@@ -1,0 +1,146 @@
+@extends('layouts.main',['titlePage'=>'IMPORTAR DATOS - MATRICULA'])
+
+@section('content')
+
+<div class="content">
+
+    @if(count($errors)>0)
+        <div class="alert alert-danger">
+            Error al Cargar Archivo <br><br>
+            <ul>
+                @foreach($errors -> all() as $error)
+                <li>{{$error}}</li>
+                @endforeach
+            </ul>
+        </div>           
+    @endif
+
+    @if($mensaje!='')
+    <div class="alert alert-danger">
+        <ul>
+            <li>{{$mensaje}}</li>            
+        </ul>
+    </div>
+    @endif
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Datos de importación</h3>
+                </div>
+             
+                <div class="card-body">
+                    <div class="form">
+
+                        <form action="{{route('Matricula.guardar')}}" method="post" enctype='multipart/form-data'
+                            class="cmxform form-horizontal tasi-form"  >                            
+                            @csrf
+
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Fuente de datos</label>
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control" readonly="readonly" value="SIAGIE">
+                                </div>
+                            </div>
+
+                            {{-- <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Nivel Educativo</label>
+                                
+                                <div class="col-md-10">
+                                    <select id="nivel" name="nivel" class="form-control form-control-sm">                                       
+                                            <option value="1"> INICIAL </option>  
+                                            <option value="2"> PRIMARIA </option>  
+                                            <option value="3"> SECUNDARIA </option>                                      
+                                            <option value="4"> EBE </option>  
+                                    </select>
+                                </div>
+                            </div> --}}
+
+
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Año Matricula</label>
+                                
+                                <div class="col-md-10">
+                                    <select id="anio" name="anio" class="form-control form-control-sm">
+                                        @foreach ($anios as $item)
+                                            <option value="{{ $item->id }}"> {{ $item->anio }} </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Fecha Versión</label>
+                                <div class="col-md-10">
+                                    <input type="date" class="form-control" name="fechaActualizacion" placeholder="Ingrese fecha actualizacion" autofocus required>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Comentario</label>
+                                <div class="col-md-10">
+                                    <textarea class="form-control" placeholder="comentario opcional" id="ccomment" name="comentario" ></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Nivel Educativo</label>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Inicial</label>
+                                <div class="col-md-10">
+                                    <input type="file" name="fileInicial" class="form-control" required > 
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Primaria</label>
+                                <div class="col-md-10">
+                                    <input type="file" name="filePrimaria" class="form-control" required > 
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Secundaria</label>
+                                <div class="col-md-10">
+                                    <input type="file" name="fileSecundaria" class="form-control" required > 
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">EBE</label>
+                                <div class="col-md-10">
+                                    <input type="file" name="fileEBE" class="form-control" required > 
+                                </div>
+                            </div>
+                          
+                            <div class="form-group row mb-0">
+                                <div class="offset-lg-2 col-lg-10">
+                                    <button class="btn btn-success waves-effect waves-light mr-1" type="submit">Importar</button>
+                                    <button class="btn btn-secondary waves-effect" type="button">Cancelar</button>
+                                </div>
+                            </div>
+                      </form>
+                  </div>
+                  <!-- .form -->
+              </div>
+              <!-- card-body -->
+          </div>
+          <!-- card -->
+      </div>
+      <!-- col -->
+  </div>
+  <!-- End row -->
+
+</div>
+
+@endsection
+
+@section('js')
+      <script src="{{ asset('/') }}public/assets/libs/jquery-validation/jquery.validate.min.js"></script>
+      <!-- Validation init js-->
+      <script src="{{ asset('/') }}public/assets/js/pages/form-validation.init.js"></script>
+
+@endsection

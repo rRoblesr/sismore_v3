@@ -1,0 +1,55 @@
+/*
+mis estilos XD
+*/
+
+/*STYLOS Para los MAPAS*/
+.mapadiv {
+    background: #e5e3f2;
+    width: 60%;
+
+}
+
+.mapadiv path {
+    fill: #f6f3f3;
+    stroke: #0a2dc9;
+    stroke-width: 2px;
+
+}
+
+.mapadiv :hover {
+    fill: #bae021;
+}
+
+/*FIN STYLOS Para los MAPAS*/
+
+
+.has-error .form-control {
+    border-color: #ef5350;
+    box-shadow: none !important;
+}
+
+.has-error .checkbox,
+.has-error .checkbox-inline,
+.has-error .control-label,
+.has-error .help-block,
+.has-error .radio,
+.has-error .radio-inline,
+.has-error.checkbox label,
+.has-error.checkbox-inline label,
+.has-error.radio label,
+.has-error.radio-inline label {
+    color: #a94442
+}
+
+.required {
+    color: #a94442
+}
+
+/*  */
+.bg-blue {
+    background-color: #0a2dc9 !important;
+}
+
+.bg-success-1 {
+    background-color: #43beac !important;
+}

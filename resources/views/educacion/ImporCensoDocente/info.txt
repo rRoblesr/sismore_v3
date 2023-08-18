@@ -1,0 +1,22 @@
+        //#ef5350 ->rojito
+        //#317eeb ->azulito
+        $option['2018']['D']['cuadro'] = ['C305'];
+        $option['2018']['D']['valor'] = 'v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13+v1.d14+v1.d15+v1.d16+v1.d17+v1.d18+v1.d19+v1.d20+v1.d21+v1.d22+v1.d23+v1.d24+v1.d25';
+        $option['2018']['D']['tipodato'] = ['01', '05'];
+        $option['2018']['N']['cuadro'] = ['C309'];
+        $option['2018']['N']['valor'] = 'v1.d01+v1.d02+v1.d03+v1.d04';
+        $option['2018']['N']['tipodato'] = ['01', '02', '03', '04', '05', '06', '42'];
+
+        $option['2019']['D']['cuadro'] = ['C305'];
+        $option['2019']['D']['valor'] = 'v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13+v1.d14+v1.d15+v1.d16+v1.d17+v1.d18+v1.d19+v1.d20+v1.d21+v1.d22+v1.d23+v1.d24+v1.d25';
+        $option['2019']['D']['tipodato'] = ['01', '05'];
+        $option['2019']['N']['cuadro'] = ['C310'];
+        $option['2019']['N']['valor'] = 'v1.d01+v1.d02+v1.d03+v1.d04';
+        $option['2019']['N']['tipodato'] = ['01', '02', '03', '04', '05', '06', '42'];
+
+        $option['2020']['D']['cuadro'] = ['C305'];
+        $option['2020']['D']['valor'] = 'v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13+v1.d14+v1.d15+v1.d16+v1.d17+v1.d18+v1.d19+v1.d20+v1.d21+v1.d22+v1.d23+v1.d24+v1.d25+v1.d26';
+        $option['2020']['D']['tipodato'] = ['01', '05'];
+        $option['2020']['N']['cuadro'] = ['C310'];
+        $option['2020']['N']['valor'] = 'v1.d01+v1.d02+v1.d03+v1.d04';
+        $option['2020']['N']['tipodato'] = ['01', '02', '03', '04', '05', '06', '42'];
