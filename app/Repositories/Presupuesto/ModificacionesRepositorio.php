@@ -16,34 +16,140 @@ class ModificacionesRepositorio
 {
     public static function anios()
     {
-        $anios = BaseModificacion::select(DB::raw('distinct pres_base_modificacion.anio'))
+        $anios = BaseModificacion::distinct()->select(DB::raw('year(v2.fechaActualizacion) as anio'))
             ->join('par_importacion as v2', 'v2.id', '=', 'pres_base_modificacion.importacion_id')
-            ->orderBy('anio', 'desc')->get();
+            ->where('v2.estado', 'PR')->get();
+        return $anios;
+    }
+
+    public static function anioActual()
+    {
+        $anios = BaseModificacion::distinct()->select(DB::raw('year(v2.fechaActualizacion) as anio'))
+            ->join('par_importacion as v2', 'v2.id', '=', 'pres_base_modificacion.importacion_id')
+            ->where('v2.estado', 'PR')
+            ->orderBy('anio', 'desc')->first()->anio;
         return $anios;
     }
     public static function meses($ano)
     {
         $nommes = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Setiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-        $mes = BaseModificacion::select(DB::raw('distinct pres_base_modificacion.mes'))
+        $mes = BaseModificacion::distinct()->select(DB::raw('pres_base_modificacion.mes'))
             ->join('par_importacion as v2', 'v2.id', '=', 'pres_base_modificacion.importacion_id')
-            ->where('pres_base_modificacion.anio', $ano)
-            ->where('v2.estado', 'PR')
-            ->orderBy('pres_base_modificacion.mes', 'desc')->get();
+            ->where('pres_base_modificacion.anio', $ano)->where('v2.estado', 'PR')
+            ->orderBy('pres_base_modificacion.mes', 'asc')->get();
         foreach ($mes as $key => $value) {
             $value->nombre = $nommes[$value->mes - 1];
         }
         return $mes;
     }
 
-    public static function listar_modificaciones($opt1, $opt2, $opt3, $opt4, $opt5, $opt6)
+    public static function mesesActual($ano)
     {
-        if ($opt2 != 0) {
+        $mes = BaseModificacion::distinct()->select(DB::raw('pres_base_modificacion.mes'))
+            ->join('par_importacion as v2', 'v2.id', '=', 'pres_base_modificacion.importacion_id')
+            ->where('pres_base_modificacion.anio', $ano)->where('v2.estado', 'PR')
+            ->orderBy('pres_base_modificacion.mes', 'desc')->first()->mes;
+        return $mes;
+    }
+
+    public static function productoproyecto($ano, $mes, $articulo, $tipo, $ue, $usb)
+    {
+        $base = BaseModificacion::select('pres_base_modificacion.id')
+            ->join('par_importacion as v2', 'v2.id', '=', 'pres_base_modificacion.importacion_id')
+            ->where('pres_base_modificacion.anio', $ano)->where('pres_base_modificacion.mes', $mes)->where('v2.estado', 'PR')
+            ->orderBy('v2.fechaActualizacion', 'desc')->first();
+        $detalle = BaseModificacionDetalle::distinct()->select('v1.*')
+            ->join('pres_producto_proyecto as v1', 'v1.id', '=', 'pres_base_modificacion_detalle.productoproyecto_id')
+            ->where('pres_base_modificacion_detalle.basemodificacion_id', $base->id)
+            ->where('pres_base_modificacion_detalle.tipo_presupuesto', 'GASTO');
+        //if ($articulo > 0) $detalle = $detalle->where('pres_base_modificacion_detalle.productoproyecto_id', $articulo);
+        if ($tipo > 0) $detalle = $detalle->where('pres_base_modificacion_detalle.tipomodificacion_id', $tipo);;
+        if ($ue > 0) $detalle = $detalle->where('pres_base_modificacion_detalle.unidadejecutora_id', $ue);
+        if ($usb != 'todos') {
+            if ($usb != '')
+                $detalle = $detalle->where('pres_base_modificacion_detalle.dispositivo_legal', '');
+            else
+                $detalle = $detalle->where('pres_base_modificacion_detalle.dispositivo_legal', $usb);
+        }
+        $detalle = $detalle->get();
+        return $detalle;
+    }
+
+    public static function unidadejecutora($ano, $mes, $articulo, $tipo, $ue, $usb, $presupuesto)
+    {
+        $base = BaseModificacion::select('pres_base_modificacion.id')
+            ->join('par_importacion as v2', 'v2.id', '=', 'pres_base_modificacion.importacion_id')
+            ->where('pres_base_modificacion.anio', $ano)->where('pres_base_modificacion.mes', $mes)->where('v2.estado', 'PR')
+            ->orderBy('v2.fechaActualizacion', 'desc')->first();
+        $detalle = BaseModificacionDetalle::distinct()->select('v1.*')
+            ->join('pres_unidadejecutora as v1', 'v1.id', '=', 'pres_base_modificacion_detalle.unidadejecutora_id')
+            ->where('pres_base_modificacion_detalle.basemodificacion_id', $base->id)
+            ->where('pres_base_modificacion_detalle.tipo_presupuesto', $presupuesto);
+        if ($articulo > 0) $detalle = $detalle->where('pres_base_modificacion_detalle.productoproyecto_id', $articulo);
+        if ($tipo > 0) $detalle = $detalle->where('pres_base_modificacion_detalle.tipomodificacion_id', $tipo);;
+        //if ($ue > 0) $detalle = $detalle->where('pres_base_modificacion_detalle.unidadejecutora_id', $ue);
+        if ($usb != 'todos') {
+            if ($usb != '')
+                $detalle = $detalle->where('pres_base_modificacion_detalle.dispositivo_legal', '');
+            else
+                $detalle = $detalle->where('pres_base_modificacion_detalle.dispositivo_legal', $usb);
+        }
+        $detalle = $detalle->orderBy('v1.codigo_ue', 'asc')->get();
+        return $detalle;
+    }
+
+    public static function cargartipos($ano, $mes, $articulo, $tipo, $ue, $usb, $presupuesto)
+    {
+        $base = BaseModificacion::select('pres_base_modificacion.id')
+            ->join('par_importacion as v2', 'v2.id', '=', 'pres_base_modificacion.importacion_id')
+            ->where('pres_base_modificacion.anio', $ano)->where('pres_base_modificacion.mes', $mes)->where('v2.estado', 'PR')
+            ->orderBy('v2.fechaActualizacion', 'desc')->first();
+        $detalle = BaseModificacionDetalle::distinct()->select('v1.*')
+            ->join('pres_tipomodificacion as v1', 'v1.id', '=', 'pres_base_modificacion_detalle.tipomodificacion_id')
+            ->where('pres_base_modificacion_detalle.basemodificacion_id', $base->id)
+            ->where('pres_base_modificacion_detalle.tipo_presupuesto', $presupuesto);
+        if ($articulo > 0) $detalle = $detalle->where('pres_base_modificacion_detalle.productoproyecto_id', $articulo);
+        //if ($tipo > 0) $detalle = $detalle->where('pres_base_modificacion_detalle.tipomodificacion_id', $tipo);;
+        if ($ue > 0) $detalle = $detalle->where('pres_base_modificacion_detalle.unidadejecutora_id', $ue);
+        if ($usb != 'todos') {
+            if ($usb != '')
+                $detalle = $detalle->where('pres_base_modificacion_detalle.dispositivo_legal', '');
+            else
+                $detalle = $detalle->where('pres_base_modificacion_detalle.dispositivo_legal', $usb);
+        }
+        $detalle = $detalle->orderBy('v1.codigo', 'asc')->get();
+        return $detalle;
+    }
+
+    public static function cargardispositivolegal($ano, $mes, $articulo, $tipo, $ue, $usb)
+    {
+        $base = BaseModificacion::select('pres_base_modificacion.id')
+            ->join('par_importacion as v2', 'v2.id', '=', 'pres_base_modificacion.importacion_id')
+            ->where('pres_base_modificacion.anio', $ano)->where('pres_base_modificacion.mes', $mes)->where('v2.estado', 'PR')
+            ->orderBy('v2.fechaActualizacion', 'desc')->first();
+        $detalle = BaseModificacionDetalle::distinct()->select('dispositivo_legal')
+            ->where('pres_base_modificacion_detalle.basemodificacion_id', $base->id)
+            ->where('pres_base_modificacion_detalle.tipo_presupuesto', 'GASTO');
+        if ($articulo > 0) $detalle = $detalle->where('pres_base_modificacion_detalle.productoproyecto_id', $articulo);
+        if ($tipo > 0) $detalle = $detalle->where('pres_base_modificacion_detalle.tipomodificacion_id', $tipo);;
+        if ($ue > 0) $detalle = $detalle->where('pres_base_modificacion_detalle.unidadejecutora_id', $ue);
+        /* if ($usb != 'todos') {
+            if ($usb != '')
+                $detalle = $detalle->where('pres_base_modificacion_detalle.dispositivo_legal', '');
+            else
+                $detalle = $detalle->where('pres_base_modificacion_detalle.dispositivo_legal', $usb);
+        } */
+        $detalle = $detalle->orderBy('dispositivo_legal', 'asc')->get();
+        return $detalle;
+    }
+
+    public static function listar_modificaciones($anio, $mes, $articulo, $tipo, $usb, $ue)
+    {
+        if ($mes > 0) {
             $basemodificacion_id = BaseModificacion::select('pres_base_modificacion.*')
                 ->join('par_importacion as v2', 'v2.id', '=', 'pres_base_modificacion.importacion_id')
-                ->where('pres_base_modificacion.anio', $opt1)
-                ->where('v2.estado', 'PR')
-                ->where('pres_base_modificacion.mes', $opt2)
-                ->orderBy('anio', 'desc')->orderBy('mes', 'desc')->orderBy('dia', 'desc')->first()->id;
+                ->where('pres_base_modificacion.anio', $anio)->where('pres_base_modificacion.mes', $mes)->where('v2.estado', 'PR')
+                ->orderBy('v2.fechaActualizacion', 'desc')->first()->id;
         }
         $query = BaseModificacionDetalle::select(
             'm4.nombre_ejecutora as unidad_ejecutora',
@@ -87,28 +193,31 @@ class ModificacionesRepositorio
             ->join('pres_proyectos as p2', 'p2.id', '=', 'pres_base_modificacion_detalle.proyectos_id', 'left')
             ->where('w2.estado', 'PR')
             ->where('pres_base_modificacion_detalle.tipo_presupuesto', 'GASTO')
-            ->where('w1.anio', $opt1);
-        if ($opt2 != 0) $query = $query->where('w1.id', $basemodificacion_id);
-        if ($opt3 != 0) {
-            if ($opt3 == 1) $query = $query->where('pres_base_modificacion_detalle.productos_id');
+            ->where('w1.anio', $anio);
+        if ($mes > 0) $query = $query->where('w1.id', $basemodificacion_id);
+        if ($articulo > 0) {
+            if ($articulo == 1) $query = $query->where('pres_base_modificacion_detalle.productos_id');
             else $query = $query->where('pres_base_modificacion_detalle.proyectos_id');
         }
-        if ($opt4 != 0) $query = $query->where('v2.id', $opt4);
-        if ($opt5 != "0") $query = $query->where('pres_base_modificacion_detalle.dispositivo_legal', $opt5);
-        if ($opt6 != 0) $query = $query->where('m4.id', $opt6);
+        if ($tipo > 0) $query = $query->where('v2.id', $tipo);
+        if ($ue > 0) $query = $query->where('m4.id', $ue);
+        if ($usb != 'todos') {
+            if ($usb == '')
+                $query = $query->where('pres_base_modificacion_detalle.dispositivo_legal', "");
+            else
+                $query = $query->where('pres_base_modificacion_detalle.dispositivo_legal', $usb);
+        }
         $query = $query->get();
         return $query;
     }
 
     public static function listar_modificaciones_foot($opt1, $opt2, $opt3, $opt4, $opt5, $opt6)
     {
-        if ($opt2 != 0) {
+        if ($opt2 > 0) {
             $basemodificacion_id = BaseModificacion::select('pres_base_modificacion.*')
                 ->join('par_importacion as v2', 'v2.id', '=', 'pres_base_modificacion.importacion_id')
-                ->where('pres_base_modificacion.anio', $opt1)
-                ->where('v2.estado', 'PR')
-                ->where('pres_base_modificacion.mes', $opt2)
-                ->orderBy('anio', 'desc')->orderBy('mes', 'desc')->orderBy('dia', 'desc')->first()->id;
+                ->where('pres_base_modificacion.anio', $opt1)->where('v2.estado', 'PR')->where('pres_base_modificacion.mes', $opt2)
+                ->orderBy('v2.fechaActualizacion', 'desc')->first()->id;
         }
         $query = BaseModificacionDetalle::select(
             DB::raw('sum(pres_base_modificacion_detalle.anulacion) as anulacion'),
@@ -132,14 +241,19 @@ class ModificacionesRepositorio
             ->where('w2.estado', 'PR')
             ->where('pres_base_modificacion_detalle.tipo_presupuesto', 'GASTO')
             ->where('w1.anio', $opt1);
-        if ($opt2 != 0) $query = $query->where('w1.id', $basemodificacion_id);
-        if ($opt3 != 0) {
+        if ($opt2 > 0) $query = $query->where('w1.id', $basemodificacion_id);
+        if ($opt3 > 0) {
             if ($opt3 == 1) $query = $query->where('pres_base_modificacion_detalle.productos_id');
             else $query = $query->where('pres_base_modificacion_detalle.proyectos_id');
         }
-        if ($opt4 != 0) $query = $query->where('v2.id', $opt4);
-        if ($opt5 != "0") $query = $query->where('pres_base_modificacion_detalle.dispositivo_legal', $opt5);
-        if ($opt6 != 0) $query = $query->where('m4.id', $opt6);
+        if ($opt4 > 0) $query = $query->where('v2.id', $opt4);
+        if ($opt5 != 'todos') {
+            if ($opt5 == '')
+                $query = $query->where('pres_base_modificacion_detalle.dispositivo_legal', "");
+            else
+                $query = $query->where('pres_base_modificacion_detalle.dispositivo_legal', $opt5);
+        }
+        if ($opt6 > 0) $query = $query->where('m4.id', $opt6);
         $query = $query->get();
         if ($query)
             return [

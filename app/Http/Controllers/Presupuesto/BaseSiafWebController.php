@@ -456,8 +456,19 @@ class BaseSiafWebController extends Controller
     public function reporte6download($ano, $articulo, $ue)
     {
         if ($ano > 0) {
-            $name = 'EJECUCIÓN DE GASTOS, SEGÚN GENÉRICA' . date('Y-m-d') . '.xlsx';
-            return Excel::download(new SiafWebRPT6Export($ano, $articulo, $ue), $name);
+            $base = BaseSiafWeb::select('pres_base_siafweb.id')
+                ->join('par_importacion as v1', 'v1.id', '=', 'pres_base_siafweb.importacion_id')
+                ->where(DB::raw('year(v1.fechaActualizacion)'), $ano)
+                ->orderBy('v1.fechaActualizacion', 'desc')->first();
+            $ue = BaseSiafWebDetalle::distinct()
+                ->select('v1.*')
+                ->join('pres_unidadejecutora as v1', 'v1.id', '=', 'pres_base_siafweb_detalle.unidadejecutora_id')
+                ->where('pres_base_siafweb_detalle.basesiafweb_id', $base->id);
+            if ($articulo > 0) $ue = $ue->where('pres_base_siafweb_detalle.productoproyecto_id', $articulo);
+            $ue = $ue->get();
+
+            $name = 'GENÉRICAS_POR_UNIDAD_EJECUTORA_' . date('Y-m-d') . '.xlsx';
+            return Excel::download(new SiafWebRPT6Export($ano, $articulo, $ue, $base->id), $name);
         }
     }
 
@@ -600,10 +611,23 @@ class BaseSiafWebController extends Controller
             ->join('par_importacion as v1', 'v1.id', '=', 'pres_base_siafweb.importacion_id')
             ->where(DB::raw('year(v1.fechaActualizacion)'), $rq->anio)
             ->orderBy('v1.fechaActualizacion', 'desc')->first();
-        $detalle = BaseSiafWebDetalle::distinct()
+        $productoproyecto = BaseSiafWebDetalle::distinct()
             ->select('v1.*')
             ->join('pres_producto_proyecto as v1', 'v1.id', '=', 'pres_base_siafweb_detalle.productoproyecto_id')
             ->where('pres_base_siafweb_detalle.basesiafweb_id', $base->id)->get();
-        return $detalle;
+        return response()->json(compact('productoproyecto'));
+    }
+
+    public function cargar_unidadejecutora(Request $rq)
+    {
+        $base = BaseSiafWeb::select('pres_base_siafweb.id')
+            ->join('par_importacion as v1', 'v1.id', '=', 'pres_base_siafweb.importacion_id')
+            ->where(DB::raw('year(v1.fechaActualizacion)'), $rq->anio)
+            ->orderBy('v1.fechaActualizacion', 'desc')->first();
+        $ue = BaseSiafWebDetalle::distinct()
+            ->select('v1.*')
+            ->join('pres_unidadejecutora as v1', 'v1.id', '=', 'pres_base_siafweb_detalle.unidadejecutora_id')
+            ->where('pres_base_siafweb_detalle.basesiafweb_id', $base->id)->get();
+        return response()->json(compact('ue'));
     }
 }

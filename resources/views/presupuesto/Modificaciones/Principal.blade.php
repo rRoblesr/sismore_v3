@@ -49,8 +49,8 @@
 
         <div class="row">
             <div class="col-sm-12">
-                <div class="card card-border">
-                    <div class="card-header bg-transparent pb-0">
+                <div class="card card-border ">
+                    <div class="card-header border-success-0 bg-transparent pb-0">
                         <div class="card-widgets">
                             <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i
                                     class="fa fa-redo"></i> Actualizar</button>
@@ -66,10 +66,12 @@
                                         <label class=" col-form-label">Año</label>
                                         <div class="">
                                             <select class="form-control" name="fano" id="fano"
-                                                onchange="cargarmes();cargarcuadros2();">
+                                                onchange="cargarmes();">
                                                 {{-- <option value="0">TODOS</option> --}}
                                                 @foreach ($opt1 as $item)
-                                                    <option value="{{ $item->anio }}">{{ $item->anio }}</option>
+                                                    <option value="{{ $item->anio }}"
+                                                        {{ $item->anio == date('Y') ? 'selected' : '' }}>{{ $item->anio }}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -99,7 +101,7 @@
                                     <div class="col-md-4">
                                         <label class="col-form-label">Unidad Ejecutora </label>
                                         <div class="">
-                                            <select class="form-control" name="fgenerica" id="fgenerica"
+                                            <select class="form-control" name="fue" id="fue"
                                                 onchange="cargarcuadros2();">
                                                 <option value="0">Todos</option>
                                                 @foreach ($opt6 as $item)
@@ -125,9 +127,9 @@
                                     <div class="col-md-4">
                                         <label class="col-form-label">Dispositivo Legal </label>
                                         <div class="">
-                                            <select class="form-control" name="fdispositivototal" id="fdispositivototal"
+                                            <select class="form-control" name="fdispositivolegal" id="fdispositivolegal"
                                                 onchange="cargarcuadros2();">
-                                                <option value="0">Todos</option>
+                                                <option value="todos">Todos</option>
                                                 @foreach ($opt5 as $item)
                                                     <option value="{{ $item->dispositivo_legal }}">
                                                         {{ $item->dispositivo_legal }}</option>
@@ -166,7 +168,7 @@
         <div class="row">
             <div class="col-xl-12 principal">
                 <div class="card card-border">
-                    <div class="card-header border-primary">{{--  bg-transparent pb-0 mb-0 --}}
+                    <div class="card-header border-success-0">{{--  bg-transparent pb-0 mb-0 --}}
                         <div class="card-widgets">
                             <button type="button" class="btn btn-success btn-xs" onclick="descargar()"><i
                                     class="fa fa-file-excel"></i>
@@ -179,7 +181,7 @@
                             <table id="tabla1-dt" class="table table-striped table-bordered tablex"
                                 style="font-size:10px;">
                                 <thead>
-                                    <tr class="bg-primary text-white text-center">
+                                    <tr class="bg-success-0 text-white text-center">
                                         <th>Unidad Ejecutora</th>
                                         <th>Fecha Aprobacion</th>
                                         <th>Documento</th>
@@ -197,7 +199,7 @@
                                 <tbody>
                                 </tbody>
                                 <tfoot>
-                                    <tr class="text-right bg-primary text-white">
+                                    <tr class="text-right bg-success-0 text-white">
                                         <th class="text-left" colspan="9">TOTAL</th>
                                         <th> </th>
                                         <th> </th>
@@ -266,14 +268,12 @@
                 $(this).next().empty();
             });
             cargarmes();
+
             //cargarcuadros();
             //cargarcuadros2();
         });
 
         function cargarcuadros() {
-            /*
-             *AJAX PARA LA PRESENTACION DE LA PRIMERA tabla 1
-             */
             $.ajax({
                 url: "{{ route('modificaciones.tabla01') }}",
                 data: {
@@ -281,8 +281,8 @@
                     'mes': $('#fmes').val(),
                     'productoproyecto': $('#fproductoproyecto').val(),
                     'tipomodificacion': $('#ftipomodificacion').val(),
-                    'dispositivototal': $('#fdispositivototal').val(),
-                    'generica': $('#fgenerica').val(),
+                    'dispositivolegal': $('#fdispositivolegal').val(),
+                    'ue': $('#fue').val(),
                 },
                 type: "GET",
                 beforeSend: function() {
@@ -318,8 +318,8 @@
                             'mes': $('#fmes').val(),
                             'productoproyecto': $('#fproductoproyecto').val(),
                             'tipomodificacion': $('#ftipomodificacion').val(),
-                            'dispositivototal': $('#fdispositivototal').val(),
-                            'generica': $('#fgenerica').val(),
+                            'dispositivolegal': $('#fdispositivolegal').val(),
+                            'ue': $('#fue').val(),
                         },
                         "type": "GET",
                         "dataType": 'JSON',
@@ -382,12 +382,12 @@
                                 'mes': $('#fmes').val(),
                                 'productoproyecto': $('#fproductoproyecto').val(),
                                 'tipomodificacion': $('#ftipomodificacion').val(),
-                                'dispositivototal': $('#fdispositivototal').val(),
-                                'generica': $('#fgenerica').val(),
+                                'dispositivolegal': $('#fdispositivolegal').val(),
+                                'ue': $('#fue').val(),
                             },
                             type: 'get',
+                            //"destroy": true,
                             success: function(data) {
-                                console.log(data)
                                 $(api.column(9).footer()).html(data.foot.anulacion);
                                 $(api.column(10).footer()).html(data.foot.credito);
                             },
@@ -411,15 +411,132 @@
                 },
                 type: 'get',
                 success: function(data) {
-                    console.log(data.info)
                     $('#fmes option ').remove();
                     var opt = ''; // '<option value="0">Todos</option>';
                     $.each(data.info, function(index, value) {
-                        opt += '<option value="' + value.mes + '">' + value.nombre +
+                        ss = value.mes == data.actual ? "selected" : "";
+                        opt += '<option value="' + value.mes + '" ' + ss + '>' + value.nombre +
                             '</option>';
                     });
                     $('#fmes').append(opt);
+                    cargarproductoproyecto();
+                    cargarunidadejecutora();
+                    cargartipomodificacion();
+                    cargardispositivolegal();
                     cargarcuadros2();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cargarproductoproyecto() {
+            $.ajax({
+                url: "{{ route('modificaciones.cargarproductoproyecto') }}",
+                data: {
+                    'ano': $('#fano').val(),
+                    'mes': $('#fmes').val(),
+                    'articulo': $('#fproductoproyecto').val(),
+                    'tipo': $('#ftipomodificacion').val(),
+                    'usb': $('#fdispositivolegal').val(),
+                    'ue': $('#fue').val(),
+                    'presupuesto': "GASTO",
+                },
+                type: 'get',
+                success: function(data) {
+                    $('#fproductoproyecto option ').remove();
+                    var opt = '<option value="0">Todos</option>';
+                    $.each(data.info, function(index, value) {
+                        opt += '<option value="' + value.id + '">' + value.codigo + " " + value.nombre +
+                            '</option>';
+                    });
+                    $('#fproductoproyecto').append(opt);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cargarunidadejecutora() {
+            $.ajax({
+                url: "{{ route('modificaciones.cargarunidadejecutora') }}",
+                data: {
+                    'ano': $('#fano').val(),
+                    'mes': $('#fmes').val(),
+                    'articulo': $('#fproductoproyecto').val(),
+                    'tipo': $('#ftipomodificacion').val(),
+                    'usb': $('#fdispositivolegal').val(),
+                    'ue': $('#fue').val(),
+                    'presupuesto': "GASTO",
+                },
+                type: 'get',
+                success: function(data) {
+                    $('#fue option ').remove();
+                    var opt = '<option value="0">Todos</option>';
+                    $.each(data.info, function(index, value) {
+                        opt += '<option value="' + value.id + '">' + value.nombre_ejecutora +
+                            '</option>';
+                    });
+                    $('#fue').append(opt);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cargartipomodificacion() {
+            $.ajax({
+                url: "{{ route('modificaciones.cargartipos') }}",
+                data: {
+                    'ano': $('#fano').val(),
+                    'mes': $('#fmes').val(),
+                    'articulo': $('#fproductoproyecto').val(),
+                    'tipo': $('#ftipomodificacion').val(),
+                    'usb': $('#fdispositivolegal').val(),
+                    'ue': $('#fue').val(),
+                    'presupuesto': "GASTO",
+                },
+                type: 'get',
+                success: function(data) {
+                    $('#ftipomodificacion option ').remove();
+                    var opt = '<option value="0">Todos</option>';
+                    $.each(data.info, function(index, value) {
+                        opt += '<option value="' + value.id + '">' + value.codigo + " " + value.nombre +
+                            '</option>';
+                    });
+                    $('#ftipomodificacion').append(opt);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cargardispositivolegal() {
+            $.ajax({
+                url: "{{ route('modificaciones.cargardispositivolegal') }}",
+                data: {
+                    'ano': $('#fano').val(),
+                    'mes': $('#fmes').val(),
+                    'articulo': $('#fproductoproyecto').val(),
+                    'tipo': $('#ftipomodificacion').val(),
+                    'usb': $('#fdispositivolegal').val(),
+                    'ue': $('#fue').val(),
+                    'presupuesto': "GASTO",
+                },
+                type: 'get',
+                success: function(data) {
+                    $('#fdispositivolegal option ').remove();
+                    var opt = '<option value="todos">Todos</option>';
+                    $.each(data.info, function(index, value) {
+                        opt += '<option value="' + value.dispositivo_legal + '">' + value
+                            .dispositivo_legal +
+                            '</option>';
+                    });
+                    $('#fdispositivolegal').append(opt);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -435,7 +552,7 @@
                     window.open("{{ url('/') }}/Modificaciones/ExportarG/excel/tabla01/" +
                         $('#fano').val() + "/" + $('#fmes').val() + "/" +
                         $('#fproductoproyecto').val() + "/" + $('#ftipomodificacion').val() + "/" +
-                        $('#fdispositivototal').val() + "/" + $('#fgenerica').val());
+                        $('#fdispositivolegal').val() + "/" + $('#fue').val());
                 },
             });
         }

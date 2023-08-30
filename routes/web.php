@@ -10,6 +10,7 @@ use App\Http\Controllers\Educacion\CuadroAsigPersonalController;
 use App\Http\Controllers\Educacion\ImportacionController;
 use App\Http\Controllers\Educacion\EceController;
 use App\Http\Controllers\Educacion\ImporCensoDocenteController;
+use App\Http\Controllers\Educacion\ImporCensoMatriculaController;
 use App\Http\Controllers\Educacion\ImporISController;
 use App\Http\Controllers\Educacion\IndicadorController;
 use App\Http\Controllers\Educacion\InstEducativaController;
@@ -112,7 +113,8 @@ Route::get('/', function () {
 });
 
 Route::get('/recursos/login1', function () {
-    return view('prueba/login');
+   echo date('Y-m-d', strtotime("1900-01-01 + 10 days - 2 days"));
+    //return view('prueba/login');
 });
 
 /**************************************** ACCESO PUBLICO ************************************************/
@@ -165,12 +167,13 @@ Route::get('/NivelModalidad/Buscar/{tipo}', [NivelModalidadController::class, 'b
 
 Route::get('/ImporPadronWeb/Importar', [ImporPadronWebController::class, 'importar'])->name('ImporPadronWeb.importar');
 Route::post('/ImporPadronWeb/Importar', [ImporPadronWebController::class, 'guardar'])->name('ImporPadronWeb.guardar');
-//Route::get('/ImporPadronWeb/ListaImportada/{importacion_id}', [ImporPadronWebController::class, 'ListaImportada'])->name('ImporPadronWeb.PadronWeb_Lista');
-Route::get('/ImporPadronWeb/ListaImportada_DataTable/{importacion_id}', [ImporPadronWebController::class, 'ListaImportada_DataTable'])->name('ImporPadronWeb.ListaImportada_DataTable');
-Route::get('/ImporPadronWeb/Aprobar/{importacion_id}', [ImporPadronWebController::class, 'aprobar'])->name('ImporPadronWeb.aprobar');
-Route::post('/ImporPadronWeb/Aprobar/procesar/{importacion_id}', [ImporPadronWebController::class, 'procesar'])->name('ImporPadronWeb.procesar');
+Route::post('/ImporPadronWeb/LI/{importacion_id}', [ImporPadronWebController::class, 'ListaImportada'])->name('ImporPadronWeb.listarimportados');
+//Route::get('/ImporPadronWeb/LIDT/{importacion_id}', [ImporPadronWebController::class, 'ListaImportada_DataTable'])->name('ImporPadronWeb.ListaImportada_DataTable');
+//Route::get('/ImporPadronWeb/Aprobar/{importacion_id}', [ImporPadronWebController::class, 'aprobar'])->name('ImporPadronWeb.aprobar');
+//Route::post('/ImporPadronWeb/Aprobar/procesar/{importacion_id}', [ImporPadronWebController::class, 'procesar'])->name('ImporPadronWeb.procesar');
 Route::get('/ImporPadronWeb/Listar/ImportarDT', [ImporPadronWebController::class, 'ListarDTImportFuenteTodos'])->name('ImporPadronWeb.listar.importados');
-Route::post('/ImporPadronWeb/ListaImportada', [ImporPadronWebController::class, 'ListaImportada'])->name('imporpadronweb.listarimportados');
+//Route::post('/ImporPadronWeb/ListaImportada', [ImporPadronWebController::class, 'ListaImportada'])->name('imporpadronweb.listarimportados');
+Route::get('/ImporPadronWeb/E/{id}', [ImporPadronWebController::class, 'eliminar'])->name('ImporPadronWeb.eliminar');
 Route::get('/ImporPadronWeb/Exportar', [ImporPadronWebController::class, 'exportar'])->name('imporpadronweb.exportar');
 Route::get('/ImporPadronWeb/Exportar/PadronWEB', [ImporPadronWebController::class, 'download'])->name('imporpadronweb.download');
 
@@ -209,9 +212,17 @@ Route::get('/ImporIS/eliminar/{id}', [ImporISController::class, 'eliminar']);
 
 Route::get('/CuadroAsigPersonal/Importar', [CuadroAsigPersonalController::class, 'importar'])->name('CuadroAsigPersonal.importar');
 Route::post('/CuadroAsigPersonal/Importar', [CuadroAsigPersonalController::class, 'guardar'])->name('CuadroAsigPersonal.guardar');
-Route::get('/CuadroAsigPersonal/ListaImportada_DataTable/{importacion_id}', [CuadroAsigPersonalController::class, 'ListaImportada_DataTable'])->name('CuadroAsigPersonal.ListaImportada_DataTable');
-Route::get('/CuadroAsigPersonal/Aprobar/{importacion_id}', [CuadroAsigPersonalController::class, 'aprobar'])->name('CuadroAsigPersonal.aprobar');
+/* Route::get('/CuadroAsigPersonal/lidt/{importacion_id}', [CuadroAsigPersonalController::class, 'ListaImportada_DataTable'])->name('CuadroAsigPersonal.ListaImportada_DataTable'); */
+//Route::get('/CuadroAsigPersonal/Aprobar/{importacion_id}', [CuadroAsigPersonalController::class, 'aprobar'])->name('CuadroAsigPersonal.aprobar');
 Route::post('/CuadroAsigPersonal/Aprobar/procesar/{importacion_id}', [CuadroAsigPersonalController::class, 'procesar'])->name('CuadroAsigPersonal.procesar');
+Route::post('/CuadroAsigPersonal/ListaImportada/{importacion_id}', [CuadroAsigPersonalController::class, 'ListaImportada'])->name('CuadroAsigPersonal.listarimportados');
+Route::get('/CuadroAsigPersonal/eliminar/{id}', [CuadroAsigPersonalController::class, 'eliminar'])->name('CuadroAsigPersonal.eliminar');
+
+/* Route::get('/ImporTableta/Importar', [ImporTabletaController::class, 'importar'])->name('importableta.importar');
+Route::post('/ImporTableta/Importar', [ImporTabletaController::class, 'guardar'])->name('importableta.guardar');
+Route::get('/ImporTableta/Listar/ImportarDT', [ImporTabletaController::class, 'ListarDTImportFuenteTodos'])->name('importableta.listar.importados');
+Route::get('/ImporTableta/ListaImportada/{importacion_id}', [ImporTabletaController::class, 'ListaImportada'])->name('importableta.listarimportados');
+Route::get('/ImporTableta/eliminar/{id}', [ImporTabletaController::class, 'eliminar'])->name('importableta.eliminar'); */
 
 Route::get('/CuadroAsigPersonal/Principal', [CuadroAsigPersonalController::class, 'Principal'])->middleware('auth')->name('CuadroAsigPersonal.principal');
 Route::post('/CuadroAsigPersonal/ReporteUgel', [CuadroAsigPersonalController::class, 'ReporteUgel'])->name('CuadroAsigPersonal.ReporteUgel');
@@ -329,10 +340,14 @@ Route::post('/MatriculaDetalle/EIB/tabla2', [MatriculaDetalleController::class, 
 Route::get('/ImporCensoDocente/Importar', [ImporCensoDocenteController::class, 'importar'])->name('imporcensodocente.importar');
 Route::post('/ImporCensoDocente/Importar', [ImporCensoDocenteController::class, 'guardar'])->name('imporcensodocente.guardar');
 Route::get('/ImporCensoDocente/Listar/ImportarDT', [ImporCensoDocenteController::class, 'ListarDTImportFuenteTodos'])->name('imporcensodocente.listar.importados');
-Route::get('/ImporCensoDocente/ListaImportada/{importacion_id}', [ImporCensoDocenteController::class, 'ListaImportada'])->name('imporcensodocente.listarimportados');
+Route::get('/ImporCensoDocente/LI/{importacion_id}', [ImporCensoDocenteController::class, 'ListaImportada'])->name('imporcensodocente.listarimportados');
 Route::get('/ImporCensoDocente/eliminar/{id}', [ImporCensoDocenteController::class, 'eliminar'])->name('imporcensodocente.eliminar');
 
-
+Route::get('/ImporCensoMatricula/Importar', [ImporCensoMatriculaController::class, 'importar'])->name('imporcensomatricula.importar');
+Route::post('/ImporCensoMatricula/Importar', [ImporCensoMatriculaController::class, 'guardar'])->name('imporcensomatricula.guardar');
+Route::get('/ImporCensoMatricula/L/ImportarDT', [ImporCensoMatriculaController::class, 'ListarDTImportFuenteTodos'])->name('imporcensomatricula.listar.importados');
+Route::post('/ImporCensoMatricula/LI/{importacion_id}', [ImporCensoMatriculaController::class, 'ListaImportada'])->name('imporcensomatricula.listarimportados');
+Route::get('/ImporCensoMatricula/E/{id}', [ImporCensoMatriculaController::class, 'eliminar'])->name('imporcensomatricula.eliminar');
 
 Route::get('/ImporTableta/Importar', [ImporTabletaController::class, 'importar'])->name('importableta.importar');
 Route::post('/ImporTableta/Importar', [ImporTabletaController::class, 'guardar'])->name('importableta.guardar');
@@ -799,6 +814,10 @@ Route::get('/GobsRegs/Exportar/excel/principal01/{ano}/{mes}/{tipo}', [Gobiernos
 
 Route::get('/Modificaciones/Principal', [ModificacionesController::class, 'principal_gasto'])->middleware('auth')->name('modificaciones.principal.gastos');
 Route::get('/Modificaciones/cargarmes', [ModificacionesController::class, 'cargarmes'])->name('modificaciones.cargarmes');
+Route::get('/Modificaciones/cargarproductoproyecto', [ModificacionesController::class, 'cargarproductoproyecto'])->name('modificaciones.cargarproductoproyecto');
+Route::get('/Modificaciones/cargarunidadejecutora', [ModificacionesController::class, 'cargarunidadejecutora'])->name('modificaciones.cargarunidadejecutora');
+Route::get('/Modificaciones/cargartipos', [ModificacionesController::class, 'cargartipos'])->name('modificaciones.cargartipos');
+Route::get('/Modificaciones/cargardispositivolegal', [ModificacionesController::class, 'cargardispositivolegal'])->name('modificaciones.cargardispositivolegal');
 Route::get('/Modificaciones/tabla01', [ModificacionesController::class, 'principalgastotabla01'])->name('modificaciones.tabla01');
 Route::get('/Modificaciones/DT/tabla01', [ModificacionesController::class, 'principalgastotabla01_DT'])->name('modificaciones.dt.tabla01');
 Route::get('/Modificaciones/DT/tabla01/foot', [ModificacionesController::class, 'principalgastotabla01_foot'])->name('modificaciones.dt.tabla01.foot');
@@ -846,7 +865,8 @@ Route::get('/SiafGastos/reportes7/tb1', [BaseSiafWebController::class, 'reporte7
 Route::get('/SiafGastos/reportes7/Exportar/excel/{ano}/{articulo}/{categoria}/{ff}/{gg}/{partidas}', [BaseSiafWebController::class, 'reporte7download']);
 Route::get('/SiafGastos/reportes7/gra1', [BaseSiafWebController::class, 'reporte7grafica1'])->name('basesiafweb.rpt7.gra.1');
 
-Route::get('/SiafGastos/Utilitarios', [BaseSiafWebController::class, 'cargar_productoproyecto'])->name('basesiafweb.cargar.productoproyecto');
+Route::get('/SiafGastos/Utilitarios1', [BaseSiafWebController::class, 'cargar_productoproyecto'])->name('basesiafweb.cargar.productoproyecto');
+Route::get('/SiafGastos/Utilitarios2', [BaseSiafWebController::class, 'cargar_unidadejecutora'])->name('basesiafweb.cargar.unidadejecutora');
 
 Route::get('/UnidadEjecutora/Principal', [UnidadEjecutoraController::class, 'principal'])->middleware('auth')->name('unidadejecutora.principal');
 Route::get('/UnidadEjecutora/listar', [UnidadEjecutoraController::class, 'listar'])->name('unidadejecutora.listar');

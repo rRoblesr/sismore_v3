@@ -140,7 +140,8 @@
                     </div>
                     <div class="modal-body">
                         <div class="table-responsive">
-                            <table id="siagie-matricula" class="table table-striped table-bordered" style="font-size:12px">
+                            <table id="siagie-matricula" class="table table-striped table-bordered"
+                                style="font-size:10px;width:10000px;">
                                 <thead class="text-primary">
                                     <th>UNIDAD_EJECUTORA</th>
                                     <th>UGEL</th>
@@ -154,42 +155,52 @@
                                     <th>CLAVE8</th>
                                     <th>NIVEL_EDUCATIVO</th>
                                     <th>INSTITUCION_EDUCATIVA</th>
+                                    <th>JEC</th>
                                     <th>CODIGO_PLAZA</th>
                                     <th>TIPO_TRABAJADOR</th>
                                     <th>SUB_TIPO_TRABAJADOR</th>
                                     <th>CARGO</th>
                                     <th>SITUACION_LABORAL</th>
                                     <th>MOTIVO_VACANTE</th>
-                                    <th>DOCUMENTO</th>
-                                    <th>SEXO</th>
-                                    <th>CODMOD_DOCENTE</th>
-                                    <th>APELLIDO_PATERNO</th>
-                                    <th>APELLIDO_MATERNO</th>
-                                    <th>NOMBRES</th>
-                                    <th>FECHA_INGRESO</th>
                                     <th>CATEGORIA_REMUNERATIVA</th>
+                                    <th>DESCRIPCION_ESCALA</th>
                                     <th>JORNADA_LABORAL</th>
                                     <th>ESTADO</th>
-                                    <th>FECHA_NACIMIENTO</th>
                                     <th>FECHA_INICIO</th>
                                     <th>FECHA_TERMINO</th>
                                     <th>TIPO_REGISTRO</th>
                                     <th>LEY</th>
-                                    <th>PREVENTIVA</th>
-                                    <th>ESPECIALIDAD</th>
+                                    <th>FECHA_INGRESO_NOMB</th>
+                                    <th>DOCUMENTO</th>
+                                    <th>CODMOD_DOCENTE</th>
+                                    <th>APELLIDO_PATERNO</th>
+                                    <th>APELLIDO_MATERNO</th>
+                                    <th>NOMBRES</th>
+                                    <th>FECHA_NACIMIENTO</th>
+                                    <th>SEXO</th>
+                                    <th>REGIMEN_PENSIONARIO</th>
+                                    <th>FECHA_AFILIACION_RP</th>
+                                    <th>CODIGO_ESSALUD</th>
+                                    <th>AFP</th>
+                                    <th>CODIGO_AFP</th>
+                                    <th>FECHA_AFILIACION_AFP</th>
+                                    <th>FECHA_DEVENGUE_AFP</th>
+                                    <th>MENCION</th>
+                                    <th>CENTRO_ESTUDIOS</th>
                                     <th>TIPO_ESTUDIOS</th>
                                     <th>ESTADO_ESTUDIOS</th>
-                                    <th>GRADO</th>
-                                    <th>MENCION</th>
                                     <th>ESPECIALIDAD_PROFESIONAL</th>
-                                    <th>FECHA_RESOLUCION</th>
-                                    <th>NUMERO_RESOLUCION</th>
-                                    <th>CENTRO_ESTUDIOS</th>
+                                    <th>GRADO</th>
                                     <th>CELULAR</th>
                                     <th>EMAIL</th>
+                                    <th>ESPECIALIDAD</th>
+                                    <th>FECHA_RESOLUCION</th>
+                                    <th>NUMERO_RESOLUCION</th>
                                     <th>DESC_SUPERIOR</th>
-
-
+                                    <th>NUMERO_CONTRATO_CAS</th>
+                                    <th>NUMERO_ADENDA_CAS</th>
+                                    <th>PREVENTIVA</th>
+                                    <th>REFERENCIA_PREVENTIVA</th>
                                 </thead>
                                 <tbody>
 
@@ -201,9 +212,9 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cerrar</button>
                     </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
+                </div>
+            </div>
+        </div>
         <!-- End Bootstrap modal -->
 
     </div>
@@ -333,9 +344,13 @@
             bootbox.confirm("Seguro desea Eliminar este IMPORTACION?", function(result) {
                 if (result === true) {
                     $.ajax({
-                        url: "{{ url('/') }}/Importacion/GetEliminar/" + id,
+                        url: "{{ route('CuadroAsigPersonal.eliminar', '') }}/" + id,
                         type: "GET",
                         dataType: "JSON",
+                        beforeSend: function() {
+                            $('#eliminar' + id).html(
+                                '<span><i class="fa fa-spinner fa-spin"></i></span>');
+                        },
                         success: function(data) {
                             $('#modal_form').modal('hide');
                             table_principal.ajax.reload();
@@ -352,8 +367,6 @@
         };
 
         function monitor(id) {
-            var url = "{{ route('cuadroasigpersonal.listarimportados', 55555) }}";
-            url = url.replace('55555', id);
             $('#siagie-matricula').DataTable({
                     "processing": true,
                     "serverSide": true,
@@ -366,174 +379,242 @@
                         "headers": {
                             'X-CSRF-TOKEN': $('input[name=_token]').val()
                         },
-                        "url": url,
+                        "url": "{{ route('CuadroAsigPersonal.listarimportados', '') }}/" + id,
                         "type": "POST",
                         "dataType": 'JSON',
                     },
                     "columns": [{
-                            data: 'dre',
-                            name: 'dre'
-                        }, {
-                            data: 'ugel',
-                            name: 'ugel'
-                        }, {
-                            data: 'departamento',
-                            name: 'departamento'
-                        }, {
+                            data: 'unidad_ejecutora',
+                            name: 'unidad_ejecutora'
+                        },
+                        {
+                            data: 'organo_intermedio',
+                            name: 'organo_intermedio'
+                        },
+                        {
                             data: 'provincia',
                             name: 'provincia'
-                        }, {
-                            data: 'distrito',
-                            name: 'distrito' /*  */
-                        }, {
-                            data: 'centropoblado',
-                            name: 'centropoblado'
-                        }, {
-                            data: 'modular',
-                            name: 'modular'
-                        }, {
-                            data: 'iiee',
-                            name: 'iiee'
-                        }, {
-                            data: 'codnivel',
-                            name: 'codnivel'
-                        }, {
-                            data: 'nivel',
-                            name: 'nivel' /*  */
-                        }, {
-                            data: 'tiponivel',
-                            name: 'tiponivel'
-                        }, {
-                            data: 'codgestion',
-                            name: 'codgestion'
-                        }, {
-                            data: 'gestiondependencia',
-                            name: 'gestiondependencia'
                         },
-                        /* {
-                                                   data: 'codtipogestion'
-                                               },  */
                         {
-                            data: 'tipogestion',
-                            name: 'tipogestion'
-                        }, {
-                            data: 'total_estudiantes',
-                            name: 'total_estudiantes' /*  */
-                        }, {
-                            data: 'matricula_definitiva',
-                            name: 'matricula_definitiva'
-                        }, {
-                            data: 'matricula_proceso',
-                            name: 'matricula_proceso'
-                        }, {
-                            data: 'dni_validado',
-                            name: 'dni_validado'
-                        }, {
-                            data: 'dni_sin_validar',
-                            name: 'dni_sin_validar'
-                        }, {
-                            data: 'registrado_sin_dni',
-                            name: 'registrado_sin_dni' /*  */
-                        }, {
-                            data: 'total_grados',
-                            name: 'total_grados'
-                        }, {
-                            data: 'total_secciones',
-                            name: 'total_secciones'
-                        }, {
-                            data: 'nominas_generadas',
-                            name: 'nominas_generadas'
-                        }, {
-                            data: 'nominas_aprobadas',
-                            name: 'nominas_aprobadas'
-                        }, {
-                            data: 'nominas_por_rectificar',
-                            name: 'nominas_por_rectificar' /*  */
-                        }, {
-                            data: 'tres_anios_hombre',
-                            name: 'tres_anios_hombre'
-                        }, {
-                            data: 'tres_anios_mujer',
-                            name: 'tres_anios_mujer'
-                        }, {
-                            data: 'cuatro_anios_hombre',
-                            name: 'cuatro_anios_hombre'
-                        }, {
-                            data: 'cuatro_anios_mujer',
-                            name: 'cuatro_anios_mujer'
-                        }, {
-                            data: 'cinco_anios_hombre',
-                            name: 'cinco_anios_hombre' /*  */
-                        }, {
-                            data: 'cinco_anios_mujer',
-                            name: 'cinco_anios_mujer'
-                        }, {
-                            data: 'primero_hombre',
-                            name: 'primero_hombre'
-                        }, {
-                            data: 'primero_mujer',
-                            name: 'primero_mujer'
-                        }, {
-                            data: 'segundo_hombre',
-                            name: 'segundo_hombre'
-                        }, {
-                            data: 'segundo_mujer',
-                            name: 'segundo_mujer' /*  */
-                        }, {
-                            data: 'tercero_hombre',
-                            name: 'tercero_hombre'
-                        }, {
-                            data: 'tercero_mujer',
-                            name: 'tercero_mujer'
-                        }, {
-                            data: 'cuarto_hombre',
-                            name: 'cuarto_hombre'
-                        }, {
-                            data: 'cuarto_mujer',
-                            name: 'cuarto_mujer'
-                        }, {
-                            data: 'quinto_hombre',
-                            name: 'quinto_hombre' /*  */
-                        }, {
-                            data: 'quinto_mujer',
-                            name: 'quinto_mujer'
-                        }, {
-                            data: 'sexto_hombre',
-                            name: 'sexto_hombre'
-                        }, {
-                            data: 'sexto_mujer',
-                            name: 'sexto_mujer'
-                        }, {
-                            data: 'cero_anios_hombre',
-                            name: 'cero_anios_hombre'
-                        }, {
-                            data: 'cero_anios_mujer',
-                            name: 'cero_anios_mujer' /*  */
-                        }, {
-                            data: 'un_anio_hombre',
-                            name: 'un_anio_hombre'
-                        }, {
-                            data: 'un_anio_mujer',
-                            name: 'un_anio_mujer'
-                        }, {
-                            data: 'dos_anios_hombre',
-                            name: 'dos_anios_hombre'
-                        }, {
-                            data: 'dos_anios_mujer',
-                            name: 'dos_anios_mujer'
-                        }, {
-                            data: 'mas_cinco_anios_hombre',
-                            name: 'mas_cinco_anios_hombre' /*  */
-                        }, {
-                            data: 'mas_cinco_anios_mujer',
-                            name: 'mas_cinco_anios_mujer'
+                            data: 'distrito',
+                            name: 'distrito'
                         },
-                        /* {
-                                               data: 'total_hombres'
-                                           }, */
-                        /*  {
-                                                data: 'total_mujer'
-                                            }, */
+                        {
+                            data: 'tipo_ie',
+                            name: 'tipo_ie'
+                        },
+                        {
+                            data: 'gestion',
+                            name: 'gestion'
+                        },
+                        {
+                            data: 'zona',
+                            name: 'zona'
+                        },
+                        {
+                            data: 'codmod_ie',
+                            name: 'codmod_ie'
+                        },
+                        {
+                            data: 'codigo_local',
+                            name: 'codigo_local'
+                        },
+                        {
+                            data: 'clave8',
+                            name: 'clave8'
+                        },
+                        {
+                            data: 'nivel_educativo',
+                            name: 'nivel_educativo'
+                        },
+                        {
+                            data: 'institucion_educativa',
+                            name: 'institucion_educativa'
+                        },
+                        {
+                            data: 'jec',
+                            name: 'jec'
+                        },
+                        {
+                            data: 'codigo_plaza',
+                            name: 'codigo_plaza'
+                        },
+                        {
+                            data: 'tipo_trabajador',
+                            name: 'tipo_trabajador'
+                        },
+                        {
+                            data: 'sub_tipo_trabajador',
+                            name: 'sub_tipo_trabajador'
+                        },
+                        {
+                            data: 'cargo',
+                            name: 'cargo'
+                        },
+                        {
+                            data: 'situacion_laboral',
+                            name: 'situacion_laboral'
+                        },
+                        {
+                            data: 'motivo_vacante',
+                            name: 'motivo_vacante'
+                        },
+                        {
+                            data: 'categoria_remunerativa',
+                            name: 'categoria_remunerativa'
+                        },
+                        {
+                            data: 'descripcion_escala',
+                            name: 'descripcion_escala'
+                        },
+                        {
+                            data: 'jornada_laboral',
+                            name: 'jornada_laboral'
+                        },
+                        {
+                            data: 'estado',
+                            name: 'estado'
+                        },
+                        {
+                            data: 'fecha_inicio',
+                            name: 'fecha_inicio'
+                        },
+                        {
+                            data: 'fecha_termino',
+                            name: 'fecha_termino'
+                        },
+                        {
+                            data: 'tipo_registro',
+                            name: 'tipo_registro'
+                        },
+                        {
+                            data: 'ley',
+                            name: 'ley'
+                        },
+                        {
+                            data: 'fecha_ingreso',
+                            name: 'fecha_ingreso'
+                        },
+                        {
+                            data: 'documento_identidad',
+                            name: 'documento_identidad'
+                        },
+                        {
+                            data: 'codigo_modular',
+                            name: 'codigo_modular'
+                        },
+                        {
+                            data: 'apellido_paterno',
+                            name: 'apellido_paterno'
+                        },
+                        {
+                            data: 'apellido_materno',
+                            name: 'apellido_materno'
+                        },
+                        {
+                            data: 'nombres',
+                            name: 'nombres'
+                        },
+                        {
+                            data: 'fecha_nacimiento',
+                            name: 'fecha_nacimiento'
+                        },
+                        {
+                            data: 'sexo',
+                            name: 'sexo'
+                        },
+                        {
+                            data: 'regimen_pensionario',
+                            name: 'regimen_pensionario'
+                        },
+                        {
+                            data: 'fecha_afiliacion_rp',
+                            name: 'fecha_afiliacion_rp'
+                        },
+                        {
+                            data: 'codigo_essalud',
+                            name: 'codigo_essalud'
+                        },
+                        {
+                            data: 'afp',
+                            name: 'afp'
+                        },
+                        {
+                            data: 'codigo_afp',
+                            name: 'codigo_afp'
+                        },
+                        {
+                            data: 'fecha_afiliacion_afp',
+                            name: 'fecha_afiliacion_afp'
+                        },
+                        {
+                            data: 'fecha_devengue_afp',
+                            name: 'fecha_devengue_afp'
+                        },
+                        {
+                            data: 'mencion',
+                            name: 'mencion'
+                        },
+                        {
+                            data: 'centro_estudios',
+                            name: 'centro_estudios'
+                        },
+                        {
+                            data: 'tipo_estudios',
+                            name: 'tipo_estudios'
+                        },
+                        {
+                            data: 'estado_estudios',
+                            name: 'estado_estudios'
+                        },
+                        {
+                            data: 'especialidad_profesional',
+                            name: 'especialidad_profesional'
+                        },
+                        {
+                            data: 'grado',
+                            name: 'grado'
+                        },
+                        {
+                            data: 'celular',
+                            name: 'celular'
+                        },
+                        {
+                            data: 'email',
+                            name: 'email'
+                        },
+                        {
+                            data: 'especialidad',
+                            name: 'especialidad'
+                        },
+                        {
+                            data: 'fecha_resolucion',
+                            name: 'fecha_resolucion'
+                        },
+                        {
+                            data: 'numero_resolucion',
+                            name: 'numero_resolucion'
+                        },
+                        {
+                            data: 'desc_superior',
+                            name: 'desc_superior'
+                        },
+                        {
+                            data: 'numero_contrato_cas',
+                            name: 'numero_contrato_cas'
+                        },
+                        {
+                            data: 'numero_adenda_cas',
+                            name: 'numero_adenda_cas'
+                        },
+                        {
+                            data: 'preventiva',
+                            name: 'preventiva'
+                        },
+                        {
+                            data: 'referencia_preventiva',
+                            name: 'referencia_preventiva'
+                        }
                     ],
                 }
 

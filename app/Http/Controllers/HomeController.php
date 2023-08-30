@@ -798,9 +798,7 @@ class HomeController extends Controller
         $impidpadweb = $imppadweb->first()->id;
         $impidsiagie = $impsiagie->first()->mat;
 
-        //$strPadronWeb = strtotime($imp->fecha);
         $strSiagie = strtotime($impsiagie->first()->fecha);
-        //$strNexus = strtotime($imp3->fecha);$actualizado = '';
         $actualizado = 'Actualizado al ' . date('d', $strSiagie) . ' de ' . $this->mes[date('m', $strSiagie) - 1] . ' del ' . date('Y', $strSiagie);
 
         $provincias = Ubigeo::select('v2.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();

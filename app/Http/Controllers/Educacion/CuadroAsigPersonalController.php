@@ -10,6 +10,7 @@ use App\Models\Administracion\Entidad;
 use App\Models\Educacion\CuadroAsigPersonal;
 use App\Models\Educacion\Importacion;
 use App\Models\Educacion\Indicador;
+use App\Models\Educacion\PLaza;
 use App\Repositories\Educacion\CuadroAsigPersonalRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\PlazaRepositorio;
@@ -273,7 +274,7 @@ class CuadroAsigPersonalController extends Controller
             $ent = $ent->first();
 
             if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_id') == 3 || session('perfil_id') == 8 || session('perfil_id') == 9 || session('perfil_id') == 10 || session('perfil_id') == 11)
-                $boton = '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> </button>';
+                $boton = '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" id="eliminar' . $value->id . '"><i class="fa fa-trash"></i> </button>';
             else
                 $boton = '';
             $boton2 = '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> </button>';
@@ -286,7 +287,7 @@ class CuadroAsigPersonalController extends Controller
                 date("d/m/Y", strtotime($value->created_at)),
 
                 $value->estado == "PR" ? "PROCESADO" : ($value->estado == "PE" ? "PENDIENTE" : "ELIMINADO"),
-                $boton /* . '&nbsp;' . $boton2, */
+                $boton . '&nbsp;' . $boton2,
             );
         }
         $result = array(
@@ -332,10 +333,9 @@ class CuadroAsigPersonalController extends Controller
             ->toJson();
     }
 
-    public function ListaImportada(Request $rq)
+    public function ListaImportada($importacion_id)
     {
-        $id = $rq->importacion_id;
-        $data = CuadroAsigPersonal::where('importacion_id', $id)->get(); // PlazaRepositorio::listaImportada($id);
+        $data = CuadroAsigPersonal::where('importacion_id', $importacion_id)->get();
         return DataTables::of($data)->make(true);
     }
 
@@ -358,6 +358,15 @@ class CuadroAsigPersonalController extends Controller
         $procesar = DB::select('call edu_pa_procesarCuadroAsigPersonal(?,?)', [$importacion_id, auth()->user()->id]);
         return view('correcto');
     }
+
+    public function eliminar($id)
+    {
+        PLaza::where('importacion_id', $id)->delete();
+        CuadroAsigPersonal::where('importacion_id', $id)->delete();
+        Importacion::find($id)->delete();
+        return response()->json(array('status' => true));
+    }
+
     public function download()
     {
         ini_set('memory_limit', '-1');

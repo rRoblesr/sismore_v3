@@ -50,7 +50,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="card card-border">
-                    <div class="card-header bg-transparent pb-0">
+                    <div class="card-header border-success-0 bg-transparent pb-0">
                         <div class="card-widgets">
                             <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i
                                     class="fa fa-redo"></i> Actualizar</button>
@@ -68,8 +68,10 @@
                                             <select class="form-control" name="fano" id="fano"
                                                 onchange="cargarmes();cargarcuadros();">
                                                 {{-- <option value="0">TODOS</option> --}}
-                                                @foreach ($opt1 as $item)
-                                                    <option value="{{ $item->anio }}">{{ $item->anio }}</option>
+                                                @foreach ($anio as $item)
+                                                    <option value="{{ $item->anio }}"
+                                                        {{ $item->anio == $actual ? 'selected' : '' }}>{{ $item->anio }}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -89,10 +91,10 @@
                                             <select class="form-control" name="ftipomodificacion" id="ftipomodificacion"
                                                 onchange="cargarcuadros();">
                                                 <option value="0">Todos</option>
-                                                @foreach ($opt4 as $item)
+                                                {{-- @foreach ($opt4 as $item)
                                                     <option value="{{ $item->id }}">
                                                         {{ $item->codigo . ' ' . $item->nombre }}</option>
-                                                @endforeach
+                                                @endforeach --}}
                                             </select>
                                         </div>
                                     </div>
@@ -102,10 +104,10 @@
                                             <select class="form-control" name="fue" id="fue"
                                                 onchange="cargarcuadros();">
                                                 <option value="0">Todos</option>
-                                                @foreach ($opt6 as $item)
+                                                {{-- @foreach ($opt6 as $item)
                                                     <option value="{{ $item->id }}">
                                                         {{ $item->nombre_ejecutora }}</option>
-                                                @endforeach
+                                                @endforeach --}}
                                             </select>
                                         </div>
                                     </div>
@@ -124,7 +126,7 @@
         <div class="row">
             <div class="col-xl-12 principal">
                 <div class="card card-border">
-                    <div class="card-header border-primary">{{--  bg-transparent pb-0 mb-0 --}}
+                    <div class="card-header border-success-0 border-primary">{{--  bg-transparent pb-0 mb-0 --}}
                         <div class="card-widgets">
                             <button type="button" class="btn btn-success btn-xs" onclick="descargar()"><i
                                     class="fa fa-file-excel"></i>
@@ -196,7 +198,7 @@
                 $(this).next().empty();
             });
             cargarmes();
-            cargarcuadros();
+            //cargarcuadros();//
         });
 
         function cargarcuadros() {
@@ -241,11 +243,70 @@
                     $('#fmes option ').remove();
                     var opt = '<option value="0">Todos</option>';
                     $.each(data.info, function(index, value) {
-                        opt += '<option value="' + value.mes + '">' + value.nombre +
+                        ss = value.mes == data.actual ? "selected" : "";
+                        opt += '<option value="' + value.mes + '" ' + ss + '>' + value.nombre +
                             '</option>';
                     });
                     $('#fmes').append(opt);
+                    cargartipomodificacion();
+                    cargarunidadejecutora();
                     cargarcuadros();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cargarunidadejecutora() {
+            $.ajax({
+                url: "{{ route('modificaciones.cargarunidadejecutora') }}",
+                data: {
+                    'ano': $('#fano').val(),
+                    'mes': $('#fmes').val(),
+                    'articulo': 0,
+                    'tipo': $('#ftipomodificacion').val(),
+                    'ue': $('#fue').val(),
+                    'usb': "todos",
+                    'presupuesto': "INGRESO",
+                },
+                type: 'get',
+                success: function(data) {
+                    $('#fue option ').remove();
+                    var opt = '<option value="0">Todos</option>';
+                    $.each(data.info, function(index, value) {
+                        opt += '<option value="' + value.id + '">' + value.nombre_ejecutora +
+                            '</option>';
+                    });
+                    $('#fue').append(opt);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cargartipomodificacion() {
+            $.ajax({
+                url: "{{ route('modificaciones.cargartipos') }}",
+                data: {
+                    'ano': $('#fano').val(),
+                    'mes': $('#fmes').val(),
+                    'articulo': 0,
+                    'tipo': $('#ftipomodificacion').val(),
+                    'ue': $('#fue').val(),
+                    'usb': "todos",
+                    'presupuesto': "INGRESO",
+                },
+                type: 'get',
+                success: function(data) {
+                    $('#ftipomodificacion option ').remove();
+                    var opt = '<option value="0">Todos</option>';
+                    $.each(data.info, function(index, value) {
+                        opt += '<option value="' + value.id + '">' + value.codigo + " " + value.nombre +
+                            '</option>';
+                    });
+                    $('#ftipomodificacion').append(opt);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);

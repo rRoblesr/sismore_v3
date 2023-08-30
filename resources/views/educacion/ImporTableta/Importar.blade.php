@@ -141,8 +141,8 @@
                     </div>
                     <div class="modal-body">
                         <div class="table-responsive">
-                            <table id="siagie-matricula" class="table table-striped table-bordered" style="font-size:10px;width:5000px;">
-                                {{-- width:7200px; --}}
+                            <table id="siagie-matricula" class="table table-striped table-bordered"
+                                style="font-size:10px;width:5000px;">
                                 <thead class="text-primary">
                                     <th>UGEL</th>
                                     <th>PROVINCIA</th>
@@ -182,9 +182,9 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cerrar</button>
                     </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
+                </div>
+            </div>
+        </div>
         <!-- End Bootstrap modal -->
 
     </div>
@@ -276,6 +276,10 @@
                         url: "{{ route('importableta.eliminar', '') }}/" + id,
                         type: "GET",
                         dataType: "JSON",
+                        beforeSend: function() {
+                            $('#eliminar' + id).html(
+                                '<span><i class="fa fa-spinner fa-spin"></i></span>');
+                        },
                         success: function(data) {
                             $('#modal_form').modal('hide');
                             table_principal.ajax.reload();
@@ -292,7 +296,6 @@
         };
 
         function monitor(importacion) {
-
             $('#siagie-matricula').DataTable({
                     "processing": true,
                     "serverSide": true,
@@ -302,7 +305,7 @@
                     "destroy": true,
                     "language": table_language,
                     "ajax": {
-                        "url": "{{ route('importableta.listarimportados','') }}/"+importacion,
+                        "url": "{{ route('importableta.listarimportados', '') }}/" + importacion,
                         "type": "GET",
                         "dataType": 'JSON',
                     },

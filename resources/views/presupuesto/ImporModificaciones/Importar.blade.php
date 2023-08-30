@@ -77,8 +77,8 @@
                                     </div>
 
                                     <div class="form-group row  mt-0 mb-0">
-                                        <label class="col-md-2 col-form-label"></label>
-                                        <div class="col-md-10">
+                                        {{-- <label class="col-md-2 col-form-label"></label> --}}
+                                        <div class="col-md-12">
                                             <div class="pwrapper m-0" style="display:none;">
                                                 <div class="progress progress_wrapper">
                                                     <div class="progress-bar progress-bar-striped bg-info progress-bar-animated progress_bar"
@@ -189,66 +189,40 @@
                     </div>
                     <div class="modal-body">
                         <div class="table-responsive">
-                            <table id="siagie-matricula" class="table table-striped table-bordered" style="font-size:12px">
-                                {{-- width:7200px; --}}
+                            <table id="siagie-matricula" class="table table-striped table-bordered"
+                                style="font-size:10px;width:5000px;">
                                 <thead class="text-primary">
-                                    <td>ANIO</td>
-                                    <td>MES</td>
-                                    <td>COD_TIPO_GOB</td>
-                                    <td>TIPO_GOBIERNO</td>
-                                    <td>COD_SECTOR</td>
-                                    <td>SECTOR</td>
                                     <td>COD_PLIEGO</td>
-                                    <td>PLIEGO</td>
-                                    <td>COD_UBIGEO</td>
-                                    <td>SEC_EJEC</td>
                                     <td>COD_UE</td>
-                                    <td>UNIDAD_EJECUTORA</td>
+                                    <td>NOTAS</td>
+                                    <td>FECHA_SOLICITUD</td>
+                                    <td>FECHA_APROBACION</td>
+                                    <td>COD_TIPO_MOD</td>
+                                    <td>TIPO_MODIFICACION</td>
+                                    <td>DOCUMENTO</td>
+                                    <td>DISPOSITIVO_LEGAL</td>
+                                    <td>TIPO_INGRESO</td>
+                                    <td>JUSTIFICACION</td>
+                                    <td>ENTIDAD_ORIGEN</td>
+                                    <td>TIPO_PRESUPUESTO</td>
                                     <td>SEC_FUNC</td>
                                     <td>COD_CAT_PRES</td>
-                                    <td>CATEGORIA_PRESUPUESTAL</td>
                                     <td>TIPO_PROD_PROY</td>
                                     <td>COD_PROD_PROY</td>
-                                    <td>PRODUCTO_PROYECTO</td>
                                     <td>TIPO_ACT_ACC_OBRA</td>
                                     <td>COD_ACT_ACC_OBRA</td>
-                                    <td>ACTIVIDAD_ACCION_OBRA</td>
-                                    <td>COD_FUN</td>
-                                    <td>FUNCION</td>
-                                    <td>COD_DIV_FUN</td>
-                                    <td>DIVISION_FUNCIONAL</td>
-                                    <td>COD_GRU_FUN</td>
-                                    <td>GRUPO_FUNCIONAL</td>
                                     <td>META</td>
                                     <td>COD_FINA</td>
-                                    <td>FINALIDAD</td>
-                                    <td>COD_FUE_FIN</td>
-                                    <td>FUENTE_FINANCIAMIENTO</td>
                                     <td>COD_RUB</td>
-                                    <td>RUBRO</td>
-                                    <td>COD_TIPO_REC</td>
-                                    <th>TIPO_RECURSO</th>
-                                    <th>COD_CAT_GAS</th>
-                                    <th>CATEGORIA_GASTO</th>
-                                    <th>COD_TIPO_TRANS</th>
-                                    <th>COD_GEN</th>
-                                    <th>GENERICA</th>
-                                    <th>COD_SUBGEN</th>
-                                    <th>SUBGENERICA</th>
-                                    <th>COD_SUBGEN_DET</th>
-                                    <th>SUBGENERICA_DETALLE</th>
-                                    <th>COD_ESP</th>
-                                    <th>ESPECIFICA</th>
-                                    <th>COD_ESP_DET</th>
-                                    <th>ESPECIFICA_DETALLE</th>
-                                    <th>PIA</th>
-                                    <th>PIM</th>
-                                    <th>CERTIFICADO</th>
-                                    <th>COMPROMISO_ANUAL</th>
-                                    <th>COMPROMISO_MENSUAL</th>
-                                    <th>DEVENGADO</th>
-                                    <th>GIRADO</th>
-                                    <th>ACCION</th>
+                                    <td>COD_CAT_GAS</td>
+                                    <td>COD_TIPO_TRANS</td>
+                                    <td>COD_GEN</td>
+                                    <td>COD_SUBGEN</td>
+                                    <td>COD_SUBGEN_DET</td>
+                                    <td>COD_ESP</td>
+                                    <td>COD_ESP_DET</td>
+                                    <td>ANULACION</td>
+                                    <td>CREDITO</td>
                                 </thead>
                                 <tbody>
 
@@ -260,9 +234,9 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cerrar</button>
                     </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
+                </div>
+            </div>
+        </div>
         <!-- End Bootstrap modal -->
 
 
@@ -376,8 +350,6 @@
         };
 
         function monitor(id) {
-            var url = "{{ route('impormodificaciones.listarimportados', 55555) }}";
-            url = url.replace('55555', id);
             $('#siagie-matricula').DataTable({
                     "processing": true,
                     "serverSide": true,
@@ -390,57 +362,61 @@
                         "headers": {
                             'X-CSRF-TOKEN': $('input[name=_token]').val()
                         },
-                        "url": url,
+                        "url": "{{ route('impormodificaciones.listarimportados', '') }}/" + id,
                         "type": "POST",
                         "dataType": 'JSON',
                     },
                     "columns": [{
-                            data: 'anio',
-                            name: 'anio'
-                        },
-                        {
-                            data: 'mes',
-                            name: 'mes'
-                        },
-                        {
-                            data: 'cod_tipo_gob',
-                            name: 'cod_tipo_gob'
-                        },
-                        {
-                            data: 'tipo_gobierno',
-                            name: 'tipo_gobierno'
-                        },
-                        {
-                            data: 'cod_sector',
-                            name: 'cod_sector'
-                        },
-                        {
-                            data: 'sector',
-                            name: 'sector'
-                        },
-                        {
                             data: 'cod_pliego',
                             name: 'cod_pliego'
-                        },
-                        {
-                            data: 'pliego',
-                            name: 'pliego'
-                        },
-                        {
-                            data: 'cod_ubigeo',
-                            name: 'cod_ubigeo'
-                        },
-                        {
-                            data: 'sec_ejec',
-                            name: 'sec_ejec'
                         },
                         {
                             data: 'cod_ue',
                             name: 'cod_ue'
                         },
                         {
-                            data: 'unidad_ejecutora',
-                            name: 'unidad_ejecutora'
+                            data: 'notas',
+                            name: 'notas'
+                        },
+                        {
+                            data: 'fecha_solicitud',
+                            name: 'fecha_solicitud'
+                        },
+                        {
+                            data: 'fecha_aprobacion',
+                            name: 'fecha_aprobacion'
+                        },
+                        {
+                            data: 'cod_tipo_mod',
+                            name: 'cod_tipo_mod'
+                        },
+                        {
+                            data: 'tipo_modificacion',
+                            name: 'tipo_modificacion'
+                        },
+                        {
+                            data: 'documento',
+                            name: 'documento'
+                        },
+                        {
+                            data: 'dispositivo_legal',
+                            name: 'dispositivo_legal'
+                        },
+                        {
+                            data: 'tipo_ingreso',
+                            name: 'tipo_ingreso'
+                        },
+                        {
+                            data: 'justificacion',
+                            name: 'justificacion'
+                        },
+                        {
+                            data: 'entidad_origen',
+                            name: 'entidad_origen'
+                        },
+                        {
+                            data: 'tipo_presupuesto',
+                            name: 'tipo_presupuesto'
                         },
                         {
                             data: 'sec_func',
@@ -451,20 +427,12 @@
                             name: 'cod_cat_pres'
                         },
                         {
-                            data: 'categoria_presupuestal',
-                            name: 'categoria_presupuestal'
-                        },
-                        {
                             data: 'tipo_prod_proy',
                             name: 'tipo_prod_proy'
                         },
                         {
                             data: 'cod_prod_proy',
                             name: 'cod_prod_proy'
-                        },
-                        {
-                            data: 'producto_proyecto',
-                            name: 'producto_proyecto'
                         },
                         {
                             data: 'tipo_act_acc_obra',
@@ -475,34 +443,6 @@
                             name: 'cod_act_acc_obra'
                         },
                         {
-                            data: 'actividad_accion_obra',
-                            name: 'actividad_accion_obra'
-                        },
-                        {
-                            data: 'cod_fun',
-                            name: 'cod_fun'
-                        },
-                        {
-                            data: 'funcion',
-                            name: 'funcion'
-                        },
-                        {
-                            data: 'cod_div_fun',
-                            name: 'cod_div_fun'
-                        },
-                        {
-                            data: 'division_funcional',
-                            name: 'division_funcional'
-                        },
-                        {
-                            data: 'cod_gru_fun',
-                            name: 'cod_gru_fun'
-                        },
-                        {
-                            data: 'grupo_funcional',
-                            name: 'grupo_funcional'
-                        },
-                        {
                             data: 'meta',
                             name: 'meta'
                         },
@@ -511,40 +451,12 @@
                             name: 'cod_fina'
                         },
                         {
-                            data: 'finalidad',
-                            name: 'finalidad'
-                        },
-                        {
-                            data: 'cod_fue_fin',
-                            name: 'cod_fue_fin'
-                        },
-                        {
-                            data: 'fuente_financiamiento',
-                            name: 'fuente_financiamiento'
-                        },
-                        {
                             data: 'cod_rub',
                             name: 'cod_rub'
                         },
                         {
-                            data: 'rubro',
-                            name: 'rubro'
-                        },
-                        {
-                            data: 'cod_tipo_rec',
-                            name: 'cod_tipo_rec'
-                        },
-                        {
-                            data: 'tipo_recurso',
-                            name: 'tipo_recurso'
-                        },
-                        {
                             data: 'cod_cat_gas',
                             name: 'cod_cat_gas'
-                        },
-                        {
-                            data: 'categoria_gasto',
-                            name: 'categoria_gasto'
                         },
                         {
                             data: 'cod_tipo_trans',
@@ -555,70 +467,29 @@
                             name: 'cod_gen'
                         },
                         {
-                            data: 'generica',
-                            name: 'generica'
-                        },
-                        {
                             data: 'cod_subgen',
                             name: 'cod_subgen'
-                        },
-                        {
-                            data: 'subgenerica',
-                            name: 'subgenerica'
                         },
                         {
                             data: 'cod_subgen_det',
                             name: 'cod_subgen_det'
                         },
                         {
-                            data: 'subgenerica_detalle',
-                            name: 'subgenerica_detalle'
-                        },
-                        {
                             data: 'cod_esp',
                             name: 'cod_esp'
-                        },
-                        {
-                            data: 'especifica',
-                            name: 'especifica'
                         },
                         {
                             data: 'cod_esp_det',
                             name: 'cod_esp_det'
                         },
                         {
-                            data: 'especifica_detalle',
-                            name: 'especifica_detalle'
+                            data: 'anulacion',
+                            name: 'anulacion'
                         },
                         {
-                            data: 'pia',
-                            name: 'pia'
+                            data: 'credito',
+                            name: 'credito'
                         },
-                        {
-                            data: 'pim',
-                            name: 'pim'
-                        },
-                        {
-                            data: 'certificado',
-                            name: 'certificado'
-                        },
-                        {
-                            data: 'compromiso_anual',
-                            name: 'compromiso_anual'
-                        },
-                        {
-                            data: 'compromiso_mensual',
-                            name: 'compromiso_mensual'
-                        },
-                        {
-                            data: 'devengado',
-                            name: 'devengado'
-                        },
-                        {
-                            data: 'girado',
-                            name: 'girado'
-                        },
-
                     ],
                 }
 

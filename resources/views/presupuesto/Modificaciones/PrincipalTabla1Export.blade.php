@@ -1,25 +1,25 @@
-<table id="tabla1" class="table table-striped table-bordered tablex" style="font-size:10px;">
+<table id="tabla1" class="table table-striped table-bordered tablex">
     <thead>
-        <tr class="bg-primary text-white text-center">
-            <th>#</th>
-            <th>Unidad Ejecutora</th>
-            <th>Fecha Aprobacion</th>
-            <th>Documento</th>
-            <th>Justificacion</th>
-            <th>SecFun</th>
-            <th>CatPres</th>
-            <th>ProdProy</th>
-            <th>ActAccObra</th>
-            <th>Rb</th>
-            <th>Especifica Detalle</th>
-            <th>Anulacion</th>
-            <th>Credito</th>
+        <tr>
+            <th style="background-color:#317eeb;color:#ffffff;text-align:center;">#</th>
+            <th style="background-color:#317eeb;color:#ffffff;text-align:center;">Unidad Ejecutora</th>
+            <th style="background-color:#317eeb;color:#ffffff;text-align:center;">Fecha Aprobacion</th>
+            <th style="background-color:#317eeb;color:#ffffff;text-align:center;">Documento</th>
+            <th style="background-color:#317eeb;color:#ffffff;text-align:center;">Justificacion</th>
+            <th style="background-color:#317eeb;color:#ffffff;text-align:center;">SecFun</th>
+            <th style="background-color:#317eeb;color:#ffffff;text-align:center;">CatPres</th>
+            <th style="background-color:#317eeb;color:#ffffff;text-align:center;">ProdProy</th>
+            <th style="background-color:#317eeb;color:#ffffff;text-align:center;">ActAccObra</th>
+            <th style="background-color:#317eeb;color:#ffffff;text-align:center;">Rb</th>
+            <th style="background-color:#317eeb;color:#ffffff;text-align:center;">Especifica Detalle</th>
+            <th style="background-color:#317eeb;color:#ffffff;text-align:center;">Anulacion</th>
+            <th style="background-color:#317eeb;color:#ffffff;text-align:center;">Credito</th>
         </tr>
 
     </thead>
     <tbody>
         @foreach ($body as $pos => $item)
-            <tr class="text-left">
+            <tr>
                 <td>{{ $pos + 1 }}</td>
                 <td>{{ $item->unidad_ejecutora }}</td>
                 <td>{{ $item->fecha_aprobacion }}</td>
@@ -37,10 +37,10 @@
         @endforeach
     </tbody>
     <tfoot>
-        <tr class="text-right bg-primary text-white">
-            <th colspan="11">TOTAL</th>
-            <th>{{ $foot['anulacion'] }}</th>
-            <th>{{ $foot['credito'] }}</th>
+        <tr>
+            <th style="background-color:#317eeb;color:#ffffff;text-align:center;" colspan="11">TOTAL</th>
+            <th style="background-color:#317eeb;color:#ffffff;text-align:center;">{{ $foot['anulacion'] }}</th>
+            <th style="background-color:#317eeb;color:#ffffff;text-align:center;">{{ $foot['credito'] }}</th>
         </tr>
     </tfoot>
 </table>

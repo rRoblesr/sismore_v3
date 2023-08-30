@@ -52,14 +52,42 @@ class ModificacionesController extends Controller
             ->get();
         $impG = Importacion::where('fuenteimportacion_id', '26')->where('estado', 'PR')->orderBy('fechaActualizacion', 'desc')->first();
         $mensaje = "";
-        return view('Presupuesto.Modificaciones.Principal', compact('mensaje', 'opt1', 'opt3', 'opt4', 'opt5', 'opt6','impG'));
+        return view('Presupuesto.Modificaciones.Principal', compact('mensaje', 'opt1', 'opt3', 'opt4', 'opt5', 'opt6', 'impG'));
     }
 
     public function cargarmes(Request $rq)
     {
         $info = ModificacionesRepositorio::meses($rq->ano);
+        $actual = 0;
+        foreach ($info as $key => $value) {
+            $actual = $value->mes;
+        }
+        //$actual = ModificacionesRepositorio::mesesActual($rq->ano);
+        return response()->json(compact('info', 'actual'));
+    }
+
+    public function cargarproductoproyecto(Request $rq)
+    {
+        $info = ModificacionesRepositorio::productoproyecto($rq->ano, $rq->mes, $rq->articulo, $rq->tipo, $rq->ue, $rq->usb);
         return response()->json(compact('info'));
-        //return $mes;
+    }
+
+    public function cargarunidadejecutora(Request $rq)
+    {
+        $info = ModificacionesRepositorio::unidadejecutora($rq->ano, $rq->mes, $rq->articulo, $rq->tipo, $rq->ue, $rq->usb, $rq->presupuesto);
+        return response()->json(compact('info'));
+    }
+
+    public function cargartipos(Request $rq)
+    {
+        $info = ModificacionesRepositorio::cargartipos($rq->ano, $rq->mes, $rq->articulo, $rq->tipo, $rq->ue, $rq->usb, $rq->presupuesto);
+        return response()->json(compact('info'));
+    }
+
+    public function cargardispositivolegal(Request $rq)
+    {
+        $info = ModificacionesRepositorio::cargardispositivolegal($rq->ano, $rq->mes, $rq->articulo, $rq->tipo, $rq->ue, $rq->usb);
+        return response()->json(compact('info'));
     }
 
     public function principalgastotabla01(Request $rq)
@@ -74,7 +102,7 @@ class ModificacionesController extends Controller
     }
     public function principalgastotabla01_DT(Request $rq)
     {
-        $body = ModificacionesRepositorio::listar_modificaciones($rq->get('ano'), $rq->get('mes'), $rq->get('productoproyecto'), $rq->get('tipomodificacion'), $rq->get('dispositivototal'), $rq->get('generica'));
+        $body = ModificacionesRepositorio::listar_modificaciones($rq->ano, $rq->mes, $rq->productoproyecto, $rq->tipomodificacion, $rq->dispositivolegal, $rq->ue);
         return DataTables::of($body)
             ->editColumn('especifica_detalle', '{{$clasificador}} {{$especifica_detalle}}')
             ->editColumn('catpres', '<div class="text-center" title="{{$ncatpres}}"><a href="javascript:void(0)">{{$catpres}}</a></div>')
@@ -89,7 +117,7 @@ class ModificacionesController extends Controller
 
     public function principalgastotabla01_foot(Request $rq)
     {
-        $foot = ModificacionesRepositorio::listar_modificaciones_foot($rq->get('ano'), $rq->get('mes'), $rq->get('productoproyecto'), $rq->get('tipomodificacion'), $rq->get('dispositivototal'), $rq->get('generica'));
+        $foot = ModificacionesRepositorio::listar_modificaciones_foot($rq->ano, $rq->mes, $rq->productoproyecto, $rq->tipomodificacion, $rq->dispositivolegal, $rq->ue);
         return response()->json(compact('foot'));
     }
 
@@ -103,17 +131,18 @@ class ModificacionesController extends Controller
 
     public function principal_ingreso()
     {
-        $opt1 = ModificacionesRepositorio::anios();
-        $opt4 = TipoModificacion::orderBy('codigo', 'asc')->get();
+        $anio = ModificacionesRepositorio::anios();
+        $actual = ModificacionesRepositorio::anioActual();
+        /* $opt4 = TipoModificacion::orderBy('codigo', 'asc')->get();
         $opt6 = UnidadEjecutora::select('pres_unidadejecutora.*')
             ->join('pres_pliego as v2', 'v2.id', '=', 'pres_unidadejecutora.pliego_id')
             ->join('pres_sector as v3', 'v3.id', '=', 'v2.sector_id')
             ->join('pres_tipo_gobierno as v4', 'v4.id', '=', 'v3.tipogobierno_id')
             ->where('v4.id', 3)
-            ->get();
+            ->get(); */
         $mensaje = "";
         $impG = Importacion::where('fuenteimportacion_id', '26')->where('estado', 'PR')->orderBy('fechaActualizacion', 'desc')->first();
-        return view('Presupuesto.Modificaciones.PrincipalIngresos', compact('mensaje', 'opt1', 'opt4', 'opt6','impG'));
+        return view('Presupuesto.Modificaciones.PrincipalIngresos', compact('mensaje', 'anio', 'actual', 'impG'));
     }
 
     public function principalingresotabla01(Request $rq)

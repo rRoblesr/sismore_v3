@@ -6,13 +6,8 @@ use App\Exports\ImporPadronSiagieExport;
 use App\Http\Controllers\Controller;
 use App\Imports\tablaXImport;
 use App\Models\Administracion\Entidad;
+use App\Models\Educacion\ImporCensoMatricula;
 use App\Models\Educacion\Importacion;
-use App\Models\Educacion\ImporTextoEscolar;
-use App\Models\Educacion\Matricula;
-use App\Models\Educacion\TextoEscolarDetalle;
-use App\Models\Educacion\TextosEscolares;
-use App\Models\Parametro\Anio;
-use App\Repositories\Educacion\ImporMatriculaRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Utilities\Utilitario;
 use Carbon\Carbon;
@@ -24,10 +19,10 @@ use Yajra\DataTables\DataTables;
 
 use function PHPUnit\Framework\isNull;
 
-class ImporTextoEscolarController extends Controller
+class ImporCensoMatriculaController extends Controller
 {
-    public static $FUENTE = 17;
-    public $fuente = 17;
+    public static $FUENTE = 33;
+    public $fuente = 33;
     public function __construct()
     {
         $this->middleware('auth');
@@ -36,15 +31,15 @@ class ImporTextoEscolarController extends Controller
     public function importar()
     {
         $mensaje = "";
-        return view('educacion.ImporTextoEscolar.Importar', compact('mensaje'));
+        return view('educacion.ImporCensoMatricula.Importar', compact('mensaje'));
     }
 
     public function exportar()
     {
-        $imp = Importacion::where(['fuenteimportacion_id' => $this->fuente, 'estado' => 'PR'])->orderBy('fechaActualizacion', 'desc')->first();
+        /* $imp = Importacion::where(['fuenteimportacion_id' => $this->fuente, 'estado' => 'PR'])->orderBy('fechaActualizacion', 'desc')->first();
         $mat = Matricula::where('importacion_id', $imp->id)->first();
         $mensaje = "";
-        return view('educacion.ImporPoblacion.Exportar', compact('mensaje', 'imp', 'mat'));
+        return view('educacion.ImporPoblacion.Exportar', compact('mensaje', 'imp', 'mat')); */
     }
 
     function json_output($status = 200, $msg = 'OK!!', $data = null)
@@ -88,33 +83,57 @@ class ImporTextoEscolarController extends Controller
                 foreach ($value as $celda => $row) {
                     if ($celda > 0) break;
                     $cadena =
-                        $row['ugel'] .
-                        $row['provincia'] .
-                        $row['distrito'] .
+                        $row['codooii'] .
+                        $row['codgeo'] .
+                        $row['codlocal'] .
                         $row['cod_mod'] .
-                        $row['institucion_educativa'] .
-                        $row['estado'] .
-                        $row['tabletas_programadas'] .
-                        $row['cargadores_programadas'] .
-                        $row['tabletas_chip'] .
-                        $row['tabletas_pecosa'] .
-                        $row['cargadores_pecosa'] .
-                        $row['tabletas_pecosa_siga'] .
-                        $row['cargadores_pecosa_siga'] .
-                        $row['tabletas_entregadas_sigema'] .
-                        $row['cargadores_entregadas_sigema'] .
-                        $row['tabletas_recepcionadas'] .
-                        $row['cargadores_recepcionadas'] .
-                        $row['tabletas_asignadas'] .
-                        $row['tabletas_asignadas_estudiantes'] .
-                        $row['tabletas_asignadas_docentes'] .
-                        $row['cargadores_asignadas'] .
-                        $row['cargadores_asignadas_estudiantes'] .
-                        $row['cargadores_asignadas_docentes'] .
-                        $row['tabletas_devueltas'] .
-                        $row['cargadores_devueltos'] .
-                        $row['tabletas_perdidas'] .
-                        $row['cargadores_perdidos'];
+                        $row['nroced'] .
+                        $row['cuadro'] .
+                        $row['tipdato'] .
+                        $row['niv_mod'] .
+                        $row['ges_dep'] .
+                        $row['area_censo'] .
+                        $row['tipoprog'] .
+                        $row['d01'] .
+                        $row['d02'] .
+                        $row['d03'] .
+                        $row['d04'] .
+                        $row['d05'] .
+                        $row['d06'] .
+                        $row['d07'] .
+                        $row['d08'] .
+                        $row['d09'] .
+                        $row['d10'] .
+                        $row['d11'] .
+                        $row['d12'] .
+                        $row['d13'] .
+                        $row['d14'] .
+                        $row['d15'] .
+                        $row['d16'] .
+                        $row['d17'] .
+                        $row['d18'] .
+                        $row['d19'] .
+                        $row['d20'] .
+                        $row['d21'] .
+                        $row['d22'] .
+                        $row['d23'] .
+                        $row['d24'] .
+                        $row['d25'] .
+                        $row['d26'] .
+                        $row['d27'] .
+                        $row['d28'] .
+                        $row['d29'] .
+                        $row['d30'] .
+                        $row['d31'] .
+                        $row['d32'] .
+                        $row['d33'] .
+                        $row['d34'] .
+                        $row['d35'] .
+                        $row['d36'] .
+                        $row['d37'] .
+                        $row['d38'] .
+                        $row['d39'] .
+                        $row['d40'];
                 }
             }
         } catch (Exception $e) {
@@ -129,46 +148,71 @@ class ImporTextoEscolarController extends Controller
                 'usuarioId_Aprueba' => null,
                 'fechaActualizacion' => $request['fechaActualizacion'],
                 'comentario' => $request['comentario'],
-                'estado' => 'PE'
+                'estado' => 'PR'
             ]);
 
-            $tableta = TextosEscolares::Create([
+            /* $tableta = Tableta::Create([
                 'importacion_id' => $importacion->id,
                 'anio_id' => Anio::where('anio', date('Y', strtotime($importacion->fechaActualizacion)))->first()->id,
                 'created_at' => date('Y-m-d h:i:s'),
-            ]);
+            ]); */
+
 
             foreach ($array as $key => $value) {
                 foreach ($value as $row) {
-                    $padronTableta = ImporTextoEscolar::Create([
+                    ImporCensoMatricula::Create([
                         'importacion_id' => $importacion->id,
-                        'ugel' => $row['ugel'],
-                        'provincia' => $row['provincia'],
-                        'distrito' => $row['distrito'],
+                        'codooii' => $row['codooii'],
+                        'codgeo' => $row['codgeo'],
+                        'codlocal' => $row['codlocal'],
                         'cod_mod' => $row['cod_mod'],
-                        'institucion_educativa' => $row['institucion_educativa'],
-                        'estado' => $row['estado'],
-                        'tabletas_programadas' => $row['tabletas_programadas'],
-                        'cargadores_programadas' => $row['cargadores_programadas'],
-                        'tabletas_chip' => $row['tabletas_chip'],
-                        'tabletas_pecosa' => $row['tabletas_pecosa'],
-                        'cargadores_pecosa' => $row['cargadores_pecosa'],
-                        'tabletas_pecosa_siga' => $row['tabletas_pecosa_siga'],
-                        'cargadores_pecosa_siga' => $row['cargadores_pecosa_siga'],
-                        'tabletas_entregadas_sigema' => $row['tabletas_entregadas_sigema'],
-                        'cargadores_entregadas_sigema' => $row['cargadores_entregadas_sigema'],
-                        'tabletas_recepcionadas' => $row['tabletas_recepcionadas'],
-                        'cargadores_recepcionadas' => $row['cargadores_recepcionadas'],
-                        'tabletas_asignadas' => $row['tabletas_asignadas'],
-                        'tabletas_asignadas_estudiantes' => $row['tabletas_asignadas_estudiantes'],
-                        'tabletas_asignadas_docentes' => $row['tabletas_asignadas_docentes'],
-                        'cargadores_asignadas' => $row['cargadores_asignadas'],
-                        'cargadores_asignadas_estudiantes' => $row['cargadores_asignadas_estudiantes'],
-                        'cargadores_asignadas_docentes' => $row['cargadores_asignadas_docentes'],
-                        'tabletas_devueltas' => $row['tabletas_devueltas'],
-                        'cargadores_devueltos' => $row['cargadores_devueltos'],
-                        'tabletas_perdidas' => $row['tabletas_perdidas'],
-                        'cargadores_perdidos' => $row['cargadores_perdidos'],
+                        'nroced' => $row['nroced'],
+                        'cuadro' => $row['cuadro'],
+                        'tipdato' => $row['tipdato'],
+                        'niv_mod' => $row['niv_mod'],
+                        'ges_dep' => $row['ges_dep'],
+                        'area_censo' => $row['area_censo'],
+                        'tipoprog' => $row['tipoprog'],
+                        'd01' => $row['d01'] ? $row['d01'] : 0,
+                        'd02' => $row['d02'] ? $row['d02'] : 0,
+                        'd03' => $row['d03'] ? $row['d03'] : 0,
+                        'd04' => $row['d04'] ? $row['d04'] : 0,
+                        'd05' => $row['d05'] ? $row['d05'] : 0,
+                        'd06' => $row['d06'] ? $row['d06'] : 0,
+                        'd07' => $row['d07'] ? $row['d07'] : 0,
+                        'd08' => $row['d08'] ? $row['d08'] : 0,
+                        'd09' => $row['d09'] ? $row['d09'] : 0,
+                        'd10' => $row['d10'] ? $row['d10'] : 0,
+                        'd11' => $row['d11'] ? $row['d11'] : 0,
+                        'd12' => $row['d12'] ? $row['d12'] : 0,
+                        'd13' => $row['d13'] ? $row['d13'] : 0,
+                        'd14' => $row['d14'] ? $row['d14'] : 0,
+                        'd15' => $row['d15'] ? $row['d15'] : 0,
+                        'd16' => $row['d16'] ? $row['d16'] : 0,
+                        'd17' => $row['d17'] ? $row['d17'] : 0,
+                        'd18' => $row['d18'] ? $row['d18'] : 0,
+                        'd19' => $row['d19'] ? $row['d19'] : 0,
+                        'd20' => $row['d20'] ? $row['d20'] : 0,
+                        'd21' => $row['d21'] ? $row['d21'] : 0,
+                        'd22' => $row['d22'] ? $row['d22'] : 0,
+                        'd23' => $row['d23'] ? $row['d23'] : 0,
+                        'd24' => $row['d24'] ? $row['d24'] : 0,
+                        'd25' => $row['d25'] ? $row['d25'] : 0,
+                        'd26' => $row['d26'] ? $row['d26'] : 0,
+                        'd27' => $row['d27'] ? $row['d27'] : 0,
+                        'd28' => $row['d28'] ? $row['d28'] : 0,
+                        'd29' => $row['d29'] ? $row['d29'] : 0,
+                        'd30' => $row['d30'] ? $row['d30'] : 0,
+                        'd31' => $row['d31'] ? $row['d31'] : 0,
+                        'd32' => $row['d32'] ? $row['d32'] : 0,
+                        'd33' => $row['d33'] ? $row['d33'] : 0,
+                        'd34' => $row['d34'] ? $row['d34'] : 0,
+                        'd35' => $row['d35'] ? $row['d35'] : 0,
+                        'd36' => $row['d36'] ? $row['d36'] : 0,
+                        'd37' => $row['d37'] ? $row['d37'] : 0,
+                        'd38' => $row['d38'] ? $row['d38'] : 0,
+                        'd39' => $row['d39'] ? $row['d39'] : 0,
+                        'd40' => $row['d40'] ? $row['d40'] : 0
                     ]);
                 }
             }
@@ -246,22 +290,13 @@ class ImporTextoEscolarController extends Controller
 
     public function ListaImportada($importacion_id) //(Request $request, $importacion_id)
     {
-        $data = ImporTextoEscolar::where('importacion_id', $importacion_id)->get();
+        $data = ImporCensoMatricula::where('importacion_id', $importacion_id)->get();
         return DataTables::of($data)->make(true);
-    }
-
-    public function ListaImportada_DataTable($importacion_id)
-    {
-        $padronWebLista = ImporMatriculaRepositorio::Listar_Por_Importacion_id($importacion_id);
-        return  datatables()->of($padronWebLista)->toJson();
     }
 
     public function eliminar($id)
     {
-        $tableta = TextosEscolares::where('importacion_id', $id)->first();
-        TextoEscolarDetalle::where('tableta_id', $tableta->id)->delete();
-        $tableta->delete();
-        ImporTextoEscolar::where('importacion_id', $id)->delete();
+        ImporCensoMatricula::where('importacion_id', $id)->delete();
         Importacion::find($id)->delete();
         return response()->json(array('status' => true));
     }

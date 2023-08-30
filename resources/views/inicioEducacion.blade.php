@@ -140,7 +140,7 @@
                                 <h4 class="font-20 my-0 font-weight-bold">
                                     <span data-plugin="counterup" id="matriculados"></span>
                                 </h4>
-                                <p class="mb-0 mt-1 text-truncate">Estudiantes EBR</p>
+                                <p class="mb-0 mt-1 text-truncate">Estudiantes EBR y EBE</p>
                             </div>
                         </div>
                     </div>

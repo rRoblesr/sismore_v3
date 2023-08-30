@@ -147,17 +147,21 @@ class MatriculaDetalleController extends Controller
     {
         /* anos */
         $anios = MatriculaRepositorio::matriculas_anio();
+        $actual = 0;
+        foreach ($anios as $key => $value) {
+            $actual = $value->id;
+        }
         /* ugels */
         $ugels = Ugel::select('id', 'nombre')->where('dependencia', 2)->get();
         /* gestion */
-        $gestions = [["id" => 2, "nombre" => "Pública"], ["id" => 3, "nombre" => "Privada"]];
+        $gestions = [["id" => 12, "nombre" => "Pública"], ["id" => 3, "nombre" => "Privada"]];
         /* area geografica */
         $areas = Area::select('id', 'nombre')->get();
         /* ultimo reg subido */
-        $imp = Importacion::select('id', 'fechaActualizacion as fecha')->where('estado', 'PR')->where('fuenteImportacion_id', '8')->orderBy('fecha', 'desc')->take(1)->get();
-        $importacion_id = $imp->first()->id;
-        $fecha = date('d/m/Y', strtotime($imp->first()->fecha));
-        return view("educacion.MatriculaDetalle.MatriculaAvance", compact('anios', 'gestions', 'areas', 'ugels', 'importacion_id', 'fecha'));
+        $imp = Importacion::select('id', 'fechaActualizacion as fecha')->where('estado', 'PR')->where('fuenteImportacion_id', '8')->orderBy('fecha', 'desc')->first();
+        $importacion_id = $imp->id;
+        $fecha = date('d/m/Y', strtotime($imp->fecha));
+        return view("educacion.MatriculaDetalle.MatriculaAvance", compact('anios', 'actual', 'gestions', 'areas', 'ugels', 'importacion_id', 'fecha'));
     }
 
     public function cargartabla0(Request $rq)
@@ -322,7 +326,7 @@ class MatriculaDetalleController extends Controller
 
 
 
-        //return $error;
+        //return $error;/
         return view("educacion.MatriculaDetalle.MatriculaAvancetabla0", compact('rq', 'base', 'anoI', 'anoF', 'foot'));
     }
 
@@ -3143,7 +3147,7 @@ class MatriculaDetalleController extends Controller
         $data['alumnos'] = 36331;
         $data['docentes'] = 2453;
 
-        return view("educacion.MatriculaDetalle.InterculturalBilingue", compact('anios', 'gestions', 'areas', 'ugels', 'importacion_id', 'fecha','data'));
+        return view("educacion.MatriculaDetalle.InterculturalBilingue", compact('anios', 'gestions', 'areas', 'ugels', 'importacion_id', 'fecha', 'data'));
     }
 
     public function cargarEIBgrafica1(Request $rq)
@@ -3656,6 +3660,4 @@ class MatriculaDetalleController extends Controller
     {
         return view("educacion.MatriculaDetalle.presupuestoview15");
     }
-
-
 }

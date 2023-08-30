@@ -27,7 +27,7 @@
     <div class="content">
         <div class="row">
             <div class="col-lg-12">
-                <div class="card card-fill bg-primary  mb-0">
+                <div class="card card-fill bg-success-0  mb-0">
                     <div class="card-header bg-transparent p-3">
                         <div class="card-widgets">
                             <button type="button" class="btn btn-purple btn-xs" onclick="location.reload()"><i
@@ -53,16 +53,17 @@
                             <div class="form-group row mb-0">
                                 <label class="col-md-1 col-form-label">Año</label>
                                 <div class="col-md-2">
-                                    <select id="ano" name="ano" class="form-control p-0"
+                                    <select id="ano" name="ano" class="form-control btn-xs p-0"
                                         onchange="cargartabla0()">
                                         @foreach ($anios as $item)
-                                            <option value="{{ $item->id }}">{{ $item->anio }}</option>
+                                            <option value="{{ $item->id }}" {{ $item->id = $actual ? 'selected' : '' }}>
+                                                {{ $item->anio }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <label class="col-md-1 col-form-label">Ugel</label>
                                 <div class="col-md-2">
-                                    <select id="ugel" name="ugel" class="form-control p-0"
+                                    <select id="ugel" name="ugel" class="form-control btn-xs p-0"
                                         onchange="cargartabla0()">
                                         <option value="0">Todos</option>
                                         @foreach ($ugels as $ugel)
@@ -72,7 +73,7 @@
                                 </div>
                                 <label class="col-md-1 col-form-label">Gestion</label>
                                 <div class="col-md-2">
-                                    <select id="gestion" name="gestion" class="form-control p-0"
+                                    <select id="gestion" name="gestion" class="form-control btn-xs p-0"
                                         onchange="cargartabla0()">
                                         <option value="0">Todos</option>
                                         @foreach ($gestions as $prov)
@@ -82,7 +83,7 @@
                                 </div>
                                 <label class="col-md-1 col-form-label">Área</label>
                                 <div class="col-md-2">
-                                    <select id="area" name="area" class="form-control p-0"
+                                    <select id="area" name="area" class="form-control btn-xs p-0"
                                         onchange="cargartabla0()">
                                         <option value="0">Todos</option>
                                         @foreach ($areas as $prov)
@@ -188,7 +189,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             Highcharts.setOptions({
-                colors: Highcharts.map(paleta_colores, function(color) {
+                /* colors: Highcharts.map(paleta_colores, function(color) {
                     return {
                         radialGradient: {
                             cx: 0.5,
@@ -200,7 +201,8 @@
                             [1, Highcharts.color(color).brighten(-0.3).get('rgb')] // darken
                         ]
                     };
-                }),
+                }), */
+                colors: ['#317eeb', '#ef5350'],
                 lang: {
                     thousandsSep: ","
                 }
@@ -337,9 +339,16 @@
     <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.responsive.min.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.js"></script>
 
-    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
+    {{-- highcharts --}}
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <!-- optional -->
+    <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+
+    {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts-more.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script> --}}
     {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script> --}}
     {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script> --}}
 @endsection

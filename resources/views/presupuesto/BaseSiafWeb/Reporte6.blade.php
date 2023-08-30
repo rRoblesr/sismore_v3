@@ -64,7 +64,7 @@
                                         <label class=" col-form-label">Año</label>
                                         <div class="">
                                             <select class="form-control" name="ganio" id="ganio"
-                                                onchange="cargarcuadros2();">
+                                                onchange="cargar_productoproyecto();cargar_unidadejecutora();cargarcuadros2();">
                                                 @foreach ($ano as $item)
                                                     <option value="{{ $item->anio }}"
                                                         {{ $item->anio == date('Y') ? 'selected' : '' }}>{{ $item->anio }}
@@ -77,7 +77,7 @@
                                         <label class="col-form-label">Producto/Proyecto</label>
                                         <div class="">
                                             <select class="form-control" name="garticulo" id="garticulo"
-                                                onchange="cargarcuadros2();">
+                                                onchange="cargar_unidadejecutora();cargarcuadros2();">
                                                 <option value="0">TODOS</option>
                                                 @foreach ($articulo as $item)
                                                     <option value="{{ $item->id }}">{{ $item->nombre }}</option>
@@ -220,6 +220,7 @@
             });
 
             cargar_productoproyecto();
+            cargar_unidadejecutora();
 
             cargarcuadros2();
 
@@ -327,13 +328,14 @@
                 },
                 type: 'get',
                 success: function(data) {
+                    console.log(data.productoproyecto);
                     $("#garticulo option").remove();
-                    var options = '<option value="">SELECCIONAR</option>';
+                    var options = '<option value="0">SELECCIONAR</option>';
                     $.each(data.productoproyecto, function(index, value) {
                         options += "<option value='" + value.id + "' >" + value.nombre +
                             "</option>"
                     });
-                    $("#entidadgerencia").append(options);
+                    $("#garticulo").append(options);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -343,16 +345,16 @@
 
         function cargar_unidadejecutora() {
             $.ajax({
-                url: "{{ route('entidad.ajax.cargar') }}",
+                url: "{{ route('basesiafweb.cargar.unidadejecutora') }}",
                 data: {
-                    "dependencia": $('#entidad').val()
+                    "anio": $('#ganio').val()
                 },
                 type: 'get',
                 success: function(data) {
                     $("#gue option").remove();
-                    var options = '<option value="">SELECCIONAR</option>';
+                    var options = '<option value="0">SELECCIONAR</option>';
                     $.each(data.ue, function(index, value) {
-                        options += "<option value='" + value.id + "' >" + value.nombre +
+                        options += "<option value='" + value.id + "' >" + value.abreviatura +
                             "</option>"
                     });
                     $("#gue").append(options);
@@ -365,7 +367,7 @@
 
         function descargar() {
             $.ajax({
-                url: "{{ url('/') }}/SiafGastos/reportes6/Exportar/excel/null/null/null",
+                url: "{{ url('/') }}/SiafGastos/reportes6/Exportar/excel/0/0/0",
                 type: "GET",
                 success: function(data) {
                     window.open("{{ url('/') }}/SiafGastos/reportes6/Exportar/excel/" +

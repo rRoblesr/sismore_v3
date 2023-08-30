@@ -1,61 +1,69 @@
-<table id="tabla1" class="table table-striped table-bordered tablex" style="font-size:11px;">
-    <thead>
-        <tr class="bg-primary text-white text-center">
-            <th>Generica_Gasto</th>
-            <th>PIA</th>
-            <th>PIM</th>
-            <th>CERTIFICADO</th>
-            <th>DEVENGADO</th>
-            <th>% ejecución</th>
-            <th>Saldo CERT.</th>
-            <th>Saldo DEV.</th>
-        </tr>
-
-    </thead>
-    <tbody>
-        @foreach ($head as $item)
-            <tr class="text-right bg-warning font-weight-bold">
-                <td>{{ $item->categoria }}</td>
-                <td>{{ $item->pia }}</td>
-                <td>{{ $item->pim }}</td>
-                <td>{{ $item->cert }}</td>
-                <td>{{ $item->dev }}</td>
-                <th>{!! avance($item->eje) !!}</th>
-                <td>{{ $item->saldo1 }}</td>
-                <td>{{ $item->saldo2 }}</td>
+<table id="tabla1">
+    @foreach ($ue as $val)
+        <thead>
+            <tr>
+                <th colspan="8" style="color:#000000;text-align:center;font-weight:bold;">UNIDAD EJECUTORA
+                    {{ $val->codigo_ue_ant }}
+                    -
+                    {{ $val->nombre_ejecutora }}</th>
             </tr>
-            @foreach ($body as $item2)
-                @if ($item->categoria == $item2->categoria)
-                    <tr class="text-right">
-                        <td>{{ '2.' . $item2->codigo . ' ' . $item2->generica }}</td>
-                        <td>{{ $item2->pia }}</td>
-                        <td>{{ $item2->pim }}</td>
-                        <td>{{ $item2->cert }}</td>
-                        <td>{{ $item2->dev }}</td>
-                        <th>{!! avance($item2->eje) !!}</th>
-                        <td>{{ $item2->saldo1 }}</td>
-                        <td>{{ $item2->saldo2 }}</td>
-                    </tr>
-                @endif
+            <tr>
+                <th style="background-color:#317eeb;color:#ffffff;text-align:center;">GENERICA</th>
+                <th style="background-color:#317eeb;color:#ffffff;text-align:center;">PIA</th>
+                <th style="background-color:#317eeb;color:#ffffff;text-align:center;">PIM</th>
+                <th style="background-color:#317eeb;color:#ffffff;text-align:center;">CERTIFICADO</th>
+                <th style="background-color:#317eeb;color:#ffffff;text-align:center;">DEVENGADO</th>
+                <th style="background-color:#317eeb;color:#ffffff;text-align:center;">EJECUCIÓN</th>
+                <th style="background-color:#317eeb;color:#ffffff;text-align:center;">Saldo CERT.</th>
+                <th style="background-color:#317eeb;color:#ffffff;text-align:center;">Saldo DEV.</th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @foreach ($head[$val->id] as $item)
+                <tr>
+                    <td style="font-weight: bold;">{{ $item->categoria }}</td>
+                    <td style="font-weight: bold;">{{ $item->pia }}</td>
+                    <td style="font-weight: bold;">{{ $item->pim }}</td>
+                    <td style="font-weight: bold;">{{ $item->cert }}</td>
+                    <td style="font-weight: bold;">{{ $item->dev }}</td>
+                    <td style="font-weight: bold;text-align:center">{!! avance($item->eje) !!}</td>
+                    <td style="font-weight: bold;">{{ $item->saldo1 }}</td>
+                    <td style="font-weight: bold;">{{ $item->saldo2 }}</td>
+                </tr>
+                @foreach ($body[$val->id] as $item2)
+                    @if ($item->categoria == $item2->categoria)
+                        <tr>
+                            <td>{{ '2.' . $item2->codigo . ' ' . $item2->generica }}</td>
+                            <td>{{ $item2->pia }}</td>
+                            <td>{{ $item2->pim }}</td>
+                            <td>{{ $item2->cert }}</td>
+                            <td>{{ $item2->dev }}</td>
+                            <td style="text-align:center">{!! avance($item2->eje) !!}</td>
+                            <td>{{ $item2->saldo1 }}</td>
+                            <td>{{ $item2->saldo2 }}</td>
+                        </tr>
+                    @endif
+                @endforeach
             @endforeach
-        @endforeach
-
-    </tbody>
-    <tfoot>
-        <tr class="text-center bg-primary text-white">
-            <th colspan="1">TOTAL</th>
-            <th>{{ $foot['pia'] }}</th>
-            <th>{{ $foot['pim'] }}</th>
-            <th>{{ $foot['cert'] }}</th>
-            <th>{{ $foot['dev'] }}</th>
-            <th>{!! avance($foot['eje']) !!}</th>
-            <th>{{ $foot['saldo1'] }}</th>
-            <th>{{ $foot['saldo2'] }}</th>
-        </tr>
-    </tfoot>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th style="background-color:#317eeb;color:#ffffff" colspan="1">TOTAL</th>
+                <th style="background-color:#317eeb;color:#ffffff">{{ $foot[$val->id]['pia'] }}</th>
+                <th style="background-color:#317eeb;color:#ffffff">{{ $foot[$val->id]['pim'] }}</th>
+                <th style="background-color:#317eeb;color:#ffffff">{{ $foot[$val->id]['cert'] }}</th>
+                <th style="background-color:#317eeb;color:#ffffff">{{ $foot[$val->id]['dev'] }}</th>
+                <th style="background-color:#317eeb;color:#ffffff;text-align:center;font-weight:bold">{!! avance($foot[$val->id]['eje']) !!}</th>
+                <th style="background-color:#317eeb;color:#ffffff">{{ $foot[$val->id]['saldo1'] }}</th>
+                <th style="background-color:#317eeb;color:#ffffff">{{ $foot[$val->id]['saldo2'] }}</th>
+            </tr>
+            <tr>
+                <th colspan="8"></th>
+            </tr>
+        </tfoot>
+    @endforeach
 </table>
-
-
 
 @php
     function avance($monto)

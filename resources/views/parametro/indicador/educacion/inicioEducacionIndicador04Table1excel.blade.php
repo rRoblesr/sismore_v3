@@ -1,14 +1,14 @@
 <table id="tabla1" class="table table-bordered mb-0 tablex" style="font-size:11px;">
     <thead>
         <tr class="table-success-0 text-white">
-            <th rowspan="2">CÓDIGO MODULAR</th>
-            <th rowspan="2">Institución Educativa</th>
-            <th rowspan="2">Área</th>
-            <th rowspan="2">Total Docentes</th>
-            <th rowspan="2">Docentes Títulados</th>
-            <th rowspan="2">Indicador</th>
-            <th colspan="3">Docentes Nombrados con Título</th>
-            <th colspan="3">Docentes Contratados con Título</th>
+            <th rowspan="2" style="text-align: center">CÓDIGO MODULAR</th>
+            <th rowspan="2" style="text-align: center">Institución Educativa</th>
+            <th rowspan="2" style="text-align: center">Área</th>
+            <th rowspan="2" style="text-align: center">Total Docentes</th>
+            <th rowspan="2" style="text-align: center">Docentes Títulados</th>
+            <th rowspan="2" style="text-align: center">Indicador</th>
+            <th colspan="3" style="text-align: center">Docentes Nombrados con Título</th>
+            <th colspan="3" style="text-align: center">Docentes Contratados con Título</th>
         </tr>
         <tr class="table-success-0 text-white">
             <th>Hombres</th>
@@ -40,15 +40,16 @@
     <tfoot>
         <tr class="table-success-0 text-white">
             <th colspan="3">Total</th>
-            <th>{{ $foot->total }}</th>
-            <th>{{ number_format($foot->d01 + $foot->d02 + $foot->d03 + $foot->d04, 0) }}</th>
-            <td>{!! avance($foot->total > 0 ? (100 * ($foot->d01 + $foot->d02 + $foot->d03 + $foot->d04)) / $foot->total : 0, 1) !!}</td>
-            <th>{{ number_format($foot->d01, 0) }}</th>
-            <th>{{ number_format($foot->d02, 0) }}</th>
-            <th>{{ number_format($foot->d01 + $foot->d02, 0) }}</th>
-            <th>{{ number_format($foot->d03, 0) }}</th>
-            <th>{{ number_format($foot->d04, 0) }}</th>
-            <th>{{ number_format($foot->d03 + $foot->d04, 0) }}</th>
+            <th style="text-align: center">{{ number_format($foot->total, 0) }}</th>
+            <th style="text-align: center">{{ number_format($foot->d01 + $foot->d02 + $foot->d03 + $foot->d04, 0) }}
+            </th>
+            <th style="text-align: center">{!! avance($foot->total > 0 ? (100 * ($foot->d01 + $foot->d02 + $foot->d03 + $foot->d04)) / $foot->total : 0, 1) !!}</th>
+            <th style="text-align: center">{{ number_format($foot->d01, 0) }}</th>
+            <th style="text-align: center">{{ number_format($foot->d02, 0) }}</th>
+            <th style="text-align: center">{{ number_format($foot->d01 + $foot->d02, 0) }}</th>
+            <th style="text-align: center">{{ number_format($foot->d03, 0) }}</th>
+            <th style="text-align: center">{{ number_format($foot->d04, 0) }}</th>
+            <th style="text-align: center">{{ number_format($foot->d03 + $foot->d04, 0) }}</th>
         </tr>
     </tfoot>
 </table>

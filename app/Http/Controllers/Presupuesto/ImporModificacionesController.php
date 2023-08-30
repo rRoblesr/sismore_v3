@@ -22,6 +22,8 @@ use Yajra\DataTables\DataTables;
 class ImporModificacionesController extends Controller
 {
     public $fuente = 26;
+    public static $FUENTE = 26;
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -49,9 +51,6 @@ class ImporModificacionesController extends Controller
     {
         ini_set('memory_limit', '-1');
         set_time_limit(0);
-        /* $this->validate($request, ['file' => 'required|mimes:xls,xlsx']);
-        $archivo = $request->file('file');
-        $array = (new tablaXImport)->toArray($archivo); */
 
         $existeMismaFecha = ImportacionRepositorio::Importacion_PE($request->fechaActualizacion, $this->fuente);
         if ($existeMismaFecha != null) {
@@ -67,7 +66,6 @@ class ImporModificacionesController extends Controller
 
         $this->validate($request, ['file' => 'required|mimes:xls,xlsx']);
         $archivo = $request->file('file');
-        //Excel::import(new ImporGastosImport, $archivo);//
         $array = (new tablaXImport)->toArray($archivo);
 
         if (count($array) != 1) {
@@ -88,12 +86,12 @@ class ImporModificacionesController extends Controller
                         $row['cod_tipo_mod'] .
                         $row['tipo_modificacion'] .
                         $row['documento'] .
-                        $row['referencia'] .
+                        //$row['referencia'] .---//
                         $row['dispositivo_legal'] .
                         $row['tipo_ingreso'] .
-                        $row['excepcion_limite'] .
+                        //$row['excepcion_limite'] .----
                         $row['justificacion'] .
-                        $row['tipo_financiamiento'] .
+                        //$row['tipo_financiamiento'] .----
                         $row['entidad_origen'] .
                         $row['tipo_presupuesto'] .
                         $row['sec_func'] .
@@ -143,12 +141,12 @@ class ImporModificacionesController extends Controller
                         'cod_tipo_mod' => $row['cod_tipo_mod'],
                         'tipo_modificacion' => $row['tipo_modificacion'],
                         'documento' => $row['documento'],
-                        'referencia' => $row['referencia'],
+                        //'referencia' => $row['referencia'],
                         'dispositivo_legal' => $row['dispositivo_legal'],
                         'tipo_ingreso' => $row['tipo_ingreso'],
-                        'excepcion_limite' => $row['excepcion_limite'],
+                        //'excepcion_limite' => $row['excepcion_limite'],
                         'justificacion' => $row['justificacion'],
-                        'tipo_financiamiento' => $row['tipo_financiamiento'],
+                        //'tipo_financiamiento' => $row['tipo_financiamiento'],
                         'entidad_origen' => $row['entidad_origen'],
                         'tipo_presupuesto' => $row['tipo_presupuesto'],
                         'sec_func' => $row['sec_func'],
@@ -231,7 +229,7 @@ class ImporModificacionesController extends Controller
                 date("d/m/Y", strtotime($value->created_at)),
                 //$value->comentario,
                 $value->estado == "PR" ? "PROCESADO" : ($value->estado == "PE" ? "PENDIENTE" : "ELIMINADO"),
-                $boton /* . '&nbsp;' . $boton2, */
+                $boton . '&nbsp;' . $boton2,
             );
         }
         $result = array(
@@ -245,17 +243,12 @@ class ImporModificacionesController extends Controller
 
     public function ListaImportada(Request $request, $importacion_id)
     {
-        /* $data = ImporGastosRepositorio::listaImportada($importacion_id);
-        return DataTables::of($data)->make(true); */
-        return null;
+        $data = ImporModificaciones::where('importacion_id', $importacion_id)->get();
+        return DataTables::of($data)->make(true);
     }
 
     public function eliminar($id)
     {
-        /* $entidad = Importacion::find($id);
-        $entidad->estado = 'EL';
-        $entidad->save(); */
-
         $bm = BaseModificacion::where('importacion_id', $id)->first();
         ImporModificaciones::where('importacion_id', $id)->delete();
         if ($bm) {

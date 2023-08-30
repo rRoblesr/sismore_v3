@@ -1,6 +1,6 @@
 <table id="tabla1" class="table table-striped table-bordered tablex" style="font-size:10px;">
     <thead>
-        <tr class="bg-primary text-white text-center">
+        <tr class="bg-success-0 text-white text-center">
             <th>Unidad Ejecutora</th>
             <th>Fecha Aprobacion</th>
             <th>Documento</th>
@@ -27,7 +27,7 @@
         @endforeach
     </tbody>
     <tfoot>
-        <tr class="text-right bg-primary text-white">
+        <tr class="text-right bg-success-0 text-white">
             <th class="text-left" colspan="6">TOTAL</th>
             <th>{{ number_format($foot['anulacion'], 0) }}</th>
             <th>{{ number_format($foot['credito'], 0) }}</th>

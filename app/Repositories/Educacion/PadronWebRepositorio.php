@@ -59,7 +59,7 @@ class PadronWebRepositorio
 
     public static function count_localesescolares2($importacion_id, $provincia, $distrito, $tipogestion, $ambito)
     {
-        $query = PadronWeb::select(DB::raw('distinct count(v2.codLocal) as conteo'))
+        $query = PadronWeb::distinct()->select('v2.codLocal')
             ->join('edu_institucioneducativa as v2', 'v2.id', '=', 'edu_padronweb.institucioneducativa_id')
             ->join('par_centropoblado as v3', 'v3.id', '=', 'v2.CentroPoblado_id')
             ->join('par_ubigeo as v4', 'v4.id', '=', 'v3.Ubigeo_id')
@@ -79,8 +79,8 @@ class PadronWebRepositorio
             }
         }
         if ($ambito > 0) $query = $query->where('v8.id', $ambito);
-        $query = $query->first();
-        return $query->conteo;
+        $query = $query->get();
+        return $query->count();
     }
 
     public static function count_matriculados($importacion_id)

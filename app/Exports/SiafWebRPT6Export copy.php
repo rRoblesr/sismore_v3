@@ -3,42 +3,43 @@
 namespace App\Exports;
 
 use App\Repositories\Presupuesto\BaseGastosRepositorio;
+use App\Repositories\Presupuesto\BaseSiafWebRepositorio;
 use App\Repositories\Presupuesto\GobiernosRegionalesRepositorio;
-use App\Repositories\Presupuesto\ModificacionesRepositorio;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 
-class ModificacionesGastoExport implements FromView, ShouldAutoSize, WithEvents
+class SiafWebRPT6Export implements FromView, ShouldAutoSize, WithEvents
 {
     public $ano;
-    public $mes;
     public $articulo;
-    public $tipo;
-    public $dispositivo;
     public $ue;
 
-    public function __construct($ano, $mes, $articulo, $tipo, $dispositivo, $ue)
+    public function __construct($ano, $articulo, $ue)
     {
         $this->ano = $ano;
-        $this->mes = $mes;
         $this->articulo = $articulo;
-        $this->tipo = $tipo;
-        $this->dispositivo = $dispositivo;
         $this->ue = $ue;
     }
 
     public function view(): View
     {
-        $body = ModificacionesRepositorio::listar_modificaciones($this->ano, $this->mes, $this->articulo, $this->tipo, $this->dispositivo, $this->ue);
-        $foot = ['anulacion' => 0, 'credito' => 0];
+        $data = BaseSiafWebRepositorio::listar_generica_anio_acticulo_ue_categoria($this->ano, $this->articulo, $this->ue);
+        $body = $data['body'];
+        $head = $data['head'];
+        $foot = ['pia' => 0, 'pim' => 0, 'cert' => 0, 'dev' => 0, 'eje' => 0, 'saldo1' => 0, 'saldo2' => 0,];
         foreach ($body as $key => $value) {
-            $foot['anulacion'] += $value->anulacion;
-            $foot['credito'] += $value->credito;
+            $foot['pia'] += $value->pia;
+            $foot['pim'] += $value->pim;
+            $foot['cert'] += $value->cert;
+            $foot['dev'] += $value->dev;
+            $foot['saldo1'] += $value->saldo1;
+            $foot['saldo2'] += $value->saldo2;
         }
-        return view("Presupuesto.Modificaciones.PrincipalTabla1Export", compact('body', 'foot'));
+        $foot['eje'] = $foot['pim'] > 0 ? number_format(100 * $foot['dev'] / $foot['pim'], 1) : 0;
+        return view("Presupuesto.BaseSiafWeb.Reporte6Tabla1Export", compact('head', 'body', 'foot'));
     }
 
     public function  registerEvents(): array
@@ -114,10 +115,10 @@ class ModificacionesGastoExport implements FromView, ShouldAutoSize, WithEvents
             ],
         ];
         $opt = [AfterSheet::class => function (AfterSheet $event) use ($head, $foot, $body, $bodya, $bodyb, $border) {
-            //$event->sheet->getStyle('A1:M1')->applyFromArray($head);
-            //->$event->sheet->getStyle('A28:I28')->applyFromArray($foot);
-            //->$event->sheet->getStyle('B2:I27')->applyFromArray($body);
-            //$event->sheet->getStyle('A2:A27')->applyFromArray($bodya);
+            $event->sheet->getStyle('A1:I1')->applyFromArray($head);
+            //$event->sheet->getStyle('A28:I28')->applyFromArray($foot);
+            $event->sheet->getStyle('B2:I27')->applyFromArray($body);
+            $event->sheet->getStyle('A2:A27')->applyFromArray($bodyb);
             //$event->sheet->getStyle('B2:B27')->applyFromArray($bodyb);
             //$event->sheet->getStyle('A1:I28')->applyFromArray($border);
         }];

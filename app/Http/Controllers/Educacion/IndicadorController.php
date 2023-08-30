@@ -662,10 +662,11 @@ class IndicadorController extends Controller
 
     public function panelControlEduacionHead(Request $rq)
     {
-        $valor1 = PadronWebRepositorio::count_institucioneducativa2($rq->get('impidpadweb'), $rq->get('provincia'), $rq->get('distrito'), $rq->get('tipogestion'), $rq->get('ambito'),);
-        $valor2 = PadronWebRepositorio::count_localesescolares2($rq->get('impidpadweb'), $rq->get('provincia'), $rq->get('distrito'), $rq->get('tipogestion'), $rq->get('ambito'),);
-        $valor3 = MatriculaDetalleRepositorio::count_matriculados2($rq->get('impidsiagie'), $rq->get('provincia'), $rq->get('distrito'), $rq->get('tipogestion'), $rq->get('ambito'),);
-        $valor4 = PlazaRepositorio::count_docente2($rq->get('impidnexus'), $rq->get('provincia'), $rq->get('distrito'), $rq->get('tipogestion'), $rq->get('ambito'),);
+        $valor1 = PadronWebRepositorio::count_institucioneducativa2($rq->impidpadweb, $rq->provincia, $rq->distrito, $rq->tipogestion, $rq->ambito);
+        $valor2 = PadronWebRepositorio::count_localesescolares2($rq->impidpadweb, $rq->provincia, $rq->distrito, $rq->tipogestion, $rq->ambito);
+        //$valor2 = PadronWebRepositorio::count_localesescolares($rq->impidpadweb);
+        $valor3 = MatriculaDetalleRepositorio::count_matriculados2($rq->impidsiagie, $rq->provincia, $rq->distrito, $rq->tipogestion, $rq->ambito);
+        $valor4 = PlazaRepositorio::count_docente2($rq->impidnexus, $rq->provincia, $rq->distrito, $rq->tipogestion, $rq->ambito);
         $valor1 = number_format($valor1, 0);
         $valor2 = number_format($valor2, 0);
         $valor3 = number_format($valor3, 0);
@@ -2259,7 +2260,7 @@ class IndicadorController extends Controller
                                 end) as d')
                 )
                     ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
-                    ->whereIn('v1.nroced', ['1A'])->whereIn('v1.cuadro', ['C309', 'C310'])->whereIn('v1.tipdato',['01', '03', '07', '08']);
+                    ->whereIn('v1.nroced', ['1A'])->whereIn('v1.cuadro', ['C309', 'C310'])->whereIn('v1.tipdato', ['01', '03', '07', '08']);
                 if ($rq->provincia > 0) {
                     $prov = Ubigeo::find($rq->provincia);
                     $nx = $nx->where('v1.codgeo', 'like', $prov->codigo . '%');
@@ -2323,7 +2324,7 @@ class IndicadorController extends Controller
                                     end) as d04'),
                 )
                     ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
-                    ->whereIn('v1.nroced', ['1A'])->whereIn('v1.cuadro', ['C309', 'C310'])->whereIn('v1.tipdato',['01', '03', '07', '08'])
+                    ->whereIn('v1.nroced', ['1A'])->whereIn('v1.cuadro', ['C309', 'C310'])->whereIn('v1.tipdato', ['01', '03', '07', '08'])
                     ->where('par_importacion.id', $rq->anio);
                 if ($rq->provincia > 0) {
                     $prov = Ubigeo::find($rq->provincia);
@@ -2378,7 +2379,7 @@ class IndicadorController extends Controller
                                     end) as d04'),
                 )
                     ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
-                    ->whereIn('v1.nroced', ['1A'])->whereIn('v1.cuadro', ['C309', 'C310'])->whereIn('v1.tipdato',['01', '03', '07', '08'])
+                    ->whereIn('v1.nroced', ['1A'])->whereIn('v1.cuadro', ['C309', 'C310'])->whereIn('v1.tipdato', ['01', '03', '07', '08'])
                     ->where('par_importacion.id', $rq->anio);
                 if ($rq->provincia > 0) {
                     $prov = Ubigeo::find($rq->provincia);
@@ -2423,7 +2424,7 @@ class IndicadorController extends Controller
                                     ) as d') */
                 )
                     ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
-                    ->whereIn('v1.nroced', ['1A'])->whereIn('v1.cuadro', ['C309', 'C310'])->whereIn('v1.tipdato',['01', '03', '07', '08'])
+                    ->whereIn('v1.nroced', ['1A'])->whereIn('v1.cuadro', ['C309', 'C310'])->whereIn('v1.tipdato', ['01', '03', '07', '08'])
                     ->where('par_importacion.id', $rq->anio);
                 if ($rq->provincia > 0) {
                     $prov = Ubigeo::find($rq->provincia);
@@ -2487,7 +2488,7 @@ class IndicadorController extends Controller
                     inner join edu_impor_censodocente as v1 on v1.importacion_id = par_importacion.id
                     where v1.nroced in ("1A") and v1.cuadro in ("C305") and v1.tipdato in ("01", "05") and par_importacion.id = ' . $rq->anio . '
                     group by modularx ) as v2 '), 'v2.modularx', '=', 'v1.cod_mod')
-                    ->whereIn('v1.nroced', ['1A'])->whereIn('v1.cuadro', ['C309', 'C310'])->whereIn('v1.tipdato',['01', '03', '07', '08'])
+                    ->whereIn('v1.nroced', ['1A'])->whereIn('v1.cuadro', ['C309', 'C310'])->whereIn('v1.tipdato', ['01', '03', '07', '08'])
                     ->where('par_importacion.id', $rq->anio);
                 if ($rq->provincia > 0) {
                     $prov = Ubigeo::find($rq->provincia);
@@ -2560,5 +2561,4 @@ class IndicadorController extends Controller
                 return response()->json([]);
         }
     }
-
 }

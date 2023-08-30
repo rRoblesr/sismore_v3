@@ -298,6 +298,10 @@
                         url: "{{ url('/') }}/ImporMatricula/eliminar/" + id,
                         type: "GET",
                         dataType: "JSON",
+                        beforeSend: function() {
+                            $('#eliminar' + id).html(
+                                '<span><i class="fa fa-spinner fa-spin"></i></span>');
+                        },
                         success: function(data) {
                             $('#modal_form').modal('hide');
                             table_principal.ajax.reload();
