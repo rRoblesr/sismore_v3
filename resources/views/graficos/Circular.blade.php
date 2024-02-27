@@ -1,20 +1,17 @@
-
-
 <script>
-
-    Highcharts.chart('{{$contenedor}}', {
+    Highcharts.chart('{{ $contenedor }}', {
         chart: {
             plotBackgroundColor: null,
             plotBorderWidth: null,
             plotShadow: false,
             type: 'pie'
         },
-        credits:false,
+        credits: false,
         title: {
-            text: '{{$titulo_grafico}}'
+            text: '{{ $titulo_grafico }}'
         },
         subtitle: {
-            text: '{{$subtitulo_grafico}}'
+            text: '{{ $subtitulo_grafico }}'
         },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -37,10 +34,7 @@
         series: [{
             name: 'Porcentaje',
             colorByPoint: true,
-            data: <?=$dataCircular?>
+            data: <?= $dataCircular ?>
         }]
     });
-    
 </script>
-    
-

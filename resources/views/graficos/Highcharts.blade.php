@@ -131,6 +131,7 @@
 @section('js')
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/highcharts-more.js"></script>
+    <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
@@ -4477,6 +4478,7 @@
                     tickColor: Highcharts.defaultOptions.chart.backgroundColor || '#FFFFFF',
                     tickLength: 20,
                     tickWidth: 2,
+                    tickAmount: 7,
                     minorTickInterval: null,
                     labels: {
                         distance: -30,
@@ -4564,8 +4566,8 @@
                 title: null,
 
                 pane: {
-                    center: ['50%', '85%'],
-                    size: '140%',
+                    center: ['50%', '50%'],//center: ['50%', '85%'],
+                    // size: '140%',
                     startAngle: -90,
                     endAngle: 90,
                     background: {
