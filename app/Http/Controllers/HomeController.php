@@ -39,6 +39,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Repositories\Vivienda\DatassRepositorio;
 use App\Utilities\Utilitario;
+use Illuminate\Support\Facades\Schema;
 
 class HomeController extends Controller
 {
@@ -82,6 +83,9 @@ class HomeController extends Controller
         session()->put(['perfil_administrador_id' => $usuper ? $usuper->perfil_id : 0]);
         session()->put(['perfils' => $perfils]);
         session()->put(['sistemas' => $sistemas]);
+
+        // return Schema::hasTable('edu_area')?'existe':'no existe';
+        // return Schema::hasTable('par_lengua');//?'existe':'no existe';
 
         // $usuario = UsuarioRepositorio::Usuario(auth()->user()->id);
         // if ($usuario->first() != null) {
@@ -187,6 +191,9 @@ class HomeController extends Controller
 
     public function trabajo($sistema_id)
     {
+        if (!Schema::hasTable('tra_pea')) {
+            return view('paginavacio');//
+        }
         return view('home', compact('sistema_id'));
     }
 
@@ -197,6 +204,9 @@ class HomeController extends Controller
 
     public function presupuesto($sistema_id)
     {
+        if (!Schema::hasTable('pres_base_siafweb')) {
+            return view('paginavacio');//
+        }
         //$actualizado = '';
         $impSW = Importacion::where('fuenteimportacion_id', ImporSiafWebController::$FUENTE)->where('estado', 'PR')->orderBy('fechaActualizacion', 'desc')->first();
         $baseSW = BaseSiafWeb::where('importacion_id', $impSW->id)->first();
@@ -590,6 +600,9 @@ class HomeController extends Controller
 
     public function vivienda($sistema_id)
     {
+        if (!Schema::hasTable('viv_centropoblado_datass')) {
+            return view('paginavacio');//
+        }
 
         $vUrl = "https://datastudio.google.com/embed/reporting/6c73c567-559b-4dd6-8608-64a0b502c85c/page/XXx8C";
         // $imp = Importacion::select(DB::raw('max(id) as maximo'))->where('fuenteimportacion_id', '7')->where('estado', 'PR')->first();
@@ -615,7 +628,11 @@ class HomeController extends Controller
     }
 
     public function educacion($sistema_id)
-    {
+    { //return Schema::hasTable('edu_area')?'existe':'no existe';
+        if (!Schema::hasTable('edu_area')) {
+            return view('paginavacio');//viv_centropoblado_datass
+        }
+
         $actualizado = '';
         $tipo_acceso = 0;
         $imgd = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
