@@ -1,40 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-
-    <!-- App favicon -->
-    <link rel="shortcut icon" href="http://localhost/_laravel/git/sismore_v3/public/assets/images/favicon.ico">
-    <!-- Plugins css-->
-    <link href="http://localhost/_laravel/git/sismore_v3/public/assets/libs/sweetalert2/sweetalert2.min.css"
-        rel="stylesheet" type="text/css" />
-    <!-- App css -->
-    <link href="http://localhost/_laravel/git/sismore_v3/public/assets/css/bootstrap.min.css" rel="stylesheet"
-        type="text/css" id="bootstrap-stylesheet" />
-    <link href="http://localhost/_laravel/git/sismore_v3/public/assets/css/icons.min.css" rel="stylesheet"
+@extends('layouts.main', ['titlePage' => 'IMPORTAR DATOS - MATRICULAS SIAGIE'])
+@section('css')
+    <!-- Table datatable css -->
+    <link href="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.css" rel="stylesheet"
         type="text/css" />
-
-    <link href="http://localhost/_laravel/git/sismore_v3/public/assets/css/app.min.css" rel="stylesheet" type="text/css"
-        id="app-stylesheet" />
-    <!-- estilos personalizados XD-->
-    <link rel="stylesheet" href="http://localhost/_laravel/git/sismore_v3/public/assets/css/otros/personalizado.css"
-        type='text/css'>
-    <link rel="stylesheet"
-        href="http://localhost/_laravel/git/sismore_v3/public/assets/css/otros/pretty-checkbox.min.css" type='text/css'>
-
-
-</head>
-
-<body>
-
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"> --}}
+@endsection
+@section('content')
     <div class="row">
 
         <div class="col-lg-6">
-            <div class="card card-border border border-plomo-0">
+            <div class="card card-border">
                 <div class="card-header border-success bg-transparent pb-0 pt-2">
                     <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11"></h3>
                 </div>
@@ -151,35 +126,43 @@
         </div>
 
     </div>
+@endsection
 
+@section('js')
     <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-more.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
     <script type="text/javascript">
         // showInLegend: false,//quita leyenda de la serie
-        /* bar01('gra01');
-        bar02('gra02');
-        bar03('gra03');
-        bar04('gra04');
-        bar05('gra05');
-        bar06('gra06');
-        bar07('gra07');
-        bar08('gra08');
-        bar09('gra09');
-        bar10('gra10'); */
 
-        column01('gra01');
-        column02('gra02');
-        column03('gra03');
-        column04('gra04');
-        column05('gra05');
-        column06('gra06');
-        column07('gra07');
-        column08('gra08');
-        column09('gra09');
-        column10('gra10');
+        // bar01('gra01');
+        // bar02('gra02');
+        // bar03('gra03');
+        // bar04('gra04');
+        // bar05('gra05');
+        // bar06('gra06');
+        // bar07('gra07');
+        // bar08('gra08');
+        // bar09('gra09');
+        // bar10('gra10');
+
+        // column01('gra01');
+        // column02('gra02');
+        // column03('gra03');
+        // column04('gra04');
+        // column05('gra05');
+        // column06('gra06');
+        // column07('gra07');
+        // column08('gra08');
+        // column09('gra09');
+        // column10('gra10');
+
+        GaugeSeries01('gra01');
+        GaugeSeries02('gra02');
+
 
         /* Highcharts.chart('gra01', {
             chart: {
@@ -4461,8 +4444,266 @@
                     .add();
             });
         }
+
+        function GaugeSeries01(div) {
+            Highcharts.chart(div, {
+                chart: {
+                    type: 'gauge',
+                    plotBackgroundColor: null,
+                    plotBackgroundImage: null,
+                    plotBorderWidth: 0,
+                    plotShadow: false,
+                    // height: '80%'
+                },
+
+                title: {
+                    text: 'Speedometer'
+                },
+
+                pane: {
+                    startAngle: -90,
+                    endAngle: 89.9,
+                    background: null,
+                    center: ['50%', '50%'],
+                    // size: '110%'
+                },
+
+                // the value axis
+                yAxis: {
+                    min: 0,
+                    max: 100,
+                    tickPixelInterval: 72,
+                    tickPosition: 'inside',
+                    tickColor: Highcharts.defaultOptions.chart.backgroundColor || '#FFFFFF',
+                    tickLength: 20,
+                    tickWidth: 2,
+                    minorTickInterval: null,
+                    labels: {
+                        distance: -30,
+                        style: {
+                            fontSize: '10px'
+                        }
+                    },
+                    lineWidth: 0,
+                    plotBands: [{
+                        from: 0,
+                        to: 50,
+                        color: '#55BF3B', // green
+                        thickness: 20
+                    }, {
+                        from: 50,
+                        to: 80,
+                        color: '#DDDF0D', // yellow
+                        thickness: 20
+                    }, {
+                        from: 80,
+                        to: 100,
+                        color: '#DF5353', // red
+                        thickness: 20
+                    }]
+                },
+
+                series: [{
+                    name: 'Speed',
+                    data: [80],
+                    tooltip: {
+                        valueSuffix: ' km/h'
+                    },
+                    dataLabels: {
+                        format: '{y} km/h',
+                        borderWidth: 0,
+                        color: (
+                            Highcharts.defaultOptions.title &&
+                            Highcharts.defaultOptions.title.style &&
+                            Highcharts.defaultOptions.title.style.color
+                        ) || '#333333',
+                        style: {
+                            fontSize: '16px'
+                        }
+                    },
+                    dial: {
+                        radius: '80%',
+                        backgroundColor: 'gray',
+                        baseWidth: 12,
+                        baseLength: '0%',
+                        rearLength: '0%'
+                    },
+                    pivot: {
+                        backgroundColor: 'gray',
+                        radius: 6
+                    }
+
+                }]
+
+            });
+
+            // Add some life
+            // setInterval(() => {
+            //     const chart = Highcharts.charts[0];
+            //     if (chart && !chart.renderer.forExport) {
+            //         const point = chart.series[0].points[0],
+            //             inc = Math.round((Math.random() - 0.5) * 20);
+
+            //         let newVal = point.y + inc;
+            //         if (newVal < 0 || newVal > 200) {
+            //             newVal = point.y - inc;
+            //         }
+
+            //         point.update(newVal);
+            //     }
+
+            // }, 3000);
+        }
+
+        function GaugeSeries02(div) {
+            const gaugeOptions = {
+                chart: {
+                    type: 'solidgauge'
+                },
+
+                title: null,
+
+                pane: {
+                    center: ['50%', '85%'],
+                    size: '140%',
+                    startAngle: -90,
+                    endAngle: 90,
+                    background: {
+                        backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
+                        innerRadius: '60%',
+                        outerRadius: '100%',
+                        shape: 'arc'
+                    }
+                },
+
+                exporting: {
+                    enabled: false
+                },
+
+                tooltip: {
+                    enabled: false
+                },
+
+                // the value axis
+                yAxis: {
+                    stops: [
+                        [0.1, '#55BF3B'], // green
+                        [0.5, '#DDDF0D'], // yellow
+                        [0.9, '#DF5353'] // red
+                    ],
+                    lineWidth: 0,
+                    tickWidth: 0,
+                    minorTickInterval: null,
+                    tickAmount: 2,
+                    title: {
+                        y: -70
+                    },
+                    labels: {
+                        y: 16
+                    }
+                },
+
+                plotOptions: {
+                    solidgauge: {
+                        dataLabels: {
+                            y: 5,
+                            borderWidth: 0,
+                            useHTML: true
+                        }
+                    }
+                }
+            };
+
+            // The speed gauge
+            const chartSpeed = Highcharts.chart('gra02', Highcharts.merge(gaugeOptions, {
+                yAxis: {
+                    min: 0,
+                    max: 200,
+                    title: {
+                        text: 'Speed'
+                    }
+                },
+
+                credits: {
+                    enabled: false
+                },
+
+                series: [{
+                    name: 'Speed',
+                    data: [80],
+                    dataLabels: {
+                        format: '<div style="text-align:center">' +
+                            '<span style="font-size:25px">{y}</span><br/>' +
+                            '<span style="font-size:12px;opacity:0.4">km/h</span>' +
+                            '</div>'
+                    },
+                    tooltip: {
+                        valueSuffix: ' km/h'
+                    }
+                }]
+
+            }));
+
+            // The RPM gauge
+            const chartRpm = Highcharts.chart('gra03', Highcharts.merge(gaugeOptions, {
+                yAxis: {
+                    min: 0,
+                    max: 5,
+                    title: {
+                        text: 'RPM'
+                    }
+                },
+
+                series: [{
+                    name: 'RPM',
+                    data: [1],
+                    dataLabels: {
+                        format: '<div style="text-align:center">' +
+                            '<span style="font-size:25px">{y:.1f}</span><br/>' +
+                            '<span style="font-size:12px;opacity:0.4">' +
+                            '* 1000 / min' +
+                            '</span>' +
+                            '</div>'
+                    },
+                    tooltip: {
+                        valueSuffix: ' revolutions/min'
+                    }
+                }]
+
+            }));
+
+            // Bring life to the dials
+            setInterval(function() {
+                // Speed
+                let point,
+                    newVal,
+                    inc;
+
+                if (chartSpeed) {
+                    point = chartSpeed.series[0].points[0];
+                    inc = Math.round((Math.random() - 0.5) * 100);
+                    newVal = point.y + inc;
+
+                    if (newVal < 0 || newVal > 200) {
+                        newVal = point.y - inc;
+                    }
+
+                    point.update(newVal);
+                }
+
+                // RPM
+                if (chartRpm) {
+                    point = chartRpm.series[0].points[0];
+                    inc = Math.random() - 0.5;
+                    newVal = point.y + inc;
+
+                    if (newVal < 0 || newVal > 5) {
+                        newVal = point.y - inc;
+                    }
+
+                    point.update(newVal);
+                }
+            }, 2000);
+        }
     </script>
-
-</body>
-
-</html>
+@endsection
