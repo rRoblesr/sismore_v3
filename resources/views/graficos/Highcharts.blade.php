@@ -161,7 +161,7 @@
         // column10('gra10');
 
         GaugeSeries01('gra01');
-        GaugeSeries02('gra02');
+        GaugeSeries02('gra10');
 
 
         /* Highcharts.chart('gra01', {
