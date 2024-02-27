@@ -4463,7 +4463,7 @@
 
                 pane: {
                     startAngle: -90,
-                    endAngle: 89.9,
+                    endAngle: 90,
                     background: null,
                     center: ['50%', '50%'],
                     // size: '110%'
@@ -4478,7 +4478,6 @@
                     tickColor: Highcharts.defaultOptions.chart.backgroundColor || '#FFFFFF',
                     tickLength: 20,
                     tickWidth: 2,
-                    tickAmount: 7,
                     minorTickInterval: null,
                     labels: {
                         distance: -30,
@@ -4524,7 +4523,7 @@
                         }
                     },
                     dial: {
-                        radius: '80%',
+                        radius: '60%',
                         backgroundColor: 'gray',
                         baseWidth: 12,
                         baseLength: '0%',
