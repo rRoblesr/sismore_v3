@@ -7,217 +7,259 @@
 @endsection
 
 @section('content')
-    <div class="content">
 
-        @if (count($errors) > 0)
-            <div class="alert alert-danger">
-                Error al Cargar Archivo <br><br>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card card-border">
+                <div class="card-header border-success-0 bg-transparent pb-0">
+                    <h3 class="card-title">Datos de importación</h3>
+                </div>
 
-        @if ($mensaje != '')
-            {{-- <div class="alert alert-danger"> --}}
-            <div class="alert alert-{{ $tipo }}">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                {{ $mensaje }}
-                {{-- <ul>
-                    <li>{{ $mensaje }}</li>
-                </ul> --}}
-            </div>
-        @endif
-
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card card-border">
-                    <div class="card-header border-success-0 bg-transparent pb-0">
-                        <h3 class="card-title">Datos de importación</h3>
-                    </div>
-
-                    <div class="card-body">
-                        <form action="{{ route('CuadroAsigPersonal.guardar') }}"
-                            class="cmxform form-horizontal tasi-form upload_file">
-                            @csrf
-                            <input type="hidden" id="ccomment" name="comentario" value="">
-                            <div class="form-group row">
-                                <div class="col-md-3">
-                                    <label class="col-form-label">Fuente de datos</label>
-                                    <div class="">
-                                        <input type="text" class="form-control btn-xs" readonly="readonly"
-                                            value="NEXUS - MINEDU">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <label class="col-form-label">Fecha Versión</label>
-                                    <div class="">
-                                        <input type="date" class="form-control btn-xs" name="fechaActualizacion"
-                                            placeholder="Ingrese fecha actualizacion" autofocus required>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="col-form-label">Archivo</label>
-                                    <div class="">
-                                        <input type="file" name="file" class="form-control btn-xs" required>
-                                    </div>
+                <div class="card-body">
+                    <form action="{{ route('CuadroAsigPersonal.guardar') }}"
+                        class="cmxform form-horizontal tasi-form upload_file">
+                        @csrf
+                        <input type="hidden" id="ccomment" name="comentario" value="">
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <label class="col-form-label">Fuente de datos</label>
+                                <div class="">
+                                    <input type="text" class="form-control btn-xs" readonly="readonly"
+                                        value="NEXUS - MINEDU">
                                 </div>
                             </div>
 
-                            <div class="form-group row  mt-0 mb-0">
-                                <label class="col-md-2 col-form-label"></label>
-                                <div class="col-md-10">
-                                    <div class="pwrapper m-0 " style="display:none;">
-                                        <div class="progress progress-lg progress_wrapper">
-                                            <div class="progress-bar progress-bar-striped bg-info progress-bar-animated progress_bar"
-                                                role="progressbar" style="width:0%">0%</div>
+                            <div class="col-md-3">
+                                <label class="col-form-label">Fecha Versión</label>
+                                <div class="">
+                                    <input type="date" class="form-control btn-xs" name="fechaActualizacion"
+                                        placeholder="Ingrese fecha actualizacion" autofocus required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="col-form-label">Archivo</label>
+                                <div class="">
+                                    <input type="file" name="file" class="form-control btn-xs" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row  mt-0 mb-0">
+                            <label class="col-md-2 col-form-label"></label>
+                            <div class="col-md-10">
+                                <div class="pwrapper m-0 " style="display:none;">
+                                    <div class="progress progress-lg progress_wrapper">
+                                        <div class="progress-bar progress-bar-striped bg-info progress-bar-animated progress_bar"
+                                            role="progressbar" style="width:0%">0%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-0">
+                            <div class="offset-lg-2 col-lg-10 text-right">
+                                <button class="btn btn-primary waves-effect waves-light mr-1"
+                                    type="submit">Importar</button>
+                                {{-- <button class="btn btn-secondary waves-effect" type="button">Cancelar</button> --}}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-border">
+                <div class="card-header border-success-0 bg-transparent pb-0">
+                    <h3 class="card-title">HISTORIAL DE IMPORTACIÓN DEL PADRON NEXUS</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table id="datatable" class="table table-striped table-bordered dt-responsive nowrap"
+                                    style="font-size: 12px">
+                                    <thead class="text-primary">
+                                        <tr>
+                                            <th>N°</th>
+                                            <th>Fecha Versión</th>
+                                            <th>Fuente</th>
+                                            <th>Usuario</th>
+                                            <th>Área</th>
+                                            <th>Registro</th>
+                                            <th>Estado</th>
+                                            <th>Acción</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap modal -->
+    <div id="modal-siagie-matricula" class="modal fade centrarmodal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table id="siagie-matricula" class="table table-striped table-bordered"
+                            style="font-size:10px;width:10000px;">
+                            <thead class="text-primary">
+                                <th>UNIDAD_EJECUTORA</th>
+                                <th>UGEL</th>
+                                <th>PROVINCIA</th>
+                                <th>DISTRITO</th>
+                                <th>TIPO_IE</th>
+                                <th>GESTION</th>
+                                <th>ZONA</th>
+                                <th>CODMOD_IE</th>
+                                <th>CODIGO_LOCAL</th>
+                                <th>CLAVE8</th>
+                                <th>NIVEL_EDUCATIVO</th>
+                                <th>INSTITUCION_EDUCATIVA</th>
+                                <th>JEC</th>
+                                <th>CODIGO_PLAZA</th>
+                                <th>TIPO_TRABAJADOR</th>
+                                <th>SUB_TIPO_TRABAJADOR</th>
+                                <th>CARGO</th>
+                                <th>SITUACION_LABORAL</th>
+                                <th>MOTIVO_VACANTE</th>
+                                <th>CATEGORIA_REMUNERATIVA</th>
+                                <th>DESCRIPCION_ESCALA</th>
+                                <th>JORNADA_LABORAL</th>
+                                <th>ESTADO</th>
+                                <th>FECHA_INICIO</th>
+                                <th>FECHA_TERMINO</th>
+                                <th>TIPO_REGISTRO</th>
+                                <th>LEY</th>
+                                <th>FECHA_INGRESO_NOMB</th>
+                                <th>DOCUMENTO</th>
+                                <th>CODMOD_DOCENTE</th>
+                                <th>APELLIDO_PATERNO</th>
+                                <th>APELLIDO_MATERNO</th>
+                                <th>NOMBRES</th>
+                                <th>FECHA_NACIMIENTO</th>
+                                <th>SEXO</th>
+                                <th>REGIMEN_PENSIONARIO</th>
+                                <th>FECHA_AFILIACION_RP</th>
+                                <th>CODIGO_ESSALUD</th>
+                                <th>AFP</th>
+                                <th>CODIGO_AFP</th>
+                                <th>FECHA_AFILIACION_AFP</th>
+                                <th>FECHA_DEVENGUE_AFP</th>
+                                <th>MENCION</th>
+                                <th>CENTRO_ESTUDIOS</th>
+                                <th>TIPO_ESTUDIOS</th>
+                                <th>ESTADO_ESTUDIOS</th>
+                                <th>ESPECIALIDAD_PROFESIONAL</th>
+                                <th>GRADO</th>
+                                <th>CELULAR</th>
+                                <th>EMAIL</th>
+                                <th>ESPECIALIDAD</th>
+                                <th>FECHA_RESOLUCION</th>
+                                <th>NUMERO_RESOLUCION</th>
+                                <th>DESC_SUPERIOR</th>
+                                <th>NUMERO_CONTRATO_CAS</th>
+                                <th>NUMERO_ADENDA_CAS</th>
+                                <th>PREVENTIVA</th>
+                                <th>REFERENCIA_PREVENTIVA</th>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Bootstrap modal -->
+
+    <!--  Modal content for the above example -->
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+        aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myLargeModalLabel">Importar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <form class="cmxform form-horizontal tasi-form upload_file">
+                                @csrf
+                                <input type="hidden" id="ccomment" name="comentario" value="">
+                                <div class="form-group">
+                                    <div class="">
+                                        <label class="col-form-label">Fuente de datos</label>
+                                        <div class="">
+                                            <input type="text" class="form-control btn-xs" readonly="readonly"
+                                                value="ESCALE">
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="form-group row mb-0">
-                                <div class="offset-lg-2 col-lg-10 text-right">
-                                    <button class="btn btn-primary waves-effect waves-light mr-1"
-                                        type="submit">Importar</button>
-                                    {{-- <button class="btn btn-secondary waves-effect" type="button">Cancelar</button> --}}
+                                <div class="form-group">
+                                    <div class="">
+                                        <label class="col-form-label">Fecha Versión</label>
+                                        <div class="">
+                                            <input type="date" class="form-control btn-xs" name="fechaActualizacion"
+                                                placeholder="Ingrese fecha actualizacion" autofocus required>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card card-border">
-                    <div class="card-header border-success-0 bg-transparent pb-0">
-                        <h3 class="card-title">HISTORIAL DE IMPORTACION </h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="table-responsive">
-                                    <table id="datatable" class="table table-striped table-bordered dt-responsive nowrap"
-                                        style="font-size: 12px">
-                                        <thead class="text-primary">
-                                            <tr>
-                                                <th>N°</th>
-                                                <th>Fecha Version</th>
-                                                <th>Fuente</th>
-                                                <th>Usuario</th>
-                                                <th>Area</th>
-                                                <th>Registro</th>
-                                                <th>Estado</th>
-                                                <th>Accion</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
+                                <div class="form-group">
+                                    <div class="">
+                                        <label class="col-form-label">Archivo</label>
+                                        <div class="">
+                                            <input type="file" name="file" class="form-control btn-xs" required>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+
+                                <div class="form-group row  mt-0 mb-0">
+                                    {{-- <label class="col-md-2 col-form-label"></label> --}}
+                                    <div class="col-md-12">
+                                        <div class="pwrapper m-0" style="display:none;">
+                                            <div class="progress progress_wrapper">
+                                                <div class="progress-bar progress-bar-striped bg-info progress-bar-animated progress_bar"
+                                                    role="progressbar" style="width:0%">0%</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row ">
+                                    <div class="col-lg-12 text-center">
+                                        <button class="btn btn-primary waves-effect waves-light" type="submit"><i
+                                                class="ion ion-md-cloud-upload"></i> Guardar</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div><!-- /.modal -->
 
-        <!-- Bootstrap modal -->
-        <div id="modal-siagie-matricula" class="modal fade centrarmodal" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title"></h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="table-responsive">
-                            <table id="siagie-matricula" class="table table-striped table-bordered"
-                                style="font-size:10px;width:10000px;">
-                                <thead class="text-primary">
-                                    <th>UNIDAD_EJECUTORA</th>
-                                    <th>UGEL</th>
-                                    <th>PROVINCIA</th>
-                                    <th>DISTRITO</th>
-                                    <th>TIPO_IE</th>
-                                    <th>GESTION</th>
-                                    <th>ZONA</th>
-                                    <th>CODMOD_IE</th>
-                                    <th>CODIGO_LOCAL</th>
-                                    <th>CLAVE8</th>
-                                    <th>NIVEL_EDUCATIVO</th>
-                                    <th>INSTITUCION_EDUCATIVA</th>
-                                    <th>JEC</th>
-                                    <th>CODIGO_PLAZA</th>
-                                    <th>TIPO_TRABAJADOR</th>
-                                    <th>SUB_TIPO_TRABAJADOR</th>
-                                    <th>CARGO</th>
-                                    <th>SITUACION_LABORAL</th>
-                                    <th>MOTIVO_VACANTE</th>
-                                    <th>CATEGORIA_REMUNERATIVA</th>
-                                    <th>DESCRIPCION_ESCALA</th>
-                                    <th>JORNADA_LABORAL</th>
-                                    <th>ESTADO</th>
-                                    <th>FECHA_INICIO</th>
-                                    <th>FECHA_TERMINO</th>
-                                    <th>TIPO_REGISTRO</th>
-                                    <th>LEY</th>
-                                    <th>FECHA_INGRESO_NOMB</th>
-                                    <th>DOCUMENTO</th>
-                                    <th>CODMOD_DOCENTE</th>
-                                    <th>APELLIDO_PATERNO</th>
-                                    <th>APELLIDO_MATERNO</th>
-                                    <th>NOMBRES</th>
-                                    <th>FECHA_NACIMIENTO</th>
-                                    <th>SEXO</th>
-                                    <th>REGIMEN_PENSIONARIO</th>
-                                    <th>FECHA_AFILIACION_RP</th>
-                                    <th>CODIGO_ESSALUD</th>
-                                    <th>AFP</th>
-                                    <th>CODIGO_AFP</th>
-                                    <th>FECHA_AFILIACION_AFP</th>
-                                    <th>FECHA_DEVENGUE_AFP</th>
-                                    <th>MENCION</th>
-                                    <th>CENTRO_ESTUDIOS</th>
-                                    <th>TIPO_ESTUDIOS</th>
-                                    <th>ESTADO_ESTUDIOS</th>
-                                    <th>ESPECIALIDAD_PROFESIONAL</th>
-                                    <th>GRADO</th>
-                                    <th>CELULAR</th>
-                                    <th>EMAIL</th>
-                                    <th>ESPECIALIDAD</th>
-                                    <th>FECHA_RESOLUCION</th>
-                                    <th>NUMERO_RESOLUCION</th>
-                                    <th>DESC_SUPERIOR</th>
-                                    <th>NUMERO_CONTRATO_CAS</th>
-                                    <th>NUMERO_ADENDA_CAS</th>
-                                    <th>PREVENTIVA</th>
-                                    <th>REFERENCIA_PREVENTIVA</th>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-
-                            </table>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cerrar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End Bootstrap modal -->
-
-    </div>
 @endsection
 
 @section('js')
@@ -234,47 +276,6 @@
                 ajax: "{{ route('cuadroasigpersonal.listar.importados') }}",
                 type: "POST",
             });
-
-            /* table_principal = $('#datatable').DataTable({
-                "ajax": "{{ route('cuadroasigpersonal.listar.importados') }}", //ece.listar.importados
-                "columns": [{
-                        data: 'fechaActualizacion'
-                    },
-                    {
-                        data: 'fechaActualizacion'
-                    },
-                    {
-                        data: 'fuente'
-                    },
-                    {
-                        data: 'nombrecompleto'
-                    },
-                    {
-                        data: 'created_at'
-                    },
-                    {
-                        data: 'comentario'
-                    },
-                    {
-                        data: 'estado'
-                    },
-                    {
-                        data: 'accion'
-                    },
-                ],
-                "responsive": true,
-                "autoWidth": false,
-                "order": false,
-                "language": table_language,
-            });
-            table_principal.on('order.dt search.dt', function() {
-                table_principal.column(0, {
-                    search: 'applied',
-                    order: 'applied'
-                }).nodes().each(function(cell, i) {
-                    cell.innerHTML = i + 1;
-                });
-            }).draw(); */
         });
 
         function upload(e) {

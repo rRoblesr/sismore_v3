@@ -22,6 +22,7 @@ use function PHPUnit\Framework\isNull;
 class ImporPadronEibController extends Controller
 {
     public $fuente = 12;
+    public static $FUENTE = 12;
     public function __construct()
     {
         $this->middleware('auth');
@@ -29,9 +30,11 @@ class ImporPadronEibController extends Controller
 
     public function importar()
     {
-        $mensaje = "";
-        $anios = Anio::orderBy('anio', 'desc')->get();
-        return view('educacion.ImporPadronEIB.Importar', compact('mensaje', 'anios'));
+        $fuente = $this->fuente;
+        return view('educacion.ImporGeneral.Importar', compact('fuente'));
+        //$mensaje = "";
+        //$anios = Anio::orderBy('anio', 'desc')->get();
+        //return view('educacion.ImporPadronEIB.Importar', compact('mensaje', 'anios'));
     }
 
     function json_output($status = 200, $msg = 'OK!!', $data = null)
@@ -96,9 +99,9 @@ class ImporPadronEibController extends Controller
             $importacion = Importacion::Create([
                 'fuenteImportacion_id' => $this->fuente, // valor predeterminado
                 'usuarioId_Crea' => auth()->user()->id,
-                'usuarioId_Aprueba' => null,
+                // 'usuarioId_Aprueba' => null,
                 'fechaActualizacion' => $request['fechaActualizacion'],
-                'comentario' => $request['comentario'],
+                // 'comentario' => $request['comentario'],
                 'estado' => 'PE'
             ]);
 
@@ -163,11 +166,11 @@ class ImporPadronEibController extends Controller
             }
             $ape = '';
             if (strlen($value->capellido1) > 0) {
-                $xx = explode(' ', $value->capellido1 . ' ' . $value->capellido2); 
+                $xx = explode(' ', $value->capellido1 . ' ' . $value->capellido2);
                 $ape = $xx[0];
             }
 
-            if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_id') == 3 || session('perfil_id') == 8 || session('perfil_id') == 9 || session('perfil_id') == 10 || session('perfil_id') == 11)
+            if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11)
                 $boton = '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" id="eliminar' . $value->id . '"><i class="fa fa-trash"></i> </button>';
             else
                 $boton = '';
@@ -204,7 +207,7 @@ class ImporPadronEibController extends Controller
                 return $query->estado == "PR" ? "PROCESADO" : ($query->estado == "PE" ? "PENDIENTE" : "ELIMINADO");
             })
             ->addColumn('accion', function ($oo) {
-                if (date('Y-m-d', strtotime($oo->created_at)) == date('Y-m-d') || session('perfil_id') == 3 || session('perfil_id') == 8 || session('perfil_id') == 9 || session('perfil_id') == 10 || session('perfil_id') == 11)
+                if (date('Y-m-d', strtotime($oo->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11)
                     $msn = '<button type="button" onclick="geteliminar(' . $oo->id . ')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> </button>';
                 else
                     $msn = '';
@@ -218,7 +221,7 @@ class ImporPadronEibController extends Controller
                 }
                 $ape = '';
                 if (strlen($oo->capellido1) > 0) {
-                    $xx = explode(' ', $oo->capellido1 . ' ' . $oo->capellido2); 
+                    $xx = explode(' ', $oo->capellido1 . ' ' . $oo->capellido2);
                     $ape = $xx[0];
                 }
                 return $nom . ' ' . $ape;

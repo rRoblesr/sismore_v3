@@ -21,6 +21,7 @@ use App\Models\Presupuesto\GenericaGasto;
 use App\Models\Presupuesto\ProductoProyecto;
 use App\Models\Presupuesto\TipoGobierno;
 use App\Models\Presupuesto\UnidadEjecutora;
+use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Presupuesto\BaseGastosRepositorio;
 use App\Repositories\Presupuesto\BaseSiafWebRepositorio;
 use Illuminate\Http\Request;
@@ -29,6 +30,8 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class BaseSiafWebController extends Controller
 {
+    public $mesc = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+    public $mesa = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SET', 'OCT', 'NOV', 'DIC'];
     public function __construct()
     {
         $this->middleware('auth');
@@ -44,14 +47,18 @@ class BaseSiafWebController extends Controller
 
         $impG = Importacion::where('fuenteimportacion_id', '24')->where('estado', 'PR')->orderBy('fechaActualizacion', 'desc')->first();
 
-        return view('Presupuesto.BaseSiafWeb.Reporte1', compact('ano', 'articulo',  'categoria', 'impG'));
+        $imp = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio('24', date('Y', strtotime($impG->fechaActualizacion)));
+        $actualizado = $imp->fuente . ', Actualizado al ' . date('d', strtotime($imp->fecha)) . ' de ' . $this->mesc[date('m', strtotime($imp->fecha)) - 1] . ' del ' . date('Y', strtotime($imp->fecha));
+
+        return view('Presupuesto.BaseSiafWeb.Reporte1', compact('ano', 'articulo',  'categoria', 'impG', 'actualizado'));
     }
 
     public function reporte1tabla01(Request $rq)
     {
         $body = BaseSiafWebRepositorio::listar_unidadejecutora_anio_acticulo_funcion_categoria($rq->get('anio'), $rq->get('articulo'), $rq->get('categoria'));
-        $foot = ['pia' => 0, 'pim' => 0, 'cert' => 0, 'dev' => 0, 'eje' => 0, 'saldo1' => 0, 'saldo2' => 0,];
+        $foot = ['pia' => 0, 'pim' => 0, 'cert' => 0, 'eje1' => 0, 'dev' => 0, 'eje' => 0, 'saldo1' => 0, 'saldo2' => 0,];
         foreach ($body as $key => $value) {
+            $value->eje1 = $value->pim > 0 ? round(100 * $value->cert / $value->pim, 1) : 0;
             $foot['pia'] += $value->pia;
             $foot['pim'] += $value->pim;
             $foot['cert'] += $value->cert;
@@ -60,6 +67,7 @@ class BaseSiafWebController extends Controller
             $foot['saldo2'] += $value->saldo2;
         }
         $foot['eje'] = $foot['pim'] > 0 ? number_format(100 * $foot['dev'] / $foot['pim'], 1) : 0;
+        $foot['eje1'] = $foot['pim'] > 0 ? number_format(100 * $foot['cert'] / $foot['pim'], 1) : 0;
         return view("Presupuesto.BaseSiafWeb.Reporte1Tabla1", compact('body', 'foot'));
     }
 
@@ -98,23 +106,21 @@ class BaseSiafWebController extends Controller
             ->join('par_importacion as v2', 'v2.id', '=', 'pres_base_siafweb.importacion_id')
             ->orderBy('anio', 'desc')->get();
         $articulo = ProductoProyecto::all();
-        $ue = UnidadEjecutora::select('pres_unidadejecutora.id', 'pres_unidadejecutora.abreviatura as nombre')
-            ->join('pres_pliego as v2', 'v2.id', '=', 'pres_unidadejecutora.pliego_id')
-            ->join('pres_sector as v3', 'v3.id', '=', 'v2.sector_id')
-            ->join('pres_tipo_gobierno as v4', 'v4.id', '=', 'v3.tipogobierno_id')
-            ->where('v4.id', 3)
-            ->get();
-
+        $ue = BaseSiafWebRepositorio::UE_poranios(0);
         $impG = Importacion::where('fuenteimportacion_id', '24')->where('estado', 'PR')->orderBy('fechaActualizacion', 'desc')->first();
 
-        return view('Presupuesto.BaseSiafWeb.Reporte2', compact('ano', 'articulo',  'ue', 'impG'));
+        $imp = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio('24', date('Y', strtotime($impG->fechaActualizacion)));
+        $actualizado = $imp->fuente . ', Actualizado al ' . date('d', strtotime($imp->fecha)) . ' de ' . $this->mesc[date('m', strtotime($imp->fecha)) - 1] . ' del ' . date('Y', strtotime($imp->fecha));
+
+        return view('Presupuesto.BaseSiafWeb.Reporte2', compact('ano', 'articulo',  'ue', 'impG', 'actualizado'));
     }
 
     public function reporte2tabla01(Request $rq)
     {
         $body = BaseSiafWebRepositorio::listar_categoria_anio_acticulo_ue_categoria($rq->get('anio'), $rq->get('articulo'), $rq->get('ue'), $rq->get('tc'));
-        $foot = ['pia' => 0, 'pim' => 0, 'cert' => 0, 'dev' => 0, 'eje' => 0, 'saldo1' => 0, 'saldo2' => 0,];
+        $foot = ['pia' => 0, 'pim' => 0, 'cert' => 0, 'eje1' => 0, 'dev' => 0, 'eje' => 0, 'saldo1' => 0, 'saldo2' => 0,];
         foreach ($body as $key => $value) {
+            $value->eje1 = $value->pim > 0 ? round(100 * $value->cert / $value->pim, 1) : 0;
             $foot['pia'] += $value->pia;
             $foot['pim'] += $value->pim;
             $foot['cert'] += $value->cert;
@@ -123,6 +129,7 @@ class BaseSiafWebController extends Controller
             $foot['saldo2'] += $value->saldo2;
         }
         $foot['eje'] = $foot['pim'] > 0 ? number_format(100 * $foot['dev'] / $foot['pim'], 1) : 0;
+        $foot['eje1'] = $foot['pim'] > 0 ? number_format(100 * $foot['cert'] / $foot['pim'], 1) : 0;
         return view("Presupuesto.BaseSiafWeb.Reporte2Tabla1", compact('body', 'foot'));
     }
 
@@ -164,26 +171,26 @@ class BaseSiafWebController extends Controller
     public function reporte3()
     {
         $ano = BaseSiafWeb::select(DB::raw('distinct anio'))
-            ->join('par_importacion as v2', 'v2.id', '=', 'pres_base_siafweb.importacion_id')->get();
+            ->join('par_importacion as v2', 'v2.id', '=', 'pres_base_siafweb.importacion_id')->groupBy('anio')->get();
+        $anio = $ano->max('anio');
         $articulo = ProductoProyecto::all();
-        $ue = UnidadEjecutora::select('pres_unidadejecutora.id', 'pres_unidadejecutora.abreviatura as nombre')
-            ->join('pres_pliego as v2', 'v2.id', '=', 'pres_unidadejecutora.pliego_id')
-            ->join('pres_sector as v3', 'v3.id', '=', 'v2.sector_id')
-            ->join('pres_tipo_gobierno as v4', 'v4.id', '=', 'v3.tipogobierno_id')
-            ->where('v4.id', 3)
-            ->get();
+        $ue = BaseSiafWebRepositorio::UE_poranios(0);
         $ff = FuenteFinanciamiento::all();
 
         $impG = Importacion::where('fuenteimportacion_id', '24')->where('estado', 'PR')->orderBy('fechaActualizacion', 'desc')->first();
 
-        return view('Presupuesto.BaseSiafWeb.Reporte3', compact('ano', 'articulo',  'ue', 'impG', 'ff'));
+        $imp = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio('24', date('Y', strtotime($impG->fechaActualizacion)));
+        $actualizado = $imp->fuente . ', Actualizado al ' . date('d', strtotime($imp->fecha)) . ' de ' . $this->mesc[date('m', strtotime($imp->fecha)) - 1] . ' del ' . date('Y', strtotime($imp->fecha));
+
+        return view('Presupuesto.BaseSiafWeb.Reporte3', compact('ano', 'anio', 'articulo',  'ue', 'impG', 'ff', 'actualizado'));
     }
 
     public function reporte3tabla01(Request $rq)
     {
         $body = BaseSiafWebRepositorio::listar_productoproyecto_anio_acticulo_ue_categoria($rq->get('anio'), $rq->get('articulo'), $rq->get('ue'), $rq->get('ff'));
-        $foot = ['pia' => 0, 'pim' => 0, 'cert' => 0, 'dev' => 0, 'eje' => 0, 'saldo1' => 0, 'saldo2' => 0,];
+        $foot = ['pia' => 0, 'pim' => 0, 'cert' => 0, 'eje1' => 0, 'dev' => 0, 'eje' => 0, 'saldo1' => 0, 'saldo2' => 0,];
         foreach ($body as $key => $value) {
+            $value->eje1 = $value->pim > 0 ? round(100 * $value->cert / $value->pim, 1) : 0;
             $foot['pia'] += $value->pia;
             $foot['pim'] += $value->pim;
             $foot['cert'] += $value->cert;
@@ -192,6 +199,7 @@ class BaseSiafWebController extends Controller
             $foot['saldo2'] += $value->saldo2;
         }
         $foot['eje'] = $foot['pim'] > 0 ? number_format(100 * $foot['dev'] / $foot['pim'], 1) : 0;
+        $foot['eje1'] = $foot['pim'] > 0 ? number_format(100 * $foot['cert'] / $foot['pim'], 1) : 0;
         return view("Presupuesto.BaseSiafWeb.Reporte3Tabla1", compact('body', 'foot'));
     }
 
@@ -237,23 +245,21 @@ class BaseSiafWebController extends Controller
             ->join('par_importacion as v2', 'v2.id', '=', 'pres_base_siafweb.importacion_id')->where('v2.estado', 'PR')
             ->orderBy('anio', 'desc')->get();
         $articulo = ProductoProyecto::all();
-        $ue = UnidadEjecutora::select('pres_unidadejecutora.id', 'pres_unidadejecutora.abreviatura as nombre')
-            ->join('pres_pliego as v2', 'v2.id', '=', 'pres_unidadejecutora.pliego_id')
-            ->join('pres_sector as v3', 'v3.id', '=', 'v2.sector_id')
-            ->join('pres_tipo_gobierno as v4', 'v4.id', '=', 'v3.tipogobierno_id')
-            ->where('v4.id', 3)
-            ->get();
-
+        $ue = BaseSiafWebRepositorio::UE_poranios(0);
         $impG = Importacion::where('fuenteimportacion_id', '24')->where('estado', 'PR')->orderBy('fechaActualizacion', 'desc')->first();
 
-        return view('Presupuesto.BaseSiafWeb.Reporte4', compact('ano', 'articulo',  'ue', 'impG'));
+        $imp = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio('24', date('Y', strtotime($impG->fechaActualizacion)));
+        $actualizado = $imp->fuente . ', Actualizado al ' . date('d', strtotime($imp->fecha)) . ' de ' . $this->mesc[date('m', strtotime($imp->fecha)) - 1] . ' del ' . date('Y', strtotime($imp->fecha));
+
+        return view('Presupuesto.BaseSiafWeb.Reporte4', compact('ano', 'articulo',  'ue', 'impG', 'actualizado'));
     }
 
     public function reporte4tabla01(Request $rq)
     {
         $body = BaseSiafWebRepositorio::listar_funcion_anio_acticulo_ue_categoria($rq->get('anio'), $rq->get('articulo'), $rq->get('ue'));
-        $foot = ['pia' => 0, 'pim' => 0, 'cert' => 0, 'dev' => 0, 'eje' => 0, 'saldo1' => 0, 'saldo2' => 0,];
+        $foot = ['pia' => 0, 'pim' => 0, 'cert' => 0, 'eje1' => 0, 'dev' => 0, 'eje' => 0, 'saldo1' => 0, 'saldo2' => 0,];
         foreach ($body as $key => $value) {
+            $value->eje1 = $value->pim > 0 ? round(100 * $value->cert / $value->pim, 1) : 0;
             $foot['pia'] += $value->pia;
             $foot['pim'] += $value->pim;
             $foot['cert'] += $value->cert;
@@ -262,6 +268,7 @@ class BaseSiafWebController extends Controller
             $foot['saldo2'] += $value->saldo2;
         }
         $foot['eje'] = $foot['pim'] > 0 ? number_format(100 * $foot['dev'] / $foot['pim'], 1) : 0;
+        $foot['eje1'] = $foot['pim'] > 0 ? number_format(100 * $foot['cert'] / $foot['pim'], 1) : 0;
         return view("Presupuesto.BaseSiafWeb.Reporte4Tabla1", compact('body', 'foot'));
     }
 
@@ -306,15 +313,13 @@ class BaseSiafWebController extends Controller
             ->join('par_importacion as v2', 'v2.id', '=', 'pres_base_siafweb.importacion_id')->where('v2.estado', 'PR')
             ->orderBy('anio', 'desc')->get();
         $articulo = ProductoProyecto::all();
-        $ue = UnidadEjecutora::select('pres_unidadejecutora.id', 'pres_unidadejecutora.abreviatura as nombre')
-            ->join('pres_pliego as v2', 'v2.id', '=', 'pres_unidadejecutora.pliego_id')
-            ->join('pres_sector as v3', 'v3.id', '=', 'v2.sector_id')
-            ->join('pres_tipo_gobierno as v4', 'v4.id', '=', 'v3.tipogobierno_id')
-            ->where('v4.id', 3)
-            ->get();
-
+        $ue = BaseSiafWebRepositorio::UE_poranios(0);
         $impG = Importacion::where('fuenteimportacion_id', '24')->where('estado', 'PR')->orderBy('fechaActualizacion', 'desc')->first();
-        return view('Presupuesto.BaseSiafWeb.Reporte5', compact('ano', 'articulo',  'ue', 'impG'));
+
+        $imp = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio('24', date('Y', strtotime($impG->fechaActualizacion)));
+        $actualizado = $imp->fuente . ', Actualizado al ' . date('d', strtotime($imp->fecha)) . ' de ' . $this->mesc[date('m', strtotime($imp->fecha)) - 1] . ' del ' . date('Y', strtotime($imp->fecha));
+
+        return view('Presupuesto.BaseSiafWeb.Reporte5', compact('ano', 'articulo',  'ue', 'impG', 'actualizado'));
     }
 
     public function reporte5tabla01(Request $rq)
@@ -421,18 +426,16 @@ class BaseSiafWebController extends Controller
     public function reporte6()
     {
         $ano = BaseSiafWeb::select(DB::raw('distinct anio'))
-            ->join('par_importacion as v2', 'v2.id', '=', 'pres_base_siafweb.importacion_id')->where('v2.estado', 'PR')->get();
+            ->join('par_importacion as v2', 'v2.id', '=', 'pres_base_siafweb.importacion_id')->where('v2.estado', 'PR')->orderBy('anio')->get();
+        $anio = $ano->max('anio');
         $articulo = ProductoProyecto::all();
-        $ue = UnidadEjecutora::select('pres_unidadejecutora.id', 'pres_unidadejecutora.abreviatura as nombre')
-            ->join('pres_pliego as v2', 'v2.id', '=', 'pres_unidadejecutora.pliego_id')
-            ->join('pres_sector as v3', 'v3.id', '=', 'v2.sector_id')
-            ->join('pres_tipo_gobierno as v4', 'v4.id', '=', 'v3.tipogobierno_id')
-            ->where('v4.id', 3)
-            ->get();
-
+        $ue = BaseSiafWebRepositorio::UE_poranios(0);
         $impG = Importacion::where('fuenteimportacion_id', '24')->where('estado', 'PR')->orderBy('fechaActualizacion', 'desc')->first();
 
-        return view('Presupuesto.BaseSiafWeb.Reporte6', compact('ano', 'articulo', 'ue', 'impG'));
+        $imp = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio('24', date('Y', strtotime($impG->fechaActualizacion)));
+        $actualizado = $imp->fuente . ', Actualizado al ' . date('d', strtotime($imp->fecha)) . ' de ' . $this->mesc[date('m', strtotime($imp->fecha)) - 1] . ' del ' . date('Y', strtotime($imp->fecha));
+
+        return view('Presupuesto.BaseSiafWeb.Reporte6', compact('ano', 'anio', 'articulo', 'ue', 'impG', 'actualizado'));
     }
 
     public function reporte6tabla01(Request $rq)
@@ -440,8 +443,9 @@ class BaseSiafWebController extends Controller
         $data = BaseSiafWebRepositorio::listar_generica_anio_acticulo_ue_categoria($rq->get('anio'), $rq->get('articulo'), $rq->get('ue'));
         $body = $data['body'];
         $head = $data['head'];
-        $foot = ['pia' => 0, 'pim' => 0, 'cert' => 0, 'dev' => 0, 'eje' => 0, 'saldo1' => 0, 'saldo2' => 0,];
+        $foot = ['pia' => 0, 'pim' => 0, 'cert' => 0, 'eje1' => 0, 'dev' => 0, 'eje' => 0, 'saldo1' => 0, 'saldo2' => 0,];
         foreach ($body as $key => $value) {
+            $value->eje1 = $value->pim > 0 ? round(100 * $value->cert / $value->pim, 1) : 0;
             $foot['pia'] += $value->pia;
             $foot['pim'] += $value->pim;
             $foot['cert'] += $value->cert;
@@ -450,6 +454,7 @@ class BaseSiafWebController extends Controller
             $foot['saldo2'] += $value->saldo2;
         }
         $foot['eje'] = $foot['pim'] > 0 ? number_format(100 * $foot['dev'] / $foot['pim'], 1) : 0;
+        $foot['eje1'] = $foot['pim'] > 0 ? number_format(100 * $foot['cert'] / $foot['pim'], 1) : 0;
         return view("Presupuesto.BaseSiafWeb.Reporte6Tabla1", compact('head', 'body', 'foot'));
     }
 
@@ -526,22 +531,20 @@ class BaseSiafWebController extends Controller
     public function reporte7()
     {
         $ano = BaseSiafWeb::select(DB::raw('distinct anio'))
-            ->join('par_importacion as v2', 'v2.id', '=', 'pres_base_siafweb.importacion_id')
-            ->orderBy('anio', 'asc')->get();
+            ->join('par_importacion as v2', 'v2.id', '=', 'pres_base_siafweb.importacion_id')->orderBy('anio')->get();
+        $anio = $ano->max('anio');
         $articulo = ProductoProyecto::all();
-        $ue = UnidadEjecutora::select('pres_unidadejecutora.id', 'pres_unidadejecutora.abreviatura as nombre')
-            ->join('pres_pliego as v2', 'v2.id', '=', 'pres_unidadejecutora.pliego_id')
-            ->join('pres_sector as v3', 'v3.id', '=', 'v2.sector_id')
-            ->join('pres_tipo_gobierno as v4', 'v4.id', '=', 'v3.tipogobierno_id')
-            ->where('v4.id', 3)
-            ->get();
+        $ue = BaseSiafWebRepositorio::UE_poranios(0);
         $ff = FuenteFinanciamiento::all();
         //$ff = Funcion::orderBy('nombre', 'asc')->get();
         $gg = GenericaGasto::orderBy('codigo', 'asc')->get();
 
         $impG = Importacion::where('fuenteimportacion_id', '24')->where('estado', 'PR')->orderBy('fechaActualizacion', 'desc')->first();
 
-        return view('Presupuesto.BaseSiafWeb.Reporte7', compact('ano', 'articulo', 'ue', 'ff', 'gg', 'impG'));
+        $imp = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio('24', date('Y', strtotime($impG->fechaActualizacion)));
+        $actualizado = $imp->fuente . ', Actualizado al ' . date('d', strtotime($imp->fecha)) . ' de ' . $this->mesc[date('m', strtotime($imp->fecha)) - 1] . ' del ' . date('Y', strtotime($imp->fecha));
+
+        return view('Presupuesto.BaseSiafWeb.Reporte7', compact('ano', 'anio', 'articulo', 'ue', 'ff', 'gg', 'impG', 'actualizado'));
     }
 
     public function reporte7tabla01(Request $rq)
@@ -555,8 +558,9 @@ class BaseSiafWebController extends Controller
             //$rq->get('sg'),
             $rq->get('partidas')
         );
-        $foot = ['pia' => 0, 'pim' => 0, 'cert' => 0, 'dev' => 0, 'eje' => 0, 'saldo1' => 0, 'saldo2' => 0,];
+        $foot = ['pia' => 0, 'pim' => 0, 'cert' => 0, 'eje1' => 0, 'dev' => 0, 'eje' => 0, 'saldo1' => 0, 'saldo2' => 0,];
         foreach ($body as $key => $value) {
+            $value->eje1 = $value->pim > 0 ? round(100 * $value->cert / $value->pim, 1) : 0;
             $foot['pia'] += $value->pia;
             $foot['pim'] += $value->pim;
             $foot['cert'] += $value->cert;
@@ -565,6 +569,7 @@ class BaseSiafWebController extends Controller
             $foot['saldo2'] += $value->saldo2;
         }
         $foot['eje'] = $foot['pim'] > 0 ? number_format(100 * $foot['dev'] / $foot['pim'], 1) : 0;
+        $foot['eje1'] = $foot['pim'] > 0 ? number_format(100 * $foot['cert'] / $foot['pim'], 1) : 0;
         return view("Presupuesto.BaseSiafWeb.Reporte7Tabla1", compact('body', 'foot'));
     }
 
@@ -620,14 +625,15 @@ class BaseSiafWebController extends Controller
 
     public function cargar_unidadejecutora(Request $rq)
     {
-        $base = BaseSiafWeb::select('pres_base_siafweb.id')
-            ->join('par_importacion as v1', 'v1.id', '=', 'pres_base_siafweb.importacion_id')
-            ->where(DB::raw('year(v1.fechaActualizacion)'), $rq->anio)
-            ->orderBy('v1.fechaActualizacion', 'desc')->first();
-        $ue = BaseSiafWebDetalle::distinct()
-            ->select('v1.*')
-            ->join('pres_unidadejecutora as v1', 'v1.id', '=', 'pres_base_siafweb_detalle.unidadejecutora_id')
-            ->where('pres_base_siafweb_detalle.basesiafweb_id', $base->id)->get();
+        // $base = BaseSiafWeb::select('pres_base_siafweb.id')
+        //     ->join('par_importacion as v1', 'v1.id', '=', 'pres_base_siafweb.importacion_id')
+        //     ->where(DB::raw('year(v1.fechaActualizacion)'), $rq->anio)
+        //     ->orderBy('v1.fechaActualizacion', 'desc')->first();
+        // $ue = BaseSiafWebDetalle::distinct()
+        //     ->select('v1.*')
+        //     ->join('pres_unidadejecutora as v1', 'v1.id', '=', 'pres_base_siafweb_detalle.unidadejecutora_id')
+        //     ->where('pres_base_siafweb_detalle.basesiafweb_id', $base->id)->get();
+        $ue = BaseSiafWebRepositorio::UE_poranios($rq->anio);
         return response()->json(compact('ue'));
     }
 }

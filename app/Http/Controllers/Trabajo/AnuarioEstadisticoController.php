@@ -27,14 +27,14 @@ class AnuarioEstadisticoController extends Controller
     public function importar()
     {
         $mensaje = "";
-        $anios = Anio::orderBy('anio','desc')->get();             
+        $anios = Anio::orderBy('anio','desc')->get();
 
         return view('trabajo.AnuarioEstadistico.Importar', compact('mensaje', 'anios'));
 
         // $lista = AnuarioEstadisticoRepositorio:: Promedio_Remuneracion_trab_sector_privado(19,34);
 
         // return $lista;
-        
+
     }
 
     public function guardar(Request $request)
@@ -60,7 +60,7 @@ class AnuarioEstadisticoController extends Controller
         } catch (Exception $e) {
             $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto y vuelva a importar";
             return view('trabajo.AnuarioEstadistico.Importar', compact('mensaje', 'anios'));
-        }        
+        }
 
         $existeMismaFecha = ImportacionRepositorio::Importacion_PE($request['fechaActualizacion'], $request['formato_reporte']);
 
@@ -72,16 +72,16 @@ class AnuarioEstadisticoController extends Controller
                 $importacion = Importacion::Create([
                     'fuenteImportacion_id' => $request['formato_reporte'], // valor predeterminado
                     'usuarioId_Crea' => auth()->user()->id,
-                    'usuarioId_Aprueba' => null,
+                    // 'usuarioId_Aprueba' => null,
                     'fechaActualizacion' => now(),
-                    'comentario' => $request['comentario'],
-                    'estado' => 'PE'
+                    // 'comentario' => $request['comentario'],
+                    'estado' => 'PR'
                 ]);
-                
+
                 foreach ($array as $key => $value) {
                     foreach ($value as $row) {
                         if( $row['regiones']!='' )//para validar que no se registren filas vacias
-                        { 
+                        {
                             $ubigeo = UbigeoRepositorio:: buscar_PorNombre($row['regiones']);
                             $ubigeo_id = 0;
 
@@ -89,11 +89,11 @@ class AnuarioEstadisticoController extends Controller
                                 $ubigeo_id  = $ubigeo->first()->id;
                             }catch (Exception $e) {
                                 $ubigeo_id = 0;
-                            } 
+                            }
 
                             if($ubigeo_id!=0)
                             {
-                                $Anuario_Estadistico = Anuario_Estadistico::Create([      
+                                $Anuario_Estadistico = Anuario_Estadistico::Create([
                                     'importacion_id'=>$importacion->id,
                                     'anio_id'=>$request['anio'],
                                     'ubigeo_id'=>$ubigeo_id,
@@ -111,9 +111,9 @@ class AnuarioEstadisticoController extends Controller
                                     'diciembre'=>$row['diciembre'],
                                 ]);
                             }
-                        }                        
+                        }
                     }
-                } 
+                }
 
             } catch (Exception $e) {
                 $importacion->estado = 'EL';
@@ -130,20 +130,20 @@ class AnuarioEstadisticoController extends Controller
     public function aprobar($importacion_id)
     {
         $importacion = ImportacionRepositorio::ImportacionPor_Id($importacion_id);
-     
+
         $anio_AnuarioEstadistico = AnuarioEstadisticoRepositorio::datos_AnuarioEstadistico($importacion_id)->first()->anio;
-        
+
         return view('trabajo.AnuarioEstadistico.Aprobar', compact('importacion_id', 'importacion','anio_AnuarioEstadistico'));
     }
-    
+
     public function procesar($importacion_id)
     {
         $importacion  = Importacion::find($importacion_id);
 
         $importacion->estado = 'PR';
-        $importacion->usuarioId_Aprueba = auth()->user()->id;
+        // $importacion->usuarioId_Aprueba = auth()->user()->id;
         $importacion->save();
-        
+
         $importacion  = ProEmpleoRepositorio::eliminar_mismoPeriodo($importacion_id);
 
         return view('correcto');
@@ -291,7 +291,7 @@ class AnuarioEstadisticoController extends Controller
 
     public function Grafico_Promedio_Remuneracion_porAnio($importacion_id)
     {
-        $promedio = [];      
+        $promedio = [];
         $categoria = [];
 
         // $datos_PorMes_yAnio = ProEmpleoRepositorio::datos_PorMes_yAnio(2022);
@@ -303,10 +303,10 @@ class AnuarioEstadisticoController extends Controller
         foreach ($data  as $key => $lista) {
             $promedio = array_merge($promedio,[intval ($lista->promedioAnual)]);
             $categoria = array_merge($categoria,[intval ($lista->anio)]);
-        } 
+        }
 
         $puntos[] = [ 'name'=> 'promedio' ,'data'=>  $promedio];
-      
+
         $titulo = 'Promedio Mensual de Remuneración - Ucayali Sector Privado';
         $subTitulo = 'Fuente - MTPE';
         $titulo_y = 'Monto S/';
@@ -320,7 +320,7 @@ class AnuarioEstadisticoController extends Controller
     public function Grafico_ranking_promedio_remuneracion_regiones($anio_id)
     {
         $categoria1 = [];
-        
+
         $categoria_nombres = [];
 
         $datos = AnuarioEstadisticoRepositorio:: ranking_promedio_remuneracion_regiones($anio_id,19);
@@ -330,7 +330,7 @@ class AnuarioEstadisticoController extends Controller
             $categoria1 = array_merge($categoria1, [intval($lista->promedio)]);
             $categoria_nombres[] = $lista->posicion.'-'.$lista->region;
         }
-        
+
         $puntos[] = ['name' => 'Regiones del Perú', 'data' =>  $categoria1];
 
         $titulo = 'Ranking Promedio  Mensual de Remuneración Por Regiones - Sector Privado' ;
@@ -356,7 +356,7 @@ class AnuarioEstadisticoController extends Controller
         foreach ($datos as $key => $lista) {
             $categoria1 = array_merge($categoria1, [intval($lista->publico)]);
             $categoria2 = array_merge($categoria2, [intval($lista->privado)]);
-            $categoria_nombres[] = ($lista->anio);       
+            $categoria_nombres[] = ($lista->anio);
         }
 
         $puntos[] = ['name' => 'Público', 'data' =>  $categoria1];
@@ -386,7 +386,7 @@ class AnuarioEstadisticoController extends Controller
     public function rptPromedioPrestaServ()
     {
         // $data = AnuarioEstadisticoRepositorio:: ranking_promedio_remuneracion_regiones(5,19);
-       
+
         // return $data;
         return view('Trabajo.AnuarioEstadistico.rptPromedioPrestaServ');
     }
@@ -397,7 +397,7 @@ class AnuarioEstadisticoController extends Controller
         // $datos = AnuarioEstadisticoRepositorio:: ranking_promedio_prestadores_servicio4ta();
         //  return $datos;
 
-        
+
         return view('Trabajo.AnuarioEstadistico.rptPrestadoresServ4taCategoria');
     }
 
@@ -442,7 +442,7 @@ class AnuarioEstadisticoController extends Controller
     public function Grafico_ranking_empresas_regiones($anio_id)
     {
         $categoria1 = [];
-        
+
         $categoria_nombres = [];
 
         $datos = AnuarioEstadisticoRepositorio:: ranking_promedio_remuneracion_regiones($anio_id,23); // cambiar el nombre metodo
@@ -452,7 +452,7 @@ class AnuarioEstadisticoController extends Controller
             $categoria1 = array_merge($categoria1, [intval($lista->promedio)]);
             $categoria_nombres[] = $lista->posicion.'-'.$lista->region;
         }
-        
+
         $puntos[] = ['name' => 'Regiones del Perú', 'data' =>  $categoria1];
 
         $titulo = 'Ranking Promedio Empresas Mensual Por Regiones - Sector Privado' ;

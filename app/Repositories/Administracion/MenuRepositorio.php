@@ -16,7 +16,8 @@ class MenuRepositorio
       'adm_menu.url',
       'adm_menu.posicion',
       'adm_menu.icono',
-      'adm_menu.parametro'
+      'adm_menu.parametro',
+      'adm_menu.link',
     )
       ->join('adm_menu_perfil as menPer', 'adm_menu.id', '=', 'menPer.menu_id')
       ->join('adm_perfil as per', 'menPer.perfil_id', '=', 'per.id')
@@ -41,7 +42,8 @@ class MenuRepositorio
       'adm_menu.url',
       'adm_menu.posicion',
       'adm_menu.icono',
-      'adm_menu.parametro'
+      'adm_menu.parametro',
+      'adm_menu.link',
     )
       ->join('adm_menu_perfil as menPer', 'adm_menu.id', '=', 'menPer.menu_id')
       ->join('adm_perfil as per', 'menPer.perfil_id', '=', 'per.id')
@@ -76,7 +78,7 @@ class MenuRepositorio
       ->where('v1.url', '')
       ->where('v1.dependencia')
       ->where('v1.estado',1)
-      ->orderBy('v1.id', 'desc')
+      ->orderBy('v1.posicion', 'asc')
       ->get();
     return $query;
   }

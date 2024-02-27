@@ -28,26 +28,22 @@ use function PHPUnit\Framework\isNull;
 
 class ImporPoblacionController extends Controller
 {
+    /* codigo unico de la fuente de importacion */
     public $fuente = 31;
+    public static $FUENTE = 31;
     public function __construct()
     {
         $this->middleware('auth');
     }
 
+    /* metodo para la vista del formulario para importar */
     public function importar()
     {
         $mensaje = "";
         return view('parametro.ImporPoblacion.Importar', compact('mensaje'));
     }
 
-    public function exportar()
-    {
-        $imp = Importacion::where(['fuenteimportacion_id' => 8, 'estado' => 'PR'])->orderBy('fechaActualizacion', 'desc')->first();
-        $mat = Matricula::where('importacion_id', $imp->id)->first();
-        $mensaje = "";
-        return view('educacion.ImporPoblacion.Exportar', compact('mensaje', 'imp', 'mat'));
-    }
-
+    /* metodo para tener una salida de respuesta de la carga del excel */
     function json_output($status = 200, $msg = 'OK!!', $data = null)
     {
         header('Content-Type:application/json');
@@ -59,11 +55,13 @@ class ImporPoblacionController extends Controller
         die;
     }
 
+    /*  metodo que carga el excel y ejecuta un procedimiento almacenado*/
     public function guardar(Request $request)
     {
         ini_set('memory_limit', '-1');
         set_time_limit(0);
 
+        /* se esta  */
         $existeMismaFecha = ImportacionRepositorio::Importacion_PE($request->fechaActualizacion, $this->fuente);
         if ($existeMismaFecha != null) {
             $mensaje = "Error, Ya existe archivos prendientes de aprobar para la fecha de versión ingresada";
@@ -90,9 +88,6 @@ class ImporPoblacionController extends Controller
                     if ($celda > 0) break;
                     $cadena =
                         $row['ubigeo'] .
-                        $row['departamento'] .
-                        $row['provincia'] .
-                        $row['distrito'] .
                         $row['sexo'] .
                         $row['edad'] .
                         $row['total'];
@@ -103,11 +98,17 @@ class ImporPoblacionController extends Controller
             $this->json_output(403, $mensaje);
         }
 
+        /* ajustar fecha */
+        $anio = Anio::where('anio', date('Y'))->first();
+        if (!$anio) {
+            Anio::Create(['anio' => date('Y')]);
+        }
+        /* fin ajuste */
+
         try {
             $importacion = Importacion::Create([
                 'fuenteImportacion_id' => $this->fuente, // valor predeterminado
                 'usuarioId_Crea' => auth()->user()->id,
-                'usuarioId_Aprueba' => null,
                 'fechaActualizacion' => $request['fechaActualizacion'],
                 'comentario' => $request['comentario'],
                 'estado' => 'PE'
@@ -124,13 +125,9 @@ class ImporPoblacionController extends Controller
                     $padronPoblacion = ImporPoblacion::Create([
                         'importacion_id' => $importacion->id,
                         'ubigeo' => $row['ubigeo'],
-                        'departamento' => $row['departamento'],
-                        'provincia' => $row['provincia'],
-                        'distrito' => $row['distrito'],
                         'sexo' => $row['sexo'],
                         'edad' => $row['edad'],
-                        'total' => $row['total'],
-
+                        'total' => $row['total']
                     ]);
                 }
             }
@@ -138,12 +135,12 @@ class ImporPoblacionController extends Controller
             $importacion->estado = 'EL';
             $importacion->save();
 
-            $mensaje = "Error en la carga de datos, verifique los datos de su archivo y/o comuniquese con el administrador del sistema" . $e->getMessage();
+            $mensaje = "Error en la carga de datos, verifique los datos de su archivo y/o comuniquese con el administrador del sistema - " . $e->getMessage();
             $this->json_output(400, $mensaje);
         }
 
         try {
-            DB::select('call par_pa_procesarImporPoblacion(?,?,?)', [$importacion->id, $poblacion->id, $importacion->usuarioId_Crea]);
+            DB::select('call par_pa_procesarImporPoblacion(?,?)', [$importacion->id, $poblacion->id]);
         } catch (Exception $e) {
             $importacion->estado = 'EL';
             $importacion->save();
@@ -156,6 +153,7 @@ class ImporPoblacionController extends Controller
         $this->json_output(200, $mensaje, '');
     }
 
+    /* metodo para listar las importaciones */
     public function ListarDTImportFuenteTodos(Request $rq)
     {
         $draw = intval($rq->draw);
@@ -164,24 +162,13 @@ class ImporPoblacionController extends Controller
         $query = ImportacionRepositorio::Listar_FuenteTodos($this->fuente);
         $data = [];
         foreach ($query as $key => $value) {
+            $ent = Entidad::find($value->entidad);
             $nom = '';
             if (strlen($value->cnombre) > 0) {
                 $xx = explode(' ', $value->cnombre);
                 $nom = $xx[0];
             }
-            $ape = '';
-            if (strlen($value->capellido1) > 0) {
-                $xx = explode(' ', $value->capellido1 . ' ' . $value->capellido2);
-                $ape = $xx[0];
-            }
-
-            $ent = Entidad::select('adm_entidad.*');
-            $ent = $ent->join('adm_entidad as v2', 'v2.dependencia', '=', 'adm_entidad.id');
-            $ent = $ent->join('adm_entidad as v3', 'v3.dependencia', '=', 'v2.id');
-            $ent = $ent->where('v3.id', $value->entidad);
-            $ent = $ent->first();
-
-            if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_id') == 3 || session('perfil_id') == 8 || session('perfil_id') == 9 || session('perfil_id') == 10 || session('perfil_id') == 11)
+            if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11)
                 $boton = '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> </button>';
             else
                 $boton = '';
@@ -190,10 +177,10 @@ class ImporPoblacionController extends Controller
                 $key + 1,
                 date("d/m/Y", strtotime($value->fechaActualizacion)),
                 $value->fuente,
-                $nom . ' ' . $ape,
-                $ent ? $ent->apodo : '',
+                $nom . ' ' . $value->capellido1,
+                $ent ? $ent->abreviado : '',
                 date("d/m/Y", strtotime($value->created_at)),
-                $value->estado == "PR" ? "PROCESADO" : ($value->estado == "PE" ? "PENDIENTE" : "ELIMINADO"),
+                $value->estado == "PR" ? "PROCESADO" : "PENDIENTE",
                 $boton . '&nbsp;' . $boton2,
             );
         }
@@ -206,33 +193,24 @@ class ImporPoblacionController extends Controller
         return response()->json($result);
     }
 
-    public function ListaImportada(Request $rq) //(Request $request, $importacion_id)
+    /* metodo para cargar una importacion especifica */
+    public function ListaImportada(Request $rq)
     {
-        //$data = MatriculaDetalleRepositorio::listaImportada($importacion_id);
-        $data = ImporMatricula::where('matricula_id', $rq->matricula_id)->get();
-        //return response()->json($data);
+        $data = PoblacionDetalle::where('pp.importacion_id', $rq->importacion_id)
+            ->join('par_poblacion as pp', 'pp.id', '=', 'par_poblacion_detalle.poblacion_id')
+            ->join('par_ubigeo as uu', 'uu.id', '=', 'par_poblacion_detalle.ubigeo_id')
+            ->select('uu.codigo', 'par_poblacion_detalle.sexo', 'par_poblacion_detalle.edad', 'par_poblacion_detalle.total')->get();
         return DataTables::of($data)->make(true);
     }
 
-    public function ListaImportada_DataTable($importacion_id)
-    {
-        $padronWebLista = ImporMatriculaRepositorio::Listar_Por_Importacion_id($importacion_id);
-        return  datatables()->of($padronWebLista)->toJson();
-    }
-
+    /* metodo para eliminar una importacion */
     public function eliminar($id)
     {
         $poblacion = Poblacion::where('importacion_id', $id)->first();
         PoblacionDetalle::where('poblacion_id', $poblacion->id)->delete();
-        ImporPoblacion::where('importacion_id', $id)->delete();
         $poblacion->delete();
         Importacion::find($id)->delete();
         return response()->json(array('status' => true));
     }
 
-    public function download()
-    {
-        $name = 'SIAGIE MATRICULAS ' . date('Y-m-d') . '.xlsx';
-        return Excel::download(new ImporPadronSiagieExport, $name);
-    }
 }

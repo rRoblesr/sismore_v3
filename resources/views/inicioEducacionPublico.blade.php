@@ -726,7 +726,7 @@
                     }
                 }, */
                 series: [{
-                    innerSize:'50%',
+                    innerSize: '50%',
                     showInLegend: true,
                     //name: 'Share',
                     data: datos,

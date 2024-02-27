@@ -88,8 +88,9 @@
                         <span class="float-right">{{ number_format($card2['eje'], 1) }}%</span>
                     </h6>
                     <div class="progress progress-sm m-0">
-                        <div class="progress-bar {{ $card2['eje'] < 51 ? 'bg-danger' : ($card2['eje'] < 76 ? 'bg-warning' : 'bg-success') }}" role="progressbar" aria-valuenow="{{ $card2['eje'] }}"
-                            aria-valuemin="0" aria-valuemax="100" style="width: {{ $card2['eje'] }}%">
+                        <div class="progress-bar {{ $card2['eje'] < 51 ? 'bg-danger' : ($card2['eje'] < 76 ? 'bg-warning' : 'bg-success') }}"
+                            role="progressbar" aria-valuenow="{{ $card2['eje'] }}" aria-valuemin="0" aria-valuemax="100"
+                            style="width: {{ $card2['eje'] }}%">
                             <span class="sr-only">{{ $card2['eje'] }}% Complete</span>
                         </div>
                     </div>
@@ -121,8 +122,9 @@
                         <span class="float-right">{{ number_format($card3['eje'], 1) }}%</span>
                     </h6>
                     <div class="progress progress-sm m-0">
-                        <div class="progress-bar {{ $card3['eje'] < 51 ? 'bg-danger' : ($card3['eje'] < 76 ? 'bg-warning' : 'bg-success') }}" role="progressbar" aria-valuenow="{{ $card3['eje'] }}"
-                            aria-valuemin="0" aria-valuemax="100" style="width: {{ $card3['eje'] }}%">
+                        <div class="progress-bar {{ $card3['eje'] < 51 ? 'bg-danger' : ($card3['eje'] < 76 ? 'bg-warning' : 'bg-success') }}"
+                            role="progressbar" aria-valuenow="{{ $card3['eje'] }}" aria-valuemin="0" aria-valuemax="100"
+                            style="width: {{ $card3['eje'] }}%">
                             <span class="sr-only">{{ $card3['eje'] }}% Complete</span>
                         </div>
                     </div>
@@ -154,8 +156,9 @@
                         <span class="float-right">{{ number_format($card4['eje'], 1) }}%</span>
                     </h6>
                     <div class="progress progress-sm m-0">
-                        <div class="progress-bar {{ $card4['eje'] < 51 ? 'bg-danger' : ($card4['eje'] < 76 ? 'bg-warning' : 'bg-success') }}" role="progressbar" aria-valuenow="{{ $card4['eje'] }}"
-                            aria-valuemin="0" aria-valuemax="100" style="width: {{ $card4['eje'] }}%">
+                        <div class="progress-bar {{ $card4['eje'] < 51 ? 'bg-danger' : ($card4['eje'] < 76 ? 'bg-warning' : 'bg-success') }}"
+                            role="progressbar" aria-valuenow="{{ $card4['eje'] }}" aria-valuemin="0" aria-valuemax="100"
+                            style="width: {{ $card4['eje'] }}%">
                             <span class="sr-only">{{ $card4['eje'] }}% Complete</span>
                         </div>
                     </div>
@@ -170,8 +173,8 @@
 
     <div class="row">
         <div class="col-xl-6">
-            <div class="card card-border card-primary">
-                <div class="card-header border-primary bg-transparent p-0">
+            <div class="card card-border">
+                <div class="card-header border-success-0 bg-transparent p-0">
                     <h3 class="card-title text-primary "></h3>
                 </div>
                 <div class="card-body p-0">
@@ -180,8 +183,8 @@
             </div>
         </div>
         <div class="col-xl-6">
-            <div class="card card-border card-primary">
-                <div class="card-header border-primary bg-transparent p-0">
+            <div class="card card-border">
+                <div class="card-header border-success-0 bg-transparent p-0">
                     <h3 class="card-title text-primary "></h3>
                 </div>
                 <div class="card-body p-0">
@@ -194,8 +197,8 @@
 
     <div class="row">
         <div class="col-xl-12">
-            <div class="card card-border card-primary">
-                <div class="card-header border-primary bg-transparent p-0">
+            <div class="card card-border">
+                <div class="card-header border-success-0 bg-transparent p-0">
                     <h3 class="card-title text-primary "></h3>
                 </div>
                 <div class="card-body p-0">
@@ -208,8 +211,8 @@
 
     <div class="row">
         <div class="col-xl-12">
-            <div class="card card-border card-primary">
-                <div class="card-header border-primary bg-transparent p-0">
+            <div class="card card-border">
+                <div class="card-header border-success-0 bg-transparent p-0">
                     <h3 class="card-title text-primary "></h3>
                 </div>
                 <div class="card-body p-0">
@@ -375,6 +378,9 @@
                 subtitle: {
                     //align:'left',
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 accessibility: {
                     announceNewData: {
@@ -383,13 +389,23 @@
                 },
                 xAxis: {
                     type: 'category',
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 yAxis: {
                     /* max: 100, */
                     title: {
                         enabled: false,
                         text: 'Porcentaje',
-                    }
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 legend: {
                     enabled: false,
@@ -471,6 +487,9 @@
                 subtitle: {
                     //align:'left',
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 accessibility: {
                     announceNewData: {
@@ -479,14 +498,24 @@
                 },
                 xAxis: {
                     //type: 'category',
-                    categories: categoria
+                    categories: categoria,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 yAxis: {
                     /* max: 100, */
                     title: {
                         enabled: false,
                         text: 'Porcentaje',
-                    }
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 legend: {
                     enabled: false,
@@ -568,16 +597,29 @@
                 },
                 subtitle: {
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 xAxis: {
                     type: 'category',
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 yAxis: {
                     /* max: 100, */
                     title: {
                         enabled: false,
                         text: 'Porcentaje',
-                    }
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 series: [{
                     showInLegend: tituloserie != '',
@@ -650,6 +692,9 @@
                 },
                 subtitle: {
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 tooltip: {
                     //pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
@@ -725,10 +770,18 @@
                     text: titulo
                 },
                 subtitle: {
-                    text: subtitulo
+                    text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 xAxis: {
                     categories: categorias,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 yAxis: {
 
@@ -736,7 +789,12 @@
                     title: {
                         text: 'Rainfall (mm)',
                         enabled: false
-                    }
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
 
                 tooltip: {
@@ -766,9 +824,17 @@
                 },
                 subtitle: {
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 xAxis: {
-                    categories: categoria
+                    categories: categoria,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 yAxis: {
                     allowDecimals: false,
@@ -776,7 +842,12 @@
                     title: {
                         enabled: false,
                         text: 'Porcentaje',
-                    }
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 series: series,
                 plotOptions: {
@@ -900,9 +971,17 @@
                 },
                 subtitle: {
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 xAxis: {
-                    categories: categoria
+                    categories: categoria,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                     /* accessibility: {
                         rangeDescription: 'Range: 2015 to 2025'
                     } */
@@ -911,7 +990,12 @@
                     title: {
                         enabled: false,
                         text: 'Number of Employees'
-                    }
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                     /* allowDecimals: false,
                     min: 0,
                     title: {

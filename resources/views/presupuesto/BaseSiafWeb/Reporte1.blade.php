@@ -49,23 +49,30 @@
 
         <div class="row">
             <div class="col-sm-12">
-                <div class="card card-border">
-                    <div class="card-header bg-transparent pb-0">
+                <div class="card">
+                    <div class="card-header bg-success-0 pt-2">
                         <div class="card-widgets">
                             <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i
                                     class="fa fa-redo"></i> Actualizar</button>
+                            <button type="button" class="btn btn-primary btn-xs"
+                                onclick="javascript:alert('Oops.. Sin Detalles')"><i class="fas fa-file-powerpoint"></i>
+                                Detalle</button>
+                            <button type="button" class="btn btn-success btn-xs" onclick="descargar()"><i
+                                    class="fa fa-file-excel"></i>
+                                Descargar</button>
                         </div>
-                        <h3 class="card-title">FILTRO</h3>
+                        <h3 class="card-title text-white">UNIDADES EJECUTORAS</h3>
                     </div>
                     <div class="card-body pt-2 pb-0">
                         <form class="form-horizontal" id="form-filtro">
                             @csrf
                             <div class="form">
                                 <div class="form-group row">
-                                    <div class="col-md-4">
-                                        <label class=" col-form-label">Año</label>
+                                    <div class="col-md-7"><span class="font-11">{{$actualizado}}</span></div>
+                                    <div class="col-md-1">
+                                        {{-- <label class=" col-form-label">Año</label> --}}
                                         <div class="">
-                                            <select class="form-control" name="fanio" id="fanio"
+                                            <select class="form-control btn-xs font-11" name="fanio" id="fanio"
                                                 onchange="cargarcuadros();">
                                                 @foreach ($ano as $item)
                                                     <option value="{{ $item->anio }}">{{ $item->anio }}</option>
@@ -73,24 +80,24 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <label class="col-form-label">Producto/Proyecto</label>
+                                    <div class="col-md-2">
+                                        {{-- <label class="col-form-label">Producto/Proyecto</label> --}}
                                         <div class="">
-                                            <select class="form-control" name="farticulo" id="farticulo"
+                                            <select class="form-control btn-xs font-11" name="farticulo" id="farticulo"
                                                 onchange="cargarcuadros();">
-                                                <option value="0">TODOS</option>
+                                                <option value="0">PRODUCTO/PROYECTO</option>
                                                 @foreach ($articulo as $item)
                                                     <option value="{{ $item->id }}">{{ $item->nombre }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <label class="col-form-label">Categoría de Gasto</label>
+                                    <div class="col-md-2">
+                                        {{-- <label class="col-form-label">Categoría de Gasto</label> --}}
                                         <div class="">
-                                            <select class="form-control" name="fcategoria" id="fcategoria"
+                                            <select class="form-control btn-xs font-11" name="fcategoria" id="fcategoria"
                                                 onchange="cargarcuadros();">
-                                                <option value="0">TODOS</option>
+                                                <option value="0">CATEGORÍA DE GASTO</option>
                                                 @foreach ($categoria as $item)
                                                     <option value="{{ $item->id }}">{{ $item->nombre }}</option>
                                                 @endforeach
@@ -112,15 +119,15 @@
         <div class="row">
             <div class="col-xl-12 principal">
                 <div class="card card-border">
-                    <div class="card-header border-primary">
-                        <div class="card-widgets">
+                    <div class="card-header border-success-0 bg-transparent p-0">
+                        {{-- <div class="card-widgets">
                             <button type="button" class="btn btn-success btn-xs" onclick="descargar()"><i
                                     class="fa fa-file-excel"></i>
-                                Excel</button>
+                                Descargar</button>
                         </div>
-                        <h3 class="card-title">Ejecución de Gastos, según Unidades Ejecutoras </h3>
+                        <h3 class="card-title">Ejecución de Gastos, según Unidades Ejecutoras </h3> --}}
                     </div>
-                    <div class="card-body pb-0 pt-0">
+                    <div class="card-body p-0">
                         <div class="table-responsive" id="vista1">
                         </div>
                     </div>
@@ -131,8 +138,8 @@
 
         <div class="row">
             <div class="col-xl-12">
-                <div class="card card-border card-primary">
-                    <div class="card-header border-primary bg-transparent p-0">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent pt-2 pb-0">
                         <h5 class="card-title anal1">UNIDAD EJECUTORA</h5>{{-- text-primary  --}}
                     </div>
                     <div class="card-body p-0">
@@ -145,7 +152,6 @@
         {{-- end  row --}}
 
     </div>
-
 @endsection
 
 @section('js')
@@ -225,6 +231,7 @@
                         "language": table_language,
                         paging: false,
                         searching: false,
+                        info: false,
                         //"aLengthMenu":[100]
                     });
                 },
@@ -342,15 +349,26 @@
                 },
                 subtitle: {
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 xAxis: [{
                     categories: categoria,
-                    crosshair: true
+                    crosshair: true,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 }],
                 yAxis: [{ // Primary yAxis
                         //max: 1000000000,
                         labels: {
                             enabled: false,
+                            style: {
+                                fontSize: '10px',
+                            }
                         },
                         title: {
                             enabled: false,

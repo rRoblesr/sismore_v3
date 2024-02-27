@@ -16,4 +16,9 @@ class Sistema extends Model
         'pos',
         'estado'
     ];
+
+    protected $hidden=[
+        'created_at',
+        'updated_at',
+    ];
 }

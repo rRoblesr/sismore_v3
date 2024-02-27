@@ -18,7 +18,7 @@ class GobiernosRegionalesRepositorio
             select anio from pres_base_actividadesproyectos
             union
             select anio from pres_base_proyectos
-            ) as tb order by anio) as tb'))->orderBy('anio', 'desc')->get();
+            ) as tb order by anio) as tb'))->orderBy('anio')->get();
         return $anios;
     }
 

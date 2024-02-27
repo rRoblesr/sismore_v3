@@ -19,9 +19,6 @@ class ImporPoblacion extends Model
     protected $fillable = [
         'importacion_id',
         'ubigeo',
-        'departamento',
-        'provincia',
-        'distrito',
         'sexo',
         'edad',
         'total',

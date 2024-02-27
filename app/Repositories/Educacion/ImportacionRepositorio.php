@@ -33,7 +33,7 @@ class ImportacionRepositorio
         $data = DB::table('par_importacion as imp')
             ->join('adm_usuario', 'adm_usuario.id', '=', 'imp.usuarioId_crea')
             ->join('par_fuenteimportacion', 'par_fuenteimportacion.id', '=', 'imp.fuenteImportacion_id')
-            ->leftJoin('adm_usuario as aprueba', 'aprueba.id', '=', 'imp.usuarioId_Aprueba')
+            // ->leftJoin('adm_usuario as aprueba', 'aprueba.id', '=', 'imp.usuarioId_Aprueba')
 
             ->leftJoin('edu_matricula_anual as matAnu', 'imp.id', '=', 'matAnu.importacion_id')
             ->leftJoin('par_anio as anioMatAnu', 'matAnu.anio_id', '=', 'anioMatAnu.id')
@@ -67,7 +67,7 @@ class ImportacionRepositorio
                 DB::raw('imp.fechaActualizacion'),
                 DB::raw('case when imp.estado = "PE" then "PENDIENTE" else "APROBADO" end as estado'),
                 DB::raw('adm_usuario.usuario'),
-                DB::raw('concat(aprueba.nombre," ", aprueba.apellido1, aprueba.apellido2) as aprueba'),
+                // DB::raw('concat(aprueba.nombre," ", aprueba.apellido1, aprueba.apellido2) as aprueba'),
                 DB::raw('par_fuenteimportacion.nombre'),
                 DB::raw('par_fuenteimportacion.codigo'),
                 DB::raw('concat(adm_usuario.nombre," ", adm_usuario.apellido1, adm_usuario.apellido2) as unombre'),
@@ -112,6 +112,7 @@ class ImportacionRepositorio
             ->join('adm_usuario', 'adm_usuario.id', '=', 'par_importacion.usuarioId_crea')
             ->join('par_fuenteimportacion', 'par_fuenteimportacion.id', '=', 'par_importacion.fuenteImportacion_id')
             ->where("par_importacion.id", "=", $id)
+            ->where('par_importacion.estado', 'PR')
             ->first();
 
         return $entidad;
@@ -227,7 +228,7 @@ class ImportacionRepositorio
         $query = DB::table('par_importacion as v1')
             ->join('par_fuenteimportacion as v2', 'v2.id', '=', 'v1.fuenteImportacion_id')
             ->join('adm_usuario as v3', 'v3.id', '=', 'v1.usuarioId_Crea')
-            ->join('adm_usuario as v4', 'v4.id', '=', 'v1.usuarioId_Aprueba', 'left')
+            // ->join('adm_usuario as v4', 'v4.id', '=', 'v1.usuarioId_Aprueba', 'left')
             ->where('v1.fuenteImportacion_id', $fuenteImportacion_id)
             ->where('v1.estado', '!=', 'EL')
             ->orderBy('v1.fechaActualizacion', 'desc')
@@ -239,9 +240,9 @@ class ImportacionRepositorio
                 'v3.nombre as cnombre',
                 'v3.apellido1 as capellido1',
                 'v3.apellido2 as capellido2',
-                'v4.nombre as anombre',
-                'v4.apellido1 as aapellido1',
-                'v4.apellido2 as aapellido2'
+                // 'v4.nombre as anombre',
+                // 'v4.apellido1 as aapellido1',
+                // 'v4.apellido2 as aapellido2'
             )
             ->get();
         return $query;
@@ -252,7 +253,7 @@ class ImportacionRepositorio
         $query = DB::table('par_importacion as v1')
             ->join('par_fuenteimportacion as v2', 'v2.id', '=', 'v1.fuenteImportacion_id')
             ->join('adm_usuario as v3', 'v3.id', '=', 'v1.usuarioId_Crea')
-            ->join('adm_usuario as v4', 'v4.id', '=', 'v1.usuarioId_Aprueba', 'left')
+            // ->join('adm_usuario as v4', 'v4.id', '=', 'v1.usuarioId_Aprueba', 'left')
             ->whereIn('v1.fuenteImportacion_id', $fuenteImportacion_id)
             ->where('v1.estado', '!=', 'EL')
             ->orderBy('v1.id', 'desc')
@@ -262,9 +263,9 @@ class ImportacionRepositorio
                 'v3.nombre as cnombre',
                 'v3.apellido1 as capellido1',
                 'v3.apellido2 as capellido2',
-                'v4.nombre as anombre',
-                'v4.apellido1 as aapellido1',
-                'v4.apellido2 as aapellido2'
+                // 'v4.nombre as anombre',
+                // 'v4.apellido1 as aapellido1',
+                // 'v4.apellido2 as aapellido2'
             )
             ->get();
         return $query;
@@ -275,7 +276,7 @@ class ImportacionRepositorio
         $query = DB::table('par_importacion as v1')
             ->join('par_fuenteimportacion as v2', 'v2.id', '=', 'v1.fuenteImportacion_id')
             ->join('adm_usuario as v3', 'v3.id', '=', 'v1.usuarioId_Crea')
-            ->join('adm_usuario as v4', 'v4.id', '=', 'v1.usuarioId_Aprueba', 'left')
+            // ->join('adm_usuario as v4', 'v4.id', '=', 'v1.usuarioId_Aprueba', 'left')
             ->join('edu_padron_eib as v5', 'v5.importacion_id', '=', 'v1.id', 'left')
             ->join('par_anio as v6', 'v6.id', '=', 'v5.anio_id', 'left')
             ->where('v1.fuenteImportacion_id', $fuenteImportacion_id)
@@ -286,9 +287,9 @@ class ImportacionRepositorio
                 'v3.nombre as cnombre',
                 'v3.apellido1 as capellido1',
                 'v3.apellido2 as capellido2',
-                'v4.nombre as anombre',
-                'v4.apellido1 as aapellido1',
-                'v4.apellido2 as aapellido2',
+                // 'v4.nombre as anombre',
+                // 'v4.apellido1 as aapellido1',
+                // 'v4.apellido2 as aapellido2',
                 'v6.anio'
             )
             ->distinct()
@@ -333,7 +334,23 @@ class ImportacionRepositorio
         //return Importacion::select(DB::raw('max(id) as maximo'))->where('fuenteimportacion_id', $fuente)->where('estado', 'PR')->first()->maximo;
     }
 
-    public static function Max_yearSiagieMatricula()
+    public static function anios_porfuente($fuente)
+    {
+        $query = Importacion::select('id', DB::raw('year(fechaActualizacion) as anio'))
+            ->where('fuenteimportacion_id', $fuente)->where('estado', 'PR')
+            ->get();
+        return  $query;
+    }
+
+    public static function aniosMax_porfuente($fuente)
+    {
+        $query = Importacion::select('id', DB::raw('year(fechaActualizacion) as anio'))
+            ->where('fuenteimportacion_id', $fuente)->where('estado', 'PR')
+            ->orderBy('anio')->first();
+        return  $query;
+    }
+
+    public static function Max_yearSiagieMatricula() //no sirve
     {
         $query =  DB::table('par_importacion as v1')
             ->join('edu_matricula as v2', 'v2.importacion_id', '=', 'v1.id')
@@ -387,5 +404,23 @@ class ImportacionRepositorio
         $fechaFinSemana = date("Y-m-d", $tiempoDeFinDeSemana);
         return [$fechaInicioSemana,  $fechaFinSemana];
         //return ['2023-01-01',  $fechaFinSemana];
+    }
+
+    public static function ImportacionMaxFuente_porFuenteAnio($fuente, $anio)
+    {
+        $query = Importacion::select(
+            'par_importacion.id',
+            'par_importacion.fechaActualizacion as fecha',
+            DB::raw('year(fechaActualizacion) as anio'),
+            DB::raw('month(fechaActualizacion) as mes'),
+            DB::raw('day(fechaActualizacion) as dia'),
+            'fi.nombre as fuente',
+            'fi.formato'
+        )->join('par_fuenteimportacion as fi', 'fi.id', '=', 'par_importacion.fuenteImportacion_id')
+            ->where('fi.id', $fuente)
+            ->where('par_importacion.estado', 'PR')
+            ->where(DB::raw('year(par_importacion.fechaActualizacion)'), $anio)
+            ->orderBy('fecha', 'desc')->get();
+        return  $query->first();
     }
 }

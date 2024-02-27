@@ -10,7 +10,7 @@ use App\Models\Educacion\Importacion;
 use App\Models\Educacion\Tableta;
 use App\Models\Educacion\TabletaDetalle;
 use App\Models\Parametro\Anio;
-use App\Models\Ubigeo;
+use App\Models\Parametro\Ubigeo;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\InstitucionEducativaRepositorio;
 use App\Repositories\Educacion\TabletaRepositorio;
@@ -90,9 +90,9 @@ class TabletaController extends Controller
                 $importacion = Importacion::Create([
                     'fuenteImportacion_id' => 9, // valor predeterminado
                     'usuarioId_Crea' => auth()->user()->id,
-                    'usuarioId_Aprueba' => null,
+                    // 'usuarioId_Aprueba' => null,
                     'fechaActualizacion' => $request['fechaActualizacion'],
-                    'comentario' => $request['comentario'],
+                    // 'comentario' => $request['comentario'],
                     'estado' => 'PE'
                 ]);
 
@@ -165,7 +165,7 @@ class TabletaController extends Controller
         $importacion  = Importacion::find($importacion_id);
 
         $importacion->estado = 'PR';
-        $importacion->usuarioId_Aprueba = auth()->user()->id;
+        // $importacion->usuarioId_Aprueba = auth()->user()->id;
         $importacion->save();
 
         $this->elimina_mismaFecha($importacion->fechaActualizacion, $importacion->fuenteImportacion_id, $importacion_id);

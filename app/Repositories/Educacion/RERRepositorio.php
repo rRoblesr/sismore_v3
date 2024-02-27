@@ -74,7 +74,7 @@ class RERRepositorio
             inner join edu_institucioneducativa v3 on v3.id=v1.institucioneducativa_id
             inner join edu_ugel v4 on v4.id=v3.Ugel_id
             inner join edu_ugel v5 on v5.id=v4.dependencia
-            inner join par_centropoblado v6 on v6.id=v3.CentroPoblado_id
+            inner join edu_centropoblado v6 on v6.id=v3.CentroPoblado_id
             inner join par_ubigeo v7 on v7.id=v6.Ubigeo_id
             inner join par_ubigeo v8 on v8.id=v7.dependencia
             inner join edu_nivelmodalidad v9 on v9.id=v3.NivelModalidad_id

@@ -49,44 +49,53 @@
 
         <div class="row">
             <div class="col-sm-12">
-                <div class="card card-border">
-                    <div class="card-header bg-transparent pb-0">
+                <div class="card">
+                    <div class="card-header bg-success-0 pt-2">
                         <div class="card-widgets">
                             <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i
                                     class="fa fa-redo"></i> Actualizar</button>
+                            <button type="button" class="btn btn-primary btn-xs"
+                                onclick="javascript:alert('Oops.. Sin Detalles')"><i class="fas fa-file-powerpoint"></i>
+                                Detalle</button>
+                            <button type="button" class="btn btn-success btn-xs" onclick="descargar()"><i
+                                    class="fa fa-file-excel"></i>
+                                Descargar</button>
                         </div>
-                        <h3 class="card-title">FILTRO</h3>
+                        <h3 class="card-title text-white">EJECUCIÓN DE GASTOS, SEGÚN GOBIERNOS REGIONALES</h3>
                     </div>
                     <div class="card-body pt-2 pb-0">
                         <form class="form-horizontal" id="form-filtro">
                             @csrf
                             <div class="form">
                                 <div class="form-group row">
-                                    <div class="col-md-3">
-                                        <label class=" col-form-label">Año</label>
+                                    <div class="col-md-8"><span class="font-11">{{$actualizado}}</span></div>
+                                    <div class="col-md-1">
+                                        {{-- <label class=" col-form-label">Año</label> --}}
                                         <div class="">
-                                            <select class="form-control" name="fano" id="fano"
+                                            <select class="form-control btn-xs font-11" name="fano" id="fano"
                                                 onchange="cargarmes();cargarcuadros();">
                                                 {{-- <option value="0">TODOS</option> --}}
                                                 @foreach ($anos as $item)
-                                                    <option value="{{ $item->anio }}">{{ $item->anio }}</option>
+                                                    <option value="{{ $item->anio }}"
+                                                        {{ $item->anio == $anio ? 'selected' : '' }}>{{ $item->anio }}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <label class="col-form-label">Mes</label>
+                                    <div class="col-md-1">
+                                        {{-- <label class="col-form-label">Mes</label> --}}
                                         <div class="">
-                                            <select class="form-control" name="fmes" id="fmes"
+                                            <select class="form-control btn-xs font-11" name="fmes" id="fmes"
                                                 onchange="cargarcuadros();">
                                                 {{-- <option value="0">TODOS</option> --}}
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label class="col-form-label">Tipo </label>
+                                    <div class="col-md-2">
+                                        {{-- <label class="col-form-label">Tipo </label> --}}
                                         <div class="">
-                                            <select class="form-control" name="ftipo" id="ftipo"
+                                            <select class="form-control btn-xs font-11" name="ftipo" id="ftipo"
                                                 onchange="cargarcuadros();">
                                                 <option value="1">Actividades/Proyectos</option>
                                                 <option value="2">Proyectos</option>
@@ -109,17 +118,16 @@
         <div class="row">
             <div class="col-xl-12 principal">
                 <div class="card card-border">
-                    <div class="card-header border-primary">{{--  bg-transparent pb-0 mb-0 --}}
-                        <div class="card-widgets">
-                            <button type="button" class="btn btn-success btn-xs"
-                                onclick="descargar()"><i
+                    <div class="card-header border-success-0 bg-transparent p-0">
+                        {{-- <div class="card-widgets">
+                            <button type="button" class="btn btn-success btn-xs" onclick="descargar()"><i
                                     class="fa fa-file-excel"></i>
-                                Excel</button>
+                                Descargar</button>
                         </div>
-                        <h3 class="card-title">&nbsp;</h3>
+                        <h3 class="card-title">EJECUCIÓN DE GASTOS, SEGÚN GOBIERNOS REGIONALES</h3> --}}
                     </div>
-                    <div class="card-body pb-0 pt-0">
-                        <div class="table-responsive" id="vista1">
+                    <div class="card-body p-0">
+                        <div class="table-responsive p-0" id="vista1">
                         </div>
                     </div>
                 </div>
@@ -206,6 +214,7 @@
                         "language": table_language,
                         paging: false,
                         searching: false,
+                        info: false,
                         //"aLengthMenu":[100]
                     });
                 },

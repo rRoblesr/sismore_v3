@@ -17,7 +17,7 @@
 
     {{-- <link href="{{ asset('/') }}public/assets/jquery-ui/jquery-ui.css" rel="stylesheet" /> --}}
 
-   {{--  <!-- Font Awesome -->
+    {{--  <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
@@ -51,52 +51,52 @@
     </style> --}}
     <style>
         /* tr.hide-table-padding td {
-            padding: 0;
-        }
+                        padding: 0;
+                    }
 
-        .expand-button {
-            position: relative;
-        }
+                    .expand-button {
+                        position: relative;
+                    }
 
-        .accordion-toggle .expand-button:after {
-            position: absolute;
-            left: .75rem;
-            top: 50%;
-            transform: translate(0, -50%);
-            content: '-';
-        }
+                    .accordion-toggle .expand-button:after {
+                        position: absolute;
+                        left: .75rem;
+                        top: 50%;
+                        transform: translate(0, -50%);
+                        content: '-';
+                    }
 
-        .accordion-toggle.collapsed .expand-button:after {
-            content: '+';
-        } */
+                    .accordion-toggle.collapsed .expand-button:after {
+                        content: '+';
+                    } */
     </style>
 
-<style>
-    .tablex thead th {
-        padding: 6px;
-        text-align: center;
-        font-size: 12px;
-    }
+    <style>
+        .tablex thead th {
+            padding: 6px;
+            text-align: center;
+            font-size: 12px;
+        }
 
-    .tablex thead td {
-        padding: 6px;
-        text-align: center;
-        vertical-align: middle;
-        font-weight: bold;
-    }
+        .tablex thead td {
+            padding: 6px;
+            text-align: center;
+            vertical-align: middle;
+            font-weight: bold;
+        }
 
-    .tablex tbody td,
-    .tablex tbody th,
-    .tablex tfoot td,
-    .tablex tfoot th {
-        padding: 5px;
-        font-size: 12px;
-    }
+        .tablex tbody td,
+        .tablex tbody th,
+        .tablex tfoot td,
+        .tablex tfoot th {
+            padding: 5px;
+            font-size: 12px;
+        }
 
-    .ui-autocomplete {
-        z-index: 215000000 !important;
-    }
-</style>
+        .ui-autocomplete {
+            z-index: 215000000 !important;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -105,63 +105,71 @@
 
         <div class="row">
             <div class="col-sm-12">
-                <div class="card card-border">
-                    <div class="card-header bg-transparent pb-0">
+                <div class="card">
+                    <div class="card-header bg-success-0 pt-2">
                         <div class="card-widgets">
                             <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i
                                     class="fa fa-redo"></i> Actualizar</button>
+
+                            <button type="button" class="btn btn-primary btn-xs"
+                                onclick="javascript:alert('Oops.. Sin Detalles')"><i class="fas fa-file-powerpoint"></i>
+                                Detalle</button>
+                            <button type="button" class="btn btn-success btn-xs" onclick="descargar()"><i
+                                    class="fa fa-file-excel"></i>
+                                Descargar</button>
                         </div>
-                        <h3 class="card-title">FILTRO</h3>
+                        <h3 class="card-title text-white">Ejecución de Gastos por Unidades Organícas de la sede central</h3>
                     </div>
                     <div class="card-body pt-2 pb-0">
                         <form class="form-horizontal" id="form-filtro">
                             @csrf
                             <div class="form">
                                 <div class="form-group row">
-                                    <div class="col-md-2">
-                                        <label class=" col-form-label">Año</label>
+                                    <div class="col-md-4"><span class="font-11">{{$actualizado}}</span></div>
+                                    <div class="col-md-1">
+                                        {{-- <label class=" col-form-label">Año</label> --}}
                                         <div class="">
-                                            <select class="form-control" name="ganio" id="ganio"
+                                            <select class="form-control btn-xs font-11" name="ganio" id="ganio"
                                                 onchange="cargarcuadros2();">
                                                 @foreach ($anios as $item)
                                                     <option value="{{ $item->anio }}"
-                                                        {{ $item->anio == date('Y') ? 'selected' : '' }}>
+                                                        {{ $item->anio == $anio ? 'selected' : '' }}>
                                                         {{ $item->anio }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
-                                        <label class="col-form-label">Producto/Proyecto</label>
+                                        {{-- <label class="col-form-label">Producto/Proyecto</label> --}}
                                         <div class="">
-                                            <select class="form-control" name="garticulo" id="garticulo"
+                                            <select class="form-control btn-xs font-11" name="garticulo" id="garticulo"
                                                 onchange="cargarcuadros2();">
-                                                <option value="0">TODOS</option>
+                                                <option value="0">PRODUCTO/PROYECTO</option>
                                                 @foreach ($articulo as $item)
                                                     <option value="{{ $item->id }}">{{ $item->nombre }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <label class="col-form-label">Unidad Ejecutora</label>
+                                    <div class="col-md-3">
+                                        {{-- <label class="col-form-label">Unidad Ejecutora</label> --}}
                                         <div class="">
-                                            <select class="form-control" name="gue" id="gue"
+                                            <select class="form-control btn-xs font-11" name="gue" id="gue"
                                                 onchange="cargarcuadros2();">
-                                                <option value="0">TODOS</option>
+                                                <option value="0">UNIDAD EJECUTORA</option>
                                                 @foreach ($ue as $item)
-                                                    <option value="{{ $item->id }}">{{ $item->unidad_ejecutora }}
+                                                    <option value="{{ $item->id }}">{{ $item->codigo . ' ' . $item->nombre }}
                                                     </option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <label class="col-form-label">Categoria de Gasto</label>
+                                    <div class="col-md-2">
+                                        {{-- <label class="col-form-label">Categoria de Gasto</label> --}}
                                         <div class="">
-                                            <select class="form-control" name="gcg" id="gcg"
+                                            <select class="form-control btn-xs font-11" name="gcg" id="gcg"
                                                 onchange="cargarcuadros2();">
-                                                <option value="0">TODOS</option>
+                                                <option value="0">CATEGORÍA DE GASTO</option>
                                                 @foreach ($catgas as $item)
                                                     <option value="{{ $item->id }}">{{ $item->nombre }}
                                                     </option>
@@ -179,17 +187,17 @@
         <!-- End row -->
 
         <div class="row">
-            <div class="col-xl-12 principal">
+            <div class="col-xl-12">
                 <div class="card card-border">
-                    <div class="card-header border-primary">{{--  bg-transparent pb-0 mb-0 --}}
-                        <div class="card-widgets">
+                    <div class="card-header border-success-0 bg-transparent p-0">
+                        {{-- <div class="card-widgets">
                             <button type="button" class="btn btn-success btn-xs" onclick="descargar()"><i
                                     class="fa fa-file-excel"></i>
-                                Excel</button>
+                                Descargar</button>
                         </div>
-                        <h3 class="card-title">Ejecución de Gastos por Unidades Organícas de la sede central</h3>
+                        <h3 class="card-title">Ejecución de Gastos por Unidades Organícas de la sede central</h3> --}}
                     </div>
-                    <div class="card-body pb-0 pt-0">
+                    <div class="card-body p-0">
                         <div class="table-responsive" id="vista4">
                         </div>
                     </div>
@@ -284,8 +292,9 @@
                         "language": table_language,
                         paging: false,
                         searching: false,
-                        //ordering: true,
-                        "aLengthMenu": [25]
+                        info: false,
+                        // ordering: true,
+                        // "aLengthMenu": [25]
                     });
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
@@ -351,10 +360,18 @@
                 },
                 subtitle: {
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 xAxis: [{
                     categories: categoria,
-                    crosshair: true
+                    crosshair: true,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 }],
                 yAxis: [{ // Primary yAxis
                         //max: 2000000000,
@@ -472,9 +489,17 @@
                 },
                 subtitle: {
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 xAxis: {
-                    categories: categoria
+                    categories: categoria,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 yAxis: {
                     title: {

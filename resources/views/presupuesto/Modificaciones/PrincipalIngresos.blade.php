@@ -49,23 +49,30 @@
 
         <div class="row">
             <div class="col-sm-12">
-                <div class="card card-border">
-                    <div class="card-header border-success-0 bg-transparent pb-0">
+                <div class="card">
+                    <div class="card-header bg-success-0 pt-2">
                         <div class="card-widgets">
                             <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i
                                     class="fa fa-redo"></i> Actualizar</button>
+                            <button type="button" class="btn btn-primary btn-xs"
+                                onclick="javascript:alert('Oops.. Sin Detalles')"><i class="fas fa-file-powerpoint"></i>
+                                Detalle</button>
+                            <button type="button" class="btn btn-success btn-xs" onclick="descargar()"><i
+                                    class="fa fa-file-excel"></i>
+                                Descargar</button>
                         </div>
-                        <h3 class="card-title">FILTRO</h3>
+                        <h3 class="card-title text-white">CONSULTA DE INGRESO</h3>
                     </div>
                     <div class="card-body pt-2 pb-0">
                         <form class="form-horizontal" id="form-filtro">
                             @csrf
                             <div class="form">
                                 <div class="form-group row">
-                                    <div class="col-md-2">
-                                        <label class=" col-form-label">Año</label>
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-1">
+                                        {{-- <label class=" col-form-label">Año</label> --}}
                                         <div class="">
-                                            <select class="form-control" name="fano" id="fano"
+                                            <select class="form-control btn-xs font-11" name="fano" id="fano"
                                                 onchange="cargarmes();cargarcuadros();">
                                                 {{-- <option value="0">TODOS</option> --}}
                                                 @foreach ($anio as $item)
@@ -76,21 +83,21 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
-                                        <label class="col-form-label">Mes</label>
+                                    <div class="col-md-1">
+                                        {{-- <label class="col-form-label">Mes</label> --}}
                                         <div class="">
-                                            <select class="form-control" name="fmes" id="fmes"
+                                            <select class="form-control btn-xs font-11 pl-0" name="fmes" id="fmes"
                                                 onchange="cargarcuadros();">
                                                 {{-- <option value="0">TODOS</option> --}}
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <label class="col-form-label">Tipos de Modificaciones </label>
+                                    <div class="col-md-3">
+                                        {{-- <label class="col-form-label">Tipos de Modificaciones </label> --}}
                                         <div class="">
-                                            <select class="form-control" name="ftipomodificacion" id="ftipomodificacion"
-                                                onchange="cargarcuadros();">
-                                                <option value="0">Todos</option>
+                                            <select class="form-control btn-xs font-11" name="ftipomodificacion"
+                                                id="ftipomodificacion" onchange="cargarcuadros();">
+                                                <option value="0">TIPOS DE MODIFICACIONES</option>
                                                 {{-- @foreach ($opt4 as $item)
                                                     <option value="{{ $item->id }}">
                                                         {{ $item->codigo . ' ' . $item->nombre }}</option>
@@ -98,12 +105,12 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <label class="col-form-label">Unidad Ejecutora </label>
+                                    <div class="col-md-3">
+                                        {{-- <label class="col-form-label">Unidad Ejecutora </label> --}}
                                         <div class="">
-                                            <select class="form-control" name="fue" id="fue"
+                                            <select class="form-control btn-xs font-11" name="fue" id="fue"
                                                 onchange="cargarcuadros();">
-                                                <option value="0">Todos</option>
+                                                <option value="0">UNIDAD EJECUTORA</option>
                                                 {{-- @foreach ($opt6 as $item)
                                                     <option value="{{ $item->id }}">
                                                         {{ $item->nombre_ejecutora }}</option>
@@ -126,13 +133,13 @@
         <div class="row">
             <div class="col-xl-12 principal">
                 <div class="card card-border">
-                    <div class="card-header border-success-0 border-primary">{{--  bg-transparent pb-0 mb-0 --}}
-                        <div class="card-widgets">
+                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                        {{-- <div class="card-widgets">
                             <button type="button" class="btn btn-success btn-xs" onclick="descargar()"><i
                                     class="fa fa-file-excel"></i>
-                                Excel</button>
+                                Descargar</button>
                         </div>
-                        <h3 class="card-title"></h3>
+                        <h3 class="card-title"></h3> --}}
                     </div>
                     <div class="card-body pb-0 pt-0">
                         <div class="table-responsive" id="vista1">
@@ -273,9 +280,9 @@
                 type: 'get',
                 success: function(data) {
                     $('#fue option ').remove();
-                    var opt = '<option value="0">Todos</option>';
+                    var opt = '<option value="0">UNIDAD EJECUTORA</option>';
                     $.each(data.info, function(index, value) {
-                        opt += '<option value="' + value.id + '">' + value.nombre_ejecutora +
+                        opt += '<option value="' + value.id + '">' + value.codigo+' '+ value.nombre+
                             '</option>';
                     });
                     $('#fue').append(opt);
@@ -301,7 +308,7 @@
                 type: 'get',
                 success: function(data) {
                     $('#ftipomodificacion option ').remove();
-                    var opt = '<option value="0">Todos</option>';
+                    var opt = '<option value="0">TIPOS DE MODIFICACIONES</option>';
                     $.each(data.info, function(index, value) {
                         opt += '<option value="' + value.id + '">' + value.codigo + " " + value.nombre +
                             '</option>';

@@ -18,7 +18,6 @@ class PoblacionDetalle extends Model
      */
     protected $fillable = [
         'poblacion_id',
-        'ubigeo',
         'ubigeo_id',
         'sexo',
         'edad',

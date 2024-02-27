@@ -9,7 +9,7 @@ use App\Models\Educacion\Importacion;
 use App\Models\Parametro\FuenteImportacion;
 use App\Models\Presupuesto\BaseModificacion;
 use App\Models\Presupuesto\BaseModificacionDetalle;
-use App\Models\Presupuesto\Entidad;
+use App\Models\Administracion\Entidad;
 use App\Models\Presupuesto\ImporModificaciones;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use Exception;
@@ -86,12 +86,9 @@ class ImporModificacionesController extends Controller
                         $row['cod_tipo_mod'] .
                         $row['tipo_modificacion'] .
                         $row['documento'] .
-                        //$row['referencia'] .---//
                         $row['dispositivo_legal'] .
                         $row['tipo_ingreso'] .
-                        //$row['excepcion_limite'] .----
                         $row['justificacion'] .
-                        //$row['tipo_financiamiento'] .----
                         $row['entidad_origen'] .
                         $row['tipo_presupuesto'] .
                         $row['sec_func'] .
@@ -123,9 +120,9 @@ class ImporModificacionesController extends Controller
             $importacion = Importacion::Create([
                 'fuenteImportacion_id' => $this->fuente, // valor predeterminado
                 'usuarioId_Crea' => auth()->user()->id,
-                'usuarioId_Aprueba' => null,
+                // 'usuarioId_Aprueba' => null,
                 'fechaActualizacion' => $request['fechaActualizacion'],
-                'comentario' => $request['comentario'],
+                // 'comentario' => $request['comentario'],
                 'estado' => 'PE'
             ]);
 
@@ -192,7 +189,6 @@ class ImporModificacionesController extends Controller
         $this->json_output(200, $mensaje, '');
     }
 
-
     public function ListarDTImportFuenteTodos(Request $rq)
     {
         $draw = intval($rq->draw);
@@ -208,13 +204,8 @@ class ImporModificacionesController extends Controller
                 $xx = explode(' ', $value->cnombre);
                 $nom = $xx[0];
             }
-            $ape = '';
-            if (strlen($value->capellido1) > 0) {
-                $xx = explode(' ', $value->capellido1 . ' ' . $value->capellido2);
-                $ape = $xx[0];
-            }
 
-            if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_id') == 3 || session('perfil_id') == 8 || session('perfil_id') == 9 || session('perfil_id') == 10 || session('perfil_id') == 11)
+            if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11)
                 $boton = '<button type="button" onclick="geteliminar(' . $value->id . ')" id="eliminar' . $value->id . '" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> </button>';
             else
                 $boton = '';
@@ -223,11 +214,9 @@ class ImporModificacionesController extends Controller
                 $key + 1,
                 'MODIFICACIÓN',
                 date("d/m/Y", strtotime($value->fechaActualizacion)),
-                //$value->fuente . $value->id,
-                $nom . ' ' . $ape,
+                $nom . ' ' . $value->capellido1,
                 ($ent ? $ent->abreviado : ''),
                 date("d/m/Y", strtotime($value->created_at)),
-                //$value->comentario,
                 $value->estado == "PR" ? "PROCESADO" : ($value->estado == "PE" ? "PENDIENTE" : "ELIMINADO"),
                 $boton . '&nbsp;' . $boton2,
             );

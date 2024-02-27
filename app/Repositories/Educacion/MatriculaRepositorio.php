@@ -152,7 +152,7 @@ class MatriculaRepositorio
     //                             inner join edu_forma forma on inst.Forma_id = forma.id
     //                             inner join edu_caracteristica caracteristica on inst.Caracteristica_id = caracteristica .id
     //                             inner join edu_area areas on inst.Area_id = areas.id
-    //                             inner join  par_centropoblado cenPo on inst.CentroPoblado_id = cenPo.id
+    //                             inner join  edu_centropoblado cenPo on inst.CentroPoblado_id = cenPo.id
     //                             inner join par_ubigeo dist on cenPo.ubigeo_id = dist.id
     //                             inner join par_ubigeo prov on dist.dependencia = prov.id
     //                             where mat.id = '$matricula_id' and nivel = '$nivel'
@@ -273,7 +273,7 @@ class MatriculaRepositorio
                             from edu_matricula mat
                             inner join edu_matricula_detalle matDet on mat.id = matDet.matricula_id
                             inner join edu_institucioneducativa inst on matDet.institucioneducativa_id = inst.id
-                            inner join  par_centropoblado cenPo on inst.CentroPoblado_id = cenPo.id
+                            inner join  edu_centropoblado cenPo on inst.CentroPoblado_id = cenPo.id
                             inner join par_ubigeo dist on cenPo.ubigeo_id = dist.id
                             inner join par_ubigeo prov on dist.dependencia = prov.id
                             where matDet.nivel = 'E' and  mat.id = $matricula_id
@@ -462,7 +462,7 @@ class MatriculaRepositorio
                             from edu_matricula mat
                             inner join edu_matricula_detalle matDet on mat.id = matDet.matricula_id
                             inner join edu_institucioneducativa inst on matDet.institucioneducativa_id = inst.id
-                            inner join  par_centropoblado cenPo on inst.CentroPoblado_id = cenPo.id
+                            inner join  edu_centropoblado cenPo on inst.CentroPoblado_id = cenPo.id
                             inner join par_ubigeo dist on cenPo.ubigeo_id = dist.id
                             inner join par_ubigeo prov on dist.dependencia = prov.id
 
@@ -520,7 +520,7 @@ class MatriculaRepositorio
                                 inner join edu_forma forma on inst.Forma_id = forma.id
                                 inner join edu_caracteristica caracteristica on inst.Caracteristica_id = caracteristica .id
                                 inner join edu_area areas on inst.Area_id = areas.id
-                                inner join  par_centropoblado cenPo on inst.CentroPoblado_id = cenPo.id
+                                inner join  edu_centropoblado cenPo on inst.CentroPoblado_id = cenPo.id
                                 inner join par_ubigeo dist on cenPo.ubigeo_id = dist.id
                                 inner join par_ubigeo prov on dist.dependencia = prov.id
 
@@ -562,7 +562,7 @@ class MatriculaRepositorio
                             from edu_matricula mat
                             inner join edu_matricula_detalle matDet on mat.id = matDet.matricula_id
                             inner join edu_institucioneducativa inst on matDet.institucioneducativa_id = inst.id
-                            inner join  par_centropoblado cenPo on inst.CentroPoblado_id = cenPo.id
+                            inner join  edu_centropoblado cenPo on inst.CentroPoblado_id = cenPo.id
                             inner join par_ubigeo dist on cenPo.ubigeo_id = dist.id
                             inner join par_ubigeo prov on dist.dependencia = prov.id
 
@@ -632,7 +632,7 @@ class MatriculaRepositorio
         $data = DB::table('edu_matricula as mat')
             ->join('edu_matricula_detalle as matDet', 'mat.id', '=', 'matDet.matricula_id')
             ->join('edu_institucioneducativa as inst', 'matDet.institucioneducativa_id', '=', 'inst.id')
-            ->join('par_centropoblado as cenPo', 'inst.CentroPoblado_id', '=', 'cenPo.id')
+            ->join('edu_centropoblado as cenPo', 'inst.CentroPoblado_id', '=', 'cenPo.id')
             // ->join('edu_padron_eib as eib', 'inst.codModular', '=', 'eib.codModular')
             ->join('par_ubigeo as dist', 'cenPo.ubigeo_id', '=', 'dist.id')
             ->join('par_ubigeo as prov', 'dist.dependencia', '=', 'prov.id')
@@ -930,7 +930,7 @@ class MatriculaRepositorio
         $data = DB::table('edu_matricula as mat')
             ->join('edu_matricula_detalle as matDet', 'mat.id', '=', 'matDet.matricula_id')
             ->join('edu_institucioneducativa as inst', 'matDet.institucioneducativa_id', '=', 'inst.id')
-            ->join('par_centropoblado as cenPo', 'inst.CentroPoblado_id', '=', 'cenPo.id')
+            ->join('edu_centropoblado as cenPo', 'inst.CentroPoblado_id', '=', 'cenPo.id')
 
             ->join('par_ubigeo as dist', 'cenPo.ubigeo_id', '=', 'dist.id')
             ->join('par_ubigeo as prov', 'dist.dependencia', '=', 'prov.id')
@@ -1013,7 +1013,7 @@ class MatriculaRepositorio
                                 inner join edu_forma forma on inst.Forma_id = forma.id
                                 inner join edu_caracteristica caracteristica on inst.Caracteristica_id = caracteristica .id
                                 inner join edu_area areas on inst.Area_id = areas.id
-                                inner join  par_centropoblado cenPo on inst.CentroPoblado_id = cenPo.id
+                                inner join  edu_centropoblado cenPo on inst.CentroPoblado_id = cenPo.id
                                 inner join par_ubigeo dist on cenPo.ubigeo_id = dist.id
                                 inner join par_ubigeo prov on dist.dependencia = prov.id
                                 where mat.id = '$matricula_id' and nivel = '$nivel'
@@ -1052,7 +1052,7 @@ class MatriculaRepositorio
                             from edu_matricula mat
                             inner join edu_matricula_detalle matDet on mat.id = matDet.matricula_id
                             inner join edu_institucioneducativa inst on matDet.institucioneducativa_id = inst.id
-                            inner join  par_centropoblado cenPo on inst.CentroPoblado_id = cenPo.id
+                            inner join  edu_centropoblado cenPo on inst.CentroPoblado_id = cenPo.id
                             inner join par_ubigeo dist on cenPo.ubigeo_id = dist.id
                             inner join par_ubigeo prov on dist.dependencia = prov.id
                             where mat.id = '$matricula_id'
@@ -1130,7 +1130,7 @@ class MatriculaRepositorio
                             from edu_matricula mat
                             inner join edu_matricula_detalle matDet on mat.id = matDet.matricula_id
                             inner join edu_institucioneducativa inst on matDet.institucioneducativa_id = inst.id
-                            inner join  par_centropoblado cenPo on inst.CentroPoblado_id = cenPo.id
+                            inner join  edu_centropoblado cenPo on inst.CentroPoblado_id = cenPo.id
                             inner join par_ubigeo dist on cenPo.ubigeo_id = dist.id
                             inner join par_ubigeo prov on dist.dependencia = prov.id
                             where matDet.nivel != 'E' and  mat.id = $matricula_id
@@ -1613,7 +1613,7 @@ class MatriculaRepositorio
                                     from edu_matricula mat
                                     inner join edu_matricula_detalle matDet on mat.id = matDet.matricula_id
                                     inner join edu_institucioneducativa inst on matDet.institucioneducativa_id = inst.id
-                                    inner join  par_centropoblado cenPo on inst.CentroPoblado_id = cenPo.id
+                                    inner join  edu_centropoblado cenPo on inst.CentroPoblado_id = cenPo.id
                                     inner join par_ubigeo dist on cenPo.ubigeo_id = dist.id
                                     inner join par_ubigeo prov on dist.dependencia = prov.id
                                     where mat.id = '$id'

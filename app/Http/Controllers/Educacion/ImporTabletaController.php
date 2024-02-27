@@ -40,8 +40,9 @@ class ImporTabletaController extends Controller
 
     public function importar()
     {
-        $mensaje = "";
-        return view('educacion.ImporTableta.Importar', compact('mensaje'));
+        $fuente = $this->fuente;
+        return view('educacion.ImporGeneral.Importar', compact('fuente'));
+        //$mensaje = "";return view('educacion.ImporTableta.Importar', compact('mensaje'));
     }
 
     public function exportar()
@@ -131,9 +132,9 @@ class ImporTabletaController extends Controller
             $importacion = Importacion::Create([
                 'fuenteImportacion_id' => $this->fuente, // valor predeterminado
                 'usuarioId_Crea' => auth()->user()->id,
-                'usuarioId_Aprueba' => null,
+                // 'usuarioId_Aprueba' => null,
                 'fechaActualizacion' => $request['fechaActualizacion'],
-                'comentario' => $request['comentario'],
+                // 'comentario' => $request['comentario'],
                 'estado' => 'PE'
             ]);
 
@@ -224,7 +225,7 @@ class ImporTabletaController extends Controller
             $ent = $ent->where('v3.id', $value->entidad);
             $ent = $ent->first();
 
-            if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_id') == 3 || session('perfil_id') == 8 || session('perfil_id') == 9 || session('perfil_id') == 10 || session('perfil_id') == 11)
+            if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11)
                 $boton = '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" id="eliminar' . $value->id . '"><i class="fa fa-trash"></i> </button>';
             else
                 $boton = '';

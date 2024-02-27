@@ -10,7 +10,7 @@ use App\Models\Educacion\Importacion;
 use App\Models\Parametro\FuenteImportacion;
 use App\Models\Presupuesto\BaseActividadesProyectos;
 use App\Models\Presupuesto\BaseActividadesProyectosDetalle;
-use App\Models\Presupuesto\Entidad;
+use App\Models\Administracion\Entidad;
 use App\Models\Presupuesto\ImporActividadesProyectos;
 use App\Models\Presupuesto\ImporGastos;
 use App\Models\Presupuesto\ImporSiafWeb;
@@ -26,6 +26,7 @@ use Yajra\DataTables\DataTables;
 class ImporActividadesProyectosController extends Controller
 {
     public $fuente = 16;
+    public static $FUENTE = 16;
     public function __construct()
     {
         $this->middleware('auth');
@@ -102,9 +103,9 @@ class ImporActividadesProyectosController extends Controller
             $importacion = Importacion::Create([
                 'fuenteImportacion_id' => $this->fuente, // valor predeterminado
                 'usuarioId_Crea' => auth()->user()->id,
-                'usuarioId_Aprueba' => null,
+                // 'usuarioId_Aprueba' => null,
                 'fechaActualizacion' => $request['fechaActualizacion'],
-                'comentario' => $request['comentario'],
+                // 'comentario' => $request['comentario'],
                 'estado' => 'PE'
             ]);
 
@@ -170,7 +171,7 @@ class ImporActividadesProyectosController extends Controller
                 $ape = $xx[0];
             }
 
-            if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_id') == 3 || session('perfil_id') == 8 || session('perfil_id') == 9 || session('perfil_id') == 10 || session('perfil_id') == 11)
+            if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11)
                 $boton = '<button type="button" onclick="geteliminar(' . $value->id . ')" id="eliminar' . $value->id . '" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> </button>';
             else
                 $boton = '';

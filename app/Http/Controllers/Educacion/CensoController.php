@@ -20,19 +20,19 @@ class CensoController extends Controller
     }
 
     public function importar()
-    {  
+    {
         $mensaje = "";
         $anios = Anio::orderBy('anio', 'desc')->get();
-        
+
         return view('educacion.Censo.Importar',compact('mensaje','anios'));
-    } 
-    
+    }
+
     public function guardar(Request $request)
-    {  
-        $this->validate($request,['file' => 'required|mimes:xls,xlsx']);      
+    {
+        $this->validate($request,['file' => 'required|mimes:xls,xlsx']);
         $archivo = $request->file('file');
-        $array = (new tablaXImport )-> toArray($archivo);    
-        $anios = Anio::orderBy('anio', 'desc')->get();    
+        $array = (new tablaXImport )-> toArray($archivo);
+        $anios = Anio::orderBy('anio', 'desc')->get();
 
         $i = 0;
         $cadena ='';
@@ -51,29 +51,29 @@ class CensoController extends Controller
                     .$row['compuescri_operativos'].$row['compuescri_inoperativos'].$row['compuporta_operativos']
                     .$row['compuporta_inoperativos'].$row['lapto_operativos'].$row['lapto_inoperativos'].$row['tieneinternet']
                     .$row['tipoconexion'].$row['fuenteenergiaelectrica'].$row['empresaenergiaelect'].$row['tieneenergiaelecttododia']
-                    .$row['fuenteagua'].$row['empresaagua'].$row['tieneaguapottododia'].$row['desagueinfo'];     
+                    .$row['fuenteagua'].$row['empresaagua'].$row['tieneaguapottododia'].$row['desagueinfo'];
                     }
              }
         }catch (Exception $e) {
-            $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto y vuelva a importar";           
-            return view('Educacion.Censo.Importar',compact('mensaje','anios'));            
+            $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto y vuelva a importar";
+            return view('Educacion.Censo.Importar',compact('mensaje','anios'));
         }
-       
+
         try{
             $importacion = Importacion::Create([
                 'fuenteImportacion_id'=>6, // valor predeterminado
                 'usuarioId_Crea'=> auth()->user()->id,
-                'usuarioId_Aprueba'=>null,
+                // 'usuarioId_Aprueba'=>null,
                 'fechaActualizacion'=>$request['fechaActualizacion'],
-                'comentario'=>$request['comentario'],
+                // 'comentario'=>$request['comentario'],
                 'estado'=>'PE'
-              ]); 
+              ]);
 
             $censo = Censo::Create([
                 'importacion_id'=>$importacion->id, // valor predeterminado
                 'anio_id'=> $request['anio'],
                 'estado'=>'PE'
-              ]); 
+              ]);
 
             foreach ($array as $key => $value) {
                 foreach ($value as $row) {
@@ -119,7 +119,7 @@ class CensoController extends Controller
                         'fuenteAgua'=>$row['fuenteagua'],
                         'empresaAgua'=>$row['empresaagua'],
                         'tieneAguaPotTodoDia'=>$row['tieneaguapottododia'],
-                        'desagueInfo'=>$row['desagueinfo']             
+                        'desagueInfo'=>$row['desagueinfo']
                     ]);
                 }
             }
@@ -127,14 +127,14 @@ class CensoController extends Controller
 
             $censo->estado = 'EL';
             $censo->save();
-                 
+
             $importacion->estado = 'EL';
             $importacion->save();
-            
-            $mensaje = "Error en la carga de datos, verifique los datos de su archivo y/o comuniquese con el administrador del sistema";          
-            return view('Educacion.Censo.Importar',compact('mensaje','anios'));            
+
+            $mensaje = "Error en la carga de datos, verifique los datos de su archivo y/o comuniquese con el administrador del sistema";
+            return view('Educacion.Censo.Importar',compact('mensaje','anios'));
         }
-       
+
         return redirect()->route('Censo.Censo_Lista',$importacion->id);
     }
 
@@ -146,26 +146,26 @@ class CensoController extends Controller
     public function ListaImportada_DataTable($importacion_id)
     {
         $Lista = CensoRepositorio::Listar_Por_Importacion_id($importacion_id);
-                
+
         return  datatables()->of($Lista)->toJson();;
     }
-    
+
     public function aprobar($importacion_id)
     {
         $importacion = ImportacionRepositorio::ImportacionPor_Id($importacion_id);
         $anioCenso = CensoRepositorio :: censo_Por_Importacion_id($importacion_id)->first()->anio;
 
         return view('educacion.Censo.Aprobar',compact('importacion_id','importacion','anioCenso'));
-    } 
+    }
 
     public function procesar($importacion_id)
     {
         $importacion  = Importacion::find($importacion_id);
-        $importacion->usuarioId_Aprueba = auth()->user()->id; 
-        $importacion->estado = 'PR';        
+        // $importacion->usuarioId_Aprueba = auth()->user()->id;
+        $importacion->estado = 'PR';
         $importacion->save();
 
-        $Censo = CensoRepositorio :: censo_Por_Importacion_id($importacion_id)->first();        
+        $Censo = CensoRepositorio :: censo_Por_Importacion_id($importacion_id)->first();
         $Censo->estado = 'PR';
         $Censo->save();
 
@@ -175,5 +175,5 @@ class CensoController extends Controller
 
         return view('correcto');
     }
-    
+
 }

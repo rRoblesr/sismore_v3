@@ -41,40 +41,42 @@
 
 @section('content')
     <div class="row">
-        <div class="col-sm-12">
-            <div class="card card-border">
-                <div class="card-header bg-transparent pb-0">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header bg-success-0 pt-2">
                     <div class="card-widgets">
                         <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i
                                 class="fa fa-redo"></i> Actualizar</button>
                         <button type="button" class="btn btn-primary btn-xs" onclick="add()">
                             <i class="fa fa-plus"></i> Agregar</button>
                     </div>
-                    <h3 class="card-title">FILTRO</h3>
+                    <h3 class="card-title text-white">PARTIDAS RESTRINGIDAS</h3>
                 </div>
                 <div class="card-body pt-2 pb-0">
                     <form class="form-horizontal" id="form-filtro">
                         @csrf
                         <div class="form">
                             <div class="form-group row">
-                                <div class="col-md-3">
-                                    <label class="col-form-label">Año</label>
+                                <div class="col-md-6"></div>
+                                <div class="col-md-1">
+                                    {{-- <label class="col-form-label">Año</label> --}}
                                     <div class="">
-                                        <select class="form-control" name="anio" id="anio" onchange="listarDT();">
+                                        <select class="form-control btn-xs font-11" name="anio" id="anio"
+                                            onchange="listarDT();">
                                             @foreach ($anios as $item)
                                                 <option value="{{ $item->anio }}"
-                                                    {{ $item->anio == date('Y') ? 'selected' : '' }}>
+                                                    {{ $item->anio == $anio ? 'selected' : '' }}>
                                                     {{ $item->anio }}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
-                                    <label class=" col-form-label">Genérica </label>
+                                <div class="col-md-2">
+                                    {{-- <label class=" col-form-label">Genérica </label> --}}
                                     <div class="">
-                                        <select class="form-control" name="generica" id="generica"
+                                        <select class="form-control btn-xs font-11" name="generica" id="generica"
                                             onchange="cargarsg();listarDT();">
-                                            <option value="0">TODOS</option>
+                                            <option value="0">GENÉRICA</option>
                                             @foreach ($generica as $item)
                                                 <option value="{{ $item->id }}">
                                                     {{ '2.' . $item->codigo . ' ' . $item->nombre }}
@@ -83,11 +85,12 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="col-form-label">Sub Genérica </label>
+                                <div class="col-md-3">
+                                    {{-- <label class="col-form-label">Sub Genérica </label> --}}
                                     <div class="">
-                                        <select class="form-control" name="sg" id="sg" onchange="listarDT();">
-                                            <option value="0">TODOS</option>
+                                        <select class="form-control btn-xs font-11" name="sg" id="sg"
+                                            onchange="listarDT();">
+                                            <option value="0">SUB GENÉRICA</option>
                                         </select>
                                     </div>
                                 </div>
@@ -125,7 +128,7 @@
                                 </div>
                             </div><br> --}}
                             <div class="table-responsive">
-                                <table id="tablemain" class="table table-striped table-bordered tablex">
+                                <table id="tablemain" class="table table-sm table-striped table-bordered font-11">
                                     <thead class="cabecera-dataTable bg-success-1 text-white">
                                         <!--th>Nº</th-->
                                         {{-- <th>Partida</th> --}}
@@ -208,16 +211,33 @@
                                                 </select>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-12">
-                                <div class="card">
-                                    {{-- <div class="card-header">
-                                        <h3 class="card-title">Datos Personales</h3>
-                                    </div> --}}
+                            {{-- <div class="col-lg-12">
+                                <div class="card-widgets">seleccionar todas las partidas
+                                    <div class="pretty p-switch">
+                                        <input type="checkbox" id="checkbox" name="checkbox[]" value="1" checked
+                                            title="Liberar">
+                                        <div class="state p-success"><label></label></div>
+                                    </div>
+                                </div>
+                            </div> --}}
+                            <div class="col-lg-12">
+                                <div class="card card-border">
+                                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                                        <div class="card-widgets">seleccionar todas las partidas
+                                            <div class="pretty p-switch">
+                                                <input type="checkbox" id="checkbox" name="checkbox[]" value="1"
+                                                    checked title="Liberar">
+                                                <div class="state p-success"><label></label></div>
+                                            </div>
+                                        </div>
+                                        <h3 class="card-title"></h3>
+                                    </div>
                                     <div class="card-body">
                                         <div class="form">
                                             <div class="table-responsive">
@@ -227,7 +247,8 @@
                                                         <!--th>Nº</th-->
                                                         <th>Partida</th>
                                                         <th>Especifica Detalle</th>
-                                                        <th>Acción</th>
+                                                        <th>Acción
+                                                        </th>
                                                     </thead>
                                                 </table>
                                             </div>
@@ -235,6 +256,7 @@
                                     </div>
                                 </div>
                             </div>
+
                         </div>
 
 
@@ -503,7 +525,7 @@
                 type: 'get',
                 success: function(data) {
                     $('#sg option ').remove();
-                    var opt = '<option value="0">TODOS</option>';
+                    var opt = '<option value="0">SUB GENÉRICA</option>';
                     $.each(data.query, function(index, vv) {
                         opt += '<option value="' + vv.id + '">' + cod[0] + '.' + vv.codigo +
                             ' ' + vv

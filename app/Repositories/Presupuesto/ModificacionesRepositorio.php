@@ -9,6 +9,7 @@ use App\Models\Presupuesto\BaseGastosDetalle;
 use App\Models\Presupuesto\BaseModificacion;
 use App\Models\Presupuesto\BaseModificacionDetalle;
 use App\Models\Presupuesto\BaseProyectosDetalle;
+use App\Models\Presupuesto\UnidadEjecutora;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,7 @@ class ModificacionesRepositorio
     {
         $anios = BaseModificacion::distinct()->select(DB::raw('year(v2.fechaActualizacion) as anio'))
             ->join('par_importacion as v2', 'v2.id', '=', 'pres_base_modificacion.importacion_id')
-            ->where('v2.estado', 'PR')->get();
+            ->where('v2.estado', 'PR')->orderBy('anio')->get();
         return $anios;
     }
 
@@ -52,6 +53,24 @@ class ModificacionesRepositorio
         return $mes;
     }
 
+    public static function UE_poranios($anio)
+    {
+        if ($anio == 0) {
+            $queryJoinPresBaseSiafwebDetalle = '(select DISTINCT unidadejecutora_id from pres_base_modificacion_detalle) as siaf';
+        } else {
+            $queryJoinPresBaseSiafwebDetalle = "(select DISTINCT unidadejecutora_id from pres_base_modificacion_detalle as bsd inner join pres_base_modificacion as bs on bs.id=bsd.basemodificacion_id where bs.anio=$anio) as siaf";
+        }
+
+        $query = UnidadEjecutora::select(
+            'pres_unidadejecutora.id',
+            'pres_unidadejecutora.unidad_ejecutora as nombre',
+            'pres_unidadejecutora.codigo_ue as codigo'
+        )
+            ->join(DB::raw($queryJoinPresBaseSiafwebDetalle), 'siaf.unidadejecutora_id', '=', 'pres_unidadejecutora.id')
+            ->orderBy('codigo')->get();
+        return $query;
+    }
+
     public static function productoproyecto($ano, $mes, $articulo, $tipo, $ue, $usb)
     {
         $base = BaseModificacion::select('pres_base_modificacion.id')
@@ -81,7 +100,7 @@ class ModificacionesRepositorio
             ->join('par_importacion as v2', 'v2.id', '=', 'pres_base_modificacion.importacion_id')
             ->where('pres_base_modificacion.anio', $ano)->where('pres_base_modificacion.mes', $mes)->where('v2.estado', 'PR')
             ->orderBy('v2.fechaActualizacion', 'desc')->first();
-        $detalle = BaseModificacionDetalle::distinct()->select('v1.*')
+        $detalle = BaseModificacionDetalle::distinct()->select('v1.id', 'v1.nombre_ejecutora as nombre', 'v1.codigo_ue as codigo')
             ->join('pres_unidadejecutora as v1', 'v1.id', '=', 'pres_base_modificacion_detalle.unidadejecutora_id')
             ->where('pres_base_modificacion_detalle.basemodificacion_id', $base->id)
             ->where('pres_base_modificacion_detalle.tipo_presupuesto', $presupuesto);
@@ -123,16 +142,20 @@ class ModificacionesRepositorio
 
     public static function cargardispositivolegal($ano, $mes, $articulo, $tipo, $ue, $usb)
     {
-        $base = BaseModificacion::select('pres_base_modificacion.id')
-            ->join('par_importacion as v2', 'v2.id', '=', 'pres_base_modificacion.importacion_id')
-            ->where('pres_base_modificacion.anio', $ano)->where('pres_base_modificacion.mes', $mes)->where('v2.estado', 'PR')
-            ->orderBy('v2.fechaActualizacion', 'desc')->first();
-        $detalle = BaseModificacionDetalle::distinct()->select('dispositivo_legal')
-            ->where('pres_base_modificacion_detalle.basemodificacion_id', $base->id)
-            ->where('pres_base_modificacion_detalle.tipo_presupuesto', 'GASTO');
-        if ($articulo > 0) $detalle = $detalle->where('pres_base_modificacion_detalle.productoproyecto_id', $articulo);
-        if ($tipo > 0) $detalle = $detalle->where('pres_base_modificacion_detalle.tipomodificacion_id', $tipo);;
-        if ($ue > 0) $detalle = $detalle->where('pres_base_modificacion_detalle.unidadejecutora_id', $ue);
+        $detalle = DB::table(DB::raw("(
+                 select bmd.dispositivo_legal from pres_base_modificacion_detalle bmd
+                 inner join (
+                    select bm.id from pres_base_modificacion bm
+                    inner join par_importacion imp on imp.id=bm.importacion_id
+                    where imp.estado='PR' and bm.anio=$ano and bm.mes=$mes
+                 ) as bm on bm.id=bmd.basemodificacion_id
+                 where bmd.tipo_presupuesto='GASTO'
+            ) as bmd"))
+            ->distinct()
+            ->select('bmd.dispositivo_legal');
+        if ($articulo > 0) $detalle = $detalle->where('bmd.productoproyecto_id', $articulo);
+        if ($tipo > 0) $detalle = $detalle->where('bmd.tipomodificacion_id', $tipo);;
+        if ($ue > 0) $detalle = $detalle->where('bmd.unidadejecutora_id', $ue);
         /* if ($usb != 'todos') {
             if ($usb != '')
                 $detalle = $detalle->where('pres_base_modificacion_detalle.dispositivo_legal', '');

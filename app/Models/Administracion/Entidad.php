@@ -11,9 +11,8 @@ class Entidad extends Model
     protected $table = "adm_entidad";
     public $timestamps = false;
     protected $fillable = [
-        'codigo',
         'nombre',
-        'apodo',
+        'abreviado',
         'dependencia',
         'estado',
     ];

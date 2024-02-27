@@ -39,7 +39,7 @@
         .centrador {
             position: relative;
             /* width: 400px;
-                                    height: 400px; */
+                                                                                                                                                                height: 400px; */
             /* background-color: red; */
         }
 
@@ -78,7 +78,7 @@
                         </div>
                     </div>
                     <div class="mt-4">
-                        <h6 class="">Ejecución(<span style="font-weight: normal">DEV/PIA</span>)
+                        <h6 class="font-11">Ejecución(<span style="font-weight: normal">DEV/PIA</span>)
                             <span class="float-right">{{ number_format($card1['eje'], 1) }}%</span>
                         </h6>
                         <div class="progress progress-sm m-0">
@@ -112,7 +112,7 @@
                         </div>
                     </div>
                     <div class="mt-4">
-                        <h6 class="">Ejecución(<span style="font-weight: normal">DEV/PIM</span>)
+                        <h6 class="font-11">Ejecución(<span style="font-weight: normal">DEV/PIM</span>)
                             <span class="float-right">{{ number_format($card2['eje'], 1) }}%</span>
                         </h6>
                         <div class="progress progress-sm m-0">
@@ -146,7 +146,7 @@
                         </div>
                     </div>
                     <div class="mt-4">
-                        <h6 class="">Ejecución(<span style="font-weight: normal">CERT/PIM</span>)
+                        <h6 class="font-11">Ejecución(<span style="font-weight: normal">CERT/PIM</span>)
                             <span class="float-right">{{ number_format($card3['eje'], 1) }}%</span>
                         </h6>
                         <div class="progress progress-sm m-0">
@@ -180,7 +180,7 @@
                         </div>
                     </div>
                     <div class="mt-4">
-                        <h6 class="">Ejecución(<span style="font-weight: normal">DEV/CERT</span>)
+                        <h6 class="font-11">Ejecución(<span style="font-weight: normal">DEV/CERT</span>)
                             <span class="float-right">{{ number_format($card4['eje'], 1) }}%</span>
                         </h6>
                         <div class="progress progress-sm m-0">
@@ -201,8 +201,8 @@
 
         <div class="row">
             <div class="col-xl-6">
-                <div class="card card-border card-primary">
-                    <div class="card-header border-primary bg-transparent p-0">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent p-0">
                         <h3 class="card-title text-primary "></h3>
                     </div>
                     <div class="card-body p-0">
@@ -211,12 +211,12 @@
                 </div>
             </div>
             <div class="col-xl-6">
-                <div class="card card-border card-primary">
-                    <div class="card-header border-primary bg-transparent p-0">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent p-0">
                         <h3 class="card-title text-primary "></h3>
                     </div>
                     <div class="card-body p-0">
-                        <div id="anal4"></div>{{--  style="min-width:400px;height:300px;margin:0 auto;" --}}
+                        <div id="anal2"></div>{{--  style="min-width:400px;height:300px;margin:0 auto;" --}}
                     </div>
                 </div>
             </div>
@@ -226,18 +226,33 @@
         <div class="row">
             <div class="col-xl-6">
 
-                <div class="card card-border card-primary">
-                    <div class="card-header border-primary bg-transparent p-0">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent p-0">
                         <h3 class="card-title text-primary "></h3>
                     </div>
                     <div class="card-body p-0">
-                        <div id="anal2"></div>{{--  style="min-width:400px;height:300px;margin:0 auto;" --}}
+                        <div id="anal3"></div>{{--  style="min-width:400px;height:300px;margin:0 auto;" --}}
                     </div>
                 </div>
             </div>
             <div class="col-xl-6">
-                <div class="card card-border card-primary">
-                    <div class="card-header border-primary bg-transparent p-0">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent p-0">
+                        <h3 class="card-title text-primary "></h3>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="anal4"></div>{{-- style="min-width:400px;height:300px;margin:0 auto;" --}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- end  row --}}
+
+
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent p-0">
                         <h3 class="card-title text-primary "></h3>
                     </div>
                     <div class="card-body p-0">
@@ -248,15 +263,14 @@
         </div>
         {{-- end  row --}}
 
-
         <div class="row">
             <div class="col-xl-12">
-                <div class="card card-border card-primary">
-                    <div class="card-header border-primary bg-transparent p-0">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent p-0">
                         <h3 class="card-title text-primary "></h3>
                     </div>
                     <div class="card-body p-0">
-                        <div id="anal7"></div>{{-- style="min-width:400px;height:300px;margin:0 auto;" --}}
+                        <div id="anal6"></div>
                     </div>
                 </div>
             </div>
@@ -265,26 +279,12 @@
 
         <div class="row">
             <div class="col-xl-12">
-                <div class="card card-border card-primary">
-                    <div class="card-header border-primary bg-transparent p-0">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent p-0">
                         <h3 class="card-title text-primary "></h3>
                     </div>
                     <div class="card-body p-0">
-                        <div id="anal9"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {{-- end  row --}}
-
-        <div class="row">
-            <div class="col-xl-12">
-                <div class="card card-border card-primary">
-                    <div class="card-header border-primary bg-transparent p-0">
-                        <h3 class="card-title text-primary "></h3>
-                    </div>
-                    <div class="card-body p-0">
-                        <div id="anal8"></div>{{--  style="min-width:400px;height:300px;margin:0 auto;" --}}
+                        <div id="anal7"></div>{{--  style="min-width:400px;height:300px;margin:0 auto;" --}}
                     </div>
                 </div>
             </div>
@@ -294,19 +294,19 @@
 
 
         <div class="row">
-            <div class="col-xl-12 principal">
+            <div class="col-xl-12">
                 <div class="card card-border">{{--  bg-transparent pb-0 mb-0 --}}
-                    <div class="card-header border-primary">
+                    <div class="card-header border-success-0 bg-transparent pb-0 mb-0">
                         <div class="card-widgets">{{-- impormatricula.download --}}
                             <button type="button" class="btn btn-success btn-xs"
-                                onclick="javascript:location=`{{ route('basegastos.download.excel.principal01') }}`"><i
+                                onclick="descargar1()"><i
                                     class="fa fa-file-excel"></i>
-                                Excel</button>
+                                Descargar</button>
                         </div>
                         <h3 class="card-title"></h3>
                     </div>
-                    <div class="card-body pb-0 pt-0">
-                        <div class="table-responsive" id="vista1">
+                    <div class="card-body pb-0 pt-2">
+                        <div class="table-responsive" id="ctable1">
                         </div>
                     </div>
                 </div>
@@ -371,209 +371,130 @@
                 }
             });
 
-            /*
-             *AJAX PARA LA PRESENTACION DE LA PRIMERA GRAFICA 1
-             */
+            cards('anal1');
+            cards('anal2');
+            cards('anal3');
+            cards('anal4');
+            cards('anal5');
+            cards('anal6');
+            cards('anal7');
+            cards('table1');
+        });
+
+        function cards(div) {
             $.ajax({
-                url: "{{ route('basegastos.nivgob.graficas.1') }}",
+                url: "{{ route('basegastos.nivelesgobiernos.cards') }}",
                 data: {
+                    div: div,
                     basegastos_id: {{ $bgs->id }}
                 },
                 type: "GET",
                 dataType: "JSON",
                 beforeSend: function() {
-                    $('#anal1').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                },
-                success: function(data) {
-                    //console.log(data)
-                    gPie('anal1', data.info,
-                        '',
-                        'Distribución del Presupuesto  de la Región Ucayali', /* <br><b class="fuentex">Fuente: SIAF-MEF</b> */
-                        '');
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 1");
-                    console.log(jqXHR);
-                },
-            });
+                    switch (div) {
+                        case "head":
+                            break;
+                        case "anal1":
+                        case "anal2":
+                        case "anal3":
+                        case "anal4":
+                        case "anal5":
+                        case "anal6":
+                        case "anal7":
+                            $('#' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                            break;
+                        case "table1":
+                            $('#c' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                            break;
+                        case "table2":
+                            break;
+                        case "table3":
+                            break;
+                        case "table4":
+                            break;
+                        case "table5":
+                            break;
 
-            /*
-             *AJAX PARA LA PRESENTACION DE LA PRIMERA GRAFICA 2
-             */
-            $.ajax({
-                url: "{{ route('basegastos.nivgob.graficas.2') }}",
-                data: {
-                    basegastos_id: {{ $bgs->id }}
-                },
-                type: "GET",
-                dataType: "JSON",
-                beforeSend: function() {
-                    $('#anal2').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                        default:
+                            break;
+                    }
                 },
                 success: function(data) {
-                    //console.log(data)
-                    gPie('anal2', data.info,
-                        '',
-                        'Distribución del Presupuesto en Inversiones.',
-                        '');
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 2");
-                    console.log(jqXHR);
-                },
-            });
+                    switch (div) {
+                        case "head":
+                            break;
+                        case "anal1":
+                            gPie(div, data.info,
+                                '',
+                                'Distribución del Presupuesto  de la Región Ucayali', /* <br><b class="fuentex">Fuente: SIAF-MEF</b> */
+                                '');
+                            break;
+                        case "anal2":
+                            gAnidadaColumn(
+                                div,
+                                data.data.categoria,
+                                data.data.series,
+                                '',
+                                'Ejecución Presupuestal Según Tipo De Gobierno'
+                            );
+                            break;
+                        case "anal3":
+                            gPie(div, data.info,
+                                '',
+                                'Distribución del Presupuesto en Inversiones.',
+                                '');
+                            break;
+                        case "anal4":
+                            gAnidadaColumn(
+                                div,
+                                data.data.categoria,
+                                data.data.series,
+                                '',
+                                'Ejecución Presupuestal en Inversiones Según Tipo De Gobierno'
+                            );
+                            break;
+                        case "anal5":
+                            glineal(
+                                div,
+                                data.data.categoria,
+                                data.data.series,
+                                '',
+                                'Evolución del PIM del Sector Público de la región de Ucayali',
+                                'Año');
+                            break;
+                        case "anal6":
+                            glineal(
+                                div,
+                                data.data.categoria,
+                                data.data.series,
+                                '',
+                                'Evolución del PIM en Actividades Pública de la región de Ucayali',
+                                'Año');
+                            break;
+                        case "anal7":
+                            glineal(
+                                div,
+                                data.data.categoria,
+                                data.data.series,
+                                '',
+                                'Evolución del PIM en Inversión Pública de la región de Ucayali',
+                                'Año');
+                            break;
+                        case "table1":
+                            $('#c' + div).html(data.table);
+                            break;
+                        case "table2":
+                            break;
+                        case "table3":
+                            break;
+                        case "table4":
+                            break;
+                        case "table5":
+                            break;
 
-            /*
-             *AJAX PARA LA PRESENTACION DE LA PRIMERA GRAFICA 3
-             */
-            /* $.ajax({
-                url: "{{ url('/') }}/Home/Presupuesto/gra3/{{ $impI->id }}",
-                type: "GET",
-                dataType: "JSON",
-                beforeSend: function() {
-                    $('#anal3').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                },
-                success: function(data) {
-                    //console.log(data)
-                    gPie('anal3', data.info,
-                        '',
-                        'Ingreso Presupuestal de la Region Ucayali',
-                        '');
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 3");
-                    console.log(jqXHR);
-                },
-            }); */
-
-            /*
-             *AJAX PARA LA PRESENTACION DE LA PRIMERA GRAFICA 4
-             */
-            $.ajax({
-                url: "{{ route('basegastos.nivgob.graficas.4') }}",
-                type: "GET",
-                dataType: "JSON",
-                beforeSend: function() {
-                    $('#anal7').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                },
-                success: function(data) {
-                    glineal(
-                        'anal7',
-                        data.data.categoria,
-                        data.data.series,
-                        '',
-                        'Evolución del PIM del Sector Público de la región de Ucayali',
-                        'Año');
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 7");
-                    console.log(jqXHR);
-                },
-            });
-
-            /*
-             *AJAX PARA LA PRESENTACION DE LA PRIMERA GRAFICA 5
-             */
-            $.ajax({
-                url: "{{ route('basegastos.nivgob.graficas.5') }}",
-                type: "GET",
-                dataType: "JSON",
-                beforeSend: function() {
-                    $('#anal8').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                },
-                success: function(data) {
-                    //gSimpleColumn('anal8', data.base,'','Evaluación Del Presupuesto En Inversión Pública En La Región De Ucayali','');
-                    glineal(
-                        'anal8',
-                        data.data.categoria,
-                        data.data.series,
-                        '',
-                        'Evolución del PIM en Inversión Pública de la región de Ucayali',
-                        'Año');
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 8");
-                    console.log(jqXHR);
-                },
-            });
-
-            /*
-             *AJAX PARA LA PRESENTACION DE LA PRIMERA GRAFICA 9
-             */
-            $.ajax({
-                url: "{{ route('basegastos.nivgob.graficas.7') }}",
-                type: "GET",
-                dataType: "JSON",
-                beforeSend: function() {
-                    $('#anal9').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                },
-                success: function(data) {
-                    glineal(
-                        'anal9',
-                        data.data.categoria,
-                        data.data.series,
-                        '',
-                        'Evolución del PIM en Actividades Pública de la región de Ucayali',
-                        'Año');
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 9");
-                    console.log(jqXHR);
-                },
-            });
-
-            /*
-             *AJAX PARA LA PRESENTACION DE LA PRIMERA tabla 1
-             */
-            $.ajax({
-                url: "{{ route('basegastos.nivgob.graficas.8') }}",
-                data: {
-                    basegastos_id: {{ $bgs->id }}
-                },
-                type: "GET",
-                dataType: "JSON",
-                beforeSend: function() {
-                    $('#anal4').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                },
-                success: function(data) {
-                    //console.log(data.data['categoria'])
-                    gAnidadaColumn(
-                        'anal4',
-                        data.data.categoria,
-                        data.data.series,
-                        '',
-                        'Ejecución Presupuestal Según Tipo De Gobierno'
-                    );
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 4");
-                    console.log(jqXHR);
-                },
-            });
-
-            /*
-             *AJAX PARA LA PRESENTACION DE LA PRIMERA tabla 2
-             */
-            $.ajax({
-                //url: "{{ url('/') }}/Home/Presupuesto/tabla2/{{ $impG->id }}",
-                url: "{{ route('basegastos.nivgob.graficas.9') }}",
-                data: {
-                    basegastos_id: {{ $bgs->id }}
-                },
-                type: "GET",
-                dataType: "JSON",
-                beforeSend: function() {
-                    $('#anal5').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                },
-                success: function(data) {
-                    //console.log(data.data['categoria'])
-                    gAnidadaColumn(
-                        'anal5',
-                        data.data.categoria,
-                        data.data.series,
-                        '',
-                        'Ejecución Presupuestal en Inversiones Según Tipo De Gobierno'
-                    );
+                        default:
+                            break;
+                    }
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 5");
@@ -581,50 +502,11 @@
                 },
             });
 
-            /*
-             *AJAX PARA LA PRESENTACION DE LA PRIMERA tabla 3
-             */
-            /* $.ajax({
-                url: "{{ url('/') }}/Home/Presupuesto/tabla3/{{ $impI->id }}",
-                type: "GET",
-                dataType: "JSON",
-                beforeSend: function() {
-                    $('#anal6').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                },
-                success: function(data) {
-                    //console.log(data)
-                    gAnidadaColumn(
-                        'anal6',
-                        data.data['categoria'],
-                        data.data['series'],
-                        '',
-                        'Recaudación De Ingresos Según Tipo De Gobierno'
-                    );
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 6");
-                    console.log(jqXHR);
-                },
-            }); */
+        }
 
-            /*
-             *AJAX PARA LA PRESENTACION DE LA PRIMERA tabla 1
-             */
-            $.ajax({
-                //url: "{{ route('tabla.home.presupuesto') }}",
-                url: "{{ route('basegastos.nivgob.graficas.0') }}",
-                type: "GET",
-                beforeSend: function() {
-                    $('#vista1').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                },
-                success: function(data) {
-                    $('#vista1').html(data);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
-        });
+        function descargar1() {
+            window.open("{{ url('/') }}/GastosP/Exportar/Excel/table1/0");
+        }
     </script>
 
     <script type="text/javascript">
@@ -641,6 +523,9 @@
                 subtitle: {
                     //align:'left',
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 accessibility: {
                     announceNewData: {
@@ -649,13 +534,23 @@
                 },
                 xAxis: {
                     type: 'category',
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 yAxis: {
                     /* max: 100, */
                     title: {
                         enabled: false,
                         text: 'Porcentaje',
-                    }
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 legend: {
                     enabled: false,
@@ -737,6 +632,9 @@
                 subtitle: {
                     //align:'left',
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 accessibility: {
                     announceNewData: {
@@ -745,14 +643,24 @@
                 },
                 xAxis: {
                     //type: 'category',
-                    categories: categoria
+                    categories: categoria,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 yAxis: {
                     /* max: 100, */
                     title: {
                         enabled: false,
                         text: 'Porcentaje',
-                    }
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 legend: {
                     enabled: false,
@@ -834,16 +742,29 @@
                 },
                 subtitle: {
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 xAxis: {
                     type: 'category',
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 yAxis: {
                     /* max: 100, */
                     title: {
                         enabled: false,
                         text: 'Porcentaje',
-                    }
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 series: [{
                     showInLegend: tituloserie != '',
@@ -914,8 +835,12 @@
                 title: {
                     text: titulo, //'Browser market shares in January, 2018'
                 },
+                colors: ['#7e57c2', '#317eeb', '#ef5350'],
                 subtitle: {
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 tooltip: {
                     //pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
@@ -991,10 +916,18 @@
                     text: titulo
                 },
                 subtitle: {
-                    text: subtitulo
+                    text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 xAxis: {
                     categories: categorias,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 yAxis: {
 
@@ -1002,7 +935,12 @@
                     title: {
                         text: 'Rainfall (mm)',
                         enabled: false
-                    }
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
 
                 tooltip: {
@@ -1032,9 +970,17 @@
                 },
                 subtitle: {
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 xAxis: {
-                    categories: categoria
+                    categories: categoria,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 yAxis: {
                     allowDecimals: false,
@@ -1042,7 +988,12 @@
                     title: {
                         enabled: false,
                         text: 'Porcentaje',
-                    }
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 series: series,
                 plotOptions: {
@@ -1101,7 +1052,12 @@
                     align: 'left'
                 },
                 xAxis: {
-                    categories: ['Arsenal', 'Chelsea', 'Liverpool', 'Manchester United']
+                    categories: ['Arsenal', 'Chelsea', 'Liverpool', 'Manchester United'],
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 yAxis: {
                     min: 0,
@@ -1118,7 +1074,12 @@
                             ) || 'gray',
                             textOutline: 'none'
                         }
-                    }
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 legend: {
                     align: 'left',
@@ -1166,9 +1127,17 @@
                 },
                 subtitle: {
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 xAxis: {
-                    categories: categoria
+                    categories: categoria,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                     /* accessibility: {
                         rangeDescription: 'Range: 2015 to 2025'
                     } */
@@ -1177,7 +1146,12 @@
                     title: {
                         enabled: false,
                         text: 'Number of Employees'
-                    }
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                     /* allowDecimals: false,
                     min: 0,
                     title: {

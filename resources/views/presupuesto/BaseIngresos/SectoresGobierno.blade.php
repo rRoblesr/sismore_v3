@@ -49,23 +49,30 @@
 
         <div class="row">
             <div class="col-sm-12">
-                <div class="card card-border">
-                    <div class="card-header bg-transparent pb-0">
+                <div class="card">
+                    <div class="card-header bg-success-0 pt-2">
                         <div class="card-widgets">
                             <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i
                                     class="fa fa-redo"></i> Actualizar</button>
+                            <button type="button" class="btn btn-primary btn-xs"
+                                onclick="javascript:alert('Oops.. Sin Detalles')"><i class="fas fa-file-powerpoint"></i>
+                                Detalle</button>
+                            <button type="button" class="btn btn-success btn-xs" onclick="descargar()"><i
+                                    class="fa fa-file-excel"></i>
+                                Descargar</button>
                         </div>
-                        <h3 class="card-title">FILTRO</h3>
+                        <h3 class="card-title text-white">Ejecución de gastos por sectores de gobiernos</h3>
                     </div>
                     <div class="card-body pt-2 pb-0">
                         <form class="form-horizontal" id="form-filtro">
                             @csrf
                             <div class="form">
                                 <div class="form-group row">
-                                    <div class="col-md-3">
-                                        <label class=" col-form-label">Año</label>
+                                    <div class="col-md-6"></div>
+                                    <div class="col-md-1">
+                                        {{-- <label class=" col-form-label">Año</label> --}}
                                         <div class="">
-                                            <select class="form-control" name="fano" id="fano"
+                                            <select class="form-control btn-xs font-11" name="fano" id="fano"
                                                 onchange="cargarcuadros();">
                                                 {{-- <option value="0">TODOS</option> --}}
                                                 @foreach ($anos as $item)
@@ -74,24 +81,24 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <label class="col-form-label">Nivel de Gobierno</label>
+                                    <div class="col-md-2">
+                                        {{-- <label class="col-form-label">Nivel de Gobierno</label> --}}
                                         <div class="">
-                                            <select class="form-control" name="fgobierno" id="fgobierno"
+                                            <select class="form-control btn-xs font-11" name="fgobierno" id="fgobierno"
                                                 onchange="cargarcuadros();">
-                                                <option value="0">TODOS</option>
+                                                <option value="0">NIVEL DE GOBIERNO</option>
                                                 @foreach ($gobiernos as $item)
                                                     <option value="{{ $item->id }}">{{ $item->tipogobierno }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label class="col-form-label">Fuente Financiamiento </label>
+                                    <div class="col-md-3">
+                                        {{-- <label class="col-form-label">Fuente Financiamiento </label> --}}
                                         <div class="">
-                                            <select class="form-control" name="ffinanciamiento" id="ffinanciamiento"
-                                                onchange="cargarcuadros();">
-                                                <option value="0">TODOS</option>
+                                            <select class="form-control btn-xs font-11" name="ffinanciamiento"
+                                                id="ffinanciamiento" onchange="cargarcuadros();">
+                                                <option value="0">FUENTE DE FINANCIAMIENTO</option>
                                                 @foreach ($financiamientos as $item)
                                                     <option value="{{ $item->id }}">{{ $item->nombre }}</option>
                                                 @endforeach
@@ -113,13 +120,13 @@
         <div class="row">
             <div class="col-xl-12 principal">
                 <div class="card card-border">
-                    <div class="card-header border-primary">{{--  bg-transparent pb-0 mb-0 --}}
-                        <div class="card-widgets">
+                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                        {{-- <div class="card-widgets">
                             <button type="button" class="btn btn-success btn-xs" onclick="descargar()"><i
                                     class="fa fa-file-excel"></i>
                                 Excel</button>
                         </div>
-                        <h3 class="card-title">Ejecución de gastos por sectores de gobiernos</h3>
+                        <h3 class="card-title">Ejecución de gastos por sectores de gobiernos</h3> --}}
                     </div>
                     <div class="card-body pb-0 pt-0">
                         <div class="table-responsive" id="vista1">
@@ -247,7 +254,8 @@
                 url: "{{ url('/') }}/SiafIngresos/SectoresGobiernos/Exportar/excel/null/null/null",
                 type: "GET",
                 success: function(data) {
-                    window.open("{{ url('/') }}/SiafIngresos/SectoresGobiernos/Exportar/excel/" + $('#fano').val() +
+                    window.open("{{ url('/') }}/SiafIngresos/SectoresGobiernos/Exportar/excel/" + $(
+                            '#fano').val() +
                         "/" + $('#fmes').val() + "/" + $('#ftipo').val());
 
                 },

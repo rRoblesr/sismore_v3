@@ -12,6 +12,8 @@
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ asset('/') }}public/assets/images/favicon.ico">
 
+    <link href="{{ asset('/') }}public/assets/jquery-ui/jquery-ui.css" rel="stylesheet" />
+
     <!-- Plugins css-->
     <link href="{{ asset('/') }}public/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet"
         type="text/css" />
@@ -106,7 +108,7 @@
 </head>
 
 
-<body class="enlarged" data-keep-enlarged="true">
+<body> {{--  class="enlarged" data-keep-enlarged="true" --}}
 
     <!-- Begin page -->
     <div id="wrapper">
@@ -282,7 +284,7 @@
                             <!-- <span class="logo-lg-text-dark">Moltran</span> -->
                             <img src="{{ asset('/') }}public/assets/images/logo-sm-blanco.png" alt=""
                                 height="50">&nbsp;&nbsp;&nbsp;
-                            <span class="logo-lg-text-light">SISMORE</span>
+                            <span class="logo-lg-text-light"></span>
                         </span>
                         <span class="logo-sm">
                             <!-- <span class="logo-lg-text-dark">M</span> -->
@@ -358,9 +360,10 @@
                             </div>
                             <div class="user-info">
                                 <div class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                                    <a href="#" class="dropdown-toggle font-14" data-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false">
-                                        {{ Auth::user()->nombre }} {{-- <i class="mdi mdi-chevron-down"></i> --}}
+                                        {{ explode(' ', Auth::user()->nombre)[0] }} {{ Auth::user()->apellido1 }}
+                                        {{-- <i class="mdi mdi-chevron-down"></i> --}}
                                     </a>
                                     {{-- <ul class="dropdown-menu" x-placement="bottom-start"
                                         style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
@@ -375,18 +378,17 @@
                                                     class="mdi mdi-power-settings mr-2"></i> Logout</a></li>
                                     </ul> --}}
                                 </div>
-                                <p class="font-13 text-muted m-0">{{ session('sistema_nombre') }}</p>
+                                <p class="font-10 text-muted m-0">{{ session('sistema_nombre') }}</p>
                             </div>
                         </div>
 
                         <ul class="metismenu" id="side-menu">
                             @if (session()->has('menuNivel01'))
-
                                 @foreach (session('menuNivel01') as $key => $menu)
                                     <li>
                                         @if ($menu->url == '')
                                             <a href="javascript: void(0);" class="waves-effect">
-                                                <i class="{{ $menu->icono }}""></i>
+                                                <i class="{{ $menu->icono }}"></i>
                                                 <span> {{ $menu->nombre }} </span>
                                                 <span class="menu-arrow"></span>
                                             </a>
@@ -395,15 +397,23 @@
 
                                                 @foreach (session('menuNivel02') as $key => $subMenu)
                                                     @if ($menu->id == $subMenu->dependencia)
-                                                        <li><a
-                                                                href="{{ route($subMenu->url) }}">{{ $subMenu->nombre }}</a>
-                                                        </li>
+                                                        @if ($subMenu->link == '')
+                                                            <li><a
+                                                                    href="{{ route($subMenu->url) }}">{{ $subMenu->nombre }}</a>
+                                                            </li>
+                                                        @else
+                                                            <li><a
+                                                                    href="{{ route($subMenu->url, $subMenu->id) }}">{{ $subMenu->nombre }}</a>
+                                                            </li>
+                                                        @endif
                                                     @endif
                                                 @endforeach
 
                                             </ul>
                                         @else
-                                            <a href="{{ route($menu->url, $menu->parametro) }}" class="waves-effect">
+                                            {{-- <a href="{{ route($menu->url, $menu->link == '' ? $menu->parametro : $menu->id) }}" --}}
+                                            <a href="{{ route($menu->url, $menu->link == '' ? mb_strtolower(session('sistema_nombre'), 'UTF-8') : $menu->id) }}"
+                                                class="waves-effect">
                                                 <i class="{{ $menu->icono }}"></i>
                                                 <span> {{ $menu->nombre }}</span>
                                             </a>
@@ -435,7 +445,7 @@
                     <!-- Start Content-->
                     <div class="container-fluid">
 
-                        @if (session('sistema_id') == 5) <br>
+                        @if (session('sistema_id') == 1) <br>
                             {{-- <div class="row">
                                 <div class="col-12">
                                     @if ($titlePage != '')
@@ -457,7 +467,7 @@
                                     @endif
                                 </div>
                             </div> --}}
-                        @elseif (session('sistema_id') == 1)
+                        @elseif (session('sistema_id') == 5)
                             <div class="row">
                                 <div class="col-12">
                                     @if (!isset($tipo_acceso))<br>
@@ -474,7 +484,7 @@
                                                 <div class="clearfix"></div>
                                             </div> --}}
                                         @else
-                                            <br>
+                                            {{-- <br> --}}
                                         @endif
                                     @else
                                         <br>
@@ -544,6 +554,10 @@
             </div>
 
         @endauth
+        <!-- ============================================================== -->
+        <!-- endauth content -->
+        <!-- ============================================================== -->
+
 
         @guest()
             {{-- @yield('content') --}}
@@ -608,7 +622,7 @@
                             <!-- <span class="logo-lg-text-dark">Moltran</span> -->
                             <img src="{{ asset('/') }}public/assets/images/logo-sm-blanco.png" alt=""
                                 height="50">&nbsp;&nbsp;&nbsp;
-                            <span class="logo-lg-text-light">SISMORE</span>
+                            <span class="logo-lg-text-light"></span>
                         </span>
                         <span class="logo-sm">
                             <!-- <span class="logo-lg-text-dark">M</span> -->
@@ -682,7 +696,7 @@
 
                         <ul class="metismenu" id="side-menu">
                             <li>
-                                <a href="{{ route('acceso.publico.modulo', session('sistema_id')) }}"
+                                <a href="{{ route('acceso.publico.modulo', session('sistema_publico_id')) }}"
                                     class="waves-effect">
                                     <i class="mdi mdi-home"></i>
                                     <span> Dashboard </span>
@@ -714,7 +728,7 @@
                     <!-- Start Content-->
                     <div class="container-fluid">
 
-                        @if (session('sistema_id') == 5)
+                        @if (session('sistema_publico_id') == 5)
                             {{-- <div class="row">
                                 <div class="col-12">
                                     @if ($titlePage != '')
@@ -733,7 +747,7 @@
                                 </div>
                             </div> --}}
                             <br>
-                        @elseif(session('sistema_id') == 1)
+                        @elseif(session('sistema_publico_id') == 1)
                             <div class="row">
                                 <div class="col-12">
                                     @if ($titlePage != '')
@@ -809,6 +823,10 @@
             </div>
 
         @endguest
+
+        <!-- ============================================================== -->
+        <!-- endguest content -->
+        <!-- ============================================================== -->
 
         <!-- ============================================================== -->
         <!-- End Page content -->
@@ -997,8 +1015,6 @@
 
     @auth()
         @if (session('total_sistema') > 1)
-
-
             <!-- Right Sidebar -->
             <div class="right-bar">
                 <div class="rightbar-title">
@@ -1014,7 +1030,11 @@
                                 <div class="col-md-12">
                                     <div
                                         class="card-box {{ $sistema->sistema_id == session('sistema_id') ? 'bg-secondary' : '' }} border m-1">
-                                        <a href="{{ route('sistema_acceder', $sistema->sistema_id) }}">
+                                        @php
+                                            //   $sis=ucwords($sistema->nombre);
+                                            // $str = ucfirst($sistema->nombre);
+                                        @endphp
+                                        <a href="{{ route('sistema_acceder', mb_strtolower($sistema->nombre, 'UTF-8')) }}">
                                             <div class="media">
                                                 <div class="avatar-md bg-info rounded-circle mr-2"
                                                     style="height: 2.5rem;width: 2.5rem;">
@@ -1060,10 +1080,10 @@
             </div>
             <div class="slimscroll-menu">
                 <div class="p-4">
-                    @foreach (session('sistemas') as $sistema)
+                    @foreach (session('sistemas_publico') as $sistema)
                         <div class="col-md-12">
                             <div class="card-box">
-                                <a href="{{ route('acceso.publico.modulo', $sistema->id) }}">
+                                <a href="{{ route('acceso.publico.modulo', $sistema->nombre) }}">
                                     <div class="media">
                                         <div class="avatar-md bg-info rounded-circle mr-2"
                                             style="height: 2.5rem;width: 2.5rem;">
@@ -1111,6 +1131,9 @@
     <script src="{{ asset('/') }}public/assets/libs/moment/moment.min.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/jquery-scrollto/jquery.scrollTo.min.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/sweetalert2/sweetalert2.min.js"></script>
+
+    {{-- autocompletar --}}
+    <script src="{{ asset('/') }}public/assets/jquery-ui/jquery-ui.js"></script>
 
     <!-- Chat app -->
     <script src="{{ asset('/') }}public/assets/js/pages/jquery.chat.js"></script>

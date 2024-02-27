@@ -15,7 +15,7 @@
                             data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><i
                                 class="ion ion-md-cloud-upload"></i> Importar</button>
                     </div>
-                    <h3 class="card-title">HISTORIAL DE IMPORTACION </h3>
+                    <h3 class="card-title">HISTORIAL DE IMPORTACIÓN DEL PADRON WEB</h3>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -26,13 +26,13 @@
                                     <thead class="text-white bg-success-0">
                                         <tr>
                                             <th>N°</th>
-                                            <th>Fecha Version</th>
+                                            <th>Fecha Versión</th>
                                             <th>Fuente</th>
                                             <th>Usuario</th>
-                                            <th>Area</th>
+                                            <th>Área</th>
                                             <th>Registro</th>
                                             <th>Estado</th>
-                                            <th>Accion</th>
+                                            <th>Acción</th>
                                         </tr>
                                     </thead>
                                 </table>

@@ -41,11 +41,11 @@
 
         <div class="row">
             <div class="col-lg-12">
-                <div class="card card-fill bg-primary  mb-0">
+                <div class="card card-fill bg-success-0  mb-0">
                     <div class="card-header bg-transparent">
                         <div class="card-widgets">
-                            <button type="button" class="btn btn-purple btn-xs" onclick="location.reload()"><i
-                                    class="fa fa-redo"></i> Actualizar</button>
+                            <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"><i
+                                    class="fa fa-history"></i></button>
                         </div>
                         <h3 class="card-title text-white text-center">EDUCACION BÁSICA REGULAR (EBR) SEGÚN SIAGIE- MINEDU
                             ACTUALIZADO AL {{ $fecha }} {{-- <a href="javascript:location.reload()" class="btn btn-warning" title="ACTUALIZAR PAGINA"><i
@@ -64,36 +64,33 @@
                             <input type="hidden" id="distrito" name="distrito" value="0">
                             <input type="hidden" id="provincia" name="provincia" value="0">
                             <div class="form-group row mb-0">
-                                <label class="col-md-1 col-form-label">Año</label>
+                                <div class="col-md-4"></div>
                                 <div class="col-md-2">
-                                    <select id="ano" name="ano" class="form-control p-0" onchange="cargartabla0()">
+                                    <select id="ano" name="ano" class="form-control" onchange="cargartabla0()">
                                         @foreach ($anios as $item)
                                             <option value="{{ $item->id }}">{{ $item->anio }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <label class="col-md-1 col-form-label">Ugel</label>
                                 <div class="col-md-2">
-                                    <select id="ugel" name="ugel" class="form-control p-0" onchange="cargartabla0()">
-                                        <option value="0">Todos</option>
+                                    <select id="ugel" name="ugel" class="form-control" onchange="cargartabla0()">
+                                        <option value="0">Ugel</option>
                                         @foreach ($ugels as $ugel)
                                             <option value="{{ $ugel['id'] }}">{{ $ugel['nombre'] }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <label class="col-md-1 col-form-label">Gestion</label>
                                 <div class="col-md-2">
-                                    <select id="gestion" name="gestion" class="form-control p-0" onchange="cargartabla0()">
-                                        <option value="0">Todos</option>
+                                    <select id="gestion" name="gestion" class="form-control" onchange="cargartabla0()">
+                                        <option value="0">Gestión</option>
                                         @foreach ($gestions as $prov)
                                             <option value="{{ $prov['id'] }}">{{ $prov['nombre'] }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <label class="col-md-1 col-form-label">Área</label>
                                 <div class="col-md-2">
-                                    <select id="area" name="area" class="form-control p-0" onchange="cargartabla0()">
-                                        <option value="0">Todos</option>
+                                    <select id="area" name="area" class="form-control" onchange="cargartabla0()">
+                                        <option value="0">Área</option>
                                         @foreach ($areas as $prov)
                                             <option value="{{ $prov->id }}">{{ $prov->nombre }}</option>
                                         @endforeach
@@ -121,7 +118,7 @@
                     <a href="#" class="waves-effect waves-light" id="secundaria"
                         onclick="secundariaok()">SECUNDARIA</a>
                     <a href="#" class="waves-effect waves-light" id="pronoi" onclick="pronoiok()">PRONOEI</a>
-                    {{-- <a href="#" data-filter=".principal" class="waves-effect waves-light current">PRINCIPAL</a>
+                    {{-- <a href="#" data-filter=".prin-cipal" class="waves-effect waves-light current">PRIN-CIPAL</a>
                     <a href="#" data-filter=".inicial" class="waves-effect waves-light">INICIAL</a>
                     <a href="#" data-filter=".primaria" class="waves-effect waves-light">PRIMARIA</a>
                     <a href="#" data-filter=".secundaria" class="waves-effect waves-light">SECUNDARIA</a>
@@ -139,7 +136,7 @@
                             <h3 class="card-title"></h3>
                         </div>
                         <div class="card-body pb-0 pt-0">
-                            <div id="gra1" ></div>
+                            <div id="gra1"></div>
                         </div>
                     </div>
                 </div>
@@ -150,7 +147,7 @@
                             <h3 class="card-title"></h3>
                         </div>
                         <div class="card-body pb-0 pt-0">
-                            <div id="gra2"  ></div>
+                            <div id="gra2"></div>
                         </div>
                     </div>
                 </div>
@@ -161,7 +158,7 @@
                             <h3 class="card-title"></h3>
                         </div>
                         <div class="card-body pb-0 pt-0">
-                            <div id="gra3" ></div>
+                            <div id="gra3"></div>
                         </div>
                     </div>
                 </div>
@@ -172,7 +169,7 @@
                             <h3 class="card-title"></h3>
                         </div>
                         <div class="card-body pb-0 pt-0">
-                            <div id="gra4"  ></div>
+                            <div id="gra4"></div>
                         </div>
                     </div>
                 </div>
@@ -183,7 +180,7 @@
                             <h3 class="card-title">Matricula educativa por genero según ugel</h3>
                         </div>
                         <div class="card-body pb-0 pt-0">
-                            <div class="table-responsive" id="vista1"  >
+                            <div class="table-responsive" id="vista1">
                             </div>
                         </div>
                     </div>
@@ -195,7 +192,7 @@
                             <h3 class="card-title">Matricula educativa por ciclo según ugel</h3>
                         </div>
                         <div class="card-body pb-0 pt-0">
-                            <div class="table-responsive" id="vista2"  >
+                            <div class="table-responsive" id="vista2">
                             </div>
                         </div>
                     </div>
@@ -218,8 +215,8 @@
                     <div class="card card-border">
                         <div class="card-header border-primary bg-transparent pb-0 mb-0">
                             <h3 class="card-title">TOTAL MATRICULA NIVEL INICIAL POR CICLO, EDAD Y SEXO SEGÚN DISTRITOS
-                                <a href="javascript:void(0)" class="btn btn-primary btn-xs" onclick="cargarvista3_1(0);" title="MOSTRAR TODO"><i
-                                    class="fa fa-redo"></i></a>
+                                <a href="javascript:void(0)" class="btn btn-primary btn-xs" onclick="cargarvista3_1(0);"
+                                    title="MOSTRAR TODO"><i class="fa fa-redo"></i></a>
                             </h3>
                         </div>
                         <div class="card-body pb-0 pt-0">
@@ -245,8 +242,9 @@
                     <div class="card card-border">
                         <div class="card-header border-primary bg-transparent pb-0 mb-0">
                             <h3 class="card-title">TOTAL MATRICULA NIVEL INICIAL POR CICLO, EDAD Y SEXO SEGÚN SERVICIOS
-                                EDUCATIVOS EN EL DISTRITO <span id="vista3_2_title"></span> <a href="javascript:void(0)" class="btn btn-primary btn-xs" onclick="cargarvista3_2(0);" title="MOSTRAR TODO"><i
-                                    class="fa fa-redo"></i></a></h3>
+                                EDUCATIVOS EN EL DISTRITO <span id="vista3_2_title"></span> <a href="javascript:void(0)"
+                                    class="btn btn-primary btn-xs" onclick="cargarvista3_2(0);" title="MOSTRAR TODO"><i
+                                        class="fa fa-redo"></i></a></h3>
                         </div>
                         <div class="card-body pb-0 pt-0">
                             <div class="table-responsive" id="vista3_2">
@@ -275,8 +273,8 @@
                     <div class="card card-border">
                         <div class="card-header border-primary bg-transparent pb-0 mb-0">
                             <h3 class="card-title">TOTAL MATRICULA NIVEL PRIMARIA POR CICLO, EDAD Y SEXO SEGÚN DISTRITOS
-                                <a href="javascript:void(0)" class="btn btn-primary btn-xs" onclick="cargarvista4_1(0);" title="MOSTRAR TODO"><i
-                                    class="fa fa-redo"></i></a>
+                                <a href="javascript:void(0)" class="btn btn-primary btn-xs" onclick="cargarvista4_1(0);"
+                                    title="MOSTRAR TODO"><i class="fa fa-redo"></i></a>
                             </h3>
                         </div>
                         <div class="card-body pb-0 pt-0">
@@ -302,8 +300,9 @@
                     <div class="card card-border">
                         <div class="card-header border-primary bg-transparent pb-0 mb-0">
                             <h3 class="card-title">TOTAL MATRICULA NIVEL PRIMARIA POR CICLO, EDAD Y SEXO SEGÚN SERVICIOS
-                                EDUCATIVOS EN EL DISTRITO <span id="vista4_2_title"></span><a href="javascript:void(0)" class="btn btn-primary btn-xs" onclick="cargarvista4_2(0);" title="MOSTRAR TODO"><i
-                                    class="fa fa-redo"></i></a></h3>
+                                EDUCATIVOS EN EL DISTRITO <span id="vista4_2_title"></span><a href="javascript:void(0)"
+                                    class="btn btn-primary btn-xs" onclick="cargarvista4_2(0);" title="MOSTRAR TODO"><i
+                                        class="fa fa-redo"></i></a></h3>
                         </div>
                         <div class="card-body pb-0 pt-0">
                             <div class="table-responsive" id="vista4_2">
@@ -332,8 +331,8 @@
                     <div class="card card-border">
                         <div class="card-header border-primary bg-transparent pb-0 mb-0">
                             <h3 class="card-title">TOTAL MATRICULA NIVEL SECUNDARIA POR CICLO, EDAD Y SEXO SEGÚN DISTRITOS
-                                <a href="javascript:void(0)" class="btn btn-primary btn-xs" onclick="cargarvista5_1(0);" title="MOSTRAR TODO"><i
-                                    class="fa fa-redo"></i></a>
+                                <a href="javascript:void(0)" class="btn btn-primary btn-xs" onclick="cargarvista5_1(0);"
+                                    title="MOSTRAR TODO"><i class="fa fa-redo"></i></a>
                             </h3>
                         </div>
                         <div class="card-body pb-0 pt-0">
@@ -359,8 +358,9 @@
                     <div class="card card-border">
                         <div class="card-header border-primary bg-transparent pb-0 mb-0">
                             <h3 class="card-title">TOTAL MATRICULA NIVEL SECUNDARIA POR CICLO, EDAD Y SEXO SEGÚN SERVICIOS
-                                EDUCATIVOS EN EL DISTRITO <span id="vista5_2_title"></span><a href="javascript:void(0)" class="btn btn-primary btn-xs" onclick="cargarvista5_2(0);" title="MOSTRAR TODO"><i
-                                    class="fa fa-redo"></i></a></h3>
+                                EDUCATIVOS EN EL DISTRITO <span id="vista5_2_title"></span><a href="javascript:void(0)"
+                                    class="btn btn-primary btn-xs" onclick="cargarvista5_2(0);" title="MOSTRAR TODO"><i
+                                        class="fa fa-redo"></i></a></h3>
                         </div>
                         <div class="card-body pb-0 pt-0">
                             <div class="table-responsive" id="vista5_2">
@@ -419,91 +419,6 @@
 
             </div>
         </div>
-
-        {{-- grafica 1 --}}
-        {{-- <div class="row">
-            <div class="col-xl-6">
-                <div class="card card-border">
-                    <div class="card-header border-primary bg-transparent p-0">
-                        <h3 class="card-title"></h3>
-                    </div>
-                    <div class="card-body pb-0 pt-0">
-                        <div id="gra1"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-6">
-                <div class="card card-border">
-                    <div class="card-header border-primary bg-transparent p-0">
-                        <h3 class="card-title"></h3>
-                    </div>
-                    <div class="card-body pb-0 pt-0">
-                        <div id="gra2"></div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
-        {{-- end  row --}}
-
-        {{-- grafica 1 --}}
-        {{-- <div class="row">
-            <div class="col-xl-6">
-                <div class="card card-border">
-                    <div class="card-header border-primary bg-transparent p-0">
-                        <h3 class="card-title"></h3>
-                    </div>
-                    <div class="card-body pb-0 pt-0">
-                        <div id="gra3"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-6">
-                <div class="card card-border">
-                    <div class="card-header border-primary bg-transparent p-0">
-                        <h3 class="card-title"></h3>
-                    </div>
-                    <div class="card-body pb-0 pt-0">
-                        <div id="gra4"></div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
-        {{-- end  row --}}
-
-
-        {{-- tablaa 0 --}}
-        {{-- <div class="row">
-            <div class="col-xl-12">
-                <div class="card card-border">
-                    <div class="card-header border-primary bg-transparent pb-0 mb-0">
-                        <h3 class="card-title">Matricula educativa por genero según ugel</h3>
-                    </div>
-                    <div class="card-body pb-0 pt-0">
-                        <div class="table-responsive" id="vista1">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
-        {{-- end  row --}}
-
-        {{-- tablaa 1 --}}
-        {{-- <div class="row">
-            <div class="col-xl-12">
-                <div class="card card-border">
-                    <div class="card-header border-primary bg-transparent pb-0 mb-0">
-                        <h3 class="card-title">Matricula educativa por ciclo según ugel</h3>
-                    </div>
-                    <div class="card-body pb-0 pt-0">
-                        <div class="table-responsive" id="vista2">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
-        {{-- end  row --}}
 
 
     </div>
@@ -802,7 +717,7 @@
             });
         }
 
-        function cargarvista3_1(provincia){
+        function cargarvista3_1(provincia) {
             $('#provincia').val(provincia);
             $.ajax({
                 url: "{{ route('matriculadetalle.ebr.tabla3_1') }}",
@@ -854,7 +769,7 @@
                 },
             });
         } */
-        function cargarvista4_1(provincia){
+        function cargarvista4_1(provincia) {
             $('#provincia').val(provincia);
             $.ajax({
                 url: "{{ route('matriculadetalle.ebr.tabla4_1') }}",
@@ -888,7 +803,7 @@
             });
         }
 
-        function cargarvista5_1(provincia){
+        function cargarvista5_1(provincia) {
             $('#provincia').val(provincia);
             $.ajax({
                 url: "{{ route('matriculadetalle.ebr.tabla5_1') }}",
@@ -902,6 +817,7 @@
                 },
             });
         }
+
         function cargarvista5_2(distrito) {
             $('#distrito').val(distrito);
             $.ajax({

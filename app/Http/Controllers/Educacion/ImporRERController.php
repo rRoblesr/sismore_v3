@@ -102,9 +102,9 @@ class ImporRERController extends Controller
             $importacion = Importacion::Create([
                 'fuenteImportacion_id' => 28, // valor predeterminado
                 'usuarioId_Crea' => auth()->user()->id,
-                'usuarioId_Aprueba' => null,
+                // 'usuarioId_Aprueba' => null,
                 'fechaActualizacion' => $request['fechaActualizacion'],
-                'comentario' => $request['comentario'],
+                // 'comentario' => $request['comentario'],
                 'estado' => 'PE'
             ]);
 
@@ -180,7 +180,7 @@ class ImporRERController extends Controller
                 $ape = $xx[0];
             }
 
-            if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_id') == 3 || session('perfil_id') == 8 || session('perfil_id') == 9 || session('perfil_id') == 10 || session('perfil_id') == 11)
+            if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11)
                 $boton = '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" id="eliminar' . $value->id . '"><i class="fa fa-trash"></i> </button>';
             else
                 $boton = '';

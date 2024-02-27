@@ -83,24 +83,25 @@
 
 @section('content')
     <div class="row">
-        <div class="col-sm-12">
-            <div class="card card-border">
-                <div class="card-header bg-transparent pb-0">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header bg-success-0 pt-2">
                     <div class="card-widgets">
                         <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i
                                 class="fa fa-redo"></i> Actualizar</button>
                     </div>
-                    <h3 class="card-title">FILTRO</h3>
+                    <h3 class="card-title text-white">UNIDAD EJECUTORA</h3>
                 </div>
                 <div class="card-body pt-2 pb-0">
                     <form class="form-horizontal" id="form-filtro">
                         @csrf
                         <div class="form">
                             <div class="form-group row">
-                                <div class="col-md-3">
-                                    <label class=" col-form-label">Gobiernos</label>
+                                <div class="col-md-5"></div>
+                                <div class="col-md-2">
+                                    {{-- <label class=" col-form-label">Gobiernos</label> --}}
                                     <div class="">
-                                        <select class="form-control" name="gobierno" id="gobierno"
+                                        <select class="form-control btn-xs font-11" name="gobierno" id="gobierno"
                                             onchange="cargarsector();listarDT();">
                                             {{-- <option value="0">TODOS</option> --}}
                                             @foreach ($gobs as $item)
@@ -110,18 +111,20 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
-                                    <label class="col-form-label">Sector</label>
+                                <div class="col-md-2">
+                                    {{-- <label class="col-form-label">Sector</label> --}}
                                     <div class="">
-                                        <select class="form-control" name="sector" id="sector"
+                                        <select class="form-control btn-xs font-11" name="sector" id="sector"
                                             onchange="cargarpliego();listarDT();">
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="col-form-label">Pliego</label>
+                                <div class="col-md-3">
+                                    {{-- <label class="col-form-label">Pliego</label> --}}
                                     <div class="">
-                                        <select class="form-control" name="pliego" id="pliego" onchange="listarDT();">
+                                        <select class="form-control btn-xs font-11" name="pliego" id="pliego"
+                                            onchange="listarDT();">
+                                            <option value="">PLIEGO</option>
                                         </select>
                                     </div>
                                 </div>
@@ -158,7 +161,7 @@
 
                             </div>
                             <div class="table-responsive">
-                                <table id="tablemain" class="table table-striped table-bordered tablex" style="width:100%">
+                                <table id="tablemain" class="table table-sm table-striped table-bordered font-11">{{-- tablex  style="width:100%" --}}
                                     <thead class="cabecera-dataTable bg-success-1 text-white">
                                         <!--th>Nº</th-->
                                         {{-- <th>Secuencia Ejecutora</th> --}}
@@ -466,7 +469,7 @@
                 type: 'get',
                 success: function(data) {
                     $('#sector option ').remove();
-                    var opt = '<option value="0">TODOS</option>';
+                    var opt = '<option value="0">SECTOR</option>';
                     $.each(data.sectors, function(index, vv) {
                         opt += '<option value="' + vv.id + '">' + vv.nombre + '</option>';
                     });
@@ -487,7 +490,7 @@
                 type: 'get',
                 success: function(data) {
                     $('#pliego option ').remove();
-                    var opt = '<option value="0">TODOS</option>';
+                    var opt = '<option value="0">PLIEGO</option>';
                     $.each(data.pliegos, function(index, vv) {
                         opt += '<option value="' + vv.id + '">' + vv.nombre + '</option>';
                     });

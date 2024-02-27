@@ -55,7 +55,7 @@
                                             <th>Menu</th>
                                             <th>Url</th>
                                             <th>Icono</th>
-                                            {{-- <th>Parametro</th> --}}
+                                            {{-- <th>Para-metro</th> --}}
                                             <th>Posicion</th>
                                             <th>Grupo</th>
                                             <th>Estado</th>
@@ -150,21 +150,19 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Icono
-                                        <!--span class="required">*</span-->
                                     </label>
                                     <input id="icono" name="icono" class="form-control" type="text">
                                     <span class="help-block"></span>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            {{-- <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Parametro
-                                        <!--span class="required">*</span-->
+                                    <label>Para-metro
                                     </label>
-                                    <input id="parametro" name="parametro" class="form-control" type="text">
+                                    <input id="para-metro" name="para-metro" class="form-control" type="text">
                                     <span class="help-block"></span>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Posicion<span class="required">*</span></label>
@@ -299,7 +297,7 @@
                     $('[name="nombre"]').val(data.menu.nombre);
                     $('[name="url"]').val(data.menu.url);
                     $('[name="icono"]').val(data.menu.icono);
-                    $('[name="parametro"]').val(data.menu.parametro);
+                    // $('[name="para-metro"]').val(data.menu.para-metro);
                     $('[name="posicion"]').val(data.menu.posicion);
                     $.ajax({
                         url: "{{ url('/') }}/Menu/cargarGrupo/" + data.menu.sistema_id,
@@ -365,7 +363,7 @@
                         data: 'icono'
                     },
                     /* {
-                        data: 'parametro'
+                        data: 'para-metro'
                     }, */
                     {
                         data: 'posicion'

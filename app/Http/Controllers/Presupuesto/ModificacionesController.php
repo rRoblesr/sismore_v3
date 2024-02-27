@@ -33,27 +33,7 @@ class ModificacionesController extends Controller
     }
 
     /* nivel gobiernos */
-    public function principal_gasto()
-    {
-        $opt1 = ModificacionesRepositorio::anios();
-        $opt3 = ProductoProyecto::all();
-        $opt4 = TipoModificacion::orderBy('codigo', 'asc')->get();
-        $opt5 = BaseModificacionDetalle::select(DB::raw('distinct dispositivo_legal'))
-            ->where('dispositivo_legal', '!=', '')
-            ->orderBy('dispositivo_legal', 'asc')->get();
-        /* $opt6 = TipoTransaccion::select('v2.id', DB::raw('concat(pres_tipotransaccion.codigo,".",v2.codigo," ",v2.nombre) as nombre'))
-            ->join('pres_generica_gastos as v2', 'v2.tipotransaccion_id', '=', 'pres_tipotransaccion.id')
-            ->get(); */
-        $opt6 = UnidadEjecutora::select('pres_unidadejecutora.*')
-            ->join('pres_pliego as v2', 'v2.id', '=', 'pres_unidadejecutora.pliego_id')
-            ->join('pres_sector as v3', 'v3.id', '=', 'v2.sector_id')
-            ->join('pres_tipo_gobierno as v4', 'v4.id', '=', 'v3.tipogobierno_id')
-            ->where('v4.id', 3)
-            ->get();
-        $impG = Importacion::where('fuenteimportacion_id', '26')->where('estado', 'PR')->orderBy('fechaActualizacion', 'desc')->first();
-        $mensaje = "";
-        return view('Presupuesto.Modificaciones.Principal', compact('mensaje', 'opt1', 'opt3', 'opt4', 'opt5', 'opt6', 'impG'));
-    }
+
 
     public function cargarmes(Request $rq)
     {
@@ -88,6 +68,25 @@ class ModificacionesController extends Controller
     {
         $info = ModificacionesRepositorio::cargardispositivolegal($rq->ano, $rq->mes, $rq->articulo, $rq->tipo, $rq->ue, $rq->usb);
         return response()->json(compact('info'));
+    }
+
+    public function principal_gasto()
+    {
+        $opt1 = ModificacionesRepositorio::anios();
+        $anio = $opt1->max('anio');
+        // $opt3 = ProductoProyecto::all();
+        // $opt4 = TipoModificacion::orderBy('codigo', 'asc')->get();
+        // $opt5 = BaseModificacionDetalle::select(DB::raw('distinct dispositivo_legal'))
+            // ->where('dispositivo_legal', '!=', "")
+            // ->orderBy('dispositivo_legal', 'asc')->get();
+        /* $opt6 = TipoTransaccion::select('v2.id', DB::raw('concat(pres_tipotransaccion.codigo,".",v2.codigo," ",v2.nombre) as nombre'))
+            ->join('pres_generica_gastos as v2', 'v2.tipotransaccion_id', '=', 'pres_tipotransaccion.id')
+            ->get(); */
+        // $opt6 = ModificacionesRepositorio::UE_poranios(0);
+        $impG = Importacion::where('fuenteimportacion_id', ImporModificacionesController::$FUENTE)->where('estado', 'PR')->orderBy('fechaActualizacion', 'desc')->first();
+        $mensaje = "";
+        // return view('Presupuesto.Modificaciones.Principal', compact('mensaje', 'opt1', 'opt3', 'opt4', 'opt5', 'opt6', 'impG', 'anio'));
+        return view('Presupuesto.Modificaciones.Principal', compact('mensaje', 'opt1', 'impG', 'anio'));
     }
 
     public function principalgastotabla01(Request $rq)

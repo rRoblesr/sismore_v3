@@ -8,94 +8,18 @@
 @section('content')
     <div class="content">
 
-        @if (count($errors) > 0)
-            <div class="alert alert-danger">
-                Error al Cargar Archivo <br><br>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        @if ($mensaje != '')
-            {{-- <div class="alert alert-danger"> --}}
-            <div class="alert alert-{{ $tipo }}">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                {{ $mensaje }}
-                {{-- <ul>
-                    <li>{{ $mensaje }}</li>
-                </ul> --}}
-            </div>
-        @endif
-
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card card-border">
-                    <div class="card-header border-success-0 bg-transparent pb-0">
-                        <h3 class="card-title">Datos de importación
-                        </h3>
-                    </div>
-                    <div class="card-body pb-0">
-                        <form class="cmxform form-horizontal tasi-form upload_file">
-                            @csrf
-                            <input type="hidden" id="ccomment" name="comentario" value="">
-                            {{-- <input type="hidden" id="anio" name="anio" value="{{ date('Y') }}"> --}}
-                            <div class="form-group row">
-                                <div class="col-md-3">
-                                    <label class="col-form-label">Fuente de datos</label>
-                                    <div class="">
-                                        <input type="text" class="form-control btn-xs" readonly="readonly"
-                                            value="POBLACIÓN">
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="col-form-label">Fecha Versión</label>
-                                    <div class="">
-                                        <input type="date" class="form-control btn-xs" name="fechaActualizacion"
-                                            placeholder="Ingrese fecha actualizacion" autofocus required>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="col-form-label">Archivo</label>
-                                    <div class="">
-                                        <input type="file" name="file" class="form-control btn-xs" required>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group row  mt-0 mb-0">
-                                {{-- <label class="col-md-2 col-form-label"></label> --}}
-                                <div class="col-md-12">
-                                    <div class="pwrapper m-0" style="display:none;">
-                                        <div class="progress progress_wrapper">
-                                            <div class="progress-bar progress-bar-striped bg-info progress-bar-animated progress_bar"
-                                                role="progressbar" style="width:0%">0%</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group row ">
-                                <div class="offset-lg-2 col-lg-10 text-right">
-                                    <button class="btn btn-primary waves-effect waves-light mr-1"
-                                        type="submit">Importar</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="row">
             <div class="col-md-12">
                 <div class="card card-border">
                     <div class="card-header border-success-0 bg-transparent pb-0">
-                        <h3 class="card-title">HISTORIAL DE IMPORTACION</h3>
+                        <div class="card-widgets">
+                            <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i
+                                    class="fa fa-redo"></i> Actualizar</button>
+                            <button type="button" class="btn btn-success btn-xs waves-effect waves-light"
+                                data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static"
+                                data-keyboard="false"><i class="ion ion-md-cloud-upload"></i> Importar</button>
+                        </div>
+                        <h3 class="card-title">HISTORIAL DE IMPORTACIÓN</h3>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -106,13 +30,13 @@
                                         <thead class="text-primary">
                                             <tr>
                                                 <th>N°</th>
-                                                <th>Version</th>
+                                                <th>Versión</th>
                                                 <th>Fuente</th>
                                                 <th>Usuario</th>
-                                                <th>Area</th>
+                                                <th>Área</th>
                                                 <th>Registro</th>
                                                 <th>Estado</th>
-                                                <th>Accion</th>
+                                                <th>Acción</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -129,6 +53,75 @@
             </div> <!-- End col -->
         </div> <!-- End row -->
 
+
+        <!--  Modal content for the above example -->
+        <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+            aria-hidden="true" style="display: none;">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="myLargeModalLabel">Importar</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <form class="cmxform form-horizontal tasi-form upload_file">
+                                    @csrf
+                                    <input type="hidden" id="ccomment" name="comentario" value="">
+                                    <div class="form-group">
+                                        <div class="">
+                                            <label class="col-form-label">Fuente de datos</label>
+                                            <div class="">
+                                                <input type="text" class="form-control btn-xs" readonly="readonly"
+                                                    value="POBLACIÓN">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="">
+                                            <label class="col-form-label">Fecha Versión</label>
+                                            <div class="">
+                                                <input type="date" class="form-control btn-xs" name="fechaActualizacion"
+                                                    placeholder="Ingrese fecha actualizacion" autofocus required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="">
+                                            <label class="col-form-label">Archivo</label>
+                                            <div class="">
+                                                <input type="file" name="file" class="form-control btn-xs" required>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row  mt-0 mb-0">
+                                        {{-- <label class="col-md-2 col-form-label"></label> --}}
+                                        <div class="col-md-12">
+                                            <div class="pwrapper m-0" style="display:none;">
+                                                <div class="progress progress_wrapper">
+                                                    <div class="progress-bar progress-bar-striped bg-info progress-bar-animated progress_bar"
+                                                        role="progressbar" style="width:0%">0%</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row ">
+                                        <div class="col-lg-12 text-center">
+                                            <button class="btn btn-primary waves-effect waves-light" type="submit"><i
+                                                    class="ion ion-md-cloud-upload"></i> Guardar</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal -->
+
         <!-- Bootstrap modal -->
         <div id="modal-siagie-matricula" class="modal fade centrarmodal" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-xl">
@@ -141,58 +134,14 @@
                     </div>
                     <div class="modal-body">
                         <div class="table-responsive">
-                            <table id="siagie-matricula" class="table table-striped table-bordered" style="font-size:12px">
+                            <table id="siagie-matricula" class="table table-striped table-bordered"
+                                style="font-size:12px">
                                 {{-- width:7200px; --}}
                                 <thead class="text-primary">
-                                    <th>DRE</th>
-                                    <th>UGEL</th>
-                                    <th>DEPARTAMENTO</th>
-                                    <th>PROVINCIA</th>
-                                    <th>DISTRITO</th>
-                                    <th>CENTRO_POBLADO</th>
-                                    <th>COD_MOD</th>
-                                    <th>INSTITUCION_EDUCATIVA</th>
-                                    <th>COD_NIVELMOD</th>
-                                    <th>NIVEL_MODALIDAD</th>
-                                    <th>COD_GES_DEP</th>
-                                    <th>GESTION_DEPENDENCIA</th>
-                                    <th>TOTAL_ESTUDIANTES</th>
-                                    <th>MATRICULA_DEFINITIVA</th>
-                                    <th>MATRICULA_PROCESO</th>
-                                    <th>DNI_VALIDADO</th>
-                                    <th>DNI_SIN_VALIDAR</th>
-                                    <th>REGISTRADO_SIN_DNI</th>
-                                    <th>TOTAL_GRADOS</th>
-                                    <th>TOTAL_SECCIONES</th>
-                                    <th>NOMINAS_GENERADAS</th>
-                                    <th>NOMINAS_APROBADAS</th>
-                                    <th>NOMINAS_POR_RECTIFICAR</th>
-                                    <th>TRES_ANIOS_HOMBRE</th>
-                                    <th>TRES_ANIOS_MUJER</th>
-                                    <th>CUATRO_ANIOS_HOMBRE</th>
-                                    <th>CUATRO_ANIOS_MUJER</th>
-                                    <th>CINCO_ANIOS_HOMBRE</th>
-                                    <th>CINCO_ANIOS_MUJER</th>
-                                    <th>PRIMERO_HOMBRE</th>
-                                    <th>PRIMERO_MUJER</th>
-                                    <th>SEGUNDO_HOMBRE</th>
-                                    <th>SEGUNDO_MUJER</th>
-                                    <th>TERCERO_HOMBRE</th>
-                                    <th>TERCERO_MUJER</th>
-                                    <th>CUARTO_HOMBRE</th>
-                                    <th>CUARTO_MUJER</th>
-                                    <th>QUINTO_HOMBRE</th>
-                                    <th>QUINTO_MUJER</th>
-                                    <th>SEXTO_HOMBRE</th>
-                                    <th>SEXTO_MUJER</th>
-                                    <th>CERO_ANIOS_HOMBRE</th>
-                                    <th>CERO_ANIOS_MUJER</th>
-                                    <th>UN_ANIO_HOMBRE</th>
-                                    <th>UN_ANIO_MUJER</th>
-                                    <th>DOS_ANIOS_HOMBRE</th>
-                                    <th>DOS_ANIOS_MUJER</th>
-                                    <th>MAS_CINCO_ANIOS_HOMBRE</th>
-                                    <th>MAS_CINCO_ANIOS_MUJER</th>
+                                    <th>UBIGEO</th>
+                                    <th>SEXO</th>
+                                    <th>EDAD</th>
+                                    <th>TOTAL</th>
                                 </thead>
                                 <tbody>
 
@@ -291,8 +240,9 @@
             });
         }
 
+        /* metodo para eliminar una importacion */
         function geteliminar(id) {
-            bootbox.confirm("Seguro desea Eliminar este IMPORTACION?", function(result) {
+            bootbox.confirm("¿Seguro desea eliminar esta importación?", function(result) {
                 if (result === true) {
                     $.ajax({
                         url: "{{ route('imporpoblacion.eliminar', '') }}/" + id,
@@ -313,8 +263,8 @@
             });
         };
 
+        /* metodo para la vista seleccionada de la importacion */
         function monitor(id) {
-            {{--
             $('#siagie-matricula').DataTable({
                     "processing": true,
                     "serverSide": true,
@@ -327,213 +277,33 @@
                         "headers": {
                             'X-CSRF-TOKEN': $('input[name=_token]').val()
                         },
-                        "url": "{{ route('ImporMatricula.listarimportados') }}",
+                        "url": "{{ route('imporpoblacion.listarimportados') }}",
                         "data": {
-                            "matricula_id": {{ $mat->id }}
+                            "importacion_id": id
                         },
                         "type": "POST",
                         "dataType": 'JSON',
                     },
                     "columns": [{
-                            data: 'dre',
-                            name: 'dre'
+                            data: 'codigo',
+                            name: 'codigo'
                         },
                         {
-                            data: 'ugel',
-                            name: 'ugel'
+                            data: 'sexo',
+                            name: 'sexo'
                         },
                         {
-                            data: 'departamento',
-                            name: 'departamento'
+                            data: 'edad',
+                            name: 'edad'
                         },
                         {
-                            data: 'provincia',
-                            name: 'provincia'
-                        },
-                        {
-                            data: 'distrito',
-                            name: 'distrito'
-                        },
-                        {
-                            data: 'centro_poblado',
-                            name: 'centro_poblado'
-                        },
-                        {
-                            data: 'cod_mod',
-                            name: 'cod_mod'
-                        },
-                        {
-                            data: 'institucion_educativa',
-                            name: 'institucion_educativa'
-                        },
-                        {
-                            data: 'cod_nivelmod',
-                            name: 'cod_nivelmod'
-                        },
-                        {
-                            data: 'nivel_modalidad',
-                            name: 'nivel_modalidad'
-                        },
-                        {
-                            data: 'cod_ges_dep',
-                            name: 'cod_ges_dep'
-                        },
-                        {
-                            data: 'gestion_dependencia',
-                            name: 'gestion_dependencia'
-                        },
-                        {
-                            data: 'total_estudiantes',
-                            name: 'total_estudiantes'
-                        },
-                        {
-                            data: 'matricula_definitiva',
-                            name: 'matricula_definitiva'
-                        },
-                        {
-                            data: 'matricula_proceso',
-                            name: 'matricula_proceso'
-                        },
-                        {
-                            data: 'dni_validado',
-                            name: 'dni_validado'
-                        },
-                        {
-                            data: 'dni_sin_validar',
-                            name: 'dni_sin_validar'
-                        },
-                        {
-                            data: 'registrado_sin_dni',
-                            name: 'registrado_sin_dni'
-                        },
-                        {
-                            data: 'total_grados',
-                            name: 'total_grados'
-                        },
-                        {
-                            data: 'total_secciones',
-                            name: 'total_secciones'
-                        },
-                        {
-                            data: 'nominas_generadas',
-                            name: 'nominas_generadas'
-                        },
-                        {
-                            data: 'nominas_aprobadas',
-                            name: 'nominas_aprobadas'
-                        },
-                        {
-                            data: 'nominas_por_rectificar',
-                            name: 'nominas_por_rectificar'
-                        },
-                        {
-                            data: 'tres_anios_hombre',
-                            name: 'tres_anios_hombre'
-                        },
-                        {
-                            data: 'tres_anios_mujer',
-                            name: 'tres_anios_mujer'
-                        },
-                        {
-                            data: 'cuatro_anios_hombre',
-                            name: 'cuatro_anios_hombre'
-                        },
-                        {
-                            data: 'cuatro_anios_mujer',
-                            name: 'cuatro_anios_mujer'
-                        },
-                        {
-                            data: 'cinco_anios_hombre',
-                            name: 'cinco_anios_hombre'
-                        },
-                        {
-                            data: 'cinco_anios_mujer',
-                            name: 'cinco_anios_mujer'
-                        },
-                        {
-                            data: 'primero_hombre',
-                            name: 'primero_hombre'
-                        },
-                        {
-                            data: 'primero_mujer',
-                            name: 'primero_mujer'
-                        },
-                        {
-                            data: 'segundo_hombre',
-                            name: 'segundo_hombre'
-                        },
-                        {
-                            data: 'segundo_mujer',
-                            name: 'segundo_mujer'
-                        },
-                        {
-                            data: 'tercero_hombre',
-                            name: 'tercero_hombre'
-                        },
-                        {
-                            data: 'tercero_mujer',
-                            name: 'tercero_mujer'
-                        },
-                        {
-                            data: 'cuarto_hombre',
-                            name: 'cuarto_hombre'
-                        },
-                        {
-                            data: 'cuarto_mujer',
-                            name: 'cuarto_mujer'
-                        },
-                        {
-                            data: 'quinto_hombre',
-                            name: 'quinto_hombre'
-                        },
-                        {
-                            data: 'quinto_mujer',
-                            name: 'quinto_mujer'
-                        },
-                        {
-                            data: 'sexto_hombre',
-                            name: 'sexto_hombre'
-                        },
-                        {
-                            data: 'sexto_mujer',
-                            name: 'sexto_mujer'
-                        },
-                        {
-                            data: 'cero_anios_hombre',
-                            name: 'cero_anios_hombre'
-                        },
-                        {
-                            data: 'cero_anios_mujer',
-                            name: 'cero_anios_mujer'
-                        },
-                        {
-                            data: 'un_anio_hombre',
-                            name: 'un_anio_hombre'
-                        },
-                        {
-                            data: 'un_anio_mujer',
-                            name: 'un_anio_mujer'
-                        },
-                        {
-                            data: 'dos_anios_hombre',
-                            name: 'dos_anios_hombre'
-                        },
-                        {
-                            data: 'dos_anios_mujer',
-                            name: 'dos_anios_mujer'
-                        },
-                        {
-                            data: 'mas_cinco_anios_hombre',
-                            name: 'mas_cinco_anios_hombre'
-                        },
-                        {
-                            data: 'mas_cinco_anios_mujer',
-                            name: 'mas_cinco_anios_mujer'
+                            data: 'total',
+                            name: 'total'
                         },
                     ],
                 }
 
-            ); --}}
+            );
 
             $('#modal-siagie-matricula').modal('show');
             $('#modal-siagie-matricula .modal-title').text('Importado');

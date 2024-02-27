@@ -20,9 +20,9 @@ class ImporGastosImport implements ToModel, WithHeadingRow, WithBatchInserts, Wi
         $this->importacion = Importacion::Create([
             'fuenteImportacion_id' => $fuente,
             'usuarioId_Crea' => auth()->user()->id,
-            'usuarioId_Aprueba' => null,
+            // 'usuarioId_Aprueba' => null,
             'fechaActualizacion' => $fecha,
-            'comentario' => $comentario,
+            // 'comentario' => $comentario,
             'estado' => 'PE'
         ]);
     }

@@ -1,4 +1,4 @@
-<table id="tabla1" class="table table-striped table-bordered tablex" style="font-size:11px;">
+<table id="tabla1" class="table table-striped table-bordered table-sm font-11">
     <thead>
         <tr class="bg-success-1 text-white text-center">
             <th>SECTOR/PLIEGO</th>

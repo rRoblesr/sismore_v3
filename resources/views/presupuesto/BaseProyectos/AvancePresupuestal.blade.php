@@ -11,7 +11,7 @@
         type="text/css" />
     <link href="{{ asset('/') }}public/assets/libs/datatables/scroller.bootstrap4.min.css" rel="stylesheet"
         type="text/css" />
-    <style>
+    {{-- <style>
         .tablex thead th {
             padding: 4px;
             text-align: center;
@@ -52,7 +52,7 @@
             bottom: 0;
             margin: auto;
         }
-    </style>
+    </style> --}}
 @endsection
 {{-- <div>
     <div id="container-speed" class="chart-container"></div>
@@ -80,17 +80,17 @@
                         </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold" title="{{ number_format($card1['pim'], 0) }}">
+                                <h4 class="font-18 my-0 font-weight-bold" title="{{ number_format($card1['pim'], 0) }}">
                                     <span data-plugin="counterup">
                                         {{ number_format($card1['pim'], 0) }}
                                     </span>
                                 </h4>
-                                <p class="mb-0 mt-1 text-truncate" style="font-size: 14px">PIA {{ $anio }}</p>
+                                <p class="mb-0 mt-1 text-truncate font-13">PIA {{ $anio }}</p>
                             </div>
                         </div>
                     </div>
                     <div class="mt-4">
-                        <h6 class="">Ejecución(<span style="font-weight: normal">DEV/PIA</span>)
+                        <h6 class="font-11">Ejecución(<span style="font-weight: normal">DEV/PIA</span>)
                             <span class="float-right">{{ number_format($card1['eje'], 1) }}%</span>
                         </h6>
                         <div class="progress progress-sm m-0">
@@ -114,17 +114,17 @@
                         </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold" title="{{ number_format($card2['pim'], 0) }}">
+                                <h4 class="font-18 my-0 font-weight-bold" title="{{ number_format($card2['pim'], 0) }}">
                                     <span data-plugin="counterup">
                                         {{ number_format($card2['pim'], 0) }}
                                     </span>
                                 </h4>
-                                <p class="mb-0 mt-1 text-truncate" style="font-size: 14px">PIM {{ $anio }}</p>
+                                <p class="mb-0 mt-1 text-truncate font-13">PIM {{ $anio }}</p>
                             </div>
                         </div>
                     </div>
                     <div class="mt-4">
-                        <h6 class="">Ejecución(<span style="font-weight: normal">DEV/PIM</span>)
+                        <h6 class="font-11">Ejecución(<span style="font-weight: normal">DEV/PIM</span>)
                             <span class="float-right">{{ number_format($card2['eje'], 1) }}%</span>
                         </h6>
                         <div class="progress progress-sm m-0">
@@ -148,18 +148,18 @@
                         </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold" title="{{ number_format($card3['pim'], 0) }}">
+                                <h4 class="font-18 my-0 font-weight-bold" title="{{ number_format($card3['pim'], 0) }}">
                                     <span data-plugin="counterup">
                                         {{ number_format($card3['pim'], 0) }}
                                     </span>
                                 </h4>
-                                <p class="mb-0 mt-1 text-truncate" style="font-size: 14px">CERTIFICADO
+                                <p class="mb-0 mt-1 text-truncate font-13">CERTIFICADO
                                     {{ $anio }}</p>
                             </div>
                         </div>
                     </div>
                     <div class="mt-4">
-                        <h6 class="">Ejecución(<span style="font-weight: normal">CERT/PIM</span>)
+                        <h6 class="font-11">Ejecución(<span style="font-weight: normal">CERT/PIM</span>)
                             <span class="float-right">{{ number_format($card3['eje'], 1) }}%</span>
                         </h6>
                         <div class="progress progress-sm m-0">
@@ -188,13 +188,13 @@
                                         {{ number_format($card4['pim'], 0) }}
                                     </span>
                                 </h4>
-                                <p class="mb-0 mt-1 text-truncate" style="font-size: 14px">DEVENGADO
+                                <p class="mb-0 mt-1 text-truncate font-13">DEVENGADO
                                     {{ $anio }}</p>
                             </div>
                         </div>
                     </div>
                     <div class="mt-4">
-                        <h6 class="">Ejecución(<span style="font-weight: normal">DEV/CERT</span>)
+                        <h6 class="font-11">Ejecución(<span style="font-weight: normal">DEV/CERT</span>)
                             <span class="float-right">{{ number_format($card4['eje'], 1) }}%</span>
                         </h6>
                         <div class="progress progress-sm m-0">
@@ -215,8 +215,8 @@
 
         <div class="row">
             <div class="col-xl-6">
-                <div class="card card-border card-primary">
-                    <div class="card-header border-primary bg-transparent p-0">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent p-0">
                         <h3 class="card-title text-primary "></h3>
                     </div>
                     <div class="card-body p-0">
@@ -226,8 +226,8 @@
                 </div>
             </div>
             <div class="col-xl-6">
-                <div class="card card-border card-primary">
-                    <div class="card-header border-primary bg-transparent p-0">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent p-0">
                         <h3 class="card-title text-primary "></h3>
                     </div>
                     <div class="card-body p-0">
@@ -241,8 +241,8 @@
 
         <div class="row">
             <div class="col-xl-6">
-                <div class="card card-border card-primary">
-                    <div class="card-header border-primary bg-transparent p-0">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent p-0">
                         <h3 class="card-title text-primary "></h3>
                     </div>
                     <div class="card-body p-0">
@@ -252,8 +252,8 @@
                 </div>
             </div>
             <div class="col-xl-6">
-                <div class="card card-border card-primary">
-                    <div class="card-header border-primary bg-transparent p-0">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent p-0">
                         <h3 class="card-title text-primary "></h3>
                     </div>
                     <div class="card-body p-0">
@@ -267,8 +267,8 @@
 
         <div class="row">
             <div class="col-xl-6">
-                <div class="card card-border card-primary">
-                    <div class="card-header border-primary bg-transparent p-0">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent p-0">
                         <h3 class="card-title text-primary "></h3>
                     </div>
                     <div class="card-body p-0">
@@ -278,8 +278,8 @@
                 </div>
             </div>
             <div class="col-xl-6">
-                <div class="card card-border card-primary">
-                    <div class="card-header border-primary bg-transparent p-0">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent p-0">
                         <h3 class="card-title text-primary "></h3>
                     </div>
                     <div class="card-body p-0">
@@ -293,8 +293,8 @@
 
         <div class="row">
             <div class="col-xl-12">
-                <div class="card card-border card-primary">
-                    <div class="card-header border-primary bg-transparent p-0">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent p-0">
                         <h3 class="card-title text-primary "></h3>
                     </div>
                     <div class="card-body p-0">
@@ -550,7 +550,8 @@
                         data.info.categoria,
                         data.info.series,
                         '',
-                        'CERTIFICADO y DEVENGADO acumulado mensual del pliego del Gobierno Regional de Ucayali');
+                        'CERTIFICADO y DEVENGADO acumulado mensual del pliego del Gobierno Regional de Ucayali'
+                    );
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 7");
@@ -575,6 +576,9 @@
                 subtitle: {
                     //align:'left',
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 accessibility: {
                     announceNewData: {
@@ -583,13 +587,23 @@
                 },
                 xAxis: {
                     type: 'category',
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 yAxis: {
                     /* max: 100, */
                     title: {
                         enabled: false,
                         text: 'Porcentaje',
-                    }
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 legend: {
                     enabled: false,
@@ -671,6 +685,9 @@
                 subtitle: {
                     //align:'left',
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 accessibility: {
                     announceNewData: {
@@ -679,14 +696,24 @@
                 },
                 xAxis: {
                     //type: 'category',
-                    categories: categoria
+                    categories: categoria,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 yAxis: {
                     /* max: 100, */
                     title: {
                         enabled: false,
                         text: 'Porcentaje',
-                    }
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 legend: {
                     enabled: false,
@@ -768,16 +795,29 @@
                 },
                 subtitle: {
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 xAxis: {
                     type: 'category',
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 yAxis: {
                     /* max: 100, */
                     title: {
                         enabled: false,
                         text: 'Porcentaje',
-                    }
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 series: [{
                     showInLegend: tituloserie != '',
@@ -870,6 +910,9 @@
                 },
                 subtitle: {
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 tooltip: {
                     //pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
@@ -945,10 +988,18 @@
                     text: titulo
                 },
                 subtitle: {
-                    text: subtitulo
+                    text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 xAxis: {
                     categories: categorias,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 yAxis: {
 
@@ -956,7 +1007,12 @@
                     title: {
                         text: 'Rainfall (mm)',
                         enabled: false
-                    }
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
 
                 tooltip: {
@@ -985,10 +1041,18 @@
                     text: titulo
                 },
                 subtitle: {
-                    text: subtitulo
+                    text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 xAxis: {
                     categories: categorias,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                     //categories: ['Arsenal', 'Chelsea', 'Liverpool', 'Manchester United']
                 },
                 yAxis: {
@@ -996,7 +1060,12 @@
                     title: {
                         text: 'Rainfall (mm)',
                         enabled: false
-                    }
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 tooltip: {
                     pointFormat: '<span style="color:{point.color}">\u25CF</span> Hay: <b>{point.y}</b><br/>',
@@ -1033,7 +1102,7 @@
                     },
                 },
                 series: [{
-                    showInLegend: false,
+                        showInLegend: false,
                         //name: '',
                         data: datos,
                         /* data: [3, 5, 1, 13] */
@@ -1054,10 +1123,18 @@
                 },
                 subtitle: {
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 xAxis: [{
                     categories: categoria,
-                    crosshair: true
+                    crosshair: true,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 }],
                 yAxis: [{ // Primary yAxis
                         max: 800000000,
@@ -1175,9 +1252,17 @@
                 },
                 subtitle: {
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 xAxis: {
-                    categories: categoria
+                    categories: categoria,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 yAxis: {
                     allowDecimals: false,
@@ -1185,7 +1270,12 @@
                     title: {
                         enabled: false,
                         text: 'Porcentaje',
-                    }
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 series: series,
                 plotOptions: {
@@ -1244,7 +1334,12 @@
                     align: 'left'
                 },
                 xAxis: {
-                    categories: ['Arsenal', 'Chelsea', 'Liverpool', 'Manchester United']
+                    categories: ['Arsenal', 'Chelsea', 'Liverpool', 'Manchester United'],
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 yAxis: {
                     min: 0,
@@ -1261,7 +1356,12 @@
                             ) || 'gray',
                             textOutline: 'none'
                         }
-                    }
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 legend: {
                     align: 'left',
@@ -1309,9 +1409,17 @@
                 },
                 subtitle: {
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 xAxis: {
-                    categories: categoria
+                    categories: categoria,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                     /* accessibility: {
                         rangeDescription: 'Range: 2015 to 2025'
                     } */
@@ -1320,7 +1428,12 @@
                     title: {
                         enabled: false,
                         text: 'Number of Employees'
-                    }
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                     /* allowDecimals: false,
                     min: 0,
                     title: {
@@ -1443,6 +1556,9 @@
                 },
                 subtitle: {
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                     /*  'Source: <a ' +
                                             'href="https://en.wikipedia.org/wiki/List_of_continents_and_continental_subregions_by_population"' +
                                             'target="_blank">Wikipedia.org</a>' */
@@ -1454,6 +1570,11 @@
                         text: '', // null
                     },
                     enabled: false,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 yAxis: {
                     //min: 0,
@@ -1461,6 +1582,11 @@
                     title: {
                         text: '', // 'Population (millions)',
                         align: 'high'
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
                     },
                     /* labels: {
                         overflow: 'justify'
@@ -1560,16 +1686,29 @@
                     text: titulo
                 },
                 subtitle: {
-                    text: subtitulo
+                    text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 yAxis: {
                     title: {
                         text: titulovetical
                     },
                     min: 0,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 xAxis: {
                     categories: categoria,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                     /* accessibility: {
                         rangeDescription: 'Range: 2010 to 2017'
                     } */
@@ -1641,6 +1780,9 @@
 
                 subtitle: {
                     text: subtitulo, //'Un descripción de reportes'
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
 
                 mapNavigation: {

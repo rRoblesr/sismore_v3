@@ -4,7 +4,7 @@ namespace App\Repositories\Educacion;
 
 use App\Models\Educacion\Censo;
 use App\Models\Educacion\CensoResultado;
-use App\Models\Ubigeo;
+use App\Models\Parametro\Ubigeo;
 use Illuminate\Support\Facades\DB;
 
 class CensoRepositorio
@@ -372,7 +372,7 @@ class CensoRepositorio
         if ($provincia > 0 && $distrito > 0) {
             $prov = Ubigeo::find($distrito);
             $query = DB::table('edu_institucioneducativa as v1')
-                ->join('par_centropoblado as v2', 'v2.id', '=', 'v1.CentroPoblado_id')
+                ->join('edu_centropoblado as v2', 'v2.id', '=', 'v1.CentroPoblado_id')
                 ->join('par_ubigeo as v3', 'v3.id', '=', 'v2.Ubigeo_id')
                 ->where('v1.NivelModalidad_id', $nivel_id)
                 ->where('v3.codigo', 'like', $prov->codigo . '%')
@@ -381,7 +381,7 @@ class CensoRepositorio
         } else if ($provincia > 0 && $distrito == 0) {
             $prov = Ubigeo::find($provincia);
             $query = DB::table('edu_institucioneducativa as v1')
-                ->join('par_centropoblado as v2', 'v2.id', '=', 'v1.CentroPoblado_id')
+                ->join('edu_centropoblado as v2', 'v2.id', '=', 'v1.CentroPoblado_id')
                 ->join('par_ubigeo as v3', 'v3.id', '=', 'v2.Ubigeo_id')
                 ->where('v1.NivelModalidad_id', $nivel_id)
                 ->where('v3.codigo', 'like', $prov->codigo . '%')
@@ -422,7 +422,7 @@ class CensoRepositorio
         if ($provincia > 0 && $distrito > 0) {
             $prov = Ubigeo::find($distrito);
             $query = DB::table('edu_institucioneducativa as v1')
-                ->join('par_centropoblado as v2', 'v2.id', '=', 'v1.CentroPoblado_id')
+                ->join('edu_centropoblado as v2', 'v2.id', '=', 'v1.CentroPoblado_id')
                 ->join('par_ubigeo as v3', 'v3.id', '=', 'v2.Ubigeo_id')
                 ->where('v3.codigo', 'like', $prov->codigo . '%')
                 ->select('v1.codModular as modular', 'v1.NivelModalidad_id as nivel')
@@ -430,7 +430,7 @@ class CensoRepositorio
         } else if ($provincia > 0 && $distrito == 0) {
             $prov = Ubigeo::find($provincia);
             $query = DB::table('edu_institucioneducativa as v1')
-                ->join('par_centropoblado as v2', 'v2.id', '=', 'v1.CentroPoblado_id')
+                ->join('edu_centropoblado as v2', 'v2.id', '=', 'v1.CentroPoblado_id')
                 ->join('par_ubigeo as v3', 'v3.id', '=', 'v2.Ubigeo_id')
                 ->where('v3.codigo', 'like', $prov->codigo . '%')
                 ->select('v1.codModular as modular', 'v1.NivelModalidad_id as nivel')

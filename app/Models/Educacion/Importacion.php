@@ -8,13 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Importacion extends Model
 {
     use HasFactory;
-    protected $table = "par_importacion"; 
-    
+    protected $table = "par_importacion";
+
     protected $fillable = [
         'fuenteImportacion_id',
         'usuarioId_Crea',
-        'usuarioId_Aprueba',
         'fechaActualizacion',
-        'comentario',
-        'estado'];
+        'estado'
+    ];
 }

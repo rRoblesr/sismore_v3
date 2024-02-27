@@ -4,9 +4,6 @@ namespace App\Http\Controllers\Administracion;
 
 use App\Http\Controllers\Controller;
 use App\Models\Administracion\Entidad;
-use App\Models\Presupuesto\UnidadEjecutora;
-use App\Models\Presupuesto\TipoGobierno;
-use Hamcrest\Type\IsNumeric;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -32,19 +29,6 @@ class EntidadController extends Controller
         $entidades = Entidad::whereNull('dependencia')->orderBy('nombre', 'asc')->get();
         return view('administracion.Entidad.Gerencia', compact('formato', 'entidades'));
     }
-    public function oficina()
-    {
-        $formato = 2;
-        $entidades = Entidad::whereNull('dependencia')->orderBy('nombre', 'asc')->get();
-        return view('administracion.Entidad.Oficina', compact('formato', 'entidades'));
-    }
-
-    public function oficina2()
-    {
-        $formato = 2;
-        $entidades = Entidad::whereNull('dependencia')->orderBy('nombre', 'asc')->get();
-        return view('administracion.Entidad.Oficina2', compact('formato', 'entidades'));
-    }
 
     public function ListarJSON(Request $rq)
     {
@@ -52,20 +36,22 @@ class EntidadController extends Controller
         //$start = intval($rq->start);
         //$length = intval($rq->length);
 
-        if ($rq->get('dependencia') > 0 && $rq->get('formato') != 0)
-            $query = Entidad::where('dependencia', $rq->get('dependencia'))->get();
+        if ($rq->get('formato') != 0)
+            $query = Entidad::where('dependencia', '>', 0)->orderBy('id', 'desc')->get();
         else
-            $query = Entidad::whereNull('dependencia')->get();
+            $query = Entidad::whereNull('dependencia')->orderBy('id', 'desc')->get();
 
         $data = [];
         foreach ($query as $key => $value) {
             $btn = '<a href="#" class="btn btn-info btn-sm" onclick="edit(' . $value->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
             $btn .= '&nbsp;<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $value->id . ')" title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
             if ($rq->get('formato') == 0) {
+                $nofi = Entidad::where('dependencia', $value->id)->count();
                 $data[] = array(
                     $key + 1,
                     $value->nombre,
-                    $value->apodo,
+                    $value->abreviado,
+                    $nofi,
                     '<div style="text-align:center">' . $btn . '</div>'
                 );
             } else if ($rq->get('formato') == 1) {
@@ -73,8 +59,9 @@ class EntidadController extends Controller
                 $data[] = array(
                     $key + 1,
                     $ent ? $ent->nombre : '',
+                    $ent ? $ent->abreviado : '',
                     $value->nombre,
-                    $value->apodo,
+                    $value->abreviado,
                     '<div style="text-align:center">' . $btn . '</div>'
                 );
             } else {
@@ -85,7 +72,7 @@ class EntidadController extends Controller
                     $ent->nombre,
                     $ger->nombre,
                     $value->nombre,
-                    $value->apodo,
+                    $value->abreviado,
                     '<div style="text-align:center">' . $btn . '</div>'
                 );
             }
@@ -97,59 +84,6 @@ class EntidadController extends Controller
             "data" => $data,
         );
         return response()->json($result);
-    }
-
-    public function listarDTentidad($dependencia)
-    {
-        if ($dependencia > 0)
-            $data = Entidad::where('dependencia', $dependencia)->get();
-        else
-            $data = Entidad::whereNull('dependencia')->get();
-
-        return  datatables()::of($data)
-            /* ->editColumn('grupo', function ($data) {
-                if ($data->dependencia) return $data->grupo;
-                else return '';
-            }) */
-            ->addColumn('action', function ($data) {
-                $acciones = '';
-                $acciones .= '<a href="#" class="btn btn-info btn-sm" onclick="edit(' . $data->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
-                $acciones .= '&nbsp;<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')" title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
-
-                return $acciones;
-            })
-            ->rawColumns(['action'/* , 'grupo' */])
-            ->make(true);
-    }
-
-    public function listarDTgerencia($entidad_id)
-    {
-        $data = Entidad::where('unidadejecutadora_id', $entidad_id)->where('dependencia')->orderBy('id', 'desc')->get();
-        return  datatables()::of($data)
-            ->addColumn('action', function ($data) {
-                $acciones = '';
-                $acciones .= '<a href="#" class="btn btn-info btn-sm" onclick="edit(' . $data->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
-                $acciones .= '&nbsp;<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')" title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
-                return $acciones;
-            })
-
-            ->rawColumns(['action'])
-            ->make(true);
-    }
-
-    public function listarDToficina($gerencia_id)
-    {
-        $data = Entidad::where('dependencia', $gerencia_id)->orderBy('id', 'desc')->get();
-        return  datatables()::of($data)
-            ->addColumn('action', function ($data) {
-                $acciones = '';
-                $acciones .= '<a href="#" class="btn btn-info btn-sm" onclick="edit(' . $data->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
-                $acciones .= '&nbsp;<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')" title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
-                return $acciones;
-            })
-
-            ->rawColumns(['action'])
-            ->make(true);
     }
 
     private function _validateentidad($request)
@@ -171,8 +105,8 @@ class EntidadController extends Controller
             $data['status'] = FALSE;
         }
 
-        if ($request->apodo == '') {
-            $data['inputerror'][] = 'apodo';
+        if ($request->abreviado == '') {
+            $data['inputerror'][] = 'abreviado';
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
         }
@@ -186,9 +120,8 @@ class EntidadController extends Controller
             return response()->json($val);
         }
         $entidad = Entidad::Create([
-            'codigo' => '',
             'nombre' => $request->descripcion,
-            'apodo' => $request->apodo,
+            'abreviado' => $request->abreviado,
             'dependencia' => $request->dependencia > 0 ? $request->dependencia : NULL,
             'estado' => '0',
         ]);
@@ -211,7 +144,7 @@ class EntidadController extends Controller
         }
         $entidad = Entidad::find($request->id);
         $entidad->nombre = $request->descripcion;
-        $entidad->apodo = $request->apodo;
+        $entidad->abreviado = $request->abreviado;
         $entidad->dependencia = $request->dependencia > 0 ? $request->dependencia : NULL;
         $entidad->save();
 
@@ -241,13 +174,13 @@ class EntidadController extends Controller
             $entidades = Entidad::where('dependencia', $rq->dependencia)->where('estado', '0')
                 ->where(function ($q) use ($term) {
                     $q->where('nombre', 'like', '%' . $term . '%')
-                        ->orWhere('apodo', 'like', '%' . $term . '%');
+                        ->orWhere('abreviado', 'like', '%' . $term . '%');
                 })->get();
         else
             $entidades = Entidad::whereNull('dependencia')->where('estado', '0')
                 ->where(function ($q) use ($term) {
                     $q->where('nombre', 'like', '%' . $term . '%')
-                        ->orWhere('apodo', 'like', '%' . $term . '%');
+                        ->orWhere('abreviado', 'like', '%' . $term . '%');
                 })->get();
 
         if ($entidades->count() > 0) {
@@ -300,31 +233,6 @@ class EntidadController extends Controller
         return $data;
     }
 
-    /* public function ajax_add_gerencia(Request $request)
-    {
-        $val = $this->_validategerencia($request);
-        if ($val['status'] === FALSE) {
-            return response()->json($val);
-        }
-        if ($request->vista == '2') {
-            $entidad = Entidad::Create([
-                'entidad' => $request->gerencia_nombre,
-                'codigo' => $request->gerencia_codigo,
-                'abreviado' => $request->gerencia_abreviado,
-                'unidadejecutadora_id' => $request->gerencia_entidad,
-                'estado' => 1,
-            ]);
-        } else {
-            $entidad = Entidad::Create([
-                'entidad' => $request->gerencia,
-                'abreviado' => $request->gerencia_abreviado,
-                'unidadejecutadora_id' => $request->entidad_id,
-                'estado' => 1,
-            ]);
-        }
-        return response()->json(array('status' => true, 'codigo' => $entidad->id));
-    } */
-
     public function ajax_update_gerencia(Request $request)
     {
         $val = $this->_validategerencia($request);
@@ -332,7 +240,6 @@ class EntidadController extends Controller
             return response()->json($val);
         }
         $entidad = Entidad::find($request->gerencia_id);
-        $entidad->codigo = $request->gerencia_codigo;
         $entidad->entidad = $request->gerencia_nombre;
         $entidad->unidadejecutadora_id = $request->gerencia_entidad;
         $entidad->abreviado = $request->gerencia_abreviado;
@@ -395,7 +302,6 @@ class EntidadController extends Controller
 
         if ($request->vista == 2) {
             $entidad = Entidad::Create([
-                'codigo' => $request->oficina_codigo,
                 'entidad' => $request->oficina_nombre,
                 'abreviado' => $request->oficina_abreviado,
                 'unidadejecutadora_id' => $request->oficina_entidad,
@@ -422,7 +328,6 @@ class EntidadController extends Controller
             return response()->json($val);
         }
         $entidad = Entidad::find($request->oficina_id);
-        $entidad->codigo = $request->oficina_codigo;
         $entidad->entidad = $request->oficina_nombre;
         $entidad->unidadejecutadora_id = $request->oficina_entidad;
         $entidad->abreviado = $request->oficina_abreviado;

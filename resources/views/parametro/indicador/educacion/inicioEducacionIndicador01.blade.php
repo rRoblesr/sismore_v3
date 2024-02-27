@@ -1,23 +1,24 @@
 @extends('layouts.main', ['titlePage' => 'INDICADOR'])
 @section('css')
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
     <style>
         .tablex thead th {
-            padding: 2px;
+            padding: 6px;
             text-align: center;
         }
 
         .tablex thead td {
-            padding: 2px;
+            padding: 6px;
             text-align: center;
             vertical-align: middle;
             font-weight: bold;
         }
 
-        3 .tablex tbody td,
+        .tablex tbody td,
         .tablex tbody th,
         .tablex tfoot td,
         .tablex tfoot th {
-            padding: 2px;
+            padding: 6px;
         }
 
         .fuentex {
@@ -35,52 +36,52 @@
                     <div class="card">
                         <div class="card-header bg-success-0">
                             <div class="card-widgets">
-                                <button type="button" class="btn btn-orange-0 btn-xs" onclick=""><i
-                                        class="ion ion-logo-usd"></i> Ficha Técnica</button>
-                                <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"><i
-                                        class="ion ion-logo-usd"></i> Limpiar</button>
+                                <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf(6)"
+                                    title='FICHA TÉCNICA'><i class="fas fa-file"></i> Ficha Técnica</button>
+                                <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
+                                    title='ACTUALIZAR'><i class=" fas fa-history"></i> Actualizar</button>{{-- {{ route('indicador.nuevos.01.print') }} --}}
+                                <button type="button" class="btn btn-orange-0 btn-xs" onclick="printer()"
+                                    title='IMPRIMIR'><i class="fa fa-print"></i></button>
+
                             </div>
-                            <h3 class="card-title text-white">Porcentaje De Estudiantes Matriculados En Educación Básica
+                            <h3 class="card-title text-white">Número de estudiantes matriculados en Educación Básica
                             </h3>
                         </div>
                         <div class="card-body pb-0">
                             <div class="form-group row align-items-center vh-5">
                                 <div class="col-lg-5 col-md-5 col-sm-5">
-                                    <h5 class="page-title font-12">{{ $actualizado }}</h5>
+                                    <h5 class="page-title font-12">SIAGIE - MINEDU, {{ $actualizado }}</h5>
                                 </div>
                                 <div class="col-lg-1 col-md-1 col-sm-1  ">
                                     <select id="anio" name="anio" class="form-control btn-xs font-11"
-                                        onchange="cargartarjetas();">
+                                        onchange="cargarCards();">
                                         <option value="0">AÑO</option>
                                         @foreach ($anios as $item)
                                             <option value="{{ $item->id }}"
-                                                {{ $item->anio == date('Y') ? 'selected' : '' }}>
+                                                {{ $item->anio == $aniomax ? 'selected' : '' }}>
                                                 {{ $item->anio }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-sm-2">
                                     <select id="provincia" name="provincia" class="form-control btn-xs font-11"
-                                        onchange="cargartarjetas();">
+                                        onchange="cargarDistritos();cargarCards();">
                                         <option value="0">PROVINCIA</option>
-                                        @foreach ($provincias as $item)
-                                            <option value="{{ $item->id }}"> {{ $item->nombre }}</option>
+                                        @foreach ($provincia as $item)
+                                            <option value="{{ $item->id }}">
+                                                {{ $item->nombre }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-sm-2">
                                     <select id="distrito" name="distrito" class="form-control btn-xs font-11"
-                                        onchange="cargartarjetas();">
+                                        onchange="cargarCards();">
                                         <option value="0">DISTRITO</option>
-                                        @foreach ($distritos as $item)
-                                            <option value="{{ $item->id }}">{{ $item->nombre }}
-                                            </option>
-                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-sm-2">
-                                    <select id="tipogestions" name="tipogestion" class="form-control btn-xs font-11"
-                                        onchange="cargartarjetas();">
+                                    <select id="gestion" name="gestion" class="form-control btn-xs font-11"
+                                        onchange="cargarCards();">
                                         <option value="0">TIPO DE GESTIÓN</option>
                                         <option value="12">PUBLICA</option>
                                         <option value="3">PRIVADA</option>
@@ -95,7 +96,7 @@
             <!--Widget-4 -->
             <div class="row">
                 <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card-box">
+                    <div class="card-box border border-plomo-0">
                         <div class="media">
                             <div class="text-center">
                                 <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
@@ -104,20 +105,18 @@
                             <div class="media-body align-self-center">
                                 <div class="text-right">
                                     <h4 class="font-20 my-0 font-weight-bold">
-                                        <span data-plugin="counterup">
-                                            {{ number_format($info['se'], 0) }}
-                                        </span>
+                                        <span data-plugin="counterup" id="basico"></span>
                                     </h4>
                                     <p class="mb-0 mt-1 text-truncate">Matriculados</p>
                                 </div>
                             </div>
                         </div>
                         <div class="mt-0 font-9">
-                            <h6 class="">Avance <span class="float-right">99.1%</span></h6>
+                            <h6 class="">Avance <span class="float-right" id="ibasico">0%</span></h6>
                             <div class="progress progress-sm m-0">
-                                <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="60"
-                                    aria-valuemin="0" aria-valuemax="100" style="width: 99.1%">
-                                    <span class="sr-only">60% Complete</span>
+                                <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="90"
+                                    aria-valuemin="0" aria-valuemax="100" style="width: 100%" id="bbasico">
+                                    <span class="sr-only">0% Complete</span>
                                 </div>
                             </div>
                         </div>
@@ -126,7 +125,7 @@
                 </div>
 
                 <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card-box">
+                    <div class="card-box border border-plomo-0">
                         <div class="media">
                             <div class="text-center">
                                 <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
@@ -135,20 +134,20 @@
                             <div class="media-body align-self-center">
                                 <div class="text-right">
                                     <h4 class="font-20 my-0 font-weight-bold">
-                                        <span data-plugin="counterup">
-                                            {{ number_format($info['le'], 0) }}
-                                        </span>
+                                        <span data-plugin="counterup" id="ebr"></span>
                                     </h4>
-                                    <p class="mb-0 mt-1 text-truncate">Matricula EBR </p>
+                                    <p class="mb-0 mt-1 text-truncate">
+                                        <a href="{{ route('matriculageneral.ebr.principal') }}" title="Ir a Matricula EBR">Matricula EBR</a>
+                                    </p>
                                 </div>
                             </div>
                         </div>
                         <div class="mt-0 font-9">
-                            <h6 class="">Avance <span class="float-right">99.1%</span></h6>
+                            <h6 class="">Avance <span class="float-right" id="iebr">0%</span></h6>
                             <div class="progress progress-sm m-0">
                                 <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="60"
-                                    aria-valuemin="0" aria-valuemax="100" style="width: 99.1%">
-                                    <span class="sr-only">60% Complete</span>
+                                    aria-valuemin="0" aria-valuemax="100" style="width: 100%" id="bebr">
+                                    <span class="sr-only">0% Complete</span>
                                 </div>
                             </div>
                         </div>
@@ -157,7 +156,7 @@
                 </div>
 
                 <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card-box">
+                    <div class="card-box border border-plomo-0">
                         <div class="media">
                             <div class="text-center">
                                 <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
@@ -166,20 +165,20 @@
                             <div class="media-body align-self-center">
                                 <div class="text-right">
                                     <h4 class="font-20 my-0 font-weight-bold">
-                                        <span data-plugin="counterup">
-                                            {{ number_format($info['tm'], 0) }}
-                                        </span>
+                                        <span data-plugin="counterup" id="ebe"></span>
                                     </h4>
-                                    <p class="mb-0 mt-1 text-truncate">Matricula EBE</p>
+                                    <p class="mb-0 mt-1 text-truncate">
+                                        <a href="{{ route('matriculageneral.ebe.principal') }}" title="Ir a Matricula EBE">Matricula EBE</a>
+                                    </p>
                                 </div>
                             </div>
                         </div>
                         <div class="mt-0 font-9">
-                            <h6 class="">Avance <span class="float-right">99.1%</span></h6>
+                            <h6 class="">Avance <span class="float-right" id="iebe">0%</span></h6>
                             <div class="progress progress-sm m-0">
                                 <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="60"
-                                    aria-valuemin="0" aria-valuemax="100" style="width: 99.1%">
-                                    <span class="sr-only">60% Complete</span>
+                                    aria-valuemin="0" aria-valuemax="100" style="width: 100%" id="bebe">
+                                    <span class="sr-only">0% Complete</span>
                                 </div>
                             </div>
                         </div>
@@ -188,7 +187,7 @@
                 </div>
 
                 <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card-box">
+                    <div class="card-box border border-plomo-0">
                         <div class="media">
                             <div class="text-center">
                                 <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
@@ -197,20 +196,20 @@
                             <div class="media-body align-self-center">
                                 <div class="text-right">
                                     <h4 class="font-20 my-0 font-weight-bold">
-                                        <span data-plugin="counterup">
-                                            {{ number_format($info['do'], 0) }}
-                                        </span>
+                                        <span data-plugin="counterup" id="eba"></span>
                                     </h4>
-                                    <p class="mb-0 mt-1 text-truncate">Matricula EBA</p>
+                                    <p class="mb-0 mt-1 text-truncate">
+                                        <a href="{{ route('matriculageneral.eba.principal') }}"title="Ir a Matricula EBA">Matricula EBA</a>
+                                    </p>
                                 </div>
                             </div>
                         </div>
                         <div class="mt-0 font-9">
-                            <h6 class="">Avance <span class="float-right">0%</span></h6>
+                            <h6 class="">Avance <span class="float-right" id="ieba">0%</span></h6>
                             <div class="progress progress-sm m-0">
-                                <div class="progress-bar bg-warning-0" role="progressbar" aria-valuenow="60"
-                                    aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-                                    <span class="sr-only">60% Complete</span>
+                                <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="60"
+                                    aria-valuemin="0" aria-valuemax="100" style="width: 100%" id="beba">
+                                    <span class="sr-only">0% Complete</span>
                                 </div>
                             </div>
                         </div>
@@ -224,60 +223,34 @@
 
                 <div class="col-lg-6">
                     <div class="card card-border border border-plomo-0">
-                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2" style="height: 4rem">
-                            <div class="card-widgets">
-                                {{-- <a href="javascript:void(0)" class="waves-effect waves-light"><i
-                                        class=" mdi mdi-download text-orange-0"></i></a> --}}
-
-                                <a href="javascript:void(0)" class="waves-effect waves-light" data-toggle="modal"
-                                    data-target="#myModal"><i class="mdi mdi-information text-orange-0"></i></a>
-                            </div>
-                            <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11">
-                                Evolución de la Matricula educativa en educación básica, segun periodo 2019-2023 </h3>
+                        <div class="card-header border-success-0 bg-transparent p-0">
+                            {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
                         </div>
                         <div class="card-body p-0">
-                            <figure class="highcharts-figure p-0">
-                                <div id="sganal1" style="height: 15rem"></div>
-                                <p class="highcharts-description d-none">
-                                    Pie chart showing a hollow semi-circle. This is a compact
-                                    visualization,
-                                    often used in dashboards.
-                                </p>
+                            <figure class="highcharts-figure p-0 m-0">
+                                <div id="anal1" style="height: 20rem"></div>
                             </figure>
-                            <div class="font-weight-bold text-muted ml-2 mr-2" style="font-size:9px">
-                                Fuente:
-                                <span class="float-right">Actualizado:</span>
-                            </div>
+                            {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                <span class="anal1-fuente">Fuente:</span>
+                                <span class="float-right anal1-fecha">Actualizado:</span>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
 
                 <div class="col-lg-6">
                     <div class="card card-border border border-plomo-0">
-                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2" style="height: 4rem">
-                            <div class="card-widgets">
-                                {{-- <a href="javascript:void(0)" class="waves-effect waves-light"><i
-                                        class=" mdi mdi-download text-orange-0"></i></a> --}}
-
-                                <a href="javascript:void(0)" class="waves-effect waves-light" data-toggle="modal"
-                                    data-target="#myModal"><i class="mdi mdi-information text-orange-0"></i></a>
-                            </div>
-                            <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11">
-                                Matricula educativa acumulada mensual en educación básica </h3>
+                        <div class="card-header border-success-0 bg-transparent p-0">
+                            {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
                         </div>
                         <div class="card-body p-0">
-                            {{-- <div id="container" ></div> --}}
-                            <figure class="highcharts-figure p-0">
-                                <div id="sganal2" style="height: 15rem"></div>
-                                <p class="highcharts-description d-none">
-                                    Pie chart showing a hollow semi-circle. This is a compact
-                                    visualization,
-                                    often used in dashboards.
-                                </p>
+                            <figure class="highcharts-figure p-0 m-0">
+                                <div id="anal2" style="height: 20rem"></div>
                             </figure>
-                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">Fuente:
-                                <span class="float-right">Actualizado:</span>
-                            </div>
+                            {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                <span class="anal2-fuente">Fuente:</span>
+                                <span class="float-right anal2-fecha">Actualizado:</span>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -287,59 +260,33 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="card card-border border border-plomo-0">
-                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2" style="height: 4rem">
-                            <div class="card-widgets">
-                                {{-- <a href="javascript:void(0)" class="waves-effect waves-light"><i
-                                        class=" mdi mdi-download text-orange-0"></i></a> --}}
-
-                                <a href="javascript:void(0)" class="waves-effect waves-light" data-toggle="modal"
-                                    data-target="#myModal"><i class="mdi mdi-information text-orange-0"></i></a>
-                            </div>
-                            <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11">
-                                Estudiantes Matriculados Según Sexo</h3>
+                        <div class="card-header border-success-0 bg-transparent p-0">
+                            {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
                         </div>
                         <div class="card-body p-0">
-                            {{-- <div id="container" ></div> --}}
-                            <figure class="highcharts-figure p-0">
-                                <div id="sganal3" style="height: 15rem"></div>
-                                <p class="highcharts-description d-none">
-                                    Pie chart showing a hollow semi-circle. This is a compact
-                                    visualization,
-                                    often used in dashboards.
-                                </p>
+                            <figure class="highcharts-figure p-0 m-0">
+                                <div id="anal3" style="height: 20rem"></div>
                             </figure>
-                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">Fuente:
-                                <span class="float-right">Actualizado:</span>
-                            </div>
+                            {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                <span class="anal3-fuente">Fuente:</span>
+                                <span class="float-right anal3-fecha">Actualizado:</span>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="card card-border border border-plomo-0">
-                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2" style="height: 4rem">
-                            <div class="card-widgets">
-                                {{-- <a href="javascript:void(0)" class="waves-effect waves-light"><i
-                                        class=" mdi mdi-download text-orange-0"></i></a> --}}
-
-                                <a href="javascript:void(0)" class="waves-effect waves-light" data-toggle="modal"
-                                    data-target="#myModal"><i class="mdi mdi-information text-orange-0"></i></a>
-                            </div>
-                            <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11">
-                                Estudiantes Matriculados Según Área Geográfica</h3>
+                        <div class="card-header border-success-0 bg-transparent p-0">
+                            {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
                         </div>
                         <div class="card-body p-0">
-                            {{-- <div id="container" ></div> --}}
-                            <figure class="highcharts-figure p-0">
-                                <div id="sganal4" style="height: 15rem"></div>
-                                <p class="highcharts-description d-none">
-                                    Pie chart showing a hollow semi-circle. This is a compact
-                                    visualization,
-                                    often used in dashboards.
-                                </p>
+                            <figure class="highcharts-figure p-0 m-0">
+                                <div id="anal4" style="height: 20rem"></div>
                             </figure>
-                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">Fuente:
-                                <span class="float-right">Actualizado: </span>
-                            </div>
+                            {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                <span class="anal4-fuente">Fuente:</span>
+                                <span class="float-right anal4-fecha">Actualizado:</span>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -350,130 +297,26 @@
 
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="card">
-                        {{-- <div class="card-header">
-                            <h3 class="card-title">Bordered Table</h3>
-                        </div> --}}
-                        <div class="card-body">
+                    <div class="card card-border border border-plomo-0">
+                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                            <div class="card-widgets">
+                                <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
+                                        class="fa fa-file-excel"></i> Descargar</button>
+                            </div>
+                            <h3 class="text-black font-14">Avance de la matricula mensual según unidad de gestion educativa
+                                local</h3>
+                        </div>
+                        <div class="card-body pt-0">
                             <div class="row">
                                 <div class="col-12">
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered mb-0">
-                                            <thead>
-                                                <tr class="table-secondary">
-                                                    <th>UGEL</th>
-                                                    <th>META</th>
-                                                    <th>ENE</th>
-                                                    <th>FEB</th>
-                                                    <th>MAZ</th>
-                                                    <th>ABR</th>
-                                                    <th>MAY</th>
-                                                    <th>JUN</th>
-                                                    <th>JUL</th>
-                                                    <th>AGO</th>
-                                                    <th>SET</th>
-                                                    <th>OCT</th>
-                                                    <th>NOV</th>
-                                                    <th>DIC</th>
-                                                    <th>TOTAL</th>
-                                                    <th>AVANCE</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>UGEL ATALAYA</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>UGEL CORONEL PORTILLA</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>UGEL PADREA ABAD</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>UGEL PURUS</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr class="table-secondary">
-                                                    <td>TOTAL</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                    <div class="table-responsive" id="vtabla1">
                                     </div>
-
                                 </div>
                             </div>
+                            {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                <span class="float-left vtabla1-fuente">Fuente:</span>
+                                <span class="float-right vtabla1-fecha">Actualizado:</span>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -481,295 +324,28 @@
 
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="card">
-                        {{-- <div class="card-header">
-                            <h3 class="card-title">Bordered Table</h3>
-                        </div> --}}
-                        <div class="card-body">
+                    <div class="card card-border border border-plomo-0">
+                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                            <div class="card-widgets">
+                                <button type="button" class="btn btn-primary btn-xs"
+                                    onclick="cargarTablaNivel('tabla2', 0)" title='Actualizar Tabla'><i
+                                        class=" fas fa-history"></i> Actualizar</button>
+                                <button type="button" class="btn btn-success btn-xs" onclick="descargar2()"><i
+                                        class="fa fa-file-excel"></i> Descargar</button>
+                            </div>
+                            <h3 class="text-black font-14">Avance de la matricula mensual según nivel y modalidad</h3>
+                        </div>
+                        <div class="card-body pt-0">
                             <div class="row">
                                 <div class="col-12">
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered mb-0">
-                                            <thead>
-                                                <tr class="table-secondary">
-                                                    <th>MODALIDAD/UGEL</th>
-                                                    <th>META</th>
-                                                    <th>ENE</th>
-                                                    <th>FEB</th>
-                                                    <th>MAZ</th>
-                                                    <th>ABR</th>
-                                                    <th>MAY</th>
-                                                    <th>JUN</th>
-                                                    <th>JUL</th>
-                                                    <th>AGO</th>
-                                                    <th>SET</th>
-                                                    <th>OCT</th>
-                                                    <th>NOV</th>
-                                                    <th>DIC</th>
-                                                    <th>TOTAL</th>
-                                                    <th>AVANCE</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr class="table-warning">
-                                                    <td>EBA</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Basica Alternativa Avanzado</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Basica Alternativa Avanzado inicial o intermedio</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr class="table-warning">
-                                                    <td>EBE</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Basica Alternativa Avanzado</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Basica Alternativa Avanzado</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Basica Alternativa Avanzado</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr class="table-warning">
-                                                    <td>EBR</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Basica Alternativa Avanzado</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Basica Alternativa Avanzado</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Basica Alternativa Avanzado</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Basica Alternativa Avanzado</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Basica Alternativa Avanzado</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-
-                                                <tr class="table-secondary">
-                                                    <td>TOTAL</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                    <div class="table-responsive" id="vtabla2">
                                     </div>
-
                                 </div>
                             </div>
+                            {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                <span class="float-left vtabla2-fuente">Fuente:</span>
+                                <span class="float-right vtabla2-fecha">Actualizado:</span>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -780,33 +356,130 @@
 
 @section('js')
     <script type="text/javascript">
+        var ugel_select = 0;
         $(document).ready(function() {
-            panelGraficas('sganal1', 1);
-            panelGraficas('sganal2', 2);
-            panelGraficas('sganal3', 3);
-            panelGraficas('sganal4', 3);
+            Highcharts.setOptions({
+                lang: {
+                    thousandsSep: ","
+                }
+            });
+            cargarDistritos();
+            cargarCards();
         });
 
-        function panelGraficas(div, tipo) {
+        function cargarCards() {
             $.ajax({
-                url: "{{ route('panelcontrol.educacion.graficas') }}",
+                url: "{{ route('indicador.nuevos.01.head') }}",
                 data: {
-                    'div': div,
+                    "anio": $('#anio').val(),
+                    "provincia": $('#provincia').val(),
+                    "distrito": $('#distrito').val(),
+                    "gestion": $('#gestion').val(),
                 },
                 type: "GET",
                 dataType: "JSON",
                 success: function(data) {
-                    if (tipo == 1) {
+                    $('#basico').text(data.valor1);
+                    $('#ebr').text(data.valor2);
+                    $('#ebe').text(data.valor3);
+                    $('#eba').text(data.valor4);
+                    $('#ibasico').text(data.ind1 + '%');
+                    $('#iebr').text(data.ind2 + '%');
+                    $('#iebe').text(data.ind3 + '%');
+                    $('#ieba').text(data.ind4 + '%');
+                    //$('#bbasico').css('width','100px');
+                    $('#bbasico').css('width', data.ind1 + '%')
+                        .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
+                        .addClass(data.ind1 > 84 ? 'bg-success-0' : (data.ind1 > 49 ? 'bg-orange-0' :
+                            'bg-warning-0'));
+                    $('#bebr').css('width', data.ind2 + '%').removeClass(
+                            'bg-success-0 bg-orange-0 bg-warning-0')
+                        .addClass(data.ind2 > 84 ? 'bg-success-0' : (data.ind2 > 49 ? 'bg-orange-0' :
+                            'bg-warning-0'));
+                    $('#bebe').css('width', data.ind3 + '%').removeClass(
+                            'bg-success-0 bg-orange-0 bg-warning-0')
+                        .addClass(data.ind3 > 84 ? 'bg-success-0' : (data.ind3 > 49 ? 'bg-orange-0' :
+                            'bg-warning-0'));
+                    $('#beba').css('width', data.ind4 + '%').removeClass(
+                            'bg-success-0 bg-orange-0 bg-warning-0')
+                        .addClass(data.ind4 > 84 ? 'bg-success-0' : (data.ind4 > 49 ? 'bg-orange-0' :
+                            'bg-warning-0'));
+                },
+                erro: function(jqXHR, textStatus, errorThrown) {
+                    console.log("ERROR GRAFICA 1");
+                    console.log(jqXHR);
+                },
+            });
+
+            panelGraficas('anal1');
+            panelGraficas('anal2');
+            panelGraficas('anal3');
+            panelGraficas('anal4');
+            panelGraficas('tabla1');
+            panelGraficas('tabla2');
+        }
+
+        function panelGraficas(div) {
+            $.ajax({
+                url: "{{ route('indicador.nuevos.01.tabla') }}",
+                data: {
+                    'div': div,
+                    "anio": $('#anio').val(),
+                    "provincia": $('#provincia').val(),
+                    "distrito": $('#distrito').val(),
+                    "gestion": $('#gestion').val(),
+                },
+                type: "GET",
+                dataType: "JSON",
+                beforeSend: function() {
+                    if (div == "tabla1") {
+                        $('#v' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "tabla2") {
+                        $('#v' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else {
+                        $('#' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    }
+                },
+                success: function(data) {
+                    if (div == "anal1") {
                         gAnidadaColumn(div,
-                            data.info.categoria,
-                            data.info.series,
-                            '',
-                            ''
+                            data.info.categoria, data.info.series, '',
+                            'Número de estudiantes matriculados en educación básica, periodo 2018-2023',
+                            data.info.maxbar
                         );
-                    } else if (tipo == 2) {
-                        gLineaBasica(div, data.data, '', '', '');
-                    } else if (tipo == 3) {
-                        gPie(div, data.puntos, '', '', '');
+                        $('.anal1-fuente').html('Fuente: ' + data.reg.fuente);
+                        $('.anal1-fecha').html('Actualizado: ' + data.reg.fecha);
+                    } else if (div == "anal2") {
+                        gLineaBasica(div, data.info, '',
+                            'Matricula educativa acumulada mensual en educación básica', '');
+                        $('.anal2-fuente').html('Fuente: ' + data.reg.fuente);
+                        $('.anal2-fecha').html('Actualizado: ' + data.reg.fecha);
+                    } else if (div == "anal3") {
+                        gPie2(div, data.info, '', 'Numero de estudiantes matriculados según sexo', '');
+                        $('.anal3-fuente').html('Fuente: ' + data.reg.fuente);
+                        $('.anal3-fecha').html('Actualizado: ' + data.reg.fecha);
+                    } else if (div == "anal4") {
+                        gPie(div, data.info, '', 'Numero de estudiantes matriculados según área geográfica',
+                            '');
+                        $('.anal4-fuente').html('Fuente: ' + data.reg.fuente);
+                        $('.anal4-fecha').html('Actualizado: ' + data.reg.fecha);
+                    } else if (div == "tabla1") {
+                        $('#vtabla1').html(data.excel);
+                        $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
+                        $('.vtabla1-fecha').html('Actualizado: ' + data.reg.fecha);
+                        $('#tabla1').DataTable({
+                            responsive: true,
+                            autoWidth: false,
+                            ordered: true,
+                            searching: false,
+                            bPaginate: false,
+                            info: false,
+                            language: table_language,
+                        });
+                    } else if (div == "tabla2") {
+                        $('#vtabla2').html(data.excel);
+                        $('.vtabla2-fuente').html('Fuente: ' + data.reg.fuente);
+                        $('.vtabla2-fecha').html('Actualizado: ' + data.reg.fecha);
                     }
 
                 },
@@ -815,6 +488,89 @@
                     console.log(jqXHR);
                 },
             });
+        }
+
+        function cargarTablaNivel(div, ugel) {
+            $.ajax({
+                url: "{{ route('indicador.nuevos.01.tabla') }}",
+                data: {
+                    'div': div,
+                    "anio": $('#anio').val(),
+                    "provincia": $('#provincia').val(),
+                    "distrito": $('#distrito').val(),
+                    "gestion": $('#gestion').val(),
+                    "ugel": ugel
+                },
+                type: "GET",
+                dataType: "JSON",
+                beforeSend: function() {
+                    ugel_select = ugel;
+                    if (div == "tabla1") {
+                        $('#v' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "tabla2") {
+                        $('#v' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else {
+                        $('#' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    }
+                },
+                success: function(data) {
+                    if (div == "tabla2") {
+                        $('#vtabla2').html(data.excel);
+                    }
+                },
+                erro: function(jqXHR, textStatus, errorThrown) {
+                    console.log("ERROR GRAFICA 1");
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cargarDistritos() {
+            $.ajax({
+                url: "{{ route('ubigeo.distrito.25', '') }}/" + $('#provincia').val(),
+                type: 'GET',
+                success: function(data) {
+                    $("#distrito option").remove();
+                    var options = '<option value="0">DISTRITO</option>';
+                    $.each(data, function(index, value) {
+                        //ss = (id == value.id ? "selected" : "");
+                        options += "<option value='" + value.id + "'>" + value.nombre +
+                            "</option>"
+                    });
+                    $("#distrito").append(options);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function descargar1() {
+            window.open("{{ url('/') }}/INDICADOR/Home/01/Excel/tabla1/" + $('#anio').val() + "/" + $('#provincia')
+                .val() + "/" + $('#distrito').val() + "/" + $('#gestion').val() + "/0");
+        }
+
+        function descargar2() {
+            window.open("{{ url('/') }}/INDICADOR/Home/01/Excel/tabla2/" + $('#anio').val() + "/" + $('#provincia')
+                .val() + "/" + $('#distrito').val() + "/" + $('#gestion').val() + "/" + ugel_select);
+        }
+
+        function verpdf(id) {
+            window.open("{{ route('mantenimiento.indicadorgeneral.exportar.pdf', '') }}/" + id);
+        };
+
+        function printer() {
+            window.print();
+            // var escalaPersonalizada = 0.6; // Cambia esto al valor de escala deseado
+            // var style = document.createElement('style');
+            // style.type = 'text/css';
+            // style.media = 'print';
+            // // style.innerHTML = '@page { size: auto; margin: 0mm; transform: scale(' + escalaPersonalizada +
+            // //     '); } @media print { body { transform: scale(' + escalaPersonalizada + '); } }';
+            // style.innerHTML = '@page { transform: scale(' + escalaPersonalizada +
+            //     '); } @media print { body { transform: scale(' + escalaPersonalizada + '); } }';
+            // document.head.appendChild(style);
+            // window.print();
         }
 
         function gSimpleColumn(div, datax, titulo, subtitulo, tituloserie) {
@@ -887,18 +643,21 @@
                     text: titulo, //'Browser market shares in January, 2018'
                 },
                 subtitle: {
-                    enabled: false,
-                    //text: subtitulo,
+                    enabled: true,
+                    text: subtitulo,
                 },
                 tooltip: {
                     //pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
-                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
+                    pointFormat: '<b>{point.percentage:.1f}% ({point.y:,0f})</b>',
+                    style: {
+                        fontSize: '10px'
+                    }
                 },
                 accessibility: {
                     point: {
                         valueSuffix: '%'
                     }
-                },
+                }, //labels:{style:{fontSize:'10px'},}
                 plotOptions: {
                     pie: {
                         allowPointSelect: true,
@@ -906,12 +665,23 @@
                         colors,
                         dataLabels: {
                             enabled: true,
+                            // distance: -20,
                             //format: '<b>{point.name}</b>: {point.percentage:.1f} %',
                             //format: '{point.percentage:.1f}% ({point.y})',
                             format: '{point.y:,0f} ( {point.percentage:.1f}% )',
-                            connectorColor: 'silver'
-                        }
+                            // format: '{point.percentage:.1f}%',
+                            connectorColor: 'silver',
+                        },
                     }
+                },
+                legend: {
+                    itemStyle: {
+                        //color: "#333333",
+                        cursor: "pointer",
+                        fontSize: "10px",
+                        fontWeight: "normal",
+                        textOverflow: "ellipsis"
+                    },
                 },
                 series: [{
                     innerSize: '50%',
@@ -920,7 +690,75 @@
                     data: datos,
                 }],
                 exporting: {
-                    enabled: false
+                    enabled: true
+                },
+                credits: false,
+            });
+        }
+
+        function gPie2(div, datos, titulo, subtitulo, tituloserie) {
+            // const colors = ["#5eb9aa", "#f5bd22", "#e65310"];
+            const colors = ['#5eb9aa', '#ef5350', '#f5bd22', '#ef5350'];
+            Highcharts.chart(div, {
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title: {
+                    enabled: false,
+                    text: titulo, //'Browser market shares in January, 2018'
+                },
+                subtitle: {
+                    enabled: true,
+                    text: subtitulo,
+                },
+                tooltip: {
+                    //pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
+                    pointFormat: '<b>{point.percentage:.1f}% ({point.y:,0f})</b>',
+                    style: {
+                        fontSize: '10px'
+                    }
+                },
+                accessibility: {
+                    point: {
+                        valueSuffix: '%'
+                    }
+                }, //labels:{style:{fontSize:'10px'},}
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        colors,
+                        dataLabels: {
+                            enabled: true,
+                            // distance: -20,
+                            //format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            //format: '{point.percentage:.1f}% ({point.y})',
+                            format: '{point.y:,0f} ( {point.percentage:.1f}% )',
+                            // format: '{point.percentage:.1f}%',
+                            connectorColor: 'silver',
+                        },
+                    }
+                },
+                legend: {
+                    itemStyle: {
+                        //color: "#333333",
+                        cursor: "pointer",
+                        fontSize: "10px",
+                        fontWeight: "normal",
+                        textOverflow: "ellipsis"
+                    },
+                },
+                series: [{
+                    innerSize: '50%',
+                    showInLegend: true,
+                    //name: 'Share',
+                    data: datos,
+                }],
+                exporting: {
+                    enabled: true
                 },
                 credits: false,
             });
@@ -1051,10 +889,20 @@
                     title: {
                         text: titulovetical
                     },
+                    labels: {
+                        style: {
+                            fontSize: '10px'
+                        }
+                    },
                     min: 0,
                 },
                 xAxis: {
                     categories: data.cat,
+                    labels: {
+                        style: {
+                            fontSize: '10px'
+                        }
+                    }
                     /* accessibility: {
                         rangeDescription: 'Range: 2010 to 2017'
                     } */
@@ -1068,6 +916,10 @@
                     series: {
                         dataLabels: {
                             enabled: true,
+                            style: {
+                                fontSize: '10px',
+                                fontWeight: 'normal',
+                            }
                         },
                         /* label: {
                             connectorAllowed: false
@@ -1095,14 +947,156 @@
                     }]
                 },
                 exporting: {
-                    enabled: false,
+                    enabled: true,
                 },
                 credits: false,
 
             });
         }
 
-        function gAnidadaColumn(div, categoria, series, titulo, subtitulo) {
+        function gAnidadaColumn(div, categoria, series, titulo, subtitulo, maxBar) {
+            var rango = categoria.length;
+            var posPorcentaje = rango * 2 + 1;
+            var cont = 0;
+            var porMaxBar = maxBar * 0.5;
+            Highcharts.chart(div, {
+                chart: {
+                    zoomType: 'xy',
+                },
+                colors: ['#5eb9aa', '#ef5350', '#f5bd22', '#ef5350'],
+                title: {
+                    text: titulo, //'Browser market shares in January, 2018'
+                },
+                subtitle: {
+                    text: subtitulo,
+                    style: {
+                        fontSize: '11px',
+                    }
+                },
+                xAxis: [{
+                    categories: categoria,
+                    crosshair: true,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    }
+                }],
+                yAxis: [{ // Primary yAxis
+                        max: maxBar > 0 ? maxBar + porMaxBar : null,
+                        labels: {
+                            enabled: true,
+                            style: {
+                                //color: Highcharts.getOptions().colors[2],
+                                fontSize: '10px',
+                            }
+                        },
+                        title: {
+                            enabled: false,
+                        },
+                        /* labels: {
+                            //format: '{value}°C',
+                            //style: {
+                            //    color: Highcharts.getOptions().colors[2]
+                            //}
+                        }, */
+                        title: {
+                            text: 'Matriculados',
+                            style: {
+                                //color: Highcharts.getOptions().colors[2],
+                                fontSize: '11px',
+                            }
+                        },
+                        //opposite: true,
+                    }, { // Secondary yAxis
+                        gridLineWidth: 0, //solo indica el tamaño de la linea
+                        labels: {
+                            enabled: false,
+                        },
+                        title: {
+                            enabled: false,
+                        },
+                        /* title: {
+                            //text: 'Rainfall',
+                            text: '%Indicador',
+                            //style: {
+                            //    color: Highcharts.getOptions().colors[0]
+                            //}
+                        }, */
+                        /* labels: {
+                            //format: '{value} mm',
+                            format: '{value} %',
+                            //style: {
+                            //   color: Highcharts.getOptions().colors[0]
+                            //}
+                        }, */
+                        //min: -200,
+                        min: 0,
+                        max: 120,
+                        opposite: true,
+                    },
+                    /* { // Tertiary yAxis
+                        gridLineWidth: 0,
+                        title: {
+                            text: 'Sea-Level Pressure',
+                            style: {
+                                color: Highcharts.getOptions().colors[1]
+                            }
+                        },
+                        labels: {
+                            format: '{value} mb',
+                            style: {
+                                color: Highcharts.getOptions().colors[1]
+                            }
+                        },
+                        opposite: true
+                    } */
+                ],
+                series: series,
+                plotOptions: {
+                    /* columns: {
+                        stacking: 'normal'
+                    }, */
+                    series: {
+                        showInLegend: true,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            //format: '{point.y:,.0f}',
+                            //format: '{point.y:.1f}%',
+                            formatter: function() {
+                                if (this.colorIndex == 1)
+                                    return this.y + " %";
+                                else
+                                    return Highcharts.numberFormat(this.y, 0);
+                            },
+                            style: {
+                                fontWeight: 'normal',
+                                fontSize: '10px',
+                            }
+                        },
+                    },
+                },
+                tooltip: {
+                    shared: true,
+                },
+                legend: {
+                    itemStyle: {
+                        //"color": "#333333",
+                        "cursor": "pointer",
+                        "fontSize": "10px",
+                        "fontWeight": "normal",
+                        "textOverflow": "ellipsis"
+                    },
+                },
+                exporting: {
+                    enabled: true
+                },
+                credits: false,
+            });
+        }
+
+        function gAnidadaColumnx(div, categoria, series, titulo, subtitulo) {
             Highcharts.chart(div, {
                 chart: {
                     zoomType: 'xy',
@@ -1233,6 +1227,8 @@
     <!-- optional -->
     <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
+
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 
     {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts-more.js"></script>

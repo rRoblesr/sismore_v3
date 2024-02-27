@@ -24,7 +24,7 @@ class PadronWebRepositorio
     {
         $query = PadronWeb::select(DB::raw('count(edu_padronweb.institucioneducativa_id) as conteo'))
             ->join('edu_institucioneducativa as v2', 'v2.id', '=', 'edu_padronweb.institucioneducativa_id')
-            ->join('par_centropoblado as v3', 'v3.id', '=', 'v2.CentroPoblado_id')
+            ->join('edu_centropoblado as v3', 'v3.id', '=', 'v2.CentroPoblado_id')
             ->join('par_ubigeo as v4', 'v4.id', '=', 'v3.Ubigeo_id')
             ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.dependencia')
             ->join('edu_tipogestion as v6', 'v6.id', '=', 'v2.TipoGestion_id')
@@ -61,7 +61,7 @@ class PadronWebRepositorio
     {
         $query = PadronWeb::distinct()->select('v2.codLocal')
             ->join('edu_institucioneducativa as v2', 'v2.id', '=', 'edu_padronweb.institucioneducativa_id')
-            ->join('par_centropoblado as v3', 'v3.id', '=', 'v2.CentroPoblado_id')
+            ->join('edu_centropoblado as v3', 'v3.id', '=', 'v2.CentroPoblado_id')
             ->join('par_ubigeo as v4', 'v4.id', '=', 'v3.Ubigeo_id')
             ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.dependencia')
             ->join('edu_tipogestion as v6', 'v6.id', '=', 'v2.TipoGestion_id')
@@ -666,7 +666,7 @@ class PadronWebRepositorio
     {
         $head = DB::table('edu_padronweb as v1')
             ->join('edu_institucioneducativa as v2', 'v2.id', '=', 'v1.institucioneducativa_id')
-            ->join('par_centropoblado as v3', 'v3.id', '=', 'v2.CentroPoblado_id')
+            ->join('edu_centropoblado as v3', 'v3.id', '=', 'v2.CentroPoblado_id')
             ->join('par_ubigeo as v4', 'v4.id', '=', 'v3.Ubigeo_id')
             ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.dependencia')
             ->join('edu_tipogestion as v6', 'v6.id', '=', 'v2.TipoGestion_id')
@@ -690,7 +690,7 @@ class PadronWebRepositorio
             ->get();
         $body = DB::table('edu_padronweb as v1')
             ->join('edu_institucioneducativa as v2', 'v2.id', '=', 'v1.institucioneducativa_id')
-            ->join('par_centropoblado as v3', 'v3.id', '=', 'v2.CentroPoblado_id')
+            ->join('edu_centropoblado as v3', 'v3.id', '=', 'v2.CentroPoblado_id')
             ->join('par_ubigeo as v4', 'v4.id', '=', 'v3.Ubigeo_id')
             ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.dependencia')
             ->join('edu_tipogestion as v6', 'v6.id', '=', 'v2.TipoGestion_id')
@@ -715,7 +715,7 @@ class PadronWebRepositorio
             ->get();
         $foot = DB::table('edu_padronweb as v1')
             ->join('edu_institucioneducativa as v2', 'v2.id', '=', 'v1.institucioneducativa_id')
-            ->join('par_centropoblado as v3', 'v3.id', '=', 'v2.CentroPoblado_id')
+            ->join('edu_centropoblado as v3', 'v3.id', '=', 'v2.CentroPoblado_id')
             ->join('par_ubigeo as v4', 'v4.id', '=', 'v3.Ubigeo_id')
             ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.dependencia')
             ->join('edu_tipogestion as v6', 'v6.id', '=', 'v2.TipoGestion_id')
@@ -914,7 +914,7 @@ class PadronWebRepositorio
     {
         $query = DB::table('edu_padronweb as v1')
             ->join('edu_institucioneducativa as v2', 'v2.id', '=', 'v1.institucioneducativa_id')
-            ->join('par_centropoblado as v3', 'v3.id', '=', 'v2.centropoblado_id')
+            ->join('edu_centropoblado as v3', 'v3.id', '=', 'v2.centropoblado_id')
             ->join('par_ubigeo as v4', 'v4.id', '=', 'v3.ubigeo_id')
             ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.dependencia')
             ->join('edu_nivelmodalidad as v6', 'v6.id', '=', 'v2.nivelmodalidad_id')

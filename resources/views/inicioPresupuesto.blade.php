@@ -38,8 +38,7 @@
         .centrador {
             position: relative;
             /* width: 400px;
-                                                                                                                                                                                                                        height: 400px; */
-            /* background-color: red; */
+                                                /* background-color: red; */
         }
 
         .imagen {
@@ -70,19 +69,21 @@
         </div> --}}
         <!-- end row -->
         <div class="form-group row align-items-center vh-5">
-            <div class="col-lg-8"><h4 class="page-title">{{$titulo}}</h4></div>
+            <div class="col-lg-8">
+                <h4 class="page-title font-16">{{ $titulo }}</h4>
+            </div>
             <label class="col-lg-1 control-label text-right align-self-end">Año</label>
             <div class="col-lg-1">
-                <select id="anio" name="anio" class="form-control btn-xs" onchange="cargartarjetas();">
+                <select id="anio" name="anio" class="form-control btn-xs font-10" onchange="cargartarjetas();">
                     @foreach ($anios as $item)
-                        <option value="{{ $item->anio }}" {{ $item->anio == date('Y') ? 'selected' : '' }}>
+                        <option value="{{ $item->anio }}" {{ $item->anio == $anio ? 'selected' : '' }}>
                             {{ $item->anio }}
                         </option>
                     @endforeach
                 </select>
             </div>
             <div class="col-lg-2">
-                <select id="articulo" name="articulo" class="form-control btn-xs" onchange="cargartarjetas();">
+                <select id="articulo" name="articulo" class="form-control btn-xs font-10" onchange="cargartarjetas();">
                     <option value="0">ACTIVIDADES Y PROYECTOS</option>
                     <option value="1">PROYECTOS</option>
                     <option value="2">ACTIVIDADES</option>
@@ -100,15 +101,15 @@
                         </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold" title="" id="vh41">
+                                <h4 class="font-18 my-0 font-weight-bold" title="" id="vh41">
                                     <span data-plugin="counterup"></span>
                                 </h4>
-                                <p class="mb-0 mt-1 text-truncate" style="font-size: 14px" id="vp1"></p>
+                                <p class="mb-0 mt-1 text-truncate font-12" id="vp1"></p>
                             </div>
                         </div>
                     </div>
                     <div class="mt-4">
-                        <h6 class="">Ejecución(<span style="font-weight: normal">DEV/PIA</span>)
+                        <h6 class="font-12">Ejecución(<span style="font-weight: normal">DEV/PIA</span>)
                             <span class="float-right" id="vspan1"></span>
                         </h6>
                         <div class="progress progress-sm m-0">
@@ -131,15 +132,15 @@
                         </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold" title="" id="vh42">
+                                <h4 class="font-18 my-0 font-weight-bold" title="" id="vh42">
                                     <span data-plugin="counterup"></span>
                                 </h4>
-                                <p class="mb-0 mt-1 text-truncate" style="font-size: 14px" id="vp2"></p>
+                                <p class="mb-0 mt-1 text-truncate font-12" id="vp2"></p>
                             </div>
                         </div>
                     </div>
                     <div class="mt-4">
-                        <h6 class="">Ejecución(<span style="font-weight: normal">DEV/PIM</span>)
+                        <h6 class="font-12">Ejecución(<span style="font-weight: normal">DEV/PIM</span>)
                             <span class="float-right" id="vspan2"></span>
                         </h6>
                         <div class="progress progress-sm m-0">
@@ -162,15 +163,15 @@
                         </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold" title="" id="vh43">
+                                <h4 class="font-18 my-0 font-weight-bold" title="" id="vh43">
                                     <span data-plugin="counterup"></span>
                                 </h4>
-                                <p class="mb-0 mt-1 text-truncate" style="font-size: 14px" id="vp3"></p>
+                                <p class="mb-0 mt-1 text-truncate font-12" id="vp3"></p>
                             </div>
                         </div>
                     </div>
                     <div class="mt-4">
-                        <h6 class="">Ejecución(<span style="font-weight: normal">CERT/PIM</span>)
+                        <h6 class="font-12">Ejecución(<span style="font-weight: normal">CERT/PIM</span>)
                             <span class="float-right" id="vspan3"></span>
                         </h6>
                         <div class="progress progress-sm m-0">
@@ -193,15 +194,15 @@
                         </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold" title="" id="vh44">
+                                <h4 class="font-18 my-0 font-weight-bold" title="" id="vh44">
                                     <span data-plugin="counterup"></span>
                                 </h4>
-                                <p class="mb-0 mt-1 text-truncate" style="font-size: 14px" id="vp4"></p>
+                                <p class="mb-0 mt-1 text-truncate font-12" id="vp4"></p>
                             </div>
                         </div>
                     </div>
                     <div class="mt-4">
-                        <h6 class="">Ejecución(<span style="font-weight: normal">DEV/CERT</span>)
+                        <h6 class="font-12">Ejecución(<span style="font-weight: normal">DEV/CERT</span>)
                             <span class="float-right" id="vspan4"></span>
                         </h6>
                         <div class="progress progress-sm m-0">
@@ -221,24 +222,31 @@
 
         <div class="row">
             <div class="col-xl-6">
-                <div class="card card-border card-primary">
-                    <div class="card-header border-primary bg-transparent p-0">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent p-0">
                         <h3 class="card-title text-primary "></h3>
                     </div>
                     <div class="card-body p-0">
                         <div id="anal1" style="min-width:100%;height:600px;margin:0 auto;"></div>
+                        <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                            <span class="float-left" id="span-anal1-fuente">Fuente:</span>
+                            <span class="float-right" id="span-anal1-fecha">Actualizado:</span>
+                        </div>
                         {{--  style="min-width:400px;height:300px;margin:0 auto;" --}}
                     </div>
                 </div>
             </div>
             <div class="col-xl-6">
-                <div class="card card-border card-primary">
-                    <div class="card-header border-primary bg-transparent p-0">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent p-0">
                         <h3 class="card-title text-primary "></h3>
                     </div>
                     <div class="card-body p-0">
                         <div id="anal2" style="min-width:100%;height:600px;margin:0 auto;"></div>
-                        {{--  style="min-width:400px;height:300px;margin:0 auto;" --}}
+                        <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                            <span class="float-left" id="span-anal2-fuente">Fuente:</span>
+                            <span class="float-right" id="span-anal2-fecha">Actualizado:</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -247,24 +255,30 @@
 
         <div class="row">
             <div class="col-xl-6">
-                <div class="card card-border card-primary">
-                    <div class="card-header border-primary bg-transparent p-0">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent p-0">
                         <h3 class="card-title text-primary "></h3>
                     </div>
                     <div class="card-body p-0">
                         <div id="anal3"></div>
-                        {{--  style="min-width:400px;height:300px;margin:0 auto;" --}}
+                        <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                            <span class="float-left" id="span-anal3-fuente">Fuente:</span>
+                            <span class="float-right" id="span-anal3-fecha">Actualizado:</span>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-xl-6">
-                <div class="card card-border card-primary">
-                    <div class="card-header border-primary bg-transparent p-0">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent p-0">
                         <h3 class="card-title text-primary "></h3>
                     </div>
                     <div class="card-body p-0">
                         <div id="anal4"></div>
-                        {{--  style="min-width:400px;height:300px;margin:0 auto;" --}}
+                        <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                            <span class="float-left" id="span-anal4-fuente">Fuente:</span>
+                            <span class="float-right" id="span-anal4-fecha">Actualizado:</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -274,24 +288,30 @@
 
         <div class="row">
             <div class="col-xl-6">
-                <div class="card card-border card-primary">
-                    <div class="card-header border-primary bg-transparent p-0">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent p-0">
                         <h3 class="card-title text-primary "></h3>
                     </div>
                     <div class="card-body p-0">
                         <div id="anal5"></div>
-                        {{--  style="min-width:400px;height:300px;margin:0 auto;" --}}
+                        <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                            <span class="float-left" id="span-anal5-fuente">Fuente:</span>
+                            <span class="float-right" id="span-anal5-fecha">Actualizado:</span>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-xl-6">
-                <div class="card card-border card-primary">
-                    <div class="card-header border-primary bg-transparent p-0">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent p-0">
                         <h3 class="card-title text-primary "></h3>
                     </div>
                     <div class="card-body p-0">
                         <div id="anal6"></div>
-                        {{--  style="min-width:400px;height:300px;margin:0 auto;" --}}
+                        <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                            <span class="float-left" id="span-anal6-fuente">Fuente:</span>
+                            <span class="float-right" id="span-anal6-fecha">Actualizado:</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -300,130 +320,21 @@
 
         <div class="row">
             <div class="col-xl-12">
-                <div class="card card-border card-primary">
-                    <div class="card-header border-primary bg-transparent p-0">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent p-0">
                         <h3 class="card-title text-primary "></h3>
                     </div>
                     <div class="card-body p-0">
                         <div id="anal7"></div>
-                        {{--  style="min-width:400px;height:300px;margin:0 auto;" --}}
+                        <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                            <span class="float-left" id="span-anal7-fuente">Fuente:</span>
+                            <span class="float-right" id="span-anal7-fecha">Actualizado:</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
         </div>
-        {{-- end  row --}}
-
-        {{-- prueba de collapse --}}
-
-        {{-- <!-- Font Awesome -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
-        <!-- Google Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
-        <!-- MDB -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.css" rel="stylesheet" />
-        <style>
-            tr.hide-table-padding td {
-                padding: 0;
-            }
-
-            .expand-button {
-                position: relative;
-            }
-
-            .accordion-toggle .expand-button:after {
-                position: absolute;
-                left: .75rem;
-                top: 50%;
-                transform: translate(0, -50%);
-                content: '-';
-            }
-
-            .accordion-toggle.collapsed .expand-button:after {
-                content: '+';
-            }
-        </style>
-        <div class="row">
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Heading</th>
-                            <th scope="col">Heading</th>
-                            <th scope="col">Heading</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="accordion-toggle collapsed" id="accordion1" data-mdb-toggle="collapse"
-                            data-mdb-parent="#accordion1" href="#collapseOne" aria-controls="collapseOne">
-                            <td class="expand-button"></td>
-                            <td>Cell</td>
-                            <td>Cell</td>
-                            <td>Cell</td>
-
-                        </tr>
-                        <tr class="hide-table-padding">
-                            <td></td>
-                            <td colspan="3">
-                                <div id="collapseOne" class="collapse in p-3">
-                                    <div class="row">
-                                        <div class="col-2">label</div>
-                                        <div class="col-6">value 1</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-2">label</div>
-                                        <div class="col-6">value 2</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-2">label</div>
-                                        <div class="col-6">value 3</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-2">label</div>
-                                        <div class="col-6">value 4</div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="accordion-toggle collapsed" id="accordion2" data-mdb-toggle="collapse"
-                            data-mdb-parent="#accordion2" href="#collapseTwo" aria-controls="collapseTwo">
-                            <td class="expand-button"></td>
-                            <td>Cell</td>
-                            <td>Cell</td>
-                            <td>Cell</td>
-                        </tr>
-                        <tr class="hide-table-padding">
-                            <td></td>
-                            <td colspan="4">
-                                <div id="collapseTwo" class="collapse in p-3">
-                                    <div class="row">
-                                        <div class="col-2">label</div>
-                                        <div class="col-6">value</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-2">label</div>
-                                        <div class="col-6">value</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-2">label</div>
-                                        <div class="col-6">value</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-2">label</div>
-                                        <div class="col-6">value</div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <!-- MDB -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.js"></script> --}}
-        {{-- fin de collapse --}}
-        {{-- </div> --}}
     </div>
 @endsection
 
@@ -514,7 +425,7 @@
                 success: function(data) { //vp1
                     $('#vh41').attr('title', data.card1.pim);
                     $('#vh41 span').text(data.card1.pim.toLocaleString('en-US'));
-                    $('#vp1').text("PIA" + anio);
+                    $('#vp1').text("PIA " + anio);
                     $('#vspan1').text(data.card1.eje + '%');
                     $('#vdiv1').removeClass('bg-danger bg-warning bg-success');
                     $('#vdiv1').addClass(data.card1.eje < 51 ? 'bg-danger' : (data.card1.eje < 76 ?
@@ -525,7 +436,7 @@
 
                     $('#vh42').attr('title', data.card2.pim);
                     $('#vh42 span').text(data.card2.pim.toLocaleString('en-US'));
-                    $('#vp2').text("PIM" + anio);
+                    $('#vp2').text("PIM " + anio);
                     $('#vspan2').text(data.card2.eje + '%');
                     $('#vdiv2').removeClass('bg-danger bg-warning bg-success');
                     $('#vdiv2').addClass(data.card2.eje < 51 ? 'bg-danger' : (data.card2.eje < 76 ?
@@ -536,7 +447,7 @@
 
                     $('#vh43').attr('title', data.card3.pim);
                     $('#vh43 span').text(data.card3.pim.toLocaleString('en-US'));
-                    $('#vp3').text("CERTIFICADO" + anio);
+                    $('#vp3').text("CERTIFICADO " + anio);
                     $('#vspan3').text(data.card3.eje + '%');
                     $('#vdiv3').removeClass('bg-danger bg-warning bg-success');
                     $('#vdiv3').addClass(data.card3.eje < 51 ? 'bg-danger' : (data.card3.eje < 76 ?
@@ -547,7 +458,7 @@
 
                     $('#vh44').attr('title', data.card4.pim);
                     $('#vh44 span').text(data.card4.pim.toLocaleString('en-US'));
-                    $('#vp4').text("DEVENGADO" + anio);
+                    $('#vp4').text("DEVENGADO " + anio);
                     $('#vspan4').text(data.card4.eje + '%');
                     $('#vdiv4').removeClass('bg-danger bg-warning bg-success');
                     $('#vdiv4').addClass(data.card4.eje < 51 ? 'bg-danger' : (data.card4.eje < 76 ?
@@ -596,6 +507,10 @@
                         '',
                         'Porcentaje de ejecución de gastos por gobiernos regionales',
                     );
+                    $('#span-anal1-fuente').text('Fuente: ' + data.reg.fue);
+                    $('#span-anal1-fecha').text('Fecha: ' + data.reg.fec);
+                    $('#span-anal2-fuente').text('Fuente: ' + data.reg.fue);
+                    $('#span-anal2-fecha').text('Fecha: ' + data.reg.fec);
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");
@@ -627,6 +542,8 @@
                         '',
                         'Ranking mensual de la Ejecución de Gastos del Gobierno Regional de Ucayali a nivel nacional',
                         '');
+                    $('#span-anal3-fuente').text('Fuente: ' + data.reg.fue);
+                    $('#span-anal3-fecha').text('Fecha: ' + data.reg.fec);
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 3");
@@ -657,6 +574,8 @@
                         'PIM',
                         '',
                         'Variación mensual del PIM del Pliego del Gobierno Regional de Ucayali', '');
+                    $('#span-anal4-fuente').text('Fuente: ' + data.reg.fue);
+                    $('#span-anal4-fecha').text('Fecha: ' + data.reg.fec);
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 3");
@@ -686,6 +605,8 @@
                         data.info.series,
                         '',
                         'CERTIFICACIÓN mensual del pliego del Gobierno Regional de Ucayali');
+                    $('#span-anal5-fuente').text('Fuente: ' + data.reg.fue);
+                    $('#span-anal5-fecha').text('Fecha: ' + data.reg.fec);
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 5");
@@ -715,6 +636,8 @@
                         data.info.series,
                         '',
                         'DEVENGADO mensual del pliego del Gobierno Regional de Ucayali');
+                    $('#span-anal6-fuente').text('Fuente: ' + data.reg.fue);
+                    $('#span-anal6-fecha').text('Fecha: ' + data.reg.fec);
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 6");
@@ -744,6 +667,8 @@
                         '',
                         'CERTIFICADO y DEVENGADO acumulado mensual del pliego del Gobierno Regional de Ucayali'
                     );
+                    $('#span-anal7-fuente').text('Fuente: ' + data.reg.fue);
+                    $('#span-anal7-fecha').text('Fecha: ' + data.reg.fec);
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 7");
@@ -767,6 +692,9 @@
                 subtitle: {
                     //align:'left',
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 accessibility: {
                     announceNewData: {
@@ -863,6 +791,9 @@
                 subtitle: {
                     //align:'left',
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 accessibility: {
                     announceNewData: {
@@ -960,6 +891,9 @@
                 },
                 subtitle: {
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 xAxis: {
                     type: 'category',
@@ -1059,6 +993,9 @@
                 },
                 subtitle: {
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 tooltip: {
                     //pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
@@ -1134,7 +1071,10 @@
                     text: titulo
                 },
                 subtitle: {
-                    text: subtitulo
+                    text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 xAxis: {
                     categories: categorias,
@@ -1207,10 +1147,18 @@
                     text: titulo
                 },
                 subtitle: {
-                    text: subtitulo
+                    text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 xAxis: {
                     categories: categorias,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                     //categories: ['Arsenal', 'Chelsea', 'Liverpool', 'Manchester United']
                 },
                 yAxis: {
@@ -1218,7 +1166,12 @@
                     title: {
                         text: 'Rainfall (mm)',
                         enabled: false
-                    }
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 tooltip: {
                     pointFormat: '<span style="color:{point.color}">\u25CF</span> Hay: <b>{point.y}</b><br/>',
@@ -1278,10 +1231,18 @@
                 },
                 subtitle: {
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 xAxis: [{
                     categories: categoria,
-                    crosshair: true
+                    crosshair: true,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 }],
                 yAxis: [{ // Primary yAxis
                         max: 2000000000,
@@ -1399,6 +1360,9 @@
                 },
                 subtitle: {
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 xAxis: [{
                     categories: categoria,
@@ -1587,6 +1551,9 @@
                 },
                 subtitle: {
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 xAxis: {
                     categories: categoria,
@@ -1717,16 +1684,29 @@
                     text: titulo
                 },
                 subtitle: {
-                    text: subtitulo
+                    text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 yAxis: {
                     title: {
                         text: titulovetical
                     },
                     min: 0,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 },
                 xAxis: {
                     categories: categoria,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                     /* accessibility: {
                         rangeDescription: 'Range: 2010 to 2017'
                     } */
@@ -1794,6 +1774,9 @@
                 },
                 subtitle: {
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                     /*  'Source: <a ' +
                                             'href="https://en.wikipedia.org/wiki/List_of_continents_and_continental_subregions_by_population"' +
                                             'target="_blank">Wikipedia.org</a>' */
@@ -1804,6 +1787,11 @@
                     title: {
                         text: '', // null
                     },
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                     enabled: false,
                 },
                 yAxis: {
@@ -1812,9 +1800,12 @@
                         text: '', // 'Population (millions)',
                         align: 'high'
                     },
-                    /* labels: {
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        },
                         overflow: 'justify'
-                    } */
+                    }
                 },
                 tooltip: {
                     valueSuffix: ' %'
@@ -1917,6 +1908,9 @@
 
                 subtitle: {
                     text: subtitulo, //'Un descripción de reportes'
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
 
                 mapNavigation: {

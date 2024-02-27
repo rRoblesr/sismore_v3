@@ -30,8 +30,9 @@ class ImporCensoMatriculaController extends Controller
 
     public function importar()
     {
-        $mensaje = "";
-        return view('educacion.ImporCensoMatricula.Importar', compact('mensaje'));
+        $fuente = $this->fuente;
+        return view('educacion.ImporGeneral.Importar', compact('fuente'));
+        //$mensaje = "";return view('educacion.ImporCensoMatricula.Importar', compact('mensaje'));
     }
 
     public function exportar()
@@ -93,7 +94,6 @@ class ImporCensoMatriculaController extends Controller
                         $row['niv_mod'] .
                         $row['ges_dep'] .
                         $row['area_censo'] .
-                        $row['tipoprog'] .
                         $row['d01'] .
                         $row['d02'] .
                         $row['d03'] .
@@ -145,9 +145,9 @@ class ImporCensoMatriculaController extends Controller
             $importacion = Importacion::Create([
                 'fuenteImportacion_id' => $this->fuente, // valor predeterminado
                 'usuarioId_Crea' => auth()->user()->id,
-                'usuarioId_Aprueba' => null,
+                // 'usuarioId_Aprueba' => null,
                 'fechaActualizacion' => $request['fechaActualizacion'],
-                'comentario' => $request['comentario'],
+                // 'comentario' => $request['comentario'],
                 'estado' => 'PR'
             ]);
 
@@ -172,7 +172,6 @@ class ImporCensoMatriculaController extends Controller
                         'niv_mod' => $row['niv_mod'],
                         'ges_dep' => $row['ges_dep'],
                         'area_censo' => $row['area_censo'],
-                        'tipoprog' => $row['tipoprog'],
                         'd01' => $row['d01'] ? $row['d01'] : 0,
                         'd02' => $row['d02'] ? $row['d02'] : 0,
                         'd03' => $row['d03'] ? $row['d03'] : 0,
@@ -263,7 +262,7 @@ class ImporCensoMatriculaController extends Controller
             $ent = $ent->where('v3.id', $value->entidad);
             $ent = $ent->first();
 
-            if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_id') == 3 || session('perfil_id') == 8 || session('perfil_id') == 9 || session('perfil_id') == 10 || session('perfil_id') == 11)
+            if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11)
                 $boton = '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" id="eliminar' . $value->id . '"><i class="fa fa-trash"></i> </button>';
             else
                 $boton = '';

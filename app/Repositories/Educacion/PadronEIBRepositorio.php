@@ -35,7 +35,7 @@ class PadronEIBRepositorio
             join edu_institucioneducativa v3 on v3.id=v1.institucioneducativa_id
             join edu_ugel v4 on v4.id=v3.Ugel_id
             join edu_ugel v5 on v5.id=v4.dependencia
-            join par_centropoblado v6 on v6.id=v3.CentroPoblado_id
+            join edu_centropoblado v6 on v6.id=v3.CentroPoblado_id
             join par_ubigeo v7 on v7.id=v6.Ubigeo_id
             join par_ubigeo v8 on v8.id=v7.dependencia
             join edu_nivelmodalidad v9 on v9.id=v3.NivelModalidad_id
@@ -64,7 +64,7 @@ class PadronEIBRepositorio
             ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'edu_padron_eib.institucioneducativa_id')
             ->join('edu_ugel as v4', 'v4.id', '=', 'v3.Ugel_id')
             ->join('edu_ugel as v5', 'v5.id', '=', 'v4.dependencia')
-            ->join('par_centropoblado as v6', 'v6.id', '=', 'v3.CentroPoblado_id')
+            ->join('edu_centropoblado as v6', 'v6.id', '=', 'v3.CentroPoblado_id')
             ->join('par_ubigeo as v7', 'v7.id', '=', 'v6.Ubigeo_id')
             ->join('par_ubigeo as v8', 'v8.id', '=', 'v7.dependencia')
             ->join('edu_nivelmodalidad as v9', 'v9.id', '=', 'v3.NivelModalidad_id')
@@ -102,7 +102,7 @@ class PadronEIBRepositorio
             ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'edu_padron_eib.institucioneducativa_id')
             ->join('edu_ugel as v4', 'v4.id', '=', 'v3.Ugel_id')
             //->join('edu_ugel as v5', 'v5.id', '=', 'v4.dependencia')
-            ->join('par_centropoblado as v6', 'v6.id', '=', 'v3.CentroPoblado_id')
+            ->join('edu_centropoblado as v6', 'v6.id', '=', 'v3.CentroPoblado_id')
             ->join('par_ubigeo as v7', 'v7.id', '=', 'v6.Ubigeo_id')
             ->join('par_ubigeo as v8', 'v8.id', '=', 'v7.dependencia')
             ->join('edu_nivelmodalidad as v9', 'v9.id', '=', 'v3.NivelModalidad_id')
@@ -116,5 +116,12 @@ class PadronEIBRepositorio
         if ($ugel != 0) $query = $query->where('v4.id', $ugel);
         $query = $query->get();
         return $query;
+    }
+
+    public static function maxid()
+    {
+        return PadronEIB::select('v1.id')
+            ->join('par_importacion as v1', 'v1.id', '=', 'edu_padron_eib.importacion_id')
+            ->orderBy('v1.fechaActualizacion', 'desc')->first()->id;
     }
 }

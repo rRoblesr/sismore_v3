@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Exception;
 
 use App\Http\Controllers\Controller;
+use App\Models\Administracion\Menu;
 
 class PowerBiController extends Controller
 {
@@ -36,5 +37,11 @@ class PowerBiController extends Controller
     public function saludCovid19()
     {
         return view('PowerBi.Salud.Covid19');
+    }
+
+    public function saludMenu($id)
+    {
+        $link = Menu::find($id)->link;
+        return view('PowerBi.Salud.Menu', compact('link'));
     }
 }

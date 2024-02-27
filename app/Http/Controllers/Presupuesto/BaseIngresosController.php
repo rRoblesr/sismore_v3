@@ -136,4 +136,10 @@ class BaseIngresosController extends Controller
             return Excel::download(new SectoresGobiernoTabla1Export($ano, $gobierno, $financiamiento), $name);
         }
     }
+
+    /* Sectores de gobierno */
+    public function resumenporanios()
+    {
+        return view('presupuesto.BaseIngresos.ResumenAnios');
+    }
 }

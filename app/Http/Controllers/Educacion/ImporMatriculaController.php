@@ -9,6 +9,7 @@ use App\Models\Administracion\Entidad;
 use App\Models\Educacion\ImporMatricula;
 use App\Models\Educacion\Importacion;
 use App\Models\Educacion\Matricula;
+use App\Models\Educacion\MatriculaDetalle;
 use App\Models\Parametro\Anio;
 use App\Repositories\Educacion\ImporMatriculaRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
@@ -25,6 +26,8 @@ use function PHPUnit\Framework\isNull;
 
 class ImporMatriculaController extends Controller
 {
+    public $fuente = 8;
+    public static $FUENTE = 8;
     public function __construct()
     {
         $this->middleware('auth');
@@ -32,11 +35,13 @@ class ImporMatriculaController extends Controller
 
     public function importar()
     {
-        $imp = Importacion::where(['fuenteimportacion_id' => 8, 'estado' => 'PR'])->orderBy('fechaActualizacion', 'desc')->first();
-        $mat = Matricula::where('importacion_id', $imp->id)->first();
-        $mensaje = "";
-        $anios = Anio::orderBy('anio', 'desc')->get();
-        return view('educacion.ImporMatricula.Importar', compact('mensaje', 'anios', 'mat'));
+        $fuente = $this->fuente;
+        return view('educacion.ImporGeneral.Importar', compact('fuente'));
+        //$imp = Importacion::where(['fuenteimportacion_id' => 8, 'estado' => 'PR'])->orderBy('fechaActualizacion', 'desc')->first();
+        //$/mat = Matricula::where('importacion_id', $imp->id)->first();
+        //$mensaje = "";
+        ///$anios = Anio::orderBy('anio', 'desc')->get();
+        ///return view('educacion.ImporMatricula.Importar', compact('mensaje', 'anios', 'mat'));
     }
 
     public function exportar()
@@ -149,9 +154,9 @@ class ImporMatriculaController extends Controller
             $importacion = Importacion::Create([
                 'fuenteImportacion_id' => 8, // valor predeterminado
                 'usuarioId_Crea' => auth()->user()->id,
-                'usuarioId_Aprueba' => null,
+                // 'usuarioId_Aprueba' => null,
                 'fechaActualizacion' => $request['fechaActualizacion'],
-                'comentario' => $request['comentario'],
+                // 'comentario' => $request['comentario'],
                 'estado' => 'PE'
             ]);
             $anio = Anio::where('anio', $request['anio'])->first();
@@ -272,7 +277,7 @@ class ImporMatriculaController extends Controller
             $ent = $ent->where('v3.id', $value->entidad);
             $ent = $ent->first();
 
-            if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_id') == 3 || session('perfil_id') == 8 || session('perfil_id') == 9 || session('perfil_id') == 10 || session('perfil_id') == 11)
+            if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11)
                 $boton = '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" id="eliminar' . $value->id . '"><i class="fa fa-trash"></i> </button>';
             else
                 $boton = '';
@@ -308,7 +313,7 @@ class ImporMatriculaController extends Controller
                 return $query->estado == "PR" ? "PROCESADO" : ($query->estado == "PE" ? "PENDIENTE" : "ELIMINADO");
             })
             ->addColumn('accion', function ($oo) {
-                if (date('Y-m-d', strtotime($oo->created_at)) == date('Y-m-d') || session('perfil_id') == 3 || session('perfil_id') == 8 || session('perfil_id') == 9 || session('perfil_id') == 10 || session('perfil_id') == 11)
+                if (date('Y-m-d', strtotime($oo->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11)
                     $msn = '<button type="button" onclick="geteliminar(' . $oo->id . ')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> </button>';
                 else
                     $msn = '';
@@ -334,7 +339,8 @@ class ImporMatriculaController extends Controller
     public function ListaImportada(Request $rq) //(Request $request, $importacion_id)
     {
         //$data = MatriculaDetalleRepositorio::listaImportada($importacion_id);
-        $data = ImporMatricula::where('matricula_id', $rq->matricula_id)->get();
+        $mat = Matricula::where('importacion_id', $rq->importacion_id)->first();
+        $data = ImporMatricula::where('matricula_id', $mat->id)->get();
         //return response()->json($data);
         return DataTables::of($data)->make(true);
     }
@@ -361,14 +367,12 @@ class ImporMatriculaController extends Controller
 
     public function eliminar($id)
     {
-        $entidad = Importacion::find($id);
-        $entidad->estado = 'EL';
-        $entidad->save();
-
-        $matricula = Matricula::where('importacion_id', $entidad->id)->first();
-        $matricula->estado = 'EL';
-        $matricula->save();
-
+        $matricula = Matricula::where('importacion_id', $id)->first();
+        if ($matricula) {
+            MatriculaDetalle::where('matricula_id', $matricula->id)->delete();
+            $matricula->delete();
+        }
+        Importacion::find($id)->delete();
         return response()->json(array('status' => true));
     }
 

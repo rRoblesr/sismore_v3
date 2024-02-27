@@ -11,12 +11,17 @@ use App\Models\Presupuesto\TipoGobierno;
 use App\Models\Presupuesto\UEMeta;
 use App\Models\Presupuesto\UnidadEjecutora;
 use App\Models\Presupuesto\UnidadOrganica;
+use App\Repositories\Educacion\ImportacionRepositorio;
+use App\Repositories\Presupuesto\BaseSiafWebRepositorio;
 use App\Repositories\Presupuesto\UnidadOrganicaRepositorio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class UnidadOrganicaController extends Controller
 {
+    public $mesc = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+    public $mesa = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SET', 'OCT', 'NOV', 'DIC'];
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -24,11 +29,12 @@ class UnidadOrganicaController extends Controller
 
     public function principal()
     {
-        $anios = Meta::distinct()->select('anio')->get();
+        $anios = Meta::distinct()->select('anio')->orderBy('anio')->get();
+        $anio = $anios->max('anio');
         $gobs = TipoGobierno::whereIn('id', [1, 2, 3])->orderBy('id', 'desc')->get();
         $ue = UnidadEjecutora::orderBy('id', 'asc')->get();
         $mensaje = "";
-        return view('Presupuesto.UnidadOrganica.Principal', compact('mensaje', 'anios', 'gobs', 'ue'));
+        return view('Presupuesto.UnidadOrganica.Principal', compact('mensaje', 'anios', 'anio', 'gobs', 'ue'));
     }
 
     public function listar(Request $rq)
@@ -214,20 +220,26 @@ class UnidadOrganicaController extends Controller
 
     public function ejecuciongasto()
     {
-        $anios = BaseGastos::distinct()->select('anio')->get();
-        $ue = UnidadEjecutora::orderBy('id', 'asc')->get();
+        $anios = BaseGastos::distinct()->select('anio')->orderBy('anio')->get();
+        $anio = $anios->max('anio');
+        $ue = BaseSiafWebRepositorio::UE_poranios(0);
         $catgas = CategoriaGasto::all();
         $articulo = ProductoProyecto::all();
         $mensaje = "";
-        return view('Presupuesto.UnidadOrganica.EjecucionGasto', compact('mensaje', 'anios', 'catgas', 'ue', 'articulo'));
+
+        $imp = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio(ImporGastosController::$FUENTE, $anio);
+        $actualizado = $imp->fuente . ', Actualizado al ' . date('d', strtotime($imp->fecha)) . ' de ' . $this->mesc[date('m', strtotime($imp->fecha)) - 1] . ' del ' . date('Y', strtotime($imp->fecha));
+
+        return view('Presupuesto.UnidadOrganica.EjecucionGasto', compact('mensaje', 'anios', 'anio', 'catgas', 'ue', 'articulo', 'actualizado'));
     }
 
     public function ejecuciongastotabla01(Request $rq)
     {
         $data = UnidadOrganicaRepositorio::listar_ejecuciongasto_anio_acticulo_ue_categoria($rq->get('anio'), $rq->get('articulo'), $rq->get('ue'), $rq->get('cg'));
 
-        $foot = ['pia' => 0, 'pim' => 0, 'cert' => 0, 'dev' => 0, 'eje' => 0, 'saldo1' => 0, 'saldo2' => 0,];
+        $foot = ['pia' => 0, 'pim' => 0, 'cert' => 0, 'eje1' => 0, 'dev' => 0, 'eje' => 0, 'saldo1' => 0, 'saldo2' => 0,];
         foreach ($data['head'] as $key => $value) {
+            $value->eje1 = $value->pim > 0 ? round(100 * $value->cert / $value->pim, 1) : 0;
             $foot['pia'] += $value->pia;
             $foot['pim'] += $value->pim;
             $foot['cert'] += $value->cert;
@@ -236,6 +248,7 @@ class UnidadOrganicaController extends Controller
             $foot['saldo2'] += $value->saldo2;
         }
         $foot['eje'] = $foot['pim'] > 0 ? number_format(100 * $foot['dev'] / $foot['pim'], 1) : 0;
+        $foot['eje1'] = $foot['pim'] > 0 ? number_format(100 * $foot['cert'] / $foot['pim'], 1) : 0;
         //return response()->json(['head' => $data['head'], 'subhead' => $data['subhead'], 'body' => $data['body'], 'foot' => $foot]);
         return view("Presupuesto.UnidadOrganica.EjecucionGastoTabla1",  ['head' => $data['head']/* , 'subhead' => $data['subhead'], 'body' => $data['body'] */, 'foot' => $foot]); //compact($data['body'], 'foot')
     }

@@ -85,52 +85,57 @@
     <div class="content">
 
         <div class="row">
-            <div class="col-sm-12">
-                <div class="card card-border">
-                    <div class="card-header bg-transparent pb-0">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header bg-success-0 pt-2">
                         <div class="card-widgets">
                             <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i
                                     class="fa fa-redo"></i> Actualizar</button>
+                            {{-- <button type="button" class="btn btn-primary btn-xs" onclick="add()">
+                                <i class="fa fa-plus"></i> Nuevo</button> --}}
                         </div>
-                        <h3 class="card-title">FILTRO</h3>
+                        <h3 class="card-title text-white">METAS PRESUPUESTALES</h3>
                     </div>
                     <div class="card-body pt-2 pb-0">
                         <form class="form-horizontal" id="form-filtro">
                             @csrf
                             <div class="form">
                                 <div class="form-group row">
-                                    <div class="col-md-3">
-                                        <label class="col-form-label">Año</label>
+                                    <div class="col-md-6"></div>
+                                    <div class="col-md-1">
+                                        {{-- <label class="col-form-label">Año</label> --}}
                                         <div class="">
-                                            <select class="form-control" name="anio" id="anio"
+                                            <select class="form-control btn-xs font-11" name="anio" id="anio"
                                                 onchange="listarDT();">
                                                 @foreach ($anios as $item)
                                                     <option value="{{ $item->anio }}"
-                                                        {{ $item->anio == date('Y') ? 'selected' : '' }}>
+                                                        {{ $item->anio == $anio ? 'selected' : '' }}>
                                                         {{ $item->anio }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <label class=" col-form-label">Gobiernos</label>
+                                    <div class="col-md-2">
+                                        {{-- <label class=" col-form-label">Gobiernos</label> --}}
                                         <div class="">
-                                            <select class="form-control" name="gobierno" id="gobierno"
+                                            <select class="form-control btn-xs font-11" name="gobierno" id="gobierno"
                                                 onchange="cargarue();listarDT();">
-                                                <option value="0">TODOS</option>
+                                                <option value="0">GOBIERNOS</option>
                                                 @foreach ($gobs as $item)
-                                                    <option value="{{ $item->id }}" {{ $item->id == 3 ? 'selected' : '' }}>
+                                                    <option value="{{ $item->id }}"
+                                                        {{ $item->id == 3 ? 'selected' : '' }}>
                                                         {{ $item->tipogobierno }}
                                                     </option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label class="col-form-label">Unidad Ejecutora</label>
+                                    <div class="col-md-3">
+                                        {{-- <label class="col-form-label">Unidad Ejecutora</label> --}}
                                         <div class="">
-                                            <select class="form-control" name="ue" id="ue"
+                                            <select class="form-control btn-xs font-11" name="ue" id="ue"
                                                 onchange="listarDT();">
+                                                <option value="">UNIDAD EJECUTORA</option>
                                             </select>
                                         </div>
                                     </div>
@@ -144,39 +149,26 @@
         <!-- End row -->
         <div class="row">
             <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            {{-- <div class="card-header card-header-primary">
+                <div class="card">
+                    {{-- <div class="card-header card-header-primary">
                                 <h4 class="card-title">Relacion de Usuarios </h4>
                             </div> --}}
-                            <div class="card-body">
-                                <div class="row justify-content-between">
-                                    {{-- <div class="col-4"></div>
-                                    <div class="col-4">
-                                        <div class="row justify-content-end">
-                                            <button type="button" class="btn btn-primary btn-xs" onclick="add()">
-                                                <i class="fa fa-plus"></i> Nuevo</button>
-                                        </div>
-                                    </div> --}}
-                                </div><br>
-                                <div class="table-responsive">
-                                    <table id="tablemain" class="table table-striped table-bordered tablex">
-                                        <thead class="cabecera-dataTable bg-success-1 text-white">
-                                            <!--th>Nº</th-->
-                                            <th>Unidad Ejecutora</th>
-                                            <th>Unidad Organica</th>
-                                            {{-- <th>Año</th> --}}
-                                            <th>Secuencia Funcional</th>
-                                            <th>Aciones</th>
-                                        </thead>
-                                    </table>
-                                </div>
-
-                            </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="tablemain" class="table table-sm table-striped table-bordered font-11">
+                                <thead class="cabecera-dataTable bg-success-1 text-white">
+                                    <!--th>Nº</th-->
+                                    <th>Unidad Ejecutora</th>
+                                    <th>Unidad Organica</th>
+                                    {{-- <th>Año</th> --}}
+                                    <th>Secuencia Funcional</th>
+                                    <th>Aciones</th>
+                                </thead>
+                            </table>
                         </div>
+
                     </div>
-                </div> <!-- End row -->
+                </div>
             </div>
         </div> <!-- End row -->
 
@@ -486,7 +478,7 @@
                 type: 'get',
                 success: function(data) {
                     $('#ue option ').remove();
-                    var opt = '<option value="0">TODOS</option>';
+                    var opt = '<option value="0">UNIDAD EJECUTORA</option>';
                     $.each(data.ues, function(index, vv) {
                         opt += '<option value="' + vv.id + '">' + vv.nombre_ejecutora + '</option>';
                     });

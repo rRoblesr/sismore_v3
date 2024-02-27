@@ -32,7 +32,7 @@ class InstitucionEducativaRepositorio
             'v6.nombre as nivel_modalidad',
             'v7.nombre as ugel',
         )
-            ->join('par_centropoblado as v3', 'v3.id', '=', 'edu_institucioneducativa.centropoblado_id')
+            ->join('edu_centropoblado as v3', 'v3.id', '=', 'edu_institucioneducativa.centropoblado_id')
             ->join('par_ubigeo as v4', 'v4.id', '=', 'v3.ubigeo_id')
             ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.dependencia')
             ->join('edu_nivelmodalidad as v6', 'v6.id', '=', 'edu_institucioneducativa.nivelmodalidad_id')
@@ -58,7 +58,7 @@ class InstitucionEducativaRepositorio
             'v6.nombre as nivel_modalidad',
             'v7.nombre as ugel',
         )
-            ->join('par_centropoblado as v3', 'v3.id', '=', 'edu_institucioneducativa.centropoblado_id')
+            ->join('edu_centropoblado as v3', 'v3.id', '=', 'edu_institucioneducativa.centropoblado_id')
             ->join('par_ubigeo as v4', 'v4.id', '=', 'v3.ubigeo_id')
             ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.dependencia')
             ->join('edu_nivelmodalidad as v6', 'v6.id', '=', 'edu_institucioneducativa.nivelmodalidad_id')

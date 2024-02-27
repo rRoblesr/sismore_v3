@@ -1,8 +1,9 @@
 @extends('layouts.main', ['activePage' => 'importacion', 'titlePage' => ''])
 
 @section('css')
-    <link href="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" />
+    {{-- <link href="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.css" rel="stylesheet"
+        type="text/css" /> --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
 
     <style>
         .tablex thead th {
@@ -43,20 +44,21 @@
                                 </div>
                                 <div class="col-md-6 text-right">
                                     <div class="form-group row">
-                                        <label class="col-md-2 col-form-label">Año</label>
+                                        <div class="col-md-4"></div>
+                                        {{-- <label class="col-md-2 col-form-label">Año</label> --}}
                                         <div class="col-md-3">
-                                            <select id="anio" name="anio" class="form-control"
+                                            <select id="anio" name="anio" class="form-control btn-xs"
                                                 onchange="cargardatos();">
                                                 @foreach ($anios as $item)
                                                     <option value="{{ $item->anio }}"> {{ $item->anio }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <label class="col-md-2 col-form-label">Ugel</label>
+                                        {{-- <label class="col-md-2 col-form-label">Ugel</label> --}}
                                         <div class="col-md-5">
-                                            <select id="ugel" name="ugel" class="form-control"
+                                            <select id="ugel" name="ugel" class="form-control btn-xs"
                                                 onchange="cargardatos()">
-                                                <option value="0">Todos</option>
+                                                <option value="0">UGEL</option>
                                                 @foreach ($ugels as $ugel)
                                                     <option value="{{ $ugel['id'] }}">{{ $ugel['nombre'] }}</option>
                                                 @endforeach
@@ -354,6 +356,45 @@
         </div>
         {{-- end  row --}}
 
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card card-border card-primary">
+                    <div class="card-header border-primary bg-transparent pb-0 m-0">
+                        <h3 class="card-title ">Numero de docentes bilingues segun lengua originaria</h3>
+                    </div>
+                    <div class="card-body pb-0 pt-0">
+                        <div class="table-responsive" id="vista5">
+                        </div>
+                        <p class="text-muted font-13 m-0 p-0 text-right">
+                            Fuente: Sistema de Administración y Control de Plazas – NEXUS, ultima actualizacion del <span
+                                id="fechaActualizacion"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- end  row --}}
+
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card card-border card-primary">
+                    <div class="card-header border-primary bg-transparent pb-0 m-0">
+                        <h3 class="card-title ">Profesionales de otras carreras que ejercen la Docencia de Nivel secundario
+                            en instituciones públicas</h3>
+                    </div>
+                    <div class="card-body pb-0 pt-0">
+                        <div class="table-responsive" id="vista6">
+                        </div>
+                        <p class="text-muted font-13 m-0 p-0 text-right">
+                            Fuente: Sistema de Administración y Control de Plazas – NEXUS, ultima actualizacion del <span
+                                id="fechaActualizacion"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- end  row --}}
+
         {{-- <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -462,6 +503,7 @@
                     console.log(jqXHR);
                 },
             });
+
             $.ajax({
                 url: "{{ route('nexus.contratacion.gra3') }}",
                 type: 'POST',
@@ -630,7 +672,6 @@
                 },
             });
 
-
             $.ajax({
                 url: "{{ route('nexus.contratacion.dt3') }}",
                 type: 'POST',
@@ -644,6 +685,7 @@
                     console.log(jqXHR);
                 },
             });
+
             $.ajax({
                 url: "{{ route('nexus.contratacion.dt4') }}",
                 type: 'POST',
@@ -657,10 +699,51 @@
                     console.log(jqXHR);
                 },
             });
+
+            $.ajax({
+                url: "{{ route('nexus.contratacion.dt5') }}",
+                type: 'POST',
+                data: $('#form_parametros').serialize(),
+                dataType: 'JSON',
+                success: function(data) {
+                    $('#fechaActualizacion').html(data.info.fecha);
+                    $('#vista5').html(data.info.DT);
+                    $('#tabla5').DataTable({
+                        // responsive: true,
+                        // autoWidth: false,
+                        // ordered: true,
+                        // searching: false,
+                        // bPaginate: false,
+                        // info: false,
+                        language: table_language,
+                    });
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+
+            $.ajax({
+                url: "{{ route('nexus.contratacion.dt6') }}",
+                type: 'POST',
+                data: $('#form_parametros').serialize(),
+                dataType: 'JSON',
+                success: function(data) {
+                    $('#fechaActualizacion').html(data.info.fecha);
+                    $('#vista6').html(data.info.DT);
+                    // $('#tabla5').DataTable({
+                    //     responsive: true,
+                    //     language: table_language,
+                    // });
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
         }
         /* function cargarMes() {
             $.ajax({
-                url: "{{ url('/') }}/Plaza/Mes/" + $('#anio').val(),
+                url: "{{ url('/') }}/Plaza/Mes/" + $('#anio').val()   ,
                 type: 'get',
                 dataType: 'JSON',
                 data: {
@@ -927,7 +1010,7 @@
                         enabled: false,
                         text: 'Number of Employees'
                     },
-                    min:0,
+                    min: 0,
                 },
                 legend: {
                     layout: 'vertical',
@@ -974,14 +1057,20 @@
         }
     </script>
 
+    {{-- <script src="https://code.highcharts.com/highcharts.js"></script> --}}
+    {{-- <script src="https://code.highcharts.com/modules/exportingÇ.js"></script>    <!-- optional --> --}}
+    {{-- <script src="https://code.highcharts.com/modules/offline-exporting.js"></script> --}}
+    {{-- <script src="https://code.highcharts.com/modules/export-data.js"></script> --}}
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+
     <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts-more.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script>
 
-    <script src="{{ asset('/') }}public/assets/libs/datatables/jquery.dataTables.min.js"></script>
+    {{--     <script src="{{ asset('/') }}public/assets/libs/datatables/jquery.dataTables.min.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.responsive.min.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.js"></script> --}}
 @endsection

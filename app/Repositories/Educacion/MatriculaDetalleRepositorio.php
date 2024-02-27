@@ -75,7 +75,7 @@ class MatriculaDetalleRepositorio
             inner join edu_institucioneducativa v3 on v3.id=v1.institucioneducativa_id
             inner join edu_ugel v4 on v4.id=v3.Ugel_id
             inner join edu_ugel v5 on v5.id=v4.dependencia
-            inner join par_centropoblado v6 on v6.id=v3.CentroPoblado_id
+            inner join edu_centropoblado v6 on v6.id=v3.CentroPoblado_id
             inner join par_ubigeo v7 on v7.id=v6.Ubigeo_id
             inner join par_ubigeo v8 on v8.id=v7.dependencia
             inner join edu_nivelmodalidad v9 on v9.id=v3.NivelModalidad_id
@@ -99,7 +99,7 @@ class MatriculaDetalleRepositorio
     {
         $query = MatriculaDetalle::select(DB::raw('SUM(IF((edu_matricula_detalle.total_hombres+edu_matricula_detalle.total_mujeres)=0,edu_matricula_detalle.total_estudiantes,edu_matricula_detalle.total_hombres+edu_matricula_detalle.total_mujeres)) as conteo'))
             ->join('edu_institucioneducativa as v2', 'v2.id', '=', 'edu_matricula_detalle.institucioneducativa_id')
-            ->join('par_centropoblado as v3', 'v3.id', '=', 'v2.CentroPoblado_id')
+            ->join('edu_centropoblado as v3', 'v3.id', '=', 'v2.CentroPoblado_id')
             ->join('par_ubigeo as v4', 'v4.id', '=', 'v3.Ubigeo_id')
             ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.dependencia')
             ->join('edu_tipogestion as v6', 'v6.id', '=', 'v2.TipoGestion_id')
@@ -125,7 +125,7 @@ class MatriculaDetalleRepositorio
     {
         $query = MatriculaDetalle::select(DB::raw('SUM(IF((edu_matricula_detalle.total_hombres+edu_matricula_detalle.total_mujeres)=0,edu_matricula_detalle.total_estudiantes,edu_matricula_detalle.total_hombres+edu_matricula_detalle.total_mujeres)) as conteo'))
             ->join('edu_institucioneducativa as v2', 'v2.id', '=', 'edu_matricula_detalle.institucioneducativa_id')
-            ->join('par_centropoblado as v3', 'v3.id', '=', 'v2.CentroPoblado_id')
+            ->join('edu_centropoblado as v3', 'v3.id', '=', 'v2.CentroPoblado_id')
             ->join('par_ubigeo as v4', 'v4.id', '=', 'v3.Ubigeo_id')
             ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.dependencia')
             ->join('edu_tipogestion as v6', 'v6.id', '=', 'v2.TipoGestion_id')
@@ -152,7 +152,7 @@ class MatriculaDetalleRepositorio
     {
         $query = MatriculaDetalle::select(DB::raw('SUM(IF((edu_matricula_detalle.total_hombres+edu_matricula_detalle.total_mujeres)=0,edu_matricula_detalle.total_estudiantes,edu_matricula_detalle.total_hombres+edu_matricula_detalle.total_mujeres)) as conteo'))
             ->join('edu_institucioneducativa as v2', 'v2.id', '=', 'edu_matricula_detalle.institucioneducativa_id')
-            ->join('par_centropoblado as v3', 'v3.id', '=', 'v2.CentroPoblado_id')
+            ->join('edu_centropoblado as v3', 'v3.id', '=', 'v2.CentroPoblado_id')
             ->join('par_ubigeo as v4', 'v4.id', '=', 'v3.Ubigeo_id')
             ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.dependencia')
             ->join('edu_tipogestion as v6', 'v6.id', '=', 'v2.TipoGestion_id')
@@ -180,7 +180,7 @@ class MatriculaDetalleRepositorio
     {
         $query = MatriculaDetalle::select(DB::raw('SUM(IF((edu_matricula_detalle.total_hombres+edu_matricula_detalle.total_mujeres)=0,edu_matricula_detalle.total_estudiantes,edu_matricula_detalle.total_hombres+edu_matricula_detalle.total_mujeres)) as conteo'))
             ->join('edu_institucioneducativa as v2', 'v2.id', '=', 'edu_matricula_detalle.institucioneducativa_id')
-            ->join('par_centropoblado as v3', 'v3.id', '=', 'v2.CentroPoblado_id')
+            ->join('edu_centropoblado as v3', 'v3.id', '=', 'v2.CentroPoblado_id')
             ->join('par_ubigeo as v4', 'v4.id', '=', 'v3.Ubigeo_id')
             ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.dependencia')
             ->join('edu_tipogestion as v6', 'v6.id', '=', 'v2.TipoGestion_id')
@@ -404,7 +404,7 @@ class MatriculaDetalleRepositorio
                 ->join('par_importacion as v3', 'v3.id', '=', 'v2.importacion_id')
                 ->join('edu_institucioneducativa as v4', 'v4.id', '=', 'v1.institucioneducativa_id')
                 ->join('edu_nivelmodalidad as v5', 'v5.id', '=', 'v4.NivelModalidad_id')
-                ->join('par_centropoblado as v6', 'v6.id', '=', 'v4.CentroPoblado_id')
+                ->join('edu_centropoblado as v6', 'v6.id', '=', 'v4.CentroPoblado_id')
                 ->join('par_ubigeo as v7', 'v7.id', '=', 'v6.Ubigeo_id')
                 ->join('par_ubigeo as v8', 'v8.id', '=', 'v7.dependencia')
                 ->select(
@@ -448,7 +448,7 @@ class MatriculaDetalleRepositorio
                 ->join('par_importacion as v3', 'v3.id', '=', 'v2.importacion_id')
                 ->join('edu_institucioneducativa as v4', 'v4.id', '=', 'v1.institucioneducativa_id')
                 ->join('edu_nivelmodalidad as v5', 'v5.id', '=', 'v4.NivelModalidad_id')
-                ->join('par_centropoblado as v6', 'v6.id', '=', 'v4.CentroPoblado_id')
+                ->join('edu_centropoblado as v6', 'v6.id', '=', 'v4.CentroPoblado_id')
                 ->join('par_ubigeo as v7', 'v7.id', '=', 'v6.Ubigeo_id')
                 ->join('par_ubigeo as v8', 'v8.id', '=', 'v7.dependencia')
                 ->select(
@@ -504,7 +504,7 @@ class MatriculaDetalleRepositorio
                 ->join('par_importacion as v3', 'v3.id', '=', 'v2.importacion_id')
                 ->join('edu_institucioneducativa as v4', 'v4.id', '=', 'v1.institucioneducativa_id')
                 ->join('edu_nivelmodalidad as v5', 'v5.id', '=', 'v4.NivelModalidad_id')
-                ->join('par_centropoblado as v6', 'v6.id', '=', 'v4.CentroPoblado_id')
+                ->join('edu_centropoblado as v6', 'v6.id', '=', 'v4.CentroPoblado_id')
                 ->join('par_ubigeo as v7', 'v7.id', '=', 'v6.Ubigeo_id')
                 ->join('par_ubigeo as v8', 'v8.id', '=', 'v7.dependencia')
                 ->select(

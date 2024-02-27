@@ -1,23 +1,12 @@
 @section('css')
-    <!-- Table datatable css -->
-    <link href="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" />
-    <link href="{{ asset('/') }}public/assets/libs/datatables/buttons.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" />
-    <link href="{{ asset('/') }}public/assets/libs/datatables/fixedHeader.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" />
-    <link href="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" />
-    <link href="{{ asset('/') }}public/assets/libs/datatables/scroller.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" />
     <style>
         .tablex thead th {
-            padding: 4px;
+            padding: 2px;
             text-align: center;
         }
 
         .tablex thead td {
-            padding: 4px;
+            padding: 2px;
             text-align: center;
             vertical-align: middle;
             font-weight: bold;
@@ -27,358 +16,1231 @@
         .tablex tbody th,
         .tablex tfoot td,
         .tablex tfoot th {
-            padding: 4px;
+            padding: 2px;
         }
 
         .fuentex {
             font-size: 10px;
             font-weight: bold;
         }
+
+
+        .link {
+            color: #000000;
+        }
+
+        .link:hover {
+            color: #0000FF;
+        }
     </style>
 @endsection
-{{-- <div>
+
+<div>
     <div id="container-speed" class="chart-container"></div>
-</div> --}}
-@section('content')
-    <div class="content">
-        <div class="container-fluid">
-            {{-- <div class="row">
-            <div class="col-lg-12">
-                <div class="card card-fill bg-primary">
-                    <div class="card-header bg-transparent">
-                        <h3 class="card-title text-white">Información General</h3>
-                    </div>
-                </div>
+</div>
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="form-group row align-items-center vh-5">
+            <div class="col-lg-4 col-md-4 col-sm-4">
+                <h4 class="page-title font-16">MODULO SALUD</h4>
             </div>
-        </div> --}}
-            <!-- end row -->
-
-            <div class="row">
-
-                <div class="col-md-6 col-xl-3">
-                    <div class="card-box">
-                        <div class="media">
-                            <div class="avatar-md bg-success rounded-circle mr-2">
-                                <i class="ion ion-logo-usd avatar-title font-26 text-white"></i>
-                            </div>
-                            <div class="media-body align-self-center">
-                                <div class="text-right">
-                                    <h4 class="font-20 my-0 font-weight-bold" title="{{ number_format($card1['pim'], 0) }}">
-                                        <span data-plugin="counterup">
-                                            {{ number_format($card1['pim'], 0) }}
-                                        </span>
-                                    </h4>
-                                    <p class="mb-0 mt-1 text-truncate" style="font-size: 14px">PIA {{ $anio }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <h6 class="">Ejecución(<span style="font-weight: normal">DEV/PIA</span>)
-                                <span class="float-right">{{ number_format($card1['eje'], 1) }}%</span>
-                            </h6>
-                            <div class="progress progress-sm m-0">
-                                <div class="progress-bar bg-success" role="progressbar" aria-valuenow="{{ $card1['eje'] }}"
-                                    aria-valuemin="0" aria-valuemax="100" style="width: {{ $card1['eje'] }}%">
-                                    <span class="sr-only">{{ number_format($card1['eje'], 1) }}% Complete</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--FIN CARD-->
-
-                <div class="col-md-6 col-xl-3">
-                    <div class="card-box">
-                        <div class="media">
-                            <div class="avatar-md bg-purple rounded-circle mr-2">
-                                <i class="ion ion-logo-usd avatar-title font-26 text-white"></i>
-                            </div>
-                            <div class="media-body align-self-center">
-                                <div class="text-right">
-                                    <h4 class="font-20 my-0 font-weight-bold"
-                                        title="{{ number_format($card2['pim'], 0) }}">
-                                        <span data-plugin="counterup">
-                                            {{ number_format($card2['pim'], 0) }}
-                                        </span>
-                                    </h4>
-                                    <p class="mb-0 mt-1 text-truncate" style="font-size: 14px">PIM {{ $anio }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <h6 class="">Ejecución(<span style="font-weight: normal">DEV/PIM</span>)
-                                <span class="float-right">{{ number_format($card2['eje'], 1) }}%</span>
-                            </h6>
-                            <div class="progress progress-sm m-0">
-                                <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="{{ $card2['eje'] }}"
-                                    aria-valuemin="0" aria-valuemax="100" style="width: {{ $card2['eje'] }}%">
-                                    <span class="sr-only">{{ $card2['eje'] }}% Complete</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--FIN CARD-->
-
-                <div class="col-md-6 col-xl-3">
-                    <div class="card-box">
-                        <div class="media">
-                            <div class="avatar-md bg-primary rounded-circle mr-2">
-                                <i class="ion ion-logo-usd avatar-title font-26 text-white"></i>
-                            </div>
-                            <div class="media-body align-self-center">
-                                <div class="text-right">
-                                    <h4 class="font-20 my-0 font-weight-bold"
-                                        title="{{ number_format($card3['pim'], 0) }}">
-                                        <span data-plugin="counterup">
-                                            {{ number_format($card3['pim'], 0) }}
-                                        </span>
-                                    </h4>
-                                    <p class="mb-0 mt-1 text-truncate" style="font-size: 14px">CERTIFICADO
-                                        {{ $anio }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <h6 class="">Ejecución(<span style="font-weight: normal">CERT/PIM</span>)
-                                <span class="float-right">{{ number_format($card3['eje'], 1) }}%</span>
-                            </h6>
-                            <div class="progress progress-sm m-0">
-                                <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="{{ $card3['eje'] }}"
-                                    aria-valuemin="0" aria-valuemax="100" style="width: {{ $card3['eje'] }}%">
-                                    <span class="sr-only">{{ $card3['eje'] }}% Complete</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--FIN CARD-->
-
-                <div class="col-md-6 col-xl-3">
-                    <div class="card-box">
-                        <div class="media">
-                            <div class="avatar-md bg-danger rounded-circle mr-2">
-                                <i class="ion ion-logo-usd avatar-title font-26 text-white"></i>
-                            </div>
-                            <div class="media-body align-self-center">
-                                <div class="text-right">
-                                    <h4 class="font-20 my-0 font-weight-bold"
-                                        title="{{ number_format($card4['pim'], 0) }}">
-                                        <span data-plugin="counterup">
-                                            {{ number_format($card4['pim'], 0) }}
-                                        </span>
-                                    </h4>
-                                    <p class="mb-0 mt-1 text-truncate" style="font-size: 14px">DEVENGADO
-                                        {{ $anio }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <h6 class="">Ejecución(<span style="font-weight: normal">DEV/CERT</span>)
-                                <span class="float-right">{{ number_format($card4['eje'], 1) }}%</span>
-                            </h6>
-                            <div class="progress progress-sm m-0">
-                                <div class="progress-bar bg-danger" role="progressbar"
-                                    aria-valuenow="{{ $card4['eje'] }}" aria-valuemin="0" aria-valuemax="100"
-                                    style="width: {{ $card4['eje'] }}%">
-                                    <span class="sr-only">{{ $card4['eje'] }}% Complete</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--FIN CARD-->
-
-
+            <div class="col-lg-2 col-md-2 col-sm-2">
+                <select id="provincia" name="provincia" class="form-control btn-xs font-11"
+                    onchange="cargarDistritos(),cargarCards();">
+                    <option value="0">PROVINCIA</option>
+                </select>
             </div>
-            <!-- end row -->
+            <div class="col-lg-2 col-md-2 col-sm-2">
+                <select id="distrito" name="distrito" class="form-control btn-xs font-11" onchange="cargarCards();">
+                    <option value="0">DISTRITO</option>
+                </select>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-2">
+                <select id="tipogestion" name="tipogestion" class="form-control btn-xs font-11"
+                    onchange="cargarCards();">
+                    <option value="0">TIPO DE GESTIÓN</option>
+                </select>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-2">
+                <select id="ambito" name="ambito" class="form-control btn-xs font-11" onchange="cargarCards();">
+                    <option value="0">ÁMBITO</option>
+                </select>
+            </div>
+        </div>
 
-            <div class="row">
-                <div class="col-xl-6">
-                    <div class="card card-border card-primary">
-                        <div class="card-header border-primary bg-transparent p-0">
-                            <h3 class="card-title text-primary "></h3>
+        <!--Widget-4 -->
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card-box border border-plomo-0">{{--  card-border border border-plomo-0 --}}
+                    <div class="media">
+                        <div class="text-center">
+                            <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                                width="70%" height="70%">
                         </div>
-                        <div class="card-body p-0">
-                            <div id="anal1" style="min-width:100%;height:600px;margin:0 auto;"></div>
-                            {{--  style="min-width:400px;height:300px;margin:0 auto;" --}}
+                        <div class="media-body align-self-center">
+                            <div class="text-right">
+                                <h4 class="font-20 my-0 font-weight-bold">
+                                    <span data-plugin="counterup" id="basico"></span>
+                                </h4>
+                                <p class="mb-0 mt-1 text-truncate">info</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-xl-6">
-                    <div class="card card-border card-primary">
-                        <div class="card-header border-primary bg-transparent p-0">
-                            <h3 class="card-title text-primary "></h3>
-                        </div>
-                        <div class="card-body p-0">
-                            <div id="anal2" style="min-width:100%;height:600px;margin:0 auto;"></div>
-                            {{--  style="min-width:400px;height:300px;margin:0 auto;" --}}
+                    <div class="mt-0 font-9">
+                        <h6 class="">Avance <span class="float-right" id="ibasico">0%</span></h6>
+                        <div class="progress progress-sm m-0">
+                            <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="90"
+                                aria-valuemin="0" aria-valuemax="100" style="width: 100%" id="bbasico">
+                                <span class="sr-only">0% Complete</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            {{-- end  row --}}
 
-            <div class="row">
-                <div class="col-xl-6">
-                    <div class="card card-border card-primary">
-                        <div class="card-header border-primary bg-transparent p-0">
-                            <h3 class="card-title text-primary "></h3>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card-box border border-plomo-0">
+                    <div class="media">
+                        <div class="text-center">
+                            <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                                width="70%" height="70%">
                         </div>
-                        <div class="card-body p-0">
-                            <div id="anal3"></div>
-                            {{--  style="min-width:400px;height:300px;margin:0 auto;" --}}
+                        <div class="media-body align-self-center">
+                            <div class="text-right">
+                                <h4 class="font-20 my-0 font-weight-bold">
+                                    <span data-plugin="counterup" id="ebr"></span>
+                                </h4>
+                                <p class="mb-0 mt-1 text-truncate">
+                                    info
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-xl-6">
-                    <div class="card card-border card-primary">
-                        <div class="card-header border-primary bg-transparent p-0">
-                            <h3 class="card-title text-primary "></h3>
-                        </div>
-                        <div class="card-body p-0">
-                            <div id="anal4"></div>
-                            {{--  style="min-width:400px;height:300px;margin:0 auto;" --}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {{-- end  row --}}
-
-
-            <div class="row">
-                <div class="col-xl-6">
-                    <div class="card card-border card-primary">
-                        <div class="card-header border-primary bg-transparent p-0">
-                            <h3 class="card-title text-primary "></h3>
-                        </div>
-                        <div class="card-body p-0">
-                            <div id="anal5"></div>
-                            {{--  style="min-width:400px;height:300px;margin:0 auto;" --}}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-6">
-                    <div class="card card-border card-primary">
-                        <div class="card-header border-primary bg-transparent p-0">
-                            <h3 class="card-title text-primary "></h3>
-                        </div>
-                        <div class="card-body p-0">
-                            <div id="anal6"></div>
-                            {{--  style="min-width:400px;height:300px;margin:0 auto;" --}}
+                    <div class="mt-0 font-9">
+                        <h6 class="">Avance <span class="float-right" id="iebr">0%</span></h6>
+                        <div class="progress progress-sm m-0">
+                            <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="60"
+                                aria-valuemin="0" aria-valuemax="100" style="width: 100%" id="bebr">
+                                <span class="sr-only">0% Complete</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            {{-- end  row --}}
 
-            <div class="row">
-                <div class="col-xl-12">
-                    <div class="card card-border card-primary">
-                        <div class="card-header border-primary bg-transparent p-0">
-                            <h3 class="card-title text-primary "></h3>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card-box border border-plomo-0">
+                    <div class="media">
+                        <div class="text-center">
+                            <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                                width="70%" height="70%">
                         </div>
-                        <div class="card-body p-0">
-                            <div id="anal7"></div>
-                            {{--  style="min-width:400px;height:300px;margin:0 auto;" --}}
+                        <div class="media-body align-self-center">
+                            <div class="text-right">
+                                <h4 class="font-20 my-0 font-weight-bold">
+                                    <span data-plugin="counterup" id="ebe"></span>
+                                </h4>
+                                <p class="mb-0 mt-1 text-truncate">
+                                    info
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-0 font-9">
+                        <h6 class="">Avance <span class="float-right" id="iebe">0%</span></h6>
+                        <div class="progress progress-sm m-0">
+                            <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="60"
+                                aria-valuemin="0" aria-valuemax="100" style="width: 100%" id="bebe">
+                                <span class="sr-only">0% Complete</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-
             </div>
-            {{-- end  row --}}
+
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card-box border border-plomo-0">
+                    <div class="media">
+                        <div class="text-center">
+                            <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                                width="70%" height="70%">
+                        </div>
+                        <div class="media-body align-self-center">
+                            <div class="text-right">
+                                <h4 class="font-20 my-0 font-weight-bold">
+                                    <span data-plugin="counterup" id="eba"></span>
+                                </h4>
+                                <p class="mb-0 mt-1 text-truncate">
+                                    info
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-0 font-9">
+                        <h6 class="">Avance <span class="float-right" id="ieba">0%</span></h6>
+                        <div class="progress progress-sm m-0">
+                            <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="60"
+                                aria-valuemin="0" aria-valuemax="100" style="width: 100%" id="beba">
+                                <span class="sr-only">0% Complete</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Widget-4 -->
+        <div class="row d-none">
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card-box border border-plomo-0">
+                    <div class="media">
+                        <div class="text-center">
+                            {{-- <i class="ion ion-logo-usd avatar-title font-26 text-white"></i> --}}
+                            <img src="{{ asset('/') }}public/img/icon/servicios.png" alt=""
+                                class="" width="70%" height="70%">
+                        </div>
+                        {{-- <div class="avatar-md bg-success rounded-circle mr-2">
+                                <i class=" ion-md-home avatar-title font-26 text-white"></i>
+                            </div> --}}
+                        <div class="media-body align-self-center">
+                            <div class="text-right">
+                                <h4 class="font-20 my-0 font-weight-bold">
+                                    <span data-plugin="counterup" id="servicios"></span>
+                                </h4>
+                                <p class="mb-0 mt-1 text-truncate">Servicios Educativos</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- end card-box-->
+            </div>
+
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card-box border border-plomo-0">
+                    <div class="media">
+                        <div class="text-center">
+                            {{-- <i class="ion ion-logo-usd avatar-title font-26 text-white"></i> --}}
+                            <img src="{{ asset('/') }}public/img/icon/locales.png" alt="" class=""
+                                width="70%" height="70%">
+                        </div>
+                        {{-- <div class="avatar-md bg-info rounded-circle mr-2">
+                                <i class=" ion ion-md-person avatar-title font-26 text-white"></i>
+                            </div> --}}
+                        <div class="media-body align-self-center">
+                            <div class="text-right">
+                                <h4 class="font-20 my-0 font-weight-bold">
+                                    <span data-plugin="counterup" id="locales"></span>
+                                </h4>
+                                <p class="mb-0 mt-1 text-truncate">Locales Educativos </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- end card-box-->
+            </div>
+
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card-box border border-plomo-0">
+                    <div class="media">
+                        <div class="text-center">
+                            {{-- <i class="ion ion-logo-usd avatar-title font-26 text-white"></i> --}}
+                            <img src="{{ asset('/') }}public/img/icon/matriculas.png" alt=""
+                                class="" width="70%" height="70%">
+                        </div>
+                        {{-- <div class="avatar-md bg-info rounded-circle mr-2">
+                                <i class=" ion ion-md-person avatar-title font-26 text-white"></i>
+                            </div> --}}
+                        <div class="media-body align-self-center">
+                            <div class="text-right">
+                                <h4 class="font-20 my-0 font-weight-bold">
+                                    <span data-plugin="counterup" id="matriculados"></span>
+                                </h4>
+                                <p class="mb-0 mt-1 text-truncate">Estudiantes</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end card-box-->
+            </div>
+
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card-box border border-plomo-0">
+                    <div class="media">
+                        <div class="text-center">
+                            {{-- <i class="ion ion-logo-usd avatar-title font-26 text-white"></i> --}}
+                            <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                                width="70%" height="70%">
+                        </div>
+                        {{-- <div class="avatar-md bg-info rounded-circle mr-2">
+                                <i class=" ion ion-md-person avatar-title font-26 text-white"></i>
+                            </div> --}}
+                        <div class="media-body align-self-center">
+                            <div class="text-right">
+                                <h4 class="font-20 my-0 font-weight-bold">
+                                    <span data-plugin="counterup" id="docentes"></span>
+                                </h4>
+                                <p class="mb-0 mt-1 text-truncate">Docentes</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card card-border border border-plomo-0">
+                    <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
+                        <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11"></h3>
+                    </div>
+                    <div class="card-body p-0">
+                        <figure class="highcharts-figure m-0">
+                            <div id="siagie001" style="height: 20rem"></div>
+                        </figure>
+                        <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                            <span class="float-left" id="span-siagie001-fuente">Fuente:</span>
+                            <span class="float-right" id="span-siagie001-fecha">Actualizado:</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card card-border border border-plomo-0">
+                    <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
+                        <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11"></h3>
+                    </div>
+                    <div class="card-body p-0">
+                        {{-- <div id="container" ></div> --}}
+                        <figure class="highcharts-figure m-0">
+                            <div id="censodocente001" style="height: 20rem"></div>
+                        </figure>
+                        <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                            <span class="float-left" id="span-censodocente001-fuente">Fuente:</span>
+                            <span class="float-right" id="span-censodocente001-fecha">Actualizado:</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
-    </div>
-@endsection
 
+        <div class="row">
+            <div class="col-lg-6">
+                {{-- <div class="card card-default card-fill"> --}}
+                {{-- <div class="card-header"> --}}
+                <div class="card card-border border border-plomo-0">
+                    <div class="card-header border-success-0 bg-transparent pb-0">
+                        <h3 class="card-title font-12">Matricula Educativa, segun modalidades</h3>
+                    </div>
+                    <div class="card-body pb-0">
+                        <div class="mb-4 skills001">
+                            <h6 class="font-12"><a href="{{ route('matriculadetalle.interculturalbilingue') }}"
+                                    class="link">Porcentajes de
+                                    estudiantes matriculados del modelo de servicio EIB</a><span
+                                    class="float-right">0%</span></h6>
+                            <div class="progress progress-sm">
+                                <div class="progress-bar wow animated progress-animated" role="progressbar"
+                                    aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                                    <span class="sr-only">60% Complete</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 skills002">
+                            <h6 class="font-12"><a href="{{ route('superiorpedagogico.principal') }}"
+                                    class="link">Porcentajes de
+                                    estudiantes
+                                    matriculados en Educacion Superior Pedagogica</a><span
+                                    class="float-right">0%</span></h6>
+                            <div class="progress progress-sm">
+                                <div class="progress-bar wow animated progress-animated" role="progressbar"
+                                    aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                                    <span class="sr-only">90% Complete</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 skills003">
+                            <h6 class="font-12"><a href="{{ route('superiortecnologico.principal') }}"
+                                    class="link">Porcentajes de
+                                    estudiantes
+                                    matriculados en Educacion Superior Tecnologica</a><span
+                                    class="float-right">0%</span></h6>
+                            <div class="progress progress-sm">
+                                <div class="progress-bar wow animated progress-animated" role="progressbar"
+                                    aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                                    <span class="sr-only">80% Complete</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 skills004">
+                            <h6 class="font-12"><a href="{{ route('superiorartistico.principal') }}"
+                                    class="link">Porcentajes de
+                                    estudiantes
+                                    matriculados en Educacion Superior Artistica</a><span class="float-right">0%</span>
+                            </h6>
+                            <div class="progress progress-sm mb-0">
+                                <div class="progress-bar wow animated progress-animated" role="progressbar"
+                                    aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                                    <span class="sr-only">95% Complete</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 skills005">
+                            <h6 class="font-12"><a href="{{ route('tecnicoproductiva.principal') }}"
+                                    class="link">Porcentajes de
+                                    estudiantes
+                                    matriculado en Educacion Tecnica-Productiva</a><span class="float-right">0%</span>
+                            </h6>
+                            <div class="progress progress-sm mb-0">
+                                <div class="progress-bar wow animated progress-animated" role="progressbar"
+                                    aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                                    <span class="sr-only">95% Complete</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="font-weight-bold text-muted mb-0 font-9">
+                            <span class="float-left" id="span-skills005-fuente">Fuente:</span>
+                            <span class="float-right" id="span-skills005-fecha">Actualizado:</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-lg-6">
+                {{-- <div class="card card-default card-fill"> --}}
+                {{-- <div class="card-header"> --}}
+                <div class="card card-border border border-plomo-0">
+                    <div class="card-header border-success-0 bg-transparent pb-0">
+                        <h3 class="card-title font-12">Locales Educativos de Educacion Basica con acceso a Servicios
+                            Basicos
+                        </h3>
+                    </div>
+                    <div class="card-body pb-0">
+                        <div class="mb-4 skills006">
+                            <h6 class="font-12"><a href="{{ route('serviciosbasicos.principal') }}"
+                                    class="link">Porcentajes de
+                                    Locales Educativos
+                                    con los tres Servicios
+                                    Basicos</a><span class="float-right">0%</span></h6>
+                            <div class="progress progress-sm">
+                                <div class="progress-bar wow animated progress-animated" role="progressbar"
+                                    aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                                    <span class="sr-only">60% Complete</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 skills007">
+                            <h6 class="font-12"><a href="{{ route('serviciosbasicos.principal') }}"
+                                    class="link">Porcentajes de
+                                    Locales Educativos
+                                    conectados a red de Agua Potable</a><span class="float-right">0%</span></h6>
+                            <div class="progress progress-sm">
+                                <div class="progress-bar wow animated progress-animated" role="progressbar"
+                                    aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                                    <span class="sr-only">90% Complete</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 skills008">
+                            <h6 class="font-12"><a href="{{ route('serviciosbasicos.principal') }}"
+                                    class="link">Porcentajes de
+                                    Locales Educativos
+                                    conectados a red de Desague</a><span class="float-right">0%</span></h6>
+                            <div class="progress progress-sm">
+                                <div class="progress-bar wow animated progress-animated" role="progressbar"
+                                    aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                                    <span class="sr-only">80% Complete</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 skills009">
+                            <h6 class="font-12"><a href="{{ route('serviciosbasicos.principal') }}"
+                                    class="link">Porcentajes de
+                                    Locales Educativos
+                                    conectados a red de Electricidad</a><span class="float-right">0%</span></h6>
+                            <div class="progress progress-sm mb-0">
+                                <div class="progress-bar wow animated progress-animated" role="progressbar"
+                                    aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                                    <span class="sr-only">95% Complete</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 skills010">
+                            <h6 class="font-12"><a href="{{ route('serviciosbasicos.principal') }}"
+                                    class="link">Porcentajes de
+                                    Locales Educativos
+                                    que cuentan con acceso a Internet</a><span class="float-right">0%</span></h6>
+                            <div class="progress progress-sm mb-0">
+                                <div class="progress-bar wow animated progress-animated" role="progressbar"
+                                    aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                                    <span class="sr-only">95% Complete</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="font-weight-bold text-muted mb-0 font-9">
+                            <span class="float-left" id="span-skills010-fuente">Fuente:</span>
+                            <span class="float-right" id="span-skills010-fecha">Actualizado:</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-lg-4 col-md-4">
+                <div class="card card-border border border-plomo-0">
+                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2" style="height: 4rem">
+                        <div class="card-widgets">
+                            <a href="{{ route('panelcontrol.educacion.indicador.nuevos.06') }}"
+                                class="waves-effect waves-light"><i class="mdi mdi-file-link text-orange-0"
+                                    title="DETALLE"></i></a>
+
+                            <a href="javascript:void(0)" class="waves-effect waves-light" data-toggle="modal"
+                                data-target="" onclick="datosIndicador(13)"><i
+                                    class="mdi mdi-information text-orange-0" title="INFORMACIÓN"></i></a>
+                        </div>
+                        <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                            Porcentaje de docentes titulados en educación inicial</h3>
+                    </div>
+                    <div class="card-body p-0">
+                        <figure class="highcharts-figure p-0">
+                            <div id="dtanal3" style="height: 7rem"></div>
+                        </figure>
+                        <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                            <span class="float-left" id="span-dtanal3-fuente">Fuente:</span>
+                            <span class="float-right" id="span-dtanal3-fecha">Actualizado:</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4">
+                <div class="card card-border border border-plomo-0">
+                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2" style="height: 4rem">
+                        <div class="card-widgets">
+                            <a href="{{ route('panelcontrol.educacion.indicador.nuevos.05') }}"
+                                class="waves-effect waves-light"><i class="mdi mdi-file-link text-orange-0"
+                                    title="DETALLE"></i></a>
+
+                            <a href="javascript:void(0)" class="waves-effect waves-light" data-toggle="modal"
+                                data-target="" onclick="datosIndicador(14)"><i
+                                    class="mdi mdi-information text-orange-0" title="INFORMACIÓN"></i></a>
+                        </div>
+                        <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                            Porcentaje de docentes titulados en educación primaria</h3>
+                    </div>
+                    <div class="card-body p-0">
+                        <figure class="highcharts-figure p-0">
+                            <div id="dtanal2" style="height: 7rem"></div>
+                        </figure>
+                        <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                            <span class="float-left" id="span-dtanal2-fuente">Fuente:</span>
+                            <span class="float-right" id="span-dtanal2-fecha">Actualizado:</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4">
+                <div class="card card-border border border-plomo-0">
+                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2" style="height: 4rem">
+                        <div class="card-widgets">
+                            <a href="{{ route('panelcontrol.educacion.indicador.nuevos.04') }}"
+                                class="waves-effect waves-light"><i class="mdi mdi-file-link text-orange-0"
+                                    title="DETALLE"></i></a>
+
+                            <a href="javascript:void(0)" class="waves-effect waves-light" data-toggle="modal"
+                                data-target="" onclick="datosIndicador(15)"><i
+                                    class="mdi mdi-information text-orange-0" title="INFORMACIÓN"></i></a>
+                        </div>
+                        <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                            Porcentaje de docentes titulados en educación
+                            secundaria</h3>
+                    </div>
+                    <div class="card-body p-0">
+                        <figure class="highcharts-figure p-0">
+                            <div id="dtanal1" style="height: 7rem"></div>
+                        </figure>
+                        <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                            <span class="float-left" id="span-dtanal1-fuente">Fuente:</span>
+                            <span class="float-right" id="span-dtanal1-fecha">Actualizado:</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        {{-- portles --}}
+
+        <div class="row d-none">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header bg-success-0 py-3 text-white">
+                        <div class="card-widgets">
+                            {{-- <a href="javascript:;" data-toggle="reload"><i class="mdi mdi-refresh"></i></a> --}}
+                            <a data-toggle="collapse" href="#portles1" role="button" aria-expanded="false"
+                                aria-controls="portles1"><i class="mdi mdi-minus"></i></a>
+                            {{-- <a href="#" data-toggle="remove"><i class="mdi mdi-close"></i></a> --}}
+                        </div>
+                        <h5 class="card-title mb-0 text-white">Cobertura de Matrícula Educativa</h5>
+                    </div>
+                    <div id="portles1" class="collapse show">
+                        <div class="card-body pb-0">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4">
+                                    <div class="card card-border border border-plomo-0">
+                                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
+                                            style="height: 4rem">
+                                            <div class="card-widgets">
+                                                <a href="{{ route('indicador.nuevos.02') }}"
+                                                    class="waves-effect waves-light"><i
+                                                        class="mdi mdi-file-link text-orange-0"
+                                                        title="DETALLE"></i></a>
+
+                                                <a href="javascript:void(0)" class="waves-effect waves-light"
+                                                    data-toggle="modal" data-target="" onclick="datosIndicador(1)"><i
+                                                        class="mdi mdi-information text-orange-0"
+                                                        title="INFORMACIÓN"></i></a>
+                                            </div>
+                                            <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                                                Tasa neta de matrícula en educación inicial en la población de 3-5 años
+                                                de edad
+                                            </h3>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            {{-- <div id="container" ></div> --}}
+                                            <figure class="highcharts-figure p-0">
+                                                <div id="container1" style="height: 7rem"></div>
+                                            </figure>
+                                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                                <span class="float-left" id="span-container1-fuente">Fuente:</span>
+                                                <span class="float-right"
+                                                    id="span-container1-fecha">Actualizado:</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4">
+                                    <div class="card card-border border border-plomo-0">
+                                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
+                                            style="height: 4rem">
+                                            <div class="card-widgets">
+                                                <a href="{{ route('indicador.nuevos.01') }}"
+                                                    class="waves-effect waves-light"><i
+                                                        class="mdi mdi-file-link text-orange-0"
+                                                        title="DETALLE"></i></a>
+
+                                                <a href="javascript:void(0)" class="waves-effect waves-light"
+                                                    data-toggle="modal" data-target="" onclick="datosIndicador(7)"><i
+                                                        class="mdi mdi-information text-orange-0"
+                                                        title="INFORMACIÓN"></i></a>
+                                            </div>
+                                            <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                                                Tasa neta de matricula en educación primaria en la población de 6 a 11
+                                                años de edad</h3>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            {{-- <div id="container" ></div> --}}
+                                            <figure class="highcharts-figure p-0">
+                                                <div id="container2" style="height: 7rem"></div>
+                                            </figure>
+                                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                                <span class="float-left" id="span-container2-fuente">Fuente:</span>
+                                                <span class="float-right"
+                                                    id="span-container2-fecha">Actualizado:</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4">
+                                    <div class="card card-border border border-plomo-0">
+                                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
+                                            style="height: 4rem">
+                                            <div class="card-widgets">
+                                                <a href="javascript:void(0)" class="waves-effect waves-light"><i
+                                                        class="mdi mdi-file-link text-orange-0"
+                                                        title="DETALLE"></i></a>
+
+                                                <a href="javascript:void(0)" class="waves-effect waves-light"
+                                                    data-toggle="modal" data-target="" onclick="datosIndicador(8)"><i
+                                                        class="mdi mdi-information text-orange-0"
+                                                        title="INFORMACIÓN"></i></a>
+                                            </div>
+                                            <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                                                Tasa neta de matricula en educación secundaria en la población de 12 a
+                                                16 años de edad</h3>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            {{-- <div id="container" ></div> --}}
+                                            <figure class="highcharts-figure p-0">
+                                                <div id="container3" style="height: 7rem"></div>
+                                            </figure>
+                                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                                <span class="float-left" id="span-container3-fuente">Fuente:</span>
+                                                <span class="float-right"
+                                                    id="span-container3-fecha">Actualizado:</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row d-none">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header bg-success-0 py-3 text-white">
+                        <div class="card-widgets">
+                            {{-- <a href="javascript:;" data-toggle="reload"><i class="mdi mdi-refresh"></i></a> --}}
+                            <a data-toggle="collapse" href="#portles2" role="button" aria-expanded="false"
+                                aria-controls="portles2"><i class="mdi mdi-minus"></i></a>
+                            {{-- <a href="#" data-toggle="remove"><i class="mdi mdi-close"></i></a> --}}
+                        </div>
+                        <h5 class="card-title mb-0 text-white">Entorno de Enseñanza</h5>
+                    </div>
+                    <div id="portles2" class="collapse show">
+                        <div class="card-body pb-0">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4">
+                                    <div class="card card-border border border-plomo-0">
+                                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
+                                            style="height: 4rem">
+                                            <div class="card-widgets">
+                                                <a href="{{ route('panelcontrol.educacion.indicador.nuevos.06') }}"
+                                                    class="waves-effect waves-light"><i
+                                                        class="mdi mdi-file-link text-orange-0"
+                                                        title="DETALLE"></i></a>
+
+                                                <a href="javascript:void(0)" class="waves-effect waves-light"
+                                                    data-toggle="modal" data-target=""
+                                                    onclick="datosIndicador(13)"><i
+                                                        class="mdi mdi-information text-orange-0"
+                                                        title="INFORMACIÓN"></i></a>
+                                            </div>
+                                            <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                                                Porcentaje de docentes titulados en educación inicial</h3>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <figure class="highcharts-figure p-0">
+                                                <div id="dtanal3" style="height: 7rem"></div>
+                                            </figure>
+                                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                                <span class="float-left" id="span-dtanal3-fuente">Fuente:</span>
+                                                <span class="float-right" id="span-dtanal3-fecha">Actualizado:</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-4">
+                                    <div class="card card-border border border-plomo-0">
+                                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
+                                            style="height: 4rem">
+                                            <div class="card-widgets">
+                                                <a href="{{ route('panelcontrol.educacion.indicador.nuevos.05') }}"
+                                                    class="waves-effect waves-light"><i
+                                                        class="mdi mdi-file-link text-orange-0"
+                                                        title="DETALLE"></i></a>
+
+                                                <a href="javascript:void(0)" class="waves-effect waves-light"
+                                                    data-toggle="modal" data-target=""
+                                                    onclick="datosIndicador(14)"><i
+                                                        class="mdi mdi-information text-orange-0"
+                                                        title="INFORMACIÓN"></i></a>
+                                            </div>
+                                            <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                                                Porcentaje de docentes titulados en educación primaria</h3>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <figure class="highcharts-figure p-0">
+                                                <div id="dtanal2" style="height: 7rem"></div>
+                                            </figure>
+                                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                                <span class="float-left" id="span-dtanal2-fuente">Fuente:</span>
+                                                <span class="float-right" id="span-dtanal2-fecha">Actualizado:</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-4">
+                                    <div class="card card-border border border-plomo-0">
+                                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
+                                            style="height: 4rem">
+                                            <div class="card-widgets">
+                                                <a href="{{ route('panelcontrol.educacion.indicador.nuevos.04') }}"
+                                                    class="waves-effect waves-light"><i
+                                                        class="mdi mdi-file-link text-orange-0"
+                                                        title="DETALLE"></i></a>
+
+                                                <a href="javascript:void(0)" class="waves-effect waves-light"
+                                                    data-toggle="modal" data-target=""
+                                                    onclick="datosIndicador(15)"><i
+                                                        class="mdi mdi-information text-orange-0"
+                                                        title="INFORMACIÓN"></i></a>
+                                            </div>
+                                            <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                                                Porcentaje de docentes titulados en educación
+                                                secundaria</h3>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <figure class="highcharts-figure p-0">
+                                                <div id="dtanal1" style="height: 7rem"></div>
+                                            </figure>
+                                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                                <span class="float-left" id="span-dtanal1-fuente">Fuente:</span>
+                                                <span class="float-right" id="span-dtanal1-fecha">Actualizado:</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            {{-- <div class="row">
+
+                                <div class="col-lg-6">
+                                    <div class="card card-border border border-plomo-0">
+                                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
+                                            style="height: 4rem">
+                                            <div class="card-widgets">
+                                                <a href="{{ route('panelcontrol.educacion.indicador.nuevos.04') }}"
+                                                    class="waves-effect waves-light"><i
+                                                        class="mdi mdi-file-link text-orange-0" title="DETALLE"></i></a>
+
+                                                <a href="javascript:void(0)" class="waves-effect waves-light"
+                                                    data-toggle="modal" data-target="#myModal-anal1"><i
+                                                        class="mdi mdi-information text-orange-0" title="INFORMACIÓN"></i></a>
+                                            </div>
+                                            <h3
+                                                class="card-title text-black text-center text-capitalize font-weight-normal font-11">
+                                                Porcentaje de Docentes Titulados en Educación
+                                                Secundaria</h3>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <figure class="highcharts-figure m-0">
+                                                <div id="anal-1" style="height: 15rem"></div>
+                                            </figure>
+                                            <div class="font-weight-bold text-muted ml-2 mr-2" style="font-size:9px">
+                                                <span class="float-left" id="span-anal1-fuente">Fuente:</span>
+                                                <span class="float-right" id="span-anal1-fecha">Actualizado:</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="card card-border border border-plomo-0">
+                                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
+                                            style="height: 4rem">
+                                            <div class="card-widgets">
+                                                <a href="{{ route('panelcontrol.educacion.indicador.nuevos.05') }}"
+                                                    class="waves-effect waves-light"><i
+                                                        class="mdi mdi-file-link text-orange-0" title="DETALLE"></i></a>
+
+                                                <a href="javascript:void(0)" class="waves-effect waves-light"
+                                                    data-toggle="modal" data-target="#myModal-anal2"><i
+                                                        class="mdi mdi-information text-orange-0" title="INFORMACIÓN"></i></a>
+                                            </div>
+                                            <h3
+                                                class="card-title text-black text-center text-capitalize font-weight-normal font-11">
+                                                Porcentaje de Docentes Titulados en Educación Primaria</h3>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <figure class="highcharts-figure m-0">
+                                                <div id="anal-2" style="height: 15rem"></div>
+                                            </figure>
+                                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                                <span class="float-left" id="span-anal2-fuente">Fuente:</span>
+                                                <span class="float-right" id="span-anal2-fecha">Actualizado:</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div> --}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row d-none">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header bg-success-0 py-3 text-white">
+                        <div class="card-widgets">
+                            {{-- <a href="javascript:;" data-toggle="reload"><i class="mdi mdi-refresh"></i></a> --}}
+                            <a data-toggle="collapse" href="#portles1" role="button" aria-expanded="false"
+                                aria-controls="portles1"><i class="mdi mdi-minus"></i></a>
+                            {{-- <a href="#" data-toggle="remove"><i class="mdi mdi-close"></i></a> --}}
+                        </div>
+                        <h5 class="card-title mb-0 text-white">Instituciones Educativas</h5>
+                    </div>
+                    <div id="portles1" class="collapse show">
+                        <div class="card-body pb-0">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4">
+                                    <div class="card card-border border border-plomo-0">
+                                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
+                                            style="height: 4rem">
+                                            <div class="card-widgets">
+                                                <a href="{{ route('indicador.nuevos.02') }}"
+                                                    class="waves-effect waves-light"><i
+                                                        class="mdi mdi-file-link text-orange-0"
+                                                        title="DETALLE"></i></a>
+
+                                                <a href="javascript:void(0)" class="waves-effect waves-light"
+                                                    data-toggle="modal" data-target="" onclick="datosIndicador(1)"><i
+                                                        class="mdi mdi-information text-orange-0"
+                                                        title="INFORMACIÓN"></i></a>
+                                            </div>
+                                            <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                                                Indicador 1
+                                            </h3>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <figure class="highcharts-figure p-0">
+                                                <div id="iiee1" style="height: 7rem"></div>
+                                            </figure>
+                                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                                <span class="float-left" id="span-iiee1-fuente">Fuente:</span>
+                                                <span class="float-right" id="span-iiee1-fecha">Actualizado:</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4">
+                                    <div class="card card-border border border-plomo-0">
+                                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
+                                            style="height: 4rem">
+                                            <div class="card-widgets">
+                                                <a href="{{ route('indicador.nuevos.01') }}"
+                                                    class="waves-effect waves-light"><i
+                                                        class="mdi mdi-file-link text-orange-0"
+                                                        title="DETALLE"></i></a>
+
+                                                <a href="javascript:void(0)" class="waves-effect waves-light"
+                                                    data-toggle="modal" data-target="" onclick="datosIndicador(7)"><i
+                                                        class="mdi mdi-information text-orange-0"
+                                                        title="INFORMACIÓN"></i></a>
+                                            </div>
+                                            <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                                                Indicador 2</h3>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <figure class="highcharts-figure p-0">
+                                                <div id="iiee2" style="height: 7rem"></div>
+                                            </figure>
+                                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                                <span class="float-left" id="span-iiee2-fuente">Fuente:</span>
+                                                <span class="float-right" id="span-iiee2-fecha">Actualizado:</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4">
+                                    <div class="card card-border border border-plomo-0">
+                                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
+                                            style="height: 4rem">
+                                            <div class="card-widgets">
+                                                <a href="javascript:void(0)" class="waves-effect waves-light"><i
+                                                        class="mdi mdi-file-link text-orange-0"
+                                                        title="DETALLE"></i></a>
+
+                                                <a href="javascript:void(0)" class="waves-effect waves-light"
+                                                    data-toggle="modal" data-target="" onclick="datosIndicador(8)"><i
+                                                        class="mdi mdi-information text-orange-0"
+                                                        title="INFORMACIÓN"></i></a>
+                                            </div>
+                                            <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                                                Indicador 3</h3>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <figure class="highcharts-figure p-0">
+                                                <div id="iiee3" style="height: 7rem"></div>
+                                            </figure>
+                                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                                <span class="float-left" id="span-iiee3-fuente">Fuente:</span>
+                                                <span class="float-right" id="span-iiee3-fecha">Actualizado:</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4">
+                                    <div class="card card-border border border-plomo-0">
+                                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
+                                            style="height: 4rem">
+                                            <div class="card-widgets">
+                                                <a href="{{ route('indicador.nuevos.02') }}"
+                                                    class="waves-effect waves-light"><i
+                                                        class="mdi mdi-file-link text-orange-0"
+                                                        title="DETALLE"></i></a>
+
+                                                <a href="javascript:void(0)" class="waves-effect waves-light"
+                                                    data-toggle="modal" data-target="" onclick="datosIndicador(1)"><i
+                                                        class="mdi mdi-information text-orange-0"
+                                                        title="INFORMACIÓN"></i></a>
+                                            </div>
+                                            <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                                                Indicador 4
+                                            </h3>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <figure class="highcharts-figure p-0">
+                                                <div id="iiee4" style="height: 7rem"></div>
+                                            </figure>
+                                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                                <span class="float-left" id="span-iiee4-fuente">Fuente:</span>
+                                                <span class="float-right" id="span-iiee4-fecha">Actualizado:</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4">
+                                    <div class="card card-border border border-plomo-0">
+                                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
+                                            style="height: 4rem">
+                                            <div class="card-widgets">
+                                                <a href="{{ route('indicador.nuevos.01') }}"
+                                                    class="waves-effect waves-light"><i
+                                                        class="mdi mdi-file-link text-orange-0"
+                                                        title="DETALLE"></i></a>
+
+                                                <a href="javascript:void(0)" class="waves-effect waves-light"
+                                                    data-toggle="modal" data-target="" onclick="datosIndicador(7)"><i
+                                                        class="mdi mdi-information text-orange-0"
+                                                        title="INFORMACIÓN"></i></a>
+                                            </div>
+                                            <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                                                Indicador 7</h3>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <figure class="highcharts-figure p-0">
+                                                <div id="iiee5" style="height: 7rem"></div>
+                                            </figure>
+                                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                                <span class="float-left" id="span-iiee5-fuente">Fuente:</span>
+                                                <span class="float-right" id="span-iiee5-fecha">Actualizado:</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4">
+                                    <div class="card card-border border border-plomo-0">
+                                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
+                                            style="height: 4rem">
+                                            <div class="card-widgets">
+                                                <a href="javascript:void(0)" class="waves-effect waves-light"><i
+                                                        class="mdi mdi-file-link text-orange-0"
+                                                        title="DETALLE"></i></a>
+
+                                                <a href="javascript:void(0)" class="waves-effect waves-light"
+                                                    data-toggle="modal" data-target="" onclick="datosIndicador(8)"><i
+                                                        class="mdi mdi-information text-orange-0"
+                                                        title="INFORMACIÓN"></i></a>
+                                            </div>
+                                            <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                                                Indicador 6</h3>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <figure class="highcharts-figure p-0">
+                                                <div id="iiee6" style="height: 7rem"></div>
+                                            </figure>
+                                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                                <span class="float-left" id="span-iiee6-fuente">Fuente:</span>
+                                                <span class="float-right" id="span-iiee6-fecha">Actualizado:</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-border border border-plomo-0">
+                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                        {{-- <div class="card-widgets">
+                            <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
+                                    class="fa fa-file-excel"></i> Descargar</button>
+                        </div> --}}
+                        <h3 class="text-black font-14">Matrícula educativa de estudiantes de educación básica por sexo,
+                            según UGEL</h3>
+                    </div>
+                    <div class="card-body pb-0">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive" id="vtabla1">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                            <span class="float-left vtabla1-fuente">Fuente:</span>
+                            <span class="float-right vtabla1-fecha">Actualizado:</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+
+<div id="modal_datosindicador" class="modal fade font-10" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-12" id="myModalLabel">Datos del indicador</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <form action="" id="form_datosindicador" name="form" class="form-horizontal"
+                    autocomplete="off">
+                    @csrf
+                    <input type="hidden" id="indicador" name="indicador" value="">
+                    <div class="form-body">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>Indicador</label>
+                                    <textarea class="form-control" name="indicadornombre" id="indicadornombre" cols="30" rows="2"
+                                        placeholder="Definición del indicador"></textarea>
+                                    {{-- <input id="indicadornombre" name="indicadornombre" class="form-control"
+                                        type="text" placeholder="Nombre del indicador"> --}}
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>Definición</label>
+                                    <textarea class="form-control" name="indicadordescripcion" id="indicadordescripcion" cols="30" rows="5"
+                                        placeholder="Definición del indicador"></textarea>
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Instrumento de gestion</label>
+                                    <input id="indicadorinstrumento" name="indicadorinstrumento" class="form-control"
+                                        type="text" placeholder="Fuente de datos">
+                                    <span class="help-block"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Tipo de indicador</label>
+                                    <input id="indicadortipo" name="indicadortipo" class="form-control"
+                                        type="text" placeholder="Fuente de datos">
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>Fuente de datos</label>
+                                    <input id="indicadorfuentedato" name="indicadorfuentedato" class="form-control"
+                                        type="text" placeholder="Fuente de datos">
+                                    <span class="help-block"></span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                {{-- <button type="button" class="btn btn-xs btn-danger waves-effect" data-dismiss="modal">Cerrar</button> --}}
+                {{-- <button type="button" class="btn btn-primary btn-xs waves-effect waves-light" onclick="verpdf(8)">Ficha Tecnica</button> --}}
+            </div>
+        </div>
+    </div>
+</div>
 
 @section('js')
-    <script src="https://code.highcharts.com/maps/highmaps.js"></script>
-    <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/mapdata/countries/pe/pe-all.js"></script>
-    {{-- highcharts --}}
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/data.js"></script>
-    {{-- <script src="https://code.highcharts.com/modules/drilldown.js"></script> --}}
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-
-
-
-    <!-- third party js -->
-    {{-- <script src="{{ asset('/') }}public/assets/libs/datatables/jquery.dataTables.min.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.js"></script>
-
-    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.responsive.min.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.js"></script>
-
-    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.buttons.min.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/datatables/buttons.bootstrap4.min.js"></script>
-
-    <script src="{{ asset('/') }}public/assets/libs/jszip/jszip.min.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/pdfmake/pdfmake.min.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/pdfmake/vfs_fonts.js"></script>
-
-    <script src="{{ asset('/') }}public/assets/libs/datatables/buttons.html5.min.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/datatables/buttons.print.min.js"></script>
-
-    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.fixedHeader.min.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.keyTable.min.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.scroller.min.js"></script>
- --}}
-
-
-
-
     <script type="text/javascript">
+        var paleta_colores = ['#5eb9aa', '#F9FFFE', '#f5bd22', '#058DC7', '#50B432', '#9D561B', '#DDDF00', '#24CBE5',
+            '#64E572', '#9F9655', '#FFF263', '#6AF9C4'
+        ];
         $(document).ready(function() {
             Highcharts.setOptions({
-                colors: paleta_colores,
                 lang: {
                     thousandsSep: ","
                 }
             });
-            /* Highcharts.setOptions({
-                colors: Highcharts.map(paleta_colores, function(color) {
-                    return {
-                        radialGradient: {
-                            cx: 0.5,
-                            cy: 0.3,
-                            r: 0.7
-                        },
-                        stops: [
-                            [0, color],
-                            [1, Highcharts.color(color).brighten(-0.3).get('rgb')] // darken
-                        ]
-                    };
-                }),
-                lang: {
-                    thousandsSep: ","
-                }
-            }); */
+            cargarCards();
+        });
 
-            /*
-             *AJAX PARA LA PRESENTACION DE LA PRIMERA GRAFICA 1
-             */
+        function cargarCards() {
             $.ajax({
-                url: "{{ url('/') }}/Home/Presupuesto/gra2/{{ $baseAP->id }}",
+                url: "{{ route('panelcontrol.educacion.head') }}",
+                data: {
+                    "provincia": $('#provincia').val(),
+                    "distrito": $('#distrito').val(),
+                    "tipogestion": $('#tipogestion').val(),
+                    "ambito": $('#ambito').val(),
+                },
                 type: "GET",
                 dataType: "JSON",
-                beforeSend: function() {
-                    $('#anal2').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                },
                 success: function(data) {
-                    maps01('anal1',
-                        data.data,
-                        '',
-                        'Rankin de la ejecución de gastos por gobiernos regionales');
-                    gbar('anal2', [],
-                        data.info,
-                        '',
-                        'Porcentaje de ejecución de gastos por gobiernos regionales',
-                    );
+                    $('#basico').text(data.valor1);
+                    $('#ebr').text(data.valor2);
+                    $('#ebe').text(data.valor3);
+                    $('#eba').text(data.valor4);
+                    $('#ibasico').text(data.ind1 + '%');
+                    $('#iebr').text(data.ind2 + '%');
+                    $('#iebe').text(data.ind3 + '%');
+                    $('#ieba').text(data.ind4 + '%');
+                    //$('#bbasico').css('width','100px');
+                    $('#bbasico').css('width', data.ind1 + '%')
+                        .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+                        .addClass(data.ind1 > 84 ? 'bg-success-0' : (data.ind1 > 49 ? 'bg-warning-0' :
+                            'bg-orange-0'));
+                    $('#bebr').css('width', data.ind2 + '%').removeClass(
+                            'bg-success-0 bg-orange-0 bg-warning-0')
+                        .addClass(data.ind2 > 84 ? 'bg-success-0' : (data.ind2 > 49 ? 'bg-warning-0' :
+                            'bg-orange-0'));
+                    $('#bebe').css('width', data.ind3 + '%').removeClass(
+                            'bg-success-0 bg-orange-0 bg-warning-0')
+                        .addClass(data.ind3 > 84 ? 'bg-success-0' : (data.ind3 > 49 ? 'bg-warning-0' :
+                            'bg-orange-0'));
+                    $('#beba').css('width', data.ind4 + '%').removeClass(
+                            'bg-success-0 bg-orange-0 bg-warning-0')
+                        .addClass(data.ind4 > 84 ? 'bg-success-0' : (data.ind4 > 49 ? 'bg-warning-0' :
+                            'bg-orange-0'));
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");
@@ -386,354 +1248,302 @@
                 },
             });
 
+
+        }
+
+        function panelGraficas(div) {
             $.ajax({
-                url: "{{ url('/') }}/Home/Presupuesto/gra3",
+                url: "{{ route('panelcontrol.educacion.graficas') }}",
+                data: {
+                    'div': div,
+                    "anio": 2024,
+                    "provincia": $('#provincia').val(),
+                    "distrito": $('#distrito').val(),
+                    "tipogestion": $('#tipogestion').val(),
+                    "ambito": $('#ambito').val(),
+                },
                 type: "GET",
                 dataType: "JSON",
                 beforeSend: function() {
-                    $('#anal3').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                },
-                success: function(data) {
-                    //console.log(data.info.categoria);
-                    /* gSimpleColumn(
-                        'anal3',
-                        data.info,
-                        '',
-                        'RANKIN(PUESTOS) MENSUAL DE LA EJECUCIÓN DE GASTOS',
-                        ''); */
-                    gLineaBasica(
-                        'anal3',
-
-                        data.info.categoria,
-                        data.info.series,
-                        'Puesto',
-                        '',
-                        'Rankin Mensual De La Ejecución De Gastos Del Gru', '');
-                    /* glineal(div, categoria, series, titulo, subtitulo) */
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 3");
-                    console.log(jqXHR);
-                },
-            });
-
-            $.ajax({
-                url: "{{ url('/') }}/Home/Presupuesto/gra4",
-                type: "GET",
-                dataType: "JSON",
-                beforeSend: function() {
-                    $('#anal4').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                },
-                success: function(data) {
-                    /* gSimpleColumn('anal4',
-                        data.info,
-                        '',
-                        'ACUMULADO MENSUAL DEL PIM A TODA FUENTE DE FINANCIAMIENTO',
-                        ''); */
-                    gLineaBasica(
-                        'anal4',
-
-                        data.info.categoria,
-                        data.info.series,
-                        'PIM',
-                        '',
-                        'Acumulado Mensual Del Pim A Nivel Pliego', '');
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 3");
-                    console.log(jqXHR);
-                },
-            });
-
-
-            $.ajax({
-                url: "{{ url('/') }}/Home/Presupuesto/gra5",
-                type: "GET",
-                dataType: "JSON",
-                beforeSend: function() {
-                    $('#anal5').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                },
-                success: function(data) {
-                    gSimpleColumn(
-                        'anal5',
-                        data.info,
-                        '',
-                        'CERTIFICADO MENSUAL A TODA FUENTE DE FINANCIAMIENTO ',
-                        '');
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 5");
-                    console.log(jqXHR);
-                },
-            });
-
-            $.ajax({
-                url: "{{ url('/') }}/Home/Presupuesto/gra6",
-                type: "GET",
-                dataType: "JSON",
-                beforeSend: function() {
-                    $('#anal6').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                },
-                success: function(data) {
-                    gSimpleColumn(
-                        'anal6',
-                        data.info,
-                        '',
-                        'DEVENGADO MENSUAL A TODA FUENTE DE FINANCIAMIENTO',
-                        '');
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 6");
-                    console.log(jqXHR);
-                },
-            });
-
-            $.ajax({
-                url: "{{ url('/') }}/Home/Presupuesto/gra7",
-                type: "GET",
-                dataType: "JSON",
-                beforeSend: function() {
-                    $('#anal7').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                },
-                success: function(data) {
-                    console.log(data)
-                    //gSimpleColumn('anal6', data.info, '', '', '');
-                    gAnidadaColumn('anal7',
-                        data.info.categoria,
-                        data.info.series,
-                        '',
-                        'CERTIFICADO Y DEVENGADO ACUMULADO Y EJECUCIÓN MENSUAL');
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 7");
-                    console.log(jqXHR);
-                },
-            });
-
-
-
-        });
-    </script>
-
-    <script type="text/javascript">
-        function gColumnDrilldown(div, data1, data2, titulo, subtitulo, tituloserie) {
-            Highcharts.chart(div, {
-                chart: {
-                    type: 'column',
-                },
-                title: {
-                    enabled: false,
-                    text: titulo,
-                    //align:'left',
-                },
-                subtitle: {
-                    //align:'left',
-                    text: subtitulo,
-                },
-                accessibility: {
-                    announceNewData: {
-                        enabled: true,
+                    if (div == "siagie001") {
+                        $('#' + div).html(
+                            '<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "censodocente001") {
+                        $('#' + div).html(
+                            '<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else {
+                        // $('#' + div).html(
+                        //     '<span><i class="fa fa-spinner fa-spin"></i></span>');
                     }
                 },
-                xAxis: {
-                    type: 'category',
-                },
-                yAxis: {
-                    /* max: 100, */
-                    title: {
-                        enabled: false,
-                        text: 'Porcentaje',
-                    }
-                },
-                legend: {
-                    enabled: false,
-                },
-                plotOptions: {
-                    series: {
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                            format: '{point.y}%',
-                        },
-                    },
-                    drilldown: {
-                        series: {
-                            //borderWidth: 0,
-                            dataLabels: {
-                                enabled: true,
-                                format: '{point.y}',
-                            },
-                            format: '{point.y}',
-                        },
-                    }
-                    /* series: {
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                            //format: '{point.y:,.0f}',
-                            //format: '{point.y:.1f}%',
-                            formatter: function() {
-                                if (this.y > 1000000) {
-                                    return Highcharts.numberFormat(this.y / 1000000, 0) + "M";
-                                } else if (this.y > 1000) {
-                                    return Highcharts.numberFormat(this.y / 1000, 0) + "K";
-                                } else {
-                                    return this.y;
-                                }
-                            },
-                        },
-                    } */
-                },
-                tooltip: {
-                    pointFormat: '<span style="color:{point.color}">\u25CF</span> Hay: <b>{point.y}%</b><br/>',
-                    shared: true,
-                    /* headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>' */
-                },
-                series: [{
-                    showInLegend: tituloserie != '',
-                    name: tituloserie,
-                    label: {
-                        enabled: false
-                    },
-                    colorByPoint: false,
-                    data: data1,
+                success: function(data) {
+                    switch (div) {
+                        case "siagie001":
+                            gAnidadaColumn(div,
+                                data.info.cat,
+                                data.info.dat,
+                                '',
+                                'Numero de estudiantes matriculados en educacion basica regular, periodo 2018 - 2023',
+                                data.info.maxbar
+                            );
+                            $('#span-siagie001-fuente').html("Fuente: " + data.reg.fuente);
+                            $('#span-siagie001-fecha').html("Actualizado: " + data.reg.fecha);
+                            break;
+                        case "censodocente001":
+                            gAnidadaColumn(div,
+                                data.info.cat,
+                                data.info.dat,
+                                '',
+                                'Numero de docentes en educacion basica regular, periodo 2018 - 2023',
+                                data.info.maxbar
+                            );
+                            $('#span-censodocente001-fuente').html("Fuente: " + data.reg.fuente);
+                            $('#span-censodocente001-fecha').html("Actualizado: " + data.reg.fecha);
+                            break;
+                        case "container1":
+                            gsemidona(div, 0, ['#5eb9aa', '#F9FFFE']);
+                            $('#span-container1-fuente').html("Fuente: " + 'MINEDU');
+                            $('#span-container1-fecha').html("Actualizado: " + '31/12/2022');
+                            break;
+                        case "container2":
+                            gsemidona(div, 0, ['#5eb9aa',
+                                '#F9FFFE'
+                            ]); // ['#f5bd22', '#FDEEC7']);
+                            $('#span-container2-fuente').html("Fuente: " + 'MINEDU');
+                            $('#span-container2-fecha').html("Actualizado: " + '31/12/2022');
+                            break;
+                        case "container3":
+                            gsemidona(div, 0, ['#5eb9aa', '#F9FFFE']); // ['#e65310', '#FDD1BD']);
+                            $('#span-container3-fuente').html("Fuente: " + 'MINEDU');
+                            $('#span-container3-fecha').html("Actualizado: " + '31/12/2022');
+                            break;
+                        case "dtanal1":
+                            gsemidona(div, data.info.indicador, ['#5eb9aa', '#F9FFFE']);
+                            $('#span-dtanal1-fuente').html("Fuente: " + data.info.fuente);
+                            $('#span-dtanal1-fecha').html("Actualizado: " + data.info.fecha);
+                            break;
+                        case "dtanal2":
+                            gsemidona(div, data.info.indicador, ['#5eb9aa', '#F9FFFE']);
+                            $('#span-dtanal2-fuente').html("Fuente: " + data.info.fuente);
+                            $('#span-dtanal2-fecha').html("Actualizado: " + data.info.fecha);
+                            break;
+                        case "dtanal3":
+                            gsemidona(div, data.info.indicador, ['#5eb9aa', '#F9FFFE']);
+                            $('#span-dtanal3-fuente').html("Fuente: " + data.info.fuente);
+                            $('#span-dtanal3-fecha').html("Actualizado: " + data.info.fecha);
+                            break;
+                        case "iiee1":
+                            gsemidona(div, 99.1, ['#5eb9aa', '#F9FFFE']);
+                            $('#span-iiee1-fuente').html("Fuente: " + 'MINEDU');
+                            $('#span-iiee1-fecha').html("Actualizado: " + '31/12/2022');
+                            break;
+                        case "iiee2":
+                            gsemidona(div, 76.0, ['#5eb9aa', '#F9FFFE']); // ['#f5bd22', '#FDEEC7']);
+                            $('#span-iiee2-fuente').html("Fuente: " + 'MINEDU');
+                            $('#span-iiee2-fecha').html("Actualizado: " + '31/12/2022');
+                            break;
+                        case "iiee3":
+                            gsemidona(div, 94.9, ['#5eb9aa', '#F9FFFE']); // ['#e65310', '#FDD1BD']);
+                            $('#span-iiee3-fuente').html("Fuente: " + 'MINEDU');
+                            $('#span-iiee3-fecha').html("Actualizado: " + '31/12/2022');
+                            break;
+                        case "iiee4":
+                            gsemidona(div, 99.1, ['#5eb9aa', '#F9FFFE']);
+                            $('#span-iiee4-fuente').html("Fuente: " + 'MINEDU');
+                            $('#span-iiee4-fecha').html("Actualizado: " + '31/12/2022');
+                            break;
+                        case "iiee5":
+                            gsemidona(div, 76.0, ['#5eb9aa', '#F9FFFE']); // ['#f5bd22', '#FDEEC7']);
+                            $('#span-iiee5-fuente').html("Fuente: " + 'MINEDU');
+                            $('#span-iiee5-fecha').html("Actualizado: " + '31/12/2022');
+                            break;
+                        case "iiee6":
+                            gsemidona(div, 94.9, ['#5eb9aa', '#F9FFFE']); // ['#e65310', '#FDD1BD']);
+                            $('#span-iiee6-fuente').html("Fuente: " + 'MINEDU');
+                            $('#span-iiee6-fecha').html("Actualizado: " + '31/12/2022');
+                            break;
 
-                }],
-                drilldown: {
-                    breadcrumbs: {
-                        position: {
-                            align: 'right',
-                        }
-                    },
-                    series: data2,
+                        case "skills001":
+                            $('.skills001 h6 span').html(data.info.indicador + "%");
+                            $('.skills001 .progress-bar').css('width', data.info.indicador + '%')
+                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
+                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+                            break;
+                        case "skills002":
+                            $('.skills002 h6 span').html(data.info.indicador + "%");
+                            $('.skills002 .progress-bar').css('width', data.info.indicador + '%')
+                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
+                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+                        case "skills003":
+                            $('.skills003 h6 span').html(data.info.indicador + "%");
+                            $('.skills003 .progress-bar').css('width', data.info.indicador + '%')
+                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
+                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+                            break;
+                        case "skills004":
+                            $('.skills004 h6 span').html(data.info.indicador + "%");
+                            $('.skills004 .progress-bar').css('width', data.info.indicador + '%')
+                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
+                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+                            break;
+                        case "skills005":
+                            $('.skills005 h6 span').html(data.info.indicador + "%");
+                            $('.skills005 .progress-bar').css('width', data.info.indicador + '%')
+                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
+                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+                            $('#span-skills005-fuente').html("Fuente: " + data.reg.fuente);
+                            $('#span-skills005-fecha').html("Actualizado: " + data.reg.fecha);
+                            break;
+                        case "skills006":
+                            $('.skills006 h6 span').html(data.info.indicador + "%");
+                            $('.skills006 .progress-bar').css('width', data.info.indicador + '%')
+                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
+                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+
+                            break;
+                        case "skills007":
+                            $('.skills007 h6 span').html(data.info.indicador + "%");
+                            $('.skills007 .progress-bar').css('width', data.info.indicador + '%')
+                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
+                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+                            break;
+                        case "skills008":
+                            $('.skills008 h6 span').html(data.info.indicador + "%");
+                            $('.skills008 .progress-bar').css('width', data.info.indicador + '%')
+                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
+                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+                            break;
+                        case "skills009":
+                            $('.skills009 h6 span').html(data.info.indicador + "%");
+                            $('.skills009 .progress-bar').css('width', data.info.indicador + '%')
+                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
+                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+                            break;
+                        case "skills010":
+                            $('.skills010 h6 span').html(data.info.indicador + "%");
+                            $('.skills010 .progress-bar').css('width', data.info.indicador + '%')
+                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
+                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+                            $('#span-skills010-fuente').html("Fuente: " + data.reg.fuente);
+                            $('#span-skills010-fecha').html("Actualizado: " + data.reg.fecha);
+                            break;
+                        case "tabla1":
+                            $('#vtabla1').html(data.excel);
+                            $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
+                            $('.vtabla1-fecha').html('Actualizado: ' + data.reg.fecha);
+                            $('#tabla1').DataTable({
+                                responsive: true,
+                                autoWidth: false,
+                                ordered: true,
+                                searching: false,
+                                bPaginate: false,
+                                info: false,
+                                language: table_language,
+                            });
+                            break;
+                        default:
+                            break;
+                    }
+
                 },
-                credits: false,
+                erro: function(jqXHR, textStatus, errorThrown) {
+                    console.log("ERROR GRAFICA 1");
+                    console.log(jqXHR);
+                },
             });
         }
 
-        function gColumnDrilldown2(div, categoria, serie1, data2, titulo, subtitulo, tituloserie) {
-            Highcharts.chart(div, {
-                chart: {
-                    type: 'column',
+        function cargarDistritos() {
+            $.ajax({
+                url: "{{ route('plaza.cargardistritos', '') }}/" + $('#provincia').val(),
+                type: 'GET',
+                success: function(data) {
+                    $("#distrito option").remove();
+                    var options = '<option value="0">DISTRITO</option>';
+                    $.each(data.distritos, function(index, value) {
+                        //ss = (id == value.id ? "selected" : "");
+                        options += "<option value='" + value.id + "'>" + value.nombre +
+                            "</option>"
+                    });
+                    $("#distrito").append(options);
                 },
-                title: {
-                    enabled: false,
-                    text: titulo,
-                    //align:'left',
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
                 },
-                subtitle: {
-                    //align:'left',
-                    text: subtitulo,
-                },
-                accessibility: {
-                    announceNewData: {
-                        enabled: true,
-                    }
-                },
-                xAxis: {
-                    //type: 'category',
-                    categories: categoria
-                },
-                yAxis: {
-                    /* max: 100, */
-                    title: {
-                        enabled: false,
-                        text: 'Porcentaje',
-                    }
-                },
-                legend: {
-                    enabled: false,
-                },
-                plotOptions: {
-                    series: {
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                            format: '{point.y}%',
-                        },
-                    },
-                    drilldown: {
-                        series: {
-                            //borderWidth: 0,
-                            dataLabels: {
-                                enabled: true,
-                                format: '{point.y}',
-                            },
-                            format: '{point.y}',
-                        },
-                    }
-                    /* series: {
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                            //format: '{point.y:,.0f}',
-                            //format: '{point.y:.1f}%',
-                            formatter: function() {
-                                if (this.y > 1000000) {
-                                    return Highcharts.numberFormat(this.y / 1000000, 0) + "M";
-                                } else if (this.y > 1000) {
-                                    return Highcharts.numberFormat(this.y / 1000, 0) + "K";
-                                } else {
-                                    return this.y;
-                                }
-                            },
-                        },
-                    } */
-                },
-                tooltip: {
-                    pointFormat: '<span style="color:{point.color}">\u25CF</span> Hay: <b>{point.y}%</b><br/>',
-                    shared: true,
-                    /* headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>' */
-                },
-                series: serie1
-                    /* [{
-                                        showInLegend: tituloserie != '',
-                                        name: tituloserie,
-                                        label: {
-                                            enabled: false
-                                        },
-                                        colorByPoint: false,
-                                        data: data1,
-
-                                    }] */
-                    ,
-                drilldown: {
-                    breadcrumbs: {
-                        position: {
-                            align: 'right',
-                        }
-                    },
-                    series: data2,
-                },
-                credits: false,
             });
         }
+
+        function datosIndicador(id) {
+            $.ajax({
+                url: "{{ route('mantenimiento.indicadorgeneral.buscar.1', '') }}/" + id,
+                type: "GET",
+                dataType: "JSON",
+                success: function(data) {
+                    console.log(data);
+                    if (data.ie) {
+                        $('#indicador').val(data.ie.id);
+                        $('#indicadornombre').val(data.ie.nombre);
+                        $('#indicadordescripcion').val(data.ie.descripcion);
+                        $('#indicadorinstrumento').val(data.ie.instrumento);
+                        $('#indicadortipo').val(data.ie.tipo);
+                        $('#indicadorfuentedato').val(data.ie.fuente_dato);
+                        $('#modal_datosindicador .modal-footer').html(
+                            '<button type="button" class="btn btn-xs btn-danger waves-effect" data-dismiss="modal">Cerrar</button><button type="button" class="btn btn-primary btn-xs waves-effect waves-light" onclick="verpdf(' +
+                            id + ')">Ficha Tecnica</button>');
+                        $('#modal_datosindicador').modal('show');
+                    } else {
+                        toastr.error('ERROR, Indicador no encontrado, consulte al administrador', 'Mensaje');
+                    }
+                },
+                erro: function(jqXHR, textStatus, errorThrown) {
+                    console.log("ERROR DE INDICADOR");
+                    console.log(jqXHR);
+                },
+            });
+        };
+
+        function verpdf(id) {
+            window.open("{{ route('mantenimiento.indicadorgeneral.exportar.pdf', '') }}/" + id);
+        };
 
         function gSimpleColumn(div, datax, titulo, subtitulo, tituloserie) {
+
             Highcharts.chart(div, {
                 chart: {
                     type: 'column',
                 },
                 title: {
-                    enabled: true,
+                    enabled: false,
                     text: titulo,
                 },
                 subtitle: {
-                    text: subtitulo,
+                    enabled: false,
+                    //text: subtitulo,
                 },
                 xAxis: {
                     type: 'category',
                 },
                 yAxis: {
-                    //max: 1600000000,
-                    //min:100000,
+                    /* max: 100, */
                     title: {
                         enabled: false,
                         text: 'Porcentaje',
                     }
                 },
+                /* colors: [
+                    '#8085e9',
+                    '#2b908f',
+                ], */
                 series: [{
                     showInLegend: tituloserie != '',
                     name: tituloserie,
@@ -742,10 +1552,8 @@
                     },
                     colorByPoint: false,
                     data: datax,
-
                 }],
                 tooltip: {
-                    //pointFormat: '<span style="color:{point.color}">\u25CF</span> Hay: <b>{point.y}%</b><br/>',
                     pointFormat: '<span style="color:{point.color}">\u25CF</span> Hay: <b>{point.y}</b><br/>',
                     shared: true
                 },
@@ -754,56 +1562,12 @@
                         borderWidth: 0,
                         dataLabels: {
                             enabled: true,
-                            //format: '{point.y}%',
-                            formatter: function() {
-                                if (this.y > 1000000) {
-                                    return Highcharts.numberFormat(this.y / 1000000, 0) + "M";
-                                } else if (this.y > 1000) {
-                                    return Highcharts.numberFormat(this.y / 1000, 0) + "K";
-                                } else if (this.y < -1000000) {
-                                    return Highcharts.numberFormat(this.y / 1000000, 0) + "M";
-                                } else {
-                                    return this.y;
-                                }
-                            },
-                            style: {
-                                fontSize: '10px',
-                                fontWeight: 'normal',
-                            }
                         },
-                        point: {
-                            cursor: 'pointer',
-                            events: {
-                                click: function() {
-                                    //alert('Category: ' + this.category + ', value: ' + this.y);
-                                    alert(this.options);
-                                    //location.href = 'https://en.wikipedia.org/wiki/' +this.options.key;
-                                    //alert('hola ronald');
-                                },
-                            },
-                        },
-
-
                     }
-                    /* series: {
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                            //format: '{point.y:,.0f}',
-                            //format: '{point.y:.1f}%',
-                            formatter: function() {
-                                if (this.y > 1000000) {
-                                    return Highcharts.numberFormat(this.y / 1000000, 0) + "M";
-                                } else if (this.y > 1000) {
-                                    return Highcharts.numberFormat(this.y / 1000, 0) + "K";
-                                } else {
-                                    return this.y;
-                                }
-                            },
-                        },
-                    } */
                 },
-
+                exporting: {
+                    enabled: false
+                },
                 credits: false,
             });
         }
@@ -817,14 +1581,16 @@
                     type: 'pie'
                 },
                 title: {
+                    enabled: false,
                     text: titulo, //'Browser market shares in January, 2018'
                 },
                 subtitle: {
-                    text: subtitulo,
+                    enabled: false,
+                    //text: subtitulo,
                 },
                 tooltip: {
                     //pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
-                    pointFormat: '{series.name}: <b>{point.y:,.0f} ({point.percentage:.1f}%)</b>',
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
                 },
                 accessibility: {
                     point: {
@@ -838,18 +1604,8 @@
                         dataLabels: {
                             enabled: true,
                             //format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                            format: '{point.y:,.0f} ({point.percentage:.1f}%)',
-                            //format: '{point.percentage:.1f}%',
-                            connectorColor: 'silver',
-                            style: {
-                                fontWeight: 'normal',
-                            }
-                        }
-                    },
-                    series: {
-                        //allowPointSelect: true
-                        style: {
-                            fontSize: '10pt'
+                            format: '{point.y:,0f} ( {point.percentage:.1f}% )',
+                            connectorColor: 'silver'
                         }
                     }
                 },
@@ -864,24 +1620,14 @@
                             connectorColor: 'silver'
                         }
                     }
-
                 }, */
                 series: [{
                     showInLegend: true,
                     //name: 'Share',
                     data: datos,
                 }],
-                legend: {
-                    //align: 'center', //right//left//center
-                    //verticalAlign: 'bottom', //top//middle//bottom
-                    //layout: 'horizontal', //horizontal//vertical//proximate
-                    itemStyle: {
-                        "color": "#333333",
-                        "cursor": "pointer",
-                        "fontSize": "10px",
-                        "fontWeight": "normal",
-                        "textOverflow": "ellipsis"
-                    },
+                exporting: {
+                    enabled: false
                 },
                 credits: false,
             });
@@ -927,44 +1673,132 @@
             });
         }
 
-        function gAnidadaColumn(div, categoria, series, titulo, subtitulo) {
+        function gsemidona(div, valor, colors) {
+            Highcharts.chart(div, {
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: 0,
+                    plotShadow: false,
+                    height: 200,
+                },
+                title: {
+                    text: valor + '%', // 'Browser<br>shares<br>January<br>2022',
+                    align: 'center',
+                    verticalAlign: 'middle',
+                    y: 15, //60,
+                    style: {
+                        //fontWeight: 'bold',
+                        //color: 'orange',
+                        fontSize: '30'
+                    }
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                accessibility: {
+                    point: {
+                        valueSuffix: '%'
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        dataLabels: {
+                            enabled: true,
+                            distance: -50,
+                            style: {
+                                fontWeight: 'bold',
+                                color: 'white'
+                            },
+
+                        },
+                        startAngle: -90,
+                        endAngle: 90,
+                        center: ['50%', '50%'], //['50%', '75%'],
+                        size: '120%',
+                        borderColor: '#98a6ad',
+                        colors: colors,
+                    }
+                },
+                series: [{
+                    type: 'pie',
+                    name: 'Avance',
+                    innerSize: '65%',
+                    data: [
+                        ['', valor],
+                        //['Edge', 11.97],
+                        //['Firefox', 5.52],
+                        //['Safari', 2.98],
+                        //['Internet Explorer', 1.90],
+                        {
+                            name: '',
+                            y: 100 - valor,
+                            dataLabels: {
+                                enabled: false
+                            }
+                        }
+                    ]
+                }],
+                exporting: {
+                    enabled: false
+                },
+                credits: false
+            });
+        }
+
+        function gAnidadaColumn(div, categoria, series, titulo, subtitulo, maxBar) {
+            var rango = categoria.length;
+            var posPorcentaje = rango * 2 + 1;
+            var cont = 0;
+            var porMaxBar = maxBar * 0.5;
             Highcharts.chart(div, {
                 chart: {
                     zoomType: 'xy',
                 },
+                colors: ['#5eb9aa', '#f5bd22', '#ef5350'],
                 title: {
                     text: titulo, //'Browser market shares in January, 2018'
                 },
                 subtitle: {
                     text: subtitulo,
+                    style: {
+                        fontSize: '10px',
+                    }
                 },
                 xAxis: [{
                     categories: categoria,
-                    crosshair: true
+                    crosshair: true,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    }
                 }],
                 yAxis: [{ // Primary yAxis
-                        max: 2000000000,
+                        max: maxBar > 0 ? maxBar + porMaxBar : null,
                         labels: {
-                            enabled: false,
-                        },
-                        title: {
-                            enabled: false,
-                        },
-                        /* labels: {
-                            format: '{value}°C',
+                            enabled: true,
                             style: {
-                                color: Highcharts.getOptions().colors[2]
+                                //color: Highcharts.getOptions().colors[2],
+                                fontSize: '10px',
                             }
                         },
+                        // labels: {
+                        //     //format: '{value}°C',
+                        //     //style: {
+                        //     //    color: Highcharts.getOptions().colors[2]
+                        //     //}
+                        // },
                         title: {
-                            text: 'Temperature',
+                            enabled: false,
+                            text: 'Matriculados',
                             style: {
-                                color: Highcharts.getOptions().colors[2]
+                                //color: Highcharts.getOptions().colors[2],
+                                fontSize: '11px',
                             }
-                        }, */
+                        },
                         //opposite: true,
                     }, { // Secondary yAxis
-                        gridLineWidth: 0,
+                        gridLineWidth: 0, //solo indica el tamaño de la linea
                         labels: {
                             enabled: false,
                         },
@@ -972,37 +1806,40 @@
                             enabled: false,
                         },
                         /* title: {
-                            text: 'Rainfall',
-                            style: {
-                                color: Highcharts.getOptions().colors[0]
-                            }
-                        },
-                        labels: {
-                            format: '{value} mm',
-                            style: {
-                                color: Highcharts.getOptions().colors[0]
-                            }
+                            //text: 'Rainfall',
+                            text: '%Indicador',
+                            //style: {
+                            //    color: Highcharts.getOptions().colors[0]
+                            //}
                         }, */
-                        min: -100,
-                        max: 150,
+                        /* labels: {
+                            //format: '{value} mm',
+                            format: '{value} %',
+                            //style: {
+                            //   color: Highcharts.getOptions().colors[0]
+                            //}
+                        }, */
+                        //min: -200,
+                        min: -600,
+                        max: 400,
                         opposite: true,
                     },
                     /* { // Tertiary yAxis
-                                       gridLineWidth: 0,
-                                       title: {
-                                           text: 'Sea-Level Pressure',
-                                           style: {
-                                               color: Highcharts.getOptions().colors[1]
-                                           }
-                                       },
-                                       labels: {
-                                           format: '{value} mb',
-                                           style: {
-                                               color: Highcharts.getOptions().colors[1]
-                                           }
-                                       },
-                                       opposite: true
-                                   } */
+                        gridLineWidth: 0,
+                        title: {
+                            text: 'Sea-Level Pressure',
+                            style: {
+                                color: Highcharts.getOptions().colors[1]
+                            }
+                        },
+                        labels: {
+                            format: '{value} mb',
+                            style: {
+                                color: Highcharts.getOptions().colors[1]
+                            }
+                        },
+                        opposite: true
+                    } */
                 ],
                 series: series,
                 plotOptions: {
@@ -1010,24 +1847,21 @@
                         stacking: 'normal'
                     }, */
                     series: {
+                        showInLegend: true,
                         borderWidth: 0,
                         dataLabels: {
                             enabled: true,
                             //format: '{point.y:,.0f}',
                             //format: '{point.y:.1f}%',
-                            formatter: function() {
-                                if (this.y > 1000000) {
-                                    return Highcharts.numberFormat(this.y / 1000000, 0) + "M";
-                                } else if (this.y > 1000) {
-                                    return Highcharts.numberFormat(this.y / 1000, 0) + "K";
-                                } else if (this.y < 101) {
-                                    return this.y + "%";
-                                } else {
-                                    return this.y;
-                                }
-                            },
+                            /* formatter: function() {
+                                if (this.colorIndex == 2)
+                                    return this.y + " %";
+                                else
+                                    return Highcharts.numberFormat(this.y, 0);
+                            }, */
                             style: {
                                 fontWeight: 'normal',
+                                fontSize: '10px',
                             }
                         },
                     },
@@ -1037,653 +1871,30 @@
                 },
                 legend: {
                     itemStyle: {
-                        "color": "#333333",
+                        //"color": "#333333",
                         "cursor": "pointer",
                         "fontSize": "10px",
                         "fontWeight": "normal",
                         "textOverflow": "ellipsis"
                     },
                 },
-                credits: false,
-            });
-        }
-
-        function gAnidadaColumn_(div, categoria, series, titulo, subtitulo) {
-            Highcharts.chart(div, {
-                chart: {
-                    type: 'column',
-                },
-                title: {
-                    text: titulo, //'Browser market shares in January, 2018'
-                },
-                subtitle: {
-                    text: subtitulo,
-                },
-                xAxis: [{
-                    categories: categoria,
-                    crosshair: true
-                }],
-                /* yAxis: [{
-                    allowDecimals: false,
-                    min: 0,
-                    title: {
-                        enabled: false,
-                        text: 'Porcentaje',
-                    }
-                }, {
-                    allowDecimals: false,
-                    min: 0,
-                    title: {
-                        enabled: false,
-                        text: 'Porcentaje',
-                    }
-                }], */
-                yAxis: [{ // Primary yAxis
-                    labels: {
-                        format: '{value}°C',
-                        style: {
-                            color: Highcharts.getOptions().colors[2]
-                        }
-                    },
-                    title: {
-                        text: 'Temperature',
-                        style: {
-                            color: Highcharts.getOptions().colors[2]
-                        }
-                    },
-                    opposite: true
-
-                }, { // Secondary yAxis
-                    gridLineWidth: 0,
-                    title: {
-                        text: 'Rainfall',
-                        style: {
-                            color: Highcharts.getOptions().colors[0]
-                        }
-                    },
-                    labels: {
-                        format: '{value} mm',
-                        style: {
-                            color: Highcharts.getOptions().colors[0]
-                        }
-                    }
-
-                }, { // Tertiary yAxis
-                    gridLineWidth: 0,
-                    title: {
-                        text: 'Sea-Level Pressure',
-                        style: {
-                            color: Highcharts.getOptions().colors[1]
-                        }
-                    },
-                    labels: {
-                        format: '{value} mb',
-                        style: {
-                            color: Highcharts.getOptions().colors[1]
-                        }
-                    },
-                    opposite: true
-                }],
-                series: series,
-                plotOptions: {
-                    columns: {
-                        stacking: 'normal'
-                    },
-                    series: {
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                            //format: '{point.y:,.0f}',
-                            //format: '{point.y:.1f}%',
-                            formatter: function() {
-                                if (this.y > 1000000) {
-                                    return Highcharts.numberFormat(this.y / 1000000, 0) + "M";
-                                } else if (this.y > 1000) {
-                                    return Highcharts.numberFormat(this.y / 1000, 0) + "K";
-                                } else {
-                                    return this.y;
-                                }
-                            },
-                            style: {
-                                fontWeight: 'normal',
-                            }
-                        },
-                        /* label:{
-                            style:{
-                                fontWeight:'normal',
-                            }
-                        } */
-                    }
-                },
-                legend: {
-                    //align: 'center', //right//left//center
-                    //verticalAlign: 'bottom', //top//middle//bottom
-                    //layout: 'horizontal', //horizontal//vertical//proximate
-                    itemStyle: {
-                        "color": "#333333",
-                        "cursor": "pointer",
-                        "fontSize": "10px",
-                        "fontWeight": "normal",
-                        "textOverflow": "ellipsis"
-                    },
+                exporting: {
+                    enabled: true
                 },
                 credits: false,
-            });
-        }
-
-        function barra(div) {
-            Highcharts.chart(div, {
-                chart: {
-                    type: 'column'
-                },
-                title: {
-                    text: 'Major trophies for some English teams',
-                    align: 'left'
-                },
-                xAxis: {
-                    categories: ['Arsenal', 'Chelsea', 'Liverpool', 'Manchester United']
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: 'Count trophies'
-                    },
-                    stackLabels: {
-                        enabled: true,
-                        style: {
-                            fontWeight: 'bold',
-                            color: ( // theme
-                                Highcharts.defaultOptions.title.style &&
-                                Highcharts.defaultOptions.title.style.color
-                            ) || 'gray',
-                            textOutline: 'none'
-                        }
-                    }
-                },
-                legend: {
-                    align: 'left',
-                    x: 70,
-                    verticalAlign: 'top',
-                    y: 70,
-                    floating: true,
-                    backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || 'white',
-                    borderColor: '#CCC',
-                    borderWidth: 1,
-                    shadow: false
-                },
-                tooltip: {
-                    headerFormat: '<b>{point.x}</b><br/>',
-                    pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-                },
-                plotOptions: {
-                    column: {
-                        stacking: 'normal',
-                        dataLabels: {
-                            enabled: true
-                        }
-                    }
-                },
-                series: [{
-                    name: 'BPL',
-                    data: [3, 5, 1, 13]
-                }, {
-                    name: 'FA Cup',
-                    data: [14, 8, 8, 12]
-                }, {
-                    name: 'CL',
-                    data: [0, 2, 6, 3]
-                }]
-            });
-        }
-
-        function glineal(div, categoria, series, titulo, subtitulo) {
-            Highcharts.chart(div, {
-                chart: {
-                    type: 'spline'
-                },
-                title: {
-                    text: titulo, //'Browser market shares in January, 2018'
-                },
-                subtitle: {
-                    text: subtitulo,
-                },
-                xAxis: {
-                    categories: categoria,
-                    /* accessibility: {
-                        rangeDescription: 'Range: 2015 to 2025'
-                    } */
-                },
-                yAxis: {
-                    title: {
-                        enabled: false,
-                        text: 'Number of Employees'
-                    }
-                    /* allowDecimals: false,
-                    min: 0,
-                    title: {
-                        enabled: false,
-                        text: 'Porcentaje',
-                    } */
-                },
-                legend: {
-                    layout: 'vertical',
-                    align: 'right',
-                    verticalAlign: 'middle'
-                },
-
-                plotOptions: {
-                    /* series: {
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                            //format: '{point.y:,.0f}',
-                            //format: '{point.y:.1f}%',
-                            formatter: function() {
-                                if (this.y > 1000000) {
-                                    return Highcharts.numberFormat(this.y / 1000000, 0) + "M";
-                                } else if (this.y > 1000) {
-                                    return Highcharts.numberFormat(this.y / 1000, 0) + "K";
-                                } else {
-                                    return this.y;
-                                }
-                            },
-                        },
-                    } */
-                    series: {
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                            //format: '{point.y:,.0f}',
-                            formatter: function() {
-                                if (this.y > 1000000) {
-                                    return Highcharts.numberFormat(this.y / 1000000, 0) + "M";
-                                } else if (this.y > 1000) {
-                                    return Highcharts.numberFormat(this.y / 1000, 0) + "K";
-                                } else {
-                                    return this.y;
-                                }
-                            },
-                            style: {
-                                fontWeight: 'normal',
-                            }
-                        },
-                        /*  point: {
-                             cursor: 'pointer',
-                             events: {
-                                 click: function() {
-                                     //alert('Category: ' + this.category + ', value: ' + this.y);
-                                     alert(this.options);
-                                     //location.href = 'https://en.wikipedia.org/wiki/' +this.options.key;
-                                     //alert('hola ronald');
-                                 },
-                             },
-                         }, */
-
-
-                    }
-                    /* spline: {
-                        marker: {
-                            radius: 4,
-                            lineColor: '#666666',
-                            lineWidth: 1
-                        }
-                    } */
-                },
-                /*  plotOptions: {
-                     series: {
-                         label: {
-                             connectorAllowed: false
-                         },
-                         pointStart: 2010
-                     }
-                 }, */
-
-                series: series,
-                legend: {
-                    align: 'center', //right//left//center
-                    verticalAlign: 'bottom', //top//middle//bottom
-                    layout: 'horizontal', //horizontal//vertical//proximate
-                    itemStyle: {
-                        "color": "#333333",
-                        "cursor": "pointer",
-                        "fontSize": "10px",
-                        "fontWeight": "normal", //bold
-                        "textOverflow": "ellipsis"
-                    },
-                },
-                /* responsive: {
-                    rules: [{
-                        condition: {
-                            maxWidth: 500
-                        },
-                        chartOptions: {
-                            legend: {
-                                layout: 'vertical', //horizontal
-                                align: 'right', //center//right//left
-                                verticalAlign: 'top'//bottom//middle
-                            }
-                        }
-                    }]
-                }, */
-                credits: false,
-
-            });
-        }
-
-        function gLineaBasica(div, categoria, series, nameserie, titulo, subtitulo, titulovetical) {
-            Highcharts.chart(div, {
-                title: {
-                    text: titulo
-                },
-                subtitle: {
-                    text: subtitulo
-                },
-                yAxis: {
-                    title: {
-                        text: titulovetical
-                    },
-                    //min: 0,
-                },
-                xAxis: {
-                    categories: categoria,
-                    /* accessibility: {
-                        rangeDescription: 'Range: 2010 to 2017'
-                    } */
-                },
-                /* legend: {
-                    layout: 'vertical',
-                    align: 'right',
-                    verticalAlign: 'middle'
-                }, */
-                plotOptions: {
-                    series: {
-                        dataLabels: {
-                            enabled: true,
-                            //format: '{point.y:,.0f}',
-                            formatter: function() {
-                                if (this.y > 1000000) {
-                                    return Highcharts.numberFormat(this.y / 1000000, 0) + "M";
-                                } else if (this.y > 1000) {
-                                    return Highcharts.numberFormat(this.y / 1000, 0) + "K";
-                                } else {
-                                    return this.y;
-                                }
-                            },
-                            style: {
-                                fontWeight: 'normal',
-                            }
-                        },
-                        /* label: {
-                            connectorAllowed: false
-                        },
-                        pointStart: 2010 */
-                    }
-                },
-                series: [{
-                    name: nameserie,
-                    showInLegend: false,
-                    data: series
-                }],
-                responsive: {
-                    rules: [{
-                        condition: {
-                            maxWidth: 500
-                        },
-                        chartOptions: {
-                            legend: {
-                                layout: 'horizontal',
-                                align: 'center',
-                                verticalAlign: 'bottom'
-                            }
-                        }
-                    }]
-                },
-                credits: false,
-
-            });
-        }
-
-        function gbar(div, categoria, series, titulo, subtitulo) {
-            Highcharts.chart(div, {
-                chart: {
-                    type: 'bar'
-                },
-                title: {
-                    text: titulo, // 'Historic World Population by Region'
-                },
-                subtitle: {
-                    text: subtitulo,
-                    /*  'Source: <a ' +
-                                            'href="https://en.wikipedia.org/wiki/List_of_continents_and_continental_subregions_by_population"' +
-                                            'target="_blank">Wikipedia.org</a>' */
-                },
-                xAxis: {
-                    //categories:categoria,// ['Africa', 'America', 'Asia', 'Europe', 'Oceania'],
-                    type: "category",
-                    title: {
-                        text: '', // null
-                    },
-                    enabled: false,
-                },
-                yAxis: {
-                    //min: 0,
-                    title: {
-                        text: '', // 'Population (millions)',
-                        align: 'high'
-                    },
-                    /* labels: {
-                        overflow: 'justify'
-                    } */
-                },
-                tooltip: {
-                    valueSuffix: ' %'
-                },
-                plotOptions: {
-                    bar: {
-                        dataLabels: {
-                            enabled: true,
-                            format: '{point.y} %'
-                        }
-                    }
-                },
-                legend: {
-                    enabled: false, //
-                    layout: 'vertical',
-                    align: 'right',
-                    verticalAlign: 'top',
-                    x: -40,
-                    y: 80,
-                    floating: true,
-                    borderWidth: 1,
-                    backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
-                    shadow: true
-                },
-
-                //series: series,
-                /*  [{
-                                    name: 'Year 1990',
-                                    data: [631, 727, 3202, 721, 26]
-                                }, {
-                                    name: 'Year 2000',
-                                    data: [814, 841, 3714, 726, 31]
-                                }, {
-                                    name: 'Year 2010',
-                                    data: [1044, 944, 4170, 735, 40]
-                                }, {
-                                    name: 'Year 2018',
-                                    data: [1276, 1007, 4561, 746, 42]
-                                }] */
-                /* showInLegend: tituloserie != '',
-                        name: tituloserie,
-                        label: {
-                            enabled: false
-                        },
-                        colorByPoint: false, */
-                series: [{
-                    name: 'Ejecución',
-                    showInLegend: false,
-                    label: {
-                        enabled: false
-                    },
-                    data: series,
-                    /* [{
-                                                name: "Chrome",
-                                                y: 63.06,
-                                            },
-                                            {
-                                                name: "Safari",
-                                                y: 19.84,
-                                            },
-                                            {
-                                                name: "Firefox",
-                                                y: 4.18,
-                                            },
-                                            {
-                                                name: "Edge",
-                                                y: 4.12,
-                                            },
-                                            {
-                                                name: "Opera",
-                                                y: 2.33,
-                                            },
-                                            {
-                                                name: "Internet Explorer",
-                                                y: 0.45,
-                                            },
-                                            {
-                                                name: "Other",
-                                                y: 1.582,
-                                            }
-                                        ] */
-                }],
-                credits: {
-                    enabled: false
-                },
             });
         }
     </script>
 
-    <script>
-        function maps01(div, data, titulo, subtitulo) {
-            Highcharts.mapChart(div, {
-                chart: {
-                    map: 'countries/pe/pe-all'
-                },
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <!-- optional -->
+    <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
 
-                title: {
-                    text: titulo, //'Reportes de Mapa'
-                },
-
-                subtitle: {
-                    text: subtitulo, //'Un descripción de reportes'
-                },
-
-                mapNavigation: {
-                    enabled: true,
-                    buttonOptions: {
-                        verticalAlign: 'top'
-                    }
-                },
-
-                colorAxis: {
-                    min: 0,
-                    max: 30,
-                    //tickPixelInterval: 100,
-                    maxColor: "#e6ebf5",
-                    minColor: "#003399",
-                    /*maxColor: '#F1EEF6',
-                    minColor: '#900037'*/
-                },
-
-                series: [{
-                    data: data,
-                    name: 'Puesto', //Población
-                    states: {
-                        hover: {
-                            color: '#BADA55'
-                        }
-                    },
-                    dataLabels: {
-                        enabled: true,
-                        format: '{point.value}°'
-                    }
-                }],
-                credits: {
-                    enabled: false
-                },
-            });
-        }
-        /* var data = [
-            ['pe-ic', 10],
-            ['pe-cs', 11],
-            ['pe-uc', 12],
-            ['pe-md', 13],
-            ['pe-sm', 14],
-            ['pe-am', 15],
-            ['pe-lo', 16],
-            ['pe-ay', 17],
-            ['pe-145', 18],
-            ['pe-hv', 19],
-            ['pe-ju', 20],
-            ['pe-lr', 21],
-            ['pe-lb', 22],
-            ['pe-tu', 23],
-            ['pe-ap', 24],
-            ['pe-ar', 25],
-            ['pe-cl', 26],
-            ['pe-mq', 27],
-            ['pe-ta', 28],
-            ['pe-an', 29],
-            ['pe-cj', 30],
-            ['pe-hc', 31],
-            ['pe-3341', 32],
-            ['pe-ll', 33],
-            ['pe-pa', 34],
-            ['pe-pi', 35]
-        ];
-        // Create the chart
-        Highcharts.mapChart('anal1', {
-            chart: {
-                map: 'countries/pe/pe-all'
-            },
-            title: {
-                text: 'Reportes de Mapa'
-            },
-            subtitle: {
-                text: 'Un descripción de reportes'
-            },
-            mapNavigation: {
-                enabled: true,
-                buttonOptions: {
-                    verticalAlign: 'top'
-                }
-            },
-            colorAxis: {
-                min: 0
-            },
-            series: [{
-                data: data,
-                name: 'Población',
-                states: {
-                    hover: {
-                        color: '#BADA55'
-                    }
-                },
-                dataLabels: {
-                    enabled: true,
-                    format: '{point.name}'
-                }
-            }]
-        }); */
-    </script>
-
-    {{--  --}}
-    {{-- <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script> --}}
-    {{-- <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/maps/modules/map.js"></script>
-    <script src="https://code.highcharts.com/maps/modules/data.js"></script>
-    <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/maps/modules/offline-exporting.js"></script>
-    <script src="https://code.highcharts.com/maps/modules/accessibility.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script> --}}
+    {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts-more.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script> --}}
 @endsection

@@ -1,0 +1,33 @@
+{
+    "material design icons": {
+        "normal": "material_design_icons_normal_bcc7196680d26c3b49e6f00d05ab0e49"
+    },
+    "font awesome 5 brands": {
+        "normal": "font_awesome_5_brands_normal_817244e2ccbd11c21a3f501c66d77c3b"
+    },
+    "font awesome 5 free": {
+        "normal": "C:\\xampp\\htdocs\\_laravel\\git\\sismore_v3\\storage\\fonts\/font_awesome_5_free_normal_84b8c8f1a7fac52671dbb1b27f80edb9",
+        "900": "font_awesome_5_free_900_a41a4396fd34281d4fc7564f26b45859"
+    },
+    "ionicons": {
+        "normal": "ionicons_normal_c764f7bb811bc5ab432796624aa3e4cc"
+    },
+    "themify": {
+        "normal": "themify_normal_7bbe0044578b1652dda41aab8d396734"
+    },
+    "simple-line-icons": {
+        "normal": "simple_line_icons_normal_6a7fba4f1172e58805601174e0a1273c"
+    },
+    "weathericons": {
+        "normal": "weathericons_normal_8fa9b77001c8e1d095cf3ae7f5ab04e0"
+    },
+    "typicons": {
+        "normal": "typicons_normal_63834745276b6c2c3232f1201999c0a8"
+    },
+    "pe-icon-7-stroke": {
+        "normal": "pe_icon_7_stroke_normal_cbd50fa9f09fbef310d35e371fca6ce4"
+    },
+    "summernote": {
+        "normal": "summernote_normal_a424c0e94b9aad0a1f1b294dd1a3076a"
+    }
+}

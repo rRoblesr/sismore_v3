@@ -14,4 +14,9 @@ class UsuarioPerfil extends Model
         'usuario_id',
         'perfil_id',
     ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
 }

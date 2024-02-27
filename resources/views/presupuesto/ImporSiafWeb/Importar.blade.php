@@ -9,9 +9,9 @@
     <div class="content">
 
         <div class="row">
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-header">
+            <div class="col-md-12">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent pb-0">
                         <div class="card-widgets">
                             <button type="button" class="btn btn-warning btn-xs" onclick="location.reload()"><i
                                     class="fa fa-redo"></i> Actualizar</button>
@@ -23,103 +23,10 @@
                                 onclick="javascript:window.open('https://1drv.ms/x/s!AgffhPHh-Qgo0ALwOvaxxoTl8N64?e=CJr9VE','_blank');"><i
                                     class="mdi mdi-file-pdf-outline"></i>
                                 Manual</button>
+                            <button type="button" class="btn btn-primary btn-xs waves-effect waves-light"
+                                data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static"
+                                data-keyboard="false"><i class="ion ion-md-cloud-upload"></i> Importar</button>
                         </div>
-                        <h3 class="card-title">Datos de importación</h3>
-                    </div>
-
-                    <div class="card-body">
-                        <div class="form">
-
-                            <form class="cmxform form-horizontal tasi-form upload_file">
-                                @csrf
-                                <div class="col-md-12">
-                                    <div class="form-group row">
-                                        <div class="col-md-3">
-                                            <label class="col-form-label">Fuente de datos</label>
-                                            <div class="">
-                                                <input type="text" class="form-control" readonly="readonly"
-                                                    value="{{ $fuente->nombre }}">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label class="col-form-label">Fecha Versión</label>
-                                            <div class="">
-                                                <input type="date" class="form-control" name="fechaActualizacion"
-                                                    placeholder="Ingrese fecha actualizacion" autofocus required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="col-form-label">Archivo</label>
-                                            <div class="">
-                                                <input type="file" name="file" class="form-control" required>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row  mt-0 mb-0">
-                                        <label class="col-md-2 col-form-label"></label>
-                                        <div class="col-md-10">
-                                            <div class="pwrapper m-0" style="display:none;">
-                                                <div class="progress progress_wrapper">
-                                                    <div class="progress-bar progress-bar-striped bg-info progress-bar-animated progress_bar"
-                                                        role="progressbar" style="width:0%">0%</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {{-- <div class="form-group row">
-                                    <label class="col-md-2 col-form-label">Fuente de datos</label>
-                                    <div class="col-md-10">
-                                        <input type="text" class="form-control" readonly="readonly" value="EMPACOPSA">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-md-2 col-form-label">Fecha Versión</label>
-                                    <div class="col-md-10">
-                                        <input type="date" class="form-control" name="fechaActualizacion"
-                                            placeholder="Ingrese fecha actualizacion" autofocus required>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-md-2 col-form-label">Comentario</label>
-                                    <div class="col-md-10">
-                                        <textarea class="form-control" placeholder="comentario opcional" id="ccomment"
-                                            name="comentario"></textarea>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-md-2 col-form-label">Archivo</label>
-                                    <div class="col-md-10">
-                                        <input type="file" name="file" class="form-control" required>
-                                    </div>
-                                </div> --}}
-
-                                <div class="form-group row mb-0">
-                                    {{-- <div class="offset-lg-2 col-lg-10"> --}}
-                                    <div class="col-12 d-flex justify-content-end">
-                                        <button class="btn btn-primary waves-effect waves-light mr-1"
-                                            type="submit">Importar</button>
-                                        {{-- <button class="btn btn-secondary waves-effect" type="button">Cancelar</button> --}}
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <!-- .form -->
-                    </div>
-                    <!-- card-body -->
-                </div>
-                <!-- card -->
-            </div>
-            <!-- col -->
-        </div>
-        <!-- End row -->
-
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
                         <h3 class="card-title">HISTORIAL DE IMPORTACION </h3>
                     </div>
                     <div class="card-body">
@@ -157,6 +64,89 @@
         </div> <!-- End row -->
 
 
+
+        <!--  Modal content for the above example -->
+        <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+            aria-hidden="true" style="display: none;">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="myLargeModalLabel">Importar</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <form class="cmxform form-horizontal tasi-form upload_file">
+                                    @csrf
+                                    <input type="hidden" id="ccomment" name="comentario" value="">
+                                    <div class="form-group">
+                                        <div class="">
+                                            <label class="col-form-label">Fuente de datos</label>
+                                            <div class="">
+                                                <input type="text" class="form-control btn-xs" readonly="readonly"
+                                                    value="{{ $fuente->nombre }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="">
+                                            <label class="col-form-label">Fecha Versión</label>
+                                            <div class="">
+                                                <input type="date" class="form-control btn-xs" name="fechaActualizacion"
+                                                    placeholder="Ingrese fecha actualizacion" autofocus required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- <div class="form-group">
+                                        <div class="">
+                                            <label class="col-form-label">Archivo</label>
+                                            <div class="">
+                                                <input type="file" name="file" class="form-control btn-xs" required>
+                                            </div>
+                                        </div>
+                                    </div> --}}
+
+                                    <div class="form-group">
+                                        <label class="col-form-label">Archivo</label>
+                                        <div class="input-group">
+                                            <input id="file" name="file" class="form-control d-none" type="file"
+                                                accept=".xls,.xlsx">
+                                            <input id="nfile" name="nfile" class="form-control" type="text"
+                                                placeholder="Seleccione Archivo" readonly>
+                                            <span class="input-group-append">
+                                                <label for="file" class="btn btn-primary btn-file-documento">
+                                                    <i class="fas fa-cloud-upload-alt"></i> </label>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row  mt-0 mb-0">
+                                        {{-- <label class="col-md-2 col-form-label"></label> --}}
+                                        <div class="col-md-12">
+                                            <div class="pwrapper m-0" style="display:none;">
+                                                <div class="progress progress_wrapper">
+                                                    <div class="progress-bar progress-bar-striped bg-info progress-bar-animated progress_bar"
+                                                        role="progressbar" style="width:0%">0%</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row ">
+                                        <div class="col-lg-12 text-center">
+                                            <button class="btn btn-primary waves-effect waves-light" type="submit">
+                                                <i class="ion ion-md-cloud-upload"></i> Importar</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal -->
+
         <!-- Bootstrap modal -->
         <div id="modal-siagie-matricula" class="modal fade centrarmodal" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-xl">
@@ -169,7 +159,8 @@
                     </div>
                     <div class="modal-body">
                         <div class="table-responsive">
-                            <table id="siagie-matricula" class="table table-striped table-bordered" style="font-size:12px">
+                            <table id="siagie-matricula" class="table table-striped table-bordered"
+                                style="font-size:12px">
                                 {{-- width:7200px; --}}
                                 <thead class="text-primary">
                                     <td>ANIO</td>
@@ -263,6 +254,13 @@
                 ajax: "{{ route('imporsiafweb.listar.importados') }}",
                 type: "POST",
             });
+
+            $("#file").on("change", function() {
+                var fileName = $(this).val().split("\\").pop();
+                $('#nfile').val(fileName);
+
+            });
+
         });
 
         function upload(e) {
@@ -305,6 +303,13 @@
                 if (res.status === 200) {
                     progress_bar.removeClass('bg-info').addClass('bg-success');
                     progress_bar.html('Listo!');
+                    $('.bs-example-modal-lg').modal('hide');
+                    Swal.fire({
+                        title: "¡Importación Exitosa!",
+                        // text: "You clicked the button!",
+                        type: "success",
+                        confirmButtonColor: "#348cd4"
+                    })
                     form.trigger('reset');
 
                     setTimeout(() => {

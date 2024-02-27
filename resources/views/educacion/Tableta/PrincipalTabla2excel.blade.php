@@ -26,10 +26,10 @@
                 <td class="text-left">{{ $item->area }}</td>
                 <td class="text-center">{{ number_format($item->te, 0) }}</td>
                 <td class="text-center">{{ number_format($item->td, 0) }}</td>
-                <td class="text-center table-warning">{!! avance($item->tt) !!}</td>
+                <td class="text-center table-warning">{{ $item->tt }}</td>
                 <td class="text-center">{{ number_format($item->ce, 0) }}</td>
                 <td class="text-center">{{ number_format($item->cd, 0) }}</td>
-                <td class="text-center table-warning">{!! avance($item->ct) !!}</td>
+                <td class="text-center table-warning">{{ $item->ct }}</td>
             </tr>
         @endforeach
     </tbody>

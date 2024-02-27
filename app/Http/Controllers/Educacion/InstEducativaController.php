@@ -136,4 +136,20 @@ class InstEducativaController extends Controller
         }
         return $data; //response()->json('data');
     }
+
+    public function buscar_codmodular($local)
+    {
+        $query = InstitucionEducativa::select('id', 'codLocal as local', 'codModular as modular', 'nombreInstEduc as iiee')->where('codLocal', $local)->get();
+        return $query;
+    }
+
+    public function cargar_distrito($provincia)
+    {
+        $query = InstitucionEducativa::distinct()->select('dt.*')
+            ->join('edu_centropoblado as cp', 'cp.id', '=', 'edu_institucioneducativa.CentroPoblado_id')
+            ->join('par_ubigeo as dt', 'dt.id', '=', 'cp.Ubigeo_id');
+        if ($provincia) $query = $query->where('dt.dependencia', $provincia);
+        $query = $query->get();
+        return $query;
+    }
 }

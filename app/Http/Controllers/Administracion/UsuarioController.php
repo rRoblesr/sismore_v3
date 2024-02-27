@@ -7,11 +7,10 @@ use App\Models\Administracion\Entidad;
 use App\Models\Administracion\Perfil;
 use App\Models\Administracion\Usuario;
 use App\Models\Administracion\UsuarioPerfil;
-use App\Models\Presupuesto\UnidadEjecutora;
 use App\Repositories\Administracion\SistemaRepositorio;
 use App\Repositories\Administracion\UsuarioPerfilRepositorio;
 use App\Repositories\Administracion\UsuarioRepositorio;
-use App\Repositories\Presupuesto\EntidadRepositorio;
+use App\Repositories\Administracion\EntidadRepositorio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -27,14 +26,13 @@ class UsuarioController extends Controller
     {
         //return filter_var('asdsad@hot', FILTER_VALIDATE_EMAIL);
         //$sistemas2 = Sistema::where('estado', '1')->orderBy('nombre')->get();
-        $sistemas = SistemaRepositorio::listar_porperfil(session('perfil_id'));
-        $entidad = UnidadEjecutora::all();
-        return view('administracion.Usuario.Principal', compact('sistemas', 'entidad'));
+        $sistemas = SistemaRepositorio::listar_porperfil(session('perfil_administrador_id'));
+        return view('administracion.Usuario.Principal', compact('sistemas'));
     }
     public function Lista_DataTable()
     {
-        //$data = UsuarioRepositorio::Listar_porperfil(session('perfil_id'));
-        $data = UsuarioRepositorio::Listar_porperfil(session('perfil_id'));
+        //$data = UsuarioRepositorio::Listar_porperfil(session('perfil_administrador_id'));
+        $data = UsuarioRepositorio::Listar_porperfil(session('perfil_administrador_id'));
         return  datatables()::of($data)
             ->addColumn('nombrecompleto', '{{$apellido1}} {{$apellido2}}, {{$nombre}}')
             ->editColumn('entidad', function ($data) {
@@ -670,21 +668,21 @@ class UsuarioController extends Controller
         return response()->json(array('status' => true, 'codigo' => $entidad->id));
     } */
 
-    public function vertical($usuari_id)
-    {
-        $usu = Usuario::find($usuari_id);
-        $usu->layouts = 'VERTICAL';
-        $usu->save();
+    // public function vertical($usuari_id)
+    // {
+    //     $usu = Usuario::find($usuari_id);
+    //     $usu->layouts = 'VERTICAL';
+    //     $usu->save();
 
-        return Redirect::back();
-    }
+    //     return Redirect::back();
+    // }
 
-    public function horizontal($usuari_id)
-    {
-        $usu = Usuario::find($usuari_id);
-        $usu->layouts = 'HORIZONTAL';
-        $usu->save();
+    // public function horizontal($usuari_id)
+    // {
+    //     $usu = Usuario::find($usuari_id);
+    //     $usu->layouts = 'HORIZONTAL';
+    //     $usu->save();
 
-        return Redirect::back();
-    }
+    //     return Redirect::back();
+    // }
 }

@@ -7,6 +7,7 @@ use App\Models\Educacion\Importacion;
 use App\Models\Educacion\NivelModalidad;
 use App\Models\Educacion\PadronRER;
 use App\Models\Educacion\PLaza;
+use App\Models\Educacion\Ugel;
 use Illuminate\Support\Facades\DB;
 
 class PlazaRepositorio
@@ -75,7 +76,7 @@ class PlazaRepositorio
             inner join edu_institucioneducativa v3 on v3.id=v1.institucioneducativa_id
             inner join edu_ugel v4 on v4.id=v3.Ugel_id
             inner join edu_ugel v5 on v5.id=v4.dependencia
-            inner join par_centropoblado v6 on v6.id=v3.CentroPoblado_id
+            inner join edu_centropoblado v6 on v6.id=v3.CentroPoblado_id
             inner join par_ubigeo v7 on v7.id=v6.Ubigeo_id
             inner join par_ubigeo v8 on v8.id=v7.dependencia
             inner join edu_nivelmodalidad v9 on v9.id=v3.NivelModalidad_id
@@ -1236,6 +1237,62 @@ class PlazaRepositorio
         $foot = $foot->get()->first();
         $dt['table'] = view('educacion.Plaza.DocentesPrincipalTabla4', compact('heads', 'bodys', 'foot'))->render();
         return $dt;
+    }
+
+    public static function cargarresumendeplazatabla5($rq, $importacion_id, $ugel)
+    {
+        $body = PLaza::select(
+            'edu_plaza.id',
+            'edu_plaza.documento_identidad as dni',
+            'edu_plaza.codigoPlaza as plaza',
+            'edu_plaza.codModular as modular',
+            'edu_plaza.nivel_educativo_dato_adic as nivel',
+            'edu_plaza.institucion_educativa_dato_adic as iiee'
+        )
+            ->join('edu_ugel as uu', 'uu.id', '=', 'edu_plaza.ugel_id')
+            ->join('edu_estadoplaza as ep', 'ep.id', '=', 'edu_plaza.estadoPlaza_id')
+            ->join('edu_situacionlab as sl', 'sl.id', '=', 'edu_plaza.situacionLab_id')
+            ->join('edu_tipotrabajador as td', 'td.id', '=', 'edu_plaza.tipoTrabajador_id')
+            ->join('edu_tipotrabajador as tt', 'tt.id', '=', 'td.dependencia')
+            // ->join('edu_tipotrabajador as tt', 'tt.id', '=', 'td.dependencia')
+            ->where('edu_plaza.importacion_id', $importacion_id)->where('bilingue', '>', 0)
+            ->whereIn('ep.id', [4, 33])->where('sl.id', '!=', 5)->where('tt.id', 1)->whereNotIn('td.id', [13, 16]);
+
+        if ($ugel > 0) $body = $body->where('uu.id', $ugel);
+        // $body = $body->groupBy('edu_plaza.institucionEducativa_id');
+        $body = $body->get();
+
+        return $body;
+    }
+
+    public static function cargarresumendeplazatabla6($rq, $importacion_id, $ugel)
+    {
+        $opc1 = "v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13+v1.d14+v1.d15+v1.d16+v1.d17+v1.d18+v1.d19+v1.d20+v1.d21+v1.d22+v1.d23+v1.d24+v1.d25";
+        $opc2 = "v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13+v1.d14+v1.d15+v1.d16+v1.d17+v1.d18+v1.d19+v1.d20+v1.d21+v1.d22+v1.d23+v1.d24+v1.d25+v1.d26";
+        $dx = Importacion::select(
+            DB::raw('year(par_importacion.fechaActualizacion) as anio'),
+            DB::raw("sum(IF(year(par_importacion.fechaActualizacion)=2018 or year(par_importacion.fechaActualizacion)=2019,$opc1,
+                         IF(year(par_importacion.fechaActualizacion)>2019,$opc2,0))) as tt"),
+            DB::raw("sum(IF(year(par_importacion.fechaActualizacion)=2018 or year(par_importacion.fechaActualizacion)=2019 and v1.tipdato='06',$opc1,
+                         IF(year(par_importacion.fechaActualizacion)>2019 and v1.tipdato='06',$opc2,0))) as t1"),
+            DB::raw("sum(IF(year(par_importacion.fechaActualizacion)=2018 or year(par_importacion.fechaActualizacion)=2019 and v1.tipdato='07',$opc1,
+                         IF(year(par_importacion.fechaActualizacion)>2019 and v1.tipdato='07',$opc2,0))) as t2"),
+            DB::raw("sum(IF(year(par_importacion.fechaActualizacion)=2018 or year(par_importacion.fechaActualizacion)=2019 and v1.tipdato='08',$opc1,
+                         IF(year(par_importacion.fechaActualizacion)>2019 and v1.tipdato='08',$opc2,0))) as t3"),
+            DB::raw("sum(IF(year(par_importacion.fechaActualizacion)=2018 or year(par_importacion.fechaActualizacion)=2019 and v1.tipdato='09',$opc1,
+                         IF(year(par_importacion.fechaActualizacion)>2019 and v1.tipdato='09',$opc2,0))) as t4"),
+            DB::raw("sum(IF(year(par_importacion.fechaActualizacion)=2018 or year(par_importacion.fechaActualizacion)=2019 and v1.tipdato='10',$opc1,
+                         IF(year(par_importacion.fechaActualizacion)>2019 and v1.tipdato='10',$opc2,0))) as t5"),
+        )
+            ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
+            ->where('importacion_id', $importacion_id)
+            ->whereIn('v1.nroced', ['3AS'])->whereIn('v1.cuadro', ['C305'])->whereIn('v1.tipdato', ['06', '07', '08', '09', '10']);
+        if ($ugel > 0) {
+            $uu = Ugel::find($ugel);
+            $dx = $dx->where('v1.codooii', $uu->codigo);
+        }
+        $dx = $dx->groupBy('anio')->orderBy('anio', 'asc')->orderBy('v1.tipdato', 'desc')->get();
+        return $dx;
     }
 
     public static function conteo_docentes_rer()

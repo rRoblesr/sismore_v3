@@ -5,6 +5,7 @@ namespace App\Repositories\Presupuesto;
 use App\Models\Presupuesto\BaseSiafWeb;
 use App\Models\Presupuesto\BaseSiafWebDetalle;
 use App\Models\Presupuesto\PartidasRestringidas;
+use App\Models\Presupuesto\UnidadEjecutora;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 
@@ -15,6 +16,24 @@ class BaseSiafWebRepositorio
         $query = BaseSiafWeb::select(DB::raw('distinct anio'))
             ->join('par_importacion as v2', 'v2.id', '=', 'pres_base_siafweb.importacion_id')
             ->orderBy('anio', 'asc')->get();
+        return $query;
+    }
+
+    public static function UE_poranios($anio)
+    {
+        if ($anio == 0) {
+            $queryJoinPresBaseSiafwebDetalle = '(select DISTINCT unidadejecutora_id from pres_base_siafweb_detalle) as siaf';
+        } else {
+            $queryJoinPresBaseSiafwebDetalle = "(select DISTINCT unidadejecutora_id from pres_base_siafweb_detalle as bsd inner join pres_base_siafweb as bs on bs.id=bsd.basesiafweb_id where bs.anio=$anio) as siaf";
+        }
+
+        $query = UnidadEjecutora::select(
+            'pres_unidadejecutora.id',
+            'pres_unidadejecutora.nombre_ejecutora as nombre',
+            'pres_unidadejecutora.codigo_ue as codigo'
+        )
+            ->join(DB::raw($queryJoinPresBaseSiafwebDetalle), 'siaf.unidadejecutora_id', '=', 'pres_unidadejecutora.id')
+            ->orderBy('codigo')->get();
         return $query;
     }
 
@@ -386,6 +405,7 @@ class BaseSiafWebRepositorio
                 DB::raw('sum(pres_base_siafweb_detalle.pia) as pia'),
                 DB::raw('sum(pres_base_siafweb_detalle.pim) as pim'),
                 DB::raw('sum(pres_base_siafweb_detalle.certificado) as cert'),
+                DB::raw('100*sum(pres_base_siafweb_detalle.certificado)/sum(pres_base_siafweb_detalle.pim) as eje1'),
                 DB::raw('sum(pres_base_siafweb_detalle.devengado) as dev'),
                 DB::raw('100*sum(pres_base_siafweb_detalle.devengado)/sum(pres_base_siafweb_detalle.pim) as eje'),
                 DB::raw('sum(pres_base_siafweb_detalle.pim-pres_base_siafweb_detalle.certificado) as saldo1'),
@@ -413,6 +433,7 @@ class BaseSiafWebRepositorio
                 DB::raw('sum(pres_base_siafweb_detalle.pia) as pia'),
                 DB::raw('sum(pres_base_siafweb_detalle.pim) as pim'),
                 DB::raw('sum(pres_base_siafweb_detalle.certificado) as cert'),
+                DB::raw('100*sum(pres_base_siafweb_detalle.certificado)/sum(pres_base_siafweb_detalle.pim) as eje1'),
                 DB::raw('sum(pres_base_siafweb_detalle.devengado) as dev'),
                 DB::raw('100*sum(pres_base_siafweb_detalle.devengado)/sum(pres_base_siafweb_detalle.pim) as eje'),
                 DB::raw('sum(pres_base_siafweb_detalle.pim-pres_base_siafweb_detalle.certificado) as saldo1'),
@@ -437,6 +458,7 @@ class BaseSiafWebRepositorio
                 DB::raw('sum(pres_base_siafweb_detalle.pia) as pia'),
                 DB::raw('sum(pres_base_siafweb_detalle.pim) as pim'),
                 DB::raw('sum(pres_base_siafweb_detalle.certificado) as cert'),
+                DB::raw('100*sum(pres_base_siafweb_detalle.certificado)/sum(pres_base_siafweb_detalle.pim) as eje1'),
                 DB::raw('sum(pres_base_siafweb_detalle.devengado) as dev'),
                 DB::raw('100*sum(pres_base_siafweb_detalle.devengado)/sum(pres_base_siafweb_detalle.pim) as eje'),
                 DB::raw('sum(pres_base_siafweb_detalle.pim-pres_base_siafweb_detalle.certificado) as saldo1'),
@@ -507,6 +529,7 @@ class BaseSiafWebRepositorio
                 DB::raw('sum(pres_base_siafweb_detalle.pia) as pia'),
                 DB::raw('sum(pres_base_siafweb_detalle.pim) as pim'),
                 DB::raw('sum(pres_base_siafweb_detalle.certificado) as cert'),
+                DB::raw('100*sum(pres_base_siafweb_detalle.certificado)/sum(pres_base_siafweb_detalle.pim) as eje1'),
                 DB::raw('sum(pres_base_siafweb_detalle.devengado) as dev'),
                 DB::raw('100*sum(pres_base_siafweb_detalle.devengado)/sum(pres_base_siafweb_detalle.pim) as eje'),
                 DB::raw('sum(pres_base_siafweb_detalle.pim-pres_base_siafweb_detalle.certificado) as saldo1'),

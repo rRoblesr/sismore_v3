@@ -51,41 +51,43 @@
                             @csrf
                             <input type="hidden" id="importacion" name="importacion" value="{{ $importacion_id }}">
                             <div class="form-group row mb-0">
-                                <label class="col-md-1 col-form-label">Año</label>
+                                <div class="col-md-4"></div>
+                                {{-- <label class="col-md-1 col-form-label"></label> --}}
                                 <div class="col-md-2">
                                     <select id="ano" name="ano" class="form-control btn-xs p-0"
                                         onchange="cargartabla0()">
+                                        <option value="0">Año</option>
                                         @foreach ($anios as $item)
                                             <option value="{{ $item->id }}" {{ $item->id = $actual ? 'selected' : '' }}>
                                                 {{ $item->anio }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <label class="col-md-1 col-form-label">Ugel</label>
+                                {{-- <label class="col-md-1 col-form-label"></label> --}}
                                 <div class="col-md-2">
                                     <select id="ugel" name="ugel" class="form-control btn-xs p-0"
                                         onchange="cargartabla0()">
-                                        <option value="0">Todos</option>
+                                        <option value="0">Ugel</option>
                                         @foreach ($ugels as $ugel)
                                             <option value="{{ $ugel['id'] }}">{{ $ugel['nombre'] }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <label class="col-md-1 col-form-label">Gestion</label>
+                                {{-- <label class="col-md-1 col-form-label"></label> --}}
                                 <div class="col-md-2">
                                     <select id="gestion" name="gestion" class="form-control btn-xs p-0"
                                         onchange="cargartabla0()">
-                                        <option value="0">Todos</option>
+                                        <option value="0">Gestión</option>
                                         @foreach ($gestions as $prov)
                                             <option value="{{ $prov['id'] }}">{{ $prov['nombre'] }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <label class="col-md-1 col-form-label">Área</label>
+                                {{-- <label class="col-md-1 col-form-label"></label> --}}
                                 <div class="col-md-2">
                                     <select id="area" name="area" class="form-control btn-xs p-0"
                                         onchange="cargartabla0()">
-                                        <option value="0">Todos</option>
+                                        <option value="0">Área</option>
                                         @foreach ($areas as $prov)
                                             <option value="{{ $prov->id }}">{{ $prov->nombre }}</option>
                                         @endforeach

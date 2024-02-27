@@ -18,11 +18,12 @@ class MetaController extends Controller
 
     public function principal()
     {
-        $anios = Meta::distinct()->select('anio')->get();
+        $anios = Meta::distinct()->select('anio')->orderBy('anio')->get();
+        $anio = $anios->max('anio');
         $gobs = TipoGobierno::whereIn('id', [1, 2, 3])->orderBy('id', 'desc')->get();
         $uo = UnidadOrganica::orderBy('nombre', 'asc')->get();
         $mensaje = "";
-        return view('Presupuesto.Meta.Principal', compact('mensaje', 'gobs', 'uo', 'anios'));
+        return view('Presupuesto.Meta.Principal', compact('mensaje', 'gobs', 'uo', 'anios', 'anio'));
     }
 
     public function listar(Request $rq)
@@ -49,13 +50,13 @@ class MetaController extends Controller
                 else return '<span class="badge badge-success">ACTIVO</span>';
             }) */
             ->addColumn('action', function ($data) {
-                $acciones = '<a href="#" class="btn btn-info btn-sm" onclick="edit(' . $data->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
+                $acciones = '<a href="#" class="btn btn-info btn-xs" onclick="edit(' . $data->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
                 /* if ($data->estado == '1') {
                     $acciones .= '&nbsp;<a class="btn btn-sm btn-dark" href="javascript:void(0)" title="Desactivar" onclick="estado(' . $data->id . ',' . $data->estado . ')"><i class="fa fa-power-off"></i></a> ';
                 } else {
                     $acciones .= '&nbsp;<a class="btn btn-sm btn-default"  title="Activar" onclick="estado(' . $data->id . ',' . $data->estado . ')"><i class="fa fa-check"></i></a> ';
                 } */
-                $acciones .= '&nbsp;<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')"  title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
+                $acciones .= '&nbsp;<a href="#" class="btn btn-danger btn-xs" onclick="borrar(' . $data->id . ')"  title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
                 return $acciones;
             })
             ->addColumn('uo', function ($data) {
@@ -160,7 +161,7 @@ class MetaController extends Controller
         $uemeta_ok = UEMeta::where('unidadejecutora_id', $rq->fue)->where('meta_id', $meta->id)->first();
         if ($uemeta_ok->id == $rq->fid) {
             $uemeta->save();
-            return response()->json(array('status' => true,'uemeta'=>$uemeta));
+            return response()->json(array('status' => true, 'uemeta' => $uemeta));
         } else {
             //$uemeta_ok = UEMeta::Create(['unidadejecutora_id' => $rq->fue, 'meta_id' => $meta->id, 'unidadorganica_id' => $rq->fuo]);
             return response()->json(array('status' => false));

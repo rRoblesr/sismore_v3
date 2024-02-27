@@ -36,10 +36,14 @@
                     <div class="card">
                         <div class="card-header bg-success-0">
                             <div class="card-widgets">
+                                <button type="button" class="btn btn-orange-0 btn-xs" onclick="history.back()"
+                                    title='ACTUALIZAR'><i class="fas fa-arrow-left"></i> Volver</button>
                                 <button type="button" class="btn btn-orange-0 btn-xs" onclick=""><i
                                         class="ion ion-logo-usd"></i> Ficha Técnica</button>
                                 <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"><i
-                                        class="ion ion-logo-usd"></i> Limpiar</button>
+                                        class="ion ion-logo-usd"></i> Actualizar</button>
+                                <button type="button" class="btn btn-orange-0 btn-xs" onclick="printer()"
+                                    title='IMPRIMIR'><i class="fa fa-print"></i></button>
                             </div>
                             <h3 class="card-title text-white">Porcentaje De Docentes Titulados En Educación Inicial</h3>
                         </div>
@@ -241,6 +245,35 @@
                 <div class="col-lg-12">
                     <div class="card card-border border border-plomo-0">
                         <div class="card-header border-success-0 bg-transparent pb-0">
+                            <div class="card-widgets">
+                                <button type="button" class="btn btn-success btn-xs" onclick="descargar2()"><i
+                                        class="fa fa-file-excel"></i> Descargar</button>
+                            </div>
+                            <h3 class="card-title">Número de personal docente con título pedagógico en educación
+                                inicial, según ugel
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="table-responsive" id="ctabla2">
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card card-border border border-plomo-0">
+                        <div class="card-header border-success-0 bg-transparent pb-0">
+                            <div class="card-widgets">
+                                <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
+                                        class="fa fa-file-excel"></i> Descargar</button>
+                            </div>
                             <h3 class="card-title">Docente con Título en Educación Inicial, Según Instituciones Educativas
                             </h3>
                         </div>
@@ -256,6 +289,8 @@
                     </div>
                 </div>
             </div>
+
+
         </div>
     </div>
 @endsection
@@ -283,6 +318,7 @@
                 },
                 type: "GET",
                 dataType: "JSON",
+
                 success: function(data) {
                     $('#valor1').text(data.valor1 + '%');
                     $('#valor2').text(data.valor2);
@@ -295,14 +331,15 @@
                 },
             });
 
-            panelGraficas('dianal0', 1);
-            panelGraficas('dianal1', 3);
-            panelGraficas('dianal2', 3);
-            panelGraficas('dianal3', 3);
-            panelGraficas('ctabla1', 0);
+            panelGraficas('dianal0');
+            panelGraficas('dianal1');
+            panelGraficas('dianal2');
+            panelGraficas('dianal3');
+            panelGraficas('ctabla1');
+            panelGraficas('ctabla2');
         }
 
-        function panelGraficas(div, tipo) {
+        function panelGraficas(div) {
             $.ajax({
                 url: "{{ route('panelcontrol.educacion.indicador.nuevos.06.tabla') }}",
                 data: {
@@ -314,41 +351,49 @@
                 },
                 type: "GET",
                 dataType: "JSON",
+                beforeSend: function() {
+                    $('#' + div).html(
+                        '<span><i class="fa fa-spinner fa-spin"></i></span>');
+                },
                 success: function(data) {
-                    if (tipo == 1) {
-                        if (div == "dianal0") {
-                            gAnidadaColumn(div,
-                                data.info.categoria,
-                                data.info.series,
-                                '',
-                                'Porcentaje de Docentes Titulados en Educación Inicial',
-                                data.info.maxbar
-                            );
-                        }
-                    } else if (tipo == 2) {
-                        gLineaBasica(div, data.data, '', '', '');
-                    } else if (tipo == 3) {
-                        if (div == "dianal1")
-                            gPie(div, data.puntos, '',
-                                'Docentes con Título Pedagógico en Educación Inicial, según Sexo', '');
-                        if (div == "dianal2")
-                            gPie(div, data.puntos, '',
-                                'Docentes con Título Pedagógico en Educación Inicial, según Condición Laboral',
-                                '');
-                        if (div == "dianal3")
-                            gPie(div, data.puntos, '',
-                                'Docentes con Título Pedagógico en Educación Inicial, según Ámbito Geográfico',
-                                '');
-                    } else if (tipo == 0) {
-                        if (div == "ctabla1") {
-                            $('#ctabla1').html(data.excel);
-                            $('#tabla1').DataTable({
-                                responsive: true,
-                                autoWidth: false,
-                                ordered: true,
-                                language: table_language,
-                            });
-                        }
+                    if (div == "dianal0") {
+                        gAnidadaColumn(div,
+                            data.info.categoria,
+                            data.info.series,
+                            '',
+                            'Porcentaje de Docentes Titulados en Educación Inicial',
+                            data.info.maxbar
+                        );
+                    } else if (div == "dianal1") {
+                        gPie(div, data.puntos, '',
+                            'Docentes con Título Pedagógico en Educación Inicial, según Sexo', '');
+                    } else if (div == "dianal2") {
+                        gPie(div, data.puntos, '',
+                            'Docentes con Título Pedagógico en Educación Inicial, según Condición Laboral',
+                            '');
+                    } else if (div == "dianal3") {
+                        gPie(div, data.puntos, '',
+                            'Docentes con Título Pedagógico en Educación Inicial, según Ámbito Geográfico',
+                            '');
+                    } else if (div == "ctabla1") {
+                        $('#ctabla1').html(data.excel);
+                        $('#tabla1').DataTable({
+                            responsive: true,
+                            autoWidth: false,
+                            ordered: true,
+                            language: table_language,
+                        });
+                    } else if (div == "ctabla2") {
+                        $('#ctabla2').html(data.excel);
+                        $('#tabla2').DataTable({
+                            responsive: true,
+                            autoWidth: false,
+                            ordered: true,
+                            searching: false,
+                            bPaginate: false,
+                            info: false,
+                            language: table_language,
+                        });
                     }
 
                 },
@@ -378,60 +423,28 @@
             });
         }
 
-        function gSimpleColumn(div, datax, titulo, subtitulo, tituloserie) {
+        function descargar1() {
+            window.open("{{ url('/') }}/INDICADOR/Home/06/Excel/" + $('#anio').val() + "/" + $('#provincia')
+                .val() + "/" + $('#distrito').val() + "/" + $('#tipogestion').val());
+        }
 
-            Highcharts.chart(div, {
-                chart: {
-                    type: 'column',
-                },
-                title: {
-                    enabled: false,
-                    text: titulo,
-                },
-                subtitle: {
-                    enabled: false,
-                    //text: subtitulo,
-                },
-                xAxis: {
-                    type: 'category',
-                },
-                yAxis: {
-                    /* max: 100, */
-                    title: {
-                        enabled: false,
-                        text: 'Porcentaje',
-                    }
-                },
-                /* colors: [
-                    '#8085e9',
-                    '#2b908f',
-                ], */
-                series: [{
-                    showInLegend: tituloserie != '',
-                    name: tituloserie,
-                    label: {
-                        enabled: false
-                    },
-                    colorByPoint: false,
-                    data: datax,
-                }],
-                tooltip: {
-                    pointFormat: '<span style="color:{point.color}">\u25CF</span> Hay: <b>{point.y}</b><br/>',
-                    shared: true
-                },
-                plotOptions: {
-                    series: {
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                        },
-                    }
-                },
-                exporting: {
-                    enabled: false
-                },
-                credits: false,
-            });
+        function descargar2() {
+            window.open("{{ url('/') }}/INDICADOR/Home/06/Excel/tabla2/" + $('#anio').val() + "/" + $('#provincia')
+                .val() + "/" + $('#distrito').val() + "/" + $('#tipogestion').val());
+        }
+
+        function printer() {
+            window.print();
+            // var escalaPersonalizada = 0.6; // Cambia esto al valor de escala deseado
+            // var style = document.createElement('style');
+            // style.type = 'text/css';
+            // style.media = 'print';
+            // // style.innerHTML = '@page { size: auto; margin: 0mm; transform: scale(' + escalaPersonalizada +
+            // //     '); } @media print { body { transform: scale(' + escalaPersonalizada + '); } }';
+            // style.innerHTML = '@page { transform: scale(' + escalaPersonalizada +
+            //     '); } @media print { body { transform: scale(' + escalaPersonalizada + '); } }';
+            // document.head.appendChild(style);
+            // window.print();
         }
 
         function gPie(div, datos, titulo, subtitulo, tituloserie) {
@@ -489,118 +502,6 @@
                     enabled: true
                 },
                 credits: false,
-            });
-        }
-
-        function gBasicColumn(div, categorias, datos, titulo, subtitulo) {
-            Highcharts.chart(div, {
-                chart: {
-                    type: 'column'
-                },
-                title: {
-                    text: titulo
-                },
-                subtitle: {
-                    text: subtitulo
-                },
-                xAxis: {
-                    categories: categorias,
-                },
-                yAxis: {
-
-                    min: 0,
-                    title: {
-                        text: 'Rainfall (mm)',
-                        enabled: false
-                    }
-                },
-
-                tooltip: {
-                    pointFormat: '<span style="color:{point.color}">\u25CF</span> Hay: <b>{point.y}</b><br/>',
-                    shared: true
-                },
-                plotOptions: {
-                    series: {
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                        },
-                    }
-                },
-                series: datos,
-                credits: false,
-            });
-        }
-
-        function gsemidona(div, valor) {
-            Highcharts.chart(div, {
-                chart: {
-                    plotBackgroundColor: null,
-                    plotBorderWidth: 0,
-                    plotShadow: false,
-                    height: 200,
-                },
-                title: {
-                    text: valor + '%', // 'Browser<br>shares<br>January<br>2022',
-                    align: 'center',
-                    verticalAlign: 'middle',
-                    y: 15, //60,
-                    style: {
-                        //fontWeight: 'bold',
-                        //color: 'orange',
-                        fontSize: '30'
-                    }
-                },
-                tooltip: {
-                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                },
-                accessibility: {
-                    point: {
-                        valueSuffix: '%'
-                    }
-                },
-                plotOptions: {
-                    pie: {
-                        dataLabels: {
-                            enabled: true,
-                            distance: -50,
-                            style: {
-                                fontWeight: 'bold',
-                                color: 'white'
-                            },
-
-                        },
-                        startAngle: -90,
-                        endAngle: 90,
-                        center: ['50%', '50%'], //['50%', '75%'],
-                        size: '120%',
-                        borderColor: '#98a6ad',
-                        color: '#fff'
-                    }
-                },
-                series: [{
-                    type: 'pie',
-                    name: 'Avance',
-                    innerSize: '65%',
-                    data: [
-                        ['', valor],
-                        //['Edge', 11.97],
-                        //['Firefox', 5.52],
-                        //['Safari', 2.98],
-                        //['Internet Explorer', 1.90],
-                        {
-                            name: '',
-                            y: 100 - valor,
-                            dataLabels: {
-                                enabled: false
-                            }
-                        }
-                    ]
-                }],
-                exporting: {
-                    enabled: false
-                },
-                credits: false
             });
         }
 
@@ -668,131 +569,6 @@
             });
         }
 
-        function gAnidadaColumnX(div, categoria, series, titulo, subtitulo) {
-            Highcharts.chart(div, {
-                chart: {
-                    zoomType: 'xy',
-                },
-                title: {
-                    text: titulo, //'Browser market shares in January, 2018'
-                },
-                subtitle: {
-                    text: subtitulo,
-                },
-                xAxis: [{
-                    categories: categoria,
-                    crosshair: true
-                }],
-                yAxis: [{ // Primary yAxis
-                        //max: 2000000000,
-                        labels: {
-                            enabled: false,
-                        },
-                        title: {
-                            enabled: false,
-                        },
-                        /* labels: {
-                            format: '{value}°C',
-                            style: {
-                                color: Highcharts.getOptions().colors[2]
-                            }
-                        },
-                        title: {
-                            text: 'Temperature',
-                            style: {
-                                color: Highcharts.getOptions().colors[2]
-                            }
-                        }, */
-                        //opposite: true,
-                    }, { // Secondary yAxis
-                        gridLineWidth: 0,
-                        labels: {
-                            enabled: false,
-                        },
-                        title: {
-                            enabled: false,
-                        },
-                        /* title: {
-                            text: 'Rainfall',
-                            style: {
-                                color: Highcharts.getOptions().colors[0]
-                            }
-                        },
-                        labels: {
-                            format: '{value} mm',
-                            style: {
-                                color: Highcharts.getOptions().colors[0]
-                            }
-                        }, */
-                        min: -200,
-                        max: 150,
-                        opposite: true,
-                    },
-                    /* { // Tertiary yAxis
-                                       gridLineWidth: 0,
-                                       title: {
-                                           text: 'Sea-Level Pressure',
-                                           style: {
-                                               color: Highcharts.getOptions().colors[1]
-                                           }
-                                       },
-                                       labels: {
-                                           format: '{value} mb',
-                                           style: {
-                                               color: Highcharts.getOptions().colors[1]
-                                           }
-                                       },
-                                       opposite: true
-                                   } */
-                ],
-                series: series,
-                plotOptions: {
-                    /* columns: {
-                        stacking: 'normal'
-                    }, */
-                    series: {
-                        showInLegend: false,
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                            //format: '{point.y:,.0f}',
-                            //format: '{point.y:.1f}%',
-                            formatter: function() {
-                                if (this.y > 1000000) {
-                                    return Highcharts.numberFormat(this.y / 1000000, 0) + "M";
-                                } else if (this.y > 1000) {
-                                    return Highcharts.numberFormat(this.y / 1000, 0) + "K";
-                                } else if (this.y < 101) {
-                                    return this.y + "%";
-                                } else {
-                                    return this.y;
-                                }
-                            },
-                            style: {
-                                fontWeight: 'normal',
-                            }
-                        },
-                    },
-                },
-                tooltip: {
-                    shared: true,
-                },
-                legend: {
-                    itemStyle: {
-                        //"color": "#333333",
-                        "cursor": "pointer",
-                        "fontSize": "10px",
-                        "fontWeight": "normal",
-                        "textOverflow": "ellipsis"
-                    },
-                },
-                exporting: {
-                    enabled: false
-                },
-                credits: false,
-            });
-        }
-
         function gAnidadaColumn(div, categoria, series, titulo, subtitulo, maxBar) {
             var rango = categoria.length;
             var posPorcentaje = rango * 2 + 1;
@@ -802,39 +578,51 @@
                 chart: {
                     zoomType: 'xy',
                 },
+                colors: ['#5eb9aa', '#f5bd22', '#ef5350'],
                 title: {
                     text: titulo, //'Browser market shares in January, 2018'
                 },
                 subtitle: {
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px',
+                    }
                 },
                 xAxis: [{
                     categories: categoria,
                     crosshair: true,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    }
                 }],
                 yAxis: [{ // Primary yAxis
-                        max: maxBar + porMaxBar,
+                        max: maxBar > 0 ? maxBar + porMaxBar : null,
                         labels: {
-                            enabled: false,
+                            enabled: true,
+                            style: {
+                                //color: Highcharts.getOptions().colors[2],
+                                fontSize: '10px',
+                            }
                         },
+                        // labels: {
+                        //     //format: '{value}°C',
+                        //     //style: {
+                        //     //    color: Highcharts.getOptions().colors[2]
+                        //     //}
+                        // },
                         title: {
                             enabled: false,
-                        },
-                        labels: {
-                            //format: '{value}°C',
-                            //style: {
-                            //    color: Highcharts.getOptions().colors[2]
-                            //}
-                        },
-                        title: {
-                            text: 'Numerador y Denomidor',
-                            /* style: {
-                                color: Highcharts.getOptions().colors[2]
-                            } */
+                            text: 'Matriculados',
+                            style: {
+                                //color: Highcharts.getOptions().colors[2],
+                                fontSize: '11px',
+                            }
                         },
                         //opposite: true,
                     }, { // Secondary yAxis
-                        gridLineWidth: 0,
+                        gridLineWidth: 0, //solo indica el tamaño de la linea
                         labels: {
                             enabled: false,
                         },
@@ -847,8 +635,8 @@
                             //style: {
                             //    color: Highcharts.getOptions().colors[0]
                             //}
-                        },
-                        labels: {
+                        }, */
+                        /* labels: {
                             //format: '{value} mm',
                             format: '{value} %',
                             //style: {
@@ -856,26 +644,26 @@
                             //}
                         }, */
                         //min: -200,
-                        min: 0,
-                        //max: 150,
+                        min: -600,
+                        max: 400,
                         opposite: true,
                     },
                     /* { // Tertiary yAxis
-                                       gridLineWidth: 0,
-                                       title: {
-                                           text: 'Sea-Level Pressure',
-                                           style: {
-                                               color: Highcharts.getOptions().colors[1]
-                                           }
-                                       },
-                                       labels: {
-                                           format: '{value} mb',
-                                           style: {
-                                               color: Highcharts.getOptions().colors[1]
-                                           }
-                                       },
-                                       opposite: true
-                                   } */
+                        gridLineWidth: 0,
+                        title: {
+                            text: 'Sea-Level Pressure',
+                            style: {
+                                color: Highcharts.getOptions().colors[1]
+                            }
+                        },
+                        labels: {
+                            format: '{value} mb',
+                            style: {
+                                color: Highcharts.getOptions().colors[1]
+                            }
+                        },
+                        opposite: true
+                    } */
                 ],
                 series: series,
                 plotOptions: {
@@ -890,25 +678,14 @@
                             //format: '{point.y:,.0f}',
                             //format: '{point.y:.1f}%',
                             formatter: function() {
-                                cont++;
-                                //console.log(cont);
-                                //console.log(div + " - " + this.points);
-                                /* if (this.y > 1000000) {
-                                    return Highcharts.numberFormat(this.y / 1000000, 0) + "M";
-                                } else if (this.y > 1000) {
-                                    return Highcharts.numberFormat(this.y / 1000, 0) + "K";
-                                } else if (this.y < 101) {
-                                    return this.y + "%";
-                                } else {
-                                    return this.y;
-                                } */
-                                if (cont >= posPorcentaje)
+                                if (this.colorIndex == 2)
                                     return this.y + " %";
                                 else
                                     return Highcharts.numberFormat(this.y, 0);
                             },
                             style: {
                                 fontWeight: 'normal',
+                                fontSize: '10px',
                             }
                         },
                     },

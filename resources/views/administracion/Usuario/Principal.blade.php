@@ -381,7 +381,7 @@
                         <div class="form">
                             <div class="form-group">
                                 <label>Abreviado<span class="required">*</span></label>
-                                <input id="apodo" name="apodo" class="form-control" type="text"
+                                <input id="abreviado" name="abreviado" class="form-control" type="text"
                                     onkeyup="this.value=this.value.toUpperCase()" maxlength="10">
                                 <span class="help-block"></span>
                             </div>

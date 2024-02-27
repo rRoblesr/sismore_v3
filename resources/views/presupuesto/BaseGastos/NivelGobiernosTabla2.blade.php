@@ -1,6 +1,6 @@
-<table id="tabla1" class="table table-striped table-bordered tablex" style="font-size:11px;">
+<table id="tabla1" class="table table-striped table-bordered table-sm font-11">
     <thead>
-        <tr class="bg-primary text-white text-center">
+        <tr class="bg-success-0 text-white text-center">
             <th>Generica</th>
             <th>2014</th>
             <th>2015</th>
@@ -31,7 +31,7 @@
         @endforeach
     </tbody>
     <tfoot>
-        <tr class="text-center bg-primary text-white">
+        <tr class="text-center bg-success-0 text-white">
             <th class="text-left">TOTAL</th>
             <th>{{ number_format($foot['pim_2014'], 0) }}</th>
             <th>{{ number_format($foot['pim_2015'], 0) }}</th>

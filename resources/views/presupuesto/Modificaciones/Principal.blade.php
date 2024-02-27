@@ -49,91 +49,97 @@
 
         <div class="row">
             <div class="col-sm-12">
-                <div class="card card-border ">
-                    <div class="card-header border-success-0 bg-transparent pb-0">
+                <div class="card">
+                    <div class="card-header bg-success-0 pt-2">
                         <div class="card-widgets">
                             <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i
                                     class="fa fa-redo"></i> Actualizar</button>
+                            <button type="button" class="btn btn-primary btn-xs"
+                                onclick="javascript:alert('Oops.. Sin Detalles')"><i class="fas fa-file-powerpoint"></i>
+                                Detalle</button>
+                            <button type="button" class="btn btn-success btn-xs" onclick="descargar()"><i
+                                    class="fa fa-file-excel"></i>
+                                Descargar</button>
                         </div>
-                        <h3 class="card-title">FILTRO</h3>
+                        <h3 class="card-title text-white">CONSULTA DE GASTOS</h3>
                     </div>
                     <div class="card-body pt-2 pb-0">
                         <form class="form-horizontal" id="form-filtro">
                             @csrf
                             <div class="form">
                                 <div class="form-group row">
-                                    <div class="col-md-4">
-                                        <label class=" col-form-label">Año</label>
+                                    <div class="col-md-1">
+                                        {{-- <label class=" col-form-label">Año</label> --}}
                                         <div class="">
-                                            <select class="form-control" name="fano" id="fano"
+                                            <select class="form-control btn-xs font-11" name="fano" id="fano"
                                                 onchange="cargarmes();">
                                                 {{-- <option value="0">TODOS</option> --}}
                                                 @foreach ($opt1 as $item)
                                                     <option value="{{ $item->anio }}"
-                                                        {{ $item->anio == date('Y') ? 'selected' : '' }}>{{ $item->anio }}
+                                                        {{ $item->anio == $anio ? 'selected' : '' }}>{{ $item->anio }}
                                                     </option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <label class="col-form-label">Mes</label>
+                                    <div class="col-md-1">
+                                        {{-- <label class="col-form-label">Mes</label> --}}
                                         <div class="">
-                                            <select class="form-control" name="fmes" id="fmes"
-                                                onchange="cargarcuadros2();">
+                                            <select class="form-control btn-xs font-11 pl-0" name="fmes" id="fmes"
+                                                onchange="cargarcuadros2();cargardispositivolegal();">
                                                 {{-- <option value="0">TODOS</option> --}}
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <label class="col-form-label">Producto/Proyecto </label>
+                                    <div class="col-md-2">
+                                        {{-- <label class="col-form-label">Producto/Proyecto </label> --}}
                                         <div class="">
-                                            <select class="form-control" name="fproductoproyecto" id="fproductoproyecto"
-                                                onchange="cargarcuadros2();">
-                                                <option value="0">Todos</option>
-                                                @foreach ($opt3 as $item)
+                                            <select class="form-control btn-xs font-11" name="fproductoproyecto"
+                                                id="fproductoproyecto" onchange="cargarcuadros2();">
+                                                <option value="0">PRODUCTO/PROYECTO</option>
+                                                {{-- @foreach ($opt3 as $item)
                                                     <option value="{{ $item->id }}">
                                                         {{ $item->codigo . ' ' . $item->nombre }}</option>
-                                                @endforeach
+                                                @endforeach --}}
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <label class="col-form-label">Unidad Ejecutora </label>
+                                    <div class="col-md-3">
+                                        {{-- <label class="col-form-label">Unidad Ejecutora </label> --}}
                                         <div class="">
-                                            <select class="form-control" name="fue" id="fue"
+                                            <select class="form-control btn-xs font-11" name="fue" id="fue"
                                                 onchange="cargarcuadros2();">
-                                                <option value="0">Todos</option>
-                                                @foreach ($opt6 as $item)
-                                                    <option value="{{ $item->id }}">
-                                                        {{ $item->nombre_ejecutora }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="col-form-label">Tipos de Modificaciones </label>
-                                        <div class="">
-                                            <select class="form-control" name="ftipomodificacion" id="ftipomodificacion"
-                                                onchange="cargarcuadros2();">
-                                                <option value="0">Todos</option>
-                                                @foreach ($opt4 as $item)
+                                                <option value="0">UNIDAD EJECUTORA</option>
+                                                {{-- @foreach ($opt6 as $item)
                                                     <option value="{{ $item->id }}">
                                                         {{ $item->codigo . ' ' . $item->nombre }}</option>
-                                                @endforeach
+                                                @endforeach --}}
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <label class="col-form-label">Dispositivo Legal </label>
+                                    <div class="col-md-3">
+                                        {{-- <label class="col-form-label">Tipos de Modificaciones </label> --}}
                                         <div class="">
-                                            <select class="form-control" name="fdispositivolegal" id="fdispositivolegal"
-                                                onchange="cargarcuadros2();">
-                                                <option value="todos">Todos</option>
-                                                @foreach ($opt5 as $item)
+                                            <select class="form-control btn-xs font-11" name="ftipomodificacion"
+                                                id="ftipomodificacion" onchange="cargarcuadros2();">
+                                                <option value="0">TIPO DE MODIFICACIONES</option>
+                                                {{-- @foreach ($opt4 as $item)
+                                                    <option value="{{ $item->id }}">
+                                                        {{ $item->codigo . ' ' . $item->nombre }}</option>
+                                                @endforeach --}}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{-- <label class="col-form-label">Dispositivo Legal </label> --}}
+                                        <div class="">
+                                            <select class="form-control btn-xs font-11" name="fdispositivolegal"
+                                                id="fdispositivolegal" onchange="cargarcuadros2();">
+                                                <option value="todos">DISPOSITIVO LEGAL</option>
+                                               {{--  @foreach ($opt5 as $item)
                                                     <option value="{{ $item->dispositivo_legal }}">
                                                         {{ $item->dispositivo_legal }}</option>
-                                                @endforeach
+                                                @endforeach --}}
                                             </select>
                                         </div>
                                     </div>
@@ -168,18 +174,17 @@
         <div class="row">
             <div class="col-xl-12 principal">
                 <div class="card card-border">
-                    <div class="card-header border-success-0">{{--  bg-transparent pb-0 mb-0 --}}
-                        <div class="card-widgets">
+                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                        {{-- <div class="card-widgets">
                             <button type="button" class="btn btn-success btn-xs" onclick="descargar()"><i
                                     class="fa fa-file-excel"></i>
-                                Excel</button>
+                                Descargar</button>
                         </div>
-                        <h3 class="card-title"></h3>
+                        <h3 class="card-title"></h3> --}}
                     </div>
                     <div class="card-body pb-0 pt-0">
                         <div class="table-responsive">
-                            <table id="tabla1-dt" class="table table-striped table-bordered tablex"
-                                style="font-size:10px;">
+                            <table id="tabla1-dt" class="table table-striped table-bordered table-sm font-10">
                                 <thead>
                                     <tr class="bg-success-0 text-white text-center">
                                         <th>Unidad Ejecutora</th>
@@ -446,7 +451,7 @@
                 type: 'get',
                 success: function(data) {
                     $('#fproductoproyecto option ').remove();
-                    var opt = '<option value="0">Todos</option>';
+                    var opt = '<option value="0">PRODUCTO/PROYECTO</option>';
                     $.each(data.info, function(index, value) {
                         opt += '<option value="' + value.id + '">' + value.codigo + " " + value.nombre +
                             '</option>';
@@ -474,10 +479,10 @@
                 type: 'get',
                 success: function(data) {
                     $('#fue option ').remove();
-                    var opt = '<option value="0">Todos</option>';
+                    var opt = '<option value="0">UNIDAD EJECUTORA</option>';
                     $.each(data.info, function(index, value) {
-                        opt += '<option value="' + value.id + '">' + value.nombre_ejecutora +
-                            '</option>';
+                        opt += '<option value="' + value.id + '">' + value.codigo + ' ' +
+                            value.nombre + '</option>';
                     });
                     $('#fue').append(opt);
                 },
@@ -502,7 +507,7 @@
                 type: 'get',
                 success: function(data) {
                     $('#ftipomodificacion option ').remove();
-                    var opt = '<option value="0">Todos</option>';
+                    var opt = '<option value="0">TIPO DE MODIFICACIONES</option>';
                     $.each(data.info, function(index, value) {
                         opt += '<option value="' + value.id + '">' + value.codigo + " " + value.nombre +
                             '</option>';
@@ -530,7 +535,7 @@
                 type: 'get',
                 success: function(data) {
                     $('#fdispositivolegal option ').remove();
-                    var opt = '<option value="todos">Todos</option>';
+                    var opt = '<option value="todos">DISPOSITIVO LEGAL</option>';
                     $.each(data.info, function(index, value) {
                         opt += '<option value="' + value.dispositivo_legal + '">' + value
                             .dispositivo_legal +

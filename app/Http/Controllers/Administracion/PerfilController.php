@@ -24,7 +24,7 @@ class PerfilController extends Controller
 
     public function principal()
     {
-        $sistemas = SistemaRepositorio::listar_porperfil(session('perfil_id'));
+        $sistemas = SistemaRepositorio::listar_porperfil(session('perfil_administrador_id'));
         return view('administracion.Perfil.Principal', compact('sistemas'));
     }
 

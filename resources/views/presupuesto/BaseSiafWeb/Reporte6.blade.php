@@ -47,52 +47,61 @@
     <div class="content">
         <div class="row">
             <div class="col-sm-12">
-                <div class="card card-border">
-                    <div class="card-header bg-transparent pb-0">
+                <div class="card">
+                    <div class="card-header bg-success-0 pt-2">
                         <div class="card-widgets">
                             <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i
                                     class="fa fa-redo"></i> Actualizar</button>
+                            <button type="button" class="btn btn-primary btn-xs"
+                                onclick="javascript:alert('Oops.. Sin Detalles')"><i class="fas fa-file-powerpoint"></i>
+                                Detalle</button>
+                            <button type="button" class="btn btn-success btn-xs" onclick="descargar()"><i
+                                    class="fa fa-file-excel"></i>
+                                Descargar</button>
                         </div>
-                        <h3 class="card-title">FILTRO</h3>
+                        <h3 class="card-title text-white">Ejecución de Gastos, según Genérica</h3>
                     </div>
                     <div class="card-body pt-2 pb-0">
                         <form class="form-horizontal" id="form-filtro">
                             @csrf
                             <div class="form">
                                 <div class="form-group row">
-                                    <div class="col-md-2">
-                                        <label class=" col-form-label">Año</label>
+                                    <div class="col-md-6"><span class="font-11">{{ $actualizado }}</span>
+                                    </div>
+                                    <div class="col-md-1">
+                                        {{-- <label class=" col-form-label">Año</label> --}}
                                         <div class="">
-                                            <select class="form-control" name="ganio" id="ganio"
+                                            <select class="form-control btn-xs font-11" name="ganio" id="ganio"
                                                 onchange="cargar_productoproyecto();cargar_unidadejecutora();cargarcuadros2();">
                                                 @foreach ($ano as $item)
                                                     <option value="{{ $item->anio }}"
-                                                        {{ $item->anio == date('Y') ? 'selected' : '' }}>{{ $item->anio }}
+                                                        {{ $item->anio == $anio ? 'selected' : '' }}>{{ $item->anio }}
                                                     </option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <label class="col-form-label">Producto/Proyecto</label>
+                                    <div class="col-md-2">
+                                        {{-- <label class="col-form-label">Producto/Proyecto</label> --}}
                                         <div class="">
-                                            <select class="form-control" name="garticulo" id="garticulo"
+                                            <select class="form-control btn-xs font-11" name="garticulo" id="garticulo"
                                                 onchange="cargar_unidadejecutora();cargarcuadros2();">
-                                                <option value="0">TODOS</option>
+                                                <option value="0">PRODUCTO/PROYECTO</option>
                                                 @foreach ($articulo as $item)
                                                     <option value="{{ $item->id }}">{{ $item->nombre }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-7">
-                                        <label class="col-form-label">Unidad Ejecutora</label>
+                                    <div class="col-md-3">
+                                        {{-- <label class="col-form-label">Unidad Ejecutora</label> --}}
                                         <div class="">
-                                            <select class="form-control" name="gue" id="gue"
+                                            <select class="form-control btn-xs font-11" name="gue" id="gue"
                                                 onchange="cargarcuadros2();">
-                                                <option value="0">TODOS</option>
+                                                <option value="0">UNIDAD EJECUTORA</option>
                                                 @foreach ($ue as $item)
-                                                    <option value="{{ $item->id }}">{{ $item->nombre }}
+                                                    <option value="{{ $item->id }}">
+                                                        {{ $item->codigo . ' ' . $item->nombre }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -112,17 +121,17 @@
 
 
         <div class="row">
-            <div class="col-xl-12 principal">
+            <div class="col-xl-12">
                 <div class="card card-border">
-                    <div class="card-header border-primary">
-                        <div class="card-widgets">
+                    <div class="card-header border-success-0 bg-transparent p-0">
+                        {{-- <div class="card-widgets">
                             <button type="button" class="btn btn-success btn-xs" onclick="descargar()"><i
                                     class="fa fa-file-excel"></i>
-                                Excel</button>
+                                    Descargar</button>
                         </div>
-                        <h3 class="card-title">Ejecución de Gastos, según Genérica</h3>
+                        <h3 class="card-title">Ejecución de Gastos, según Genérica</h3> --}}
                     </div>
-                    <div class="card-body pb-0 pt-0">
+                    <div class="card-body p-0">
                         <div class="table-responsive" id="vista3">
                         </div>
                     </div>
@@ -133,7 +142,7 @@
 
         <div class="row">
             <div class="col-xl-12">
-                <div class="card card-border card-primary">
+                <div class="card card-border border-success-0">
                     {{-- <div class="card-header border-primary bg-transparent p-0">
                         <h3 class="card-title anal2">Grafico</h3>
                     </div> --}}
@@ -149,8 +158,8 @@
 
         <div class="row">
             <div class="col-xl-12">
-                <div class="card card-border card-primary">
-                    <div class="card-header border-primary bg-transparent p-0">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent pt-2 pb-0">
                         <h3 class="card-title anal1">Funcion</h3>
                     </div>
                     <div class="card-body p-0">
@@ -330,7 +339,7 @@
                 success: function(data) {
                     console.log(data.productoproyecto);
                     $("#garticulo option").remove();
-                    var options = '<option value="0">SELECCIONAR</option>';
+                    var options = '<option value="0">PRODUCTO/PROYECTO</option>';
                     $.each(data.productoproyecto, function(index, value) {
                         options += "<option value='" + value.id + "' >" + value.nombre +
                             "</option>"
@@ -352,9 +361,10 @@
                 type: 'get',
                 success: function(data) {
                     $("#gue option").remove();
-                    var options = '<option value="0">SELECCIONAR</option>';
+                    var options = '<option value="0">UNIDAD EJECUTORA</option>';
                     $.each(data.ue, function(index, value) {
-                        options += "<option value='" + value.id + "' >" + value.abreviatura +
+                        options += "<option value='" + value.id + "' >" + value.codigo + ' ' +
+                            value.nombre +
                             "</option>"
                     });
                     $("#gue").append(options);
@@ -388,10 +398,18 @@
                 },
                 subtitle: {
                     text: subtitulo,
+                    style: {
+                        fontSize: '11px'
+                    }
                 },
                 xAxis: [{
                     categories: categoria,
-                    crosshair: true
+                    crosshair: true,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    },
                 }],
                 yAxis: [{ // Primary yAxis
                         //max: 1000000000,

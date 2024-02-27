@@ -1,0 +1,4 @@
+vista0001
+    representa al indicado nº1
+    titulo: NÚMERO DE ESTUDIANTES MATRICULADOS EN EDUCACIÓN BÁSICA
+

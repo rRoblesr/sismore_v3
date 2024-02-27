@@ -14,51 +14,6 @@
     <div class="content">
         <input type="hidden" id="formato" name="formato" value="{{ $formato }}">
         <div class="row">
-            @if ($formato == 1)
-                <div class="col-md-6">
-                    <form class="form-horizontal">
-                        <div class="form-group row">
-                            <div class="col-md-12">
-                                <label class=" col-form-label">Entidad</label>
-                                <div class="">
-                                    <select name="bentidad" id="bentidad" class="form-control btn-xs"
-                                        onchange="listarDT();">
-                                        @foreach ($entidades as $item)
-                                            <option value="{{ $item->id }}">{{ $item->nombre }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            @elseif($formato == 2)
-                <div class="col-md-12">
-                    <form class="form-horizontal">
-                        <div class="form-group row">
-                            <div class="col-md-6">
-                                <label class=" col-form-label">Entidad</label>
-                                <div class="">
-                                    <select name="bentidad" id="bentidad" class="form-control btn-xs"
-                                        onchange="listarDT();">
-                                        @foreach ($entidades as $item)
-                                            <option value="{{ $item->id }}">{{ $item->nombre }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="col-form-label">TODOS</label>
-                                <div class="">
-                                    <select name="bgerencia" id="bgerencia" class="form-control btn-xs">
-                                        <option value="">Gerencias</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            @endif
             <div class="col-md-12">
                 <div class="card card-border">
                     <div class="card-header border-success-0 bg-transparent pb-0">
@@ -68,7 +23,7 @@
                             <button type="button" class="btn btn-primary btn-xs" onclick="add_entidad()"><i
                                     class="fa fa-plus"></i> Nuevo</button>
                         </div>
-                        <h4 class="card-title">Lista de Entidades</h4>
+                        <h4 class="card-title">Lista de Oficinas</h4>
                     </div>
 
                     <div class="card-body">
@@ -77,25 +32,12 @@
                             <br>
                             <table id="dtPrincipal" class="table table-striped table-bordered" style="width:100%">
                                 <thead class="cabecera-dataTable table-success-0 text-white" id="xxx">
-                                    @if ($formato == 0)
-                                        <th>Nº</th>
-                                        <th>Entidad</th>
-                                        <th>Abreviado</th>
-                                        <th>Aciones</th>
-                                    @elseif ($formato == 1)
-                                        <th>Nº</th>
-                                        <th>Entidad</th>
-                                        <th>Oficina</th>
-                                        <th>Abreviado</th>
-                                        <th>Aciones</th>
-                                    @else
-                                        <th>Nº</th>
-                                        <th>Entidad</th>
-                                        <th>Gerencia</th>
-                                        <th>Abreviado</th>
-                                        <th>Aciones</th>
-                                    @endif
-
+                                    <th>Nº</th>
+                                    <th>Entidad</th>
+                                    <th>Abreviado</th>
+                                    <th>Oficina</th>
+                                    <th>Abreviado</th>
+                                    <th>Aciones</th>
                                 </thead>
                             </table>
                         </div>
@@ -123,25 +65,16 @@
                         <input type="hidden" id="id" name="id">
                         {{-- <input type="hidden" id="dependencia" name="dependencia"> --}}
                         <div class="form-body">
-                            @if ($formato == 1)
-                                <div class="form-group">
-                                    <label>Entidad<span class="required">*</span></label>
-                                    <select name="dependencia" id="dependencia" class="form-control btn-xs">
-                                        @foreach ($entidades as $item)
-                                            <option value="{{ $item->id }}">{{ $item->nombre }}</option>
-                                        @endforeach
-                                    </select>
-                                    <span class="help-block"></span>
-                                </div>
-                            @endif
-                            @if ($formato == 2)
-                                <div class="form-group">
-                                    <label>Gerencia<span class="required">*</span></label>
-                                    <select name="gerencia" id="gerencia" class="form-control btn-xs">
-                                    </select>
-                                    <span class="help-block"></span>
-                                </div>
-                            @endif
+                            <div class="form-group">
+                                <label>Entidad<span class="required">*</span></label>
+                                <select name="dependencia" id="dependencia" class="form-control btn-xs">
+                                    <option value="">SELECCIONAR</option>
+                                    @foreach ($entidades as $item)
+                                        <option value="{{ $item->id }}">{{ $item->nombre }}</option>
+                                    @endforeach
+                                </select>
+                                <span class="help-block"></span>
+                            </div>
                             <div class="form-group">
                                 <label>Nombre <span class="required">*</span></label>
                                 <input id="descripcion" name="descripcion" class="form-control btn-xs" type="text"
@@ -150,7 +83,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Abreviado <span class="required">*</span></label>
-                                <input id="apodo" name="apodo" class="form-control btn-xs" type="text"
+                                <input id="abreviado" name="abreviado" class="form-control btn-xs" type="text"
                                     onkeyup="this.value=this.value.toUpperCase()" maxlength="10">
                                 <span class="help-block"></span>
                             </div>
@@ -208,7 +141,7 @@
                     "url": "{{ route('entidad.listar.json') }}",
                     "type": "GET",
                     "data": {
-                        'dependencia': $('#bentidad').val(),
+                        'dependencia': 0, //$('#bentidad').val(),
                         'formato': '{{ $formato }}'
                     },
                 },
@@ -246,7 +179,7 @@
                 success: function(data) {
                     $("#dependencia").val(data.gerencia.dependencia);
                     $("#descripcion").val(data.gerencia.nombre);
-                    $("#apodo").val(data.gerencia.apodo);
+                    $("#abreviado").val(data.gerencia.abreviado);
 
                     $('#modal_form_entidad').modal('show');
                     $('#modal_form_entidad .modal-title').text('Modificar Entidad');

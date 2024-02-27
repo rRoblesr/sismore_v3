@@ -1,4 +1,4 @@
-<table id="tabla1" class="table table-striped table-bordered tablex" style="font-size:11px;">
+<table id="tabla1" class="table table-striped table-bordered table-sm font-11">
     <thead>
         <tr class="bg-success-1 text-white text-center">
             <th>#</th>
@@ -7,8 +7,9 @@
             <th>PIA</th>
             <th>PIM</th>
             <th>CERTIFICADO</th>
+            <th>Avance CERT.</th>
             <th>DEVENGADO</th>
-            <th>% EJECUCIÓN</th>
+            <th>Avance DEV.</th>
             <th>SALDO CERT.</th>
             <th>SALDO DEV.</th>
         </tr>
@@ -26,6 +27,7 @@
                 <td>{{ number_format($item->pia, 0) }}</td>
                 <td>{{ number_format($item->pim, 0) }}</td>
                 <td>{{ number_format($item->cert, 0) }}</td>
+                <th class="text-center">{!! avance($item->eje1) !!}</th>
                 <td>{{ number_format($item->dev, 0) }}</td>
                 <th class="text-center">{!! avance($item->eje) !!}</th>
                 <td>{{ number_format($item->saldo1, 0) }}</td>
@@ -39,6 +41,7 @@
             <th>{{ number_format($foot['pia'], 0) }}</th>
             <th>{{ number_format($foot['pim'], 0) }}</th>
             <th>{{ number_format($foot['cert'], 0) }}</th>
+            <th class="text-center">{!! avance($foot['eje1']) !!}</th>
             <th>{{ number_format($foot['dev'], 0) }}</th>
             <th class="text-center">{!! avance($foot['eje']) !!}</th>
             <th>{{ number_format($foot['saldo1'], 0) }}</th>

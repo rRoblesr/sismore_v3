@@ -9,7 +9,7 @@ use App\Models\Educacion\Importacion;
 use App\Models\Parametro\FuenteImportacion;
 use App\Models\Presupuesto\BaseIngresos;
 use App\Models\Presupuesto\BaseIngresosDetalle;
-use App\Models\Presupuesto\Entidad;
+use App\Models\Administracion\Entidad;
 use App\Models\Presupuesto\ImporIngresos;
 use App\Repositories\Educacion\ImporGastosRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
@@ -23,6 +23,7 @@ use Yajra\DataTables\DataTables;
 class ImporIngresosController extends Controller
 {
     public $fuente = 15;
+    public static $FUENTE = 15;
     public function __construct()
     {
         $this->middleware('auth');
@@ -124,9 +125,9 @@ class ImporIngresosController extends Controller
             $importacion = Importacion::Create([
                 'fuenteImportacion_id' => 15, // valor predeterminado
                 'usuarioId_Crea' => auth()->user()->id,
-                'usuarioId_Aprueba' => null,
+                // 'usuarioId_Aprueba' => null,
                 'fechaActualizacion' => $request['fechaActualizacion'],
-                'comentario' => $request['comentario'],
+                // 'comentario' => $request['comentario'],
                 'estado' => 'PE'
             ]);
 
@@ -213,7 +214,7 @@ class ImporIngresosController extends Controller
                 $ape = $xx[0];
             }
 
-            if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_id') == 3 || session('perfil_id') == 8 || session('perfil_id') == 9 || session('perfil_id') == 10 || session('perfil_id') == 11)
+            if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11)
                 $boton = '<button type="button" onclick="geteliminar(' . $value->id . ')" id="eliminar' . $value->id . '" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> </button>';
             else
                 $boton = '';

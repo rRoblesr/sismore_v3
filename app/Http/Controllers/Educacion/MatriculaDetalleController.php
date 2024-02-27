@@ -9,7 +9,7 @@ use App\Models\Educacion\NivelModalidad;
 use App\Models\Educacion\TipoGestion;
 use App\Models\Educacion\Ugel;
 use App\Models\Parametro\Anio;
-use App\Models\Ubigeo;
+use App\Models\Parametro\Ubigeo;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\MatriculaDetalleRepositorio;
 use App\Repositories\Educacion\MatriculaRepositorio;
@@ -1566,7 +1566,7 @@ class MatriculaDetalleController extends Controller
             inner join edu_tipogestion as v7 on v7.id=v4.TipoGestion_id
             inner join edu_tipogestion as v8 on v8.id=v7.dependencia
             inner join edu_area as v9 on v9.id=v4.Area_id
-            inner join par_centropoblado as vA on vA.id=v4.CentroPoblado_id
+            inner join edu_centropoblado as vA on vA.id=v4.CentroPoblado_id
             inner join par_ubigeo as vB on vB.id=vA.Ubigeo_id
             inner join par_ubigeo as vC on vC.id=vB.dependencia
             where v3.estado='PR' and v5.tipo in ('EBR') and v2.anio_id=$ano and v3.fechaActualizacion in ('$fx') $optugel $optgestion $optarea
@@ -1605,7 +1605,7 @@ class MatriculaDetalleController extends Controller
             inner join edu_tipogestion as v7 on v7.id=v4.TipoGestion_id
             inner join edu_tipogestion as v8 on v8.id=v7.dependencia
             inner join edu_area as v9 on v9.id=v4.Area_id
-            inner join par_centropoblado as vA on vA.id=v4.CentroPoblado_id
+            inner join edu_centropoblado as vA on vA.id=v4.CentroPoblado_id
             inner join par_ubigeo as vB on vB.id=vA.Ubigeo_id
             inner join par_ubigeo as vC on vC.id=vB.dependencia
             where v3.estado='PR' and v5.tipo in ('EBR') and v2.anio_id=$ano and v3.fechaActualizacion in ('$fx') $optugel $optgestion $optarea
@@ -1716,7 +1716,7 @@ class MatriculaDetalleController extends Controller
             inner join edu_tipogestion as v7 on v7.id=v4.TipoGestion_id
             inner join edu_tipogestion as v8 on v8.id=v7.dependencia
             inner join edu_area as v9 on v9.id=v4.Area_id
-            inner join par_centropoblado as vA on vA.id=v4.CentroPoblado_id
+            inner join edu_centropoblado as vA on vA.id=v4.CentroPoblado_id
             inner join par_ubigeo as vB on vB.id=vA.Ubigeo_id
             inner join par_ubigeo as vC on vC.id=vB.dependencia
             where v3.estado='PR' and v5.tipo in ('EBR') and v5.nombre like '%Inicial%' and v2.anio_id=$ano and v3.fechaActualizacion in ('$fx') $optdistrito $optgestion $optarea $optugel
@@ -1751,7 +1751,7 @@ class MatriculaDetalleController extends Controller
                 inner join edu_tipogestion as v7 on v7.id=v4.TipoGestion_id
                 inner join edu_tipogestion as v8 on v8.id=v7.dependencia
                 inner join edu_area as v9 on v9.id=v4.Area_id
-                inner join par_centropoblado as vA on vA.id=v4.CentroPoblado_id
+                inner join edu_centropoblado as vA on vA.id=v4.CentroPoblado_id
                 inner join par_ubigeo as vB on vB.id=vA.Ubigeo_id
                 inner join par_ubigeo as vC on vC.id=vB.dependencia
                 where v3.estado='PR' and v5.tipo in ('EBR') and v5.nombre like '%Inicial%' and v2.anio_id=$ano and v3.fechaActualizacion in ('$fx') $optdistrito $optgestion $optarea $optugel
@@ -1827,7 +1827,7 @@ class MatriculaDetalleController extends Controller
             inner join edu_tipogestion as v7 on v7.id=v4.TipoGestion_id
             inner join edu_tipogestion as v8 on v8.id=v7.dependencia
             inner join edu_area as v9 on v9.id=v4.Area_id
-            inner join par_centropoblado as vA on vA.id=v4.CentroPoblado_id
+            inner join edu_centropoblado as vA on vA.id=v4.CentroPoblado_id
             inner join par_ubigeo as vB on vB.id=vA.Ubigeo_id
             inner join par_ubigeo as vC on vC.id=vB.dependencia
             where v3.estado='PR' and v5.tipo in ('EBR') and v2.anio_id=$ano and v3.fechaActualizacion in ('$fx') and vB.id=$distrito $optgestion $optarea $optugel
@@ -1862,7 +1862,7 @@ class MatriculaDetalleController extends Controller
                 inner join edu_tipogestion as v7 on v7.id=v4.TipoGestion_id
                 inner join edu_tipogestion as v8 on v8.id=v7.dependencia
                 inner join edu_area as v9 on v9.id=v4.Area_id
-                inner join par_centropoblado as vA on vA.id=v4.CentroPoblado_id
+                inner join edu_centropoblado as vA on vA.id=v4.CentroPoblado_id
                 inner join par_ubigeo as vB on vB.id=vA.Ubigeo_id
                 inner join par_ubigeo as vC on vC.id=vB.dependencia
                 where v3.estado='PR' and v5.tipo in ('EBR') and v2.anio_id=$ano and v3.fechaActualizacion in ('$fx') and vB.id=$distrito $optgestion $optarea $optugel
@@ -2030,7 +2030,7 @@ class MatriculaDetalleController extends Controller
             inner join edu_tipogestion as v7 on v7.id=v4.TipoGestion_id
             inner join edu_tipogestion as v8 on v8.id=v7.dependencia
             inner join edu_area as v9 on v9.id=v4.Area_id
-            inner join par_centropoblado as vA on vA.id=v4.CentroPoblado_id
+            inner join edu_centropoblado as vA on vA.id=v4.CentroPoblado_id
             inner join par_ubigeo as vB on vB.id=vA.Ubigeo_id
             inner join par_ubigeo as vC on vC.id=vB.dependencia
             where v3.estado='PR' and v5.tipo in ('EBR') and v2.anio_id=$ano and v3.fechaActualizacion in ('$fx') $optugel $optgestion $optarea $optugel
@@ -2066,7 +2066,7 @@ class MatriculaDetalleController extends Controller
             inner join edu_tipogestion as v7 on v7.id=v4.TipoGestion_id
             inner join edu_tipogestion as v8 on v8.id=v7.dependencia
             inner join edu_area as v9 on v9.id=v4.Area_id
-            inner join par_centropoblado as vA on vA.id=v4.CentroPoblado_id
+            inner join edu_centropoblado as vA on vA.id=v4.CentroPoblado_id
             inner join par_ubigeo as vB on vB.id=vA.Ubigeo_id
             inner join par_ubigeo as vC on vC.id=vB.dependencia
             where v3.estado='PR' and v5.tipo in ('EBR') and v2.anio_id=$ano and v3.fechaActualizacion in ('$fx') $optugel $optgestion $optarea $optugel
@@ -2171,7 +2171,7 @@ class MatriculaDetalleController extends Controller
             inner join edu_tipogestion as v7 on v7.id=v4.TipoGestion_id
             inner join edu_tipogestion as v8 on v8.id=v7.dependencia
             inner join edu_area as v9 on v9.id=v4.Area_id
-            inner join par_centropoblado as vA on vA.id=v4.CentroPoblado_id
+            inner join edu_centropoblado as vA on vA.id=v4.CentroPoblado_id
             inner join par_ubigeo as vB on vB.id=vA.Ubigeo_id
             inner join par_ubigeo as vC on vC.id=vB.dependencia
             where v3.estado='PR' and v5.tipo in ('EBR') and v5.nombre like '%Primaria%' and v2.anio_id=$ano and v3.fechaActualizacion in ('$fx') $optdistrito $optgestion $optarea $optugel
@@ -2203,7 +2203,7 @@ class MatriculaDetalleController extends Controller
                 inner join edu_tipogestion as v7 on v7.id=v4.TipoGestion_id
                 inner join edu_tipogestion as v8 on v8.id=v7.dependencia
                 inner join edu_area as v9 on v9.id=v4.Area_id
-                inner join par_centropoblado as vA on vA.id=v4.CentroPoblado_id
+                inner join edu_centropoblado as vA on vA.id=v4.CentroPoblado_id
                 inner join par_ubigeo as vB on vB.id=vA.Ubigeo_id
                 inner join par_ubigeo as vC on vC.id=vB.dependencia
                 where v3.estado='PR' and v5.tipo in ('EBR') and v5.nombre like '%Primaria%' and v2.anio_id=$ano and v3.fechaActualizacion in ('$fx') $optdistrito $optgestion $optarea $optugel
@@ -2369,7 +2369,7 @@ class MatriculaDetalleController extends Controller
             inner join edu_tipogestion as v7 on v7.id=v4.TipoGestion_id
             inner join edu_tipogestion as v8 on v8.id=v7.dependencia
             inner join edu_area as v9 on v9.id=v4.Area_id
-            inner join par_centropoblado as vA on vA.id=v4.CentroPoblado_id
+            inner join edu_centropoblado as vA on vA.id=v4.CentroPoblado_id
             inner join par_ubigeo as vB on vB.id=vA.Ubigeo_id
             inner join par_ubigeo as vC on vC.id=vB.dependencia
             where v3.estado='PR' and v5.tipo in ('EBR') and v2.anio_id=$ano and v3.fechaActualizacion in ('$fx') $optugel $optgestion $optarea $optugel
@@ -2405,7 +2405,7 @@ class MatriculaDetalleController extends Controller
             inner join edu_tipogestion as v7 on v7.id=v4.TipoGestion_id
             inner join edu_tipogestion as v8 on v8.id=v7.dependencia
             inner join edu_area as v9 on v9.id=v4.Area_id
-            inner join par_centropoblado as vA on vA.id=v4.CentroPoblado_id
+            inner join edu_centropoblado as vA on vA.id=v4.CentroPoblado_id
             inner join par_ubigeo as vB on vB.id=vA.Ubigeo_id
             inner join par_ubigeo as vC on vC.id=vB.dependencia
             where v3.estado='PR' and v5.tipo in ('EBR') and v2.anio_id=$ano and v3.fechaActualizacion in ('$fx') $optugel $optgestion $optarea $optugel
@@ -2510,7 +2510,7 @@ class MatriculaDetalleController extends Controller
             inner join edu_tipogestion as v7 on v7.id=v4.TipoGestion_id
             inner join edu_tipogestion as v8 on v8.id=v7.dependencia
             inner join edu_area as v9 on v9.id=v4.Area_id
-            inner join par_centropoblado as vA on vA.id=v4.CentroPoblado_id
+            inner join edu_centropoblado as vA on vA.id=v4.CentroPoblado_id
             inner join par_ubigeo as vB on vB.id=vA.Ubigeo_id
             inner join par_ubigeo as vC on vC.id=vB.dependencia
             where v3.estado='PR' and v5.tipo in ('EBR') and v5.nombre like '%Secundaria%' and v2.anio_id=$ano and
@@ -2543,7 +2543,7 @@ class MatriculaDetalleController extends Controller
                 inner join edu_tipogestion as v7 on v7.id=v4.TipoGestion_id
                 inner join edu_tipogestion as v8 on v8.id=v7.dependencia
                 inner join edu_area as v9 on v9.id=v4.Area_id
-                inner join par_centropoblado as vA on vA.id=v4.CentroPoblado_id
+                inner join edu_centropoblado as vA on vA.id=v4.CentroPoblado_id
                 inner join par_ubigeo as vB on vB.id=vA.Ubigeo_id
                 inner join par_ubigeo as vC on vC.id=vB.dependencia
                 where v3.estado='PR' and v5.tipo in ('EBR') and v5.nombre like '%Secundaria%' and v2.anio_id=$ano and

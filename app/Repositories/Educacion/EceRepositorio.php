@@ -4,7 +4,7 @@ namespace App\Repositories\Educacion;
 
 use App\Models\Educacion\Grado;
 use App\Models\Educacion\NivelModalidad;
-use App\Models\Ubigeo;
+use App\Models\Parametro\Ubigeo;
 use Illuminate\Support\Facades\DB;
 
 class EceRepositorio
@@ -120,7 +120,7 @@ class EceRepositorio
             ]);
         return $query;
     }
-    public static function listar_indicadorsatisfactorio($anio, $grado, $tipo) //esta por ver 
+    public static function listar_indicadorsatisfactorio($anio, $grado, $tipo) //esta por ver
     {
         $query = DB::table('edu_eceresultado as v1')
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
@@ -195,7 +195,7 @@ class EceRepositorio
         $query = DB::table('edu_eceresultado as v1')
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
             ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
-            ->join('par_centropoblado as v4', 'v4.id', '=', 'v3.CentroPoblado_id')
+            ->join('edu_centropoblado as v4', 'v4.id', '=', 'v3.CentroPoblado_id')
             ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.Ubigeo_id')
             ->join('par_anio as v6', 'v6.id', '=', 'v2.anio_id')
             ->where('v2.grado_id', $grado)
@@ -231,7 +231,7 @@ class EceRepositorio
         $query = DB::table('edu_eceresultado as v1')
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
             ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
-            ->join('par_centropoblado as v4', 'v4.id', '=', 'v3.CentroPoblado_id')
+            ->join('edu_centropoblado as v4', 'v4.id', '=', 'v3.CentroPoblado_id')
             ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.Ubigeo_id')
             ->join('par_anio as v6', 'v6.id', '=', 'v2.anio_id')
             ->where('v2.grado_id', $grado)
@@ -264,7 +264,7 @@ class EceRepositorio
         $query = DB::table('edu_eceresultado as v1')
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
             ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
-            ->join('par_centropoblado as v4', 'v4.id', '=', 'v3.CentroPoblado_id')
+            ->join('edu_centropoblado as v4', 'v4.id', '=', 'v3.CentroPoblado_id')
             ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.Ubigeo_id')
             ->join('par_anio as v6', 'v6.id', '=', 'v2.anio_id')
             ->where('v2.grado_id', $grado)
@@ -309,7 +309,7 @@ class EceRepositorio
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
             ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
             ->join('edu_tipogestion as v4', 'v4.id', '=', 'v3.TipoGestion_id')
-            //->join('par_centropoblado as v4', 'v4.id', '=', 'v3.CentroPoblado_id')
+            //->join('edu_centropoblado as v4', 'v4.id', '=', 'v3.CentroPoblado_id')
             //->join('par_ubigeo as v5', 'v5.id', '=', 'v4.Ubigeo_id')
             ->where('v1.materia_id', $materia)
             ->where('v2.grado_id', $grado)
@@ -357,7 +357,7 @@ class EceRepositorio
         $query = DB::table('edu_eceresultado as v1')
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
             ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
-            ->join('par_centropoblado as v4', 'v4.id', '=', 'v3.CentroPoblado_id')
+            ->join('edu_centropoblado as v4', 'v4.id', '=', 'v3.CentroPoblado_id')
             ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.Ubigeo_id')
             ->join('par_anio as v6', 'v6.id', '=', 'v2.anio_id')
             ->where('v1.materia_id', $materia)->where('v2.grado_id', $grado)->where('v6.anio', $anio)->where('v2.tipo', $tipo);
@@ -399,7 +399,7 @@ class EceRepositorio
         $query = DB::table('edu_eceresultado as v1')
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
             ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
-            ->join('par_centropoblado as v4', 'v4.id', '=', 'v3.CentroPoblado_id')
+            ->join('edu_centropoblado as v4', 'v4.id', '=', 'v3.CentroPoblado_id')
             ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.Ubigeo_id')
             ->where('v2.grado_id', $grado)
             ->where('v2.anio', $anio)
@@ -433,7 +433,7 @@ class EceRepositorio
         $query = DB::table('edu_eceresultado as v1')
             ->join('edu_ece as v2', 'v2.id', '=', 'v1.ece_id')
             ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v1.institucioneducativa_id')
-            ->join('par_centropoblado as v4', 'v4.id', '=', 'v3.CentroPoblado_id')
+            ->join('edu_centropoblado as v4', 'v4.id', '=', 'v3.CentroPoblado_id')
             ->join('par_ubigeo as v5', 'v5.id', '=', 'v4.Ubigeo_id')
             ->where('v2.grado_id', $grado)
             ->where('v2.anio', $anio)

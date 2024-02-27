@@ -79,37 +79,38 @@
 @section('content')
     <div class="row">
         <div class="col-sm-12">
-            <div class="card card-border">
-                <div class="card-header bg-transparent pb-0">
+            <div class="card">
+                <div class="card-header bg-success-0 pt-2">
                     <div class="card-widgets">
                         <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i
                                 class="fa fa-redo"></i> Actualizar</button>
                         <button type="button" class="btn btn-primary btn-xs" onclick="add()">
                             <i class="fa fa-plus"></i> Nuevo</button>
                     </div>
-                    <h3 class="card-title">FILTRO</h3>
+                    <h3 class="card-title text-white">UNIDADES ORGANICAS</h3>
                 </div>
                 <div class="card-body pt-2 pb-0">
                     {{-- <form class="form-horizontal" id="form-filtro">
                         @csrf --}}
                     <div class="form">
                         <div class="form-group row">
-                            <div class="col-md-3">
-                                <label class="col-form-label">Año</label>
+                            <div class="col-md-5"></div>
+                            <div class="col-md-2">
+                                {{-- <label class="col-form-label">Año</label> --}}
                                 <div class="">
-                                    <select class="form-control" name="fanio" id="fanio" onchange="listarDT();">
+                                    <select class="form-control btn-xs font-11" name="fanio" id="fanio" onchange="listarDT();">
                                         @foreach ($anios as $item)
                                             <option value="{{ $item->anio }}"
-                                                {{ $item->anio == date('Y') ? 'selected' : '' }}>{{ $item->anio }}
+                                                {{ $item->anio == $anio ? 'selected' : '' }}>{{ $item->anio }}
                                             </option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <label class=" col-form-label">Gobiernos</label>
+                            <div class="col-md-2">
+                                {{-- <label class=" col-form-label">Gobiernos</label> --}}
                                 <div class="">
-                                    <select class="form-control" name="fgobierno" id="fgobierno"
+                                    <select class="form-control btn-xs font-11" name="fgobierno" id="fgobierno"
                                         onchange="cargarue();listarDT();">
                                         {{-- <option value="0">TODOS</option> --}}
                                         @foreach ($gobs as $item)
@@ -119,10 +120,11 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <label class="col-form-label">Unidad Ejecutora</label>
+                            <div class="col-md-3">
+                                {{-- <label class="col-form-label">Unidad Ejecutora</label> --}}
                                 <div class="">
-                                    <select class="form-control" name="fue" id="fue" onchange="listarDT();">
+                                    <select class="form-control btn-xs font-11" name="fue" id="fue" onchange="listarDT();">
+                                        <option value="UNIDAD EJECUTORA"></option>
                                     </select>
                                 </div>
                             </div>
@@ -154,7 +156,7 @@
                                 </div>
                             </div><br> --}}
                             <div class="table-responsive">
-                                <table id="tablemain" class="table table-striped table-bordered tabley">
+                                <table id="tablemain" class="table table-sm table-striped table-bordered font-11">
                                     <thead class="cabecera-dataTable bg-success-1 text-white">
                                         <!--th>Nº</th-->
                                         <th>Codigo</th>
@@ -249,7 +251,7 @@
                                         @foreach ($anios as $item)
                                             @if ($item->anio > 2021)
                                                 <option value="{{ $item->anio }}"
-                                                    {{ $item->anio == date('Y') ? 'selected' : '' }}>{{ $item->anio }}
+                                                    {{ $item->anio == $anio ? 'selected' : '' }}>{{ $item->anio }}
                                                 </option>
                                             @endif
                                         @endforeach

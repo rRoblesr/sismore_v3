@@ -107,6 +107,7 @@ class BaseIngresosRepositorio
             )
             ->whereIn('w1.id', $fechas)
             ->groupBy('id', 'ano')
+            ->orderBy('ano')
             ->get();
         return $query;
     }
@@ -130,6 +131,7 @@ class BaseIngresosRepositorio
             )
             ->whereIn('w1.id', $fechas)
             ->groupBy('id', 'ano')
+            ->orderBy('ano')
             ->get();
         return $query;
     }

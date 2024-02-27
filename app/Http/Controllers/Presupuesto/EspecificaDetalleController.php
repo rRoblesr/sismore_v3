@@ -24,10 +24,11 @@ class EspecificaDetalleController extends Controller
 
     public function partidasrestringidas()
     {
-        $anios = BaseGastos::distinct()->select('anio')->orderBy('anio', 'asc')->get();
+        $anios = BaseGastos::distinct()->select('anio')->orderBy('anio')->get();
+        $anio = $anios->max('anio');
         $generica = GenericaGasto::orderBy('codigo', 'asc')->get();
         $mensaje = "";
-        return view('Presupuesto.EspecificaDetalle.restringidas', compact('mensaje', 'generica', 'anios'));
+        return view('Presupuesto.EspecificaDetalle.restringidas', compact('mensaje', 'generica', 'anios', 'anio'));
     }
 
     public function listarpartidasrestringidas(Request $rq)
@@ -63,7 +64,7 @@ class EspecificaDetalleController extends Controller
                 return $data->pespecificadetalle . ' ' . $data->especificadetalle;
             })
             ->addColumn('gen', function ($data) {
-                return $data->pgenerica.' '.$data->generica;
+                return $data->pgenerica . ' ' . $data->generica;
             })
             ->addColumn('action', function ($data) {
 
@@ -76,7 +77,7 @@ class EspecificaDetalleController extends Controller
                 $acciones = '&nbsp;<a href="#" class="btn btn-danger btn-xs" onclick="borrar(' . $data->id . ')"  title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
                 return $acciones;
             })
-            ->rawColumns(['action','espdet','gen'])
+            ->rawColumns(['action', 'espdet', 'gen'])
             ->make(true);
     }
 

@@ -144,7 +144,7 @@ class TabletaRepositorio
             ->where('v2.id', $anio)
             ->first();
         $query = TabletaDetalle::join('edu_institucioneducativa as v1', 'v1.id', '=', 'edu_tableta_detalle.institucioneducativa_id')
-            ->join('par_centropoblado as v2', 'v2.id', '=', 'v1.CentroPoblado_id')
+            ->join('edu_centropoblado as v2', 'v2.id', '=', 'v1.CentroPoblado_id')
             ->join('par_ubigeo as v3', 'v3.id', '=', 'v2.Ubigeo_id')
             ->join('edu_area as v4', 'v4.id', '=', 'v1.Area_id')
             ->where('edu_tableta_detalle.tableta_id', $tableta->id);
@@ -174,7 +174,7 @@ class TabletaRepositorio
             ->where('v2.id', $anio)
             ->first();
         $query = TabletaDetalle::join('edu_institucioneducativa as v1', 'v1.id', '=', 'edu_tableta_detalle.institucioneducativa_id')
-            ->join('par_centropoblado as v2', 'v2.id', '=', 'v1.CentroPoblado_id')
+            ->join('edu_centropoblado as v2', 'v2.id', '=', 'v1.CentroPoblado_id')
             ->join('par_ubigeo as v3', 'v3.id', '=', 'v2.Ubigeo_id')
             ->join('edu_area as v4', 'v4.id', '=', 'v1.Area_id')
             ->where('edu_tableta_detalle.tableta_id', $tableta->id);
@@ -218,7 +218,7 @@ class TabletaRepositorio
             ->where('v2.id', $anio)
             ->first();
         $query = TabletaDetalle::join('edu_institucioneducativa as v1', 'v1.id', '=', 'edu_tableta_detalle.institucioneducativa_id')
-            ->join('par_centropoblado as v2', 'v2.id', '=', 'v1.CentroPoblado_id')
+            ->join('edu_centropoblado as v2', 'v2.id', '=', 'v1.CentroPoblado_id')
             ->join('par_ubigeo as v3', 'v3.id', '=', 'v2.Ubigeo_id')
             ->join('edu_area as v4', 'v4.id', '=', 'v1.Area_id')
             ->join('edu_ugel as v5', 'v5.id', '=', 'v1.Ugel_id')

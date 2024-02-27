@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Trabajo;
+
 use Illuminate\Http\Request;
 use App\Imports\tablaXImport;
 use Exception;
@@ -26,14 +27,14 @@ class ProEmpleoController extends Controller
 
         // return $padronWebLista;
         $mensaje = "";
-        $anios = Anio::orderBy('anio','desc')->get();
-      
+        $anios = Anio::orderBy('anio', 'desc')->get();
+
         // $meses = collect([
         //       ['nombre' => 'Enero', 'mes' => 1],
         //       ['nombre' => 'Febrero', 'mes' => 2],
         //       ['nombre' => 'Marzo', 'mes' => 3],
         //       ['nombre' => 'Abril', 'mes' => 4],
-        //  ]);        
+        //  ]);
 
         return view('trabajo.ProEmpleo.Importar', compact('mensaje', 'anios'));
     }
@@ -54,15 +55,15 @@ class ProEmpleoController extends Controller
                 foreach ($value as $row) {
                     if (++$i > 1) break;
                     $cadena =  $cadena .
-                        $row['ruc'].$row['empresa'].$row['titulo'].$row['provincia'].$row['distrito'].$row['tipo_de_documento'].
-                        $row['dni'].$row['nombres'].$row['apellidos'].$row['sexo'].$row['pcd'].$row['email'].$row['telefono1'].
-                        $row['telefono2'].$row['colocado'].$row['fuente'].$row['observaciones'];
+                        $row['ruc'] . $row['empresa'] . $row['titulo'] . $row['provincia'] . $row['distrito'] . $row['tipo_de_documento'] .
+                        $row['dni'] . $row['nombres'] . $row['apellidos'] . $row['sexo'] . $row['pcd'] . $row['email'] . $row['telefono1'] .
+                        $row['telefono2'] . $row['colocado'] . $row['fuente'] . $row['observaciones'];
                 }
             }
         } catch (Exception $e) {
             $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto y vuelva a importar";
             return view('Trabajo.ProEmpleo.Importar', compact('mensaje', 'anios'));
-        }        
+        }
 
         $existeMismaFecha = ImportacionRepositorio::Importacion_PE($request['fechaActualizacion'], 18);
 
@@ -74,49 +75,48 @@ class ProEmpleoController extends Controller
                 $importacion = Importacion::Create([
                     'fuenteImportacion_id' => 18, // valor predeterminado
                     'usuarioId_Crea' => auth()->user()->id,
-                    'usuarioId_Aprueba' => null,
+                    // 'usuarioId_Aprueba' => null,
                     'fechaActualizacion' => now(),
-                    'comentario' => $request['comentario'],
-                    'estado' => 'PE'
-                ]);   
+                    // 'comentario' => $request['comentario'],
+                    'estado' => 'PR'
+                ]);
 
                 $ProEmpleo = ProEmpleo::Create([
-                    'mes'=>$request['mes'],
-                    'importacion_id'=>$importacion->id,
-                    'anio_id'=>$request['anio'],
+                    'mes' => $request['mes'],
+                    'importacion_id' => $importacion->id,
+                    'anio_id' => $request['anio'],
                     'oferta_hombres' => $request['oferta_hombres'],
                     'oferta_mujeres' => $request['oferta_mujeres'],
                     'demanda' => $request['demanda']
-                ]);                
-                
+                ]);
+
                 foreach ($array as $key => $value) {
                     foreach ($value as $row) {
-                        if( $row['ruc']!='' )//para validar que no se registren filas vacias
-                        {                        
-                            $ProEmpleo_Colocados = ProEmpleo_Colocados::Create([                                        
-                                'ruc'=>$row['ruc'],
-                                'empresa'=>$row['empresa'],
-                                'titulo'=>$row['titulo'],
-                                'provincia'=>$row['provincia'],
-                                'distrito'=>$row['distrito'],
-                                'tipDoc'=>$row['tipo_de_documento'],
-                                'documento'=>$row['dni'],
-                                'nombres'=>$row['nombres'],
-                                'apellidos'=>$row['apellidos'],
-                                'sexo'=>$row['sexo'],
-                                'per_Con_Discapacidad'=>$row['pcd'],
-                                'email'=>$row['email'],
-                                'telefono1'=>$row['telefono1'],
-                                'telefono2'=>$row['telefono2'],
-                                'colocado'=>$row['colocado'],
-                                'fuente'=>$row['fuente'],
-                                'observaciones'=>$row['observaciones'],                           
-                                'proempleo_id'=>$ProEmpleo->id,                            
+                        if ($row['ruc'] != '') //para validar que no se registren filas vacias
+                        {
+                            $ProEmpleo_Colocados = ProEmpleo_Colocados::Create([
+                                'ruc' => $row['ruc'],
+                                'empresa' => $row['empresa'],
+                                'titulo' => $row['titulo'],
+                                'provincia' => $row['provincia'],
+                                'distrito' => $row['distrito'],
+                                'tipDoc' => $row['tipo_de_documento'],
+                                'documento' => $row['dni'],
+                                'nombres' => $row['nombres'],
+                                'apellidos' => $row['apellidos'],
+                                'sexo' => $row['sexo'],
+                                'per_Con_Discapacidad' => $row['pcd'],
+                                'email' => $row['email'],
+                                'telefono1' => $row['telefono1'],
+                                'telefono2' => $row['telefono2'],
+                                'colocado' => $row['colocado'],
+                                'fuente' => $row['fuente'],
+                                'observaciones' => $row['observaciones'],
+                                'proempleo_id' => $ProEmpleo->id,
                             ]);
-                        }                        
+                        }
                     }
                 }
-
             } catch (Exception $e) {
                 $importacion->estado = 'EL';
                 $importacion->save();
@@ -133,11 +133,11 @@ class ProEmpleoController extends Controller
     {
         $importacion = ImportacionRepositorio::ImportacionPor_Id($importacion_id);
 
-        $proEmpleo = ProEmpleoRepositorio:: ProEmpleo_porIdImportacion($importacion_id);
-        
-        return view('trabajo.ProEmpleo.Aprobar', compact('importacion_id', 'importacion','proEmpleo'));
+        $proEmpleo = ProEmpleoRepositorio::ProEmpleo_porIdImportacion($importacion_id);
+
+        return view('trabajo.ProEmpleo.Aprobar', compact('importacion_id', 'importacion', 'proEmpleo'));
     }
-    
+
     public function procesar($importacion_id)
     {
         $importacion  = Importacion::find($importacion_id);
@@ -174,13 +174,13 @@ class ProEmpleoController extends Controller
         $cantColocados = [];
         $oferta = [];
 
-        //cuandso el id viene del dashboard viene con CERO y se busca el mas actual 
+        //cuandso el id viene del dashboard viene con CERO y se busca el mas actual
 
         if ($anio_id == 0)
             $anio_id = ProEmpleoRepositorio::ProEmpleo_ultimo_anio()->anio_id;
-      
+
         if ($anio_id == 0)
-            $nombreAnio = '';                  
+            $nombreAnio = '';
         else
             $nombreAnio = Anio::find($anio_id)->anio;
 
@@ -188,49 +188,52 @@ class ProEmpleoController extends Controller
 
         // array_merge concatena los valores del arreglo, mientras recorre el foreach
         foreach ($datos_PorMes_yAnio as $key => $lista) {
-            $demanda = array_merge($demanda,[intval ($lista->demanda)]);  
-            $cantColocados = array_merge($cantColocados,[intval ($lista->cantColocados)]);  
-            $oferta = array_merge($oferta,[intval ($lista->oferta)]);
-        } 
+            $demanda = array_merge($demanda, [intval($lista->demanda)]);
+            $cantColocados = array_merge($cantColocados, [intval($lista->cantColocados)]);
+            $oferta = array_merge($oferta, [intval($lista->oferta)]);
+        }
 
-        $puntos[] = [ 'name'=> 'Oferta' ,'data'=>  $oferta];
-        $puntos[] = [ 'name'=> 'Demanda' ,'data'=>  $demanda];
-        $puntos[] = [ 'name'=> 'Colocados' ,'data'=> $cantColocados ];
+        $puntos[] = ['name' => 'Oferta', 'data' =>  $oferta];
+        $puntos[] = ['name' => 'Demanda', 'data' =>  $demanda];
+        $puntos[] = ['name' => 'Colocados', 'data' => $cantColocados];
 
-        $categoria = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Set','Oct','Nov','Dic'];
-      
-        $titulo = 'Oferta-Demanda-Colocados PROEMPLEO '.$nombreAnio;
+        $categoria = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Set', 'Oct', 'Nov', 'Dic'];
+
+        $titulo = 'Oferta-Demanda-Colocados PROEMPLEO ' . $nombreAnio;
         $subTitulo = 'Fuente: DRPE - UCAYALI';
         $titulo_y = 'Número personas';
 
         $nombreGraficoLineal = 'Grafico_oferta_demanda_colocados'; // este nombre va de la mano con el nombre del DIV en la vista
 
-        return view('graficos.Lineal', ["dataLineal" => json_encode($puntos),"categoria_nombres" => json_encode($categoria)],
-        compact('titulo_y', 'titulo', 'subTitulo', 'nombreGraficoLineal'));
+        return view(
+            'graficos.Lineal',
+            ["dataLineal" => json_encode($puntos), "categoria_nombres" => json_encode($categoria)],
+            compact('titulo_y', 'titulo', 'subTitulo', 'nombreGraficoLineal')
+        );
     }
 
     /******************************************************************************************************************** */
 
-    public function Principal ()
+    public function Principal()
     {
         // $anios = Anio::orderBy('anio', 'desc')->get();
 
         $anios = ProEmpleoRepositorio::ProEmpleo_anios();
 
-        return view('Trabajo.ProEmpleo.Principal',compact('anios'));
+        return view('Trabajo.ProEmpleo.Principal', compact('anios'));
     }
 
-    public function VariablesMercado ($anio_id)
+    public function VariablesMercado($anio_id)
     {
         $data = ProEmpleoRepositorio::formato_reporte_MTPE($anio_id);
         $anio = Anio::find($anio_id)->anio;
 
-        return view('Trabajo.ProEmpleo.VariablesMercadoParcial',compact('data','anio'));
+        return view('Trabajo.ProEmpleo.VariablesMercadoParcial', compact('data', 'anio'));
     }
 
     public function Grafico_Colocados_Hombres_Vs_Mujeres($anio_id)
     {
-        $data = ProEmpleoRepositorio::formato_reporte_MTPE($anio_id);  
+        $data = ProEmpleoRepositorio::formato_reporte_MTPE($anio_id);
 
         $categoria1 = [];
         $categoria2 = [];
@@ -239,7 +242,7 @@ class ProEmpleoController extends Controller
         // array_merge concatena los valores del arreglo, mientras recorre el foreach
         foreach ($data as $key => $lista) {
             $categoria1 = array_merge($categoria1, [intval($lista->cantColocadosM)]);
-            $categoria2 = array_merge($categoria2, [intval($lista->cantColocadosF)]);           
+            $categoria2 = array_merge($categoria2, [intval($lista->cantColocadosF)]);
             $categoria_nombres[] = $lista->nombreMes;
         }
 
@@ -251,7 +254,7 @@ class ProEmpleoController extends Controller
         // else
         $nombreAnio = Anio::find($anio_id)->anio;
 
-        $titulo = 'Colocados ProEmpleo Hombres vs Mujeres '. $nombreAnio ;
+        $titulo = 'Colocados ProEmpleo Hombres vs Mujeres ' . $nombreAnio;
         $subTitulo = 'Fuente: DRPE - UCAYALI';
         $titulo_y = 'Numero Personas';
 
@@ -266,23 +269,23 @@ class ProEmpleoController extends Controller
 
     public function Grafico_Colocados_per_Con_Discapacidad($anio_id)
     {
-        $data = ProEmpleoRepositorio::formato_reporte_MTPE_Discapacitados($anio_id);  
+        $data = ProEmpleoRepositorio::formato_reporte_MTPE_Discapacitados($anio_id);
 
-        $categoria1 = [];    
+        $categoria1 = [];
         $categoria_nombres = [];
 
         // array_merge concatena los valores del arreglo, mientras recorre el foreach
         foreach ($data as $key => $lista) {
-            $categoria1 = array_merge($categoria1, [intval($lista->totalColocados)]);                
+            $categoria1 = array_merge($categoria1, [intval($lista->totalColocados)]);
             $categoria_nombres[] = $lista->nombreMes;
         }
 
         $nombreAnio = Anio::find($anio_id)->anio;
 
-        $puntos[] = ['name' => 'Ucayali '.$nombreAnio, 'data' =>  $categoria1];     
+        $puntos[] = ['name' => 'Ucayali ' . $nombreAnio, 'data' =>  $categoria1];
         $nombreAnio = Anio::find($anio_id)->anio;
 
-        $titulo = ' Colocados ProEmpleo - Personas con Discapacidad '. $nombreAnio ;
+        $titulo = ' Colocados ProEmpleo - Personas con Discapacidad ' . $nombreAnio;
         $subTitulo = 'Fuente: DRPE - UCAYALI';
         $titulo_y = 'Numero Personas';
 

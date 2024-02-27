@@ -11,7 +11,7 @@ use App\Models\Educacion\Importacion;
 use App\Models\Educacion\InstitucionEducativa;
 use App\Models\Educacion\Materia;
 use App\Models\Parametro\Anio;
-use App\Models\Ubigeo;
+use App\Models\Parametro\Ubigeo;
 use App\Repositories\Educacion\EceRepositorio;
 use App\Repositories\Educacion\GradoRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
@@ -96,9 +96,9 @@ class EceController extends Controller
                 $importacion = Importacion::Create([
                     'fuenteImportacion_id' => $request->fuenteImportacion, // valor predeterminado
                     'usuarioId_Crea' => auth()->user()->id,
-                    'usuarioId_Aprueba' => null,
+                    // 'usuarioId_Aprueba' => null,
                     'fechaActualizacion' => $request->fechaActualizacion,
-                    'comentario' => $request->comentario,
+                    // 'comentario' => $request->comentario,
                     'estado' => 'PE'
                 ]);
                 $ece = Ece::Create([

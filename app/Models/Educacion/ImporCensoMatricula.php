@@ -28,7 +28,6 @@ class ImporCensoMatricula extends Model
         'niv_mod',
         'ges_dep',
         'area_censo',
-        'tipoprog',
         'd01',
         'd02',
         'd03',

@@ -25,7 +25,7 @@ class PLazaController extends Controller
         /* anios */
         $anios = PLazaRepositorio::listar_anios();
         /* ugels */
-        $ugels = Ugel::select('id', 'nombre', 'codigo')->where('codigo', 'like', '25%')->orderBy('nombre','asc')->get();
+        $ugels = Ugel::select('id', 'nombre', 'codigo')->where('codigo', 'like', '25%')->orderBy('nombre', 'asc')->get();
 
         return view('educacion.Plaza.DocentesPrincipal', compact('anios', 'ugels'));
     }
@@ -164,6 +164,24 @@ class PLazaController extends Controller
         return response()->json(compact('info'));
     }
 
+    public function DocentesPrincipalDT5(Request $rq)
+    {
+        $imp = $this->cargarultimoimportado($rq->anio, 0);
+        $info['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
+        $body = PlazaRepositorio::cargarresumendeplazatabla5($rq, $imp->id, $rq->ugel);
+        $info['DT'] = view('educacion.Plaza.DocentesPrincipalTabla5', compact('body'))->render();
+        return response()->json(compact('info'));
+    }
+
+    public function DocentesPrincipalDT6(Request $rq)
+    {
+        $imp = 1952; //$this->cargarultimoimportado($rq->anio, 0);
+        $info['fecha'] = date('d/m/Y', strtotime($imp));
+        $body = PlazaRepositorio::cargarresumendeplazatabla6($rq, $imp, $rq->ugel);
+        $info['DT'] = view('educacion.Plaza.DocentesPrincipalTabla6', compact('body'))->render();
+        return response()->json(compact('info'));
+    }
+
     public function cargardistritos($provincia)
     {
         $distritos = PlazaRepositorio::listar_distrito($provincia);
@@ -205,7 +223,7 @@ class PLazaController extends Controller
         /* tipo modalidad */
         $tipo = NivelModalidad::select('tipo')->where(DB::raw('tipo is not null'), true)->groupBy('tipo')->get();
         /* ugels */
-        $ugels = Ugel::select('id', 'nombre', 'codigo')->where('codigo', 'like', '25%')->orderBy('nombre','asc')->get();
+        $ugels = Ugel::select('id', 'nombre', 'codigo')->where('codigo', 'like', '25%')->orderBy('nombre', 'asc')->get();
         /* ultimo reg subido */
         $imp = Importacion::select('id', 'fechaActualizacion as fecha')->where('estado', 'PR')->where('fuenteImportacion_id', '2')
             ->orderBy('fecha', 'desc')->take(1)->get();

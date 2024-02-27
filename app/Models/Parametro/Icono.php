@@ -11,6 +11,13 @@ class Icono extends Model
     protected $table = "par_icono";
 
     protected $fillable = [
-        'nombre'
+        'tipo',
+        'icon',
+        'estado',
+    ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at'
     ];
 }

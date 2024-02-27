@@ -98,7 +98,6 @@
                                     <th>NIV_MOD</th>
                                     <th>GES_DEP</th>
                                     <th>AREA_CENSO</th>
-                                    <th>TIPOPROG</th>
                                     <th>D01</th>
                                     <th>D02</th>
                                     <th>D03</th>
@@ -393,10 +392,6 @@
                     {
                         data: 'area_censo',
                         name: 'area_censo'
-                    },
-                    {
-                        data: 'tipoprog',
-                        name: 'tipoprog'
                     },
                     {
                         data: 'd01',
