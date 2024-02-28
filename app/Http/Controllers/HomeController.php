@@ -151,7 +151,7 @@ class HomeController extends Controller
 
     public function accesopublico()
     {
-        $sistemas = Sistema::select('id as sistema_id', 'nombre')->where('id', '!=', 4)->orderBy('pos')->get();
+        $sistemas = Sistema::select('id as sistema_id', 'nombre', 'icono')->where('id', '!=', 4)->orderBy('pos')->get();
         if ($sistemas) {
             session(['sistemas_publico' => $sistemas]);
             session(['sistema_publico_id' => $sistemas->first()->sistema_id]);
@@ -192,7 +192,7 @@ class HomeController extends Controller
     public function trabajo($sistema_id)
     {
         if (!Schema::hasTable('tra_pea')) {
-            return view('paginavacio');//
+            return view('paginavacio'); //
         }
         return view('home', compact('sistema_id'));
     }
@@ -205,7 +205,7 @@ class HomeController extends Controller
     public function presupuesto($sistema_id)
     {
         if (!Schema::hasTable('pres_base_siafweb')) {
-            return view('paginavacio');//
+            return view('paginavacio'); //
         }
         //$actualizado = '';
         $impSW = Importacion::where('fuenteimportacion_id', ImporSiafWebController::$FUENTE)->where('estado', 'PR')->orderBy('fechaActualizacion', 'desc')->first();
@@ -601,7 +601,7 @@ class HomeController extends Controller
     public function vivienda($sistema_id)
     {
         if (!Schema::hasTable('viv_centropoblado_datass')) {
-            return view('paginavacio');//
+            return view('paginavacio'); //
         }
 
         $vUrl = "https://datastudio.google.com/embed/reporting/6c73c567-559b-4dd6-8608-64a0b502c85c/page/XXx8C";
@@ -630,7 +630,7 @@ class HomeController extends Controller
     public function educacion($sistema_id)
     { //return Schema::hasTable('edu_area')?'existe':'no existe';
         if (!Schema::hasTable('edu_area')) {
-            return view('paginavacio');//viv_centropoblado_datass
+            return view('paginavacio'); //viv_centropoblado_datass
         }
 
         $actualizado = '';
