@@ -68,6 +68,7 @@ use App\Http\Controllers\Presupuesto\SubGenericaController;
 use App\Http\Controllers\Presupuesto\SubGenericaDetalleController;
 use App\Http\Controllers\Presupuesto\UnidadEjecutoraController;
 use App\Http\Controllers\Presupuesto\UnidadOrganicaController;
+use App\Http\Controllers\Salud\IndicadoresController;
 use App\Http\Controllers\Trabajo\ActividadController;
 use App\Http\Controllers\Trabajo\AnuarioEstadisticoController;
 use App\Http\Controllers\Trabajo\IndicadorTrabajoController;
@@ -1089,6 +1090,7 @@ Route::get('/Trabajo/PowerBi/EmpleoInformal', [PowerBiController::class, 'trabaj
 /*********************************************** SALUD ****************************************************/
 Route::get('/Salud/PowerBi/Covid19', [PowerBiController::class, 'saludCovid19'])->name('powerbi.salud.covid19');
 Route::get('/Salud/PowerBi/{id}', [PowerBiController::class, 'saludMenu'])->name('powerbi.salud.menu');
+Route::get('/Salud/pactoregional', [IndicadoresController::class, 'PactoRegional'])->name('salud.indicador.xxx');
 /******************************************** FIN SALUD ***************************************************/
 
 
