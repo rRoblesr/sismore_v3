@@ -610,6 +610,7 @@ Route::post('/Man/INDICADORGENERAL/AjaxUpdate', [IndicadorGeneralController::cla
 Route::get('/Man/INDICADORGENERAL/AjaxDelete/{id}', [IndicadorGeneralController::class, 'ajax_delete'])->middleware('auth')->name('mantenimiento.indicadorgeneral.eliminar');
 Route::get('/Man/INDICADORGENERAL/Exportar/{id}', [IndicadorGeneralController::class, 'exportarPDF'])->name('mantenimiento.indicadorgeneral.exportar.pdf');
 Route::get('/Man/INDICADORGENERAL/Buscar/{id}', [IndicadorGeneralController::class, 'buscar'])->middleware('auth')->name('mantenimiento.indicadorgeneral.buscar.1');
+
 Route::get('/Man/INDICADORGENERAL/Principal/E', [IndicadorGeneralController::class, 'principalEducacion'])->middleware('auth')->name('mantenimiento.indicadorgeneral.principal.educacion');
 
 Route::get('/Man/INDICADORGENERALMETA/Listar', [IndicadorGeneralController::class, 'ListarDTMeta'])->name('mantenimiento.indicadorgeneralmeta.listar');
