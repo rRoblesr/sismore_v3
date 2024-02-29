@@ -74,9 +74,228 @@
 
         <div class="row ">
             <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card" style="height: 100%">
+                    <div class="card-header bg-success-0">
+                        <h3 class="card-title text-white text-center text-capitalize font-weight-normal font-12">INDICADOR
+                            1
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center" style="margin-top: 0%"><i class="mdi mdi-finance font-30"></i></div>
+                        <div class="text-center font-14 font-weight-bold P-9" style="margin-top: 0%">Avance</div>
+                        <div class="text-center font-30 font-weight-bold" style="margin-top: 3%">98.8 %</div>
+                        <div class="text-center font-12" style="margin-top: 2%">Actualizado 20/02/2024</div>
+                        <div class="text-center font-14 font-weight-bold" style="margin-top: 2%">Meta: 71%</div>
+                        <div class="text-center font-11" style="margin-top: 1%">
+                            <span class="badge badge-success" style="font-size: 120%">
+                                <i class="fas fa-hand-point-right"></i> CUMPLE</span>
+                        </div>
+                        <div class="text-center font-14" style="margin-top: 5%">
+                            <p>N° DE ACTA DE HOMLOGACION REGISTRADAS OPORTUNAMENTE QUE EVIDENCIAN LA ACTUALIZACION DE LA
+                                INFORMACION EN LAS NIÑAS (OS) MEDIANTE EL TRABAJO ARTICULADO EN EL TERRITORIO</p>
+                        </div>
+                        <div class="text-center font-11 font-weight-bold" style="margin-top: 5%">
+                            <button type="button" class="btn btn-warning btn-sm text-dark">Ver detalle</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card" style="height: 100%">
+                    <div class="card-header bg-success-0">
+                        <h3 class="card-title text-white text-center text-capitalize font-weight-normal font-12">INDICADOR
+                            2
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center" style="margin-top: 0%"><i class="mdi mdi-finance font-30"></i></div>
+                        <div class="text-center font-14 font-weight-bold P-9" style="margin-top: 0%">Avance</div>
+                        <div class="text-center font-30 font-weight-bold" style="margin-top: 3%">98.8 %</div>
+                        <div class="text-center font-12" style="margin-top: 2%">Actualizado 20/02/2024</div>
+                        <div class="text-center font-14 font-weight-bold" style="margin-top: 2%">Meta: 71%</div>
+                        <div class="text-center font-11" style="margin-top: 1%">
+                            <span class="badge badge-danger" style="font-size: 120%">
+                                <i class="fas fa-hand-point-right"></i> CUMPLE</span>
+                        </div>
+                        <div class="text-center font-14" style="margin-top: 5%">
+                            <p>N° DE TALLERES DE CAPACITACION DIRIGIDOS A LOS AGENTES COMUNITARIOS QUE PROMUEVEN PRACTICAS
+                                SALUDABLES EN LA FAMILIA</p>
+                        </div>
+                        <div class="text-center font-11 font-weight-bold" style="margin-top: 5%">
+                            <button type="button" class="btn btn-warning btn-sm text-dark">Ver detalle</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card" style="height: 100%">
+                    <div class="card-header bg-success-0">
+                        <h3 class="card-title text-white text-center text-capitalize font-weight-normal font-12">INDICADOR
+                            1
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center" style="margin-top: 0%"><i class="mdi mdi-finance font-30"></i></div>
+                        <div class="text-center font-14 font-weight-bold P-9" style="margin-top: 0%">Avance</div>
+                        <div class="text-center font-30 font-weight-bold" style="margin-top: 3%">98.8 %</div>
+                        <div class="text-center font-12" style="margin-top: 2%">Actualizado 20/02/2024</div>
+                        <div class="text-center font-14 font-weight-bold" style="margin-top: 2%">Meta: 71%</div>
+                        <div class="text-center font-11" style="margin-top: 1%">
+                            <span class="badge badge-success" style="font-size: 120%">
+                                <i class="fas fa-hand-point-right"></i> CUMPLE</span>
+                        </div>
+                        <div class="text-center font-14" style="margin-top: 5%">
+                            <p>N° DE NIÑOS TRATADOS DE LA ANEMIA Y DCI </p>
+                        </div>
+                        <div class="text-center font-11 font-weight-bold" style="margin-top: 5%">
+                            <button type="button" class="btn btn-warning btn-sm text-dark">Ver detalle</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card" style="height: 100%">
+                    <div class="card-header bg-success-0">
+                        <h3 class="card-title text-white text-center text-capitalize font-weight-normal font-12">INDICADOR
+                            1
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center" style="margin-top: 0%"><i class="mdi mdi-finance font-30"></i></div>
+                        <div class="text-center font-14 font-weight-bold P-9" style="margin-top: 0%">Avance</div>
+                        <div class="text-center font-30 font-weight-bold" style="margin-top: 3%">98.8 %</div>
+                        <div class="text-center font-12" style="margin-top: 2%">Actualizado 20/02/2024</div>
+                        <div class="text-center font-14 font-weight-bold" style="margin-top: 2%">Meta: 71%</div>
+                        <div class="text-center font-11" style="margin-top: 1%">
+                            <span class="badge badge-success" style="font-size: 120%">
+                                <i class="fas fa-hand-point-right"></i> CUMPLE</span>
+                        </div>
+                        <div class="text-center font-14" style="margin-top: 5%">
+                            <p>N° DE CASAS MATERNAS RECONOCIDAS CON ORDENANZAS MUNICIPAL, ESTAN IMPLEMENTADAS Y ACTIVAS</p>
+                        </div>
+                        <div class="text-center font-11 font-weight-bold" style="margin-top: 5%">
+                            <button type="button" class="btn btn-warning btn-sm text-dark">Ver detalle</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="card">
                     <div class="card-header bg-success-0">
-                        <h3 class="card-title text-white text-center text-capitalize font-weight-normal font-12">INDICADOR 1
+                        <h3 class="card-title text-white text-center text-capitalize font-weight-normal font-12">INDICADOR
+                            1
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center" style="margin-top: 0%"><i class="mdi mdi-finance font-30"></i></div>
+                        <div class="text-center font-14 font-weight-bold P-9" style="margin-top: 0%">Avance</div>
+                        <div class="text-center font-30 font-weight-bold" style="margin-top: 3%">98.8 %</div>
+                        <div class="text-center font-12" style="margin-top: 2%">Actualizado 20/02/2024</div>
+                        <div class="text-center font-14 font-weight-bold" style="margin-top: 2%">Meta: 71%</div>
+                        <div class="text-center font-11" style="margin-top: 1%">
+                            <span class="badge badge-success" style="font-size: 120%">
+                                <i class="fas fa-hand-point-right"></i> CUMPLE</span>
+                        </div>
+                        <div class="text-center font-14" style="margin-top: 5%">
+                            <p>N° DE CENTROS DE VIGILANCIA COMUNAL RECONOCIDOS CON ORDENANZA MUNICIPAL, SE ENCUENTRAN
+                                ACTIVAS Y REPORTAN CASOS DE VIOLENCIA </p>
+                        </div>
+                        <div class="text-center font-11 font-weight-bold" style="margin-top: 5%">
+                            <button type="button" class="btn btn-warning btn-sm text-dark">Ver detalle</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card-deck">
+                    <div class="card">
+                        <div class="card-header bg-success-0">
+                            <h3 class="card-title text-white text-center text-capitalize font-weight-normal font-12">
+                                INDICADOR 1
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center" style="margin-top: 0%"><i class="mdi mdi-finance font-30"></i></div>
+                            <div class="text-center font-14 font-weight-bold P-9" style="margin-top: 0%">Avance</div>
+                            <div class="text-center font-30 font-weight-bold" style="margin-top: 3%">98.8 %</div>
+                            <div class="text-center font-12" style="margin-top: 2%">Actualizado 20/02/2024</div>
+                            <div class="text-center font-14 font-weight-bold" style="margin-top: 2%">Meta: 71%</div>
+                            <div class="text-center font-11" style="margin-top: 1%">
+                                <span class="badge badge-success" style="font-size: 120%">
+                                    <i class="fas fa-hand-point-right"></i> CUMPLE</span>
+                            </div>
+                            <div class="text-center font-14" style="margin-top: 5%">
+                                <p>N° DE ACTA DE HOMLOGACION REGISTRADAS OPORTUNAMENTE QUE EVIDENCIAN LA ACTUALIZACION DE LA
+                                    INFORMACION EN LAS NIÑAS (OS) MEDIANTE EL TRABAJO ARTICULADO EN EL TERRITORIO</p>
+                            </div>
+                            <div class="text-center font-11 font-weight-bold" style="margin-top: 5%">
+                                <button type="button" class="btn btn-warning btn-sm text-dark">Ver detalle</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header bg-success-0">
+                            <h3 class="card-title text-white text-center text-capitalize font-weight-normal font-12">
+                                INDICADOR 2
+                            </h3>
+                        </div>
+                        <div class="card-body">
+
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header bg-success-0">
+                            <h3 class="card-title text-white text-center text-capitalize font-weight-normal font-12">
+                                INDICADOR 3
+                            </h3>
+                        </div>
+                        <div class="card-body">
+
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header bg-success-0">
+                            <h3 class="card-title text-white text-center text-capitalize font-weight-normal font-12">
+                                INDICADOR 4
+                            </h3>
+                        </div>
+                        <div class="card-body">
+
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header bg-success-0">
+                            <h3 class="card-title text-white text-center text-capitalize font-weight-normal font-12">
+                                INDICADOR 5
+                            </h3>
+                        </div>
+                        <div class="card-body">
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row d-none">
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card">
+                    <div class="card-header bg-success-0">
+                        <h3 class="card-title text-white text-center text-capitalize font-weight-normal font-12">INDICADOR
+                            1
                         </h3>
                     </div>
                     <div class="card-body">
@@ -109,7 +328,8 @@
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="card">
                     <div class="card-header bg-success-0">
-                        <h3 class="card-title text-white text-center text-capitalize font-weight-normal font-12">INDICADOR 2
+                        <h3 class="card-title text-white text-center text-capitalize font-weight-normal font-12">INDICADOR
+                            2
                         </h3>
                     </div>
                     <div class="card-body">
@@ -139,7 +359,8 @@
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="card">
                     <div class="card-header bg-success-0">
-                        <h3 class="card-title text-white text-center text-capitalize font-weight-normal font-12">INDICADOR 1
+                        <h3 class="card-title text-white text-center text-capitalize font-weight-normal font-12">INDICADOR
+                            1
                         </h3>
                     </div>
                     <div class="card-body">
@@ -173,7 +394,8 @@
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="card">
                     <div class="card-header bg-success-0">
-                        <h3 class="card-title text-white text-center text-capitalize font-weight-normal font-12">INDICADOR 1
+                        <h3 class="card-title text-white text-center text-capitalize font-weight-normal font-12">INDICADOR
+                            1
                         </h3>
                     </div>
                     <div class="card-body">
@@ -207,7 +429,8 @@
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="card">
                     <div class="card-header bg-success-0">
-                        <h3 class="card-title text-white text-center text-capitalize font-weight-normal font-12">INDICADOR 1
+                        <h3 class="card-title text-white text-center text-capitalize font-weight-normal font-12">INDICADOR
+                            1
                         </h3>
                     </div>
                     <div class="card-body">
@@ -240,7 +463,7 @@
 
         </div>
 
-        <div class="row">
+        <div class="row d-none">
             <div class="col-lg-12">
                 <div class="card-deck">
                     <div class="card">
@@ -327,7 +550,6 @@
                     <div class="card">
                         <img class="card-img-top" src="https://m.media-amazon.com/images/I/61zhqDaVVZL._AC_SL1500_.jpg"
                             alt="Card image cap" style="margin:0.4rem;">
-
                         <div class="card-block">
                             <h4 class="card-title">Card title</h4>
                             <p class="card-text">This is a longer card with supporting text below as a natural lead-in to
