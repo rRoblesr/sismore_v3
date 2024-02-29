@@ -73,70 +73,167 @@
 
 
         <div class="row ">
-            <div class="col-lg-3 col-md-3 col-sm-6">
+            <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="card">
                     <div class="card-header bg-success-0">
                         <h3 class="card-title text-white text-center text-capitalize font-weight-normal font-12">INDICADOR 1
                         </h3>
                     </div>
                     <div class="card-body">
+                        <div class="text-center" style="margin-top: 0%"><i class="mdi mdi-finance font-30"></i></div>
+                        <div class="text-center font-14 font-weight-bold P-9" style="margin-top: 0%">Avance</div>
+                        <div class="text-center font-30 font-weight-bold" style="margin-top: 3%">98.8 %</div>
+                        <div class="text-center font-12" style="margin-top: 2%">Actualizado 20/02/2024</div>
 
+                        <div class="text-center font-14 font-weight-bold" style="margin-top: 2%">Meta: 71%</div>
+                        {{-- <div class="text-center font-11 font-weight-bold">
+                            <button type="button" class="btn btn-primary p-0"><i class="fas fa-hand-point-right"></i>
+                                cumple</button>
+                        </div> --}}
+                        <div class="text-center font-11" style="margin-top: 1%">
+                            <span class="badge badge-success" style="font-size: 120%">
+                                <i class="fas fa-hand-point-right"></i> CUMPLE</span>
+                        </div>
+                        <div class="text-center font-14" style="margin-top: 5%">
+                            <p>Mujeres gestantes atendidas asdasden IPRESS del primer nivel de atención de salud del
+                                Gobierno
+                                Regional, captadas en el primer trimestre de gestación, y con dagnóstico de anemia
+                                durante el embarazo e inician tratamiento. </p>
+                        </div>
+                        <div class="text-center font-11 font-weight-bold" style="margin-top: 5%">
+                            <button type="button" class="btn btn-warning btn-sm text-dark">Ver detalle</button>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-6">
-                <div class="card card-border border border-plomo-0">
-                    <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
-                        <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11">
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card">
+                    <div class="card-header bg-success-0">
+                        <h3 class="card-title text-white text-center text-capitalize font-weight-normal font-12">INDICADOR 2
                         </h3>
                     </div>
-                    <div class="card-body p-0">
-                        {{-- <div id="container" ></div> --}}
-                        <figure class="highcharts-figure m-0">
-                            <div id="anal2" style="height: 20rem"></div>
-                        </figure>
-                        {{--  <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                            <span class="float-left" id="span-censodocente001-fuente">Fuente:</span>
-                            <span class="float-right" id="span-censodocente001-fecha">Actualizado:</span>
-                        </div> --}}
+                    <div class="card-body">
+                        <div class="text-center" style="margin-top: 0%"><i class="mdi mdi-finance font-30"></i></div>
+                        <div class="text-center font-14 font-weight-bold P-9" style="margin-top: 0%">Avance</div>
+                        <div class="text-center font-30 font-weight-bold" style="margin-top: 3%">98.8 %</div>
+                        <div class="text-center font-12" style="margin-top: 2%">Actualizado 20/02/2024</div>
+
+                        <div class="text-center font-14 font-weight-bold" style="margin-top: 2%">Meta: 71%</div>
+                        <div class="text-center font-11" style="margin-top: 1%">
+                            <span class="badge badge-danger" style="font-size: 120%">
+                                <i class="fas fa-hand-point-right"></i> CUMPLE</span>
+                        </div>
+                        <div class="text-center font-14" style="margin-top: 5%">
+                            <p>Mujeres gestantes atendidas asdasden IPRESS del primer nivel de atención de salud del
+                                Gobierno
+                                Regional, captadas en el primer trimestre de gestación, y con dagnóstico de anemia
+                                durante el embarazo e inician tratamiento. </p>
+                        </div>
+                        <div class="text-center font-11 font-weight-bold" style="margin-top: 5%">
+                            <button type="button" class="btn btn-warning btn-sm text-dark">Ver detalle</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-lg-3 col-md-3 col-sm-6">
-                <div class="card card-border border border-plomo-0">
-                    <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
-                        <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11">
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card">
+                    <div class="card-header bg-success-0">
+                        <h3 class="card-title text-white text-center text-capitalize font-weight-normal font-12">INDICADOR 1
                         </h3>
                     </div>
-                    <div class="card-body p-0">
-                        {{-- <div id="container" ></div> --}}
-                        <figure class="highcharts-figure m-0">
-                            <div id="anal3" style="height: 20rem"></div>
-                        </figure>
-                        {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                            <span class="float-left" id="span-censodocente001-fuente">Fuente:</span>
-                            <span class="float-right" id="span-censodocente001-fecha">Actualizado:</span>
+                    <div class="card-body">
+                        <div class="text-center" style="margin-top: 0%"><i class="mdi mdi-finance font-30"></i></div>
+                        <div class="text-center font-14 font-weight-bold P-9" style="margin-top: 0%">Avance</div>
+                        <div class="text-center font-30 font-weight-bold" style="margin-top: 3%">98.8 %</div>
+                        <div class="text-center font-12" style="margin-top: 2%">Actualizado 20/02/2024</div>
+
+                        <div class="text-center font-14 font-weight-bold" style="margin-top: 2%">Meta: 71%</div>
+                        {{-- <div class="text-center font-11 font-weight-bold">
+                            <button type="button" class="btn btn-primary p-0"><i class="fas fa-hand-point-right"></i>
+                                cumple</button>
                         </div> --}}
+                        <div class="text-center font-11" style="margin-top: 1%">
+                            <span class="badge badge-success" style="font-size: 120%">
+                                <i class="fas fa-hand-point-right"></i> CUMPLE</span>
+                        </div>
+                        <div class="text-center font-14" style="margin-top: 5%">
+                            <p>Mujeres gestantes atendidas asdasden IPRESS del primer nivel de atención de salud del
+                                Gobierno
+                                Regional, captadas en el primer trimestre de gestación, y con dagnóstico de anemia
+                                durante el embarazo e inician tratamiento. </p>
+                        </div>
+                        <div class="text-center font-11 font-weight-bold" style="margin-top: 5%">
+                            <button type="button" class="btn btn-warning btn-sm text-dark">Ver detalle</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-lg-3 col-md-3 col-sm-6">
-                <div class="card card-border border border-plomo-0">
-                    <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
-                        <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11">
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card">
+                    <div class="card-header bg-success-0">
+                        <h3 class="card-title text-white text-center text-capitalize font-weight-normal font-12">INDICADOR 1
                         </h3>
                     </div>
-                    <div class="card-body p-0">
-                        {{-- <div id="container" ></div> --}}
-                        <figure class="highcharts-figure m-0">
-                            <div id="anal4" style="height: 20rem"></div>
-                        </figure>
-                        {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                            <span class="float-left" id="span-censodocente001-fuente">Fuente:</span>
-                            <span class="float-right" id="span-censodocente001-fecha">Actualizado:</span>
+                    <div class="card-body">
+                        <div class="text-center" style="margin-top: 0%"><i class="mdi mdi-finance font-30"></i></div>
+                        <div class="text-center font-14 font-weight-bold P-9" style="margin-top: 0%">Avance</div>
+                        <div class="text-center font-30 font-weight-bold" style="margin-top: 3%">98.8 %</div>
+                        <div class="text-center font-12" style="margin-top: 2%">Actualizado 20/02/2024</div>
+
+                        <div class="text-center font-14 font-weight-bold" style="margin-top: 2%">Meta: 71%</div>
+                        {{-- <div class="text-center font-11 font-weight-bold">
+                            <button type="button" class="btn btn-primary p-0"><i class="fas fa-hand-point-right"></i>
+                                cumple</button>
                         </div> --}}
+                        <div class="text-center font-11" style="margin-top: 1%">
+                            <span class="badge badge-success" style="font-size: 120%">
+                                <i class="fas fa-hand-point-right"></i> CUMPLE</span>
+                        </div>
+                        <div class="text-center font-14" style="margin-top: 5%">
+                            <p>Mujeres gestantes atendidas asdasden IPRESS del primer nivel de atención de salud del
+                                Gobierno
+                                Regional, captadas en el primer trimestre de gestación, y con dagnóstico de anemia
+                                durante el embarazo e inician tratamiento. </p>
+                        </div>
+                        <div class="text-center font-11 font-weight-bold" style="margin-top: 5%">
+                            <button type="button" class="btn btn-warning btn-sm text-dark">Ver detalle</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card">
+                    <div class="card-header bg-success-0">
+                        <h3 class="card-title text-white text-center text-capitalize font-weight-normal font-12">INDICADOR 1
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center" style="margin-top: 0%"><i class="mdi mdi-finance font-30"></i></div>
+                        <div class="text-center font-14 font-weight-bold P-9" style="margin-top: 0%">Avance</div>
+                        <div class="text-center font-30 font-weight-bold" style="margin-top: 3%">98.8 %</div>
+                        <div class="text-center font-12" style="margin-top: 2%">Actualizado 20/02/2024</div>
+
+                        <div class="text-center font-14 font-weight-bold" style="margin-top: 2%">Meta: 71%</div>
+                        {{-- <div class="text-center font-11 font-weight-bold">
+                            <button type="button" class="btn btn-primary p-0"><i class="fas fa-hand-point-right"></i>
+                                cumple</button>
+                        </div> --}}
+                        <div class="text-center font-11" style="margin-top: 1%">
+                            <span class="badge badge-success" style="font-size: 120%">
+                                <i class="fas fa-hand-point-right"></i> CUMPLE</span>
+                        </div>
+                        <div class="text-center font-14" style="margin-top: 5%">
+                            <p>Mujeres gestantes atendidas asdasden IPRESS del primer nivel de atención de salud del
+                                Gobierno
+                                Regional, captadas en el primer trimestre de gestación, y con dagnóstico de anemia
+                                durante el embarazo e inician tratamiento. </p>
+                        </div>
+                        <div class="text-center font-11 font-weight-bold" style="margin-top: 5%">
+                            <button type="button" class="btn btn-warning btn-sm text-dark">Ver detalle</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -159,15 +256,18 @@
                             <div class="text-center font-9">Actualizado 20/02/2024</div>
                             <div class="text-center font-11 font-weight-bold">Meta: 71%</div>
                             <div class="text-center font-11 font-weight-bold">
-                                <button type="button" class="btn btn primary"><i></i> cumple</button>
+                                <button type="button" class="btn btn-primary p-1"><i
+                                        class="fas fa-hand-point-right"></i>
+                                    cumple</button>
                             </div>
                             <div class="text-center font-11 font-weight-bold">
-                                <p>Mujeres gestantes atendidas en IPRESS del primer nivel de atención de salud del Gobierno
+                                <p>Mujeres gestantes atendidas asdasden IPRESS del primer nivel de atención de salud del
+                                    Gobierno
                                     Regional, captadas en el primer trimestre de gestación, y con dagnóstico de anemia
                                     durante el embarazo e inician tratamiento. </p>
                             </div>
                             <div class="text-center font-11 font-weight-bold">
-                                <button type="button" class="btn btn warning"><i></i>Ver detalle</button>
+                                <button type="button" class="btn btn-warning btn-sm">Ver detalle</button>
                             </div>
                         </div>
                     </div>
