@@ -40,10 +40,10 @@
     <div class="content">
 
         <div class="form-group row align-items-center vh-5">
-            <div class="col-lg-4 col-md-4 col-sm-4">
+            <div class="col-lg-8 col-md-8 col-sm-8">
                 <h4 class="page-title font-16">PACTO REGIONAL</h4>
             </div>
-            {{-- <div class="col-lg-2 col-md-2 col-sm-2">
+            <div class="col-lg-2 col-md-2 col-sm-2">
                 <select id="provincia" name="provincia" class="form-control btn-xs font-11"
                     onchange="cargarDistritos(),cargarCards();">
                     <option value="0">PROVINCIA</option>
@@ -56,19 +56,6 @@
 
                 </select>
             </div>
-            <div class="col-lg-2 col-md-2 col-sm-2">
-                <select id="tipogestion" name="tipogestion" class="form-control btn-xs font-11" onchange="cargarCards();">
-                    <option value="0">TIPO DE GESTIÓN</option>
-                    <option value="12">PUBLICA</option>
-                    <option value="3">PRIVADA</option>
-                </select>
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-2">
-                <select id="ambito" name="ambito" class="form-control btn-xs font-11" onchange="cargarCards();">
-                    <option value="0">ÁMBITO</option>
-
-                </select>
-            </div> --}}
         </div>
 
 
@@ -88,7 +75,7 @@
                         <div class="text-center font-14 font-weight-bold" style="margin-top: 2%">Meta: 71%</div>
                         <div class="text-center font-11" style="margin-top: 1%">
                             <span class="badge badge-success" style="font-size: 120%">
-                                <i class="fas fa-hand-point-right"></i> CUMPLE</span>
+                                <i class="mdi mdi-thumb-down"></i> CUMPLE</span>
                         </div>
                         <div class="text-center font-14" style="margin-top: 5%">
                             <p>N° DE ACTA DE HOMLOGACION REGISTRADAS OPORTUNAMENTE QUE EVIDENCIAN LA ACTUALIZACION DE LA
@@ -116,7 +103,7 @@
                         <div class="text-center font-14 font-weight-bold" style="margin-top: 2%">Meta: 71%</div>
                         <div class="text-center font-11" style="margin-top: 1%">
                             <span class="badge badge-danger" style="font-size: 120%">
-                                <i class="fas fa-hand-point-right"></i> CUMPLE</span>
+                                <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
                         </div>
                         <div class="text-center font-14" style="margin-top: 5%">
                             <p>N° DE TALLERES DE CAPACITACION DIRIGIDOS A LOS AGENTES COMUNITARIOS QUE PROMUEVEN PRACTICAS
@@ -182,7 +169,8 @@
                     </div>
                 </div>
             </div>
-
+        </div>
+        <div class="row">
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="card">
                     <div class="card-header bg-success-0">
@@ -210,7 +198,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
 
         <div class="row">
