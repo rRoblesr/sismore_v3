@@ -16,4 +16,9 @@ class IndicadoresController extends Controller
     {
         return view('salud.Indicadores.PactoRegional');
     }
+
+    public function ConvenioFED()
+    {
+        return view('salud.Indicadores.ConvenioFED');
+    }
 }

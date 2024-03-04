@@ -1091,7 +1091,8 @@ Route::get('/Trabajo/PowerBi/EmpleoInformal', [PowerBiController::class, 'trabaj
 /*********************************************** SALUD ****************************************************/
 Route::get('/Salud/PowerBi/Covid19', [PowerBiController::class, 'saludCovid19'])->name('powerbi.salud.covid19');
 Route::get('/Salud/PowerBi/{id}', [PowerBiController::class, 'saludMenu'])->name('powerbi.salud.menu');
-Route::get('/Salud/pactoregional', [IndicadoresController::class, 'PactoRegional'])->name('salud.indicador.xxx');
+Route::get('/Salud/pactoregional', [IndicadoresController::class, 'PactoRegional'])->name('salud.indicador.pactoregional');
+Route::get('/Salud/conveniofed', [IndicadoresController::class, 'ConvenioFED'])->name('salud.indicador.conveniofed');
 /******************************************** FIN SALUD ***************************************************/
 
 
