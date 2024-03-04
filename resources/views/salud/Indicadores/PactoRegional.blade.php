@@ -40,8 +40,14 @@
     <div class="content">
 
         <div class="form-group row align-items-center vh-5">
-            <div class="col-lg-8 col-md-8 col-sm-8">
+            <div class="col-lg-6 col-md-6 col-sm-6">
                 <h4 class="page-title font-16">PACTO REGIONAL</h4>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-2">
+                <select id="provincia" name="provincia" class="form-control btn-xs font-11"
+                    onchange="cargarDistritos(),cargarCards();">
+                    <option value="0">AÑO</option>
+                </select>
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2">
                 <select id="provincia" name="provincia" class="form-control btn-xs font-11"
@@ -58,8 +64,194 @@
             </div>
         </div>
 
+        <div class="row pricing-plan">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6 col-xl-3">
+                        <div class="card text-center">
+                            <div class="pricing-header bg-primary p-0 rounded-top">
+                                <h5 class="text-white font-14 font-weight-normal">Indicador 1</h5>
+                                {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
+                                {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
+                            </div>
+                            <div class="p-4">
+                                <ul class="list-unstyled mb-0">
+                                    <li class=""><i class="mdi mdi-finance font-44 text-green-0"></i></li>
+                                    <li class="mt-1 pt-1 font-16">Avance</li>
+                                    <li class="mt-1 pt-1 font-44 font-weight-bold">98.8 %</li>
+                                    <li class="mt-1 pt-1 font-11">Actualizado: 20/02/2024</li>
+                                    <li class="mt-1 pt-1 font-weight-bold">Meta: 71%</li>
+                                    <li class="mt-1 pt-1"><span class="badge badge-success" style="font-size: 100%">
+                                            <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
+                                    </li>
+                                    <li class="mt-1 pt-1">
+                                        <p>N° DE ACTA DE HOMLOGACION REGISTRADAS OPORTUNAMENTE QUE EVIDENCIAN LA
+                                            ACTUALIZACION DE LA
+                                            INFORMACION EN LAS NIÑAS (OS) MEDIANTE EL TRABAJO ARTICULADO EN EL TERRITORIO
+                                        </p>
+                                    </li>
 
-        <div class="row ">
+                                </ul>
+                                <div class="mt-4 pt-3">
+                                    {{-- <button class="btn btn-primary width-md waves-effect waves-light">Sign Up</button> --}}
+                                    <button type="button"
+                                        class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
+                                        detalle</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end col -->
+
+                    <div class="col-md-6 col-xl-3">
+                        <div class="card text-center">
+                            <div class="pricing-header bg-primary p-0 rounded-top">
+                                <h5 class="text-white font-14 font-weight-normal">Indicador 2</h5>
+                                {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
+                                {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
+                            </div>
+                            <div class="p-4">
+                                <ul class="list-unstyled mb-0">
+                                    <li class=""><i class="mdi mdi-finance font-44 text-green-0"></i></li>
+                                    <li class="mt-1 pt-1 font-16">Avance</li>
+                                    <li class="mt-1 pt-1 font-44 font-weight-bold">98.8 %</li>
+                                    <li class="mt-1 pt-1 font-11">Actualizado: 20/02/2024</li>
+                                    <li class="mt-1 pt-1 font-weight-bold">Meta: 71%</li>
+                                    <li class="mt-1 pt-1"><span class="badge badge-success" style="font-size: 100%">
+                                            <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
+                                    </li>
+                                    <li class="mt-1 pt-1">
+                                        <p>N° DE TALLERES DE CAPACITACION DIRIGIDOS A LOS AGENTES COMUNITARIOS QUE PROMUEVEN
+                                            PRACTICAS
+                                            SALUDABLES EN LA FAMILIA</p>
+                                    </li>
+
+                                </ul>
+                                <div class="mt-4 pt-3">
+                                    {{-- <button class="btn btn-primary width-md waves-effect waves-light">Sign Up</button> --}}
+                                    <button type="button"
+                                        class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
+                                        detalle</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end col -->
+
+                    <div class="col-md-6 col-xl-3">
+                        <div class="card text-center">
+                            <div class="pricing-header bg-primary p-0 rounded-top">
+                                <h5 class="text-white font-14 font-weight-normal">Indicador 3</h5>
+                                {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
+                                {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
+                            </div>
+                            <div class="p-4">
+                                <ul class="list-unstyled mb-0">
+                                    <li class=""><i class="mdi mdi-finance font-44 text-green-0"></i></li>
+                                    <li class="mt-1 pt-1 font-16">Avance</li>
+                                    <li class="mt-1 pt-1 font-44 font-weight-bold">98.8 %</li>
+                                    <li class="mt-1 pt-1 font-11">Actualizado: 20/02/2024</li>
+                                    <li class="mt-1 pt-1 font-weight-bold">Meta: 71%</li>
+                                    <li class="mt-1 pt-1"><span class="badge badge-danger" style="font-size: 100%">
+                                            <i class="mdi mdi-thumb-down"></i> CUMPLE</span>
+                                    </li>
+                                    <li class="mt-1 pt-1">
+                                        <p>N° DE NIÑOS TRATADOS DE LA ANEMIA Y DCI </p>
+                                    </li>
+
+                                </ul>
+                                <div class="mt-4 pt-3">
+                                    {{-- <button class="btn btn-primary width-md waves-effect waves-light">Sign Up</button> --}}
+                                    <button type="button"
+                                        class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
+                                        detalle</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end col -->
+
+                    <div class="col-md-6 col-xl-3">
+                        <div class="card text-center">
+                            <div class="pricing-header bg-primary p-0 rounded-top">
+                                <h5 class="text-white font-14 font-weight-normal">Indicador 4</h5>
+                                {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
+                                {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
+                            </div>
+                            <div class="p-4">
+                                <ul class="list-unstyled mb-0">
+                                    <li class=""><i class="mdi mdi-finance font-44 text-green-0"></i></li>
+                                    <li class="mt-1 pt-1 font-16">Avance</li>
+                                    <li class="mt-1 pt-1 font-44 font-weight-bold">98.8 %</li>
+                                    <li class="mt-1 pt-1 font-11">Actualizado: 20/02/2024</li>
+                                    <li class="mt-1 pt-1 font-weight-bold">Meta: 71%</li>
+                                    <li class="mt-1 pt-1"><span class="badge badge-success" style="font-size: 100%">
+                                            <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
+                                    </li>
+                                    <li class="mt-1 pt-1">
+                                        <p>N° DE CASAS MATERNAS RECONOCIDAS CON ORDENANZAS MUNICIPAL, ESTAN IMPLEMENTADAS Y
+                                            ACTIVAS</p>
+                                    </li>
+
+                                </ul>
+                                <div class="mt-4 pt-3">
+                                    {{-- <button class="btn btn-primary width-md waves-effect waves-light">Sign Up</button> --}}
+                                    <button type="button"
+                                        class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
+                                        detalle</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end col -->
+
+                    <div class="col-md-6 col-xl-3">
+                        <div class="card text-center">
+                            <div class="pricing-header bg-primary p-0 rounded-top">
+                                <h5 class="text-white font-14 font-weight-normal">Indicador 5</h5>
+                                {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
+                                {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
+                            </div>
+                            <div class="p-4">
+                                <ul class="list-unstyled mb-0">
+                                    <li class=""><i class="mdi mdi-finance font-44 text-green-0"></i></li>
+                                    <li class="mt-1 pt-1 font-16">Avance</li>
+                                    <li class="mt-1 pt-1 font-44 font-weight-bold">98.8 %</li>
+                                    <li class="mt-1 pt-1 font-11">Actualizado: 20/02/2024</li>
+                                    <li class="mt-1 pt-1">Meta: 71%</li>
+                                    <li class="mt-1 pt-1"><span class="badge badge-success" style="font-size: 100%">
+                                            <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
+                                    </li>
+                                    <li class="mt-1 pt-1">
+                                        <p>N° DE CASAS MATERNAS RECONOCIDAS CON ORDENANZAS MUNICIPAL, ESTAN IMPLEMENTADAS Y
+                                            ACTIVAS</p>
+                                    </li>
+
+                                </ul>
+                                <div class="mt-4 pt-3">
+                                    {{-- <button class="btn btn-primary width-md waves-effect waves-light">Sign Up</button> --}}
+                                    <button type="button"
+                                        class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
+                                        detalle</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end col -->
+
+                </div>
+                <!-- end row -->
+            </div>
+            <!-- end Col-10 -->
+        </div>
+        <!-- end row -->
+
+        <div class="row d-none">
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="card" style="height: 100%">
                     <div class="card-header bg-success-0">
@@ -68,7 +260,9 @@
                         </h3>
                     </div>
                     <div class="card-body">
-                        <div class="text-center" style="margin-top: 0%"><i class="mdi mdi-finance font-30"></i></div>
+                        <div class="text-center" style="margin-top: 0%"><i
+                                class="mdi mdi-finance font-30 text-green-0"></i>
+                        </div>
                         <div class="text-center font-14 font-weight-bold P-9" style="margin-top: 0%">Avance</div>
                         <div class="text-center font-30 font-weight-bold" style="margin-top: 3%">98.8 %</div>
                         <div class="text-center font-12" style="margin-top: 2%">Actualizado 20/02/2024</div>
@@ -96,7 +290,8 @@
                         </h3>
                     </div>
                     <div class="card-body">
-                        <div class="text-center" style="margin-top: 0%"><i class="mdi mdi-finance font-30"></i></div>
+                        <div class="text-center" style="margin-top: 0%"><i
+                                class="mdi mdi-finance font-30 text-green-0"></i></div>
                         <div class="text-center font-14 font-weight-bold P-9" style="margin-top: 0%">Avance</div>
                         <div class="text-center font-30 font-weight-bold" style="margin-top: 3%">98.8 %</div>
                         <div class="text-center font-12" style="margin-top: 2%">Actualizado 20/02/2024</div>
@@ -120,11 +315,12 @@
                 <div class="card" style="height: 100%">
                     <div class="card-header bg-success-0">
                         <h3 class="card-title text-white text-center text-capitalize font-weight-normal font-12">INDICADOR
-                            1
+                            3
                         </h3>
                     </div>
                     <div class="card-body">
-                        <div class="text-center" style="margin-top: 0%"><i class="mdi mdi-finance font-30"></i></div>
+                        <div class="text-center" style="margin-top: 0%"><i
+                                class="mdi mdi-finance font-30 text-green-0"></i></div>
                         <div class="text-center font-14 font-weight-bold P-9" style="margin-top: 0%">Avance</div>
                         <div class="text-center font-30 font-weight-bold" style="margin-top: 3%">98.8 %</div>
                         <div class="text-center font-12" style="margin-top: 2%">Actualizado 20/02/2024</div>
@@ -147,11 +343,12 @@
                 <div class="card" style="height: 100%">
                     <div class="card-header bg-success-0">
                         <h3 class="card-title text-white text-center text-capitalize font-weight-normal font-12">INDICADOR
-                            1
+                            4
                         </h3>
                     </div>
                     <div class="card-body">
-                        <div class="text-center" style="margin-top: 0%"><i class="mdi mdi-finance font-30"></i></div>
+                        <div class="text-center" style="margin-top: 0%"><i
+                                class="mdi mdi-finance font-30 text-green-0"></i></div>
                         <div class="text-center font-14 font-weight-bold P-9" style="margin-top: 0%">Avance</div>
                         <div class="text-center font-30 font-weight-bold" style="margin-top: 3%">98.8 %</div>
                         <div class="text-center font-12" style="margin-top: 2%">Actualizado 20/02/2024</div>
@@ -170,16 +367,18 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row d-none">
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="card">
                     <div class="card-header bg-success-0">
                         <h3 class="card-title text-white text-center text-capitalize font-weight-normal font-12">INDICADOR
-                            1
+                            5
                         </h3>
                     </div>
                     <div class="card-body">
-                        <div class="text-center" style="margin-top: 0%"><i class="mdi mdi-finance font-30"></i></div>
+                        <div class="text-center" style="margin-top: 0%">
+                            <i class="mdi mdi-finance font-30 text-green-0"></i>
+                        </div>
                         <div class="text-center font-14 font-weight-bold P-9" style="margin-top: 0%">Avance</div>
                         <div class="text-center font-30 font-weight-bold" style="margin-top: 3%">98.8 %</div>
                         <div class="text-center font-12" style="margin-top: 2%">Actualizado 20/02/2024</div>
@@ -200,7 +399,7 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row d-none">
             <div class="col-lg-12">
                 <div class="card-deck">
                     <div class="card">

@@ -46,7 +46,7 @@
         }
 
         .text-green-0 {
-            background-color: #43beac;
+            color: #43beac !important;
         }
 
         .bg-orange-0 {
@@ -79,6 +79,10 @@
 
         .table-success-0 {
             background-color: #43beac !important;
+        }
+
+        .text-success-0 {
+            color: #43beac !important;
         }
 
         .border-plomo-0 {
@@ -1034,7 +1038,8 @@
                                             //   $sis=ucwords($sistema->nombre);
                                             // $str = ucfirst($sistema->nombre);
                                         @endphp
-                                        <a href="{{ route('sistema_acceder', mb_strtolower($sistema->nombre, 'UTF-8')) }}">
+                                        <a
+                                            href="{{ route('sistema_acceder', mb_strtolower($sistema->nombre, 'UTF-8')) }}">
                                             <div class="media">
                                                 <div class="avatar-md bg-info rounded-circle mr-2"
                                                     style="height: 2.5rem;width: 2.5rem;">
