@@ -65,7 +65,7 @@
                     <div class="col-md-6 col-xl-3">
                         <div class="card text-center">
                             <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                <h5 class="text-white font-14 font-weight-normal">SI 01-01</h5>
+                                <h5 class="text-white font-14 font-weight-normal"><i class="mdi mdi-shield-cross" style="font-size: 20px"></i> SI 01-01</h5>
                                 {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                 {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
                             </div>
@@ -112,7 +112,7 @@
                     <div class="col-md-6 col-xl-3">
                         <div class="card text-center">
                             <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                <h5 class="text-white font-14 font-weight-normal">SI 01-02</h5>
+                                <h5 class="text-white font-14 font-weight-normal"><i class="mdi mdi-shield-cross" style="font-size: 20px"></i> SI 01-02</h5>
                                 {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                 {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
                             </div>
@@ -158,7 +158,7 @@
                     <div class="col-md-6 col-xl-3">
                         <div class="card text-center">
                             <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                <h5 class="text-white font-14 font-weight-normal">SI 01-03</h5>
+                                <h5 class="text-white font-14 font-weight-normal"><i class="mdi mdi-shield-cross" style="font-size: 20px"></i> SI 01-03</h5>
                                 {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                 {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
                             </div>
@@ -202,7 +202,7 @@
                     <div class="col-md-6 col-xl-3">
                         <div class="card text-center">
                             <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                <h5 class="text-white font-14 font-weight-normal">SI 01-04</h5>
+                                <h5 class="text-white font-14 font-weight-normal"><i class="mdi mdi-shield-cross" style="font-size: 20px"></i> SI 01-04</h5>
                                 {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                 {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
                             </div>
@@ -247,7 +247,7 @@
                     <div class="col-md-6 col-xl-3">
                         <div class="card text-center">
                             <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                <h5 class="text-white font-14 font-weight-normal">SI 01-05</h5>
+                                <h5 class="text-white font-14 font-weight-normal"><i class="mdi mdi-shield-cross" style="font-size: 20px"></i> SI 01-05</h5>
                                 {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                 {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
                             </div>

@@ -147,14 +147,29 @@
                                     <span class="help-block"></span>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            {{-- <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Icono
                                     </label>
                                     <input id="icono" name="icono" class="form-control" type="text">
                                     <span class="help-block"></span>
                                 </div>
+                            </div> --}}
+                            <div class="col-md-6">
+                                <label>Icono<span class="required">*</span></label>
+                                <div class="input-group">
+                                    <input type="text" id="icono" name="icono" class="form-control"
+                                        placeholder="Seleccione un Icono" maxlength="8">
+                                    <span class="help-block"></span>
+                                    <span class="input-group-append">
+                                        <button type="button" class="btn waves-effect waves-light btn-primary"
+                                            onclick="open_modal_icon();">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </span>
+                                </div>
                             </div>
+
                             {{-- <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Para-metro
@@ -181,6 +196,54 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+    <!-- End Bootstrap modal -->
+
+    <!-- Bootstrap modal -->
+    <div class="modal fade" id="modal_icon" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+
+                        </div>
+                        <div class="col-md-6">
+                            <select class="form-control btn-xs" name="tipoicono" id="tipoicono"
+                                onchange="cargar_tabla_icon()">
+                                <option value="0">TIPO DE ICONOS</option>
+                                <option value="1">Iconos de diseño de materiales</option>
+                                <option value="2">Iconos de iones</option>
+                                <option value="3">Fuente impresionante</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-12 table-responsive">
+                            <table id="tabla_icon" class="table table-striped table-bordered tablex" style="width:100%">
+                                <thead class="cabecera-dataTable table-success-0 text-white">
+                                    <th>Nº</th>
+                                    <th>NOMBRE</th>
+                                    <th>ICONO</th>
+                                    <th>ACCIÓN</th>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    {{-- <button type="button" id="btnEliminar" name="btnEliminar" class="btn btn-danger">Guardar</button> --}}
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- End Bootstrap modal -->
 @endsection
 
@@ -415,5 +478,33 @@
                 }
             });
         };
+
+        function open_modal_icon() {
+            $('#modal_icon').modal('show');
+            cargar_tabla_icon();
+        }
+
+        function cargar_tabla_icon() {
+            table_icon = $('#tabla_icon').DataTable({
+                // responsive: true,
+                // autoWidth: false,
+                // ordered: false,
+                destroy: true,
+                language: table_language,
+                ajax: {
+                    "url": "{{ route('icono.listar') }}",
+                    "type": "GET",
+                    "data": {
+                        'tipo': $('#tipoicono').val(),
+                    },
+                },
+
+            });
+        }
+
+        function seleccionar_icon(icon) {
+            $('#icono').val(icon);
+            $('#modal_icon').modal('hide');
+        }
     </script>
 @endsection
