@@ -335,32 +335,17 @@ class ImporPadronWebController extends Controller
             ->toJson();
     }
 
-    public function ListaImportada($importacion_id) //(Request $request, $importacion_id)
-    {
-        $data = ImporPadronWeb::where('importacion_id', $importacion_id)->get();
-        return DataTables::of($data)->make(true);
-    }
+    // public function ListaImportada($importacion_id) //(Request $request, $importacion_id)
+    // {
+    //     $data = ImporPadronWeb::where('importacion_id', $importacion_id)->get();
+    //     return DataTables::of($data)->make(true);
+    // }
 
-    public function ListaImportada_DataTable($importacion_id)
-    {
-        $padronWebLista = ImporPadronWebRepositorio::Listar_Por_Importacion_id($importacion_id);
-
-        return  datatables()->of($padronWebLista)->toJson();;
-    }
-
-    public function aprobar($importacion_id)
-    {
-        $importacion = ImportacionRepositorio::ImportacionPor_Id($importacion_id);
-        //Importacion::where('id',$importacion_id)->first();
-
-        return view('educacion.ImporPadronWeb.Aprobar', compact('importacion_id', 'importacion'));
-    }
-
-    public function procesar($importacion_id)
-    {
-        $procesar = DB::select('call edu_pa_procesarPadronWeb(?)', [$importacion_id]);
-        return view('correcto');
-    }
+    // public function procesar($importacion_id)
+    // {
+    //     $procesar = DB::select('call edu_pa_procesarPadronWeb(?)', [$importacion_id]);
+    //     return view('correcto');
+    // }
 
     public function eliminar($id)
     {
