@@ -1,6 +1,18 @@
 @extends('layouts.main', ['activePage' => 'usuarios', 'titlePage' => ''])
 @section('css')
-   
+    <style type="text/css">
+        .bs-example {
+            margin: 150px 50px;
+        }
+
+        /* Styles for custom popover template */
+        .popover-footer {
+            padding: 6px 14px;
+            background-color: #f7f7f7;
+            border-top: 1px solid #ebebeb;
+            text-align: right;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -321,6 +333,12 @@
             '#64E572', '#9F9655', '#FFF263', '#6AF9C4'
         ];
         $(document).ready(function() {
+            $('[data-toggle="popover"]').popover({
+                html: true,
+                template: '<div class="popover"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div><div class="popover-footer"><a href="#" class="btn btn-info btn-sm">Close</a></div></div>'
+            });
+
+
             Highcharts.setOptions({
                 lang: {
                     thousandsSep: ","
@@ -328,10 +346,6 @@
             });
             cargarCards();
 
-            $('[data-toggle="popover"]').popover({
-                html: true,
-                template: '<div class="popover"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div><div class="popover-footer"><a href="#" class="btn btn-info btn-sm">Close</a></div></div>'
-            });
 
             // $('[data-original-title]').css('background-color','#256398');
             // $('#v1').tooltip({
