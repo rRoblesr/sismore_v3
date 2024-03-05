@@ -1093,7 +1093,7 @@ Route::get('/salud/PowerBi/{id}', [PowerBiController::class, 'saludMenu'])->name
 Route::get('/salud/pactoregional', [IndicadoresController::class, 'PactoRegional'])->name('salud.indicador.pactoregional');
 Route::get('/salud/conveniofed', [IndicadoresController::class, 'ConvenioFED'])->name('salud.indicador.conveniofed');
 Route::get('/salud/pruebas', function () {
-    return view('pruebas2');
+    return view('pruebas3');
 })->name('salud.indicador.conveniofed');
 /******************************************** FIN SALUD ***************************************************/
 

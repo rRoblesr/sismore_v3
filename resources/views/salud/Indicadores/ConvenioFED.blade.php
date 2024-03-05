@@ -1,39 +1,6 @@
 @extends('layouts.main', ['activePage' => 'usuarios', 'titlePage' => ''])
 @section('css')
-    <style>
-        .tablex thead th {
-            padding: 2px;
-            text-align: center;
-        }
-
-        .tablex thead td {
-            padding: 2px;
-            text-align: center;
-            vertical-align: middle;
-            font-weight: bold;
-        }
-
-        .tablex tbody td,
-        .tablex tbody th,
-        .tablex tfoot td,
-        .tablex tfoot th {
-            padding: 2px;
-        }
-
-        .fuentex {
-            font-size: 10px;
-            font-weight: bold;
-        }
-
-
-        .link {
-            color: #000000;
-        }
-
-        .link:hover {
-            color: #0000FF;
-        }
-    </style>
+   
 @endsection
 
 @section('content')
@@ -79,18 +46,26 @@
                                     <li class="mt-1 pt-1">
                                         <div class="row">
                                             <div class="col-6">
+
                                                 {{-- <span class="text-green-0 font-weight-bold" style="font-size: 100%"
                                                     data-toggle="tooltip" data-placement="top" title="bbbbbbbbbbbbbb"
                                                     data-original-title="Tooltip on top">
                                                     <i class="mdi mdi-arrow-down-bold"></i> Numerador</span>
                                                 <div class="font-weight-bold">100</div> --}}
-                                                <a href="javascript:void(0)" tabindex="0"
+
+                                                {{-- <a href="javascript:void(0)" tabindex="0"
                                                     class="text-green-0 font-weight-bold" data-toggle="popover"
                                                     data-trigger="focus" title=""
                                                     data-content="Locales Educativos conectados a red de agra potable, según departamentos"
                                                     data-original-title="Numerador" data-placement="top">
                                                     <i class="mdi mdi-arrow-down-bold"></i> Numerador
-                                                </a>
+                                                </a> --}}
+
+                                                <a href="javascript:void(0)" class="text-green-0 font-weight-bold"
+                                                    data-toggle="popover" title="Numerador"
+                                                    data-content="Locales Educativos conectados a red de agra potable, según departamentos"><i
+                                                        class="mdi mdi-arrow-down-bold" data-placement="top"></i>
+                                                    Numerador</a>
                                                 <div class="font-weight-bold">100</div>
                                             </div>
 
@@ -101,22 +76,32 @@
                                             </div>' --}}
 
                                             <div class="col-6">
+
                                                 {{-- <span class="text-green-0 font-weight-bold" style="font-size: 100%">
                                                     <i class="mdi mdi-arrow-up-bold"></i> Denominador</span>
                                                 <div class="font-weight-bold">100</div> --}}
-                                                <a href="javascript:void(0)" tabindex="0"
+
+                                                {{-- <a href="javascript:void(0)" tabindex="0"
                                                     class="text-green-0 font-weight-bold" data-toggle="popover"
                                                     data-trigger="focus" title=""
                                                     data-content="Locales Educativos conectados a red de agra potable, según departamentos"
                                                     data-original-title="Denominador" data-placement="top">
                                                     <i class="mdi mdi-arrow-up-bold"></i> Denominador
-                                                </a>
+                                                </a> --}}
+
+                                                <a href="javascript:void(0)" class="text-green-0 font-weight-bold"
+                                                    data-toggle="popover" title="Denominador"
+                                                    data-content="Locales Educativos conectados a red de agra potable, según departamentos">
+                                                    <i class="mdi mdi-arrow-up-bold" data-placement="top"></i>
+                                                    Denominador</a>
                                                 <div class="font-weight-bold">100</div>
                                             </div>
                                         </div>
                                     </li>
                                     <li class="mt-1 pt-3">
-                                        <p>N° de acta de homlogacion registradas oportunamente que evidencian la actualizacion de la informacion en las niñas (os) mediante el trabajo articulado en el territorio
+                                        <p>N° de acta de homlogacion registradas oportunamente que evidencian la
+                                            actualizacion de la informacion en las niñas (os) mediante el trabajo articulado
+                                            en el territorio
                                         </p>
                                     </li>
 
@@ -342,6 +327,11 @@
                 }
             });
             cargarCards();
+
+            $('[data-toggle="popover"]').popover({
+                html: true,
+                template: '<div class="popover"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div><div class="popover-footer"><a href="#" class="btn btn-info btn-sm">Close</a></div></div>'
+            });
 
             // $('[data-original-title]').css('background-color','#256398');
             // $('#v1').tooltip({
