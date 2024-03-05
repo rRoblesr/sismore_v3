@@ -63,9 +63,10 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-6 col-xl-3">
-                        <div class="card text-center">
+                        <div class="card text-center" style="height: 95%;">
                             <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                <h5 class="text-white font-14 font-weight-normal"><i class="mdi mdi-shield-cross" style="font-size: 20px"></i> SI 01-01</h5>
+                                <h5 class="text-white font-14 font-weight-normal"><i class="mdi mdi-shield-cross"
+                                        style="font-size: 20px"></i> SI 01-01</h5>
                                 {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                 {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
                             </div>
@@ -78,21 +79,44 @@
                                     <li class="mt-1 pt-1">
                                         <div class="row">
                                             <div class="col-6">
-                                                <span class="text-green-0 font-weight-bold" style="font-size: 100%">
+                                                {{-- <span class="text-green-0 font-weight-bold" style="font-size: 100%"
+                                                    data-toggle="tooltip" data-placement="top" title="bbbbbbbbbbbbbb"
+                                                    data-original-title="Tooltip on top">
                                                     <i class="mdi mdi-arrow-down-bold"></i> Numerador</span>
+                                                <div class="font-weight-bold">100</div> --}}
+                                                <a href="javascript:void(0)" tabindex="0"
+                                                    class="text-green-0 font-weight-bold" data-toggle="popover"
+                                                    data-trigger="focus" title=""
+                                                    data-content="Locales Educativos conectados a red de agra potable, según departamentos"
+                                                    data-original-title="Numerador" data-placement="top">
+                                                    <i class="mdi mdi-arrow-down-bold"></i> Numerador
+                                                </a>
                                                 <div class="font-weight-bold">100</div>
                                             </div>
+
+                                            {{-- '<div class="popover" role="tooltip">
+                                                <div class="arrow"></div>
+                                                <h3 class="popover-header"></h3>
+                                                <div class="popover-body"></div>
+                                            </div>' --}}
+
                                             <div class="col-6">
-                                                <span class="text-green-0 font-weight-bold" style="font-size: 100%">
+                                                {{-- <span class="text-green-0 font-weight-bold" style="font-size: 100%">
                                                     <i class="mdi mdi-arrow-up-bold"></i> Denominador</span>
+                                                <div class="font-weight-bold">100</div> --}}
+                                                <a href="javascript:void(0)" tabindex="0"
+                                                    class="text-green-0 font-weight-bold" data-toggle="popover"
+                                                    data-trigger="focus" title=""
+                                                    data-content="Locales Educativos conectados a red de agra potable, según departamentos"
+                                                    data-original-title="Denominador" data-placement="top">
+                                                    <i class="mdi mdi-arrow-up-bold"></i> Denominador
+                                                </a>
                                                 <div class="font-weight-bold">100</div>
                                             </div>
                                         </div>
                                     </li>
                                     <li class="mt-1 pt-3">
-                                        <p>N° DE ACTA DE HOMLOGACION REGISTRADAS OPORTUNAMENTE QUE EVIDENCIAN LA
-                                            ACTUALIZACION DE LA
-                                            INFORMACION EN LAS NIÑAS (OS) MEDIANTE EL TRABAJO ARTICULADO EN EL TERRITORIO
+                                        <p>N° de acta de homlogacion registradas oportunamente que evidencian la actualizacion de la informacion en las niñas (os) mediante el trabajo articulado en el territorio
                                         </p>
                                     </li>
 
@@ -110,9 +134,10 @@
                     <!-- end col -->
 
                     <div class="col-md-6 col-xl-3">
-                        <div class="card text-center">
+                        <div class="card text-center" style="height: 95%;">
                             <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                <h5 class="text-white font-14 font-weight-normal"><i class="mdi mdi-shield-cross" style="font-size: 20px"></i> SI 01-02</h5>
+                                <h5 class="text-white font-14 font-weight-normal"><i class="mdi mdi-shield-cross"
+                                        style="font-size: 20px"></i> SI 01-02</h5>
                                 {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                 {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
                             </div>
@@ -156,9 +181,10 @@
                     <!-- end col -->
 
                     <div class="col-md-6 col-xl-3">
-                        <div class="card text-center">
+                        <div class="card text-center" style="height: 95%;">
                             <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                <h5 class="text-white font-14 font-weight-normal"><i class="mdi mdi-shield-cross" style="font-size: 20px"></i> SI 01-03</h5>
+                                <h5 class="text-white font-14 font-weight-normal"><i class="mdi mdi-shield-cross"
+                                        style="font-size: 20px"></i> SI 01-03</h5>
                                 {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                 {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
                             </div>
@@ -200,9 +226,10 @@
                     <!-- end col -->
 
                     <div class="col-md-6 col-xl-3">
-                        <div class="card text-center">
+                        <div class="card text-center" style="height: 95%;">
                             <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                <h5 class="text-white font-14 font-weight-normal"><i class="mdi mdi-shield-cross" style="font-size: 20px"></i> SI 01-04</h5>
+                                <h5 class="text-white font-14 font-weight-normal"><i class="mdi mdi-shield-cross"
+                                        style="font-size: 20px"></i> SI 01-04</h5>
                                 {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                 {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
                             </div>
@@ -245,9 +272,10 @@
                     <!-- end col -->
 
                     <div class="col-md-6 col-xl-3">
-                        <div class="card text-center">
+                        <div class="card text-center" style="height: 95%;">
                             <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                <h5 class="text-white font-14 font-weight-normal"><i class="mdi mdi-shield-cross" style="font-size: 20px"></i> SI 01-05</h5>
+                                <h5 class="text-white font-14 font-weight-normal"><i class="mdi mdi-shield-cross"
+                                        style="font-size: 20px"></i> SI 01-05</h5>
                                 {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                 {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
                             </div>
@@ -300,6 +328,9 @@
     </div>
 @endsection
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript">
         var paleta_colores = ['#5eb9aa', '#F9FFFE', '#f5bd22', '#058DC7', '#50B432', '#9D561B', '#DDDF00', '#24CBE5',
             '#64E572', '#9F9655', '#FFF263', '#6AF9C4'
@@ -311,6 +342,12 @@
                 }
             });
             cargarCards();
+
+            // $('[data-original-title]').css('background-color','#256398');
+            // $('#v1').tooltip({
+            //     boundary: 'window',
+            //     template: '<div class="tooltip bs-tooltip-top" role="tooltip"><div class="arrow"></div><div class="tooltip-inner">aaaaaaaaaaaaaaaaaaaaaaa</div></div>'
+            // })
         });
 
         function cargarCards() {
@@ -364,22 +401,22 @@
             // panelGraficas('anal2');
             // panelGraficas('anal3');
             // panelGraficas('anal4');
-            panelGraficas('siagie001');
-            panelGraficas('censodocente001');
-            panelGraficas('dtanal1');
-            panelGraficas('dtanal2');
-            panelGraficas('dtanal3');
-            panelGraficas('skills001');
-            panelGraficas('skills002');
-            panelGraficas('skills003');
-            panelGraficas('skills004');
-            panelGraficas('skills005');
-            panelGraficas('skills006');
-            panelGraficas('skills007');
-            panelGraficas('skills008');
-            panelGraficas('skills009');
-            panelGraficas('skills010');
-            panelGraficas('tabla1');
+            // panelGraficas('siagie001');
+            // panelGraficas('censodocente001');
+            // panelGraficas('dtanal1');
+            // panelGraficas('dtanal2');
+            // panelGraficas('dtanal3');
+            // panelGraficas('skills001');
+            // panelGraficas('skills002');
+            // panelGraficas('skills003');
+            // panelGraficas('skills004');
+            // panelGraficas('skills005');
+            // panelGraficas('skills006');
+            // panelGraficas('skills007');
+            // panelGraficas('skills008');
+            // panelGraficas('skills009');
+            // panelGraficas('skills010');
+            // panelGraficas('tabla1');
             /* panelGraficas('iiee1');
             panelGraficas('iiee2');
             panelGraficas('iiee3');
