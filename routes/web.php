@@ -164,7 +164,8 @@ Route::get('/Home/PanelControl/graficas', [HomeController::class, 'panelControlE
 // Route::get('/INDICADOR/Home/01/Excel/{div}/{anio}/{provincia}/{distrito}/{gestion}/{ugel}', [IndicadorController::class, 'panelControlEduacionNuevoindicador01Download']);
 // Route::get('/INDICADOR/Home/01/xxx', [IndicadorController::class, 'pagina'])->name('indicador.nuevos.01.print');
 
-Route::get('/educación/SinDatos', [HomeController::class, 'educacionvacio'])->name('educacion.sinruta');
+Route::get('/educación/SinDatos', [HomeController::class, 'paginavacio'])->name('educacion.sinruta');
+
 Route::get('/INDICADOR/Home/02', [IndicadorController::class, 'panelControlEduacionNuevoindicador02'])->name('indicador.nuevos.02');
 
 Route::get('/INDICADOR/Home/04', [IndicadorController::class, 'panelControlEduacionNuevoindicador04'])->name('panelcontrol.educacion.indicador.nuevos.04');
@@ -391,7 +392,7 @@ Route::post('/MatriculaDetalle/EBE/grafica4', [MatriculaDetalleController::class
 Route::post('/MatriculaDetalle/EBE/tabla1', [MatriculaDetalleController::class, 'cargarEBEtabla1'])->name('matriculadetalle.ebe.tabla1');
 Route::post('/MatriculaDetalle/EBE/tabla2', [MatriculaDetalleController::class, 'cargarEBEtabla2'])->name('matriculadetalle.ebe.tabla2');
 
-Route::get('/MatriculaDetalle/EIB/', [MatriculaDetalleController::class, 'interculturalbilingue'])->name('matriculadetalle.interculturalbilingue');
+Route::get('/educación/InterculturalBilingue', [MatriculaDetalleController::class, 'interculturalbilingue'])->name('matriculadetalle.interculturalbilingue');
 Route::post('/MatriculaDetalle/EIB/grafica1', [MatriculaDetalleController::class, 'cargarEIBgrafica1'])->name('matriculadetalle.eib.grafica1');
 Route::post('/MatriculaDetalle/EIB/grafica2', [MatriculaDetalleController::class, 'cargarEIBgrafica2'])->name('matriculadetalle.eib.grafica2');
 Route::post('/MatriculaDetalle/EIB/grafica3', [MatriculaDetalleController::class, 'cargarEIBgrafica3'])->name('matriculadetalle.eib.grafica3');
@@ -422,7 +423,7 @@ Route::get('/ImporTableta/eliminar/{id}', [ImporTabletaController::class, 'elimi
 //Route::get('/Tableta/Aprobar/{importacion_id}', [TabletaController::class, 'aprobar'])->name('Tableta.aprobar');
 //Route::post('/Tableta/Aprobar/procesar/{importacion_id}', [TabletaController::class, 'procesar'])->name('Tableta.procesar');
 
-Route::get('/Tableta/Principal', [TabletaController::class, 'principal'])->middleware('auth')->name('tableta.principal');
+Route::get('/educación/Tableta', [TabletaController::class, 'principal'])->middleware('auth')->name('tableta.principal');
 Route::get('/Tableta/Principal/Head', [TabletaController::class, 'principalHead'])->name('tableta.principal.head');
 Route::get('/Tableta/Principal/Tabla', [TabletaController::class, 'principalTabla'])->name('tableta.principal.tabla');
 
@@ -490,7 +491,7 @@ Route::get('/SuperiorArtistico/Ugeles', [SuperiorArtisticoController::class, 'ug
 Route::get('/SuperiorArtistico/Areas', [SuperiorArtisticoController::class, 'area'])->name('superiorartistico.area');
 Route::get('/SuperiorArtistico/Exportar/Excel/{anio}/{ugel}/{area}/{gestion}', [SuperiorArtisticoController::class, 'download']);
 
-Route::get('/ServiciosBasicos/Principal/', [ServiciosBasicosController::class, 'principal'])->name('serviciosbasicos.principal');
+Route::get('/educación/ServiciosBasicos', [ServiciosBasicosController::class, 'principal'])->name('serviciosbasicos.principal');
 Route::get('/ServiciosBasicos/Tablas', [ServiciosBasicosController::class, 'principalTabla'])->name('serviciosbasicos.principal.tablas');
 Route::get('/ServiciosBasicos/Excel/{div}/{anio}/{ugel}/{gestion}/{area}/{servicio}', [ServiciosBasicosController::class, 'principalDownload']);
 
@@ -535,7 +536,7 @@ Route::post('/INDICADOR/ece/plaza', [PLazaController::class, 'datoIndicadorPLaza
 Route::get('/INDICADOR/Principal', [IndicadorController::class, 'principal'])->middleware('auth')->name('indicador.principal');
 Route::get('/INDICADOR/AJAX/LISTAR', [IndicadorController::class, 'ListarDT'])->name('indicador.ajax.listar');
 
-Route::get('/Plaza/Docentes/Principal', [CensoDocenteController::class, 'PersonalDocente'])->middleware('auth')->name('Docentes.principal');
+Route::get('/educación/PersonalDocente', [CensoDocenteController::class, 'PersonalDocente'])->middleware('auth')->name('Docentes.principal');
 Route::get('/Plaza/Docentes/Principal222', [CensoDocenteController::class, 'PersonalDocenteTabla'])->middleware('auth')->name('censodocente.personaldocente');
 
 //Route::get('/Plaza/Docentes/Principal', [PLazaController::class, 'DocentesPrincipal'])->middleware('auth')->name('Docentes.principal');
@@ -628,7 +629,7 @@ Route::get('/PadronEIB/ajax_delete/{id}', [PadronEIBController::class, 'ajax_del
 Route::get('/PadronEIB/IIEE/autocompletar', [InstEducativaController::class, 'completariiee2'])->name('padroneib.completar.iiee');
 
 
-Route::get('/PadronRER/Avance', [PadronRERController::class, 'avance'])->name('padronrer.avance');
+Route::get('/educación/PadronRER/Avance', [PadronRERController::class, 'avance'])->name('padronrer.avance');
 Route::get('/PadronRER/Grafica1', [PadronRERController::class, 'grafica1'])->name('padronrer.avance.graficas1');
 Route::get('/PadronRER/Grafica2', [PadronRERController::class, 'grafica2'])->name('padronrer.avance.graficas2');
 
