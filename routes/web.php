@@ -164,6 +164,7 @@ Route::get('/Home/PanelControl/graficas', [HomeController::class, 'panelControlE
 // Route::get('/INDICADOR/Home/01/Excel/{div}/{anio}/{provincia}/{distrito}/{gestion}/{ugel}', [IndicadorController::class, 'panelControlEduacionNuevoindicador01Download']);
 // Route::get('/INDICADOR/Home/01/xxx', [IndicadorController::class, 'pagina'])->name('indicador.nuevos.01.print');
 
+Route::get('/educación/SinDatos', [HomeController::class, 'educacionvacio'])->name('educacion.sinruta');
 Route::get('/INDICADOR/Home/02', [IndicadorController::class, 'panelControlEduacionNuevoindicador02'])->name('indicador.nuevos.02');
 
 Route::get('/INDICADOR/Home/04', [IndicadorController::class, 'panelControlEduacionNuevoindicador04'])->name('panelcontrol.educacion.indicador.nuevos.04');

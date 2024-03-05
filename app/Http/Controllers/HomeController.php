@@ -1483,4 +1483,9 @@ class HomeController extends Controller
 
         return view('homeAEI', compact('titulados_inicial', 'porcentajeTitulados_inicial', 'bilingues'));
     }
+
+    public function educacionvacio()
+    {
+        return view('educacion.paginavacio');
+    }
 }
