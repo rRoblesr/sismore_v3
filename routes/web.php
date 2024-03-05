@@ -322,7 +322,7 @@ Route::post('/InstEducativa/ReporteDistrito', [InstEducativaController::class, '
 Route::post('/InstEducativa/GraficoBarras_Instituciones_Distrito', [InstEducativaController::class, 'GraficoBarras_Instituciones_Distrito'])->name('InstEducativa.GraficoBarras_Instituciones_Distrito');
 /*  */
 
-Route::get('/INDICADOR/Home/01', [MatriculaGeneralController::class, 'vista0001'])->name('indicador.nuevos.01');
+Route::get('/educación/AvanceMatricula', [MatriculaGeneralController::class, 'vista0001'])->name('indicador.nuevos.01');
 Route::get('/INDICADOR/Home/01/Head', [MatriculaGeneralController::class, 'vista0001head'])->name('indicador.nuevos.01.head');
 Route::get('/INDICADOR/Home/01/Tabla', [MatriculaGeneralController::class, 'vista0001Tabla'])->name('indicador.nuevos.01.tabla');
 Route::get('/INDICADOR/Home/01/Excel/{div}/{anio}/{provincia}/{distrito}/{gestion}/{ugel}', [MatriculaGeneralController::class, 'vista0001Download']);
@@ -339,15 +339,15 @@ Route::get('/MatriculaGeneral/NivelEBA/', [MatriculaGeneralController::class, 'n
 Route::get('/MatriculaGeneral/NivelEBA/tablas', [MatriculaGeneralController::class, 'niveleducativoEBAtabla'])->name('matriculageneral.niveleducativo.eba.tablas');
 Route::get('/MatriculaGeneral/NivelEBA/Excel/{div}/{anio}/{provincia}/{distrito}/{nivel}', [MatriculaGeneralController::class, 'niveleducativoEBADownload']);
 
-Route::get('/MatriculaGeneral/EBR/', [MatriculaGeneralController::class, 'basicaregular'])->name('matriculageneral.ebr.principal');
+Route::get('/educación/BásicaRegular', [MatriculaGeneralController::class, 'basicaregular'])->name('matriculageneral.ebr.principal');
 Route::get('/MatriculaGeneral/EBR/tablas', [MatriculaGeneralController::class, 'basicaregulartabla'])->name('matriculageneral.ebr.tablas');
 Route::get('/MatriculaGeneral/EBR/Excel/{div}/{anio}/{ugel}/{gestion}/{area}/{provincia}', [MatriculaGeneralController::class, 'basicaregularDownload']);
 
-Route::get('/MatriculaGeneral/EBE/', [MatriculaGeneralController::class, 'basicaespecial'])->name('matriculageneral.ebe.principal');
+Route::get('/educación/BásicaEspecial', [MatriculaGeneralController::class, 'basicaespecial'])->name('matriculageneral.ebe.principal');
 Route::get('/MatriculaGeneral/EBE/tablas', [MatriculaGeneralController::class, 'basicaespecialtabla'])->name('matriculageneral.ebe.tablas');
 Route::get('/MatriculaGeneral/EBE/Excel/{div}/{anio}/{ugel}/{gestion}/{area}/{provincia}', [MatriculaGeneralController::class, 'basicaespecialDownload']);
 
-Route::get('/MatriculaGeneral/EBA/', [MatriculaGeneralController::class, 'basicaalternativa'])->name('matriculageneral.eba.principal');
+Route::get('/educación/BásicaAlternativa', [MatriculaGeneralController::class, 'basicaalternativa'])->name('matriculageneral.eba.principal');
 Route::get('/MatriculaGeneral/EBA/tablas', [MatriculaGeneralController::class, 'basicaalternativatabla'])->name('matriculageneral.eba.tablas');
 Route::get('/MatriculaGeneral/EBA/Excel/{div}/{anio}/{ugel}/{gestion}/{area}/{provincia}', [MatriculaGeneralController::class, 'basicaalternativaDownload']);
 
@@ -404,7 +404,7 @@ Route::get('/ImporCensoDocente/Listar/ImportarDT', [ImporCensoDocenteController:
 Route::get('/ImporCensoDocente/LI/{importacion_id}', [ImporCensoDocenteController::class, 'ListaImportada'])->name('imporcensodocente.listarimportados');
 Route::get('/ImporCensoDocente/eliminar/{id}', [ImporCensoDocenteController::class, 'eliminar'])->name('imporcensodocente.eliminar');
 
-Route::get('/ImporCensoMatricula/Importar', [ImporCensoMatriculaController::class, 'importar'])->name('imporcensomatricula.importar');
+Route::get('/educación/Importar/CensoMatricula', [ImporCensoMatriculaController::class, 'importar'])->name('imporcensomatricula.importar');
 Route::post('/ImporCensoMatricula/Importar', [ImporCensoMatriculaController::class, 'guardar'])->name('imporcensomatricula.guardar');
 Route::get('/ImporCensoMatricula/L/ImportarDT', [ImporCensoMatriculaController::class, 'ListarDTImportFuenteTodos'])->name('imporcensomatricula.listar.importados');
 Route::post('/ImporCensoMatricula/LI/{importacion_id}', [ImporCensoMatriculaController::class, 'ListaImportada'])->name('imporcensomatricula.listarimportados');
@@ -446,7 +446,7 @@ Route::post('/TextosEscolares/ReporteUgel/{importacion_id}', [TextosEscolaresCon
 
 
 /* ************ */
-Route::get('/TecnicoProductiva/Principal', [TecnicoProductivaController::class, 'principal'])->middleware('auth')->name('tecnicoproductiva.principal');
+Route::get('/educación/TecnicoProductiva', [TecnicoProductivaController::class, 'principal'])->middleware('auth')->name('tecnicoproductiva.principal');
 Route::get('/TecnicoProductiva/Principal/Head', [TecnicoProductivaController::class, 'principalHead'])->name('tecnicoproductiva.principal.head');
 Route::get('/TecnicoProductiva/Principal/Tabla', [TecnicoProductivaController::class, 'principalTabla'])->name('tecnicoproductiva.principal.tabla');
 Route::get('/TecnicoProductiva/Ugeles', [TecnicoProductivaController::class, 'ugel'])->name('tecnicoproductiva.ugel');
@@ -468,21 +468,21 @@ Route::post('/TecnicoProductiva/GraficoBarrasPrincipal/{anio_id}', [TabletaContr
 */
 /***************** */
 
-Route::get('/SuperiorPedagogico/Principal', [SuperiorPedagogicoController::class, 'principal'])->middleware('auth')->name('superiorpedagogico.principal');
+Route::get('/educación/SuperiorPedagogico', [SuperiorPedagogicoController::class, 'principal'])->middleware('auth')->name('superiorpedagogico.principal');
 Route::get('/SuperiorPedagogico/Principal/Head', [SuperiorPedagogicoController::class, 'principalHead'])->name('superiorpedagogico.principal.head');
 Route::get('/SuperiorPedagogico/Principal/Tabla', [SuperiorPedagogicoController::class, 'principalTabla'])->name('superiorpedagogico.principal.tabla');
 Route::get('/SuperiorPedagogico/Ugeles', [SuperiorPedagogicoController::class, 'ugel'])->name('superiorpedagogico.ugel');
 Route::get('/SuperiorPedagogico/Areas', [SuperiorPedagogicoController::class, 'area'])->name('superiorpedagogico.area');
 Route::get('/SuperiorPedagogico/Exportar/Excel/{anio}/{ugel}/{area}/{gestion}', [SuperiorPedagogicoController::class, 'download']);
 
-Route::get('/SuperiorTecnologico/Principal', [SuperiorTecnologicoController::class, 'principal'])->middleware('auth')->name('superiortecnologico.principal');
+Route::get('/educación/SuperiorTecnologico', [SuperiorTecnologicoController::class, 'principal'])->middleware('auth')->name('superiortecnologico.principal');
 Route::get('/SuperiorTecnologico/Principal/Head', [SuperiorTecnologicoController::class, 'principalHead'])->name('superiortecnologico.principal.head');
 Route::get('/SuperiorTecnologico/Principal/Tabla', [SuperiorTecnologicoController::class, 'principalTabla'])->name('superiortecnologico.principal.tabla');
 Route::get('/SuperiorTecnologico/Ugeles', [SuperiorTecnologicoController::class, 'ugel'])->name('superiortecnologico.ugel');
 Route::get('/SuperiorTecnologico/Areas', [SuperiorTecnologicoController::class, 'area'])->name('superiortecnologico.area');
 Route::get('/SuperiorTecnologico/Exportar/Excel/{anio}/{ugel}/{area}/{gestion}', [SuperiorTecnologicoController::class, 'download']);
 
-Route::get('/SuperiorArtistico/Principal', [SuperiorArtisticoController::class, 'principal'])->middleware('auth')->name('superiorartistico.principal');
+Route::get('/educación/SuperiorArtistico', [SuperiorArtisticoController::class, 'principal'])->middleware('auth')->name('superiorartistico.principal');
 Route::get('/SuperiorArtistico/Principal/Head', [SuperiorArtisticoController::class, 'principalHead'])->name('superiorartistico.principal.head');
 Route::get('/SuperiorArtistico/Principal/Tabla', [SuperiorArtisticoController::class, 'principalTabla'])->name('superiorartistico.principal.tabla');
 Route::get('/SuperiorArtistico/Ugeles', [SuperiorArtisticoController::class, 'ugel'])->name('superiorartistico.ugel');
@@ -570,7 +570,7 @@ Route::get('/ImporRER/Importar', [ImporRERController::class, 'importar'])->name(
 Route::post('/ImporRER/Importar', [ImporRERController::class, 'guardar'])->name('imporrer.guardar');
 Route::post('/ImporRER/ListaImportada/{importacion_id}', [ImporRERController::class, 'ListaImportada'])->name('imporrer.listarimportados');
 
-Route::get('/Mantenimiento/RER/Principal', [RERController::class, 'principal'])->middleware('auth')->name('mantenimiento.rer.principal');
+Route::get('/educación/Mantenimiento/RER', [RERController::class, 'principal'])->middleware('auth')->name('mantenimiento.rer.principal');
 Route::post('/Mantenimiento/RER/Importados/', [RERController::class, 'ListarDTImportFuenteTodos'])->name('mantenimiento.rer.listar.importados');
 Route::get('/Mantenimiento/RER/ajax_edit/{id}', [RERController::class, 'ajax_edit']);
 Route::post('/Mantenimiento/RER/ajax_add/', [RERController::class, 'ajax_add']);
@@ -580,7 +580,7 @@ Route::get('/Mantenimiento/RER/ajax_delete/{id}', [RERController::class, 'ajax_d
 
 Route::get('/RER/ajax_cargar', [RERController::class, 'ajax_cargar'])->name('rer.cargar');
 
-Route::get('/Mantenimiento/PadronRER/Principal', [PadronRERController::class, 'principal'])->middleware('auth')->name('mantenimiento.padronrer.principal');
+Route::get('/educación/Mantenimiento/PadronRER', [PadronRERController::class, 'principal'])->middleware('auth')->name('mantenimiento.padronrer.principal');
 Route::post('/Mantenimiento/PadronRER/Importados/', [PadronRERController::class, 'ListarDTImportFuenteTodos'])->name('mantenimiento.padronrer.listar.importados');
 Route::get('/Mantenimiento/PadronRER/ajax_edit/{id}', [PadronRERController::class, 'ajax_edit']);
 Route::post('/Mantenimiento/PadronRER/ajax_add/', [PadronRERController::class, 'ajax_add']);
@@ -591,7 +591,7 @@ Route::get('/Mantenimiento/PadronRER/RedEducativa/autocompletar', [RERController
 Route::get('/Mantenimiento/PadronRER/IIEE/autocompletar', [InstEducativaController::class, 'completariiee'])->name('mantenimiento.padronrer.completar.iiee');
 Route::get('/Mantenimiento/PadronRER/ajax_cargar', [PadronRERController::class, 'ajax_cargarnivel'])->name('padronrer.nivelmodalidad.cargar');
 
-Route::get('/Mantenimiento/Lengua/Principal', [LenguaController::class, 'principal'])->middleware('auth')->name('mantenimiento.lengua.principal');
+Route::get('/educación/Mantenimiento/Lengua', [LenguaController::class, 'principal'])->middleware('auth')->name('mantenimiento.lengua.principal');
 Route::get('/Mantenimiento/Lengua/listar/', [LenguaController::class, 'ListarDTImportFuenteTodos'])->name('mantenimiento.lengua.listar');
 Route::get('/Mantenimiento/Lengua/ajax_edit/{id}', [LenguaController::class, 'ajax_edit']);
 Route::post('/Mantenimiento/Lengua/ajax_add/', [LenguaController::class, 'ajax_add']);
@@ -608,13 +608,13 @@ Route::get('/Man/INDICADORGENERAL/AjaxDelete/{id}', [IndicadorGeneralController:
 Route::get('/Man/INDICADORGENERAL/Exportar/{id}', [IndicadorGeneralController::class, 'exportarPDF'])->name('mantenimiento.indicadorgeneral.exportar.pdf');
 Route::get('/Man/INDICADORGENERAL/Buscar/{id}', [IndicadorGeneralController::class, 'buscar'])->middleware('auth')->name('mantenimiento.indicadorgeneral.buscar.1');
 
-Route::get('/Man/INDICADORGENERAL/Principal/E', [IndicadorGeneralController::class, 'principalEducacion'])->middleware('auth')->name('mantenimiento.indicadorgeneral.principal.educacion');
+Route::get('/educación/Mantenimiento/Indicadores', [IndicadorGeneralController::class, 'principalEducacion'])->middleware('auth')->name('mantenimiento.indicadorgeneral.principal.educacion');
 
 Route::get('/Man/INDICADORGENERALMETA/Listar', [IndicadorGeneralController::class, 'ListarDTMeta'])->name('mantenimiento.indicadorgeneralmeta.listar');
 Route::post('/Man/INDICADORGENERALMETA/AjaxAddMeta', [IndicadorGeneralController::class, 'ajax_add_meta'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.guardar');
 Route::get('/Man/INDICADORGENERALMETA/AjaxDelete/{id}', [IndicadorGeneralController::class, 'ajax_delete_meta'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.eliminar');
 
-Route::get('/PadronEIB/Principal', [PadronEIBController::class, 'principal'])->middleware('auth')->name('padroneib.principal');
+Route::get('/educación/Mantenimiento/PadronEIB', [PadronEIBController::class, 'principal'])->middleware('auth')->name('padroneib.principal');
 Route::post('/PadronEIB/ajax_add_opt1/', [PadronEIBController::class, 'ajax_add_opt1'])->name('padroneib.ajax.add.opt1');
 Route::get('/PadronEIB/ajax_delete_opt1/{idpadroneib}', [PadronEIBController::class, 'ajax_delete_opt1']);
 
@@ -631,7 +631,7 @@ Route::get('/PadronRER/Avance', [PadronRERController::class, 'avance'])->name('p
 Route::get('/PadronRER/Grafica1', [PadronRERController::class, 'grafica1'])->name('padronrer.avance.graficas1');
 Route::get('/PadronRER/Grafica2', [PadronRERController::class, 'grafica2'])->name('padronrer.avance.graficas2');
 
-Route::get('/Man/SFL/Principal', [SFLController::class, 'principal'])->middleware('auth')->name('mantenimiento.sfl.principal');
+Route::get('/educación/Mantenimiento/SFL', [SFLController::class, 'principal'])->middleware('auth')->name('mantenimiento.sfl.principal');
 Route::get('/Man/SFL/Listar/', [SFLController::class, 'ListarDT'])->name('mantenimiento.sfl.listar');
 Route::post('/Man/SFL/AjaxAdd', [SFLController::class, 'ajax_add'])->middleware('auth')->name('mantenimiento.sfl.guardar');
 Route::get('/Man/SFL/AjaxEdit/{id}', [SFLController::class, 'ajax_edit'])->middleware('auth')->name('mantenimiento.sfl.editar');
@@ -731,7 +731,7 @@ Route::post('/CentroPobladoDatass/Grafico_Asociados_organizacion_comunal/{id}', 
 /**************************************** FIN VIVIENDA ************************************************/
 
 /**************************************** ADMINISTRADOR ************************************************/
-Route::get('/Administrador/Sistema/Principal', [SistemaController::class, 'principal'])->middleware('auth')->name('sistema.principal');
+Route::get('/administrador/Sistema/Principal', [SistemaController::class, 'principal'])->middleware('auth')->name('sistema.principal');
 Route::get('/Sistema/listarDT', [SistemaController::class, 'listarDT'])->name('sistema.listarDT');
 Route::get('/Sistema/ajax_edit/{sistema_id}', [SistemaController::class, 'ajax_edit']);
 Route::post('/Sistema/ajax_add', [SistemaController::class, 'ajax_add']);
@@ -739,7 +739,7 @@ Route::post('/Sistema/ajax_update', [SistemaController::class, 'ajax_update']);
 Route::get('/Sistema/ajax_delete/{sistema_id}', [SistemaController::class, 'ajax_delete']);
 Route::get('/Sistema/ajax_estado/{sistema_id}', [SistemaController::class, 'ajax_estado']);
 
-Route::get('/Administrador/Menu/Principal', [MenuController::class, 'principal'])->middleware('auth')->name('menu.principal');
+Route::get('/administrador/Menu/Principal', [MenuController::class, 'principal'])->middleware('auth')->name('menu.principal');
 Route::get('/Menu/listarDT/{sistema_id}', [MenuController::class, 'listarDT'])->name('menu.listarDT');
 Route::get('/Menu/cargarGrupo/{sistema_id}', [MenuController::class, 'cargarGrupo']);
 Route::get('/Menu/ajax_edit/{menu_id}', [MenuController::class, 'ajax_edit']);
@@ -748,13 +748,13 @@ Route::post('/Menu/ajax_update', [MenuController::class, 'ajax_update']);
 Route::get('/Menu/ajax_delete/{menu_id}', [MenuController::class, 'ajax_delete']);
 Route::get('/Menu/ajax_estado/{menu_id}', [MenuController::class, 'ajax_estado']);
 
-Route::get('/Administrador/Menu/Principal/Link', [MenuController::class, 'principallink'])->middleware('auth')->name('menu.principal.link');
+Route::get('/administrador/Menu/Principal/Link', [MenuController::class, 'principallink'])->middleware('auth')->name('menu.principal.link');
 Route::get('/Menu/listarDTLink/{sistema_id}', [MenuController::class, 'listarDTLink'])->name('menu.listar.link');
 Route::post('/Menu/ajax_add_link', [MenuController::class, 'ajax_add_link']);
 Route::post('/Menu/ajax_update_link', [MenuController::class, 'ajax_update_link']);
 
 
-Route::get('/Administrador/Usuario/Principal', [UsuarioController::class, 'principal'])->middleware('auth')->name('Usuario.principal');
+Route::get('/administrador/Usuario/Principal', [UsuarioController::class, 'principal'])->middleware('auth')->name('Usuario.principal');
 Route::get('/Usuario/Usuario_DataTable/', [UsuarioController::class, 'Lista_DataTable'])->name('Usuario.Lista_DataTable');
 Route::get('/Usuario/Eliminar/{id}', [UsuarioController::class, 'eliminar'])->name('Usuario.Eliminar');
 
@@ -786,7 +786,7 @@ Route::get('/Icono/corregir', function () {
     }
 });
 
-Route::get('/Administrador/Perfil/Principal', [PerfilController::class, 'principal'])->middleware('auth')->name('perfil.principal');
+Route::get('/administrador/Perfil/Principal', [PerfilController::class, 'principal'])->middleware('auth')->name('perfil.principal');
 Route::get('/Perfil/listarDT/{sistema_id}', [PerfilController::class, 'listarDT'])->name('perfil.listarDT');
 Route::get('/Perfil/ajax_edit/{perfil_id}', [PerfilController::class, 'ajax_edit']);
 Route::post('/Perfil/ajax_add', [PerfilController::class, 'ajax_add']);
@@ -800,7 +800,7 @@ Route::post('/Perfil/ajax_add_menu', [PerfilController::class, 'ajax_add_menu'])
 Route::get('/Perfil/listarsistema/{perfil_id}/{sistema_id}', [PerfilController::class, 'listarsistema']);
 Route::post('/Perfil/ajax_add_sistema', [PerfilController::class, 'ajax_add_sistema']);
 
-Route::get('/Administrador/Entidad/Principal', [EntidadController::class, 'principal'])->middleware('auth')->name('entidad.principal');
+Route::get('/administrador/Entidad/Principal', [EntidadController::class, 'principal'])->middleware('auth')->name('entidad.principal');
 Route::get('/Entidad/listar', [EntidadController::class, 'ListarJSON'])->name('entidad.listar.json');
 Route::post('/Entidad/ajax_add_entidad/', [EntidadController::class, 'ajax_add_entidad'])->name('entidad.ajax.addentidad');
 Route::get('/Entidad/ajax_edit_entidad/{entidad}', [EntidadController::class, 'ajax_edit_entidad'])->name('entidad.ajax.edit');
@@ -812,7 +812,7 @@ Route::get('/Entidad/CargarEntidad/', [EntidadController::class, 'cargarEntidad'
 Route::get('/Entidad/CargarEntidad/AUTOCOMPLETE', [EntidadController::class, 'autocompletarEntidad'])->name('entidad.autocomplete');
 //Route::get('/PadronEIB/IIEE/autocompletar', [InstEducativaController::class, 'completariiee2'])->name('padroneib.completar.iiee');
 
-Route::get('/Administrador/Entidad/Gerencia', [EntidadController::class, 'gerencia'])->name('entidad.gerencia');
+Route::get('/administrador/Entidad/Gerencia', [EntidadController::class, 'gerencia'])->name('entidad.gerencia');
 Route::get('/Entidad/ajax_edit_gerencia/{gerencia_id}', [EntidadController::class, 'ajax_edit_gerencia'])->name('entidad.ajax.edit.gerencia');
 
 Route::get('/Importado/resumen', [ImportacionController::class, 'resumenimportados'])->name('importar.importados');
