@@ -193,6 +193,22 @@
                                                 <div class="form-group">
                                                     <div class="row">
                                                         <div class="col-md-6">
+                                                            <label>Numerador<span class="required">*</span></label>
+                                                            <textarea class="form-control" name="descripcion" id="descripcion" cols="30" rows="2"
+                                                                placeholder="Definición del indicador"></textarea>
+                                                            <span class="help-block"></span>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label>Denominador<span class="required">*</span></label>
+                                                            <textarea class="form-control" name="descripcion" id="descripcion" cols="30" rows="2"
+                                                                placeholder="Definición del indicador"></textarea>
+                                                            <span class="help-block"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
                                                             <label>Instrumento de gestion<span
                                                                     class="required">*</span></label>
                                                             <select id="instrumento" name="instrumento"
@@ -218,6 +234,11 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                            </div>
+                                            <div class="tab-pane p-3 border border-success-0" id="profile1"
+                                                role="tabpanel" aria-labelledby="profile1-tab">
+
                                                 <div class="form-group">
                                                     <div class="row">
                                                         <div class="col-md-6">
@@ -245,9 +266,6 @@
 
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="tab-pane p-3 border border-success-0" id="profile1"
-                                                role="tabpanel" aria-labelledby="profile1-tab">
 
                                                 <div class="form-group">
                                                     <div class="row">
@@ -344,7 +362,7 @@
                                                             </div>
                                                             {{--  --}}
                                                         </div>
-                                                        <div class="col-md-6">
+                                                        {{-- <div class="col-md-6">
                                                             <label for="fichatecnica">Ficha Tecnica</label><br>
                                                             <label for="fichatecnica" class="btn btn-primary">
                                                                 <i class="fas fa-cloud-upload-alt"></i> Cargar</label>
@@ -352,6 +370,22 @@
                                                                 class="form-control d-none" type="file"
                                                                 accept="application/pdf">
                                                             <span class="help-block"></span>
+                                                        </div> --}}
+
+                                                        <div class="col-md-6">
+                                                            <label>Ficha Tecnica</label>
+                                                            <div class="input-group">
+                                                                <input id="fichatecnica" name="fichatecnica"
+                                                                    class="form-control d-none" type="file" accept="application/pdf">
+                                                                <input id="fichatecnica_nombre" name="fichatecnica_nombre"
+                                                                    class="form-control" type="text" placeholder="Seleccione Archivo"
+                                                                    readonly>
+                                                                <span class="input-group-append">
+                                                                    <label for="fichatecnica"
+                                                                        class="btn btn-primary btn-file-documento">
+                                                                        <i class="fas fa-cloud-upload-alt"></i> </label>
+                                                                </span>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -742,6 +776,12 @@
                 select: function(event, ui) {
                     $('#oficina').val(ui.item.id);
                 }
+            });
+
+            $("#fichatecnica").on("change", function() {
+                var fileName = $(this).val().split("\\").pop();
+                $('#fichatecnica_nombre').val(fileName);
+
             });
 
             table_principal = $('#tbprincipal').DataTable({
