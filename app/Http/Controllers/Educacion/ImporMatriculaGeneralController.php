@@ -202,11 +202,10 @@ class ImporMatriculaGeneralController extends Controller
         }
 
         try {
-            $procesar = DB::select('call edu_pa_procesarImporMatriculaGeneral(?,?,?)', [$importacion->id, $matricula->id]);
+            $procesar = DB::select('call edu_pa_procesarImporMatriculaGeneral(?,?)', [$importacion->id, $matricula->id]);
         } catch (Exception $e) {
-            $importacion->estado = 'EL';
-            $importacion->save();
-
+            // $importacion->estado = 'EL';
+            // $importacion->save();
             $mensaje = "Error al procesar la normalizacion de datos." . $e;
             $tipo = 'danger';
             $this->json_output(400, $mensaje);
