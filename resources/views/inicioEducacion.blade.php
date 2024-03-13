@@ -191,7 +191,7 @@
                                 <h4 class="font-20 my-0 font-weight-bold">
                                     <span data-plugin="counterup" id="basico"></span>
                                 </h4>
-                                <p class="mb-0 mt-1 text-truncate">Matriculados-2023</p>
+                                <p class="mb-0 mt-1 text-truncate">Matriculados - {{$anio}}</p>
                             </div>
                         </div>
                     </div>
@@ -1319,6 +1319,7 @@
             $.ajax({
                 url: "{{ route('panelcontrol.educacion.head') }}",
                 data: {
+                    "anio": {{ $anio }},
                     "provincia": $('#provincia').val(),
                     "distrito": $('#distrito').val(),
                     "tipogestion": $('#tipogestion').val(),

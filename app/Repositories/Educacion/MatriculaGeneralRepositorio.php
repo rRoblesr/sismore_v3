@@ -177,9 +177,9 @@ class MatriculaGeneralRepositorio
             ->orderBy('fechaActualizacion', 'desc')->first();
         $query = MatriculaGeneralDetalle::select(
             DB::raw('count(matriculageneral_id) as basica'),
-            DB::raw('sum(IF(modalidad_id=1,1,0)) as ebr'),
-            DB::raw('sum(IF(modalidad_id=2,1,0)) as ebe'),
-            DB::raw('sum(IF(modalidad_id=3,1,0)) as eba'),
+            DB::raw('sum(IF(modalidad="EBR",1,0)) as ebr'),
+            DB::raw('sum(IF(modalidad="EBE",1,0)) as ebe'),
+            DB::raw('sum(IF(modalidad="EBA",1,0)) as eba'),
         );
         if ($provincia > 0 || $distrito > 0 || $gestion > 0)
             $query = $query->join('edu_institucioneducativa as ie', 'ie.id', '=', 'edu_matricula_general_detalle.institucioneducativa_id')
