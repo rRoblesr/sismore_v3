@@ -419,8 +419,24 @@ class IndicadorGeneralController extends Controller
         $data['inputerror'] = array();
         $data['status'] = TRUE;
 
-        if ($request->periodo == '') {
-            $data['inputerror'][] = 'periodo';
+        // if ($request->periodo == '') {
+        //     $data['inputerror'][] = 'periodo';
+        //     $data['error_string'][] = 'Este campo es obligatorio.';
+        //     $data['status'] = FALSE;
+        // }
+
+        if ($request->aniobase == '') {
+            $data['inputerror'][] = 'aniobase';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+        if ($request->valorbase == '') {
+            $data['inputerror'][] = 'valorbase';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+        if ($request->distrito == '') {
+            $data['inputerror'][] = 'distrito';
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
         }
@@ -448,7 +464,8 @@ class IndicadorGeneralController extends Controller
         $this->_validate_meta($request);
         IndicadorGeneralMeta::Create([
             'indicadorgeneral' => $request->indicadorgeneral,
-            'periodo' => $request->periodo,
+            'periodo' => '', //$request->periodo,
+            'distrito' => $request->distrito,
             'anio' => $request->anioesperado,
             'valor' => $request->valoresperado
         ]);
