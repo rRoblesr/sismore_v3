@@ -62,17 +62,17 @@
         }
 
         /* .tab-content {
-            border: 1px solid #dee2e6;
-            border-top: transparent;
-            padding: 15px;
-        }
+                                border: 1px solid #dee2e6;
+                                border-top: transparent;
+                                padding: 15px;
+                            }
 
-        .tab-content .tab-pane {
-            background-color: #FFF;
-            color: #0080FF;
-            min-height: 200px;
-            height: auto;
-        } */
+                            .tab-content .tab-pane {
+                                background-color: #FFF;
+                                color: #0080FF;
+                                min-height: 200px;
+                                height: auto;
+                            } */
 
         /*  */
     </style>
@@ -155,8 +155,8 @@
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link border border-success-0 border-bottom-0" id="profile1-tab"
-                                                    data-toggle="tab" href="#profile1" role="tab"
+                                                <a class="nav-link border border-success-0 border-bottom-0"
+                                                    id="profile1-tab" data-toggle="tab" href="#profile1" role="tab"
                                                     aria-controls="profile1" aria-selected="false">
                                                     <span class="d-block d-sm-none">
                                                         <i class="mdi mdi-account-outline font-18"></i>
@@ -194,13 +194,13 @@
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <label>Numerador<span class="required">*</span></label>
-                                                            <textarea class="form-control" name="descripcion" id="descripcion" cols="30" rows="2"
+                                                            <textarea class="form-control" name="numerador" id="numerador" cols="30" rows="2"
                                                                 placeholder="Definición del indicador"></textarea>
                                                             <span class="help-block"></span>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label>Denominador<span class="required">*</span></label>
-                                                            <textarea class="form-control" name="descripcion" id="descripcion" cols="30" rows="2"
+                                                            <textarea class="form-control" name="denominador" id="denominador" cols="30" rows="2"
                                                                 placeholder="Definición del indicador"></textarea>
                                                             <span class="help-block"></span>
                                                         </div>
@@ -291,7 +291,7 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                {{-- <div class="form-group">
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <label>Año base</label>
@@ -306,7 +306,7 @@
                                                             <span class="help-block"></span>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div> --}}
 
                                                 <div class="form-group">
                                                     <div class="row">
@@ -376,10 +376,11 @@
                                                             <label>Ficha Tecnica</label>
                                                             <div class="input-group">
                                                                 <input id="fichatecnica" name="fichatecnica"
-                                                                    class="form-control d-none" type="file" accept="application/pdf">
+                                                                    class="form-control d-none" type="file"
+                                                                    accept="application/pdf">
                                                                 <input id="fichatecnica_nombre" name="fichatecnica_nombre"
-                                                                    class="form-control" type="text" placeholder="Seleccione Archivo"
-                                                                    readonly>
+                                                                    class="form-control" type="text"
+                                                                    placeholder="Seleccione Archivo" readonly>
                                                                 <span class="input-group-append">
                                                                     <label for="fichatecnica"
                                                                         class="btn btn-primary btn-file-documento">
@@ -599,18 +600,44 @@
                         <div class="form-body">
                             <div class="form-group">
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
+                                        <label>Año base<span class="required">*</span></label>
+                                        <input id="aniobase" name="aniobase" class="form-control" type="number">
+                                        <span class="help-block"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Valor base<span class="required">*</span></label>
+                                        <input id="valorbase" name="valorbase" class="form-control" type="text">
+                                        <span class="help-block"></span>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Provincia<span class="required">*</span></label>
+                                        <input id="provincia" name="provincia" class="form-control" type="number">
+                                        <span class="help-block"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Distrito<span class="required">*</span></label>
+                                        <input id="distrito" name="distrito" class="form-control" type="text">
+                                        <span class="help-block"></span>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    {{-- <div class="col-md-4">
                                         <label>periodo<span class="required">*</span></label>
                                         <input id="periodo" name="periodo" class="form-control" type="text">
                                         <span class="help-block"></span>
-                                    </div>
-                                    <div class="col-md-4">
+                                    </div> --}}
+                                    <div class="col-md-6">
                                         <label>Año esperado<span class="required">*</span></label>
                                         <input id="anioesperado" name="anioesperado" class="form-control"
                                             type="number">
                                         <span class="help-block"></span>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <label>Valor esperado<span class="required">*</span></label>
                                         <input id="valoresperado" name="valoresperado" class="form-control"
                                             type="text">

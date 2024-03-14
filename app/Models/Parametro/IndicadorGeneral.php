@@ -20,6 +20,8 @@ class IndicadorGeneral extends Model
         'codigo',
         'nombre',
         'descripcion',
+        'numerador',
+        'denominador',
         'instrumento_id',
         'tipo_id',
         'dimension_id',

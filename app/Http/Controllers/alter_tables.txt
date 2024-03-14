@@ -1,0 +1,3 @@
+ALTER TABLE `par_indicador_general` ADD `numerador` INT NULL DEFAULT NULL AFTER `descripcion`;
+ALTER TABLE `par_indicador_general` ADD `denominador` INT NULL DEFAULT NULL AFTER `numerador`;
+ALTER TABLE `par_indicador_general_meta` ADD `distrito` INT NULL DEFAULT NULL AFTER `periodo`;

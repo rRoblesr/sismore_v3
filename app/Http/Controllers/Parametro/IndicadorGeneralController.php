@@ -109,8 +109,14 @@ class IndicadorGeneralController extends Controller
             $data['status'] = FALSE;
         }
 
-        if ($request->instrumento == '') {
-            $data['inputerror'][] = 'instrumento';
+        if ($request->numerador == '') {
+            $data['inputerror'][] = 'numerador';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+
+        if ($request->denominador == '') {
+            $data['inputerror'][] = 'denominador';
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
         }
@@ -145,17 +151,17 @@ class IndicadorGeneralController extends Controller
             $data['status'] = FALSE;
         }
 
-        if ($request->aniobase == '') {
-            $data['inputerror'][] = 'aniobase';
-            $data['error_string'][] = 'Este campo es obligatorio.';
-            $data['status'] = FALSE;
-        }
+        // if ($request->aniobase == '') {
+        //     $data['inputerror'][] = 'aniobase';
+        //     $data['error_string'][] = 'Este campo es obligatorio.';
+        //     $data['status'] = FALSE;
+        // }
 
-        if ($request->valorbase == '') {
-            $data['inputerror'][] = 'valorbase';
-            $data['error_string'][] = 'Este campo es obligatorio.';
-            $data['status'] = FALSE;
-        }
+        // if ($request->valorbase == '') {
+        //     $data['inputerror'][] = 'valorbase';
+        //     $data['error_string'][] = 'Este campo es obligatorio.';
+        //     $data['status'] = FALSE;
+        // }
 
         if ($request->sector == '') {
             $data['inputerror'][] = 'sector';
@@ -226,14 +232,16 @@ class IndicadorGeneralController extends Controller
             'codigo' => $codigo,
             'nombre' => $request->nombre,
             'descripcion' => $request->descripcion,
+            'numerador' => $request->numerador,
+            'denominador' => $request->denominador,
             'instrumento_id' => $request->instrumento,
             'tipo_id' => $request->tipo,
             'dimension_id' => $request->dimension,
             'unidad_id' => $request->unidad,
             'frecuencia_id' => $request->frecuencia,
             'fuente_dato' => $request->fuentedato,
-            'anio_base' => $request->aniobase,
-            'valor_base' => $request->valorbase,
+            'anio_base' => 0, //$request->aniobase,
+            'valor_base' => '', //$request->valorbase,
             'sector_id' => $request->sector,
             'oficina_id' => $request->oficina,
             'ficha_tecnica' => $fichatecnica,
@@ -324,14 +332,16 @@ class IndicadorGeneralController extends Controller
         $indicador = IndicadorGeneral::find($request->id);
         $indicador->nombre = $request->nombre;
         $indicador->descripcion = $request->descripcion;
+        $indicador->numerador = $request->numerador;
+        $indicador->denominador = $request->denominador;
         $indicador->instrumento_id = $request->instrumento;
         $indicador->tipo_id = $request->tipo;
         $indicador->dimension_id = $request->dimension;
         $indicador->unidad_id = $request->unidad;
         $indicador->frecuencia_id = $request->frecuencia;
         $indicador->fuente_dato = $request->fuentedato;
-        $indicador->anio_base = $request->aniobase;
-        $indicador->valor_base = $request->valorbase;
+        // $indicador->anio_base = $request->aniobase;
+        // $indicador->valor_base = $request->valorbase;
         $indicador->sector_id = $request->sector;
         $indicador->oficina_id = $request->oficina;
         if ($file)
