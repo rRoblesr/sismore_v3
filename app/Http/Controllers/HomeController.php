@@ -5,13 +5,18 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Educacion\ImporCensoDocenteController;
 use App\Http\Controllers\Educacion\ImporCensoMatriculaController;
 use App\Http\Controllers\Educacion\ImporMatriculaGeneralController;
+use App\Http\Controllers\Educacion\ImporPadronWebController;
 use App\Http\Controllers\Educacion\ImporServiciosBasicosController;
 use App\Http\Controllers\Presupuesto\ImporActividadesProyectosController;
 use App\Http\Controllers\Presupuesto\ImporProyectosController;
 use App\Http\Controllers\Presupuesto\ImporSiafWebController;
 use App\Models\Administracion\Sistema;
 use App\Models\Educacion\Area;
+use App\Models\Educacion\ImporPadronWeb;
 use App\Models\Educacion\Importacion;
+use App\Models\Educacion\MatriculaGeneral;
+use App\Models\Educacion\MatriculaGeneralDetalle;
+use App\Models\Educacion\PadronWeb;
 use App\Models\Parametro\Anio;
 use App\Models\Presupuesto\BaseActividadesProyectos;
 use App\Models\Presupuesto\BaseProyectos;
@@ -676,7 +681,22 @@ class HomeController extends Controller
         $valor3 = number_format($valor3, 0);
         $valor4 = number_format($valor4, 0);
 
-        return response()->json(compact('valor1', 'valor2', 'valor3', 'valor4', 'ind1', 'ind2', 'ind3', 'ind4'));
+        $imppw = ImportacionRepositorio::aniosMax_porfuente(ImporPadronWebController::$FUENTE);
+        $servicio = PadronWeb::where('importacion_id', $imppw->id)->distinct()->select('institucioneducativa_id')->get()->count();
+        $servicio = number_format($servicio, 0);
+        $local = PadronWeb::where('importacion_id', $imppw->id)
+            ->join('edu_institucioneducativa as iiee', 'iiee.id', '=', 'edu_padronweb.institucioneducativa_id')
+            ->distinct()->select('iiee.codlocal')->get()->count();
+        $local = number_format($local, 0);
+        $impmg = ImportacionRepositorio::aniosMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
+        $mg = MatriculaGeneral::where('importacion_id', $impmg->id)->first();
+        $alumno = MatriculaGeneralDetalle::where('matriculageneral_id', $mg->id)->count();
+        $alumno = number_format($alumno, 0);
+        $impcd = Importacion::select('id', DB::raw('year(fechaActualizacion) as anio'))->where('fuenteimportacion_id', ImporCensoDocenteController::$FUENTE)->where( DB::raw('year(fechaActualizacion)'), $rq->anio)->orderBy('anio', 'asc')->get()->first();
+        $base = ImporCensoDocenteRepositorio::PersonaDocente('head', $impcd->id, $rq->provincia, $rq->distrito, $rq->tipogestion, 0);
+        $docente = (int)$base->docentes;
+        $docente = number_format($docente, 0);
+        return response()->json(compact('valor1', 'valor2', 'valor3', 'valor4', 'ind1', 'ind2', 'ind3', 'ind4', 'servicio', 'local', 'alumno', 'docente'));
     }
 
     public function panelControlEduacionGraficas(Request $rq)

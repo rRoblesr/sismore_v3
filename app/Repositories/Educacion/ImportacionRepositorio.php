@@ -346,7 +346,7 @@ class ImportacionRepositorio
     {
         $query = Importacion::select('id', DB::raw('year(fechaActualizacion) as anio'))
             ->where('fuenteimportacion_id', $fuente)->where('estado', 'PR')
-            ->orderBy('anio')->first();
+            ->orderBy('anio','desc')->first();
         return  $query;
     }
 

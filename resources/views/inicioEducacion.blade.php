@@ -167,9 +167,9 @@
                         <div class="media-body align-self-center">
                             <div class="text-right">
                                 <h4 class="font-20 my-0 font-weight-bold">
-                                    <span data-plugin="counterup"></span>
+                                    <span data-plugin="counterup" id="docente"></span>
                                 </h4>
-                                <p class="mb-0 mt-1 text-truncate" id="docente">Docentes</p>
+                                <p class="mb-0 mt-1 text-truncate">Docentes</p>
                             </div>
                         </div>
                     </div>
@@ -191,7 +191,7 @@
                                 <h4 class="font-20 my-0 font-weight-bold">
                                     <span data-plugin="counterup" id="basico"></span>
                                 </h4>
-                                <p class="mb-0 mt-1 text-truncate">Matriculados - {{$anio}}</p>
+                                <p class="mb-0 mt-1 text-truncate">Matriculados - {{ $anio }}</p>
                             </div>
                         </div>
                     </div>
@@ -300,107 +300,6 @@
                 </div>
             </div>
         </div>
-
-        <!--Widget-4 -->
-        <div class="row d-none">
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="card-box border border-plomo-0">
-                    <div class="media">
-                        <div class="text-center">
-                            {{-- <i class="ion ion-logo-usd avatar-title font-26 text-white"></i> --}}
-                            <img src="{{ asset('/') }}public/img/icon/servicios.png" alt=""
-                                class="" width="70%" height="70%">
-                        </div>
-                        {{-- <div class="avatar-md bg-success rounded-circle mr-2">
-                                <i class=" ion-md-home avatar-title font-26 text-white"></i>
-                            </div> --}}
-                        <div class="media-body align-self-center">
-                            <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold">
-                                    <span data-plugin="counterup" id="servicios"></span>
-                                </h4>
-                                <p class="mb-0 mt-1 text-truncate">Servicios Educativos</p>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <!-- end card-box-->
-            </div>
-
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="card-box border border-plomo-0">
-                    <div class="media">
-                        <div class="text-center">
-                            {{-- <i class="ion ion-logo-usd avatar-title font-26 text-white"></i> --}}
-                            <img src="{{ asset('/') }}public/img/icon/locales.png" alt="" class=""
-                                width="70%" height="70%">
-                        </div>
-                        {{-- <div class="avatar-md bg-info rounded-circle mr-2">
-                                <i class=" ion ion-md-person avatar-title font-26 text-white"></i>
-                            </div> --}}
-                        <div class="media-body align-self-center">
-                            <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold">
-                                    <span data-plugin="counterup" id="locales"></span>
-                                </h4>
-                                <p class="mb-0 mt-1 text-truncate">Locales Educativos </p>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <!-- end card-box-->
-            </div>
-
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="card-box border border-plomo-0">
-                    <div class="media">
-                        <div class="text-center">
-                            {{-- <i class="ion ion-logo-usd avatar-title font-26 text-white"></i> --}}
-                            <img src="{{ asset('/') }}public/img/icon/matriculas.png" alt=""
-                                class="" width="70%" height="70%">
-                        </div>
-                        {{-- <div class="avatar-md bg-info rounded-circle mr-2">
-                                <i class=" ion ion-md-person avatar-title font-26 text-white"></i>
-                            </div> --}}
-                        <div class="media-body align-self-center">
-                            <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold">
-                                    <span data-plugin="counterup" id="matriculados"></span>
-                                </h4>
-                                <p class="mb-0 mt-1 text-truncate">Estudiantes</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- end card-box-->
-            </div>
-
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="card-box border border-plomo-0">
-                    <div class="media">
-                        <div class="text-center">
-                            {{-- <i class="ion ion-logo-usd avatar-title font-26 text-white"></i> --}}
-                            <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
-                                width="70%" height="70%">
-                        </div>
-                        {{-- <div class="avatar-md bg-info rounded-circle mr-2">
-                                <i class=" ion ion-md-person avatar-title font-26 text-white"></i>
-                            </div> --}}
-                        <div class="media-body align-self-center">
-                            <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold">
-                                    <span data-plugin="counterup" id="docentes"></span>
-                                </h4>
-                                <p class="mb-0 mt-1 text-truncate">Docentes</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
 
         <div class="row">
             <div class="col-lg-6">
@@ -1353,6 +1252,11 @@
                             'bg-success-0 bg-orange-0 bg-warning-0')
                         .addClass(data.ind4 > 84 ? 'bg-success-0' : (data.ind4 > 49 ? 'bg-warning-0' :
                             'bg-orange-0'));
+
+                    $('#servicio').text(data.servicio);
+                    $('#local').text(data.local);
+                    $('#alumno').text(data.alumno);
+                    $('#docente').text(data.docente);
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");
