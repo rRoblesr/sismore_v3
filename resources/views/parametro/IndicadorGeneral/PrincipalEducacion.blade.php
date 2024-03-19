@@ -62,17 +62,17 @@
         }
 
         /* .tab-content {
-                                border: 1px solid #dee2e6;
-                                border-top: transparent;
-                                padding: 15px;
-                            }
+                                                        border: 1px solid #dee2e6;
+                                                        border-top: transparent;
+                                                        padding: 15px;
+                                                    }
 
-                            .tab-content .tab-pane {
-                                background-color: #FFF;
-                                color: #0080FF;
-                                min-height: 200px;
-                                height: auto;
-                            } */
+                                                    .tab-content .tab-pane {
+                                                        background-color: #FFF;
+                                                        color: #0080FF;
+                                                        min-height: 200px;
+                                                        height: auto;
+                                                    } */
 
         /*  */
     </style>
@@ -615,12 +615,18 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label>Provincia<span class="required">*</span></label>
-                                        <input id="provincia" name="provincia" class="form-control" type="number">
+                                        <select name="provincia" id="provincia" class="form-control"
+                                            onchange="cargarDistritos(0)">
+                                            <option value="0">SELECCIONAR</option>
+
+                                        </select>
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
                                         <label>Distrito<span class="required">*</span></label>
-                                        <input id="distrito" name="distrito" class="form-control" type="text">
+                                        <select name="distrito" id="distrito" class="form-control">
+                                            <option value="0">SELECCIONAR</option>
+                                        </select>
                                         <span class="help-block"></span>
                                     </div>
                                 </div>
@@ -825,6 +831,46 @@
             });
 
         });
+
+        function cargarProvincia(id) {
+            $.ajax({
+                url: "{{ route('ubigeo.provincia.25') }}",
+                type: 'GET',
+                success: function(data) {
+                    $("#provincia option").remove();
+                    var options = '<option value="0">SELECCIONAR</option>';
+                    $.each(data, function(index, value) {
+                        ss = (id == value.id ? "selected" : "");
+                        options += "<option value='" + value.id + "' " + ss + ">" + value.nombre +
+                            "</option>"
+                    });
+                    $("#provincia").append(options);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cargarDistritos(id) {
+            $.ajax({
+                url: "{{ route('ubigeo.distrito.25', '') }}/" + $('#provincia').val(),
+                type: 'GET',
+                success: function(data) {
+                    $("#distrito option").remove();
+                    var options = '<option value="0">DISTRITO</option>';
+                    $.each(data, function(index, value) {
+                        ss = (id == value.id ? "selected" : "");
+                        options += "<option value='" + value.id + "' " + ss + ">" + value.nombre +
+                            "</option>"
+                    });
+                    $("#distrito").append(options);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
 
         function add() {
             save_method = 'add';
@@ -1032,10 +1078,11 @@
                 },
                 destroy: true,
             });
+            cargarProvincia(0);
         };
 
         function savemeta() {
-            $('#btnSaveMeta').text('guardando...');
+            $('#btnSaveMeta').text('Guardando...');
             $('#btnSaveMeta').attr('disabled', true);
             $.ajax({
                 url: "{{ route('mantenimiento.indicadorgeneralmeta.guardar') }}",

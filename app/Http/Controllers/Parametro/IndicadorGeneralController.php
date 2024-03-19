@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Administracion\Entidad;
 use App\Models\Parametro\IndicadorGeneral;
 use App\Models\Parametro\IndicadorGeneralMeta;
+use App\Models\Parametro\Ubigeo;
 use App\Models\Presupuesto\Sector;
 use App\Repositories\Parametro\IndicadorGeneralRepositorio;
 use Illuminate\Http\Request;
@@ -36,6 +37,8 @@ class IndicadorGeneralController extends Controller
         $unidad = IndicadorGeneralRepositorio::unidad();
         $frecuencia = IndicadorGeneralRepositorio::frecuencia();
         $sector = Sector::all();
+        //$provincia=Ubigeo::where(DB::raw('length(codigo)'),4)->where('dependencia',34)->get();
+        // $provincia = Ubigeo::join('par_ubigeo as p', 'p.dependencia', '=', 'par_ubigeo.id')->select('p.id', 'p.codigo', 'p.nombre')->where('par_ubigeo.codigo', '25')->get();
 
         return view('parametro.IndicadorGeneral.PrincipalEducacion', compact('instrumento', 'tipo', 'dimension', 'unidad', 'frecuencia', 'sector'));
     }
@@ -435,7 +438,7 @@ class IndicadorGeneralController extends Controller
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
         }
-        if ($request->distrito == '') {
+        if ($request->distrito == '0') {
             $data['inputerror'][] = 'distrito';
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;

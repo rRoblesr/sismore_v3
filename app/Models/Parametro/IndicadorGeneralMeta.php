@@ -19,6 +19,7 @@ class IndicadorGeneralMeta extends Model
     protected $fillable = [
         'indicadorgeneral',
         'periodo',
+        'distrito',
         'anio',
         'valor'
     ];

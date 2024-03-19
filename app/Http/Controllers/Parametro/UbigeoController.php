@@ -14,12 +14,12 @@ class UbigeoController extends Controller
 
     public function cargarprovincia25()
     {
-        $provincias = UbigeoRepositorio::provincia25();
+        $provincias = UbigeoRepositorio::provincia('25');
         return response()->json($provincias);
     }
     public function cargardistrito25($provincia)
     {
-        $distritos = UbigeoRepositorio::distrito25($provincia);
+        $distritos = UbigeoRepositorio::distrito('25', $provincia);
         return response()->json($distritos);
     }
 }
