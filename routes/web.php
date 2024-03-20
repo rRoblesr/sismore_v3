@@ -610,11 +610,13 @@ Route::get('/Man/INDICADORGENERAL/AjaxDelete/{id}', [IndicadorGeneralController:
 Route::get('/Man/INDICADORGENERAL/Exportar/{id}', [IndicadorGeneralController::class, 'exportarPDF'])->name('mantenimiento.indicadorgeneral.exportar.pdf');
 Route::get('/Man/INDICADORGENERAL/Buscar/{id}', [IndicadorGeneralController::class, 'buscar'])->middleware('auth')->name('mantenimiento.indicadorgeneral.buscar.1');
 
-Route::get('/educación/Mantenimiento/Indicadores', [IndicadorGeneralController::class, 'principalEducacion'])->middleware('auth')->name('mantenimiento.indicadorgeneral.principal.educacion');
+Route::get('/Mantenimiento/Indicador', [IndicadorGeneralController::class, 'principalEducacion'])->middleware('auth')->name('mantenimiento.indicadorgeneral.principal.educacion');
 
-Route::get('/Man/INDICADORGENERALMETA/Listar', [IndicadorGeneralController::class, 'ListarDTMeta'])->name('mantenimiento.indicadorgeneralmeta.listar');
-Route::post('/Man/INDICADORGENERALMETA/AjaxAddMeta', [IndicadorGeneralController::class, 'ajax_add_meta'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.guardar');
-Route::get('/Man/INDICADORGENERALMETA/AjaxDelete/{id}', [IndicadorGeneralController::class, 'ajax_delete_meta'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.eliminar');
+Route::get('/Mantenimiento/Indicador/Listar', [IndicadorGeneralController::class, 'ListarDTMeta'])->name('mantenimiento.indicadorgeneralmeta.listar');
+Route::get('/Mantenimiento/Indicador/Listar/DIT', [IndicadorGeneralController::class, 'ListarDTMeta_dit'])->name('mantenimiento.indicadorgeneralmeta.listar.dit');
+Route::post('/Mantenimiento/Indicador/Add', [IndicadorGeneralController::class, 'ajax_add_meta'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.guardar');
+Route::post('/Mantenimiento/Indicador/Add/DIT', [IndicadorGeneralController::class, 'ajax_add_meta_dit'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.guardar.dit');
+Route::get('/Mantenimiento/Indicador/Delete/{id}', [IndicadorGeneralController::class, 'ajax_delete_meta'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.eliminar');
 
 Route::get('/educación/Mantenimiento/PadronEIB', [PadronEIBController::class, 'principal'])->middleware('auth')->name('padroneib.principal');
 Route::post('/PadronEIB/ajax_add_opt1/', [PadronEIBController::class, 'ajax_add_opt1'])->name('padroneib.ajax.add.opt1');

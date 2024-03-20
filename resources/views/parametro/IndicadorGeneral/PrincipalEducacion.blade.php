@@ -679,6 +679,99 @@
     </div>
     <!-- End Bootstrap modal -->
 
+    <!-- Bootstrap modal -->
+    <div id="modal_meta_dit" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pb-0">
+                    <form action="" id="form_meta_dit" name="formver" class="form-horizontal" autocomplete="off">
+                        @csrf
+                        <input type="hidden" id="idmeta_dit" name="idmeta_dit" value="">
+                        <input type="hidden" id="indicadorgeneral_dit" name="indicadorgeneral_dit" value="">
+                        <div class="form-body">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Año base<span class="required">*</span></label>
+                                        <input id="aniobase_dit" name="aniobase_dit" class="form-control" type="number">
+                                        <span class="help-block"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Valor base<span class="required">*</span></label>
+                                        <input id="valorbase_dit" name="valorbase_dit" class="form-control" type="text">
+                                        <span class="help-block"></span>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Provincia<span class="required">*</span></label>
+                                        <select name="provincia_dit" id="provincia_dit" class="form-control"
+                                            onchange="cargarDistritos(0)">
+                                            <option value="0">SELECCIONAR</option>
+
+                                        </select>
+                                        <span class="help-block"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Distrito<span class="required">*</span></label>
+                                        <select name="distrito_dit" id="distrito_dit" class="form-control">
+                                            <option value="0">SELECCIONAR</option>
+                                        </select>
+                                        <span class="help-block"></span>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Año esperado<span class="required">*</span></label>
+                                        <input id="anioesperado_dit" name="anioesperado_dit" class="form-control"
+                                            type="number">
+                                        <span class="help-block"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Valor esperado<span class="required">*</span></label>
+                                        <input id="valoresperado_dit" name="valoresperado_dit" class="form-control"
+                                            type="text">
+                                        <span class="help-block"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-body pt-0" style="text-align:center">
+                    <button type="button" class="btn btn-xs btn-primary" id="btnSaveMeta_dit" onclick="savemeta_dit()"><i
+                            class="fa fa-plus"></i> Agregar</button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table id="tbmeta_dit" class="table table-striped table-bordered tablex" style="font-size: 12px">
+                            <thead class="cabecera-dataTable">
+                                <tr class="text-white bg-success-0">
+                                    <th>Nº</th>
+                                    <th>Periodo</th>
+                                    <th>Año</th>
+                                    <th>Valor</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Bootstrap modal -->
+
     <div id="modal_form_entidad" class="modal fade centrarmodal" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -1078,6 +1171,30 @@
                 },
                 destroy: true,
             });
+        };
+
+        function metas(id) {
+            $('#form_meta_dit')[0].reset();
+            $('.form-group').removeClass('has-error');
+            $('.help-block').empty();
+            $('#modal_meta_dit').modal('show');
+            $('.modal-title').text('Agregar Metas');
+            $('#indicadorgeneral_dit').val(id);
+            table_meta = $('#tbmeta_dit').DataTable({
+                responsive: true,
+                autoWidth: false,
+                ordered: false,
+                language: table_language,
+                ajax: {
+                    "url": "{{ route('mantenimiento.indicadorgeneralmeta.listar') }}",
+                    "data": {
+                        "indicadorgeneral": id
+                    },
+                    "type": "GET",
+                    //"dataType": 'JSON',
+                },
+                destroy: true,
+            });
             cargarProvincia(0);
         };
 
@@ -1109,6 +1226,38 @@
                     toastr.error(msgerror, 'Mensaje');
                     $('#btnSaveMeta').text('Guardar');
                     $('#btnSaveMeta').attr('disabled', false);
+                }
+            });
+        };
+
+        function savemeta_dit() {
+            $('#btnSaveMeta_dit').text('Guardando...');
+            $('#btnSaveMeta_dit').attr('disabled', true);
+            $.ajax({
+                url: "{{ route('mantenimiento.indicadorgeneralmeta.guardar') }}",
+                type: "POST",
+                data: $('#form_meta_dit').serialize(),
+                dataType: "JSON",
+                success: function(data) {
+                    console.log(data)
+                    if (data.status) {
+                        //$('#modal_meta').modal('hide');
+                        table_meta.ajax.reload(null, false);
+                        $('#form_meta_dit')[0].reset();
+                        //toastr.success(msgsuccess, 'Mensaje');
+                    } else {
+                        for (var i = 0; i < data.inputerror.length; i++) {
+                            $('[name="' + data.inputerror[i] + '"]').parent().addClass('has-error');
+                            $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]);
+                        }
+                    }
+                    $('#btnSaveMeta_dit').text('Guardar');
+                    $('#btnSaveMeta_dit').attr('disabled', false);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    toastr.error(msgerror, 'Mensaje');
+                    $('#btnSaveMeta_dit').text('Guardar');
+                    $('#btnSaveMeta_dit').attr('disabled', false);
                 }
             });
         };

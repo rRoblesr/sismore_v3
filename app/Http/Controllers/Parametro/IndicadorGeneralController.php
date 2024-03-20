@@ -465,14 +465,18 @@ class IndicadorGeneralController extends Controller
     public function ajax_add_meta(Request $request)
     {
         $this->_validate_meta($request);
-        IndicadorGeneralMeta::Create([
+        $ind = IndicadorGeneral::find($request->indicadorgeneral);
+        $ind->anio_base = $request->aniobase;
+        $ind->valor_base = $request->valorbase;
+
+        $meta = IndicadorGeneralMeta::Create([
             'indicadorgeneral' => $request->indicadorgeneral,
             'periodo' => '', //$request->periodo,
             'distrito' => $request->distrito,
             'anio' => $request->anioesperado,
             'valor' => $request->valoresperado
         ]);
-        return response()->json(array('status' => true));
+        return response()->json(['status' => true, 'ind' => $ind, 'meta' => $meta]);
     }
 
     public function ajax_delete_meta($id) //elimina deverdad *o*
@@ -480,5 +484,102 @@ class IndicadorGeneralController extends Controller
         $rer = IndicadorGeneralMeta::find($id);
         $rer->delete();
         return response()->json(array('status' => true));
+    }
+
+    public function ListarDTMeta_dit(Request $rq)
+    {
+        $draw = intval($rq->draw);
+        $start = intval($rq->start);
+        $length = intval($rq->length);
+
+        $ig = IndicadorGeneral::select('id', 'unidad_id')->where('id', $rq->indicadorgeneral)->first();
+        $query = IndicadorGeneralMeta::where('indicadorgeneral', $rq->indicadorgeneral)->orderBy('id', 'desc')->get();
+        $data = [];
+        foreach ($query as $key => $value) {
+            $dis = Ubigeo::find($value->distrito);
+            $pro = Ubigeo::find($dis->dependencia);
+
+            $btn3 = '&nbsp;<a href="#" class="btn btn-danger btn-xs" onclick="borrarmeta(' . $value->id . ')"  title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
+
+            $data[] = array(
+                $key + 1,
+                '<div style="text-align:center">' . $pro->nombre . '</div>',
+                '<div style="text-align:center">' . $dis->nombre . '</div>',
+                '<div style="text-align:center">' . $value->anio . '</div>',
+                '<div style="text-align:center">' . $value->valor . ($ig->unidad_id == 1 ? '%' : '') . '</div>',
+                "<center>" . $btn3 . "</center>",
+            );
+        }
+        $result = array(
+            "draw" => $draw,
+            "recordsTotal" => $start,
+            "recordsFiltered" => $length,
+            "data" => $data,
+        );
+        return response()->json($result);
+    }
+
+    private function _validate_meta_dit($request)
+    {
+        $data = array();
+        $data['error_string'] = array();
+        $data['inputerror'] = array();
+        $data['status'] = TRUE;
+
+        // if ($request->periodo == '') {
+        //     $data['inputerror'][] = 'periodo';
+        //     $data['error_string'][] = 'Este campo es obligatorio.';
+        //     $data['status'] = FALSE;
+        // }
+
+        if ($request->aniobase_dit == '') {
+            $data['inputerror'][] = 'aniobase_dit';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+        if ($request->valorbase_dit == '') {
+            $data['inputerror'][] = 'valorbase_dit';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+        if ($request->distrito_dit == '0') {
+            $data['inputerror'][] = 'distrito_dit';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+
+        if ($request->anioesperado_dit == '') {
+            $data['inputerror'][] = 'anioesperado_dit';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+
+        if ($request->valoresperado_dit == '') {
+            $data['inputerror'][] = 'valoresperado_dit';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+
+        if ($data['status'] === FALSE) {
+            echo json_encode($data);
+            exit();
+        }
+    }
+
+    public function ajax_add_meta_dit(Request $request)
+    {
+        $this->_validate_meta_dit($request);
+        $ind = IndicadorGeneral::find($request->indicadorgeneral_dit);
+        $ind->anio_base = $request->aniobase_dit;
+        $ind->valor_base = $request->valorbase_dit;
+
+        $meta = IndicadorGeneralMeta::Create([
+            'indicadorgeneral' => $request->indicadorgeneral_dit,
+            'periodo' => '', //$request->periodo,
+            'distrito' => $request->distrito_dit,
+            'anio' => $request->anioesperado_dit,
+            'valor' => $request->valoresperado_dit
+        ]);
+        return response()->json(['status' => true, 'ind' => $ind, 'meta' => $meta]);
     }
 }
