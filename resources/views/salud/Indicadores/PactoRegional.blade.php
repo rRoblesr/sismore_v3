@@ -67,47 +67,50 @@
         <div class="row pricing-plan">
             <div class="col-md-12">
                 <div class="row">
-                    <div class="col-md-6 col-xl-3">
-                        <div class="card text-center">
-                            <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                <h5 class="text-white font-14 font-weight-normal"><i class="mdi mdi-shield-cross" style="font-size: 20px"></i> Indicador 1</h5>
-                                {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
-                                {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
-                            </div>
-                            <div class="p-4">
-                                <ul class="list-unstyled mb-0">
-                                    <li class=""><i class="mdi mdi-finance font-44 text-green-0"></i></li>
-                                    <li class="mt-1 pt-0 font-16">Avance</li>
-                                    <li class="mt-1 pt-0 font-40 font-weight-bold">98.8 %</li>
-                                    <li class="mt-1 pt-0 font-12">Actualizado: 20/02/2024</li>
-                                    <li class="mt-1 pt-0 font-20 font-weight-bold">Meta: 71%</li>
-                                    <li class="mt-1 pt-0"><span class="badge badge-success" style="font-size: 100%">
-                                            <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
-                                    </li>
-                                    <li class="mt-1 pt-1">
-                                        <p>N° DE ACTA DE HOMLOGACION REGISTRADAS OPORTUNAMENTE QUE EVIDENCIAN LA
-                                            ACTUALIZACION DE LA
-                                            INFORMACION EN LAS NIÑAS (OS) MEDIANTE EL TRABAJO ARTICULADO EN EL TERRITORIO
-                                        </p>
-                                    </li>
-
-                                </ul>
-                                <div class="mt-4 pt-3">
-                                    {{-- <button class="btn btn-primary width-md waves-effect waves-light">Sign Up</button> --}}
-                                    <button type="button"
-                                        class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
-                                        detalle</button>
+                    @foreach ($inds as $key => $item)
+                        <div class="col-md-6 col-xl-3">
+                            <div class="card text-center">
+                                <div class="pricing-header bg-success-0 p-0 rounded-top">
+                                    <h5 class="text-white font-14 font-weight-normal"><i class="mdi mdi-shield-cross"
+                                            style="font-size: 20px"></i> Indicador {{ $key + 1 }}</h5>
+                                    {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
+                                    {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
                                 </div>
+                                <div class="p-4">
+                                    <ul class="list-unstyled mt-0">
+                                        <li class="mt-0 pt-0"><i class="mdi mdi-finance font-44 text-green-0"></i></li>
+                                        <li class="mt-0 pt-0 font-16">Avance</li>
+                                        <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 %</li>
+                                        <li class="mt-0 pt-0 font-12">Actualizado: 20/02/2024ss</li>
+                                        <li class="mt-0 pt-0 font-20 font-weight-bold">Meta: 71%</li>
+                                        <li class="mt-0 pt-0">
+                                            <span class="badge badge-success" style="font-size: 100%">
+                                                <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
+                                        </li>
+                                        <li class="mt-1 pt-1">
+                                            <p>{{ $item->nombre }}</p>
+                                        </li>
 
+                                    </ul>
+                                    <div class="mt-4 pt-3">
+                                        {{-- <button class="btn btn-primary width-md waves-effect waves-light">Sign Up</button> --}}
+                                        <button type="button"
+                                            class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
+                                            detalle</button>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- end col -->
+                        <!-- end col -->
+                    @endforeach
+
 
                     <div class="col-md-6 col-xl-3">
                         <div class="card text-center">
                             <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                <h5 class="text-white font-14 font-weight-normal"><i class="mdi mdi-shield-cross" style="font-size: 20px"></i> Indicador 2</h5>
+                                <h5 class="text-white font-14 font-weight-normal"><i class="mdi mdi-shield-cross"
+                                        style="font-size: 20px"></i> Indicador 2</h5>
                                 {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                 {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
                             </div>
@@ -143,7 +146,8 @@
                     <div class="col-md-6 col-xl-3">
                         <div class="card text-center">
                             <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                <h5 class="text-white font-14 font-weight-normal"><i class="mdi mdi-shield-cross" style="font-size: 20px"></i> Indicador 3</h5>
+                                <h5 class="text-white font-14 font-weight-normal"><i class="mdi mdi-shield-cross"
+                                        style="font-size: 20px"></i> Indicador 3</h5>
                                 {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                 {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
                             </div>
@@ -177,7 +181,8 @@
                     <div class="col-md-6 col-xl-3">
                         <div class="card text-center">
                             <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                <h5 class="text-white font-14 font-weight-normal"><i class="mdi mdi-shield-cross" style="font-size: 20px"></i> Indicador 4</h5>
+                                <h5 class="text-white font-14 font-weight-normal"><i class="mdi mdi-shield-cross"
+                                        style="font-size: 20px"></i> Indicador 4</h5>
                                 {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                 {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
                             </div>
@@ -212,7 +217,8 @@
                     <div class="col-md-6 col-xl-3">
                         <div class="card text-center">
                             <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                <h5 class="text-white font-14 font-weight-normal"><i class="mdi mdi-shield-cross" style="font-size: 20px"></i> Indicador 5</h5>
+                                <h5 class="text-white font-14 font-weight-normal"><i class="mdi mdi-shield-cross"
+                                        style="font-size: 20px"></i> Indicador 5</h5>
                                 {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                 {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
                             </div>
