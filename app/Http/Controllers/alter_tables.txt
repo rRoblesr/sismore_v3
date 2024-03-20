@@ -2,6 +2,8 @@ ALTER TABLE `par_indicador_general` ADD `numerador` INT NULL DEFAULT NULL AFTER 
 ALTER TABLE `par_indicador_general` ADD `denominador` INT NULL DEFAULT NULL AFTER `numerador`;
 ALTER TABLE `par_indicador_general_meta` ADD `distrito` INT NULL DEFAULT NULL AFTER `periodo`;
 
+ALTER TABLE `par_indicador_general_meta` ADD `anio_base` INT(4) NOT NULL AFTER `distrito`, ADD `valor_base` VARCHAR(15)  NOT NULL AFTER `anio_base`;
+
 # inicio procedimiento almacenado
 CREATE DEFINER=`root`@`localhost` PROCEDURE `datay`.`edu_pa_procesarImporMatriculaGeneral`(v_importacion_id INT, v_matriculageneral_id INT)
 BEGIN

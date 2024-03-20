@@ -62,17 +62,17 @@
         }
 
         /* .tab-content {
-                                                        border: 1px solid #dee2e6;
-                                                        border-top: transparent;
-                                                        padding: 15px;
-                                                    }
+                                                                                                                border: 1px solid #dee2e6;
+                                                                                                                border-top: transparent;
+                                                                                                                padding: 15px;
+                                                                                                            }
 
-                                                    .tab-content .tab-pane {
-                                                        background-color: #FFF;
-                                                        color: #0080FF;
-                                                        min-height: 200px;
-                                                        height: auto;
-                                                    } */
+                                                                                                            .tab-content .tab-pane {
+                                                                                                                background-color: #FFF;
+                                                                                                                color: #0080FF;
+                                                                                                                min-height: 200px;
+                                                                                                                height: auto;
+                                                                                                            } */
 
         /*  */
     </style>
@@ -616,7 +616,7 @@
                                     <div class="col-md-6">
                                         <label>Provincia<span class="required">*</span></label>
                                         <select name="provincia" id="provincia" class="form-control"
-                                            onchange="cargarDistritos(0)">
+                                            onchange="cargarDistritos('',0)">
                                             <option value="0">SELECCIONAR</option>
 
                                         </select>
@@ -691,30 +691,18 @@
                     </button>
                 </div>
                 <div class="modal-body pb-0">
-                    <form action="" id="form_meta_dit" name="formver" class="form-horizontal" autocomplete="off">
+                    <form action="" id="form_meta_dit" name="form_meta_dit" class="form-horizontal" autocomplete="off">
                         @csrf
                         <input type="hidden" id="idmeta_dit" name="idmeta_dit" value="">
                         <input type="hidden" id="indicadorgeneral_dit" name="indicadorgeneral_dit" value="">
                         <div class="form-body">
                             <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label>Año base<span class="required">*</span></label>
-                                        <input id="aniobase_dit" name="aniobase_dit" class="form-control" type="number">
-                                        <span class="help-block"></span>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Valor base<span class="required">*</span></label>
-                                        <input id="valorbase_dit" name="valorbase_dit" class="form-control" type="text">
-                                        <span class="help-block"></span>
-                                    </div>
-                                </div>
 
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label>Provincia<span class="required">*</span></label>
                                         <select name="provincia_dit" id="provincia_dit" class="form-control"
-                                            onchange="cargarDistritos(0)">
+                                            onchange="cargarDistritos('_dit',0)">
                                             <option value="0">SELECCIONAR</option>
 
                                         </select>
@@ -725,6 +713,21 @@
                                         <select name="distrito_dit" id="distrito_dit" class="form-control">
                                             <option value="0">SELECCIONAR</option>
                                         </select>
+                                        <span class="help-block"></span>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Año base<span class="required">*</span></label>
+                                        <input id="aniobase_dit" name="aniobase_dit" class="form-control"
+                                            type="number">
+                                        <span class="help-block"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Valor base<span class="required">*</span></label>
+                                        <input id="valorbase_dit" name="valorbase_dit" class="form-control"
+                                            type="text">
                                         <span class="help-block"></span>
                                     </div>
                                 </div>
@@ -748,19 +751,21 @@
                     </form>
                 </div>
                 <div class="modal-body pt-0" style="text-align:center">
-                    <button type="button" class="btn btn-xs btn-primary" id="btnSaveMeta_dit" onclick="savemeta_dit()"><i
-                            class="fa fa-plus"></i> Agregar</button>
+                    <button type="button" class="btn btn-xs btn-primary" id="btnSaveMeta_dit"
+                        onclick="savemeta_dit()"><i class="fa fa-plus"></i> Agregar</button>
                 </div>
                 <div class="modal-body">
                     <div class="table-responsive">
-                        <table id="tbmeta_dit" class="table table-striped table-bordered tablex" style="font-size: 12px">
+                        <table id="tbmeta_dit" class="table table-sm table-striped table-bordered font-12">
                             <thead class="cabecera-dataTable">
-                                <tr class="text-white bg-success-0">
-                                    <th>Nº</th>
-                                    <th>Periodo</th>
+                                <tr class="text-white bg-success-0 text-center">
+                                    <th>Nº</th>                                    
+                                    <th>Distrito</th>
+                                    <th>Año Base</th>
+                                    <th>Valor Base</th>
                                     <th>Año</th>
-                                    <th>Valor</th>
-                                    <th>Acciones</th>
+                                    <th>Meta</th>
+                                    <th>Acción</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -925,19 +930,19 @@
 
         });
 
-        function cargarProvincia(id) {
+        function cargarProvincia(inst, id) {
             $.ajax({
                 url: "{{ route('ubigeo.provincia.25') }}",
                 type: 'GET',
                 success: function(data) {
-                    $("#provincia option").remove();
+                    $("#provincia" + inst + " option").remove();
                     var options = '<option value="0">SELECCIONAR</option>';
                     $.each(data, function(index, value) {
                         ss = (id == value.id ? "selected" : "");
                         options += "<option value='" + value.id + "' " + ss + ">" + value.nombre +
                             "</option>"
                     });
-                    $("#provincia").append(options);
+                    $("#provincia" + inst).append(options);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -945,19 +950,19 @@
             });
         }
 
-        function cargarDistritos(id) {
+        function cargarDistritos(inst, id) {
             $.ajax({
-                url: "{{ route('ubigeo.distrito.25', '') }}/" + $('#provincia').val(),
+                url: "{{ route('ubigeo.distrito.25', '') }}/" + $('#provincia' + inst).val(),
                 type: 'GET',
                 success: function(data) {
-                    $("#distrito option").remove();
-                    var options = '<option value="0">DISTRITO</option>';
+                    $("#distrito" + inst + " option").remove();
+                    var options = '<option value="0">SELECCIONAR</option>';
                     $.each(data, function(index, value) {
                         ss = (id == value.id ? "selected" : "");
                         options += "<option value='" + value.id + "' " + ss + ">" + value.nombre +
                             "</option>"
                     });
-                    $("#distrito").append(options);
+                    $("#distrito" + inst).append(options);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -1033,6 +1038,8 @@
                     $('[name="codigo"]').val(data.ie.codigo);
                     $('[name="nombre"]').val(data.ie.nombre);
                     $('[name="descripcion"]').val(data.ie.descripcion);
+                    $('[name="numerador"]').val(data.ie.numerador);
+                    $('[name="denominador"]').val(data.ie.denominador);
                     $('[name="instrumento"]').val(data.ie.instrumento_id);
                     $('[name="tipo"]').val(data.ie.tipo_id);
                     $('[name="dimension"]').val(data.ie.dimension_id);
@@ -1173,20 +1180,21 @@
             });
         };
 
-        function metas(id) {
+        function metas_dit(id) {
             $('#form_meta_dit')[0].reset();
             $('.form-group').removeClass('has-error');
             $('.help-block').empty();
             $('#modal_meta_dit').modal('show');
             $('.modal-title').text('Agregar Metas');
             $('#indicadorgeneral_dit').val(id);
+            
             table_meta = $('#tbmeta_dit').DataTable({
                 responsive: true,
                 autoWidth: false,
                 ordered: false,
                 language: table_language,
                 ajax: {
-                    "url": "{{ route('mantenimiento.indicadorgeneralmeta.listar') }}",
+                    "url": "{{ route('mantenimiento.indicadorgeneralmeta.listar.dit') }}",
                     "data": {
                         "indicadorgeneral": id
                     },
@@ -1195,7 +1203,7 @@
                 },
                 destroy: true,
             });
-            cargarProvincia(0);
+            cargarProvincia('_dit', 0);
         };
 
         function savemeta() {
@@ -1234,16 +1242,19 @@
             $('#btnSaveMeta_dit').text('Guardando...');
             $('#btnSaveMeta_dit').attr('disabled', true);
             $.ajax({
-                url: "{{ route('mantenimiento.indicadorgeneralmeta.guardar') }}",
+                url: "{{ route('mantenimiento.indicadorgeneralmeta.guardar.dit') }}",
                 type: "POST",
                 data: $('#form_meta_dit').serialize(),
                 dataType: "JSON",
                 success: function(data) {
                     console.log(data)
                     if (data.status) {
-                        //$('#modal_meta').modal('hide');
+                        var anio = $('#aniobase_dit').val();
+                        var valor = $('#valorbase_dit').val();
                         table_meta.ajax.reload(null, false);
                         $('#form_meta_dit')[0].reset();
+                        $('#aniobase_dit').val(anio);
+                        $('#valorbase_dit').val(valor);
                         //toastr.success(msgsuccess, 'Mensaje');
                     } else {
                         for (var i = 0; i < data.inputerror.length; i++) {

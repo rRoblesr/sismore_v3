@@ -20,6 +20,8 @@ class IndicadorGeneralMeta extends Model
         'indicadorgeneral',
         'periodo',
         'distrito',
+        'anio_base',
+        'valor_base',
         'anio',
         'valor'
     ];

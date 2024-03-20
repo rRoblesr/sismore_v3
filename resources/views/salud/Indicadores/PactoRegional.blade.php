@@ -77,11 +77,11 @@
                             <div class="p-4">
                                 <ul class="list-unstyled mb-0">
                                     <li class=""><i class="mdi mdi-finance font-44 text-green-0"></i></li>
-                                    <li class="mt-1 pt-1 font-16">Avance</li>
-                                    <li class="mt-1 pt-1 font-44 font-weight-bold">98.8 %</li>
-                                    <li class="mt-1 pt-1 font-11">Actualizado: 20/02/2024</li>
-                                    <li class="mt-1 pt-1 font-weight-bold">Meta: 71%</li>
-                                    <li class="mt-1 pt-1"><span class="badge badge-success" style="font-size: 100%">
+                                    <li class="mt-1 pt-0 font-16">Avance</li>
+                                    <li class="mt-1 pt-0 font-40 font-weight-bold">98.8 %</li>
+                                    <li class="mt-1 pt-0 font-12">Actualizado: 20/02/2024</li>
+                                    <li class="mt-1 pt-0 font-20 font-weight-bold">Meta: 71%</li>
+                                    <li class="mt-1 pt-0"><span class="badge badge-success" style="font-size: 100%">
                                             <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
                                     </li>
                                     <li class="mt-1 pt-1">
