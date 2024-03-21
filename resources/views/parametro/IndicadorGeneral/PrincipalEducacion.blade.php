@@ -62,17 +62,17 @@
         }
 
         /* .tab-content {
-                                                                                                                border: 1px solid #dee2e6;
-                                                                                                                border-top: transparent;
-                                                                                                                padding: 15px;
-                                                                                                            }
+                                                                                                                        border: 1px solid #dee2e6;
+                                                                                                                        border-top: transparent;
+                                                                                                                        padding: 15px;
+                                                                                                                    }
 
-                                                                                                            .tab-content .tab-pane {
-                                                                                                                background-color: #FFF;
-                                                                                                                color: #0080FF;
-                                                                                                                min-height: 200px;
-                                                                                                                height: auto;
-                                                                                                            } */
+                                                                                                                    .tab-content .tab-pane {
+                                                                                                                        background-color: #FFF;
+                                                                                                                        color: #0080FF;
+                                                                                                                        min-height: 200px;
+                                                                                                                        height: auto;
+                                                                                                                    } */
 
         /*  */
     </style>
@@ -168,6 +168,35 @@
                                         <div class="tab-content p-0">
                                             <div class="tab-pane p-3 border border-success-0 show active" id="home1"
                                                 role="tabpanel" aria-labelledby="home1-tab">
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label>Instrumento de gestion<span
+                                                                    class="required">*</span></label>
+                                                            <select id="instrumento" name="instrumento"
+                                                                class="form-control">
+                                                                <option value="">Seleccionar</option>
+                                                                @foreach ($instrumento as $item)
+                                                                    <option value="{{ $item->id }}">{{ $item->nombre }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                            <span class="help-block"></span>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label>Sector</label>
+                                                            <select id="sector" name="sector" class="form-control">
+                                                                <option value="">Seleccionar</option>
+                                                                @foreach ($sector as $item)
+                                                                    <option value="{{ $item->id }}">
+                                                                        {{ $item->nombre }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                            <span class="help-block"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
                                                 <div class="form-group">
                                                     <div class="row">
@@ -246,7 +275,8 @@
                                                             <select id="dimension" name="dimension" class="form-control">
                                                                 <option value="">Seleccionar</option>
                                                                 @foreach ($dimension as $item)
-                                                                    <option value="{{ $item->id }}">{{ $item->nombre }}
+                                                                    <option value="{{ $item->id }}">
+                                                                        {{ $item->nombre }}
                                                                     </option>
                                                                 @endforeach
                                                             </select>
@@ -257,7 +287,8 @@
                                                             <select id="unidad" name="unidad" class="form-control">
                                                                 <option value="">Seleccionar</option>
                                                                 @foreach ($unidad as $item)
-                                                                    <option value="{{ $item->id }}">{{ $item->nombre }}
+                                                                    <option value="{{ $item->id }}">
+                                                                        {{ $item->nombre }}
                                                                     </option>
                                                                 @endforeach
                                                             </select>
@@ -691,7 +722,8 @@
                     </button>
                 </div>
                 <div class="modal-body pb-0">
-                    <form action="" id="form_meta_dit" name="form_meta_dit" class="form-horizontal" autocomplete="off">
+                    <form action="" id="form_meta_dit" name="form_meta_dit" class="form-horizontal"
+                        autocomplete="off">
                         @csrf
                         <input type="hidden" id="idmeta_dit" name="idmeta_dit" value="">
                         <input type="hidden" id="indicadorgeneral_dit" name="indicadorgeneral_dit" value="">
@@ -759,7 +791,7 @@
                         <table id="tbmeta_dit" class="table table-sm table-striped table-bordered font-12">
                             <thead class="cabecera-dataTable">
                                 <tr class="text-white bg-success-0 text-center">
-                                    <th>Nº</th>                                    
+                                    <th>Nº</th>
                                     <th>Distrito</th>
                                     <th>Año Base</th>
                                     <th>Valor Base</th>
@@ -1187,7 +1219,7 @@
             $('#modal_meta_dit').modal('show');
             $('.modal-title').text('Agregar Metas');
             $('#indicadorgeneral_dit').val(id);
-            
+
             table_meta = $('#tbmeta_dit').DataTable({
                 responsive: true,
                 autoWidth: false,

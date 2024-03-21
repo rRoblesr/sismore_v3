@@ -94,7 +94,7 @@
                                     </ul>
                                     <div class="mt-1 pt-1">
                                         {{-- <button class="btn btn-primary width-md waves-effect waves-light">Sign Up</button> --}}
-                                        <a href=""
+                                        <a href="{{ route('salud.indicador.pactoregional.detalle', $item->id) }}"
                                             class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
                                             detalle</a>
                                     </div>
