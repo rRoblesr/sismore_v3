@@ -62,17 +62,17 @@
         }
 
         /* .tab-content {
-                                                                                                                        border: 1px solid #dee2e6;
-                                                                                                                        border-top: transparent;
-                                                                                                                        padding: 15px;
-                                                                                                                    }
+                                                                                                                                            border: 1px solid #dee2e6;
+                                                                                                                                            border-top: transparent;
+                                                                                                                                            padding: 15px;
+                                                                                                                                        }
 
-                                                                                                                    .tab-content .tab-pane {
-                                                                                                                        background-color: #FFF;
-                                                                                                                        color: #0080FF;
-                                                                                                                        min-height: 200px;
-                                                                                                                        height: auto;
-                                                                                                                    } */
+                                                                                                                                        .tab-content .tab-pane {
+                                                                                                                                            background-color: #FFF;
+                                                                                                                                            color: #0080FF;
+                                                                                                                                            min-height: 200px;
+                                                                                                                                            height: auto;
+                                                                                                                                        } */
 
         /*  */
     </style>
@@ -200,6 +200,29 @@
 
                                                 <div class="form-group">
                                                     <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label>Código<span class="required">*</span></label>
+                                                            <input type="text" id="codigo" name="codigo"
+                                                                class="form-control">
+                                                            <span class="help-block"></span>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label>Tipo de indicador<span class="required">*</span></label>
+                                                            <select id="tipo" name="tipo" class="form-control">
+                                                                <option value="">Seleccionar</option>
+                                                                @foreach ($tipo as $item)
+                                                                    <option value="{{ $item->id }}">
+                                                                        {{ $item->nombre }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                            <span class="help-block"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="row">
                                                         <div class="col-md-12">
                                                             <label>Indicador<span class="required">*</span></label>
                                                             <input id="nombre" name="nombre" class="form-control"
@@ -235,40 +258,11 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <label>Instrumento de gestion<span
-                                                                    class="required">*</span></label>
-                                                            <select id="instrumento" name="instrumento"
-                                                                class="form-control">
-                                                                <option value="">Seleccionar</option>
-                                                                @foreach ($instrumento as $item)
-                                                                    <option value="{{ $item->id }}">{{ $item->nombre }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                            <span class="help-block"></span>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label>Tipo de indicador<span class="required">*</span></label>
-                                                            <select id="tipo" name="tipo" class="form-control">
-                                                                <option value="">Seleccionar</option>
-                                                                @foreach ($tipo as $item)
-                                                                    <option value="{{ $item->id }}">{{ $item->nombre }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                            <span class="help-block"></span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
                                             </div>
                                             <div class="tab-pane p-3 border border-success-0" id="profile1"
                                                 role="tabpanel" aria-labelledby="profile1-tab">
 
-                                                <div class="form-group">
+                                                {{-- <div class="form-group">
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <label>Dimension</label>
@@ -296,7 +290,7 @@
                                                         </div>
 
                                                     </div>
-                                                </div>
+                                                </div> --}}
 
                                                 <div class="form-group">
                                                     <div class="row">
@@ -342,6 +336,19 @@
                                                 <div class="form-group">
                                                     <div class="row">
                                                         <div class="col-md-6">
+                                                            <label>Unidad de Medida</label>
+                                                            <select id="unidad" name="unidad" class="form-control">
+                                                                <option value="">Seleccionar</option>
+                                                                @foreach ($unidad as $item)
+                                                                    <option value="{{ $item->id }}">
+                                                                        {{ $item->nombre }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                            <span class="help-block"></span>
+                                                        </div>
+
+                                                        {{-- <div class="col-md-6">
                                                             <label>Sector</label>
                                                             <select id="sector" name="sector" class="form-control">
                                                                 <option value="">Seleccionar</option>
@@ -352,7 +359,7 @@
                                                                 @endforeach
                                                             </select>
                                                             <span class="help-block"></span>
-                                                        </div>
+                                                        </div> --}}
                                                         <div class="col-md-6">
                                                             <label>Entidad responsable</label>
                                                             {{--  --}}
@@ -377,7 +384,6 @@
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <label>Oficina Responsable</label>
-                                                            {{--  --}}
                                                             <div class="input-group">
                                                                 <input id="oficina" name="oficina" type="hidden">
                                                                 <input id="oficinan" name="oficinan"
@@ -391,17 +397,7 @@
                                                                     </button>
                                                                 </span>
                                                             </div>
-                                                            {{--  --}}
                                                         </div>
-                                                        {{-- <div class="col-md-6">
-                                                            <label for="fichatecnica">Ficha Tecnica</label><br>
-                                                            <label for="fichatecnica" class="btn btn-primary">
-                                                                <i class="fas fa-cloud-upload-alt"></i> Cargar</label>
-                                                            <input id="fichatecnica" name="fichatecnica"
-                                                                class="form-control d-none" type="file"
-                                                                accept="application/pdf">
-                                                            <span class="help-block"></span>
-                                                        </div> --}}
 
                                                         <div class="col-md-6">
                                                             <label>Ficha Tecnica</label>
