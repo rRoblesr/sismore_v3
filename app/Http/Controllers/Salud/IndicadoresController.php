@@ -36,7 +36,11 @@ class IndicadoresController extends Controller
             'oficina_id',
             'estado'
         )->where('sector_id', $sector)->where('instrumento_id', $instrumento)->where('estado', '0')->get();
-        return view('salud.Indicadores.PactoRegional',compact('inds'));
+        return view('salud.Indicadores.PactoRegional', compact('inds'));
+    }
+    public function PactoRegionalDetalle($id)
+    {
+        return view('');
     }
 
     public function ConvenioFED()

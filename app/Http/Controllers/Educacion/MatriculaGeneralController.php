@@ -706,7 +706,7 @@ class MatriculaGeneralController extends Controller
 
         $anios = MatriculaGeneralRepositorio::anios();
         $aniomax = MatriculaGeneralRepositorio::anioMax();
-        $provincia = UbigeoRepositorio::provincia25();
+        $provincia = UbigeoRepositorio::provincia('25');
 
         return  view('parametro.indicador.educacion.inicioEducacionIndicador01', compact('anios', 'aniomax', 'provincia', 'actualizado',));
     }
@@ -1450,7 +1450,7 @@ class MatriculaGeneralController extends Controller
 
         $anios = MatriculaGeneralRepositorio::anios();
         $aniomax = MatriculaGeneralRepositorio::anioMax();
-        //$provincia = UbigeoRepositorio::provincia25();
+        //$provincia = UbigeoRepositorio::provincia---25();
         $ugel = MatriculaGeneralRepositorio::ugels();
         $area = MatriculaGeneralRepositorio::areas();
 
@@ -2546,7 +2546,7 @@ class MatriculaGeneralController extends Controller
 
         $anios = MatriculaGeneralRepositorio::aniosModalidad('EBA');
         $aniomax = MatriculaGeneralRepositorio::anioMax();
-        //$provincia = UbigeoRepositorio::provincia25();
+        //$provincia = UbigeoRepositorio::provincia--25();
         $ugel = MatriculaGeneralRepositorio::ugels();
         $area = MatriculaGeneralRepositorio::areas();
 
@@ -2967,7 +2967,7 @@ class MatriculaGeneralController extends Controller
 
         $anios = MatriculaGeneralRepositorio::anios();
         $aniomax = MatriculaGeneralRepositorio::anioMax();
-        $provincia = UbigeoRepositorio::provincia25();
+        $provincia = UbigeoRepositorio::provincia--25();
         //$ugel = MatriculaGeneralRepositorio::ugels();
         //$area = MatriculaGeneralRepositorio::areas();
         $nivel = NivelModalidad::select('id', 'codigo', DB::raw('case when codigo="A2" then "JARDÍN" when codigo="A3" then "CUNA-JARDÍN" when codigo="A5" then "PRONOEI" else upper(nombre) end as nombre'))->where('tipo', 'EBR')->orderBy('nombre')->get();
@@ -3594,7 +3594,7 @@ class MatriculaGeneralController extends Controller
 
         $anios = MatriculaGeneralRepositorio::anios();
         $aniomax = MatriculaGeneralRepositorio::anioMax();
-        $provincia = UbigeoRepositorio::provincia25();
+        $provincia = UbigeoRepositorio::provincia--25();
         //$ugel = MatriculaGeneralRepositorio::ugels();
         //$area = MatriculaGeneralRepositorio::areas();
         $nivel = NivelModalidad::select('id', 'codigo', DB::raw('case when codigo="E0" then "Prite" when codigo="E1" then "Inicial" when codigo="E2" then "Primaria" else nombre end as nombre'))->where('tipo', 'EBE')->orderBy('nombre')->get();
@@ -4135,7 +4135,7 @@ class MatriculaGeneralController extends Controller
 
         $anios = MatriculaGeneralRepositorio::aniosModalidad('EBA');
         $aniomax = MatriculaGeneralRepositorio::anioMax();
-        $provincia = UbigeoRepositorio::provincia25();
+        $provincia = UbigeoRepositorio::provincia('25');
         //$ugel = MatriculaGeneralRepositorio::ugels();
         //$area = MatriculaGeneralRepositorio::areas();
         $nivel = NivelModalidad::select('id', 'codigo', DB::raw('case when codigo="D1" then "Inicial e Intermedio" when codigo="D2" then "Avanzado"  else nombre end as nombre'))->where('tipo', 'EBA')->orderBy('codigo')->get();

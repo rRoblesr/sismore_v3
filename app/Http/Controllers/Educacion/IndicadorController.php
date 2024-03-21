@@ -520,7 +520,7 @@ class IndicadorController extends Controller
     /*****OTRAS OPCIONES */
     public function cargarprovincias()
     {
-        $provincias = UbigeoRepositorio::provincia25();
+        $provincias = UbigeoRepositorio::provincia('25');
         return response()->json($provincias);
     }
     public function cargardistritos($provincia)
@@ -690,7 +690,7 @@ class IndicadorController extends Controller
 
         $anios = MatriculaGeneralRepositorio::anios();
         $aniomax = MatriculaGeneralRepositorio::anioMax();
-        $provincia = UbigeoRepositorio::provincia25();
+        $provincia = UbigeoRepositorio::provincia('25');
 
         return  view('parametro.indicador.educacion.inicioEducacionIndicador01', compact('anios', 'aniomax', 'provincia', 'actualizado',));
     }
@@ -1125,7 +1125,7 @@ class IndicadorController extends Controller
 
         // $anios = MatriculaGeneralRepositorio::anios();
         // $aniomax = MatriculaGeneralRepositorio::anioMax();
-        // $provincia = UbigeoRepositorio::provincia25();
+        // $provincia = UbigeoRepositorio::provincia--25();
 
         // $pdf = Pdf::loadView('parametro.indicador.educacion.inicioEducacionIndicador01PDF', compact('anios', 'aniomax', 'provincia', 'actualizado'));
         // return $pdf->stream();
