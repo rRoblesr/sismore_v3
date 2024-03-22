@@ -49,6 +49,7 @@ class IndicadoresController extends Controller
                 $anio = Anio::orderBy('anio')->get();
                 $provincia = UbigeoRepositorio::provincia('25');
                 $aniomax = 2023;
+                                
                 return view('salud.Indicadores.PactoRegionalDetalle1', compact('actualizado', 'anio', 'provincia', 'aniomax', 'ind'));
             case 'DITSALUD02':
                 return '';
