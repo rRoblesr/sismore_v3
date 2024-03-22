@@ -44,13 +44,20 @@ class IndicadoresController extends Controller
     {
         $ind = IndicadorGeneral::find($indicador_id);
         switch ($ind->codigo) {
-            case 'IND0001':
-                $actualizado = 'Actualizado al 29 de febrero del 2024';
+            case 'DITSALUD01':
+                $actualizado = 'Actualizado al 29 de febrero del 2023';
                 $anio = Anio::orderBy('anio')->get();
                 $provincia = UbigeoRepositorio::provincia('25');
-                $aniomax = 2024;
+                $aniomax = 2023;
                 return view('salud.Indicadores.PactoRegionalDetalle1', compact('actualizado', 'anio', 'provincia', 'aniomax', 'ind'));
-
+            case 'DITSALUD02':
+                return '';
+            case 'DITSALUD03':
+                return '';
+            case 'DITSALUD04':
+                return '';
+            case 'DITSALUD05':
+                return '';
             default:
                 return 'ERROR, PAGINA NO ENCONTRADA';
         }

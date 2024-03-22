@@ -1,31 +1,6 @@
-@extends('layouts.main', ['titlePage' => 'INDICADOR'])
+@extends('layouts.main', ['titlePage' => ''])
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
-    <style>
-        .tablex thead th {
-            padding: 6px;
-            text-align: center;
-        }
-
-        .tablex thead td {
-            padding: 6px;
-            text-align: center;
-            vertical-align: middle;
-            font-weight: bold;
-        }
-
-        .tablex tbody td,
-        .tablex tbody th,
-        .tablex tfoot td,
-        .tablex tfoot th {
-            padding: 6px;
-        }
-
-        .fuentex {
-            font-size: 10px;
-            font-weight: bold;
-        }
-    </style>
 @endsection
 
 @section('content')
@@ -185,16 +160,56 @@
                                 <button type="button" class="btn btn-success btn-xs"><i
                                         class="fa fa-file-excel"></i> Descargar</button>
                             </div> --}}
-                            <h3 class="text-black font-14">Avance de la matricula mensual según unidad de gestion educativa
-                                local</h3>
+                            <h3 class="text-black font-14"></h3>
                         </div>
                         <div class="card-body pt-0">
                             <div class="row">
                                 <div class="col-12">
                                     <div class="table-responsive" style="height: 40rem">
+                                        <table class="table table-bordered mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>N°</th>
+                                                    <th>Distrito</th>
+                                                    <th>Meta</th>
+                                                    <th>Avance</th>
+                                                    <th>Indicador</th>
+                                                    <th>Cumple</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td rowspan="2">1</td>
+                                                    <td>Mark</td>
+                                                    <td>Otto</td>
+                                                    <td>Otto</td>
+                                                    <td>Otto</td>
+                                                    <td>@mdo</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Mark</td>
+                                                    <td>Otto</td>
+                                                    <td>Otto</td>
+                                                    <td>@TwBootstrap</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>2</td>
+                                                    <td>Otto</td>
+                                                    <td>Jacob</td>
+                                                    <td>Thornton</td>
+                                                    <td>@fat</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>3</td>
+                                                    <td>Otto</td>
+                                                    <td colspan="2">Larry the Bird</td>
+                                                    <td>@twitter</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
-                            </div> 
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -207,10 +222,10 @@
                         <div class="card-body p-0">
                             <figure class="highcharts-figure p-0 m-0">
                                 <div id="anal1" style="height: 20rem"></div>
-                            </figure> 
+                            </figure>
                         </div>
                     </div>
-                
+
                     <div class="card card-border border border-plomo-0">
                         <div class="card-header border-success-0 bg-transparent p-0">
                             {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
@@ -218,7 +233,7 @@
                         <div class="card-body p-0">
                             <figure class="highcharts-figure p-0 m-0">
                                 <div id="anal2" style="height: 20rem"></div>
-                            </figure> 
+                            </figure>
                         </div>
                     </div>
                 </div>
@@ -379,12 +394,12 @@
                 },
             });
 
-            panelGraficas('anal1');
-            panelGraficas('anal2');
-            panelGraficas('anal3');
-            panelGraficas('anal4');
-            panelGraficas('tabla1');
-            panelGraficas('tabla2');
+            // panelGraficas('anal1');
+            // panelGraficas('anal2');
+            // panelGraficas('anal3');
+            // panelGraficas('anal4');
+            // panelGraficas('tabla1');
+            // panelGraficas('tabla2');
         }
 
         function panelGraficas(div) {

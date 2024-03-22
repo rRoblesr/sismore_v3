@@ -601,23 +601,24 @@ Route::post('/Mantenimiento/Lengua/ajax_update/', [LenguaController::class, 'aja
 Route::get('/Mantenimiento/Lengua/ajax_estado/{id}', [LenguaController::class, 'ajax_estado']);
 Route::get('/Mantenimiento/Lengua/ajax_delete/{id}', [LenguaController::class, 'ajax_delete']);
 
-Route::get('/Man/INDICADORGENERAL/Principal', [IndicadorGeneralController::class, 'principal'])->middleware('auth')->name('mantenimiento.indicadorgeneral.principal');
-Route::get('/Man/INDICADORGENERAL/Listar/', [IndicadorGeneralController::class, 'ListarDT'])->name('mantenimiento.indicadorgeneral.listar');
-Route::post('/Man/INDICADORGENERAL/AjaxAdd', [IndicadorGeneralController::class, 'ajax_add'])->middleware('auth')->name('mantenimiento.indicadorgeneral.guardar');
-Route::get('/Man/INDICADORGENERAL/AjaxEdit/{id}', [IndicadorGeneralController::class, 'ajax_edit'])->middleware('auth')->name('mantenimiento.indicadorgeneral.editar');
-Route::post('/Man/INDICADORGENERAL/AjaxUpdate', [IndicadorGeneralController::class, 'ajax_update'])->middleware('auth')->name('mantenimiento.indicadorgeneral.modificar');
-Route::get('/Man/INDICADORGENERAL/AjaxDelete/{id}', [IndicadorGeneralController::class, 'ajax_delete'])->middleware('auth')->name('mantenimiento.indicadorgeneral.eliminar');
-Route::get('/Man/INDICADORGENERAL/Exportar/{id}', [IndicadorGeneralController::class, 'exportarPDF'])->name('mantenimiento.indicadorgeneral.exportar.pdf');
-Route::get('/Man/INDICADORGENERAL/Buscar/{id}', [IndicadorGeneralController::class, 'buscar'])->middleware('auth')->name('mantenimiento.indicadorgeneral.buscar.1');
-
+// Route::get('/Man/INDICADORGENERAL/Principal', [IndicadorGeneralController::class, 'principal'])->middleware('auth')->name('mantenimiento.indicadorgeneral.principal');
 Route::get('/Mantenimiento/Indicador', [IndicadorGeneralController::class, 'principalEducacion'])->middleware('auth')->name('mantenimiento.indicadorgeneral.principal.educacion');
 
-Route::get('/Mantenimiento/Indicador/Listar', [IndicadorGeneralController::class, 'ListarDTMeta'])->name('mantenimiento.indicadorgeneralmeta.listar');
-Route::get('/Mantenimiento/Indicador/Listar/DIT', [IndicadorGeneralController::class, 'ListarDTMeta_dit'])->name('mantenimiento.indicadorgeneralmeta.listar.dit');
-Route::post('/Mantenimiento/Indicador/Add', [IndicadorGeneralController::class, 'ajax_add_meta'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.guardar');
-Route::post('/Mantenimiento/Indicador/Add/DIT', [IndicadorGeneralController::class, 'ajax_add_meta_dit'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.guardar.dit');
-Route::post('/Mantenimiento/Indicador/Find/DIT', [IndicadorGeneralController::class, 'ajax_find_meta_dit'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.find.dit');
-Route::get('/Mantenimiento/Indicador/Delete/{id}', [IndicadorGeneralController::class, 'ajax_delete_meta'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.eliminar');
+Route::get('/Mantenimiento/Indicador/Listar/', [IndicadorGeneralController::class, 'ListarDT'])->name('mantenimiento.indicadorgeneral.listar');
+Route::post('/Mantenimiento/Indicador/Add', [IndicadorGeneralController::class, 'ajax_add'])->middleware('auth')->name('mantenimiento.indicadorgeneral.guardar');
+Route::get('/Mantenimiento/Indicador/Find/{id}', [IndicadorGeneralController::class, 'ajax_edit'])->middleware('auth')->name('mantenimiento.indicadorgeneral.editar');
+Route::post('/Mantenimiento/Indicador/Update', [IndicadorGeneralController::class, 'ajax_update'])->middleware('auth')->name('mantenimiento.indicadorgeneral.modificar');
+Route::get('/Mantenimiento/Indicador/Delete/{id}', [IndicadorGeneralController::class, 'ajax_delete'])->name('mantenimiento.indicadorgeneral.eliminar');
+Route::get('/Mantenimiento/Indicador/Exportar/{id}', [IndicadorGeneralController::class, 'exportarPDF'])->name('mantenimiento.indicadorgeneral.exportar.pdf');
+Route::get('/Mantenimiento/Indicador/Buscar/{id}', [IndicadorGeneralController::class, 'buscar'])->name('mantenimiento.indicadorgeneral.buscar.1');
+Route::get('/Mantenimiento/Indicador/Codigo', [IndicadorGeneralController::class, 'generarCodigo'])->name('mantenimiento.indicadorgeneral.codigo');
+
+Route::get('/Mantenimiento/Indicador/Meta/Listar', [IndicadorGeneralController::class, 'ListarDTMeta'])->name('mantenimiento.indicadorgeneralmeta.listar');
+Route::get('/Mantenimiento/Indicador/Meta/Listar/DIT', [IndicadorGeneralController::class, 'ListarDTMeta_dit'])->name('mantenimiento.indicadorgeneralmeta.listar.dit');
+Route::post('/Mantenimiento/Indicador/Meta/Add', [IndicadorGeneralController::class, 'ajax_add_meta'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.guardar');
+Route::post('/Mantenimiento/Indicador/Meta/Add/DIT', [IndicadorGeneralController::class, 'ajax_add_meta_dit'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.guardar.dit');
+Route::post('/Mantenimiento/Indicador/Meta/Find/DIT', [IndicadorGeneralController::class, 'ajax_find_meta_dit'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.find.dit');
+Route::get('/Mantenimiento/Indicador/Meta/Delete/{id}', [IndicadorGeneralController::class, 'ajax_delete_meta'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.eliminar');
 
 Route::get('/educación/Mantenimiento/PadronEIB', [PadronEIBController::class, 'principal'])->middleware('auth')->name('padroneib.principal');
 Route::post('/PadronEIB/ajax_add_opt1/', [PadronEIBController::class, 'ajax_add_opt1'])->name('padroneib.ajax.add.opt1');

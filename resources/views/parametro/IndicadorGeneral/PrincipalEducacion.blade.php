@@ -62,17 +62,17 @@
         }
 
         /* .tab-content {
-                                                                                                                                            border: 1px solid #dee2e6;
-                                                                                                                                            border-top: transparent;
-                                                                                                                                            padding: 15px;
-                                                                                                                                        }
+                                                                                                                                                                            border: 1px solid #dee2e6;
+                                                                                                                                                                            border-top: transparent;
+                                                                                                                                                                            padding: 15px;
+                                                                                                                                                                        }
 
-                                                                                                                                        .tab-content .tab-pane {
-                                                                                                                                            background-color: #FFF;
-                                                                                                                                            color: #0080FF;
-                                                                                                                                            min-height: 200px;
-                                                                                                                                            height: auto;
-                                                                                                                                        } */
+                                                                                                                                                                        .tab-content .tab-pane {
+                                                                                                                                                                            background-color: #FFF;
+                                                                                                                                                                            color: #0080FF;
+                                                                                                                                                                            min-height: 200px;
+                                                                                                                                                                            height: auto;
+                                                                                                                                                                        } */
 
         /*  */
     </style>
@@ -139,6 +139,7 @@
                         method="POST" autocomplete="off">
                         @csrf
                         <input type="hidden" id="id" name="id" value="">
+                        <input type="hidden" id="codigoconteo" name="codigoconteo" value="0">
                         <div class="form-body">
                             <div class="row">
                                 <div class="col-lg-12">
@@ -173,8 +174,8 @@
                                                         <div class="col-md-6">
                                                             <label>Instrumento de gestion<span
                                                                     class="required">*</span></label>
-                                                            <select id="instrumento" name="instrumento"
-                                                                class="form-control">
+                                                            <select id="instrumento" name="instrumento" class="form-control"
+                                                                onchange="generarcodigo()">
                                                                 <option value="">Seleccionar</option>
                                                                 @foreach ($instrumento as $item)
                                                                     <option value="{{ $item->id }}">{{ $item->nombre }}
@@ -185,7 +186,8 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label>Sector</label>
-                                                            <select id="sector" name="sector" class="form-control">
+                                                            <select id="sector" name="sector" class="form-control"
+                                                                onchange="generarcodigo()">
                                                                 <option value="">Seleccionar</option>
                                                                 @foreach ($sector as $item)
                                                                     <option value="{{ $item->id }}">
@@ -861,23 +863,6 @@
     <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.responsive.min.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.js"></script>
 
-    {{-- <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.buttons.min.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/datatables/buttons.bootstrap4.min.js"></script> --}}
-
-    {{-- <script src="{{ asset('/') }}public/assets/libs/jszip/jszip.min.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/pdfmake/pdfmake.min.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/pdfmake/vfs_fonts.js"></script> --}}
-
-    {{-- <script src="{{ asset('/') }}public/assets/libs/datatables/buttons.html5.min.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/datatables/buttons.print.min.js"></script> --}}
-
-    {{-- <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.fixedHeader.min.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.keyTable.min.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.scroller.min.js"></script> --}}
-
-
-
-
     <script>
         var save_method = '';
         var table_principal;
@@ -958,6 +943,25 @@
 
         });
 
+        function generarcodigo() {
+            $.ajax({
+                url: "{{ route('mantenimiento.indicadorgeneral.codigo') }}",
+                type: 'GET',
+                data: {
+                    instrumento: $('#instrumento').val(),
+                    sector: $('#sector').val(),
+                },
+                success: function(data) {
+                    console.log(data);
+                    $('#codigo').val(data.codigo);
+                    $('#codigoconteo').val(data.conteo);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
         function cargarProvincia(inst, id) {
             $.ajax({
                 url: "{{ route('ubigeo.provincia.25') }}",
@@ -1006,6 +1010,7 @@
             $('#modal_form').modal('show');
             $('.modal-title').text('Crear nuevo indicador');
             $('#id').val("");
+            $('#codigoconteo').val(0);
         };
 
         function save() {
@@ -1064,6 +1069,7 @@
                 success: function(data) {
                     $('[name="id"]').val(data.ie.id);
                     $('[name="codigo"]').val(data.ie.codigo);
+                    $('[name="codigoconteo"]').val(data.ie.codigo.length);
                     $('[name="nombre"]').val(data.ie.nombre);
                     $('[name="descripcion"]').val(data.ie.descripcion);
                     $('[name="numerador"]').val(data.ie.numerador);

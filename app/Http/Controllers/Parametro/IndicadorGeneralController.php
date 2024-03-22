@@ -121,9 +121,29 @@ class IndicadorGeneralController extends Controller
             $data['status'] = FALSE;
         }
 
+        if ($request->instrumento == '') {
+            $data['inputerror'][] = 'instrumento';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+
         if ($request->numerador == '') {
             $data['inputerror'][] = 'numerador';
             $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+
+        if ($request->codigo == '') {
+            $data['inputerror'][] = 'codigo';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        } else if ($request->codigoconteo == 0) {
+            $data['inputerror'][] = 'codigo';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        } else if (strlen($request->codigo) != $request->codigoconteo) {
+            $data['inputerror'][] = 'codigo';
+            $data['error_string'][] = 'Este campo esta incompleto';
             $data['status'] = FALSE;
         }
 
@@ -139,11 +159,11 @@ class IndicadorGeneralController extends Controller
             $data['status'] = FALSE;
         }
 
-        if ($request->dimension == '') {
-            $data['inputerror'][] = 'dimension';
-            $data['error_string'][] = 'Este campo es obligatorio.';
-            $data['status'] = FALSE;
-        }
+        // if ($request->dimension == '') {
+        //     $data['inputerror'][] = 'dimension';
+        //     $data['error_string'][] = 'Este campo es obligatorio.';
+        //     $data['status'] = FALSE;
+        // }
 
         if ($request->unidad == '') {
             $data['inputerror'][] = 'unidad';
@@ -234,12 +254,12 @@ class IndicadorGeneralController extends Controller
         } else {
             $fichatecnica = NULL;
         }
-        $codigoSector = IndicadorGeneral::where('sector_id', $request->sector)->select(DB::raw('max(codigo) codigo'))->first();
-        if ($codigoSector) {
-            $codigo = $this->generarCodigo($codigoSector->codigo);
-        } else {
-            $codigo = 'IND0001';
-        }
+        // $codigoSector = IndicadorGeneral::where('sector_id', $request->sector)->select(DB::raw('max(codigo) codigo'))->first();
+        // if ($codigoSector) {
+        //     $codigo = $this->generarCodigo($codigoSector->codigo);
+        // } else {
+        //     $codigo = 'IND0001';
+        // }
         IndicadorGeneral::Create([
             'codigo' => $codigo,
             'nombre' => $request->nombre,
@@ -248,7 +268,7 @@ class IndicadorGeneralController extends Controller
             'denominador' => $request->denominador,
             'instrumento_id' => $request->instrumento,
             'tipo_id' => $request->tipo,
-            'dimension_id' => $request->dimension,
+            'dimension_id' => 0, //$request->dimension,
             'unidad_id' => $request->unidad,
             'frecuencia_id' => $request->frecuencia,
             'fuente_dato' => $request->fuentedato,
@@ -261,17 +281,6 @@ class IndicadorGeneralController extends Controller
         ]);
 
         return response()->json(array('status' => true, 'msn' => 'OK'));
-    }
-
-    public function generarCodigo($codigo)
-    {
-        $valor = (int)substr($codigo, 3, 7);
-        $valor++;
-        $codigo = '';
-        for ($i = 0; $i < 4 - strlen('' . $valor); $i++) {
-            $codigo .= '0';
-        }
-        return 'IND' . $codigo . $valor;
     }
 
     public function ajax_edit($id)
@@ -322,6 +331,30 @@ class IndicadorGeneralController extends Controller
         return response()->json(compact('ie'));
     }
 
+    // public function generar-Codigo($codigo)
+    // {
+    //     $valor = (int)substr($codigo, 3, 7);
+    //     $valor++;
+    //     $codigo = '';
+    //     for ($i = 0; $i < 4 - strlen('' . $valor); $i++) {
+    //         $codigo .= '0';
+    //     }
+    //     return 'IND' . $codigo . $valor;
+    // }
+
+    public function generarCodigo(Request $rq)
+    {
+        $inst = DB::table('par_instrumento')->where('id', $rq->instrumento)->first();
+        $sect = Sector::where('id', $rq->sector)->first();
+
+        $codigo = $inst ? $inst->abreviado : '';
+        $codigo .= $sect ? $sect->nombre : '';
+
+        $conteo = strlen($codigo) + 2;
+
+        return response()->json(compact('codigo', 'conteo'));
+    }
+
     public function ajax_update(Request $request)
     {
         $this->_validate($request);
@@ -342,13 +375,14 @@ class IndicadorGeneralController extends Controller
         }
 
         $indicador = IndicadorGeneral::find($request->id);
+        $indicador->codigo = $request->codigo;
         $indicador->nombre = $request->nombre;
         $indicador->descripcion = $request->descripcion;
         $indicador->numerador = $request->numerador;
         $indicador->denominador = $request->denominador;
         $indicador->instrumento_id = $request->instrumento;
         $indicador->tipo_id = $request->tipo;
-        $indicador->dimension_id = $request->dimension;
+        // $indicador->dimension_id = $request->dimension;
         $indicador->unidad_id = $request->unidad;
         $indicador->frecuencia_id = $request->frecuencia;
         $indicador->fuente_dato = $request->fuentedato;
