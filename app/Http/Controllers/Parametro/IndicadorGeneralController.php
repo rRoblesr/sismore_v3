@@ -261,7 +261,7 @@ class IndicadorGeneralController extends Controller
         //     $codigo = 'IND0001';
         // }
         IndicadorGeneral::Create([
-            'codigo' => $codigo,
+            'codigo' => $request->codigo,
             'nombre' => $request->nombre,
             'descripcion' => $request->descripcion,
             'numerador' => $request->numerador,

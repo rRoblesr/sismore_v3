@@ -165,48 +165,7 @@
                         <div class="card-body pt-0">
                             <div class="row">
                                 <div class="col-12">
-                                    <div class="table-responsive" style="height: 40rem">
-                                        <table class="table table-bordered mb-0">
-                                            <thead>
-                                                <tr>
-                                                    <th>N°</th>
-                                                    <th>Distrito</th>
-                                                    <th>Meta</th>
-                                                    <th>Avance</th>
-                                                    <th>Indicador</th>
-                                                    <th>Cumple</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td rowspan="2">1</td>
-                                                    <td>Mark</td>
-                                                    <td>Otto</td>
-                                                    <td>Otto</td>
-                                                    <td>Otto</td>
-                                                    <td>@mdo</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Mark</td>
-                                                    <td>Otto</td>
-                                                    <td>Otto</td>
-                                                    <td>@TwBootstrap</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>Otto</td>
-                                                    <td>Jacob</td>
-                                                    <td>Thornton</td>
-                                                    <td>@fat</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td>Otto</td>
-                                                    <td colspan="2">Larry the Bird</td>
-                                                    <td>@twitter</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                    <div class="table-responsive" style="height: 40rem" id="vtabla1">
                                     </div>
                                 </div>
                             </div>
@@ -357,36 +316,37 @@
                     "anio": $('#anio').val(),
                     "provincia": $('#provincia').val(),
                     "distrito": $('#distrito').val(),
-                    "gestion": $('#gestion').val(),
+                    "indicador": '{{ $ind->id }}',
+                    "codigo": '{{ $ind->codigo }}',
                 },
                 type: "GET",
                 dataType: "JSON",
                 success: function(data) {
-                    $('#basico').text(data.valor1);
-                    $('#ebr').text(data.valor2);
-                    $('#ebe').text(data.valor3);
-                    $('#eba').text(data.valor4);
-                    $('#ibasico').text(data.ind1 + '%');
-                    $('#iebr').text(data.ind2 + '%');
-                    $('#iebe').text(data.ind3 + '%');
-                    $('#ieba').text(data.ind4 + '%');
-                    //$('#bbasico').css('width','100px');
-                    $('#bbasico').css('width', data.ind1 + '%')
-                        .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
-                        .addClass(data.ind1 > 84 ? 'bg-success-0' : (data.ind1 > 49 ? 'bg-orange-0' :
-                            'bg-warning-0'));
-                    $('#bebr').css('width', data.ind2 + '%').removeClass(
-                            'bg-success-0 bg-orange-0 bg-warning-0')
-                        .addClass(data.ind2 > 84 ? 'bg-success-0' : (data.ind2 > 49 ? 'bg-orange-0' :
-                            'bg-warning-0'));
-                    $('#bebe').css('width', data.ind3 + '%').removeClass(
-                            'bg-success-0 bg-orange-0 bg-warning-0')
-                        .addClass(data.ind3 > 84 ? 'bg-success-0' : (data.ind3 > 49 ? 'bg-orange-0' :
-                            'bg-warning-0'));
-                    $('#beba').css('width', data.ind4 + '%').removeClass(
-                            'bg-success-0 bg-orange-0 bg-warning-0')
-                        .addClass(data.ind4 > 84 ? 'bg-success-0' : (data.ind4 > 49 ? 'bg-orange-0' :
-                            'bg-warning-0'));
+                    // $('#basico').text(data.valor1);
+                    // $('#ebr').text(data.valor2);
+                    // $('#ebe').text(data.valor3);
+                    // $('#eba').text(data.valor4);
+                    // $('#ibasico').text(data.ind1 + '%');
+                    // $('#iebr').text(data.ind2 + '%');
+                    // $('#iebe').text(data.ind3 + '%');
+                    // $('#ieba').text(data.ind4 + '%');
+                    // //$('#bbasico').css('width','100px');
+                    // $('#bbasico').css('width', data.ind1 + '%')
+                    //     .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
+                    //     .addClass(data.ind1 > 84 ? 'bg-success-0' : (data.ind1 > 49 ? 'bg-orange-0' :
+                    //         'bg-warning-0'));
+                    // $('#bebr').css('width', data.ind2 + '%').removeClass(
+                    //         'bg-success-0 bg-orange-0 bg-warning-0')
+                    //     .addClass(data.ind2 > 84 ? 'bg-success-0' : (data.ind2 > 49 ? 'bg-orange-0' :
+                    //         'bg-warning-0'));
+                    // $('#bebe').css('width', data.ind3 + '%').removeClass(
+                    //         'bg-success-0 bg-orange-0 bg-warning-0')
+                    //     .addClass(data.ind3 > 84 ? 'bg-success-0' : (data.ind3 > 49 ? 'bg-orange-0' :
+                    //         'bg-warning-0'));
+                    // $('#beba').css('width', data.ind4 + '%').removeClass(
+                    //         'bg-success-0 bg-orange-0 bg-warning-0')
+                    //     .addClass(data.ind4 > 84 ? 'bg-success-0' : (data.ind4 > 49 ? 'bg-orange-0' :
+                    //         'bg-warning-0'));
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");
@@ -398,19 +358,20 @@
             // panelGraficas('anal2');
             // panelGraficas('anal3');
             // panelGraficas('anal4');
-            // panelGraficas('tabla1');
+            panelGraficas('tabla1');
             // panelGraficas('tabla2');
         }
 
         function panelGraficas(div) {
             $.ajax({
-                url: "{{ route('indicador.nuevos.01.tabla') }}",
+                url: "{{ route('salud.indicador.pactoregional.detalle.reports') }}",
                 data: {
                     'div': div,
                     "anio": $('#anio').val(),
                     "provincia": $('#provincia').val(),
                     "distrito": $('#distrito').val(),
-                    "gestion": $('#gestion').val(),
+                    "indicador": '{{ $ind->id }}',
+                    "codigo": '{{ $ind->codigo }}',
                 },
                 type: "GET",
                 dataType: "JSON",
@@ -448,17 +409,17 @@
                         $('.anal4-fecha').html('Actualizado: ' + data.reg.fecha);
                     } else if (div == "tabla1") {
                         $('#vtabla1').html(data.excel);
-                        $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
-                        $('.vtabla1-fecha').html('Actualizado: ' + data.reg.fecha);
-                        $('#tabla1').DataTable({
-                            responsive: true,
-                            autoWidth: false,
-                            ordered: true,
-                            searching: false,
-                            bPaginate: false,
-                            info: false,
-                            language: table_language,
-                        });
+                        // $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
+                        // $('.vtabla1-fecha').html('Actualizado: ' + data.reg.fecha);
+                        // $('#tabla1').DataTable({
+                        //     responsive: true,
+                        //     autoWidth: false,
+                        //     ordered: true,
+                        //     searching: false,
+                        //     bPaginate: false,
+                        //     info: false,
+                        //     language: table_language,
+                        // });
                     } else if (div == "tabla2") {
                         $('#vtabla2').html(data.excel);
                         $('.vtabla2-fuente').html('Fuente: ' + data.reg.fuente);

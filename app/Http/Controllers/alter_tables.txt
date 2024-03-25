@@ -1,5 +1,8 @@
 ALTER TABLE `par_indicador_general` ADD `numerador` INT NULL DEFAULT NULL AFTER `descripcion`;
 ALTER TABLE `par_indicador_general` ADD `denominador` INT NULL DEFAULT NULL AFTER `numerador`;
+
+ALTER TABLE `par_indicador_general` ADD `numerador` TEXT NULL DEFAULT NULL AFTER `descripcion`, ADD `denominador` TEXT NULL DEFAULT NULL AFTER `numerador`;
+
 ALTER TABLE `par_indicador_general` CHANGE `codigo` `codigo` VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
 
 ALTER TABLE `par_indicador_general_meta` ADD `distrito` INT NULL DEFAULT NULL AFTER `periodo`;
@@ -10,7 +13,7 @@ ALTER TABLE `par_indicador_general_meta` ADD `anio_base` INT(4) NOT NULL AFTER `
 CREATE DEFINER=`root`@`localhost` PROCEDURE `datay`.`edu_pa_procesarImporMatriculaGeneral`(v_importacion_id INT, v_matriculageneral_id INT)
 BEGIN
 
-	UPDATE edu_impor_matricula_general SET 
+	UPDATE edu_impor_matricula_general SET
 		id_anio=ltrim(rtrim(ifnull(id_anio,''))),
 		cod_mod=ltrim(rtrim(ifnull(cod_mod,''))),
 		modalidad=ltrim(rtrim(ifnull(modalidad,''))),
@@ -45,71 +48,71 @@ BEGIN
 		sf_regular=ltrim(rtrim(ifnull(sf_regular,''))),
 		sf_promocion_guiada=ltrim(rtrim(ifnull(sf_promocion_guiada,'')))
 	WHERE importacion_id=v_importacion_id;
-    
+
 
 
     BEGIN
 		INSERT INTO edu_matricula_general_detalle(
-		matriculageneral_id,	institucioneducativa_id, 	cod_mod, 				modalidad, 					nivel, 
-		gestion, 				pais_nacimiento, 			fecha_nacimiento, 		edad, 						sexo, 
-        lengua_materna, 		segunda_lengua, 			situacion_matricula, 	estado_matricula, 			fecha_matricula, 
-        id_grado, 				dsc_grado, 					id_seccion, 			dsc_seccion, 				fecha_registro, 
-        fecha_retiro, 			motivo_retiro, 				sf_regular, 			sf_promocion_guiada,		di_leve, 
-        di_moderada, 			di_severo, 					discapacidad_fisica, 	trastorno_espectro_autista, dv_baja_vision, 
+		matriculageneral_id,	institucioneducativa_id, 	cod_mod, 				modalidad, 					nivel,
+		gestion, 				pais_nacimiento, 			fecha_nacimiento, 		edad, 						sexo,
+        lengua_materna, 		segunda_lengua, 			situacion_matricula, 	estado_matricula, 			fecha_matricula,
+        id_grado, 				dsc_grado, 					id_seccion, 			dsc_seccion, 				fecha_registro,
+        fecha_retiro, 			motivo_retiro, 				sf_regular, 			sf_promocion_guiada,		di_leve,
+        di_moderada, 			di_severo, 					discapacidad_fisica, 	trastorno_espectro_autista, dv_baja_vision,
         dv_ceguera, 			da_hipoacusia, 				da_sordera, 			sordoceguera, 				otra_discapacidad
-        ) 
-		SELECT 
-			v_matriculageneral_id,			
+        )
+		SELECT
+			v_matriculageneral_id,
 			(select id from edu_institucioneducativa  where codModular=imp.cod_mod),
-			imp.cod_mod, 
-            imp.modalidad, 
-            (select id from edu_nivelmodalidad where codigo=imp.id_nivel ), 
-            
+			imp.cod_mod,
+            imp.modalidad,
+            (select id from edu_nivelmodalidad where codigo=imp.id_nivel ),
+
             (select id from edu_tipogestion where codigo=imp.id_gestion ),
-			imp.pais_nacimiento, 
-			if(imp.fecha_nacimiento='NULL' or imp.fecha_nacimiento='',null,str_to_date(imp.fecha_nacimiento,'%Y-%m-%d')), 
+			imp.pais_nacimiento,
+			if(imp.fecha_nacimiento='NULL' or imp.fecha_nacimiento='',null,str_to_date(imp.fecha_nacimiento,'%Y-%m-%d')),
             YEAR(CURDATE())-YEAR(str_to_date(fecha_nacimiento,'%Y-%m-%d')) + IF(DATE_FORMAT(CURDATE(),'%m-%d') > DATE_FORMAT(str_to_date(fecha_nacimiento,'%Y-%m-%d'),'%m-%d'), 0 , -1 ),
-			imp.sexo, 
-            
-			imp.lengua_materna, 
-			imp.segunda_lengua, 			
-			imp.situacion_matricula, 
-			imp.estado_matricula, 
+			imp.sexo,
+
+			imp.lengua_materna,
+			imp.segunda_lengua,
+			imp.situacion_matricula,
+			imp.estado_matricula,
 			if(imp.fecha_matricula='NULL' or imp.fecha_matricula='',null,str_to_date(imp.fecha_matricula,'%Y-%m-%d')),
-            
-			imp.id_grado, 
-			imp.dsc_grado, 
-			imp.id_seccion, 
-			imp.dsc_seccion, 
+
+			imp.id_grado,
+			imp.dsc_grado,
+			imp.id_seccion,
+			imp.dsc_seccion,
 			if(imp.fecha_registro='NULL' or imp.fecha_registro='',null,str_to_date(imp.fecha_registro,'%Y-%m-%d')),
-			
+
 			if(imp.fecha_retiro='NULL' or imp.fecha_retiro='',null,str_to_date(imp.fecha_retiro,'%Y-%m-%d')),
-			imp.motivo_retiro, 
-			imp.sf_regular, 
-			imp.sf_promocion_guiada,			
+			imp.motivo_retiro,
+			imp.sf_regular,
+			imp.sf_promocion_guiada,
 			if(imp.di_leve='NULL' or di_leve='',null,di_leve),
-			
+
 			if(imp.di_moderada='NULL' or di_moderada='',null,di_moderada),
 			if(imp.di_severo='NULL' or di_severo='',null,di_severo),
 			if(imp.discapacidad_fisica='NULL' or discapacidad_fisica='',null,discapacidad_fisica),
 			if(imp.trastorno_espectro_autista='NULL' or trastorno_espectro_autista='',null,trastorno_espectro_autista),
 			if(imp.dv_baja_vision='NULL' or dv_baja_vision='',null,dv_baja_vision),
-			
+
 			if(imp.dv_ceguera='NULL' or dv_ceguera='',null,dv_ceguera),
 			if(imp.da_hipoacusia='NULL' or da_hipoacusia='',null,da_hipoacusia),
 			if(imp.da_sordera='NULL' or da_sordera='',null,da_sordera),
 			if(imp.sordoceguera='NULL' or sordoceguera='',null,sordoceguera),
 			if(imp.otra_discapacidad='NULL' or otra_discapacidad='',null,otra_discapacidad)
-			
+
 		FROM edu_impor_matricula_general as imp WHERE imp.importacion_id=v_importacion_id;
-	
+
 		update par_importacion  set estado = 'PR' where id = v_importacion_id;
-	  
-		truncate edu_impor_matricula_general;         	
-	
-        
+
+		truncate edu_impor_matricula_general;
+
+
     END;
-     
-   
+
+
 END
 # fin
