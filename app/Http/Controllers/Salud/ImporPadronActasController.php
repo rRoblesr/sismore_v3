@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Educacion;
+namespace App\Http\Controllers\Salud;
 
 use App\Exports\ImporPadronSiagieExport;
 use App\Http\Controllers\Controller;
@@ -8,6 +8,8 @@ use App\Imports\tablaXImport;
 use App\Models\Administracion\Entidad;
 use App\Models\Educacion\ImporCensoDocente;
 use App\Models\Educacion\Importacion;
+use App\Models\Parametro\FuenteImportacion;
+use App\Models\Salud\ImporPadronActas;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Utilities\Utilitario;
 use Carbon\Carbon;
@@ -21,8 +23,8 @@ use function PHPUnit\Framework\isNull;
 
 class ImporPadronActasController extends Controller
 {
-    public static $FUENTE = 32;
-    public $fuente = 32;
+    public static $FUENTE = ['pacto_1' => 36, 'pacto_2' => 0, 'pacto_3' => 0, 'pacto_4' => 0, 'pacto_5' => 0];
+    public $fuente = 36;
     public function __construct()
     {
         $this->middleware('auth');
@@ -30,8 +32,9 @@ class ImporPadronActasController extends Controller
 
     public function importar()
     {
-        $fuente = $this->fuente;
-        return view('educacion.ImporGeneral.Importar', compact('fuente'));
+        // $fuente = $this->fuente;
+        $fuentes = FuenteImportacion::whereIn('id', [36])->get();
+        return view('salud.ImporPadronActas.Importar', compact('fuentes'));
         //$mensaje = "";return view('educacion.ImporCensoDocente.Importar', compact('mensaje'));
     }
 
@@ -54,104 +57,114 @@ class ImporPadronActasController extends Controller
         die;
     }
 
-    public function guardar(Request $request)
+    public function guardar(Request $rq)
     {
         ini_set('memory_limit', '-1');
         set_time_limit(0);
 
-        $existeMismaFecha = ImportacionRepositorio::Importacion_PE($request->fechaActualizacion, $this->fuente);
-        if ($existeMismaFecha != null) {
-            $mensaje = "Error, Ya existe archivos prendientes de aprobar para la fecha de versión ingresada";
-            $this->json_output(400, $mensaje);
-        }
+        // $this->json_output(400, $rq->all());
 
-        $existeMismaFecha = ImportacionRepositorio::Importacion_PR($request->fechaActualizacion, $this->fuente);
-        if ($existeMismaFecha != null) {
-            $mensaje = "Error, Ya existe archivos procesados para la fecha de versión ingresada";
-            $this->json_output(400, $mensaje);
-        }
-
-        $this->validate($request, ['file' => 'required|mimes:xls,xlsx']);
-        $archivo = $request->file('file');
-        $array = (new tablaXImport)->toArray($archivo);
-
-        if (count($array) != 1) {
-            $this->json_output(400, 'Error de Hojas, Solo debe tener una HOJA, el LIBRO EXCEL');
-        }
-
-        try {
-            foreach ($array as $value) {
-                foreach ($value as $celda => $row) {
-                    if ($celda > 0) break;
-                    $cadena =
-                        $row['distrito'] .
-                        $row['fecha_inicial'] .
-                        $row['fecha_final'] .
-                        $row['fecha_envio'] .
-                        $row['dni_usuario_envio'] .
-                        $row['primer_apellido'] .
-                        $row['segundo_apellido'] .
-                        $row['prenombres'] .
-                        $row['numero_archivos '];
+        switch ($rq->fuente) {
+            case 36:
+                $existeMismaFecha = ImportacionRepositorio::Importacion_PE($rq->fechaActualizacion, $rq->fuente);
+                if ($existeMismaFecha != null) {
+                    $mensaje = "Error, Ya existe archivos prendientes de aprobar para la fecha de versión ingresada";
+                    $this->json_output(400, $mensaje);
                 }
-            }
-        } catch (Exception $e) {
-            $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto";
-            $this->json_output(403, $mensaje);
-        }
 
-        try {
-            $importacion = Importacion::Create([
-                'fuenteImportacion_id' => $this->fuente, // valor predeterminado
-                'usuarioId_Crea' => auth()->user()->id,
-                // 'usuarioId_Aprueba' => null,
-                'fechaActualizacion' => $request['fechaActualizacion'],
-                // 'comentario' => $request['comentario'],
-                'estado' => 'PR'
-            ]);
+                $existeMismaFecha = ImportacionRepositorio::Importacion_PR($rq->fechaActualizacion, $rq->fuente);
+                if ($existeMismaFecha != null) {
+                    $mensaje = "Error, Ya existe archivos procesados para la fecha de versión ingresada";
+                    $this->json_output(400, $mensaje);
+                }
 
-            /* $tableta = Tableta::Create([
-                'importacion_id' => $importacion->id,
-                'anio_id' => Anio::where('anio', date('Y', strtotime($importacion->fechaActualizacion)))->first()->id,
-                'created_at' => date('Y-m-d h:i:s'),
-            ]); */
+                $this->validate($rq, ['file' => 'required|mimes:xls,xlsx']);
+                $archivo = $rq->file('file');
+                $array = (new tablaXImport)->toArray($archivo);
 
-            foreach ($array as $key => $value) {
-                foreach ($value as $row) {
-                    ImporCensoDocente::Create([
-                        'importacion_id' => $importacion->id,
-                        'distrito' => $row['distrito'],
-                        'fecha_inicial' => $row['fecha_inicial'],
-                        'fecha_final' => $row['fecha_final'],
-                        'fecha_envio' => $row['fecha_envio'],
-                        'dni_usuario_envio' => $row['dni_usuario_envio'],
-                        'primer_apellido' => $row['primer_apellido'],
-                        'segundo_apellido' => $row['segundo_apellido'],
-                        'prenombres' => $row['prenombres'],
-                        'numero_archivos ' => $row['numero_archivos ']
+                if (count($array) != 1) {
+                    $this->json_output(400, 'Error de Hojas, Solo debe tener una HOJA, el LIBRO EXCEL');
+                }
+
+                try {
+                    foreach ($array as $value) {
+                        foreach ($value as $celda => $row) {
+                            if ($celda > 0) break;
+                            $cadena =
+                                $row['nombre_municipio'] .
+                                $row['departamento'] .
+                                $row['provincia'] .
+                                $row['distrito'] .
+                                $row['fecha_inicial'] .
+                                $row['fecha_final'] .
+                                $row['fecha_envio'] .
+                                $row['dni_usuario_envio'] .
+                                $row['primer_apellido'] .
+                                $row['segundo_apellido'] .
+                                $row['prenombres'] .
+                                $row['numero_archivos'];
+                        }
+                    }
+                } catch (Exception $e) {
+                    $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto";
+                    $this->json_output(403, $mensaje);
+                }
+
+                try {
+                    $importacion = Importacion::Create([
+                        'fuenteImportacion_id' => $rq->fuente, // valor predeterminado
+                        'usuarioId_Crea' => auth()->user()->id,
+                        'fechaActualizacion' => $rq->fechaActualizacion,
+                        'estado' => 'PE'
                     ]);
+
+                    foreach ($array as $key => $value) {
+                        foreach ($value as $row) {
+                            ImporPadronActas::Create([
+                                'importacion_id' => $importacion->id,
+                                'nombre_municipio' => $row['nombre_municipio'],
+                                'departamento' => $row['departamento'],
+                                'provincia' => $row['provincia'],
+                                'distrito' => $row['distrito'],
+                                'fecha_inicial' => $row['fecha_inicial'],
+                                'fecha_final' => $row['fecha_final'],
+                                'fecha_envio' => $row['fecha_envio'],
+                                'dni_usuario_envio' => $row['dni_usuario_envio'],
+                                'primer_apellido' => $row['primer_apellido'],
+                                'segundo_apellido' => $row['segundo_apellido'],
+                                'prenombres' => $row['prenombres'],
+                                'numero_archivos' => $row['numero_archivos'],
+
+                            ]);
+                        }
+                    }
+                } catch (Exception $e) {
+                    // $importacion->estado = 'EL';
+                    // $importacion->save();
+
+                    $mensaje = "Error en la carga de datos, verifique los datos de su archivo y/o comuniquese con el administrador del sistema" . $e->getMessage();
+                    $this->json_output(400, $mensaje);
                 }
-            }
-        } catch (Exception $e) {
-            $importacion->estado = 'EL';
-            $importacion->save();
 
-            $mensaje = "Error en la carga de datos, verifique los datos de su archivo y/o comuniquese con el administrador del sistema" . $e->getMessage();
-            $this->json_output(400, $mensaje);
+                // try {
+                //     DB::select('call par_pa_procesarImporTableta(?,?,?)', [$importacion->id, $tableta->id, $importacion->usuarioId_Crea]);
+                // } catch (Exception $e) {
+                //     $importacion->estado = 'EL';
+                //     $importacion->save();
+
+                //     $mensaje = "Error al procesar la normalizacion de datos." . $e;
+                //     $tipo = 'danger';
+                //     $this->json_output(400, $mensaje);
+                // }
+
+                $mensaje = "Archivo excel subido y Procesado correctamente .";
+                $this->json_output(200, $mensaje, '');
+                break;
+
+            default:
+                # code...
+                break;
         }
-
-        /* try {
-            DB::select('call par_pa_procesarImporTableta(?,?,?)', [$importacion->id, $tableta->id, $importacion->usuarioId_Crea]);
-        } catch (Exception $e) {
-            $importacion->estado = 'EL';
-            $importacion->save();
-
-            $mensaje = "Error al procesar la normalizacion de datos." . $e;
-            $tipo = 'danger';
-            $this->json_output(400, $mensaje);
-        } */
-        $mensaje = "Archivo excel subido y Procesado correctamente .";
-        $this->json_output(200, $mensaje, '');
     }
 
     public function ListarDTImportFuenteTodos(Request $rq)

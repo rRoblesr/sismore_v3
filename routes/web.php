@@ -68,6 +68,7 @@ use App\Http\Controllers\Presupuesto\SubGenericaController;
 use App\Http\Controllers\Presupuesto\SubGenericaDetalleController;
 use App\Http\Controllers\Presupuesto\UnidadEjecutoraController;
 use App\Http\Controllers\Presupuesto\UnidadOrganicaController;
+use App\Http\Controllers\Salud\ImporPadronActasController;
 use App\Http\Controllers\Salud\IndicadoresController;
 use App\Http\Controllers\Trabajo\ActividadController;
 use App\Http\Controllers\Trabajo\AnuarioEstadisticoController;
@@ -1109,6 +1110,13 @@ Route::get('/salud/conveniofed', [IndicadoresController::class, 'ConvenioFED'])-
 Route::get('/salud/pruebas', function () {
     return view('pruebas3');
 })->name('salud.indicador.conveniofed');
+
+Route::get('/ImporPadronActas/Importar', [ImporPadronActasController::class, 'importar'])->name('imporpadronactas.importar');
+Route::post('/ImporPadronActas/Importar', [ImporPadronActasController::class, 'guardar'])->name('imporpadronactas.guardar');
+Route::get('/ImporPadronActas/Listar/ImportarDT', [ImporPoblacionController::class, 'ListarDTImportFuenteTodos'])->name('imporpadronactas.listar.importados');
+Route::post('/ImporPadronActas/ListaImportada', [ImporPoblacionController::class, 'ListaImportada'])->name('imporpadronactas.listarimportados');
+Route::get('/ImporPadronActas/eliminar/{id}', [ImporPoblacionController::class, 'eliminar'])->name('imporpadronactas.eliminar');
+
 /******************************************** FIN SALUD ***************************************************/
 
 

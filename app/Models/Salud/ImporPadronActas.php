@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models\Educacion;
+namespace App\Models\Salud;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ImporCensoDocente extends Model
+class ImporPadronActas extends Model
 {
     use HasFactory;
 
@@ -19,6 +19,9 @@ class ImporCensoDocente extends Model
      */
     protected $fillable = [
         'importacion_id',
+        'nombre_municipio',
+        'departamento',
+        'provincia',
         'distrito',
         'fecha_inicial',
         'fecha_final',
@@ -27,6 +30,6 @@ class ImporCensoDocente extends Model
         'primer_apellido',
         'segundo_apellido',
         'prenombres',
-        'numero_archivos '
+        'numero_archivos'
     ];
 }

@@ -20,7 +20,7 @@ class IndicadoresController extends Controller
     {
         $sector = 14;
         $instrumento = 8;
-        $inds = IndicadorGeneral::select('id',            'codigo',            'nombre',            'descripcion',            'numerador',            'denominador',            'instrumento_id',            'tipo_id',            'dimension_id',            'unidad_id',            'frecuencia_id',            'fuente_dato',            'anio_base',            'valor_base',            'sector_id',            'oficina_id',            'estado')->where('sector_id', $sector)->where('instrumento_id', $instrumento)->where('estado', '0')->get();
+        $inds = IndicadorGeneral::select('id', 'codigo', 'nombre', 'descripcion', 'numerador', 'denominador', 'instrumento_id', 'tipo_id', 'dimension_id', 'unidad_id', 'frecuencia_id', 'fuente_dato', 'anio_base', 'valor_base', 'sector_id', 'oficina_id', 'estado')->where('sector_id', $sector)->where('instrumento_id', $instrumento)->where('estado', '0')->get();
         return view('salud.Indicadores.PactoRegional', compact('inds'));
     }
 
@@ -79,7 +79,7 @@ class IndicadoresController extends Controller
                 return response()->json(['ss' => 234324]);
             case 'tabla1':
                 $aa = Anio::find($rq->anio);
-                $base = IndicadorGeneralMeta::where('indicadorgeneral', $rq->indicador)->where('anio',$aa->anio)
+                $base = IndicadorGeneralMeta::where('indicadorgeneral', $rq->indicador)->where('anio', $aa->anio)
                     ->join('par_ubigeo as d', 'd.id', '=', 'par_Indicador_general_meta.distrito')->get();
                 // return response()->json(['rq' => $rq->all(), 'base' => $aa]);
 
