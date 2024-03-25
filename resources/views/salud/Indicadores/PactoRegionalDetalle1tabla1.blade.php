@@ -15,11 +15,11 @@
             @foreach ($base as $key => $item)
                 <tr class="text-center">
                     <td>{{ $key + 1 }}</td>
-                    <td class="text-left">{{ $item->distrito }}</td>
+                    <td class="text-left">{{ $item->nombre }}</td>
                     <td>{{$item->valor }}</td>
                     <td>{{ 0 }}</td>
                     <td>{{ '0 %' }}</td>
-                    <td></td>
+                    <td><i class="mdi mdi-thumb-up" style="color: aqua"></i><i class="mdi mdi-thumb-down" style="color: red"></i></td>
                 </tr>
             @endforeach
         </tbody>

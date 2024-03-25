@@ -108,8 +108,13 @@
         .font-11 {
             font-size: 11px !important;
         }
+
         .font-40 {
             font-size: 40px !important;
+        }
+
+        .requerid {
+            color: red;
         }
     </style>
 </head>

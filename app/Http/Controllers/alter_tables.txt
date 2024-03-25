@@ -116,3 +116,28 @@ BEGIN
 
 END
 # fin
+
+
+# query para crear tabla padron actas
+
+CREATE TABLE `edu_impor_padron_actas` (
+  `id` int(11) NOT NULL,
+  `importacion_id` int(11) DEFAULT NULL,
+   distrito	varchar(20) DEFAULT NULL,
+   fecha_inicial	varchar(10) DEFAULT NULL,
+   fecha_final	varchar(10) DEFAULT NULL,
+   fecha_envio	varchar(10) DEFAULT NULL,
+   dni_usuario_envio	varchar(8) DEFAULT NULL,
+   primer_apellido	varchar(20) DEFAULT NULL,
+   segundo_apellido	varchar(20) DEFAULT NULL,
+   prenombres	varchar(30) DEFAULT NULL,
+   numero_archivos 	int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `edu_impor_padron_actas` ADD PRIMARY KEY(`id`);
+ALTER TABLE `edu_impor_padron_actas` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `edu_impor_padron_actas` ADD INDEX(`importacion_id`);
+
+########################################################

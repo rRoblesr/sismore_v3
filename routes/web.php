@@ -94,6 +94,7 @@ use App\Models\Presupuesto\BaseProyectos;
 use App\Models\Presupuesto\BaseProyectosDetalle;
 use App\Models\Presupuesto\BaseSiafWeb;
 use App\Models\Presupuesto\BaseSiafWebDetalle;
+use App\Models\Presupuesto\FuenteFinanciamiento;
 use App\Models\Presupuesto\ImporActividadesProyectos;
 use App\Models\Presupuesto\ImporGastos;
 use App\Models\Presupuesto\ImporIngresos;
@@ -571,6 +572,13 @@ Route::post('/Plaza/Plazas/grafica1', [PLazaController::class, 'cargarcoberturap
 Route::get('/ImporRER/Importar', [ImporRERController::class, 'importar'])->name('imporrer.importar');
 Route::post('/ImporRER/Importar', [ImporRERController::class, 'guardar'])->name('imporrer.guardar');
 Route::post('/ImporRER/ListaImportada/{importacion_id}', [ImporRERController::class, 'ListaImportada'])->name('imporrer.listarimportados');
+
+Route::get('/Mantenimiento/Fuente', [FuenteImportacionController::class, 'principal'])->name('mantenimiento.fuenteimportacion.principal');
+Route::post('/Mantenimiento/Fuente/Listar', [FuenteImportacionController::class, 'ListarDTImportFuenteTodos'])->name('mantenimiento.fuenteimportacion.listar.importados');
+Route::get('/Mantenimiento/Fuente/Find/{id}', [FuenteImportacionController::class, 'ajax_edit'])->name('mantenimiento.fuenteimportacion.find');
+Route::post('/Mantenimiento/Fuente/Add', [FuenteImportacionController::class, 'ajax_add'])->name('mantenimiento.fuenteimportacion.save');
+Route::post('/Mantenimiento/Fuente/Update', [FuenteImportacionController::class, 'ajax_update'])->name('mantenimiento.fuenteimportacion.update');
+Route::get('/Mantenimiento/Fuente/Delete/{id}', [FuenteImportacionController::class, 'ajax_delete'])->name('mantenimiento.fuenteimportacion.delete');
 
 Route::get('/educación/Mantenimiento/RER', [RERController::class, 'principal'])->middleware('auth')->name('mantenimiento.rer.principal');
 Route::post('/Mantenimiento/RER/Importados/', [RERController::class, 'ListarDTImportFuenteTodos'])->name('mantenimiento.rer.listar.importados');
@@ -1061,7 +1069,7 @@ Route::get('/AnuarioEstadistico/Aprobar/{importacion_id}', [AnuarioEstadisticoCo
 Route::post('/AnuarioEstadistico/Aprobar/procesar/{importacion_id}', [AnuarioEstadisticoController::class, 'procesar'])->name('AnuarioEstadistico.procesar');
 Route::get('/AnuarioEstadistico/ListaImportada_DataTable/{importacion_id}', [AnuarioEstadisticoController::class, 'ListaImportada_DataTable'])->name('AnuarioEstadistico.ListaImportada_DataTable');
 
-Route::post('/AnuarioEstadistico/Grafico_Promedio_Remuneracion/{id}', [AnuarioEstadisticoController::class, 'Grafico_Promedio_Remuneracion']);
+Route::post('/AnuarioEstadistico/Grafico_Promedio_Remuneracion/{iFd}', [AnuarioEstadisticoController::class, 'Grafico_Promedio_Remuneracion']);
 Route::post('/AnuarioEstadistico/Grafico_Promedio_Trabajadores/{id}', [AnuarioEstadisticoController::class, 'Grafico_Promedio_Trabajadores']);
 Route::post('/AnuarioEstadistico/Grafico_Prestadores_Servicio4ta_Publico/{id}', [AnuarioEstadisticoController::class, 'Grafico_Prestadores_Servicio4ta_Publico']);
 Route::post('/AnuarioEstadistico/Grafico_Prestadores_Servicio4ta_Privado/{id}', [AnuarioEstadisticoController::class, 'Grafico_Prestadores_Servicio4ta_Privado']);

@@ -78,8 +78,10 @@ class IndicadoresController extends Controller
             case 'anal1':
                 return response()->json(['ss' => 234324]);
             case 'tabla1':
-                $base = IndicadorGeneralMeta::where('indicadorgeneral', $rq->indicador)->get();
-                // return response()->json(['rq' => $rq->all(), 'base' => $base]);
+                $aa = Anio::find($rq->anio);
+                $base = IndicadorGeneralMeta::where('indicadorgeneral', $rq->indicador)->where('anio',$aa->anio)
+                    ->join('par_ubigeo as d', 'd.id', '=', 'par_Indicador_general_meta.distrito')->get();
+                // return response()->json(['rq' => $rq->all(), 'base' => $aa]);
 
                 $excel = view('salud.Indicadores.PactoRegionalDetalle1tabla1', compact('base'))->render();
                 return response()->json(compact('excel'));
