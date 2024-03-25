@@ -13,13 +13,22 @@
                 <div class="card card-border">
                     <div class="card-header border-success-0 bg-transparent pb-0">
                         <div class="card-widgets">
+                            {{-- <div class="form-inline">
+                                <select class="form-control btn-xs" name="sistema" id="sistema"
+                                    onchange="listarDT();">
+                                    @foreach ($fuentes as $item)
+                                        <option value="{{ $item->id }}">{{ $item->nombre }}</option>
+                                    @endforeach
+                                </select> 
+                            </div> --}}
+
                             <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i
                                     class="fa fa-redo"></i> Actualizar</button>
                             <button type="button" class="btn btn-success btn-xs waves-effect waves-light"
                                 data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static"
                                 data-keyboard="false"><i class="ion ion-md-cloud-upload"></i> Importar</button>
                         </div>
-                        <h3 class="card-title">HISTORIAL DE IMPORTACIÓN DE PADRÓN ACTAS</h3>
+                        <h3 class="card-title">HISTORIAL DE IMPORTACIÓN DE PADRÓN ACTAS </h3>
                     </div>
                     <div class="card-body">
                         <div class="row">
