@@ -28,7 +28,7 @@
                                 data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static"
                                 data-keyboard="false"><i class="ion ion-md-cloud-upload"></i> Importar</button>
                         </div>
-                        <h3 class="card-title">HISTORIAL DE IMPORTACIÓN DE PADRÓN ACTAS </h3>
+                        <h3 class="card-title">HISTORIAL DE IMPORTACIÓN DE PADRÓN ACTAS</h3>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -192,6 +192,28 @@
                 },
                 type: "POST",
             });
+
+            fetch('https://www.highcharts.com/samples/data/nuclear-energy-production.json')
+                .then((res) => res.json())
+                .then((data) => {
+                    console.log(data);
+                    // dataset = data;
+                });
+
+            fetch(
+                    "https://apiperu.dev/api/dni/45026462?api_token=95f88a81f2e812ab6c398d30776a74f03a6d21edb121457819c1d8c22095cbe0"
+                )
+                .then((res) => res.json())
+                .then((data) => {
+                    console.log(data);
+                });
+            fetch(
+                    "https://apiperu.dev/api/ruc/10450264623?api_token=95f88a81f2e812ab6c398d30776a74f03a6d21edb121457819c1d8c22095cbe0"
+                )
+                .then((res) => res.json())
+                .then((data) => {
+                    console.log(data);
+                });
         });
 
         function upload(e) {

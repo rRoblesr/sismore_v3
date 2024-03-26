@@ -78,9 +78,12 @@
                                 </div>
                                 <div class="p-4">
                                     <ul class="list-unstyled mt-0">
-                                        <li class="mt-0 pt-0"><i class="mdi mdi-finance font-44 text-green-0"></i></li>
+                                        <li class="mt-0 pt-0">
+                                            {{-- <i class="mdi mdi-finance font-44 text-green-0"></i></li>
                                         <li class="mt-0 pt-0 font-16">Avance</li>
-                                        <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 %</li>
+                                        <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 % --}}
+
+                                        </li>
                                         <li class="mt-0 pt-0 font-12">Actualizado: 20/02/2024ss</li>
                                         <li class="mt-0 pt-0 font-20 font-weight-bold">Meta: 71%</li>
                                         <li class="mt-0 pt-0">
@@ -909,6 +912,7 @@
                 credits: false,
             });
         }
+
     </script>
 
     <script src="https://code.highcharts.com/highcharts.js"></script>
