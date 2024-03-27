@@ -1798,7 +1798,7 @@
 
                 xAxis: {
                     type: 'category',
-                    lineWidth: 0, //control de la linea 
+                    lineWidth: 0, //control de la linea
                     tickWidth: 0 //control del tamaño de lalinea
                 },
 
@@ -4476,7 +4476,7 @@
                 yAxis: {
                     allowDecimals: false,
                     min: 0,
-                    //max:1000,           
+                    //max:1000,
                     title: {
                         text: 'Count medals'
                     }
@@ -5264,28 +5264,80 @@
                         [0.9, '#DF5353'] // red
                     ]
                 },
+                xAxis: {
+                    accessibility: {
+                        description: 'Days'
+                    }
+                },
+                lang: {
+                    accessibility: {
+                        chartContainerLabel: 'CPU usage. Highcharts interactive chart.'
+                    }
+                },
+                tooltip: {
+                    valueSuffix: '%'
+                },
                 pane: {
                     background: {
                         innerRadius: '80%',
                         outerRadius: '100%'
                     }
                 },
-                accessibility: {
-                    typeDescription: 'The gauge chart with 1 data point.'
-                }
-            });
-
-            Highcharts.setOptions({
+                // series: [{
+                //     name: 'CPU utilization',
+                //     innerRadius: '80%',
+                //     data: [{
+                //         colorIndex: '100'
+                //     }],
+                //     radius: '100%'
+                // }],
+                series: [{
+                    name: 'Avance',
+                    data: [80],
+                    dataLabels: {
+                        format: '<div style="text-align:center">' +
+                            '<span style="font-size:25px">{y}%</span><br/>' +
+                            '<span style="font-size:12px;opacity:0.4">Avance</span>' +
+                            '</div>',
+                            useHTML: true,
+                    },
+                    tooltip: {
+                        valueSuffix: ' km/h'
+                    }
+                }],
+                plotOptions: {
+                    series: {
+                        // className: 'highcharts-live-kpi',
+                        // dataLabels: {
+                        //     format: '<div style="text-align:center; margin-top: -20px">' +
+                        //         '<div style="font-size:1.2em;">{y}%</div>' +
+                        //         '<div style="font-size:14px; opacity:0.4; text-align: center;">CPU</div>' +
+                        //         '</div>',
+                        //     useHTML: true
+                        // }
+                    },
+                    solidgauge: {
+                        dataLabels: {
+                            // y: 5,
+                            borderWidth: 0,
+                            useHTML: true
+                        }
+                    }
+                },
+                // accessibility: {
+                //     typeDescription: 'The gauge chart with 1 data point.'
+                // },
                 credits: {
                     enabled: false
                 },
                 title: {
                     text: ''
-                }
-                title: {
+                },
+                subtitle: {
                     text: ''
-                }
+                },
             });
+
         }
     </script>
 @endsection
