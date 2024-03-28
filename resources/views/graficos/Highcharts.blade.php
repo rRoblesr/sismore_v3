@@ -164,6 +164,7 @@
         GaugeSeries01('gra01');
         GaugeSeries02('gra02');
         GaugeSeries04('gra04');
+        GaugeSeries05('gra05');
 
         // pie01('gra01');
         // pie02('gra02');
@@ -5259,6 +5260,84 @@
                     min: 0,
                     max: 100,
                     stops: [
+                        // [0.1, '#33A29D'], // green
+                        // [0.5, '#DDDF0D'], // yellow
+                        [0.9, '#DF5353'] // red
+                    ],
+                    lineWidth: 0,
+                    minorTickInterval: null,
+                    tickAmount: 0,
+
+                },
+                pane: {
+                    background: {
+                        innerRadius: '80%',
+                        outerRadius: '100%'
+                    }
+                },
+                accessibility: {
+                    // typeDescription: 'The gauge chart with 1 data point.'
+                },
+                credits: {
+                    enabled: false
+                },
+                title: {
+                    text: ''
+                },
+
+                plotOptions: {
+                    series: {
+                        // className: 'highcharts-live-kpi',
+                        dataLabels: {
+                            format: '<div style="text-align:center; margin-top: -20px">' +
+                                '<div style="font-size:1.2em;">{y}%</div>' +
+                                '<div style="font-size:14px; opacity:0.4; text-align: center;">CPU</div>' +
+                                '</div>',
+                            useHTML: true
+                        }
+                    }
+                },
+                series: [{
+                    name: 'CPU utilization',
+                    // data:[80],
+                    innerRadius: '80%',
+                    data: [{
+                        y: 50,
+                        colorIndex: '50'
+                    }],
+                    radius: '100%',
+                }],
+                xAxis: {
+                    accessibility: {
+                        // description: 'Days'
+                    }
+                },
+                lang: {
+                    accessibility: {
+                        // chartContainerLabel: 'CPU usage. Highcharts interactive chart.'
+                    }
+                },
+                tooltip: {
+                    valueSuffix: '%'
+                }
+
+            });
+
+        }
+
+
+        function GaugeSeries05(div) {
+            Highcharts.chart(div, {
+                chart: {
+                    height: 165,
+                    margin: [0, 0, 0, 0],
+                    spacing: [0, 0, 0, 0],
+                    type: 'solidgauge'
+                },
+                yAxis: {
+                    min: 0,
+                    max: 100,
+                    stops: [
                         [0.1, '#33A29D'], // green
                         [0.5, '#DDDF0D'], // yellow
                         [0.9, '#DF5353'] // red
@@ -5299,7 +5378,7 @@
                             '<span style="font-size:25px">{y}%</span><br/>' +
                             '<span style="font-size:12px;opacity:0.4">Avance</span>' +
                             '</div>',
-                            useHTML: true,
+                        useHTML: true,
                     },
                     tooltip: {
                         valueSuffix: ' km/h'
