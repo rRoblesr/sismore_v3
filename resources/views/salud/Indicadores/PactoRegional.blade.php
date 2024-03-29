@@ -76,22 +76,27 @@
                                     {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                     {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
                                 </div>
-                                <div class="p-4">
+                                <div class="pb-4 pl-4 pr-4">
                                     <ul class="list-unstyled mt-0">
                                         <li class="mt-0 pt-0">
                                             {{-- <i class="mdi mdi-finance font-44 text-green-0"></i></li>
                                         <li class="mt-0 pt-0 font-16">Avance</li>
                                         <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 % --}}
+                                        <li class="m-0 pt-0">
 
+                                            <figure class="p-0 m-0">
+                                                <div id="gra{{ $item->codigo }}"></div>{{-- graDITSALUD01 --}}
+                                            </figure>
                                         </li>
-                                        <li class="mt-0 pt-0 font-12">Actualizado: 20/02/2024ss</li>
+                                        </li>
+                                        <li class="mt-0 pt-0 font-12">Actualizado: 20/02/2024</li>
                                         <li class="mt-0 pt-0 font-20 font-weight-bold">Meta: 71%</li>
                                         <li class="mt-0 pt-0">
                                             <span class="badge badge-success" style="font-size: 100%">
                                                 <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
                                         </li>
                                         <li class="mt-1 pt-1">
-                                            <p style="height: 20%">{{ $item->nombre }}</p>
+                                            <p class="font-12" style="height: 7rem">{{ $item->nombre }}</p>
                                         </li>
 
                                     </ul>
@@ -201,7 +206,12 @@
                     thousandsSep: ","
                 }
             });
-            cargarCards();
+            // cargarCards();
+            GaugeSeries('graDITSALUD01', 71);
+            GaugeSeries('graDITSALUD02', 82);
+            GaugeSeries('graDITSALUD03', 92);
+            GaugeSeries('graDITSALUD04', 99);
+            GaugeSeries('graDITSALUD05', 62);
         });
 
         function cargarCards() {
@@ -210,43 +220,45 @@
                 data: {
                     "provincia": $('#provincia').val(),
                     "distrito": $('#distrito').val(),
-                    "tipogestion": $('#tipogestion').val(),
-                    "ambito": $('#ambito').val(),
+                    // "tipogestion": $('#tipogestion').val(),
+                    // "ambito": $('#ambito').val(),
                 },
                 type: "GET",
                 dataType: "JSON",
                 success: function(data) {
-                    $('#basico').text(data.valor1);
-                    $('#ebr').text(data.valor2);
-                    $('#ebe').text(data.valor3);
-                    $('#eba').text(data.valor4);
-                    $('#ibasico').text(data.ind1 + '%');
-                    $('#iebr').text(data.ind2 + '%');
-                    $('#iebe').text(data.ind3 + '%');
-                    $('#ieba').text(data.ind4 + '%');
-                    //$('#bbasico').css('width','100px');
-                    $('#bbasico').css('width', data.ind1 + '%')
-                        .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                        .addClass(data.ind1 > 84 ? 'bg-success-0' : (data.ind1 > 49 ? 'bg-warning-0' :
-                            'bg-orange-0'));
-                    $('#bebr').css('width', data.ind2 + '%').removeClass(
-                            'bg-success-0 bg-orange-0 bg-warning-0')
-                        .addClass(data.ind2 > 84 ? 'bg-success-0' : (data.ind2 > 49 ? 'bg-warning-0' :
-                            'bg-orange-0'));
-                    $('#bebe').css('width', data.ind3 + '%').removeClass(
-                            'bg-success-0 bg-orange-0 bg-warning-0')
-                        .addClass(data.ind3 > 84 ? 'bg-success-0' : (data.ind3 > 49 ? 'bg-warning-0' :
-                            'bg-orange-0'));
-                    $('#beba').css('width', data.ind4 + '%').removeClass(
-                            'bg-success-0 bg-orange-0 bg-warning-0')
-                        .addClass(data.ind4 > 84 ? 'bg-success-0' : (data.ind4 > 49 ? 'bg-warning-0' :
-                            'bg-orange-0'));
+                    // $('#basico').text(data.valor1);
+                    // $('#ebr').text(data.valor2);
+                    // $('#ebe').text(data.valor3);
+                    // $('#eba').text(data.valor4);
+                    // $('#ibasico').text(data.ind1 + '%');
+                    // $('#iebr').text(data.ind2 + '%');
+                    // $('#iebe').text(data.ind3 + '%');
+                    // $('#ieba').text(data.ind4 + '%');
+                    // //$('#bbasico').css('width','100px');
+                    // $('#bbasico').css('width', data.ind1 + '%')
+                    //     .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+                    //     .addClass(data.ind1 > 84 ? 'bg-success-0' : (data.ind1 > 49 ? 'bg-warning-0' :
+                    //         'bg-orange-0'));
+                    // $('#bebr').css('width', data.ind2 + '%').removeClass(
+                    //         'bg-success-0 bg-orange-0 bg-warning-0')
+                    //     .addClass(data.ind2 > 84 ? 'bg-success-0' : (data.ind2 > 49 ? 'bg-warning-0' :
+                    //         'bg-orange-0'));
+                    // $('#bebe').css('width', data.ind3 + '%').removeClass(
+                    //         'bg-success-0 bg-orange-0 bg-warning-0')
+                    //     .addClass(data.ind3 > 84 ? 'bg-success-0' : (data.ind3 > 49 ? 'bg-warning-0' :
+                    //         'bg-orange-0'));
+                    // $('#beba').css('width', data.ind4 + '%').removeClass(
+                    //         'bg-success-0 bg-orange-0 bg-warning-0')
+                    //     .addClass(data.ind4 > 84 ? 'bg-success-0' : (data.ind4 > 49 ? 'bg-warning-0' :
+                    //         'bg-orange-0'));
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");
                     console.log(jqXHR);
                 },
             });
+
+            // GaugeSeries('gra01DITSALUD01');
 
             //panelGraficas('container1');
             //panelGraficas('container2');
@@ -287,8 +299,8 @@
                     "anio": 2024,
                     "provincia": $('#provincia').val(),
                     "distrito": $('#distrito').val(),
-                    "tipogestion": $('#tipogestion').val(),
-                    "ambito": $('#ambito').val(),
+                    // "tipogestion": $('#tipogestion').val(),
+                    // "ambito": $('#ambito').val(),
                 },
                 type: "GET",
                 dataType: "JSON",
@@ -913,9 +925,91 @@
             });
         }
 
+        function GaugeSeries(div, data) {
+            Highcharts.chart(div, {
+                chart: {
+                    height: 165,
+                    margin: [0, 0, 0, 0],
+                    spacing: [0, 0, 0, 0],
+                    type: 'solidgauge'
+                },
+                yAxis: {
+                    min: 0,
+                    max: 100,
+                    stops: [
+                        [0.1, '#33A29D'], // green
+                        // [0.5, '#DDDF0D'], // yellow
+                        // [0.9, '#DF5353'] // red
+                    ],
+                    lineWidth: 0,
+                    minorTickInterval: null,
+                    tickAmount: 0,
+
+                },
+                pane: {
+                    background: {
+                        innerRadius: '80%',
+                        outerRadius: '100%'
+                    }
+                },
+                accessibility: {
+                    // typeDescription: 'The gauge chart with 1 data point.'
+                },
+                credits: {
+                    enabled: false
+                },
+                exporting: {
+                    enabled: false,
+                },
+                title: {
+                    text: ''
+                },
+
+                plotOptions: {
+                    series: {
+                        // className: 'highcharts-live-kpi',
+                        dataLabels: {
+                            format: '<div style="text-align:center; margin-top: -20px">' +
+                                '<div style="font-size:2.5em;">{y}%</div>' +
+                                '<div style="font-size:14px; opacity:0.4; text-align: center;">Avance</div>' +
+                                '</div>',
+                            useHTML: true,
+                            borderWidth: 0,
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Avance',
+                    // data:[80],
+                    innerRadius: '80%',
+                    data: [{
+                        y: data,
+                        colorIndex: '50'
+                    }],
+                    radius: '100%',
+                }],
+                xAxis: {
+                    accessibility: {
+                        // description: 'Days'
+                    }
+                },
+                lang: {
+                    accessibility: {
+                        // chartContainerLabel: 'CPU usage. Highcharts interactive chart.'
+                    }
+                },
+                tooltip: {
+                    valueSuffix: '%'
+                }
+
+            });
+
+        }
     </script>
 
     <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-more.js"></script>
+    <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <!-- optional -->
     <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
