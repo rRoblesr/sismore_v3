@@ -13,6 +13,7 @@ use App\Models\Salud\ImporPadronActas;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Utilities\Utilitario;
 use Carbon\Carbon;
+use DateTime;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -32,10 +33,15 @@ class ImporPadronActasController extends Controller
 
     public function importar()
     {
-        // $fuente = $this->fuente;
+        // $var = '23/12/1987';
+        // $date = str_replace('/', '-', $var);
+        // echo date('Y-m-d', strtotime($date));
+
+        // $date = DateTime::createFromFormat('d/m/Y', "3/12/1987");
+        // echo $date->format('Y-m-d');
+
         $fuentes = FuenteImportacion::whereIn('id', [36])->get();
         return view('salud.ImporPadronActas.Importar', compact('fuentes'));
-        //$mensaje = "";return view('educacion.ImporCensoDocente.Importar', compact('mensaje'));
     }
 
     public function exportar()
@@ -65,7 +71,7 @@ class ImporPadronActasController extends Controller
         // $this->json_output(400, $rq->all());
 
         switch ($rq->fuente) {
-            case 36:
+            case ImporPadronActasController::$FUENTE['pacto_1']:
                 $existeMismaFecha = ImportacionRepositorio::Importacion_PE($rq->fechaActualizacion, $rq->fuente);
                 if ($existeMismaFecha != null) {
                     $mensaje = "Error, Ya existe archivos prendientes de aprobar para la fecha de versión ingresada";
@@ -126,36 +132,29 @@ class ImporPadronActasController extends Controller
                                 'departamento' => $row['departamento'],
                                 'provincia' => $row['provincia'],
                                 'distrito' => $row['distrito'],
-                                'fecha_inicial' => $row['fecha_inicial'],
-                                'fecha_final' => $row['fecha_final'],
-                                'fecha_envio' => $row['fecha_envio'],
+                                'fecha_inicial' => $this->cambiarFormat($row['fecha_inicial']),
+                                'fecha_final' => $this->cambiarFormat($row['fecha_final']),
+                                'fecha_envio' => $this->cambiarFormat($row['fecha_envio']),
                                 'dni_usuario_envio' => $row['dni_usuario_envio'],
                                 'primer_apellido' => $row['primer_apellido'],
                                 'segundo_apellido' => $row['segundo_apellido'],
                                 'prenombres' => $row['prenombres'],
                                 'numero_archivos' => $row['numero_archivos'],
-
                             ]);
                         }
                     }
                 } catch (Exception $e) {
-                    // $importacion->estado = 'EL';
-                    // $importacion->save();
-
                     $mensaje = "Error en la carga de datos, verifique los datos de su archivo y/o comuniquese con el administrador del sistema" . $e->getMessage();
                     $this->json_output(400, $mensaje);
                 }
 
-                // try {
-                //     DB::select('call par_pa_procesarImporTableta(?,?,?)', [$importacion->id, $tableta->id, $importacion->usuarioId_Crea]);
-                // } catch (Exception $e) {
-                //     $importacion->estado = 'EL';
-                //     $importacion->save();
-
-                //     $mensaje = "Error al procesar la normalizacion de datos." . $e;
-                //     $tipo = 'danger';
-                //     $this->json_output(400, $mensaje);
-                // }
+                try {
+                    DB::select('call sal_procesarPacto1(?,?)', [$importacion->id, date('Y', strtotime($rq->fechaActualizacion))]);
+                } catch (Exception $e) {
+                    $mensaje = "Error al procesar la normalizacion de datos." . $e;
+                    $tipo = 'danger';
+                    $this->json_output(400, $mensaje);
+                }
 
                 $mensaje = "Archivo excel subido y Procesado correctamente .";
                 $this->json_output(200, $mensaje, '');
@@ -165,6 +164,17 @@ class ImporPadronActasController extends Controller
                 # code...
                 break;
         }
+    }
+
+    public function cambiarFormat($ff)
+    {
+        if ($ff) {
+            if (strlen($ff) > 7) {
+                $date = DateTime::createFromFormat('d/m/Y', $ff);
+                return $date->format('Y-m-d');
+            }
+        }
+        return null;
     }
 
     public function ListarDTImportFuenteTodos(Request $rq)
@@ -217,31 +227,23 @@ class ImporPadronActasController extends Controller
         return response()->json($result);
     }
 
-    public function ListaImportada($importacion_id) //(Request $request, $importacion_id)
+    public function ListaImportada(Request $rq) //(Request $request, $importacion_id)
     {
-        $data = ImporCensoDocente::where('importacion_id', $importacion_id)->get();
+        $data = ImporPadronActas::where('importacion_id', $rq->importacion_id)->get();
         return DataTables::of($data)->make(true);
     }
 
-    /* public function ListaImportada_DataTable($importacion_id)
-    {
-        $padronWebLista = ImporMatriculaRepositorio::Listar_Por_Importacion_id($importacion_id);
-        return  datatables()->of($padronWebLista)->toJson();
-    } */
-
     public function eliminar($id)
     {
-        //$tableta = Tableta::where('importacion_id', $id)->first();
-        //TabletaDetalle::where('tableta_id', $tableta->id)->delete();
-        //$tableta->delete();
-        ImporCensoDocente::where('importacion_id', $id)->delete();
+        ImporPadronActas::where('importacion_id', $id)->delete();
         Importacion::find($id)->delete();
         return response()->json(array('status' => true));
     }
 
     public function download()
     {
-        $name = 'SIAGIE MATRICULAS ' . date('Y-m-d') . '.xlsx';
-        return Excel::download(new ImporPadronSiagieExport, $name);
+        // $name = 'SIAGIE MATRICULAS ' . date('Y-m-d') . '.xlsx';
+        // return Excel::download(new ImporPadronSiagieExport, $name);
+        return [];
     }
 }

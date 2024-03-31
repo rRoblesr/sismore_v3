@@ -10,7 +10,7 @@ class ImporPadronActas extends Model
     use HasFactory;
 
     public $timestamps = false;
-    protected $table = "edu_impor_padron_actas";
+    protected $table = "sal_impor_padron_actas";
 
     /**
      * The attributes that are mass assignable.

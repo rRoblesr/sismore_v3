@@ -1114,8 +1114,8 @@ Route::get('/salud/pruebas', function () {
 Route::get('/ImporPadronActas/Importar', [ImporPadronActasController::class, 'importar'])->name('imporpadronactas.importar');
 Route::post('/ImporPadronActas/Importar', [ImporPadronActasController::class, 'guardar'])->name('imporpadronactas.guardar');
 Route::get('/ImporPadronActas/Listar/ImportarDT', [ImporPadronActasController::class, 'ListarDTImportFuenteTodos'])->name('imporpadronactas.listar.importados');
-Route::post('/ImporPadronActas/ListaImportada', [ImporPoblacionController::class, 'ListaImportada'])->name('imporpadronactas.listarimportados');
-Route::get('/ImporPadronActas/eliminar/{id}', [ImporPoblacionController::class, 'eliminar'])->name('imporpadronactas.eliminar');
+Route::post('/ImporPadronActas/ListaImportada', [ImporPadronActasController::class, 'ListaImportada'])->name('imporpadronactas.listarimportados');
+Route::get('/ImporPadronActas/eliminar/{id}', [ImporPadronActasController::class, 'eliminar'])->name('imporpadronactas.eliminar');
 
 /******************************************** FIN SALUD ***************************************************/
 

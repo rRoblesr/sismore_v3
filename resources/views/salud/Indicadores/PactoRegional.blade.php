@@ -96,7 +96,7 @@
                                                 <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
                                         </li>
                                         <li class="mt-1 pt-1">
-                                            <p class="font-12" style="height: 7rem">{{ $item->nombre }}</p>
+                                            <p class="font-12" style="height: 6rem">{{ $item->nombre }}</p>
                                         </li>
 
                                     </ul>
@@ -971,10 +971,11 @@
                         dataLabels: {
                             format: '<div style="text-align:center; margin-top: -20px">' +
                                 '<div style="font-size:2.5em;">{y}%</div>' +
-                                '<div style="font-size:14px; opacity:0.4; text-align: center;">Avance</div>' +
+                                '<div style="font-size:12px; opacity:0.4; text-align: center;">Avance</div>' +
                                 '</div>',
                             useHTML: true,
                             borderWidth: 0,
+
                         }
                     }
                 },

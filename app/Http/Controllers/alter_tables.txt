@@ -141,11 +141,44 @@ ALTER TABLE `edu_impor_padron_actas` ADD PRIMARY KEY(`id`);
 ALTER TABLE `edu_impor_padron_actas` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `edu_impor_padron_actas` ADD INDEX(`importacion_id`);
 
+ALTER TABLE `edu_impor_padron_actas` CHANGE `dni_usuario_envio` `dni_usuario_envio` VARCHAR(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
+
+
 ########################################################
 
 #query para modifcar table fuenteimportacion
 ########################################################
 
 
+#
+
+CREATE TABLE `sal_data_pacto1` (
+  `id` int(11) NOT NULL,
+  `importacion_id` int(11) DEFAULT NULL,
+  `anio` int(11) DEFAULT NULL,
+  `distrito` varchar(50) DEFAULT NULL,
+  `mes` int(11) DEFAULT NULL,
+  `estado` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
+ALTER TABLE `sal_data_pacto1` ADD PRIMARY KEY(`id`);
+ALTER TABLE `sal_data_pacto1` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `sal_data_pacto1` ADD INDEX(`importacion_id`);
+
+#
+CREATE PROCEDURE bdsismore.sal_procesarPacto1(v_importacion int,v_anio int)
+begin
+	delete from sal_data_pacto1 where anio=v_anio;
+	drop table if exists temp1;
+	create temporary table temp1(importacion int, anio int,distrito varchar(50),fechai date,fechaf date,fechae date,estado int);
+
+	insert into temp1
+	select imp.id, year(imp.fechaActualizacion),pa.distrito ,pa.fecha_inicial ,pa.fecha_final, pa.fecha_envio ,if(pa.fecha_envio between pa.fecha_inicial and pa.fecha_final ,1,0) from sal_impor_padron_actas pa
+	left join par_importacion imp on imp.id =pa.importacion_id
+	where year(imp.fechaActualizacion)=v_anio and imp.id=v_importacion order by pa.distrito,pa.fecha_inicial ;
+
+	insert into sal_data_pacto1(`importacion_id`, `anio`, `distrito`, `mes`, `estado`)
+	select importacion, anio, distrito, month(fechai) mes, max(estado) from temp1 group by importacion,anio,distrito,mes;
+
+end

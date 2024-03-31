@@ -19,7 +19,7 @@
                                     @foreach ($fuentes as $item)
                                         <option value="{{ $item->id }}">{{ $item->nombre }}</option>
                                     @endforeach
-                                </select> 
+                                </select>
                             </div> --}}
 
                             <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i
@@ -34,9 +34,9 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="table-responsive">
-                                    <table id="datatable" class="table table-striped table-bordered dt-responsive nowrap"
+                                    <table id="datatable" class="table table-sm table-striped table-bordered dt-responsive nowrap font-12"
                                         style="font-size: 12px">
-                                        <thead class="text-primary">
+                                        <thead class="text-white  bg-success-0">
                                             <tr>
                                                 <th>N°</th>
                                                 <th>Versión</th>
@@ -148,14 +148,21 @@
                     </div>
                     <div class="modal-body">
                         <div class="table-responsive">
-                            <table id="siagie-matricula" class="table table-striped table-bordered"
-                                style="font-size:12px">
+                            <table id="siagie-matricula" class="table table-sm table-striped table-bordered font-11">
                                 {{-- width:7200px; --}}
-                                <thead class="text-primary">
-                                    <th>UBIGEO</th>
-                                    <th>SEXO</th>
-                                    <th>EDAD</th>
-                                    <th>TOTAL</th>
+                                <thead class="text-white bg-success-0">
+                                    <th>nombre_municipio</th>
+                                    <th>departamento</th>
+                                    <th>provincia</th>
+                                    <th>distrito</th>
+                                    <th>fecha_inicial</th>
+                                    <th>fecha_final</th>
+                                    <th>fecha_envio</th>
+                                    <th>dni_usuario_envio</th>
+                                    <th>primer_apellido</th>
+                                    <th>segundo_apellido</th>
+                                    <th>prenombres</th>
+                                    <th>numero_archivos </th>
                                 </thead>
                                 <tbody>
 
@@ -193,27 +200,27 @@
                 type: "POST",
             });
 
-            fetch('https://www.highcharts.com/samples/data/nuclear-energy-production.json')
-                .then((res) => res.json())
-                .then((data) => {
-                    console.log(data);
-                    // dataset = data;
-                });
+            // fetch('https://www.highcharts.com/samples/data/nuclear-energy-production.json')
+            //     .then((res) => res.json())
+            //     .then((data) => {
+            //         console.log(data);
+            //         // dataset = data;
+            //     });
 
-            fetch(
-                    "https://apiperu.dev/api/dni/45026462?api_token=95f88a81f2e812ab6c398d30776a74f03a6d21edb121457819c1d8c22095cbe0"
-                )
-                .then((res) => res.json())
-                .then((data) => {
-                    console.log(data);
-                });
-            fetch(
-                    "https://apiperu.dev/api/ruc/10450264623?api_token=95f88a81f2e812ab6c398d30776a74f03a6d21edb121457819c1d8c22095cbe0"
-                )
-                .then((res) => res.json())
-                .then((data) => {
-                    console.log(data);
-                });
+            // fetch(
+            //         "https://apiperu.dev/api/dni/45026462?api_token=95f88a81f2e812ab6c398d30776a74f03a6d21edb121457819c1d8c22095cbe0"
+            //     )
+            //     .then((res) => res.json())
+            //     .then((data) => {
+            //         console.log(data);
+            //     });
+            // fetch(
+            //         "https://apiperu.dev/api/ruc/10450264623?api_token=95f88a81f2e812ab6c398d30776a74f03a6d21edb121457819c1d8c22095cbe0"
+            //     )
+            //     .then((res) => res.json())
+            //     .then((data) => {
+            //         console.log(data);
+            //     });
         });
 
         function upload(e) {
@@ -324,21 +331,54 @@
                         "dataType": 'JSON',
                     },
                     "columns": [{
-                            data: 'codigo',
-                            name: 'codigo'
+                            data: 'nombre_municipio',
+                            name: 'nombre_municipio'
                         },
                         {
-                            data: 'sexo',
-                            name: 'sexo'
+                            data: 'departamento',
+                            name: 'departamento'
                         },
                         {
-                            data: 'edad',
-                            name: 'edad'
+                            data: 'provincia',
+                            name: 'provincia'
                         },
                         {
-                            data: 'total',
-                            name: 'total'
+                            data: 'distrito',
+                            name: 'distrito'
                         },
+                        {
+                            data: 'fecha_inicial',
+                            name: 'fecha_inicial'
+                        },
+                        {
+                            data: 'fecha_final',
+                            name: 'fecha_final'
+                        },
+                        {
+                            data: 'fecha_envio',
+                            name: 'fecha_envio'
+                        },
+                        {
+                            data: 'dni_usuario_envio',
+                            name: 'dni_usuario_envio'
+                        },
+                        {
+                            data: 'primer_apellido',
+                            name: 'primer_apellido'
+                        },
+                        {
+                            data: 'segundo_apellido',
+                            name: 'segundo_apellido'
+                        },
+                        {
+                            data: 'prenombres',
+                            name: 'prenombres'
+                        },
+                        {
+                            data: 'numero_archivos',
+                            name: 'numero_archivos'
+                        },
+
                     ],
                 }
 
