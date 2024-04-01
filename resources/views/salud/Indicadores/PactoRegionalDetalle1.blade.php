@@ -11,7 +11,7 @@
                     <div class="card">
                         <div class="card-header bg-success-0">
                             <div class="card-widgets">
-                                <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf(6)"
+                                <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf({{$ind->id}})"
                                     title='FICHA TÉCNICA'><i class="fas fa-file"></i> Ficha Técnica</button>
                                 <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
                                     title='ACTUALIZAR'><i class=" fas fa-history"></i>
@@ -196,59 +196,23 @@
 
             </div>
 
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="card card-border border border-plomo-0">
-                        <div class="card-header border-success-0 bg-transparent p-0">
-                            {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
-                        </div>
-                        <div class="card-body p-0">
-                            <figure class="highcharts-figure p-0 m-0">
-                                <div id="anal3" style="height: 20rem"></div>
-                            </figure>
-                            {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                                <span class="anal3-fuente">Fuente:</span>
-                                <span class="float-right anal3-fecha">Actualizado:</span>
-                            </div> --}}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="card card-border border border-plomo-0">
-                        <div class="card-header border-success-0 bg-transparent p-0">
-                            {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
-                        </div>
-                        <div class="card-body p-0">
-                            <figure class="highcharts-figure p-0 m-0">
-                                <div id="anal4" style="height: 20rem"></div>
-                            </figure>
-                            {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                                <span class="anal4-fuente">Fuente:</span>
-                                <span class="float-right anal4-fecha">Actualizado:</span>
-                            </div> --}}
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
 
 
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card card-border border border-plomo-0">
                         <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                            <div class="card-widgets">
+                            {{-- <div class="card-widgets">
                                 <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
                                         class="fa fa-file-excel"></i> Descargar</button>
                             </div>
                             <h3 class="text-black font-14">Avance de la matricula mensual según unidad de gestion educativa
-                                local</h3>
+                                local</h3> --}}
                         </div>
                         <div class="card-body pt-0">
                             <div class="row">
                                 <div class="col-12">
-                                    <div class="table-responsive" id="vtabla1">
+                                    <div class="table-responsive" id="vtabla2">
                                     </div>
                                 </div>
                             </div>
@@ -261,34 +225,7 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card card-border border border-plomo-0">
-                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                            <div class="card-widgets">
-                                <button type="button" class="btn btn-primary btn-xs"
-                                    onclick="cargarTablaNivel('tabla2', 0)" title='Actualizar Tabla'><i
-                                        class=" fas fa-history"></i> Actualizar</button>
-                                <button type="button" class="btn btn-success btn-xs" onclick="descargar2()"><i
-                                        class="fa fa-file-excel"></i> Descargar</button>
-                            </div>
-                            <h3 class="text-black font-14">Avance de la matricula mensual según nivel y modalidad</h3>
-                        </div>
-                        <div class="card-body pt-0">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="table-responsive" id="vtabla2">
-                                    </div>
-                                </div>
-                            </div>
-                            {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                                <span class="float-left vtabla2-fuente">Fuente:</span>
-                                <span class="float-right vtabla2-fecha">Actualizado:</span>
-                            </div> --}}
-                        </div>
-                    </div>
-                </div>
-            </div>
+
         </div>
     </div>
 @endsection
@@ -449,7 +386,7 @@
         }
 
         function verpdf(id) {
-            window.open("{{ route('mantenimiento.indicadorgeneral.exportar.pdf', '') }}/" + id);
+            window.open("{{ route('salud.indicador.pactoregional.exportar.pdf', '') }}/" + id);
         };
 
         function gSimpleColumn(div, datax, titulo, subtitulo, tituloserie) {
@@ -807,7 +744,7 @@
                     }
                 },
                 series: [{
-                    name: '',
+                    name: 'Actas Enviadas',
                     showInLegend: false,
                     data: data.dat
                 }],

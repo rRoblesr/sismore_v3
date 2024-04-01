@@ -1,4 +1,4 @@
-<table id="tabla1" class="table table-sm table-striped table-bordered font-14">
+<table id="tabla1" class="table table-sm table-striped table-bordered font-12">
     <thead>
         <tr class="bg-success-0 text-white text-center">
             <th rowspan="1" class="text-center">Nº</th>

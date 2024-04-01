@@ -14,6 +14,9 @@ use Illuminate\Http\Request;
 class IndicadoresController extends Controller
 {
     public $mes = ['ENE', 'FEB', 'MAR', 'ABR', 'MAYO', 'JUN', 'JUL', 'AGO', 'SET', 'OCT', 'NOV', 'DIC'];
+    public static $pacto1_anio = 2023;
+    public static $pacto1_mes = 5;
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -36,7 +39,6 @@ class IndicadoresController extends Controller
                 $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios($indicador_id); // Anio::orderBy('anio')->get();
                 $provincia = UbigeoRepositorio::provincia('25');
                 $aniomax = 2023;
-
                 return view('salud.Indicadores.PactoRegionalDetalle1', compact('actualizado', 'anio', 'provincia', 'aniomax', 'ind'));
             case 'DITSALUD02':
                 return '';
@@ -57,8 +59,8 @@ class IndicadoresController extends Controller
             case 'head':
                 $ri = 0;
                 $gl = IndicadorGeneralMetaRepositorio::getPacto1GL($rq->indicador, $rq->anio);
-                $gls = 0;
-                $gln = 0;
+                $gls = IndicadorGeneralMetaRepositorio::getPacto1GLS($rq->indicador, $rq->anio);
+                $gln = IndicadorGeneralMetaRepositorio::getPacto1GLN($rq->indicador, $rq->anio);
                 return response()->json(['aa' => $rq->all(), 'ri' => $ri, 'gl' => $gl, 'gls' => $gls, 'gln' => $gln]);
 
             case 'anal1':
@@ -87,13 +89,9 @@ class IndicadoresController extends Controller
                     $info['dat'][] = (int)$value->y;
                 }
                 foreach ($base2 as $key => $value) {
-                    foreach ($base as $key => $valuex) {
-                        if ($valuex->name == $value->name) {
-                            $info['dat2'][] = (int)$value->y;
-                        }
-                    }
+                    $info['dat2'][] = (int)$value->y;
                 }
-                return response()->json(compact('info', 'base2'));
+                return response()->json(compact('info'));
             case 'tabla1':
                 // $aa = Anio::find($rq->anio);
                 $base = IndicadorGeneralMetaRepositorio::getPacto1tabla1($rq->indicador, $rq->anio);
@@ -108,6 +106,25 @@ class IndicadoresController extends Controller
                 return [];
         }
     }
+
+    public function exportarPDF($id)
+    {
+        $ind = IndicadorGeneral::select('codigo', 'ficha_tecnica')->where('id', $id)->first();
+        if ($ind->ficha_tecnica) {
+            header('Content-Type: application/pdf');
+            echo base64_decode($ind->ficha_tecnica);
+
+            // $b64d = base64_decode($ind->ficha_tecnica);
+            // $pdf = fopen('aaa.pdf', 'w');
+            // fwrite($pdf, $b64d);
+            // fclose($pdf);
+            // echo $b64d;
+            //echo file_put_contents("aaaa.pdf", base64_decode($ind->ficha_tecnica));
+        } else {
+            echo 'archivo PDF no encontrado';
+        }
+    }
+
 
     public function ConvenioFED()
     {
