@@ -24,34 +24,28 @@ class IndicadorGeneralMetaRepositorio
     {
         $query1 = IndicadorGeneralMeta::distinct()->select('valor')->where('indicadorgeneral', $indicador_id)->where('anio', $anio)->get()->first();
         $base = $query1->valor ? $query1->valor : 0;
+
         $query2 =  DataPacto1::where('anio', $anio)->select(DB::raw("IF(sum(estado)=$base,1,0) as conteo"));
         if (IndicadoresController::$pacto1_anio == $anio)
             $query2 = $query2->where('mes', '>=', IndicadoresController::$pacto1_mes);
-        $query2 = $query2->groupBy('mes')->orderBy('mes')->get();
+        $query2 = $query2->groupBy('distrito')->orderBy('distrito')->get();
 
-        $conteo = 0;
-        foreach ($query2 as $key => $value) {
-            $conteo += $value->conteo;
-        }
 
-        return $conteo;
+        return $query2->count() > 0 ? $query2->sum('conteo') : 0;
     }
 
     public static function getPacto1GLN($indicador_id, $anio)
     {
         $query1 = IndicadorGeneralMeta::distinct()->select('valor')->where('indicadorgeneral', $indicador_id)->where('anio', $anio)->get()->first();
         $base = $query1->valor ? $query1->valor : 0;
+
         $query2 =  DataPacto1::where('anio', $anio)->select(DB::raw("IF(sum(estado)=$base,0,1) as conteo"));
         if (IndicadoresController::$pacto1_anio == $anio)
             $query2 = $query2->where('mes', '>=', IndicadoresController::$pacto1_mes);
-        $query2 = $query2->groupBy('mes')->orderBy('mes')->get();
+        $query2 = $query2->groupBy('distrito')->orderBy('distrito')->get();
 
-        $conteo = 0;
-        foreach ($query2 as $key => $value) {
-            $conteo += $value->conteo;
-        }
 
-        return 0;
+        return $query2->count() > 0 ? $query2->sum('conteo') : 0;
     }
 
     public static function getPacto1tabla1($indicador_id, $anio)
@@ -64,6 +58,74 @@ class IndicadorGeneralMetaRepositorio
             $value->porcentaje = number_format(100 * ($value->valor > 0 ? $value->avance / $value->valor : 0), 1);
             $value->cumple = $value->valor == $value->avance ? 1 : 0;
         }
+        return $query;
+    }
+
+    public static function getPacto1tabla2($indicador_id, $anio)
+    {
+        $query = IndicadorGeneralMeta::select(
+            'd.nombre as dis',
+            'anio_base',
+            'valor_base',
+            DB::raw('max(if(anio=2023,valor,0)) as v2023'),
+            DB::raw('max(if(anio=2024,valor,0)) as v2024'),
+            DB::raw('max(if(anio=2025,valor,0)) as v2025'),
+            DB::raw('max(if(anio=2026,valor,0)) as v2026'),
+        )->where('indicadorgeneral', $indicador_id)
+            ->join('par_ubigeo as d', 'd.id', '=', 'par_indicador_general_meta.distrito')->groupBy('dis', 'anio_base', 'valor_base')->get();
+
+        foreach ($query as $key => $value) {
+            $anioxx = 2023;
+            $query2 =  DataPacto1::where('anio', $anioxx)->select(DB::raw("sum(estado) as conteo"))->where('distrito', $value->dis);
+            if (IndicadoresController::$pacto1_anio == $anioxx)
+                $query2 = $query2->where('mes', '>=', IndicadoresController::$pacto1_mes);
+            $query2 = $query2->groupBy('distrito')->get();
+            $value->r2023 = $query2->count() > 0 ? $query2->first()->conteo : 0;
+            if ($anioxx == $anio) {
+                $value->avance = number_format(100 * ($value->v2023 > 0 ? $value->r2023 / $value->v2023 : 0), 0);
+                $value->cumple = $value->r2023 == $value->v2023 ? 1 : 0;
+            }
+        }
+
+        foreach ($query as $key => $value) {
+            $anioxx = 2024;
+            $query2 =  DataPacto1::where('anio', $anioxx)->select(DB::raw("sum(estado) as conteo"))->where('distrito', $value->dis);
+            if (IndicadoresController::$pacto1_anio == $anioxx)
+                $query2 = $query2->where('mes', '>=', IndicadoresController::$pacto1_mes);
+            $query2 = $query2->groupBy('distrito')->get();
+            $value->r2024 = $query2->count() > 0 ? $query2->first()->conteo : 0;
+            if ($anioxx == $anio) {
+                $value->avance = number_format(100 * ($value->v2024 > 0 ? $value->r2024 / $value->v2024 : 0), 0);
+                $value->cumple = $value->r2024 == $value->v2024 ? 1 : 0;
+            }
+        }
+        foreach ($query as $key => $value) {
+            $anioxx = 2025;
+            $query2 =  DataPacto1::where('anio', $anioxx)->select(DB::raw("sum(estado) as conteo"))->where('distrito', $value->dis);
+            if (IndicadoresController::$pacto1_anio == $anioxx)
+                $query2 = $query2->where('mes', '>=', IndicadoresController::$pacto1_mes);
+            $query2 = $query2->groupBy('distrito')->get();
+            $value->r2025 = $query2->count() > 0 ? $query2->first()->conteo : 0;
+            if ($anioxx == $anio) {
+                $value->avance = number_format(100 * ($value->v2025 > 0 ? $value->r2025 / $value->v2025 : 0), 0);
+                $value->cumple = $value->r2025 == $value->v2025 ? 1 : 0;
+            }
+        }
+        foreach ($query as $key => $value) {
+            $anioxx = 2026;
+            $query2 =  DataPacto1::where('anio', $anioxx)->select(DB::raw("sum(estado) as conteo"))->where('distrito', $value->dis);
+            if (IndicadoresController::$pacto1_anio == $anioxx)
+                $query2 = $query2->where('mes', '>=', IndicadoresController::$pacto1_mes);
+            $query2 = $query2->groupBy('distrito')->get();
+            $value->r2026 = $query2->count() > 0 ? $query2->first()->conteo : 0;
+            if ($anioxx == $anio) {
+                $value->avance = number_format(100 * ($value->v2026 > 0 ? $value->r2026 / $value->v2026 : 0), 0);
+                $value->cumple = $value->r2026 == $value->v2026 ? 1 : 0;
+            }
+        }
+
+
+
         return $query;
     }
 

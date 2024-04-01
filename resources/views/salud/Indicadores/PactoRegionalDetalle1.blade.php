@@ -11,7 +11,7 @@
                     <div class="card">
                         <div class="card-header bg-success-0">
                             <div class="card-widgets">
-                                <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf({{$ind->id}})"
+                                <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf({{ $ind->id }})"
                                     title='FICHA TÉCNICA'><i class="fas fa-file"></i> Ficha Técnica</button>
                                 <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
                                     title='ACTUALIZAR'><i class=" fas fa-history"></i>
@@ -27,7 +27,7 @@
                                 </div>
                                 <div class="col-lg-1 col-md-1 col-sm-1  ">
                                     <select id="anio" name="anio" class="form-control btn-xs font-11"
-                                        onchange="cargarCards();">
+                                        onchange="cargarcuadros();">
                                         <option value="0">AÑO</option>
                                         @foreach ($anio as $item)
                                             <option value="{{ $item->anio }}"
@@ -240,11 +240,16 @@
                 }
             });
             cargarDistritos();
+            cargarcuadros();
+        });
+
+        function cargarcuadros() {
             panelGraficas('head');
             panelGraficas('anal1');
             panelGraficas('anal2');
             panelGraficas('tabla1');
-        });
+            panelGraficas('tabla2');
+        }
 
         function panelGraficas(div) {
             $.ajax({

@@ -167,7 +167,7 @@ ALTER TABLE `sal_data_pacto1` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `sal_data_pacto1` ADD INDEX(`importacion_id`);
 
 #
-CREATE PROCEDURE bdsismore.sal_procesarPacto1(v_importacion int,v_anio int)
+CREATE PROCEDURE bdsismore.sal_pa_procesarPacto1(v_importacion int,v_anio int)
 begin
 	delete from sal_data_pacto1 where anio=v_anio;
 	drop table if exists temp1;
@@ -180,6 +180,8 @@ begin
 
 	insert into sal_data_pacto1(`importacion_id`, `anio`, `distrito`, `mes`, `estado`)
 	select importacion, anio, distrito, month(fechai) mes, max(estado) from temp1 group by importacion,anio,distrito,mes;
+
+	update par_importacion set estado="PR" where id=v_importacion;
 
 end
 

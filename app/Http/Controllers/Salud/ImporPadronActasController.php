@@ -149,7 +149,7 @@ class ImporPadronActasController extends Controller
                 }
 
                 try {
-                    DB::select('call sal_procesarPacto1(?,?)', [$importacion->id, date('Y', strtotime($rq->fechaActualizacion))]);
+                    DB::select('call sal_pa_procesarPacto1(?,?)', [$importacion->id, date('Y', strtotime($rq->fechaActualizacion))]);
                 } catch (Exception $e) {
                     $mensaje = "Error al procesar la normalizacion de datos." . $e;
                     $tipo = 'danger';

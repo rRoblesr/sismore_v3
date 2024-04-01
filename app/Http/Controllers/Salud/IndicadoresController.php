@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Parametro\Anio;
 use App\Models\Parametro\IndicadorGeneral;
 use App\Models\Parametro\IndicadorGeneralMeta;
+use App\Models\Salud\ImporPadronActas;
+use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Parametro\IndicadorGeneralMetaRepositorio;
 use App\Repositories\Parametro\IndicadorGeneralRepositorio;
 use App\Repositories\Parametro\UbigeoRepositorio;
@@ -13,7 +15,8 @@ use Illuminate\Http\Request;
 
 class IndicadoresController extends Controller
 {
-    public $mes = ['ENE', 'FEB', 'MAR', 'ABR', 'MAYO', 'JUN', 'JUL', 'AGO', 'SET', 'OCT', 'NOV', 'DIC'];
+    public $mes = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SET', 'OCT', 'NOV', 'DIC'];
+    public $mesname = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'setiembre', 'octubre', 'noviembre', 'diciembre'];
     public static $pacto1_anio = 2023;
     public static $pacto1_mes = 5;
 
@@ -35,7 +38,9 @@ class IndicadoresController extends Controller
         $ind = IndicadorGeneral::find($indicador_id);
         switch ($ind->codigo) {
             case 'DITSALUD01':
-                $actualizado = 'Actualizado al 29 de febrero del 2023';
+                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_1']);
+                // return response()->json([$imp]);
+                $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
                 $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios($indicador_id); // Anio::orderBy('anio')->get();
                 $provincia = UbigeoRepositorio::provincia('25');
                 $aniomax = 2023;
@@ -93,13 +98,16 @@ class IndicadoresController extends Controller
                 }
                 return response()->json(compact('info'));
             case 'tabla1':
-                // $aa = Anio::find($rq->anio);
                 $base = IndicadorGeneralMetaRepositorio::getPacto1tabla1($rq->indicador, $rq->anio);
-                // return response()->json(['rq' => $rq->all(), 'base' => $aa]);
 
                 $excel = view('salud.Indicadores.PactoRegionalDetalle1tabla1', compact('base'))->render();
                 return response()->json(compact('excel', 'base'));
 
+            case 'tabla2':
+                $base = IndicadorGeneralMetaRepositorio::getPacto1tabla2($rq->indicador, $rq->anio);
+                $aniob = $rq->anio;
+                $excel = view('salud.Indicadores.PactoRegionalDetalle1tabla2', compact('base','aniob'))->render();
+                return response()->json(compact('excel', 'base'));
 
 
             default:
