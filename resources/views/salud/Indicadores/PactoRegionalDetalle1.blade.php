@@ -16,9 +16,6 @@
                                 <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
                                     title='ACTUALIZAR'><i class=" fas fa-history"></i>
                                     Actualizar</button>{{-- {{ route('indicador.nuevos.01.print') }} --}}
-                                <button type="button" class="btn btn-orange-0 btn-xs" onclick="printer()"
-                                    title='IMPRIMIR'><i class="fa fa-print"></i></button>
-
                             </div>
                             <h3 class="card-title text-white">{{ $ind->nombre }}
                             </h3>
@@ -33,7 +30,7 @@
                                         onchange="cargarCards();">
                                         <option value="0">AÑO</option>
                                         @foreach ($anio as $item)
-                                            <option value="{{ $item->id }}"
+                                            <option value="{{ $item->anio }}"
                                                 {{ $item->anio == $aniomax ? 'selected' : '' }}>
                                                 {{ $item->anio }}</option>
                                         @endforeach
@@ -73,7 +70,7 @@
                             <div class="media-body align-self-center">
                                 <div class="text-right">
                                     <h4 class="font-20 my-0 font-weight-bold">
-                                        <span data-plugin="counterup" id="basico"></span>
+                                        <span data-plugin="counterup" id="ri"></span>
                                     </h4>
                                     <p class="mb-0 mt-1 text-truncate">Resultado Indicador</p>
                                 </div>
@@ -93,7 +90,7 @@
                             <div class="media-body align-self-center">
                                 <div class="text-right">
                                     <h4 class="font-20 my-0 font-weight-bold">
-                                        <span data-plugin="counterup" id="ebr"></span>
+                                        <span data-plugin="counterup" id="gl"></span>
                                     </h4>
                                     <p class="mb-0 mt-1 text-truncate">
                                         Gobiernos Locales
@@ -115,7 +112,7 @@
                             <div class="media-body align-self-center">
                                 <div class="text-right">
                                     <h4 class="font-20 my-0 font-weight-bold">
-                                        <span data-plugin="counterup" id="ebe"></span>
+                                        <span data-plugin="counterup" id="gls"></span>
                                     </h4>
                                     <p class="mb-0 mt-1 text-truncate">
                                         Gobiernos Locales Cumplen
@@ -137,7 +134,7 @@
                             <div class="media-body align-self-center">
                                 <div class="text-right">
                                     <h4 class="font-20 my-0 font-weight-bold">
-                                        <span data-plugin="counterup" id="eba"></span>
+                                        <span data-plugin="counterup" id="gln"></span>
                                     </h4>
                                     <p class="mb-0 mt-1 text-truncate">
                                         Gobiernos Locales No Cumplen
@@ -306,61 +303,11 @@
                 }
             });
             cargarDistritos();
-            cargarCards();
-        });
-
-        function cargarCards() {
-            $.ajax({
-                url: "{{ route('indicador.nuevos.01.head') }}",
-                data: {
-                    "anio": $('#anio').val(),
-                    "provincia": $('#provincia').val(),
-                    "distrito": $('#distrito').val(),
-                    "indicador": '{{ $ind->id }}',
-                    "codigo": '{{ $ind->codigo }}',
-                },
-                type: "GET",
-                dataType: "JSON",
-                success: function(data) {
-                    // $('#basico').text(data.valor1);
-                    // $('#ebr').text(data.valor2);
-                    // $('#ebe').text(data.valor3);
-                    // $('#eba').text(data.valor4);
-                    // $('#ibasico').text(data.ind1 + '%');
-                    // $('#iebr').text(data.ind2 + '%');
-                    // $('#iebe').text(data.ind3 + '%');
-                    // $('#ieba').text(data.ind4 + '%');
-                    // //$('#bbasico').css('width','100px');
-                    // $('#bbasico').css('width', data.ind1 + '%')
-                    //     .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
-                    //     .addClass(data.ind1 > 84 ? 'bg-success-0' : (data.ind1 > 49 ? 'bg-orange-0' :
-                    //         'bg-warning-0'));
-                    // $('#bebr').css('width', data.ind2 + '%').removeClass(
-                    //         'bg-success-0 bg-orange-0 bg-warning-0')
-                    //     .addClass(data.ind2 > 84 ? 'bg-success-0' : (data.ind2 > 49 ? 'bg-orange-0' :
-                    //         'bg-warning-0'));
-                    // $('#bebe').css('width', data.ind3 + '%').removeClass(
-                    //         'bg-success-0 bg-orange-0 bg-warning-0')
-                    //     .addClass(data.ind3 > 84 ? 'bg-success-0' : (data.ind3 > 49 ? 'bg-orange-0' :
-                    //         'bg-warning-0'));
-                    // $('#beba').css('width', data.ind4 + '%').removeClass(
-                    //         'bg-success-0 bg-orange-0 bg-warning-0')
-                    //     .addClass(data.ind4 > 84 ? 'bg-success-0' : (data.ind4 > 49 ? 'bg-orange-0' :
-                    //         'bg-warning-0'));
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 1");
-                    console.log(jqXHR);
-                },
-            });
-
-            // panelGraficas('anal1');
-            // panelGraficas('anal2');
-            // panelGraficas('anal3');
-            // panelGraficas('anal4');
+            panelGraficas('head');
+            panelGraficas('anal1');
+            panelGraficas('anal2');
             panelGraficas('tabla1');
-            // panelGraficas('tabla2');
-        }
+        });
 
         function panelGraficas(div) {
             $.ajax({
@@ -385,19 +332,21 @@
                     }
                 },
                 success: function(data) {
-                    if (div == "anal1") {
-                        gAnidadaColumn(div,
-                            data.info.categoria, data.info.series, '',
-                            'Número de estudiantes matriculados en educación básica, periodo 2018-2023',
-                            data.info.maxbar
-                        );
-                        $('.anal1-fuente').html('Fuente: ' + data.reg.fuente);
-                        $('.anal1-fecha').html('Actualizado: ' + data.reg.fecha);
-                    } else if (div == "anal2") {
+                    if (div == "head") {
+                        $('#ri').text(data.ri);
+                        $('#gl').text(data.gl);
+                        $('#gls').text(data.gls);
+                        $('#gln').text(data.gln);
+                    } else if (div == "anal1") {
+
                         gLineaBasica(div, data.info, '',
-                            'Matricula educativa acumulada mensual en educación básica', '');
-                        $('.anal2-fuente').html('Fuente: ' + data.reg.fuente);
-                        $('.anal2-fecha').html('Actualizado: ' + data.reg.fecha);
+                            'Acumulado mensual del registro de actas de homologacion en el sistema de padrón nominal',
+                            '');
+                    } else if (div == "anal2") {
+                        console.log(data.info);
+                        gLineaBasica2(div, data.info, '',
+                            'Numero de actas de homolagación registradas en el sistema de padrón nominal por mes',
+                            '');
                     } else if (div == "anal3") {
                         gPie2(div, data.info, '', 'Numero de estudiantes matriculados según sexo', '');
                         $('.anal3-fuente').html('Fuente: ' + data.reg.fuente);
@@ -502,20 +451,6 @@
         function verpdf(id) {
             window.open("{{ route('mantenimiento.indicadorgeneral.exportar.pdf', '') }}/" + id);
         };
-
-        function printer() {
-            window.print();
-            // var escalaPersonalizada = 0.6; // Cambia esto al valor de escala deseado
-            // var style = document.createElement('style');
-            // style.type = 'text/css';
-            // style.media = 'print';
-            // // style.innerHTML = '@page { size: auto; margin: 0mm; transform: scale(' + escalaPersonalizada +
-            // //     '); } @media print { body { transform: scale(' + escalaPersonalizada + '); } }';
-            // style.innerHTML = '@page { transform: scale(' + escalaPersonalizada +
-            //     '); } @media print { body { transform: scale(' + escalaPersonalizada + '); } }';
-            // document.head.appendChild(style);
-            // window.print();
-        }
 
         function gSimpleColumn(div, datax, titulo, subtitulo, tituloserie) {
 
@@ -872,9 +807,91 @@
                     }
                 },
                 series: [{
-                    name: 'Matriculados',
+                    name: '',
                     showInLegend: false,
                     data: data.dat
+                }],
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 500
+                        },
+                        chartOptions: {
+                            legend: {
+                                layout: 'horizontal',
+                                align: 'center',
+                                verticalAlign: 'bottom'
+                            }
+                        }
+                    }]
+                },
+                exporting: {
+                    enabled: true,
+                },
+                credits: false,
+
+            });
+        }
+
+        function gLineaBasica2(div, data, titulo, subtitulo, titulovetical) {
+            const colors = ["#5eb9aa", "#f5bd22", "#e65310"];
+            Highcharts.chart(div, {
+                title: {
+                    text: titulo
+                },
+                subtitle: {
+                    text: subtitulo
+                },
+                yAxis: {
+                    title: {
+                        text: titulovetical
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px'
+                        }
+                    },
+                    min: 0,
+                },
+                xAxis: {
+                    categories: data.cat,
+                    labels: {
+                        style: {
+                            fontSize: '10px'
+                        }
+                    }
+                    /* accessibility: {
+                        rangeDescription: 'Range: 2010 to 2017'
+                    } */
+                },
+                /* legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle'
+                }, */
+                plotOptions: {
+                    series: {
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontSize: '10px',
+                                fontWeight: 'normal',
+                            }
+                        },
+                        /* label: {
+                            connectorAllowed: false
+                        },
+                        pointStart: 2010 */
+                    }
+                },
+                series: [{
+                    name: 'Actas Enviadas',
+                    // showInLegend: false,
+                    data: data.dat
+                }, {
+                    name: 'Actas Aprobadas',
+                    // showInLegend: false,
+                    data: data.dat2
                 }],
                 responsive: {
                     rules: [{
@@ -907,14 +924,14 @@
                 chart: {
                     zoomType: 'xy',
                 },
-                colors: ['#5eb9aa', '#ef5350', '#f5bd22', '#ef5350'],
+                colors: ['#5eb9aa', '#f5bd22', '#ef5350'],
                 title: {
                     text: titulo, //'Browser market shares in January, 2018'
                 },
                 subtitle: {
                     text: subtitulo,
                     style: {
-                        fontSize: '11px',
+                        fontSize: '10px',
                     }
                 },
                 xAxis: [{
@@ -935,16 +952,14 @@
                                 fontSize: '10px',
                             }
                         },
+                        // labels: {
+                        //     //format: '{value}°C',
+                        //     //style: {
+                        //     //    color: Highcharts.getOptions().colors[2]
+                        //     //}
+                        // },
                         title: {
                             enabled: false,
-                        },
-                        /* labels: {
-                            //format: '{value}°C',
-                            //style: {
-                            //    color: Highcharts.getOptions().colors[2]
-                            //}
-                        }, */
-                        title: {
                             text: 'Matriculados',
                             style: {
                                 //color: Highcharts.getOptions().colors[2],
@@ -975,8 +990,8 @@
                             //}
                         }, */
                         //min: -200,
-                        min: 0,
-                        max: 120,
+                        min: -600,
+                        max: 400,
                         opposite: true,
                     },
                     /* { // Tertiary yAxis
@@ -1008,12 +1023,12 @@
                             enabled: true,
                             //format: '{point.y:,.0f}',
                             //format: '{point.y:.1f}%',
-                            formatter: function() {
-                                if (this.colorIndex == 1)
+                            /* formatter: function() {
+                                if (this.colorIndex == 2)
                                     return this.y + " %";
                                 else
                                     return Highcharts.numberFormat(this.y, 0);
-                            },
+                            }, */
                             style: {
                                 fontWeight: 'normal',
                                 fontSize: '10px',
@@ -1035,131 +1050,6 @@
                 },
                 exporting: {
                     enabled: true
-                },
-                credits: false,
-            });
-        }
-
-        function gAnidadaColumnx(div, categoria, series, titulo, subtitulo) {
-            Highcharts.chart(div, {
-                chart: {
-                    zoomType: 'xy',
-                },
-                title: {
-                    text: titulo, //'Browser market shares in January, 2018'
-                },
-                subtitle: {
-                    text: subtitulo,
-                },
-                xAxis: [{
-                    categories: categoria,
-                    crosshair: true
-                }],
-                yAxis: [{ // Primary yAxis
-                        //max: 2000000000,
-                        labels: {
-                            enabled: false,
-                        },
-                        title: {
-                            enabled: false,
-                        },
-                        /* labels: {
-                            format: '{value}°C',
-                            style: {
-                                color: Highcharts.getOptions().colors[2]
-                            }
-                        },
-                        title: {
-                            text: 'Temperature',
-                            style: {
-                                color: Highcharts.getOptions().colors[2]
-                            }
-                        }, */
-                        //opposite: true,
-                    }, { // Secondary yAxis
-                        gridLineWidth: 0,
-                        labels: {
-                            enabled: false,
-                        },
-                        title: {
-                            enabled: false,
-                        },
-                        /* title: {
-                            text: 'Rainfall',
-                            style: {
-                                color: Highcharts.getOptions().colors[0]
-                            }
-                        },
-                        labels: {
-                            format: '{value} mm',
-                            style: {
-                                color: Highcharts.getOptions().colors[0]
-                            }
-                        }, */
-                        min: -200,
-                        max: 150,
-                        opposite: true,
-                    },
-                    /* { // Tertiary yAxis
-                                       gridLineWidth: 0,
-                                       title: {
-                                           text: 'Sea-Level Pressure',
-                                           style: {
-                                               color: Highcharts.getOptions().colors[1]
-                                           }
-                                       },
-                                       labels: {
-                                           format: '{value} mb',
-                                           style: {
-                                               color: Highcharts.getOptions().colors[1]
-                                           }
-                                       },
-                                       opposite: true
-                                   } */
-                ],
-                series: series,
-                plotOptions: {
-                    /* columns: {
-                        stacking: 'normal'
-                    }, */
-                    series: {
-                        showInLegend: false,
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                            //format: '{point.y:,.0f}',
-                            //format: '{point.y:.1f}%',
-                            formatter: function() {
-                                if (this.y > 1000000) {
-                                    return Highcharts.numberFormat(this.y / 1000000, 0) + "M";
-                                } else if (this.y > 1000) {
-                                    return Highcharts.numberFormat(this.y / 1000, 0) + "K";
-                                } else if (this.y < 101) {
-                                    return this.y + "%";
-                                } else {
-                                    return this.y;
-                                }
-                            },
-                            style: {
-                                fontWeight: 'normal',
-                            }
-                        },
-                    },
-                },
-                tooltip: {
-                    shared: true,
-                },
-                legend: {
-                    itemStyle: {
-                        //"color": "#333333",
-                        "cursor": "pointer",
-                        "fontSize": "10px",
-                        "fontWeight": "normal",
-                        "textOverflow": "ellipsis"
-                    },
-                },
-                exporting: {
-                    enabled: false
                 },
                 credits: false,
             });

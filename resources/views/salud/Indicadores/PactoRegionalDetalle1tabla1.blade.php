@@ -15,11 +15,17 @@
             @foreach ($base as $key => $item)
                 <tr class="text-center">
                     <td>{{ $key + 1 }}</td>
-                    <td class="text-left">{{ $item->nombre }}</td>
-                    <td>{{$item->valor }}</td>
-                    <td>{{ 0 }}</td>
-                    <td>{{ '0 %' }}</td>
-                    <td><i class="mdi mdi-thumb-up" style="color: aqua"></i><i class="mdi mdi-thumb-down" style="color: red"></i></td>
+                    <td class="text-left">{{ $item->distrito }}</td>
+                    <td>{{ $item->valor }}</td>
+                    <td>{{ $item->avance }}</td>
+                    <td>{{ $item->porcentaje . ' %' }}</td>
+                    <td>
+                        @if ($item->cumple == 1)
+                            <i class="mdi mdi-thumb-up" style="color: aqua" title="CUMPLE"></i>
+                        @else
+                            <i class="mdi mdi-thumb-down" style="color: red" title="NO CUMPLE"></i>
+                        @endif
+                    </td>
                 </tr>
             @endforeach
         </tbody>

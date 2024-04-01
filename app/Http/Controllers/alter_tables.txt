@@ -182,3 +182,15 @@ begin
 	select importacion, anio, distrito, month(fechai) mes, max(estado) from temp1 group by importacion,anio,distrito,mes;
 
 end
+
+#
+ALTER TABLE `par_indicador_general` CHANGE `update_at` `update_at` TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+
+#
+
+UPDATE `par_ubigeo` SET `nombre` = 'RAIMONDI' WHERE `par_ubigeo`.`id` = 45;
+
+#
+ALTER TABLE `sal_impor_padron_actas` ADD FOREIGN KEY (`importacion_id`) REFERENCES `par_importacion`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
