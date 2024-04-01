@@ -18,7 +18,7 @@
                     <td class="text-left">{{ $item->distrito }}</td>
                     <td>{{ $item->valor }}</td>
                     <td>{{ $item->avance }}</td>
-                    <td>{{ $item->porcentaje . ' %' }}</td>
+                    <td>{!! avance($item->porcentaje)!!}</td>
                     <td>
                         @if ($item->cumple == 1)
                             <i class="mdi mdi-thumb-up" style="color: aqua" title="CUMPLE"></i>
@@ -53,15 +53,15 @@
     function avance($monto)
     {
         if ($monto < 51) {
-            return '<span class="badge badge-pill badge-danger" style="font-size:90%;">' .
+            return '<span class="badge badge-pill badge-danger" style="font-size:80%;">' .
                 round($monto, 1) .
                 '%</span>';
         } elseif ($monto < 100) {
-            return '<span class="badge badge-pill badge-warning" style="font-size:90%;">' .
+            return '<span class="badge badge-pill badge-warning" style="font-size:80%;">' .
                 round($monto, 1) .
                 '%</span>';
         } else {
-            return '<span class="badge badge-pill badge-success" style="font-size:90%;">' .
+            return '<span class="badge badge-pill badge-success" style="font-size:80%;">' .
                 round($monto, 1) .
                 '%</span>';
         }

@@ -44,7 +44,7 @@
                     <td>{{ $item->avance }}%</td>
                     <td>
                         @if ($item->cumple == 1)
-                            <button type="button" class="btn btn-xs btn-primary">Cumple</button>
+                            <button type="button" class="btn btn-xs btn-success-0">&nbsp;&nbsp;&nbsp;Cumple&nbsp;&nbsp;&nbsp;</button>
                         @else
                             <button type="button" class="btn btn-xs btn-danger">No Cumple</button>
                         @endif

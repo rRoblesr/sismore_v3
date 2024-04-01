@@ -61,6 +61,12 @@
             background-color: #f04c27;
         }
 
+        .btn-success-0 {
+            color: #fff;
+            background-color: #43beac;
+            border-color: #43beac;
+        }
+
         .border-orange-0 {
             border-color: #f04c27 !important;
         }

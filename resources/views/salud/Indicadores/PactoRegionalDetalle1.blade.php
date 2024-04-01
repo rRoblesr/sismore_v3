@@ -157,7 +157,7 @@
                                 <button type="button" class="btn btn-success btn-xs"><i
                                         class="fa fa-file-excel"></i> Descargar</button>
                             </div> --}}
-                            <h3 class="text-black font-14"></h3>
+                            <h3 class="text-black font-14">Evaluación de Cumplimiento por Distrito</h3>
                         </div>
                         <div class="card-body pt-0">
                             <div class="row">
@@ -205,9 +205,9 @@
                             {{-- <div class="card-widgets">
                                 <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
                                         class="fa fa-file-excel"></i> Descargar</button>
-                            </div>
-                            <h3 class="text-black font-14">Avance de la matricula mensual según unidad de gestion educativa
-                                local</h3> --}}
+                            </div> --}}
+                            <h3 class="text-black font-14">Evaluación de cumplimiento de los logros esperados por distrito
+                            </h3>
                         </div>
                         <div class="card-body pt-0">
                             <div class="row">
@@ -275,7 +275,7 @@
                 },
                 success: function(data) {
                     if (div == "head") {
-                        $('#ri').text(data.ri);
+                        $('#ri').text(data.ri + '%');
                         $('#gl').text(data.gl);
                         $('#gls').text(data.gls);
                         $('#gln').text(data.gln);
@@ -289,15 +289,6 @@
                         gLineaBasica2(div, data.info, '',
                             'Numero de actas de homolagación registradas en el sistema de padrón nominal por mes',
                             '');
-                    } else if (div == "anal3") {
-                        gPie2(div, data.info, '', 'Numero de estudiantes matriculados según sexo', '');
-                        $('.anal3-fuente').html('Fuente: ' + data.reg.fuente);
-                        $('.anal3-fecha').html('Actualizado: ' + data.reg.fecha);
-                    } else if (div == "anal4") {
-                        gPie(div, data.info, '', 'Numero de estudiantes matriculados según área geográfica',
-                            '');
-                        $('.anal4-fuente').html('Fuente: ' + data.reg.fuente);
-                        $('.anal4-fecha').html('Actualizado: ' + data.reg.fecha);
                     } else if (div == "tabla1") {
                         $('#vtabla1').html(data.excel);
                         // $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
@@ -313,8 +304,8 @@
                         // });
                     } else if (div == "tabla2") {
                         $('#vtabla2').html(data.excel);
-                        $('.vtabla2-fuente').html('Fuente: ' + data.reg.fuente);
-                        $('.vtabla2-fecha').html('Actualizado: ' + data.reg.fecha);
+                        // $('.vtabla2-fuente').html('Fuente: ]]' + data.reg.fuente);
+                        // $('.vtabla2-fecha').html('Actualizado: ' + data.reg.fecha);
                     }
 
                 },
