@@ -8,6 +8,30 @@ use Illuminate\Support\Facades\DB;
 
 class IndicadorGeneralRepositorio
 {
+    public static function find_pactoregional($sector, $instrumento)
+    {
+        $query = IndicadorGeneral::select(
+            'id',
+            'codigo',
+            'nombre',
+            'descripcion',
+            'numerador',
+            'denominador',
+            'instrumento_id',
+            'tipo_id',
+            'dimension_id',
+            'unidad_id',
+            'frecuencia_id',
+            'fuente_dato',
+            'anio_base',
+            'valor_base',
+            'sector_id',
+            'oficina_id',
+            'estado'
+        )->where('sector_id', $sector)->where('instrumento_id', $instrumento)->where('estado', '0')->get();
+        return $query;
+    }
+
     public static function findNoFichatecnica($id)
     {
         return IndicadorGeneral::select('id', 'codigo', 'nombre', 'descripcion', 'instrumento_id', 'tipo_id', 'dimension_id', 'unidad_id', 'frecuencia_id', 'fuente_dato', 'anio_base', 'valor_base', 'sector_id', 'oficina_id', 'estado')->where('id', $id)->first();

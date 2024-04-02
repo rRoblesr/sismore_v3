@@ -30,7 +30,7 @@ class IndicadoresController extends Controller
     {
         $sector = 14;
         $instrumento = 8;
-        $inds = IndicadorGeneral::select('id', 'codigo', 'nombre', 'descripcion', 'numerador', 'denominador', 'instrumento_id', 'tipo_id', 'dimension_id', 'unidad_id', 'frecuencia_id', 'fuente_dato', 'anio_base', 'valor_base', 'sector_id', 'oficina_id', 'estado')->where('sector_id', $sector)->where('instrumento_id', $instrumento)->where('estado', '0')->get();
+        $inds = IndicadorGeneralRepositorio::find_pactoregional($sector, $instrumento);
         return view('salud.Indicadores.PactoRegional', compact('inds'));
     }
 

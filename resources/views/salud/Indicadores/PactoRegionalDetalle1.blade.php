@@ -157,7 +157,7 @@
                                 <button type="button" class="btn btn-success btn-xs"><i
                                         class="fa fa-file-excel"></i> Descargar</button>
                             </div> --}}
-                            <h3 class="text-black font-14">Evaluación de Cumplimiento por Distrito</h3>
+                            <h3 class="text-black font-14">Avance acumulado de la evaluación de Cumplimiento por Distrito</h3>
                         </div>
                         <div class="card-body p-0">
                             <div class="row">
