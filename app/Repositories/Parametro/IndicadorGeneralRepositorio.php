@@ -37,6 +37,27 @@ class IndicadorGeneralRepositorio
         return IndicadorGeneral::select('id', 'codigo', 'nombre', 'descripcion', 'instrumento_id', 'tipo_id', 'dimension_id', 'unidad_id', 'frecuencia_id', 'fuente_dato', 'anio_base', 'valor_base', 'sector_id', 'oficina_id', 'estado')->where('id', $id)->first();
     }
 
+    public static function findNoFichatecnicaCodigo($codigo)
+    {
+        return IndicadorGeneral::select(
+            'id',
+            'codigo',
+            'nombre',
+            'descripcion',
+            'instrumento_id',
+            'tipo_id',
+            'dimension_id',
+            'unidad_id',
+            'frecuencia_id',
+            'fuente_dato',
+            'anio_base',
+            'valor_base',
+            'sector_id',
+            'oficina_id',
+            'estado'
+        )->where('codigo', $codigo)->where('estado','0')->first();
+    }
+
     public static function instrumento($id)
     {
         if ($id > 0)

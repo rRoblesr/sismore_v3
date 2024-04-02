@@ -89,11 +89,17 @@
                                             </figure>
                                         </li>
                                         </li>
-                                        <li class="mt-0 pt-0 font-12">Actualizado: 20/02/2024</li>
-                                        <li class="mt-0 pt-0 font-20 font-weight-bold">Meta: 71%</li>
+                                        <li class="mt-0 pt-0 font-12">{{$pacto[$item->codigo]['actualizado']}}</li>
+                                        <li class="mt-0 pt-0 font-18 font-weight-bold">Meta: {{$pacto[$item->codigo]['meta']}}</li>
                                         <li class="mt-0 pt-0">
+                                            @if ($pacto[$item->codigo]['cumple'])
                                             <span class="badge badge-success" style="font-size: 100%">
-                                                <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
+                                                <i class="mdi mdi-thumb-up"></i> CUMPLE</span>    
+                                            @else
+                                            <span class="badge badge-danger" style="font-size: 100%">
+                                                <i class="mdi mdi-thumb-down"></i>NO CUMPLE</span>
+                                            @endif
+                                            
                                         </li>
                                         <li class="mt-1 pt-1">
                                             <p class="font-12" style="height: 6rem">{{ $item->nombre }}</p>

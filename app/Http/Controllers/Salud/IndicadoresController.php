@@ -31,7 +31,42 @@ class IndicadoresController extends Controller
         $sector = 14;
         $instrumento = 8;
         $inds = IndicadorGeneralRepositorio::find_pactoregional($sector, $instrumento);
-        return view('salud.Indicadores.PactoRegional', compact('inds'));
+
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_1']);
+        $ind = IndicadorGeneralRepositorio::findNoFichatecnicaCodigo('DITSALUD01'); //IndicadorGeneral::select()->where('codigo','DITSALUD01')->get();
+        $gls = IndicadorGeneralMetaRepositorio::getPacto1GLS($ind->id, $imp->anio);
+        $gl = IndicadorGeneralMetaRepositorio::getPacto1GL($ind->id, $imp->anio);
+        $pacto['DITSALUD01'] = [];
+        $pacto['DITSALUD01']['avance'] = 100 * ($gl > 0 ? $gls / $gl : 0);
+        $pacto['DITSALUD01']['actualizado'] = 'Actualizado: ' . date('d/m/Y',strtotime($imp->fechaActualizacion));
+        $pacto['DITSALUD01']['meta'] = 19;
+        $pacto['DITSALUD01']['cumple'] = $gls == $gl;
+
+        $pacto['DITSALUD02'] = [];
+        $pacto['DITSALUD02']['avance'] = 100 * ($gl > 0 ? $gls / $gl : 0);
+        $pacto['DITSALUD02']['actualizado'] = 'Actualizado: ' . $imp->dia . ' de ' . $imp->mes . ' del ' . $imp->anio;
+        $pacto['DITSALUD02']['meta'] = 0;
+        $pacto['DITSALUD02']['cumple'] = $gls == $gl;
+
+        $pacto['DITSALUD03'] = [];
+        $pacto['DITSALUD03']['avance'] = 100 * ($gl > 0 ? $gls / $gl : 0);
+        $pacto['DITSALUD03']['actualizado'] = 'Actualizado: ' . $imp->dia . ' de ' . $imp->mes . ' del ' . $imp->anio;
+        $pacto['DITSALUD03']['meta'] = 0;
+        $pacto['DITSALUD03']['cumple'] = $gls == $gl;
+
+        $pacto['DITSALUD04'] = [];
+        $pacto['DITSALUD04']['avance'] = 100 * ($gl > 0 ? $gls / $gl : 0);
+        $pacto['DITSALUD04']['actualizado'] = 'Actualizado: ' . $imp->dia . ' de ' . $imp->mes . ' del ' . $imp->anio;
+        $pacto['DITSALUD04']['meta'] = 0;
+        $pacto['DITSALUD04']['cumple'] = $gls == $gl;
+
+        $pacto['DITSALUD05'] = [];
+        $pacto['DITSALUD05']['avance'] = 100 * ($gl > 0 ? $gls / $gl : 0);
+        $pacto['DITSALUD05']['actualizado'] = 'Actualizado: ' . $imp->dia . ' de ' . $imp->mes . ' del ' . $imp->anio;
+        $pacto['DITSALUD05']['meta'] = 0;
+        $pacto['DITSALUD05']['cumple'] = $gls == $gl;
+
+        return view('salud.Indicadores.PactoRegional', compact('inds', 'pacto'));
     }
 
     public function PactoRegionalDetalle($indicador_id)
