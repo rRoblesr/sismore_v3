@@ -44,7 +44,7 @@ class IndicadoresController extends Controller
                 $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
                 $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios($indicador_id); // Anio::orderBy('anio')->get();
                 $provincia = UbigeoRepositorio::provincia('25');
-                $aniomax = 2023;
+                $aniomax = $imp->anio;
                 return view('salud.Indicadores.PactoRegionalDetalle1', compact('actualizado', 'anio', 'provincia', 'aniomax', 'ind'));
             case 'DITSALUD02':
                 return '';
