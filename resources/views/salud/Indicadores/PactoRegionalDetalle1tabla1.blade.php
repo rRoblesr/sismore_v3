@@ -1,4 +1,4 @@
-<table id="tabla1" class="table table-sm table-striped table-bordered font-12">
+<table id="tabla1" class="table table-sm table-striped table-bordered font-12 m-0" style="height: 100%">
     <thead>
         <tr class="bg-success-0 text-white text-center">
             <th rowspan="1" class="text-center">Nº</th>
@@ -13,17 +13,17 @@
     @if ($base->count() > 0)
         <tbody>
             @foreach ($base as $key => $item)
-                <tr class="text-center">
+                <tr class="text-center {{ $item->distrito == $ndis ? 'table-warning' : '' }}">
                     <td>{{ $key + 1 }}</td>
                     <td class="text-left">{{ $item->distrito }}</td>
                     <td>{{ $item->valor }}</td>
                     <td>{{ $item->avance }}</td>
-                    <td>{!! avance($item->porcentaje)!!}</td>
+                    <td>{!! avance($item->porcentaje) !!}</td>
                     <td>
                         @if ($item->cumple == 1)
-                            <i class="mdi mdi-thumb-up" style="color: aqua" title="CUMPLE"></i>
+                            <i class="mdi mdi-thumb-up" style="font-size:13px;color:#43beac" title="CUMPLE"></i>
                         @else
-                            <i class="mdi mdi-thumb-down" style="color: red" title="NO CUMPLE"></i>
+                            <i class="mdi mdi-thumb-down" style="font-size:13px;color: red" title="NO CUMPLE"></i>
                         @endif
                     </td>
                 </tr>
@@ -53,15 +53,15 @@
     function avance($monto)
     {
         if ($monto < 51) {
-            return '<span class="badge badge-pill badge-danger" style="font-size:80%;">' .
+            return '<span class="badge badge-pill badge-danger" style="font-size:80%; width:50px">' .
                 round($monto, 1) .
                 '%</span>';
         } elseif ($monto < 100) {
-            return '<span class="badge badge-pill badge-warning" style="font-size:80%;">' .
+            return '<span class="badge badge-pill badge-warning" style="font-size:80%; width:50px">' .
                 round($monto, 1) .
                 '%</span>';
         } else {
-            return '<span class="badge badge-pill badge-success" style="font-size:80%;">' .
+            return '<span class="badge badge-pill badge-success" style="font-size:80%; width:50px">' .
                 round($monto, 1) .
                 '%</span>';
         }

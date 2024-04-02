@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Parametro\Anio;
 use App\Models\Parametro\IndicadorGeneral;
 use App\Models\Parametro\IndicadorGeneralMeta;
+use App\Models\Parametro\Ubigeo;
 use App\Models\Salud\ImporPadronActas;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Parametro\IndicadorGeneralMetaRepositorio;
@@ -60,6 +61,8 @@ class IndicadoresController extends Controller
 
     public function PactoRegionalDetalleReports(Request $rq)
     {
+        if ($rq->distrito > 0) $ndis = Ubigeo::find($rq->distrito)->nombre;
+        else $ndis = '';
         switch ($rq->div) {
             case 'head':
                 $gls = IndicadorGeneralMetaRepositorio::getPacto1GLS($rq->indicador, $rq->anio);
@@ -69,7 +72,7 @@ class IndicadoresController extends Controller
                 return response()->json(['aa' => $rq->all(), 'ri' => $ri, 'gl' => $gl, 'gls' => $gls, 'gln' => $gln]);
 
             case 'anal1':
-                $base = IndicadorGeneralMetaRepositorio::getPacto1Mensual($rq->anio, 0);
+                $base = IndicadorGeneralMetaRepositorio::getPacto1Mensual($rq->anio, $rq->distrito);
                 $info = [];
                 foreach ($base as $key => $value) {
                     $info['cat'][] = $this->mes[$value->name - 1];
@@ -86,8 +89,8 @@ class IndicadoresController extends Controller
                 }
                 return response()->json(compact('info'));
             case 'anal2':
-                $base = IndicadorGeneralMetaRepositorio::getPacto1Mensual($rq->anio, 0);
-                $base2 = IndicadorGeneralMetaRepositorio::getPacto1Mensual2($rq->anio, 0);
+                $base = IndicadorGeneralMetaRepositorio::getPacto1Mensual($rq->anio, $rq->distrito);
+                $base2 = IndicadorGeneralMetaRepositorio::getPacto1Mensual2($rq->anio, $rq->distrito);
                 $info = [];
                 foreach ($base as $key => $value) {
                     $info['cat'][] = $this->mes[$value->name - 1];
@@ -100,13 +103,13 @@ class IndicadoresController extends Controller
             case 'tabla1':
                 $base = IndicadorGeneralMetaRepositorio::getPacto1tabla1($rq->indicador, $rq->anio);
 
-                $excel = view('salud.Indicadores.PactoRegionalDetalle1tabla1', compact('base'))->render();
+                $excel = view('salud.Indicadores.PactoRegionalDetalle1tabla1', compact('base', 'ndis'))->render();
                 return response()->json(compact('excel', 'base'));
 
             case 'tabla2':
                 $base = IndicadorGeneralMetaRepositorio::getPacto1tabla2($rq->indicador, $rq->anio);
                 $aniob = $rq->anio;
-                $excel = view('salud.Indicadores.PactoRegionalDetalle1tabla2', compact('base', 'aniob'))->render();
+                $excel = view('salud.Indicadores.PactoRegionalDetalle1tabla2', compact('base', 'ndis', 'aniob'))->render();
                 return response()->json(compact('excel', 'base'));
 
 

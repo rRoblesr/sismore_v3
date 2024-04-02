@@ -38,7 +38,7 @@
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-sm-2">
                                     <select id="provincia" name="provincia" class="form-control btn-xs font-11"
-                                        onchange="cargarDistritos();cargarCards();">
+                                        onchange="cargarDistritos();">
                                         <option value="0">PROVINCIA</option>
                                         @foreach ($provincia as $item)
                                             <option value="{{ $item->id }}">
@@ -48,7 +48,7 @@
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-sm-2">
                                     <select id="distrito" name="distrito" class="form-control btn-xs font-11"
-                                        onchange="cargarCards();">
+                                        onchange="cargarcuadros();">
                                         <option value="0">DISTRITO</option>
                                     </select>
                                 </div>
@@ -159,7 +159,7 @@
                             </div> --}}
                             <h3 class="text-black font-14">Evaluación de Cumplimiento por Distrito</h3>
                         </div>
-                        <div class="card-body pt-0">
+                        <div class="card-body p-0">
                             <div class="row">
                                 <div class="col-12">
                                     <div class="table-responsive" style="height: 40rem" id="vtabla1">
@@ -209,7 +209,7 @@
                             <h3 class="text-black font-14">Evaluación de cumplimiento de los logros esperados por distrito
                             </h3>
                         </div>
-                        <div class="card-body pt-0">
+                        <div class="card-body p-0">
                             <div class="row">
                                 <div class="col-12">
                                     <div class="table-responsive" id="vtabla2">

@@ -1,4 +1,4 @@
-<table id="tabla1" class="table table-sm table-striped table-bordered font-12">
+<table id="tabla1" class="table table-sm table-striped table-bordered font-12 m-0">
     <thead>
         <tr class="bg-success-0 text-white text-center">
             <th rowspan="2" class="text-center">Nº</th>
@@ -6,7 +6,7 @@
             <th rowspan="1" colspan="2" class="text-center">Linea Base</th>
             <th rowspan="1" colspan="4" class="text-center">Logro Esperados</th>
             <th rowspan="1" colspan="4" class="text-center">Valores Obtenidos</th>
-            <th rowspan="2" class="text-center">Avance<br>{{$aniob}}</th>
+            <th rowspan="2" class="text-center">Avance<br>{{ $aniob }}</th>
             <th rowspan="2" class="text-center">Condición</th>
         </tr>
         <tr class="bg-success-0 text-white text-center">
@@ -28,7 +28,7 @@
     @if ($base->count() > 0)
         <tbody>
             @foreach ($base as $key => $item)
-                <tr class="text-center">
+                <tr class="text-center {{ $item->dis == $ndis ? 'table-warning' : '' }}">
                     <td>{{ $key + 1 }}</td>
                     <td class="text-left">{{ $item->dis }}</td>
                     <td>{{ $item->anio_base }}</td>
@@ -41,10 +41,11 @@
                     <td>{{ $item->r2024 }}</td>
                     <td>{{ $item->r2025 }}</td>
                     <td>{{ $item->r2026 }}</td>
-                    <td>{{ $item->avance }}%</td>
+                    <td>{!! avance($item->avance) !!}</td>{{--  --}}
                     <td>
                         @if ($item->cumple == 1)
-                            <button type="button" class="btn btn-xs btn-success-0">&nbsp;&nbsp;&nbsp;Cumple&nbsp;&nbsp;&nbsp;</button>
+                            <button type="button"
+                                class="btn btn-xs btn-success-0">&nbsp;&nbsp;&nbsp;Cumple&nbsp;&nbsp;&nbsp;</button>
                         @else
                             <button type="button" class="btn btn-xs btn-danger">No Cumple</button>
                         @endif
@@ -76,15 +77,15 @@
     function avance($monto)
     {
         if ($monto < 51) {
-            return '<span class="badge badge-pill badge-danger" style="font-size:90%;">' .
+            return '<span class="badge badge-pill badge-danger" style="font-size:80%; width:50px">' .
                 round($monto, 1) .
                 '%</span>';
         } elseif ($monto < 100) {
-            return '<span class="badge badge-pill badge-warning" style="font-size:90%;">' .
+            return '<span class="badge badge-pill badge-warning" style="font-size:80%; width:50px">' .
                 round($monto, 1) .
                 '%</span>';
         } else {
-            return '<span class="badge badge-pill badge-success" style="font-size:90%;">' .
+            return '<span class="badge badge-pill badge-success" style="font-size:80%; width:50px">' .
                 round($monto, 1) .
                 '%</span>';
         }

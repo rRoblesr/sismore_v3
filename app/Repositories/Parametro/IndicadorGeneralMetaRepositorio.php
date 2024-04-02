@@ -4,6 +4,7 @@ namespace App\Repositories\Parametro;
 
 use App\Http\Controllers\Salud\IndicadoresController;
 use App\Models\Parametro\IndicadorGeneralMeta;
+use App\Models\Parametro\Ubigeo;
 use App\Models\Salud\DataPacto1;
 use App\Models\Salud\ImporPadronActas;
 use Illuminate\Support\Facades\DB;
@@ -137,6 +138,11 @@ class IndicadorGeneralMetaRepositorio
         $query = ImporPadronActas::select(DB::raw('month(sal_impor_padron_actas.fecha_envio) as name'), DB::raw('sum(numero_archivos) as y'))
             ->join('par_importacion as imp', 'imp.id', '=', 'sal_impor_padron_actas.importacion_id')
             ->where(DB::raw('year(fechaActualizacion)'), $anio);
+        if ($distrito > 0) {
+            $dd = Ubigeo::find($distrito);
+            $query = $query->where('distrito',  $dd->nombre);
+        }
+
         if (IndicadoresController::$pacto1_anio == $anio)
             $query = $query->where(DB::raw('month(sal_impor_padron_actas.fecha_envio)'), '>=', IndicadoresController::$pacto1_mes);
         $query = $query->groupBy('name')->orderBy('name')->get();
@@ -147,6 +153,10 @@ class IndicadorGeneralMetaRepositorio
     public static function getPacto1Mensual2($anio, $distrito)
     {
         $query =  DataPacto1::where('anio', $anio)->select('mes', DB::raw('sum(estado) as y'));
+        if ($distrito > 0) {
+            $dd = Ubigeo::find($distrito);
+            $query = $query->where('distrito',  $dd->nombre);
+        }
         if (IndicadoresController::$pacto1_anio == $anio)
             $query = $query->where('mes', '>=', IndicadoresController::$pacto1_mes);
         $query = $query->groupBy('mes')->orderBy('mes')->get();
