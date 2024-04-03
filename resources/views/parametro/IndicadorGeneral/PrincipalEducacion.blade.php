@@ -4,14 +4,6 @@
     <!-- Table datatable css -->
     <link href="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.css" rel="stylesheet"
         type="text/css" />
-    {{-- <link href="{{ asset('/') }}public/assets/libs/datatables/buttons.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" />
-    <link href="{{ asset('/') }}public/assets/libs/datatables/fixedHeader.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" />
-    <link href="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" />
-    <link href="{{ asset('/') }}public/assets/libs/datatables/scroller.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" /> --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 
     <style>
@@ -60,21 +52,6 @@
             color: #43beac;
             /* #0080FF; */
         }
-
-        /* .tab-content {
-                                                                                                                                                                            border: 1px solid #dee2e6;
-                                                                                                                                                                            border-top: transparent;
-                                                                                                                                                                            padding: 15px;
-                                                                                                                                                                        }
-
-                                                                                                                                                                        .tab-content .tab-pane {
-                                                                                                                                                                            background-color: #FFF;
-                                                                                                                                                                            color: #0080FF;
-                                                                                                                                                                            min-height: 200px;
-                                                                                                                                                                            height: auto;
-                                                                                                                                                                        } */
-
-        /*  */
     </style>
 @endsection
 @section('content')

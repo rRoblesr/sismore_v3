@@ -1,37 +1,36 @@
 @extends('layouts.main', ['activePage' => 'usuarios', 'titlePage' => ''])
 @section('css')
     <style>
-        .tablex thead th {
-            padding: 2px;
-            text-align: center;
+        .centrarmodal {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000000c9 !important;
         }
 
-        .tablex thead td {
-            padding: 2px;
-            text-align: center;
-            vertical-align: middle;
-            font-weight: bold;
+        .ui-autocomplete {
+            z-index: 215000000 !important;
         }
 
-        .tablex tbody td,
-        .tablex tbody th,
-        .tablex tfoot td,
-        .tablex tfoot th {
-            padding: 2px;
+        /*  formateando nav-tabs  */
+        .nav-tabs .nav-link:not(.active) {
+            /* border-color: transparent !important; */
         }
 
-        .fuentex {
-            font-size: 10px;
-            font-weight: bold;
+        .nav-tabs .nav-item .nav-link {
+            color: #43beac;
+
+            /* background-color: #43beac; */
+            /* #0080FF; */
+            /* color: #FFF; */
         }
 
+        .nav-tabs .nav-item .nav-link.active {
+            /* color: #43beac; */
+            /* #0080FF; */
 
-        .link {
-            color: #000000;
-        }
-
-        .link:hover {
-            color: #0000FF;
+            background-color: #43beac;
+            color: #FFF;
         }
     </style>
 @endsection
@@ -69,66 +68,341 @@
             </div>
         </div>
 
-        <div class="row pricing-plan">
-            <div class="col-md-12">
-                <div class="row">
-                    @foreach ($inds as $key => $item)
-                        <div class="col-md-6 col-xl-3">
-                            <div class="card text-center">
-                                <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                    <h5 class="text-white font-14 font-weight-normal"><i class="mdi mdi-shield-cross"
-                                            style="font-size: 20px"></i> Indicador {{ $key + 1 }}</h5>
-                                    {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
-                                    {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
-                                </div>
-                                <div class="pb-4 pl-4 pr-4">
-                                    <ul class="list-unstyled mt-0">
-                                        <li class="mt-0 pt-0">
-                                            {{-- <i class="mdi mdi-finance font-44 text-green-0"></i></li>
-                                        <li class="mt-0 pt-0 font-16">Avance</li>
-                                        <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 % --}}
-                                        <li class="m-0 pt-0">
-                                            <figure class="p-0 m-0">
-                                                <div id="gra{{ $item->codigo }}"></div>{{-- graDITSALUD01 --}}
-                                            </figure>
-                                        </li>
-                                        </li>
-                                        <li class="mt-0 pt-0 font-12">{{ $pacto[$item->codigo]['actualizado'] }}</li>
-                                        <li class="mt-0 pt-0 font-18 font-weight-bold">Meta:
-                                            {{ $pacto[$item->codigo]['meta'] }}</li>
-                                        <li class="mt-0 pt-0">
-                                            @if ($pacto[$item->codigo]['cumple'])
-                                                <span class="badge badge-success" style="font-size: 90%; width:100px">
-                                                    <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
-                                            @else
-                                                <span class="badge badge-danger" style="font-size: 90%; width:100px">
-                                                    <i class="mdi mdi-thumb-down"></i> NO CUMPLE</span>
-                                            @endif
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card-box p-0">
+                    <ul class="nav nav-tabs border-0" role="tablist">{{-- nav-justified  --}}
+                        <li class="nav-item">
+                            <a class="nav-link border border-success-0 border-bottom-0 active" id="vista1-tab"
+                                data-toggle="tab" href="#vista1" role="tab" aria-controls="vista1" aria-selected="true">
+                                <span class="d-block d-sm-none">
+                                    <i class="mdi mdi-home-variant-outline font-18"></i>
+                                </span>
+                                <span class="d-none d-sm-block text-center" style="width:110px">SALUD</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link border border-success-0 border-bottom-0" id="vista2-tab" data-toggle="tab"
+                                href="#vista2" role="tab" aria-controls="vista2" aria-selected="false">
+                                <span class="d-block d-sm-none">
+                                    <i class="mdi mdi-account-outline font-18"></i>
+                                </span>
+                                <span class="d-none d-sm-block text-center" style="width:110px">EDUCACIÓN</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link border border-success-0 border-bottom-0" id="vista3-tab" data-toggle="tab"
+                                href="#vista3" role="tab" aria-controls="vista3" aria-selected="false">
+                                <span class="d-block d-sm-none">
+                                    <i class="mdi mdi-account-outline font-18"></i>
+                                </span>
+                                <span class="d-none d-sm-block text-center" style="width:110px">VIVIENDA</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link border border-success-0 border-bottom-0" id="vista4-tab" data-toggle="tab"
+                                href="#vista4" role="tab" aria-controls="vista4" aria-selected="false">
+                                <span class="d-block d-sm-none">
+                                    <i class="mdi mdi-account-outline font-18"></i>
+                                </span>
+                                <span class="d-none d-sm-block text-center" style="width:110px">ARTICULACIÓN</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content p-0">
+                        <div class="tab-pane p-3 border border-success-0 show active" id="vista1" role="tabpanel"
+                            aria-labelledby="vista1-tab">
 
-                                        </li>
-                                        <li class="mt-1 pt-1">
-                                            <p class="font-12" style="height: 6rem">{{ $item->nombre }}</p>
-                                        </li>
+                            <div class="row pricing-plan">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        @foreach ($inds as $key => $item)
+                                            <div class="col-md-6 col-xl-3">
+                                                <div class="card text-center border border-success-0">
+                                                    <div class="pricing-header bg-success-0 p-0 rounded-top">
+                                                        <h5 class="text-white font-14 font-weight-normal"><i
+                                                                class="mdi mdi-shield-cross" style="font-size: 20px"></i>
+                                                            Indicador {{ $key + 1 }}</h5>
+                                                        {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
+                                                        {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
+                                                    </div>
+                                                    <div class="pb-4 pl-4 pr-4">
+                                                        <ul class="list-unstyled mt-0">
+                                                            <li class="mt-0 pt-0">
+                                                                {{-- <i class="mdi mdi-finance font-44 text-green-0"></i></li>
+                                                            <li class="mt-0 pt-0 font-16">Avance</li>
+                                                            <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 % --}}
+                                                            <li class="m-0 pt-0">
+                                                                <figure class="p-0 m-0">
+                                                                    <div id="gra{{ $item->codigo }}"></div>
+                                                                    {{-- graDITSALUD01 --}}
+                                                                </figure>
+                                                            </li>
+                                                            </li>
+                                                            <li class="mt-0 pt-0 font-12">
+                                                                {{ $pacto[$item->codigo]['actualizado'] }}</li>
+                                                            <li class="mt-0 pt-0 font-18 font-weight-bold">Meta:
+                                                                {{ $pacto[$item->codigo]['meta'] }}</li>
+                                                            <li class="mt-0 pt-0">
+                                                                @if ($pacto[$item->codigo]['cumple'])
+                                                                    <span class="badge badge-success m-2"
+                                                                        style="font-size: 90%; width:100px">
+                                                                        <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
+                                                                @else
+                                                                    <span class="badge badge-danger m-2"
+                                                                        style="font-size: 90%; width:100px">
+                                                                        <i class="mdi mdi-thumb-down"></i> NO CUMPLE</span>
+                                                                @endif
 
-                                    </ul>
-                                    <div class="mt-1 pt-1">
-                                        {{-- <button class="btn btn-primary width-md waves-effect waves-light">Sign Up</button> --}}
-                                        <a href="{{ route('salud.indicador.pactoregional.detalle', $item->id) }}"
-                                            class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
-                                            detalle</a>
+                                                            </li>
+                                                            <li class="mt-1 pt-1">
+                                                                <p class="font-12" style="height: 5rem;">
+                                                                    {{ $item->nombre }}</p>
+                                                            </li>
+
+                                                        </ul>
+                                                        <div class="mt-1 pt-1">
+                                                            {{-- <button class="btn btn-primary width-md waves-effect waves-light">Sign Up</button> --}}
+                                                            <a href="{{ route('salud.indicador.pactoregional.detalle', $item->id) }}"
+                                                                class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
+                                                                detalle</a>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- end col -->
+                                        @endforeach
+
                                     </div>
-
+                                    <!-- end row -->
                                 </div>
+                                <!-- end Col-10 -->
                             </div>
-                        </div>
-                        <!-- end col -->
-                    @endforeach
 
+                        </div>
+
+                        <div class="tab-pane p-3 border border-success-0" id="vista2" role="tabpanel"
+                            aria-labelledby="vista2-tab">
+
+                            <div class="row pricing-plan">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        @foreach ($inds as $key => $item)
+                                            <div class="col-md-6 col-xl-3">
+                                                <div class="card text-center border border-success-0">
+                                                    <div class="pricing-header bg-success-0 p-0 rounded-top">
+                                                        <h5 class="text-white font-14 font-weight-normal"><i
+                                                                class="mdi mdi-shield-cross" style="font-size: 20px"></i>
+                                                            Indicador {{ $key + 1 }}</h5>
+                                                        {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
+                                                        {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
+                                                    </div>
+                                                    <div class="pb-4 pl-4 pr-4">
+                                                        <ul class="list-unstyled mt-0">
+                                                            <li class="mt-0 pt-0">
+                                                                {{-- <i class="mdi mdi-finance font-44 text-green-0"></i></li>
+                                                            <li class="mt-0 pt-0 font-16">Avance</li>
+                                                            <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 % --}}
+                                                            <li class="m-0 pt-0">
+                                                                <figure class="p-0 m-0">
+                                                                    <div id="gra{{ $item->codigo }}"></div>
+                                                                    {{-- graDITSALUD01 --}}
+                                                                </figure>
+                                                            </li>
+                                                            </li>
+                                                            <li class="mt-0 pt-0 font-12">
+                                                                {{ $pacto[$item->codigo]['actualizado'] }}</li>
+                                                            <li class="mt-0 pt-0 font-18 font-weight-bold">Meta:
+                                                                {{ $pacto[$item->codigo]['meta'] }}</li>
+                                                            <li class="mt-0 pt-0">
+                                                                @if ($pacto[$item->codigo]['cumple'])
+                                                                    <span class="badge badge-success m-2"
+                                                                        style="font-size: 90%; width:100px">
+                                                                        <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
+                                                                @else
+                                                                    <span class="badge badge-danger m-2"
+                                                                        style="font-size: 90%; width:100px">
+                                                                        <i class="mdi mdi-thumb-down"></i> NO CUMPLE</span>
+                                                                @endif
+
+                                                            </li>
+                                                            <li class="mt-1 pt-1">
+                                                                <p class="font-12" style="height: 5rem;">
+                                                                    {{ $item->nombre }}</p>
+                                                            </li>
+
+                                                        </ul>
+                                                        <div class="mt-1 pt-1">
+                                                            {{-- <button class="btn btn-primary width-md waves-effect waves-light">Sign Up</button> --}}
+                                                            <a href="{{ route('salud.indicador.pactoregional.detalle', $item->id) }}"
+                                                                class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
+                                                                detalle</a>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- end col -->
+                                        @endforeach
+
+                                    </div>
+                                    <!-- end row -->
+                                </div>
+                                <!-- end Col-10 -->
+                            </div>
+
+                        </div>
+
+                        <div class="tab-pane p-3 border border-success-0" id="vista3" role="tabpanel"
+                            aria-labelledby="vista3-tab">
+
+                            <div class="row pricing-plan">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        @foreach ($inds as $key => $item)
+                                            <div class="col-md-6 col-xl-3">
+                                                <div class="card text-center border border-success-0">
+                                                    <div class="pricing-header bg-success-0 p-0 rounded-top">
+                                                        <h5 class="text-white font-14 font-weight-normal"><i
+                                                                class="mdi mdi-shield-cross" style="font-size: 20px"></i>
+                                                            Indicador {{ $key + 1 }}</h5>
+                                                        {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
+                                                        {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
+                                                    </div>
+                                                    <div class="pb-4 pl-4 pr-4">
+                                                        <ul class="list-unstyled mt-0">
+                                                            <li class="mt-0 pt-0">
+                                                                {{-- <i class="mdi mdi-finance font-44 text-green-0"></i></li>
+                                                            <li class="mt-0 pt-0 font-16">Avance</li>
+                                                            <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 % --}}
+                                                            <li class="m-0 pt-0">
+                                                                <figure class="p-0 m-0">
+                                                                    <div id="gra{{ $item->codigo }}"></div>
+                                                                    {{-- graDITSALUD01 --}}
+                                                                </figure>
+                                                            </li>
+                                                            </li>
+                                                            <li class="mt-0 pt-0 font-12">
+                                                                {{ $pacto[$item->codigo]['actualizado'] }}</li>
+                                                            <li class="mt-0 pt-0 font-18 font-weight-bold">Meta:
+                                                                {{ $pacto[$item->codigo]['meta'] }}</li>
+                                                            <li class="mt-0 pt-0">
+                                                                @if ($pacto[$item->codigo]['cumple'])
+                                                                    <span class="badge badge-success m-2"
+                                                                        style="font-size: 90%; width:100px">
+                                                                        <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
+                                                                @else
+                                                                    <span class="badge badge-danger m-2"
+                                                                        style="font-size: 90%; width:100px">
+                                                                        <i class="mdi mdi-thumb-down"></i> NO CUMPLE</span>
+                                                                @endif
+
+                                                            </li>
+                                                            <li class="mt-1 pt-1">
+                                                                <p class="font-12" style="height: 5rem;">
+                                                                    {{ $item->nombre }}</p>
+                                                            </li>
+
+                                                        </ul>
+                                                        <div class="mt-1 pt-1">
+                                                            {{-- <button class="btn btn-primary width-md waves-effect waves-light">Sign Up</button> --}}
+                                                            <a href="{{ route('salud.indicador.pactoregional.detalle', $item->id) }}"
+                                                                class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
+                                                                detalle</a>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- end col -->
+                                        @endforeach
+
+                                    </div>
+                                    <!-- end row -->
+                                </div>
+                                <!-- end Col-10 -->
+                            </div>
+
+                        </div>
+
+                        <div class="tab-pane p-3 border border-success-0" id="vista4" role="tabpanel"
+                            aria-labelledby="vista4-tab">
+
+                            <div class="row pricing-plan">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        @foreach ($inds as $key => $item)
+                                            <div class="col-md-6 col-xl-3">
+                                                <div class="card text-center border border-success-0">
+                                                    <div class="pricing-header bg-success-0 p-0 rounded-top">
+                                                        <h5 class="text-white font-14 font-weight-normal"><i
+                                                                class="mdi mdi-shield-cross" style="font-size: 20px"></i>
+                                                            Indicador {{ $key + 1 }}</h5>
+                                                        {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
+                                                        {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
+                                                    </div>
+                                                    <div class="pb-4 pl-4 pr-4">
+                                                        <ul class="list-unstyled mt-0">
+                                                            <li class="mt-0 pt-0">
+                                                                {{-- <i class="mdi mdi-finance font-44 text-green-0"></i></li>
+                                                            <li class="mt-0 pt-0 font-16">Avance</li>
+                                                            <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 % --}}
+                                                            <li class="m-0 pt-0">
+                                                                <figure class="p-0 m-0">
+                                                                    <div id="gra{{ $item->codigo }}"></div>
+                                                                    {{-- graDITSALUD01 --}}
+                                                                </figure>
+                                                            </li>
+                                                            </li>
+                                                            <li class="mt-0 pt-0 font-12">
+                                                                {{ $pacto[$item->codigo]['actualizado'] }}</li>
+                                                            <li class="mt-0 pt-0 font-18 font-weight-bold">Meta:
+                                                                {{ $pacto[$item->codigo]['meta'] }}</li>
+                                                            <li class="mt-0 pt-0">
+                                                                @if ($pacto[$item->codigo]['cumple'])
+                                                                    <span class="badge badge-success m-2"
+                                                                        style="font-size: 90%; width:100px">
+                                                                        <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
+                                                                @else
+                                                                    <span class="badge badge-danger m-2"
+                                                                        style="font-size: 90%; width:100px">
+                                                                        <i class="mdi mdi-thumb-down"></i> NO CUMPLE</span>
+                                                                @endif
+
+                                                            </li>
+                                                            <li class="mt-1 pt-1">
+                                                                <p class="font-12" style="height: 5rem;">
+                                                                    {{ $item->nombre }}</p>
+                                                            </li>
+
+                                                        </ul>
+                                                        <div class="mt-1 pt-1">
+                                                            {{-- <button class="btn btn-primary width-md waves-effect waves-light">Sign Up</button> --}}
+                                                            <a href="{{ route('salud.indicador.pactoregional.detalle', $item->id) }}"
+                                                                class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
+                                                                detalle</a>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- end col -->
+                                        @endforeach
+
+                                    </div>
+                                    <!-- end row -->
+                                </div>
+                                <!-- end Col-10 -->
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
-                <!-- end row -->
             </div>
-            <!-- end Col-10 -->
         </div>
+
+
         <!-- end row -->
 
         <div id="modal_datosindicador" class="modal fade font-10" tabindex="-1" role="dialog"
