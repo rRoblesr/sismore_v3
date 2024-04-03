@@ -44,15 +44,20 @@
                 <h4 class="page-title font-16">PACTO REGIONAL</h4>
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2">
-                <select id="provincia" name="provincia" class="form-control btn-xs font-11"
-                    onchange="cargarDistritos(),cargarCards();">
-                    <option value="0">AÑO</option>
+                <select id="anio" name="anio" class="form-control btn-xs font-11" onchange="cargarActualizar();">
+                    @foreach ($anio as $item)
+                        <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                            {{ $item->anio }}</option>
+                    @endforeach
                 </select>
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2">
-                <select id="provincia" name="provincia" class="form-control btn-xs font-11"
-                    onchange="cargarDistritos(),cargarCards();">
+                <select id="provincia" name="provincia" class="form-control btn-xs font-11" onchange="cargarDistritos()">
                     <option value="0">PROVINCIA</option>
+                    @foreach ($provincia as $item)
+                        <option value="{{ $item->id }}">
+                            {{ $item->nombre }}</option>
+                    @endforeach
 
                 </select>
             </div>
@@ -83,23 +88,23 @@
                                         <li class="mt-0 pt-0 font-16">Avance</li>
                                         <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 % --}}
                                         <li class="m-0 pt-0">
-
                                             <figure class="p-0 m-0">
                                                 <div id="gra{{ $item->codigo }}"></div>{{-- graDITSALUD01 --}}
                                             </figure>
                                         </li>
                                         </li>
-                                        <li class="mt-0 pt-0 font-12">{{$pacto[$item->codigo]['actualizado']}}</li>
-                                        <li class="mt-0 pt-0 font-18 font-weight-bold">Meta: {{$pacto[$item->codigo]['meta']}}</li>
+                                        <li class="mt-0 pt-0 font-12">{{ $pacto[$item->codigo]['actualizado'] }}</li>
+                                        <li class="mt-0 pt-0 font-18 font-weight-bold">Meta:
+                                            {{ $pacto[$item->codigo]['meta'] }}</li>
                                         <li class="mt-0 pt-0">
                                             @if ($pacto[$item->codigo]['cumple'])
-                                            <span class="badge badge-success" style="font-size: 100%">
-                                                <i class="mdi mdi-thumb-up"></i> CUMPLE</span>    
+                                                <span class="badge badge-success" style="font-size: 90%; width:100px">
+                                                    <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
                                             @else
-                                            <span class="badge badge-danger" style="font-size: 100%">
-                                                <i class="mdi mdi-thumb-down"></i>NO CUMPLE</span>
+                                                <span class="badge badge-danger" style="font-size: 90%; width:100px">
+                                                    <i class="mdi mdi-thumb-down"></i> NO CUMPLE</span>
                                             @endif
-                                            
+
                                         </li>
                                         <li class="mt-1 pt-1">
                                             <p class="font-12" style="height: 6rem">{{ $item->nombre }}</p>
@@ -213,294 +218,34 @@
                 }
             });
             // cargarCards();
-            GaugeSeries('graDITSALUD01', 71);
-            GaugeSeries('graDITSALUD02', 82);
-            GaugeSeries('graDITSALUD03', 92);
-            GaugeSeries('graDITSALUD04', 99);
-            GaugeSeries('graDITSALUD05', 62);
+            cargarpacto1();
         });
 
-        function cargarCards() {
-            $.ajax({
-                url: "{{ route('panelcontrol.educacion.head') }}",
-                data: {
-                    "provincia": $('#provincia').val(),
-                    "distrito": $('#distrito').val(),
-                    // "tipogestion": $('#tipogestion').val(),
-                    // "ambito": $('#ambito').val(),
-                },
-                type: "GET",
-                dataType: "JSON",
-                success: function(data) {
-                    // $('#basico').text(data.valor1);
-                    // $('#ebr').text(data.valor2);
-                    // $('#ebe').text(data.valor3);
-                    // $('#eba').text(data.valor4);
-                    // $('#ibasico').text(data.ind1 + '%');
-                    // $('#iebr').text(data.ind2 + '%');
-                    // $('#iebe').text(data.ind3 + '%');
-                    // $('#ieba').text(data.ind4 + '%');
-                    // //$('#bbasico').css('width','100px');
-                    // $('#bbasico').css('width', data.ind1 + '%')
-                    //     .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                    //     .addClass(data.ind1 > 84 ? 'bg-success-0' : (data.ind1 > 49 ? 'bg-warning-0' :
-                    //         'bg-orange-0'));
-                    // $('#bebr').css('width', data.ind2 + '%').removeClass(
-                    //         'bg-success-0 bg-orange-0 bg-warning-0')
-                    //     .addClass(data.ind2 > 84 ? 'bg-success-0' : (data.ind2 > 49 ? 'bg-warning-0' :
-                    //         'bg-orange-0'));
-                    // $('#bebe').css('width', data.ind3 + '%').removeClass(
-                    //         'bg-success-0 bg-orange-0 bg-warning-0')
-                    //     .addClass(data.ind3 > 84 ? 'bg-success-0' : (data.ind3 > 49 ? 'bg-warning-0' :
-                    //         'bg-orange-0'));
-                    // $('#beba').css('width', data.ind4 + '%').removeClass(
-                    //         'bg-success-0 bg-orange-0 bg-warning-0')
-                    //     .addClass(data.ind4 > 84 ? 'bg-success-0' : (data.ind4 > 49 ? 'bg-warning-0' :
-                    //         'bg-orange-0'));
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 1");
-                    console.log(jqXHR);
-                },
-            });
+        function cargarpacto1() {
+            @foreach ($inds as $key => $item)
+                GaugeSeries('gra{{ $item->codigo }}', {{ $pacto[$item->codigo]['avance'] }});
+            @endforeach
 
-            // GaugeSeries('gra01DITSALUD01');
+            // GaugeSeries('graDITSALUD01', 71);
+            // GaugeSeries('graDITSALUD02', 82);
+            // GaugeSeries('graDITSALUD03', 92);
+            // GaugeSeries('graDITSALUD04', 99);
+            // GaugeSeries('graDITSALUD05', 62);
 
-            //panelGraficas('container1');
-            //panelGraficas('container2');
-            //panelGraficas('container3');
-            // panelGraficas('anal1');
-            // panelGraficas('anal2');
-            // panelGraficas('anal3');
-            // panelGraficas('anal4');
-            // panelGraficas('siagie001');
-            // panelGraficas('censodocente001');
-            // panelGraficas('dtanal1');
-            // panelGraficas('dtanal2');
-            // panelGraficas('dtanal3');
-            // panelGraficas('skills001');
-            // panelGraficas('skills002');
-            // panelGraficas('skills003');
-            // panelGraficas('skills004');
-            // panelGraficas('skills005');
-            // panelGraficas('skills006');
-            // panelGraficas('skills007');
-            // panelGraficas('skills008');
-            // panelGraficas('skills009');
-            // panelGraficas('skills010');
-            // panelGraficas('tabla1');
-            /* panelGraficas('iiee1');
-            panelGraficas('iiee2');
-            panelGraficas('iiee3');
-            panelGraficas('iiee4');
-            panelGraficas('iiee5');
-            panelGraficas('iiee6'); */
         }
 
-        function panelGraficas(div) {
+        function cargarActualizar() {
             $.ajax({
-                url: "{{ route('panelcontrol.educacion.graficas') }}",
+                url: "{{ route('salud.indicador.pactoregional.actualizar') }}",
                 data: {
-                    'div': div,
-                    "anio": 2024,
-                    "provincia": $('#provincia').val(),
+                    "anio": $('#anio').val(),
                     "distrito": $('#distrito').val(),
-                    // "tipogestion": $('#tipogestion').val(),
-                    // "ambito": $('#ambito').val(),
                 },
                 type: "GET",
                 dataType: "JSON",
-                beforeSend: function() {
-                    if (div == "siagie001") {
-                        $('#' + div).html(
-                            '<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    } else if (div == "censodocente001") {
-                        $('#' + div).html(
-                            '<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    } else {
-                        // $('#' + div).html(
-                        //     '<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    }
-                },
+                // beforeSend: function() {},
                 success: function(data) {
-                    switch (div) {
-                        case "siagie001":
-                            gAnidadaColumn(div,
-                                data.info.cat,
-                                data.info.dat,
-                                '',
-                                'Numero de estudiantes matriculados en educacion basica regular, periodo 2018 - 2023',
-                                data.info.maxbar
-                            );
-                            $('#span-siagie001-fuente').html("Fuente: " + data.reg.fuente);
-                            $('#span-siagie001-fecha').html("Actualizado: " + data.reg.fecha);
-                            break;
-                        case "censodocente001":
-                            gAnidadaColumn(div,
-                                data.info.cat,
-                                data.info.dat,
-                                '',
-                                'Numero de docentes en educacion basica regular, periodo 2018 - 2023',
-                                data.info.maxbar
-                            );
-                            $('#span-censodocente001-fuente').html("Fuente: " + data.reg.fuente);
-                            $('#span-censodocente001-fecha').html("Actualizado: " + data.reg.fecha);
-                            break;
-                        case "container1":
-                            gsemidona(div, 0, ['#5eb9aa', '#F9FFFE']);
-                            $('#span-container1-fuente').html("Fuente: " + 'MINEDU');
-                            $('#span-container1-fecha').html("Actualizado: " + '31/12/2022');
-                            break;
-                        case "container2":
-                            gsemidona(div, 0, ['#5eb9aa',
-                                '#F9FFFE'
-                            ]); // ['#f5bd22', '#FDEEC7']);
-                            $('#span-container2-fuente').html("Fuente: " + 'MINEDU');
-                            $('#span-container2-fecha').html("Actualizado: " + '31/12/2022');
-                            break;
-                        case "container3":
-                            gsemidona(div, 0, ['#5eb9aa', '#F9FFFE']); // ['#e65310', '#FDD1BD']);
-                            $('#span-container3-fuente').html("Fuente: " + 'MINEDU');
-                            $('#span-container3-fecha').html("Actualizado: " + '31/12/2022');
-                            break;
-                        case "dtanal1":
-                            gsemidona(div, data.info.indicador, ['#5eb9aa', '#F9FFFE']);
-                            $('#span-dtanal1-fuente').html("Fuente: " + data.info.fuente);
-                            $('#span-dtanal1-fecha').html("Actualizado: " + data.info.fecha);
-                            break;
-                        case "dtanal2":
-                            gsemidona(div, data.info.indicador, ['#5eb9aa', '#F9FFFE']);
-                            $('#span-dtanal2-fuente').html("Fuente: " + data.info.fuente);
-                            $('#span-dtanal2-fecha').html("Actualizado: " + data.info.fecha);
-                            break;
-                        case "dtanal3":
-                            gsemidona(div, data.info.indicador, ['#5eb9aa', '#F9FFFE']);
-                            $('#span-dtanal3-fuente').html("Fuente: " + data.info.fuente);
-                            $('#span-dtanal3-fecha').html("Actualizado: " + data.info.fecha);
-                            break;
-                        case "iiee1":
-                            gsemidona(div, 99.1, ['#5eb9aa', '#F9FFFE']);
-                            $('#span-iiee1-fuente').html("Fuente: " + 'MINEDU');
-                            $('#span-iiee1-fecha').html("Actualizado: " + '31/12/2022');
-                            break;
-                        case "iiee2":
-                            gsemidona(div, 76.0, ['#5eb9aa', '#F9FFFE']); // ['#f5bd22', '#FDEEC7']);
-                            $('#span-iiee2-fuente').html("Fuente: " + 'MINEDU');
-                            $('#span-iiee2-fecha').html("Actualizado: " + '31/12/2022');
-                            break;
-                        case "iiee3":
-                            gsemidona(div, 94.9, ['#5eb9aa', '#F9FFFE']); // ['#e65310', '#FDD1BD']);
-                            $('#span-iiee3-fuente').html("Fuente: " + 'MINEDU');
-                            $('#span-iiee3-fecha').html("Actualizado: " + '31/12/2022');
-                            break;
-                        case "iiee4":
-                            gsemidona(div, 99.1, ['#5eb9aa', '#F9FFFE']);
-                            $('#span-iiee4-fuente').html("Fuente: " + 'MINEDU');
-                            $('#span-iiee4-fecha').html("Actualizado: " + '31/12/2022');
-                            break;
-                        case "iiee5":
-                            gsemidona(div, 76.0, ['#5eb9aa', '#F9FFFE']); // ['#f5bd22', '#FDEEC7']);
-                            $('#span-iiee5-fuente').html("Fuente: " + 'MINEDU');
-                            $('#span-iiee5-fecha').html("Actualizado: " + '31/12/2022');
-                            break;
-                        case "iiee6":
-                            gsemidona(div, 94.9, ['#5eb9aa', '#F9FFFE']); // ['#e65310', '#FDD1BD']);
-                            $('#span-iiee6-fuente').html("Fuente: " + 'MINEDU');
-                            $('#span-iiee6-fecha').html("Actualizado: " + '31/12/2022');
-                            break;
-
-                        case "skills001":
-                            $('.skills001 h6 span').html(data.info.indicador + "%");
-                            $('.skills001 .progress-bar').css('width', data.info.indicador + '%')
-                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
-                            break;
-                        case "skills002":
-                            $('.skills002 h6 span').html(data.info.indicador + "%");
-                            $('.skills002 .progress-bar').css('width', data.info.indicador + '%')
-                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
-                        case "skills003":
-                            $('.skills003 h6 span').html(data.info.indicador + "%");
-                            $('.skills003 .progress-bar').css('width', data.info.indicador + '%')
-                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
-                            break;
-                        case "skills004":
-                            $('.skills004 h6 span').html(data.info.indicador + "%");
-                            $('.skills004 .progress-bar').css('width', data.info.indicador + '%')
-                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
-                            break;
-                        case "skills005":
-                            $('.skills005 h6 span').html(data.info.indicador + "%");
-                            $('.skills005 .progress-bar').css('width', data.info.indicador + '%')
-                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
-                            $('#span-skills005-fuente').html("Fuente: " + data.reg.fuente);
-                            $('#span-skills005-fecha').html("Actualizado: " + data.reg.fecha);
-                            break;
-                        case "skills006":
-                            $('.skills006 h6 span').html(data.info.indicador + "%");
-                            $('.skills006 .progress-bar').css('width', data.info.indicador + '%')
-                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
-
-                            break;
-                        case "skills007":
-                            $('.skills007 h6 span').html(data.info.indicador + "%");
-                            $('.skills007 .progress-bar').css('width', data.info.indicador + '%')
-                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
-                            break;
-                        case "skills008":
-                            $('.skills008 h6 span').html(data.info.indicador + "%");
-                            $('.skills008 .progress-bar').css('width', data.info.indicador + '%')
-                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
-                            break;
-                        case "skills009":
-                            $('.skills009 h6 span').html(data.info.indicador + "%");
-                            $('.skills009 .progress-bar').css('width', data.info.indicador + '%')
-                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
-                            break;
-                        case "skills010":
-                            $('.skills010 h6 span').html(data.info.indicador + "%");
-                            $('.skills010 .progress-bar').css('width', data.info.indicador + '%')
-                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
-                            $('#span-skills010-fuente').html("Fuente: " + data.reg.fuente);
-                            $('#span-skills010-fecha').html("Actualizado: " + data.reg.fecha);
-                            break;
-                        case "tabla1":
-                            $('#vtabla1').html(data.excel);
-                            $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
-                            $('.vtabla1-fecha').html('Actualizado: ' + data.reg.fecha);
-                            $('#tabla1').DataTable({
-                                responsive: true,
-                                autoWidth: false,
-                                ordered: true,
-                                searching: false,
-                                bPaginate: false,
-                                info: false,
-                                language: table_language,
-                            });
-                            break;
-                        default:
-                            break;
-                    }
-
+                    console.log(data);
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");
@@ -508,15 +253,304 @@
                 },
             });
         }
+
+        // function cargarCards() {
+        //     $.ajax({
+        //         url: "{{ route('panelcontrol.educacion.head') }}",
+        //         data: {
+        //             "provincia": $('#provincia').val(),
+        //             "distrito": $('#distrito').val(),
+        //             // "tipogestion": $('#tipogestion').val(),
+        //             // "ambito": $('#ambito').val(),
+        //         },
+        //         type: "GET",
+        //         dataType: "JSON",
+        //         success: function(data) {
+        //             // $('#basico').text(data.valor1);
+        //             // $('#ebr').text(data.valor2);
+        //             // $('#ebe').text(data.valor3);
+        //             // $('#eba').text(data.valor4);
+        //             // $('#ibasico').text(data.ind1 + '%');
+        //             // $('#iebr').text(data.ind2 + '%');
+        //             // $('#iebe').text(data.ind3 + '%');
+        //             // $('#ieba').text(data.ind4 + '%');
+        //             // //$('#bbasico').css('width','100px');
+        //             // $('#bbasico').css('width', data.ind1 + '%')
+        //             //     .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+        //             //     .addClass(data.ind1 > 84 ? 'bg-success-0' : (data.ind1 > 49 ? 'bg-warning-0' :
+        //             //         'bg-orange-0'));
+        //             // $('#bebr').css('width', data.ind2 + '%').removeClass(
+        //             //         'bg-success-0 bg-orange-0 bg-warning-0')
+        //             //     .addClass(data.ind2 > 84 ? 'bg-success-0' : (data.ind2 > 49 ? 'bg-warning-0' :
+        //             //         'bg-orange-0'));
+        //             // $('#bebe').css('width', data.ind3 + '%').removeClass(
+        //             //         'bg-success-0 bg-orange-0 bg-warning-0')
+        //             //     .addClass(data.ind3 > 84 ? 'bg-success-0' : (data.ind3 > 49 ? 'bg-warning-0' :
+        //             //         'bg-orange-0'));
+        //             // $('#beba').css('width', data.ind4 + '%').removeClass(
+        //             //         'bg-success-0 bg-orange-0 bg-warning-0')
+        //             //     .addClass(data.ind4 > 84 ? 'bg-success-0' : (data.ind4 > 49 ? 'bg-warning-0' :
+        //             //         'bg-orange-0'));
+        //         },
+        //         erro: function(jqXHR, textStatus, errorThrown) {
+        //             console.log("ERROR GRAFICA 1");
+        //             console.log(jqXHR);
+        //         },
+        //     });
+
+        //     // GaugeSeries('gra01DITSALUD01');
+
+        //     //panelGraficas('container1');
+        //     //panelGraficas('container2');
+        //     //panelGraficas('container3');
+        //     // panelGraficas('anal1');
+        //     // panelGraficas('anal2');
+        //     // panelGraficas('anal3');
+        //     // panelGraficas('anal4');
+        //     // panelGraficas('siagie001');
+        //     // panelGraficas('censodocente001');
+        //     // panelGraficas('dtanal1');
+        //     // panelGraficas('dtanal2');
+        //     // panelGraficas('dtanal3');
+        //     // panelGraficas('skills001');
+        //     // panelGraficas('skills002');
+        //     // panelGraficas('skills003');
+        //     // panelGraficas('skills004');
+        //     // panelGraficas('skills005');
+        //     // panelGraficas('skills006');
+        //     // panelGraficas('skills007');
+        //     // panelGraficas('skills008');
+        //     // panelGraficas('skills009');
+        //     // panelGraficas('skills010');
+        //     // panelGraficas('tabla1');
+        //     /* panelGraficas('iiee1');
+        //     panelGraficas('iiee2');
+        //     panelGraficas('iiee3');
+        //     panelGraficas('iiee4');
+        //     panelGraficas('iiee5');
+        //     panelGraficas('iiee6'); */
+        // }
+
+        // function panelGraficas(div) {
+        //     $.ajax({
+        //         url: "{{ route('panelcontrol.educacion.graficas') }}",
+        //         data: {
+        //             'div': div,
+        //             "anio": 2024,
+        //             "provincia": $('#provincia').val(),
+        //             "distrito": $('#distrito').val(),
+        //             // "tipogestion": $('#tipogestion').val(),
+        //             // "ambito": $('#ambito').val(),
+        //         },
+        //         type: "GET",
+        //         dataType: "JSON",
+        //         beforeSend: function() {
+        //             if (div == "siagie001") {
+        //                 $('#' + div).html(
+        //                     '<span><i class="fa fa-spinner fa-spin"></i></span>');
+        //             } else if (div == "censodocente001") {
+        //                 $('#' + div).html(
+        //                     '<span><i class="fa fa-spinner fa-spin"></i></span>');
+        //             } else {
+        //                 // $('#' + div).html(
+        //                 //     '<span><i class="fa fa-spinner fa-spin"></i></span>');
+        //             }
+        //         },
+        //         success: function(data) {
+        //             switch (div) {
+        //                 case "siagie001":
+        //                     gAnidadaColumn(div,
+        //                         data.info.cat,
+        //                         data.info.dat,
+        //                         '',
+        //                         'Numero de estudiantes matriculados en educacion basica regular, periodo 2018 - 2023',
+        //                         data.info.maxbar
+        //                     );
+        //                     $('#span-siagie001-fuente').html("Fuente: " + data.reg.fuente);
+        //                     $('#span-siagie001-fecha').html("Actualizado: " + data.reg.fecha);
+        //                     break;
+        //                 case "censodocente001":
+        //                     gAnidadaColumn(div,
+        //                         data.info.cat,
+        //                         data.info.dat,
+        //                         '',
+        //                         'Numero de docentes en educacion basica regular, periodo 2018 - 2023',
+        //                         data.info.maxbar
+        //                     );
+        //                     $('#span-censodocente001-fuente').html("Fuente: " + data.reg.fuente);
+        //                     $('#span-censodocente001-fecha').html("Actualizado: " + data.reg.fecha);
+        //                     break;
+        //                 case "container1":
+        //                     gsemidona(div, 0, ['#5eb9aa', '#F9FFFE']);
+        //                     $('#span-container1-fuente').html("Fuente: " + 'MINEDU');
+        //                     $('#span-container1-fecha').html("Actualizado: " + '31/12/2022');
+        //                     break;
+        //                 case "container2":
+        //                     gsemidona(div, 0, ['#5eb9aa',
+        //                         '#F9FFFE'
+        //                     ]); // ['#f5bd22', '#FDEEC7']);
+        //                     $('#span-container2-fuente').html("Fuente: " + 'MINEDU');
+        //                     $('#span-container2-fecha').html("Actualizado: " + '31/12/2022');
+        //                     break;
+        //                 case "container3":
+        //                     gsemidona(div, 0, ['#5eb9aa', '#F9FFFE']); // ['#e65310', '#FDD1BD']);
+        //                     $('#span-container3-fuente').html("Fuente: " + 'MINEDU');
+        //                     $('#span-container3-fecha').html("Actualizado: " + '31/12/2022');
+        //                     break;
+        //                 case "dtanal1":
+        //                     gsemidona(div, data.info.indicador, ['#5eb9aa', '#F9FFFE']);
+        //                     $('#span-dtanal1-fuente').html("Fuente: " + data.info.fuente);
+        //                     $('#span-dtanal1-fecha').html("Actualizado: " + data.info.fecha);
+        //                     break;
+        //                 case "dtanal2":
+        //                     gsemidona(div, data.info.indicador, ['#5eb9aa', '#F9FFFE']);
+        //                     $('#span-dtanal2-fuente').html("Fuente: " + data.info.fuente);
+        //                     $('#span-dtanal2-fecha').html("Actualizado: " + data.info.fecha);
+        //                     break;
+        //                 case "dtanal3":
+        //                     gsemidona(div, data.info.indicador, ['#5eb9aa', '#F9FFFE']);
+        //                     $('#span-dtanal3-fuente').html("Fuente: " + data.info.fuente);
+        //                     $('#span-dtanal3-fecha').html("Actualizado: " + data.info.fecha);
+        //                     break;
+        //                 case "iiee1":
+        //                     gsemidona(div, 99.1, ['#5eb9aa', '#F9FFFE']);
+        //                     $('#span-iiee1-fuente').html("Fuente: " + 'MINEDU');
+        //                     $('#span-iiee1-fecha').html("Actualizado: " + '31/12/2022');
+        //                     break;
+        //                 case "iiee2":
+        //                     gsemidona(div, 76.0, ['#5eb9aa', '#F9FFFE']); // ['#f5bd22', '#FDEEC7']);
+        //                     $('#span-iiee2-fuente').html("Fuente: " + 'MINEDU');
+        //                     $('#span-iiee2-fecha').html("Actualizado: " + '31/12/2022');
+        //                     break;
+        //                 case "iiee3":
+        //                     gsemidona(div, 94.9, ['#5eb9aa', '#F9FFFE']); // ['#e65310', '#FDD1BD']);
+        //                     $('#span-iiee3-fuente').html("Fuente: " + 'MINEDU');
+        //                     $('#span-iiee3-fecha').html("Actualizado: " + '31/12/2022');
+        //                     break;
+        //                 case "iiee4":
+        //                     gsemidona(div, 99.1, ['#5eb9aa', '#F9FFFE']);
+        //                     $('#span-iiee4-fuente').html("Fuente: " + 'MINEDU');
+        //                     $('#span-iiee4-fecha').html("Actualizado: " + '31/12/2022');
+        //                     break;
+        //                 case "iiee5":
+        //                     gsemidona(div, 76.0, ['#5eb9aa', '#F9FFFE']); // ['#f5bd22', '#FDEEC7']);
+        //                     $('#span-iiee5-fuente').html("Fuente: " + 'MINEDU');
+        //                     $('#span-iiee5-fecha').html("Actualizado: " + '31/12/2022');
+        //                     break;
+        //                 case "iiee6":
+        //                     gsemidona(div, 94.9, ['#5eb9aa', '#F9FFFE']); // ['#e65310', '#FDD1BD']);
+        //                     $('#span-iiee6-fuente').html("Fuente: " + 'MINEDU');
+        //                     $('#span-iiee6-fecha').html("Actualizado: " + '31/12/2022');
+        //                     break;
+
+        //                 case "skills001":
+        //                     $('.skills001 h6 span').html(data.info.indicador + "%");
+        //                     $('.skills001 .progress-bar').css('width', data.info.indicador + '%')
+        //                         .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+        //                         .addClass(data.info.indicador > 84 ? 'bg-success-0' :
+        //                             (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+        //                     break;
+        //                 case "skills002":
+        //                     $('.skills002 h6 span').html(data.info.indicador + "%");
+        //                     $('.skills002 .progress-bar').css('width', data.info.indicador + '%')
+        //                         .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+        //                         .addClass(data.info.indicador > 84 ? 'bg-success-0' :
+        //                             (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+        //                 case "skills003":
+        //                     $('.skills003 h6 span').html(data.info.indicador + "%");
+        //                     $('.skills003 .progress-bar').css('width', data.info.indicador + '%')
+        //                         .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+        //                         .addClass(data.info.indicador > 84 ? 'bg-success-0' :
+        //                             (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+        //                     break;
+        //                 case "skills004":
+        //                     $('.skills004 h6 span').html(data.info.indicador + "%");
+        //                     $('.skills004 .progress-bar').css('width', data.info.indicador + '%')
+        //                         .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+        //                         .addClass(data.info.indicador > 84 ? 'bg-success-0' :
+        //                             (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+        //                     break;
+        //                 case "skills005":
+        //                     $('.skills005 h6 span').html(data.info.indicador + "%");
+        //                     $('.skills005 .progress-bar').css('width', data.info.indicador + '%')
+        //                         .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+        //                         .addClass(data.info.indicador > 84 ? 'bg-success-0' :
+        //                             (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+        //                     $('#span-skills005-fuente').html("Fuente: " + data.reg.fuente);
+        //                     $('#span-skills005-fecha').html("Actualizado: " + data.reg.fecha);
+        //                     break;
+        //                 case "skills006":
+        //                     $('.skills006 h6 span').html(data.info.indicador + "%");
+        //                     $('.skills006 .progress-bar').css('width', data.info.indicador + '%')
+        //                         .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+        //                         .addClass(data.info.indicador > 84 ? 'bg-success-0' :
+        //                             (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+
+        //                     break;
+        //                 case "skills007":
+        //                     $('.skills007 h6 span').html(data.info.indicador + "%");
+        //                     $('.skills007 .progress-bar').css('width', data.info.indicador + '%')
+        //                         .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+        //                         .addClass(data.info.indicador > 84 ? 'bg-success-0' :
+        //                             (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+        //                     break;
+        //                 case "skills008":
+        //                     $('.skills008 h6 span').html(data.info.indicador + "%");
+        //                     $('.skills008 .progress-bar').css('width', data.info.indicador + '%')
+        //                         .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+        //                         .addClass(data.info.indicador > 84 ? 'bg-success-0' :
+        //                             (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+        //                     break;
+        //                 case "skills009":
+        //                     $('.skills009 h6 span').html(data.info.indicador + "%");
+        //                     $('.skills009 .progress-bar').css('width', data.info.indicador + '%')
+        //                         .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+        //                         .addClass(data.info.indicador > 84 ? 'bg-success-0' :
+        //                             (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+        //                     break;
+        //                 case "skills010":
+        //                     $('.skills010 h6 span').html(data.info.indicador + "%");
+        //                     $('.skills010 .progress-bar').css('width', data.info.indicador + '%')
+        //                         .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+        //                         .addClass(data.info.indicador > 84 ? 'bg-success-0' :
+        //                             (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+        //                     $('#span-skills010-fuente').html("Fuente: " + data.reg.fuente);
+        //                     $('#span-skills010-fecha').html("Actualizado: " + data.reg.fecha);
+        //                     break;
+        //                 case "tabla1":
+        //                     $('#vtabla1').html(data.excel);
+        //                     $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
+        //                     $('.vtabla1-fecha').html('Actualizado: ' + data.reg.fecha);
+        //                     $('#tabla1').DataTable({
+        //                         responsive: true,
+        //                         autoWidth: false,
+        //                         ordered: true,
+        //                         searching: false,
+        //                         bPaginate: false,
+        //                         info: false,
+        //                         language: table_language,
+        //                     });
+        //                     break;
+        //                 default:
+        //                     break;
+        //             }
+
+        //         },
+        //         erro: function(jqXHR, textStatus, errorThrown) {
+        //             console.log("ERROR GRAFICA 1");
+        //             console.log(jqXHR);
+        //         },
+        //     });
+        // }
 
         function cargarDistritos() {
             $.ajax({
-                url: "{{ route('plaza.cargardistritos', '') }}/" + $('#provincia').val(),
+                url: "{{ route('ubigeo.distrito.25', '') }}/" + $('#provincia').val(),
                 type: 'GET',
                 success: function(data) {
                     $("#distrito option").remove();
                     var options = '<option value="0">DISTRITO</option>';
-                    $.each(data.distritos, function(index, value) {
+                    $.each(data, function(index, value) {
                         //ss = (id == value.id ? "selected" : "");
                         options += "<option value='" + value.id + "'>" + value.nombre +
                             "</option>"
@@ -932,6 +966,7 @@
         }
 
         function GaugeSeries(div, data) {
+            //colors: ['#5eb9aa', '#f5bd22', '#ef5350'],
             Highcharts.chart(div, {
                 chart: {
                     height: 165,
@@ -942,11 +977,24 @@
                 yAxis: {
                     min: 0,
                     max: 100,
-                    stops: [
-                        [0.1, '#33A29D'], // green
-                        // [0.5, '#DDDF0D'], // yellow
-                        // [0.9, '#DF5353'] // red
-                    ],
+                    // stops: [
+                    //     [0.5, '#ef5350'], // red DF5353
+                    //     [0.9, '#f5bd22'], // yellow
+                    //     [1, '#5eb9aa'], // green 33A29D
+                    // ],
+                    dataClasses: [{
+                        from: 0,
+                        to: 50,
+                        color: '#ef5350'
+                    }, {
+                        from: 51,
+                        to: 99,
+                        color: '#f5bd22'
+                    }, {
+                        from: 100,
+                        to: 150,
+                        color: '#5eb9aa'
+                    }],
                     lineWidth: 0,
                     minorTickInterval: null,
                     tickAmount: 0,

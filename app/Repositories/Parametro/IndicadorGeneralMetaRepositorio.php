@@ -24,7 +24,7 @@ class IndicadorGeneralMetaRepositorio
     public static function getPacto1GLS($indicador_id, $anio)
     {
         $query1 = IndicadorGeneralMeta::distinct()->select('valor')->where('indicadorgeneral', $indicador_id)->where('anio', $anio)->get()->first();
-         $base = $query1->valor ? $query1->valor : 0;
+        $base = $query1->valor ? $query1->valor : 0;
 
         $query2 =  DataPacto1::where('anio', $anio)->select(DB::raw("IF(sum(estado)=$base,1,0) as conteo"));
         if (IndicadoresController::$pacto1_anio == $anio)
