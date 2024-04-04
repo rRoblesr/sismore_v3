@@ -1114,7 +1114,7 @@ Route::get('/salud/conveniofed', [IndicadoresController::class, 'ConvenioFED'])-
 
 Route::get('/salud/pruebas', function () {
     return view('pruebas3');
-})->name('salud.indicador.conveniofed');
+});
 
 Route::get('/ImporPadronActas/Importar', [ImporPadronActasController::class, 'importar'])->name('imporpadronactas.importar');
 Route::post('/ImporPadronActas/Importar', [ImporPadronActasController::class, 'guardar'])->name('imporpadronactas.guardar');

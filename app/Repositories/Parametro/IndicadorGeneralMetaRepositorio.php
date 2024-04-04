@@ -23,8 +23,8 @@ class IndicadorGeneralMetaRepositorio
 
     public static function getPacto1GLS($indicador_id, $anio)
     {
-        $query1 = IndicadorGeneralMeta::distinct()->select('valor')->where('indicadorgeneral', $indicador_id)->where('anio', $anio)->get()->first();
-        $base = $query1->valor ? $query1->valor : 0;
+        $query1 = IndicadorGeneralMeta::distinct()->select('valor')->where('indicadorgeneral', $indicador_id)->where('anio', $anio)->get();
+        $base = $query1->count() > 0 ? ($query1->first()->valor ? $query1->first()->valor : 0) : 0;
 
         $query2 =  DataPacto1::where('anio', $anio)->select(DB::raw("IF(sum(estado)=$base,1,0) as conteo"));
         if (IndicadoresController::$pacto1_anio == $anio)
@@ -37,8 +37,8 @@ class IndicadorGeneralMetaRepositorio
 
     public static function getPacto1GLN($indicador_id, $anio)
     {
-        $query1 = IndicadorGeneralMeta::distinct()->select('valor')->where('indicadorgeneral', $indicador_id)->where('anio', $anio)->get()->first();
-        $base = $query1->valor ? $query1->valor : 0;
+        $query1 = IndicadorGeneralMeta::distinct()->select('valor')->where('indicadorgeneral', $indicador_id)->where('anio', $anio)->get();
+        $base = $query1->count() > 0 ? ($query1->first()->valor ? $query1->first()->valor : 0) : 0;
 
         $query2 =  DataPacto1::where('anio', $anio)->select(DB::raw("IF(sum(estado)=$base,0,1) as conteo"));
         if (IndicadoresController::$pacto1_anio == $anio)

@@ -29,7 +29,6 @@
                                 <div class="col-lg-1 col-md-1 col-sm-1  ">
                                     <select id="anio" name="anio" class="form-control btn-xs font-11"
                                         onchange="cargarcuadros();">
-                                        <option value="0">AÑO</option>
                                         @foreach ($anio as $item)
                                             <option value="{{ $item->anio }}"
                                                 {{ $item->anio == $aniomax ? 'selected' : '' }}>
@@ -116,7 +115,7 @@
                                         <span data-plugin="counterup" id="gls"></span>
                                     </h4>
                                     <p class="mb-0 mt-1 text-truncate">
-                                        Gobiernos Locales Cumplen
+                                        GL Cumplen
                                     </p>
                                 </div>
                             </div>
@@ -138,7 +137,7 @@
                                         <span data-plugin="counterup" id="gln"></span>
                                     </h4>
                                     <p class="mb-0 mt-1 text-truncate">
-                                        Gobiernos Locales No Cumplen
+                                        GL No Cumplen
                                     </p>
                                 </div>
                             </div>

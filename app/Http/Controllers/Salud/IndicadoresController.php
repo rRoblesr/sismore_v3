@@ -41,6 +41,7 @@ class IndicadoresController extends Controller
         $aniomax = $imp->anio;
 
         $gls = IndicadorGeneralMetaRepositorio::getPacto1GLS($ind->id, $imp->anio);
+        // return response()->json(compact('gls','ind'));
         $gl = IndicadorGeneralMetaRepositorio::getPacto1GL($ind->id, $imp->anio);
 
         $pacto['DITSALUD01'] = [];
