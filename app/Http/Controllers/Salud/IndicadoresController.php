@@ -37,6 +37,7 @@ class IndicadoresController extends Controller
         $provincia = UbigeoRepositorio::provincia('25');
 
         $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_1']);
+        // return response()->json(compact('imp'));
         $aniomax = $imp->anio;
 
         $gls = IndicadorGeneralMetaRepositorio::getPacto1GLS($ind->id, $imp->anio);

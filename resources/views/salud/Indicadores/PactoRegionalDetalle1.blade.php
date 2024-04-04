@@ -11,11 +11,12 @@
                     <div class="card">
                         <div class="card-header bg-success-0">
                             <div class="card-widgets">
+                                <button type="button" class="btn btn-orange-0 btn-xs" onclick="history.back()" title="ACTUALIZAR"><i class="fas fa-arrow-left"></i> Volver</button>
                                 <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf({{ $ind->id }})"
                                     title='FICHA TÉCNICA'><i class="fas fa-file"></i> Ficha Técnica</button>
                                 <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
                                     title='ACTUALIZAR'><i class=" fas fa-history"></i>
-                                    Actualizar</button>{{-- {{ route('indicador.nuevos.01.print') }} --}}
+                                    Actualizar</button>
                             </div>
                             <h3 class="card-title text-white">{{ $ind->nombre }}
                             </h3>
