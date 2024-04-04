@@ -10,6 +10,7 @@ ALTER TABLE `par_indicador_general_meta` ADD `anio_base` INT(4) NOT NULL AFTER `
 
 
 # inicio procedimiento almacenado
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `datay`.`edu_pa_procesarImporMatriculaGeneral`(v_importacion_id INT, v_matriculageneral_id INT)
 BEGIN
 
@@ -120,7 +121,7 @@ END
 
 # query para crear tabla padron actas
 
-CREATE TABLE `edu_impor_padron_actas` (
+CREATE TABLE `sal_impor_padron_actas` (
   `id` int(11) NOT NULL,
   `importacion_id` int(11) DEFAULT NULL,
    nombre_municipio	varchar(40) DEFAULT NULL,
@@ -137,11 +138,11 @@ CREATE TABLE `edu_impor_padron_actas` (
 			numero_archivos	int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-ALTER TABLE `edu_impor_padron_actas` ADD PRIMARY KEY(`id`);
-ALTER TABLE `edu_impor_padron_actas` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;
-ALTER TABLE `edu_impor_padron_actas` ADD INDEX(`importacion_id`);
+ALTER TABLE `sal_impor_padron_actas` ADD PRIMARY KEY(`id`);
+ALTER TABLE `sal_impor_padron_actas` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `sal_impor_padron_actas` ADD INDEX(`importacion_id`);
 
-ALTER TABLE `edu_impor_padron_actas` CHANGE `dni_usuario_envio` `dni_usuario_envio` VARCHAR(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
+ALTER TABLE `sal_impor_padron_actas` CHANGE `dni_usuario_envio` `dni_usuario_envio` VARCHAR(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
 
 
 ########################################################
