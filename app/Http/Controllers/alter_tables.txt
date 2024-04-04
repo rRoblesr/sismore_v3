@@ -8,6 +8,8 @@ ALTER TABLE `par_indicador_general` CHANGE `codigo` `codigo` VARCHAR(20) CHARACT
 ALTER TABLE `par_indicador_general_meta` ADD `distrito` INT NULL DEFAULT NULL AFTER `periodo`;
 ALTER TABLE `par_indicador_general_meta` ADD `anio_base` INT(4) NOT NULL AFTER `distrito`, ADD `valor_base` VARCHAR(15)  NOT NULL AFTER `anio_base`;
 
+ALTER TABLE `par_indicador_general` CHANGE `numerador` `numerador` TEXT NULL DEFAULT NULL, CHANGE `denominador` `denominador` TEXT NULL DEFAULT NULL;
+
 
 # inicio procedimiento almacenado
 
@@ -126,8 +128,8 @@ CREATE TABLE `sal_impor_padron_actas` (
   `importacion_id` int(11) DEFAULT NULL,
    nombre_municipio	varchar(40) DEFAULT NULL,
 			departamento	varchar(10) DEFAULT NULL,
-			provincia	varchar(20) DEFAULT NULL,
-			distrito	varchar(20) DEFAULT NULL,
+			provincia	varchar(30) DEFAULT NULL,
+			distrito	varchar(50) DEFAULT NULL,
 			fecha_inicial	varchar(10) DEFAULT NULL,
 			fecha_final	varchar(10) DEFAULT NULL,
 			fecha_envio	varchar(10) DEFAULT NULL,
