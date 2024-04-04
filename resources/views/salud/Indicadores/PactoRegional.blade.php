@@ -42,7 +42,7 @@
             <div class="col-lg-6 col-md-6 col-sm-6">
                 <h4 class="page-title font-16">PACTO REGIONAL</h4>
             </div>
-            <div class="col-lg-2 col-md-2 col-sm-2">
+            <div class="col-lg-1 col-md-1 col-sm-1">
                 <select id="anio" name="anio" class="form-control btn-xs font-11" onchange="cargarActualizar();">
                     @foreach ($anio as $item)
                         <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
@@ -63,9 +63,16 @@
             <div class="col-lg-2 col-md-2 col-sm-2">
                 <select id="distrito" name="distrito" class="form-control btn-xs font-11" onchange="cargarCards();">
                     <option value="0">DISTRITO</option>
-
                 </select>
             </div>
+
+            <div class="col-lg-1 col-md-1 col-sm-1 text-right">
+                <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()" title='ACTUALIZAR'>
+                    <i class=" fas fa-history"></i>
+                </button>
+            </div>
+
+
         </div>
 
         <div class="row">
@@ -76,36 +83,42 @@
                             <a class="nav-link border border-success-0 border-bottom-0 active" id="vista1-tab"
                                 data-toggle="tab" href="#vista1" role="tab" aria-controls="vista1" aria-selected="true">
                                 <span class="d-block d-sm-none">
-                                    <i class="mdi mdi-home-variant-outline font-18"></i>
+                                    {{-- <i class="mdi mdi-home-variant-outline font-18"></i> --}}
+                                    <i class="mdi mdi-shield-plus font-18"></i>
                                 </span>
-                                <span class="d-none d-sm-block text-center" style="width:110px">SALUD</span>
+                                <span class="d-none d-sm-block text-center" style="width:130px">
+                                    <i class="mdi mdi-shield-plus"></i> SALUD</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link border border-success-0 border-bottom-0" id="vista2-tab" data-toggle="tab"
                                 href="#vista2" role="tab" aria-controls="vista2" aria-selected="false">
                                 <span class="d-block d-sm-none">
-                                    <i class="mdi mdi-account-outline font-18"></i>
+                                    {{-- <i class="mdi mdi-account-outline font-18"></i> --}}
+                                    <i class="mdi mdi-school font-18"></i>
                                 </span>
-                                <span class="d-none d-sm-block text-center" style="width:110px">EDUCACIÓN</span>
+                                <span class="d-none d-sm-block text-center" style="width:130px">
+                                    <i class="mdi mdi-school"></i> EDUCACIÓN</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link border border-success-0 border-bottom-0" id="vista3-tab" data-toggle="tab"
                                 href="#vista3" role="tab" aria-controls="vista3" aria-selected="false">
                                 <span class="d-block d-sm-none">
-                                    <i class="mdi mdi-account-outline font-18"></i>
+                                    <i class="mdi mdi-home font-18"></i>
                                 </span>
-                                <span class="d-none d-sm-block text-center" style="width:110px">VIVIENDA</span>
+                                <span class="d-none d-sm-block text-center" style="width:130px">
+                                    <i class="mdi mdi-home"></i> VIVIENDA</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link border border-success-0 border-bottom-0" id="vista4-tab" data-toggle="tab"
                                 href="#vista4" role="tab" aria-controls="vista4" aria-selected="false">
                                 <span class="d-block d-sm-none">
-                                    <i class="mdi mdi-account-outline font-18"></i>
+                                    <i class="mdi mdi-plus-circle-outline font-18"></i>
                                 </span>
-                                <span class="d-none d-sm-block text-center" style="width:110px">ARTICULACIÓN</span>
+                                <span class="d-none d-sm-block text-center" style="width:130px">
+                                    <i class="mdi mdi-plus-circle-outline"></i> ARTICULACIÓN</span>
                             </a>
                         </li>
                     </ul>
@@ -120,7 +133,14 @@
                                             <div class="col-md-6 col-xl-3">
                                                 <div class="card text-center border border-success-0">
                                                     <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                                        <h5 class="text-white font-14 font-weight-normal"><i
+                                                        <div class="card-widgets">
+                                                            {{-- <i class="mdi mdi-alert-circle-outline"></i> --}}
+                                                            <span><i class="mdi mdi-alert-circle"
+                                                                    style="color:#FFF;font-size: 20px"></i>&nbsp;&nbsp;</span>
+                                                            {{-- <a href="" title='' class=""><i class="mdi mdi-alert-circle"
+                                                                    style="color:#FFF;font-size: 20px"></i></a> --}}
+                                                        </div>
+                                                        <h5 class="text-white font-14 font-weight-normal mt-1 mb-1"><i
                                                                 class="mdi mdi-shield-cross" style="font-size: 20px"></i>
                                                             Indicador {{ $key + 1 }}</h5>
                                                         {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
