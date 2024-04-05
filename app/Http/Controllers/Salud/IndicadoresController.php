@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Parametro\Anio;
 use App\Models\Parametro\IndicadorGeneral;
 use App\Models\Parametro\IndicadorGeneralMeta;
+use App\Models\Parametro\Mes;
 use App\Models\Parametro\Ubigeo;
 use App\Models\Salud\ImporPadronActas;
 use App\Repositories\Educacion\ImportacionRepositorio;
@@ -13,6 +14,7 @@ use App\Repositories\Parametro\IndicadorGeneralMetaRepositorio;
 use App\Repositories\Parametro\IndicadorGeneralRepositorio;
 use App\Repositories\Parametro\UbigeoRepositorio;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class IndicadoresController extends Controller
 {
@@ -158,33 +160,58 @@ class IndicadoresController extends Controller
 
             case 'anal1':
                 $base = IndicadorGeneralMetaRepositorio::getPacto1Mensual($rq->anio, $rq->distrito);
-                $info = [];
-                foreach ($base as $key => $value) {
-                    $info['cat'][] = $this->mes[$value->name - 1];
-                    $value->y = (int)$value->y;
+                $mes = Mes::select('codigo', 'abreviado as mes')->get();
+                foreach ($mes as $mm) {
+                    $mm->y = null;
+                    foreach ($base as $bb) {
+                        if ($bb->name == $mm->codigo) {
+                            $mm->y = (int)$bb->y;
+                            break;
+                        }
+                    }
                 }
-                foreach ($base as $key => $value) {
+                $info = [];
+                foreach ($mes as $key => $value) {
+                    $info['cat'][] = $value->mes;
+                    $value->y = $value->y;
                     if ($key == 0)
-                        $vv = (int)$value->y;
+                        $vv = $value->y;
                     if ($key > 0) {
-                        $value->y += $vv;
-                        $vv = (int)$value->y;
+                        if ($value->y) {
+                            $value->y += $vv;
+                            $vv = $value->y;
+                        }
                     }
                     $info['dat'][] = $value->y;
                 }
                 return response()->json(compact('info'));
             case 'anal2':
-                $base = IndicadorGeneralMetaRepositorio::getPacto1Mensual($rq->anio, $rq->distrito);
+                $base1 = IndicadorGeneralMetaRepositorio::getPacto1Mensual($rq->anio, $rq->distrito);
                 $base2 = IndicadorGeneralMetaRepositorio::getPacto1Mensual2($rq->anio, $rq->distrito);
                 $info = [];
-                foreach ($base as $key => $value) {
-                    $info['cat'][] = $this->mes[$value->name - 1];
-                    $info['dat'][] = (int)$value->y;
+                $mes = Mes::select('codigo', 'abreviado as mes')->get();
+                foreach ($mes as $mm) {
+                    $mm->y1 = null;
+                    $mm->y2 = null;
+
+                    foreach ($base1 as $bb1) {
+                        if ($bb1->name == $mm->codigo) {
+                            $mm->y1 = (int)$bb1->y;
+                            break;
+                        }
+                    }
+
+                    foreach ($base2 as $bb2) {
+                        if ($bb2->mes == $mm->codigo) {
+                            $mm->y2 = (int)$bb2->y;
+                            break;
+                        }
+                    }
+                    $info['cat'][] = $mm->mes;
+                    $info['dat'][] = $mm->y1;
+                    $info['dat2'][] = $mm->y2;
                 }
-                foreach ($base2 as $key => $value) {
-                    $info['dat2'][] = (int)$value->y;
-                }
-                return response()->json(compact('info', 'base2'));
+                return response()->json(compact('info', 'base1', 'base2', 'mes'));
             case 'tabla1':
                 $base = IndicadorGeneralMetaRepositorio::getPacto1tabla1($rq->indicador, $rq->anio);
 

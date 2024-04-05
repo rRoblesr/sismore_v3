@@ -147,11 +147,11 @@ class IndicadorGeneralController extends Controller
             $data['status'] = FALSE;
         }
 
-        if ($request->denominador == '') {
-            $data['inputerror'][] = 'denominador';
-            $data['error_string'][] = 'Este campo es obligatorio.';
-            $data['status'] = FALSE;
-        }
+        // if ($request->denominador == '') {
+        //     $data['inputerror'][] = 'denominador';
+        //     $data['error_string'][] = 'Este campo es obligatorio.';
+        //     $data['status'] = FALSE;
+        // }
 
         if ($request->tipo == '') {
             $data['inputerror'][] = 'tipo';

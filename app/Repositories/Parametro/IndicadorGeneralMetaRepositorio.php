@@ -138,6 +138,7 @@ class IndicadorGeneralMetaRepositorio
         $query = ImporPadronActas::select(DB::raw('month(sal_impor_padron_actas.fecha_envio) as name'), DB::raw('sum(numero_archivos) as y'))
             ->join('par_importacion as imp', 'imp.id', '=', 'sal_impor_padron_actas.importacion_id')
             ->where(DB::raw('year(fechaActualizacion)'), $anio);
+
         if ($distrito > 0) {
             $dd = Ubigeo::find($distrito);
             $query = $query->where('distrito',  $dd->nombre);
@@ -145,6 +146,7 @@ class IndicadorGeneralMetaRepositorio
 
         if (IndicadoresController::$pacto1_anio == $anio)
             $query = $query->where(DB::raw('month(sal_impor_padron_actas.fecha_envio)'), '>=', IndicadoresController::$pacto1_mes);
+
         $query = $query->groupBy('name')->orderBy('name')->get();
         // ->where('distrito', $distrito)where('anio', $anio)->
         return $query;

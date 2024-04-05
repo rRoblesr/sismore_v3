@@ -22,7 +22,7 @@
             font-weight: bold;
         }
 
-        .nav-tabs .nav-item   {
+        .nav-tabs .nav-item {
             color: #43beac;
 
             /* background-color: #43beac; */
@@ -140,13 +140,13 @@
                                                     <div class="pricing-header bg-success-0 p-0 rounded-top">
                                                         <div class="card-widgets">
                                                             {{-- <i class="mdi mdi-alert-circle-outline"></i> --}}
-                                                            <span><i class="mdi mdi-alert-circle"
-                                                                    style="color:#FFF;font-size: 20px"></i>&nbsp;&nbsp;</span>
+                                                            <span onclick="datosIndicador({{$item->id}})"><i class="mdi mdi-rotate-180 mdi-alert-circle"
+                                                                    style="color:#FFF;font-size: 20px;"></i>&nbsp;&nbsp;</span>
                                                             {{-- <a href="" title='' class=""><i class="mdi mdi-alert-circle"
                                                                     style="color:#FFF;font-size: 20px"></i></a> --}}
                                                         </div>
                                                         <h5 class="text-white font-14 font-weight-normal mt-1 mb-1"><i
-                                                                class="mdi mdi-shield-cross" style="font-size: 20px"></i>
+                                                                class="mdi mdi-shield-plus" style="font-size: 20px"></i>
                                                             Indicador {{ $key + 1 }}</h5>
                                                         {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                                         {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
@@ -217,7 +217,7 @@
                                             <div class="card text-center border border-success-0">
                                                 <div class="pricing-header bg-success-0 p-0 rounded-top">
                                                     <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-shield-cross" style="font-size: 20px"></i>
+                                                            class="mdi mdi-school" style="font-size: 20px"></i>
                                                         Indicador 1</h5>
                                                     {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                                     {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
@@ -269,7 +269,7 @@
                                             <div class="card text-center border border-success-0">
                                                 <div class="pricing-header bg-success-0 p-0 rounded-top">
                                                     <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-shield-cross" style="font-size: 20px"></i>
+                                                            class="mdi mdi-school" style="font-size: 20px"></i>
                                                         Indicador 1</h5>
                                                     {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                                     {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
@@ -321,7 +321,7 @@
                                             <div class="card text-center border border-success-0">
                                                 <div class="pricing-header bg-success-0 p-0 rounded-top">
                                                     <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-shield-cross" style="font-size: 20px"></i>
+                                                            class="mdi mdi-school" style="font-size: 20px"></i>
                                                         Indicador 1</h5>
                                                     {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                                     {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
@@ -373,7 +373,7 @@
                                             <div class="card text-center border border-success-0">
                                                 <div class="pricing-header bg-success-0 p-0 rounded-top">
                                                     <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-shield-cross" style="font-size: 20px"></i>
+                                                            class="mdi mdi-school" style="font-size: 20px"></i>
                                                         Indicador 1</h5>
                                                     {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                                     {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
@@ -425,7 +425,7 @@
                                             <div class="card text-center border border-success-0">
                                                 <div class="pricing-header bg-success-0 p-0 rounded-top">
                                                     <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-shield-cross" style="font-size: 20px"></i>
+                                                            class="mdi mdi-school" style="font-size: 20px"></i>
                                                         Indicador 1</h5>
                                                     {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                                     {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
@@ -477,7 +477,7 @@
                                             <div class="card text-center border border-success-0">
                                                 <div class="pricing-header bg-success-0 p-0 rounded-top">
                                                     <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-shield-cross" style="font-size: 20px"></i>
+                                                            class="mdi mdi-school" style="font-size: 20px"></i>
                                                         Indicador 1</h5>
                                                     {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                                     {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
@@ -543,7 +543,7 @@
                                             <div class="card text-center border border-success-0">
                                                 <div class="pricing-header bg-success-0 p-0 rounded-top">
                                                     <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-shield-cross" style="font-size: 20px"></i>
+                                                            class="mdi mdi-home" style="font-size: 20px"></i>
                                                         Indicador 1</h5>
                                                     {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                                     {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
@@ -595,7 +595,7 @@
                                             <div class="card text-center border border-success-0">
                                                 <div class="pricing-header bg-success-0 p-0 rounded-top">
                                                     <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-shield-cross" style="font-size: 20px"></i>
+                                                            class="mdi mdi-home" style="font-size: 20px"></i>
                                                         Indicador 1</h5>
                                                     {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                                     {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
@@ -647,7 +647,7 @@
                                             <div class="card text-center border border-success-0">
                                                 <div class="pricing-header bg-success-0 p-0 rounded-top">
                                                     <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-shield-cross" style="font-size: 20px"></i>
+                                                            class="mdi mdi-home" style="font-size: 20px"></i>
                                                         Indicador 1</h5>
                                                     {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                                     {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
@@ -699,7 +699,7 @@
                                             <div class="card text-center border border-success-0">
                                                 <div class="pricing-header bg-success-0 p-0 rounded-top">
                                                     <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-shield-cross" style="font-size: 20px"></i>
+                                                            class="mdi mdi-home" style="font-size: 20px"></i>
                                                         Indicador 1</h5>
                                                     {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                                     {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
@@ -751,7 +751,7 @@
                                             <div class="card text-center border border-success-0">
                                                 <div class="pricing-header bg-success-0 p-0 rounded-top">
                                                     <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-shield-cross" style="font-size: 20px"></i>
+                                                            class="mdi mdi-home" style="font-size: 20px"></i>
                                                         Indicador 1</h5>
                                                     {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                                     {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
@@ -815,7 +815,7 @@
                                             <div class="card text-center border border-success-0">
                                                 <div class="pricing-header bg-success-0 p-0 rounded-top">
                                                     <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-shield-cross" style="font-size: 20px"></i>
+                                                            class="mdi mdi-plus-circle-outline" style="font-size: 20px"></i>
                                                         Indicador 1</h5>
                                                     {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                                     {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
@@ -867,7 +867,7 @@
                                             <div class="card text-center border border-success-0">
                                                 <div class="pricing-header bg-success-0 p-0 rounded-top">
                                                     <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-shield-cross" style="font-size: 20px"></i>
+                                                            class="mdi mdi-plus-circle-outline" style="font-size: 20px"></i>
                                                         Indicador 1</h5>
                                                     {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                                     {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
@@ -919,7 +919,7 @@
                                             <div class="card text-center border border-success-0">
                                                 <div class="pricing-header bg-success-0 p-0 rounded-top">
                                                     <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-shield-cross" style="font-size: 20px"></i>
+                                                            class="mdi mdi-plus-circle-outline" style="font-size: 20px"></i>
                                                         Indicador 1</h5>
                                                     {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                                     {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
@@ -971,7 +971,7 @@
                                             <div class="card text-center border border-success-0">
                                                 <div class="pricing-header bg-success-0 p-0 rounded-top">
                                                     <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-shield-cross" style="font-size: 20px"></i>
+                                                            class="mdi mdi-plus-circle-outline" style="font-size: 20px"></i>
                                                         Indicador 1</h5>
                                                     {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                                     {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
@@ -1023,7 +1023,7 @@
                                             <div class="card text-center border border-success-0">
                                                 <div class="pricing-header bg-success-0 p-0 rounded-top">
                                                     <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-shield-cross" style="font-size: 20px"></i>
+                                                            class="mdi mdi-plus-circle-outline" style="font-size: 20px"></i>
                                                         Indicador 1</h5>
                                                     {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                                     {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
@@ -1086,10 +1086,10 @@
 
         <div id="modal_datosindicador" class="modal fade font-10" tabindex="-1" role="dialog"
             aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title font-12" id="myModalLabel">Datos del indicador</h5>
+                        <h5 class="modal-title font-16" id="myModalLabel">Datos del indicador</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                     </div>
                     <div class="modal-body">
@@ -1114,7 +1114,23 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <label>Definición</label>
-                                            <textarea class="form-control" name="indicadordescripcion" id="indicadordescripcion" cols="30" rows="5"
+                                            <textarea class="form-control" name="indicadordescripcion" id="indicadordescripcion" cols="30" rows="3"
+                                                placeholder="Definición del indicador"></textarea>
+                                            <span class="help-block"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Numerador</label>
+                                            <textarea class="form-control" name="indicadornumerador" id="indicadornumerador" cols="30" rows="5"
+                                                placeholder="Definición del indicador"></textarea>
+                                            <span class="help-block"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Denominador</label>
+                                            <textarea class="form-control" name="indicadordenominador" id="indicadordenominador" cols="30" rows="5"
                                                 placeholder="Definición del indicador"></textarea>
                                             <span class="help-block"></span>
                                         </div>
@@ -1129,22 +1145,11 @@
                                             <span class="help-block"></span>
                                         </div>
                                         <div class="col-md-6">
-                                            <label>Tipo de indicador</label>
-                                            <input id="indicadortipo" name="indicadortipo" class="form-control"
-                                                type="text" placeholder="Fuente de datos">
-                                            <span class="help-block"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-12">
                                             <label>Fuente de datos</label>
                                             <input id="indicadorfuentedato" name="indicadorfuentedato"
                                                 class="form-control" type="text" placeholder="Fuente de datos">
                                             <span class="help-block"></span>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -1251,6 +1256,8 @@
                         $('#indicador').val(data.ie.id);
                         $('#indicadornombre').val(data.ie.nombre);
                         $('#indicadordescripcion').val(data.ie.descripcion);
+                        $('#indicadornumerador').val(data.ie.numerador);
+                        $('#indicadordenominador').val(data.ie.denominador);
                         $('#indicadorinstrumento').val(data.ie.instrumento);
                         $('#indicadortipo').val(data.ie.tipo);
                         $('#indicadorfuentedato').val(data.ie.fuente_dato);
@@ -1651,14 +1658,52 @@
                     spacing: [0, 0, 0, 0],
                     type: 'solidgauge'
                 },
+                // yAxis: {
+                //     min: 0,
+                //     max: 100,
+                //     // stops: [
+                //     //     [0.5, '#ef5350'], // red DF5353
+                //     //     [0.9, '#f5bd22'], // yellow
+                //     //     [1, '#5eb9aa'], // green 33A29D
+                //     // ],
+                //     dataClasses: [{
+                //         from: 0,
+                //         to: 50,
+                //         color: '#ef5350'
+                //     }, {
+                //         from: 51,
+                //         to: 99,
+                //         color: '#f5bd22'
+                //     }, {
+                //         from: 100,
+                //         to: 150,
+                //         color: '#5eb9aa'
+                //     }],
+                //     // starOnTick:true,
+                //     lineWidth: 0,
+                //     tickInterval: null,
+                //     minorTickInterval: null,
+                //     // minorTickWidth:null,
+                //     tickAmount: 0,
+                //     labels: {
+                //         enabled: false,
+                //     }
+
+                // },
                 yAxis: {
+                    labels: {
+                        style: {
+                            display: 'none'
+                        }
+                    },
+                    tickLength: 0,
+                    lineColor: 'transparent',
+                    minorTickLength: 0,
+                    minorGridLineWidth: 0,
+                    gridLineWidth: 0,
+
                     min: 0,
                     max: 100,
-                    // stops: [
-                    //     [0.5, '#ef5350'], // red DF5353
-                    //     [0.9, '#f5bd22'], // yellow
-                    //     [1, '#5eb9aa'], // green 33A29D
-                    // ],
                     dataClasses: [{
                         from: 0,
                         to: 50,
@@ -1672,14 +1717,6 @@
                         to: 150,
                         color: '#5eb9aa'
                     }],
-                    lineWidth: 0,
-                    tickInterval: null,
-                    minorTickInterval: null,
-                    tickAmount: 0,
-                    labels: {
-                        enabled: false,
-                    }
-
                 },
                 pane: {
                     background: {

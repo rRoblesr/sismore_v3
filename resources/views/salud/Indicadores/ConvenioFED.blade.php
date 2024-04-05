@@ -1396,13 +1396,19 @@
                     type: 'solidgauge'
                 },
                 yAxis: {
+                    labels: {
+                        style: {
+                            display: 'none'
+                        }
+                    },
+                    tickLength: 0,
+                    lineColor: 'transparent',
+                    minorTickLength: 0,
+                    minorGridLineWidth: 0,
+                    gridLineWidth: 0,
+
                     min: 0,
                     max: 100,
-                    // stops: [
-                    //     [0.5, '#ef5350'], // red DF5353
-                    //     [0.9, '#f5bd22'], // yellow
-                    //     [1, '#5eb9aa'], // green 33A29D
-                    // ],
                     dataClasses: [{
                         from: 0,
                         to: 50,
@@ -1416,14 +1422,6 @@
                         to: 150,
                         color: '#5eb9aa'
                     }],
-                    lineWidth: 0,
-                    tickInterval: null,
-                    minorTickInterval: null,
-                    tickAmount: 0,
-                    labels: {
-                        enabled: false,
-                    }
-
                 },
                 pane: {
                     background: {

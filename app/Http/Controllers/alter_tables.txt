@@ -178,9 +178,7 @@ begin
 
 	insert into temp1
 	select imp.id, year(imp.fechaActualizacion),pa.distrito ,pa.fecha_inicial ,pa.fecha_final, pa.fecha_envio ,
-		if(pa.fecha_envio between pa.fecha_inicial and date_format(date_add(pa.fecha_inicial,interval 1 month),'%Y-%m-07') ,
-		if(month(pa.fecha_envio)=month(pa.fecha_final),1,0)
-		,0) as estado 
+		if(pa.fecha_envio between pa.fecha_inicial and date_format(date_add(pa.fecha_inicial,interval 1 month),'%Y-%m-07') ,1,0) as estado 
 	from sal_impor_padron_actas pa
 	left join par_importacion imp on imp.id =pa.importacion_id
 	where year(imp.fechaActualizacion)=v_anio and imp.id=v_importacion and year(pa.fecha_final)=year(imp.fechaActualizacion)
