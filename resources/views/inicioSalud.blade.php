@@ -1,30 +1,5 @@
 @section('css')
     <style>
-        .tablex thead th {
-            padding: 2px;
-            text-align: center;
-        }
-
-        .tablex thead td {
-            padding: 2px;
-            text-align: center;
-            vertical-align: middle;
-            font-weight: bold;
-        }
-
-        .tablex tbody td,
-        .tablex tbody th,
-        .tablex tfoot td,
-        .tablex tfoot th {
-            padding: 2px;
-        }
-
-        .fuentex {
-            font-size: 10px;
-            font-weight: bold;
-        }
-
-
         .link {
             color: #000000;
         }
@@ -70,7 +45,7 @@
         </div>
 
         <!--Widget-4 -->
-        <div class="row">
+        <div class="row d-none">
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="card-box border border-plomo-0">{{--  card-border border border-plomo-0 --}}
                     <div class="media">
@@ -291,7 +266,7 @@
         </div>
 
 
-        <div class="row">
+        <div class="row d-none">
             <div class="col-lg-6">
                 <div class="card card-border border border-plomo-0">
                     <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
@@ -328,7 +303,7 @@
 
         </div>
 
-        <div class="row">
+        <div class="row d-none">
             <div class="col-lg-6">
                 {{-- <div class="card card-default card-fill"> --}}
                 {{-- <div class="card-header"> --}}
@@ -502,7 +477,7 @@
         </div>
 
 
-        <div class="row">
+        <div class="row d-none">
             <div class="col-lg-4 col-md-4">
                 <div class="card card-border border border-plomo-0">
                     <div class="card-header border-success-0 bg-transparent pb-0 pt-2" style="height: 4rem">
@@ -1084,7 +1059,7 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row d-none">
             <div class="col-lg-12">
                 <div class="card card-border border border-plomo-0">
                     <div class="card-header border-success-0 bg-transparent pb-0 pt-2">

@@ -115,9 +115,14 @@
             font-size: 11px !important;
         }
 
-        .font-40 {
-            font-size: 40px !important;
+        @for ($i = 31; $i < 44; $i++)
+        .font-{{$i}} {
+            font-size: {{$i}}px !important;
         }
+        @endfor
+        /* .font-40 {
+            font-size: 40px !important;
+        } */
 
         .requerid {
             color: red;

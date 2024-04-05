@@ -11,7 +11,8 @@
                     <div class="card">
                         <div class="card-header bg-success-0">
                             <div class="card-widgets">
-                                <button type="button" class="btn btn-orange-0 btn-xs" onclick="history.back()" title="ACTUALIZAR"><i class="fas fa-arrow-left"></i> Volver</button>
+                                <button type="button" class="btn btn-orange-0 btn-xs" onclick="history.back()"
+                                    title="ACTUALIZAR"><i class="fas fa-arrow-left"></i> Volver</button>
                                 <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf({{ $ind->id }})"
                                     title='FICHA TÉCNICA'><i class="fas fa-file"></i> Ficha Técnica</button>
                                 <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
@@ -64,8 +65,9 @@
                     <div class="card-box border border-plomo-0">
                         <div class="media">
                             <div class="text-center">
-                                <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
-                                    width="70%" height="70%">
+                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                                    width="70%" height="70%"> --}}
+                                <i class="mdi mdi-finance font-35 text-green-0"></i>
                             </div>
                             <div class="media-body align-self-center">
                                 <div class="text-right">
@@ -84,8 +86,9 @@
                     <div class="card-box border border-plomo-0">
                         <div class="media">
                             <div class="text-center">
-                                <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
-                                    width="70%" height="70%">
+                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                                    width="70%" height="70%"> --}}
+                                <i class=" mdi mdi-city font-35 text-green-0"></i>
                             </div>
                             <div class="media-body align-self-center">
                                 <div class="text-right">
@@ -106,8 +109,9 @@
                     <div class="card-box border border-plomo-0">
                         <div class="media">
                             <div class="text-center">
-                                <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
-                                    width="70%" height="70%">
+                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                                    width="70%" height="70%"> --}}
+                                <i class="mdi mdi-thumb-up font-35 text-green-0"></i>
                             </div>
                             <div class="media-body align-self-center">
                                 <div class="text-right">
@@ -128,8 +132,9 @@
                     <div class="card-box border border-plomo-0">
                         <div class="media">
                             <div class="text-center">
-                                <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
-                                    width="70%" height="70%">
+                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                                    width="70%" height="70%"> --}}
+                                <i class="mdi mdi-thumb-down font-35 text-green-0"></i>
                             </div>
                             <div class="media-body align-self-center">
                                 <div class="text-right">
@@ -157,7 +162,8 @@
                                 <button type="button" class="btn btn-success btn-xs"><i
                                         class="fa fa-file-excel"></i> Descargar</button>
                             </div> --}}
-                            <h3 class="text-black font-14">Avance acumulado de la evaluación de Cumplimiento por Distrito</h3>
+                            <h3 class="text-black font-14">Avance acumulado de la evaluación de Cumplimiento por Distrito
+                            </h3>
                         </div>
                         <div class="card-body p-0">
                             <div class="row">

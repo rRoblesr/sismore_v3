@@ -17,7 +17,12 @@
             /* border-color: transparent !important; */
         }
 
-        .nav-tabs .nav-item .nav-link {
+        .nav-link {
+            /* color: #000; */
+            font-weight: bold;
+        }
+
+        .nav-tabs .nav-item   {
             color: #43beac;
 
             /* background-color: #43beac; */

@@ -20,7 +20,7 @@
 
         <div class="form-group row align-items-center vh-5">
             <div class="col-lg-8 col-md-8 col-sm-8">
-                <h4 class="page-title font-16">PACTO REGIONAL</h4>
+                <h4 class="page-title font-16">CONVENIO FED</h4>
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2">
                 <select id="provincia" name="provincia" class="form-control btn-xs font-11"
@@ -37,8 +37,325 @@
             </div>
         </div>
 
-
         <div class="row pricing-plan">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6 col-xl-3">
+                        <div class="card text-center border border-success-0">
+                            <div class="pricing-header bg-success-0 p-0 rounded-top">
+                                <h5 class="text-white font-14 font-weight-normal">
+                                    <i class="mdi mdi-shield-cross" style="font-size: 20px"></i>
+                                    SI 01-01
+                                </h5>
+                                {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
+                                {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
+                            </div>
+                            <div class="pb-4 pl-4 pr-4">
+                                <ul class="list-unstyled mt-0">
+                                    <li class="mt-0 pt-0">
+                                    <li class="m-0 pt-0">
+                                        <figure class="p-0 m-0">
+                                            <div id="graeducacion01"></div>
+                                            {{-- graDITSALUD01 --}}
+                                        </figure>
+                                    </li>
+                                    </li>
+                                    <li class="mt-0 pt-0 font-12">Actualizado: 02/04/2024
+                                    </li>
+                                    <li class="mt-0 pt-0">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <a href="javascript:void(0)" class="text-green-0 font-weight-bold"
+                                                    data-toggle="popover" title="Numerador"
+                                                    data-content="Locales Educativos conectados a red de agra potable, según departamentos"><i
+                                                        class="mdi mdi-arrow-down-bold" data-placement="top"></i>
+                                                    Numerador</a>
+                                                <div class="font-weight-bold">100</div>
+                                            </div>
+
+                                            <div class="col-6">
+                                                <a href="javascript:void(0)" class="text-green-0 font-weight-bold"
+                                                    data-toggle="popover" title="Denominador"
+                                                    data-content="Locales Educativos conectados a red de agra potable, según departamentos">
+                                                    <i class="mdi mdi-arrow-up-bold" data-placement="top"></i>
+                                                    Denominador</a>
+                                                <div class="font-weight-bold">100</div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="mt-1 pt-1">
+                                        <p class="font-12" style="height: 5rem;">Número de gobiernos
+                                            locales que registraron oportunamente las actas de
+                                            homologación en el sistema de padron nominal</p>
+                                    </li>
+
+                                </ul>
+                                <div class="mt-1 pt-1">
+                                    <a href="#"
+                                        class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
+                                        detalle</a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-xl-3">
+                        <div class="card text-center border border-success-0">
+                            <div class="pricing-header bg-success-0 p-0 rounded-top">
+                                <h5 class="text-white font-14 font-weight-normal">
+                                    <i class="mdi mdi-shield-cross" style="font-size: 20px"></i>
+                                    SI 01-02
+                                </h5>
+                                {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
+                                {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
+                            </div>
+                            <div class="pb-4 pl-4 pr-4">
+                                <ul class="list-unstyled mt-0">
+                                    <li class="mt-0 pt-0">
+                                        {{-- <i class="mdi mdi-finance font-44 text-green-0"></i></li>
+                                    <li class="mt-0 pt-0 font-16">Avance</li>
+                                    <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 % --}}
+                                    <li class="m-0 pt-0">
+                                        <figure class="p-0 m-0">
+                                            <div id="graeducacion02"></div>
+                                            {{-- graDITSALUD01 --}}
+                                        </figure>
+                                    </li>
+                                    </li>
+                                    <li class="mt-0 pt-0 font-12">Actualizado: 02/04/2024
+                                    </li>
+                                    <li class="mt-0 pt-0">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <a href="javascript:void(0)" class="text-green-0 font-weight-bold"
+                                                    data-toggle="popover" title="Numerador"
+                                                    data-content="Locales Educativos conectados a red de agra potable, según departamentos"><i
+                                                        class="mdi mdi-arrow-down-bold" data-placement="top"></i>
+                                                    Numerador</a>
+                                                <div class="font-weight-bold">100</div>
+                                            </div>
+
+                                            <div class="col-6">
+                                                <a href="javascript:void(0)" class="text-green-0 font-weight-bold"
+                                                    data-toggle="popover" title="Denominador"
+                                                    data-content="Locales Educativos conectados a red de agra potable, según departamentos">
+                                                    <i class="mdi mdi-arrow-up-bold" data-placement="top"></i>
+                                                    Denominador</a>
+                                                <div class="font-weight-bold">100</div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="mt-1 pt-1">
+                                        <p class="font-12" style="height: 5rem;">Número de gobiernos
+                                            locales que registraron oportunamente las actas de
+                                            homologación en el sistema de padron nominal</p>
+                                    </li>
+
+                                </ul>
+                                <div class="mt-1 pt-1">
+                                    <a href="#"
+                                        class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
+                                        detalle</a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-xl-3">
+                        <div class="card text-center border border-success-0">
+                            <div class="pricing-header bg-success-0 p-0 rounded-top">
+                                <h5 class="text-white font-14 font-weight-normal">
+                                    <i class="mdi mdi-shield-cross" style="font-size: 20px"></i>
+                                    SI 01-03
+                                </h5>
+                                {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
+                                {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
+                            </div>
+                            <div class="pb-4 pl-4 pr-4">
+                                <ul class="list-unstyled mt-0">
+                                    <li class="mt-0 pt-0">
+                                        {{-- <i class="mdi mdi-finance font-44 text-green-0"></i></li>
+                                    <li class="mt-0 pt-0 font-16">Avance</li>
+                                    <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 % --}}
+                                    <li class="m-0 pt-0">
+                                        <figure class="p-0 m-0">
+                                            <div id="graeducacion03"></div>
+                                            {{-- graDITSALUD01 --}}
+                                        </figure>
+                                    </li>
+                                    </li>
+                                    <li class="mt-0 pt-0 font-12">Actualizado: 02/04/2024
+                                    </li>
+                                    <li class="mt-0 pt-0">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <a href="javascript:void(0)" class="text-green-0 font-weight-bold"
+                                                    data-toggle="popover" title="Numerador"
+                                                    data-content="Locales Educativos conectados a red de agra potable, según departamentos"><i
+                                                        class="mdi mdi-arrow-down-bold" data-placement="top"></i>
+                                                    Numerador</a>
+                                                <div class="font-weight-bold">100</div>
+                                            </div>
+
+                                            <div class="col-6">
+                                                <a href="javascript:void(0)" class="text-green-0 font-weight-bold"
+                                                    data-toggle="popover" title="Denominador"
+                                                    data-content="Locales Educativos conectados a red de agra potable, según departamentos">
+                                                    <i class="mdi mdi-arrow-up-bold" data-placement="top"></i>
+                                                    Denominador</a>
+                                                <div class="font-weight-bold">100</div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="mt-1 pt-1">
+                                        <p class="font-12" style="height: 5rem;">Número de gobiernos
+                                            locales que registraron oportunamente las actas de
+                                            homologación en el sistema de padron nominal</p>
+                                    </li>
+                                </ul>
+                                <div class="mt-1 pt-1">
+                                    <a href="#"
+                                        class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
+                                        detalle</a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-xl-3">
+                        <div class="card text-center border border-success-0">
+                            <div class="pricing-header bg-success-0 p-0 rounded-top">
+                                <h5 class="text-white font-14 font-weight-normal">
+                                    <i class="mdi mdi-shield-cross" style="font-size: 20px"></i>
+                                    SI 01-04
+                                </h5>
+                                {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
+                                {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
+                            </div>
+                            <div class="pb-4 pl-4 pr-4">
+                                <ul class="list-unstyled mt-0">
+                                    <li class="mt-0 pt-0">
+                                        {{-- <i class="mdi mdi-finance font-44 text-green-0"></i></li>
+                                    <li class="mt-0 pt-0 font-16">Avance</li>
+                                    <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 % --}}
+                                    <li class="m-0 pt-0">
+                                        <figure class="p-0 m-0">
+                                            <div id="graeducacion04"></div>
+                                            {{-- graDITSALUD01 --}}
+                                        </figure>
+                                    </li>
+                                    </li>
+                                    <li class="mt-0 pt-0 font-12">Actualizado: 02/04/2024
+                                    </li>
+                                    <li class="mt-0 pt-0">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <a href="javascript:void(0)" class="text-green-0 font-weight-bold"
+                                                    data-toggle="popover" title="Numerador"
+                                                    data-content="Locales Educativos conectados a red de agra potable, según departamentos"><i
+                                                        class="mdi mdi-arrow-down-bold" data-placement="top"></i>
+                                                    Numerador</a>
+                                                <div class="font-weight-bold">100</div>
+                                            </div>
+
+                                            <div class="col-6">
+                                                <a href="javascript:void(0)" class="text-green-0 font-weight-bold"
+                                                    data-toggle="popover" title="Denominador"
+                                                    data-content="Locales Educativos conectados a red de agra potable, según departamentos">
+                                                    <i class="mdi mdi-arrow-up-bold" data-placement="top"></i>
+                                                    Denominador</a>
+                                                <div class="font-weight-bold">100</div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="mt-1 pt-1">
+                                        <p class="font-12" style="height: 5rem;">Número de gobiernos
+                                            locales que registraron oportunamente las actas de
+                                            homologación en el sistema de padron nominal</p>
+                                    </li>
+
+                                </ul>
+                                <div class="mt-1 pt-1">
+                                    <a href="#"
+                                        class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
+                                        detalle</a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-xl-3">
+                        <div class="card text-center border border-success-0">
+                            <div class="pricing-header bg-success-0 p-0 rounded-top">
+                                <h5 class="text-white font-14 font-weight-normal">
+                                    <i class="mdi mdi-shield-cross" style="font-size: 20px"></i>
+                                    SI 01-05
+                                </h5>
+                                {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
+                                {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
+                            </div>
+                            <div class="pb-4 pl-4 pr-4">
+                                <ul class="list-unstyled mt-0">
+                                    <li class="mt-0 pt-0">
+                                        {{-- <i class="mdi mdi-finance font-44 text-green-0"></i></li>
+                                    <li class="mt-0 pt-0 font-16">Avance</li>
+                                    <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 % --}}
+                                    <li class="m-0 pt-0">
+                                        <figure class="p-0 m-0">
+                                            <div id="graeducacion05"></div>
+                                            {{-- graDITSALUD01 --}}
+                                        </figure>
+                                    </li>
+                                    </li>
+                                    <li class="mt-0 pt-0 font-12">Actualizado: 02/04/2024
+                                    </li>
+                                    <li class="mt-0 pt-0">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <a href="javascript:void(0)" class="text-green-0 font-weight-bold"
+                                                    data-toggle="popover" title="Numerador"
+                                                    data-content="Locales Educativos conectados a red de agra potable, según departamentos"><i
+                                                        class="mdi mdi-arrow-down-bold" data-placement="top"></i>
+                                                    Numerador</a>
+                                                <div class="font-weight-bold">100</div>
+                                            </div>
+
+                                            <div class="col-6">
+                                                <a href="javascript:void(0)" class="text-green-0 font-weight-bold"
+                                                    data-toggle="popover" title="Denominador"
+                                                    data-content="Locales Educativos conectados a red de agra potable, según departamentos">
+                                                    <i class="mdi mdi-arrow-up-bold" data-placement="top"></i>
+                                                    Denominador</a>
+                                                <div class="font-weight-bold">100</div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="mt-1 pt-1">
+                                        <p class="font-12" style="height: 5rem;">Número de gobiernos
+                                            locales que registraron oportunamente las actas de
+                                            homologación en el sistema de padron nominal</p>
+                                    </li>
+
+                                </ul>
+                                <div class="mt-1 pt-1">
+                                    <a href="#"
+                                        class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
+                                        detalle</a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row pricing-plan d-none">
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-6 col-xl-3">
@@ -344,7 +661,13 @@
                     thousandsSep: ","
                 }
             });
-            cargarCards();
+
+            GaugeSeries('graeducacion01', 71);
+            GaugeSeries('graeducacion02', 82);
+            GaugeSeries('graeducacion03', 92);
+            GaugeSeries('graeducacion04', 99);
+            GaugeSeries('graeducacion05', 62);
+            // cargarCards();
 
 
             // $('[data-original-title]').css('background-color','#256398');
@@ -1062,9 +1385,111 @@
                 credits: false,
             });
         }
+
+        function GaugeSeries(div, data) {
+            //colors: ['#5eb9aa', '#f5bd22', '#ef5350'],
+            Highcharts.chart(div, {
+                chart: {
+                    height: 165,
+                    margin: [0, 0, 0, 0],
+                    spacing: [0, 0, 0, 0],
+                    type: 'solidgauge'
+                },
+                yAxis: {
+                    min: 0,
+                    max: 100,
+                    // stops: [
+                    //     [0.5, '#ef5350'], // red DF5353
+                    //     [0.9, '#f5bd22'], // yellow
+                    //     [1, '#5eb9aa'], // green 33A29D
+                    // ],
+                    dataClasses: [{
+                        from: 0,
+                        to: 50,
+                        color: '#ef5350'
+                    }, {
+                        from: 51,
+                        to: 99,
+                        color: '#f5bd22'
+                    }, {
+                        from: 100,
+                        to: 150,
+                        color: '#5eb9aa'
+                    }],
+                    lineWidth: 0,
+                    tickInterval: null,
+                    minorTickInterval: null,
+                    tickAmount: 0,
+                    labels: {
+                        enabled: false,
+                    }
+
+                },
+                pane: {
+                    background: {
+                        innerRadius: '80%',
+                        outerRadius: '100%'
+                    }
+                },
+                accessibility: {
+                    // typeDescription: 'The gauge chart with 1 data point.'
+                },
+                credits: {
+                    enabled: false
+                },
+                exporting: {
+                    enabled: false,
+                },
+                title: {
+                    text: ''
+                },
+
+                plotOptions: {
+                    series: {
+                        // className: 'highcharts-live-kpi',
+                        dataLabels: {
+                            format: '<div style="text-align:center; margin-top: -20px">' +
+                                '<div style="font-size:2.5em;">{y}%</div>' +
+                                '<div style="font-size:12px; opacity:0.4; text-align: center;">Avance</div>' +
+                                '</div>',
+                            useHTML: true,
+                            borderWidth: 0,
+
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Avance',
+                    // data:[80],
+                    innerRadius: '80%',
+                    data: [{
+                        y: data,
+                        colorIndex: '50'
+                    }],
+                    radius: '100%',
+                }],
+                xAxis: {
+                    accessibility: {
+                        // description: 'Days'
+                    }
+                },
+                lang: {
+                    accessibility: {
+                        // chartContainerLabel: 'CPU usage. Highcharts interactive chart.'
+                    }
+                },
+                tooltip: {
+                    valueSuffix: '%'
+                }
+
+            });
+
+        }
     </script>
 
     <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-more.js"></script>
+    <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <!-- optional -->
     <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
