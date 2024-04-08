@@ -1337,7 +1337,7 @@ class HomeController extends Controller
             case 'tabla1':
                 $aniox = Anio::where('anio', $rq->anio)->first();
                 $anioy = Anio::where('anio', $aniox->anio - 1)->first();
-                return $meta = MatriculaGeneralRepositorio::metaUgel($anioy->id, $rq->provincia, $rq->distrito,  $rq->gestion, 0);
+                $meta = MatriculaGeneralRepositorio::metaUgel($anioy->id, $rq->provincia, $rq->distrito,  $rq->gestion, 0);
                 $base = MatriculaGeneralRepositorio::educacionbasicasexougel($aniox->id, $rq->provincia, $rq->distrito,  $rq->gestion, 0, 0);
                 $foot = [];
                 if ($base->count() > 0) {

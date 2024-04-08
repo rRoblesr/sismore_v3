@@ -486,7 +486,7 @@ class MatriculaGeneralRepositorio
             ->orderBy('fechaActualizacion', 'desc')->first();
 
         $query = MatriculaGeneralDetalle::where('matriculageneral_id', $mg->id);
-        $query = $query->join('edu_institucionedu-cativa as ie', 'ie.id', '=', 'edu_matricula_general_detalle.institucioneducativa_id')
+        $query = $query->join('edu_institucioneducativa as ie', 'ie.id', '=', 'edu_matricula_general_detalle.institucioneducativa_id')
             ->join('edu_ugel as uu', 'uu.id', '=', 'ie.Ugel_id')
             ->join('edu_centropoblado as cp', 'cp.id', '=', 'ie.CentroPoblado_id')
             ->join('par_ubigeo as dt', 'dt.id', '=', 'cp.Ubigeo_id')
