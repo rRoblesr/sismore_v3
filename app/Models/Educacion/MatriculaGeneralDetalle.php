@@ -8,13 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class MatriculaGeneralDetalle extends Model
 {
     use HasFactory;
-
+    public $timestamps = false;
     protected $table = 'edu_matricula_general_detalle';
 
+    protected $fillable = [];
 
-    protected $fillable = [
-        'importacion_id',
-        'anio_id',
-        'estado'
-    ];
 }

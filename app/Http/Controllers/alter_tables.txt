@@ -172,7 +172,7 @@ ALTER TABLE `sal_data_pacto1` ADD INDEX(`importacion_id`);
 #
 CREATE PROCEDURE bdsismore.sal_pa_procesarPacto1(v_importacion int,v_anio int)
 begin
-	
+
 /*
 	delete from sal_data_pacto1 where anio=v_anio;
 	drop table if exists temp1;
@@ -180,7 +180,7 @@ begin
 
 	insert into temp1
 	select imp.id, year(imp.fechaActualizacion),pa.distrito ,pa.fecha_inicial ,pa.fecha_final, pa.fecha_envio ,
-		if(pa.fecha_envio between pa.fecha_inicial and date_format(date_add(pa.fecha_inicial,interval 1 month),'%Y-%m-07') ,1,0) as estado 
+		if(pa.fecha_envio between pa.fecha_inicial and date_format(date_add(pa.fecha_inicial,interval 1 month),'%Y-%m-07') ,1,0) as estado
 	from sal_impor_padron_actas pa
 	left join par_importacion imp on imp.id =pa.importacion_id
 	where year(imp.fechaActualizacion)=v_anio and imp.id=v_importacion and year(pa.fecha_final)=year(imp.fechaActualizacion)
@@ -190,10 +190,10 @@ begin
 	select importacion, anio, distrito, month(fechai) mes, max(estado) from temp1 group by importacion,anio,distrito,mes;
 
 	update par_importacion set estado="PR" where id=v_importacion;
-*/	
-	
+*/
+
 	delete from sal_data_pacto1 where anio=v_anio;
-	
+
 	drop table if exists temp1;
 	drop table if exists temp2;
 	create temporary table temp1(importacion int, anio int,distrito varchar(50),fechai date,fechaf date,fechae date,estado int);
@@ -201,7 +201,7 @@ begin
 
 	insert into temp1
 	select imp.id, year(imp.fechaActualizacion),pa.distrito ,pa.fecha_inicial ,pa.fecha_final, pa.fecha_envio ,
-		if(pa.fecha_envio between pa.fecha_inicial and date_format(date_add(pa.fecha_inicial,interval 1 month),'%Y-%m-07') ,1,0) as estado 
+		if(pa.fecha_envio between pa.fecha_inicial and date_format(date_add(pa.fecha_inicial,interval 1 month),'%Y-%m-07') ,1,0) as estado
 	from sal_impor_padron_actas pa
 	left join par_importacion imp on imp.id =pa.importacion_id
 	where year(imp.fechaActualizacion)=v_anio and imp.id=v_importacion and (year(pa.fecha_inicial)=year(imp.fechaActualizacion) and year(pa.fecha_final)=year(imp.fechaActualizacion))
@@ -212,7 +212,7 @@ begin
 	IF(estado=0,
 		IF(month(fechaf)-month(fechai) in(1,2,3) and month(fechaf)=month(fechae),
 			IF(fechae between fechaf and date_format(date_add(fechaf,interval 1 month),'%Y-%m-07') ,1,0)
-		,0) 
+		,0)
 	,1)
 	 as estado
 	from temp1;
@@ -220,7 +220,7 @@ begin
 	insert into sal_data_pacto1(`importacion_id`, `anio`, `distrito`, `mes`, `estado`)
 	select importacion, anio, distrito, month(if(year(fechai)=anio,fechai,if(year(fechaf)=anio,fechaf,fechae))) mes, max(estado) from temp2 group by importacion, anio, distrito, mes;
 
-	update par_importacion set estado="PR" where id=v_importacion;	
+	update par_importacion set estado="PR" where id=v_importacion;
 
 end
 
@@ -248,13 +248,13 @@ begin
 
 	select count(*) 'numero de envios' from sal_impor_padron_actas where importacion_id =v_importacion;
 	select distinct year(fecha_inicial),year(fecha_final),year(fecha_envio) 'fechas' from sal_impor_padron_actas where importacion_id =v_importacion;
-	
+
 	insert into temp1
 	select imp.id, year(imp.fechaActualizacion),pa.distrito ,pa.fecha_inicial ,pa.fecha_final, pa.fecha_envio ,
-		if(pa.fecha_envio between pa.fecha_inicial and date_format(date_add(pa.fecha_inicial,interval 1 month),'%Y-%m-07') ,1,0) as estado 
+		if(pa.fecha_envio between pa.fecha_inicial and date_format(date_add(pa.fecha_inicial,interval 1 month),'%Y-%m-07') ,1,0) as estado
 	from sal_impor_padron_actas pa
 	left join par_importacion imp on imp.id =pa.importacion_id
-	where year(imp.fechaActualizacion)=v_anio and imp.id=v_importacion  
+	where year(imp.fechaActualizacion)=v_anio and imp.id=v_importacion
 	order by pa.distrito,pa.fecha_inicial ;
 
 	select * from temp1;
@@ -264,7 +264,7 @@ begin
 	IF(estado=0,
 		IF(month(fechaf)-month(fechai) in(1,2) and month(fechaf)=month(fechae),
 			IF(fechae between fechaf and date_format(date_add(fechaf,interval 1 month),'%Y-%m-07') ,1,0)
-		,0) 
+		,0)
 	,1)
 	 as estado
 	from temp1;
@@ -272,4 +272,51 @@ begin
 	select * from temp2;
 
 end
+
+#############
+# EDUCACION #
+#############
+
+#
+ALTER TABLE `edu_impor_matricula_general`
+DROP `di_severo`, DROP `discapacidad_fisica`,
+DROP `trastorno_espectro_autista`,
+DROP `dv_baja_vision`,
+DROP `dv_ceguera`,
+DROP `da_hipoacusia`,
+DROP `da_sordera`,
+DROP `sordoceguera`,
+DROP `otra_discapacidad`;
+
+
+#
+ALTER TABLE `edu_impor_matricula_general`
+CHANGE `di_leve` `id_discapacidad` INT(11) NULL DEFAULT NULL,
+CHANGE `di_moderada` `discapacidad` VARCHAR(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
+
+#
+ALTER TABLE `edu_impor_matricula_general`
+CHANGE `modalidad` `id_mod` INT NULL DEFAULT NULL,
+CHANGE `sexo` `id_sexo` INT NULL DEFAULT NULL,
+CHANGE `dsc_grado` `grado` VARCHAR(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+CHANGE `dsc_seccion` `seccion` VARCHAR(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+CHANGE `sf_promocion_guiada` `sf_recuperacion` VARCHAR(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
+
+#
+ALTER TABLE `edu_impor_matricula_general` CHANGE `id_discapacidad` `id_discapacidad` VARCHAR(5) NULL DEFAULT NULL;
+
+
+#
+ALTER TABLE `edu_matricula_general_detalle` DROP `di_severo`, DROP `discapacidad_fisica`, DROP `trastorno_espectro_autista`, DROP `dv_baja_vision`, DROP `dv_ceguera`, DROP `da_hipoacusia`, DROP `da_sordera`, DROP `sordoceguera`, DROP `otra_discapacidad`;
+
+
+
+
+
+
+
+
+
+
+
 

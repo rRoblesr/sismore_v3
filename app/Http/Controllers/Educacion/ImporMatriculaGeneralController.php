@@ -96,37 +96,28 @@ class ImporMatriculaGeneralController extends Controller
                     $cadena =
                         $row['id_anio'] .
                         $row['cod_mod'] .
-                        $row['modalidad'] .
+                        $row['id_mod'] .
                         $row['id_nivel'] .
                         $row['id_gestion'] .
-                        $row['pais_nacimiento'] .
+                        $row['id_sexo'] .
                         $row['fecha_nacimiento'] .
-                        $row['sexo'] .
+                        $row['pais_nacimiento'] .
                         $row['lengua_materna'] .
                         $row['segunda_lengua'] .
-                        $row['di_leve'] .
-                        $row['di_moderada'] .
-                        $row['di_severo'] .
-                        $row['discapacidad_fisica'] .
-                        $row['trastorno_espectro_autista'] .
-                        $row['dv_baja_vision'] .
-                        $row['dv_ceguera'] .
-                        $row['da_hipoacusia'] .
-                        $row['da_sordera'] .
-                        $row['sordoceguera'] .
-                        $row['otra_discapacidad'] .
+                        $row['id_discapacidad'] .
+                        $row['discapacidad'] .
                         $row['situacion_matricula'] .
                         $row['estado_matricula'] .
                         $row['fecha_matricula'] .
                         $row['id_grado'] .
-                        $row['dsc_grado'] .
+                        $row['grado'] .
                         $row['id_seccion'] .
-                        $row['dsc_seccion'] .
+                        $row['seccion'] .
                         $row['fecha_registro'] .
                         $row['fecha_retiro'] .
                         $row['motivo_retiro'] .
                         $row['sf_regular'] .
-                        $row['sf_promocion_guiada'];
+                        $row['sf_recuperacion'];
                 }
             }
         } catch (Exception $e) {
@@ -151,65 +142,52 @@ class ImporMatriculaGeneralController extends Controller
                 'anio_id' => $anio->id
             ]);
 
+            //$fecha_php = date('Y-m-d', strtotime('1899-12-30 +' . $fecha_excel . ' days'));
+
             foreach ($array as $key => $value) {
                 foreach ($value as $row) {
                     ImporMatriculaGeneral::Create([
                         'importacion_id' => $importacion->id,
-
                         'id_anio' => $row['id_anio'],
                         'cod_mod' => $row['cod_mod'],
-                        'modalidad' => $row['modalidad'],//-------------
+                        'id_mod' => $row['id_mod'],
                         'id_nivel' => $row['id_nivel'],
-                        'id_gestion' => $row['id_gestion'],//-------
-                        'pais_nacimiento' => $row['pais_nacimiento'],
+                        'id_gestion' => $row['id_gestion'],
+                        'id_sexo' => $row['id_sexo'],
                         'fecha_nacimiento' => $row['fecha_nacimiento'],
-                        'sexo' => $row['sexo'],
+                        'pais_nacimiento' => $row['pais_nacimiento'],
                         'lengua_materna' => $row['lengua_materna'],
                         'segunda_lengua' => $row['segunda_lengua'],
-                        'di_leve' => $row['di_leve'],//-------
-                        'di_moderada' => $row['di_moderada'],//-------
-                        'di_severo' => $row['di_severo'],//-------
-                        'discapacidad_fisica' => $row['discapacidad_fisica'],//-------
-                        'trastorno_espectro_autista' => $row['trastorno_espectro_autista'],//-------
-                        'dv_baja_vision' => $row['dv_baja_vision'],//-------
-                        'dv_ceguera' => $row['dv_ceguera'],//-------
-                        'da_hipoacusia' => $row['da_hipoacusia'],//-------
-                        'da_sordera' => $row['da_sordera'],//-------
-                        'sordoceguera' => $row['sordoceguera'],//-------
-                        'otra_discapacidad' => $row['otra_discapacidad'],//-------
+                        'id_discapacidad' => $row['id_discapacidad'],
+                        'discapacidad' => $row['discapacidad'],
                         'situacion_matricula' => $row['situacion_matricula'],
                         'estado_matricula' => $row['estado_matricula'],
                         'fecha_matricula' => $row['fecha_matricula'],
                         'id_grado' => $row['id_grado'],
-                        'dsc_grado' => $row['dsc_grado'],
+                        'grado' => $row['grado'],
                         'id_seccion' => $row['id_seccion'],
-                        'dsc_seccion' => $row['dsc_seccion'],
+                        'seccion' => $row['seccion'],
                         'fecha_registro' => $row['fecha_registro'],
                         'fecha_retiro' => $row['fecha_retiro'],
                         'motivo_retiro' => $row['motivo_retiro'],
                         'sf_regular' => $row['sf_regular'],
-                        'sf_promocion_guiada' => $row['sf_promocion_guiada'],
+                        'sf_recuperacion' => $row['sf_recuperacion']
                     ]);
                 }
             }
         } catch (Exception $e) {
-
-            $importacion->estado = 'EL';
-            $importacion->save();
-
             $mensaje = "Error en la carga de datos, verifique los datos de su archivo y/o comuniquese con el administrador del sistema" . $e->getMessage();
             $this->json_output(400, $mensaje);
         }
 
         try {
-            $procesar = DB::select('call edu_pa_procesarImporMatriculaGeneral(?,?)', [$importacion->id, $matricula->id]);
+            $procesar = DB::select('call edu_pa_procesarImporMatriculaGeneral(?,?,?)', [$importacion->id, $matricula->id, date('Y-m-d', strtotime($importacion->fechaActualizacion))]);
         } catch (Exception $e) {
-            // $importacion->estado = 'EL';
-            // $importacion->save();
             $mensaje = "Error al procesar la normalizacion de datos." . $e;
             $tipo = 'danger';
             $this->json_output(400, $mensaje);
         }
+
         $mensaje = "Archivo excel subido y Procesado correctamente .";
         $this->json_output(200, $mensaje, '');
     }
@@ -313,12 +291,18 @@ class ImporMatriculaGeneralController extends Controller
 
     public function eliminar($id)
     {
-        $matricula = MatriculaGeneral::where('importacion_id', $id)->first();
-        if ($matricula) {
-            MatriculaGeneralDetalle::where('matriculageneral_id', $matricula->id)->delete();
-            $matricula->delete();
+        $impor = Importacion::find($id);
+        if ($impor->estado == 'PE') {
+            ImporMatriculaGeneral::where('importacion_id', $id)->delete();
+            MatriculaGeneral::where('importacion_id', $id)->delete();
+        } else {
+            $matricula = MatriculaGeneral::where('importacion_id', $id)->first();
+            if ($matricula) {
+                MatriculaGeneralDetalle::where('matriculageneral_id', $matricula->id)->delete();
+                $matricula->delete();
+            }
         }
-        Importacion::find($id)->delete();
+        $impor->delete();
         return response()->json(array('status' => true));
     }
 

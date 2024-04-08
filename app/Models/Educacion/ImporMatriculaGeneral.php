@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ImporMatriculaGeneral extends Model
 {
     use HasFactory;
-
+    public $timestamps = false;
     protected $table = "edu_impor_matricula_general";
 
     /**
@@ -20,42 +20,32 @@ class ImporMatriculaGeneral extends Model
         'importacion_id',
         'id_anio',
         'cod_mod',
-        'modalidad',
+        'id_mod',
         'id_nivel',
         'id_gestion',
-        'pais_nacimiento',
+        'id_sexo',
         'fecha_nacimiento',
-        'sexo',
+        'pais_nacimiento',
         'lengua_materna',
         'segunda_lengua',
-        'di_leve',
-        'di_moderada',
-        'di_severo',
-        'discapacidad_fisica',
-        'trastorno_espectro_autista',
-        'dv_baja_vision',
-        'dv_ceguera',
-        'da_hipoacusia',
-        'da_sordera',
-        'sordoceguera',
-        'otra_discapacidad',
+        'id_discapacidad',
+        'discapacidad',
         'situacion_matricula',
         'estado_matricula',
         'fecha_matricula',
         'id_grado',
-        'dsc_grado',
+        'grado',
         'id_seccion',
-        'dsc_seccion',
+        'seccion',
         'fecha_registro',
         'fecha_retiro',
         'motivo_retiro',
         'sf_regular',
-        'sf_promocion_guiada',
-
+        'sf_recuperacion'
     ];
 
-    protected $hide = [
-        'created_at',
-        'updated_at'
-    ];
+    // protected $hide = [
+    //     'created_at',
+    //     'updated_at'
+    // ];
 }

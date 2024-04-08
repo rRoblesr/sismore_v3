@@ -115,14 +115,61 @@
             font-size: 11px !important;
         }
 
-        @for ($i = 31; $i < 44; $i++)
-        .font-{{$i}} {
-            font-size: {{$i}}px !important;
+        .font-31 {
+            font-size: 31px !important;
         }
-        @endfor
-        /* .font-40 {
+
+        .font-32 {
+            font-size: 32px !important;
+        }
+
+        .font-33 {
+            font-size: 33px !important;
+        }
+
+        .font-34 {
+            font-size: 34px !important;
+        }
+
+        .font-35 {
+            font-size: 35px !important;
+        }
+
+        .font-36 {
+            font-size: 36px !important;
+        }
+
+        .font-37 {
+            font-size: 37px !important;
+        }
+
+        .font-38 {
+            font-size: 38px !important;
+        }
+
+        .font-39 {
+            font-size: 39px !important;
+        }
+
+        .font-40 {
             font-size: 40px !important;
-        } */
+        }
+
+        .font-41 {
+            font-size: 41px !important;
+        }
+
+        .font-42 {
+            font-size: 42px !important;
+        }
+
+        .font-43 {
+            font-size: 43px !important;
+        }
+
+        .font-44 {
+            font-size: 44px !important;
+        }
 
         .requerid {
             color: red;

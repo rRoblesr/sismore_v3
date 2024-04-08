@@ -11,9 +11,13 @@ class MatriculaGeneral extends Model
 
     protected $table = 'edu_matricula_general';
 
-
     protected $fillable = [
         'importacion_id',
         'anio_id'
+    ];
+
+    protected $hide = [
+        'created_at',
+        'updated_at'
     ];
 }

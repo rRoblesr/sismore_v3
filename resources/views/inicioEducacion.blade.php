@@ -1,30 +1,5 @@
 @section('css')
     <style>
-        .tablex thead th {
-            padding: 2px;
-            text-align: center;
-        }
-
-        .tablex thead td {
-            padding: 2px;
-            text-align: center;
-            vertical-align: middle;
-            font-weight: bold;
-        }
-
-        .tablex tbody td,
-        .tablex tbody th,
-        .tablex tfoot td,
-        .tablex tfoot th {
-            padding: 2px;
-        }
-
-        .fuentex {
-            font-size: 10px;
-            font-weight: bold;
-        }
-
-
         .link {
             color: #000000;
         }
@@ -82,17 +57,17 @@
             </div>
         </div>
 
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-lg-3 col-md-3 col-sm-6">
                 <div class="card-box">
                     <div class="media">
                         <div class="avatar-md rounded-circle mr-2 centrador">
-                            {{-- <i class="ion ion-logo-usd avatar-title font-26 text-white"></i> --}}
+                            <i class="ion ion-logo-usd avatar-title font-26 text-white"></i>
                             <img src="{{ asset('/') }}public/img/icon/servicios.png" alt="" class="imagen">
                         </div>
-                        {{-- <div class="avatar-md bg-success rounded-circle mr-2">
+                        <div class="avatar-md bg-success rounded-circle mr-2">
                             <i class=" ion-md-home avatar-title font-26 text-white"></i>
-                        </div> --}}
+                        </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
                                 <h4 class="font-20 my-0 font-weight-bold">
@@ -102,21 +77,19 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
-                <!-- end card-box-->
             </div>
 
             <div class="col-md-3 col-xl-3">
                 <div class="card-box">
                     <div class="media">
                         <div class="avatar-md rounded-circle mr-2 centrador">
-                            {{-- <i class="ion ion-logo-usd avatar-title font-26 text-white"></i> --}}
+                            <i class="ion ion-logo-usd avatar-title font-26 text-white"></i>
                             <img src="{{ asset('/') }}public/img/icon/locales.png" alt="" class="imagen">
                         </div>
-                        {{-- <div class="avatar-md bg-info rounded-circle mr-2">
+                        <div class="avatar-md bg-info rounded-circle mr-2">
                             <i class=" ion ion-md-person avatar-title font-26 text-white"></i>
-                        </div> --}}
+                        </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
                                 <h4 class="font-20 my-0 font-weight-bold">
@@ -126,21 +99,19 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
-                <!-- end card-box-->
             </div>
 
             <div class="col-md-3 col-xl-3">
                 <div class="card-box">
                     <div class="media">
                         <div class="avatar-md rounded-circle mr-2 centrador">
-                            {{-- <i class="ion ion-logo-usd avatar-title font-26 text-white"></i> --}}
+                            <i class="ion ion-logo-usd avatar-title font-26 text-white"></i>
                             <img src="{{ asset('/') }}public/img/icon/matriculas.png" alt="" class="imagen">
                         </div>
-                        {{-- <div class="avatar-md bg-info rounded-circle mr-2">
+                        <div class="avatar-md bg-info rounded-circle mr-2">
                             <i class=" ion ion-md-person avatar-title font-26 text-white"></i>
-                        </div> --}}
+                        </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
                                 <h4 class="font-20 my-0 font-weight-bold">
@@ -151,19 +122,18 @@
                         </div>
                     </div>
                 </div>
-                <!-- end card-box-->
             </div>
 
             <div class="col-md-3 col-xl-3">
                 <div class="card-box">
                     <div class="media">
                         <div class="avatar-md rounded-circle mr-2 centrador">
-                            {{-- <i class="ion ion-logo-usd avatar-title font-26 text-white"></i> --}}
+                            <i class="ion ion-logo-usd avatar-title font-26 text-white"></i>
                             <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class="imagen">
                         </div>
-                        {{-- <div class="avatar-md bg-info rounded-circle mr-2">
+                        <div class="avatar-md bg-info rounded-circle mr-2">
                             <i class=" ion ion-md-person avatar-title font-26 text-white"></i>
-                        </div> --}}
+                        </div>
                         <div class="media-body align-self-center">
                             <div class="text-right">
                                 <h4 class="font-20 my-0 font-weight-bold">
@@ -175,7 +145,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <!--Widget-4 -->
         <div class="row">
@@ -827,68 +797,7 @@
                                 </div>
 
                             </div>
-                            {{-- <div class="row">
 
-                                <div class="col-lg-6">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
-                                            style="height: 4rem">
-                                            <div class="card-widgets">
-                                                <a href="{{ route('panelcontrol.educacion.indicador.nuevos.04') }}"
-                                                    class="waves-effect waves-light"><i
-                                                        class="mdi mdi-file-link text-orange-0" title="DETALLE"></i></a>
-
-                                                <a href="javascript:void(0)" class="waves-effect waves-light"
-                                                    data-toggle="modal" data-target="#myModal-anal1"><i
-                                                        class="mdi mdi-information text-orange-0" title="INFORMACIÓN"></i></a>
-                                            </div>
-                                            <h3
-                                                class="card-title text-black text-center text-capitalize font-weight-normal font-11">
-                                                Porcentaje de Docentes Titulados en Educación
-                                                Secundaria</h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <figure class="highcharts-figure m-0">
-                                                <div id="anal-1" style="height: 15rem"></div>
-                                            </figure>
-                                            <div class="font-weight-bold text-muted ml-2 mr-2" style="font-size:9px">
-                                                <span class="float-left" id="span-anal1-fuente">Fuente:</span>
-                                                <span class="float-right" id="span-anal1-fecha">Actualizado:</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
-                                            style="height: 4rem">
-                                            <div class="card-widgets">
-                                                <a href="{{ route('panelcontrol.educacion.indicador.nuevos.05') }}"
-                                                    class="waves-effect waves-light"><i
-                                                        class="mdi mdi-file-link text-orange-0" title="DETALLE"></i></a>
-
-                                                <a href="javascript:void(0)" class="waves-effect waves-light"
-                                                    data-toggle="modal" data-target="#myModal-anal2"><i
-                                                        class="mdi mdi-information text-orange-0" title="INFORMACIÓN"></i></a>
-                                            </div>
-                                            <h3
-                                                class="card-title text-black text-center text-capitalize font-weight-normal font-11">
-                                                Porcentaje de Docentes Titulados en Educación Primaria</h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <figure class="highcharts-figure m-0">
-                                                <div id="anal-2" style="height: 15rem"></div>
-                                            </figure>
-                                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                                                <span class="float-left" id="span-anal2-fuente">Fuente:</span>
-                                                <span class="float-right" id="span-anal2-fecha">Actualizado:</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -1253,10 +1162,10 @@
                         .addClass(data.ind4 > 84 ? 'bg-success-0' : (data.ind4 > 49 ? 'bg-warning-0' :
                             'bg-orange-0'));
 
-                    $('#servicio').text(data.servicio);
-                    $('#local').text(data.local);
-                    $('#alumno').text(data.alumno);
-                    $('#docente').text(data.docente);
+                    // $('#servicio').text(data.servicio);
+                    // $('#local').text(data.local);
+                    // $('#alumno').text(data.alumno);
+                    // $('#docente').text(data.docente);
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");
