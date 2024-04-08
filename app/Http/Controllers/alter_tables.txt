@@ -413,6 +413,23 @@ begin
 	/*drop table tmp1;*/
 END
 
+#
+ALTER TABLE `edu_matricula_general_detalle` CHANGE `modalidad` `modalidad_id` INT(1) NULL DEFAULT NULL;
+
+#
+ALTER TABLE `edu_matricula_general_detalle` CHANGE `dsc_grado` `grado` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, CHANGE `dsc_seccion` `seccion` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, CHANGE `sf_promocion_guiada` `sf_recuperacion` VARCHAR(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
+
+#
+ALTER TABLE `edu_matricula_general_detalle` CHANGE `nivel` `nivel_codigo` INT(11) NULL DEFAULT NULL, CHANGE `gestion` `gestion_id` INT(11) NULL DEFAULT NULL, CHANGE `sexo` `sexo_id` INT(11) NULL DEFAULT NULL;
+
+#
+ALTER TABLE `edu_matricula_general_detalle` ADD `discapacidad_id` INT NULL DEFAULT NULL AFTER `segunda_lengua`;
+
+#
+ALTER TABLE `edu_matricula_general_detalle` CHANGE `id_grado` `grado_id` INT(11) NULL DEFAULT NULL, CHANGE `id_seccion` `seccion_id` INT(11) NULL DEFAULT NULL;
+
+#
+ALTER TABLE `edu_matricula_general_detalle` CHANGE `nivel_codigo` `nivel_codigo` VARCHAR(3) NULL DEFAULT NULL;
 
 
 

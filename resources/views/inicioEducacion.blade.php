@@ -1236,7 +1236,8 @@
                                 data.info.cat,
                                 data.info.dat,
                                 '',
-                                'Numero de estudiantes matriculados en educacion basica regular, periodo 2018 - 2023',
+                                'Numero de estudiantes matriculados en educacion basica regular, periodo ' +
+                                data.reg.rango,
                                 data.info.maxbar
                             );
                             $('#span-siagie001-fuente').html("Fuente: " + data.reg.fuente);

@@ -296,6 +296,7 @@ class ImporMatriculaGeneralController extends Controller
             ImporMatriculaGeneral::where('importacion_id', $id)->delete();
             MatriculaGeneral::where('importacion_id', $id)->delete();
         } else {
+            ImporMatriculaGeneral::where('importacion_id', $id)->delete();
             $matricula = MatriculaGeneral::where('importacion_id', $id)->first();
             if ($matricula) {
                 MatriculaGeneralDetalle::where('matriculageneral_id', $matricula->id)->delete();

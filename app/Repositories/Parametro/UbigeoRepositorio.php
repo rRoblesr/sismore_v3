@@ -38,8 +38,7 @@ class UbigeoRepositorio
             ->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')
             ->join('par_ubigeo as v3', 'v3.dependencia', '=', 'v2.id')
             ->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', $codigo);
-        if ($provincia > 0)
-            $query = $query->where('v3.dependencia', $provincia);
+        if ($provincia > 0) $query = $query->where('v3.dependencia', $provincia);
         $query = $query->get();
         return $query;
     }

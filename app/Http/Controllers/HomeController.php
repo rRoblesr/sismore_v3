@@ -7,6 +7,7 @@ use App\Http\Controllers\Educacion\ImporCensoMatriculaController;
 use App\Http\Controllers\Educacion\ImporMatriculaGeneralController;
 use App\Http\Controllers\Educacion\ImporPadronWebController;
 use App\Http\Controllers\Educacion\ImporServiciosBasicosController;
+use App\Http\Controllers\Parametro\UbigeoController;
 use App\Http\Controllers\Presupuesto\ImporActividadesProyectosController;
 use App\Http\Controllers\Presupuesto\ImporProyectosController;
 use App\Http\Controllers\Presupuesto\ImporSiafWebController;
@@ -35,6 +36,7 @@ use App\Repositories\Educacion\PadronWebRepositorio;
 use App\Repositories\Educacion\PlazaRepositorio;
 use App\Repositories\Educacion\ServiciosBasicosRepositorio;
 use App\Repositories\Educacion\TabletaRepositorio;
+use App\Repositories\Parametro\UbigeoRepositorio;
 use App\Repositories\Presupuesto\BaseActividadesProyectosRepositorio;
 use App\Repositories\Presupuesto\BaseGastosRepositorio;
 use App\Repositories\Presupuesto\BaseIngresosRepositorio;
@@ -643,9 +645,9 @@ class HomeController extends Controller
         $imgd = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
         $anio = $imgd->anio;
 
-        $provincias = Ubigeo::select('v2.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();
-        $distritos = Ubigeo::select('v3.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->join('par_ubigeo as v3', 'v3.dependencia', '=', 'v2.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();
-        $ambitos = Area::all();
+        $provincias = UbigeoRepositorio::provincia('25'); //Ubigeo::select('v2.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();
+        $distritos = UbigeoRepositorio::distrito('25', 0); //Ubigeo::select('v3.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->join('par_ubigeo as v3', 'v3.dependencia', '=', 'v2.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();
+        $ambitos = Area::select(DB::raw('upper(nombre) as nombre'))->get();
 
         return  view('home', compact(
             'tipo_acceso',
@@ -696,7 +698,7 @@ class HomeController extends Controller
         // $base = ImporCensoDocenteRepositorio::PersonaDocente('head', $impcd->id, $rq->provincia, $rq->distrito, $rq->tipogestion, 0);
         // $docente = (int)$base->docentes;
         // $docente = number_format($docente, 0);
-        return response()->json(compact('valor1', 'valor2', 'valor3', 'valor4', 'ind1', 'ind2', 'ind3', 'ind4'));//, 'servicio', 'local', 'alumno', 'docente'));
+        return response()->json(compact('valor1', 'valor2', 'valor3', 'valor4', 'ind1', 'ind2', 'ind3', 'ind4')); //, 'servicio', 'local', 'alumno', 'docente'));
     }
 
     public function panelControlEduacionGraficas(Request $rq)
@@ -1176,8 +1178,13 @@ class HomeController extends Controller
                 $data = MatriculaGeneralRepositorio::basicaregularopcion2('siagie001', $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion);
                 $info['cat'] = [];
                 $info['dat'] = [];
+                $rango = '';
+                $pos = 0;
                 foreach ($data->unique('anio') as $key => $value) {
+                    if ($pos == 0) $rango .= '' . $value->anio . ' - ';
+                    if ($pos == $data->unique('anio')->count() - 1) $rango .= '' . $value->anio;
                     $info['cat'][] = $value->anio;
+                    $pos += 1;
                 }
                 foreach ($data->unique('nivel') as $key => $value) {
                     $info['dat'][] = ["name" => $value->nivel, "data" => []];
@@ -1198,6 +1205,7 @@ class HomeController extends Controller
                 $reg['fuente'] = 'Siagie - MINEDU';
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
+                $reg['rango'] = $rango;
                 return response()->json(compact('info', 'reg'));
             case 'censodocente001':
                 $data = ImporCensoDocenteRepositorio::basicaregular('censodocente001', $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion, 0);
@@ -1240,8 +1248,10 @@ class HomeController extends Controller
                 return response()->json(compact('info', 'reg'));
 
             case 'skills002':
-                $data1 = ImporCensoMatriculaRepositorio::_5ATotalEstudianteAnio($rq->anio - 1, $rq->provincia, $rq->distrito, 0, $rq->area,  $rq->gestion);
-                $data2 = ImporCensoMatriculaRepositorio::_5ATotalEstudianteAnio($rq->anio, $rq->provincia, $rq->distrito, 0, $rq->area,  $rq->gestion);
+                $icd = ImportacionRepositorio::ImportacionMax_porfuente(ImporCensoDocenteController::$FUENTE);
+
+                $data1 = ImporCensoMatriculaRepositorio::_5ATotalEstudianteAnio($icd->anio - 1, $rq->provincia, $rq->distrito, 0, $rq->area,  $rq->gestion);
+                $data2 = ImporCensoMatriculaRepositorio::_5ATotalEstudianteAnio($icd->anio, $rq->provincia, $rq->distrito, 0, $rq->area,  $rq->gestion);
                 $info['indicador'] = round(100 * $data2->total / $data1->total, 0);
 
                 $reg['fuente'] = 'Siagie - MINEDU';
@@ -1250,8 +1260,10 @@ class HomeController extends Controller
                 return response()->json(compact('info', 'reg'));
 
             case 'skills003':
-                $data1 = ImporCensoMatriculaRepositorio::_6ATotalEstudianteAnio($rq->anio - 1, $rq->provincia, $rq->distrito, 0, $rq->area,  $rq->gestion);
-                $data2 = ImporCensoMatriculaRepositorio::_6ATotalEstudianteAnio($rq->anio, $rq->provincia, $rq->distrito, 0, $rq->area,  $rq->gestion);
+                $icd = ImportacionRepositorio::ImportacionMax_porfuente(ImporCensoDocenteController::$FUENTE);
+
+                $data1 = ImporCensoMatriculaRepositorio::_6ATotalEstudianteAnio($icd->anio - 1, $rq->provincia, $rq->distrito, 0, $rq->area,  $rq->gestion);
+                $data2 = ImporCensoMatriculaRepositorio::_6ATotalEstudianteAnio($icd->anio, $rq->provincia, $rq->distrito, 0, $rq->area,  $rq->gestion);
                 $info['indicador'] = round(100 * $data2->total / $data1->total, 0);
 
                 $reg['fuente'] = 'Siagie - MINEDU';
@@ -1260,8 +1272,10 @@ class HomeController extends Controller
                 return response()->json(compact('info', 'reg'));
 
             case 'skills004':
-                $data1 = ImporCensoMatriculaRepositorio::_7ATotalEstudianteAnio($rq->anio - 1, $rq->provincia, $rq->distrito, 0, $rq->area,  $rq->gestion);
-                $data2 = ImporCensoMatriculaRepositorio::_7ATotalEstudianteAnio($rq->anio, $rq->provincia, $rq->distrito, 0, $rq->area,  $rq->gestion);
+                $icd = ImportacionRepositorio::ImportacionMax_porfuente(ImporCensoDocenteController::$FUENTE);
+
+                $data1 = ImporCensoMatriculaRepositorio::_7ATotalEstudianteAnio($icd->anio - 1, $rq->provincia, $rq->distrito, 0, $rq->area,  $rq->gestion);
+                $data2 = ImporCensoMatriculaRepositorio::_7ATotalEstudianteAnio($icd->anio, $rq->provincia, $rq->distrito, 0, $rq->area,  $rq->gestion);
                 $info['indicador'] = round(100 * $data2->total / $data1->total, 0);
 
                 $reg['fuente'] = 'Siagie - MINEDU';
@@ -1270,8 +1284,10 @@ class HomeController extends Controller
                 return response()->json(compact('info', 'reg'));
 
             case 'skills005':
-                $data1 = ImporCensoMatriculaRepositorio::_9ATotalEstudianteAnio($rq->anio - 1, $rq->provincia, $rq->distrito, 0,  $rq->gestion, 0, 6);
-                $data2 = ImporCensoMatriculaRepositorio::_9ATotalEstudianteAnio($rq->anio, $rq->provincia, $rq->distrito, 0,  $rq->gestion, 0, 6);
+                $icd = ImportacionRepositorio::ImportacionMax_porfuente(ImporCensoDocenteController::$FUENTE);
+
+                $data1 = ImporCensoMatriculaRepositorio::_9ATotalEstudianteAnio($icd->anio - 1, $rq->provincia, $rq->distrito, 0,  $rq->gestion, 0, 6);
+                $data2 = ImporCensoMatriculaRepositorio::_9ATotalEstudianteAnio($icd->anio, $rq->provincia, $rq->distrito, 0,  $rq->gestion, 0, 6);
                 $info['indicador'] = round(100 * $data2->total / $data1->total, 0);
 
                 $reg['fuente'] = 'Censo Educativo - MINEDU';
@@ -1321,7 +1337,7 @@ class HomeController extends Controller
             case 'tabla1':
                 $aniox = Anio::where('anio', $rq->anio)->first();
                 $anioy = Anio::where('anio', $aniox->anio - 1)->first();
-                $meta = MatriculaGeneralRepositorio::metaUgel($anioy->id, $rq->provincia, $rq->distrito,  $rq->gestion, 0);
+                return $meta = MatriculaGeneralRepositorio::metaUgel($anioy->id, $rq->provincia, $rq->distrito,  $rq->gestion, 0);
                 $base = MatriculaGeneralRepositorio::educacionbasicasexougel($aniox->id, $rq->provincia, $rq->distrito,  $rq->gestion, 0, 0);
                 $foot = [];
                 if ($base->count() > 0) {
