@@ -309,6 +309,111 @@ ALTER TABLE `edu_impor_matricula_general` CHANGE `id_discapacidad` `id_discapaci
 #
 ALTER TABLE `edu_matricula_general_detalle` DROP `di_severo`, DROP `discapacidad_fisica`, DROP `trastorno_espectro_autista`, DROP `dv_baja_vision`, DROP `dv_ceguera`, DROP `da_hipoacusia`, DROP `da_sordera`, DROP `sordoceguera`, DROP `otra_discapacidad`;
 
+#
+CREATE DEFINER=root@localhost PROCEDURE bdsismore.edu_pa_procesarImporMatriculaGeneral(v_importacion_id INT, v_matricula_id INT,v_fecha_actualizacion varchar(10))
+begin
+
+	DROP TABLE IF EXISTS tmp1;
+	CREATE TEMPORARY TABLE tmp1 (id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,codigo varchar(10) DEFAULT NULL,nombre varchar(100) DEFAULT NULL);
+
+	UPDATE edu_impor_matricula_general SET
+		id_anio=ltrim(rtrim(ifnull(id_anio,''))),
+		cod_mod=ltrim(rtrim(ifnull(cod_mod,''))),
+		id_mod=ltrim(rtrim(ifnull(id_mod,''))),
+		id_nivel=ltrim(rtrim(ifnull(id_nivel,''))),
+		id_gestion=ltrim(rtrim(ifnull(id_gestion,''))),
+		id_sexo=ltrim(rtrim(ifnull(id_sexo,''))),
+		fecha_nacimiento=ltrim(rtrim(ifnull(fecha_nacimiento,''))),
+		pais_nacimiento=ltrim(rtrim(ifnull(pais_nacimiento,''))),
+		lengua_materna=ltrim(rtrim(ifnull(lengua_materna,''))),
+		segunda_lengua=ltrim(rtrim(ifnull(segunda_lengua,''))),
+		id_discapacidad=ltrim(rtrim(ifnull(id_discapacidad,''))),
+		discapacidad=ltrim(rtrim(ifnull(discapacidad,''))),
+		situacion_matricula=ltrim(rtrim(ifnull(situacion_matricula,''))),
+		estado_matricula=ltrim(rtrim(ifnull(estado_matricula,''))),
+		fecha_matricula=ltrim(rtrim(ifnull(fecha_matricula,''))),
+		id_grado=ltrim(rtrim(ifnull(id_grado,''))),
+		grado=ltrim(rtrim(ifnull(grado,''))),
+		id_seccion=ltrim(rtrim(ifnull(id_seccion,''))),
+		seccion=ltrim(rtrim(ifnull(seccion,''))),
+		fecha_registro=ltrim(rtrim(ifnull(fecha_registro,''))),
+		fecha_retiro=if(fecha_retiro='NULL','',ltrim(rtrim(ifnull(fecha_retiro,'')))),
+		motivo_retiro=ltrim(rtrim(ifnull(motivo_retiro,''))),
+		sf_regular=ltrim(rtrim(ifnull(sf_regular,''))),
+		sf_recuperacion=ltrim(rtrim(ifnull(sf_recuperacion,'')))
+	WHERE importacion_id=v_importacion_id;
+
+
+	insert into tmp1 (codigo) select codigo from edu_discapacidad;
+	insert into edu_discapacidad(codigo,nombre,estado)
+    select distinct id_discapacidad,discapacidad,"AC" from edu_impor_matricula_general where discapacidad!="" and id_discapacidad not in (select codigo from tmp1) order by discapacidad;
+	/*truncate tmp1;*/
+
+
+	drop table tmp1;
+
+    begin
+
+		INSERT INTO edu_matricula_general_detalle(
+		matriculageneral_id, 	institucioneducativa_id, 	cod_mod, 			modalidad_id, 			nivel_codigo,
+		gestion_id, 			pais_nacimiento, 			fecha_nacimiento, 	edad, 					sexo_id,
+		lengua_materna, 		segunda_lengua, 			discapacidad_id, 	situacion_matricula, 	estado_matricula,
+		fecha_matricula, 		grado_id, 					grado, 				seccion_id, 			seccion,
+		fecha_registro, 		fecha_retiro, 				motivo_retiro, 		sf_regular, 			sf_recuperacion
+		)
+		SELECT
+			v_matricula_id,
+			(select id from edu_institucioneducativa  where codModular=imp.cod_mod) as iiee,
+			/*imp.id_anio,*/
+			imp.cod_mod,
+			imp.id_mod,
+			imp.id_nivel,
+
+			imp.id_gestion,
+			imp.pais_nacimiento,
+			/*imp.fecha_nacimiento, */
+			if(imp.fecha_nacimiento='NULL' or imp.fecha_nacimiento='',null,str_to_date(imp.fecha_nacimiento,'%Y-%m-%d')) as fecha_nacimiento,
+			if(imp.fecha_nacimiento='NULL' or imp.fecha_nacimiento='',null,
+	            YEAR(v_fecha_actualizacion)-YEAR(str_to_date(imp.fecha_nacimiento,'%Y-%m-%d')) +
+	            IF(DATE_FORMAT(v_fecha_actualizacion,'%m-%d') > DATE_FORMAT(str_to_date(imp.fecha_nacimiento,'%Y-%m-%d'),'%m-%d'), 0 , -1 )
+			) as edad,
+			imp.id_sexo,
+
+			imp.lengua_materna,
+			imp.segunda_lengua,
+			if(imp.id_discapacidad="NULL" or imp.id_discapacidad="",null,(select id from edu_discapacidad where codigo=imp.id_discapacidad)) as discapacidad,
+			imp.situacion_matricula,
+			imp.estado_matricula,
+
+			if(imp.fecha_matricula='NULL' or imp.fecha_matricula='',null,str_to_date(imp.fecha_matricula,'%Y-%m-%d')) as fecha_matricula,
+			/*imp.fecha_matricula, */
+			imp.id_grado,
+			imp.grado,
+			imp.id_seccion,
+			imp.seccion,
+
+			if(imp.fecha_registro='NULL' or imp.fecha_registro='',null,str_to_date(imp.fecha_registro,'%Y-%m-%d')) as fecha_registro,
+			if(imp.fecha_retiro='NULL' or imp.fecha_retiro='',null,str_to_date(imp.fecha_retiro,'%Y-%m-%d')) as fecha_retiro,
+			/*imp.fecha_registro, */
+			/*imp.fecha_retiro, */
+			imp.motivo_retiro,
+			imp.sf_regular,
+			imp.sf_recuperacion
+		FROM edu_impor_matricula_general as imp WHERE imp.importacion_id=v_importacion_id;
+
+		update par_importacion  set estado = 'PR' where id = v_importacion_id;
+
+		/*truncate edu_impor_matricula_general;*/
+
+
+    END;
+
+   	/*truncate tmp1;*/
+	/*delete from tmp1;*/
+	/*drop table tmp1;*/
+END
+
+
 
 
 
