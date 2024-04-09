@@ -268,7 +268,7 @@ class MatriculaGeneralRepositorio
                     ->where('estado', 'PR')->where('ano.id', $anio)
                     ->orderBy('fechaActualizacion', 'desc')->first();
 
-                $query = MatriculaGeneralDetalle::where('matriculageneral_id', $mg->id);
+                $query = MatriculaGeneralDetalle::where('matriculageneral_id', $mg->id)->join('par_sexo as ss', 'ss.id', '=', 'edu_matricula_general_detalle.sexo_id');;
                 if ($provincia > 0 || $distrito > 0 || $gestion > 0)
                     $query = $query->join('edu_institucioneducativa as ie', 'ie.id', '=', 'edu_matricula_general_detalle.institucioneducativa_id')
                         ->join('edu_centropoblado as cp', 'cp.id', '=', 'ie.CentroPoblado_id')
@@ -284,7 +284,7 @@ class MatriculaGeneralRepositorio
                         $query = $query->where('tg.dependencia', '!=', 3);
                     }
                 }
-                $query = $query->select(DB::raw('sexo as name'), DB::raw('count(edu_matricula_general_detalle.id) as y'))->groupBy('sexo')->get();
+                $query = $query->select(DB::raw('ss.nombre as name'), DB::raw('count(edu_matricula_general_detalle.id) as y'))->groupBy('name')->get();
                 return $query;
 
             case 'anal4':
@@ -931,13 +931,13 @@ class MatriculaGeneralRepositorio
                     // DB::raw('sum(IF(sexo_id=2 and nm.codigo="B0",1,0)) as tmp'),
                     // DB::raw('sum(IF(sexo_id=1 and nm.codigo="F0",1,0)) as ths'),
                     // DB::raw('sum(IF(sexo_id=2 and nm.codigo="F0",1,0)) as tms'),
-                    DB::raw('sum(IF(nm.codigo in ("A3","A5") and id_grado=1,1,0)) as ci'),
-                    DB::raw('sum(IF(nm.codigo in ("A2","A3","A5") and id_grado in (2,3,4,5),1,0)) as cii'),
-                    DB::raw('sum(IF(nm.codigo="B0" and id_grado in (4,5),1,0)) as ciii'),
-                    DB::raw('sum(IF(nm.codigo="B0" and id_grado in (6,7),1,0)) as civ'),
-                    DB::raw('sum(IF(nm.codigo="B0" and id_grado in (8,9),1,0)) as cv'),
-                    DB::raw('sum(IF(nm.codigo="F0" and id_grado in (10,11),1,0)) as cvi'),
-                    DB::raw('sum(IF(nm.codigo="F0" and id_grado in (12,13,14),1,0)) as cvii'),
+                    DB::raw('sum(IF(nm.codigo in ("A3","A5") and grado_id=1,1,0)) as ci'),
+                    DB::raw('sum(IF(nm.codigo in ("A2","A3","A5") and grado_id in (2,3,4,5),1,0)) as cii'),
+                    DB::raw('sum(IF(nm.codigo="B0" and grado_id in (4,5),1,0)) as ciii'),
+                    DB::raw('sum(IF(nm.codigo="B0" and grado_id in (6,7),1,0)) as civ'),
+                    DB::raw('sum(IF(nm.codigo="B0" and grado_id in (8,9),1,0)) as cv'),
+                    DB::raw('sum(IF(nm.codigo="F0" and grado_id in (10,11),1,0)) as cvi'),
+                    DB::raw('sum(IF(nm.codigo="F0" and grado_id in (12,13,14),1,0)) as cvii'),
 
                 )->groupBy('idprovincia', 'provincia')->get();
                 return $query;
@@ -980,13 +980,13 @@ class MatriculaGeneralRepositorio
                     // DB::raw('sum(IF(sexo_id=2 and nm.codigo="B0",1,0)) as tmp'),
                     // DB::raw('sum(IF(sexo_id=1 and nm.codigo="F0",1,0)) as ths'),
                     // DB::raw('sum(IF(sexo_id=2 and nm.codigo="F0",1,0)) as tms'),
-                    DB::raw('sum(IF(nm.codigo in ("A3","A5") and id_grado=1,1,0)) as ci'),
-                    DB::raw('sum(IF(nm.codigo in ("A2","A3","A5") and id_grado in (2,3,4,5),1,0)) as cii'),
-                    DB::raw('sum(IF(nm.codigo="B0" and id_grado in (4,5),1,0)) as ciii'),
-                    DB::raw('sum(IF(nm.codigo="B0" and id_grado in (6,7),1,0)) as civ'),
-                    DB::raw('sum(IF(nm.codigo="B0" and id_grado in (8,9),1,0)) as cv'),
-                    DB::raw('sum(IF(nm.codigo="F0" and id_grado in (10,11),1,0)) as cvi'),
-                    DB::raw('sum(IF(nm.codigo="F0" and id_grado in (12,13,14),1,0)) as cvii'),
+                    DB::raw('sum(IF(nm.codigo in ("A3","A5") and grado_id=1,1,0)) as ci'),
+                    DB::raw('sum(IF(nm.codigo in ("A2","A3","A5") and grado_id in (2,3,4,5),1,0)) as cii'),
+                    DB::raw('sum(IF(nm.codigo="B0" and grado_id in (4,5),1,0)) as ciii'),
+                    DB::raw('sum(IF(nm.codigo="B0" and grado_id in (6,7),1,0)) as civ'),
+                    DB::raw('sum(IF(nm.codigo="B0" and grado_id in (8,9),1,0)) as cv'),
+                    DB::raw('sum(IF(nm.codigo="F0" and grado_id in (10,11),1,0)) as cvi'),
+                    DB::raw('sum(IF(nm.codigo="F0" and grado_id in (12,13,14),1,0)) as cvii'),
 
                 )->groupBy('iddistrito', 'distrito')->get();
                 return $query;
@@ -1028,13 +1028,13 @@ class MatriculaGeneralRepositorio
                     // DB::raw('sum(IF(sexo_id=2 and nm.codigo="B0",1,0)) as tmp'),
                     // DB::raw('sum(IF(sexo_id=1 and nm.codigo="F0",1,0)) as ths'),
                     // DB::raw('sum(IF(sexo_id=2 and nm.codigo="F0",1,0)) as tms'),
-                    DB::raw('sum(IF(nm.codigo in ("A3","A5") and id_grado=1,1,0)) as ci'),
-                    DB::raw('sum(IF(nm.codigo in ("A2","A3","A5") and id_grado in (2,3,4,5),1,0)) as cii'),
-                    DB::raw('sum(IF(nm.codigo="B0" and id_grado in (4,5),1,0)) as ciii'),
-                    DB::raw('sum(IF(nm.codigo="B0" and id_grado in (6,7),1,0)) as civ'),
-                    DB::raw('sum(IF(nm.codigo="B0" and id_grado in (8,9),1,0)) as cv'),
-                    DB::raw('sum(IF(nm.codigo="F0" and id_grado in (10,11),1,0)) as cvi'),
-                    DB::raw('sum(IF(nm.codigo="F0" and id_grado in (12,13,14),1,0)) as cvii'),
+                    DB::raw('sum(IF(nm.codigo in ("A3","A5") and grado_id=1,1,0)) as ci'),
+                    DB::raw('sum(IF(nm.codigo in ("A2","A3","A5") and grado_id in (2,3,4,5),1,0)) as cii'),
+                    DB::raw('sum(IF(nm.codigo="B0" and grado_id in (4,5),1,0)) as ciii'),
+                    DB::raw('sum(IF(nm.codigo="B0" and grado_id in (6,7),1,0)) as civ'),
+                    DB::raw('sum(IF(nm.codigo="B0" and grado_id in (8,9),1,0)) as cv'),
+                    DB::raw('sum(IF(nm.codigo="F0" and grado_id in (10,11),1,0)) as cvi'),
+                    DB::raw('sum(IF(nm.codigo="F0" and grado_id in (12,13,14),1,0)) as cvii'),
 
                 )->groupBy('centropoblado')->get();
                 return $query;
@@ -1067,17 +1067,17 @@ class MatriculaGeneralRepositorio
                 $query = $query->select(
                     'uu.nombre as ugel',
                     'dt.nombre as distrito',
-                    DB::raw('sum(IF(nm.codigo in ("A2","A3") and id_grado in (1,2,3,4,5),1,0)) as tt'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2","A3") and id_grado in (1,2,3,4,5),1,0)) as th'),
-                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2","A3") and id_grado in (1,2,3,4,5),1,0)) as tm'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A3") and id_grado=1,1,0)) as cih'),
-                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A3") and id_grado=1,1,0)) as cim'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and id_grado in (3),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and id_grado in (2),1,0)) as cii3h'),
-                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and id_grado in (3),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and id_grado in (2),1,0)) as cii3m'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and id_grado in (4),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and id_grado in (3),1,0)) as cii4h'),
-                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and id_grado in (4),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and id_grado in (3),1,0)) as cii4m'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and id_grado in (5),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and id_grado in (4),1,0)) as cii5h'),
-                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and id_grado in (5),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and id_grado in (4),1,0)) as cii5m'),
+                    DB::raw('sum(IF(nm.codigo in ("A2","A3") and grado_id in (1,2,3,4,5),1,0)) as tt'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2","A3") and grado_id in (1,2,3,4,5),1,0)) as th'),
+                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2","A3") and grado_id in (1,2,3,4,5),1,0)) as tm'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A3") and grado_id=1,1,0)) as cih'),
+                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A3") and grado_id=1,1,0)) as cim'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and grado_id in (3),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and grado_id in (2),1,0)) as cii3h'),
+                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and grado_id in (3),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and grado_id in (2),1,0)) as cii3m'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and grado_id in (4),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and grado_id in (3),1,0)) as cii4h'),
+                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and grado_id in (4),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and grado_id in (3),1,0)) as cii4m'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and grado_id in (5),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and grado_id in (4),1,0)) as cii5h'),
+                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and grado_id in (5),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and grado_id in (4),1,0)) as cii5m'),
                 )->groupBy('ugel', 'distrito')->get();
                 return $query;
             case 'vista3i':
@@ -1108,17 +1108,17 @@ class MatriculaGeneralRepositorio
                 }
                 $query = $query->select(
                     'ie.nombreInstEduc as iiee',
-                    DB::raw('sum(IF(nm.codigo in ("A2","A3") and id_grado in (1,2,3,4,5),1,0)) as tt'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2","A3") and id_grado in (1,2,3,4,5),1,0)) as th'),
-                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2","A3") and id_grado in (1,2,3,4,5),1,0)) as tm'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A3") and id_grado=1,1,0)) as cih'),
-                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A3") and id_grado=1,1,0)) as cim'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and id_grado in (3),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and id_grado in (2),1,0)) as cii3h'),
-                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and id_grado in (3),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and id_grado in (2),1,0)) as cii3m'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and id_grado in (4),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and id_grado in (3),1,0)) as cii4h'),
-                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and id_grado in (4),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and id_grado in (3),1,0)) as cii4m'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and id_grado in (5),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and id_grado in (4),1,0)) as cii5h'),
-                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and id_grado in (5),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and id_grado in (4),1,0)) as cii5m'),
+                    DB::raw('sum(IF(nm.codigo in ("A2","A3") and grado_id in (1,2,3,4,5),1,0)) as tt'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2","A3") and grado_id in (1,2,3,4,5),1,0)) as th'),
+                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2","A3") and grado_id in (1,2,3,4,5),1,0)) as tm'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A3") and grado_id=1,1,0)) as cih'),
+                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A3") and grado_id=1,1,0)) as cim'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and grado_id in (3),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and grado_id in (2),1,0)) as cii3h'),
+                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and grado_id in (3),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and grado_id in (2),1,0)) as cii3m'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and grado_id in (4),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and grado_id in (3),1,0)) as cii4h'),
+                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and grado_id in (4),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and grado_id in (3),1,0)) as cii4m'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and grado_id in (5),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and grado_id in (4),1,0)) as cii5h'),
+                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and grado_id in (5),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and grado_id in (4),1,0)) as cii5m'),
                 )->groupBy('iiee')->get();
                 return $query;
             default:
@@ -1486,13 +1486,13 @@ class MatriculaGeneralRepositorio
                 $query = $query->select(
                     'uu.nombre as ugel',
                     DB::raw('count(edu_matricula_general_detalle.id) as tt'),
-                    DB::raw('sum(IF(nm.codigo in ("A3","A5") and id_grado=1,1,0)) as ci'),
-                    DB::raw('sum(IF(nm.codigo in ("A2","A3","A5") and id_grado in (2,3,4,5),1,0)) as cii'),
-                    DB::raw('sum(IF(nm.codigo in ("B0") and id_grado in (4,5),1,0)) as ciii'),
-                    DB::raw('sum(IF(nm.codigo in ("B0") and id_grado in (6,7),1,0)) as civ'),
-                    DB::raw('sum(IF(nm.codigo in ("B0") and id_grado in (8,9),1,0)) as cv'),
-                    DB::raw('sum(IF(nm.codigo in ("F0") and id_grado in (10,11),1,0)) as cvi'),
-                    DB::raw('sum(IF(nm.codigo in ("F0") and id_grado in (12,13,14),1,0)) as cvii'),
+                    DB::raw('sum(IF(nm.codigo in ("A3","A5") and grado_id=1,1,0)) as ci'),
+                    DB::raw('sum(IF(nm.codigo in ("A2","A3","A5") and grado_id in (2,3,4,5),1,0)) as cii'),
+                    DB::raw('sum(IF(nm.codigo in ("B0") and grado_id in (4,5),1,0)) as ciii'),
+                    DB::raw('sum(IF(nm.codigo in ("B0") and grado_id in (6,7),1,0)) as civ'),
+                    DB::raw('sum(IF(nm.codigo in ("B0") and grado_id in (8,9),1,0)) as cv'),
+                    DB::raw('sum(IF(nm.codigo in ("F0") and grado_id in (10,11),1,0)) as cvi'),
+                    DB::raw('sum(IF(nm.codigo in ("F0") and grado_id in (12,13,14),1,0)) as cvii'),
                 )->groupBy('ugel')->get();
                 return $query;
             case 'vista1i':
@@ -1521,17 +1521,17 @@ class MatriculaGeneralRepositorio
                 }
                 $query = $query->select(
                     'uu.nombre as ugel',
-                    DB::raw('sum(IF(nm.codigo in ("A2","A3") and id_grado in (1,2,3,4,5),1,0)) as tt'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2","A3") and id_grado in (1,2,3,4,5),1,0)) as th'),
-                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2","A3") and id_grado in (1,2,3,4,5),1,0)) as tm'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A3") and id_grado=1,1,0)) as cih'),
-                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A3") and id_grado=1,1,0)) as cim'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and id_grado in (3),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and id_grado in (2),1,0)) as cii3h'),
-                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and id_grado in (3),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and id_grado in (2),1,0)) as cii3m'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and id_grado in (4),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and id_grado in (3),1,0)) as cii4h'),
-                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and id_grado in (4),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and id_grado in (3),1,0)) as cii4m'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and id_grado in (5),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and id_grado in (4),1,0)) as cii5h'),
-                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and id_grado in (5),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and id_grado in (4),1,0)) as cii5m'),
+                    DB::raw('sum(IF(nm.codigo in ("A2","A3") and grado_id in (1,2,3,4,5),1,0)) as tt'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2","A3") and grado_id in (1,2,3,4,5),1,0)) as th'),
+                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2","A3") and grado_id in (1,2,3,4,5),1,0)) as tm'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A3") and grado_id=1,1,0)) as cih'),
+                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A3") and grado_id=1,1,0)) as cim'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and grado_id in (3),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and grado_id in (2),1,0)) as cii3h'),
+                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and grado_id in (3),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and grado_id in (2),1,0)) as cii3m'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and grado_id in (4),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and grado_id in (3),1,0)) as cii4h'),
+                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and grado_id in (4),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and grado_id in (3),1,0)) as cii4m'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and grado_id in (5),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and grado_id in (4),1,0)) as cii5h'),
+                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and grado_id in (5),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and grado_id in (4),1,0)) as cii5m'),
                 )->orderBy('tt', 'desc')->groupBy('ugel')->get();
                 return $query;
             case 'vista2i':
@@ -1563,17 +1563,17 @@ class MatriculaGeneralRepositorio
                 $query = $query->select(
                     'uu.nombre as ugel',
                     'dt.nombre as distrito',
-                    DB::raw('sum(IF(nm.codigo in ("A2","A3") and id_grado in (1,2,3,4,5),1,0)) as tt'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2","A3") and id_grado in (1,2,3,4,5),1,0)) as th'),
-                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2","A3") and id_grado in (1,2,3,4,5),1,0)) as tm'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A3") and id_grado=1,1,0)) as cih'),
-                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A3") and id_grado=1,1,0)) as cim'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and id_grado in (3),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and id_grado in (2),1,0)) as cii3h'),
-                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and id_grado in (3),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and id_grado in (2),1,0)) as cii3m'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and id_grado in (4),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and id_grado in (3),1,0)) as cii4h'),
-                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and id_grado in (4),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and id_grado in (3),1,0)) as cii4m'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and id_grado in (5),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and id_grado in (4),1,0)) as cii5h'),
-                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and id_grado in (5),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and id_grado in (4),1,0)) as cii5m'),
+                    DB::raw('sum(IF(nm.codigo in ("A2","A3") and grado_id in (1,2,3,4,5),1,0)) as tt'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2","A3") and grado_id in (1,2,3,4,5),1,0)) as th'),
+                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2","A3") and grado_id in (1,2,3,4,5),1,0)) as tm'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A3") and grado_id=1,1,0)) as cih'),
+                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A3") and grado_id=1,1,0)) as cim'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and grado_id in (3),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and grado_id in (2),1,0)) as cii3h'),
+                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and grado_id in (3),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and grado_id in (2),1,0)) as cii3m'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and grado_id in (4),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and grado_id in (3),1,0)) as cii4h'),
+                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and grado_id in (4),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and grado_id in (3),1,0)) as cii4m'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and grado_id in (5),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and grado_id in (4),1,0)) as cii5h'),
+                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and grado_id in (5),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and grado_id in (4),1,0)) as cii5m'),
                 )->groupBy('ugel', 'distrito')->get();
                 return $query;
             case 'vista3i':
@@ -1604,17 +1604,17 @@ class MatriculaGeneralRepositorio
                 }
                 $query = $query->select(
                     'ie.nombreInstEduc as iiee',
-                    DB::raw('sum(IF(nm.codigo in ("A2","A3") and id_grado in (1,2,3,4,5),1,0)) as tt'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2","A3") and id_grado in (1,2,3,4,5),1,0)) as th'),
-                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2","A3") and id_grado in (1,2,3,4,5),1,0)) as tm'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A3") and id_grado=1,1,0)) as cih'),
-                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A3") and id_grado=1,1,0)) as cim'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and id_grado in (3),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and id_grado in (2),1,0)) as cii3h'),
-                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and id_grado in (3),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and id_grado in (2),1,0)) as cii3m'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and id_grado in (4),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and id_grado in (3),1,0)) as cii4h'),
-                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and id_grado in (4),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and id_grado in (3),1,0)) as cii4m'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and id_grado in (5),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and id_grado in (4),1,0)) as cii5h'),
-                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and id_grado in (5),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and id_grado in (4),1,0)) as cii5m'),
+                    DB::raw('sum(IF(nm.codigo in ("A2","A3") and grado_id in (1,2,3,4,5),1,0)) as tt'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2","A3") and grado_id in (1,2,3,4,5),1,0)) as th'),
+                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2","A3") and grado_id in (1,2,3,4,5),1,0)) as tm'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A3") and grado_id=1,1,0)) as cih'),
+                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A3") and grado_id=1,1,0)) as cim'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and grado_id in (3),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and grado_id in (2),1,0)) as cii3h'),
+                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and grado_id in (3),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and grado_id in (2),1,0)) as cii3m'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and grado_id in (4),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and grado_id in (3),1,0)) as cii4h'),
+                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and grado_id in (4),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and grado_id in (3),1,0)) as cii4m'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo in ("A2") and grado_id in (5),1,0))+sum(IF(sexo_id=1 and nm.codigo in ("A3") and grado_id in (4),1,0)) as cii5h'),
+                    DB::raw('sum(IF(sexo_id=2  and nm.codigo in ("A2") and grado_id in (5),1,0))+sum(IF(sexo_id=2  and nm.codigo in ("A3") and grado_id in (4),1,0)) as cii5m'),
                 )->groupBy('iiee')->get();
                 return $query;
             default:
@@ -2067,8 +2067,8 @@ class MatriculaGeneralRepositorio
 
                 $query = MatriculaGeneralDetalle::select(
                     DB::raw('count(matriculageneral_id) as conteo'),
-                    DB::raw('sum(IF(nm.codigo="D1" and id_grado in (1,2),1,0)) as conteox'),
-                    DB::raw('sum(IF(nm.codigo="D1" and id_grado in (3,4,5),1,0)) as conteoi'),
+                    DB::raw('sum(IF(nm.codigo="D1" and grado_id in (1,2),1,0)) as conteox'),
+                    DB::raw('sum(IF(nm.codigo="D1" and grado_id in (3,4,5),1,0)) as conteoi'),
                     DB::raw('sum(IF(nm.codigo="D2",1,0)) as conteop')
                 );
                 $query = $query->join('edu_institucioneducativa as ie', 'ie.id', '=', 'edu_matricula_general_detalle.institucioneducativa_id')
@@ -2224,7 +2224,7 @@ class MatriculaGeneralRepositorio
                     ->where('estado', 'PR')->where('ano.id', $anio)
                     ->orderBy('fechaActualizacion', 'desc')->first();
 
-                $query = MatriculaGeneralDetalle::where('matriculageneral_id', $mg->id);
+                $query = MatriculaGeneralDetalle::where('matriculageneral_id', $mg->id)->join('par_sexo as ss', 'ss.id', '=', 'edu_matricula_general_detalle.sexo_id');
                 $query = $query->join('edu_institucioneducativa as ie', 'ie.id', '=', 'edu_matricula_general_detalle.institucioneducativa_id')
                     ->join('edu_ugel as uu', 'uu.id', '=', 'ie.Ugel_id')
                     ->join('edu_area as aa', 'aa.id', '=', 'ie.Area_id')
@@ -2242,7 +2242,7 @@ class MatriculaGeneralRepositorio
                     }
                 }
                 $query = $query->select(
-                    'sexo as name',
+                    'ss.nombre as name',
                     DB::raw('count(edu_matricula_general_detalle.id) as y'),
                     DB::raw('count(edu_matricula_general_detalle.id) as yx'),
                 )->groupBy('name')->get();
@@ -2385,10 +2385,10 @@ class MatriculaGeneralRepositorio
                     DB::raw('count(edu_matricula_general_detalle.id) as tt'),
                     DB::raw('sum(IF(sexo_id=1,1,0)) as th'),
                     DB::raw('sum(IF(sexo_id=2,1,0)) as tm'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo="D1" and id_grado in (1,2),1,0)) as thi'),
-                    DB::raw('sum(IF(sexo_id=2 and nm.codigo="D1" and id_grado in (1,2),1,0)) as tmi'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo="D1" and id_grado in (3,4,5),1,0)) as thp'),
-                    DB::raw('sum(IF(sexo_id=2 and nm.codigo="D1" and id_grado in (3,4,5),1,0)) as tmp'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo="D1" and grado_id in (1,2),1,0)) as thi'),
+                    DB::raw('sum(IF(sexo_id=2 and nm.codigo="D1" and grado_id in (1,2),1,0)) as tmi'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo="D1" and grado_id in (3,4,5),1,0)) as thp'),
+                    DB::raw('sum(IF(sexo_id=2 and nm.codigo="D1" and grado_id in (3,4,5),1,0)) as tmp'),
                     DB::raw('sum(IF(sexo_id=1 and nm.codigo="D2",1,0)) as ths'),
                     DB::raw('sum(IF(sexo_id=2 and nm.codigo="D2",1,0)) as tms'),
 
@@ -2427,10 +2427,10 @@ class MatriculaGeneralRepositorio
                     DB::raw('count(edu_matricula_general_detalle.id) as tt'),
                     DB::raw('sum(IF(sexo_id=1,1,0)) as th'),
                     DB::raw('sum(IF(sexo_id=2,1,0)) as tm'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo="D1" and id_grado in (1,2),1,0)) as thi'),
-                    DB::raw('sum(IF(sexo_id=2 and nm.codigo="D1" and id_grado in (1,2),1,0)) as tmi'),
-                    DB::raw('sum(IF(sexo_id=1 and nm.codigo="D1" and id_grado in (3,4,5),1,0)) as thp'),
-                    DB::raw('sum(IF(sexo_id=2 and nm.codigo="D1" and id_grado in (3,4,5),1,0)) as tmp'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo="D1" and grado_id in (1,2),1,0)) as thi'),
+                    DB::raw('sum(IF(sexo_id=2 and nm.codigo="D1" and grado_id in (1,2),1,0)) as tmi'),
+                    DB::raw('sum(IF(sexo_id=1 and nm.codigo="D1" and grado_id in (3,4,5),1,0)) as thp'),
+                    DB::raw('sum(IF(sexo_id=2 and nm.codigo="D1" and grado_id in (3,4,5),1,0)) as tmp'),
                     DB::raw('sum(IF(sexo_id=1 and nm.codigo="D2",1,0)) as ths'),
                     DB::raw('sum(IF(sexo_id=2 and nm.codigo="D2",1,0)) as tms'),
 
@@ -2450,8 +2450,8 @@ class MatriculaGeneralRepositorio
 
         $query = MatriculaGeneralDetalle::select(
             DB::raw('count(matriculageneral_id) as conteo'),
-            DB::raw('sum(IF(nm.codigo="D1" and id_grado in (1,2),1,0)) as conteox'),
-            DB::raw('sum(IF(nm.codigo="D1" and id_grado in (3,4,5),1,0)) as conteoi'),
+            DB::raw('sum(IF(nm.codigo="D1" and grado_id in (1,2),1,0)) as conteox'),
+            DB::raw('sum(IF(nm.codigo="D1" and grado_id in (3,4,5),1,0)) as conteoi'),
             DB::raw('sum(IF(nm.codigo="D2",1,0)) as conteop')
         );
         $query = $query->join('edu_institucioneducativa as ie', 'ie.id', '=', 'edu_matricula_general_detalle.institucioneducativa_id')
@@ -2997,12 +2997,12 @@ class MatriculaGeneralRepositorio
                     DB::raw('sum(IF(sexo_id=1,1,0)) as th'),
                     DB::raw('sum(IF(sexo_id=2 ,1,0)) as tm'),
 
-                    DB::raw('sum(IF(id_grado=4,1,0)) as e1'),
-                    DB::raw('sum(IF(id_grado=5,1,0)) as e2'),
-                    DB::raw('sum(IF(id_grado=6,1,0)) as e3'),
-                    DB::raw('sum(IF(id_grado=7,1,0)) as e4'),
-                    DB::raw('sum(IF(id_grado=8,1,0)) as e5'),
-                    DB::raw('sum(IF(id_grado=9,1,0)) as e6'),
+                    DB::raw('sum(IF(grado_id=4,1,0)) as e1'),
+                    DB::raw('sum(IF(grado_id=5,1,0)) as e2'),
+                    DB::raw('sum(IF(grado_id=6,1,0)) as e3'),
+                    DB::raw('sum(IF(grado_id=7,1,0)) as e4'),
+                    DB::raw('sum(IF(grado_id=8,1,0)) as e5'),
+                    DB::raw('sum(IF(grado_id=9,1,0)) as e6'),
                 )->groupBy('idiiee', 'codmod', 'iiee', 'nivel', 'gestion', 'area')->get();
                 return $query;
 
@@ -3044,12 +3044,12 @@ class MatriculaGeneralRepositorio
                     DB::raw('sum(IF(sexo_id=1,1,0)) as th'),
                     DB::raw('sum(IF(sexo_id=2 ,1,0)) as tm'),
 
-                    DB::raw('sum(IF(id_grado=4,1,0)) as e1'),
-                    DB::raw('sum(IF(id_grado=5,1,0)) as e2'),
-                    DB::raw('sum(IF(id_grado=6,1,0)) as e3'),
-                    DB::raw('sum(IF(id_grado=7,1,0)) as e4'),
-                    DB::raw('sum(IF(id_grado=8,1,0)) as e5'),
-                    DB::raw('sum(IF(id_grado=9,1,0)) as e6'),
+                    DB::raw('sum(IF(grado_id=4,1,0)) as e1'),
+                    DB::raw('sum(IF(grado_id=5,1,0)) as e2'),
+                    DB::raw('sum(IF(grado_id=6,1,0)) as e3'),
+                    DB::raw('sum(IF(grado_id=7,1,0)) as e4'),
+                    DB::raw('sum(IF(grado_id=8,1,0)) as e5'),
+                    DB::raw('sum(IF(grado_id=9,1,0)) as e6'),
                 )->groupBy('idiiee', 'codmod', 'iiee', 'nivel', 'gestion', 'area', 'provincia', 'distrito', 'centropoblado')->get();
                 return $query;
 
@@ -3088,11 +3088,11 @@ class MatriculaGeneralRepositorio
                     DB::raw('sum(IF(sexo_id=1,1,0)) as th'),
                     DB::raw('sum(IF(sexo_id=2 ,1,0)) as tm'),
 
-                    DB::raw('sum(IF(id_grado=10,1,0)) as e1'),
-                    DB::raw('sum(IF(id_grado=11,1,0)) as e2'),
-                    DB::raw('sum(IF(id_grado=12,1,0)) as e3'),
-                    DB::raw('sum(IF(id_grado=13,1,0)) as e4'),
-                    DB::raw('sum(IF(id_grado=14,1,0)) as e5'),
+                    DB::raw('sum(IF(grado_id=10,1,0)) as e1'),
+                    DB::raw('sum(IF(grado_id=11,1,0)) as e2'),
+                    DB::raw('sum(IF(grado_id=12,1,0)) as e3'),
+                    DB::raw('sum(IF(grado_id=13,1,0)) as e4'),
+                    DB::raw('sum(IF(grado_id=14,1,0)) as e5'),
                 )->groupBy('idiiee', 'codmod', 'iiee', 'nivel', 'gestion', 'area')->get();
                 return $query;
 
@@ -3134,11 +3134,11 @@ class MatriculaGeneralRepositorio
                     DB::raw('sum(IF(sexo_id=1,1,0)) as th'),
                     DB::raw('sum(IF(sexo_id=2 ,1,0)) as tm'),
 
-                    DB::raw('sum(IF(id_grado=10,1,0)) as e1'),
-                    DB::raw('sum(IF(id_grado=11,1,0)) as e2'),
-                    DB::raw('sum(IF(id_grado=12,1,0)) as e3'),
-                    DB::raw('sum(IF(id_grado=13,1,0)) as e4'),
-                    DB::raw('sum(IF(id_grado=14,1,0)) as e5'),
+                    DB::raw('sum(IF(grado_id=10,1,0)) as e1'),
+                    DB::raw('sum(IF(grado_id=11,1,0)) as e2'),
+                    DB::raw('sum(IF(grado_id=12,1,0)) as e3'),
+                    DB::raw('sum(IF(grado_id=13,1,0)) as e4'),
+                    DB::raw('sum(IF(grado_id=14,1,0)) as e5'),
                 )->groupBy('idiiee', 'codmod', 'iiee', 'nivel', 'gestion', 'area', 'provincia', 'distrito', 'centropoblado')->get();
                 return $query;
 
@@ -3617,12 +3617,12 @@ class MatriculaGeneralRepositorio
                     DB::raw('sum(IF(sexo_id=1,1,0)) as th'),
                     DB::raw('sum(IF(sexo_id=2 ,1,0)) as tm'),
 
-                    DB::raw('sum(IF(id_grado=6,1,0)) as e1'),
-                    DB::raw('sum(IF(id_grado=7,1,0)) as e2'),
-                    DB::raw('sum(IF(id_grado=8,1,0)) as e3'),
-                    DB::raw('sum(IF(id_grado=9,1,0)) as e4'),
-                    DB::raw('sum(IF(id_grado=10,1,0)) as e5'),
-                    DB::raw('sum(IF(id_grado=11,1,0)) as e6'),
+                    DB::raw('sum(IF(grado_id=6,1,0)) as e1'),
+                    DB::raw('sum(IF(grado_id=7,1,0)) as e2'),
+                    DB::raw('sum(IF(grado_id=8,1,0)) as e3'),
+                    DB::raw('sum(IF(grado_id=9,1,0)) as e4'),
+                    DB::raw('sum(IF(grado_id=10,1,0)) as e5'),
+                    DB::raw('sum(IF(grado_id=11,1,0)) as e6'),
                 )->groupBy('idiiee', 'codmod', 'iiee', 'nivel', 'gestion', 'area')->get();
                 return $query;
 
@@ -4096,11 +4096,11 @@ class MatriculaGeneralRepositorio
                     DB::raw('sum(IF(sexo_id=1,1,0)) as th'),
                     DB::raw('sum(IF(sexo_id=2 ,1,0)) as tm'),
 
-                    DB::raw('sum(IF(id_grado=1,1,0)) as e1'),
-                    DB::raw('sum(IF(id_grado=2,1,0)) as e2'),
-                    DB::raw('sum(IF(id_grado=3,1,0)) as e3'),
-                    DB::raw('sum(IF(id_grado=4,1,0)) as e4'),
-                    DB::raw('sum(IF(id_grado=5,1,0)) as e5'),
+                    DB::raw('sum(IF(grado_id=1,1,0)) as e1'),
+                    DB::raw('sum(IF(grado_id=2,1,0)) as e2'),
+                    DB::raw('sum(IF(grado_id=3,1,0)) as e3'),
+                    DB::raw('sum(IF(grado_id=4,1,0)) as e4'),
+                    DB::raw('sum(IF(grado_id=5,1,0)) as e5'),
                 )->groupBy('idiiee', 'codmod', 'iiee', 'nivel', 'gestion', 'area')->get();
                 return $query;
 
@@ -4140,10 +4140,10 @@ class MatriculaGeneralRepositorio
                     DB::raw('sum(IF(sexo_id=1,1,0)) as th'),
                     DB::raw('sum(IF(sexo_id=2 ,1,0)) as tm'),
 
-                    DB::raw('sum(IF(id_grado=6,1,0)) as e1'),
-                    DB::raw('sum(IF(id_grado=7,1,0)) as e2'),
-                    DB::raw('sum(IF(id_grado=8,1,0)) as e3'),
-                    DB::raw('sum(IF(id_grado=9,1,0)) as e4'),
+                    DB::raw('sum(IF(grado_id=6,1,0)) as e1'),
+                    DB::raw('sum(IF(grado_id=7,1,0)) as e2'),
+                    DB::raw('sum(IF(grado_id=8,1,0)) as e3'),
+                    DB::raw('sum(IF(grado_id=9,1,0)) as e4'),
                 )->groupBy('idiiee', 'codmod', 'iiee', 'nivel', 'gestion', 'area')->get();
                 return $query;
 

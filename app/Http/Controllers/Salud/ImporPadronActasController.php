@@ -131,7 +131,7 @@ class ImporPadronActasController extends Controller
                                 'nombre_municipio' => $row['nombre_municipio'],
                                 'departamento' => $row['departamento'],
                                 'provincia' => $row['provincia'],
-                                'distrito' => $row['distrito'],
+                                'distrito' => $row['distrito'] == 'RAIMONDI' ? 'RAYMONDI' : $row['distrito'],
                                 'fecha_inicial' => $this->cambiarFormat($row['fecha_inicial']),
                                 'fecha_final' => $this->cambiarFormat($row['fecha_final']),
                                 'fecha_envio' => $this->cambiarFormat($row['fecha_envio']),
