@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ImporPadronWeb extends Model
 {
     use HasFactory;
-
+    public $timestamps = false;
     protected $table = "edu_impor_padronweb";
 
     /**
@@ -63,8 +63,8 @@ class ImporPadronWeb extends Model
         'fecha_Act'
     ];
 
-    protected $hide = [
-        'created_at',
-        'updated_at'
-    ];
+    // protected $hide = [
+    //     'created_at',
+    //     'updated_at'
+    // ];
 }

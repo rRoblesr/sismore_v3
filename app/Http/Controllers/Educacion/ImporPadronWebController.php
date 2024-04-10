@@ -95,51 +95,46 @@ class ImporPadronWebController extends Controller
                         $row['cod_nivelmod'] . //niv_mod
                         $row['nivel_modalidad'] . //d_niv_mod
 
-                        $row['modalidad'] . //modalidad
                         $row['forma'] . //d_forma
                         $row['cod_car'] . //cod_car
                         $row['caracteristica'] . //d_cod_car
                         $row['cod_genero'] . //tipssexo
-
                         $row['genero'] . //d_tipssexo
+
                         $row['cod_gest'] . //gestion
                         $row['gestion'] . //d_gestion
                         $row['cod_ges_dep'] . //ges_dep
                         $row['gestion_dependencia'] . //d_ges_dep
-
                         $row['director'] . //director
-                        $row['telefono'] . //telefono
-                        $row['email'] . //email
-                        $row['direccion_centro_educativo'] . //dir_cen
-                        $row['localidad'] . //localidad
 
+                        $row['telefono'] . //telefono
+                        $row['direccion_centro_educativo'] . //dir_cen
                         $row['codcp_inei'] . //codcp_inei
                         $row['cod_ccpp'] . //codccpp
                         $row['centro_poblado'] . //cen_pob
+
                         $row['cod_area'] . //area_censo
                         $row['area_geografica'] . //dareacenso
-
                         $row['codgeo'] . //codgeo
                         $row['provincia'] . //d_prov
                         $row['distrito'] . //d_dist
+
+                        $row['d_region'] . //codooii
                         $row['codooii'] . //codooii
                         $row['ugel'] . //d_dreugel
-
                         $row['nlat_ie'] . //no tenia
                         $row['nlong_ie'] . //no tenia
+                        
                         $row['cod_tur'] . //cod_tur
                         $row['turno'] . //d_cod_tur
                         $row['cod_estado'] . //estado
-
                         $row['estado'] . //d_estado
                         $row['talum_hom'] . //talum_hom
+ 
                         $row['talum_muj'] . //talum_muj
                         $row['talumno'] . //talumno
                         $row['tdocente'] . //tdocente
-
-                        $row['tseccion'] . //tseccion
-                        $row['fecha_registro'] . //fechareg
-                        $row['fecha_act']; //fecha_act
+                        $row['tseccion']; //tseccion
                 }
             }
         } catch (Exception $e) {
@@ -162,77 +157,73 @@ class ImporPadronWebController extends Controller
                 foreach ($value as $row) {
                     $padronWeb = ImporPadronWeb::Create([
                         'importacion_id' => $importacion->id,
+
                         'cod_Mod' => $row['cod_mod'],
                         'cod_Local' => $row['cod_local'],
                         'cen_Edu' => $row['institucion_educativa'],
                         'niv_Mod' => $row['cod_nivelmod'],
                         'd_Niv_Mod' => $row['nivel_modalidad'],
 
-                        'modalidad' => $row['modalidad'] ? $row['modalidad'] : '',
                         'd_Forma' => $row['forma'],
                         'cod_Car' => $row['cod_car'],
                         'd_Cod_Car' => $row['caracteristica'],
                         'TipsSexo' => $row['cod_genero'],
-
                         'd_TipsSexo' => $row['genero'],
+
                         'gestion' => $row['cod_gest'],
                         'd_Gestion' => $row['gestion'],
                         'ges_Dep' => $row['cod_ges_dep'],
                         'd_Ges_Dep' => $row['gestion_dependencia'],
-
                         'director' => $row['director'],
-                        'telefono' => $row['telefono'],
-                        'email' => $row['email'],
-                        'dir_Cen' => $row['direccion_centro_educativo'],
-                        'localidad' => $row['localidad'],
 
+                        'telefono' => $row['telefono'],
+                        'dir_Cen' => $row['direccion_centro_educativo'],
                         'codcp_Inei' => $row['codcp_inei'],
                         'codccpp' => $row['cod_ccpp'],
                         'cen_Pob' => $row['centro_poblado'],
+
                         'area_Censo' => $row['cod_area'],
                         'd_areaCenso' => $row['area_geografica'],
-
                         'codGeo' => $row['codgeo'],
                         'd_Prov' => $row['provincia'],
                         'd_Dist' => $row['distrito'],
+
+                        'region' => $row['d_region'],
                         'codOOII' => $row['codooii'],
                         'd_DreUgel' => $row['ugel'],
-
                         'nLat_IE' => $row['nlat_ie'],
                         'nLong_IE' => $row['nlong_ie'],
+
                         'cod_Tur' => $row['cod_tur'],
                         'estado' => $row['cod_estado'],
                         'd_Estado' => $row['estado'],
-
                         'D_Cod_Tur' => $row['turno'],
                         'tAlum_Hom' => $row['talum_hom'],
+
                         'tAlum_Muj' => $row['talum_muj'],
                         'tAlumno' => $row['talumno'],
                         'tDocente' => $row['tdocente'],
-
-                        'tSeccion' => $row['tseccion'],
-                        'fechaReg' => $this->fechax($row['fecha_registro']),
-                        'fecha_Act' => $this->fechax($row['fecha_act'])
+                        'tSeccion' => $row['tseccion']
                     ]);
                     //var_dump($padronWeb->fechaReg);//var_dump($padronWeb->fecha_Act);
                 }
             }
         } catch (Exception $e) {
-            $importacion->estado = 'EL';
-            $importacion->save();
+            // $importacion->estado = 'EL';
+            // $importacion->save();
 
             $mensaje = "Error en la carga de datos, verifique los datos de su archivo y/o comuniquese con el administrador del sistema" . $e->getMessage();
-            $tipo = 'danger';
+            // $tipo = 'danger';
             $this->json_output(400, $mensaje);
         }
 
         try {
             $procesar = DB::select('call edu_pa_procesarPadronWeb(?,?)', [$importacion->id, auth()->user()->id]);
         } catch (Exception $e) {
-            $importacion->estado = 'EL';
-            $importacion->save();
+            // $importacion->estado = 'EL';
+            // $importacion->save();
             $mensaje = "Error al procesar la normalizacion de datos." . $e;
-            $tipo = 'danger';
+            // $tipo = 'danger';
             $this->json_output(400, $mensaje);
         }
         $mensaje = "Archivo excel subido y Procesado correctamente .";
