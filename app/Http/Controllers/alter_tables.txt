@@ -961,6 +961,36 @@ BEGIN
 END
 
 
+# sirve para exportar padron web
+
+SELECT 
+	ie.codModular, ie.codLocal, ie.nombreInstEduc, nm.codigo, nm.nombre, 
+	ff.nombre, cc.codigo, cc.nombre, gg.codigo, gg.nombre,
+    tg1.codigo, tg1.nombre, tg2.codigo, tg2.nombre, ie.nombreDirector,
+    ie.telefono, ie.direccion, cp.codINEI, cp.codUEMinedu,cp.nombre,
+    aa.codigo, aa.nombre, ub1.codigo, ub2.nombre,ub1.nombre,
+    uu2.nombre, uu1.codigo, uu1.nombre, ie.coorGeoLatitud,ie.coordGeoLongitud,
+    tt.codigo, tt.nombre, ei.codigo, ei.nombre,pw.total_alumno_m,
+    pw.total_alumno_f,pw.total_alumno,pw.total_docente,pw.total_seccion
+FROM edu_padronweb pw
+inner join edu_institucioneducativa ie 	on ie.id=pw.institucioneducativa_id 
+inner join edu_nivelmodalidad nm 		on nm.id=ie.NivelModalidad_id
+inner join edu_forma ff 				on ff.id=ie.Forma_id
+inner join edu_caracteristica cc 		on cc.id=ie.Caracteristica_id
+inner join edu_genero gg 				on gg.id=ie.Genero_id
+inner join edu_tipogestion tg1 			on tg1.id=ie.TipoGestion_id
+inner join edu_tipogestion tg2 			on tg2.id=tg1.dependencia
+inner join edu_ugel uu1 				on uu1.id=ie.Ugel_id
+inner join edu_ugel uu2 				on uu2.id=uu1.dependencia
+inner join edu_area aa 					on aa.id=ie.Area_id
+inner join edu_estadoinsedu ei 			on ei.id=ie.EstadoInsEdu_id
+inner join edu_turno tt 				on tt.id=ie.Turno_id
+inner join edu_centropoblado cp 		on cp.id=ie.CentroPoblado_id
+inner join par_ubigeo ub1 				on ub1.id=cp.Ubigeo_id
+inner join par_ubigeo ub2 				on ub2.id=ub1.dependencia
+WHERE pw.importacion_id=2426;
+
+####
 
 
 
