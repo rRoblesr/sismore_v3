@@ -91,6 +91,7 @@ class IndicadorGeneralController extends Controller
             "recordsTotal" => $start,
             "recordsFiltered" => $length,
             "data" => $data,
+            "data2" => session()->all(),
         );
         return response()->json($result);
     }

@@ -39,7 +39,8 @@
                                 <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf(6)"
                                     title='FICHA TÉCNICA'><i class="fas fa-file"></i> Ficha Técnica</button>
                                 <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
-                                    title='ACTUALIZAR'><i class=" fas fa-history"></i> Actualizar</button>{{-- {{ route('indicador.nuevos.01.print') }} --}}
+                                    title='ACTUALIZAR'><i class=" fas fa-history"></i>
+                                    Actualizar</button>{{-- {{ route('indicador.nuevos.01.print') }} --}}
                                 <button type="button" class="btn btn-orange-0 btn-xs" onclick="printer()"
                                     title='IMPRIMIR'><i class="fa fa-print"></i></button>
 
@@ -137,7 +138,8 @@
                                         <span data-plugin="counterup" id="ebr"></span>
                                     </h4>
                                     <p class="mb-0 mt-1 text-truncate">
-                                        <a href="{{ route('matriculageneral.ebr.principal') }}" title="Ir a Matricula EBR">Matricula EBR</a>
+                                        <a href="{{ route('matriculageneral.ebr.principal') }}"
+                                            title="Ir a Matricula EBR">Matricula EBR</a>
                                     </p>
                                 </div>
                             </div>
@@ -168,7 +170,8 @@
                                         <span data-plugin="counterup" id="ebe"></span>
                                     </h4>
                                     <p class="mb-0 mt-1 text-truncate">
-                                        <a href="{{ route('matriculageneral.ebe.principal') }}" title="Ir a Matricula EBE">Matricula EBE</a>
+                                        <a href="{{ route('matriculageneral.ebe.principal') }}"
+                                            title="Ir a Matricula EBE">Matricula EBE</a>
                                     </p>
                                 </div>
                             </div>
@@ -199,7 +202,8 @@
                                         <span data-plugin="counterup" id="eba"></span>
                                     </h4>
                                     <p class="mb-0 mt-1 text-truncate">
-                                        <a href="{{ route('matriculageneral.eba.principal') }}"title="Ir a Matricula EBA">Matricula EBA</a>
+                                        <a href="{{ route('matriculageneral.eba.principal') }}"title="Ir a Matricula EBA">Matricula
+                                            EBA</a>
                                     </p>
                                 </div>
                             </div>
@@ -390,20 +394,20 @@
                     //$('#bbasico').css('width','100px');
                     $('#bbasico').css('width', data.ind1 + '%')
                         .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
-                        .addClass(data.ind1 > 84 ? 'bg-success-0' : (data.ind1 > 49 ? 'bg-orange-0' :
-                            'bg-warning-0'));
-                    $('#bebr').css('width', data.ind2 + '%').removeClass(
-                            'bg-success-0 bg-orange-0 bg-warning-0')
-                        .addClass(data.ind2 > 84 ? 'bg-success-0' : (data.ind2 > 49 ? 'bg-orange-0' :
-                            'bg-warning-0'));
-                    $('#bebe').css('width', data.ind3 + '%').removeClass(
-                            'bg-success-0 bg-orange-0 bg-warning-0')
-                        .addClass(data.ind3 > 84 ? 'bg-success-0' : (data.ind3 > 49 ? 'bg-orange-0' :
-                            'bg-warning-0'));
-                    $('#beba').css('width', data.ind4 + '%').removeClass(
-                            'bg-success-0 bg-orange-0 bg-warning-0')
-                        .addClass(data.ind4 > 84 ? 'bg-success-0' : (data.ind4 > 49 ? 'bg-orange-0' :
-                            'bg-warning-0'));
+                        .addClass(data.ind1 > 84 ? 'bg-success-0' : (data.ind1 > 49 ? 'bg-warning-0' :
+                            'bg-orange-0'));
+                    $('#bebr').css('width', data.ind2 + '%')
+                        .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
+                        .addClass(data.ind2 > 84 ? 'bg-success-0' : (data.ind2 > 49 ? 'bg-warning-0' :
+                            'bg-orange-0'));
+                    $('#bebe').css('width', data.ind3 + '%')
+                        .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
+                        .addClass(data.ind3 > 84 ? 'bg-success-0' : (data.ind3 > 49 ? 'bg-warning-0' :
+                            'bg-orange-0'));
+                    $('#beba').css('width', data.ind4 + '%')
+                        .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
+                        .addClass(data.ind4 > 84 ? 'bg-success-0' : (data.ind4 > 49 ? 'bg-warning-0' :
+                            'bg-orange-0'));
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");

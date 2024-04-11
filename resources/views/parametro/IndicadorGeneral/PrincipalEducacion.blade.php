@@ -7,25 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 
     <style>
-        .tablex thead th {
-            padding: 6px;
-            text-align: center;
-        }
-
-        .tablex thead td {
-            padding: 6px;
-            text-align: center;
-            vertical-align: middle;
-            font-weight: bold;
-        }
-
-        .tablex tbody td,
-        .tablex tbody th,
-        .tablex tfoot td,
-        .tablex tfoot th {
-            padding: 6px;
-        }
-
         .centrarmodal {
             display: flex;
             justify-content: center;

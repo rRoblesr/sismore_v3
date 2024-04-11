@@ -146,8 +146,8 @@
                     <div class="mt-0 font-9">
                         <h6 class="">Avance <span class="float-right" id="icard2">0%</span></h6>
                         <div class="progress progress-sm m-0">
-                            <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="90" aria-valuemin="0"
-                                aria-valuemax="100" style="width: 100%" id="bcard2">
+                            <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="90"
+                                aria-valuemin="0" aria-valuemax="100" style="width: 100%" id="bcard2">
                                 <span class="sr-only">0% Complete</span>
                             </div>
                         </div>
@@ -450,20 +450,20 @@
                         //$('#bbasico').css('width','100px');
                         $('#bcard1').css('width', data.ind1 + '%')
                             .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
-                            .addClass(data.ind1 > 84 ? 'bg-success-0' : (data.ind1 > 49 ? 'bg-orange-0' :
-                                'bg-warning-0'));
-                        $('#bcard2').css('width', data.ind2 + '%').removeClass(
-                                'bg-success-0 bg-orange-0 bg-warning-0')
-                            .addClass(data.ind2 > 84 ? 'bg-success-0' : (data.ind2 > 49 ? 'bg-orange-0' :
-                                'bg-warning-0'));
-                        $('#bcard3').css('width', data.ind3 + '%').removeClass(
-                                'bg-success-0 bg-orange-0 bg-warning-0')
-                            .addClass(data.ind3 > 84 ? 'bg-success-0' : (data.ind3 > 49 ? 'bg-orange-0' :
-                                'bg-warning-0'));
-                        $('#bcard4').css('width', data.ind4 + '%').removeClass(
-                                'bg-success-0 bg-orange-0 bg-warning-0')
-                            .addClass(data.ind4 > 84 ? 'bg-success-0' : (data.ind4 > 49 ? 'bg-orange-0' :
-                                'bg-warning-0'));
+                            .addClass(data.ind1 > 84 ? 'bg-success-0' : (data.ind1 > 49 ? 'bg-warning-0' :
+                                'bg-orange-0'));
+                        $('#bcard2').css('width', data.ind2 + '%')
+                            .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
+                            .addClass(data.ind2 > 84 ? 'bg-success-0' : (data.ind2 > 49 ? 'bg-warning-0' :
+                                'bg-orange-0'));
+                        $('#bcard3').css('width', data.ind3 + '%')
+                            .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
+                            .addClass(data.ind3 > 84 ? 'bg-success-0' : (data.ind3 > 49 ? 'bg-warning-0' :
+                                'bg-orange-0'));
+                        $('#bcard4').css('width', data.ind4 + '%')
+                            .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
+                            .addClass(data.ind4 > 84 ? 'bg-success-0' : (data.ind4 > 49 ? 'bg-warning-0' :
+                                'bg-orange-0'));
                     } else if (div == "anal1") {
                         gAnidadaColumn(div,
                             data.info.categoria, data.info.series, '',
@@ -753,8 +753,9 @@
                 credits: false,
             });
         }
+
         function gPie2(div, datos, titulo, subtitulo, tituloserie) {
-            const colors= ['#5eb9aa', '#ef5350', '#f5bd22', '#ef5350'];
+            const colors = ['#5eb9aa', '#ef5350', '#f5bd22', '#ef5350'];
             // const colors = ["#5eb9aa", "#f5bd22", "#e65310"];
             Highcharts.chart(div, {
                 chart: {
