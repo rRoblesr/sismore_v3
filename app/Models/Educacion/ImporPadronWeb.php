@@ -23,7 +23,6 @@ class ImporPadronWeb extends Model
         'cen_Edu',
         'niv_Mod',
         'd_Niv_Mod',
-        'modalidad',
         'd_Forma',
         'cod_Car',
         'd_Cod_Car',
@@ -35,9 +34,7 @@ class ImporPadronWeb extends Model
         'd_Ges_Dep',
         'director',
         'telefono',
-        'email',
         'dir_Cen',
-        'localidad',
         'codcp_Inei',
         'codccpp',
         'cen_Pob',
@@ -46,6 +43,7 @@ class ImporPadronWeb extends Model
         'codGeo',
         'd_Prov',
         'd_Dist',
+        'region',
         'codOOII',
         'd_DreUgel',
         'nLat_IE',
@@ -58,9 +56,7 @@ class ImporPadronWeb extends Model
         'tAlum_Muj',
         'tAlumno',
         'tDocente',
-        'tSeccion',
-        'fechaReg',
-        'fecha_Act'
+        'tSeccion'
     ];
 
     // protected $hide = [

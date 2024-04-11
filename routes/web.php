@@ -204,7 +204,6 @@ Route::get('/educación/Importar/PadronWeb', [ImporPadronWebController::class, '
 Route::post('/ImporPadronWeb/Importar', [ImporPadronWebController::class, 'guardar'])->name('ImporPadronWeb.guardar');
 Route::post('/ImporPadronWeb/LI/{importacion_id}', [ImporPadronWebController::class, 'ListaImportada'])->name('ImporPadronWeb.listarimportados');
 Route::get('/ImporPadronWeb/Listar/ImportarDT', [ImporPadronWebController::class, 'ListarDTImportFuenteTodos'])->name('ImporPadronWeb.listar.importados');
-//Route::post('/ImporPadronWeb/ListaImportada', [ImporPadronWebController::class, 'ListaImportada'])->name('imporpadronweb.listarimportados');
 Route::get('/ImporPadronWeb/Eliminar/{id}', [ImporPadronWebController::class, 'eliminar'])->name('ImporPadronWeb.eliminar');
 Route::get('/ImporPadronWeb/Exportar', [ImporPadronWebController::class, 'exportar'])->name('imporpadronweb.exportar');
 Route::get('/ImporPadronWeb/Exportar/PadronWEB', [ImporPadronWebController::class, 'download'])->name('imporpadronweb.download');

@@ -19,15 +19,11 @@ class PadronWeb extends Model
     protected $fillable = [
         'importacion_id',
         'institucioneducativa_id',
-        'estadoinsedu_id',
-        'localidad',
-        'd_Fte_Dato',
         'total_alumno_m',
         'total_alumno_f',
         'total_alumno',
         'total_docente',
         'total_seccion',
-        'fecha_actual',
     ];
 
     protected $hidden = [

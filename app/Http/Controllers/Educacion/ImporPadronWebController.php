@@ -10,6 +10,7 @@ use App\Models\Administracion\Entidad;
 use App\Models\Educacion\Importacion;
 use App\Models\Educacion\ImporPadronWeb;
 use App\Models\Educacion\PadronWeb;
+use App\Repositories\Administracion\EntidadRepositorio;
 use App\Repositories\Educacion\ImporPadronWebRepositorio;
 use App\Utilities\Utilitario;
 use App\Repositories\Educacion\ImportacionRepositorio;
@@ -35,7 +36,6 @@ class ImporPadronWebController extends Controller
     {
         $fuente = $this->fuente;
         return view('educacion.ImporGeneral.Importar', compact('fuente'));
-
         //$mensaje = "";return view('educacion.ImporPadronWeb.Importar', compact('mensaje'));
     }
 
@@ -124,13 +124,13 @@ class ImporPadronWebController extends Controller
                         $row['ugel'] . //d_dreugel
                         $row['nlat_ie'] . //no tenia
                         $row['nlong_ie'] . //no tenia
-                        
+
                         $row['cod_tur'] . //cod_tur
                         $row['turno'] . //d_cod_tur
                         $row['cod_estado'] . //estado
                         $row['estado'] . //d_estado
                         $row['talum_hom'] . //talum_hom
- 
+
                         $row['talum_muj'] . //talum_muj
                         $row['talumno'] . //talumno
                         $row['tdocente'] . //tdocente
@@ -139,7 +139,6 @@ class ImporPadronWebController extends Controller
             }
         } catch (Exception $e) {
             $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto";
-            $tipo = 'danger';
             $this->json_output(403, $mensaje);
         }
 
@@ -209,21 +208,14 @@ class ImporPadronWebController extends Controller
                 }
             }
         } catch (Exception $e) {
-            // $importacion->estado = 'EL';
-            // $importacion->save();
-
             $mensaje = "Error en la carga de datos, verifique los datos de su archivo y/o comuniquese con el administrador del sistema" . $e->getMessage();
-            // $tipo = 'danger';
             $this->json_output(400, $mensaje);
         }
 
         try {
             $procesar = DB::select('call edu_pa_procesarPadronWeb(?,?)', [$importacion->id, auth()->user()->id]);
         } catch (Exception $e) {
-            // $importacion->estado = 'EL';
-            // $importacion->save();
             $mensaje = "Error al procesar la normalizacion de datos." . $e;
-            // $tipo = 'danger';
             $this->json_output(400, $mensaje);
         }
         $mensaje = "Archivo excel subido y Procesado correctamente .";
@@ -247,7 +239,7 @@ class ImporPadronWebController extends Controller
         $start = intval($rq->start);
         $length = intval($rq->length);
 
-        $query = ImportacionRepositorio::Listar_FuenteTodos('1');
+        $query = ImportacionRepositorio::Listar_FuenteTodos(ImporPadronWebController::$FUENTE);
         $data = [];
         foreach ($query as $key => $value) {
             $nom = '';
@@ -261,11 +253,7 @@ class ImporPadronWebController extends Controller
                 $ape = $xx[0];
             }
 
-            $ent = Entidad::select('adm_entidad.*');
-            $ent = $ent->join('adm_entidad as v2', 'v2.dependencia', '=', 'adm_entidad.id');
-            $ent = $ent->join('adm_entidad as v3', 'v3.dependencia', '=', 'v2.id');
-            $ent = $ent->where('v3.id', $value->entidad);
-            $ent = $ent->first();
+            $ent = Entidad::find($value->entidad);
 
             if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11)
                 $boton = '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" id="eliminar' . $value->id . '"><i class="fa fa-trash"></i> </button>';
@@ -277,7 +265,7 @@ class ImporPadronWebController extends Controller
                 date("d/m/Y", strtotime($value->fechaActualizacion)),
                 $value->fuente,
                 $nom . ' ' . $ape,
-                $ent ? $ent->apodo : '',
+                $ent ? $ent->abreviado : '',
                 date("d/m/Y", strtotime($value->created_at)),
                 $value->estado == "PR" ? "PROCESADO" : ($value->estado == "PE" ? "PENDIENTE" : "ELIMINADO"),
                 $boton . '&nbsp;' . $boton2,
@@ -287,50 +275,78 @@ class ImporPadronWebController extends Controller
             "draw" => $draw,
             "recordsTotal" => $start,
             "recordsFiltered" => $length,
-            "data" => $data
+            "data" => $data,
         );
         return response()->json($result);
     }
 
-    public function ListarDTImportFuenteTodosx()
-    {
-        $data = ImportacionRepositorio::Listar_FuenteTodos('1');
-        return datatables()
-            ->of($data)
-            ->editColumn('fechaActualizacion', '{{date("d/m/Y",strtotime($fechaActualizacion))}}')
-            ->editColumn('created_at', '{{date("d/m/Y",strtotime($created_at))}}')
-            ->editColumn('estado', function ($query) {
-                return $query->estado == "PR" ? "PROCESADO" : ($query->estado == "PE" ? "PENDIENTE" : "ELIMINADO");
-            })
-            ->addColumn('accion', function ($oo) {
-                if (date('Y-m-d', strtotime($oo->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11)
-                    $msn = '<button type="button" onclick="geteliminar(' . $oo->id . ')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> </button>';
-                else
-                    $msn = '';
-                return $msn;
-            })
-            ->addColumn('nombrecompleto', function ($oo) {
-                $nom = '';
-                if (strlen($oo->cnombre) > 0) {
-                    $xx = explode(' ', $oo->cnombre);
-                    $nom = $xx[0];
-                }
-                $ape = '';
-                if (strlen($oo->capellido1) > 0) {
-                    $xx = explode(' ', $oo->capellido1 . ' ' . $oo->capellido2);
-                    $ape = $xx[0];
-                }
-                return $nom . ' ' . $ape;
-            })
-            ->rawColumns(['fechaActualizacion', 'estado', 'accion', 'nombrecompleto'])
-            ->toJson();
-    }
-
-    // public function ListaImportada($importacion_id) //(Request $request, $importacion_id)
+    // public function ListarDTImportFuenteTodosx()
     // {
-    //     $data = ImporPadronWeb::where('importacion_id', $importacion_id)->get();
-    //     return DataTables::of($data)->make(true);
+    //     $data = ImportacionRepositorio::Listar_FuenteTodos('1');
+    //     return datatables()
+    //         ->of($data)
+    //         ->editColumn('fechaActualizacion', '{{date("d/m/Y",strtotime($fechaActualizacion))}}')
+    //         ->editColumn('created_at', '{{date("d/m/Y",strtotime($created_at))}}')
+    //         ->editColumn('estado', function ($query) {
+    //             return $query->estado == "PR" ? "PROCESADO" : ($query->estado == "PE" ? "PENDIENTE" : "ELIMINADO");
+    //         })
+    //         ->addColumn('accion', function ($oo) {
+    //             if (date('Y-m-d', strtotime($oo->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11)
+    //                 $msn = '<button type="button" onclick="geteliminar(' . $oo->id . ')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> </button>';
+    //             else
+    //                 $msn = '';
+    //             return $msn;
+    //         })
+    //         ->addColumn('nombrecompleto', function ($oo) {
+    //             $nom = '';
+    //             if (strlen($oo->cnombre) > 0) {
+    //                 $xx = explode(' ', $oo->cnombre);
+    //                 $nom = $xx[0];
+    //             }
+    //             $ape = '';
+    //             if (strlen($oo->capellido1) > 0) {
+    //                 $xx = explode(' ', $oo->capellido1 . ' ' . $oo->capellido2);
+    //                 $ape = $xx[0];
+    //             }
+    //             return $nom . ' ' . $ape;
+    //         })
+    //         ->rawColumns(['fechaActualizacion', 'estado', 'accion', 'nombrecompleto'])
+    //         ->toJson();
     // }
+
+    public function ListaImportada($importacion_id) //(Request $request, $importacion_id)
+    {
+        //$data = ImporPadronWeb::where('importacion_id', $importacion_id)->get();
+        $data = DB::table(DB::raw("(
+        SELECT 
+            ie.codModular as cod_mod,      ie.codLocal     as cod_local,                  ie.nombreInstEduc as institucion_educativa, nm.codigo as cod_nivelmod,         nm.nombre as nivel_modalidad,  
+            ff.nombre as forma,            cc.codigo       as cod_car,                    cc.nombre as carasteristica,                gg.codigo as cod_genero,           gg.nombre as genero,
+            tg1.codigo as cod_gest,        tg1.nombre      as gestion,                    tg2.codigo as cod_ges_dep,                  tg2.nombre as gestion_dependencia, ie.nombreDirector as director,
+            ie.telefono,                   ie.direccion    as direccion_centro_educativo, cp.codINEI as codcp_inei,                   cp.codUEMinedu as cod_ccpp,        cp.nombre as centro_poblado,
+            aa.codigo as cod_area,         aa.nombre       as area_geografica,            ub1.codigo as codgeo,                       ub2.nombre as provincia,           ub1.nombre as distrito,
+            uu2.nombre as d_region,        uu1.codigo      as codooii,                    uu1.nombre as ugel,                         ie.coorGeoLatitud as nlat_ie,      ie.coordGeoLongitud as nlong_ie,
+            tt.codigo as cod_tur,          tt.nombre       as turno,                      ei.codigo as cod_estado,                    ei.nombre as estado,               pw.total_alumno_m as talum_hom,
+            pw.total_alumno_f as talum_muj,pw.total_alumno as talumno,                    pw.total_docente as tdocente,               pw.total_seccion as tseccion
+        FROM edu_padronweb as pw
+        inner join edu_institucioneducativa as ie 	on ie.id=pw.institucioneducativa_id 
+        inner join edu_nivelmodalidad as nm 		on nm.id=ie.NivelModalidad_id
+        inner join edu_forma as ff 				    on ff.id=ie.Forma_id
+        inner join edu_caracteristica as cc 		on cc.id=ie.Caracteristica_id
+        inner join edu_genero as gg 				on gg.id=ie.Genero_id
+        inner join edu_tipogestion as tg1 			on tg1.id=ie.TipoGestion_id
+        inner join edu_tipogestion as tg2 			on tg2.id=tg1.dependencia
+        inner join edu_ugel as uu1 				    on uu1.id=ie.Ugel_id
+        left join edu_ugel as uu2 					on uu2.id=uu1.dependencia
+        inner join edu_area as aa 					on aa.id=ie.Area_id
+        inner join edu_estadoinsedu as ei 			on ei.id=ie.EstadoInsEdu_id
+        inner join edu_turno as tt 				    on tt.id=ie.Turno_id
+        inner join edu_centropoblado as cp 		    on cp.id=ie.CentroPoblado_id
+        inner join par_ubigeo as ub1 				on ub1.id=cp.Ubigeo_id
+        inner join par_ubigeo as ub2 				on ub2.id=ub1.dependencia
+        WHERE pw.importacion_id=$importacion_id            
+        ) as tb"))->get();
+        return DataTables::of($data)->make(true);
+    }
 
     // public function procesar($importacion_id)
     // {

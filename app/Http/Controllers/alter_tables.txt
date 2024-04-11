@@ -964,14 +964,14 @@ END
 # sirve para exportar padron web
 
 SELECT 
-	ie.codModular, ie.codLocal, ie.nombreInstEduc, nm.codigo, nm.nombre, 
-	ff.nombre, cc.codigo, cc.nombre, gg.codigo, gg.nombre,
-    tg1.codigo, tg1.nombre, tg2.codigo, tg2.nombre, ie.nombreDirector,
-    ie.telefono, ie.direccion, cp.codINEI, cp.codUEMinedu,cp.nombre,
-    aa.codigo, aa.nombre, ub1.codigo, ub2.nombre,ub1.nombre,
-    uu2.nombre, uu1.codigo, uu1.nombre, ie.coorGeoLatitud,ie.coordGeoLongitud,
-    tt.codigo, tt.nombre, ei.codigo, ei.nombre,pw.total_alumno_m,
-    pw.total_alumno_f,pw.total_alumno,pw.total_docente,pw.total_seccion
+	ie.codModular as cod_mod,      ie.codLocal     as cod_local,                  ie.nombreInstEduc as institucion_educativa, nm.codigo as cod_nivelmod,         nm.nombre as nivel_modalidad,  
+	ff.nombre as forma,            cc.codigo       as cod_car,                    cc.nombre as carasteristica,                gg.codigo as cod_genero,           gg.nombre as genero,
+    tg1.codigo as cod_gest,        tg1.nombre      as gestion,                    tg2.codigo as cod_ges_dep,                  tg2.nombre as gestion_dependencia, ie.nombreDirector as director,
+    ie.telefono,                   ie.direccion    as direccion_centro_educativo, cp.codINEI as codcp_inei,                   cp.codUEMinedu as cod_ccpp,        cp.nombre as centro_poblado,
+    aa.codigo as cod_area,         aa.nombre       as area_geografica,            ub1.codigo as codgeo,                       ub2.nombre as provincia,           ub1.nombre as distrito,
+    uu2.nombre as d_region,        uu1.codigo      as codooii,                    uu1.nombre as ugel,                         ie.coorGeoLatitud as nlat_ie,      ie.coordGeoLongitud as nlong_ie,
+    tt.codigo as cod_tur,          tt.nombre       as turno,                      ei.codigo as cod_estado,                    ei.nombre as estado,               pw.total_alumno_m as talum_hom,
+    pw.total_alumno_f as talum_muj,pw.total_alumno as talumno,                    pw.total_docente as tdocente,               pw.total_seccion as tseccion
 FROM edu_padronweb pw
 inner join edu_institucioneducativa ie 	on ie.id=pw.institucioneducativa_id 
 inner join edu_nivelmodalidad nm 		on nm.id=ie.NivelModalidad_id
@@ -981,14 +981,14 @@ inner join edu_genero gg 				on gg.id=ie.Genero_id
 inner join edu_tipogestion tg1 			on tg1.id=ie.TipoGestion_id
 inner join edu_tipogestion tg2 			on tg2.id=tg1.dependencia
 inner join edu_ugel uu1 				on uu1.id=ie.Ugel_id
-inner join edu_ugel uu2 				on uu2.id=uu1.dependencia
+left join edu_ugel uu2 				on uu2.id=uu1.dependencia
 inner join edu_area aa 					on aa.id=ie.Area_id
 inner join edu_estadoinsedu ei 			on ei.id=ie.EstadoInsEdu_id
 inner join edu_turno tt 				on tt.id=ie.Turno_id
 inner join edu_centropoblado cp 		on cp.id=ie.CentroPoblado_id
 inner join par_ubigeo ub1 				on ub1.id=cp.Ubigeo_id
 inner join par_ubigeo ub2 				on ub2.id=ub1.dependencia
-WHERE pw.importacion_id=2426;
+WHERE pw.importacion_id=383;
 
 ####
 

@@ -212,11 +212,7 @@ class ImporMatriculaGeneralController extends Controller
                 $ape = $xx[0];
             }
 
-            $ent = Entidad::select('adm_entidad.*');
-            $ent = $ent->join('adm_entidad as v2', 'v2.dependencia', '=', 'adm_entidad.id');
-            $ent = $ent->join('adm_entidad as v3', 'v3.dependencia', '=', 'v2.id');
-            $ent = $ent->where('v3.id', $value->entidad);
-            $ent = $ent->first();
+            $ent = Entidad::find($value->entidad);
 
             if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11)
                 $boton = '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" id="eliminar' . $value->id . '"><i class="fa fa-trash"></i> </button>';
@@ -228,7 +224,7 @@ class ImporMatriculaGeneralController extends Controller
                 date("d/m/Y", strtotime($value->fechaActualizacion)),
                 $value->fuente,
                 $nom . ' ' . $ape,
-                $ent ? $ent->apodo : '',
+                $ent ? $ent->abreviado : '',
                 date("d/m/Y", strtotime($value->created_at)),
                 $value->estado == "PR" ? "PROCESADO" : ($value->estado == "PE" ? "PENDIENTE" : "ELIMINADO"),
                 $boton . '&nbsp;' . $boton2,
@@ -242,40 +238,40 @@ class ImporMatriculaGeneralController extends Controller
         );
         return response()->json($result);
     }
-    public function ListarDTImportFuenteTodosx()
-    {
-        $permitidos = [3, 8, 9, 10, 11];
-        $data = ImportacionRepositorio::Listar_FuenteTodos($this->fuente);
-        return datatables()
-            ->of($data)
-            ->editColumn('fechaActualizacion', '{{date("d/m/Y",strtotime($fechaActualizacion))}}')
-            ->editColumn('created_at', '{{date("d/m/Y",strtotime($created_at))}}')
-            ->editColumn('estado', function ($query) {
-                return $query->estado == "PR" ? "PROCESADO" : ($query->estado == "PE" ? "PENDIENTE" : "ELIMINADO");
-            })
-            ->addColumn('accion', function ($oo) {
-                if (date('Y-m-d', strtotime($oo->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11)
-                    $msn = '<button type="button" onclick="geteliminar(' . $oo->id . ')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> </button>';
-                else
-                    $msn = '';
-                return $msn;
-            })
-            ->addColumn('nombrecompleto', function ($oo) {
-                $nom = '';
-                if (strlen($oo->cnombre) > 0) {
-                    $xx = explode(' ', $oo->cnombre);
-                    $nom = $xx[0];
-                }
-                $ape = '';
-                if (strlen($oo->capellido1) > 0) {
-                    $xx = explode(' ', $oo->capellido1 . ' ' . $oo->capellido2);
-                    $ape = $xx[0];
-                }
-                return $nom . ' ' . $ape;
-            })
-            ->rawColumns(['fechaActualizacion', 'estado', 'accion', 'created_at', 'nombrecompleto'])
-            ->toJson();
-    }
+    // public function ListarDTImportFuenteTodosx()
+    // {
+    //     $permitidos = [3, 8, 9, 10, 11];
+    //     $data = ImportacionRepositorio::Listar_FuenteTodos($this->fuente);
+    //     return datatables()
+    //         ->of($data)
+    //         ->editColumn('fechaActualizacion', '{{date("d/m/Y",strtotime($fechaActualizacion))}}')
+    //         ->editColumn('created_at', '{{date("d/m/Y",strtotime($created_at))}}')
+    //         ->editColumn('estado', function ($query) {
+    //             return $query->estado == "PR" ? "PROCESADO" : ($query->estado == "PE" ? "PENDIENTE" : "ELIMINADO");
+    //         })
+    //         ->addColumn('accion', function ($oo) {
+    //             if (date('Y-m-d', strtotime($oo->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11)
+    //                 $msn = '<button type="button" onclick="geteliminar(' . $oo->id . ')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> </button>';
+    //             else
+    //                 $msn = '';
+    //             return $msn;
+    //         })
+    //         ->addColumn('nombrecompleto', function ($oo) {
+    //             $nom = '';
+    //             if (strlen($oo->cnombre) > 0) {
+    //                 $xx = explode(' ', $oo->cnombre);
+    //                 $nom = $xx[0];
+    //             }
+    //             $ape = '';
+    //             if (strlen($oo->capellido1) > 0) {
+    //                 $xx = explode(' ', $oo->capellido1 . ' ' . $oo->capellido2);
+    //                 $ape = $xx[0];
+    //             }
+    //             return $nom . ' ' . $ape;
+    //         })
+    //         ->rawColumns(['fechaActualizacion', 'estado', 'accion', 'created_at', 'nombrecompleto'])
+    //         ->toJson();
+    // }
 
     public function ListaImportada($importacion_id)
     {

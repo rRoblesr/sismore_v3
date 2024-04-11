@@ -112,7 +112,6 @@
                                         <th>INSTITUCION_EDUCATIVA</th>
                                         <th>COD_NIVELMOD</th>
                                         <th>NIVEL_MODALIDAD</th>
-                                        <th>MODALIDAD</th>
                                         <th>FORMA</th>
                                         <th>COD_CAR</th>
                                         <th>CARACTERISTICA</th>
@@ -124,9 +123,7 @@
                                         <th>GESTION_DEPENDENCIA</th>
                                         <th>DIRECTOR</th>
                                         <th>TELEFONO</th>
-                                        <th>EMAIL</th>
                                         <th>DIRECCION_CENTRO_EDUCATIVO</th>
-                                        <th>LOCALIDAD</th>
                                         <th>CODCP_INEI</th>
                                         <th>COD_CCPP</th>
                                         <th>CENTRO_POBLADO</th>
@@ -135,6 +132,7 @@
                                         <th>CODGEO</th>
                                         <th>PROVINCIA</th>
                                         <th>DISTRITO</th>
+                                        <th>D_REGION</th>
                                         <th>CODOOII</th>
                                         <th>UGEL</th>
                                         <th>NLAT_IE</th>
@@ -148,8 +146,6 @@
                                         <th>TALUMNO</th>
                                         <th>TDOCENTE</th>
                                         <th>TSECCION</th>
-                                        <th>FECHA_REGISTRO</th>
-                                        <th>FECHA_ACT</th>
 
                                     </thead>
                                 @break
@@ -690,64 +686,60 @@
                             "dataType": 'JSON',
                         },
                         "columns": [{
-                                data: 'cod_Mod',
-                                name: 'cod_Mod'
+                                data: 'cod_mod',
+                                name: 'cod_mod'
                             },
                             {
-                                data: 'cod_Local',
-                                name: 'cod_Local'
+                                data: 'cod_local',
+                                name: 'cod_local'
                             },
                             {
-                                data: 'cen_Edu',
-                                name: 'cen_Edu'
+                                data: 'institucion_educativa',
+                                name: 'institucion_educativa'
                             },
                             {
-                                data: 'niv_Mod',
-                                name: 'niv_Mod'
+                                data: 'cod_nivelmod',
+                                name: 'cod_nivelmod'
                             },
                             {
-                                data: 'd_Niv_Mod',
-                                name: 'd_Niv_Mod'
+                                data: 'nivel_modalidad',
+                                name: 'nivel_modalidad'
                             },
                             {
-                                data: 'modalidad',
-                                name: 'modalidad'
+                                data: 'forma',
+                                name: 'forma'
                             },
                             {
-                                data: 'd_Forma',
-                                name: 'd_Forma'
+                                data: 'cod_car',
+                                name: 'cod_car'
                             },
                             {
-                                data: 'cod_Car',
-                                name: 'cod_Car'
+                                data: 'carasteristica',
+                                name: 'carasteristica'
                             },
                             {
-                                data: 'd_Cod_Car',
-                                name: 'd_Cod_Car'
+                                data: 'cod_genero',
+                                name: 'cod_genero'
                             },
                             {
-                                data: 'TipsSexo',
-                                name: 'TipsSexo'
+                                data: 'genero',
+                                name: 'genero'
                             },
                             {
-                                data: 'd_TipsSexo',
-                                name: 'd_TipsSexo'
+                                data: 'cod_gest',
+                                name: 'cod_gest'
                             },
                             {
                                 data: 'gestion',
                                 name: 'gestion'
                             },
                             {
-                                data: 'd_Gestion',
-                                name: 'd_Gestion'
+                                data: 'cod_ges_dep',
+                                name: 'cod_ges_dep'
                             },
                             {
-                                data: 'ges_Dep',
-                                name: 'ges_Dep'
-                            },
-                            {
-                                data: 'd_Ges_Dep',
-                                name: 'd_Ges_Dep'
+                                data: 'gestion_dependencia',
+                                name: 'gestion_dependencia'
                             },
                             {
                                 data: 'director',
@@ -758,108 +750,96 @@
                                 name: 'telefono'
                             },
                             {
-                                data: 'email',
-                                name: 'email'
+                                data: 'direccion_centro_educativo',
+                                name: 'direccion_centro_educativo'
                             },
                             {
-                                data: 'dir_Cen',
-                                name: 'dir_Cen'
+                                data: 'codcp_inei',
+                                name: 'codcp_inei'
                             },
                             {
-                                data: 'localidad',
-                                name: 'localidad'
+                                data: 'cod_ccpp',
+                                name: 'cod_ccpp'
                             },
                             {
-                                data: 'codcp_Inei',
-                                name: 'codcp_Inei'
+                                data: 'centro_poblado',
+                                name: 'centro_poblado'
                             },
                             {
-                                data: 'codccpp',
-                                name: 'codccpp'
+                                data: 'cod_area',
+                                name: 'cod_area'
                             },
                             {
-                                data: 'cen_Pob',
-                                name: 'cen_Pob'
+                                data: 'area_geografica',
+                                name: 'area_geografica'
                             },
                             {
-                                data: 'area_Censo',
-                                name: 'area_Censo'
+                                data: 'codgeo',
+                                name: 'codgeo'
                             },
                             {
-                                data: 'd_areaCenso',
-                                name: 'd_areaCenso'
+                                data: 'provincia',
+                                name: 'provincia'
                             },
                             {
-                                data: 'codGeo',
-                                name: 'codGeo'
+                                data: 'distrito',
+                                name: 'distrito'
                             },
                             {
-                                data: 'd_Prov',
-                                name: 'd_Prov'
+                                data: 'd_region',
+                                name: 'd_region'
                             },
                             {
-                                data: 'd_Dist',
-                                name: 'd_Dist'
+                                data: 'codooii',
+                                name: 'codooii'
                             },
                             {
-                                data: 'codOOII',
-                                name: 'codOOII'
+                                data: 'ugel',
+                                name: 'ugel'
                             },
                             {
-                                data: 'd_DreUgel',
-                                name: 'd_DreUgel'
+                                data: 'nlat_ie',
+                                name: 'nlat_ie'
                             },
                             {
-                                data: 'nLat_IE',
-                                name: 'nLat_IE'
+                                data: 'nlong_ie',
+                                name: 'nlong_ie'
                             },
                             {
-                                data: 'nLong_IE',
-                                name: 'nLong_IE'
+                                data: 'cod_tur',
+                                name: 'cod_tur'
                             },
                             {
-                                data: 'cod_Tur',
-                                name: 'cod_Tur'
+                                data: 'turno',
+                                name: 'turno'
                             },
                             {
-                                data: 'D_Cod_Tur',
-                                name: 'D_Cod_Tur'
+                                data: 'cod_estado',
+                                name: 'cod_estado'
                             },
                             {
                                 data: 'estado',
                                 name: 'estado'
                             },
                             {
-                                data: 'd_Estado',
-                                name: 'd_Estado'
+                                data: 'talum_hom',
+                                name: 'talum_hom'
                             },
                             {
-                                data: 'tAlum_Hom',
-                                name: 'tAlum_Hom'
+                                data: 'talum_muj',
+                                name: 'talum_muj'
                             },
                             {
-                                data: 'tAlum_Muj',
-                                name: 'tAlum_Muj'
+                                data: 'talumno',
+                                name: 'talumno'
                             },
                             {
-                                data: 'tAlumno',
-                                name: 'tAlumno'
+                                data: 'tdocente',
+                                name: 'tdocente'
                             },
                             {
-                                data: 'tDocente',
-                                name: 'tDocente'
-                            },
-                            {
-                                data: 'tSeccion',
-                                name: 'tSeccion'
-                            },
-                            {
-                                data: 'fechaReg',
-                                name: 'fechaReg'
-                            },
-                            {
-                                data: 'fecha_Act',
-                                name: 'fecha_Act'
+                                data: 'tseccion',
+                                name: 'tseccion'
                             },
                         ],
                     });

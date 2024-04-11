@@ -270,11 +270,7 @@ class CuadroAsigPersonalController extends Controller
                 $ape = $xx[0];
             }
 
-            $ent = Entidad::select('adm_entidad.*');
-            $ent = $ent->join('adm_entidad as v2', 'v2.dependencia', '=', 'adm_entidad.id');
-            $ent = $ent->join('adm_entidad as v3', 'v3.dependencia', '=', 'v2.id');
-            $ent = $ent->where('v3.id', $value->entidad);
-            $ent = $ent->first();
+            $ent = Entidad::find($value->entidad);
 
             if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11)
                 $boton = '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" id="eliminar' . $value->id . '"><i class="fa fa-trash"></i> </button>';
@@ -286,7 +282,7 @@ class CuadroAsigPersonalController extends Controller
                 date("d/m/Y", strtotime($value->fechaActualizacion)),
                 $value->fuente,
                 $nom . ' ' . $ape,
-                $ent ? $ent->apodo : '',
+                $ent ? $ent->abreviado : '',
                 date("d/m/Y", strtotime($value->created_at)),
 
                 $value->estado == "PR" ? "PROCESADO" : ($value->estado == "PE" ? "PENDIENTE" : "ELIMINADO"),
