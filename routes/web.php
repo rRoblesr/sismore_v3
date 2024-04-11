@@ -123,7 +123,6 @@ use Illuminate\Support\Facades\DB;
 |
 */
 
-
 Auth::routes();
 
 Route::get('/', function () {

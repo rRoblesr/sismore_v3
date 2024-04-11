@@ -31,12 +31,28 @@ class IndicadorGeneralController extends Controller
 
     public function principalEducacion()
     {
+        $control = session('perfil_administrador_id');
+        $sistema = session('sistema_id');
+
         $instrumento = IndicadorGeneralRepositorio::instrumento(0);
         $tipo = IndicadorGeneralRepositorio::tipo(0);
         $dimension = IndicadorGeneralRepositorio::dimension();
         $unidad = IndicadorGeneralRepositorio::unidad();
         $frecuencia = IndicadorGeneralRepositorio::frecuencia();
-        $sector = Sector::all();
+        if ($control > 0) {
+            $sector = Sector::all();
+        } else {
+            switch ($sistema) {
+                case 1:
+                    $sector = Sector::where('id', 4)->get();
+                    break;
+                case 3:
+                    $sector = Sector::where('id', 14)->get();
+                    break;
+                default:
+                    break;
+            }
+        }
         //$provincia=Ubigeo::where(DB::raw('length(codigo)'),4)->where('dependencia',34)->get();
         // $provincia = Ubigeo::join('par_ubigeo as p', 'p.dependencia', '=', 'par_ubigeo.id')->select('p.id', 'p.codigo', 'p.nombre')->where('par_ubigeo.codigo', '25')->get();
 
@@ -49,7 +65,29 @@ class IndicadorGeneralController extends Controller
         $start = intval($rq->start);
         $length = intval($rq->length);
 
-        $query = IndicadorGeneral::select('id', 'codigo', 'nombre', 'descripcion', 'instrumento_id', 'tipo_id', 'dimension_id', 'unidad_id', 'frecuencia_id', 'fuente_dato', 'anio_base', 'valor_base', 'sector_id', 'oficina_id', 'estado')->orderBy('id', 'desc')->get();
+        $control = session('perfil_administrador_id');
+        $sistema = session('sistema_id');
+        if ($control > 0) {
+            $query = IndicadorGeneral::select('id', 'codigo', 'nombre', 'descripcion', 'instrumento_id', 'tipo_id', 'dimension_id', 'unidad_id', 'frecuencia_id', 'fuente_dato', 'anio_base', 'valor_base', 'sector_id', 'oficina_id', 'estado')
+                ->orderBy('id', 'desc')->get();
+        } else {
+            switch ($sistema) {
+                case 1:
+                    $query = IndicadorGeneral::select('id', 'codigo', 'nombre', 'descripcion', 'instrumento_id', 'tipo_id', 'dimension_id', 'unidad_id', 'frecuencia_id', 'fuente_dato', 'anio_base', 'valor_base', 'sector_id', 'oficina_id', 'estado')
+                        ->where('sector_id', 4)
+                        ->orderBy('id', 'desc')->get();
+                    break;
+                case 3:
+                    $query = IndicadorGeneral::select('id', 'codigo', 'nombre', 'descripcion', 'instrumento_id', 'tipo_id', 'dimension_id', 'unidad_id', 'frecuencia_id', 'fuente_dato', 'anio_base', 'valor_base', 'sector_id', 'oficina_id', 'estado')
+                        ->where('sector_id', 14)
+                        ->orderBy('id', 'desc')->get();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
         $data = [];
         foreach ($query as $key => $value) {
             $sector = Sector::find($value->sector_id);
