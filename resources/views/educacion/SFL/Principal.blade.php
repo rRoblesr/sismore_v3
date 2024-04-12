@@ -348,7 +348,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label>Fecha de Inscripción</label>
-                                        <input id="fecha_inscripcion" name="fecha_inscripcion" class="form-control"
+                                        <input id="fechainscripcion" name="fechainscripcion" class="form-control"
                                             type="date" placeholder="Ingrese fecha de registro">
                                         <span class="help-block"></span>
                                     </div>
@@ -784,6 +784,7 @@
                     $('[name="partidamodulares"]').val(data.sfl.partida_electronica);
                     $('[name="zonamodulares"]').val(data.sfl.zona_registral);
                     $('[name="fechamodulares"]').val(data.sfl.fecha_registro);
+                    $('[name="fechainscripcion"]').val(data.sfl.fecha_inscripcion);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     alert('Error get data from ajax');

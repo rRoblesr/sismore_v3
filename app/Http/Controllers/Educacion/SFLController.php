@@ -681,7 +681,9 @@ class SFLController extends Controller
             $ie->partida_electronica = $request->partidamodulares;
             $ie->zona_registral = $request->zonamodulares;
             $ie->fecha_registro = $request->fechamodulares;
-            $ie->documento = $documento;
+            $ie->fecha_inscripcion = $request->fechainscripcion;
+            if ($documento)
+                $ie->documento = $documento;
             $ie->save();
         } else {
             SFL::create([
@@ -691,6 +693,7 @@ class SFLController extends Controller
                 'partida_electronica' => $request->partidamodulares == '' ? NULL : $request->partidamodulares,
                 'zona_registral' => $request->zonamodulares == '' ? NULL : $request->zonamodulares,
                 'fecha_registro' => $request->fechamodulares,
+                'fecha_inscripcion' => $request->fechainscripcion,
                 'documento' => $documento,
             ]);
         }
