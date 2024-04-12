@@ -17,25 +17,6 @@
     <link href="assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
 
     <style>
-        .tablex thead th {
-            padding: 6px;
-            text-align: center;
-        }
-
-        .tablex thead td {
-            padding: 6px;
-            text-align: center;
-            vertical-align: middle;
-            font-weight: bold;
-        }
-
-        .tablex tbody td,
-        .tablex tbody th,
-        .tablex tfoot td,
-        .tablex tfoot th {
-            padding: 6px;
-        }
-
         .centrarmodal {
             display: flex;
             justify-content: center;
@@ -63,20 +44,20 @@
             /* #0080FF; */
         }
 
-        /* .tab-content {
-                                                                                                                                                                                                                                        border: 1px solid #dee2e6;
-                                                                                                                                                                                                                                        border-top: transparent;
-                                                                                                                                                                                                                                        padding: 15px;
-                                                                                                                                                                                                                                    }
+        .tab-content--- {
+            /* NO SE USA */
+            border: 1px solid #dee2e6;
+            border-top: transparent;
+            padding: 15px;
+        }
 
-                                                                                                                                                                                                                                    .tab-content .tab-pane {
-                                                                                                                                                                                                                                        background-color: #FFF;
-                                                                                                                                                                                                                                        color: #0080FF;
-                                                                                                                                                                                                                                        min-height: 200px;
-                                                                                                                                                                                                                                        height: auto;
-                                                                                                                                                                                                                                    } */
-
-        /*  */
+        .tab-content---- .tab-pane---- {
+            /* NO SE USA */
+            background-color: #FFF;
+            color: #0080FF;
+            min-height: 200px;
+            height: auto;
+        }
     </style>
 @endsection
 @section('content')
@@ -365,6 +346,12 @@
                                             type="date" placeholder="Ingrese fecha de registro">
                                         <span class="help-block"></span>
                                     </div>
+                                    <div class="col-md-4">
+                                        <label>Fecha de Inscripción</label>
+                                        <input id="fecha_inscripcion" name="fecha_inscripcion" class="form-control"
+                                            type="date" placeholder="Ingrese fecha de registro">
+                                        <span class="help-block"></span>
+                                    </div>
                                     {{-- <div class="col-md-4">
                                         <label for="documento">Cargar Documento</label><br>
                                         <label for="documento" class="btn btn-primary">
@@ -374,7 +361,7 @@
                                         <span class="help-block"></span>
                                     </div> --}}
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-12">
                                         <label>Cargar Documento</label>
                                         <div class="input-group">
                                             <input id="documentomodulares" name="documentomodulares"

@@ -16,6 +16,7 @@ use App\Models\Educacion\Importacion;
 use App\Models\Educacion\NivelModalidad;
 use App\Models\Educacion\Ugel;
 use App\Models\Parametro\Anio;
+use App\Models\Parametro\Mes;
 use App\Models\Parametro\Ubigeo;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\MatriculaGeneralRepositorio;
@@ -775,14 +776,24 @@ class MatriculaGeneralController extends Controller
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
                 return response()->json(compact('info', 'reg'));
             case 'anal2':
+                $periodo = Mes::select('codigo', 'abreviado as mes', DB::raw('0 as conteo'))->get();
                 $datax = MatriculaGeneralRepositorio::indicador01tabla($rq->div, $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion, 0, 0);
                 $info['cat'] = [];
                 $info['dat'] = [];
-                $xx = 0;
-                foreach ($datax as $key => $value) {
-                    $info['cat'][] = $this->mess[$value->mes - 1];
-                    $xx += $value->conteo;
-                    $info['dat'][] = $xx;
+                $mesmax = $datax->max('mes');
+                foreach ($periodo as $key => $pp) {
+                    $info['cat'][$key] = $pp->mes;
+                    if ($pp->codigo > $mesmax) {
+                        $info['dat'][$key] = null;
+                    } else {
+                        $info['dat'][$key] = 0;
+                        foreach ($datax as $dd) {
+                            if ($dd->mes == $pp->codigo) {
+                                $info['dat'][$key] = $key > 0 ? $info['dat'][$key - 1] + $dd->conteo : $dd->conteo;
+                                break;
+                            }
+                        }
+                    }
                 }
                 $reg['fuente'] = 'Siagie - MINEDU';
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
@@ -1544,14 +1555,24 @@ class MatriculaGeneralController extends Controller
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
                 return response()->json(compact('info', 'reg'));
             case 'anal2':
+                $periodo = Mes::select('codigo', 'abreviado as mes', DB::raw('0 as conteo'))->get();
                 $datax = MatriculaGeneralRepositorio::basicaregulartabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
                 $info['cat'] = [];
                 $info['dat'] = [];
-                $xx = 0;
-                foreach ($datax as $key => $value) {
-                    $info['cat'][] = $this->mess[$value->mes - 1];
-                    $xx += $value->conteo;
-                    $info['dat'][] = $xx;
+                $mesmax = $datax->max('mes');
+                foreach ($periodo as $key => $pp) {
+                    $info['cat'][$key] = $pp->mes;
+                    if ($pp->codigo > $mesmax) {
+                        $info['dat'][$key] = null;
+                    } else {
+                        $info['dat'][$key] = 0;
+                        foreach ($datax as $dd) {
+                            if ($dd->mes == $pp->codigo) {
+                                $info['dat'][$key] = $key > 0 ? $info['dat'][$key - 1] + $dd->conteo : $dd->conteo;
+                                break;
+                            }
+                        }
+                    }
                 }
 
                 $reg['fuente'] = 'Siagie - MINEDU';
@@ -2196,14 +2217,24 @@ class MatriculaGeneralController extends Controller
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
                 return response()->json(compact('info', 'reg'));
             case 'anal2':
+                $periodo = Mes::select('codigo', 'abreviado as mes', DB::raw('0 as conteo'))->get();
                 $datax = MatriculaGeneralRepositorio::basicaespecialtabla($rq->div,  $rq->anio, $rq->ugel, $rq->distrito,  $rq->dependencia);
                 $info['cat'] = [];
                 $info['dat'] = [];
-                $xx = 0;
-                foreach ($datax as $key => $value) {
-                    $info['cat'][] = $this->mess[$value->mes - 1];
-                    $xx += $value->conteo;
-                    $info['dat'][] = $xx;
+                $mesmax = $datax->max('mes');
+                foreach ($periodo as $key => $pp) {
+                    $info['cat'][$key] = $pp->mes;
+                    if ($pp->codigo > $mesmax) {
+                        $info['dat'][$key] = null;
+                    } else {
+                        $info['dat'][$key] = 0;
+                        foreach ($datax as $dd) {
+                            if ($dd->mes == $pp->codigo) {
+                                $info['dat'][$key] = $key > 0 ? $info['dat'][$key - 1] + $dd->conteo : $dd->conteo;
+                                break;
+                            }
+                        }
+                    }
                 }
 
                 $reg['fuente'] = 'Siagie - MINEDU';
@@ -2612,16 +2643,25 @@ class MatriculaGeneralController extends Controller
                 $reg['periodo'] = '' . $datax[0]->anio . ' - ' . $datax[$datax->count() - 1]->anio;
                 return response()->json(compact('info', 'reg'));
             case 'anal2':
+                $periodo = Mes::select('codigo', 'abreviado as mes', DB::raw('0 as conteo'))->get();
                 $datax = MatriculaGeneralRepositorio::basicaalternativatabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
                 $info['cat'] = [];
                 $info['dat'] = [];
-                $xx = 0;
-                foreach ($datax as $key => $value) {
-                    $info['cat'][] = $this->mess[$value->mes - 1];
-                    $xx += $value->conteo;
-                    $info['dat'][] = $xx;
+                $mesmax = $datax->max('mes');
+                foreach ($periodo as $key => $pp) {
+                    $info['cat'][$key] = $pp->mes;
+                    if ($pp->codigo > $mesmax) {
+                        $info['dat'][$key] = null;
+                    } else {
+                        $info['dat'][$key] = 0;
+                        foreach ($datax as $dd) {
+                            if ($dd->mes == $pp->codigo) {
+                                $info['dat'][$key] = $key > 0 ? $info['dat'][$key - 1] + $dd->conteo : $dd->conteo;
+                                break;
+                            }
+                        }
+                    }
                 }
-
                 $reg['fuente'] = 'Siagie - MINEDU';
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
@@ -3140,8 +3180,10 @@ class MatriculaGeneralController extends Controller
                     }
                 }
                 $info['series'] = [];
+                // return response()->json([$data->unique('sexo'), $xx]);
+                $pos = 0;
                 foreach ($data->unique('sexo') as $key => $value) {
-                    $info['series'][] = ["name" => $value->sexo, "data" => $xx[$key]];
+                    $info['series'][] = ["name" => $value->sexo, "data" => $xx[$pos++]];
                 }
 
                 $reg['fuente'] = 'Siagie - MINEDU';

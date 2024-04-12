@@ -774,6 +774,7 @@ class MatriculaGeneralRepositorio
                     ->join('edu_area as aa', 'aa.id', '=', 'ie.Area_id')
                     ->join('edu_tipogestion as tg', 'tg.id', '=', 'ie.TipoGestion_id')
                     ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'ie.NivelModalidad_id')
+                    ->join('par_sexo as ss', 'ss.id', '=', 'edu_matricula_general_detalle.sexo_id')
                     ->where('nm.tipo', 'EBR');
 
                 if ($ugel > 0) $query = $query->where('uu.id', $ugel);
@@ -786,7 +787,7 @@ class MatriculaGeneralRepositorio
                     }
                 }
                 $query = $query->select(
-                    'sexo as name',
+                    'ss.nombre as name',
                     DB::raw('count(edu_matricula_general_detalle.id) as y'),
                     DB::raw('count(edu_matricula_general_detalle.id) as yx'),
                 )->groupBy('name')->get();
@@ -1404,6 +1405,7 @@ class MatriculaGeneralRepositorio
                     ->join('edu_area as aa', 'aa.id', '=', 'ie.Area_id')
                     ->join('edu_tipogestion as tg', 'tg.id', '=', 'ie.TipoGestion_id')
                     ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'ie.NivelModalidad_id')
+                    ->join('par_sexo as ss', 'ss.id', '=', 'edu_matricula_general_detalle.sexo_id')
                     ->where('nm.tipo', 'EBR');
 
                 if ($ugel > 0) $query = $query->where('uu.id', $ugel);
@@ -1416,7 +1418,7 @@ class MatriculaGeneralRepositorio
                     }
                 }
                 $query = $query->select(
-                    'sexo as name',
+                    'ss.nombre as name',
                     DB::raw('count(edu_matricula_general_detalle.id) as y'),
                     DB::raw('count(edu_matricula_general_detalle.id) as yx'),
                 )->groupBy('name')->get();
@@ -1784,6 +1786,7 @@ class MatriculaGeneralRepositorio
                     ->join('edu_ugel as uu', 'uu.id', '=', 'ie.Ugel_id')
                     ->join('edu_tipogestion as tg', 'tg.id', '=', 'ie.TipoGestion_id')
                     ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'ie.NivelModalidad_id')
+                    ->join('par_sexo as ss', 'ss.id', '=', 'edu_matricula_general_detalle.sexo_id')
                     ->where('nm.tipo', 'EBE');
 
                 if ($ugel > 0) $query = $query->where('uu.id', $ugel);
@@ -1791,7 +1794,7 @@ class MatriculaGeneralRepositorio
                 if ($dependencia > 0) $query = $query->where('tg.id', $dependencia);
 
                 $query = $query->select(
-                    'sexo as name',
+                    'ss.nombre as name',
                     DB::raw('count(edu_matricula_general_detalle.id) as y'),
                     DB::raw('count(edu_matricula_general_detalle.id) as yx'),
                 )->groupBy('name')->get();
@@ -2703,6 +2706,7 @@ class MatriculaGeneralRepositorio
                     ->join('edu_centropoblado as cp', 'cp.id', '=', 'ie.CentroPoblado_id')
                     ->join('par_ubigeo as dt', 'dt.id', '=', 'cp.Ubigeo_id')
                     ->join('par_ubigeo as pv', 'pv.id', '=', 'dt.dependencia')
+                    ->join('par_sexo as ss', 'ss.id', '=', 'edu_matricula_general_detalle.sexo_id')
                     // ->join('edu_ugel as uu', 'uu.id', '=', 'ie.Ugel_id')
                     // ->join('edu_area as aa', 'aa.id', '=', 'ie.Area_id')
                     // ->join('edu_tipogestion as tg', 'tg.id', '=', 'ie.TipoGestion_id')
@@ -2726,7 +2730,7 @@ class MatriculaGeneralRepositorio
                                   when edad in (35,36,37,38,39) then "35-39"
                                   when edad in (40,41,42,43,44) then "40-44"
                                   else "45 a mas" end as grupos'),
-                    'sexo',
+                    'ss.nombre as sexo',
                     DB::raw('count(edu_matricula_general_detalle.id) as conteo'),
                 )->groupBy('grupos', 'sexo')->get();
                 return $query;
@@ -2747,6 +2751,7 @@ class MatriculaGeneralRepositorio
                     ->join('edu_area as aa', 'aa.id', '=', 'ie.Area_id')
                     ->join('edu_tipogestion as tg', 'tg.id', '=', 'ie.TipoGestion_id')
                     ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'ie.NivelModalidad_id')
+                    ->join('par_sexo as ss', 'ss.id', '=', 'edu_matricula_general_detalle.sexo_id')
                     ->where('nm.tipo', 'EBR');
 
                 if ($provincia > 0) $query = $query->where('pv.id', $provincia);
@@ -2754,7 +2759,7 @@ class MatriculaGeneralRepositorio
                 if ($nivel > 0) $query = $query->where('nm.id', $nivel);
 
                 $query = $query->select(
-                    'sexo as name',
+                    'ss.nombre as name',
                     DB::raw('count(edu_matricula_general_detalle.id) as y'),
                     DB::raw('count(edu_matricula_general_detalle.id) as yx'),
                 )->groupBy('name')->get();
@@ -2778,6 +2783,7 @@ class MatriculaGeneralRepositorio
                     ->join('edu_area as aa', 'aa.id', '=', 'ie.Area_id')
                     ->join('edu_tipogestion as tg', 'tg.id', '=', 'ie.TipoGestion_id')
                     ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'ie.NivelModalidad_id')
+                    ->join('par_sexo as ss', 'ss.id', '=', 'edu_matricula_general_detalle.sexo_id')
                     ->where('nm.tipo', 'EBR')->where('pais_nacimiento', '!=', 'PERÚ');
 
                 if ($provincia > 0) $query = $query->where('pv.id', $provincia);
@@ -2786,7 +2792,7 @@ class MatriculaGeneralRepositorio
 
                 $query = $query->select(
                     DB::raw('(case when pais_nacimiento in ("VENEZUELA","COLOMBIA","BRASIL","ARGENTINA","CHILE","BOLIVIA","ECUADOR","ESTADOS UNIDOS DE AMÉRICA","JAPON") then pais_nacimiento else  "OTROS" end) as pais'),
-                    'sexo',
+                    'ss.nombre as sexo',
                     DB::raw('count(edu_matricula_general_detalle.id) as conteo'),
                 )->groupBy('pais', 'sexo')->orderBy('conteo', 'desc')->get();
                 return $query;
@@ -2809,6 +2815,7 @@ class MatriculaGeneralRepositorio
                     ->join('edu_discapacidad as dd', 'dd.id', '=', 'discapacidad_id')
                     ->join('edu_tipogestion as tg', 'tg.id', '=', 'ie.TipoGestion_id')
                     ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'ie.NivelModalidad_id')
+                    ->join('par_sexo as ss', 'ss.id', '=', 'edu_matricula_general_detalle.sexo_id')
                     ->where('nm.tipo', 'EBR'); //->where('pais_nacimiento', '!=', 'PERÚ');
 
                 if ($provincia > 0) $query = $query->where('pv.id', $provincia);
@@ -2817,7 +2824,7 @@ class MatriculaGeneralRepositorio
 
                 $query = $query->select(
                     'dd.nombre as discapacidad',
-                    'sexo',
+                    'ss.nombre as sexo',
                     DB::raw('count(edu_matricula_general_detalle.id) as conteo'),
                 )->orderBy('conteo', 'desc')->groupBy('discapacidad', 'sexo')->get();
                 return $query;
@@ -3364,6 +3371,7 @@ class MatriculaGeneralRepositorio
                     // ->join('edu_area as aa', 'aa.id', '=', 'ie.Area_id')
                     // ->join('edu_tipogestion as tg', 'tg.id', '=', 'ie.TipoGestion_id')
                     ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'ie.NivelModalidad_id')
+                    ->join('par_sexo as ss', 'ss.id', '=', 'edu_matricula_general_detalle.sexo_id')
                     ->where('nm.tipo', 'EBE');
 
                 if ($provincia > 0) $query = $query->where('pv.id', $provincia);
@@ -3373,7 +3381,7 @@ class MatriculaGeneralRepositorio
                 $query = $query->select(
                     // DB::raw('case when ie.es_eib="NO" then "Intercural" else "Intercural Bilingue" end as eib'),
                     'uu.nombre as ugel',
-                    'sexo',
+                    'ss.nombre as sexo',
                     DB::raw('count(edu_matricula_general_detalle.id) as conteo')
                 )->groupBy('ugel', 'sexo')->get();
                 return $query;
@@ -3394,6 +3402,7 @@ class MatriculaGeneralRepositorio
                     ->join('edu_area as aa', 'aa.id', '=', 'ie.Area_id')
                     ->join('edu_tipogestion as tg', 'tg.id', '=', 'ie.TipoGestion_id')
                     ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'ie.NivelModalidad_id')
+                    ->join('par_sexo as ss', 'ss.id', '=', 'edu_matricula_general_detalle.sexo_id')
                     ->where('nm.tipo', 'EBE');
 
                 if ($provincia > 0) $query = $query->where('pv.id', $provincia);
@@ -3401,7 +3410,7 @@ class MatriculaGeneralRepositorio
                 if ($nivel > 0) $query = $query->where('nm.id', $nivel);
 
                 $query = $query->select(
-                    'sexo as name',
+                    'ss.nombre as name',
                     DB::raw('count(edu_matricula_general_detalle.id) as y'),
                     DB::raw('count(edu_matricula_general_detalle.id) as yx'),
                 )->groupBy('name')->get();
@@ -3424,6 +3433,7 @@ class MatriculaGeneralRepositorio
                     // ->join('edu_tipogestion as tg', 'tg.id', '=', 'ie.TipoGestion_id')
                     ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'ie.NivelModalidad_id')
                     ->join('par_grupoedad as ge', 'ge.edad', '=', 'edu_matricula_general_detalle.edad')
+                    ->join('par_sexo as ss', 'ss.id', '=', 'edu_matricula_general_detalle.sexo_id')
                     ->where('nm.tipo', 'EBE');
 
                 if ($provincia > 0) $query = $query->where('pv.id', $provincia);
@@ -3432,7 +3442,7 @@ class MatriculaGeneralRepositorio
 
                 $query = $query->select(
                     DB::raw('case when ge.grupo in ("00-04","05-09","10-14","15-19","20-24","25-29","30-34","35-39","40-44") then ge.grupo else "45 a mas" end as grupos'),
-                    'sexo',
+                    'ss.nombre as sexo',
                     DB::raw('count(edu_matricula_general_detalle.id) as conteo'),
                 )->groupBy('grupos', 'sexo')->get();
                 return $query;
@@ -3456,6 +3466,7 @@ class MatriculaGeneralRepositorio
                     ->join('edu_discapacidad as dd', 'dd.id', '=', 'discapacidad_id')
                     ->join('edu_tipogestion as tg', 'tg.id', '=', 'ie.TipoGestion_id')
                     ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'ie.NivelModalidad_id')
+                    ->join('par_sexo as ss', 'ss.id', '=', 'edu_matricula_general_detalle.sexo_id')
                     ->where('nm.tipo', 'EBE')->where('discapacidad_id', '>', '0');
 
                 if ($provincia > 0) $query = $query->where('pv.id', $provincia);
@@ -3464,7 +3475,7 @@ class MatriculaGeneralRepositorio
 
                 $query = $query->select(
                     'dd.nombre as discapacidad',
-                    'sexo',
+                    'ss.nombre as sexo',
                     DB::raw('count(edu_matricula_general_detalle.id) as conteo'),
                 )->orderBy('conteo', 'desc')->groupBy('discapacidad', 'sexo')->get();
                 return $query;
@@ -3489,6 +3500,7 @@ class MatriculaGeneralRepositorio
                     ->join('edu_area as aa', 'aa.id', '=', 'ie.Area_id')
                     ->join('edu_tipogestion as tg', 'tg.id', '=', 'ie.TipoGestion_id')
                     ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'ie.NivelModalidad_id')
+                    ->join('par_sexo as ss', 'ss.id', '=', 'edu_matricula_general_detalle.sexo_id')
                     ->where('nm.tipo', 'EBE')->where('pais_nacimiento', '!=', 'PERÚ')->where('discapacidad_id', '>', '0');
 
                 if ($provincia > 0) $query = $query->where('pv.id', $provincia);
@@ -3497,7 +3509,7 @@ class MatriculaGeneralRepositorio
 
                 $query = $query->select(
                     DB::raw('(case when pais_nacimiento in ("VENEZUELA","COLOMBIA","BRASIL","ARGENTINA","CHILE","BOLIVIA","ECUADOR","ESTADOS UNIDOS DE AMERICA","JAPON") then pais_nacimiento else  "OTROS" end) as pais'),
-                    'sexo',
+                    'ss.nombre as sexo',
                     DB::raw('count(edu_matricula_general_detalle.id) as conteo'),
                 )->orderBy('conteo', 'desc')->groupBy('pais', 'sexo')->get();
                 return $query;
@@ -3522,6 +3534,7 @@ class MatriculaGeneralRepositorio
                     ->join('edu_discapacidad as dd', 'dd.id', '=', 'discapacidad_id')
                     ->join('edu_tipogestion as tg', 'tg.id', '=', 'ie.TipoGestion_id')
                     ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'ie.NivelModalidad_id')
+                    ->join('par_sexo as ss', 'ss.id', '=', 'edu_matricula_general_detalle.sexo_id')
                     ->where('nm.tipo', 'EBE')->where('pais_nacimiento', '!=', 'PERÚ')->where('discapacidad_id', '>', '0');
 
                 if ($provincia > 0) $query = $query->where('pv.id', $provincia);
@@ -3530,7 +3543,7 @@ class MatriculaGeneralRepositorio
 
                 $query = $query->select(
                     'dd.nombre as discapacidad',
-                    'sexo',
+                    'ss.nombre as sexo',
                     DB::raw('count(edu_matricula_general_detalle.id) as conteo'),
                 )->orderBy('conteo', 'desc')->groupBy('discapacidad', 'sexo')->get();
                 return $query;
@@ -3812,6 +3825,7 @@ class MatriculaGeneralRepositorio
                     // ->join('edu_area as aa', 'aa.id', '=', 'ie.Area_id')
                     // ->join('edu_tipogestion as tg', 'tg.id', '=', 'ie.TipoGestion_id')
                     ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'ie.NivelModalidad_id')
+                    ->join('par_sexo as ss', 'ss.id', '=', 'edu_matricula_general_detalle.sexo_id')
                     ->where('nm.tipo', 'EBA');
 
                 if ($provincia > 0) $query = $query->where('pv.id', $provincia);
@@ -3821,7 +3835,7 @@ class MatriculaGeneralRepositorio
                 $query = $query->select(
                     // DB::raw('case when ie.es_eib="NO" then "Intercural" else "Intercural Bilingue" end as eib'),
                     'uu.nombre as ugel',
-                    'sexo',
+                    'ss.nombre as sexo',
                     DB::raw('count(edu_matricula_general_detalle.id) as conteo')
                 )->groupBy('ugel', 'sexo')->get();
                 return $query;
@@ -3870,6 +3884,7 @@ class MatriculaGeneralRepositorio
                     ->join('edu_area as aa', 'aa.id', '=', 'ie.Area_id')
                     ->join('edu_tipogestion as tg', 'tg.id', '=', 'ie.TipoGestion_id')
                     ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'ie.NivelModalidad_id')
+                    ->join('par_sexo as ss', 'ss.id', '=', 'edu_matricula_general_detalle.sexo_id')
                     ->where('nm.tipo', 'EBA');
 
                 if ($provincia > 0) $query = $query->where('pv.id', $provincia);
@@ -3877,7 +3892,7 @@ class MatriculaGeneralRepositorio
                 if ($nivel > 0) $query = $query->where('nm.id', $nivel);
 
                 $query = $query->select(
-                    'sexo as name',
+                    'ss.nombre as name',
                     DB::raw('count(edu_matricula_general_detalle.id) as y'),
                     DB::raw('count(edu_matricula_general_detalle.id) as yx'),
                 )->groupBy('name')->get();
@@ -3900,6 +3915,7 @@ class MatriculaGeneralRepositorio
                     // ->join('edu_tipogestion as tg', 'tg.id', '=', 'ie.TipoGestion_id')
                     ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'ie.NivelModalidad_id')
                     ->join('par_grupoedad as ge', 'ge.edad', '=', 'edu_matricula_general_detalle.edad')
+                    ->join('par_sexo as ss', 'ss.id', '=', 'edu_matricula_general_detalle.sexo_id')
                     ->where('nm.tipo', 'EBA');
 
                 if ($provincia > 0) $query = $query->where('pv.id', $provincia);
@@ -3908,7 +3924,7 @@ class MatriculaGeneralRepositorio
 
                 $query = $query->select(
                     DB::raw('case when ge.grupo in ("00-04","05-09","10-14","15-19","20-24","25-29","30-34","35-39","40-44") then ge.grupo else "45 a mas" end as grupos'),
-                    'sexo',
+                    'ss.nombre as sexo',
                     DB::raw('count(edu_matricula_general_detalle.id) as conteo'),
                 )->groupBy('grupos', 'sexo')->get();
                 return $query;
@@ -3932,6 +3948,7 @@ class MatriculaGeneralRepositorio
                     ->join('edu_discapacidad as dd', 'dd.id', '=', 'discapacidad_id')
                     ->join('edu_tipogestion as tg', 'tg.id', '=', 'ie.TipoGestion_id')
                     ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'ie.NivelModalidad_id')
+                    ->join('par_sexo as ss', 'ss.id', '=', 'edu_matricula_general_detalle.sexo_id')
                     ->where('nm.tipo', 'EBA')->where('discapacidad_id', '>', '0');
 
                 if ($provincia > 0) $query = $query->where('pv.id', $provincia);
@@ -3940,7 +3957,7 @@ class MatriculaGeneralRepositorio
 
                 $query = $query->select(
                     'dd.nombre as discapacidad',
-                    'sexo',
+                    'ss.nombre as sexo',
                     DB::raw('count(edu_matricula_general_detalle.id) as conteo'),
                 )->orderBy('conteo', 'desc')->groupBy('discapacidad', 'sexo')->get();
                 return $query;
@@ -3965,6 +3982,7 @@ class MatriculaGeneralRepositorio
                     ->join('edu_area as aa', 'aa.id', '=', 'ie.Area_id')
                     ->join('edu_tipogestion as tg', 'tg.id', '=', 'ie.TipoGestion_id')
                     ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'ie.NivelModalidad_id')
+                    ->join('par_sexo as ss', 'ss.id', '=', 'edu_matricula_general_detalle.sexo_id')
                     ->where('nm.tipo', 'EBA')->where('pais_nacimiento', '!=', 'PERÚ')->where('discapacidad_id', '>', '0');
 
                 if ($provincia > 0) $query = $query->where('pv.id', $provincia);
@@ -3973,7 +3991,7 @@ class MatriculaGeneralRepositorio
 
                 $query = $query->select(
                     DB::raw('(case when pais_nacimiento in ("VENEZUELA","COLOMBIA","BRASIL","ARGENTINA","CHILE","BOLIVIA","ECUADOR","ESTADOS UNIDOS DE AMERICA","JAPON") then pais_nacimiento else  "OTROS" end) as pais'),
-                    'sexo',
+                    'ss.nombre as sexo',
                     DB::raw('count(edu_matricula_general_detalle.id) as conteo'),
                 )->orderBy('conteo', 'desc')->groupBy('pais', 'sexo')->get();
                 return $query;
@@ -3998,6 +4016,7 @@ class MatriculaGeneralRepositorio
                     ->join('edu_discapacidad as dd', 'dd.id', '=', 'discapacidad_id')
                     ->join('edu_tipogestion as tg', 'tg.id', '=', 'ie.TipoGestion_id')
                     ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'ie.NivelModalidad_id')
+                    ->join('par_sexo as ss', 'ss.id', '=', 'edu_matricula_general_detalle.sexo_id')
                     ->where('nm.tipo', 'EBA')->where('pais_nacimiento', '!=', 'PERÚ')->where('discapacidad_id', '>', '0');
 
                 if ($provincia > 0) $query = $query->where('pv.id', $provincia);
@@ -4006,7 +4025,7 @@ class MatriculaGeneralRepositorio
 
                 $query = $query->select(
                     'dd.nombre as discapacidad',
-                    'sexo',
+                    'ss.nombre as sexo',
                     DB::raw('count(edu_matricula_general_detalle.id) as conteo'),
                 )->orderBy('conteo', 'desc')->groupBy('discapacidad', 'sexo')->get();
                 return $query;

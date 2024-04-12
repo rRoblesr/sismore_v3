@@ -992,8 +992,25 @@ WHERE pw.importacion_id=383;
 
 ####
 
+#
+ALTER TABLE `edu_sfl` ADD `fecha_inscripcion` DATE NULL DEFAULT NULL AFTER `fecha_registro`;
 
-
+#
+    select 
+    	iiee.codLocal as local, max(iiee.id) as iiee, max(uu.nombre) as ugel, max(pv.nombre) as provincia, max(dt.nombre) as distrito, max(aa.nombre) as area,count(codModular) as iiees,
+    	sfl.estado, sfl.tipo, sfl.fecha_registro  
+    from (
+    	select iiee.id, iiee.CentroPoblado_id, iiee.codLocal, iiee.codModular, iiee.Area_id, iiee.Ugel_id 
+    	from edu_institucionEducativa as iiee
+    	where iiee.EstadoInsEdu_id = 3 and iiee.TipoGestion_id in (4, 5, 7, 8) and iiee.estado = 'AC' and iiee.NivelModalidad_id not in (14, 15)
+    	) as iiee 
+    inner join edu_centropoblado as cp on cp.id = iiee.CentroPoblado_id 
+    inner join edu_area as aa on aa.id = iiee.Area_id 
+    inner join edu_ugel as uu on uu.id = iiee.Ugel_id 
+    inner join par_ubigeo as dt on dt.id = cp.Ubigeo_id 
+    inner join par_ubigeo as pv on pv.id = dt.dependencia 
+    left join edu_sfl as sfl on sfl.institucioneducativa_id = iiee.id 
+    group by local;
 
 
 

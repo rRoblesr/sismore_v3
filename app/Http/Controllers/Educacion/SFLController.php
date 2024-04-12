@@ -110,10 +110,10 @@ class SFLController extends Controller
                     case 2:
                         $estado = 'NO SANEADO';
                         break;
-                    case 2:
+                    case 3:
                         $estado = 'NO REGISTRADO';
                         break;
-                    case 2:
+                    case 4:
                         $estado = 'EN PROCESO';
                         break;
                     default:
