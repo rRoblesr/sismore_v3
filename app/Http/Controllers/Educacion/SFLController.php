@@ -51,12 +51,12 @@ class SFLController extends Controller
 	        from edu_institucionEducativa as iiee
 	        where iiee.EstadoInsEdu_id = 3 and iiee.TipoGestion_id in (4, 5, 7, 8) and iiee.estado = 'AC' and iiee.NivelModalidad_id not in (14, 15)
         ) as iiee"))
-            ->join('edu_centropoblado as cp', 'cp.id', '=', 'iiee.CentroPoblado_id', 'left')
-            ->join('edu_area as aa', 'aa.id', '=', 'iiee.Area_id', 'left')
-            ->join('edu_ugel as uu', 'uu.id', '=', 'iiee.Ugel_id', 'left')
-            ->join('par_ubigeo as dt', 'dt.id', '=', 'cp.Ubigeo_id', 'left')
-            ->join('par_ubigeo as pv', 'pv.id', '=', 'dt.dependencia', 'left')
-            ->join('edu_sfl as sfl', 'sfl.institucioneducativa_id', '=', 'iiee.id', 'left');
+            ->join('edu_centropoblado as cp', 'cp.id', '=', 'iiee.CentroPoblado_id')
+            ->join('edu_area as aa', 'aa.id', '=', 'iiee.Area_id')
+            ->join('edu_ugel as uu', 'uu.id', '=', 'iiee.Ugel_id')
+            ->join('par_ubigeo as dt', 'dt.id', '=', 'cp.Ubigeo_id')
+            ->join('par_ubigeo as pv', 'pv.id', '=', 'dt.dependencia');
+        // ->join('edu_sfl as sfl', 'sfl.institucioneducativa_id', '=', 'iiee.id');
         $query = $query->select(
             'iiee.codLocal as local',
             DB::raw('max(iiee.id) as id'),
@@ -73,17 +73,11 @@ class SFLController extends Controller
 
         $query = $query->groupBy('local')->get();
 
-        $querySFL = SFL::select(
-            'edu_sfl.id',
-            'edu_sfl.estado',
-            'edu_sfl.tipo',
-            'edu_sfl.partida_electronica',
-            'edu_sfl.zona_registral',
-            'edu_sfl.fecha_registro',
-            'ie.*'
-        )
-            ->join(DB::raw("(select id, codLocal as local, codModular as modular from edu_institucioneducativa) as ie"), 'ie.id', '=', 'edu_sfl.institucioneducativa_id', 'right')
-            ->get();
+        $querySFL = DB::table(DB::raw('(select id, codLocal as local, codModular as modular from edu_institucioneducativa)as ie'))
+            ->join('edu_sfl as sfl', 'sfl.institucioneducativa_id', '=', 'ie.id', 'left')->where('ie.local', '!=', '')
+            ->select('ie.*', 'sfl.estado', 'sfl.tipo', 'sfl.fecha_registro')
+            ->orderBy('ie.id')->get();
+
         $data = [];
         foreach ($query as $key => $value) {
             $local = $value->local;
