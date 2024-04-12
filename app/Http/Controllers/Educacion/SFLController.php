@@ -55,8 +55,8 @@ class SFLController extends Controller
             ->join('edu_area as aa', 'aa.id', '=', 'iiee.Area_id')
             ->join('edu_ugel as uu', 'uu.id', '=', 'iiee.Ugel_id')
             ->join('par_ubigeo as dt', 'dt.id', '=', 'cp.Ubigeo_id')
-            ->join('par_ubigeo as pv', 'pv.id', '=', 'dt.dependencia');
-        // ->join('edu_sfl as sfl', 'sfl.institucioneducativa_id', '=', 'iiee.id');
+            ->join('par_ubigeo as pv', 'pv.id', '=', 'dt.dependencia')
+            ->join('edu_sfl as sfl', 'sfl.institucioneducativa_id', '=', 'iiee.id');
         $query = $query->select(
             'iiee.codLocal as local',
             DB::raw('max(iiee.id) as id'),
@@ -84,11 +84,23 @@ class SFLController extends Controller
             $sflLOCAL = $querySFL->where('local', $local);
 
             $saneado = 0;
+            $nosaneado = 0;
+            $noregistrado = 0;
+            $enproceso = 0;
             $pos = 0;
             $var0 = FALSE;
             foreach ($sflLOCAL as $item) {
                 if ($item->estado == 1) {
                     $saneado++;
+                }
+                if ($item->estado == 2) {
+                    $nosaneado++;
+                }
+                if ($item->estado == 3) {
+                    $noregistrado++;
+                }
+                if ($item->estado == 4) {
+                    $enproceso++;
                 }
                 if ($pos == 0) {
                     $var0 = clone $item;
@@ -99,6 +111,12 @@ class SFLController extends Controller
             $estado = '';
             if ($sflLOCAL->count() == $saneado) {
                 $estado = 'SANEADO';
+            } else  if ($sflLOCAL->count() == $nosaneado) {
+                $estado = 'NO SANEADO';
+            } else  if ($sflLOCAL->count() == $noregistrado) {
+                $estado = 'NO REGISTRADO';
+            } else  if ($sflLOCAL->count() == $enproceso) {
+                $estado = 'EN PROCESO';
             } else if ($sflLOCAL->count() == 1) {
                 switch ($var0->estado) {
                     case 2:
