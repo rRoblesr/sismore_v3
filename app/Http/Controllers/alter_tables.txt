@@ -1062,7 +1062,30 @@ BEGIN
 
 END
 
+#
+ select count(matriculageneral_id) as basica, sum(IF(modalidad_id=1,1,0)) as ebr, sum(IF(modalidad_id=2,1,0)) as ebe, sum(IF(modalidad_id=3,1,0)) as eba 
+ from edu_matricula_general_detalle 
+ inner join edu_institucioneducativa as ie on ie.id = edu_matricula_general_detalle.institucioneducativa_id 
+ inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id 
+ inner join par_ubigeo as dt on dt.id = cp.Ubigeo_id 
+ inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id 
+ where dt.dependencia = 35 and matriculageneral_id = 15;  
 
+
+ select count(matriculageneral_id) as basica, sum(IF(modalidad_id=1,1,0)) as ebr, sum(IF(modalidad_id=2,1,0)) as ebe, sum(IF(modalidad_id=3,1,0)) as eba 
+ from edu_matricula_general_detalle 
+ left join (
+ 	select ie.id, dd.id as distrito, dd.dependencia as provincia, tg.dependencia as gestion, aa.id as area 
+ 	from edu_institucioneducativa as ie 
+ 	left join edu_centropoblado as cp on cp.id=ie.CentroPoblado_id 
+ 	inner join par_ubigeo as dd on dd.id=cp.Ubigeo_id  
+ 	inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id 
+ 	inner join edu_area as aa on aa.id = ie.Area_id 
+ 	where dd.dependencia = 35
+ 	) as ie on ie.id=edu_matricula_general_detalle.institucioneducativa_id  
+ where matriculageneral_id = 15 ;
+
+select distinct institucioneducativa_id  from edu_matricula_general_detalle where matriculageneral_id = 15;
 
 
 

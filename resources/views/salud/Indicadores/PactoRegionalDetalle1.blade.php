@@ -846,6 +846,10 @@
                         }
                     }]
                 },
+                tooltip: {
+                    //pointFormat: '<span style="color:{point.color}">\u25CF</span> {point.name}<b>{point.y}</b><br/>',
+                    shared: true
+                },
                 exporting: {
                     enabled: true,
                 },

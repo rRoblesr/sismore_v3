@@ -161,13 +161,18 @@ class IndicadoresController extends Controller
             case 'anal1':
                 $base = IndicadorGeneralMetaRepositorio::getPacto1Mensual($rq->anio, $rq->distrito);
                 $mes = Mes::select('codigo', 'abreviado as mes')->get();
+                $mesmax = $base->max('name');
                 foreach ($mes as $mm) {
-                    $mm->y = null;
-                    foreach ($base as $bb) {
-                        if ($bb->name == $mm->codigo) {
-                            $mm->y = (int)$bb->y;
-                            break;
+                    if ($mm->codigo <= $mesmax) {
+                        $mm->y = 0;
+                        foreach ($base as $bb) {
+                            if ($bb->name == $mm->codigo) {
+                                $mm->y = (int)$bb->y;
+                                break;
+                            }
                         }
+                    } else {
+                        $mm->y = null;
                     }
                 }
                 $info = [];
@@ -184,28 +189,38 @@ class IndicadoresController extends Controller
                     }
                     $info['dat'][] = $value->y;
                 }
-                return response()->json(compact('info'));
+                return response()->json(compact('info', 'mes', 'base', 'mesmax'));
             case 'anal2':
                 $base1 = IndicadorGeneralMetaRepositorio::getPacto1Mensual($rq->anio, $rq->distrito);
                 $base2 = IndicadorGeneralMetaRepositorio::getPacto1Mensual2($rq->anio, $rq->distrito);
                 $info = [];
                 $mes = Mes::select('codigo', 'abreviado as mes')->get();
+                $mesmax1 = $base1->max('name');
+                $mesmax2 = $base2->max('mes');
                 foreach ($mes as $mm) {
-                    $mm->y1 = null;
-                    $mm->y2 = null;
 
-                    foreach ($base1 as $bb1) {
-                        if ($bb1->name == $mm->codigo) {
-                            $mm->y1 = (int)$bb1->y;
-                            break;
+                    if ($mm->codigo <= $mesmax1) {
+                        $mm->y1 = 0;
+                        foreach ($base1 as $bb1) {
+                            if ($bb1->name == $mm->codigo) {
+                                $mm->y1 = (int)$bb1->y;
+                                break;
+                            }
                         }
+                    } else {
+                        $mm->y1 = null;
                     }
 
-                    foreach ($base2 as $bb2) {
-                        if ($bb2->mes == $mm->codigo) {
-                            $mm->y2 = (int)$bb2->y;
-                            break;
+                    if ($mm->codigo <= $mesmax2) {
+                        $mm->y2 = 0;
+                        foreach ($base2 as $bb2) {
+                            if ($bb2->mes == $mm->codigo) {
+                                $mm->y2 = (int)$bb2->y;
+                                break;
+                            }
                         }
+                    } else {
+                        $mm->y2 = null;
                     }
                     $info['cat'][] = $mm->mes;
                     $info['dat'][] = $mm->y1;

@@ -661,13 +661,13 @@ class HomeController extends Controller
     public function panelControlEduacionHead(Request $rq)
     {
         $anio = Anio::where('anio', $rq->anio)->first(); //MatriculaGeneralRepositorio::anioId();
-        $xx = MatriculaGeneralRepositorio::indicador01head($anio->id, $rq->provincia, $rq->distrito,  $rq->tipogestion, 1);
+        $xx = MatriculaGeneralRepositorio::indicador01head($anio->id, $rq->provincia, $rq->distrito,  $rq->tipogestion, $rq->area);
         $valor1 = $xx->basica;
         $valor2 = $xx->ebr;
         $valor3 = $xx->ebe;
         $valor4 = $xx->eba;
         $aa = Anio::where('anio', -1 + (int)$anio->anio)->first();
-        $xx = MatriculaGeneralRepositorio::indicador01head($aa->id, $rq->provincia, $rq->distrito,  $rq->tipogestion, 1);
+        $xx = MatriculaGeneralRepositorio::indicador01head($aa->id, $rq->provincia, $rq->distrito,  $rq->tipogestion, $rq->area);
         $valor1x = $xx->basica;
         $valor2x = $xx->ebr;
         $valor3x = $xx->ebe;
