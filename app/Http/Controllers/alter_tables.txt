@@ -442,26 +442,26 @@ BEGIN
     declare v_codigo, v_codMod varchar(20);
     declare v_nombre varchar(200);
     drop table if exists tabla_tempo,forma_tempo,tipogestiondet_tempo,
-    centropoblado_tempo,padronweb_tempo_completo;    
-	
-    create temporary table tabla_tempo( id  INT AUTO_INCREMENT PRIMARY KEY, codigo varchar(20),nombre varchar(200),id_deTabla_enTempo int); 
-    create temporary table forma_tempo( id  INT NOT NULL AUTO_INCREMENT PRIMARY KEY,nombre varchar(200), id_deTabla_enTempo int);  
+    centropoblado_tempo,padronweb_tempo_completo;
+
+    create temporary table tabla_tempo( id  INT AUTO_INCREMENT PRIMARY KEY, codigo varchar(20),nombre varchar(200),id_deTabla_enTempo int);
+    create temporary table forma_tempo( id  INT NOT NULL AUTO_INCREMENT PRIMARY KEY,nombre varchar(200), id_deTabla_enTempo int);
     create temporary table tipogestiondet_tempo( id  INT NOT NULL AUTO_INCREMENT PRIMARY KEY,  codigoCab varchar(20),codigo varchar(20),nombre varchar(200), id_deTabla_enTempo int);
-    create temporary table centropoblado_tempo (id  INT NOT NULL AUTO_INCREMENT PRIMARY KEY, codUbigeo varchar(20),codINEI varchar(20),codUEMinedu varchar(20), nombre varchar(200), id_deTabla_enTempo int);   
+    create temporary table centropoblado_tempo (id  INT NOT NULL AUTO_INCREMENT PRIMARY KEY, codUbigeo varchar(20),codINEI varchar(20),codUEMinedu varchar(20), nombre varchar(200), id_deTabla_enTempo int);
     create temporary table padronweb_tempo_completo ( nivelmodalidad_id int,forma_id int,caracteristica_id int,genero_id int,tipogestion_id int,
     ugel_id int, area_id int,estadoinsedu_id int, turno_id int, centropoblado_id int, institucion_id int,cod_Mod varchar(100),cod_Local varchar(100),
     cen_Edu varchar(200),director varchar(200), telefono varchar(45),/*email varchar(100),*/dir_Cen varchar(200),nLat_IE decimal(15,4),
-    nLong_IE decimal(15,4),/*fechaReg timestamp null,fecha_Act timestamp null,*/created_at timestamp null,updated_at timestamp null, estado char(2)); 
-   
+    nLong_IE decimal(15,4),/*fechaReg timestamp null,fecha_Act timestamp null,*/created_at timestamp null,updated_at timestamp null, estado char(2));
+
    /***
     * modalidad
     * email
-    * localidad 
+    * localidad
     * fechaReg
     * fecha_Act
     */
-      
-    update edu_impor_padronweb set 
+
+    update edu_impor_padronweb set
     cod_Mod= ltrim(rtrim( ifnull(cod_Mod,''))),
 	cod_Local= ltrim(rtrim( ifnull(cod_Local,''))),
 	cen_Edu= ltrim(rtrim( ifnull(cen_Edu,''))),
@@ -502,156 +502,156 @@ BEGIN
 	tDocente= ltrim(rtrim( ifnull(tDocente,''))),
 	tSeccion= ltrim(rtrim( ifnull(tSeccion,'')))
 	where  importacion_id = v_importacion_id;
-    
-             
+
+
     begin
 		DELETE FROM tabla_tempo where id > 0;
-		
+
 		insert `tabla_tempo` (`codigo`,`nombre`,`id_deTabla_enTempo`)
-		select pw.codigo,pw.nombre,tab.id from 
+		select pw.codigo,pw.nombre,tab.id from
 		(
 			select distinct niv_Mod as codigo,d_Niv_Mod as nombre from edu_impor_padronweb
 			where importacion_id=v_importacion_id
-		) as pw 
-		left join edu_nivelmodalidad as tab on pw.codigo = tab.codigo;    
-		   
+		) as pw
+		left join edu_nivelmodalidad as tab on pw.codigo = tab.codigo;
+
 		update edu_nivelmodalidad as tab
 		left join tabla_tempo as tt on tab.id = tt.id_deTabla_enTempo
 		set estado = 'EL'
 		where id_deTabla_enTempo is null;
-		
-		update edu_nivelmodalidad as tab 
+
+		update edu_nivelmodalidad as tab
 		inner join tabla_tempo as tt on tab.id = tt.id_deTabla_enTempo
-		set 
+		set
 		tab.nombre = tt.nombre,
 		tab.updated_at= now(),
-		tab.estado = 'AC'; 
-		
+		tab.estado = 'AC';
+
 		insert into `edu_nivelmodalidad` (`codigo`,`nombre`,`created_at`,`estado`)
 		select codigo,nombre,now(),'AC' FROM tabla_tempo
-		where id_deTabla_enTempo is null; 
+		where id_deTabla_enTempo is null;
     end ;
-    
-    
-    
+
+
+
 	begin
         insert `forma_tempo` (`nombre`,`id_deTabla_enTempo`)
-		select pw.nombre,tab.id from 
+		select pw.nombre,tab.id from
 		(
 			select distinct d_forma as nombre from edu_impor_padronweb
 			where importacion_id=v_importacion_id
-		) as pw 
-		left join edu_forma as tab on pw.nombre = tab.nombre;    
-    
+		) as pw
+		left join edu_forma as tab on pw.nombre = tab.nombre;
+
         update edu_forma as tab
 		left join forma_tempo as tt on tab.id = tt.id_deTabla_enTempo
 		set estado = 'EL', updated_at=now()
 		where id_deTabla_enTempo is null;
-        
-        update edu_forma as tab 
+
+        update edu_forma as tab
 		inner join forma_tempo as tt on tab.id = tt.id_deTabla_enTempo
-		set 
+		set
 		tab.updated_at= now(),
-		tab.estado = 'AC'; 
-        
+		tab.estado = 'AC';
+
         insert into `edu_forma` (`nombre`,`created_at`,`estado`)
 		select nombre,now(),'AC' FROM forma_tempo
-		where id_deTabla_enTempo is null;  
+		where id_deTabla_enTempo is null;
     end;
-    
-    
-    
+
+
+
     begin
 		delete from tabla_tempo where id > 0;
-		
+
 		insert `tabla_tempo` (`codigo`,`nombre`,`id_deTabla_enTempo`)
-		select pw.codigo,pw.nombre,tab.id from 
+		select pw.codigo,pw.nombre,tab.id from
 		(
 			select distinct cod_Car as codigo,d_Cod_Car as nombre from edu_impor_padronweb
 			where importacion_id=v_importacion_id
-		) as pw 
-		left join edu_caracteristica as tab on pw.codigo = tab.codigo;    
-		   
+		) as pw
+		left join edu_caracteristica as tab on pw.codigo = tab.codigo;
+
 		update edu_caracteristica as tab
 		left join tabla_tempo as tt on tab.id = tt.id_deTabla_enTempo
 		set estado = 'EL'
 		where id_deTabla_enTempo is null;
-		
-		update edu_caracteristica as tab 
+
+		update edu_caracteristica as tab
 		inner join tabla_tempo as tt on tab.id = tt.id_deTabla_enTempo
-		set 
+		set
 		tab.nombre = tt.nombre,
 		tab.updated_at= now(),
-		tab.estado = 'AC'; 
-		
+		tab.estado = 'AC';
+
 		insert into `edu_caracteristica` (`codigo`,`nombre`,`created_at`,`estado`)
 		select codigo,nombre,now(),'AC' FROM tabla_tempo
 		where id_deTabla_enTempo is null;
     end;
-    
 
-   
+
+
     begin
 		delete from tabla_tempo where id > 0;
-		
+
 		insert `tabla_tempo` (`codigo`,`nombre`,`id_deTabla_enTempo`)
-		select pw.codigo,pw.nombre,tab.id from 
+		select pw.codigo,pw.nombre,tab.id from
 		(
 			select distinct TipsSexo as codigo,d_TipsSexo as nombre from edu_impor_padronweb
 			where importacion_id=v_importacion_id
-		) as pw 
-		left join edu_genero as tab on pw.codigo = tab.codigo;    
-		   
+		) as pw
+		left join edu_genero as tab on pw.codigo = tab.codigo;
+
 		update edu_genero as tab
 		left join tabla_tempo as tt on tab.id = tt.id_deTabla_enTempo
 		set estado = 'EL'
 		where id_deTabla_enTempo is null;
-		
-		update edu_genero as tab 
+
+		update edu_genero as tab
 		inner join tabla_tempo as tt on tab.id = tt.id_deTabla_enTempo
-		set 
+		set
 		tab.nombre = tt.nombre,
 		tab.updated_at= now(),
-		tab.estado = 'AC'; 
-		
+		tab.estado = 'AC';
+
 		insert into `edu_genero` (`codigo`,`nombre`,`created_at`,`estado`)
 		select codigo,nombre,now(),'AC' FROM tabla_tempo
-		where id_deTabla_enTempo is null;  
+		where id_deTabla_enTempo is null;
     end;
-    
-    
-    
+
+
+
 	begin
 		delete from tabla_tempo where id > 0;
-		
+
 		insert `tabla_tempo` (`codigo`,`nombre`,`id_deTabla_enTempo`)
-		select pw.codigo,pw.nombre,tab.id from 
+		select pw.codigo,pw.nombre,tab.id from
 		(
 			select distinct gestion as codigo,d_Gestion as nombre from edu_impor_padronweb
 			where importacion_id=v_importacion_id
-		) as pw 
-		left join edu_tipogestion as tab on pw.codigo = tab.codigo and dependencia is  null;     
-		   
+		) as pw
+		left join edu_tipogestion as tab on pw.codigo = tab.codigo and dependencia is  null;
+
 		update edu_tipogestion as tab
 		left join tabla_tempo as tt on tab.id = tt.id_deTabla_enTempo
 		set estado = 'EL'
 		where id_deTabla_enTempo is null
-        and dependencia is null; 
-		
-		update edu_tipogestion as tab 
+        and dependencia is null;
+
+		update edu_tipogestion as tab
 		inner join tabla_tempo as tt on tab.id = tt.id_deTabla_enTempo
-		set 
+		set
 		tab.nombre = tt.nombre,
 		tab.updated_at= now(),
-		tab.estado = 'AC'; 
-		
+		tab.estado = 'AC';
+
 		insert into `edu_tipogestion` (`codigo`,`nombre`,`dependencia`,`created_at`,`estado`)
 		select codigo,nombre,null,now(),'AC' FROM tabla_tempo
-		where id_deTabla_enTempo is null;  
+		where id_deTabla_enTempo is null;
     end;
-    
-    
-    
+
+
+
     begin
 
 		insert into `tipogestiondet_tempo`(`codigoCab`,`codigo`,`nombre`,`id_deTabla_enTempo`)
@@ -660,151 +660,151 @@ BEGIN
 			select distinct gestion as codigoCab ,ges_Dep  as codigo ,d_Ges_Dep as nombre from edu_impor_padronweb
 			where importacion_id=v_importacion_id
 		) as pw
-		left join edu_tipogestion as tab on pw.codigo = tab.codigo and dependencia is not null;    
-        
+		left join edu_tipogestion as tab on pw.codigo = tab.codigo and dependencia is not null;
+
         update edu_tipogestion as tab
 		left join tipogestiondet_tempo as tt on tab.id = tt.id_deTabla_enTempo
 		set estado = 'EL'
 		where id_deTabla_enTempo is null
-        and dependencia is not null; 
-        
-        update edu_tipogestion as tab 
+        and dependencia is not null;
+
+        update edu_tipogestion as tab
 		inner join tipogestiondet_tempo as tt on tab.id = tt.id_deTabla_enTempo
-		set 
+		set
 		tab.codigo = tt.codigo,
 		tab.nombre = tt.nombre,
 		tab.updated_at= now(),
-		tab.estado = 'AC'; 
-	          
+		tab.estado = 'AC';
+
 		insert into `edu_tipogestion` (`codigo`,`nombre`,`dependencia`,`created_at`,`estado`)
 		select a.codigo,a.nombre,b.id,now(),'AC' FROM tipogestiondet_tempo as a
 		inner join edu_tipogestion b on a.codigoCab = b.codigo
-		where id_deTabla_enTempo is null;   
+		where id_deTabla_enTempo is null;
     end;
-        
-        
-    
+
+
+
 	begin
 		delete from tabla_tempo where id > 0;
-		
+
 		insert `tabla_tempo` (`codigo`,`nombre`,`id_deTabla_enTempo`)
-		select pw.codigo,pw.nombre,tab.id from 
+		select pw.codigo,pw.nombre,tab.id from
 		(
 			select distinct estado as codigo,d_Estado as nombre from edu_impor_padronweb
 			where importacion_id=v_importacion_id
-		) as pw 
-		left join edu_estadoinsedu as tab on pw.codigo = tab.codigo;    
-		   
+		) as pw
+		left join edu_estadoinsedu as tab on pw.codigo = tab.codigo;
+
 		update edu_estadoinsedu as tab
 		left join tabla_tempo as tt on tab.id = tt.id_deTabla_enTempo
 		set estado = 'EL'
 		where id_deTabla_enTempo is null;
-		
-		update edu_estadoinsedu as tab 
+
+		update edu_estadoinsedu as tab
 		inner join tabla_tempo as tt on tab.id = tt.id_deTabla_enTempo
-		set 
+		set
 		tab.nombre = tt.nombre,
 		tab.updated_at= now(),
-		tab.estado = 'AC'; 
-		
+		tab.estado = 'AC';
+
 		insert into `edu_estadoinsedu` (`codigo`,`nombre`,`created_at`,`estado`)
 		select codigo,nombre,now(),'AC' FROM tabla_tempo
-		where id_deTabla_enTempo is null; 
+		where id_deTabla_enTempo is null;
     end;
-    
-  
-	
+
+
+
     begin
 		delete from tabla_tempo where id > 0;
-		
+
 		insert `tabla_tempo` (`codigo`,`nombre`,`id_deTabla_enTempo`)
-		select pw.codigo,pw.nombre,tab.id from 
+		select pw.codigo,pw.nombre,tab.id from
 		(
 			select distinct codOOII as codigo,d_DreUgel as nombre from edu_impor_padronweb
 			where importacion_id=v_importacion_id
-		) as pw 
-		left join edu_ugel as tab on pw.codigo = tab.codigo;    
-		   
+		) as pw
+		left join edu_ugel as tab on pw.codigo = tab.codigo;
+
 		update edu_ugel as tab
 		left join tabla_tempo as tt on tab.id = tt.id_deTabla_enTempo
 		set estado = 'EL'
 		where id_deTabla_enTempo is null;
-		
-		update edu_ugel as tab 
+
+		update edu_ugel as tab
 		inner join tabla_tempo as tt on tab.id = tt.id_deTabla_enTempo
-		set 
+		set
 		tab.nombre = tt.nombre,
 		tab.updated_at= now(),
-		tab.estado = 'AC'; 
-		
+		tab.estado = 'AC';
+
 		insert into `edu_ugel` (`codigo`,`nombre`,`created_at`,`estado`)
 		select codigo,nombre,now(),'AC' FROM tabla_tempo
-		where id_deTabla_enTempo is null; 
+		where id_deTabla_enTempo is null;
     end;
-    
-        
-	
+
+
+
     begin
 		delete from tabla_tempo where id > 0;
-		
+
 		insert `tabla_tempo` (`codigo`,`nombre`,`id_deTabla_enTempo`)
-		select pw.codigo,pw.nombre,tab.id from 
+		select pw.codigo,pw.nombre,tab.id from
 		(
 			select distinct area_Censo as codigo,d_areaCenso as nombre from edu_impor_padronweb
 			where importacion_id=v_importacion_id
-		) as pw 
-		left join edu_area as tab on pw.codigo = tab.codigo;    
-		   
+		) as pw
+		left join edu_area as tab on pw.codigo = tab.codigo;
+
 		update edu_area as tab
 		left join tabla_tempo as tt on tab.id = tt.id_deTabla_enTempo
 		set estado = 'EL'
 		where id_deTabla_enTempo is null;
-		
-		update edu_area as tab 
+
+		update edu_area as tab
 		inner join tabla_tempo as tt on tab.id = tt.id_deTabla_enTempo
-		set 
+		set
 		tab.nombre = tt.nombre,
 		tab.updated_at= now(),
-		tab.estado = 'AC'; 
-		
+		tab.estado = 'AC';
+
 		insert into `edu_area` (`codigo`,`nombre`,`created_at`,`estado`)
 		select codigo,nombre,now(),'AC' FROM tabla_tempo
-		where id_deTabla_enTempo is null; 
+		where id_deTabla_enTempo is null;
     end;
-    
-   
-   	
+
+
+
    begin
     delete from tabla_tempo where id > 0;
-    
+
     insert `tabla_tempo` (`codigo`,`nombre`,`id_deTabla_enTempo`)
-	select pw.codigo,pw.nombre,tab.id from 
+	select pw.codigo,pw.nombre,tab.id from
 	(
 		select distinct cod_Tur as codigo,D_Cod_Tur as nombre from edu_impor_padronweb
 		where importacion_id=v_importacion_id
-	) as pw 
-	left join edu_turno as tab on pw.codigo = tab.codigo;    
-       
+	) as pw
+	left join edu_turno as tab on pw.codigo = tab.codigo;
+
     update edu_turno as tab
     left join tabla_tempo as tt on tab.id = tt.id_deTabla_enTempo
     set estado = 'EL'
     where id_deTabla_enTempo is null;
-    
-    update edu_turno as tab 
+
+    update edu_turno as tab
     inner join tabla_tempo as tt on tab.id = tt.id_deTabla_enTempo
-    set 
+    set
     tab.nombre = tt.nombre,
     tab.updated_at= now(),
-    tab.estado = 'AC'; 
-    
+    tab.estado = 'AC';
+
     insert into `edu_turno` (`codigo`,`nombre`,`created_at`,`estado`)
     select codigo,nombre,now(),'AC' FROM tabla_tempo
-    where id_deTabla_enTempo is null; 
+    where id_deTabla_enTempo is null;
     end;
-    
-    
-    
-            
+
+
+
+
     insert into `centropoblado_tempo`(`codUbigeo`,`codINEI`,`codUEMinedu`,`nombre`,`id_deTabla_enTempo`)
 	select pw.codUbigeo,pw.codINEI,pw.codUEMinedu,pw.nombre,tab.id from
 	(
@@ -816,37 +816,37 @@ BEGIN
 		select cen.id,ub.codigo,cen.nombre from edu_centropoblado cen
 		inner join par_ubigeo ub on cen.Ubigeo_id = ub.id
 	) as tab on pw.codUbigeo = tab.codigo and pw.nombre = tab.nombre;
-    
-	update edu_centropoblado as tab 
+
+	update edu_centropoblado as tab
     inner join centropoblado_tempo as tt on tab.id = tt.id_deTabla_enTempo
-    set 
+    set
     tab.codINEI = tt.codINEI,
     tab.codUEMinedu = tt.codUEMinedu,
     tab.updated_at= now(),
-    tab.estado = 'AC'; 
-   
+    tab.estado = 'AC';
+
 	insert into `edu_centropoblado` (`Ubigeo_id`,`codINEI`,`codUEMinedu`,`nombre`,`created_at`,`estado`)
-    
+
     select ubigeo.id,a.codINEI,a.codUEMinedu,a.nombre,now(),'AC' FROM centropoblado_tempo as a
     inner join par_ubigeo ubigeo on a.codUbigeo = ubigeo.codigo
-    where id_deTabla_enTempo is null; 
-      
-	
+    where id_deTabla_enTempo is null;
 
-	
+
+
+
 	INSERT padronweb_tempo_completo
-	select 
+	select
 		(select id from edu_nivelmodalidad where codigo = pw.niv_Mod    limit 1) as nivelmodalidad_id,
 	    (select id from edu_forma          where nombre = pw.d_forma    limit 1) as forma_id,
 		(select id from edu_caracteristica where codigo = pw.cod_Car    limit 1) as caracteristica_id,
 		(select id from edu_genero         where codigo = pw.TipsSexo   limit 1) as genero_id,
-		(select id from edu_tipogestion    where codigo = pw.ges_Dep    limit 1) as tipogestion_id, 
-		(select id from edu_ugel           where codigo = pw.codOOII    limit 1) as ugel_id,                
+		(select id from edu_tipogestion    where codigo = pw.ges_Dep    limit 1) as tipogestion_id,
+		(select id from edu_ugel           where codigo = pw.codOOII    limit 1) as ugel_id,
 		(select id from edu_area           where codigo = pw.area_Censo limit 1) as area_id,
 		(select id from edu_estadoinsedu   where codigo = pw.estado     limit 1) as estadoinsedu_id,
-		(select id from edu_turno          where codigo = pw.cod_Tur    limit 1) as turno_id,        
-		
-       	(select cen.id from edu_centropoblado  cen inner join par_ubigeo ub on cen.Ubigeo_id = ub.id where cen.nombre = pw.cen_Pob and ub.codigo = pw.codGeo limit 1) as centropoblado_id,                
+		(select id from edu_turno          where codigo = pw.cod_Tur    limit 1) as turno_id,
+
+       	(select cen.id from edu_centropoblado  cen inner join par_ubigeo ub on cen.Ubigeo_id = ub.id where cen.nombre = pw.cen_Pob and ub.codigo = pw.codGeo limit 1) as centropoblado_id,
          inst.id as institucion_id,
          pw.cod_Mod,
          pw.cod_Local,
@@ -861,26 +861,26 @@ BEGIN
          /*pw.fecha_Act,*/
          now(),
          now(),
-         'AC' 
-	from edu_impor_padronweb as pw 
-	left join edu_institucioneducativa as inst on pw.cod_Mod = inst.codModular 
-	where importacion_id=v_importacion_id; 
-    
-        
+         'AC'
+	from edu_impor_padronweb as pw
+	left join edu_institucioneducativa as inst on pw.cod_Mod = inst.codModular
+	where importacion_id=v_importacion_id;
+
+
     update edu_institucioneducativa as ins
     left join padronweb_tempo_completo as pw on ins.id = pw.institucion_id
     set ins.estado = 'EL'
     where institucion_id is null;
-    	   
-       
-    update edu_institucioneducativa as inst 
+
+
+    update edu_institucioneducativa as inst
     inner join padronweb_tempo_completo as pw on inst.id = pw.institucion_id
-    set 
+    set
     inst.NivelModalidad_id = pw.nivelmodalidad_id,
-    inst.Forma_id = pw.forma_id, 
+    inst.Forma_id = pw.forma_id,
     inst.Caracteristica_id = pw.caracteristica_id,
-    inst.Genero_id = pw.genero_id, 
-    inst.TipoGestion_id = pw.tipogestion_id, 
+    inst.Genero_id = pw.genero_id,
+    inst.TipoGestion_id = pw.tipogestion_id,
     inst.Ugel_id = pw.ugel_id,
     inst.Area_id = pw.area_id,
     inst.EstadoInsEdu_id = pw.estadoinsedu_id,
@@ -899,53 +899,53 @@ BEGIN
     inst.created_at = pw.created_at,
     inst.updated_at = pw.updated_at,
     inst.estado = pw.estado;
-    
-   
-       
+
+
+
     insert into `edu_institucioneducativa` (`NivelModalidad_id`,`Forma_id`,`Caracteristica_id`,`Genero_id`,`TipoGestion_id`,`Ugel_id`,
 			`Area_id`,`EstadoInsEdu_id`,`Turno_id`,`CentroPoblado_id`,`codModular`,`codLocal`,`nombreInstEduc`,`nombreDirector`,`telefono`,/*`email`,*/
 			`direccion`,`coorGeoLatitud`,`coordGeoLongitud`,/*`fechaReg`,`fechaAct`,*/`created_at`,`updated_at`,`estado`)
-    SELECT nivelmodalidad_id ,forma_id,caracteristica_id ,genero_id ,tipogestion_id,ugel_id , area_id ,estadoinsedu_id , turno_id , 
+    SELECT nivelmodalidad_id ,forma_id,caracteristica_id ,genero_id ,tipogestion_id,ugel_id , area_id ,estadoinsedu_id , turno_id ,
     centropoblado_id , cod_Mod ,cod_Local ,cen_Edu ,director , telefono ,/*email ,*/dir_Cen ,nLat_IE ,
-    nLong_IE ,/*fechaReg ,fecha_Act ,*/created_at ,updated_at , estado 
+    nLong_IE ,/*fechaReg ,fecha_Act ,*/created_at ,updated_at , estado
     FROM padronweb_tempo_completo
-    where institucion_id is null;  
-    
-    
-    update par_importacion set estado = 'PR' where id = v_importacion_id;   
-    
+    where institucion_id is null;
+
+
+    update par_importacion set estado = 'PR' where id = v_importacion_id;
+
     update edu_institucioneducativa set es_eib = 'SI'
 	where id in (
 				select inst.id from edu_institucioneducativa inst
-				inner join edu_padron_eib eib on eib.institucioneducativa_id=inst.id 
-				where  eib.importacion_id in (        
+				inner join edu_padron_eib eib on eib.institucioneducativa_id=inst.id
+				where  eib.importacion_id in (
 						select id from (
-								select row_number() OVER (partition BY fuenteImportacion_id  ORDER BY anio desc, fechaActualizacion desc ) AS posicion,imp.id 
+								select row_number() OVER (partition BY fuenteImportacion_id  ORDER BY anio desc, fechaActualizacion desc ) AS posicion,imp.id
 								from edu_padron_eib eib
 								inner join par_importacion imp on eib.importacion_id = imp.id
 								inner join par_anio vanio on eib.anio_id = vanio.id
-								where imp.estado = 'PR'		
+								where imp.estado = 'PR'
 						) as dd
-						where posicion = 1	
+						where posicion = 1
 				)
 	);
-    
+
     drop table if exists tabla_tempo,forma_tempo,tipogestiondet_tempo,
-    centropoblado_tempo,padronweb_tempo_completo;  
-    
+    centropoblado_tempo,padronweb_tempo_completo;
+
     INSERT INTO `edu_padronweb`(
-		`importacion_id`, 
-		`institucioneducativa_id`, 
-        `estadoinsedu_id`, 
+		`importacion_id`,
+		`institucioneducativa_id`,
+        `estadoinsedu_id`,
 		/*`localidad`, */
-		`total_alumno_m`, 
-		`total_alumno_f`, 
+		`total_alumno_m`,
+		`total_alumno_f`,
 		`total_alumno`,
-		`total_docente`, 
+		`total_docente`,
 		`total_seccion`/*,
 		`fecha_actual`*/
-        ) 
-    select 
+        )
+    select
 		ipw.importacion_id,
 		(select id from edu_institucioneducativa where codModular=ipw.cod_Mod),
         (select id from edu_estadoinsedu where codigo=ipw.estado),
@@ -956,15 +956,15 @@ BEGIN
 		ipw.tDocente,
 		ipw.tSeccion/*,
 		ipw.fecha_Act */
-    from edu_impor_padronweb as ipw 
+    from edu_impor_padronweb as ipw
     where ipw.importacion_id=v_importacion_id;
 END
 
 
 # sirve para exportar padron web
 
-SELECT 
-	ie.codModular as cod_mod,      ie.codLocal     as cod_local,                  ie.nombreInstEduc as institucion_educativa, nm.codigo as cod_nivelmod,         nm.nombre as nivel_modalidad,  
+SELECT
+	ie.codModular as cod_mod,      ie.codLocal     as cod_local,                  ie.nombreInstEduc as institucion_educativa, nm.codigo as cod_nivelmod,         nm.nombre as nivel_modalidad,
 	ff.nombre as forma,            cc.codigo       as cod_car,                    cc.nombre as carasteristica,                gg.codigo as cod_genero,           gg.nombre as genero,
     tg1.codigo as cod_gest,        tg1.nombre      as gestion,                    tg2.codigo as cod_ges_dep,                  tg2.nombre as gestion_dependencia, ie.nombreDirector as director,
     ie.telefono,                   ie.direccion    as direccion_centro_educativo, cp.codINEI as codcp_inei,                   cp.codUEMinedu as cod_ccpp,        cp.nombre as centro_poblado,
@@ -973,7 +973,7 @@ SELECT
     tt.codigo as cod_tur,          tt.nombre       as turno,                      ei.codigo as cod_estado,                    ei.nombre as estado,               pw.total_alumno_m as talum_hom,
     pw.total_alumno_f as talum_muj,pw.total_alumno as talumno,                    pw.total_docente as tdocente,               pw.total_seccion as tseccion
 FROM edu_padronweb pw
-inner join edu_institucioneducativa ie 	on ie.id=pw.institucioneducativa_id 
+inner join edu_institucioneducativa ie 	on ie.id=pw.institucioneducativa_id
 inner join edu_nivelmodalidad nm 		on nm.id=ie.NivelModalidad_id
 inner join edu_forma ff 				on ff.id=ie.Forma_id
 inner join edu_caracteristica cc 		on cc.id=ie.Caracteristica_id
@@ -996,21 +996,71 @@ WHERE pw.importacion_id=383;
 ALTER TABLE `edu_sfl` ADD `fecha_inscripcion` DATE NULL DEFAULT NULL AFTER `fecha_registro`;
 
 #
-    select 
+    select
     	iiee.codLocal as local, max(iiee.id) as iiee, max(uu.nombre) as ugel, max(pv.nombre) as provincia, max(dt.nombre) as distrito, max(aa.nombre) as area,count(codModular) as iiees,
-    	sfl.estado, sfl.tipo, sfl.fecha_registro  
+    	sfl.estado, sfl.tipo, sfl.fecha_registro
     from (
-    	select iiee.id, iiee.CentroPoblado_id, iiee.codLocal, iiee.codModular, iiee.Area_id, iiee.Ugel_id 
+    	select iiee.id, iiee.CentroPoblado_id, iiee.codLocal, iiee.codModular, iiee.Area_id, iiee.Ugel_id
     	from edu_institucionEducativa as iiee
     	where iiee.EstadoInsEdu_id = 3 and iiee.TipoGestion_id in (4, 5, 7, 8) and iiee.estado = 'AC' and iiee.NivelModalidad_id not in (14, 15)
-    	) as iiee 
-    inner join edu_centropoblado as cp on cp.id = iiee.CentroPoblado_id 
-    inner join edu_area as aa on aa.id = iiee.Area_id 
-    inner join edu_ugel as uu on uu.id = iiee.Ugel_id 
-    inner join par_ubigeo as dt on dt.id = cp.Ubigeo_id 
-    inner join par_ubigeo as pv on pv.id = dt.dependencia 
-    left join edu_sfl as sfl on sfl.institucioneducativa_id = iiee.id 
+    	) as iiee
+    inner join edu_centropoblado as cp on cp.id = iiee.CentroPoblado_id
+    inner join edu_area as aa on aa.id = iiee.Area_id
+    inner join edu_ugel as uu on uu.id = iiee.Ugel_id
+    inner join par_ubigeo as dt on dt.id = cp.Ubigeo_id
+    inner join par_ubigeo as pv on pv.id = dt.dependencia
+    left join edu_sfl as sfl on sfl.institucioneducativa_id = iiee.id
     group by local;
+
+
+#
+CREATE DEFINER=`root`@`localhost` PROCEDURE `bdsismore`.`sal_pa_procesarPacto1`(IN `v_importacion` INT, IN `v_anio` INT)
+BEGIN
+
+
+	/*delete from sal_data_pacto1 where anio=v_anio;*/
+
+	drop table if exists temp1;
+	drop table if exists temp2;
+	drop table if exists temp3;
+	create temporary table temp1(importacion int, anio int,distrito varchar(50),fechai date,fechaf date,fechae date,mes int,estado int);
+	create temporary table temp2(importacion int, anio int,distrito varchar(50),fechai date,fechaf date,fechae date,mes int,estado int);
+
+	insert into temp1
+	select imp.id, year(imp.fechaActualizacion),pa.distrito ,pa.fecha_inicial ,pa.fecha_final, pa.fecha_envio ,
+		IF(date_format(pa.fecha_envio,'%Y-%m-07'),
+			month(fecha_envio)
+		,0) ,
+		IF(year(fecha_inicial)=v_anio and year(fecha_final)=v_anio,
+			if(pa.fecha_envio between pa.fecha_inicial and date_format(date_add(pa.fecha_inicial,interval 1 month),'%Y-%m-07') ,1,0)
+		,0) as estado
+	from sal_impor_padron_actas pa
+	left join par_importacion imp on imp.id =pa.importacion_id
+	where year(imp.fechaActualizacion)=v_anio and imp.id=v_importacion /*and (year(pa.fecha_inicial)=year(imp.fechaActualizacion) and year(pa.fecha_final)=year(imp.fechaActualizacion))*/
+	order by pa.distrito,pa.fecha_envio,fecha_inicial,fecha_final ;
+
+	select * from temp1;
+
+	insert into temp2
+	select importacion, anio, distrito , fechai , fechaf, fechae ,0,
+	IF(estado=0,/*month(fechaf)-month(fechai) in(1,2,3) and */
+		IF(month(fechaf)=month(fechae) or month(fechaf)+1=month(fechae),
+			IF(fechae between date_format(fechaf,'%Y-%m-08') and date_format(date_add(fechaf,interval 1 month),'%Y-%m-07') ,1,0)
+		,0)
+	,1)
+	 as estado
+	from temp1;
+
+	select * from temp2;
+
+
+	/*insert into sal_data_pacto1(`importacion_id`, `anio`, `distrito`, `mes`, `estado`)
+	select importacion, anio, distrito, month(if(year(fechai)=anio,fechai,if(year(fechaf)=anio,fechaf,fechae))) mes, max(estado) from temp2 group by importacion, anio, distrito, mes;
+
+	update par_importacion set estado="PR" where id=v_importacion;*/
+
+
+END
 
 
 
