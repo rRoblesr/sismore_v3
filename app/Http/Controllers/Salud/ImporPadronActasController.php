@@ -9,6 +9,7 @@ use App\Models\Administracion\Entidad;
 use App\Models\Educacion\ImporCensoDocente;
 use App\Models\Educacion\Importacion;
 use App\Models\Parametro\FuenteImportacion;
+use App\Models\Salud\DataPacto1;
 use App\Models\Salud\ImporPadronActas;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Utilities\Utilitario;
@@ -232,6 +233,7 @@ class ImporPadronActasController extends Controller
     public function eliminar($id)
     {
         ImporPadronActas::where('importacion_id', $id)->delete();
+        DataPacto1::where('importacion_id', $id)->delete();
         Importacion::find($id)->delete();
         return response()->json(array('status' => true));
     }
