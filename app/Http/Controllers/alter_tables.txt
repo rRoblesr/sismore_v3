@@ -1089,6 +1089,58 @@ select distinct institucioneducativa_id  from edu_matricula_general_detalle wher
 
 
 
+#
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `datosx`.`sal_pa_procesarPacto1`(IN `v_importacion` INT, IN `v_anio` INT)
+BEGIN
+
+	/*delete from sal_data_pacto1 where anio=v_anio;*/
+
+	drop table if exists temp1;
+	drop table if exists temp2;
+	drop table if exists temp3;
+	create temporary table temp1(importacion int, anio int,distrito varchar(50),fechai date,fechaf date,fechae date,mes int,estado int);
+	create temporary table temp2(importacion int, anio int,distrito varchar(50),fechai date,fechaf date,fechae date,mes int,estado int);
+
+	insert into temp1
+	select imp.id, year(imp.fechaActualizacion),pa.distrito ,pa.fecha_inicial ,pa.fecha_final, pa.fecha_envio ,
+		IF(month(pa.fecha_envio)=month(pa.fecha_final),
+			IF(month(pa.fecha_final)-month(pa.fecha_inicial)=1,month(pa.fecha_inicial),month(pa.fecha_envio))			
+		,0) ,
+		IF(year(fecha_inicial)=v_anio and year(fecha_final)=v_anio,
+			if(pa.fecha_envio between pa.fecha_inicial and date_format(date_add(pa.fecha_inicial,interval 1 month),'%Y-%m-07') ,1,0)
+		,0) as estado
+	from sal_impor_padron_actas pa
+	left join par_importacion imp on imp.id =pa.importacion_id
+	where year(imp.fechaActualizacion)=v_anio and imp.id=v_importacion /*and (year(pa.fecha_inicial)=year(imp.fechaActualizacion) and year(pa.fecha_final)=year(imp.fechaActualizacion))*/
+	order by pa.distrito,pa.fecha_envio,fecha_inicial,fecha_final ;
+
+	select * from temp1;
+
+	insert into temp2
+	select importacion, anio, distrito , fechai , fechaf, fechae ,
+	IF(mes=0,
+		IF(month(fechae)-1=month(fechaf),
+			month(fechaf)
+		,0) 		
+	,mes),
+	IF(estado=0,
+		IF(month(fechaf)=month(fechae) or month(fechaf)+1=month(fechae),
+			IF(fechae between date_format(fechaf,'%Y-%m-08') and date_format(date_add(fechaf,interval 1 month),'%Y-%m-07') ,1,0)
+		,0)
+	,1)
+	 as estado
+	from temp1;
+
+	select * from temp2;
+
+
+	/*insert into sal_data_pacto1(`importacion_id`, `anio`, `distrito`, `mes`, `estado`)
+	select importacion, anio, distrito, month(if(year(fechai)=anio,fechai,if(year(fechaf)=anio,fechaf,fechae))) mes, max(estado) from temp2 group by importacion, anio, distrito, mes;
+
+	update par_importacion set estado="PR" where id=v_importacion;*/
+
+END
 
 
 
