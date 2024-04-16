@@ -1175,7 +1175,7 @@ class HomeController extends Controller
                 return response()->json(compact('info'));
 
             case 'siagie001':
-                $data = MatriculaGeneralRepositorio::basicaregularopcion2('siagie001', $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion);
+                $data = MatriculaGeneralRepositorio::basicaregularopcion2('siagie001', $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->area);
                 $info['cat'] = [];
                 $info['dat'] = [];
                 $rango = '';
@@ -1198,8 +1198,9 @@ class HomeController extends Controller
                     }
                 }
                 $info['dat'] = [];
-                foreach ($data->unique('nivel') as $key => $value) {
-                    $info['dat'][] = ["name" => $value->nivel, "data" => $xx[$key]];
+                $pos = 0;
+                foreach ($data->unique('nivel') as $value) {
+                    $info['dat'][] = ["name" => $value->nivel, "data" => $xx[$pos++]];
                 }
 
                 $reg['fuente'] = 'Siagie - MINEDU';
@@ -1252,7 +1253,7 @@ class HomeController extends Controller
 
                 $data1 = ImporCensoMatriculaRepositorio::_5ATotalEstudianteAnio($icd->anio - 1, $rq->provincia, $rq->distrito, 0, $rq->area,  $rq->gestion);
                 $data2 = ImporCensoMatriculaRepositorio::_5ATotalEstudianteAnio($icd->anio, $rq->provincia, $rq->distrito, 0, $rq->area,  $rq->gestion);
-                $info['indicador'] = round(100 * $data2->total / $data1->total, 0);
+                $info['indicador'] = round(100 * ($data1->total > 0 ? $data2->total / $data1->total : 0), 0);
 
                 $reg['fuente'] = 'Siagie - MINEDU';
                 // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
