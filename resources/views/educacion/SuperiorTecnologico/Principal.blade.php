@@ -45,11 +45,11 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-lg-2 col-md-2 col-sm-2">
+                {{-- <div class="col-lg-2 col-md-2 col-sm-2">
                     <select id="ugel" name="ugel" class="form-control btn-xs font-11" onchange="cargarCards();">
                         <option value="0">UGEL</option>
                     </select>
-                </div>
+                </div> --}}
                 <div class="col-lg-2 col-md-2 col-sm-2">
                     <select id="gestion" name="gestion" class="form-control btn-xs font-11" onchange="cargarCards();">
                         <option value="0">TIPO DE GESTIÓN</option>
@@ -60,6 +60,11 @@
                 <div class="col-lg-2 col-md-2 col-sm-2">
                     <select id="area" name="area" class="form-control btn-xs font-11" onchange="cargarCards();">
                         <option value="0">ÁREA GEOGRÁFICA</option>
+                    </select>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2">
+                    <select id="iiee" name="iiee" class="form-control btn-xs font-11" onchange="cargarCards();">
+                        <option value="0">INSTITUCIÓN EDUCATIVA</option>
                     </select>
                 </div>
             </div>
@@ -284,7 +289,7 @@
                     "anio": $('#anio').val(),
                     "provincia": 0,
                     "distrito": 0,
-                    "ugel": $('#ugel').val(),
+                    "ugel": 0, // $('#ugel').val(),
                     "area": $('#area').val(),
                     "gestion": $('#gestion').val(),
                 },
@@ -374,7 +379,7 @@
                     "anio": $('#anio').val(),
                     "provincia": 0,
                     "distrito": 0,
-                    "ugel": $('#ugel').val(),
+                    "ugel": 0, // $('#ugel').val(),
                     "area": $('#area').val(),
                     "gestion": $('#gestion').val(),
                 },

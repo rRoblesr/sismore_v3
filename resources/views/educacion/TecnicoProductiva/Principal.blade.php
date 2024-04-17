@@ -62,6 +62,11 @@
                         <option value="0">ÁREA GEOGRÁFICA</option>
                     </select>
                 </div>
+                <div class="col-lg-2 col-md-2 col-sm-2">
+                    <select id="iiee" name="iiee" class="form-control btn-xs font-11" onchange="cargarCards();">
+                        <option value="0">INSTITUCIÓN EDUCATIVA</option>
+                    </select>
+                </div>
             </div>
 
 
@@ -317,7 +322,7 @@
                     "anio": $('#anio').val(),
                     "provincia": 0,
                     "distrito": 0,
-                    "ugel": $('#ugel').val(),
+                    "ugel": 0, // $('#ugel').val(),
                     "area": $('#area').val(),
                     "gestion": $('#gestion').val(),
                 },
