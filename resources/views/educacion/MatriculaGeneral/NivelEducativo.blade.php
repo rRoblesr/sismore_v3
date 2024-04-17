@@ -294,7 +294,8 @@
                             <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
                                     class="fa fa-file-excel"></i> Descargar</button>
                         </div>
-                        <h3 class="text-black font-14">Matricula educativa por tipo de gestión y sexo, según UGEL&nbsp;</h3>
+                        <h3 class="text-black font-14">Matricula educativa por tipo de gestión y sexo, según UGEL&nbsp;
+                        </h3>
                     </div>
                     <div class="card-body pt-0 pb-0">
                         <div class="row">
@@ -496,8 +497,12 @@
                 type: "GET",
                 dataType: "JSON",
                 beforeSend: function() {
-
-                    if (div == "tabla1") {
+                    if (div == "head") {
+                        $('#normal').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('#eib').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('#foraneo').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('#limitado').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "tabla1") {
                         $('#v' + div).html(
                             '<span><i class="fa fa-spinner fa-spin"></i></span>');
                     } else if (div == "tabla2") {

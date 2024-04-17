@@ -714,7 +714,7 @@ class MatriculaGeneralController extends Controller
 
     public function vista0001head(Request $rq) //viene de indicadorcontroller como panelControlEduacionNuevoindicador01
     {
-        $xx = MatriculaGeneralRepositorio::indicador01head($rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion, 1);
+        $xx = MatriculaGeneralRepositorio::indicador01head($rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion, $rq->area);
         $valor1 = $xx->basica;
         $valor2 = $xx->ebr;
         $valor3 = $xx->ebe;
@@ -722,7 +722,7 @@ class MatriculaGeneralController extends Controller
         $aa = Anio::find($rq->anio);
         $aav =  -1 + (int)$aa->anio;
         $aa = Anio::where('anio', $aav)->first();
-        $xx = MatriculaGeneralRepositorio::indicador01head($aa->id, $rq->provincia, $rq->distrito,  $rq->gestion, 1);
+        $xx = MatriculaGeneralRepositorio::indicador01head($aa->id, $rq->provincia, $rq->distrito,  $rq->gestion, $rq->area);
         $valor1x = $xx->basica;
         $valor2x = $xx->ebr;
         $valor3x = $xx->ebe;
@@ -745,7 +745,7 @@ class MatriculaGeneralController extends Controller
     {
         switch ($rq->div) {
             case 'anal1':
-                $datax = MatriculaGeneralRepositorio::indicador01tabla($rq->div, $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion, 0, 0);
+                $datax = MatriculaGeneralRepositorio::indicador01tabla($rq->div, $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion, $rq->area, 0);
                 $info['series'] = [];
                 $alto = 0;
                 $btotal = 0;
@@ -777,7 +777,7 @@ class MatriculaGeneralController extends Controller
                 return response()->json(compact('info', 'reg'));
             case 'anal2':
                 $periodo = Mes::select('codigo', 'abreviado as mes', DB::raw('0 as conteo'))->get();
-                $datax = MatriculaGeneralRepositorio::indicador01tabla($rq->div, $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion, 0, 0);
+                $datax = MatriculaGeneralRepositorio::indicador01tabla($rq->div, $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion, $rq->area, 0);
                 $info['cat'] = [];
                 $info['dat'] = [];
                 $mesmax = $datax->max('mes');
@@ -800,13 +800,13 @@ class MatriculaGeneralController extends Controller
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
                 return response()->json(compact('info', 'reg'));
             case 'anal3':
-                $info = MatriculaGeneralRepositorio::indicador01tabla($rq->div, $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion, 0, 0);
+                $info = MatriculaGeneralRepositorio::indicador01tabla($rq->div, $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion, $rq->area, 0);
                 $reg['fuente'] = 'Siagie - MINEDU';
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
                 return response()->json(compact('info', 'reg'));
             case 'anal4':
-                $info = MatriculaGeneralRepositorio::indicador01tabla($rq->div, $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion, 0, 0);
+                $info = MatriculaGeneralRepositorio::indicador01tabla($rq->div, $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion, $rq->area, 0);
                 $reg['fuente'] = 'Siagie - MINEDU';
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
@@ -815,7 +815,7 @@ class MatriculaGeneralController extends Controller
                 $aniox = Anio::find($rq->anio);
                 $anioy = Anio::where('anio', $aniox->anio - 1)->first();
                 $meta = MatriculaGeneralRepositorio::metaUgel($anioy->id, $rq->provincia, $rq->distrito,  $rq->gestion, 0);
-                $base = MatriculaGeneralRepositorio::indicador01tabla($rq->div, $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion, 0, 0);
+                $base = MatriculaGeneralRepositorio::indicador01tabla($rq->div, $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion, $rq->area, 0);
                 $foot = [];
                 if ($base->count() > 0) {
                     $foot = clone $base[0];
@@ -871,7 +871,7 @@ class MatriculaGeneralController extends Controller
                 $aniox = Anio::find($rq->anio);
                 $anioy = Anio::where('anio', $aniox->anio - 1)->first();
                 $meta = MatriculaGeneralRepositorio::metaNivel($anioy->id, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ugel);
-                $base = MatriculaGeneralRepositorio::indicador01tabla($rq->div, $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion, 0,  $rq->ugel);
+                $base = MatriculaGeneralRepositorio::indicador01tabla($rq->div, $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion, $rq->area,  $rq->ugel);
                 $head = [];
                 $foot = [];
                 if ($base->count() > 0) {

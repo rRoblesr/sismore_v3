@@ -508,7 +508,12 @@
                 dataType: "JSON",
                 beforeSend: function() {
 
-                    if (div == "tabla1") {
+                    if (div == "head") {
+                        $('#normal').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('#eib').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('#foraneo').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('#limitado').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "tabla1") {
                         $('#v' + div).html(
                             '<span><i class="fa fa-spinner fa-spin"></i></span>');
                     } else if (div == "tabla2") {
@@ -532,19 +537,19 @@
                         //$('#bbasico').css('width','100px');
                         $('#bnormal').css('width', data.ind1 + '%')
                             .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
-                            .addClass(data.ind1 > 84 ? 'bg-success-0' : (data.ind1 > 49 ? 'bg-warning-0' :
+                            .addClass(data.ind1 > 95 ? 'bg-success-0' : (data.ind1 > 75 ? 'bg-warning-0' :
                                 'bg-orange-0'));
                         $('#beib').css('width', data.ind2 + '%')
                             .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
-                            .addClass(data.ind2 > 84 ? 'bg-success-0' : (data.ind2 > 49 ? 'bg-warning-0' :
+                            .addClass(data.ind2 > 95 ? 'bg-success-0' : (data.ind2 > 75 ? 'bg-warning-0' :
                                 'bg-orange-0'));
                         $('#bforaneo').css('width', data.ind3 + '%')
                             .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
-                            .addClass(data.ind3 > 84 ? 'bg-success-0' : (data.ind3 > 49 ? 'bg-warning-0' :
+                            .addClass(data.ind3 > 95 ? 'bg-success-0' : (data.ind3 > 75 ? 'bg-warning-0' :
                                 'bg-orange-0'));
                         $('#blimitado').css('width', data.ind4 + '%')
                             .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
-                            .addClass(data.ind4 > 84 ? 'bg-success-0' : (data.ind4 > 49 ? 'bg-warning-0' :
+                            .addClass(data.ind4 > 95 ? 'bg-success-0' : (data.ind4 > 75 ? 'bg-warning-0' :
                                 'bg-orange-0'));
                     } else if (div == "anal1") {
                         gAnidadaColumn(div,

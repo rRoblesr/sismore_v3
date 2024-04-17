@@ -382,6 +382,12 @@
                 },
                 type: "GET",
                 dataType: "JSON",
+                beforeSend: function() {
+                    $('#basico').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    $('#ebr').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    $('#ebe').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    $('#eba').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                },
                 success: function(data) {
                     $('#basico').text(data.valor1);
                     $('#ebr').text(data.valor2);
@@ -394,19 +400,19 @@
                     //$('#bbasico').css('width','100px');
                     $('#bbasico').css('width', data.ind1 + '%')
                         .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
-                        .addClass(data.ind1 > 84 ? 'bg-success-0' : (data.ind1 > 49 ? 'bg-warning-0' :
+                        .addClass(data.ind1 > 95 ? 'bg-success-0' : (data.ind1 > 75 ? 'bg-warning-0' :
                             'bg-orange-0'));
                     $('#bebr').css('width', data.ind2 + '%')
                         .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
-                        .addClass(data.ind2 > 84 ? 'bg-success-0' : (data.ind2 > 49 ? 'bg-warning-0' :
+                        .addClass(data.ind2 > 95 ? 'bg-success-0' : (data.ind2 > 75 ? 'bg-warning-0' :
                             'bg-orange-0'));
                     $('#bebe').css('width', data.ind3 + '%')
                         .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
-                        .addClass(data.ind3 > 84 ? 'bg-success-0' : (data.ind3 > 49 ? 'bg-warning-0' :
+                        .addClass(data.ind3 > 95 ? 'bg-success-0' : (data.ind3 > 75 ? 'bg-warning-0' :
                             'bg-orange-0'));
                     $('#beba').css('width', data.ind4 + '%')
                         .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
-                        .addClass(data.ind4 > 84 ? 'bg-success-0' : (data.ind4 > 49 ? 'bg-warning-0' :
+                        .addClass(data.ind4 > 95 ? 'bg-success-0' : (data.ind4 > 75 ? 'bg-warning-0' :
                             'bg-orange-0'));
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {

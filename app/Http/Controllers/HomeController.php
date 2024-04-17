@@ -1026,8 +1026,9 @@ class HomeController extends Controller
                     $nx = $nx->where('v1.area_censo', $area->codigo);
                 }
                 $nx = $nx->groupBy('anio')->orderBy('anio', 'asc')->orderBy('v1.tipdato', 'desc')->first();
-
-                $info['indicador'] = round(100 * $nx->d / $dx->d, 1);
+                $v1 = $nx ? $nx->d : 0;
+                $v2 = $dx ? $dx->d : 0;
+                $info['indicador'] = round(100 * $v2 > 0 ? $v1 / $v2 : 0, 1);
                 $info['fuente'] = 'Censo Educativo - MINEDU';
                 $info['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
                 return response()->json(compact('info'));
@@ -1098,7 +1099,9 @@ class HomeController extends Controller
                     $nx = $nx->where('v1.area_censo', $area->codigo);
                 }
                 $nx = $nx->groupBy('anio')->orderBy('anio', 'asc')->orderBy('v1.tipdato', 'desc')->first();
-                $info['indicador'] = round(100 * $nx->d / $dx->d, 1);
+                $v1 = $nx ? $nx->d : 0;
+                $v2 = $dx ? $dx->d : 0;
+                $info['indicador'] = round(100 * ($v1 > 0 ? $v1 / $v2 : 0), 1);
                 $info['fuente'] = 'Censo Educativo - MINEDU';
                 $info['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
                 return response()->json(compact('info'));
@@ -1169,7 +1172,10 @@ class HomeController extends Controller
                     $nx = $nx->where('v1.area_censo', $area->codigo);
                 }
                 $nx = $nx->groupBy('anio')->orderBy('anio', 'asc')->orderBy('v1.tipdato', 'desc')->first();
-                $info['indicador'] = round(100 * $nx->d / $dx->d, 1);
+                $v1 = $nx ? $nx->d : 0;
+                $v2 = $dx ? $dx->d : 0;
+                $info['indicador'] = round(100 * ($v1 > 0 ? $v1 / $v2 : 0), 1);
+                // $info['indicador'] = round(100 * $nx->d / $dx->d, 1);
                 $info['fuente'] = 'Censo Educativo - MINEDU';
                 $info['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
                 return response()->json(compact('info'));
@@ -1241,19 +1247,25 @@ class HomeController extends Controller
                 $data1 = MatriculaGeneralRepositorio::estudiantesModeloEIB($anio->id, $rq->provincia, $rq->distrito, 0, $rq->area,  $rq->gestion);
                 $anio = Anio::where('anio', $rq->anio)->first();
                 $data2 = MatriculaGeneralRepositorio::estudiantesModeloEIB($anio->id, $rq->provincia, $rq->distrito, 0, $rq->area,  $rq->gestion);
-                $info['indicador'] = round(100 * $data2 / $data1, 0);
+                $v1 = $data2 ? $data2 : 0;
+                $v2 = $data1 ? $data1 : 0;
+                $info['indicador'] = round(100 * ($v1 > 0 ? $v1 / $v2 : 0), 1);
+                // $info['indicador'] = round(100 * $data2 / $data1, 1);
 
                 $reg['fuente'] = 'Siagie - MINEDU';
                 // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
                 $reg['fecha'] = ''; // date('d/m/Y', strtotime($imp->fechaActualizacion));
-                return response()->json(compact('info', 'reg'));
+                return response()->json(compact('info', 'reg', 'data2', 'data1'));
 
             case 'skills002':
                 $icd = ImportacionRepositorio::ImportacionMax_porfuente(ImporCensoDocenteController::$FUENTE);
 
                 $data1 = ImporCensoMatriculaRepositorio::_5ATotalEstudianteAnio($icd->anio - 1, $rq->provincia, $rq->distrito, 0, $rq->area,  $rq->gestion);
                 $data2 = ImporCensoMatriculaRepositorio::_5ATotalEstudianteAnio($icd->anio, $rq->provincia, $rq->distrito, 0, $rq->area,  $rq->gestion);
-                $info['indicador'] = round(100 * ($data1->total > 0 ? $data2->total / $data1->total : 0), 0);
+                $v1 = $data2 ? $data2->total : 0;
+                $v2 = $data1 ? $data1->total : 0;
+                $info['indicador'] = round(100 * ($v1 > 0 ? $v1 / $v2 : 0), 1);
+                // $info['indicador'] = round(100 * ($data1->total > 0 ? $data2->total / $data1->total : 0), 0);
 
                 $reg['fuente'] = 'Siagie - MINEDU';
                 // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
@@ -1265,19 +1277,24 @@ class HomeController extends Controller
 
                 $data1 = ImporCensoMatriculaRepositorio::_6ATotalEstudianteAnio($icd->anio - 1, $rq->provincia, $rq->distrito, 0, $rq->area,  $rq->gestion);
                 $data2 = ImporCensoMatriculaRepositorio::_6ATotalEstudianteAnio($icd->anio, $rq->provincia, $rq->distrito, 0, $rq->area,  $rq->gestion);
-                $info['indicador'] = round(100 * $data2->total / $data1->total, 0);
+                $v1 = $data1 ? $data1->total : 0;
+                $v2 = $data2 ? $data2->total : 0;
+                $info['indicador'] = round(100 * ($v1 > 0 ? $v2 / $v1 : 0), 0);
 
                 $reg['fuente'] = 'Siagie - MINEDU';
                 // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
                 $reg['fecha'] = ''; // date('d/m/Y', strtotime($imp->fechaActualizacion));
-                return response()->json(compact('info', 'reg'));
+                return response()->json(compact('info', 'reg', 'data1', 'data2'));
 
             case 'skills004':
                 $icd = ImportacionRepositorio::ImportacionMax_porfuente(ImporCensoDocenteController::$FUENTE);
 
                 $data1 = ImporCensoMatriculaRepositorio::_7ATotalEstudianteAnio($icd->anio - 1, $rq->provincia, $rq->distrito, 0, $rq->area,  $rq->gestion);
                 $data2 = ImporCensoMatriculaRepositorio::_7ATotalEstudianteAnio($icd->anio, $rq->provincia, $rq->distrito, 0, $rq->area,  $rq->gestion);
-                $info['indicador'] = round(100 * $data2->total / $data1->total, 0);
+                $v1 = $data2 ? $data2->total : 0;
+                $v2 = $data1 ? $data1->total : 0;
+                $info['indicador'] = round(100 * ($v1 > 0 ? $v1 / $v2 : 0), 1);
+                // $info['indicador'] = round(100 * $data2->total / $data1->total, 0);
 
                 $reg['fuente'] = 'Siagie - MINEDU';
                 // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
