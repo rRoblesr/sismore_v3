@@ -647,7 +647,7 @@ class HomeController extends Controller
 
         $provincias = UbigeoRepositorio::provincia('25'); //Ubigeo::select('v2.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();
         $distritos = UbigeoRepositorio::distrito('25', 0); //Ubigeo::select('v3.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->join('par_ubigeo as v3', 'v3.dependencia', '=', 'v2.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();
-        $ambitos = Area::select(DB::raw('upper(nombre) as nombre'))->get();
+        $ambitos = Area::select('id',DB::raw('upper(nombre) as nombre'))->get();
 
         return  view('home', compact(
             'tipo_acceso',

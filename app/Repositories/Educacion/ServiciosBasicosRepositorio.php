@@ -7,6 +7,7 @@ use App\Models\Educacion\ImporServiciosBasicos;
 use App\Models\Educacion\Importacion;
 use App\Models\Educacion\Matricula;
 use App\Models\Educacion\MatriculaGeneralDetalle;
+use App\Models\Parametro\Ubigeo;
 use Illuminate\Support\Facades\DB;
 
 class ServiciosBasicosRepositorio
@@ -364,7 +365,20 @@ class ServiciosBasicosRepositorio
 
     public static function indicador($anio, $provincia, $distrito, $gestion, $area, $servicio)
     {
-        $total = ImporServiciosBasicos::where('codgeo', 'like', '25%')->count();
+        $total = ImporServiciosBasicos::where('codgeo', 'like', '25%');
+        if ($provincia > 0) {
+            $uu1 = Ubigeo::find($provincia);
+            $total = $total->where('prov', $uu1->nombre);
+        }
+        if ($distrito > 0) {
+            $uu2 = Ubigeo::find($distrito);
+            $total = $total->where('dist', $uu2->nombre);
+        }
+        if ($gestion > 0) {
+            $total = $gestion == 3 ? $total->where('pub_priv', 'Privada') : $total->where('pub_priv', 'Público');
+        }
+        if ($area > 0) $total = $total->where('area_censo', $area);
+        $total = $total->count();
 
         $query = ImporServiciosBasicos::where('codgeo', 'like', '25%');
         if ($servicio == 1)
@@ -377,8 +391,22 @@ class ServiciosBasicosRepositorio
             $query = $query->where('tres_servicios_final', '>', 0);
         else if ($servicio == 5)
             $query = $query->where('internet_final', '>', 0);
+
+        if ($provincia > 0) {
+            $uu1 = Ubigeo::find($provincia);
+            $query = $query->where('prov', $uu1->nombre);
+        }
+        if ($distrito > 0) {
+            $uu2 = Ubigeo::find($distrito);
+            $query = $query->where('dist', $uu2->nombre);
+        }
+        if ($gestion > 0) {
+            $query = $gestion == 3 ? $query->where('pub_priv', 'Privada') : $query->where('pub_priv', 'Público');
+        }
+        if ($area > 0) $query = $query->where('area_censo', $area);
+
         $query = $query->count();
 
-        return round(100 * $query / $total, 0);
+        return round(100 * ($total > 0 ? $query / $total : 0), 0);
     }
 }

@@ -1224,12 +1224,30 @@
                 type: "GET",
                 dataType: "JSON",
                 beforeSend: function() {
-                    if (div == "siagie001") {
-                        $('#' + div).html(
-                            '<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    if (div == "skills001") {
+                        $('.skills001 h6 span').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "skills002") {
+                        $('.skills002 h6 span').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "skills003") {
+                        $('.skills003 h6 span').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "skills004") {
+                        $('.skills004 h6 span').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "skills005") {
+                        $('.skills005 h6 span').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "skills006") {
+                        $('.skills006 h6 span').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "skills007") {
+                        $('.skills007 h6 span').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "skills008") {
+                        $('.skills008 h6 span').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "skills009") {
+                        $('.skills009 h6 span').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "skills010") {
+                        $('.skills010 h6 span').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "siagie001") {
+                        $('#' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
                     } else if (div == "censodocente001") {
-                        $('#' + div).html(
-                            '<span><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('#' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
                     } else {
                         // $('#' + div).html(
                         //     '<span><i class="fa fa-spinner fa-spin"></i></span>');
@@ -1327,35 +1345,35 @@
                             $('.skills001 h6 span').html(data.info.indicador + "%");
                             $('.skills001 .progress-bar').css('width', data.info.indicador + '%')
                                 .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+                                .addClass(data.info.indicador > 95 ? 'bg-success-0' :
+                                    (data.info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
                             break;
                         case "skills002":
                             $('.skills002 h6 span').html(data.info.indicador + "%");
                             $('.skills002 .progress-bar').css('width', data.info.indicador + '%')
                                 .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+                                .addClass(data.info.indicador > 95 ? 'bg-success-0' :
+                                    (data.info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
                         case "skills003":
                             $('.skills003 h6 span').html(data.info.indicador + "%");
                             $('.skills003 .progress-bar').css('width', data.info.indicador + '%')
                                 .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+                                .addClass(data.info.indicador > 95 ? 'bg-success-0' :
+                                    (data.info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
                             break;
                         case "skills004":
                             $('.skills004 h6 span').html(data.info.indicador + "%");
                             $('.skills004 .progress-bar').css('width', data.info.indicador + '%')
                                 .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+                                .addClass(data.info.indicador > 95 ? 'bg-success-0' :
+                                    (data.info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
                             break;
                         case "skills005":
                             $('.skills005 h6 span').html(data.info.indicador + "%");
                             $('.skills005 .progress-bar').css('width', data.info.indicador + '%')
                                 .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+                                .addClass(data.info.indicador > 95 ? 'bg-success-0' :
+                                    (data.info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
                             $('#span-skills005-fuente').html("Fuente: " + data.reg.fuente);
                             $('#span-skills005-fecha').html("Actualizado: " + data.reg.fecha);
                             break;
@@ -1363,37 +1381,37 @@
                             $('.skills006 h6 span').html(data.info.indicador + "%");
                             $('.skills006 .progress-bar').css('width', data.info.indicador + '%')
                                 .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+                                .addClass(data.info.indicador > 95 ? 'bg-success-0' :
+                                    (data.info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
 
                             break;
                         case "skills007":
                             $('.skills007 h6 span').html(data.info.indicador + "%");
                             $('.skills007 .progress-bar').css('width', data.info.indicador + '%')
                                 .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+                                .addClass(data.info.indicador > 95 ? 'bg-success-0' :
+                                    (data.info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
                             break;
                         case "skills008":
                             $('.skills008 h6 span').html(data.info.indicador + "%");
                             $('.skills008 .progress-bar').css('width', data.info.indicador + '%')
                                 .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+                                .addClass(data.info.indicador > 95 ? 'bg-success-0' :
+                                    (data.info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
                             break;
                         case "skills009":
                             $('.skills009 h6 span').html(data.info.indicador + "%");
                             $('.skills009 .progress-bar').css('width', data.info.indicador + '%')
                                 .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+                                .addClass(data.info.indicador > 95 ? 'bg-success-0' :
+                                    (data.info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
                             break;
                         case "skills010":
                             $('.skills010 h6 span').html(data.info.indicador + "%");
                             $('.skills010 .progress-bar').css('width', data.info.indicador + '%')
                                 .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
+                                .addClass(data.info.indicador > 95 ? 'bg-success-0' :
+                                    (data.info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
                             $('#span-skills010-fuente').html("Fuente: " + data.reg.fuente);
                             $('#span-skills010-fecha').html("Actualizado: " + data.reg.fecha);
                             break;

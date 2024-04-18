@@ -2,6 +2,8 @@
 
 namespace App\Repositories\Educacion;
 
+use App\Http\Controllers\Educacion\ImporPadronEibController;
+use App\Models\Educacion\ImporPadronEib;
 use App\Models\Educacion\Importacion;
 use App\Models\Educacion\Matricula;
 use App\Models\Educacion\MatriculaGeneralDetalle;
@@ -4289,13 +4291,15 @@ class MatriculaGeneralRepositorio
 
     public static function estudiantesModeloEIB($anio, $provincia, $distrito, $ugel, $area, $gestion)
     {
+        $imp = ImportacionRepositorio::aniosMax_porfuente(ImporPadronEibController::$FUENTE);
+        $ipeib = $imp->id;
         $mg = Importacion::select('mg.*')
             ->join('edu_matricula_general as mg', 'mg.importacion_id', '=', 'par_importacion.id')
             ->where('estado', 'PR')->where('anio_id', $anio)
             ->orderBy('fechaActualizacion', 'desc')->first();
 
         $query = MatriculaGeneralDetalle::select('edu_matricula_general_detalle.id')
-            ->join(DB::raw('(SELECT institucioneducativa_id FROM edu_padron_eib where importacion_id=1872) as eib'), 'eib.institucioneducativa_id', '=', 'edu_matricula_general_detalle.institucioneducativa_id')
+            ->join(DB::raw("(SELECT institucioneducativa_id FROM edu_padron_eib where importacion_id=$ipeib) as eib"), 'eib.institucioneducativa_id', '=', 'edu_matricula_general_detalle.institucioneducativa_id')
             ->join('edu_institucioneducativa as ie', 'ie.id', '=', 'edu_matricula_general_detalle.institucioneducativa_id')
             ->join('edu_centropoblado as cp', 'cp.id', '=', 'ie.CentroPoblado_id')
             ->join('par_ubigeo as dt', 'dt.id', '=', 'cp.Ubigeo_id')
