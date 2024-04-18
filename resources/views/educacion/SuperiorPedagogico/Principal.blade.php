@@ -273,6 +273,7 @@
         $(document).ready(function() {
             cargarUgels();
             cargarAreas();
+            cargarIIEE();
             cargarCards();
 
         });
@@ -287,6 +288,7 @@
                     "ugel": 0, // $('#ugel').val(),
                     "area": $('#area').val(),
                     "gestion": $('#gestion').val(),
+                    "iiee": $('#iiee').val(),
                 },
                 type: "GET",
                 dataType: "JSON",
@@ -349,7 +351,7 @@
 
         function cargarAreas() {
             $.ajax({
-                url: "{{ route('superiorpedagogico.area') }}",
+                url: "{{ route('superiorped<agogico.area') }}",
                 type: 'GET',
                 success: function(data) {
                     $("#area option").remove();
@@ -359,6 +361,28 @@
                             "</option>"
                     });
                     $("#area").append(options);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cargarIIEE() {
+            $.ajax({
+                url: "{{ route('superiorpedagogico.iiee') }}",
+                data: {
+                    anio: $('#anio').val(),
+                },
+                type: 'GET',
+                success: function(data) {
+                    $("#iiee option").remove();
+                    var options = '<option value="0">IIEE</option>';
+                    $.each(data.ie, function(index, value) {
+                        options += "<option value='" + value.cod_mod + "'>" + value.nombre +
+                            "</option>"
+                    });
+                    $("#iiee").append(options);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -377,6 +401,7 @@
                     "ugel": 0, // $('#ugel').val(),
                     "area": $('#area').val(),
                     "gestion": $('#gestion').val(),
+                    "iiee": $('#iiee').val(),
                 },
                 type: "GET",
                 dataType: "JSON",

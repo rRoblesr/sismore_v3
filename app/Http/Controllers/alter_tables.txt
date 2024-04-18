@@ -1142,6 +1142,20 @@ BEGIN
 
 END
 
+#
+    public static function iiee($anio, $cedula)
+    {
+        $query = ImporCensoMatricula::distinct()->select('cod_mod')
+            ->join('par_importacion as imp', 'imp.id', '=', 'edu_impor_censomatricula.importacion_id')
+            ->where(DB::raw('year(imp.fechaActualizacion)'), $anio)->where('nroced', $cedula)->get();
+        foreach ($query as $key => $value) {
+            $value->nombre = InstitucionEducativa::where('codModular', $value->cod_mod)->first()->nombreInstEduc;
+        }
+        // $query->orderBy('nombre');
+        return $query;
+    }
+
+
 
 
 

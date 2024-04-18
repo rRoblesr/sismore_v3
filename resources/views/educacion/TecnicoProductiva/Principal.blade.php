@@ -46,7 +46,8 @@
                     </select>
                 </div>
                 {{-- <div class="col-lg-2 col-md-2 col-sm-2">
-                    <select id="ugel" name="ugel" class="form-control btn-xs font-11" onchange="cargarCards();">
+                    <select id="ugel" name=
+                     class="form-control btn-xs font-11" onchange="cargarCards();">
                         <option value="0">UGEL</option>
                     </select>
                 </div> --}}
@@ -278,6 +279,7 @@
 
             cargarUgels();
             cargarAreas();
+            cargarIIEE();
             cargarCards();
 
         });
@@ -292,6 +294,7 @@
                     "ugel": 0, // $('#ugel').val(),
                     "area": $('#area').val(),
                     "gestion": $('#gestion').val(),
+                    "iiee": $('#iiee').val(),
                 },
                 type: "GET",
                 dataType: "JSON",
@@ -325,6 +328,7 @@
                     "ugel": 0, // $('#ugel').val(),
                     "area": $('#area').val(),
                     "gestion": $('#gestion').val(),
+                    "iiee": $('#iiee').val(),
                 },
                 type: "GET",
                 dataType: "JSON",
@@ -438,6 +442,28 @@
                             "</option>"
                     });
                     $("#area").append(options);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cargarIIEE() {
+            $.ajax({
+                url: "{{ route('tecnicoproductiva.iiee') }}",
+                data: {
+                    anio: $('#anio').val(),
+                },
+                type: 'GET',
+                success: function(data) {
+                    $("#iiee option").remove();
+                    var options = '<option value="0">IIEE</option>';
+                    $.each(data.ie, function(index, value) {
+                        options += "<option value='" + value.cod_mod + "'>" + value.nombre +
+                            "</option>"
+                    });
+                    $("#iiee").append(options);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);

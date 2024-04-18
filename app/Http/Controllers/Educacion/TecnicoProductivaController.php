@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Educacion;
 
 use App\Exports\TecnicoProductivoExport;
 use App\Http\Controllers\Controller;
+use App\Models\Educacion\Importacion;
 use Illuminate\Http\Request;
 use App\Models\Parametro\Ubigeo;
 use App\Repositories\Educacion\ImporCensoMatriculaRepositorio;
@@ -34,6 +35,12 @@ class TecnicoProductivaController extends Controller
         return response()->json(compact('area'));
     }
 
+    public function iiee(Request $rq)
+    {
+        $ie = ImporCensoMatriculaRepositorio::iiee($rq->anio, $this->cedula);
+        return response()->json(compact('ie'));
+    }
+
     public function principal()
     {
         $actualizado = '';
@@ -45,6 +52,7 @@ class TecnicoProductivaController extends Controller
 
         $anios = ImporCensoMatriculaRepositorio::anios();
         $maxAnio = ImporCensoMatriculaRepositorio::anioMax();
+
         return view('educacion.TecnicoProductiva.Principal', compact(
             'actualizado',
             'maxAnio',
@@ -54,10 +62,10 @@ class TecnicoProductivaController extends Controller
 
     public function principalHead(Request $rq)
     {
-        $valor1 = ImporCensoMatriculaRepositorio::_9APrincipalHead($rq->anio, $rq->provincia, $rq->distrito, $rq->ugel, $rq->area, $rq->gestion, 1);
-        $valor2 = ImporCensoMatriculaRepositorio::_9APrincipalHead($rq->anio, $rq->provincia, $rq->distrito, $rq->ugel, $rq->area, $rq->gestion, 2);
-        $valor3 = ImporCensoMatriculaRepositorio::_9APrincipalHead($rq->anio, $rq->provincia, $rq->distrito, $rq->ugel, $rq->area, $rq->gestion, 3);
-        $valor4 = ImporCensoMatriculaRepositorio::_9APrincipalHead($rq->anio, $rq->provincia, $rq->distrito, $rq->ugel, $rq->area, $rq->gestion, 4);
+        $valor1 = ImporCensoMatriculaRepositorio::_9APrincipalHead($rq->anio, $rq->provincia, $rq->distrito, $rq->iiee, $rq->area, $rq->gestion, 1);
+        $valor2 = ImporCensoMatriculaRepositorio::_9APrincipalHead($rq->anio, $rq->provincia, $rq->distrito, $rq->iiee, $rq->area, $rq->gestion, 2);
+        $valor3 = ImporCensoMatriculaRepositorio::_9APrincipalHead($rq->anio, $rq->provincia, $rq->distrito, $rq->iiee, $rq->area, $rq->gestion, 3);
+        $valor4 = ImporCensoMatriculaRepositorio::_9APrincipalHead($rq->anio, $rq->provincia, $rq->distrito, $rq->iiee, $rq->area, $rq->gestion, 4);
         $valor1 = number_format($valor1, 0);
         $valor2 = number_format($valor2, 0);
         $valor3 = number_format($valor3, 0);
@@ -75,7 +83,7 @@ class TecnicoProductivaController extends Controller
                 foreach ($imps as $key => $value) {
                     $info['categoria'][] = $value->anio;
                     if ($key == 0) {
-                        $inicio = ImporCensoMatriculaRepositorio::_9ATotalEstudianteAnio($value->anio - 1, $rq->provincia, $rq->distrito, $rq->ugel, $rq->area, $rq->gestion);
+                        $inicio = ImporCensoMatriculaRepositorio::_9ATotalEstudianteAnio($value->anio - 1, $rq->provincia, $rq->distrito, $rq->iiee, $rq->area, $rq->gestion);
                         if ($inicio) {
                             $banio = $inicio->anio;
                             $btotal = (int)$inicio->total;
@@ -86,7 +94,7 @@ class TecnicoProductivaController extends Controller
                     }
                 }
 
-                $totales = ImporCensoMatriculaRepositorio::_9AReportes($rq->anio, $rq->provincia, $rq->distrito, $rq->ugel, $rq->area, $rq->gestion, 1);
+                $totales = ImporCensoMatriculaRepositorio::_9AReportes($rq->anio, $rq->provincia, $rq->distrito, $rq->iiee, $rq->area, $rq->gestion, 1);
 
                 $info['series'] = [];
                 $alto = 0;
@@ -139,7 +147,7 @@ class TecnicoProductivaController extends Controller
                     $info['categoria'][] = $value->anio;
                 }
 
-                $totales = ImporCensoMatriculaRepositorio::_9AReportes($rq->anio, $rq->provincia, $rq->distrito, $rq->ugel, $rq->area, $rq->gestion, 2);
+                $totales = ImporCensoMatriculaRepositorio::_9AReportes($rq->anio, $rq->provincia, $rq->distrito, $rq->iiee, $rq->area, $rq->gestion, 2);
 
                 $info['series'] = [];
                 $alto = 0;
@@ -179,7 +187,7 @@ class TecnicoProductivaController extends Controller
 
                 return response()->json(compact('info', 'foot', 'totales', 'imps'));
             case 'anal3':
-                $info = ImporCensoMatriculaRepositorio::_9AReportes($rq->anio, $rq->provincia, $rq->distrito, $rq->ugel, $rq->area, $rq->gestion, 3);
+                $info = ImporCensoMatriculaRepositorio::_9AReportes($rq->anio, $rq->provincia, $rq->distrito, $rq->iiee, $rq->area, $rq->gestion, 3);
                 $categoria = [];
                 $hh = [];
                 $mm = [];
@@ -198,7 +206,7 @@ class TecnicoProductivaController extends Controller
                 $foot['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
                 return response()->json(compact('categoria', 'series', 'foot'));
             case 'anal4':
-                $info = ImporCensoMatriculaRepositorio::_9AReportes($rq->anio, $rq->provincia, $rq->distrito, $rq->ugel, $rq->area, $rq->gestion, 4);
+                $info = ImporCensoMatriculaRepositorio::_9AReportes($rq->anio, $rq->provincia, $rq->distrito, $rq->iiee, $rq->area, $rq->gestion, 4);
                 $categoria = [];
                 $hh = [];
                 $mm = [];
@@ -217,12 +225,12 @@ class TecnicoProductivaController extends Controller
                 $foot['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
                 return response()->json(compact('categoria', 'series', 'foot'));
             case 'tabla1':
-                $base = ImporCensoMatriculaRepositorio::_9AReportes($rq->anio, $rq->provincia, $rq->distrito, $rq->ugel, $rq->area, $rq->gestion, 5);
+                $base = ImporCensoMatriculaRepositorio::_9AReportes($rq->anio, $rq->provincia, $rq->distrito, $rq->iiee, $rq->area, $rq->gestion, 5);
                 $distrito = Ubigeo::where('codigo', 'like', '25%')->where(DB::raw('length(codigo)'), 6)->get();
                 $gestion = DB::table('censo_gestion')->get();
                 $area = DB::table('censo_area')->get();
-                $docentes = ImporCensoMatriculaRepositorio::_9ATotalDocentesAnioModular($rq->anio, $rq->provincia, $rq->distrito, $rq->ugel, $rq->area, $rq->gestion, 1);
-                $meta = ImporCensoMatriculaRepositorio::_9ATotalEstudiantesAnioMeta($rq->anio - 1, $rq->provincia, $rq->distrito, $rq->ugel, $rq->area, $rq->gestion);
+                $docentes = ImporCensoMatriculaRepositorio::_9ATotalDocentesAnioModular($rq->anio, $rq->provincia, $rq->distrito, $rq->iiee, $rq->area, $rq->gestion, 1);
+                $meta = ImporCensoMatriculaRepositorio::_9ATotalEstudiantesAnioMeta($rq->anio - 1, $rq->provincia, $rq->distrito, $rq->iiee, $rq->area, $rq->gestion);
                 foreach ($base as $key => $bb) {
                     foreach ($gestion as $key => $gg) {
                         if ($bb->gestion == $gg->codigo) {

@@ -7,6 +7,7 @@ use App\Models\Educacion\Area;
 use App\Models\Educacion\ImporCensoDocente;
 use App\Models\Educacion\ImporCensoMatricula;
 use App\Models\Educacion\Importacion;
+use App\Models\Educacion\InstitucionEducativa;
 use App\Models\Educacion\Ugel;
 use App\Models\Parametro\Ubigeo;
 use Illuminate\Support\Facades\DB;
@@ -78,7 +79,19 @@ class ImporCensoMatriculaRepositorio
         return $ugel;
     }
 
-    public static function _5APrincipalHead($anio, $provincia, $distrito, $ugel, $area, $gestion, $valor)
+    public static function iiee($anio, $cedula)
+    {
+        $query = ImporCensoMatricula::distinct()->select('cod_mod')
+            ->join('par_importacion as imp', 'imp.id', '=', 'edu_impor_censomatricula.importacion_id')
+            ->where(DB::raw('year(imp.fechaActualizacion)'), $anio)->where('nroced', $cedula)->get();
+        foreach ($query as $key => $value) {
+            $value->nombre = InstitucionEducativa::where('codModular', $value->cod_mod)->first()->nombreInstEduc;
+        }
+        // $query->orderBy('nombre');
+        return $query;
+    }
+
+    public static function _5APrincipalHead($anio, $provincia, $distrito, $ugel, $area, $iiee, $valor)
     {
         switch ($valor) {
             case 1:
@@ -88,30 +101,30 @@ class ImporCensoMatriculaRepositorio
                         $cuadro = 'C201';
                         break;
                 }
-                $iiee = ImporCensoMatricula::distinct()->select('cod_mod')
+                $query = ImporCensoMatricula::distinct()->select('cod_mod')
                     ->join('par_importacion as v1', 'v1.id', '=', 'edu_impor_censomatricula.importacion_id')
                     ->where(DB::raw('year(v1.fechaActualizacion)'), $anio)->where('nroced', '5A')->where('cuadro', $cuadro)->where('v1.estado', 'PR');
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                return $iiee = $iiee->get()->count();
+                return $query = $query->get()->count();
             case 2:
                 switch ($anio) {
                         //case 2021:$cuadro = 'C201';break;
@@ -119,32 +132,32 @@ class ImporCensoMatriculaRepositorio
                         $cuadro = 'C201';
                         break;
                 }
-                $iiee = ImporCensoMatricula::select(DB::raw('sum(d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20) as conteo'))
+                $query = ImporCensoMatricula::select(DB::raw('sum(d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20) as conteo'))
                     ->join('par_importacion as v1', 'v1.id', '=', 'edu_impor_censomatricula.importacion_id')
                     ->where(DB::raw('year(v1.fechaActualizacion)'), $anio)->where('nroced', '5A')->where('cuadro', $cuadro);
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                return $iiee = $iiee->first()->conteo;
+                return $query = $query->first()->conteo;
             case 3:
-                $iiee = Importacion::select(
+                $query = Importacion::select(
                     DB::raw('sum(d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20) as conteo'),
                 )
                     ->join('edu_impor_censomatricula as v1', 'v1.importacion_id', '=', 'par_importacion.id')
@@ -152,60 +165,60 @@ class ImporCensoMatriculaRepositorio
                     ->where(DB::raw('year(fechaActualizacion)'), $anio)->where('par_importacion.estado', 'PR');
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                return $iiee->first()->conteo;
+                return $query->first()->conteo;
             case 4:
-                $iiee = ImporCensoDocente::select(DB::raw('sum(d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32) as conteo'))
+                $query = ImporCensoDocente::select(DB::raw('sum(d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32) as conteo'))
                     ->join('par_importacion as v1', 'v1.id', '=', 'edu_impor_censodocente.importacion_id')
                     ->where(DB::raw('year(v1.fechaActualizacion)'), $anio)->where('nroced', '5A')->where('cuadro', 'C304'); //->whereIn('tipdato', ['01', '05']);
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                return $iiee = $iiee->first()->conteo;
+                return $query = $query->first()->conteo;
             default:
                 return 0;
         }
     }
 
-    public static function _5AReportes($anio, $provincia, $distrito, $ugel, $area, $gestion, $valor)
+    public static function _5AReportes($anio, $provincia, $distrito, $ugel, $area, $iiee, $valor)
     {
         switch ($valor) {
             case 1:
-                $iiee = Importacion::select(
+                $query = Importacion::select(
                     DB::raw('year(par_importacion.fechaActualizacion) as anio'),
                     DB::raw('sum(CASE
                     WHEN year(fechaActualizacion)=20019 THEN IF(cuadro="C202",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20,0)
@@ -219,28 +232,28 @@ class ImporCensoMatriculaRepositorio
 
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                $iiee = $iiee->groupBy('anio')->orderBy('anio', 'asc')->get();
-                return $iiee;
+                $query = $query->groupBy('anio')->orderBy('anio', 'asc')->get();
+                return $query;
             case 2:
-                $iiee = Importacion::select(
+                $query = Importacion::select(
                     DB::raw('year(par_importacion.fechaActualizacion) as anio'),
                     DB::raw('sum(CASE
                     WHEN year(fechaActualizacion)=20019 THEN IF(cuadro="C202",v1.d01+v1.d02,0)
@@ -259,28 +272,28 @@ class ImporCensoMatriculaRepositorio
 
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                $iiee = $iiee->groupBy('anio')->orderBy('anio', 'asc')->get();
-                return $iiee;
+                $query = $query->groupBy('anio')->orderBy('anio', 'asc')->get();
+                return $query;
             case 3:
-                $iiee = Importacion::select(
+                $query = Importacion::select(
                     DB::raw('v2.grupo as name'),
                     DB::raw('sum(v1.d01+v1.d03+v1.d05+v1.d07+v1.d09+v1.d11+v1.d13+v1.d15+v1.d17+v1.d19) as h'),
                     DB::raw('sum(v1.d02+v1.d04+v1.d06+v1.d08+v1.d10+v1.d12+v1.d14+v1.d16+v1.d18+v1.d20) as m'),
@@ -292,28 +305,28 @@ class ImporCensoMatriculaRepositorio
 
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                $iiee = $iiee->groupBy('name')->orderBy('name', 'asc')->get();
-                return $iiee;
+                $query = $query->groupBy('name')->orderBy('name', 'asc')->get();
+                return $query;
             case 4:
-                $iiee = Importacion::select(
+                $query = Importacion::select(
                     DB::raw('v2.lengua as name'),
                     DB::raw('sum(v1.d01+v1.d03+v1.d05+v1.d07+v1.d09+v1.d11+v1.d13+v1.d15+v1.d17+v1.d19) as h'),
                     DB::raw('sum(v1.d02+v1.d04+v1.d06+v1.d08+v1.d10+v1.d12+v1.d14+v1.d16+v1.d18+v1.d20) as m'),
@@ -326,28 +339,28 @@ class ImporCensoMatriculaRepositorio
 
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                $iiee = $iiee->groupBy('name')->orderBy('tt', 'desc')->get();
-                return $iiee;
+                $query = $query->groupBy('name')->orderBy('tt', 'desc')->get();
+                return $query;
             case 5:
-                $iiee = Importacion::select(
+                $query = Importacion::select(
                     'cod_mod as modular',
                     'v2.nombreInstEduc as iiee',
                     'codgeo as distrito',
@@ -370,35 +383,35 @@ class ImporCensoMatriculaRepositorio
                     ->where('par_importacion.estado', 'PR');
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                $iiee = $iiee->groupBy('modular', 'distrito', 'iiee', 'gestion', 'area')->get();
-                return $iiee;
+                $query = $query->groupBy('modular', 'distrito', 'iiee', 'gestion', 'area')->get();
+                return $query;
                 break;
             default:
                 return 0;
         }
     }
 
-    public static function _5ATotalEstudianteAnio($anio, $provincia, $distrito, $ugel, $area, $gestion)
+    public static function _5ATotalEstudianteAnio($anio, $provincia, $distrito, $ugel, $area, $iiee)
     {
-        $iiee = Importacion::select(
+        $query = Importacion::select(
             DB::raw('year(par_importacion.fechaActualizacion) as anio'),
             DB::raw('sum(CASE
             WHEN year(fechaActualizacion)=20019 THEN IF(cuadro="C202",v1.d01+v1.d02+v1.d03+v1.d04,0)
@@ -411,31 +424,31 @@ class ImporCensoMatriculaRepositorio
             ->whereIn('v1.nroced', ['5A'])->whereIn('v1.cuadro', ['C201']);
         if ($provincia > 0) {
             $prov = Ubigeo::find($provincia);
-            $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+            $query = $query->where('codgeo', 'like', $prov->codigo . '%');
         }
         if ($distrito > 0) {
             $dist = Ubigeo::find($distrito);
-            $iiee = $iiee->where('codgeo', $dist->codigo);
+            $query = $query->where('codgeo', $dist->codigo);
         }
         if ($ugel > 0) {
-            $iiee = $iiee->where('codooii', $ugel);
+            $query = $query->where('codooii', $ugel);
         }
         if ($area > 0) {
-            $iiee = $iiee->where('area_censo', $area);
+            $query = $query->where('area_censo', $area);
         }
-        if ($gestion > 0) {
-            if ($gestion == 3)
-                $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-            else
-                $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+        // if ($gestion > 0) {
+        //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+        // }
+        if ($iiee > 0) {
+            $iiee = $query->where('cod_mod', $iiee);
         }
-        $iiee = $iiee->groupBy('anio')->orderBy('anio', 'asc')->first();
-        return $iiee;
+        $query = $query->groupBy('anio')->orderBy('anio', 'asc')->first();
+        return $query;
     }
 
-    public static function _5ATotalEstudiantesAnioMeta($anio, $provincia, $distrito, $ugel, $area, $gestion)
+    public static function _5ATotalEstudiantesAnioMeta($anio, $provincia, $distrito, $ugel, $area, $iiee)
     {
-        $iiee = Importacion::select(
+        $query = Importacion::select(
             'cod_mod as modular',
             DB::raw('sum(CASE
             WHEN year(fechaActualizacion)=20019 THEN IF(cuadro="C202",v1.d01+v1.d02+v1.d03+v1.d04,0)
@@ -447,31 +460,31 @@ class ImporCensoMatriculaRepositorio
             ->whereIn('v1.nroced', ['5A'])->whereIn('v1.cuadro', ['C201'])->where(DB::raw('year(fechaActualizacion)'), $anio)->where('par_importacion.estado', 'PR');
         if ($provincia > 0) {
             $prov = Ubigeo::find($provincia);
-            $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+            $query = $query->where('codgeo', 'like', $prov->codigo . '%');
         }
         if ($distrito > 0) {
             $dist = Ubigeo::find($distrito);
-            $iiee = $iiee->where('codgeo', $dist->codigo);
+            $query = $query->where('codgeo', $dist->codigo);
         }
         if ($ugel > 0) {
-            $iiee = $iiee->where('codooii', $ugel);
+            $query = $query->where('codooii', $ugel);
         }
         if ($area > 0) {
-            $iiee = $iiee->where('area_censo', $area);
+            $query = $query->where('area_censo', $area);
         }
-        if ($gestion > 0) {
-            if ($gestion == 3)
-                $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-            else
-                $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+        // if ($gestion > 0) {
+        //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+        // }
+        if ($iiee > 0) {
+            $iiee = $query->where('cod_mod', $iiee);
         }
-        $iiee = $iiee->groupBy('modular')->get();
-        return $iiee;
+        $query = $query->groupBy('modular')->get();
+        return $query;
     }
 
-    public static function _5ATotalDocentesAnioModular($anio, $provincia, $distrito, $ugel, $area, $gestion)
+    public static function _5ATotalDocentesAnioModular($anio, $provincia, $distrito, $ugel, $area, $iiee)
     {
-        $iiee = Importacion::select(
+        $query = Importacion::select(
             'cod_mod as modular',
             DB::raw('sum(if(tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)) as n'),
             DB::raw('sum(if(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)) as c'),
@@ -480,29 +493,29 @@ class ImporCensoMatriculaRepositorio
             ->whereIn('v1.nroced', ['5A'])->whereIn('v1.cuadro', ['C304'])->where(DB::raw('year(fechaActualizacion)'), $anio)->where('par_importacion.estado', 'PR');
         if ($provincia > 0) {
             $prov = Ubigeo::find($provincia);
-            $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+            $query = $query->where('codgeo', 'like', $prov->codigo . '%');
         }
         if ($distrito > 0) {
             $dist = Ubigeo::find($distrito);
-            $iiee = $iiee->where('codgeo', $dist->codigo);
+            $query = $query->where('codgeo', $dist->codigo);
         }
         if ($ugel > 0) {
-            $iiee = $iiee->where('codooii', $ugel);
+            $query = $query->where('codooii', $ugel);
         }
         if ($area > 0) {
-            $iiee = $iiee->where('area_censo', $area);
+            $query = $query->where('area_censo', $area);
         }
-        if ($gestion > 0) {
-            if ($gestion == 3)
-                $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-            else
-                $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+        // if ($gestion > 0) {
+        //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+        // }
+        if ($iiee > 0) {
+            $iiee = $query->where('cod_mod', $iiee);
         }
-        $iiee = $iiee->groupBy('modular')->get();
-        return $iiee;
+        $query = $query->groupBy('modular')->get();
+        return $query;
     }
 
-    public static function _6APrincipalHead($anio, $provincia, $distrito, $ugel, $area, $gestion, $valor)
+    public static function _6APrincipalHead($anio, $provincia, $distrito, $ugel, $area, $iiee, $valor)
     {
         switch ($valor) {
             case 1:
@@ -520,33 +533,33 @@ class ImporCensoMatriculaRepositorio
                         $cuadro = ['C201', 'C202', 'C203'];
                         break;
                 }
-                $iiee = ImporCensoMatricula::distinct()->select('cod_mod')
+                $query = ImporCensoMatricula::distinct()->select('cod_mod')
                     ->join('par_importacion as v1', 'v1.id', '=', 'edu_impor_censomatricula.importacion_id')
                     ->where(DB::raw('year(v1.fechaActualizacion)'), $anio)->where('nroced', '6A')->whereIn('cuadro', $cuadro)
                     ->where('v1.estado', 'PR');
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                return $iiee = $iiee->get()->count();
+                return $query = $query->get()->count();
             case 2:
-                $iiee = ImporCensoMatricula::select(
+                $query = ImporCensoMatricula::select(
                     DB::raw('sum(CASE
                 WHEN year(fechaActualizacion) in (2017,2018) THEN IF(cuadro in ("C201","C202"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16,0)
                 WHEN year(fechaActualizacion) in (2023) THEN IF(cuadro in ("C201","C208","C215"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20,0)
@@ -557,27 +570,27 @@ class ImporCensoMatriculaRepositorio
                     ->where(DB::raw('year(v1.fechaActualizacion)'), $anio)->where('nroced', '6A')->whereIn('cuadro', ['C201', 'C202', 'C203', 'C208', 'C215']);
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                return $iiee = $iiee->first()->conteo;
+                return $query = $query->first()->conteo;
             case 3:
-                $iiee = Importacion::select(
+                $query = Importacion::select(
                     DB::raw('sum(CASE
                     WHEN year(fechaActualizacion)=2018 THEN 0
                     WHEN year(fechaActualizacion)=2019
@@ -592,60 +605,60 @@ class ImporCensoMatriculaRepositorio
                     ->where(DB::raw('year(fechaActualizacion)'), $anio)->where('par_importacion.estado', 'PR');
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                return $iiee->first()->conteo;
+                return $query->first()->conteo;
             case 4:
-                $iiee = ImporCensoDocente::select(DB::raw('sum(d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32) as conteo'))
+                $query = ImporCensoDocente::select(DB::raw('sum(d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32) as conteo'))
                     ->join('par_importacion as v1', 'v1.id', '=', 'edu_impor_censodocente.importacion_id')
                     ->where(DB::raw('year(v1.fechaActualizacion)'), $anio)->where('nroced', '6A')->where('cuadro', 'C304'); //->whereIn('tipdato', ['01', '05']);
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                return $iiee = $iiee->first()->conteo;
+                return $query = $query->first()->conteo;
             default:
                 return 0;
         }
     }
 
-    public static function _6AReportes($anio, $provincia, $distrito, $ugel,  $area, $gestion, $valor)
+    public static function _6AReportes($anio, $provincia, $distrito, $ugel,  $area, $iiee, $valor)
     {
         switch ($valor) {
             case 1: //$cuadro = ['C201', 'C208', 'C215'];
-                $iiee = Importacion::select(
+                $query = Importacion::select(
                     DB::raw('year(par_importacion.fechaActualizacion) as anio'),
                     DB::raw('sum(CASE
                     WHEN year(fechaActualizacion) in(2017,2018) THEN IF(cuadro in("C201","C202"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16,0)
@@ -658,28 +671,28 @@ class ImporCensoMatriculaRepositorio
                     ->whereIn('v1.nroced', ['6A'])->whereIn('v1.cuadro', ['C201', 'C202', 'C203', 'C208', 'C215']);
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                $iiee = $iiee->groupBy('anio')->orderBy('anio', 'asc')->get();
-                return $iiee;
+                $query = $query->groupBy('anio')->orderBy('anio', 'asc')->get();
+                return $query;
             case 2:
-                $iiee = Importacion::select(
+                $query = Importacion::select(
                     DB::raw('year(par_importacion.fechaActualizacion) as anio'),
                     DB::raw('sum(CASE
                     WHEN year(fechaActualizacion) in(2017,2018) THEN IF(cuadro in("C205","C206"),v1.d01+v1.d02,0)
@@ -695,28 +708,28 @@ class ImporCensoMatriculaRepositorio
                     ->whereIn('v1.nroced', ['6A'])->whereIn('v1.cuadro', ['C205', 'C206', 'C207', 'C208', 'C209'])->where('par_importacion.estado', 'PR');
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                $iiee = $iiee->groupBy('anio')->orderBy('anio', 'asc')->get();
-                return $iiee;
+                $query = $query->groupBy('anio')->orderBy('anio', 'asc')->get();
+                return $query;
             case 3:
-                $iiee = Importacion::select(
+                $query = Importacion::select(
                     DB::raw('v2.grupo as name'),
                     DB::raw('sum(CASE
                     WHEN year(fechaActualizacion) in(2017,2018) THEN IF(cuadro in("C201","C202"),d01+d03+d05+d07+d09+d11+d13+d15,0)
@@ -735,28 +748,28 @@ class ImporCensoMatriculaRepositorio
                     ->where('par_importacion.estado', 'PR');
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                $iiee = $iiee->groupBy('name')->orderBy('name', 'asc')->get();
-                return $iiee;
+                $query = $query->groupBy('name')->orderBy('name', 'asc')->get();
+                return $query;
             case 4:
-                $iiee = Importacion::select(
+                $query = Importacion::select(
                     DB::raw('v2.lengua as name'),
                     DB::raw('sum(CASE
                     WHEN year(fechaActualizacion)=2018 THEN 0
@@ -789,28 +802,28 @@ class ImporCensoMatriculaRepositorio
                     ->where('v2.codigo', '!=', '0100')->where('par_importacion.estado', 'PR');
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                $iiee = $iiee->groupBy('name')->orderBy('tt', 'desc')->get();
-                return $iiee;
+                $query = $query->groupBy('name')->orderBy('tt', 'desc')->get();
+                return $query;
             case 5:
-                $iiee = Importacion::select(
+                $query = Importacion::select(
                     'cod_mod as modular',
                     'v2.nombreInstEduc as iiee',
                     'codgeo as distrito',
@@ -834,35 +847,35 @@ class ImporCensoMatriculaRepositorio
 
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                $iiee = $iiee->groupBy('modular', 'distrito', 'iiee', 'gestion', 'area')->get();
-                return $iiee;
+                $query = $query->groupBy('modular', 'distrito', 'iiee', 'gestion', 'area')->get();
+                return $query;
                 break;
             default:
                 return 0;
         }
     }
 
-    public static function _6ATotalEstudianteAnio($anio, $provincia, $distrito, $ugel,  $area, $gestion)
+    public static function _6ATotalEstudianteAnio($anio, $provincia, $distrito, $ugel,  $area, $iiee)
     {
-        $iiee = Importacion::select(
+        $query = Importacion::select(
             DB::raw('year(par_importacion.fechaActualizacion) as anio'),
             DB::raw('sum(CASE
                         WHEN year(fechaActualizacion) in(2017,2018) THEN IF(cuadro in ("C201","C202"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16,0)
@@ -875,31 +888,31 @@ class ImporCensoMatriculaRepositorio
             ->whereIn('v1.nroced', ['6A'])->whereIn('v1.cuadro', ['C201', 'C202', 'C203', 'C208', 'C215']);
         if ($provincia > 0) {
             $prov = Ubigeo::find($provincia);
-            $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+            $query = $query->where('codgeo', 'like', $prov->codigo . '%');
         }
         if ($distrito > 0) {
             $dist = Ubigeo::find($distrito);
-            $iiee = $iiee->where('codgeo', $dist->codigo);
+            $query = $query->where('codgeo', $dist->codigo);
         }
         if ($ugel > 0) {
-            $iiee = $iiee->where('codooii', $ugel);
+            $query = $query->where('codooii', $ugel);
         }
         if ($area > 0) {
-            $iiee = $iiee->where('area_censo', $area);
+            $query = $query->where('area_censo', $area);
         }
-        if ($gestion > 0) {
-            if ($gestion == 3)
-                $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-            else
-                $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+        // if ($gestion > 0) {
+        //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+        // }
+        if ($iiee > 0) {
+            $iiee = $query->where('cod_mod', $iiee);
         }
-        $iiee = $iiee->groupBy('anio')->orderBy('anio', 'asc')->first();
-        return $iiee;
+        $query = $query->groupBy('anio')->orderBy('anio', 'asc')->first();
+        return $query;
     }
 
-    public static function _6ATotalEstudiantesAnioMeta($anio, $provincia, $distrito, $ugel, $area, $gestion)
+    public static function _6ATotalEstudiantesAnioMeta($anio, $provincia, $distrito, $ugel, $area, $iiee)
     {
-        $iiee = Importacion::select(
+        $query = Importacion::select(
             'cod_mod as modular',
             DB::raw('sum(CASE
             WHEN year(fechaActualizacion) in(2017,2018)
@@ -911,31 +924,31 @@ class ImporCensoMatriculaRepositorio
             ->whereIn('v1.nroced', ['6A'])->whereIn('v1.cuadro', ['C201', 'C202', 'C203'])->where(DB::raw('year(fechaActualizacion)'), $anio)->where('par_importacion.estado', 'PR');
         if ($provincia > 0) {
             $prov = Ubigeo::find($provincia);
-            $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+            $query = $query->where('codgeo', 'like', $prov->codigo . '%');
         }
         if ($distrito > 0) {
             $dist = Ubigeo::find($distrito);
-            $iiee = $iiee->where('codgeo', $dist->codigo);
+            $query = $query->where('codgeo', $dist->codigo);
         }
         if ($ugel > 0) {
-            $iiee = $iiee->where('codooii', $ugel);
+            $query = $query->where('codooii', $ugel);
         }
         if ($area > 0) {
-            $iiee = $iiee->where('area_censo', $area);
+            $query = $query->where('area_censo', $area);
         }
-        if ($gestion > 0) {
-            if ($gestion == 3)
-                $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-            else
-                $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+        // if ($gestion > 0) {
+        //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+        // }
+        if ($iiee > 0) {
+            $iiee = $query->where('cod_mod', $iiee);
         }
-        $iiee = $iiee->groupBy('modular')->get();
-        return $iiee;
+        $query = $query->groupBy('modular')->get();
+        return $query;
     }
 
-    public static function _6ATotalDocentesAnioModular($anio, $provincia, $distrito, $ugel, $area, $gestion)
+    public static function _6ATotalDocentesAnioModular($anio, $provincia, $distrito, $ugel, $area, $iiee)
     {
-        $iiee = Importacion::select(
+        $query = Importacion::select(
             'cod_mod as modular',
             DB::raw('sum(if(tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)) as n'),
             DB::raw('sum(if(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)) as c'),
@@ -944,57 +957,57 @@ class ImporCensoMatriculaRepositorio
             ->whereIn('v1.nroced', ['6A'])->whereIn('v1.cuadro', ['C304'])->where(DB::raw('year(fechaActualizacion)'), $anio)->where('par_importacion.estado', 'PR');
         if ($provincia > 0) {
             $prov = Ubigeo::find($provincia);
-            $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+            $query = $query->where('codgeo', 'like', $prov->codigo . '%');
         }
         if ($distrito > 0) {
             $dist = Ubigeo::find($distrito);
-            $iiee = $iiee->where('codgeo', $dist->codigo);
+            $query = $query->where('codgeo', $dist->codigo);
         }
         if ($ugel > 0) {
-            $iiee = $iiee->where('codooii', $ugel);
+            $query = $query->where('codooii', $ugel);
         }
         if ($area > 0) {
-            $iiee = $iiee->where('area_censo', $area);
+            $query = $query->where('area_censo', $area);
         }
-        if ($gestion > 0) {
-            if ($gestion == 3)
-                $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-            else
-                $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+        // if ($gestion > 0) {
+        //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+        // }
+        if ($iiee > 0) {
+            $iiee = $query->where('cod_mod', $iiee);
         }
-        $iiee = $iiee->groupBy('modular')->get();
-        return $iiee;
+        $query = $query->groupBy('modular')->get();
+        return $query;
     }
 
 
-    public static function _7APrincipalHead($anio, $provincia, $distrito, $ugel, $area, $gestion, $valor)
+    public static function _7APrincipalHead($anio, $provincia, $distrito, $ugel, $area, $iiee, $valor)
     {
         switch ($valor) {
             case 1:
-                $iiee = ImporCensoMatricula::distinct()->select('cod_mod')
+                $query = ImporCensoMatricula::distinct()->select('cod_mod')
                     ->join('par_importacion as v1', 'v1.id', '=', 'edu_impor_censomatricula.importacion_id')
                     ->where(DB::raw('year(v1.fechaActualizacion)'), $anio)->where('nroced', '7A')->whereIn('cuadro', ['C201', 'C202'])->where('v1.estado', 'PR');
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                return $iiee = $iiee->get()->count();
+                return $query = $query->get()->count();
             case 2:
                 switch ($anio) {
                         //case 2021:$cuadro = 'C201';break;
@@ -1002,32 +1015,32 @@ class ImporCensoMatriculaRepositorio
                         $cuadro = 'C202';
                         break;
                 }
-                $iiee = ImporCensoMatricula::select(DB::raw('sum(d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20) as conteo'))
+                $query = ImporCensoMatricula::select(DB::raw('sum(d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20) as conteo'))
                     ->join('par_importacion as v1', 'v1.id', '=', 'edu_impor_censomatricula.importacion_id')
                     ->where(DB::raw('year(v1.fechaActualizacion)'), $anio)->where('nroced', '7A')->whereIn('cuadro', ['C201', 'C202']);
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                return $iiee = $iiee->first()->conteo;
+                return $query = $query->first()->conteo;
             case 3:
-                $iiee = Importacion::select(
+                $query = Importacion::select(
                     DB::raw('sum(CASE
                     WHEN year(fechaActualizacion)=2018 THEN 0
                     WHEN year(fechaActualizacion)=2019 or year(fechaActualizacion)=2020
@@ -1040,60 +1053,60 @@ class ImporCensoMatriculaRepositorio
                     ->where(DB::raw('year(fechaActualizacion)'), $anio)->where('par_importacion.estado', 'PR');
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                return $iiee->first()->conteo;
+                return $query->first()->conteo;
             case 4:
-                $iiee = ImporCensoDocente::select(DB::raw('sum(d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32) as conteo'))
+                $query = ImporCensoDocente::select(DB::raw('sum(d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32) as conteo'))
                     ->join('par_importacion as v1', 'v1.id', '=', 'edu_impor_censodocente.importacion_id')
                     ->where(DB::raw('year(v1.fechaActualizacion)'), $anio)->where('nroced', '7A')->where('cuadro', 'C304'); //->whereIn('tipdato', ['01', '05']);
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                return $iiee = $iiee->first()->conteo;
+                return $query = $query->first()->conteo;
             default:
                 return 0;
         }
     }
 
-    public static function _7AReportes($anio, $provincia, $distrito, $ugel, $area, $gestion, $valor)
+    public static function _7AReportes($anio, $provincia, $distrito, $ugel, $area, $iiee, $valor)
     {
         switch ($valor) {
             case 1:
-                $iiee = Importacion::select(
+                $query = Importacion::select(
                     DB::raw('year(par_importacion.fechaActualizacion) as anio'),
                     //DB::raw('sum(d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20) as total'),
                     DB::raw('sum(
@@ -1118,28 +1131,28 @@ class ImporCensoMatriculaRepositorio
                     ->whereIn('v1.nroced', ['7A'])->whereIn('v1.cuadro', ['C201', 'C202', 'C209']);
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                $iiee = $iiee->groupBy('anio')->orderBy('anio', 'asc')->get();
-                return $iiee;
+                $query = $query->groupBy('anio')->orderBy('anio', 'asc')->get();
+                return $query;
             case 2:
-                $iiee = Importacion::select(
+                $query = Importacion::select(
                     DB::raw('year(par_importacion.fechaActualizacion) as anio'),
                     // DB::raw('sum(d01+d02) as at'),
                     // DB::raw('sum(d03+d04) as t'),
@@ -1178,28 +1191,28 @@ class ImporCensoMatriculaRepositorio
                     ->whereIn('v1.nroced', ['7A'])->whereIn('v1.cuadro', ['C205', 'C206', 'C211'])->where('par_importacion.estado', 'PR');
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                $iiee = $iiee->groupBy('anio')->orderBy('anio', 'asc')->get();
-                return $iiee;
+                $query = $query->groupBy('anio')->orderBy('anio', 'asc')->get();
+                return $query;
             case 3:
-                $iiee = Importacion::select(
+                $query = Importacion::select(
                     DB::raw('v2.grupo as name'),
                     // DB::raw('sum(d01+d03+d05+d07+d09+d11+d13+d15+d17+d19) as h'),
                     // DB::raw('sum(d02+d04+d06+d08+d10+d12+d14+d16+d18+d20) as m'),
@@ -1240,28 +1253,28 @@ class ImporCensoMatriculaRepositorio
                     ->where('par_importacion.estado', 'PR');
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                $iiee = $iiee->groupBy('name')->orderBy('name', 'asc')->get();
-                return $iiee;
+                $query = $query->groupBy('name')->orderBy('name', 'asc')->get();
+                return $query;
             case 4:
-                $iiee = Importacion::select(
+                $query = Importacion::select(
                     DB::raw('v2.lengua as name'),
                     DB::raw('sum(CASE
                                     WHEN year(fechaActualizacion)=2018 THEN 0
@@ -1294,28 +1307,28 @@ class ImporCensoMatriculaRepositorio
                     ->where('par_importacion.estado', 'PR');
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                $iiee = $iiee->groupBy('name')->orderBy('tt', 'desc')->get();
-                return $iiee;
+                $query = $query->groupBy('name')->orderBy('tt', 'desc')->get();
+                return $query;
             case 5:
-                $iiee = Importacion::select(
+                $query = Importacion::select(
                     'cod_mod as modular',
                     'v2.nombreInstEduc as iiee',
                     'codgeo as distrito',
@@ -1360,35 +1373,35 @@ class ImporCensoMatriculaRepositorio
                     ->where('par_importacion.estado', 'PR');
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                $iiee = $iiee->groupBy('modular', 'distrito', 'iiee', 'gestion', 'area')->get();
-                return $iiee;
+                $query = $query->groupBy('modular', 'distrito', 'iiee', 'gestion', 'area')->get();
+                return $query;
                 break;
             default:
                 return 0;
         }
     }
 
-    public static function _7ATotalEstudianteAnio($anio, $provincia, $distrito, $ugel, $area, $gestion)
+    public static function _7ATotalEstudianteAnio($anio, $provincia, $distrito, $ugel, $area, $iiee)
     {
-        $iiee = Importacion::select(
+        $query = Importacion::select(
             DB::raw('year(par_importacion.fechaActualizacion) as anio'),
             //DB::raw('sum(d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20) as total'),
             DB::raw('sum(
@@ -1412,31 +1425,31 @@ class ImporCensoMatriculaRepositorio
             ->whereIn('v1.nroced', ['7A'])->whereIn('v1.cuadro', ['C201', 'C202', 'C209']);
         if ($provincia > 0) {
             $prov = Ubigeo::find($provincia);
-            $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+            $query = $query->where('codgeo', 'like', $prov->codigo . '%');
         }
         if ($distrito > 0) {
             $dist = Ubigeo::find($distrito);
-            $iiee = $iiee->where('codgeo', $dist->codigo);
+            $query = $query->where('codgeo', $dist->codigo);
         }
         if ($ugel > 0) {
-            $iiee = $iiee->where('codooii', $ugel);
+            $query = $query->where('codooii', $ugel);
         }
         if ($area > 0) {
-            $iiee = $iiee->where('area_censo', $area);
+            $query = $query->where('area_censo', $area);
         }
-        if ($gestion > 0) {
-            if ($gestion == 3)
-                $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-            else
-                $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+        // if ($gestion > 0) {
+        //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+        // }
+        if ($iiee > 0) {
+            $iiee = $query->where('cod_mod', $iiee);
         }
-        $iiee = $iiee->groupBy('anio')->orderBy('anio', 'asc')->first();
-        return $iiee;
+        $query = $query->groupBy('anio')->orderBy('anio', 'asc')->first();
+        return $query;
     }
 
-    public static function _7ATotalEstudiantesAnioMeta($anio, $provincia, $distrito, $ugel, $area, $gestion)
+    public static function _7ATotalEstudiantesAnioMeta($anio, $provincia, $distrito, $ugel, $area, $iiee)
     {
-        $iiee = Importacion::select(
+        $query = Importacion::select(
             'cod_mod as modular',
             DB::raw('sum(d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20) as meta')
         )
@@ -1444,31 +1457,31 @@ class ImporCensoMatriculaRepositorio
             ->whereIn('v1.nroced', ['7A'])->whereIn('v1.cuadro', ['C201', 'C202'])->where(DB::raw('year(fechaActualizacion)'), $anio)->where('par_importacion.estado', 'PR');
         if ($provincia > 0) {
             $prov = Ubigeo::find($provincia);
-            $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+            $query = $query->where('codgeo', 'like', $prov->codigo . '%');
         }
         if ($distrito > 0) {
             $dist = Ubigeo::find($distrito);
-            $iiee = $iiee->where('codgeo', $dist->codigo);
+            $query = $query->where('codgeo', $dist->codigo);
         }
         if ($ugel > 0) {
-            $iiee = $iiee->where('codooii', $ugel);
+            $query = $query->where('codooii', $ugel);
         }
         if ($area > 0) {
-            $iiee = $iiee->where('area_censo', $area);
+            $query = $query->where('area_censo', $area);
         }
-        if ($gestion > 0) {
-            if ($gestion == 3)
-                $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-            else
-                $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+        // if ($gestion > 0) {
+        //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+        // }
+        if ($iiee > 0) {
+            $iiee = $query->where('cod_mod', $iiee);
         }
-        $iiee = $iiee->groupBy('modular')->get();
+        $query = $query->groupBy('modular')->get();
         return $iiee;
     }
 
-    public static function _7ATotalDocentesAnioModular($anio, $provincia, $distrito, $ugel, $area, $gestion)
+    public static function _7ATotalDocentesAnioModular($anio, $provincia, $distrito, $ugel, $area, $iiee)
     {
-        $iiee = Importacion::select(
+        $query = Importacion::select(
             'cod_mod as modular',
             DB::raw('sum(if(tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)) as n'),
             DB::raw('sum(if(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)) as c'),
@@ -1477,31 +1490,31 @@ class ImporCensoMatriculaRepositorio
             ->whereIn('v1.nroced', ['7A'])->whereIn('v1.cuadro', ['C304'])->where(DB::raw('year(fechaActualizacion)'), $anio)->where('par_importacion.estado', 'PR');
         if ($provincia > 0) {
             $prov = Ubigeo::find($provincia);
-            $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+            $query = $query->where('codgeo', 'like', $prov->codigo . '%');
         }
         if ($distrito > 0) {
             $dist = Ubigeo::find($distrito);
-            $iiee = $iiee->where('codgeo', $dist->codigo);
+            $query = $query->where('codgeo', $dist->codigo);
         }
         if ($ugel > 0) {
-            $iiee = $iiee->where('codooii', $ugel);
+            $query = $query->where('codooii', $ugel);
         }
         if ($area > 0) {
-            $iiee = $iiee->where('area_censo', $area);
+            $query = $query->where('area_censo', $area);
         }
-        if ($gestion > 0) {
-            if ($gestion == 3)
-                $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-            else
-                $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+        // if ($gestion > 0) {
+        //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+        // }
+        if ($iiee > 0) {
+            $iiee = $query->where('cod_mod', $iiee);
         }
-        $iiee = $iiee->groupBy('modular')->get();
-        return $iiee;
+        $query = $query->groupBy('modular')->get();
+        return $query;
     }
 
-    public static function _9ATotalEstudianteAnio($anio, $provincia, $distrito,  $ugel, $area, $gestion)
+    public static function _9ATotalEstudianteAnio($anio, $provincia, $distrito,  $ugel, $area, $iiee)
     {
-        $iiee = Importacion::select(
+        $query = Importacion::select(
             DB::raw('year(par_importacion.fechaActualizacion) as anio'),
             DB::raw('sum(CASE
             WHEN year(fechaActualizacion)=2019 THEN IF(cuadro="C202",v1.d01+v1.d02+v1.d03+v1.d04,0)
@@ -1514,31 +1527,31 @@ class ImporCensoMatriculaRepositorio
             ->whereIn('v1.nroced', ['9A'])->whereIn('v1.cuadro', ['C201', 'C202', 'C203']);
         if ($provincia > 0) {
             $prov = Ubigeo::find($provincia);
-            $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+            $query = $query->where('codgeo', 'like', $prov->codigo . '%');
         }
         if ($distrito > 0) {
             $dist = Ubigeo::find($distrito);
-            $iiee = $iiee->where('codgeo', $dist->codigo);
+            $query = $query->where('codgeo', $dist->codigo);
         }
         if ($ugel > 0) {
-            $iiee = $iiee->where('codooii', $ugel);
+            $query = $query->where('codooii', $ugel);
         }
         if ($area > 0) {
-            $iiee = $iiee->where('area_censo', $area);
+            $query = $query->where('area_censo', $area);
         }
-        if ($gestion > 0) {
-            if ($gestion == 3)
-                $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-            else
-                $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+        // if ($gestion > 0) {
+        //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+        // }
+        if ($iiee > 0) {
+            $iiee = $query->where('cod_mod', $iiee);
         }
-        $iiee = $iiee->groupBy('anio')->orderBy('anio', 'asc')->first();
-        return $iiee;
+        $query = $query->groupBy('anio')->orderBy('anio', 'asc')->first();
+        return $query;
     }
 
-    public static function _9ATotalEstudiantesAnioMeta($anio, $provincia, $distrito,  $ugel, $area, $gestion)
+    public static function _9ATotalEstudiantesAnioMeta($anio, $provincia, $distrito,  $ugel, $area, $iiee)
     {
-        $iiee = Importacion::select(
+        $query = Importacion::select(
             'cod_mod as modular',
             DB::raw('sum(CASE
             WHEN year(fechaActualizacion)=2019 THEN IF(cuadro="C202",v1.d01+v1.d02+v1.d03+v1.d04,0)
@@ -1550,31 +1563,31 @@ class ImporCensoMatriculaRepositorio
             ->whereIn('v1.nroced', ['9A'])->whereIn('v1.cuadro', ['C201', 'C202', 'C203'])->where(DB::raw('year(fechaActualizacion)'), $anio)->where('par_importacion.estado', 'PR');
         if ($provincia > 0) {
             $prov = Ubigeo::find($provincia);
-            $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+            $query = $query->where('codgeo', 'like', $prov->codigo . '%');
         }
         if ($distrito > 0) {
             $dist = Ubigeo::find($distrito);
-            $iiee = $iiee->where('codgeo', $dist->codigo);
+            $query = $query->where('codgeo', $dist->codigo);
         }
         if ($ugel > 0) {
-            $iiee = $iiee->where('codooii', $ugel);
+            $query = $query->where('codooii', $ugel);
         }
         if ($area > 0) {
-            $iiee = $iiee->where('area_censo', $area);
+            $query = $query->where('area_censo', $area);
         }
-        if ($gestion > 0) {
-            if ($gestion == 3)
-                $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-            else
-                $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+        // if ($gestion > 0) {
+        //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+        // }
+        if ($iiee > 0) {
+            $iiee = $query->where('cod_mod', $iiee);
         }
-        $iiee = $iiee->groupBy('modular')->get();
-        return $iiee;
+        $query = $query->groupBy('modular')->get();
+        return $query;
     }
 
-    public static function _9ATotalDocentesAnioModular($anio, $provincia, $distrito,  $ugel, $area, $gestion)
+    public static function _9ATotalDocentesAnioModular($anio, $provincia, $distrito,  $ugel, $area, $iiee)
     {
-        $iiee = Importacion::select(
+        $query = Importacion::select(
             'cod_mod as modular',
             DB::raw('sum(if(tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)) as n'),
             DB::raw('sum(if(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)) as c'),
@@ -1583,29 +1596,29 @@ class ImporCensoMatriculaRepositorio
             ->whereIn('v1.nroced', ['9A'])->whereIn('v1.cuadro', ['C304'])->where(DB::raw('year(fechaActualizacion)'), $anio)->where('par_importacion.estado', 'PR');
         if ($provincia > 0) {
             $prov = Ubigeo::find($provincia);
-            $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+            $query = $query->where('codgeo', 'like', $prov->codigo . '%');
         }
         if ($distrito > 0) {
             $dist = Ubigeo::find($distrito);
-            $iiee = $iiee->where('codgeo', $dist->codigo);
+            $query = $query->where('codgeo', $dist->codigo);
         }
         if ($ugel > 0) {
-            $iiee = $iiee->where('codooii', $ugel);
+            $query = $query->where('codooii', $ugel);
         }
         if ($area > 0) {
-            $iiee = $iiee->where('area_censo', $area);
+            $query = $query->where('area_censo', $area);
         }
-        if ($gestion > 0) {
-            if ($gestion == 3)
-                $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-            else
-                $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+        // if ($gestion > 0) {
+        //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+        // }
+        if ($iiee > 0) {
+            $iiee = $query->where('cod_mod', $iiee);
         }
-        $iiee = $iiee->groupBy('modular')->get();
-        return $iiee;
+        $query = $query->groupBy('modular')->get();
+        return $query;
     }
 
-    public static function _9APrincipalHead($anio, $provincia, $distrito, $ugel, $area, $gestion, $valor)
+    public static function _9APrincipalHead($anio, $provincia, $distrito, $ugel, $area, $iiee, $valor)
     {
         switch ($valor) {
             case 1:
@@ -1617,30 +1630,30 @@ class ImporCensoMatriculaRepositorio
                         $cuadro = 'C203';
                         break;
                 }
-                $iiee = ImporCensoMatricula::distinct()->select('cod_mod')
+                $query = ImporCensoMatricula::distinct()->select('cod_mod')
                     ->join('par_importacion as v1', 'v1.id', '=', 'edu_impor_censomatricula.importacion_id')
                     ->where(DB::raw('year(v1.fechaActualizacion)'), $anio)->where('nroced', '9A')->where('cuadro', $cuadro)->where('v1.estado', 'PR');
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                return $iiee = $iiee->get()->count();
+                return $query = $query->get()->count();
             case 2:
                 switch ($anio) {
                     case 2021:
@@ -1650,32 +1663,32 @@ class ImporCensoMatriculaRepositorio
                         $cuadro = 'C203';
                         break;
                 }
-                $iiee = ImporCensoMatricula::select(DB::raw('sum(d01+d02+d03+d04) as conteo'))
+                $query = ImporCensoMatricula::select(DB::raw('sum(d01+d02+d03+d04) as conteo'))
                     ->join('par_importacion as v1', 'v1.id', '=', 'edu_impor_censomatricula.importacion_id')
                     ->where(DB::raw('year(v1.fechaActualizacion)'), $anio)->where('nroced', '9A')->where('cuadro', $cuadro);
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                return $iiee = $iiee->first()->conteo;
+                return $query = $query->first()->conteo;
             case 3:
-                $iiee = Importacion::select(
+                $query = Importacion::select(
                     DB::raw('sum(CASE
                     WHEN year(fechaActualizacion)=2018 THEN 0
                     WHEN year(fechaActualizacion)=2019 or year(fechaActualizacion)=2020 or year(fechaActualizacion)=2021
@@ -1688,60 +1701,60 @@ class ImporCensoMatriculaRepositorio
                     ->where(DB::raw('year(fechaActualizacion)'), $anio)->where('par_importacion.estado', 'PR');
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                return $iiee->first()->conteo;
+                return $query->first()->conteo;
             case 4:
-                $iiee = ImporCensoDocente::select(DB::raw('sum(d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24) as conteo'))
+                $query = ImporCensoDocente::select(DB::raw('sum(d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24) as conteo'))
                     ->join('par_importacion as v1', 'v1.id', '=', 'edu_impor_censodocente.importacion_id')
                     ->where(DB::raw('year(v1.fechaActualizacion)'), $anio)->where('nroced', '9A')->where('cuadro', 'C305')->whereIn('tipdato', ['01', '05']);
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                return $iiee = $iiee->first()->conteo;
+                return $query = $query->first()->conteo;
             default:
                 return 0;
         }
     }
 
-    public static function _9AReportes($anio, $provincia, $distrito, $ugel, $area, $gestion, $valor)
+    public static function _9AReportes($anio, $provincia, $distrito, $ugel, $area, $iiee, $valor)
     {
         switch ($valor) {
             case 1:
-                $iiee = Importacion::select(
+                $query = Importacion::select(
                     DB::raw('year(par_importacion.fechaActualizacion) as anio'),
                     DB::raw('sum(CASE
                     WHEN year(fechaActualizacion)=2019 THEN IF(cuadro="C202",v1.d01+v1.d02+v1.d03+v1.d04,0)
@@ -1754,28 +1767,28 @@ class ImporCensoMatriculaRepositorio
                     ->whereIn('v1.nroced', ['9A'])->whereIn('v1.cuadro', ['C201', 'C202', 'C203']);
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                $iiee = $iiee->groupBy('anio')->orderBy('anio', 'asc')->get();
-                return $iiee;
+                $query = $query->groupBy('anio')->orderBy('anio', 'asc')->get();
+                return $query;
             case 2:
-                $iiee = Importacion::select(
+                $query = Importacion::select(
                     DB::raw('year(par_importacion.fechaActualizacion) as anio'),
                     DB::raw('sum(CASE
                     WHEN year(fechaActualizacion)=2019 THEN IF(cuadro="C202",v1.d01+v1.d02,0)
@@ -1793,28 +1806,28 @@ class ImporCensoMatriculaRepositorio
                     ->whereIn('v1.nroced', ['9A'])->whereIn('v1.cuadro', ['C201', 'C202', 'C203'])->where('par_importacion.estado', 'PR');
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                $iiee = $iiee->groupBy('anio')->orderBy('anio', 'asc')->get();
-                return $iiee;
+                $query = $query->groupBy('anio')->orderBy('anio', 'asc')->get();
+                return $query;
             case 3:
-                $iiee = Importacion::select(
+                $query = Importacion::select(
                     DB::raw('v2.grupo as name'),
                     DB::raw('sum(v1.d01+v1.d03+v1.d05+v1.d07+v1.d09+v1.d11+v1.d13+v1.d15+v1.d17+v1.d19) as h'),
                     DB::raw('sum(v1.d02+v1.d04+v1.d06+v1.d08+v1.d10+v1.d12+v1.d14+v1.d16+v1.d18+v1.d20) as m'),
@@ -1824,28 +1837,28 @@ class ImporCensoMatriculaRepositorio
                     ->whereIn('v1.nroced', ['9A'])->whereIn('v1.cuadro', ['C201'])->where(DB::raw('year(fechaActualizacion)'), $anio)->where('par_importacion.estado', 'PR');
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                $iiee = $iiee->groupBy('name')->orderBy('name', 'asc')->get();
-                return $iiee;
+                $query = $query->groupBy('name')->orderBy('name', 'asc')->get();
+                return $query;
             case 4:
-                $iiee = Importacion::select(
+                $query = Importacion::select(
                     DB::raw('v2.lengua as name'),
                     DB::raw('sum(CASE
                     WHEN year(fechaActualizacion)=2018 THEN 0
@@ -1872,28 +1885,28 @@ class ImporCensoMatriculaRepositorio
                     ->whereNotIn('v2.codigo', ['0100', '01'])->where('par_importacion.estado', 'PR');
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                $iiee = $iiee->groupBy('name')->orderBy('tt', 'desc')->get();
-                return $iiee;
+                $query = $query->groupBy('name')->orderBy('tt', 'desc')->get();
+                return $query;
             case 5:
-                $iiee = Importacion::select(
+                $query = Importacion::select(
                     'cod_mod as modular',
                     'v2.nombreInstEduc as iiee',
                     'codgeo as distrito',
@@ -1916,26 +1929,26 @@ class ImporCensoMatriculaRepositorio
                     ->where('par_importacion.estado', 'PR');
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
-                    $iiee = $iiee->where('codgeo', 'like', $prov->codigo . '%');
+                    $query = $query->where('codgeo', 'like', $prov->codigo . '%');
                 }
                 if ($distrito > 0) {
                     $dist = Ubigeo::find($distrito);
-                    $iiee = $iiee->where('codgeo', $dist->codigo);
+                    $query = $query->where('codgeo', $dist->codigo);
                 }
                 if ($ugel > 0) {
-                    $iiee = $iiee->where('codooii', $ugel);
+                    $query = $query->where('codooii', $ugel);
                 }
                 if ($area > 0) {
-                    $iiee = $iiee->where('area_censo', $area);
+                    $query = $query->where('area_censo', $area);
                 }
-                if ($gestion > 0) {
-                    if ($gestion == 3)
-                        $iiee = $iiee->whereIn('ges_dep', ['B3', 'B4']);
-                    else
-                        $iiee = $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // if ($gestion > 0) {
+                //     $iiee = $gestion == 3 ? $iiee->whereIn('ges_dep', ['B3', 'B4']) : $iiee->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+                // }
+                if ($iiee > 0) {
+                    $iiee = $query->where('cod_mod', $iiee);
                 }
-                $iiee = $iiee->groupBy('modular', 'distrito', 'iiee', 'gestion', 'area')->get();
-                return $iiee;
+                $query = $query->groupBy('modular', 'distrito', 'iiee', 'gestion', 'area')->get();
+                return $query;
                 /* case 6:
                 $iiee = Importacion::select(
                     DB::raw('year(par_importacion.fechaActualizacion) as anio'),

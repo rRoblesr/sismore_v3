@@ -453,6 +453,7 @@ Route::get('/TecnicoProductiva/Principal/Head', [TecnicoProductivaController::cl
 Route::get('/TecnicoProductiva/Principal/Tabla', [TecnicoProductivaController::class, 'principalTabla'])->name('tecnicoproductiva.principal.tabla');
 Route::get('/TecnicoProductiva/Ugeles', [TecnicoProductivaController::class, 'ugel'])->name('tecnicoproductiva.ugel');
 Route::get('/TecnicoProductiva/Areas', [TecnicoProductivaController::class, 'area'])->name('tecnicoproductiva.area');
+Route::get('/TecnicoProductiva/IIEE', [TecnicoProductivaController::class, 'iiee'])->name('tecnicoproductiva.iiee');
 Route::get('/TecnicoProductiva/Exportar/Excel/{anio}/{ugel}/{area}/{gestion}', [TecnicoProductivaController::class, 'download']);
 
 /* Route::post('/TecnicoProductiva/Fechas/{anio_id}', [TecnicoProductivaController::class, 'Fechas'])->name('tecnicoproductiva.Fechas');
@@ -475,6 +476,7 @@ Route::get('/SuperiorPedagogico/Principal/Head', [SuperiorPedagogicoController::
 Route::get('/SuperiorPedagogico/Principal/Tabla', [SuperiorPedagogicoController::class, 'principalTabla'])->name('superiorpedagogico.principal.tabla');
 Route::get('/SuperiorPedagogico/Ugeles', [SuperiorPedagogicoController::class, 'ugel'])->name('superiorpedagogico.ugel');
 Route::get('/SuperiorPedagogico/Areas', [SuperiorPedagogicoController::class, 'area'])->name('superiorpedagogico.area');
+Route::get('/SuperiorPedagogico/IIEE', [SuperiorPedagogicoController::class, 'iiee'])->name('superiorpedagogico.iiee');
 Route::get('/SuperiorPedagogico/Exportar/Excel/{anio}/{ugel}/{area}/{gestion}', [SuperiorPedagogicoController::class, 'download']);
 
 Route::get('/educación/SuperiorTecnologico', [SuperiorTecnologicoController::class, 'principal'])->middleware('auth')->name('superiortecnologico.principal');
@@ -482,6 +484,7 @@ Route::get('/SuperiorTecnologico/Principal/Head', [SuperiorTecnologicoController
 Route::get('/SuperiorTecnologico/Principal/Tabla', [SuperiorTecnologicoController::class, 'principalTabla'])->name('superiortecnologico.principal.tabla');
 Route::get('/SuperiorTecnologico/Ugeles', [SuperiorTecnologicoController::class, 'ugel'])->name('superiortecnologico.ugel');
 Route::get('/SuperiorTecnologico/Areas', [SuperiorTecnologicoController::class, 'area'])->name('superiortecnologico.area');
+Route::get('/SuperiorTecnologico/IIEE', [SuperiorTecnologicoController::class, 'iiee'])->name('superiortecnologico.iiee');
 Route::get('/SuperiorTecnologico/Exportar/Excel/{anio}/{ugel}/{area}/{gestion}', [SuperiorTecnologicoController::class, 'download']);
 
 Route::get('/educación/SuperiorArtistico', [SuperiorArtisticoController::class, 'principal'])->middleware('auth')->name('superiorartistico.principal');
@@ -489,6 +492,7 @@ Route::get('/SuperiorArtistico/Principal/Head', [SuperiorArtisticoController::cl
 Route::get('/SuperiorArtistico/Principal/Tabla', [SuperiorArtisticoController::class, 'principalTabla'])->name('superiorartistico.principal.tabla');
 Route::get('/SuperiorArtistico/Ugeles', [SuperiorArtisticoController::class, 'ugel'])->name('superiorartistico.ugel');
 Route::get('/SuperiorArtistico/Areas', [SuperiorArtisticoController::class, 'area'])->name('superiorartistico.area');
+Route::get('/SuperiorArtistico/IIEE', [SuperiorArtisticoController::class, 'iiee'])->name('superiorartistico.iiee');
 Route::get('/SuperiorArtistico/Exportar/Excel/{anio}/{ugel}/{area}/{gestion}', [SuperiorArtisticoController::class, 'download']);
 
 Route::get('/educación/ServiciosBasicos', [ServiciosBasicosController::class, 'principal'])->name('serviciosbasicos.principal');

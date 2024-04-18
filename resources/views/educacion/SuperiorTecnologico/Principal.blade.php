@@ -278,6 +278,7 @@
             });
             cargarUgels();
             cargarAreas();
+            cargarIIEE();
             cargarCards();
 
         });
@@ -292,6 +293,7 @@
                     "ugel": 0, // $('#ugel').val(),
                     "area": $('#area').val(),
                     "gestion": $('#gestion').val(),
+                    "iiee": $('#iiee').val(),
                 },
                 type: "GET",
                 dataType: "JSON",
@@ -371,6 +373,28 @@
             });
         }
 
+        function cargarIIEE() {
+            $.ajax({
+                url: "{{ route('superiortecnologico.iiee') }}",
+                data: {
+                    anio: $('#anio').val(),
+                },
+                type: 'GET',
+                success: function(data) {
+                    $("#iiee option").remove();
+                    var options = '<option value="0">IIEE</option>';
+                    $.each(data.ie, function(index, value) {
+                        options += "<option value='" + value.cod_mod + "'>" + value.nombre +
+                            "</option>"
+                    });
+                    $("#iiee").append(options);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
         function panelGraficas(div) {
             $.ajax({
                 url: "{{ route('superiortecnologico.principal.tabla') }}",
@@ -382,6 +406,7 @@
                     "ugel": 0, // $('#ugel').val(),
                     "area": $('#area').val(),
                     "gestion": $('#gestion').val(),
+                    "iiee": $('#iiee').val(),
                 },
                 type: "GET",
                 dataType: "JSON",
