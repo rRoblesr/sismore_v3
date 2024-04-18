@@ -274,6 +274,7 @@
         $(document).ready(function() {
             cargarUgels();
             cargarAreas();
+            cargarIIEE();
             cargarCards();
 
         });
@@ -285,7 +286,7 @@
                     "anio": $('#anio').val(),
                     "provincia": 0,
                     "distrito": 0,
-                    "ugel":0,// $('#ugel').val(),
+                    "ugel": 0, // $('#ugel').val(),
                     "area": $('#area').val(),
                     "gestion": $('#gestion').val(),
                     "iiee": $('#iiee').val(),
@@ -356,7 +357,11 @@
                 type: 'GET',
                 success: function(data) {
                     $("#area option").remove();
-                    var options = '<option value="0">ÁREA GEOGRÁFICA</option>';
+                    if (data.area.length == 1) {
+                        var options = '';
+                    } else {
+                        var options = '<option value="0">ÁREA GEOGRÁFICA</option>';
+                    }
                     $.each(data.area, function(index, value) {
                         options += "<option value='" + value.codigo + "'>" + value.nombre +
                             "</option>"
@@ -378,7 +383,12 @@
                 type: 'GET',
                 success: function(data) {
                     $("#iiee option").remove();
-                    var options = '<option value="0">IIEE</option>';
+                    // console.log(data.ie.length);
+                    if (data.ie.length == 1) {
+                        var options = '';
+                    } else {
+                        var options = '<option value="0">IIEE</option>';
+                    }
                     $.each(data.ie, function(index, value) {
                         options += "<option value='" + value.cod_mod + "'>" + value.nombre +
                             "</option>"

@@ -351,7 +351,7 @@
 
         function cargarAreas() {
             $.ajax({
-                url: "{{ route('superiorped<agogico.area') }}",
+                url: "{{ route('superiorpedagogico.area') }}",
                 type: 'GET',
                 success: function(data) {
                     $("#area option").remove();
