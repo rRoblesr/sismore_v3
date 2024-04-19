@@ -1156,6 +1156,25 @@ END
     }
 
 
+#
+SELECT sum(d01+d02+d03+d04+d05+d06) FROM `edu_impor_censodocente` where importacion_id=2160 and nroced='8A' and cuadro='C303' and tipdato in('01','02');/*8*/
+SELECT sum(d01+d02+d03+d04+d05+d06) FROM `edu_impor_censodocente` where importacion_id=2160 and nroced='8A' and cuadro='C304' and tipdato in('01','02');/*8*/
+SELECT sum(d01+d02+d03+d04+d05+d06) FROM `edu_impor_censodocente` where importacion_id=2160 and nroced='8A' and cuadro='C306' and tipdato in('01','02','03','04','05','06');/*0*/
+
+SELECT sum(d01+d02+d03+d04+d05+d06+d07+d08) FROM `edu_impor_censodocente` where importacion_id=2160 and nroced='8AI' and cuadro='C303' and tipdato in('01','02');/*194*/
+SELECT sum(d01+d02+d03+d04+d05+d06+d07+d08) FROM `edu_impor_censodocente` where importacion_id=2160 and nroced='8AI' and cuadro='C304' and tipdato in('01','02');/*194*/
+SELECT sum(d01+d02+d03+d04+d05+d06+d07+d08) FROM `edu_impor_censodocente` where importacion_id=2160 and nroced='8AI' and cuadro='C305' and tipdato in('01','05');/*197*/
+SELECT sum(d01+d02+d03+d04+d05+d06+d07+d08) FROM `edu_impor_censodocente` where importacion_id=2160 and nroced='8AI' and cuadro='C305' and tipdato in('02','03','04');/*171*/
+SELECT sum(d01+d02+d03+d04+d05+d06+d07+d08) FROM `edu_impor_censodocente` where importacion_id=2160 and nroced='8AI' and cuadro='C305' and tipdato in('06','07','08','09','10');/*23*/
+
+SELECT sum(d01+d02+d03+d04+d05+d06+d07+d08) FROM `edu_impor_censodocente` where importacion_id=2160 and nroced='8AP' and cuadro='C303' and tipdato in('01','02');/*226*/
+SELECT sum(d01+d02+d03+d04+d05+d06+d07+d08) FROM `edu_impor_censodocente` where importacion_id=2160 and nroced='8AP' and cuadro='C304' and tipdato in('01','02');/*226*/
+SELECT sum(d01+d02+d03+d04+d05+d06+d07+d08) FROM `edu_impor_censodocente` where importacion_id=2160 and nroced='8AP' and cuadro='C305' and tipdato in('01','05');/*236*/
+SELECT sum(d01+d02+d03+d04+d05+d06+d07+d08) FROM `edu_impor_censodocente` where importacion_id=2160 and nroced='8AP' and cuadro='C305' and tipdato in('02','03','04');/*206*/
+SELECT sum(d01+d02+d03+d04+d05+d06+d07+d08) FROM `edu_impor_censodocente` where importacion_id=2160 and nroced='8AP' and cuadro='C305' and tipdato in('06','07','08','09','10');/*20*/
+
+
+
 
 
 
