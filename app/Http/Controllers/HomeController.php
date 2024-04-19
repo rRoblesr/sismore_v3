@@ -647,7 +647,7 @@ class HomeController extends Controller
 
         $provincias = UbigeoRepositorio::provincia('25'); //Ubigeo::select('v2.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();
         $distritos = UbigeoRepositorio::distrito('25', 0); //Ubigeo::select('v3.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->join('par_ubigeo as v3', 'v3.dependencia', '=', 'v2.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();
-        $ambitos = Area::select('id',DB::raw('upper(nombre) as nombre'))->get();
+        $ambitos = Area::select('id', DB::raw('upper(nombre) as nombre'))->get();
 
         return  view('home', compact(
             'tipo_acceso',
@@ -1181,7 +1181,7 @@ class HomeController extends Controller
                 return response()->json(compact('info'));
 
             case 'siagie001':
-                $data = MatriculaGeneralRepositorio::basicaregularopcion2('siagie001', $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->area);
+                $data = MatriculaGeneralRepositorio::basicaregularopcion2('siagie001', $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
                 $info['cat'] = [];
                 $info['dat'] = [];
                 $rango = '';
@@ -1215,7 +1215,7 @@ class HomeController extends Controller
                 $reg['rango'] = $rango;
                 return response()->json(compact('info', 'reg'));
             case 'censodocente001':
-                $data = ImporCensoDocenteRepositorio::basicaregular('censodocente001', $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion, 0);
+                $data = ImporCensoDocenteRepositorio::basicaregular('censodocente001', $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion, $rq->ambito);
                 $info['cat'] = [];
                 $info['dat'] = [];
                 foreach ($data->unique('anio') as $key => $value) {
@@ -1244,9 +1244,9 @@ class HomeController extends Controller
 
             case 'skills001':
                 $anio = Anio::where('anio', $rq->anio - 1)->first();
-                $data1 = MatriculaGeneralRepositorio::estudiantesModeloEIB($anio->id, $rq->provincia, $rq->distrito, 0, $rq->area,  $rq->gestion);
+                $data1 = MatriculaGeneralRepositorio::estudiantesModeloEIB($anio->id, $rq->provincia, $rq->distrito, 0, $rq->ambito,  $rq->gestion);
                 $anio = Anio::where('anio', $rq->anio)->first();
-                $data2 = MatriculaGeneralRepositorio::estudiantesModeloEIB($anio->id, $rq->provincia, $rq->distrito, 0, $rq->area,  $rq->gestion);
+                $data2 = MatriculaGeneralRepositorio::estudiantesModeloEIB($anio->id, $rq->provincia, $rq->distrito, 0, $rq->ambito,  $rq->gestion);
                 $v1 = $data2 ? $data2 : 0;
                 $v2 = $data1 ? $data1 : 0;
                 $info['indicador'] = round(100 * ($v1 > 0 ? $v1 / $v2 : 0), 1);
@@ -1260,8 +1260,8 @@ class HomeController extends Controller
             case 'skills002':
                 $icd = ImportacionRepositorio::ImportacionMax_porfuente(ImporCensoDocenteController::$FUENTE);
 
-                $data1 = ImporCensoMatriculaRepositorio::_5ATotalEstudianteAnio($icd->anio - 1, $rq->provincia, $rq->distrito, 0, $rq->area,  $rq->gestion);
-                $data2 = ImporCensoMatriculaRepositorio::_5ATotalEstudianteAnio($icd->anio, $rq->provincia, $rq->distrito, 0, $rq->area,  $rq->gestion);
+                $data1 = ImporCensoMatriculaRepositorio::_5ATotalEstudianteAnio($icd->anio - 1, $rq->provincia, $rq->distrito, 0, $rq->ambito,  $rq->gestion);
+                $data2 = ImporCensoMatriculaRepositorio::_5ATotalEstudianteAnio($icd->anio, $rq->provincia, $rq->distrito, 0, $rq->ambito,  $rq->gestion);
                 $v1 = $data2 ? $data2->total : 0;
                 $v2 = $data1 ? $data1->total : 0;
                 $info['indicador'] = round(100 * ($v1 > 0 ? $v1 / $v2 : 0), 1);
@@ -1275,8 +1275,8 @@ class HomeController extends Controller
             case 'skills003':
                 $icd = ImportacionRepositorio::ImportacionMax_porfuente(ImporCensoDocenteController::$FUENTE);
 
-                $data1 = ImporCensoMatriculaRepositorio::_6ATotalEstudianteAnio($icd->anio - 1, $rq->provincia, $rq->distrito, 0, $rq->area,  $rq->gestion);
-                $data2 = ImporCensoMatriculaRepositorio::_6ATotalEstudianteAnio($icd->anio, $rq->provincia, $rq->distrito, 0, $rq->area,  $rq->gestion);
+                $data1 = ImporCensoMatriculaRepositorio::_6ATotalEstudianteAnio($icd->anio - 1, $rq->provincia, $rq->distrito, 0, $rq->ambito,  $rq->gestion);
+                $data2 = ImporCensoMatriculaRepositorio::_6ATotalEstudianteAnio($icd->anio, $rq->provincia, $rq->distrito, 0, $rq->ambito,  $rq->gestion);
                 $v1 = $data1 ? $data1->total : 0;
                 $v2 = $data2 ? $data2->total : 0;
                 $info['indicador'] = round(100 * ($v1 > 0 ? $v2 / $v1 : 0), 0);
@@ -1313,7 +1313,7 @@ class HomeController extends Controller
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
                 return response()->json(compact('info', 'reg'));
             case 'skills006':
-                $info['indicador'] = ServiciosBasicosRepositorio::indicador($rq->anio, $rq->provincia, $rq->distrito, $rq->gestion, $rq->area, 4);
+                $info['indicador'] = ServiciosBasicosRepositorio::indicador($rq->anio, $rq->provincia, $rq->distrito, $rq->gestion, $rq->ambito, 4);
 
                 $reg['fuente'] = 'Siagie - MINEDU';
                 // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
@@ -1321,7 +1321,7 @@ class HomeController extends Controller
                 return response()->json(compact('info', 'reg'));
 
             case 'skills007':
-                $info['indicador'] = ServiciosBasicosRepositorio::indicador($rq->anio, $rq->provincia, $rq->distrito, $rq->gestion, $rq->area, 1);
+                $info['indicador'] = ServiciosBasicosRepositorio::indicador($rq->anio, $rq->provincia, $rq->distrito, $rq->gestion, $rq->ambito, 1);
 
                 $reg['fuente'] = 'Siagie - MINEDU';
                 // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
@@ -1330,7 +1330,7 @@ class HomeController extends Controller
 
 
             case 'skills008':
-                $info['indicador'] = ServiciosBasicosRepositorio::indicador($rq->anio, $rq->provincia, $rq->distrito, $rq->gestion, $rq->area, 2);
+                $info['indicador'] = ServiciosBasicosRepositorio::indicador($rq->anio, $rq->provincia, $rq->distrito, $rq->gestion, $rq->ambito, 2);
 
                 $reg['fuente'] = 'Siagie - MINEDU';
                 // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
@@ -1338,7 +1338,7 @@ class HomeController extends Controller
                 return response()->json(compact('info', 'reg'));
 
             case 'skills009':
-                $info['indicador'] = ServiciosBasicosRepositorio::indicador($rq->anio, $rq->provincia, $rq->distrito, $rq->gestion, $rq->area, 3);
+                $info['indicador'] = ServiciosBasicosRepositorio::indicador($rq->anio, $rq->provincia, $rq->distrito, $rq->gestion, $rq->ambito, 3);
 
                 $reg['fuente'] = 'Siagie - MINEDU';
                 // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);

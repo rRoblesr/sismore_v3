@@ -2,29 +2,7 @@
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
     <style>
-        .tablex thead th {
-            padding: 2px;
-            text-align: center;
-        }
-
-        .tablex thead td {
-            padding: 2px;
-            text-align: center;
-            vertical-align: middle;
-            font-weight: bold;
-        }
-
-        3 .tablex tbody td,
-        .tablex tbody th,
-        .tablex tfoot td,
-        .tablex tfoot th {
-            padding: 2px;
-        }
-
-        .fuentex {
-            font-size: 10px;
-            font-weight: bold;
-        }
+      
     </style>
 @endsection
 
@@ -749,7 +727,7 @@
                         stacking: 'normal'
                     }, */
                     series: {
-                        showInLegend: true,
+                        showInLegend: false,
                         borderWidth: 0,
                         dataLabels: {
                             enabled: true,

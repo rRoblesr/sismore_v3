@@ -6,3 +6,5 @@ UPDATE `alumno` SET anemia=IF(round(rand()*1,0)=1,'SI','NO') WHERE 1;
 
 # convierte fechanumero de excel a date mkysql
 select date(from_unixtime((45169+1-25569)*86400));
+
+select lpad(floor(rand()*99999999),8,'0');
