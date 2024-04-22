@@ -382,7 +382,7 @@
                 type: 'GET',
                 success: function(data) {
                     $("#iiee option").remove();
-                    var options = '<option value="0">IIEE</option>';
+                    var options = '<option value="0">INSTITUCIÓN EDUCATIVA</option>';
                     $.each(data.ie, function(index, value) {
                         options += "<option value='" + value.cod_mod + "'>" + value.nombre +
                             "</option>"
