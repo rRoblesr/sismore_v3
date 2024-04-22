@@ -43,12 +43,13 @@
                     <div class="col-md-6 col-xl-3">
                         <div class="card text-center border border-success-0">
                             <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                <h5 class="text-white font-14 font-weight-normal">
-                                    <i class="mdi mdi-shield-cross" style="font-size: 20px"></i>
-                                    SI 01-01
-                                </h5>
-                                {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
-                                {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
+                                <div class="card-widgets">
+                                    <span onclick=""><i class="mdi mdi-rotate-180 mdi-alert-circle"
+                                            style="color:#FFF;font-size: 20px;"></i>&nbsp;&nbsp;</span>
+                                </div>
+                                <h5 class="text-white font-14 font-weight-normal mt-1 mb-1"><i class="mdi mdi-shield-plus"
+                                        style="font-size: 20px"></i>
+                                    SI 01-01 </h5>
                             </div>
                             <div class="pb-4 pl-4 pr-4">
                                 <ul class="list-unstyled mt-0">
@@ -60,7 +61,15 @@
                                         </figure>
                                     </li>
                                     </li>
-                                    <li class="mt-0 pt-0 font-12">Actualizado: 02/04/2024
+                                    <li class="mt-0 pt-0 font-12">Actualizado: 02/04/2024</li>
+                                    <li class="mt-0 pt-0">
+                                        @if (true)
+                                            <span class="badge badge-success m-2" style="font-size: 90%; width:100px">
+                                                <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
+                                        @else
+                                            <span class="badge badge-danger m-2" style="font-size: 90%; width:100px">
+                                                <i class="mdi mdi-thumb-down"></i> NO CUMPLE</span>
+                                        @endif
                                     </li>
                                     <li class="mt-0 pt-0">
                                         <div class="row">
@@ -83,6 +92,7 @@
                                             </div>
                                         </div>
                                     </li>
+
                                     <li class="mt-1 pt-1">
                                         <p class="font-12" style="height: 5rem;">Número de gobiernos
                                             locales que registraron oportunamente las actas de
@@ -103,12 +113,15 @@
                     <div class="col-md-6 col-xl-3">
                         <div class="card text-center border border-success-0">
                             <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                <h5 class="text-white font-14 font-weight-normal">
-                                    <i class="mdi mdi-shield-cross" style="font-size: 20px"></i>
-                                    SI 01-02
-                                </h5>
-                                {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
-                                {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
+                                <div class="pricing-header bg-success-0 p-0 rounded-top">
+                                    <div class="card-widgets">
+                                        <span onclick=""><i class="mdi mdi-rotate-180 mdi-alert-circle"
+                                                style="color:#FFF;font-size: 20px;"></i>&nbsp;&nbsp;</span>
+                                    </div>
+                                    <h5 class="text-white font-14 font-weight-normal mt-1 mb-1"><i
+                                            class="mdi mdi-shield-plus" style="font-size: 20px"></i>
+                                        SI 01-02 </h5>
+                                </div>
                             </div>
                             <div class="pb-4 pl-4 pr-4">
                                 <ul class="list-unstyled mt-0">
@@ -123,8 +136,18 @@
                                         </figure>
                                     </li>
                                     </li>
-                                    <li class="mt-0 pt-0 font-12">Actualizado: 02/04/2024
+                                    <li class="mt-0 pt-0 font-12">Actualizado: 02/04/2024</li>
+                                    
+                                    <li class="mt-0 pt-0">
+                                        @if (false)
+                                            <span class="badge badge-success m-2" style="font-size: 90%; width:100px">
+                                                <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
+                                        @else
+                                            <span class="badge badge-danger m-2" style="font-size: 90%; width:100px">
+                                                <i class="mdi mdi-thumb-down"></i> NO CUMPLE</span>
+                                        @endif
                                     </li>
+                                    
                                     <li class="mt-0 pt-0">
                                         <div class="row">
                                             <div class="col-6">
@@ -166,12 +189,13 @@
                     <div class="col-md-6 col-xl-3">
                         <div class="card text-center border border-success-0">
                             <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                <h5 class="text-white font-14 font-weight-normal">
-                                    <i class="mdi mdi-shield-cross" style="font-size: 20px"></i>
-                                    SI 01-03
-                                </h5>
-                                {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
-                                {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
+                                <div class="card-widgets">
+                                    <span onclick=""><i class="mdi mdi-rotate-180 mdi-alert-circle"
+                                            style="color:#FFF;font-size: 20px;"></i>&nbsp;&nbsp;</span>
+                                </div>
+                                <h5 class="text-white font-14 font-weight-normal mt-1 mb-1"><i class="mdi mdi-shield-plus"
+                                        style="font-size: 20px"></i>
+                                    SI 01-03 </h5>
                             </div>
                             <div class="pb-4 pl-4 pr-4">
                                 <ul class="list-unstyled mt-0">
@@ -189,6 +213,15 @@
                                     <li class="mt-0 pt-0 font-12">Actualizado: 02/04/2024
                                     </li>
                                     <li class="mt-0 pt-0">
+                                        @if (true)
+                                            <span class="badge badge-success m-2" style="font-size: 90%; width:100px">
+                                                <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
+                                        @else
+                                            <span class="badge badge-danger m-2" style="font-size: 90%; width:100px">
+                                                <i class="mdi mdi-thumb-down"></i> NO CUMPLE</span>
+                                        @endif
+                                    </li>
+                                    <li class="mt-0 pt-0">
                                         <div class="row">
                                             <div class="col-6">
                                                 <a href="javascript:void(0)" class="text-green-0 font-weight-bold"
@@ -228,12 +261,13 @@
                     <div class="col-md-6 col-xl-3">
                         <div class="card text-center border border-success-0">
                             <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                <h5 class="text-white font-14 font-weight-normal">
-                                    <i class="mdi mdi-shield-cross" style="font-size: 20px"></i>
-                                    SI 01-04
-                                </h5>
-                                {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
-                                {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
+                                <div class="card-widgets">
+                                    <span onclick=""><i class="mdi mdi-rotate-180 mdi-alert-circle"
+                                            style="color:#FFF;font-size: 20px;"></i>&nbsp;&nbsp;</span>
+                                </div>
+                                <h5 class="text-white font-14 font-weight-normal mt-1 mb-1"><i class="mdi mdi-shield-plus"
+                                        style="font-size: 20px"></i>
+                                    SI 01-04 </h5>
                             </div>
                             <div class="pb-4 pl-4 pr-4">
                                 <ul class="list-unstyled mt-0">
@@ -251,6 +285,15 @@
                                     <li class="mt-0 pt-0 font-12">Actualizado: 02/04/2024
                                     </li>
                                     <li class="mt-0 pt-0">
+                                        @if (false)
+                                            <span class="badge badge-success m-2" style="font-size: 90%; width:100px">
+                                                <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
+                                        @else
+                                            <span class="badge badge-danger m-2" style="font-size: 90%; width:100px">
+                                                <i class="mdi mdi-thumb-down"></i> NO CUMPLE</span>
+                                        @endif
+                                    </li>
+                                    <li class="mt-0 pt-0">
                                         <div class="row">
                                             <div class="col-6">
                                                 <a href="javascript:void(0)" class="text-green-0 font-weight-bold"
@@ -291,12 +334,13 @@
                     <div class="col-md-6 col-xl-3">
                         <div class="card text-center border border-success-0">
                             <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                <h5 class="text-white font-14 font-weight-normal">
-                                    <i class="mdi mdi-shield-cross" style="font-size: 20px"></i>
-                                    SI 01-05
-                                </h5>
-                                {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
-                                {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
+                                <div class="card-widgets">
+                                    <span onclick=""><i class="mdi mdi-rotate-180 mdi-alert-circle"
+                                            style="color:#FFF;font-size: 20px;"></i>&nbsp;&nbsp;</span>
+                                </div>
+                                <h5 class="text-white font-14 font-weight-normal mt-1 mb-1"><i class="mdi mdi-shield-plus"
+                                        style="font-size: 20px"></i>
+                                    SI 01-05 </h5>
                             </div>
                             <div class="pb-4 pl-4 pr-4">
                                 <ul class="list-unstyled mt-0">
@@ -312,6 +356,15 @@
                                     </li>
                                     </li>
                                     <li class="mt-0 pt-0 font-12">Actualizado: 02/04/2024
+                                    </li>
+                                    <li class="mt-0 pt-0">
+                                        @if (true)
+                                            <span class="badge badge-success m-2" style="font-size: 90%; width:100px">
+                                                <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
+                                        @else
+                                            <span class="badge badge-danger m-2" style="font-size: 90%; width:100px">
+                                                <i class="mdi mdi-thumb-down"></i> NO CUMPLE</span>
+                                        @endif
                                     </li>
                                     <li class="mt-0 pt-0">
                                         <div class="row">
