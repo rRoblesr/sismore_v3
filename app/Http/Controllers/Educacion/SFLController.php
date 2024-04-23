@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Educacion;
 use App\Exports\SFLExport;
 use App\Http\Controllers\Controller;
 use App\Models\Administracion\Entidad;
+use App\Models\Educacion\Area;
 use App\Models\Educacion\InstitucionEducativa;
 use App\Models\Educacion\SFL;
 use App\Models\Educacion\Ugel;
@@ -12,6 +13,7 @@ use App\Models\Parametro\IndicadorGeneral;
 use App\Models\Parametro\IndicadorGeneralMeta;
 use App\Models\Presupuesto\Sector;
 use App\Repositories\Parametro\IndicadorGeneralRepositorio;
+use App\Repositories\Parametro\UbigeoRepositorio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -20,6 +22,7 @@ use PhpParser\Node\Stmt\Else_;
 
 class SFLController extends Controller
 {
+    public $mesname = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'setiembre', 'octubre', 'noviembre', 'diciembre'];
     public function __construct()
     {
         $this->middleware('auth');
@@ -753,5 +756,18 @@ class SFLController extends Controller
         $query = $query->get();
 
         return ["base" => $query];
+    }
+
+
+    public function SFL()
+    {
+        $ff = SFL::select(DB::raw('max(fecha_registro) as ff'))->first();
+        // return response()->json([$imp]);
+         $actualizado = 'Actualizado al ' . date('d', strtotime($ff->ff)) . ' de ' . $this->mesname[date('m', strtotime($ff->ff)) - 1] . ' del ' . date('Y', strtotime($ff->ff));
+        $anio = SFL::distinct()->select(DB::raw('year(fecha_registro) as anio'))->orderBy('anio')->get();
+        $provincia = UbigeoRepositorio::provincia('25');
+        $area=Area::all();
+        $aniomax = $anio->max('anio');
+        return view('educacion.SFL.SFL', compact('actualizado', 'anio', 'provincia', 'aniomax','area'));
     }
 }
