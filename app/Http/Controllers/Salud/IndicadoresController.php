@@ -134,7 +134,13 @@ class IndicadoresController extends Controller
                 $aniomax = $imp->anio;
                 return view('salud.Indicadores.PactoRegionalDetalle1', compact('actualizado', 'anio', 'provincia', 'aniomax', 'ind'));
             case 'DITSALUD02':
-                return '';
+                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_1']);
+                // return response()->json([$imp]);
+                $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
+                $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios($indicador_id); // Anio::orderBy('anio')->get();
+                $provincia = UbigeoRepositorio::provincia('25');
+                $aniomax = $imp->anio;
+                return view('salud.Indicadores.PactoRegionalDetalle2', compact('actualizado', 'anio', 'provincia', 'aniomax', 'ind'));
             case 'DITSALUD03':
                 return '';
             case 'DITSALUD04':
