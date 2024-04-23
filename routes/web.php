@@ -70,6 +70,12 @@ use App\Http\Controllers\Presupuesto\UnidadEjecutoraController;
 use App\Http\Controllers\Presupuesto\UnidadOrganicaController;
 use App\Http\Controllers\Salud\ImporPadronActasController;
 use App\Http\Controllers\Salud\IndicadoresController;
+use App\Http\Controllers\Salud\SaludNino;
+use App\Http\Controllers\Salud\SaludPadronExportar;
+use App\Http\Controllers\Salud\SaludPadronNominal;
+use App\Http\Controllers\Salud\SaludPadronNominalCalidad;
+use App\Http\Controllers\Salud\SaludPadronNominalImportar;
+use App\Http\Controllers\Salud\SaludPadronNominalSeguimiento;
 use App\Http\Controllers\Trabajo\ActividadController;
 use App\Http\Controllers\Trabajo\AnuarioEstadisticoController;
 use App\Http\Controllers\Trabajo\IndicadorTrabajoController;
@@ -1127,6 +1133,29 @@ Route::post('/ImporPadronActas/Importar', [ImporPadronActasController::class, 'g
 Route::get('/ImporPadronActas/Listar/ImportarDT', [ImporPadronActasController::class, 'ListarDTImportFuenteTodos'])->name('imporpadronactas.listar.importados');
 Route::post('/ImporPadronActas/ListaImportada', [ImporPadronActasController::class, 'ListaImportada'])->name('imporpadronactas.listarimportados');
 Route::get('/ImporPadronActas/eliminar/{id}', [ImporPadronActasController::class, 'eliminar'])->name('imporpadronactas.eliminar');
+
+Route::get('/Salud/Nino', [SaludNino::class, 'PadronNominal'])->name('salud.nino.padron');
+Route::get('/Salud/Calidad', [SaludNino::class, 'ControlCalidad'])->name('salud.nino.calidad');
+
+Route::get('/Salud/PadronNominal/', [SaludPadronNominal::class, 'index'])->name('salud.padron.index');
+Route::get('/Salud/PadronNominal/Listar', [SaludPadronNominal::class, 'listar'])->name('salud.padron.listar');
+Route::post('/Salud/PadronNominal/ImportarGuardar', [SaludPadronNominal::class, 'guardar'])->name('salud.padron.importar.guardar');
+
+Route::get('/Salud/PadronNominal/Seguimiento', [SaludPadronNominalSeguimiento::class, 'index'])->name('salud.padron.seguimiento.index');
+Route::get('/Salud/PadronNominal/Seguimiento/Principal/{grupoEdad}/{cod_2000}', [SaludPadronNominalSeguimiento::class, 'index'])->name('salud.padron.seguimiento.indexge');
+Route::get('/Salud/PadronNominal/Seguimiento/Listar/{idGrupo}/{cod_2000}', [SaludPadronNominalSeguimiento::class, 'listar'])->name('salud.padron.seguimiento.listar');
+Route::get('/Salud/PadronNominal/Seguimiento/Descargar/{edad}', [SaludPadronExportar::class, 'descargarExcelSeguimiento'])->name('salud.padron.seguimiento.exportar');
+Route::get('/Salud/PadronNominal/Seguimiento/Mostrar/{id}', [SaludPadronNominalSeguimiento::class, 'mostrarDatos'])->name('salud.padron.seguimiento.mostrardato');
+
+Route::get('/Salud/PadronNominal/Calidad', [SaludPadronNominalCalidad::class, 'index'])->name('salud.padron.calidad.index');
+Route::get('/Salud/PadronNominal/Calidad/Listado', [SaludPadronNominalCalidad::class, 'listadoGeneral'])->name('salud.padron.calidad.listadogeneral');
+Route::get('/Salud/PadronNominal/Calidad/Descargar/{codigoCalidad}', [SaludPadronExportar::class, 'descargarExcel'])->name('salud.padron.calidad.exportar');
+Route::get('/Salud/PadronNominal/Calidad/{tipo}', [SaludPadronNominalCalidad::class, 'listadoTipo'])->name('salud.padron.calidad.listadotipo');
+Route::get('/Salud/PadronNominal/Calidad/{codigoCalidad}/{codigoPadron}', [SaludPadronNominalCalidad::class, 'mostrarDatos'])->name('salud.padron.calidad.mostrardato');
+
+Route::get('/Salud/PadronNominal/Importar', [SaludPadronNominalImportar::class, 'index'])->name('salud.padron.importar.index');
+Route::get('/Salud/PadronNominal/Importar/Historial', [SaludPadronNominalImportar::class, 'listarHistorial'])->name('salud.padron.importar.historial');
+Route::post('/Salud/PadronNominal/Importar/Cargar', [SaludPadronNominalImportar::class, 'cargarPadron'])->name('salud.padron.importar.cargar');
 
 /******************************************** FIN SALUD ***************************************************/
 
