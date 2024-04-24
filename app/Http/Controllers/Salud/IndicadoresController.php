@@ -32,100 +32,155 @@ class IndicadoresController extends Controller
     {
         $sector = 14;
         $instrumento = 8;
-        $inds = IndicadorGeneralRepositorio::find_pactoregional($sector, $instrumento);
+        $indsal = IndicadorGeneralRepositorio::find_pactoregional($sector, $instrumento);
+        $sector = 4;
+        $instrumento = 8;
+        $indedu = IndicadorGeneralRepositorio::find_pactoregional($sector, $instrumento);
 
-        $ind = IndicadorGeneralRepositorio::findNoFichatecnicaCodigo('DITSALUD01');
+        $ind = IndicadorGeneralRepositorio::findNoFichatecnicaCodigo('DIT-SAL-01');
         $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios($ind->id);
         $provincia = UbigeoRepositorio::provincia('25');
 
         $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_1']);
-        // return response()->json(compact('imp'));
+        // // return response()->json(compact('imp'));
         $aniomax = $imp->anio;
 
-        $gls = IndicadorGeneralMetaRepositorio::getPacto1GLS($ind->id, $imp->anio);
-        // return response()->json(compact('gls','ind'));
-        $gl = IndicadorGeneralMetaRepositorio::getPacto1GL($ind->id, $imp->anio);
-
-        $pacto['DITSALUD01'] = [];
-        $pacto['DITSALUD01']['avance'] = round(100 * ($gl > 0 ? $gls / $gl : 0));
-        $pacto['DITSALUD01']['actualizado'] = 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion));
-        $pacto['DITSALUD01']['meta'] = '100%';
-        $pacto['DITSALUD01']['cumple'] = $gls == $gl;
-
-        $pacto['DITSALUD02'] = [];
-        $pacto['DITSALUD02']['avance'] = rand(0, 100); //100 * ($gl > 0 ? $gls / $gl : 0);
-        $pacto['DITSALUD02']['actualizado'] = 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion));
-        $pacto['DITSALUD02']['meta'] = rand(0, 100);
-        $pacto['DITSALUD02']['cumple'] = rand(0, 1);
-
-        $pacto['DITSALUD03'] = [];
-        $pacto['DITSALUD03']['avance'] = rand(0, 100); //100 * ($gl > 0 ? $gls / $gl : 0);
-        $pacto['DITSALUD03']['actualizado'] = 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion));
-        $pacto['DITSALUD03']['meta'] = rand(0, 100);
-        $pacto['DITSALUD03']['cumple'] = rand(0, 1);
-
-        $pacto['DITSALUD04'] = [];
-        $pacto['DITSALUD04']['avance'] = rand(0, 100); //100 * ($gl > 0 ? $gls / $gl : 0);
-        $pacto['DITSALUD04']['actualizado'] = 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion));
-        $pacto['DITSALUD04']['meta'] = rand(0, 100);
-        $pacto['DITSALUD04']['cumple'] = rand(0, 1);
-
-        $pacto['DITSALUD05'] = [];
-        $pacto['DITSALUD05']['avance'] = rand(0, 100); //100 * ($gl > 0 ? $gls / $gl : 0);
-        $pacto['DITSALUD05']['actualizado'] = 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion));
-        $pacto['DITSALUD05']['meta'] = rand(0, 100);
-        $pacto['DITSALUD05']['cumple'] = rand(0, 1);
-
-        return view('salud.Indicadores.PactoRegional', compact('inds', 'pacto', 'anio', 'provincia', 'aniomax'));
+        return view('salud.Indicadores.PactoRegional', compact('indsal', 'indedu',  'anio', 'provincia', 'aniomax'));
     }
 
-    public function PactoRegionalActualizar(Request $rq)
+    public function PactoRegionalActualizar2(Request $rq)
     {
         $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_1']);
         $ind = IndicadorGeneralRepositorio::findNoFichatecnicaCodigo('DITSALUD01');
         $gls = IndicadorGeneralMetaRepositorio::getPacto1GLS($ind->id, $rq->anio);
         $gl = IndicadorGeneralMetaRepositorio::getPacto1GL($ind->id, $rq->anio);
 
-        $pacto['DITSALUD01'] = [];
-        $pacto['DITSALUD01']['avance'] =  round(100 * ($gl > 0 ? $gls / $gl : 0));
-        $pacto['DITSALUD01']['actualizado'] = 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion));
-        $pacto['DITSALUD01']['meta'] = '100%';
-        $pacto['DITSALUD01']['cumple'] = $gls == $gl;
+        $pacto['DIT-SAL-01'] = [];
+        $pacto['DIT-SAL-01']['avance'] =  round(100 * ($gl > 0 ? $gls / $gl : 0));
+        $pacto['DIT-SAL-01']['actualizado'] = 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion));
+        $pacto['DIT-SAL-01']['meta'] = '100%';
+        $pacto['DIT-SAL-01']['cumple'] = $gls == $gl;
 
-        $pacto['DITSALUD02'] = [];
-        $pacto['DITSALUD02']['avance'] = rand(0, 100); //100 * ($gl > 0 ? $gls / $gl : 0);
-        $pacto['DITSALUD02']['actualizado'] = 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion));
-        $pacto['DITSALUD02']['meta'] = rand(0, 100);
-        $pacto['DITSALUD02']['cumple'] = rand(0, 1);
+        $pacto['DIT-SAL-02'] = [];
+        $pacto['DIT-SAL-02']['avance'] = rand(0, 100); //100 * ($gl > 0 ? $gls / $gl : 0);
+        $pacto['DIT-SAL-02']['actualizado'] = 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion));
+        $pacto['DIT-SAL-02']['meta'] = rand(0, 100);
+        $pacto['DIT-SAL-02']['cumple'] = rand(0, 1);
 
-        $pacto['DITSALUD03'] = [];
-        $pacto['DITSALUD03']['avance'] = rand(0, 100); //100 * ($gl > 0 ? $gls / $gl : 0);
-        $pacto['DITSALUD03']['actualizado'] = 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion));
-        $pacto['DITSALUD03']['meta'] = rand(0, 100);
-        $pacto['DITSALUD03']['cumple'] = rand(0, 1);
+        $pacto['DIT-SAL-03'] = [];
+        $pacto['DIT-SAL-03']['avance'] = rand(0, 100); //100 * ($gl > 0 ? $gls / $gl : 0);
+        $pacto['DIT-SAL-03']['actualizado'] = 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion));
+        $pacto['DIT-SAL-03']['meta'] = rand(0, 100);
+        $pacto['DIT-SAL-03']['cumple'] = rand(0, 1);
 
-        $pacto['DITSALUD04'] = [];
-        $pacto['DITSALUD04']['avance'] = rand(0, 100); //100 * ($gl > 0 ? $gls / $gl : 0);
-        $pacto['DITSALUD04']['actualizado'] = 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion));
-        $pacto['DITSALUD04']['meta'] = rand(0, 100);
-        $pacto['DITSALUD04']['cumple'] = rand(0, 1);
+        $pacto['DIT-SAL-04'] = [];
+        $pacto['DIT-SAL-04']['avance'] = rand(0, 100); //100 * ($gl > 0 ? $gls / $gl : 0);
+        $pacto['DIT-SAL-04']['actualizado'] = 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion));
+        $pacto['DIT-SAL-04']['meta'] = rand(0, 100);
+        $pacto['DIT-SAL-04']['cumple'] = rand(0, 1);
 
-        $pacto['DITSALUD05'] = [];
-        $pacto['DITSALUD05']['avance'] = rand(0, 100); //100 * ($gl > 0 ? $gls / $gl : 0);
-        $pacto['DITSALUD05']['actualizado'] = 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion));
-        $pacto['DITSALUD05']['meta'] = rand(0, 100);
-        $pacto['DITSALUD05']['cumple'] = rand(0, 1);
-
-
+        $pacto['DIT-SAL-05'] = [];
+        $pacto['DIT-SAL-05']['avance'] = rand(0, 100); //100 * ($gl > 0 ? $gls / $gl : 0);
+        $pacto['DIT-SAL-05']['actualizado'] = 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion));
+        $pacto['DIT-SAL-05']['meta'] = rand(0, 100);
+        $pacto['DIT-SAL-05']['cumple'] = rand(0, 1);
 
         return response()->json(compact('pacto'));
+    }
+
+    public function PactoRegionalActualizar(Request $rq)
+    {
+        $imp = null;
+        $gls = 0;
+        $gl = 0;
+        switch ($rq->codigo) {
+            case 'DIT-SAL-01':
+                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_1']);
+                $ind = IndicadorGeneralRepositorio::findNoFichatecnicaCodigo($rq->codigo);
+                $gls = IndicadorGeneralMetaRepositorio::getPacto1GLS($ind->id, $rq->anio);
+                $gl = IndicadorGeneralMetaRepositorio::getPacto1GL($ind->id, $rq->anio);
+                break;
+            case 'DIT-SAL-02':
+                $gls = 105.5;
+                $gl = 100;
+                break;
+            case 'DIT-SAL-03':
+                $gls = 75;
+                $gl = 100;
+                break;
+            case 'DIT-SAL-04':
+                $gls = 50;
+                $gl = 100;
+                break;
+            case 'DIT-SAL-05':
+                $gls = 25;
+                $gl = 100;
+                break;
+            case 'DIT-EDU-01':
+                $gls = 75;
+                $gl = 100;
+                break;
+            case 'DIT-EDU-02':
+                $gls = 100;
+                $gl = 100;
+                break;
+            case 'DIT-EDU-03':
+                $gls = 102;
+                $gl = 100;
+                break;
+            case 'DIT-EDU-04':
+                $gls = 25;
+                $gl = 100;
+                break;
+            case 'DIT-VIV-01':
+                $gls = 25;
+                $gl = 100;
+                break;
+            case 'DIT-VIV-02':
+                $gls = 50;
+                $gl = 100;
+                break;
+            case 'DIT-VIV-03':
+                $gls = 75;
+                $gl = 100;
+                break;
+            case 'DIT-VIV-04':
+                $gls = 100.9;
+                $gl = 100;
+                break;
+            case 'DIT-ART-01':
+                $gls = 25;
+                $gl = 100;
+                break;
+            case 'DIT-ART-02':
+                $gls = 50;
+                $gl = 100;
+                break;
+            case 'DIT-ART-03':
+                $gls = 75;
+                $gl = 100;
+                break;
+            case 'DIT-ART-04':
+                $gls = 100.9;
+                $gl = 100;
+                break;
+            default:
+                break;
+        }
+
+        $avance =  round(100 * ($gl > 0 ? $gls / $gl : 0));
+        $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
+        $meta = '100%';
+        $cumple = $gls >= $gl;
+
+        return response()->json(compact('avance', 'actualizado', 'meta', 'cumple'));
     }
 
     public function PactoRegionalDetalle($indicador_id)
     {
         $ind = IndicadorGeneral::find($indicador_id);
         switch ($ind->codigo) {
-            case 'DITSALUD01':
+            case 'DIT-SAL-01':
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_1']);
                 // return response()->json([$imp]);
                 $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
@@ -133,7 +188,7 @@ class IndicadoresController extends Controller
                 $provincia = UbigeoRepositorio::provincia('25');
                 $aniomax = $imp->anio;
                 return view('salud.Indicadores.PactoRegionalDetalle1', compact('actualizado', 'anio', 'provincia', 'aniomax', 'ind'));
-            case 'DITSALUD02':
+            case 'DIT-SAL-02':
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_1']);
                 // return response()->json([$imp]);
                 $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
@@ -141,11 +196,11 @@ class IndicadoresController extends Controller
                 $provincia = UbigeoRepositorio::provincia('25');
                 $aniomax = $imp->anio;
                 return view('salud.Indicadores.PactoRegionalDetalle2', compact('actualizado', 'anio', 'provincia', 'aniomax', 'ind'));
-            case 'DITSALUD03':
+            case 'DIT-SAL-03':
                 return '';
-            case 'DITSALUD04':
+            case 'DIT-SAL-04':
                 return '';
-            case 'DITSALUD05':
+            case 'DIT-SAL-05':
                 return '';
             default:
                 return 'ERROR, PAGINA NO ENCONTRADA';
@@ -161,6 +216,10 @@ class IndicadoresController extends Controller
                 $gls = IndicadorGeneralMetaRepositorio::getPacto1GLS($rq->indicador, $rq->anio);
                 $gl = IndicadorGeneralMetaRepositorio::getPacto1GL($rq->indicador, $rq->anio);
                 $gln = IndicadorGeneralMetaRepositorio::getPacto1GLN($rq->indicador, $rq->anio);
+                if ($gl == ($gls + $gln)) {
+                } else {
+                    $gln += $gl - ($gls + $gln);
+                }
                 $ri = number_format(100 * ($gl > 0 ? $gls / $gl : 0));
                 return response()->json(['aa' => $rq->all(), 'ri' => $ri, 'gl' => $gl, 'gls' => $gls, 'gln' => $gln]);
 

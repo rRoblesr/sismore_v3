@@ -1505,6 +1505,7 @@ class HomeController extends Controller
 
     public function salud($sistema_id)
     {
+        // return session()->all();
         return view('home', []);
     }
 

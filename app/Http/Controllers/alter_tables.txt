@@ -1276,6 +1276,9 @@ BEGIN
 END
 
 
+###
+
+ALTER TABLE `par_indicador_general` ADD `usuario` INT NULL DEFAULT NULL AFTER `ficha_tecnica`;
 
 
 

@@ -48,7 +48,7 @@
                 <h4 class="page-title font-16">PACTO REGIONAL</h4>
             </div>
             <div class="col-lg-1 col-md-1 col-sm-1">
-                <select id="anio" name="anio" class="form-control btn-xs font-11" onchange="cargarActualizar();">
+                <select id="anio" name="anio" class="form-control btn-xs font-11" onchange="cargarpacto1();">
                     @foreach ($anio as $item)
                         <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
                             {{ $item->anio }}</option>
@@ -56,7 +56,7 @@
                 </select>
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2">
-                <select id="provincia" name="provincia" class="form-control btn-xs font-11" onchange="cargarDistritos()">
+                <select id="provincia" name="provincia" class="form-control btn-xs font-11" onchange="cargarDistritos();">
                     <option value="0">PROVINCIA</option>
                     @foreach ($provincia as $item)
                         <option value="{{ $item->id }}">
@@ -66,7 +66,7 @@
                 </select>
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2">
-                <select id="distrito" name="distrito" class="form-control btn-xs font-11" onchange="cargarCards();">
+                <select id="distrito" name="distrito" class="form-control btn-xs font-11" onchange="cargarpacto1();">
                     <option value="0">DISTRITO</option>
                 </select>
             </div>
@@ -134,13 +134,14 @@
                             <div class="row pricing-plan">
                                 <div class="col-md-12">
                                     <div class="row">
-                                        @foreach ($inds as $key => $item)
+                                        @foreach ($indsal as $key => $item)
                                             <div class="col-md-6 col-xl-3">
                                                 <div class="card text-center border border-success-0">
                                                     <div class="pricing-header bg-success-0 p-0 rounded-top">
                                                         <div class="card-widgets">
                                                             {{-- <i class="mdi mdi-alert-circle-outline"></i> --}}
-                                                            <span onclick="datosIndicador({{$item->id}})"><i class="mdi mdi-rotate-180 mdi-alert-circle"
+                                                            <span onclick="datosIndicador({{ $item->id }})"><i
+                                                                    class="mdi mdi-rotate-180 mdi-alert-circle"
                                                                     style="color:#FFF;font-size: 20px;"></i>&nbsp;&nbsp;</span>
                                                             {{-- <a href="" title='' class=""><i class="mdi mdi-alert-circle"
                                                                     style="color:#FFF;font-size: 20px"></i></a> --}}
@@ -164,21 +165,11 @@
                                                                 </figure>
                                                             </li>
                                                             </li>
-                                                            <li class="mt-0 pt-0 font-12">
-                                                                {{ $pacto[$item->codigo]['actualizado'] }}</li>
-                                                            <li class="mt-0 pt-0 font-18 font-weight-bold">Meta:
-                                                                {{ $pacto[$item->codigo]['meta'] }}</li>
-                                                            <li class="mt-0 pt-0">
-                                                                @if ($pacto[$item->codigo]['cumple'])
-                                                                    <span class="badge badge-success m-2"
-                                                                        style="font-size: 90%; width:100px">
-                                                                        <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
-                                                                @else
-                                                                    <span class="badge badge-danger m-2"
-                                                                        style="font-size: 90%; width:100px">
-                                                                        <i class="mdi mdi-thumb-down"></i> NO CUMPLE</span>
-                                                                @endif
-
+                                                            <li class="mt-0 pt-0 font-12"
+                                                                id="actualizado{{ $item->codigo }}"></li>
+                                                            <li class="mt-0 pt-0 font-18 font-weight-bold"
+                                                                id="meta{{ $item->codigo }}"></li>
+                                                            <li class="mt-0 pt-0" id="cumple{{ $item->codigo }}">
                                                             </li>
                                                             <li class="mt-1 pt-1">
                                                                 <p class="font-12" style="height: 5rem;">
@@ -213,214 +204,63 @@
                             <div class="row pricing-plan">
                                 <div class="col-md-12">
                                     <div class="row">
-                                        <div class="col-md-6 col-xl-3">
-                                            <div class="card text-center border border-success-0">
-                                                <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                                    <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-school" style="font-size: 20px"></i>
-                                                        Indicador 1</h5>
-                                                    {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
-                                                    {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
-                                                </div>
-                                                <div class="pb-4 pl-4 pr-4">
-                                                    <ul class="list-unstyled mt-0">
-                                                        <li class="mt-0 pt-0">
-                                                            {{-- <i class="mdi mdi-finance font-44 text-green-0"></i></li>
-                                                        <li class="mt-0 pt-0 font-16">Avance</li>
-                                                        <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 % --}}
-                                                        <li class="m-0 pt-0">
-                                                            <figure class="p-0 m-0">
-                                                                <div id="graeducacion01"></div>
-                                                                {{-- graDITSALUD01 --}}
-                                                            </figure>
-                                                        </li>
-                                                        </li>
-                                                        <li class="mt-0 pt-0 font-12">Actualizado: 02/04/2024
-                                                        </li>
-                                                        <li class="mt-0 pt-0 font-18 font-weight-bold">Meta: 60</li>
-                                                        <li class="mt-0 pt-0">
 
-                                                            <span class="badge badge-success m-2"
-                                                                style="font-size: 90%; width:100px">
-                                                                <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
-                                                            {{-- <span class="badge badge-danger m-2"
-                                                                    style="font-size: 90%; width:100px">
-                                                                    <i class="mdi mdi-thumb-down"></i> NO CUMPLE</span> --}}
-
-                                                        </li>
-                                                        <li class="mt-1 pt-1">
-                                                            <p class="font-12" style="height: 5rem;">Número de gobiernos
-                                                                locales que registraron oportunamente las actas de
-                                                                homologación en el sistema de padron nominal</p>
-                                                        </li>
-
-                                                    </ul>
-                                                    <div class="mt-1 pt-1">
-                                                        <a href="#"
-                                                            class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
-                                                            detalle</a>
+                                        @foreach ($indedu as $key => $item)
+                                            <div class="col-md-6 col-xl-3">
+                                                <div class="card text-center border border-success-0">
+                                                    <div class="pricing-header bg-success-0 p-0 rounded-top">
+                                                        <div class="card-widgets">
+                                                            {{-- <i class="mdi mdi-alert-circle-outline"></i> --}}
+                                                            <span onclick="datosIndicador({{ $item->id }})"><i
+                                                                    class="mdi mdi-rotate-180 mdi-alert-circle"
+                                                                    style="color:#FFF;font-size: 20px;"></i>&nbsp;&nbsp;</span>
+                                                            {{-- <a href="" title='' class=""><i class="mdi mdi-alert-circle"
+                                                                    style="color:#FFF;font-size: 20px"></i></a> --}}
+                                                        </div>
+                                                        <h5 class="text-white font-14 font-weight-normal mt-1 mb-1"><i
+                                                                class="mdi mdi-school" style="font-size: 20px"></i>
+                                                            Indicador {{ $key + 1 }}</h5>
+                                                        {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
+                                                        {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
                                                     </div>
+                                                    <div class="pb-4 pl-4 pr-4">
+                                                        <ul class="list-unstyled mt-0">
+                                                            <li class="mt-0 pt-0">
+                                                                {{-- <i class="mdi mdi-finance font-44 text-green-0"></i></li>
+                                                            <li class="mt-0 pt-0 font-16">Avance</li>
+                                                            <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 % --}}
+                                                            <li class="m-0 pt-0">
+                                                                <figure class="p-0 m-0">
+                                                                    <div id="gra{{ $item->codigo }}"></div>
+                                                                    {{-- graDITSALUD01 --}}
+                                                                </figure>
+                                                            </li>
+                                                            </li>
+                                                            <li class="mt-0 pt-0 font-12"
+                                                                id="actualizado{{ $item->codigo }}">
+                                                            </li>
+                                                            <li class="mt-0 pt-0 font-18 font-weight-bold"
+                                                                id="meta{{ $item->codigo }}"></li>
+                                                            <li class="mt-0 pt-0" id="cumple{{ $item->codigo }}"></li>
+                                                            <li class="mt-1 pt-1">
+                                                                <p class="font-12" style="height: 5rem;">
+                                                                    {{ $item->nombre }}</p>
+                                                            </li>
 
+                                                        </ul>
+                                                        <div class="mt-1 pt-1">
+                                                            {{-- <button class="btn btn-primary width-md waves-effect waves-light">Sign Up</button> --}}
+                                                            <a href="{{ route('salud.indicador.pactoregional.detalle', $item->id) }}"
+                                                                class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
+                                                                detalle</a>
+                                                        </div>
+
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                            <!-- end col -->
+                                        @endforeach
 
-                                        <div class="col-md-6 col-xl-3">
-                                            <div class="card text-center border border-success-0">
-                                                <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                                    <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-school" style="font-size: 20px"></i>
-                                                        Indicador 1</h5>
-                                                    {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
-                                                    {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
-                                                </div>
-                                                <div class="pb-4 pl-4 pr-4">
-                                                    <ul class="list-unstyled mt-0">
-                                                        <li class="mt-0 pt-0">
-                                                            {{-- <i class="mdi mdi-finance font-44 text-green-0"></i></li>
-                                                        <li class="mt-0 pt-0 font-16">Avance</li>
-                                                        <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 % --}}
-                                                        <li class="m-0 pt-0">
-                                                            <figure class="p-0 m-0">
-                                                                <div id="graeducacion02"></div>
-                                                                {{-- graDITSALUD01 --}}
-                                                            </figure>
-                                                        </li>
-                                                        </li>
-                                                        <li class="mt-0 pt-0 font-12">Actualizado: 02/04/2024
-                                                        </li>
-                                                        <li class="mt-0 pt-0 font-18 font-weight-bold">Meta: 60</li>
-                                                        <li class="mt-0 pt-0">
-
-                                                            <span class="badge badge-success m-2"
-                                                                style="font-size: 90%; width:100px">
-                                                                <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
-                                                            {{-- <span class="badge badge-danger m-2"
-                                                                    style="font-size: 90%; width:100px">
-                                                                    <i class="mdi mdi-thumb-down"></i> NO CUMPLE</span> --}}
-
-                                                        </li>
-                                                        <li class="mt-1 pt-1">
-                                                            <p class="font-12" style="height: 5rem;">Número de gobiernos
-                                                                locales que registraron oportunamente las actas de
-                                                                homologación en el sistema de padron nominal</p>
-                                                        </li>
-
-                                                    </ul>
-                                                    <div class="mt-1 pt-1">
-                                                        <a href="#"
-                                                            class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
-                                                            detalle</a>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6 col-xl-3">
-                                            <div class="card text-center border border-success-0">
-                                                <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                                    <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-school" style="font-size: 20px"></i>
-                                                        Indicador 1</h5>
-                                                    {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
-                                                    {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
-                                                </div>
-                                                <div class="pb-4 pl-4 pr-4">
-                                                    <ul class="list-unstyled mt-0">
-                                                        <li class="mt-0 pt-0">
-                                                            {{-- <i class="mdi mdi-finance font-44 text-green-0"></i></li>
-                                                        <li class="mt-0 pt-0 font-16">Avance</li>
-                                                        <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 % --}}
-                                                        <li class="m-0 pt-0">
-                                                            <figure class="p-0 m-0">
-                                                                <div id="graeducacion03"></div>
-                                                                {{-- graDITSALUD01 --}}
-                                                            </figure>
-                                                        </li>
-                                                        </li>
-                                                        <li class="mt-0 pt-0 font-12">Actualizado: 02/04/2024
-                                                        </li>
-                                                        <li class="mt-0 pt-0 font-18 font-weight-bold">Meta: 60</li>
-                                                        <li class="mt-0 pt-0">
-
-                                                            <span class="badge badge-success m-2"
-                                                                style="font-size: 90%; width:100px">
-                                                                <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
-                                                            {{-- <span class="badge badge-danger m-2"
-                                                                    style="font-size: 90%; width:100px">
-                                                                    <i class="mdi mdi-thumb-down"></i> NO CUMPLE</span> --}}
-
-                                                        </li>
-                                                        <li class="mt-1 pt-1">
-                                                            <p class="font-12" style="height: 5rem;">Número de gobiernos
-                                                                locales que registraron oportunamente las actas de
-                                                                homologación en el sistema de padron nominal</p>
-                                                        </li>
-
-                                                    </ul>
-                                                    <div class="mt-1 pt-1">
-                                                        <a href="#"
-                                                            class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
-                                                            detalle</a>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6 col-xl-3">
-                                            <div class="card text-center border border-success-0">
-                                                <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                                    <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-school" style="font-size: 20px"></i>
-                                                        Indicador 1</h5>
-                                                    {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
-                                                    {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
-                                                </div>
-                                                <div class="pb-4 pl-4 pr-4">
-                                                    <ul class="list-unstyled mt-0">
-                                                        <li class="mt-0 pt-0">
-                                                            {{-- <i class="mdi mdi-finance font-44 text-green-0"></i></li>
-                                                        <li class="mt-0 pt-0 font-16">Avance</li>
-                                                        <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 % --}}
-                                                        <li class="m-0 pt-0">
-                                                            <figure class="p-0 m-0">
-                                                                <div id="graeducacion04"></div>
-                                                                {{-- graDITSALUD01 --}}
-                                                            </figure>
-                                                        </li>
-                                                        </li>
-                                                        <li class="mt-0 pt-0 font-12">Actualizado: 02/04/2024
-                                                        </li>
-                                                        <li class="mt-0 pt-0 font-18 font-weight-bold">Meta: 60</li>
-                                                        <li class="mt-0 pt-0">
-
-                                                            <span class="badge badge-success m-2"
-                                                                style="font-size: 90%; width:100px">
-                                                                <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
-                                                            {{-- <span class="badge badge-danger m-2"
-                                                                    style="font-size: 90%; width:100px">
-                                                                    <i class="mdi mdi-thumb-down"></i> NO CUMPLE</span> --}}
-
-                                                        </li>
-                                                        <li class="mt-1 pt-1">
-                                                            <p class="font-12" style="height: 5rem;">Número de gobiernos
-                                                                locales que registraron oportunamente las actas de
-                                                                homologación en el sistema de padron nominal</p>
-                                                        </li>
-
-                                                    </ul>
-                                                    <div class="mt-1 pt-1">
-                                                        <a href="#"
-                                                            class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
-                                                            detalle</a>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
- 
 
                                     </div>
                                 </div>
@@ -435,6 +275,7 @@
                             <div class="row pricing-plan">
                                 <div class="col-md-12">
                                     <div class="row">
+                                        
                                         <div class="col-md-6 col-xl-3">
                                             <div class="card text-center border border-success-0">
                                                 <div class="pricing-header bg-success-0 p-0 rounded-top">
@@ -711,7 +552,8 @@
                                             <div class="card text-center border border-success-0">
                                                 <div class="pricing-header bg-success-0 p-0 rounded-top">
                                                     <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-plus-circle-outline" style="font-size: 20px"></i>
+                                                            class="mdi mdi-plus-circle-outline"
+                                                            style="font-size: 20px"></i>
                                                         Indicador 1</h5>
                                                     {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                                     {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
@@ -763,7 +605,8 @@
                                             <div class="card text-center border border-success-0">
                                                 <div class="pricing-header bg-success-0 p-0 rounded-top">
                                                     <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-plus-circle-outline" style="font-size: 20px"></i>
+                                                            class="mdi mdi-plus-circle-outline"
+                                                            style="font-size: 20px"></i>
                                                         Indicador 1</h5>
                                                     {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                                     {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
@@ -815,7 +658,8 @@
                                             <div class="card text-center border border-success-0">
                                                 <div class="pricing-header bg-success-0 p-0 rounded-top">
                                                     <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-plus-circle-outline" style="font-size: 20px"></i>
+                                                            class="mdi mdi-plus-circle-outline"
+                                                            style="font-size: 20px"></i>
                                                         Indicador 1</h5>
                                                     {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                                     {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
@@ -867,7 +711,8 @@
                                             <div class="card text-center border border-success-0">
                                                 <div class="pricing-header bg-success-0 p-0 rounded-top">
                                                     <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-plus-circle-outline" style="font-size: 20px"></i>
+                                                            class="mdi mdi-plus-circle-outline"
+                                                            style="font-size: 20px"></i>
                                                         Indicador 1</h5>
                                                     {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                                     {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
@@ -919,7 +764,8 @@
                                             <div class="card text-center border border-success-0">
                                                 <div class="pricing-header bg-success-0 p-0 rounded-top">
                                                     <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-plus-circle-outline" style="font-size: 20px"></i>
+                                                            class="mdi mdi-plus-circle-outline"
+                                                            style="font-size: 20px"></i>
                                                         Indicador 1</h5>
                                                     {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                                                     {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
@@ -1072,26 +918,44 @@
                 }
             });
             // cargarCards();
+            cargarDistritos();
             cargarpacto1();
         });
 
         function cargarpacto1() {
-            @foreach ($inds as $key => $item)
-                GaugeSeries('gra{{ $item->codigo }}', {{ $pacto[$item->codigo]['avance'] }});
-            @endforeach
+            cargarActualizar('DIT-SAL-01');
+            cargarActualizar('DIT-SAL-02');
+            cargarActualizar('DIT-SAL-03');
+            cargarActualizar('DIT-SAL-04');
+            cargarActualizar('DIT-SAL-05');
 
-            GaugeSeries('graeducacion01', 71);
-            GaugeSeries('graeducacion02', 82);
-            GaugeSeries('graeducacion03', 92);
-            GaugeSeries('graeducacion04', 99);
-            GaugeSeries('graeducacion05', 62);
-            GaugeSeries('graeducacion06', 62);
+            cargarActualizar('DIT-EDU-01');
+            cargarActualizar('DIT-EDU-02');
+            cargarActualizar('DIT-EDU-03');
+            cargarActualizar('DIT-EDU-04');
+            
+            // GaugeSeries('graeducacion01', 71);
+            // GaugeSeries('graeducacion02', 82);
+            // GaugeSeries('graeducacion03', 92);
+            // GaugeSeries('graeducacion04', 99);
+            // GaugeSeries('graeducacion05', 62);
+            // GaugeSeries('graeducacion06', 62);
+
+            // cargarActualizar('DIT-VIV-01');
+            // cargarActualizar('DIT-VIV-02');
+            // cargarActualizar('DIT-VIV-03');
+            // cargarActualizar('DIT-VIV-04');
 
             GaugeSeries('gravivienda01', 71);
             GaugeSeries('gravivienda02', 82);
             GaugeSeries('gravivienda03', 92);
             GaugeSeries('gravivienda04', 99);
             GaugeSeries('gravivienda05', 62);
+
+            // cargarActualizar('DIT-ART-01');
+            // cargarActualizar('DIT-ART-02');
+            // cargarActualizar('DIT-ART-03');
+            // cargarActualizar('DIT-ART-04');
 
             GaugeSeries('graarticulacion01', 71);
             GaugeSeries('graarticulacion02', 82);
@@ -1101,18 +965,26 @@
 
         }
 
-        function cargarActualizar() {
+        function cargarActualizar(codigo) {
             $.ajax({
                 url: "{{ route('salud.indicador.pactoregional.actualizar') }}",
                 data: {
                     "anio": $('#anio').val(),
                     "distrito": $('#distrito').val(),
+                    "codigo": codigo,
                 },
                 type: "GET",
                 dataType: "JSON",
                 // beforeSend: function() {},
                 success: function(data) {
                     console.log(data);
+                    GaugeSeries('gra' + codigo, data.avance);
+                    $('#actualizado' + codigo).text(data.actualizado);
+                    $('#meta' + codigo).text('Meta: ' + data.meta);
+                    $('#cumple' + codigo).html(data.cumple ?
+                        '<span class="badge badge-success m-2" style="font-size: 90%; width:100px"> <i class="mdi mdi-thumb-up"></i> CUMPLE</span>' :
+                        '<span class="badge badge-danger m-2" style="font-size: 90%; width:100px"> <i class="mdi mdi-thumb-down"></i> NO CUMPLE</span>'
+                    );
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");

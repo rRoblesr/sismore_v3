@@ -280,6 +280,7 @@
                     }
                 },
                 success: function(data) {
+                    console.log(data);
                     if (div == "head") {
                         $('#ri').text(data.ri + '%');
                         $('#gl').text(data.gl);

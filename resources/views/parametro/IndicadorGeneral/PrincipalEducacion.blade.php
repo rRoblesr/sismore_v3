@@ -45,11 +45,10 @@
                     <div class="card card-border">
                         <div class="card-header border-success-0 bg-transparent pb-0">
                             <div class="card-widgets">
-                                <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i
-                                        class="fa fa-redo"></i> Actualizar</button>
-                                <button type="button" class="btn btn-primary btn-xs" onclick="add()"><i
-                                        class="fa fa-plus"></i>
-                                    Nuevo</button>
+                                <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
+                                    <i class="fa fa-redo"></i> Actualizar</button>
+                                <button type="button" class="btn btn-primary btn-xs" onclick="add()">
+                                    <i class="fa fa-plus"></i>Nuevo</button>
                             </div>
                             <h3 class="card-title">Indicadores </h3>
                         </div>
@@ -163,7 +162,7 @@
                                                         <div class="col-md-6">
                                                             <label>Código<span class="required">*</span></label>
                                                             <input type="text" id="codigo" name="codigo"
-                                                                class="form-control">
+                                                                class="form-control" size="10" maxlength="10">
                                                             <span class="help-block"></span>
                                                         </div>
                                                         <div class="col-md-6">

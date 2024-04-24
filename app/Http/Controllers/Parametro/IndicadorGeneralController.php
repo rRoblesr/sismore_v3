@@ -39,7 +39,8 @@ class IndicadorGeneralController extends Controller
         $dimension = IndicadorGeneralRepositorio::dimension();
         $unidad = IndicadorGeneralRepositorio::unidad();
         $frecuencia = IndicadorGeneralRepositorio::frecuencia();
-        if ($control > 0) {
+
+        if ($control == 3) {
             $sector = Sector::all();
         } else {
             switch ($sistema) {
@@ -67,7 +68,7 @@ class IndicadorGeneralController extends Controller
 
         $control = session('perfil_administrador_id');
         $sistema = session('sistema_id');
-        if ($control > 0) {
+        if ($control == 3 || $control == 8) {
             $query = IndicadorGeneral::select('id', 'codigo', 'nombre', 'descripcion', 'instrumento_id', 'tipo_id', 'dimension_id', 'unidad_id', 'frecuencia_id', 'fuente_dato', 'anio_base', 'valor_base', 'sector_id', 'oficina_id', 'estado')
                 ->orderBy('id', 'desc')->get();
         } else {
@@ -386,8 +387,8 @@ class IndicadorGeneralController extends Controller
         $inst = DB::table('par_instrumento')->where('id', $rq->instrumento)->first();
         $sect = Sector::where('id', $rq->sector)->first();
 
-        $codigo = $inst ? $inst->abreviado : '';
-        $codigo .= $sect ? $sect->nombre : '';
+        $codigo = $inst ? $inst->abreviado . '-' : '';
+        $codigo .= $sect ? substr($sect->nombre,0,3) . '-' : '';
 
         $conteo = strlen($codigo) + 2;
 
