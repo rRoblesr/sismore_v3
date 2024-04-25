@@ -78,7 +78,7 @@ class SFLController extends Controller
 
         $querySFL = DB::table(DB::raw('(select id, codLocal as local, codModular as modular from edu_institucioneducativa)as ie'))
             ->join('edu_sfl as sfl', 'sfl.institucioneducativa_id', '=', 'ie.id', 'left')->where('ie.local', '!=', '')
-            ->select('ie.*', 'sfl.estado', 'sfl.tipo', 'sfl.fecha_registro')
+            ->select('ie.*', 'sfl.estado', 'sfl.tipo', 'sfl.fecha_registro', 'sfl.fecha_inscripcion')
             ->orderBy('ie.id')->get();
 
         $data = [];
@@ -110,7 +110,7 @@ class SFLController extends Controller
                 }
                 $pos++;
             }
-
+            //NIURCA 941696330
             $estado = '';
             if ($sflLOCAL->count() == $saneado) {
                 $estado = 'SANEADO';
@@ -172,7 +172,7 @@ class SFLController extends Controller
                 $value->provincia,
                 $value->distrito,
                 '<div style="text-align:center">' . $value->area . '</div>',
-                '<div style="text-align:center">' . ($sfl->fecha_registro != null ? date('d/m/Y', strtotime($sfl->fecha_registro)) : '') . '</div>',
+                '<div style="text-align:center">' . ($sfl->fecha_inscripcion != null ? date('d/m/Y', strtotime($sfl->fecha_inscripcion)) : '') . '</div>',
                 '<div style="text-align:center">' . ($sfl->tipo > 0 ? ($tip[$sfl->tipo == NULL ? 0 : $sfl->tipo]) : '') . '</div>',
                 '<div style="text-align:center">' . $estadox . '</div>',
                 "<center><div class='btn-group'>" . $btn . "</div></center>",
@@ -756,18 +756,5 @@ class SFLController extends Controller
         $query = $query->get();
 
         return ["base" => $query];
-    }
-
-
-    public function SFL()
-    {
-        $ff = SFL::select(DB::raw('max(fecha_registro) as ff'))->first();
-        // return response()->json([$imp]);
-         $actualizado = 'Actualizado al ' . date('d', strtotime($ff->ff)) . ' de ' . $this->mesname[date('m', strtotime($ff->ff)) - 1] . ' del ' . date('Y', strtotime($ff->ff));
-        $anio = SFL::distinct()->select(DB::raw('year(fecha_registro) as anio'))->orderBy('anio')->get();
-        $provincia = UbigeoRepositorio::provincia('25');
-        $area=Area::all();
-        $aniomax = $anio->max('anio');
-        return view('educacion.SFL.SFL', compact('actualizado', 'anio', 'provincia', 'aniomax','area'));
     }
 }

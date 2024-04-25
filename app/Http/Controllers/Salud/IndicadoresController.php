@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Salud;
 
 use App\Http\Controllers\Controller;
+use App\Models\Educacion\Area;
+use App\Models\Educacion\SFL;
 use App\Models\Parametro\Anio;
 use App\Models\Parametro\IndicadorGeneral;
 use App\Models\Parametro\IndicadorGeneralMeta;
@@ -202,6 +204,21 @@ class IndicadoresController extends Controller
                 return '';
             case 'DIT-SAL-05':
                 return '';
+
+            case 'DIT-EDU-01':
+                return '';
+            case 'DIT-EDU-02':
+                $ff = SFL::select(DB::raw('max(fecha_registro) as ff'))->first();
+                $actualizado = 'Actualizado al ' . date('d', strtotime($ff->ff)) . ' de ' . $this->mesname[date('m', strtotime($ff->ff)) - 1] . ' del ' . date('Y', strtotime($ff->ff));
+                $anio = SFL::distinct()->select(DB::raw('year(fecha_registro) as anio'))->orderBy('anio')->get();
+                $provincia = UbigeoRepositorio::provincia('25');
+                $area = Area::all();
+                $aniomax = $anio->max('anio');
+                return view('educacion.SFL.SFL', compact('actualizado', 'anio', 'provincia', 'aniomax', 'area'));
+            case 'DIT-EDU-03':
+                return '';
+            case 'DIT-EDU-04':
+                return '';
             default:
                 return 'ERROR, PAGINA NO ENCONTRADA';
         }
@@ -227,8 +244,9 @@ class IndicadoresController extends Controller
                 $base = IndicadorGeneralMetaRepositorio::getPacto1Mensual($rq->anio, $rq->distrito);
                 $mes = Mes::select('codigo', 'abreviado as mes')->get();
                 $mesmax = $base->max('name');
+                $limit = $rq->anio == 2023 ? IndicadoresController::$pacto1_mes : 0;
                 foreach ($mes as $mm) {
-                    if ($mm->codigo <= $mesmax) {
+                    if ($mm->codigo >= $limit && $mm->codigo <= $mesmax) {
                         $mm->y = 0;
                         foreach ($base as $bb) {
                             if ($bb->name == $mm->codigo) {
@@ -262,9 +280,10 @@ class IndicadoresController extends Controller
                 $mes = Mes::select('codigo', 'abreviado as mes')->get();
                 $mesmax1 = $base1->max('name');
                 $mesmax2 = $base2->max('mes');
+                $limit = $rq->anio == 2023 ? IndicadoresController::$pacto1_mes : 0;
                 foreach ($mes as $mm) {
 
-                    if ($mm->codigo <= $mesmax1) {
+                    if ($mm->codigo >= $limit && $mm->codigo <= $mesmax1) {
                         $mm->y1 = 0;
                         foreach ($base1 as $bb1) {
                             if ($bb1->name == $mm->codigo) {
@@ -276,7 +295,7 @@ class IndicadoresController extends Controller
                         $mm->y1 = null;
                     }
 
-                    if ($mm->codigo <= $mesmax2) {
+                    if ($mm->codigo >= $limit && $mm->codigo <= $mesmax2) {
                         $mm->y2 = 0;
                         foreach ($base2 as $bb2) {
                             if ($bb2->mes == $mm->codigo) {

@@ -130,7 +130,7 @@
                                             <th>Provincia</th>
                                             <th>Distrito</th>
                                             <th>Área</th>
-                                            <th>Fecha Registro</th>
+                                            <th>Fecha Inscripción</th>
                                             <th>Tipo SFL</th>
                                             <th>Estado SFL</th>
                                             <th>Acciones</th>

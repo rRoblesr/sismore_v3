@@ -137,7 +137,8 @@ class IndicadorGeneralMetaRepositorio
     {
         $query = ImporPadronActas::select(DB::raw('month(sal_impor_padron_actas.fecha_envio) as name'), DB::raw('sum(numero_archivos) as y'))
             ->join('par_importacion as imp', 'imp.id', '=', 'sal_impor_padron_actas.importacion_id')
-            ->where(DB::raw('year(fechaActualizacion)'), $anio);
+            // ->where(DB::raw('year(fechaActualizacion)'), $anio)
+            ->where('sal_impor_padron_actas.fecha_envio', '<', ($anio + 1) . '-01-08')->where(DB::raw('year(fecha_envio)'), $anio);
 
         if ($distrito > 0) {
             $dd = Ubigeo::find($distrito);

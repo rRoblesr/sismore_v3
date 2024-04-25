@@ -505,7 +505,7 @@ Route::get('/educación/ServiciosBasicos', [ServiciosBasicosController::class, '
 Route::get('/ServiciosBasicos/Tablas', [ServiciosBasicosController::class, 'principalTabla'])->name('serviciosbasicos.principal.tablas');
 Route::get('/ServiciosBasicos/Excel/{div}/{anio}/{ugel}/{gestion}/{area}/{servicio}', [ServiciosBasicosController::class, 'principalDownload']);
 
-Route::get('/educación/sfl', [SFLController::class, 'SFL'])->name('sfl.principal');
+Route::get('/educación/sfl', [SFLController::class, 'SFL'])->name('sfl.principal');//NECESITA UN CONTENEDOR PARA PACTO
 
 Route::get('/Importacion', [ImportacionController::class, 'inicio'])->name('importacion.inicio');
 Route::get('/Importacion/importaciones_DataTable/', [ImportacionController::class, 'importacionesLista_DataTable'])->name('importacion.importacionesLista_DataTable');

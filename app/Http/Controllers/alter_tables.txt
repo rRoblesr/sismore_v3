@@ -1326,7 +1326,52 @@ BEGIN
 
 END
 
+##
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `datosx`.`sal_pa_procesarPacto1`(IN `v_importacion` INT, IN `v_anio` INT)
+BEGIN
+	 
+	delete from sal_data_pacto1 where anio=v_anio;
+	
+	drop table if exists temp1;
+	drop table if exists temp2;
+	drop table if exists temp3;
+	create temporary table temp1(importacion int, anio int,distrito varchar(50),fechai date,fechaf date,fechae date,mes int,estado int);
+	create temporary table temp2(importacion int, anio int,distrito varchar(50),fechai date,fechaf date,fechae date,mes int,estado int);
+
+	insert into temp1
+	select imp.id,IF(month(pa.fecha_envio)-1=0,if(pa.fecha_envio>date_format(pa.fecha_envio,'%Y-%m-07'),year(imp.fechaActualizacion),year(imp.fechaActualizacion)-1),year(imp.fechaActualizacion)) ,pa.distrito ,pa.fecha_inicial ,pa.fecha_final, pa.fecha_envio ,
+		IF(pa.fecha_envio<date_format(pa.fecha_envio,'%Y-%m-08'),
+			IF(month(pa.fecha_envio)-1=0,12,month(pa.fecha_envio)-1)			
+		,month(pa.fecha_envio)) as mes,
+		0 as estado
+	from sal_impor_padron_actas pa
+	left join par_importacion imp on imp.id =pa.importacion_id
+	where year(imp.fechaActualizacion)=v_anio and imp.id=v_importacion 
+	order by pa.distrito,pa.fecha_envio,fecha_inicial,fecha_final ;
+
+	select * from temp1;
+
+	insert into temp2
+	select importacion, anio, distrito , fechai , fechaf, fechae , mes,
+	IF(mes>0,
+		IF(fechae<fechaf,0,
+		IF(fechae between fechai and IF(month(fechaf)=mes,date_format(date_add(fechaf,interval 1 month),'%Y-%m-07'),date_format(fechaf,'%Y-%m-07')) 
+		,1
+		,0)
+		)
+	,0)
+	 as estado
+	from temp1;
+
+	select * from temp2;
+
+    insert into sal_data_pacto1(`importacion_id`, `anio`, `distrito`, `mes`, `estado`)
+	select importacion, anio, distrito, mes, max(estado) from temp2 where mes!=0 group by importacion, anio, distrito, mes;
+
+	update par_importacion set estado="PR" where id=v_importacion;
+
+END
 
 
 
