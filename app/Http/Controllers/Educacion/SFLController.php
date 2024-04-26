@@ -46,6 +46,180 @@ class SFLController extends Controller
         $draw = intval($rq->draw);
         $start = intval($rq->start);
         $length = intval($rq->length);
+        $est = ['', 'SANEADO', 'NO SANEADO', 'NO REGISTRADO', 'EN PROCESO'];
+        $tip = ['', 'AFECTACION EN USO', 'TITULARIDAD', 'APORTE REGLAMENTARIO', 'OTROS'];
+
+        $query = DB::table(DB::raw("(
+            select iiee.id, iiee.CentroPoblado_id, iiee.codLocal, iiee.Area_id, iiee.Ugel_id
+	        from edu_institucionEducativa as iiee
+	        where iiee.EstadoInsEdu_id = 3 and iiee.TipoGestion_id in (4, 5, 7, 8) and iiee.estado = 'AC' and iiee.NivelModalidad_id not in (14, 15)
+        ) as iiee"))
+            ->join('edu_centropoblado as cp', 'cp.id', '=', 'iiee.CentroPoblado_id')
+            ->join('edu_area as aa', 'aa.id', '=', 'iiee.Area_id')
+            ->join('edu_ugel as uu', 'uu.id', '=', 'iiee.Ugel_id')
+            ->join('par_ubigeo as dt', 'dt.id', '=', 'cp.Ubigeo_id')
+            ->join('par_ubigeo as pv', 'pv.id', '=', 'dt.dependencia')
+            ->join('edu_sfl as sfl', 'sfl.institucioneducativa_id', '=', 'iiee.id');
+        $query = $query->select(
+            'iiee.codLocal as local',
+            DB::raw('max(iiee.id) as id'),
+            DB::raw('max(uu.nombre) as ugel'),
+            DB::raw('max(pv.nombre) as provincia'),
+            DB::raw('max(dt.nombre) as distrito'),
+            DB::raw('max(aa.nombre) as area'),
+        );
+
+        if ($rq->ugel > 0) $query = $query->where('uu.id', $rq->ugel);
+        if ($rq->provincia > 0) $query = $query->where('dt.dependencia', $rq->provincia);
+        if ($rq->distrito > 0) $query = $query->where('dt.id', $rq->distrito);
+        if ($rq->estado > 0) $query = $query->where('sfl.estado', $rq->estado);
+
+        $query = $query->groupBy('local')->get();
+
+        $querySFL = DB::table(DB::raw('(select id, codLocal as local, codModular as modular from edu_institucioneducativa)as ie'))
+            ->join('edu_sfl as sfl', 'sfl.institucioneducativa_id', '=', 'ie.id', 'left')->where('ie.local', '!=', '')
+            ->select('ie.*', 'sfl.estado', 'sfl.tipo', 'sfl.fecha_registro', 'sfl.fecha_inscripcion')
+            ->orderBy('ie.id')->get();
+
+        $data = [];
+        foreach ($query as $key => $value) {
+            $local = $value->local;
+            $sflLOCAL = $querySFL->where('local', $local);
+
+            $saneado = 0;
+            $nosaneado = 0;
+            $noregistrado = 0;
+            $enproceso = 0;
+            $blanco = 0;
+            $pos = 0;
+            $var0 = FALSE;
+            foreach ($sflLOCAL as $item) {
+                if ($item->estado == 1) {
+                    $saneado++;
+                }
+                if ($item->estado == 2) {
+                    $nosaneado++;
+                }
+                if ($item->estado == 3) {
+                    $noregistrado++;
+                }
+                if ($item->estado == 4) {
+                    $enproceso++;
+                }
+                if ($item->estado == null) {
+                    $blanco++;
+                }
+                if ($pos == 0) {
+                    $var0 = clone $item;
+                }
+                $pos++;
+            }
+            //NIURCA 941696330
+            $estado = '';
+            if ($sflLOCAL->count() == $saneado) {
+                $estado = 'SANEADO';
+            } else if ($sflLOCAL->count() == $saneado + $blanco) {
+                $estado = 'SANEADO';
+            } else   if ($sflLOCAL->count() == $nosaneado + $blanco) {
+                $estado = 'NO SANEADO';
+            } else  if ($sflLOCAL->count() == $noregistrado + $blanco) {
+                $estado = 'NO REGISTRADO';
+            } else  if ($sflLOCAL->count() == $enproceso + $blanco) {
+                $estado = 'EN PROCESO';
+            } else if ($sflLOCAL->count() == 1) {
+                switch ($var0->estado) {
+                    case 2:
+                        $estado = 'NO SANEADO';
+                        break;
+                    case 3:
+                        $estado = 'NO REGISTRADO';
+                        break;
+                    case 4:
+                        $estado = 'EN PROCESO';
+                        break;
+                    case null:
+                        $estado = 'NO REGISTRADO';
+                        break;
+                    default:
+                        # code...
+                        break;
+                }
+            } else {
+                $estado = 'NO SANEADO';
+            }
+            $btn = '';
+            $btn .= '&nbsp;<a href="#" class="btn btn-info btn-xs" onclick="open_modular(`' . $value->local . '`)"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
+            $btn .= '&nbsp;<a href="#" class="btn btn-orange-0 btn-xs" onclick="open_ver(`' . $value->local . '`)"  title="VER"> <i class="fas fa-eye"></i> </a>';
+
+            $sfl = null;
+            if ($sflLOCAL->count() > 0)
+                $sfl = $var0;
+
+            switch ($estado) {
+                case 'SANEADO':
+                    $estadox = '<span class="badge badge-success">' . $estado . '</span>';
+                    break;
+                case 'NO SANEADO':
+                    $estadox = '<span class="badge badge-danger">' . $estado . '</span>';
+                    break;
+                case 'NO REGISTRADO':
+                    $estadox = '<span class="badge badge-secondary">' . $estado . '</span>';
+                    break;
+                case 'EN PROCESO':
+                    $estadox = '<span class="badge badge-warning">' . $estado . '</span>';
+                    break;
+                default:
+                    $estadox = '';
+                    break;
+            }
+            if ($rq->estado > 0) {
+                if ($est[$rq->estado] == $estado) {
+                    $data[] = array(
+                        '<div style="text-align:center">' . ($key + 1) . '</div>',
+                        '<div style="text-align:center">' . $value->local . '</div>',
+                        '<div style="text-align:center">' . $sflLOCAL->count() . '</div>',
+                        $value->ugel,
+                        $value->provincia,
+                        $value->distrito,
+                        '<div style="text-align:center">' . $value->area . '</div>',
+                        '<div style="text-align:center">' . ($sfl->fecha_inscripcion != null ? date('d/m/Y', strtotime($sfl->fecha_inscripcion)) : '') . '</div>',
+                        '<div style="text-align:center">' . ($sfl->tipo > 0 ? ($tip[$sfl->tipo == NULL ? 0 : $sfl->tipo]) : '') . '</div>',
+                        '<div style="text-align:center">' . $estadox . '</div>',
+                        "<center><div class='btn-group'>" . $btn . "</div></center>",
+                    );
+                }
+            } else {
+                $data[] = array(
+                    '<div style="text-align:center">' . ($key + 1) . '</div>',
+                    '<div style="text-align:center">' . $value->local . '</div>',
+                    '<div style="text-align:center">' . $sflLOCAL->count() . '</div>',
+                    $value->ugel,
+                    $value->provincia,
+                    $value->distrito,
+                    '<div style="text-align:center">' . $value->area . '</div>',
+                    '<div style="text-align:center">' . ($sfl->fecha_inscripcion != null ? date('d/m/Y', strtotime($sfl->fecha_inscripcion)) : '') . '</div>',
+                    '<div style="text-align:center">' . ($sfl->tipo > 0 ? ($tip[$sfl->tipo == NULL ? 0 : $sfl->tipo]) : '') . '</div>',
+                    '<div style="text-align:center">' . $estadox . '</div>',
+                    "<center><div class='btn-group'>" . $btn . "</div></center>",
+                );
+            }
+        }
+        $result = array(
+            "draw" => $draw,
+            "recordsTotal" => $start,
+            "recordsFiltered" => $length,
+            "data" => $data,
+            "xxx1" => $query,
+            "xxx2" => $querySFL,
+        );
+        return response()->json($result);
+    }
+
+    public function ListarDT2xx(Request $rq)
+    {
+        $draw = intval($rq->draw);
+        $start = intval($rq->start);
+        $length = intval($rq->length);
         // $est = ['', 'SANEADO', 'NO SANEADO', 'NO REGISTRADO', 'EN PROCESO'];
         $tip = ['', 'AFECTACION EN USO', 'TITULARIDAD', 'APORTE REGLAMENTARIO', 'OTROS'];
 
