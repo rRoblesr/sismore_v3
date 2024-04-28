@@ -13,14 +13,14 @@
                             <div class="card-widgets">
                                 <button type="button" class="btn btn-orange-0 btn-xs" onclick="history.back()"
                                     title="ACTUALIZAR"><i class="fas fa-arrow-left"></i> Volver</button>
-                                <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf({{ '$ind->id' }})"
+                                <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf({{ $ind->id }})"
                                     title='FICHA TÉCNICA'><i class="fas fa-file"></i> Ficha Técnica</button>
                                 <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
                                     title='ACTUALIZAR'><i class=" fas fa-history"></i>
                                     Actualizar</button>
                             </div>
-                            <h3 class="card-title text-white">Número de Locales Escolares Públicos con Sanamiento Físico
-                                Legal
+                            <h3 class="card-title text-white">
+                                {{ $ind->nombre }}
                             </h3>
                         </div>
                         <div class="card-body p-2">
@@ -276,6 +276,7 @@
                     "anio": $('#anio').val(),
                     "provincia": $('#provincia').val(),
                     "distrito": $('#distrito').val(),
+                    "area": $('#area').val(),
                 },
                 type: "GET",
                 dataType: "JSON",

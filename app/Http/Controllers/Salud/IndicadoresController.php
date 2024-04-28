@@ -189,7 +189,7 @@ class IndicadoresController extends Controller
                 $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios($indicador_id); // Anio::orderBy('anio')->get();
                 $provincia = UbigeoRepositorio::provincia('25');
                 $aniomax = $imp->anio;
-                return view('salud.Indicadores.PactoRegionalDetalle1', compact('actualizado', 'anio', 'provincia', 'aniomax', 'ind'));
+                return view('salud.Indicadores.PactoRegionalSalPacto1', compact('actualizado', 'anio', 'provincia', 'aniomax', 'ind'));
             case 'DIT-SAL-02':
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_1']);
                 // return response()->json([$imp]);
@@ -197,7 +197,7 @@ class IndicadoresController extends Controller
                 $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios($indicador_id); // Anio::orderBy('anio')->get();
                 $provincia = UbigeoRepositorio::provincia('25');
                 $aniomax = $imp->anio;
-                return view('salud.Indicadores.PactoRegionalDetalle2', compact('actualizado', 'anio', 'provincia', 'aniomax', 'ind'));
+                return view('salud.Indicadores.PactoRegionalSalPacto2', compact('actualizado', 'anio', 'provincia', 'aniomax', 'ind'));
             case 'DIT-SAL-03':
                 return '';
             case 'DIT-SAL-04':
@@ -214,7 +214,7 @@ class IndicadoresController extends Controller
                 $provincia = UbigeoRepositorio::provincia('25');
                 $area = Area::all();
                 $aniomax = $anio->max('anio');
-                return view('educacion.SFL.SFL', compact('actualizado', 'anio', 'provincia', 'aniomax', 'area'));
+                return view('salud.Indicadores.PactoRegionalEduPacto2', compact('actualizado', 'anio', 'provincia', 'aniomax', 'area', 'ind'));
             case 'DIT-EDU-03':
                 return '';
             case 'DIT-EDU-04':
@@ -314,13 +314,118 @@ class IndicadoresController extends Controller
             case 'tabla1':
                 $base = IndicadorGeneralMetaRepositorio::getPacto1tabla1($rq->indicador, $rq->anio);
 
-                $excel = view('salud.Indicadores.PactoRegionalDetalle1tabla1', compact('base', 'ndis'))->render();
+                $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla1', compact('base', 'ndis'))->render();
                 return response()->json(compact('excel', 'base'));
 
             case 'tabla2':
                 $base = IndicadorGeneralMetaRepositorio::getPacto1tabla2($rq->indicador, $rq->anio);
                 $aniob = $rq->anio;
-                $excel = view('salud.Indicadores.PactoRegionalDetalle1tabla2', compact('base', 'ndis', 'aniob'))->render();
+                $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla2', compact('base', 'ndis', 'aniob'))->render();
+                return response()->json(compact('excel', 'base'));
+
+
+            default:
+                return [];
+        }
+    }
+
+    public function PactoRegionalEduReports(Request $rq)
+    {
+        if ($rq->distrito > 0) $ndis = Ubigeo::find($rq->distrito)->nombre;
+        else $ndis = '';
+        switch ($rq->div) {
+            case 'head':
+                $gls = IndicadorGeneralMetaRepositorio::getPacto1GLS($rq->indicador, $rq->anio);
+                $gl = IndicadorGeneralMetaRepositorio::getPacto1GL($rq->indicador, $rq->anio);
+                $gln = IndicadorGeneralMetaRepositorio::getPacto1GLN($rq->indicador, $rq->anio);
+                if ($gl == ($gls + $gln)) {
+                } else {
+                    $gln += $gl - ($gls + $gln);
+                }
+                $ri = number_format(100 * ($gl > 0 ? $gls / $gl : 0));
+                return response()->json(['aa' => $rq->all(), 'ri' => $ri, 'gl' => $gl, 'gls' => $gls, 'gln' => $gln]);
+
+            case 'anal1':
+                $base = IndicadorGeneralMetaRepositorio::getPacto1Mensual($rq->anio, $rq->distrito);
+                $mes = Mes::select('codigo', 'abreviado as mes')->get();
+                $mesmax = $base->max('name');
+                $limit = $rq->anio == 2023 ? IndicadoresController::$pacto1_mes : 0;
+                foreach ($mes as $mm) {
+                    if ($mm->codigo >= $limit && $mm->codigo <= $mesmax) {
+                        $mm->y = 0;
+                        foreach ($base as $bb) {
+                            if ($bb->name == $mm->codigo) {
+                                $mm->y = (int)$bb->y;
+                                break;
+                            }
+                        }
+                    } else {
+                        $mm->y = null;
+                    }
+                }
+                $info = [];
+                foreach ($mes as $key => $value) {
+                    $info['cat'][] = $value->mes;
+                    $value->y = $value->y;
+                    if ($key == 0)
+                        $vv = $value->y;
+                    if ($key > 0) {
+                        if ($value->y) {
+                            $value->y += $vv;
+                            $vv = $value->y;
+                        }
+                    }
+                    $info['dat'][] = $value->y;
+                }
+                return response()->json(compact('info', 'mes', 'base', 'mesmax'));
+            case 'anal2':
+                $base1 = IndicadorGeneralMetaRepositorio::getPacto1Mensual($rq->anio, $rq->distrito);
+                $base2 = IndicadorGeneralMetaRepositorio::getPacto1Mensual2($rq->anio, $rq->distrito);
+                $info = [];
+                $mes = Mes::select('codigo', 'abreviado as mes')->get();
+                $mesmax1 = $base1->max('name');
+                $mesmax2 = $base2->max('mes');
+                $limit = $rq->anio == 2023 ? IndicadoresController::$pacto1_mes : 0;
+                foreach ($mes as $mm) {
+
+                    if ($mm->codigo >= $limit && $mm->codigo <= $mesmax1) {
+                        $mm->y1 = 0;
+                        foreach ($base1 as $bb1) {
+                            if ($bb1->name == $mm->codigo) {
+                                $mm->y1 = (int)$bb1->y;
+                                break;
+                            }
+                        }
+                    } else {
+                        $mm->y1 = null;
+                    }
+
+                    if ($mm->codigo >= $limit && $mm->codigo <= $mesmax2) {
+                        $mm->y2 = 0;
+                        foreach ($base2 as $bb2) {
+                            if ($bb2->mes == $mm->codigo) {
+                                $mm->y2 = (int)$bb2->y;
+                                break;
+                            }
+                        }
+                    } else {
+                        $mm->y2 = null;
+                    }
+                    $info['cat'][] = $mm->mes;
+                    $info['dat'][] = $mm->y1;
+                    $info['dat2'][] = $mm->y2;
+                }
+                return response()->json(compact('info', 'base1', 'base2', 'mes'));
+            case 'tabla1':
+                $base = IndicadorGeneralMetaRepositorio::getPacto1tabla1($rq->indicador, $rq->anio);
+
+                $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla1', compact('base', 'ndis'))->render();
+                return response()->json(compact('excel', 'base'));
+
+            case 'tabla2':
+                $base = IndicadorGeneralMetaRepositorio::getPacto1tabla2($rq->indicador, $rq->anio);
+                $aniob = $rq->anio;
+                $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla2', compact('base', 'ndis', 'aniob'))->render();
                 return response()->json(compact('excel', 'base'));
 
 
