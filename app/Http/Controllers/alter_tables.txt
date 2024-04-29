@@ -1374,7 +1374,60 @@ BEGIN
 END
 
 
+####################
 
+CREATE DEFINER=`root`@`localhost` FUNCTION `datosx`.`buscar_estado`(v_local varchar(10)) RETURNS int(11)
+begin
+	set @ee1:=(select count(*) conteo from edu_sfl sfl inner join edu_institucioneducativa ie on ie.id=sfl.institucioneducativa_id where ie.codLocal=v_local and ie.EstadoInsEdu_id=3 and sfl.estado=1);
+	set @ee2:=(select count(*) conteo from edu_sfl sfl inner join edu_institucioneducativa ie on ie.id=sfl.institucioneducativa_id where ie.codLocal=v_local and ie.EstadoInsEdu_id=3 and sfl.estado=2);
+	set @ee3:=(select count(*) conteo from edu_sfl sfl inner join edu_institucioneducativa ie on ie.id=sfl.institucioneducativa_id where ie.codLocal=v_local and ie.EstadoInsEdu_id=3 and sfl.estado=3);
+	set @ee4:=(select count(*) conteo from edu_sfl sfl inner join edu_institucioneducativa ie on ie.id=sfl.institucioneducativa_id where ie.codLocal=v_local and ie.EstadoInsEdu_id=3 and sfl.estado=4);
+	set @eet:=(select count(*) conteo from edu_sfl sfl inner join edu_institucioneducativa ie on ie.id=sfl.institucioneducativa_id where ie.codLocal=v_local and ie.EstadoInsEdu_id=3);
+
+	return 
+	IF(@eet=@ee1,1,
+		IF(@eet=@ee2,2,
+			IF(@eet=@ee3,3,
+				IF(@eet=@ee4,4,2)
+			)
+		)
+	);
+end
+
+#######################
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `datosx`.`edu_pa_sfl_porlocal`(IN `v_ugel` INT, IN `v_provincia` INT, IN `v_distrito` INT, IN `v_estado` INT)
+BEGIN	  
+	set @query='
+	select `local`, ugel, provincia, distrito, area, estado from (
+		select `local`, ugel, provincia, distrito,area,ugelid,provinciaid,distritoid,areaid, buscar_estado(`local`) as estado from (
+			select 
+				`local`, max(ugel_n) as ugel, max(provincia_n) as provincia, max(distrito_n) as distrito, max(distrito_n) as area,
+				max(ugel_id) ugelid, max(provincia_id) provinciaid, max(distrito_id) distritoid, max(area_id) areaid
+			from (       
+				select 
+					iiee.id iiee_id, iiee.codLocal `local`, iiee.Ugel_id ugel_id, pv.id provincia_id, dt.id distrito_id, iiee.Area_id area_id, 
+					uu.nombre ugel_n, pv.nombre provincia_n, dt.nombre distrito_n, aa.nombre area_n 
+				from edu_institucionEducativa as iiee 
+				inner join edu_centropoblado as cp on cp.id = iiee.CentroPoblado_id 
+				inner join edu_area as aa on aa.id = iiee.Area_id 
+				inner join edu_ugel as uu on uu.id = iiee.Ugel_id 
+				inner join par_ubigeo as dt on dt.id = cp.Ubigeo_id 
+				inner join par_ubigeo as pv on pv.id = dt.dependencia 
+				where iiee.EstadoInsEdu_id = 3 and iiee.TipoGestion_id in (4, 5, 7, 8) and iiee.estado = "AC" and iiee.NivelModalidad_id not in (14, 15)
+			) as iiee '; 
+	set @query=concat(@query,' group by `local` ) as tb order by estado )as tbx');
+	set @query=concat(@query,' where 1');
+	set @query=concat(@query,if(v_ugel>0     ,concat(' and ugelid=',v_ugel),''));
+	set @query=concat(@query,if(v_provincia>0,concat(' and provinciaid=',v_provincia),''));
+	set @query=concat(@query,if(v_distrito>0 ,concat(' and distritoid=',v_distrito),''));
+	set @query=concat(@query,if(v_estado>0   ,concat(' and estado=',v_estado),''));
+
+	prepare xxx from @query;
+	execute xxx;
+	deallocate prepare xxx;
+	
+END
 
 
 

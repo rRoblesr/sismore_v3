@@ -76,7 +76,7 @@ class SFLController extends Controller
 
         $query = $query->groupBy('local')->get();
 
-        $querySFL = DB::table(DB::raw('(select id, codLocal as local, codModular as modular from edu_institucioneducativa)as ie'))
+        $querySFL = DB::table(DB::raw('(select id, codLocal as local, codModular as modular from edu_institucioneducativa where EstadoInsEdu_id=3)as ie'))
             ->join('edu_sfl as sfl', 'sfl.institucioneducativa_id', '=', 'ie.id', 'left')->where('ie.local', '!=', '')
             ->select('ie.*', 'sfl.estado', 'sfl.tipo', 'sfl.fecha_registro', 'sfl.fecha_inscripcion')
             ->orderBy('ie.id')->get();
@@ -481,7 +481,7 @@ class SFLController extends Controller
         )
             ->join('edu_institucioneducativa as ie', 'ie.id', '=', 'edu_sfl.institucioneducativa_id', 'right')
             ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'ie.NivelModalidad_id')
-            ->where('ie.codLocal', $rq->local)
+            ->where('ie.codLocal', $rq->local)->where('ie.EstadoInsEdu_id', 3)
             ->get();
 
         $data = [];
