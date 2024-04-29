@@ -1120,7 +1120,7 @@ Route::get('/salud/pactoregional', [IndicadoresController::class, 'PactoRegional
 Route::get('/salud/pactoregional/Actualizarx', [IndicadoresController::class, 'PactoRegionalActualizar'])->name('salud.indicador.pactoregional.actualizar');
 // Route::get('/salud/pactoregional/Actualizarx2', [IndicadoresController::class, 'PactoRegionalActualizar2'])->name('salud.indicador.pactoregional.actualizar2');
 Route::get('/salud/pactoregional/Sal/Reports', [IndicadoresController::class, 'PactoRegionalDetalleReports'])->name('salud.indicador.pactoregional.detalle.reports');
-Route::get('/salud/pactoregional/Edu/Reports', [IndicadoresController::class, 'PactoRegionalEduReports'])->name('salud.indicador.pactoregional.edu.reports');
+Route::get('/salud/pactoregional/Edu/Reports', [IndicadoresController::class, 'PactoRegionalEduPacto2Reports'])->name('salud.indicador.pactoregional.edu.pacto2.reports');
 Route::get('/salud/pactoregional/{indicador_id}', [IndicadoresController::class, 'PactoRegionalDetalle'])->name('salud.indicador.pactoregional.detalle');
 Route::get('/salud/pactoregional/Exportar/{id}', [IndicadoresController::class, 'exportarPDF'])->name('salud.indicador.pactoregional.exportar.pdf');
 Route::get('/salud/conveniofed', [IndicadoresController::class, 'ConvenioFED'])->name('salud.indicador.conveniofed');

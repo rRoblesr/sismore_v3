@@ -167,12 +167,26 @@
                                                             </li>
                                                             <li class="mt-0 pt-0 font-12"
                                                                 id="actualizado{{ $item->codigo }}"></li>
-                                                            <li class="mt-0 pt-0 font-18 font-weight-bold"
+                                                            {{-- <li class="mt-0 pt-0 font-18 font-weight-bold"
                                                                 id="meta{{ $item->codigo }}"></li>
                                                             <li class="mt-0 pt-0" id="cumple{{ $item->codigo }}">
+                                                            </li> --}}
+                                                            <li class="mt-1 pt-1">
+                                                                <div class="row">
+                                                                    <div class="col-6">
+                                                                        <span class="text-green-0 font-weight-bold font-10" style="font-size: 100%">
+                                                                            <i class="mdi mdi-arrow-down-bold"></i> Numerador</span>
+                                                                        <div class="font-weight-bold">100</div>
+                                                                    </div>
+                                                                    <div class="col-6">
+                                                                        <span class="text-green-0 font-weight-bold font-10" style="font-size: 100%">
+                                                                            <i class="mdi mdi-arrow-up-bold"></i> Denominador</span>
+                                                                        <div class="font-weight-bold">100</div>
+                                                                    </div>
+                                                                </div>
                                                             </li>
                                                             <li class="mt-1 pt-1">
-                                                                <p class="font-12" style="height: 5rem;">
+                                                                <p class="font-12" style="height: 5.2rem;">
                                                                     {{ $item->nombre }}</p>
                                                             </li>
 
@@ -239,9 +253,23 @@
                                                             <li class="mt-0 pt-0 font-12"
                                                                 id="actualizado{{ $item->codigo }}">
                                                             </li>
-                                                            <li class="mt-0 pt-0 font-18 font-weight-bold"
+                                                            {{-- <li class="mt-0 pt-0 font-18 font-weight-bold"
                                                                 id="meta{{ $item->codigo }}"></li>
-                                                            <li class="mt-0 pt-0" id="cumple{{ $item->codigo }}"></li>
+                                                            <li class="mt-0 pt-0" id="cumple{{ $item->codigo }}"></li> --}}
+                                                            <li class="mt-1 pt-1">
+                                                                <div class="row">
+                                                                    <div class="col-6">
+                                                                        <span class="text-green-0 font-weight-bold font-10" style="font-size: 100%">
+                                                                            <i class="mdi mdi-arrow-down-bold"></i> Numerador</span>
+                                                                        <div class="font-weight-bold">100</div>
+                                                                    </div>
+                                                                    <div class="col-6">
+                                                                        <span class="text-green-0 font-weight-bold font-10" style="font-size: 100%">
+                                                                            <i class="mdi mdi-arrow-up-bold"></i> Denominador</span>
+                                                                        <div class="font-weight-bold">100</div>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
                                                             <li class="mt-1 pt-1">
                                                                 <p class="font-12" style="height: 5rem;">
                                                                     {{ $item->nombre }}</p>
@@ -275,7 +303,7 @@
                             <div class="row pricing-plan">
                                 <div class="col-md-12">
                                     <div class="row">
-                                        
+
                                         <div class="col-md-6 col-xl-3">
                                             <div class="card text-center border border-success-0">
                                                 <div class="pricing-header bg-success-0 p-0 rounded-top">
@@ -933,7 +961,7 @@
             cargarActualizar('DIT-EDU-02');
             cargarActualizar('DIT-EDU-03');
             cargarActualizar('DIT-EDU-04');
-            
+
             // GaugeSeries('graeducacion01', 71);
             // GaugeSeries('graeducacion02', 82);
             // GaugeSeries('graeducacion03', 92);

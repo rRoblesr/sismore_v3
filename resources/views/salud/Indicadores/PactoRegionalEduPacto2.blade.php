@@ -83,7 +83,7 @@
                             <div class="media-body align-self-center">
                                 <div class="text-right">
                                     <h4 class="font-20 my-0 font-weight-bold">
-                                        <span data-plugin="counterup" id="ri"></span>
+                                        <span data-plugin="counterup" id="rin"></span>
                                     </h4>
                                     <p class="mb-0 mt-1 text-truncate">Resultado del Indicador</p>
                                 </div>
@@ -104,7 +104,7 @@
                             <div class="media-body align-self-center">
                                 <div class="text-right">
                                     <h4 class="font-20 my-0 font-weight-bold">
-                                        <span data-plugin="counterup" id="gl"></span>
+                                        <span data-plugin="counterup" id="loc"></span>
                                     </h4>
                                     <p class="mb-0 mt-1 text-truncate">
                                         Locales Escolares
@@ -127,7 +127,7 @@
                             <div class="media-body align-self-center">
                                 <div class="text-right">
                                     <h4 class="font-20 my-0 font-weight-bold">
-                                        <span data-plugin="counterup" id="gls"></span>
+                                        <span data-plugin="counterup" id="ssa"></span>
                                     </h4>
                                     <p class="mb-0 mt-1 text-truncate">
                                         L.E. Saneados
@@ -150,7 +150,7 @@
                             <div class="media-body align-self-center">
                                 <div class="text-right">
                                     <h4 class="font-20 my-0 font-weight-bold">
-                                        <span data-plugin="counterup" id="gln"></span>
+                                        <span data-plugin="counterup" id="nsa"></span>
                                     </h4>
                                     <p class="mb-0 mt-1 text-truncate">
                                         L.E. No Saneados
@@ -189,8 +189,29 @@
 
                 <div class="col-lg-6">
                     <div class="card card-border border border-plomo-0">
+                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                            {{-- <div class="card-widgets">
+                                <button type="button" class="btn btn-success btn-xs"><i
+                                        class="fa fa-file-excel"></i> Descargar</button>
+                            </div> --}}
+                            <h3 class="text-black font-14">Avance de Locales Escolares por Distrito
+                            </h3>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="table-responsive" style="height: 40rem" id="vtabla2">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- <div class="col-lg-6">
+                    <div class="card card-border border border-plomo-0">
                         <div class="card-header border-success-0 bg-transparent p-0">
-                            {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
+                            <h3 class="text-black text-center font-weight-normal font-11"></h3>
                         </div>
                         <div class="card-body p-0">
                             <figure class="highcharts-figure p-0 m-0">
@@ -201,7 +222,7 @@
 
                     <div class="card card-border border border-plomo-0">
                         <div class="card-header border-success-0 bg-transparent p-0">
-                            {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
+                            <h3 class="text-black text-center font-weight-normal font-11"></h3>
                         </div>
                         <div class="card-body p-0">
                             <figure class="highcharts-figure p-0 m-0">
@@ -209,7 +230,7 @@
                             </figure>
                         </div>
                     </div>
-                </div>
+                </div> --}}
 
             </div>
 
@@ -229,7 +250,7 @@
                         <div class="card-body p-0">
                             <div class="row">
                                 <div class="col-12">
-                                    <div class="table-responsive" id="vtabla2">
+                                    <div class="table-responsive" id="vtabla3">
                                     </div>
                                 </div>
                             </div>
@@ -265,18 +286,20 @@
             panelGraficas('anal1');
             panelGraficas('anal2');
             panelGraficas('tabla1');
-            panelGraficas('tabla2');
+            panelGraficas('tabla2');panelGraficas('tabla3');
         }
 
         function panelGraficas(div) {
             $.ajax({
-                url: "{{ route('salud.indicador.pactoregional.detalle.reports') }}",
+                url: "{{ route('salud.indicador.pactoregional.edu.pacto2.reports') }}",
                 data: {
                     'div': div,
                     "anio": $('#anio').val(),
                     "provincia": $('#provincia').val(),
                     "distrito": $('#distrito').val(),
                     "area": $('#area').val(),
+                    "indicador": '{{ $ind->id }}',
+                    "codigo": '{{ $ind->codigo }}',
                 },
                 type: "GET",
                 dataType: "JSON",
@@ -291,10 +314,10 @@
                 },
                 success: function(data) {
                     if (div == "head") {
-                        $('#ri').text(data.ri + '%');
-                        $('#gl').text(data.gl);
-                        $('#gls').text(data.gls);
-                        $('#gln').text(data.gln);
+                        $('#rin').text(data.rin + '%');
+                        $('#nsa').text(data.nsa);
+                        $('#ssa').text(data.ssa);
+                        $('#loc').text(data.loc);
                     } else if (div == "anal1") {
 
                         gLineaBasica(div, data.info, '',
@@ -320,6 +343,10 @@
                         // });
                     } else if (div == "tabla2") {
                         $('#vtabla2').html(data.excel);
+                        // $('.vtabla2-fuente').html('Fuente: ]]' + data.reg.fuente);
+                        // $('.vtabla2-fecha').html('Actualizado: ' + data.reg.fecha);
+                    }else if (div == "tabla3") {
+                        $('#vtabla3').html(data.excel);
                         // $('.vtabla2-fuente').html('Fuente: ]]' + data.reg.fuente);
                         // $('.vtabla2-fecha').html('Actualizado: ' + data.reg.fecha);
                     }
