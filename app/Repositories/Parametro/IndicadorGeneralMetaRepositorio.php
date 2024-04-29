@@ -74,10 +74,16 @@ class IndicadorGeneralMetaRepositorio
             // if (IndicadoresController::$pacto1_anio == $anio)
             //     $queryx = $queryx->where('mes', '>=', IndicadoresController::$pacto1_mes);
             // $queryx = $queryx->get()->first();
-            $value->avance = 0;//$queryx->conteo ? $queryx->conteo : 0;
-            $value->porcentaje = 0;//number_format(100 * ($value->valor > 0 ? $value->avance / $value->valor : 0), 1);
+            $value->avance = 0; //$queryx->conteo ? $queryx->conteo : 0;
+            $value->porcentaje = 0; //number_format(100 * ($value->valor > 0 ? $value->avance / $value->valor : 0), 1);
             $value->cumple = $value->valor == $value->avance ? 1 : 0;
         }
+        return $query;
+    }
+
+    public static function getEduPacto2tabla2($indicador_id, $anio)
+    {
+        $query = DB::select('call edu_pa_sfl_porlocal_distrito(?,?,?,?)', [0, 0, 0, 0]);
         return $query;
     }
 

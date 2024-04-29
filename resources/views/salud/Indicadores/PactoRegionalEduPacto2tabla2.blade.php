@@ -1,31 +1,27 @@
 <table id="tabla1" class="table table-sm table-striped table-bordered font-12 m-0" style="height: 100%">
     <thead>
         <tr class="bg-success-0 text-white text-center">
-            <th rowspan="1" class="text-center">Nº</th>
             <th rowspan="1" class="text-center">Distrito</th>
-            <th colspan="1" class="text-center">Meta</th>
-            <th rowspan="1" class="text-center">Avance</th>
+            <th colspan="1" class="text-center">Locales Escolares</th>
+            <th rowspan="1" class="text-center">Saneados</th>
             <th colspan="1" class="text-center">Indicador</th>
-            <th colspan="1" class="text-center">Cumple</th>
+            <th colspan="1" class="text-center">No Saneado</th>
+            <th colspan="1" class="text-center">Proceso de SFL</th>
+            <th colspan="1" class="text-center">Sin Información</th>
         </tr>
 
     </thead>
-    @if ($base->count() > 0)
+    @if (count($base) > 0)
         <tbody>
             @foreach ($base as $key => $item)
-                <tr class="text-center {{ $item->distrito == $ndis ? 'table-warning' : '' }}">
-                    <td>{{ $key + 1 }}</td>
+                <tr class="text-center">
                     <td class="text-left">{{ $item->distrito }}</td>
-                    <td>{{ $item->valor }}</td>
-                    <td>{{ $item->avance }}</td>
-                    <td>{!! avance($item->porcentaje) !!}</td>
-                    <td>
-                        @if ($item->cumple == 1)
-                            <i class="mdi mdi-thumb-up" style="font-size:13px;color:#43beac" title="CUMPLE"></i>
-                        @else
-                            <i class="mdi mdi-thumb-down" style="font-size:13px;color: red" title="NO CUMPLE"></i>
-                        @endif
-                    </td>
+                    <td>{{ $item->tt }}</td>
+                    <td>{{ $item->t1 }}</td>
+                    <td>{!! avance($item->indicador) !!}</td>
+                    <td>{{ $item->t2 }}</td>
+                    <td>{{ $item->t3 }}</td>
+                    <td>{{ $item->t4 }}</td>
                 </tr>
             @endforeach
         </tbody>
@@ -52,11 +48,11 @@
 @php
     function avance($monto)
     {
-        if ($monto < 51) {
+        if ($monto < 75) {
             return '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px">' .
                 round($monto, 1) .
                 '%</span>';
-        } elseif ($monto < 100) {
+        } elseif ($monto < 95) {
             return '<span class="badge badge-pill badge-warning" style="font-size:90%; width:50px">' .
                 round($monto, 1) .
                 '%</span>';

@@ -420,7 +420,9 @@ class IndicadoresController extends Controller
                 return response()->json(compact('excel', 'base'));
 
             case 'tabla2':
-                $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla1($rq->indicador, $rq->anio);
+                // $excel = DB::select('call edu_pa_sfl_porlocal_distrito(?,?,?,?)', [0, 0, 0, 0]);
+                // return response()->json(compact('excel'));
+                $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla2($rq->indicador, $rq->anio);
                 $aniob = $rq->anio;
                 $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla2', compact('base', 'ndis', 'aniob'))->render();
                 return response()->json(compact('excel', 'base'));
