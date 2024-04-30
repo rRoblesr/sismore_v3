@@ -30,8 +30,35 @@
                     <td>{{ $item->distrito }}</td>
                     <td>{{ $item->centropoblado }}</td>
                     <td>{{ $item->area }}</td>
-                    <td>{{ $item->estado }}</td>
+                    {{-- <td>{{ $item->estado }}</td> --}}
+                    <td>
+                        {{-- @if ($item->estado == 'SANEADO')
+                            <button type="button"
+                                class="btn btn-xs btn-success-0 font-10">&nbsp;&nbsp;&nbsp;{{$item->estado}}&nbsp;&nbsp;&nbsp;</button>
+                        @else
+                            <button type="button" class="btn btn-xs btn-danger font-10">{{$item->estado}}</button>
+                        @endif --}}
 
+                        @switch($item->estadox)
+                            @case(1)
+                                <button type="button" class="btn btn-xs btn-success-0 font-8">{{ $item->estado }}</button>
+                            @break
+
+                            @case(2)
+                                <button type="button" class="btn btn-xs btn-danger font-8">{{ $item->estado }}</button>
+                            @break
+
+                            @case(3)
+                                <button type="button" class="btn btn-xs btn-secondary font-8">{{ $item->estado }}</button>
+                            @break
+
+                            @case(4)
+                                <button type="button" class="btn btn-xs btn-warning font-8">{{ $item->estado }}</button>
+                            @break
+
+                            @default
+                        @endswitch
+                    </td>
                 </tr>
             @endforeach
         </tbody>

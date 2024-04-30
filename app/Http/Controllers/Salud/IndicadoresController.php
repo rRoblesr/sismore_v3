@@ -346,76 +346,34 @@ class IndicadoresController extends Controller
                 return response()->json(['rq' => $rq->all(), 'loc' => $loc, 'ssa' => $ssa, 'nsa' => $nsa, 'rin' => $rin]);
 
             case 'anal1':
-                $base = IndicadorGeneralMetaRepositorio::getPacto1Mensual($rq->anio, $rq->distrito);
-                $mes = Mes::select('codigo', 'abreviado as mes')->get();
-                $mesmax = $base->max('name');
-                $limit = $rq->anio == 2023 ? IndicadoresController::$pacto1_mes : 0;
-                foreach ($mes as $mm) {
-                    if ($mm->codigo >= $limit && $mm->codigo <= $mesmax) {
-                        $mm->y = 0;
-                        foreach ($base as $bb) {
-                            if ($bb->name == $mm->codigo) {
-                                $mm->y = (int)$bb->y;
-                                break;
-                            }
-                        }
-                    } else {
-                        $mm->y = null;
-                    }
+                $base = IndicadorGeneralMetaRepositorio::getEduPacto2anal1($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 0);
+                $info['series'] = [];
+                $dx1 = [];
+                $dx2 = [];
+                foreach ($base as $keyi => $ii) {
+                    $info['categoria'][] = $ii->provincia;
+                    $dx1[$keyi] = $ii->t1;
+                    $dx2[$keyi] = $ii->tt - $ii->t1;
                 }
-                $info = [];
-                foreach ($mes as $key => $value) {
-                    $info['cat'][] = $value->mes;
-                    $value->y = $value->y;
-                    if ($key == 0)
-                        $vv = $value->y;
-                    if ($key > 0) {
-                        if ($value->y) {
-                            $value->y += $vv;
-                            $vv = $value->y;
-                        }
-                    }
-                    $info['dat'][] = $value->y;
-                }
-                return response()->json(compact('info', 'mes', 'base', 'mesmax'));
+                // $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'SANEADO',  'data' => $dx2];
+                // $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'NO SANEADO', 'data' => $dx3];
+                $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' =>    'SANEADO','data' => $dx1];
+                $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'NO SANEADO','data' => $dx2];
+                return response()->json(compact('info', 'base'));
+                // return [];
             case 'anal2':
-                $base1 = IndicadorGeneralMetaRepositorio::getPacto1Mensual($rq->anio, $rq->distrito);
-                $base2 = IndicadorGeneralMetaRepositorio::getPacto1Mensual2($rq->anio, $rq->distrito);
+                $tt = SFLRepositorio::get_locals($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 0)->count();
+                $ssa = SFLRepositorio::get_locals($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 1)->count();
+                $nsa = $tt - $ssa;
                 $info = [];
-                $mes = Mes::select('codigo', 'abreviado as mes')->get();
-                $mesmax1 = $base1->max('name');
-                $mesmax2 = $base2->max('mes');
-                $limit = $rq->anio == 2023 ? IndicadoresController::$pacto1_mes : 0;
-                foreach ($mes as $mm) {
-
-                    if ($mm->codigo >= $limit && $mm->codigo <= $mesmax1) {
-                        $mm->y1 = 0;
-                        foreach ($base1 as $bb1) {
-                            if ($bb1->name == $mm->codigo) {
-                                $mm->y1 = (int)$bb1->y;
-                                break;
-                            }
-                        }
-                    } else {
-                        $mm->y1 = null;
-                    }
-
-                    if ($mm->codigo >= $limit && $mm->codigo <= $mesmax2) {
-                        $mm->y2 = 0;
-                        foreach ($base2 as $bb2) {
-                            if ($bb2->mes == $mm->codigo) {
-                                $mm->y2 = (int)$bb2->y;
-                                break;
-                            }
-                        }
-                    } else {
-                        $mm->y2 = null;
-                    }
-                    $info['cat'][] = $mm->mes;
-                    $info['dat'][] = $mm->y1;
-                    $info['dat2'][] = $mm->y2;
-                }
-                return response()->json(compact('info', 'base1', 'base2', 'mes'));
+                $info[] = ['name' => 'SANEADO', 'y' => $ssa];
+                $info[] = ['name' => 'NO SANEADO', 'y' => $nsa];
+                // $info = MatriculaGeneralRepositorio::indicador01tabla($rq->div, $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion, $rq->area, 0);
+                $reg['fuente'] = 'Siagie - MINEDU';
+                // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
+                // $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
+                return response()->json(compact('info', 'reg'));
+                // return [];
             case 'tabla1':
                 $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla1($rq->indicador, $rq->anio);
 
@@ -425,7 +383,7 @@ class IndicadoresController extends Controller
             case 'tabla2':
                 // $excel = DB::select('call edu_pa_sfl_porlocal_distrito(?,?,?,?)', [0, 0, 0, 0]);
                 // return response()->json(compact('excel'));
-                $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla2($rq->indicador, $rq->anio);
+                $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla2($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 0);
                 $aniob = $rq->anio;
                 $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla2', compact('base', 'ndis', 'aniob'))->render();
                 return response()->json(compact('excel', 'base'));
