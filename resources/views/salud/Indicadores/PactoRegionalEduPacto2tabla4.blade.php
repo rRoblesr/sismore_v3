@@ -1,27 +1,37 @@
-<table id="tabla2" class="table table-sm table-striped table-bordered font-12 m-0" style="height: 100%">
+<table id="tabla4" class="table table-sm table-striped table-bordered font-11 m-0">
     <thead>
         <tr class="bg-success-0 text-white text-center">
+            <th rowspan="1" class="text-center">Nº</th>
+            <th rowspan="1" class="text-center">Còdigo Local</th>
+            <th rowspan="1" class="text-center">Còdigo Modular</th>
+            <th rowspan="1" class="text-center">Instituciòn Educativa</th>
+            <th rowspan="1" class="text-center">Modalidad</th>
+            <th rowspan="1" class="text-center">Nivel</th>
+            <th rowspan="1" class="text-center">UGEL</th>
             <th rowspan="1" class="text-center">Distrito</th>
-            <th colspan="1" class="text-center">Locales Escolares</th>
-            <th rowspan="1" class="text-center">Saneados</th>
-            <th colspan="1" class="text-center">Indicador</th>
-            <th colspan="1" class="text-center">No Saneado</th>
-            <th colspan="1" class="text-center">Proceso de SFL</th>
-            <th colspan="1" class="text-center">Sin Información</th>
+            <th rowspan="1" class="text-center">Centro Poblado</th>
+            <th rowspan="1" class="text-center">Àrea</th>
+            <th rowspan="1" class="text-center">EstadoSFL</th>
         </tr>
 
+
     </thead>
-    @if (count($base) > 0)
+    @if ($base->count() > 0)
         <tbody>
             @foreach ($base as $key => $item)
                 <tr class="text-center">
-                    <td class="text-left">{{ $item->distrito }}</td>
-                    <td>{{ $item->tt }}</td>
-                    <td>{{ $item->t1 }}</td>
-                    <td>{!! avance($item->indicador) !!}</td>
-                    <td>{{ $item->t2 }}</td>
-                    <td>{{ $item->t3 }}</td>
-                    <td>{{ $item->t4 }}</td>
+                    <td>{{ $key + 1 }}</td>
+                    <td>{{ $item->local }}</td>
+                    <td>{{ $item->modular }}</td>
+                    <td class="text-left">{{ $item->iiee }}</td>
+                    <td>{{ $item->modalidad }}</td>
+                    <td>{{ $item->nivel }}</td>
+                    <td>{{ $item->ugel }}</td>
+                    <td>{{ $item->distrito }}</td>
+                    <td>{{ $item->centropoblado }}</td>
+                    <td>{{ $item->area }}</td>
+                    <td>{{ $item->estado }}</td>
+
                 </tr>
             @endforeach
         </tbody>
@@ -48,11 +58,11 @@
 @php
     function avance($monto)
     {
-        if ($monto < 75) {
+        if ($monto < 51) {
             return '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px">' .
                 round($monto, 1) .
                 '%</span>';
-        } elseif ($monto < 95) {
+        } elseif ($monto < 100) {
             return '<span class="badge badge-pill badge-warning" style="font-size:90%; width:50px">' .
                 round($monto, 1) .
                 '%</span>';

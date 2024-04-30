@@ -263,6 +263,33 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card card-border border border-plomo-0">
+                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                            {{-- <div class="card-widgets">
+                                <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
+                                        class="fa fa-file-excel"></i> Descargar</button>
+                            </div> --}}
+                            <h3 class="text-black font-14">Listado  de Instituciones Educativas Pùblicas, Segùn estado de Saneamiento Fisico Legal
+                             </h3>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="table-responsive" id="vtabla4">
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                <span class="float-left vtabla1-fuente">Fuente:</span>
+                                <span class="float-right vtabla1-fecha">Actualizado:</span>
+                            </div> --}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
         </div>
     </div>
@@ -286,7 +313,9 @@
             panelGraficas('anal1');
             panelGraficas('anal2');
             panelGraficas('tabla1');
-            panelGraficas('tabla2');panelGraficas('tabla3');
+            panelGraficas('tabla2');
+            panelGraficas('tabla3');
+            panelGraficas('tabla4');
         }
 
         function panelGraficas(div) {
@@ -349,6 +378,17 @@
                         $('#vtabla3').html(data.excel);
                         // $('.vtabla2-fuente').html('Fuente: ]]' + data.reg.fuente);
                         // $('.vtabla2-fecha').html('Actualizado: ' + data.reg.fecha);
+                    }else if (div == "tabla4") {
+                        $('#vtabla4').html(data.excel);
+                        $('#tabla4').DataTable({
+                            responsive: true,
+                            autoWidth: false,
+                            ordered: true,
+                            // searching: false,
+                            // bPaginate: false,
+                            // info: false,
+                            language: table_language,
+                        });
                     }
 
                 },

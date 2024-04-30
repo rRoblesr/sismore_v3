@@ -174,13 +174,17 @@
                                                             <li class="mt-1 pt-1">
                                                                 <div class="row">
                                                                     <div class="col-6">
-                                                                        <span class="text-green-0 font-weight-bold font-10" style="font-size: 100%">
-                                                                            <i class="mdi mdi-arrow-down-bold"></i> Numerador</span>
+                                                                        <span class="text-green-0 font-weight-bold font-10"
+                                                                            style="font-size: 100%">
+                                                                            <i class="mdi mdi-arrow-down-bold"></i>
+                                                                            Numerador</span>
                                                                         <div class="font-weight-bold">100</div>
                                                                     </div>
                                                                     <div class="col-6">
-                                                                        <span class="text-green-0 font-weight-bold font-10" style="font-size: 100%">
-                                                                            <i class="mdi mdi-arrow-up-bold"></i> Denominador</span>
+                                                                        <span class="text-green-0 font-weight-bold font-10"
+                                                                            style="font-size: 100%">
+                                                                            <i class="mdi mdi-arrow-up-bold"></i>
+                                                                            Denominador</span>
                                                                         <div class="font-weight-bold">100</div>
                                                                     </div>
                                                                 </div>
@@ -259,13 +263,17 @@
                                                             <li class="mt-1 pt-1">
                                                                 <div class="row">
                                                                     <div class="col-6">
-                                                                        <span class="text-green-0 font-weight-bold font-10" style="font-size: 100%">
-                                                                            <i class="mdi mdi-arrow-down-bold"></i> Numerador</span>
+                                                                        <span class="text-green-0 font-weight-bold font-10"
+                                                                            style="font-size: 100%">
+                                                                            <i class="mdi mdi-arrow-down-bold"></i>
+                                                                            Numerador</span>
                                                                         <div class="font-weight-bold">100</div>
                                                                     </div>
                                                                     <div class="col-6">
-                                                                        <span class="text-green-0 font-weight-bold font-10" style="font-size: 100%">
-                                                                            <i class="mdi mdi-arrow-up-bold"></i> Denominador</span>
+                                                                        <span class="text-green-0 font-weight-bold font-10"
+                                                                            style="font-size: 100%">
+                                                                            <i class="mdi mdi-arrow-up-bold"></i>
+                                                                            Denominador</span>
                                                                         <div class="font-weight-bold">100</div>
                                                                     </div>
                                                                 </div>
@@ -304,266 +312,79 @@
                                 <div class="col-md-12">
                                     <div class="row">
 
-                                        <div class="col-md-6 col-xl-3">
-                                            <div class="card text-center border border-success-0">
-                                                <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                                    <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-home" style="font-size: 20px"></i>
-                                                        Indicador 1</h5>
-                                                    {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
-                                                    {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
-                                                </div>
-                                                <div class="pb-4 pl-4 pr-4">
-                                                    <ul class="list-unstyled mt-0">
-                                                        <li class="mt-0 pt-0">
-                                                            {{-- <i class="mdi mdi-finance font-44 text-green-0"></i></li>
+                                        @foreach ($indviv as $key => $item)
+                                            <div class="col-md-6 col-xl-3">
+                                                <div class="card text-center border border-success-0">
+                                                    <div class="pricing-header bg-success-0 p-0 rounded-top">
+                                                        <div class="card-widgets">
+                                                            {{-- <i class="mdi mdi-alert-circle-outline"></i> --}}
+                                                            <span onclick="datosIndicador({{ $item->id }})"><i
+                                                                    class="mdi mdi-rotate-180 mdi-alert-circle"
+                                                                    style="color:#FFF;font-size: 20px;"></i>&nbsp;&nbsp;</span>
+                                                            {{-- <a href="" title='' class=""><i class="mdi mdi-alert-circle"
+                                                                style="color:#FFF;font-size: 20px"></i></a> --}}
+                                                        </div>
+                                                        <h5 class="text-white font-14 font-weight-normal mt-1 mb-1"><i
+                                                                class="mdi mdi-home" style="font-size: 20px"></i>
+                                                            Indicador {{ $key + 1 }}</h5>
+                                                        {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
+                                                        {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
+                                                    </div>
+                                                    <div class="pb-4 pl-4 pr-4">
+                                                        <ul class="list-unstyled mt-0">
+                                                            <li class="mt-0 pt-0">
+                                                                {{-- <i class="mdi mdi-finance font-44 text-green-0"></i></li>
                                                         <li class="mt-0 pt-0 font-16">Avance</li>
                                                         <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 % --}}
-                                                        <li class="m-0 pt-0">
-                                                            <figure class="p-0 m-0">
-                                                                <div id="gravivienda01"></div>
-                                                                {{-- graDITSALUD01 --}}
-                                                            </figure>
-                                                        </li>
-                                                        </li>
-                                                        <li class="mt-0 pt-0 font-12">Actualizado: 02/04/2024
-                                                        </li>
-                                                        <li class="mt-0 pt-0 font-18 font-weight-bold">Meta: 60</li>
-                                                        <li class="mt-0 pt-0">
+                                                            <li class="m-0 pt-0">
+                                                                <figure class="p-0 m-0">
+                                                                    <div id="gra{{ $item->codigo }}"></div>
+                                                                    {{-- graDITSALUD01 --}}
+                                                                </figure>
+                                                            </li>
+                                                            </li>
+                                                            <li class="mt-0 pt-0 font-12"
+                                                                id="actualizado{{ $item->codigo }}">
+                                                            </li>
+                                                            {{-- <li class="mt-0 pt-0 font-18 font-weight-bold"
+                                                            id="meta{{ $item->codigo }}"></li>
+                                                        <li class="mt-0 pt-0" id="cumple{{ $item->codigo }}"></li> --}}
+                                                            <li class="mt-1 pt-1">
+                                                                <div class="row">
+                                                                    <div class="col-6">
+                                                                        <span class="text-green-0 font-weight-bold font-10"
+                                                                            style="font-size: 100%">
+                                                                            <i class="mdi mdi-arrow-down-bold"></i>
+                                                                            Numerador</span>
+                                                                        <div class="font-weight-bold">100</div>
+                                                                    </div>
+                                                                    <div class="col-6">
+                                                                        <span class="text-green-0 font-weight-bold font-10"
+                                                                            style="font-size: 100%">
+                                                                            <i class="mdi mdi-arrow-up-bold"></i>
+                                                                            Denominador</span>
+                                                                        <div class="font-weight-bold">100</div>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <li class="mt-1 pt-1">
+                                                                <p class="font-12" style="height: 5rem;">
+                                                                    {{ $item->nombre }}</p>
+                                                            </li>
 
-                                                            <span class="badge badge-success m-2"
-                                                                style="font-size: 90%; width:100px">
-                                                                <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
-                                                            {{-- <span class="badge badge-danger m-2"
-                                                                    style="font-size: 90%; width:100px">
-                                                                    <i class="mdi mdi-thumb-down"></i> NO CUMPLE</span> --}}
+                                                        </ul>
+                                                        <div class="mt-1 pt-1">
+                                                            {{-- <button class="btn btn-primary width-md waves-effect waves-light">Sign Up</button> --}}
+                                                            <a href="{{ route('salud.indicador.pactoregional.detalle', $item->id) }}"
+                                                                class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
+                                                                detalle</a>
+                                                        </div>
 
-                                                        </li>
-                                                        <li class="mt-1 pt-1">
-                                                            <p class="font-12" style="height: 5rem;">Número de gobiernos
-                                                                locales que registraron oportunamente las actas de
-                                                                homologación en el sistema de padron nominal</p>
-                                                        </li>
-
-                                                    </ul>
-                                                    <div class="mt-1 pt-1">
-                                                        <a href="#"
-                                                            class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
-                                                            detalle</a>
                                                     </div>
-
                                                 </div>
                                             </div>
-                                        </div>
-
-                                        <div class="col-md-6 col-xl-3">
-                                            <div class="card text-center border border-success-0">
-                                                <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                                    <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-home" style="font-size: 20px"></i>
-                                                        Indicador 1</h5>
-                                                    {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
-                                                    {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
-                                                </div>
-                                                <div class="pb-4 pl-4 pr-4">
-                                                    <ul class="list-unstyled mt-0">
-                                                        <li class="mt-0 pt-0">
-                                                            {{-- <i class="mdi mdi-finance font-44 text-green-0"></i></li>
-                                                        <li class="mt-0 pt-0 font-16">Avance</li>
-                                                        <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 % --}}
-                                                        <li class="m-0 pt-0">
-                                                            <figure class="p-0 m-0">
-                                                                <div id="gravivienda02"></div>
-                                                                {{-- graDITSALUD01 --}}
-                                                            </figure>
-                                                        </li>
-                                                        </li>
-                                                        <li class="mt-0 pt-0 font-12">Actualizado: 02/04/2024
-                                                        </li>
-                                                        <li class="mt-0 pt-0 font-18 font-weight-bold">Meta: 60</li>
-                                                        <li class="mt-0 pt-0">
-
-                                                            <span class="badge badge-success m-2"
-                                                                style="font-size: 90%; width:100px">
-                                                                <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
-                                                            {{-- <span class="badge badge-danger m-2"
-                                                                    style="font-size: 90%; width:100px">
-                                                                    <i class="mdi mdi-thumb-down"></i> NO CUMPLE</span> --}}
-
-                                                        </li>
-                                                        <li class="mt-1 pt-1">
-                                                            <p class="font-12" style="height: 5rem;">Número de gobiernos
-                                                                locales que registraron oportunamente las actas de
-                                                                homologación en el sistema de padron nominal</p>
-                                                        </li>
-
-                                                    </ul>
-                                                    <div class="mt-1 pt-1">
-                                                        <a href="#"
-                                                            class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
-                                                            detalle</a>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6 col-xl-3">
-                                            <div class="card text-center border border-success-0">
-                                                <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                                    <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-home" style="font-size: 20px"></i>
-                                                        Indicador 1</h5>
-                                                    {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
-                                                    {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
-                                                </div>
-                                                <div class="pb-4 pl-4 pr-4">
-                                                    <ul class="list-unstyled mt-0">
-                                                        <li class="mt-0 pt-0">
-                                                            {{-- <i class="mdi mdi-finance font-44 text-green-0"></i></li>
-                                                        <li class="mt-0 pt-0 font-16">Avance</li>
-                                                        <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 % --}}
-                                                        <li class="m-0 pt-0">
-                                                            <figure class="p-0 m-0">
-                                                                <div id="gravivienda03"></div>
-                                                                {{-- graDITSALUD01 --}}
-                                                            </figure>
-                                                        </li>
-                                                        </li>
-                                                        <li class="mt-0 pt-0 font-12">Actualizado: 02/04/2024
-                                                        </li>
-                                                        <li class="mt-0 pt-0 font-18 font-weight-bold">Meta: 60</li>
-                                                        <li class="mt-0 pt-0">
-
-                                                            <span class="badge badge-success m-2"
-                                                                style="font-size: 90%; width:100px">
-                                                                <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
-                                                            {{-- <span class="badge badge-danger m-2"
-                                                                    style="font-size: 90%; width:100px">
-                                                                    <i class="mdi mdi-thumb-down"></i> NO CUMPLE</span> --}}
-
-                                                        </li>
-                                                        <li class="mt-1 pt-1">
-                                                            <p class="font-12" style="height: 5rem;">Número de gobiernos
-                                                                locales que registraron oportunamente las actas de
-                                                                homologación en el sistema de padron nominal</p>
-                                                        </li>
-
-                                                    </ul>
-                                                    <div class="mt-1 pt-1">
-                                                        <a href="#"
-                                                            class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
-                                                            detalle</a>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6 col-xl-3">
-                                            <div class="card text-center border border-success-0">
-                                                <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                                    <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-home" style="font-size: 20px"></i>
-                                                        Indicador 1</h5>
-                                                    {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
-                                                    {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
-                                                </div>
-                                                <div class="pb-4 pl-4 pr-4">
-                                                    <ul class="list-unstyled mt-0">
-                                                        <li class="mt-0 pt-0">
-                                                            {{-- <i class="mdi mdi-finance font-44 text-green-0"></i></li>
-                                                        <li class="mt-0 pt-0 font-16">Avance</li>
-                                                        <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 % --}}
-                                                        <li class="m-0 pt-0">
-                                                            <figure class="p-0 m-0">
-                                                                <div id="gravivienda04"></div>
-                                                                {{-- graDITSALUD01 --}}
-                                                            </figure>
-                                                        </li>
-                                                        </li>
-                                                        <li class="mt-0 pt-0 font-12">Actualizado: 02/04/2024
-                                                        </li>
-                                                        <li class="mt-0 pt-0 font-18 font-weight-bold">Meta: 60</li>
-                                                        <li class="mt-0 pt-0">
-
-                                                            <span class="badge badge-success m-2"
-                                                                style="font-size: 90%; width:100px">
-                                                                <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
-                                                            {{-- <span class="badge badge-danger m-2"
-                                                                    style="font-size: 90%; width:100px">
-                                                                    <i class="mdi mdi-thumb-down"></i> NO CUMPLE</span> --}}
-
-                                                        </li>
-                                                        <li class="mt-1 pt-1">
-                                                            <p class="font-12" style="height: 5rem;">Número de gobiernos
-                                                                locales que registraron oportunamente las actas de
-                                                                homologación en el sistema de padron nominal</p>
-                                                        </li>
-
-                                                    </ul>
-                                                    <div class="mt-1 pt-1">
-                                                        <a href="#"
-                                                            class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
-                                                            detalle</a>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6 col-xl-3">
-                                            <div class="card text-center border border-success-0">
-                                                <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                                    <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-home" style="font-size: 20px"></i>
-                                                        Indicador 1</h5>
-                                                    {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
-                                                    {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
-                                                </div>
-                                                <div class="pb-4 pl-4 pr-4">
-                                                    <ul class="list-unstyled mt-0">
-                                                        <li class="mt-0 pt-0">
-                                                            {{-- <i class="mdi mdi-finance font-44 text-green-0"></i></li>
-                                                        <li class="mt-0 pt-0 font-16">Avance</li>
-                                                        <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 % --}}
-                                                        <li class="m-0 pt-0">
-                                                            <figure class="p-0 m-0">
-                                                                <div id="gravivienda05"></div>
-                                                                {{-- graDITSALUD01 --}}
-                                                            </figure>
-                                                        </li>
-                                                        </li>
-                                                        <li class="mt-0 pt-0 font-12">Actualizado: 02/04/2024
-                                                        </li>
-                                                        <li class="mt-0 pt-0 font-18 font-weight-bold">Meta: 60</li>
-                                                        <li class="mt-0 pt-0">
-
-                                                            <span class="badge badge-success m-2"
-                                                                style="font-size: 90%; width:100px">
-                                                                <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
-                                                            {{-- <span class="badge badge-danger m-2"
-                                                                    style="font-size: 90%; width:100px">
-                                                                    <i class="mdi mdi-thumb-down"></i> NO CUMPLE</span> --}}
-
-                                                        </li>
-                                                        <li class="mt-1 pt-1">
-                                                            <p class="font-12" style="height: 5rem;">Número de gobiernos
-                                                                locales que registraron oportunamente las actas de
-                                                                homologación en el sistema de padron nominal</p>
-                                                        </li>
-
-                                                    </ul>
-                                                    <div class="mt-1 pt-1">
-                                                        <a href="#"
-                                                            class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
-                                                            detalle</a>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-
+                                            <!-- end col -->
+                                        @endforeach
 
                                     </div>
                                 </div>
@@ -788,60 +609,6 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-6 col-xl-3">
-                                            <div class="card text-center border border-success-0">
-                                                <div class="pricing-header bg-success-0 p-0 rounded-top">
-                                                    <h5 class="text-white font-14 font-weight-normal"><i
-                                                            class="mdi mdi-plus-circle-outline"
-                                                            style="font-size: 20px"></i>
-                                                        Indicador 1</h5>
-                                                    {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
-                                                    {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
-                                                </div>
-                                                <div class="pb-4 pl-4 pr-4">
-                                                    <ul class="list-unstyled mt-0">
-                                                        <li class="mt-0 pt-0">
-                                                            {{-- <i class="mdi mdi-finance font-44 text-green-0"></i></li>
-                                                        <li class="mt-0 pt-0 font-16">Avance</li>
-                                                        <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 % --}}
-                                                        <li class="m-0 pt-0">
-                                                            <figure class="p-0 m-0">
-                                                                <div id="graarticulacion05"></div>
-                                                                {{-- graDITSALUD01 --}}
-                                                            </figure>
-                                                        </li>
-                                                        </li>
-                                                        <li class="mt-0 pt-0 font-12">Actualizado: 02/04/2024
-                                                        </li>
-                                                        <li class="mt-0 pt-0 font-18 font-weight-bold">Meta: 60</li>
-                                                        <li class="mt-0 pt-0">
-
-                                                            <span class="badge badge-success m-2"
-                                                                style="font-size: 90%; width:100px">
-                                                                <i class="mdi mdi-thumb-up"></i> CUMPLE</span>
-                                                            {{-- <span class="badge badge-danger m-2"
-                                                                    style="font-size: 90%; width:100px">
-                                                                    <i class="mdi mdi-thumb-down"></i> NO CUMPLE</span> --}}
-
-                                                        </li>
-                                                        <li class="mt-1 pt-1">
-                                                            <p class="font-12" style="height: 5rem;">Número de gobiernos
-                                                                locales que registraron oportunamente las actas de
-                                                                homologación en el sistema de padron nominal</p>
-                                                        </li>
-
-                                                    </ul>
-                                                    <div class="mt-1 pt-1">
-                                                        <a href="#"
-                                                            class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
-                                                            detalle</a>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-
                                     </div>
                                 </div>
                             </div>
@@ -969,16 +736,16 @@
             // GaugeSeries('graeducacion05', 62);
             // GaugeSeries('graeducacion06', 62);
 
-            // cargarActualizar('DIT-VIV-01');
-            // cargarActualizar('DIT-VIV-02');
-            // cargarActualizar('DIT-VIV-03');
-            // cargarActualizar('DIT-VIV-04');
+            cargarActualizar('DIT-VIV-01');
+            cargarActualizar('DIT-VIV-02');
+            cargarActualizar('DIT-VIV-03');
+            cargarActualizar('DIT-VIV-04');
 
-            GaugeSeries('gravivienda01', 71);
-            GaugeSeries('gravivienda02', 82);
-            GaugeSeries('gravivienda03', 92);
-            GaugeSeries('gravivienda04', 99);
-            GaugeSeries('gravivienda05', 62);
+            // GaugeSeries('gravivienda01', 71);
+            // GaugeSeries('gravivienda02', 82);
+            // GaugeSeries('gravivienda03', 92);
+            // GaugeSeries('gravivienda04', 99);
+            // GaugeSeries('gravivienda05', 62);
 
             // cargarActualizar('DIT-ART-01');
             // cargarActualizar('DIT-ART-02');
@@ -989,7 +756,7 @@
             GaugeSeries('graarticulacion02', 82);
             GaugeSeries('graarticulacion03', 92);
             GaugeSeries('graarticulacion04', 99);
-            GaugeSeries('graarticulacion05', 62);
+            // GaugeSeries('graarticulacion05', 62);
 
         }
 

@@ -39,6 +39,9 @@ class IndicadoresController extends Controller
         $sector = 4;
         $instrumento = 8;
         $indedu = IndicadorGeneralRepositorio::find_pactoregional($sector, $instrumento);
+        $sector = 18;
+        $instrumento = 8;
+        $indviv = IndicadorGeneralRepositorio::find_pactoregional($sector, $instrumento);
 
         $ind = IndicadorGeneralRepositorio::findNoFichatecnicaCodigo('DIT-SAL-01');
         $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios($ind->id);
@@ -48,7 +51,7 @@ class IndicadoresController extends Controller
         // // return response()->json(compact('imp'));
         $aniomax = $imp->anio;
 
-        return view('salud.Indicadores.PactoRegional', compact('indsal', 'indedu',  'anio', 'provincia', 'aniomax'));
+        return view('salud.Indicadores.PactoRegional', compact('indsal', 'indedu', 'indviv', 'anio', 'provincia', 'aniomax'));
     }
 
     public function PactoRegionalActualizar2(Request $rq)
@@ -336,8 +339,8 @@ class IndicadoresController extends Controller
         else $ndis = '';
         switch ($rq->div) {
             case 'head':
-                $loc = SFLRepositorio::listado_iiee($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 0)->count();
-                $ssa = SFLRepositorio::listado_iiee($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 1)->count();
+                $loc = SFLRepositorio::get_locals($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 0)->count();
+                $ssa = SFLRepositorio::get_locals($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 1)->count();
                 $nsa = $loc - $ssa; //SFLRepositorio::listado_iiee($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 1)->count();
                 $rin = number_format(100 * ($loc > 0 ? $ssa / $loc : 0));
                 return response()->json(['rq' => $rq->all(), 'loc' => $loc, 'ssa' => $ssa, 'nsa' => $nsa, 'rin' => $rin]);
@@ -428,11 +431,16 @@ class IndicadoresController extends Controller
                 return response()->json(compact('excel', 'base'));
 
             case 'tabla3':
-                $base = IndicadorGeneralMetaRepositorio::getPacto1tabla2($rq->indicador, $rq->anio);
+                $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla3($rq->indicador, $rq->anio);
                 $aniob = $rq->anio;
                 $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla3', compact('base', 'ndis', 'aniob'))->render();
                 return response()->json(compact('excel', 'base'));
-
+            case 'tabla4':
+                $base = SFLRepositorio::get_iiee(2024, 0, 0, 0, 0);
+                // $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla3($rq->indicador, $rq->anio);
+                $aniob = $rq->anio;
+                $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla4', compact('base', 'ndis', 'aniob'))->render();
+                return response()->json(compact('excel', 'base'));
 
             default:
                 return [];
