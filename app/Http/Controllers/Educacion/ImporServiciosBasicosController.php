@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Imports\tablaXImport;
 use App\Models\Administracion\Entidad;
 use App\Models\Educacion\ImporCensoDocente;
+use App\Models\Educacion\ImporServiciosBasicos;
 use App\Models\Educacion\Importacion;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Utilities\Utilitario;
@@ -102,7 +103,7 @@ class ImporServiciosBasicosController extends Controller
                 }
             }
         } catch (Exception $e) {
-            $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto";
+            $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto ".$e;
             $this->json_output(403, $mensaje);
         }
 
@@ -116,15 +117,9 @@ class ImporServiciosBasicosController extends Controller
                 'estado' => 'PR'
             ]);
 
-            /* $tableta = Tableta::Create([
-                'importacion_id' => $importacion->id,
-                'anio_id' => Anio::where('anio', date('Y', strtotime($importacion->fechaActualizacion)))->first()->id,
-                'created_at' => date('Y-m-d h:i:s'),
-            ]); */
-
             foreach ($array as $key => $value) {
                 foreach ($value as $row) {
-                    ImporCensoDocente::Create([
+                    ImporServiciosBasicos::Create([
                         'importacion_id' => $importacion->id,
                         'codlocal' => $row['codlocal'],
                         'codgeo' => $row['codgeo'],
@@ -218,7 +213,7 @@ class ImporServiciosBasicosController extends Controller
 
     public function ListaImportada($importacion_id) //(Request $request, $importacion_id)
     {
-        $data = ImporCensoDocente::where('importacion_id', $importacion_id)->get();
+        $data = ImporServiciosBasicos::where('importacion_id', $importacion_id)->get();
         return DataTables::of($data)->make(true);
     }
 
@@ -233,7 +228,7 @@ class ImporServiciosBasicosController extends Controller
         //$tableta = Tableta::where('importacion_id', $id)->first();
         //TabletaDetalle::where('tableta_id', $tableta->id)->delete();
         //$tableta->delete();
-        ImporCensoDocente::where('importacion_id', $id)->delete();
+        ImporServiciosBasicos::where('importacion_id', $id)->delete();
         Importacion::find($id)->delete();
         return response()->json(array('status' => true));
     }

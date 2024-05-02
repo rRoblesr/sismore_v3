@@ -22,6 +22,7 @@ use App\Http\Controllers\Educacion\ImporMatriculaController;
 use App\Http\Controllers\Educacion\ImporMatriculaGeneralController;
 use App\Http\Controllers\Educacion\ImporPadronEibController;
 use App\Http\Controllers\Educacion\ImporRERController;
+use App\Http\Controllers\Educacion\ImporServiciosBasicosController;
 use App\Http\Controllers\Educacion\ImporTabletaController;
 use App\Http\Controllers\Educacion\LenguaController;
 use App\Http\Controllers\Educacion\MatriculaDetalleController;
@@ -280,7 +281,13 @@ Route::get('/CuadroAsigPersonal/Exportar', [CuadroAsigPersonalController::class,
 Route::post('/CuadroAsigPersonal/ListaImportada', [CuadroAsigPersonalController::class, 'ListaImportada'])->name('cuadroasigpersonal.listarimportados');
 Route::get('/CuadroAsigPersonal/Exportar/Nexus', [CuadroAsigPersonalController::class, 'download'])->name('cuadroasigpersonal.download');
 
-
+Route::get('/educación/Importar/ServiciosBasicos', [ImporServiciosBasicosController::class, 'importar'])->name('imporserviciosbasicos.importar');
+Route::post('/educación/Importar/ServiciosBasicos/Importar', [ImporServiciosBasicosController::class, 'guardar'])->name('imporserviciosbasicos.guardar');
+Route::post('/educación/Importar/ServiciosBasicos/ListaImportada/{importacion_id}', [ImporServiciosBasicosController::class, 'ListaImportada'])->name('imporserviciosbasicos.listarimportados');
+Route::get('/educación/Importar/ServiciosBasicos/Listar/ImportarDT', [ImporServiciosBasicosController::class, 'ListarDTImportFuenteTodos'])->name('imporserviciosbasicos.listar.importados');
+Route::get('/educación/Importar/ServiciosBasicos/Eliminar/{id}', [ImporServiciosBasicosController::class, 'eliminar'])->name('imporserviciosbasicos.eliminar');
+//Route::get('/educación/Importar/ServiciosBasicos/Exportar', [ImporServiciosBasicosController::class, 'exportar'])->name('imporserviciosbasicos.exportar');
+//Route::get('/educación/Importar/ServiciosBasicos/Exportar/PadronSiagie', [ImporServiciosBasicosController::class, 'download'])->name('imporserviciosbasicos.download');
 
 Route::get('/Censo/Importar', [CensoController::class, 'importar'])->name('Censo.importar');
 Route::post('/Censo/Importar', [CensoController::class, 'guardar'])->name('Censo.guardar');
@@ -505,7 +512,11 @@ Route::get('/educación/ServiciosBasicos', [ServiciosBasicosController::class, '
 Route::get('/ServiciosBasicos/Tablas', [ServiciosBasicosController::class, 'principalTabla'])->name('serviciosbasicos.principal.tablas');
 Route::get('/ServiciosBasicos/Excel/{div}/{anio}/{ugel}/{gestion}/{area}/{servicio}', [ServiciosBasicosController::class, 'principalDownload']);
 
-Route::get('/educación/sfl', [SFLController::class, 'SFL'])->name('sfl.principal');//NECESITA UN CONTENEDOR PARA PACTO
+Route::get('/educación/ServiciosBasicos/Agua', [ServiciosBasicosController::class, 'aguapotable'])->name('serviciosbasicos.aguapotable');
+Route::get('/educación/ServiciosBasicos/Agua/Tablas', [ServiciosBasicosController::class, 'aguapotableTabla'])->name('serviciosbasicos.aguapotable.tablas');
+Route::get('/educación/ServiciosBasicos/Agua/Excel/{div}/{anio}/{ugel}/{gestion}/{area}/{servicio}', [ServiciosBasicosController::class, 'aguapotableDownload']);
+
+// Route::get('/educación/sfl', [SFLController::class, 'SFL'])->name('sfl.principal'); //NECESITA UN CONTENEDOR PARA PACTO
 
 Route::get('/Importacion', [ImportacionController::class, 'inicio'])->name('importacion.inicio');
 Route::get('/Importacion/importaciones_DataTable/', [ImportacionController::class, 'importacionesLista_DataTable'])->name('importacion.importacionesLista_DataTable');

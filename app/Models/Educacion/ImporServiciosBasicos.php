@@ -20,19 +20,19 @@ class ImporServiciosBasicos extends Model
         'importacion_id',
         'codlocal',
         'codgeo',
-        'dpto',
-        'prov',
-        'dist',
+        'provincia',
+        'distrito',
+        'ugel',
+        'cod_area',
         'area_censo',
-        'pub_priv',
+        'cod_gest',
+        'gestion',
         'modalidad',
-        'region',
         'agua_final',
         'desague_final',
         'luz_final',
         'internet_final',
-        'tres_servicios_final',
-        'todo'
+        'tres_servicios_final'
     ];
 
     protected $hide = [

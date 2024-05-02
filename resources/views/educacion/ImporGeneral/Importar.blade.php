@@ -12,7 +12,7 @@
                 <div class="card-header border-success-0 bg-transparent pb-0">
                     <div class="card-widgets">
                         <button type="button" class="btn btn-warning btn-xs" onclick="location.reload()"><i
-                            class="fa fa-redo"></i> Actualizar</button>
+                                class="fa fa-redo"></i> Actualizar</button>
                         <button type="button" class="btn btn-success btn-xs waves-effect waves-light" data-toggle="modal"
                             data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"><i
                                 class="ion ion-md-cloud-upload"></i> Importar</button>
@@ -56,6 +56,11 @@
                         @case(34)
                             {{-- censo educativo - matricula --}}
                             <h3 class="card-title">HISTORIAL DE IMPORTACIÓN DEL SIAGIE - MATRICULA</h3>
+                        @break
+
+                        @case(35)
+                            {{-- censo educativo - matricula --}}
+                            <h3 class="card-title">HISTORIAL DE IMPORTACIÓN DE SERVICIOS BASICOS</h3>
                         @break
 
                         @default
@@ -404,6 +409,116 @@
                                     </thead>
                                 @break
 
+                                @case(34)
+                                    <thead class="text-primary">
+                                        <th>CODOOII</th>
+                                        <th>CODGEO</th>
+                                        <th>CODLOCAL</th>
+                                        <th>COD_MOD</th>
+                                        <th>NROCED</th>
+                                        <th>CUADRO</th>
+                                        <th>TIPDATO</th>
+                                        <th>NIV_MOD</th>
+                                        <th>GES_DEP</th>
+                                        <th>AREA_CENSO</th>
+                                        <th>D01</th>
+                                        <th>D02</th>
+                                        <th>D03</th>
+                                        <th>D04</th>
+                                        <th>D05</th>
+                                        <th>D06</th>
+                                        <th>D07</th>
+                                        <th>D08</th>
+                                        <th>D09</th>
+                                        <th>D10</th>
+                                        <th>D11</th>
+                                        <th>D12</th>
+                                        <th>D13</th>
+                                        <th>D14</th>
+                                        <th>D15</th>
+                                        <th>D16</th>
+                                        <th>D17</th>
+                                        <th>D18</th>
+                                        <th>D19</th>
+                                        <th>D20</th>
+                                        <th>D21</th>
+                                        <th>D22</th>
+                                        <th>D23</th>
+                                        <th>D24</th>
+                                        <th>D25</th>
+                                        <th>D26</th>
+                                        <th>D27</th>
+                                        <th>D28</th>
+                                        <th>D29</th>
+                                        <th>D30</th>
+                                        <th>D31</th>
+                                        <th>D32</th>
+                                        <th>D33</th>
+                                        <th>D34</th>
+                                        <th>D35</th>
+                                        <th>D36</th>
+                                        <th>D37</th>
+                                        <th>D38</th>
+                                        <th>D39</th>
+                                        <th>D40</th>
+                                    </thead>
+                                @break
+
+                                @case(35)
+                                    <thead class="text-primary">
+                                        <th>CODOOII</th>
+                                        <th>CODGEO</th>
+                                        <th>CODLOCAL</th>
+                                        <th>COD_MOD</th>
+                                        <th>NROCED</th>
+                                        <th>CUADRO</th>
+                                        <th>TIPDATO</th>
+                                        <th>NIV_MOD</th>
+                                        <th>GES_DEP</th>
+                                        <th>AREA_CENSO</th>
+                                        <th>D01</th>
+                                        <th>D02</th>
+                                        <th>D03</th>
+                                        <th>D04</th>
+                                        <th>D05</th>
+                                        <th>D06</th>
+                                        <th>D07</th>
+                                        <th>D08</th>
+                                        <th>D09</th>
+                                        <th>D10</th>
+                                        <th>D11</th>
+                                        <th>D12</th>
+                                        <th>D13</th>
+                                        <th>D14</th>
+                                        <th>D15</th>
+                                        <th>D16</th>
+                                        <th>D17</th>
+                                        <th>D18</th>
+                                        <th>D19</th>
+                                        <th>D20</th>
+                                        <th>D21</th>
+                                        <th>D22</th>
+                                        <th>D23</th>
+                                        <th>D24</th>
+                                        <th>D25</th>
+                                        <th>D26</th>
+                                        <th>D27</th>
+                                        <th>D28</th>
+                                        <th>D29</th>
+                                        <th>D30</th>
+                                        <th>D31</th>
+                                        <th>D32</th>
+                                        <th>D33</th>
+                                        <th>D34</th>
+                                        <th>D35</th>
+                                        <th>D36</th>
+                                        <th>D37</th>
+                                        <th>D38</th>
+                                        <th>D39</th>
+                                        <th>D40</th>
+                                    </thead>
+                                @break
+
                                 @default
                             @endswitch
 
@@ -524,6 +639,8 @@
                     return "{{ route('imporcensomatricula.listar.importados') }}";
                 case 34:
                     return "{{ route('impormatriculageneral.listar.importados') }}";
+                case 35:
+                    return "{{ route('imporserviciosbasicos.listar.importados') }}";
                 default:
                     return '';
             }
@@ -609,7 +726,9 @@
                 case 33:
                     return "{{ route('imporcensomatricula.guardar') }}";
                 case 34:
-                    return "{{ route('impormatriculageneral.guardar') }}"; //impormatriculageneral
+                    return "{{ route('impormatriculageneral.guardar') }}";
+                case 35:
+                    return "{{ route('imporserviciosbasicos.guardar') }}";
                 default:
                     return '';
             }
@@ -659,6 +778,8 @@
                     return "{{ route('imporcensomatricula.eliminar', '') }}/" + id;
                 case 34:
                     return "{{ route('impormatriculageneral.eliminar', '') }}/" + id;
+                case 35:
+                    return "{{ route('imporserviciosbasicos.eliminar', '') }}/" + id;
                 default:
                     return '';
             }
@@ -1866,6 +1987,122 @@
                                 'X-CSRF-TOKEN': $('input[name=_token]').val()
                             },
                             "url": "{{ route('impormatriculageneral.listarimportados', '') }}/" + importacion,
+                            "type": "POST",
+                            "dataType": 'JSON',
+                        },
+                        "columns": [{
+                                data: 'id_anio',
+                                name: 'id_anio'
+                            },
+                            {
+                                data: 'cod_mod',
+                                name: 'cod_mod'
+                            },
+                            {
+                                data: 'id_modalidad',
+                                name: 'id_modalidad'
+                            },
+                            {
+                                data: 'id_nivel',
+                                name: 'id_nivel'
+                            },
+                            {
+                                data: 'gestion',
+                                name: 'gestion'
+                            },
+                            {
+                                data: 'pais_nacimiento',
+                                name: 'pais_nacimiento'
+                            },
+                            {
+                                data: 'fecha_nacimiento',
+                                name: 'fecha_nacimiento'
+                            },
+                            {
+                                data: 'sexo',
+                                name: 'sexo'
+                            },
+                            {
+                                data: 'lengua_materna',
+                                name: 'lengua_materna'
+                            },
+                            {
+                                data: 'segunda_lengua',
+                                name: 'segunda_lengua'
+                            },
+                            {
+                                data: 'id_discapacidad',
+                                name: 'id_discapacidad'
+                            },
+                            {
+                                data: 'situacion_matricula',
+                                name: 'situacion_matricula'
+                            },
+                            {
+                                data: 'estado_matricula',
+                                name: 'estado_matricula'
+                            },
+                            {
+                                data: 'fecha_matricula',
+                                name: 'fecha_matricula'
+                            },
+                            {
+                                data: 'condicion_matricula',
+                                name: 'condicion_matricula'
+                            },
+                            {
+                                data: 'id_grado',
+                                name: 'id_grado'
+                            },
+                            {
+                                data: 'dsc_grado',
+                                name: 'dsc_grado'
+                            },
+                            {
+                                data: 'id_seccion',
+                                name: 'id_seccion'
+                            },
+                            {
+                                data: 'dsc_seccion',
+                                name: 'dsc_seccion'
+                            },
+                            {
+                                data: 'fecha_registro',
+                                name: 'fecha_registro'
+                            },
+                            {
+                                data: 'fecha_retiro',
+                                name: 'fecha_retiro'
+                            },
+                            {
+                                data: 'motivo_retiro',
+                                name: 'motivo_retiro'
+                            },
+                            {
+                                data: 'sf_regular',
+                                name: 'sf_regular'
+                            },
+                            {
+                                data: 'sf_recuperacion',
+                                name: 'sf_recuperacion'
+                            },
+                        ],
+                    });
+                    break;
+                case 35:
+                    $('#siagie-matricula').DataTable({
+                        "processing": true,
+                        "serverSide": true,
+                        "responsive": false,
+                        "autoWidth": false,
+                        "ordered": true,
+                        "destroy": true,
+                        "language": table_language,
+                        "ajax": {
+                            "headers": {
+                                'X-CSRF-TOKEN': $('input[name=_token]').val()
+                            },
+                            "url": "{{ route('imporserviciosbasicos.listarimportados', '') }}/" + importacion,
                             "type": "POST",
                             "dataType": 'JSON',
                         },
