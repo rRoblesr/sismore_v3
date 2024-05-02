@@ -84,48 +84,21 @@ class ImporServiciosBasicosController extends Controller
                 foreach ($value as $celda => $row) {
                     if ($celda > 0) break;
                     $cadena =
-                        $row['codooii'] .
-                        $row['codgeo'] .
                         $row['codlocal'] .
-                        $row['cod_mod'] .
-                        $row['nroced'] .
-                        $row['cuadro'] .
-                        $row['tipdato'] .
-                        $row['niv_mod'] .
-                        $row['ges_dep'] .
+                        $row['codgeo'] .
+                        $row['provincia'] .
+                        $row['distrito'] .
+                        $row['ugel'] .
+                        $row['cod_area'] .
                         $row['area_censo'] .
-                        $row['d01'] .
-                        $row['d02'] .
-                        $row['d03'] .
-                        $row['d04'] .
-                        $row['d05'] .
-                        $row['d06'] .
-                        $row['d07'] .
-                        $row['d08'] .
-                        $row['d09'] .
-                        $row['d10'] .
-                        $row['d11'] .
-                        $row['d12'] .
-                        $row['d13'] .
-                        $row['d14'] .
-                        $row['d15'] .
-                        $row['d16'] .
-                        $row['d17'] .
-                        $row['d18'] .
-                        $row['d19'] .
-                        $row['d20'] .
-                        $row['d21'] .
-                        $row['d22'] .
-                        $row['d23'] .
-                        $row['d24'] .
-                        $row['d25'] .
-                        $row['d26'] .
-                        $row['d27'] .
-                        $row['d28'] .
-                        $row['d29'] .
-                        $row['d30'] .
-                        $row['d31'] .
-                        $row['d32'];
+                        $row['cod_gest'] .
+                        $row['gestion'] .
+                        $row['modalidad'] .
+                        $row['agua_final'] .
+                        $row['desague_final'] .
+                        $row['luz_final'] .
+                        $row['internet_final'] .
+                        $row['tres_servicios_final'];
                 }
             }
         } catch (Exception $e) {
@@ -153,48 +126,21 @@ class ImporServiciosBasicosController extends Controller
                 foreach ($value as $row) {
                     ImporCensoDocente::Create([
                         'importacion_id' => $importacion->id,
-                        'codooii' => $row['codooii'],
-                        'codgeo' => $row['codgeo'],
                         'codlocal' => $row['codlocal'],
-                        'cod_mod' => $row['cod_mod'],
-                        'nroced' => $row['nroced'],
-                        'cuadro' => $row['cuadro'],
-                        'tipdato' => $row['tipdato'],
-                        'niv_mod' => $row['niv_mod'],
-                        'ges_dep' => $row['ges_dep'],
+                        'codgeo' => $row['codgeo'],
+                        'provincia' => $row['provincia'],
+                        'distrito' => $row['distrito'],
+                        'ugel' => $row['ugel'],
+                        'cod_area' => $row['cod_area'],
                         'area_censo' => $row['area_censo'],
-                        'd01' => $row['d01'],
-                        'd02' => $row['d02'],
-                        'd03' => $row['d03'],
-                        'd04' => $row['d04'],
-                        'd05' => $row['d05'],
-                        'd06' => $row['d06'],
-                        'd07' => $row['d07'],
-                        'd08' => $row['d08'],
-                        'd09' => $row['d09'],
-                        'd10' => $row['d10'],
-                        'd11' => $row['d11'],
-                        'd12' => $row['d12'],
-                        'd13' => $row['d13'],
-                        'd14' => $row['d14'],
-                        'd15' => $row['d15'],
-                        'd16' => $row['d16'],
-                        'd17' => $row['d17'],
-                        'd18' => $row['d18'],
-                        'd19' => $row['d19'],
-                        'd20' => $row['d20'],
-                        'd21' => $row['d21'],
-                        'd22' => $row['d22'],
-                        'd23' => $row['d23'],
-                        'd24' => $row['d24'],
-                        'd25' => $row['d25'],
-                        'd26' => $row['d26'],
-                        'd27' => $row['d27'],
-                        'd28' => $row['d28'],
-                        'd29' => $row['d29'],
-                        'd30' => $row['d30'],
-                        'd31' => $row['d31'],
-                        'd32' => $row['d32']
+                        'cod_gest' => $row['cod_gest'],
+                        'gestion' => $row['gestion'],
+                        'modalidad' => $row['modalidad'],
+                        'agua_final' => $row['agua_final'],
+                        'desague_final' => $row['desague_final'],
+                        'luz_final' => $row['luz_final'],
+                        'internet_final' => $row['internet_final'],
+                        'tres_servicios_final' => $row['tres_servicios_final']
                     ]);
                 }
             }
