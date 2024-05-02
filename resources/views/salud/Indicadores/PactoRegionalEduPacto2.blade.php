@@ -208,7 +208,7 @@
                     </div>
                 </div>
 
-                {{-- <div class="col-lg-6">
+                <div class="col-lg-6">
                     <div class="card card-border border border-plomo-0">
                         <div class="card-header border-success-0 bg-transparent p-0">
                             <h3 class="text-black text-center font-weight-normal font-11"></h3>
@@ -218,8 +218,8 @@
                                 <div id="anal1" style="height: 20rem"></div>
                             </figure>
                         </div>
-                    </div>
-
+                    </div></div>
+                    <div class="col-lg-6">
                     <div class="card card-border border border-plomo-0">
                         <div class="card-header border-success-0 bg-transparent p-0">
                             <h3 class="text-black text-center font-weight-normal font-11"></h3>
@@ -230,7 +230,7 @@
                             </figure>
                         </div>
                     </div>
-                </div> --}}
+                </div>
 
             </div>
 
@@ -271,8 +271,9 @@
                                 <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
                                         class="fa fa-file-excel"></i> Descargar</button>
                             </div> --}}
-                            <h3 class="text-black font-14">Listado  de Instituciones Educativas Pùblicas, Segùn estado de Saneamiento Fisico Legal
-                             </h3>
+                            <h3 class="text-black font-14">Listado de Instituciones Educativas Pùblicas, Segùn estado de
+                                Saneamiento Fisico Legal
+                            </h3>
                         </div>
                         <div class="card-body p-0">
                             <div class="row">
@@ -348,15 +349,22 @@
                         $('#ssa').text(data.ssa);
                         $('#loc').text(data.loc);
                     } else if (div == "anal1") {
-
-                        gLineaBasica(div, data.info, '',
-                            'Acumulado mensual del registro de actas de homologacion en el sistema de padrón nominal',
-                            '');
+                        gcolumn2(div,
+                            data.info.categoria,
+                            data.info.series,
+                            '',
+                            'Locales escolares públicos con saneamiento físico legal por provincia'
+                        );
+                        // gAnidadaColumn(div,
+                        //     data.info.categoria, data.info.series, '',
+                        //     'Número de estudiantes matriculados en educación básica, periodo 2018-2023',
+                        //     0
+                        // );
+                        // gLineaBasica(div, data.info, '',
+                        //     'Locales escolares públicos con saneamiento físico legal por provincia',
+                        //     '');
                     } else if (div == "anal2") {
-                        console.log(data.info);
-                        gLineaBasica2(div, data.info, '',
-                            'Numero de actas de homolagación registradas en el sistema de padrón nominal por mes',
-                            '');
+                        gPie2(div, data.info, '', 'Numero de estudiantes matriculados según sexo', '');
                     } else if (div == "tabla1") {
                         $('#vtabla1').html(data.excel);
                         // $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
@@ -374,11 +382,11 @@
                         $('#vtabla2').html(data.excel);
                         // $('.vtabla2-fuente').html('Fuente: ]]' + data.reg.fuente);
                         // $('.vtabla2-fecha').html('Actualizado: ' + data.reg.fecha);
-                    }else if (div == "tabla3") {
+                    } else if (div == "tabla3") {
                         $('#vtabla3').html(data.excel);
                         // $('.vtabla2-fuente').html('Fuente: ]]' + data.reg.fuente);
                         // $('.vtabla2-fecha').html('Actualizado: ' + data.reg.fecha);
-                    }else if (div == "tabla4") {
+                    } else if (div == "tabla4") {
                         $('#vtabla4').html(data.excel);
                         $('#tabla4').DataTable({
                             responsive: true,
@@ -467,6 +475,91 @@
         function verpdf(id) {
             window.open("{{ route('salud.indicador.pactoregional.exportar.pdf', '') }}/" + id);
         };
+
+        function gcolumn2(div, categoria, series, titulo, subtitulo) {
+            const colors = ['#5eb9aa', '#ef5350', '#f5bd22', '#ef5350'];
+            Highcharts.chart(div, {
+                chart: {
+                    type: 'column'
+                },
+                colors,
+                title: {
+                    text: titulo,
+                    //align: 'left'
+                },
+                subtitle: {
+                    text: subtitulo,
+                    style: {
+                        fontSize: '11px',
+                    }
+                    //align: 'left'
+                },
+                xAxis: {
+                    categories: categoria,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                            //color:'blue',
+                        }
+                    }
+                    //crosshair: true,
+                    //accessibility: {
+                    //    description: 'Countries'
+                    //}
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        enabled: false,
+                        text: '1000 metric tons (MT)'
+                    },
+                    labels: {
+                        enabled: true,
+                        style: {
+                            //color: Highcharts.getOptions().colors[2],
+                            fontSize: '10px',
+                        }
+                    },
+
+                },
+                tooltip: {
+                    //valueSuffix: ' (1000 MT)'
+                },
+                plotOptions: {
+                    series: {
+                        //stacking: 'normal', //normal, overlap, percent,stream
+                        pointPadding: 0.1, //size de colunma
+                        borderWidth: 0 //borde de columna
+                    },
+                    column: {
+                        dataLabels: {
+                            enabled: true,
+                            //inside: true,
+                            style: {
+                                fontWeight: 'normal',
+                                fontSize: '10px',
+                                //color: 'white',
+                                //textShadow:false,//quita sombra//para versiones antiguas
+                                textOutline: false, //quita sombra
+                            }
+                        }
+                    },
+                },
+                legend: {
+                    itemStyle: {
+                        //color: "#333333",
+                        //cursor: "pointer",
+                        fontSize: "10px",
+                        //fontWeight: "normal",
+                        //textOverflow: "ellipsis"
+                    },
+                },
+                series: series,
+                credits: {
+                    enabled: false
+                },
+            });
+        }
 
         function gSimpleColumn(div, datax, titulo, subtitulo, tituloserie) {
 

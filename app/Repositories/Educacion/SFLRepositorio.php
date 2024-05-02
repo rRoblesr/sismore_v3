@@ -36,6 +36,7 @@ class SFLRepositorio
             'dt.nombre as distrito',
             'cp.nombre as centropoblado',
             'aa.nombre as area',
+            'sfl.estado as estadox',
             DB::raw('case when sfl.estado=1 then "SANEADO" when sfl.estado=2 then "NO SANEADO" when sfl.estado=3 then "NO REGISTRADO" when sfl.estado=4 then "EN PROCESO" end as estado')
         );
 

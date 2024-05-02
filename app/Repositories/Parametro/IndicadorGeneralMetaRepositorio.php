@@ -167,6 +167,12 @@ class IndicadorGeneralMetaRepositorio
         return $query;
     }
 
+    public static function getEduPacto2anal1($anio, $ugel, $provincia, $distrito, $estado)
+    {
+        $query = DB::select('call edu_pa_sfl_porlocal_provincia(?,?,?,?)', [$ugel, $provincia, $distrito, $estado]);
+        return $query;
+    }
+
     public static function getEduPacto2tabla1($indicador_id, $anio)
     {
         $query = IndicadorGeneralMeta::select('par_Indicador_general_meta.*', 'd.codigo', 'd.id as distrito_id', 'd.nombre as distrito')->where('indicadorgeneral', $indicador_id)->where('anio', $anio)
@@ -183,9 +189,9 @@ class IndicadorGeneralMetaRepositorio
         return $query;
     }
 
-    public static function getEduPacto2tabla2($indicador_id, $anio)
+    public static function getEduPacto2tabla2($anio, $ugel, $provincia, $distrito, $estado)
     {
-        $query = DB::select('call edu_pa_sfl_porlocal_distrito(?,?,?,?)', [0, 0, 0, 0]);
+        $query = DB::select('call edu_pa_sfl_porlocal_distrito(?,?,?,?)', [$ugel, $provincia, $distrito, $estado]);
         return $query;
     }
 
@@ -254,5 +260,4 @@ class IndicadorGeneralMetaRepositorio
         // }
         return $query;
     }
-
 }
