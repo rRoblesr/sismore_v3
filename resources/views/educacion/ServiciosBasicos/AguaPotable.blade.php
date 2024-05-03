@@ -504,7 +504,13 @@
                             default:
                                 break;
                         }
-                        gbar02(div, [], data.info, '', anal3titulo);
+                        gbar('anal3',
+                            data.info.categoria,
+                            data.info.series,
+                            '',
+                            anal3titulo,
+                        );
+                        // gbar02(div, [], data.info, '', anal3titulo);
                         // $('.ana-l1-fuente').html('Fuente: ' + data.reg.fuente);
                         // $('.ana-l1-fecha').html('Actualizado: ' + data.reg.fecha);
                     } else if (div == "tabla1") {
@@ -1702,7 +1708,82 @@
                 },
             });
         }
-
+        function gbar(div, categoria, series, titulo, subtitulo) {
+            Highcharts.chart(div, {
+                chart: {
+                    type: 'bar',
+                    //marginLeft: 50,
+                    //marginBottom: 90
+                },
+                colors: ['#5eb9aa', '#ef5350'],
+                title: {
+                    text: titulo,
+                },
+                subtitle: {
+                    text: subtitulo,
+                    style: {
+                        fontSize: '11px',
+                    }
+                },
+                xAxis: {
+                    categories: categoria,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    }
+                },
+                yAxis: {
+                    labels: {
+                        enabled: true,
+                        style: {
+                            //color: Highcharts.getOptions().colors[2],
+                            fontSize: '10px',
+                        }
+                    },
+                    title: {
+                        text: '',
+                        enabled: false,
+                    },
+                },
+                plotOptions: {
+                    series: {
+                        stacking: 'normal', //normal, overlap, percent,stream
+                        pointPadding: 0, //size de colunma
+                        borderWidth: 0 //borde de columna
+                    },
+                    bar: {
+                        dataLabels: {
+                            enabled: true,
+                            inside: true,
+                            style: {
+                                fontWeight: 'normal',
+                                fontSize: '10px',
+                                color: 'white',
+                                //textShadow:false,//quita sombra//para versiones antiguas
+                                textOutline: false, //quita sombra
+                            }
+                        }
+                    },
+                },
+                legend: {
+                    itemStyle: {
+                        //color: "#333333",
+                        //cursor: "pointer",
+                        fontSize: "10px",
+                        //fontWeight: "normal",
+                        //textOverflow: "ellipsis"
+                    },
+                },
+                series: series,
+                tooltip: {
+                    shared: true,
+                },
+                credits: {
+                    enabled: false
+                },
+            });
+        }
         function gbar02(div, categoria, series, titulo, subtitulo) {
             Highcharts.chart(div, {
                 chart: {

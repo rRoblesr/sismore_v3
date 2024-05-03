@@ -385,8 +385,8 @@ class ServiciosBasicosController extends Controller
                 }
                 $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'Numerador', 'data' => $dx2];
                 $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'Denuminador',  'data' => $dx1];
-                $info['series'][] = ['type' => 'spline', 'yAxis' => 1, 'name' => 'Indicador',   'tooltip' => ['valueSuffix' => ' %'],'data' => $dx3];
-                return response()->json(compact('info','alto'));
+                $info['series'][] = ['type' => 'spline', 'yAxis' => 1, 'name' => 'Indicador',   'tooltip' => ['valueSuffix' => ' %'], 'data' => $dx3];
+                return response()->json(compact('info', 'alto'));
 
 
             case 'anal2':
@@ -405,8 +405,18 @@ class ServiciosBasicosController extends Controller
                 return response()->json(compact('info'));
 
             case 'anal3':
-                $info = ServiciosBasicosRepositorio::aguapotableTabla($rq->div, $rq->anio, $rq->provincia, $rq->distrito,  $rq->area,  $rq->servicio);
+                $data = ServiciosBasicosRepositorio::aguapotableTabla($rq->div, $rq->anio, $rq->provincia, $rq->distrito,  $rq->area,  $rq->servicio);
+                $info['categoria'] = [];
+                $dx1 = [];
+                $dx2 = [];
+                foreach ($data as $key => $value) {
+                    $info['categoria'][] = $value->name;
+                    $dx1[] = (int)$value->y;
+                    $dx2[] = (int)$value->x-(int)$value->y;
+                }
 
+                $info['series'][] = ['name' => 'Locales Escolares', 'data' => $dx2];
+                $info['series'][] = ['name' => 'L.E con Agua', 'data' => $dx1];
                 return response()->json(compact('info'));
             case 'tabla1':
                 if ($rq->servicio == 1) {

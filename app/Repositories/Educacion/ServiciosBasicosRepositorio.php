@@ -543,7 +543,7 @@ class ServiciosBasicosRepositorio
                     //DB::raw("(100*count(id)/$total) as y"),
                     // DB::raw("(100*sum(IF($tipo=1,1,0))/count(id)) as y"),
                     DB::raw("sum(IF($tipo=1,1,0)) as y"),
-                    DB::raw("count(*) as y2"),
+                    DB::raw("count(*) as x"),
                 )->where('importacion_id', $anio);
                 if ($provincia > 0) {
                     $pp = Ubigeo::find($provincia);
@@ -555,7 +555,7 @@ class ServiciosBasicosRepositorio
                 }
                 if ($area > 0) $query = $query->where('cod_area', $area);
 
-                $query = $query->groupBy('name')->orderBy('y', 'desc')->get();
+                $query = $query->groupBy('name')->orderBy('x', 'desc')->get();
 
                 foreach ($query as $key => $value) {
                     $value->y = round($value->y, 0);
