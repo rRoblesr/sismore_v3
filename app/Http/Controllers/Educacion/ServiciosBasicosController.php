@@ -369,7 +369,43 @@ class ServiciosBasicosController extends Controller
                 return response()->json(compact('valor1', 'valor2', 'valor3', 'valor4', 'tservicio'));
 
             case 'anal1':
-                $info = ServiciosBasicosRepositorio::aguapotableTabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area,  $rq->servicio);
+                $data = ServiciosBasicosRepositorio::aguapotableTabla($rq->div, $rq->anio, $rq->provincia, $rq->distrito,  $rq->area,  $rq->servicio);
+                $info['categoria'] = [];
+                $dx1 = [];
+                $dx2 = [];
+                $dx3 = [];
+                $alto = 0;
+                foreach ($data as $key => $value) {
+                    $info['categoria'][] = $value->anio;
+                    $dx1[] = (int)$value->y;
+                    $dx2[] = (int)$value->x;
+                    $dx3[] = (int)$value->z;
+                    $alto = (int)$value->y > $alto ? (int)$value->y : $alto;
+                    $alto = (int)$value->x > $alto ? (int)$value->x : $alto;
+                }
+                $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'Numerador', 'data' => $dx2];
+                $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'Denuminador',  'data' => $dx1];
+                $info['series'][] = ['type' => 'spline', 'yAxis' => 1, 'name' => 'Indicador',   'tooltip' => ['valueSuffix' => ' %'],'data' => $dx3];
+                return response()->json(compact('info','alto'));
+
+
+            case 'anal2':
+                $data = ServiciosBasicosRepositorio::aguapotableTabla($rq->div, $rq->anio, $rq->provincia, $rq->distrito,  $rq->area,  $rq->servicio);
+                $info['categoria'] = [];
+                $dx1 = [];
+                $dx2 = [];
+                foreach ($data as $key => $value) {
+                    $info['categoria'][] = $value->ugel;
+                    $dx1[] = (int)$value->y;
+                    $dx2[] = (int)$value->x;
+                }
+
+                $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'Locales Escolares', 'data' => $dx2];
+                $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'L.E con Agua', 'data' => $dx1];
+                return response()->json(compact('info'));
+
+            case 'anal3':
+                $info = ServiciosBasicosRepositorio::aguapotableTabla($rq->div, $rq->anio, $rq->provincia, $rq->distrito,  $rq->area,  $rq->servicio);
 
                 return response()->json(compact('info'));
             case 'tabla1':
@@ -384,7 +420,7 @@ class ServiciosBasicosController extends Controller
                 } else if ($rq->servicio == 5) {
                     $tservicio = 'Internet';
                 }
-                $base = ServiciosBasicosRepositorio::aguapotableTabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area,  $rq->servicio);
+                $base = ServiciosBasicosRepositorio::aguapotableTabla($rq->div, $rq->anio, $rq->provincia, $rq->distrito,  $rq->area,  $rq->servicio);
                 $foot = [];
                 if ($base->count() > 0) {
                     $foot = clone $base[0];
@@ -421,7 +457,7 @@ class ServiciosBasicosController extends Controller
                 } else if ($rq->servicio == 5) {
                     $tservicio = 'Internet';
                 }
-                $base = ServiciosBasicosRepositorio::principalTabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area,  $rq->servicio);
+                $base = ServiciosBasicosRepositorio::aguapotableTabla($rq->div, $rq->anio, $rq->provincia, $rq->distrito,  $rq->area,  $rq->servicio);
                 $foot = [];
                 if ($base->count() > 0) {
                     $foot = clone $base[0];
@@ -457,7 +493,7 @@ class ServiciosBasicosController extends Controller
                     $foot->indicador = round($foot->total > 0 ? 100 * $foot->con / $foot->total : 0, 1);
                 }
                 // return response()->json(compact('base', 'foot'));
-                $excel = view('educacion.ServiciosBasicos.PrincipalTabla2', compact('base', 'foot', 'tservicio'))->render();
+                $excel = view('educacion.ServiciosBasicos.AguaPotableTabla2', compact('base', 'foot', 'tservicio'))->render();
 
                 // $reg['fuente'] = 'Siagie - MINEDU';
                 // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
@@ -465,7 +501,7 @@ class ServiciosBasicosController extends Controller
                 return response()->json(compact('excel'));
 
             case 'tabla3':
-                $base = ServiciosBasicosRepositorio::principalTabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area,  $rq->servicio);
+                $base = ServiciosBasicosRepositorio::principalTabla($rq->div, $rq->anio, $rq->provincia, $rq->distrito,  $rq->area,  $rq->servicio);
                 $foot = [];
                 if ($base->count() > 0) {
                 }

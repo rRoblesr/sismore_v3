@@ -178,11 +178,41 @@
                     </div>
                     <div class="card-body p-0">
                         <figure class="highcharts-figure p-0 m-0">
-                            <div id="anal1" style="height: 47.5rem"></div>
+                            <div id="anal1" style="height: 20rem"></div>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card card-border border border-plomo-0">
+                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                        {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
+                    </div>
+                    <div class="card-body p-0">
+                        <figure class="highcharts-figure p-0 m-0">
+                            <div id="anal2" style="height: 20rem"></div>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-lg-6">
+                <div class="card card-border border border-plomo-0">
+                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                        {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
+                    </div>
+                    <div class="card-body p-0">
+                        <figure class="highcharts-figure p-0 m-0">
+                            <div id="anal3" style="height: 47.5rem"></div>
                         </figure>
                         {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                            <span class="anal1-fuente">Fuente:</span>
-                            <span class="float-right anal1-fecha">Actualizado:</span>
+                            <span class="ana-l1-fuente">Fuente:</span>
+                            <span class="float-right ana-l1-fecha">Actualizado:</span>
                         </div> --}}
                     </div>
                 </div>
@@ -211,7 +241,7 @@
 
         </div>
 
-        <div class="row">
+        <div class="row d-none">
             <div class="col-lg-12">
                 <div class="card card-border border border-plomo-0 vtabla2">
                     <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
@@ -342,8 +372,10 @@
             }
             panelGraficas('head');
             panelGraficas('anal1');
+            panelGraficas('anal2');
+            panelGraficas('anal3');
             panelGraficas('tabla1');
-            panelGraficas('tabla2');
+            // panelGraficas('tabla2');
             panelGraficas('tabla3');
         }
 
@@ -382,34 +414,99 @@
                         $('.card3 p').text('II.EE con ' + data.tservicio);
                         $('.card4 p').text('II.EE sin ' + data.tservicio);
                     } else if (div == "anal1") {
-                        var anal1titulo = '';
+                        var anal3titulo = '';
                         switch ($('#servicio').val()) {
                             case '1':
-                                anal1titulo =
-                                    'Locales Educativos conectados a red de agua potable, según departamentos';
+                                anal3titulo =
+                                    'Locales Educativos conectados a red de agua potable, según Distritos';
                                 break;
                             case '2':
-                                anal1titulo =
-                                    'Locales Educativos conectados a red de desague, según departamentos';
+                                anal3titulo =
+                                    'Locales Educativos conectados a red de desague, según Distritos';
                                 break;
                             case '3':
-                                anal1titulo =
-                                    'Locales Educativos conectados a red de electricidad, según departamentos';
+                                anal3titulo =
+                                    'Locales Educativos conectados a red de electricidad, según Distritos';
                                 break;
                             case '4':
-                                anal1titulo =
-                                    'Locales Educativos con los tres servicios basicos, según departamentos';
+                                anal3titulo =
+                                    'Locales Educativos con los tres servicios basicos, según Distritos';
                                 break;
                             case '5':
-                                anal1titulo =
-                                    'Locales Educativos que cuentan con acceso a Internet, según departamentos';
+                                anal3titulo =
+                                    'Locales Educativos que cuentan con acceso a Internet, según Distritos';
                                 break;
                             default:
                                 break;
                         }
-                        gbar02(div, [], data.info, '', anal1titulo);
-                        // $('.anal1-fuente').html('Fuente: ' + data.reg.fuente);
-                        // $('.anal1-fecha').html('Actualizado: ' + data.reg.fecha);
+                        gAnidadaColumn4(div,
+                            data.info.categoria,
+                            data.info.series,
+                            '',
+                            'Distribución de Tabletas y Cargadores Solares, según Nivel Educativo',
+                            data.alto
+                        );
+                    } else if (div == "anal2") {
+                        var anal3titulo = '';
+                        switch ($('#servicio').val()) {
+                            case '1':
+                                anal3titulo =
+                                    'Locales Educativos conectados a red de agua potable, según Distritos';
+                                break;
+                            case '2':
+                                anal3titulo =
+                                    'Locales Educativos conectados a red de desague, según Distritos';
+                                break;
+                            case '3':
+                                anal3titulo =
+                                    'Locales Educativos conectados a red de electricidad, según Distritos';
+                                break;
+                            case '4':
+                                anal3titulo =
+                                    'Locales Educativos con los tres servicios basicos, según Distritos';
+                                break;
+                            case '5':
+                                anal3titulo =
+                                    'Locales Educativos que cuentan con acceso a Internet, según Distritos';
+                                break;
+                            default:
+                                break;
+                        }
+                        gAnidadaColumn3(div,
+                            data.info.categoria,
+                            data.info.series,
+                            '',
+                            'Distribución de Tabletas y Cargadores Solares, según Nivel Educativo'
+                        );
+                    } else if (div == "anal3") {
+                        var anal3titulo = '';
+                        switch ($('#servicio').val()) {
+                            case '1':
+                                anal3titulo =
+                                    'Locales Educativos conectados a red de agua potable, según Distritos';
+                                break;
+                            case '2':
+                                anal3titulo =
+                                    'Locales Educativos conectados a red de desague, según Distritos';
+                                break;
+                            case '3':
+                                anal3titulo =
+                                    'Locales Educativos conectados a red de electricidad, según Distritos';
+                                break;
+                            case '4':
+                                anal3titulo =
+                                    'Locales Educativos con los tres servicios basicos, según Distritos';
+                                break;
+                            case '5':
+                                anal3titulo =
+                                    'Locales Educativos que cuentan con acceso a Internet, según Distritos';
+                                break;
+                            default:
+                                break;
+                        }
+                        gbar02(div, [], data.info, '', anal3titulo);
+                        // $('.ana-l1-fuente').html('Fuente: ' + data.reg.fuente);
+                        // $('.ana-l1-fecha').html('Actualizado: ' + data.reg.fecha);
                     } else if (div == "tabla1") {
                         $('#vtabla1').html(data.excel);
                         // $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
@@ -977,6 +1074,271 @@
 
             });
         }
+        function gAnidadaColumn4(div, categoria, series, titulo, subtitulo, maxBar) {
+            var rango = categoria.length;
+            var posPorcentaje = rango * 2 + 1;
+            var cont = 0;
+            var porMaxBar = maxBar * 0.5;
+            Highcharts.chart(div, {
+                chart: {
+                    zoomType: 'xy',
+                },
+                colors: ['#5eb9aa', '#f5bd22', '#ef5350'],
+                title: {
+                    text: titulo, //'Browser market shares in January, 2018'
+                },
+                subtitle: {
+                    text: subtitulo,
+                    style: {
+                        fontSize: '11px',
+                    }
+                },
+                xAxis: [{
+                    categories: categoria,
+                    crosshair: true,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    }
+                }],
+                yAxis: [{ // Primary yAxis
+                        max: maxBar > 0 ? maxBar + porMaxBar : null,
+                        labels: {
+                            enabled: true,
+                            style: {
+                                //color: Highcharts.getOptions().colors[2],
+                                fontSize: '10px',
+                            }
+                        },
+                        title: {
+                            enabled: false,
+                        },
+                        /* labels: {
+                            //format: '{value}°C',
+                            //style: {
+                            //    color: Highcharts.getOptions().colors[2]
+                            //}
+                        }, */
+                        title: {
+                            text: 'Matriculados',
+                            style: {
+                                //color: Highcharts.getOptions().colors[2],
+                                fontSize: '11px',
+                            }
+                        },
+                        //opposite: true,
+                    }, { // Secondary yAxis
+                        gridLineWidth: 0, //solo indica el tamaño de la linea
+                        labels: {
+                            enabled: false,
+                        },
+                        title: {
+                            enabled: false,
+                        },
+                        /* title: {
+                            //text: 'Rainfall',
+                            text: '%Indicador',
+                            //style: {
+                            //    color: Highcharts.getOptions().colors[0]
+                            //}
+                        }, */
+                        /* labels: {
+                            //format: '{value} mm',
+                            format: '{value} %',
+                            //style: {
+                            //   color: Highcharts.getOptions().colors[0]
+                            //}
+                        }, */
+                        //min: -200,
+                        min: -600,
+                        max: 400,
+                        opposite: true,
+                    },
+                    /* { // Tertiary yAxis
+                        gridLineWidth: 0,
+                        title: {
+                            text: 'Sea-Level Pressure',
+                            style: {
+                                color: Highcharts.getOptions().colors[1]
+                            }
+                        },
+                        labels: {
+                            format: '{value} mb',
+                            style: {
+                                color: Highcharts.getOptions().colors[1]
+                            }
+                        },
+                        opposite: true
+                    } */
+                ],
+                series: series,
+                plotOptions: {
+                    /* columns: {
+                        stacking: 'normal'
+                    }, */
+                    series: {
+                        showInLegend: true,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            //format: '{point.y:,.0f}',
+                            //format: '{point.y:.1f}%',
+                            formatter: function() {
+                                if (this.colorIndex == 2)
+                                    return this.y + " %";
+                                else
+                                    return Highcharts.numberFormat(this.y, 0);
+                            },
+                            style: {
+                                fontWeight: 'normal',
+                                fontSize: '10px',
+                            }
+                        },
+                    },
+                },
+                tooltip: {
+                    shared: true,
+                },
+                legend: {
+                    itemStyle: {
+                        //"color": "#333333",
+                        "cursor": "pointer",
+                        "fontSize": "10px",
+                        "fontWeight": "normal",
+                        "textOverflow": "ellipsis"
+                    },
+                },
+                exporting: {
+                    enabled: true
+                },
+                credits: false,
+            });
+        }
+        function gAnidadaColumn3(div, categoria, series, titulo, subtitulo) {
+            Highcharts.chart(div, {
+                chart: {
+                    zoomType: 'xy',
+                },
+                colors: ['#5eb9aa', '#f5bd22', '#ef5350'],
+                title: {
+                    text: titulo, //'Browser market shares in January, 2018'
+                },
+                subtitle: {
+                    text: subtitulo,
+                },
+                xAxis: [{
+                    categories: categoria,
+                    crosshair: true
+                }],
+                yAxis: [{ // Primary yAxis
+                        //max: 2000000000,
+                        labels: {
+                            enabled: false,
+                        },
+                        title: {
+                            enabled: false,
+                        },
+                        /* labels: {
+                            format: '{value}°C',
+                            style: {
+                                color: Highcharts.getOptions().colors[2]
+                            }
+                        },
+                        title: {
+                            text: 'Temperature',
+                            style: {
+                                color: Highcharts.getOptions().colors[2]
+                            }
+                        }, */
+                        //opposite: true,
+                    }, { // Secondary yAxis
+                        gridLineWidth: 0,
+                        labels: {
+                            enabled: false,
+                        },
+                        title: {
+                            enabled: false,
+                        },
+                        /* title: {
+                            text: 'Rainfall',
+                            style: {
+                                color: Highcharts.getOptions().colors[0]
+                            }
+                        },
+                        labels: {
+                            format: '{value} mm',
+                            style: {
+                                color: Highcharts.getOptions().colors[0]
+                            }
+                        }, */
+                        min: -200,
+                        max: 150,
+                        opposite: true,
+                    },
+                    /* { // Tertiary yAxis
+                                       gridLineWidth: 0,
+                                       title: {
+                                           text: 'Sea-Level Pressure',
+                                           style: {
+                                               color: Highcharts.getOptions().colors[1]
+                                           }
+                                       },
+                                       labels: {
+                                           format: '{value} mb',
+                                           style: {
+                                               color: Highcharts.getOptions().colors[1]
+                                           }
+                                       },
+                                       opposite: true
+                                   } */
+                ],
+                series: series,
+                plotOptions: {
+                    /* columns: {
+                        stacking: 'normal'
+                    }, */
+                    series: {
+                        //showInLegend: false,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            //format: '{point.y:,.0f}',
+                            //format: '{point.y:.1f}%',
+                            formatter: function() {
+                                if (this.colorIndex == 3)
+                                    return this.y + " %";
+                                else
+                                    return Highcharts.numberFormat(this.y, 0);
+                            },
+                            style: {
+                                fontWeight: 'normal',
+                                fontSize: '10px',
+                            }
+                            // style: {
+                            //     fontWeight: 'normal',
+                            // }
+                        },
+                    },
+                },
+                tooltip: {
+                    shared: true,
+                },
+                legend: {
+                    itemStyle: {
+                        //"color": "#333333",
+                        "cursor": "pointer",
+                        "fontSize": "10px",
+                        "fontWeight": "normal",
+                        "textOverflow": "ellipsis"
+                    },
+                },
+                exporting: {
+                    enabled: false
+                },
+                credits: false,
+            });
+        }
 
         function gAnidadaColumn(div, categoria, series, titulo, subtitulo, maxBar) {
             var rango = categoria.length;
@@ -1346,6 +1708,7 @@
                 chart: {
                     type: 'bar'
                 },
+                colors: ['#5eb9aa', '#f5bd22', '#ef5350'],
                 title: {
                     text: titulo, // 'Historic World Population by Region'
                 },

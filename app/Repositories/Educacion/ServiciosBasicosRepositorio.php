@@ -471,10 +471,79 @@ class ServiciosBasicosRepositorio
                 else if ($servicio == 5) $tipo = 'internet_final';
 
                 $query = ImporServiciosBasicos::select(
+                    DB::raw('year(fechaActualizacion) as anio'),
+                    // 'ugel as ugel',
+                    //DB::raw("(100*count(id)/$total) as y"),
+                    // DB::raw("(100*sum(IF($tipo=1,1,0))/count(id)) as y"),
+                    DB::raw("sum(IF($tipo=1,1,0)) as y"),
+                    DB::raw("count(*) as x"),
+                    DB::raw("round(100*sum(IF($tipo=1,1,0))/count(*),1) as z"),
+                )->join('par_importacion as imp','imp.id','=','importacion_id');
+                if ($provincia > 0) {
+                    $pp = Ubigeo::find($provincia);
+                    $query = $query->where('provincia', $pp->nombre);
+                }
+                if ($distrito > 0) {
+                    $dd = Ubigeo::find($distrito);
+                    $query = $query->where('distrito', $dd->nombre);
+                }
+                if ($area > 0) $query = $query->where('cod_area', $area);
+
+                $query = $query->groupBy('anio')->orderBy('anio')->get();
+
+                // foreach ($query as $key => $value) {
+                //     $value->y = round($value->y, 0);
+                //     $value->color = '#317eeb'; // $value->name == 'UCAYALI' ? '#ef5350' : '#317eeb';
+                // }
+                return $query;
+
+            case 'anal2':
+                //$total = ImporServiciosBasicos::select('id')->count();
+                if ($servicio == 1) $tipo = 'agua_final';
+                else if ($servicio == 2) $tipo = 'desague_final';
+                else if ($servicio == 3) $tipo = 'luz_final';
+                else if ($servicio == 4) $tipo = 'tres_servicios_final';
+                else if ($servicio == 5) $tipo = 'internet_final';
+
+                $query = ImporServiciosBasicos::select(
+                    'ugel',
+                    //DB::raw("(100*count(id)/$total) as y"),
+                    // DB::raw("(100*sum(IF($tipo=1,1,0))/count(id)) as y"),
+                    DB::raw("sum(IF($tipo=1,1,0)) as y"),
+                    DB::raw("count(id) as x"),
+                )->where('importacion_id', $anio);
+                if ($provincia > 0) {
+                    $pp = Ubigeo::find($provincia);
+                    $query = $query->where('provincia', $pp->nombre);
+                }
+                if ($distrito > 0) {
+                    $dd = Ubigeo::find($distrito);
+                    $query = $query->where('distrito', $dd->nombre);
+                }
+                if ($area > 0) $query = $query->where('cod_area', $area);
+
+                $query = $query->groupBy('ugel')->orderBy('y', 'desc')->get();
+
+                // foreach ($query as $key => $value) {
+                //     $value->y = round($value->y, 0);
+                //     $value->color = '#317eeb'; // $value->name == 'UCAYALI' ? '#ef5350' : '#317eeb';
+                // }
+                return $query;
+
+            case 'anal3':
+                //$total = ImporServiciosBasicos::select('id')->count();
+                if ($servicio == 1) $tipo = 'agua_final';
+                else if ($servicio == 2) $tipo = 'desague_final';
+                else if ($servicio == 3) $tipo = 'luz_final';
+                else if ($servicio == 4) $tipo = 'tres_servicios_final';
+                else if ($servicio == 5) $tipo = 'internet_final';
+
+                $query = ImporServiciosBasicos::select(
                     'distrito as name',
                     //DB::raw("(100*count(id)/$total) as y"),
                     // DB::raw("(100*sum(IF($tipo=1,1,0))/count(id)) as y"),
                     DB::raw("sum(IF($tipo=1,1,0)) as y"),
+                    DB::raw("count(*) as y2"),
                 )->where('importacion_id', $anio);
                 if ($provincia > 0) {
                     $pp = Ubigeo::find($provincia);
@@ -490,7 +559,7 @@ class ServiciosBasicosRepositorio
 
                 foreach ($query as $key => $value) {
                     $value->y = round($value->y, 0);
-                    $value->color = '#317eeb'; // $value->name == 'UCAYALI' ? '#ef5350' : '#317eeb';
+                    // $value->color = '#317eeb'; // $value->name == 'UCAYALI' ? '#ef5350' : '#317eeb';
                 }
                 return $query;
 
@@ -508,7 +577,7 @@ class ServiciosBasicosRepositorio
                     );
                 else if ($servicio == 2)
                     $query = $query->select(
-                        'dist',
+                        'distrito',
                         DB::raw("count(id) as total"),
                         DB::raw("sum(IF(desague_final=1,1,0)) as con"),
                         DB::raw("count(id)-sum(IF(desague_final=1,1,0)) as sin"),
@@ -516,7 +585,7 @@ class ServiciosBasicosRepositorio
                     );
                 else if ($servicio == 3)
                     $query = $query->select(
-                        'dist',
+                        'distrito',
                         DB::raw("count(id) as total"),
                         DB::raw("sum(IF(luz_final=1,1,0)) as con"),
                         DB::raw("count(id)-sum(IF(luz_final=1,1,0)) as sin"),
@@ -524,7 +593,7 @@ class ServiciosBasicosRepositorio
                     );
                 else if ($servicio == 4)
                     $query = $query->select(
-                        'dist',
+                        'distrito',
                         DB::raw("count(id) as total"),
                         DB::raw("sum(IF(tres_servicios_final=1,1,0)) as con"),
                         DB::raw("count(id)-sum(IF(tres_servicios_final=1,1,0)) as sin"),
@@ -532,7 +601,7 @@ class ServiciosBasicosRepositorio
                     );
                 else if ($servicio == 5)
                     $query = $query->select(
-                        'dist',
+                        'distrito',
                         DB::raw("count(id) as total"),
                         DB::raw("sum(IF(internet_final=1,1,0)) as con"),
                         DB::raw("count(id)-sum(IF(internet_final=1,1,0)) as sin"),
@@ -553,30 +622,30 @@ class ServiciosBasicosRepositorio
                 return $query;
 
             case 'tabla2':
-                $total = ImporServiciosBasicos::select('id')->where('codgeo', 'like', '25%')->count();
+                $total = ImporServiciosBasicos::select('id')->where('codgeo', 'like', '25%')->where('importacion_id', $anio)->count();
 
-                $query = ImporServiciosBasicos::where('codgeo', 'like', '25%');
+                $query = ImporServiciosBasicos::where('codgeo', 'like', '25%')->where('importacion_id', $anio);
 
                 if ($servicio == 1)
                     $query = $query->select(
-                        'prov',
+                        'provincia',
                         DB::raw("count(id) as total"),
                         DB::raw("sum(IF(agua_final=1,1,0)) as con"),
                         DB::raw("count(id)-sum(IF(agua_final=1,1,0)) as sin"),
                         DB::raw("(100*count(id)/$total) as indicador"),
-                        DB::raw("sum(IF(modalidad='Educación Básica Regular (EBR)',1,0)) as EBRtotal"),
-                        DB::raw("sum(IF(modalidad='Educación Básica Regular (EBR)' and agua_final=1,1,0)) as EBRcon"),
-                        DB::raw("sum(IF(modalidad='Educación Básica Regular (EBR)',1,0))-sum(IF(modalidad='Educación Básica Regular (EBR)' and agua_final=1,1,0)) as EBRsin"),
-                        DB::raw("sum(IF(modalidad='Educación Básica Especial (EBE)',1,0)) as EBEtotal"),
-                        DB::raw("sum(IF(modalidad='Educación Básica Especial (EBE)' and agua_final=1,1,0)) as EBEcon"),
-                        DB::raw("sum(IF(modalidad='Educación Básica Especial (EBE)',1,0))-sum(IF(modalidad='Educación Básica Especial (EBE)' and agua_final=1,1,0)) as EBEsin"),
-                        DB::raw("sum(IF(modalidad='Educación Básica Alternativa (EBA)',1,0)) as EBAtotal"),
-                        DB::raw("sum(IF(modalidad='Educación Básica Alternativa (EBA)' and agua_final=1,1,0)) as EBAcon"),
-                        DB::raw("sum(IF(modalidad='Educación Básica Alternativa (EBA)',1,0))-sum(IF(modalidad='Educación Básica Alternativa (EBA)' and agua_final=1,1,0)) as EBAsin"),
+                        DB::raw("sum(IF(modalidad='EBR',1,0)) as EBRtotal"),
+                        DB::raw("sum(IF(modalidad='EBR' and agua_final=1,1,0)) as EBRcon"),
+                        DB::raw("sum(IF(modalidad='EBR',1,0))-sum(IF(modalidad='EBR' and agua_final=1,1,0)) as EBRsin"),
+                        DB::raw("sum(IF(modalidad='EBE',1,0)) as EBEtotal"),
+                        DB::raw("sum(IF(modalidad='EBE' and agua_final=1,1,0)) as EBEcon"),
+                        DB::raw("sum(IF(modalidad='EBE',1,0))-sum(IF(modalidad='EBE' and agua_final=1,1,0)) as EBEsin"),
+                        DB::raw("sum(IF(modalidad='EBA',1,0)) as EBAtotal"),
+                        DB::raw("sum(IF(modalidad='EBA' and agua_final=1,1,0)) as EBAcon"),
+                        DB::raw("sum(IF(modalidad='EBA',1,0))-sum(IF(modalidad='EBA' and agua_final=1,1,0)) as EBAsin"),
                     );
                 else if ($servicio == 2)
                     $query = $query->select(
-                        'prov',
+                        'provincia',
                         DB::raw("count(id) as total"),
                         DB::raw("sum(IF(desague_final=1,1,0)) as con"),
                         DB::raw("count(id)-sum(IF(desague_final=1,1,0)) as sin"),
@@ -593,7 +662,7 @@ class ServiciosBasicosRepositorio
                     );
                 else if ($servicio == 3)
                     $query = $query->select(
-                        'prov',
+                        'provincia',
                         DB::raw("count(id) as total"),
                         DB::raw("sum(IF(luz_final=1,1,0)) as con"),
                         DB::raw("count(id)-sum(IF(luz_final=1,1,0)) as sin"),
@@ -610,7 +679,7 @@ class ServiciosBasicosRepositorio
                     );
                 else if ($servicio == 4)
                     $query = $query->select(
-                        'prov',
+                        'provincia',
                         DB::raw("count(id) as total"),
                         DB::raw("sum(IF(tres_servicios_final=1,1,0)) as con"),
                         DB::raw("count(id)-sum(IF(tres_servicios_final=1,1,0)) as sin"),
@@ -627,7 +696,7 @@ class ServiciosBasicosRepositorio
                     );
                 else if ($servicio == 5)
                     $query = $query->select(
-                        'prov',
+                        'provincia',
                         DB::raw("count(id) as total"),
                         DB::raw("sum(IF(internet_final=1,1,0)) as con"),
                         DB::raw("count(id)-sum(IF(internet_final=1,1,0)) as sin"),
@@ -652,14 +721,14 @@ class ServiciosBasicosRepositorio
                 }
                 if ($area > 0) $query = $query->where('cod_area', $area);
 
-                $query = $query->groupBy('prov')->orderBy('indicador', 'desc')->get();
+                $query = $query->groupBy('provincia')->orderBy('indicador', 'desc')->get();
 
                 return $query;
 
             case 'tabla3':
-                $total = ImporServiciosBasicos::select('id')->where('codgeo', 'like', '25%')->count();
+                $total = ImporServiciosBasicos::select('id')->where('codgeo', 'like', '25%')->where('importacion_id', $anio)->count();
 
-                $query = ImporServiciosBasicos::where('codgeo', 'like', '25%')
+                $query = ImporServiciosBasicos::where('codgeo', 'like', '25%')->where('importacion_id', $anio)
                     ->join('edu_institucioneducativa as ie', 'ie.codLocal', '=', 'edu_impor_serviciosbasicos.codlocal')
                     ->join('edu_centropoblado as cp', 'cp.id', '=', 'ie.CentroPoblado_id')
                     ->join('par_ubigeo as dt', 'dt.id', '=', 'cp.Ubigeo_id')
