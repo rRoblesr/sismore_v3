@@ -415,8 +415,9 @@ class ServiciosBasicosController extends Controller
                     $dx2[] = (int)$value->x-(int)$value->y;
                 }
 
-                $info['series'][] = ['name' => 'Locales Escolares', 'data' => $dx2];
                 $info['series'][] = ['name' => 'L.E con Agua', 'data' => $dx1];
+                $info['series'][] = ['name' => 'Locales Escolares', 'data' => $dx2];
+
                 return response()->json(compact('info'));
             case 'tabla1':
                 if ($rq->servicio == 1) {

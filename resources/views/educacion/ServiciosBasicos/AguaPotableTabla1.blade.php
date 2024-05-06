@@ -1,9 +1,9 @@
-<table id="tabla1" class="table table-striped table-bordered tablex" style="font-size:11px;">
+<table id="tabla1" class="table table-sm table-striped table-bordered font-10" style="height: 100%">
     <thead>
         <tr class="bg-success-0 text-white text-center">
-            <td rowspan="1" class="text-center">Puesto</td>
-            <td rowspan="1" class="text-center">Distrito</td>
-            <td colspan="1" class="text-center">Total</td>
+            <th rowspan="1" class="text-center">Puesto</th>
+            <th rowspan="1" class="text-center">Distrito</th>
+            <th colspan="1" class="text-center">Total</th>
             <th rowspan="1" class="text-center">Con {{ $tservicio }}</th>
             <th colspan="1" class="text-center">Sin {{ $tservicio }}</th>
             <th colspan="1" class="text-center">% Indicador</th>

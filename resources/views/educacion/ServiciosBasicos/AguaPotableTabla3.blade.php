@@ -1,10 +1,10 @@
-<table id="tabla3" class="table table-striped table-bordered tablex" style="font-size:11px;">
+<table id="tabla3" class="table table-sm table-striped table-bordered font-10">
     <thead>
         <tr class="bg-success-0 text-white text-center">
-            <td rowspan="2" class="text-center">Nº</td>
-            <td rowspan="2" class="text-center">Código<br>Local</td>
-            <td rowspan="2" class="text-center">Código<br>Modular</td>
-            <td rowspan="2" class="text-center">Institución Educatica</td>
+            <th rowspan="2" class="text-center">Nº</th>
+            <th rowspan="2" class="text-center">Código<br>Local</th>
+            <th rowspan="2" class="text-center">Código<br>Modular</th>
+            <th rowspan="2" class="text-center">Institución Educatica</th>
             <th rowspan="2" class="text-center">Distrito</th>
             {{-- <th rowspan="2" class="text-center">Modalidad</th> --}}
             <th rowspan="2" class="text-center">Nivel</th>
