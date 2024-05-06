@@ -157,12 +157,12 @@
 
                 <div class="col-lg-6">
                     <div class="card card-border border border-plomo-0">
-                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                        <div class="card-header border-success-0 bg-transparent p-0">
                             {{-- <div class="card-widgets">
                                 <button type="button" class="btn btn-success btn-xs"><i
                                         class="fa fa-file-excel"></i> Descargar</button>
                             </div> --}}
-                            <h3 class="text-black font-14">Avance acumulado de la evaluación de Cumplimiento por Distrito
+                            <h3 class="text-black font-14 mb-0">Avance acumulado de la evaluación de Cumplimiento por Distrito
                             </h3>
                         </div>
                         <div class="card-body p-0">
@@ -182,9 +182,9 @@
                             {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
                         </div>
                         <div class="card-body p-0">
-                            <figure class="highcharts-figure p-0 m-0">
+                            {{-- <figure class="highcharts-figure p-0 m-0"> --}}
                                 <div id="anal1" style="height: 20rem"></div>
-                            </figure>
+                            {{-- </figure> --}}
                         </div>
                     </div>
 
@@ -193,9 +193,9 @@
                             {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
                         </div>
                         <div class="card-body p-0">
-                            <figure class="highcharts-figure p-0 m-0">
+                            {{-- <figure class="highcharts-figure p-0 m-0"> --}}
                                 <div id="anal2" style="height: 20rem"></div>
-                            </figure>
+                            {{-- </figure> --}}
                         </div>
                     </div>
                 </div>
@@ -207,12 +207,12 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card card-border border border-plomo-0">
-                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                        <div class="card-header border-success-0 bg-transparent p-0">
                             {{-- <div class="card-widgets">
                                 <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
                                         class="fa fa-file-excel"></i> Descargar</button>
                             </div> --}}
-                            <h3 class="text-black font-14">Evaluación de cumplimiento de los logros esperados por distrito
+                            <h3 class="text-black font-14 mb-0">Evaluación de cumplimiento de los logros esperados por distrito
                             </h3>
                         </div>
                         <div class="card-body p-0">

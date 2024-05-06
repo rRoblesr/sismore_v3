@@ -165,7 +165,7 @@
                                                                 </figure>
                                                             </li>
                                                             </li>
-                                                            <li class="mt-0 pt-0 font-12"
+                                                            <li class="mt-0 pt-0 font-10"
                                                                 id="actualizado{{ $item->codigo }}"></li>
                                                             {{-- <li class="mt-0 pt-0 font-18 font-weight-bold"
                                                                 id="meta{{ $item->codigo }}"></li>
@@ -173,19 +173,25 @@
                                                             </li> --}}
                                                             <li class="mt-1 pt-1">
                                                                 <div class="row">
-                                                                    <div class="col-6">
-                                                                        <span class="text-green-0 font-weight-bold font-10"
-                                                                            style="font-size: 100%">
-                                                                            <i class="mdi mdi-arrow-down-bold"></i>
-                                                                            Numerador</span>
-                                                                        <div class="font-weight-bold">100</div>
-                                                                    </div>
-                                                                    <div class="col-6">
-                                                                        <span class="text-green-0 font-weight-bold font-10"
+                                                                    <div class="col-6 p-0">
+                                                                        <span class="text-green-0 font-weight-bold font-11"
                                                                             style="font-size: 100%">
                                                                             <i class="mdi mdi-arrow-up-bold"></i>
-                                                                            Denominador</span>
-                                                                        <div class="font-weight-bold">100</div>
+                                                                            Numerador
+                                                                            <i class="mdi mdi-rotate-180 mdi-alert-circle" onclick="#"></i>
+                                                                        </span>
+                                                                        <div class="font-weight-bold"
+                                                                            id="num{{ $item->codigo }}">100</div>
+                                                                    </div>
+                                                                    <div class="col-6 p-0">
+                                                                        <span class="text-green-0 font-weight-bold font-11"
+                                                                            style="font-size: 100%">
+                                                                            <i class="mdi mdi-arrow-down-bold"></i>
+                                                                            Denominador
+                                                                            <i class="mdi mdi-rotate-180 mdi-alert-circle" onclick="#"></i>
+                                                                        </span>
+                                                                        <div class="font-weight-bold"
+                                                                            id="den{{ $item->codigo }}">100</div>
                                                                     </div>
                                                                 </div>
                                                             </li>
@@ -198,8 +204,8 @@
                                                         <div class="mt-1 pt-1">
                                                             {{-- <button class="btn btn-primary width-md waves-effect waves-light">Sign Up</button> --}}
                                                             <a href="{{ route('salud.indicador.pactoregional.detalle', $item->id) }}"
-                                                                class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
-                                                                detalle</a>
+                                                                class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light pb-0 pt-0">
+                                                                Ver detalle</a>
                                                         </div>
 
                                                     </div>
@@ -254,7 +260,7 @@
                                                                 </figure>
                                                             </li>
                                                             </li>
-                                                            <li class="mt-0 pt-0 font-12"
+                                                            <li class="mt-0 pt-0 font-10"
                                                                 id="actualizado{{ $item->codigo }}">
                                                             </li>
                                                             {{-- <li class="mt-0 pt-0 font-18 font-weight-bold"
@@ -262,19 +268,25 @@
                                                             <li class="mt-0 pt-0" id="cumple{{ $item->codigo }}"></li> --}}
                                                             <li class="mt-1 pt-1">
                                                                 <div class="row">
-                                                                    <div class="col-6">
-                                                                        <span class="text-green-0 font-weight-bold font-10"
-                                                                            style="font-size: 100%">
-                                                                            <i class="mdi mdi-arrow-down-bold"></i>
-                                                                            Numerador</span>
-                                                                        <div class="font-weight-bold">100</div>
-                                                                    </div>
-                                                                    <div class="col-6">
-                                                                        <span class="text-green-0 font-weight-bold font-10"
+                                                                    <div class="col-6 p-0">
+                                                                        <span class="text-green-0 font-weight-bold font-11"
                                                                             style="font-size: 100%">
                                                                             <i class="mdi mdi-arrow-up-bold"></i>
-                                                                            Denominador</span>
-                                                                        <div class="font-weight-bold">100</div>
+                                                                            Numerador
+                                                                            <i class="mdi mdi-rotate-180 mdi-alert-circle" onclick="#"></i>
+                                                                        </span>
+                                                                        <div class="font-weight-bold"
+                                                                            id="num{{ $item->codigo }}">100</div>
+                                                                    </div>
+                                                                    <div class="col-6 p-0">
+                                                                        <span class="text-green-0 font-weight-bold font-11"
+                                                                            style="font-size: 100%">
+                                                                            <i class="mdi mdi-arrow-down-bold"></i>
+                                                                            Denominador
+                                                                            <i class="mdi mdi-rotate-180 mdi-alert-circle" onclick="#"></i>
+                                                                        </span>
+                                                                        <div class="font-weight-bold"
+                                                                            id="den{{ $item->codigo }}">100</div>
                                                                     </div>
                                                                 </div>
                                                             </li>
@@ -287,8 +299,8 @@
                                                         <div class="mt-1 pt-1">
                                                             {{-- <button class="btn btn-primary width-md waves-effect waves-light">Sign Up</button> --}}
                                                             <a href="{{ route('salud.indicador.pactoregional.detalle', $item->id) }}"
-                                                                class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
-                                                                detalle</a>
+                                                                class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light pb-0 pt-0">
+                                                                Ver detalle</a>
                                                         </div>
 
                                                     </div>
@@ -343,32 +355,38 @@
                                                                 </figure>
                                                             </li>
                                                             </li>
-                                                            <li class="mt-0 pt-0 font-12"
+                                                            <li class="mt-0 pt-0 font-10"
                                                                 id="actualizado{{ $item->codigo }}">
                                                             </li>
                                                             {{-- <li class="mt-0 pt-0 font-18 font-weight-bold"
                                                             id="meta{{ $item->codigo }}"></li>
                                                         <li class="mt-0 pt-0" id="cumple{{ $item->codigo }}"></li> --}}
-                                                            <li class="mt-1 pt-1">
-                                                                <div class="row">
-                                                                    <div class="col-6">
-                                                                        <span class="text-green-0 font-weight-bold font-10"
-                                                                            style="font-size: 100%">
-                                                                            <i class="mdi mdi-arrow-down-bold"></i>
-                                                                            Numerador</span>
-                                                                        <div class="font-weight-bold">100</div>
-                                                                    </div>
-                                                                    <div class="col-6">
-                                                                        <span class="text-green-0 font-weight-bold font-10"
-                                                                            style="font-size: 100%">
-                                                                            <i class="mdi mdi-arrow-up-bold"></i>
-                                                                            Denominador</span>
-                                                                        <div class="font-weight-bold">100</div>
-                                                                    </div>
+                                                        <li class="mt-1 pt-1">
+                                                            <div class="row">
+                                                                <div class="col-6 p-0">
+                                                                    <span class="text-green-0 font-weight-bold font-11"
+                                                                        style="font-size: 100%">
+                                                                        <i class="mdi mdi-arrow-up-bold"></i>
+                                                                        Numerador
+                                                                        <i class="mdi mdi-rotate-180 mdi-alert-circle" onclick="#"></i>
+                                                                    </span>
+                                                                    <div class="font-weight-bold"
+                                                                        id="num{{ $item->codigo }}">100</div>
                                                                 </div>
-                                                            </li>
+                                                                <div class="col-6 p-0">
+                                                                    <span class="text-green-0 font-weight-bold font-11"
+                                                                        style="font-size: 100%">
+                                                                        <i class="mdi mdi-arrow-down-bold"></i>
+                                                                        Denominador
+                                                                        <i class="mdi mdi-rotate-180 mdi-alert-circle" onclick="#"></i>
+                                                                    </span>
+                                                                    <div class="font-weight-bold"
+                                                                        id="den{{ $item->codigo }}">100</div>
+                                                                </div>
+                                                            </div>
+                                                        </li>
                                                             <li class="mt-1 pt-1">
-                                                                <p class="font-12" style="height: 5rem;">
+                                                                <p class="font-12" style="height: 5.5rem;">
                                                                     {{ $item->nombre }}</p>
                                                             </li>
 
@@ -376,8 +394,8 @@
                                                         <div class="mt-1 pt-1">
                                                             {{-- <button class="btn btn-primary width-md waves-effect waves-light">Sign Up</button> --}}
                                                             <a href="{{ route('salud.indicador.pactoregional.detalle', $item->id) }}"
-                                                                class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">Ver
-                                                                detalle</a>
+                                                                class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light pb-0 pt-0">
+                                                                Ver detalle</a>
                                                         </div>
 
                                                     </div>
@@ -780,9 +798,11 @@
                         '<span class="badge badge-success m-2" style="font-size: 90%; width:100px"> <i class="mdi mdi-thumb-up"></i> CUMPLE</span>' :
                         '<span class="badge badge-danger m-2" style="font-size: 90%; width:100px"> <i class="mdi mdi-thumb-down"></i> NO CUMPLE</span>'
                     );
+                    $('#num' + codigo).text(data.num);
+                    $('#den' + codigo).text(data.den);
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 1");
+                    console.log("ERROR cargarActualizar");
                     console.log(jqXHR);
                 },
             });

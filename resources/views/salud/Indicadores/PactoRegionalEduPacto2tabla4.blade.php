@@ -41,19 +41,23 @@
 
                         @switch($item->estadox)
                             @case(1)
-                                <button type="button" class="btn btn-xs btn-success-0 font-8">{{ $item->estado }}</button>
+                                <span class="badge badge-success">{{ $item->estado }}</span>
+                                {{-- <button type="button" class="btn btn-xs btn-success-0 font-8">{{ $item->estado }}</button> --}}
                             @break
 
                             @case(2)
-                                <button type="button" class="btn btn-xs btn-danger font-8">{{ $item->estado }}</button>
+                                <span class="badge badge-danger">{{ $item->estado }}</span>
+                                {{-- <button type="button" class="btn btn-xs btn-danger font-8">{{ $item->estado }}</button> --}}
                             @break
 
                             @case(3)
-                                <button type="button" class="btn btn-xs btn-secondary font-8">{{ $item->estado }}</button>
+                                <span class="badge badge-secondary">{{ $item->estado }}</span>
+                                {{-- <button type="button" class="btn btn-xs btn-secondary font-8">{{ $item->estado }}</button> --}}
                             @break
 
                             @case(4)
-                                <button type="button" class="btn btn-xs btn-warning font-8">{{ $item->estado }}</button>
+                                <span class="badge badge-warning">{{ $item->estado }}</span>
+                                {{-- <button type="button" class="btn btn-xs btn-warning font-8">{{ $item->estado }}</button> --}}
                             @break
 
                             @default

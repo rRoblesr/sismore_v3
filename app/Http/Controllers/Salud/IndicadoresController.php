@@ -105,70 +105,106 @@ class IndicadoresController extends Controller
                 $ind = IndicadorGeneralRepositorio::findNoFichatecnicaCodigo($rq->codigo);
                 $gls = IndicadorGeneralMetaRepositorio::getPacto1GLS($ind->id, $rq->anio);
                 $gl = IndicadorGeneralMetaRepositorio::getPacto1GL($ind->id, $rq->anio);
+                $num = $gls;
+                $den = $gl;
                 break;
             case 'DIT-SAL-02':
                 $gls = 105.5;
                 $gl = 100;
+                $num = $gls;
+                $den = $gl;
                 break;
             case 'DIT-SAL-03':
                 $gls = 75;
                 $gl = 100;
+                $num = $gls;
+                $den = $gl;
                 break;
             case 'DIT-SAL-04':
                 $gls = 50;
                 $gl = 100;
+                $num = $gls;
+                $den = $gl;
                 break;
             case 'DIT-SAL-05':
                 $gls = 25;
                 $gl = 100;
+                $num = $gls;
+                $den = $gl;
                 break;
             case 'DIT-EDU-01':
                 $gls = 75;
                 $gl = 100;
+                $num = $gls;
+                $den = $gl;
                 break;
             case 'DIT-EDU-02':
-                $gls = 100;
-                $gl = 100;
+                $gl = SFLRepositorio::get_locals($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 0)->count();
+                $gls = SFLRepositorio::get_locals($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 1)->count();
+                // $gls = 100;
+                // $gl = 100;
+                $num = $gls;
+                $den = $gl;
                 break;
             case 'DIT-EDU-03':
                 $gls = 102;
                 $gl = 100;
+                $num = $gls;
+                $den = $gl;
                 break;
             case 'DIT-EDU-04':
                 $gls = 25;
                 $gl = 100;
+                $num = $gls;
+                $den = $gl;
                 break;
             case 'DIT-VIV-01':
                 $gls = 25;
                 $gl = 100;
+                $num = $gls;
+                $den = $gl;
                 break;
             case 'DIT-VIV-02':
                 $gls = 50;
                 $gl = 100;
+                $num = $gls;
+                $den = $gl;
                 break;
             case 'DIT-VIV-03':
                 $gls = 75;
                 $gl = 100;
+                $num = $gls;
+                $den = $gl;
                 break;
             case 'DIT-VIV-04':
                 $gls = 100.9;
                 $gl = 100;
+                $num = $gls;
+                $den = $gl;
                 break;
             case 'DIT-ART-01':
                 $gls = 25;
                 $gl = 100;
+                $num = $gls;
+                $den = $gl;
                 break;
             case 'DIT-ART-02':
                 $gls = 50;
                 $gl = 100;
+                $num = $gls;
+                $den = $gl;
                 break;
             case 'DIT-ART-03':
                 $gls = 75;
                 $gl = 100;
+                $num = $gls;
+                $den = $gl;
                 break;
             case 'DIT-ART-04':
                 $gls = 100.9;
                 $gl = 100;
+                $num = $gls;
+                $den = $gl;
                 break;
             default:
                 break;
@@ -177,9 +213,10 @@ class IndicadoresController extends Controller
         $avance =  round(100 * ($gl > 0 ? $gls / $gl : 0));
         $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
         $meta = '100%';
+
         $cumple = $gls >= $gl;
 
-        return response()->json(compact('avance', 'actualizado', 'meta', 'cumple'));
+        return response()->json(compact('avance', 'actualizado', 'meta', 'cumple', 'num', 'den'));
     }
 
     public function PactoRegionalDetalle($indicador_id)
@@ -236,11 +273,7 @@ class IndicadoresController extends Controller
             case 'head':
                 $gls = IndicadorGeneralMetaRepositorio::getPacto1GLS($rq->indicador, $rq->anio);
                 $gl = IndicadorGeneralMetaRepositorio::getPacto1GL($rq->indicador, $rq->anio);
-                $gln = IndicadorGeneralMetaRepositorio::getPacto1GLN($rq->indicador, $rq->anio);
-                if ($gl == ($gls + $gln)) {
-                } else {
-                    $gln += $gl - ($gls + $gln);
-                }
+                $gln = $gl - $gls;
                 $ri = number_format(100 * ($gl > 0 ? $gls / $gl : 0));
                 return response()->json(['aa' => $rq->all(), 'ri' => $ri, 'gl' => $gl, 'gls' => $gls, 'gln' => $gln]);
 
@@ -352,13 +385,13 @@ class IndicadoresController extends Controller
                 $dx2 = [];
                 foreach ($base as $keyi => $ii) {
                     $info['categoria'][] = $ii->provincia;
-                    $dx1[$keyi] = $ii->t1;
-                    $dx2[$keyi] = $ii->tt - $ii->t1;
+                    $dx1[$keyi] = (int)$ii->t1;
+                    $dx2[$keyi] = (int)$ii->tt - (int)$ii->t1;
                 }
                 // $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'SANEADO',  'data' => $dx2];
                 // $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'NO SANEADO', 'data' => $dx3];
-                $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' =>    'SANEADO','data' => $dx1];
-                $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'NO SANEADO','data' => $dx2];
+                $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' =>    'SANEADO', 'data' => $dx1];
+                $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'NO SANEADO', 'data' => $dx2];
                 return response()->json(compact('info', 'base'));
                 // return [];
             case 'anal2':
