@@ -139,8 +139,10 @@ class IndicadoresController extends Controller
                 $den = $gl;
                 break;
             case 'DIT-EDU-02':
-                $gls = 100;
-                $gl = 100;
+                $gl = SFLRepositorio::get_locals($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 0)->count();
+                $gls = SFLRepositorio::get_locals($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 1)->count();
+                // $gls = 100;
+                // $gl = 100;
                 $num = $gls;
                 $den = $gl;
                 break;
