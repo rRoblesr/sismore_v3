@@ -217,7 +217,7 @@
                         </div>
                         <div class="card-body p-0">
                             <div class="row">
-                                <div class="col-12">
+                                <div class="col-lg-12">
                                     <div class="table-responsive" id="vtabla2">
                                     </div>
                                 </div>

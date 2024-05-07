@@ -1,4 +1,4 @@
-@extends('layouts.main', ['titlePage' => 'INDICADOR'])
+@extends('layouts.main', ['titlePage' => ''])
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
     <style>
@@ -2696,6 +2696,9 @@
                 colors: ['#5eb9aa', '#f5bd22', '#ef5350'],
                 title: {
                     text: titulo, //'Browser market shares in January, 2018'
+                    style: {
+                        fontSize: '11px',
+                    }
                 },
                 subtitle: {
                     text: subtitulo,
