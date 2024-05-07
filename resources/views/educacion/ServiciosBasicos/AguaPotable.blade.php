@@ -306,7 +306,7 @@
                                         <div class="card-header border-success-0 bg-transparent p-0">
                                             <div class="card-widgets">
                                                 <button type="button" class="btn btn-success btn-xs"
-                                                    onclick="descargar3vista1()"><i class="fa fa-file-excel"></i>
+                                                    onclick="descargar1vista1()"><i class="fa fa-file-excel"></i>
                                                     Descargar</button>
                                             </div>
                                             <h3 class="text-black font-14">Locales Educativos conectados</h3>
@@ -572,7 +572,7 @@
                                         <div class="card-header border-success-0 bg-transparent p-0">
                                             <div class="card-widgets">
                                                 <button type="button" class="btn btn-success btn-xs"
-                                                    onclick="descargar3vista2()"><i class="fa fa-file-excel"></i>
+                                                    onclick="descargar1vista2()"><i class="fa fa-file-excel"></i>
                                                     Descargar</button>
                                             </div>
                                             <h3 class="text-black font-14">Locales Educativos conectados</h3>
@@ -584,10 +584,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9 p-0">
-                                                <span class="float-left vtabxla1-fuente">Fuente: </span>
-                                                <span class="float-right vtaxbla1-fecha">Actualizado:</span>
-                                            </div> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -838,7 +834,7 @@
                                         <div class="card-header border-success-0 bg-transparent p-0">
                                             <div class="card-widgets">
                                                 <button type="button" class="btn btn-success btn-xs"
-                                                    onclick="descargar3vista3()"><i class="fa fa-file-excel"></i>
+                                                    onclick="descargar1vista3()"><i class="fa fa-file-excel"></i>
                                                     Descargar</button>
                                             </div>
                                             <h3 class="text-black font-14">Locales Educativos conectados</h3>
@@ -850,10 +846,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9 p-0">
-                                                <span class="float-left vtabxla1-fuente">Fuente: </span>
-                                                <span class="float-right vtaxbla1-fecha">Actualizado:</span>
-                                            </div> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -1104,7 +1096,7 @@
                                         <div class="card-header border-success-0 bg-transparent p-0">
                                             <div class="card-widgets">
                                                 <button type="button" class="btn btn-success btn-xs"
-                                                    onclick="descargar3vista4()"><i class="fa fa-file-excel"></i>
+                                                    onclick="descargar1vista4()"><i class="fa fa-file-excel"></i>
                                                     Descargar</button>
                                             </div>
                                             <h3 class="text-black font-14">Locales Educativos conectados</h3>
@@ -1116,10 +1108,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9 p-0">
-                                                <span class="float-left vtabxla1-fuente">Fuente: </span>
-                                                <span class="float-right vtaxbla1-fecha">Actualizado:</span>
-                                            </div> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -1370,7 +1358,7 @@
                                         <div class="card-header border-success-0 bg-transparent p-0">
                                             <div class="card-widgets">
                                                 <button type="button" class="btn btn-success btn-xs"
-                                                    onclick="descargar3vista5()"><i class="fa fa-file-excel"></i>
+                                                    onclick="descargar1vista5()"><i class="fa fa-file-excel"></i>
                                                     Descargar</button>
                                             </div>
                                             <h3 class="text-black font-14">Locales Educativos conectados</h3>
@@ -1382,10 +1370,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9 p-0">
-                                                <span class="float-left vtabxla1-fuente">Fuente: </span>
-                                                <span class="float-right vtaxbla1-fecha">Actualizado:</span>
-                                            </div> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -1495,67 +1479,17 @@
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Locales Educativos con los tres servicios basicos, según Distritos',
+                            'Numero de Locales Educativos con los tres servicios basicos, por año',
                             data.alto
                         );
                     } else if (div == "anal2") {
-                        // var anal3titulo = '';
-                        // switch ($('#serviciovista1').val()) {
-                        //     case '1':
-                        //         anal3titulo =
-                        //             'Locales Educativos conectados a red de agua potable, según Distritos';
-                        //         break;
-                        //     case '2':
-                        //         anal3titulo =
-                        //             'Locales Educativos conectados a red de desague, según Distritos';
-                        //         break;
-                        //     case '3':
-                        //         anal3titulo =
-                        //             'Locales Educativos conectados a red de electricidad, según Distritos';
-                        //         break;
-                        //     case '4':
-                        //         anal3titulo =
-                        //             ;
-                        //         break;
-                        //     case '5':
-                        //         anal3titulo =
-                        //             'Locales Educativos que cuentan con acceso a Internet, según Distritos';
-                        //         break;
-                        //     default:
-                        //         break;
-                        // }
                         gAnidadaColumn3('anal2vista1',
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Locales Educativos con los tres servicios basicos, según Distritos'
+                            'Locales Educativos con los tres servicios basicos, según Provincia'
                         );
                     } else if (div == "anal3") {
-                        // var anal3titulo = '';
-                        // switch ($('#serviciovista1').val()) {
-                        //     case '1':
-                        //         anal3titulo =
-                        //             'Locales Educativos conectados a red de agua potable, según Distritos';
-                        //         break;
-                        //     case '2':
-                        //         anal3titulo =
-                        //             'Locales Educativos conectados a red de desague, según Distritos';
-                        //         break;
-                        //     case '3':
-                        //         anal3titulo =
-                        //             'Locales Educativos conectados a red de electricidad, según Distritos';
-                        //         break;
-                        //     case '4':
-                        //         anal3titulo =
-                        //             ;
-                        //         break;
-                        //     case '5':
-                        //         anal3titulo =
-                        //             'Locales Educativos que cuentan con acceso a Internet, según Distritos';
-                        //         break;
-                        //     default:
-                        //         break;
-                        // }
                         gbar('anal3vista1',
                             data.info.categoria,
                             data.info.series,
@@ -1648,7 +1582,7 @@
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Locales Educativos con los tres servicios basicos, según Distritos',
+                            'Locales Educativos conectados a red de agua potable, según Distritos',
                             data.alto
                         );
                     } else if (div == "anal2") {
@@ -1656,14 +1590,14 @@
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Locales Educativos con los tres servicios basicos, según Distritos'
+                            'Locales Educativos conectados a red de agua potable, según Distritos',
                         );
                     } else if (div == "anal3") {
                         gbar('anal3vista2',
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Locales Educativos con los tres servicios basicos, según Distritos'
+                            'Locales Educativos conectados a red de agua potable, según Distritos',
                         );
                     } else if (div == "tabla1") {
                         $('#vtabla1vista2').html(data.excel);
@@ -1750,7 +1684,7 @@
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Locales Educativos con los tres servicios basicos, según Distritos',
+                            'Locales Educativos conectados a red de desague, según Distritos',
                             data.alto
                         );
                     } else if (div == "anal2") {
@@ -1758,14 +1692,14 @@
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Locales Educativos con los tres servicios basicos, según Distritos'
+                            'Locales Educativos conectados a red de desague, según Distritos',
                         );
                     } else if (div == "anal3") {
                         gbar('anal3vista3',
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Locales Educativos con los tres servicios basicos, según Distritos'
+                            'Locales Educativos conectados a red de desague, según Distritos',
                         );
                     } else if (div == "tabla1") {
                         $('#vtabla1vista3').html(data.excel);
@@ -1852,7 +1786,7 @@
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Locales Educativos con los tres servicios basicos, según Distritos',
+                            'Locales Educativos conectados a red de electricidad, según Distritos',
                             data.alto
                         );
                     } else if (div == "anal2") {
@@ -1860,14 +1794,14 @@
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Locales Educativos con los tres servicios basicos, según Distritos'
+                            'Locales Educativos conectados a red de electricidad, según Distritos',
                         );
                     } else if (div == "anal3") {
                         gbar('anal3vista4',
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Locales Educativos con los tres servicios basicos, según Distritos'
+                            'Locales Educativos conectados a red de electricidad, según Distritos',
                         );
                     } else if (div == "tabla1") {
                         $('#vtabla1vista4').html(data.excel);
@@ -1954,7 +1888,7 @@
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Locales Educativos con los tres servicios basicos, según Distritos',
+                            'Locales Educativos que cuentan con acceso a Internet, según Distritos',
                             data.alto
                         );
                     } else if (div == "anal2") {
@@ -1962,14 +1896,14 @@
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Locales Educativos con los tres servicios basicos, según Distritos'
+                            'Locales Educativos que cuentan con acceso a Internet, según Distritos',
                         );
                     } else if (div == "anal3") {
                         gbar('anal3vista5',
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Locales Educativos con los tres servicios basicos, según Distritos'
+                            'Locales Educativos que cuentan con acceso a Internet, según Distritos',
                         );
                     } else if (div == "tabla1") {
                         $('#vtabla1vista5').html(data.excel);
