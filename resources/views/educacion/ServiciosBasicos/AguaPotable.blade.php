@@ -1912,7 +1912,7 @@
                     "provincia": $('#provinciavista5').val(),
                     "distrito": $('#distritovista5').val(),
                     "area": $('#areavista5').val(),
-                    "servicio": 4,
+                    "servicio": 5,
                     "vista": 5,
                 },
                 type: "GET",
