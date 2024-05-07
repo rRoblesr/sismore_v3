@@ -412,11 +412,12 @@ class ServiciosBasicosController extends Controller
                 foreach ($data as $key => $value) {
                     $info['categoria'][] = $value->name;
                     $dx1[] = (int)$value->y;
-                    $dx2[] = (int)$value->x-(int)$value->y;
+                    $dx2[] = (int)$value->x - (int)$value->y;
                 }
 
-                $info['series'][] = ['name' => 'Locales Escolares', 'data' => $dx2];
                 $info['series'][] = ['name' => 'L.E con Agua', 'data' => $dx1];
+                $info['series'][] = ['name' => 'Locales Escolares', 'data' => $dx2];
+
                 return response()->json(compact('info'));
             case 'tabla1':
                 if ($rq->servicio == 1) {
@@ -447,8 +448,27 @@ class ServiciosBasicosController extends Controller
                     }
                     $foot->indicador = round($foot->total > 0 ? 100 * $foot->con / $foot->total : 0, 1);
                 }
+                switch ($rq->vista) {
+                    case 1:
+                        $tablax = 'tabla1vista1';
+                        break;
+                    case 2:
+                        $tablax = 'tabla1vista2';
+                        break;
+                    case 3:
+                        $tablax = 'tabla1vista3';
+                        break;
+                    case 4:
+                        $tablax = 'tabla1vista4';
+                        break;
+                    case 5:
+                        $tablax = 'tabla1vista5';
+                        break;
+                    default:
+                        break;
+                }
                 // return response()->json(compact('base', 'foot'));
-                $excel = view('educacion.ServiciosBasicos.AguaPotableTabla1', compact('base', 'foot', 'tservicio'))->render();
+                $excel = view('educacion.ServiciosBasicos.AguaPotableTabla1', compact('base', 'foot', 'tservicio', 'tablax'))->render();
 
                 // $reg['fuente'] = 'Siagie - MINEDU';
                 // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
@@ -516,7 +536,26 @@ class ServiciosBasicosController extends Controller
                 if ($base->count() > 0) {
                 }
                 // return response()->json(compact('base', 'foot'));
-                $excel = view('educacion.ServiciosBasicos.PrincipalTabla3', compact('base', 'foot'))->render();
+                switch ($rq->vista) {
+                    case 1:
+                        $tablax = 'tabla3vista1';
+                        break;
+                    case 2:
+                        $tablax = 'tabla3vista2';
+                        break;
+                    case 3:
+                        $tablax = 'tabla3vista3';
+                        break;
+                    case 4:
+                        $tablax = 'tabla3vista4';
+                        break;
+                    case 5:
+                        $tablax = 'tabla3vista5';
+                        break;
+                    default:
+                        break;
+                }
+                $excel = view('educacion.ServiciosBasicos.AguaPotableTabla3', compact('base', 'foot', 'tablax'))->render();
 
                 // $reg['fuente'] = 'Siagie - MINEDU';
                 // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);

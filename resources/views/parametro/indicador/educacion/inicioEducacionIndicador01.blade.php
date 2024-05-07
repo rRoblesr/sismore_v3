@@ -448,7 +448,7 @@
                         $('#v' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
                     } else {
                         $('#' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    }+
+                    }
                 },
                 success: function(data) {
                     if (div == "anal1") {

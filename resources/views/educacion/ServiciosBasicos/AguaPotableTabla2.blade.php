@@ -1,27 +1,27 @@
-<table id="tabla2" class="table table-striped table-bordered tablex" style="font-size:11px;">
+<table id="tabla2vista1" class="table table-sm table-striped table-bordered font-11">
     <thead>
         <tr class="bg-success-0 text-white text-center">
-            <td rowspan="2" class="text-center">PROVINCIA</td>
-            <td colspan="3" class="text-center">Locales Educativos</td>
-            <td rowspan="2" class="text-center">Indicador</td>
-            <th colspan="3" class="text-center">Locales Educativos de EBR</td>
-            <th colspan="3" class="text-center">Locales Educativos de EBE</td>
-            <th colspan="3" class="text-center">Locales Educativos de EBA</td>
+            <th rowspan="2" class="text-center">PROVINCIA</th>
+            <th colspan="3" class="text-center">Locales Educativos</th>
+            <th rowspan="2" class="text-center">Indicador</th>
+            <th colspan="3" class="text-center">Locales Educativos de EBR</th>
+            <th colspan="3" class="text-center">Locales Educativos de EBE</th>
+            <th colspan="3" class="text-center">Locales Educativos de EBA</th>
         </tr>
 
         <tr class="bg-success-0 text-white text-center">
-            <td class="text-center">Total</td>
-            <td class="text-center">Con {{ $tservicio }}</td>
-            <td class="text-center">Sin {{ $tservicio }}</td>
-            <td class="text-center">Total</td>
-            <td class="text-center">Con {{ $tservicio }}</td>
-            <td class="text-center">Sin {{ $tservicio }}</td>
-            <td class="text-center">Total</td>
-            <td class="text-center">Con {{ $tservicio }}</td>
-            <td class="text-center">Sin {{ $tservicio }}</td>
-            <td class="text-center">Total</td>
-            <td class="text-center">Con {{ $tservicio }}</td>
-            <td class="text-center">Sin {{ $tservicio }}</td>
+            <th class="text-center">Total</th>
+            <th class="text-center">Con {{ $tservicio }}</th>
+            <th class="text-center">Sin {{ $tservicio }}</th>
+            <th class="text-center">Total</th>
+            <th class="text-center">Con {{ $tservicio }}</th>
+            <th class="text-center">Sin {{ $tservicio }}</th>
+            <th class="text-center">Total</th>
+            <th class="text-center">Con {{ $tservicio }}</th>
+            <th class="text-center">Sin {{ $tservicio }}</th>
+            <th class="text-center">Total</th>
+            <th class="text-center">Con {{ $tservicio }}</th>
+            <th class="text-center">Sin {{ $tservicio }}</th>
         </tr>
 
     </thead>

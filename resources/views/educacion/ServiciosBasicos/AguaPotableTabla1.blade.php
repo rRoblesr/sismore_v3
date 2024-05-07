@@ -1,9 +1,9 @@
-<table id="tabla1" class="table table-striped table-bordered tablex" style="font-size:11px;">
+<table id="{{ $tablax }}" class="table table-sm table-striped table-bordered font-11">
     <thead>
         <tr class="bg-success-0 text-white text-center">
-            <td rowspan="1" class="text-center">Puesto</td>
-            <td rowspan="1" class="text-center">Distrito</td>
-            <td colspan="1" class="text-center">Total</td>
+            <th rowspan="1" class="text-center">Puesto</th>
+            <th rowspan="1" class="text-center">Distrito</th>
+            <th colspan="1" class="text-center">Total</th>
             <th rowspan="1" class="text-center">Con {{ $tservicio }}</th>
             <th colspan="1" class="text-center">Sin {{ $tservicio }}</th>
             <th colspan="1" class="text-center">% Indicador</th>
@@ -47,11 +47,17 @@
     function avance($monto)
     {
         if ($monto < 51) {
-            return '<span class="badge badge-pill badge-danger" style="font-size:90%;width:40px;">' . round($monto, 1) . '%</span>';
+            return '<span class="badge badge-pill badge-danger" style="font-size:90%;width:40px;">' .
+                round($monto, 1) .
+                '%</span>';
         } elseif ($monto < 100) {
-            return '<span class="badge badge-pill badge-warning" style="font-size:90%;width:40px;">' . round($monto, 1) . '%</span>';
+            return '<span class="badge badge-pill badge-warning" style="font-size:90%;width:40px;">' .
+                round($monto, 1) .
+                '%</span>';
         } else {
-            return '<span class="badge badge-pill badge-success" style="font-size:90%;width:40px;">' . round($monto, 1) . '%</span>';
+            return '<span class="badge badge-pill badge-success" style="font-size:90%;width:40px;">' .
+                round($monto, 1) .
+                '%</span>';
         }
     }
     function bajas($monto)

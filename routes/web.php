@@ -509,7 +509,7 @@ Route::get('/SuperiorArtistico/IIEE', [SuperiorArtisticoController::class, 'iiee
 Route::get('/SuperiorArtistico/Exportar/Excel/{anio}/{ugel}/{area}/{gestion}', [SuperiorArtisticoController::class, 'download']);
 
 Route::get('/educación/ServiciosBasicos', [ServiciosBasicosController::class, 'principal'])->name('serviciosbasicos.principal');
-Route::get('/ServiciosBasicos/Tablas', [ServiciosBasicosController::class, 'principalTabla'])->name('serviciosbasicos.principal.tablas');
+Route::get('/educación/ServiciosBasicos/Tablas', [ServiciosBasicosController::class, 'principalTabla'])->name('serviciosbasicos.principal.tablas');
 Route::get('/ServiciosBasicos/Excel/{div}/{anio}/{ugel}/{gestion}/{area}/{servicio}', [ServiciosBasicosController::class, 'principalDownload']);
 
 Route::get('/educación/ServiciosBasicos/Agua', [ServiciosBasicosController::class, 'aguapotable'])->name('serviciosbasicos.aguapotable');
