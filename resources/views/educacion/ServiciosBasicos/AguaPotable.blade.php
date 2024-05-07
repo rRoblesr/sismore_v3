@@ -159,8 +159,9 @@
                                     <div class="card-box border border-plomo-0">
                                         <div class="media">
                                             <div class="text-center">
-                                                <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%">
+                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                                <i class="mdi mdi-finance font-35 text-green-0"></i>
                                             </div>
                                             <div class="media-body align-self-center card1vista1">
                                                 <div class="text-right">
@@ -179,8 +180,9 @@
                                     <div class="card-box border border-plomo-0">
                                         <div class="media">
                                             <div class="text-center">
-                                                <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%">
+                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                                <i class=" mdi mdi-city font-35 text-green-0"></i>
                                             </div>
                                             <div class="media-body align-self-center card2vista1">
                                                 <div class="text-right">
@@ -199,8 +201,9 @@
                                     <div class="card-box border border-plomo-0">
                                         <div class="media">
                                             <div class="text-center">
-                                                <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%">
+                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                                <i class="mdi mdi-thumb-up font-35 text-green-0"></i>
                                             </div>
                                             <div class="media-body align-self-center card3vista1">
                                                 <div class="text-right">
@@ -219,8 +222,9 @@
                                     <div class="card-box border border-plomo-0">
                                         <div class="media">
                                             <div class="text-center">
-                                                <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%">
+                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                                <i class="mdi mdi-thumb-down font-35 text-green-0"></i>
                                             </div>
                                             <div class="media-body align-self-center card4vista1">
                                                 <div class="text-right">
@@ -421,8 +425,9 @@
                                     <div class="card-box border border-plomo-0">
                                         <div class="media">
                                             <div class="text-center">
-                                                <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%">
+                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                                <i class="mdi mdi-finance font-35 text-green-0"></i>
                                             </div>
                                             <div class="media-body align-self-center card1vista2">
                                                 <div class="text-right">
@@ -441,8 +446,9 @@
                                     <div class="card-box border border-plomo-0">
                                         <div class="media">
                                             <div class="text-center">
-                                                <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%">
+                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                                <i class=" mdi mdi-city font-35 text-green-0"></i>
                                             </div>
                                             <div class="media-body align-self-center card2vista2">
                                                 <div class="text-right">
@@ -461,8 +467,9 @@
                                     <div class="card-box border border-plomo-0">
                                         <div class="media">
                                             <div class="text-center">
-                                                <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%">
+                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                                <i class="mdi mdi-thumb-up font-35 text-green-0"></i>
                                             </div>
                                             <div class="media-body align-self-center card3vista2">
                                                 <div class="text-right">
@@ -481,8 +488,9 @@
                                     <div class="card-box border border-plomo-0">
                                         <div class="media">
                                             <div class="text-center">
-                                                <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%">
+                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                                <i class="mdi mdi-thumb-down font-35 text-green-0"></i>
                                             </div>
                                             <div class="media-body align-self-center card4vista2">
                                                 <div class="text-right">
@@ -683,8 +691,9 @@
                                     <div class="card-box border border-plomo-0">
                                         <div class="media">
                                             <div class="text-center">
-                                                <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%">
+                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                                <i class="mdi mdi-finance font-35 text-green-0"></i>
                                             </div>
                                             <div class="media-body align-self-center card1vista3">
                                                 <div class="text-right">
@@ -703,8 +712,9 @@
                                     <div class="card-box border border-plomo-0">
                                         <div class="media">
                                             <div class="text-center">
-                                                <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%">
+                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                                <i class=" mdi mdi-city font-35 text-green-0"></i>
                                             </div>
                                             <div class="media-body align-self-center card2vista3">
                                                 <div class="text-right">
@@ -723,8 +733,9 @@
                                     <div class="card-box border border-plomo-0">
                                         <div class="media">
                                             <div class="text-center">
-                                                <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%">
+                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                                <i class="mdi mdi-thumb-up font-35 text-green-0"></i>
                                             </div>
                                             <div class="media-body align-self-center card3vista3">
                                                 <div class="text-right">
@@ -743,8 +754,9 @@
                                     <div class="card-box border border-plomo-0">
                                         <div class="media">
                                             <div class="text-center">
-                                                <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%">
+                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                                <i class="mdi mdi-thumb-down font-35 text-green-0"></i>
                                             </div>
                                             <div class="media-body align-self-center card4vista3">
                                                 <div class="text-right">
@@ -945,8 +957,9 @@
                                     <div class="card-box border border-plomo-0">
                                         <div class="media">
                                             <div class="text-center">
-                                                <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%">
+                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                                <i class="mdi mdi-finance font-35 text-green-0"></i>
                                             </div>
                                             <div class="media-body align-self-center card1vista4">
                                                 <div class="text-right">
@@ -965,8 +978,9 @@
                                     <div class="card-box border border-plomo-0">
                                         <div class="media">
                                             <div class="text-center">
-                                                <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%">
+                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                                <i class=" mdi mdi-city font-35 text-green-0"></i>
                                             </div>
                                             <div class="media-body align-self-center card2vista4">
                                                 <div class="text-right">
@@ -985,8 +999,9 @@
                                     <div class="card-box border border-plomo-0">
                                         <div class="media">
                                             <div class="text-center">
-                                                <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%">
+                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                                <i class="mdi mdi-thumb-up font-35 text-green-0"></i>
                                             </div>
                                             <div class="media-body align-self-center card3vista4">
                                                 <div class="text-right">
@@ -1005,8 +1020,9 @@
                                     <div class="card-box border border-plomo-0">
                                         <div class="media">
                                             <div class="text-center">
-                                                <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%">
+                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                                <i class="mdi mdi-thumb-down font-35 text-green-0"></i>
                                             </div>
                                             <div class="media-body align-self-center card4vista4">
                                                 <div class="text-right">
@@ -1207,8 +1223,9 @@
                                     <div class="card-box border border-plomo-0">
                                         <div class="media">
                                             <div class="text-center">
-                                                <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%">
+                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                                <i class="mdi mdi-finance font-35 text-green-0"></i>
                                             </div>
                                             <div class="media-body align-self-center card1vista5">
                                                 <div class="text-right">
@@ -1227,8 +1244,9 @@
                                     <div class="card-box border border-plomo-0">
                                         <div class="media">
                                             <div class="text-center">
-                                                <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%">
+                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                                <i class=" mdi mdi-city font-35 text-green-0"></i>
                                             </div>
                                             <div class="media-body align-self-center card2vista5">
                                                 <div class="text-right">
@@ -1247,8 +1265,9 @@
                                     <div class="card-box border border-plomo-0">
                                         <div class="media">
                                             <div class="text-center">
-                                                <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%">
+                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                                <i class="mdi mdi-thumb-up font-35 text-green-0"></i>
                                             </div>
                                             <div class="media-body align-self-center card3vista5">
                                                 <div class="text-right">
@@ -1267,8 +1286,9 @@
                                     <div class="card-box border border-plomo-0">
                                         <div class="media">
                                             <div class="text-center">
-                                                <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%">
+                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                                <i class="mdi mdi-thumb-down font-35 text-green-0"></i>
                                             </div>
                                             <div class="media-body align-self-center card4vista5">
                                                 <div class="text-right">
