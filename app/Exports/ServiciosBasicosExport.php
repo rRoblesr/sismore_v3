@@ -13,17 +13,17 @@ class ServiciosBasicosExport implements FromView, ShouldAutoSize
 {
     public $div;
     public $anio;
-    public $ugel;
-    public $gestion;
+    public $provincia;
+    public $distrito;
     public $area;
     public $servicio;
 
-    public function __construct($div, $anio, $ugel, $gestion, $area, $servicio)
+    public function __construct($div, $anio, $provincia, $distrito, $area, $servicio)
     {
         $this->div = $div;
         $this->anio = $anio;
-        $this->ugel = $ugel;
-        $this->gestion = $gestion;
+        $this->provincia = $provincia;
+        $this->distrito = $distrito;
         $this->area = $area;
         $this->servicio = $servicio;
     }
@@ -31,13 +31,13 @@ class ServiciosBasicosExport implements FromView, ShouldAutoSize
     public function view(): View
     {
         if ($this->div == 'tabla1') {
-            $mgs = (new ServiciosBasicosController())->principalTablaExport($this->div, $this->anio, $this->ugel, $this->gestion, $this->area, $this->servicio);
+            $mgs = (new ServiciosBasicosController())->principalTablaExport($this->div, $this->anio, $this->provincia, $this->distrito, $this->area, $this->servicio);
             return view('educacion.ServiciosBasicos.PrincipalTabla1Export', $mgs);
         } else if ($this->div == 'tabla2') {
-            $mgs = (new ServiciosBasicosController())->principalTablaExport($this->div, $this->anio, $this->ugel, $this->gestion, $this->area, $this->servicio);
+            $mgs = (new ServiciosBasicosController())->principalTablaExport($this->div, $this->anio, $this->provincia, $this->distrito, $this->area, $this->servicio);
             return view('educacion.ServiciosBasicos.PrincipalTabla2Export', $mgs);
         } else {
-            $mgs = (new ServiciosBasicosController())->principalTablaExport($this->div, $this->anio, $this->ugel, $this->gestion, $this->area, $this->servicio);
+            $mgs = (new ServiciosBasicosController())->principalTablaExport($this->div, $this->anio, $this->provincia, $this->distrito, $this->area, $this->servicio);
             return view('educacion.ServiciosBasicos.PrincipalTabla3Export', $mgs);
         }
     }

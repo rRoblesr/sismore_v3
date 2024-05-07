@@ -1468,7 +1468,7 @@
 
         function panelGraficas(div) {
             $.ajax({
-                url: "{{ route('serviciosbasicos.aguapotable.tablas') }}",
+                url: "{{ route('serviciosbasicos.principal.tablas') }}",
                 data: {
                     'div': div,
                     "anio": $('#aniovista1').val(),
@@ -1619,7 +1619,7 @@
 
         function panelGraficasvista2(div) {
             $.ajax({
-                url: "{{ route('serviciosbasicos.aguapotable.tablas') }}",
+                url: "{{ route('serviciosbasicos.principal.tablas') }}",
                 data: {
                     'div': div,
                     "anio": $('#aniovista2').val(),
@@ -1721,7 +1721,7 @@
 
         function panelGraficasvista3(div) {
             $.ajax({
-                url: "{{ route('serviciosbasicos.aguapotable.tablas') }}",
+                url: "{{ route('serviciosbasicos.principal.tablas') }}",
                 data: {
                     'div': div,
                     "anio": $('#aniovista3').val(),
@@ -1823,7 +1823,7 @@
 
         function panelGraficasvista4(div) {
             $.ajax({
-                url: "{{ route('serviciosbasicos.aguapotable.tablas') }}",
+                url: "{{ route('serviciosbasicos.principal.tablas') }}",
                 data: {
                     'div': div,
                     "anio": $('#aniovista4').val(),
@@ -1925,7 +1925,7 @@
 
         function panelGraficasvista5(div) {
             $.ajax({
-                url: "{{ route('serviciosbasicos.aguapotable.tablas') }}",
+                url: "{{ route('serviciosbasicos.principal.tablas') }}",
                 data: {
                     'div': div,
                     "anio": $('#aniovista5').val(),
@@ -2119,15 +2119,40 @@
                 .val() + "/" + $('#gestion').val() + "/" + $('#area').val() + "/0");
         } */
 
-        function descargar2() {
-            window.open("{{ url('/') }}/ServiciosBasicos/Excel/tabla2/" + $('#anio').val() + "/" + $('#ugel')
-                .val() + "/" + $('#gestion').val() + "/" + $('#area').val() + "/" + $('#servicio').val());
+        function descargar1vista1() {
+            window.open("{{ url('/') }}/educación/ServiciosBasicos/Exportar/Excel/tabla3/" +
+                $('#aniovista1').val() + "/" + $('#provinciavista1').val() + "/" + $('#distritovista1').val() + "/" +
+                $('#areavista1').val() + "/4");
         }
 
-        function descargar3() {
-            window.open("{{ url('/') }}/ServiciosBasicos/Excel/tabla3/" + $('#anio').val() + "/" + $('#ugel')
-                .val() + "/" + $('#gestion').val() + "/" + $('#area').val() + "/" + $('#servicio').val());
+        function descargar1vista2() {
+            window.open("{{ url('/') }}/educación/ServiciosBasicos/Exportar/Excel/tabla3/" +
+                $('#aniovista1').val() + "/" + $('#provinciavista1').val() + "/" + $('#distritovista1').val() + "/" +
+                $('#areavista1').val() + "/1");
         }
+
+        function descargar1vista3() {
+            window.open("{{ url('/') }}/educación/ServiciosBasicos/Exportar/Excel/tabla3/" +
+                $('#aniovista1').val() + "/" + $('#provinciavista1').val() + "/" + $('#distritovista1').val() + "/" +
+                $('#areavista1').val() + "/2");
+        }
+
+        function descargar1vista4() {
+            window.open("{{ url('/') }}/educación/ServiciosBasicos/Exportar/Excel/tabla3/" +
+                $('#aniovista1').val() + "/" + $('#provinciavista1').val() + "/" + $('#distritovista1').val() + "/" +
+                $('#areavista1').val() + "/3");
+        }
+
+        function descargar1vista5() {
+            window.open("{{ url('/') }}/educación/ServiciosBasicos/Exportar/Excel/tabla3/" +
+                $('#aniovista1').val() + "/" + $('#provinciavista1').val() + "/" + $('#distritovista1').val() + "/" +
+                $('#areavista1').val() + "/5");
+        }
+
+        // function descargar3() {
+        //     window.open("{{ url('/') }}/ServiciosBasicos/Excel/tabla3/" + $('#anio').val() + "/" + $('#ugel')
+        //         .val() + "/" + $('#gestion').val() + "/" + $('#area').val() + "/" + $('#servicio').val());
+        // }
 
         function verpdf(id) {
             window.open("{{ route('mantenimiento.indicadorgeneral.exportar.pdf', '') }}/" + id);

@@ -508,13 +508,13 @@ Route::get('/SuperiorArtistico/Areas', [SuperiorArtisticoController::class, 'are
 Route::get('/SuperiorArtistico/IIEE', [SuperiorArtisticoController::class, 'iiee'])->name('superiorartistico.iiee');
 Route::get('/SuperiorArtistico/Exportar/Excel/{anio}/{ugel}/{area}/{gestion}', [SuperiorArtisticoController::class, 'download']);
 
-Route::get('/educación/ServiciosBasicos', [ServiciosBasicosController::class, 'principal'])->name('serviciosbasicos.principal');
-Route::get('/educación/ServiciosBasicos/Tablas', [ServiciosBasicosController::class, 'principalTabla'])->name('serviciosbasicos.principal.tablas');
-Route::get('/ServiciosBasicos/Excel/{div}/{anio}/{ugel}/{gestion}/{area}/{servicio}', [ServiciosBasicosController::class, 'principalDownload']);
+// Route::get('/educación/ServiciosBasicos', [ServiciosBasicosController::class, 'principal'])->name('serviciosbasicos.principal');
+// Route::get('/educación/ServiciosBasicos/Tablas', [ServiciosBasicosController::class, 'principalTabla'])->name('serviciosbasicos.principal.tablas');
+// Route::get('/ServiciosBasicos/Excel/{div}/{anio}/{ugel}/{gestion}/{area}/{servicio}', [ServiciosBasicosController::class, 'principalDownload']);
 
-Route::get('/educación/ServiciosBasicos/Agua', [ServiciosBasicosController::class, 'aguapotable'])->name('serviciosbasicos.aguapotable');
-Route::get('/educación/ServiciosBasicos/Agua/Tablas', [ServiciosBasicosController::class, 'aguapotableTabla'])->name('serviciosbasicos.aguapotable.tablas');
-Route::get('/educación/ServiciosBasicos/Agua/Excel/{div}/{anio}/{ugel}/{gestion}/{area}/{servicio}', [ServiciosBasicosController::class, 'aguapotableDownload']);
+Route::get('/educación/ServiciosBasicos', [ServiciosBasicosController::class, 'aguapotable'])->name('serviciosbasicos.principal');
+Route::get('/educación/ServiciosBasicos/Tablas', [ServiciosBasicosController::class, 'aguapotableTabla'])->name('serviciosbasicos.principal.tablas');
+Route::get('/educación/ServiciosBasicos/Exportar/Excel/{div}/{anio}/{provincia}/{distrito}/{area}/{servicio}', [ServiciosBasicosController::class, 'principalDownload']);
 
 // Route::get('/educación/sfl', [SFLController::class, 'SFL'])->name('sfl.principal'); //NECESITA UN CONTENEDOR PARA PACTO
 

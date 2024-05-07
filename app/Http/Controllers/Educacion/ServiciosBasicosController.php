@@ -39,7 +39,7 @@ class ServiciosBasicosController extends Controller
         $this->middleware('auth');
     }
 
-    public function principal()
+    public function principal__()
     {
         $actualizado = '';
         $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporServiciosBasicosController::$FUENTE);
@@ -53,7 +53,7 @@ class ServiciosBasicosController extends Controller
         return view('educacion.ServiciosBasicos.Principal', compact('anios', 'aniomax', 'actualizado', 'ugel', 'area', 'fecha'));
     }
 
-    public function principalTabla(Request $rq)
+    public function principalTabla__(Request $rq)
     {
         switch ($rq->div) {
             case 'head':
@@ -197,130 +197,7 @@ class ServiciosBasicosController extends Controller
         }
     }
 
-    public function principalTablaExport($div, $anio, $ugel, $gestion, $area, $servicio)
-    {
-        switch ($div) {
-            case 'tabla1':
-                $aniox = Anio::find($anio);
-                $anioy = Anio::where('anio', $aniox->anio - 1)->first();
-                $meta = MatriculaGeneralRepositorio::metaEBRProvincia($anio == 3 ? 3 : $anioy->id, $ugel, $gestion,  $area);
-                $base = MatriculaGeneralRepositorio::basicaregulartabla($div, $anio, $ugel, $gestion,  $area);
-                $foot = [];
-                if ($base->count() > 0) {
-                    $foot = clone $base[0];
-                    $foot->meta = 0;
-                    $foot->tt = 0;
-                    $foot->th = 0;
-                    $foot->tm = 0;
-                    $foot->ci = 0;
-                    $foot->cii = 0;
-                    $foot->ciii = 0;
-                    $foot->civ = 0;
-                    $foot->cv = 0;
-                    $foot->cvi = 0;
-                    $foot->cvii = 0;
 
-                    foreach ($base as $key => $value) {
-                        $value->meta = 0;
-                        foreach ($meta as $kk => $mm) {
-                            if ($value->provincia == $mm->provincia) {
-                                $value->meta = $mm->conteo;
-                                break;
-                            }
-                        }
-                        $value->avance = $value->meta > 0 ? 100 * $value->tt / $value->meta : 0;
-                        $foot->meta += $value->meta;
-                        $foot->tt += $value->tt;
-                        $foot->th += $value->th;
-                        $foot->tm += $value->tm;
-                        $foot->ci += $value->ci;
-                        $foot->cii += $value->cii;
-                        $foot->ciii += $value->ciii;
-                        $foot->civ += $value->civ;
-                        $foot->cv += $value->cv;
-                        $foot->cvi += $value->cvi;
-                        $foot->cvii += $value->cvii;
-                    }
-                    $foot->avance = $foot->meta > 0 ? 100 * $foot->tt / $foot->meta : 0;
-                }
-                return compact('base', 'foot');
-
-            case 'tabla2':
-                if ($servicio == 1) {
-                    $tservicio = 'Agua';
-                } else if ($servicio == 2) {
-                    $tservicio = 'Desague';
-                } else if ($servicio == 3) {
-                    $tservicio = 'Luz';
-                } else if ($servicio == 4) {
-                    $tservicio = 'Tres Servicios';
-                } else if ($servicio == 5) {
-                    $tservicio = 'Internet';
-                }
-                $base = ServiciosBasicosRepositorio::principalTabla($div, $anio, $ugel, $gestion,  $area,  $servicio);
-                $foot = [];
-                if ($base->count() > 0) {
-                    $foot = clone $base[0];
-                    $foot->total = 0;
-                    $foot->con = 0;
-                    $foot->sin = 0;
-                    $foot->indicador = 0;
-                    $foot->EBRtotal = 0;
-                    $foot->EBRcon = 0;
-                    $foot->EBRsin = 0;
-                    $foot->EBEtotal = 0;
-                    $foot->EBEcon = 0;
-                    $foot->EBEsin = 0;
-                    $foot->EBAtotal = 0;
-                    $foot->EBAcon = 0;
-                    $foot->EBAsin = 0;
-
-                    foreach ($base as $key => $value) {
-                        $value->indicador = round($value->indicador, 1);
-                        $foot->total += $value->total;
-                        $foot->con += (int)$value->con;
-                        $foot->sin += (int)$value->sin;
-                        $foot->EBRtotal += $value->EBRtotal;
-                        $foot->EBRcon += $value->EBRcon;
-                        $foot->EBRsin += $value->EBRsin;
-                        $foot->EBEtotal += $value->EBEtotal;
-                        $foot->EBEcon += $value->EBEcon;
-                        $foot->EBEsin += $value->EBEsin;
-                        $foot->EBAtotal += $value->EBAtotal;
-                        $foot->EBAcon += $value->EBAcon;
-                        $foot->EBAsin += $value->EBAsin;
-                    }
-                    $foot->indicador = round($foot->total > 0 ? 100 * $foot->con / $foot->total : 0, 1);
-                }
-                return  compact('base', 'foot', 'tservicio');
-
-            case 'tabla3':
-                $base = ServiciosBasicosRepositorio::principalTabla($div, $anio, $ugel, $gestion,  $area,  $servicio);
-                $foot = [];
-                if ($base->count() > 0) {
-                }
-                return  compact('base', 'foot');
-            default:
-                return [];
-        }
-    }
-
-    public function principalDownload($div, $anio, $ugel, $gestion, $area, $servicio)
-    {
-        if ($anio) {
-            /* if ($div == 'tabla1') {
-                $name = 'Basica_regular_provincia_' . date('Y-m-d') . '.xlsx';
-                return Excel::download(new BasicaRegularExport($div, $anio, $ugel, $gestion, $area, $provincia), $name);
-            } */
-            if ($div == 'tabla2') {
-                $name = 'Servicio Basico ' . date('Y-m-d') . '.xlsx';
-                return Excel::download(new ServiciosBasicosExport($div, $anio, $ugel, $gestion, $area, $servicio), $name);
-            } else {
-                $name = 'Servicio basico ' . date('Y-m-d') . '.xlsx';
-                return Excel::download(new ServiciosBasicosExport($div, $anio, $ugel, $gestion, $area, $servicio), $name);
-            }
-        }
-    }
 
     public function aguapotable()
     {
@@ -467,12 +344,7 @@ class ServiciosBasicosController extends Controller
                     default:
                         break;
                 }
-                // return response()->json(compact('base', 'foot'));
                 $excel = view('educacion.ServiciosBasicos.AguaPotableTabla1', compact('base', 'foot', 'tservicio', 'tablax'))->render();
-
-                // $reg['fuente'] = 'Siagie - MINEDU';
-                // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-                // $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
                 return response()->json(compact('excel'));
 
             case 'tabla2':
@@ -522,20 +394,12 @@ class ServiciosBasicosController extends Controller
                     }
                     $foot->indicador = round($foot->total > 0 ? 100 * $foot->con / $foot->total : 0, 1);
                 }
-                // return response()->json(compact('base', 'foot'));
                 $excel = view('educacion.ServiciosBasicos.AguaPotableTabla2', compact('base', 'foot', 'tservicio'))->render();
-
-                // $reg['fuente'] = 'Siagie - MINEDU';
-                // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-                // $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
                 return response()->json(compact('excel'));
 
             case 'tabla3':
                 $base = ServiciosBasicosRepositorio::principalTabla($rq->div, $rq->anio, $rq->provincia, $rq->distrito,  $rq->area,  $rq->servicio);
                 $foot = [];
-                if ($base->count() > 0) {
-                }
-                // return response()->json(compact('base', 'foot'));
                 switch ($rq->vista) {
                     case 1:
                         $tablax = 'tabla3vista1';
@@ -556,10 +420,6 @@ class ServiciosBasicosController extends Controller
                         break;
                 }
                 $excel = view('educacion.ServiciosBasicos.AguaPotableTabla3', compact('base', 'foot', 'tablax'))->render();
-
-                // $reg['fuente'] = 'Siagie - MINEDU';
-                // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-                // $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
                 return response()->json(compact('excel'));
 
             default:
@@ -567,14 +427,14 @@ class ServiciosBasicosController extends Controller
         }
     }
 
-    public function aguapotableTablaExport($div, $anio, $ugel, $gestion, $area, $servicio)
+    public function principalTablaExport($div, $anio, $provincia, $distrito, $area, $servicio)
     {
         switch ($div) {
             case 'tabla1':
                 $aniox = Anio::find($anio);
                 $anioy = Anio::where('anio', $aniox->anio - 1)->first();
-                $meta = MatriculaGeneralRepositorio::metaEBRProvincia($anio == 3 ? 3 : $anioy->id, $ugel, $gestion,  $area);
-                $base = MatriculaGeneralRepositorio::basicaregulartabla($div, $anio, $ugel, $gestion,  $area);
+                $meta = MatriculaGeneralRepositorio::metaEBRProvincia($anio == 3 ? 3 : $anioy->id, $provincia, $distrito,  $area);
+                $base = MatriculaGeneralRepositorio::basicaregulartabla($div, $anio, $provincia, $distrito,  $area);
                 $foot = [];
                 if ($base->count() > 0) {
                     $foot = clone $base[0];
@@ -627,7 +487,7 @@ class ServiciosBasicosController extends Controller
                 } else if ($servicio == 5) {
                     $tservicio = 'Internet';
                 }
-                $base = ServiciosBasicosRepositorio::principalTabla($div, $anio, $ugel, $gestion,  $area,  $servicio);
+                $base = ServiciosBasicosRepositorio::principalTabla($div, $anio, $provincia, $distrito,  $area,  $servicio);
                 $foot = [];
                 if ($base->count() > 0) {
                     $foot = clone $base[0];
@@ -665,29 +525,27 @@ class ServiciosBasicosController extends Controller
                 return  compact('base', 'foot', 'tservicio');
 
             case 'tabla3':
-                $base = ServiciosBasicosRepositorio::principalTabla($div, $anio, $ugel, $gestion,  $area,  $servicio);
+                $base = ServiciosBasicosRepositorio::principalTabla($div, $anio, $provincia, $distrito,  $area,  $servicio);
                 $foot = [];
-                if ($base->count() > 0) {
-                }
                 return  compact('base', 'foot');
             default:
                 return [];
         }
     }
 
-    public function aguapotableDownload($div, $anio, $ugel, $gestion, $area, $servicio)
+    public function principalDownload($div, $anio, $provincia, $distrito, $area, $servicio)
     {
         if ($anio) {
             /* if ($div == 'tabla1') {
                 $name = 'Basica_regular_provincia_' . date('Y-m-d') . '.xlsx';
                 return Excel::download(new BasicaRegularExport($div, $anio, $ugel, $gestion, $area, $provincia), $name);
             } */
-            if ($div == 'tabla2') {
+            if ($div == 'tabla3') {
                 $name = 'Servicio Basico ' . date('Y-m-d') . '.xlsx';
-                return Excel::download(new ServiciosBasicosExport($div, $anio, $ugel, $gestion, $area, $servicio), $name);
+                return Excel::download(new ServiciosBasicosExport($div, $anio, $provincia, $distrito, $area, $servicio), $name);
             } else {
                 $name = 'Servicio basico ' . date('Y-m-d') . '.xlsx';
-                return Excel::download(new ServiciosBasicosExport($div, $anio, $ugel, $gestion, $area, $servicio), $name);
+                return Excel::download(new ServiciosBasicosExport($div, $anio, $provincia, $distrito, $area, $servicio), $name);
             }
         }
     }
