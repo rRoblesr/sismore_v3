@@ -1434,32 +1434,6 @@
         });
 
         function cargarCards() {
-            // tservicio = $('#servicio').val();
-            // switch ($('#servicio').val()) {
-            //     case '1':
-            //         $('.cabeceravista1 h3').text(
-            //             'Porcentajes de Locales Escolares Públicos conectados a red de Agua Potable');
-            //         $('.vtabla1vista1 h3').text('Locales Educativos conectados a red de agua potable, según Distritos');
-            //         $('.vtabla2vista1 h3').text('Locales Educativos conectados a red de agua potable, según Provincia');
-            //         break;
-            //     case '2':
-            //         $('.cabeceravista2 h3').text('Porcentajes de Locales Educativos conectados a red de Desague');
-            //         $('.vtabla1vista2 h3').text('Locales Educativos conectados a red de desague, según Distritos');
-            //         $('.vtabla2vista2 h3').text('Locales Educativos conectados a red de desague, según Provincia');
-            //         break;
-            //     case '3':
-            //        
-            //         break;
-            //     case '4':
-
-            //         break;
-            //     case '5':
-            //         
-            //         break;
-            //     default:
-            //         break;
-            // }
-
             $('.cabeceravista1 h3').text('Porcentajes de Locales Educativos con los tres Servicios Basicos');
             $('.vtabla1vista1 h3').text('Locales Educativos con los tres servicios basicos, según Distritos');
             $('.vtabla2vista1 h3').text('Locales Educativos con los tres servicios basicos, según Provincia');
