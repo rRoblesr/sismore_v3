@@ -727,7 +727,7 @@ class ServiciosBasicosRepositorio
                 return $query;
 
             case 'tabla3':
-                $total = ImporServiciosBasicos::select('id')->where('codgeo', 'like', '25%')->where('importacion_id', $anio)->count();
+                // $total = ImporServiciosBasicos::select('id')->where('codgeo', 'like', '25%')->where('importacion_id', $anio)->count();
 
                 $query = ImporServiciosBasicos::where('codgeo', 'like', '25%')->where('importacion_id', $anio)
                     ->join('edu_institucioneducativa as ie', 'ie.codLocal', '=', 'edu_impor_serviciosbasicos.codlocal')
