@@ -482,7 +482,7 @@
         </div>
 
 
-        <div class="row">
+        <div class="row d-none">
             <div class="col-lg-4 col-md-4">
                 <div class="card card-border border border-plomo-0">
                     <div class="card-header border-success-0 bg-transparent pb-0 pt-2" style="height: 4rem">

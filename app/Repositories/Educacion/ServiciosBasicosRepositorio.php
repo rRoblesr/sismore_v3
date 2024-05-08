@@ -365,22 +365,23 @@ class ServiciosBasicosRepositorio
 
     public static function indicador($anio, $provincia, $distrito, $gestion, $area, $servicio)
     {
-        $total = ImporServiciosBasicos::where('codgeo', 'like', '25%');
+        $imp = ImportacionRepositorio::aniosMax_porfuente(ImporServiciosBasicosController::$FUENTE);
+        $total = ImporServiciosBasicos::where('codgeo', 'like', '25%')->where('importacion_id', $imp->id);
         if ($provincia > 0) {
             $uu1 = Ubigeo::find($provincia);
-            $total = $total->where('prov', $uu1->nombre);
+            $total = $total->where('provincia', $uu1->nombre);
         }
         if ($distrito > 0) {
             $uu2 = Ubigeo::find($distrito);
-            $total = $total->where('dist', $uu2->nombre);
+            $total = $total->where('distrito', $uu2->nombre);
         }
         if ($gestion > 0) {
-            $total = $gestion == 3 ? $total->where('pub_priv', 'Privada') : $total->where('pub_priv', 'Público');
+            $total = $gestion == 3 ? $total->where('cod_gest', 3) : $total->where('cod_gest', '!=', 3);
         }
-        if ($area > 0) $total = $total->where('area_censo', $area);
+        if ($area > 0) $total = $total->where('cod_area', $area);
         $total = $total->count();
 
-        $query = ImporServiciosBasicos::where('codgeo', 'like', '25%');
+        $query = ImporServiciosBasicos::where('codgeo', 'like', '25%')->where('importacion_id', $imp->id);
         if ($servicio == 1)
             $query = $query->where('agua_final', '>', 0);
         else if ($servicio == 2)
@@ -394,20 +395,20 @@ class ServiciosBasicosRepositorio
 
         if ($provincia > 0) {
             $uu1 = Ubigeo::find($provincia);
-            $query = $query->where('prov', $uu1->nombre);
+            $query = $query->where('provincia', $uu1->nombre);
         }
         if ($distrito > 0) {
             $uu2 = Ubigeo::find($distrito);
-            $query = $query->where('dist', $uu2->nombre);
+            $query = $query->where('distrito', $uu2->nombre);
         }
         if ($gestion > 0) {
-            $query = $gestion == 3 ? $query->where('pub_priv', 'Privada') : $query->where('pub_priv', 'Público');
+            $total = $gestion == 3 ? $total->where('cod_gest', 3) : $total->where('cod_gest', '!=', 3);
         }
-        if ($area > 0) $query = $query->where('area_censo', $area);
+        if ($area > 0) $query = $query->where('cod_area', $area);
 
         $query = $query->count();
 
-        return round(100 * ($total > 0 ? $query / $total : 0), 0);
+        return round(100 * ($total > 0 ? $query / $total : 0), 1);
     }
 
     public static function aguapotableTabla($div, $anio, $provincia, $distrito, $area, $servicio)
@@ -478,7 +479,7 @@ class ServiciosBasicosRepositorio
                     DB::raw("sum(IF($tipo=1,1,0)) as y"),
                     DB::raw("count(*) as x"),
                     DB::raw("round(100*sum(IF($tipo=1,1,0))/count(*),1) as z"),
-                )->join('par_importacion as imp','imp.id','=','importacion_id');
+                )->join('par_importacion as imp', 'imp.id', '=', 'importacion_id');
                 if ($provincia > 0) {
                     $pp = Ubigeo::find($provincia);
                     $query = $query->where('provincia', $pp->nombre);

@@ -511,6 +511,7 @@ Route::get('/SuperiorArtistico/Exportar/Excel/{anio}/{ugel}/{area}/{gestion}', [
 // Route::get('/educación/ServiciosBasicos', [ServiciosBasicosController::class, 'principal'])->name('serviciosbasicos.principal');
 // Route::get('/educación/ServiciosBasicos/Tablas', [ServiciosBasicosController::class, 'principalTabla'])->name('serviciosbasicos.principal.tablas');
 // Route::get('/ServiciosBasicos/Excel/{div}/{anio}/{ugel}/{gestion}/{area}/{servicio}', [ServiciosBasicosController::class, 'principalDownload']);
+Route::get('/educación/ServiciosBasicossss', [ServiciosBasicosController::class, 'aguapotable'])->name('serviciosbasicos.aguapotable');
 
 Route::get('/educación/ServiciosBasicos', [ServiciosBasicosController::class, 'aguapotable'])->name('serviciosbasicos.principal');
 Route::get('/educación/ServiciosBasicos/Tablas', [ServiciosBasicosController::class, 'aguapotableTabla'])->name('serviciosbasicos.principal.tablas');
