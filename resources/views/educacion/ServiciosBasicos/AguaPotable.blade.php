@@ -2,6 +2,42 @@
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
     <style>
+        .centrarmodal {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000000c9 !important;
+        }
+
+        .ui-autocomplete {
+            z-index: 215000000 !important;
+        }
+
+        /*  formateando nav-tabs  */
+        .nav-tabs .nav-link:not(.active) {
+            /* border-color: transparent !important; */
+        }
+
+        .nav-link {
+            /* color: #000; */
+            font-weight: bold;
+        }
+
+        .nav-tabs .nav-item {
+            color: #43beac;
+
+            /* background-color: #43beac; */
+            /* #0080FF; */
+            /* color: #FFF; */
+        }
+
+        .nav-tabs .nav-item .nav-link.active {
+            /* color: #43beac; */
+            /* #0080FF; */
+
+            background-color: #43beac;
+            color: #FFF;
+        }
     </style>
 @endsection
 
@@ -2611,7 +2647,7 @@
                             //format: '{point.y:.1f}%',
                             formatter: function() {
                                 if (this.colorIndex == 2)
-                                    return this.y + " %";
+                                    return Highcharts.numberFormat(this.y, 1) + " %";
                                 else
                                     return Highcharts.numberFormat(this.y, 0);
                             },

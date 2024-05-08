@@ -546,15 +546,15 @@ class ServiciosBasicosRepositorio
                     DB::raw("sum(IF($tipo=1,1,0)) as y"),
                     DB::raw("count(*) as x"),
                 )->where('importacion_id', $anio);
-                if ($provincia > 0) {
-                    $pp = Ubigeo::find($provincia);
-                    $query = $query->where('provincia', $pp->nombre);
-                }
-                if ($distrito > 0) {
-                    $dd = Ubigeo::find($distrito);
-                    $query = $query->where('distrito', $dd->nombre);
-                }
-                if ($area > 0) $query = $query->where('cod_area', $area);
+                // if ($provincia > 0) {
+                //     $pp = Ubigeo::find($provincia);
+                //     $query = $query->where('provincia', $pp->nombre);
+                // }
+                // if ($distrito > 0) {
+                //     $dd = Ubigeo::find($distrito);
+                //     $query = $query->where('distrito', $dd->nombre);
+                // }
+                // if ($area > 0) $query = $query->where('cod_area', $area);
 
                 $query = $query->groupBy('name')->orderBy('x', 'desc')->get();
 
@@ -608,15 +608,15 @@ class ServiciosBasicosRepositorio
                         DB::raw("count(id)-sum(IF(internet_final=1,1,0)) as sin"),
                         DB::raw("(100*count(id)/$total) as indicador")
                     );
-                if ($provincia > 0) {
-                    $pp = Ubigeo::find($provincia);
-                    $query = $query->where('provincia', $pp->nombre);
-                }
-                if ($distrito > 0) {
-                    $dd = Ubigeo::find($distrito);
-                    $query = $query->where('distrito', $dd->nombre);
-                }
-                if ($area > 0) $query = $query->where('cod_area', $area);
+                // if ($provincia > 0) {
+                //     $pp = Ubigeo::find($provincia);
+                //     $query = $query->where('provincia', $pp->nombre);
+                // }
+                // if ($distrito > 0) {
+                //     $dd = Ubigeo::find($distrito);
+                //     $query = $query->where('distrito', $dd->nombre);
+                // }
+                // if ($area > 0) $query = $query->where('cod_area', $area);
 
                 $query = $query->groupBy('distrito')->orderBy('indicador', 'desc')->get();
 

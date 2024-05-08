@@ -254,9 +254,9 @@ class ServiciosBasicosController extends Controller
                 $alto = 0;
                 foreach ($data as $key => $value) {
                     $info['categoria'][] = $value->anio;
-                    $dx1[] = (int)$value->y;
-                    $dx2[] = (int)$value->x;
-                    $dx3[] = (int)$value->z;
+                    $dx1[] = (float)$value->y;
+                    $dx2[] = (float)$value->x;
+                    $dx3[] = (float)$value->z;
                     $alto = (int)$value->y > $alto ? (int)$value->y : $alto;
                     $alto = (int)$value->x > $alto ? (int)$value->x : $alto;
                 }
@@ -344,7 +344,9 @@ class ServiciosBasicosController extends Controller
                     default:
                         break;
                 }
-                $excel = view('educacion.ServiciosBasicos.AguaPotableTabla1', compact('base', 'foot', 'tservicio', 'tablax'))->render();
+                $xxx = Ubigeo::find($rq->distrito);
+                $dis = $xxx ? $xxx->nombre : '';
+                $excel = view('educacion.ServiciosBasicos.AguaPotableTabla1', compact('base', 'foot', 'tservicio', 'tablax', 'dis'))->render();
                 return response()->json(compact('excel'));
 
             case 'tabla2':

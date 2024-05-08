@@ -13,7 +13,7 @@
     @if ($base->count() > 0)
         <tbody>
             @foreach ($base as $key => $item)
-                <tr class="text-center">
+                <tr class="text-center {{ $item->distrito == $dis ? 'table-warning' : '' }}">
                     <td>{{ $key + 1 }}</td>
                     <td class="text-left">{{ $item->distrito }}</td>
                     <td class="table-warning">{{ number_format($item->total, 0) }}</td>
