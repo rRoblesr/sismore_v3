@@ -400,7 +400,7 @@ class ServiciosBasicosController extends Controller
                 return response()->json(compact('excel'));
 
             case 'tabla3':
-                $base = ServiciosBasicosRepositorio::principalTabla($rq->div, $rq->anio, $rq->provincia, $rq->distrito,  $rq->area,  $rq->servicio);
+                $base = ServiciosBasicosRepositorio::aguapotableTabla($rq->div, $rq->anio, $rq->provincia, $rq->distrito,  $rq->area,  $rq->servicio);
                 $foot = [];
                 switch ($rq->vista) {
                     case 1:

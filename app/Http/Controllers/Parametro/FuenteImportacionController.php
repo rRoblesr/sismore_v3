@@ -110,7 +110,7 @@ class FuenteImportacionController extends Controller
             for ($i = 0; $i < 2 - strlen('' . $valor); $i++) {
                 $ceros .= '0';
             }
-            $codigo = 'COD' . $codigo . $valor;
+            $codigo = 'COD' . $ceros . $valor;
         } else {
             $codigo = 'COD01';
         }

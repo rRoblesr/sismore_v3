@@ -25,7 +25,7 @@ use function PHPUnit\Framework\isNull;
 
 class ImporPadronActasController extends Controller
 {
-    public static $FUENTE = ['pacto_1' => 36, 'pacto_2' => 0, 'pacto_3' => 0, 'pacto_4' => 0, 'pacto_5' => 0];
+    public static $FUENTE = ['pacto_1' => 36, 'pacto_2' => 37, 'pacto_3' => 38, 'pacto_4' => 39, 'pacto_5' => 40];
     public $fuente = 36;
     public function __construct()
     {
@@ -41,7 +41,7 @@ class ImporPadronActasController extends Controller
         // $date = DateTime::createFromFormat('d/m/Y', "3/12/1987");
         // echo $date->format('Y-m-d');
 
-        $fuentes = FuenteImportacion::whereIn('id', [36])->get();
+        $fuentes = FuenteImportacion::whereIn('id', [36, 37, 38, 39, 40])->get();
         return view('salud.ImporPadronActas.Importar', compact('fuentes'));
     }
 
@@ -72,6 +72,7 @@ class ImporPadronActasController extends Controller
         // $this->json_output(400, $rq->all());
 
         switch ($rq->fuente) {
+
             case ImporPadronActasController::$FUENTE['pacto_1']:
                 $existeMismaFecha = ImportacionRepositorio::Importacion_PE($rq->fechaActualizacion, $rq->fuente);
                 if ($existeMismaFecha != null) {
@@ -159,6 +160,109 @@ class ImporPadronActasController extends Controller
 
                 $mensaje = "Archivo excel subido y Procesado correctamente .";
                 $this->json_output(200, $mensaje, '');
+
+                break;
+
+            case ImporPadronActasController::$FUENTE['pacto_2']:
+                $existeMismaFecha = ImportacionRepositorio::Importacion_PE($rq->fechaActualizacion, $rq->fuente);
+                if ($existeMismaFecha != null) {
+                    $mensaje = "Error, Ya existe archivos prendientes de aprobar para la fecha de versión ingresada";
+                    $this->json_output(400, $mensaje);
+                }
+
+                $existeMismaFecha = ImportacionRepositorio::Importacion_PR($rq->fechaActualizacion, $rq->fuente);
+                if ($existeMismaFecha != null) {
+                    $mensaje = "Error, Ya existe archivos procesados para la fecha de versión ingresada";
+                    $this->json_output(400, $mensaje);
+                }
+
+                $this->validate($rq, ['file' => 'required|mimes:xls,xlsx']);
+                $archivo = $rq->file('file');
+                $array = (new tablaXImport)->toArray($archivo);
+
+                if (count($array) != 1) {
+                    $this->json_output(400, 'Error de Hojas, Solo debe tener una HOJA, el LIBRO EXCEL');
+                }
+
+                try {
+                    foreach ($array as $value) {
+                        foreach ($value as $celda => $row) {
+                            if ($celda > 0) break;
+                            $cadena =
+                                $row['año'] .
+                                $row['mes'] .
+                                $row['ubigeo'] .
+                                $row['cod_unico'] .
+                                $row['num_doc'] .
+                                $row['fecha_nac'] .
+                                $row['seguro'] .
+                                $row['fecha_dx'] .
+                                $row['fecha_supt1'] .
+                                $row['num_supt1'] .
+                                $row['fecha_supt3'] .
+                                $row['num_supt3'] .
+                                $row['fecha_recup'] .
+                                $row['num_recup'] .
+                                $row['fecha_dosaje'] .
+                                $row['num_dosaje'] .
+                                $row['den'] .
+                                $row['num'];
+                        }
+                    }
+                } catch (Exception $e) {
+                    $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto";
+                    $this->json_output(403, $mensaje);
+                }
+
+                try {
+                    $importacion = Importacion::Create([
+                        'fuenteImportacion_id' => $rq->fuente, // valor predeterminado
+                        'usuarioId_Crea' => auth()->user()->id,
+                        'fechaActualizacion' => $rq->fechaActualizacion,
+                        'estado' => 'PE'
+                    ]);
+
+                    foreach ($array as $key => $value) {
+                        foreach ($value as $row) {
+                            ImporPadronActas::Create([
+                                'importacion_id' => $importacion->id,
+                                'año' => $row['año'],
+                                'mes' => $row['mes'],
+                                'ubigeo' => $row['ubigeo'],
+                                'cod_unico' => $row['cod_unico'],
+                                'num_doc' => $row['num_doc'],
+                                'fecha_nac' => $row['fecha_nac'],
+                                'seguro' => $row['seguro'],
+                                'fecha_dx' => $row['fecha_dx'],
+                                'fecha_supt1' => $row['fecha_supt1'],
+                                'num_supt1' => $row['num_supt1'],
+                                'fecha_supt3' => $row['fecha_supt3'],
+                                'num_supt3' => $row['num_supt3'],
+                                'fecha_recup' => $row['fecha_recup'],
+                                'num_recup' => $row['num_recup'],
+                                'fecha_dosaje' => $row['fecha_dosaje'],
+                                'num_dosaje' => $row['num_dosaje'],
+                                'den' => $row['den'],
+                                'num' => $row['num']
+                            ]);
+                        }
+                    }
+                } catch (Exception $e) {
+                    $mensaje = "Error en la carga de datos, verifique los datos de su archivo y/o comuniquese con el administrador del sistema" . $e->getMessage();
+                    $this->json_output(400, $mensaje);
+                }
+
+                // try {
+                //     DB::select('call sal_pa_procesarPacto1(?,?)', [$importacion->id, date('Y', strtotime($rq->fechaActualizacion))]);
+                // } catch (Exception $e) {
+                //     $mensaje = "Error al procesar la normalizacion de datos." . $e;
+                //     $tipo = 'danger';
+                //     $this->json_output(400, $mensaje);
+                // }
+
+                $mensaje = "Archivo excel subido y Procesado correctamente .";
+                $this->json_output(200, $mensaje, '');
+
                 break;
 
             default:

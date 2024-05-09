@@ -70,6 +70,7 @@ use App\Http\Controllers\Presupuesto\SubGenericaDetalleController;
 use App\Http\Controllers\Presupuesto\UnidadEjecutoraController;
 use App\Http\Controllers\Presupuesto\UnidadOrganicaController;
 use App\Http\Controllers\Salud\ImporPadronActasController;
+use App\Http\Controllers\Salud\ImporPadronEstablecimientoController;
 use App\Http\Controllers\Salud\IndicadoresController;
 use App\Http\Controllers\Salud\SaludNino;
 use App\Http\Controllers\Salud\SaludPadronExportar;
@@ -111,6 +112,7 @@ use App\Models\Presupuesto\ImporProyectos;
 use App\Models\Presupuesto\ImporSiafWeb;
 use App\Models\Presupuesto\SubGenericaGasto;
 use App\Models\Presupuesto\UnidadEjecutora;
+use App\Models\Salud\ImporPadronEstablecimiento;
 use App\Models\Vivienda\CentroPobladoDatass;
 use App\Repositories\Parametro\UbigeoRepositorio;
 use App\Repositories\Presupuesto\BaseActividadesProyectosRepositorio;
@@ -1147,6 +1149,12 @@ Route::post('/ImporPadronActas/Importar', [ImporPadronActasController::class, 'g
 Route::get('/ImporPadronActas/Listar/ImportarDT', [ImporPadronActasController::class, 'ListarDTImportFuenteTodos'])->name('imporpadronactas.listar.importados');
 Route::post('/ImporPadronActas/ListaImportada', [ImporPadronActasController::class, 'ListaImportada'])->name('imporpadronactas.listarimportados');
 Route::get('/ImporPadronActas/eliminar/{id}', [ImporPadronActasController::class, 'eliminar'])->name('imporpadronactas.eliminar');
+
+Route::get('/ImporPadronEESS/Importar', [ImporPadronEstablecimientoController::class, 'importar'])->name('imporpadronestablecimiento.importar');
+Route::post('/ImporPadronEESS/Importar', [ImporPadronEstablecimientoController::class, 'guardar'])->name('imporpadronestablecimiento.guardar');
+Route::get('/ImporPadronEESS/Listar/ImportarDT', [ImporPadronEstablecimientoController::class, 'ListarDTImportFuenteTodos'])->name('imporpadronestablecimiento.listar.importados');
+Route::post('/ImporPadronEESS/ListaImportada', [ImporPadronEstablecimientoController::class, 'ListaImportada'])->name('imporpadronestablecimiento.listarimportados');
+Route::get('/ImporPadronEESS/eliminar/{id}', [ImporPadronEstablecimientoController::class, 'eliminar'])->name('imporpadronestablecimiento.eliminar');
 
 Route::get('/Salud/Nino', [SaludNino::class, 'PadronNominal'])->name('salud.nino.padron');
 Route::get('/Salud/Calidad', [SaludNino::class, 'ControlCalidad'])->name('salud.nino.calidad');

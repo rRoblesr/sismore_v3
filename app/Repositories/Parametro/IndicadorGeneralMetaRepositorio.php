@@ -27,8 +27,9 @@ class IndicadorGeneralMetaRepositorio
         $base = $query1->count() > 0 ? ($query1->first()->valor ? $query1->first()->valor : 0) : 0;
         // $value->cumple = $value->r2024 == $value->v2024  ? 1 : (intval(date('m')) == $value->r2024 ? 1 : (intval(date('m')) - 1 == $value->r2024  ? 1 : 0));
         if ($anio == date('Y'))
-            $mm = date('Y-m-d') < date('Y-m-d', strtotime($anio . '-' . date('m') . '-08')) ? date('m') - 1 : date('m');
-        else $mm = $base;
+            $mm = date('Y-m-d') < date('Y-m-d', strtotime($anio . '-' . (intval(date('m')) + 1) . '-08')) ? date('m') - 1 : date('m');
+        else
+            $mm = $base;
 
         $query2 =  DataPacto1::where('anio', $anio)->select(DB::raw("IF(sum(estado)=$mm,1,0) as conteo"), DB::raw("sum(estado) as conteo2"));
         if (IndicadoresController::$pacto1_anio == $anio) $query2 = $query2->where('mes', '>=', IndicadoresController::$pacto1_mes);
@@ -76,8 +77,8 @@ class IndicadorGeneralMetaRepositorio
             $value->avance = $queryx->conteo ? $queryx->conteo : 0;
             $value->porcentaje = number_format(100 * ($value->valor > 0 ? $value->avance / $value->valor : 0), 1);
             if ($anio == date('Y'))
-                // $value->cumple = $value->valor == $value->avance ? 1 : (intval(date('m')) == $value->avance ? 1 : (intval(date('m')) - 1 == $value->avance  ? 1 : 0));
-                $value->cumple = $value->valor == $value->avance ? 1 : (intval(date('m')) == $value->avance ? 1 : (intval(date('m')) - 1 == $value->avance && date('Y-m-d') < date('Y-m-d', strtotime($anio . '-' . intval(date('m')) . '-07'))  ? 1 : 0));
+                $value->cumple = $value->valor == $value->avance ? 1 : (intval(date('m')) == $value->avance ? 1 : (intval(date('m')) - 1 == $value->avance  ? 1 : 0));
+            // $value->cumple = $value->valor == $value->avance ? 1 : (intval(date('m')) == $value->avance ? 1 : (intval(date('m')) - 1 == $value->avance && date('Y-m-d') < date('Y-m-d', strtotime($anio . '-' . intval(date('m')) . '-07'))  ? 1 : 0));
             else $value->cumple = $value->valor == $value->avance ? 1 : 0;
         }
         return $query;
