@@ -9,6 +9,7 @@ use App\Models\Educacion\Importacion;
 use App\Models\Parametro\Anio;
 use App\Models\Parametro\ImporPoblacion;
 use App\Models\Parametro\PoblacionDetalle;
+use App\Models\Salud\Establecimiento;
 use App\Models\Salud\ImporPadronEstablecimiento;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use Exception;
@@ -167,16 +168,12 @@ class ImporPadronEstablecimientoController extends Controller
             $this->json_output(400, $mensaje);
         }
 
-        // try {
-        //     DB::select('call par_pa_procesarImporPoblacion(?,?)', [$importacion->id, $poblacion->id]);
-        // } catch (Exception $e) {
-        //     $importacion->estado = 'EL';
-        //     $importacion->save();
-
-        //     $mensaje = "Error al procesar la normalizacion de datos." . $e;
-        //     $tipo = 'danger';
-        //     $this->json_output(400, $mensaje);
-        // }
+        try {
+            DB::select('call sal_pa_procesarPadronEstablecimiento(?,?)', [$importacion->id, auth()->user()->id]);
+        } catch (Exception $e) {
+            $mensaje = "Error al procesar la normalizacion de datos." . $e;
+            $this->json_output(400, $mensaje);
+        }
         $mensaje = "Archivo excel subido y Procesado correctamente .";
         $this->json_output(200, $mensaje, '');
     }
@@ -224,10 +221,11 @@ class ImporPadronEstablecimientoController extends Controller
     /* metodo para cargar una importacion especifica */
     public function ListaImportada(Request $rq)
     {
-        $data = PoblacionDetalle::where('pp.importacion_id', $rq->importacion_id)
-            ->join('par_poblacion as pp', 'pp.id', '=', 'par_poblacion_detalle.poblacion_id')
-            ->join('par_ubigeo as uu', 'uu.id', '=', 'par_poblacion_detalle.ubigeo_id')
-            ->select('uu.codigo', 'par_poblacion_detalle.sexo', 'par_poblacion_detalle.edad', 'par_poblacion_detalle.total')->get();
+        $data = ImporPadronEstablecimiento::all();
+        // PoblacionDetalle::where('pp.importacion_id', $rq->importacion_id)
+        //     ->join('par_poblacion as pp', 'pp.id', '=', 'par_poblacion_detalle.poblacion_id')
+        //     ->join('par_ubigeo as uu', 'uu.id', '=', 'par_poblacion_detalle.ubigeo_id')
+        //     ->select('uu.codigo', 'par_poblacion_detalle.sexo', 'par_poblacion_detalle.edad', 'par_poblacion_detalle.total')->get();
         return DataTables::of($data)->make(true);
     }
 
@@ -237,7 +235,9 @@ class ImporPadronEstablecimientoController extends Controller
         // $poblacion = Poblacion::where('importacion_id', $id)->first();
         // PoblacionDetalle::where('poblacion_id', $poblacion->id)->delete();
         // $poblacion->delete();
-        // Importacion::find($id)->delete();
+        ImporPadronEstablecimiento::where('importacion_id', $id)->delete();
+        Establecimiento::where('importacion_id', $id)->delete();
+        Importacion::find($id)->delete();
         return response()->json(array('status' => true));
     }
 }

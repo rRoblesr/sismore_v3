@@ -1,4 +1,4 @@
-@extends('layouts.main', ['titlePage' => 'IMPORTAR DATOS - POBLACIÓN'])
+@extends('layouts.main', ['titlePage' => 'IMPORTAR DATOS - ESTABLECIMIENTO'])
 @section('css')
     <!-- Table datatable css -->
     <link href="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.css" rel="stylesheet"
@@ -74,7 +74,7 @@
                                             <label class="col-form-label">Fuente de datos</label>
                                             <div class="">
                                                 <input type="text" class="form-control btn-xs" readonly="readonly"
-                                                    value="POBLACIÓN">
+                                                    value="ESTABLECIMIENTOS">
                                             </div>
                                         </div>
                                     </div>
@@ -172,7 +172,7 @@
                 autoWidth: false,
                 ordered: true,
                 language: table_language,
-                ajax: "{{ route('imporpoblacion.listar.importados') }}",
+                ajax: "{{ route('imporpadronestablecimiento.listar.importados') }}",
                 type: "POST",
             });
         });
@@ -204,7 +204,7 @@
                     return xhr;
                 },
                 type: "POST",
-                url: "{{ route('imporpoblacion.guardar') }}",
+                url: "{{ route('imporpadronestablecimiento.guardar') }}",
                 dataType: "json",
                 contentType: false,
                 processData: false,
@@ -245,7 +245,7 @@
             bootbox.confirm("¿Seguro desea eliminar esta importación?", function(result) {
                 if (result === true) {
                     $.ajax({
-                        url: "{{ route('imporpoblacion.eliminar', '') }}/" + id,
+                        url: "{{ route('imporpadronestablecimiento.eliminar', '') }}/" + id,
                         type: "GET",
                         dataType: "JSON",
                         success: function(data) {
@@ -277,7 +277,7 @@
                         "headers": {
                             'X-CSRF-TOKEN': $('input[name=_token]').val()
                         },
-                        "url": "{{ route('imporpoblacion.listarimportados') }}",
+                        "url": "{{ route('imporpadronestablecimiento.listarimportados') }}",
                         "data": {
                             "importacion_id": id
                         },
