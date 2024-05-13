@@ -11,6 +11,7 @@ use App\Models\Educacion\Importacion;
 use App\Models\Parametro\FuenteImportacion;
 use App\Models\Salud\DataPacto1;
 use App\Models\Salud\ImporPadronActas;
+use App\Models\Salud\ImporPadronAnemia;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Utilities\Utilitario;
 use Carbon\Carbon;
@@ -189,7 +190,7 @@ class ImporPadronActasController extends Controller
                         foreach ($value as $celda => $row) {
                             if ($celda > 0) break;
                             $cadena =
-                                $row['año'] .
+                                $row['anio'] .
                                 $row['mes'] .
                                 $row['ubigeo'] .
                                 $row['cod_unico'] .
@@ -224,9 +225,9 @@ class ImporPadronActasController extends Controller
 
                     foreach ($array as $key => $value) {
                         foreach ($value as $row) {
-                            ImporPadronActas::Create([
+                            ImporPadronAnemia::Create([
                                 'importacion_id' => $importacion->id,
-                                'año' => $row['año'],
+                                'anio' => $row['anio'],
                                 'mes' => $row['mes'],
                                 'ubigeo' => $row['ubigeo'],
                                 'cod_unico' => $row['cod_unico'],
@@ -287,7 +288,7 @@ class ImporPadronActasController extends Controller
         $draw = intval($rq->draw);
         $start = intval($rq->start);
         $length = intval($rq->length);
-        $query = ImportacionRepositorio::Listar_FuenteTodos($this->fuente);
+        $query = ImportacionRepositorio::Listar_FuenteTodos($rq->fuente);
         $data = [];
         foreach ($query as $key => $value) {
             $nom = '';
@@ -323,7 +324,8 @@ class ImporPadronActasController extends Controller
             "draw" => $draw,
             "recordsTotal" => $start,
             "recordsFiltered" => $length,
-            "data" => $data
+            "data" => $data,
+            "rq"=>$rq->all()
         );
         return response()->json($result);
     }

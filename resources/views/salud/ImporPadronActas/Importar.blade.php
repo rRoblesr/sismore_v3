@@ -8,20 +8,26 @@
 @section('content')
     <div class="content">
 
+
         <div class="row">
+            <div class="col-md-10">
+            </div>
+            <div class="col-md-2">
+                <select name="fuente1" id="fuente1" class="form-control btn-xs" onchange="cargarhistorial();">
+                    @if ($fuentes->count() == 1)
+                        <option value="{{ $fuentes[0]->id }}">{{ $fuentes[0]->nombre }}</option>
+                    @else
+                        {{-- <option value="">FUENTE DE DATOS</option> --}}
+                        @foreach ($fuentes as $item)
+                            <option value="{{ $item->id }}">{{ $item->nombre }}</option>
+                        @endforeach
+                    @endif
+                </select>
+            </div>
             <div class="col-md-12">
                 <div class="card card-border">
                     <div class="card-header border-success-0 bg-transparent pb-0">
                         <div class="card-widgets">
-                            {{-- <div class="form-inline">
-                                <select class="form-control btn-xs" name="sistema" id="sistema"
-                                    onchange="listarDT();">
-                                    @foreach ($fuentes as $item)
-                                        <option value="{{ $item->id }}">{{ $item->nombre }}</option>
-                                    @endforeach
-                                </select>
-                            </div> --}}
-
                             <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i
                                     class="fa fa-redo"></i> Actualizar</button>
                             <button type="button" class="btn btn-success btn-xs waves-effect waves-light"
@@ -34,7 +40,8 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="table-responsive">
-                                    <table id="datatable" class="table table-sm table-striped table-bordered dt-responsive nowrap font-12"
+                                    <table id="datatable"
+                                        class="table table-sm table-striped table-bordered dt-responsive nowrap font-12"
                                         style="font-size: 12px">
                                         <thead class="text-white  bg-success-0">
                                             <tr>
@@ -82,7 +89,7 @@
                                         <label class="col-form-label">Fuente de datos<span class="requerid">*</span>
                                         </label>
                                         <div class="">
-                                            <select name="fuente" id="fuente" class="form-control btn-xs">
+                                            <select name="fuente2" id="fuente2" class="form-control btn-xs">
                                                 @if ($fuentes->count() == 1)
                                                     <option value="{{ $fuentes[0]->id }}">{{ $fuentes[0]->nombre }}</option>
                                                 @else
@@ -188,17 +195,17 @@
         $(document).ready(function() {
             $('.upload_file').on('submit', upload);
 
-            table_principal = $('#datatable').DataTable({
-                responsive: true,
-                autoWidth: false,
-                ordered: true,
-                language: table_language,
-                ajax: "{{ route('imporpadronactas.listar.importados') }}",
-                data: {
-                    fuente: $('#fuente').val(),
-                },
-                type: "POST",
-            });
+            // table_principal = $('#datatable').DataTable({
+            //     responsive: true,
+            //     autoWidth: false,
+            //     ordered: true,
+            //     language: table_language,
+            //     ajax: "{{ route('imporpadronactas.listar.importados') }}",
+            //     data: {
+            //         fuente: $('#fuente').val(),
+            //     },
+            //     type: "POST",
+            // });
 
             // fetch('https://www.highcharts.com/samples/data/nuclear-energy-production.json')
             //     .then((res) => res.json())
@@ -221,7 +228,24 @@
             //     .then((data) => {
             //         console.log(data);
             //     });
+            cargarhistorial();
         });
+
+        function cargarhistorial() {
+            console.log('ss');
+            table_principal = $('#datatable').DataTable({
+                responsive: true,
+                autoWidth: false,
+                ordered: true,
+                destroy: true,
+                language: table_language,
+                ajax: "{{ route('imporpadronactas.listar.importados') }}",
+                data: {
+                    fuente: $('#fuente1').val(),
+                },
+                type: "POST",
+            });
+        }
 
         function upload(e) {
             e.preventDefault();
