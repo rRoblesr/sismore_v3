@@ -325,7 +325,7 @@ class ImporPadronActasController extends Controller
             "recordsTotal" => $start,
             "recordsFiltered" => $length,
             "data" => $data,
-            "rq"=>$rq->all()
+            "rq" => $rq->all()
         );
         return response()->json($result);
     }

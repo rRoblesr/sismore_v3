@@ -13,7 +13,7 @@
             <div class="col-md-10">
             </div>
             <div class="col-md-2">
-                <select name="fuente1" id="fuente1" class="form-control btn-xs" onchange="cargarhistorial();">
+                <select name="fuente2" id="fuente2" class="form-control btn-xs" onchange="cargarhistorial();">
                     @if ($fuentes->count() == 1)
                         <option value="{{ $fuentes[0]->id }}">{{ $fuentes[0]->nombre }}</option>
                     @else
@@ -89,7 +89,7 @@
                                         <label class="col-form-label">Fuente de datos<span class="requerid">*</span>
                                         </label>
                                         <div class="">
-                                            <select name="fuente2" id="fuente2" class="form-control btn-xs">
+                                            <select name="fuente" id="fuente" class="form-control btn-xs">
                                                 @if ($fuentes->count() == 1)
                                                     <option value="{{ $fuentes[0]->id }}">{{ $fuentes[0]->nombre }}</option>
                                                 @else
@@ -232,7 +232,7 @@
         });
 
         function cargarhistorial() {
-            console.log('ss');
+            console.log('ss '+);
             table_principal = $('#datatable').DataTable({
                 responsive: true,
                 autoWidth: false,
@@ -241,9 +241,9 @@
                 language: table_language,
                 ajax: "{{ route('imporpadronactas.listar.importados') }}",
                 data: {
-                    fuente: $('#fuente1').val(),
+                    fuente: $('#fuente2').val(),
                 },
-                type: "POST",
+                type: "GET",
             });
         }
 
