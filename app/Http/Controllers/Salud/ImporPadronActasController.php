@@ -9,6 +9,7 @@ use App\Models\Administracion\Entidad;
 use App\Models\Educacion\ImporCensoDocente;
 use App\Models\Educacion\Importacion;
 use App\Models\Parametro\FuenteImportacion;
+use App\Models\Parametro\Ubigeo;
 use App\Models\Salud\DataPacto1;
 use App\Models\Salud\ImporPadronActas;
 use App\Models\Salud\ImporPadronAnemia;
@@ -220,7 +221,7 @@ class ImporPadronActasController extends Controller
                         'fuenteImportacion_id' => $rq->fuente, // valor predeterminado
                         'usuarioId_Crea' => auth()->user()->id,
                         'fechaActualizacion' => $rq->fechaActualizacion,
-                        'estado' => 'PE'
+                        'estado' => 'PR'
                     ]);
 
                     foreach ($array as $key => $value) {
@@ -229,19 +230,19 @@ class ImporPadronActasController extends Controller
                                 'importacion_id' => $importacion->id,
                                 'anio' => $row['anio'],
                                 'mes' => $row['mes'],
-                                'ubigeo' => $row['ubigeo'],
+                                'ubigeo' => Ubigeo::where('codigo', $row['ubigeo'])->first()->id,
                                 'cod_unico' => $row['cod_unico'],
                                 'num_doc' => $row['num_doc'],
-                                'fecha_nac' => $row['fecha_nac'],
+                                'fecha_nac' =>  $this->fechaExcel($row['fecha_nac']),
                                 'seguro' => $row['seguro'],
-                                'fecha_dx' => $row['fecha_dx'],
-                                'fecha_supt1' => $row['fecha_supt1'],
+                                'fecha_dx' =>  $this->fechaExcel($row['fecha_dx']),
+                                'fecha_supt1' => $this->fechaExcel($row['fecha_supt1']),
                                 'num_supt1' => $row['num_supt1'],
-                                'fecha_supt3' => $row['fecha_supt3'],
+                                'fecha_supt3' => $this->fechaExcel($row['fecha_supt3']),
                                 'num_supt3' => $row['num_supt3'],
-                                'fecha_recup' => $row['fecha_recup'],
+                                'fecha_recup' => $this->fechaExcel($row['fecha_recup']),
                                 'num_recup' => $row['num_recup'],
-                                'fecha_dosaje' => $row['fecha_dosaje'],
+                                'fecha_dosaje' => $this->fechaExcel($row['fecha_dosaje']),
                                 'num_dosaje' => $row['num_dosaje'],
                                 'den' => $row['den'],
                                 'num' => $row['num']
@@ -249,6 +250,9 @@ class ImporPadronActasController extends Controller
                         }
                     }
                 } catch (Exception $e) {
+                    $importacion->estado = 'PE';
+                    $importacion->save();
+
                     $mensaje = "Error en la carga de datos, verifique los datos de su archivo y/o comuniquese con el administrador del sistema" . $e->getMessage();
                     $this->json_output(400, $mensaje);
                 }
@@ -267,7 +271,6 @@ class ImporPadronActasController extends Controller
                 break;
 
             default:
-                # code...
                 break;
         }
     }
@@ -278,6 +281,18 @@ class ImporPadronActasController extends Controller
             if (strlen($ff) > 7) {
                 $date = DateTime::createFromFormat('d/m/Y', $ff);
                 return $date->format('Y-m-d');
+            }
+        }
+        return null;
+    }
+
+    public function fechaExcel($ff)
+    {
+        if ($ff) {
+            if ($ff != 'NULL') {
+                $unix = (intval($ff) - 25569) * 86400;
+                $php = new DateTime("@$unix");
+                return $php->format('Y-m-d');
             }
         }
         return null;
@@ -305,10 +320,10 @@ class ImporPadronActasController extends Controller
             $ent = Entidad::find($value->entidad);
 
             if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11)
-                $boton = '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" id="eliminar' . $value->id . '"><i class="fa fa-trash"></i> </button>';
+                $boton = '<button type="button" onclick="geteliminar(' . $rq->fuente . ',' . $value->id . ')" class="btn btn-danger btn-xs" id="eliminar' . $value->id . '"><i class="fa fa-trash"></i> </button>';
             else
                 $boton = '';
-            $boton2 = '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> </button>';
+            $boton2 = '<button type="button" onclick="monitor(' . $rq->fuente . ',' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> </button>';
             $data[] = array(
                 $key + 1,
                 date("d/m/Y", strtotime($value->fechaActualizacion)),
@@ -336,11 +351,28 @@ class ImporPadronActasController extends Controller
         return DataTables::of($data)->make(true);
     }
 
-    public function eliminar($id)
+    public function eliminar($fuente, $id)
     {
-        ImporPadronActas::where('importacion_id', $id)->delete();
-        DataPacto1::where('importacion_id', $id)->delete();
-        Importacion::find($id)->delete();
+        // public static $FUENTE = ['pacto_1' => 36, 'pacto_2' => 37, 'pacto_3' => 38, 'pacto_4' => 39, 'pacto_5' => 40];
+        switch ($fuente) {
+            case 36:
+                ImporPadronActas::where('importacion_id', $id)->delete();
+                DataPacto1::where('importacion_id', $id)->delete();
+                Importacion::find($id)->delete();
+                break;
+            case 37:
+                ImporPadronAnemia::where('importacion_id', $id)->truncate();
+                Importacion::find($id)->delete();
+                break;
+            case 38:
+                break;
+            case 39:
+                break;
+            case 40:
+                break;
+            default:
+                break;
+        }
         return response()->json(array('status' => true));
     }
 

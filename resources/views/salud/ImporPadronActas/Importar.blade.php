@@ -232,18 +232,20 @@
         });
 
         function cargarhistorial() {
-            console.log('ss '+);
+            // console.log('ss ' + $('#fuente2').val());
             table_principal = $('#datatable').DataTable({
                 responsive: true,
                 autoWidth: false,
                 ordered: true,
                 destroy: true,
                 language: table_language,
-                ajax: "{{ route('imporpadronactas.listar.importados') }}",
-                data: {
-                    fuente: $('#fuente2').val(),
-                },
-                type: "GET",
+                ajax: {
+                    url: "{{ route('imporpadronactas.listar.importados') }}",
+                    data: {
+                        fuente: $('#fuente2').val(),
+                    },
+                    type: "GET",
+                }
             });
         }
 
@@ -311,11 +313,11 @@
         }
 
         /* metodo para eliminar una importacion */
-        function geteliminar(id) {
+        function geteliminar(fuente, id) {
             bootbox.confirm("¿Seguro desea eliminar esta importación?", function(result) {
                 if (result === true) {
                     $.ajax({
-                        url: "{{ route('imporpadronactas.eliminar', '') }}/" + id,
+                        url: "{{ route('imporpadronactas.eliminar', ['', '']) }}/" + fuente + "/" + id,
                         type: "GET",
                         dataType: "JSON",
                         success: function(data) {

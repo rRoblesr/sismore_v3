@@ -7,6 +7,7 @@ use App\Models\Parametro\IndicadorGeneralMeta;
 use App\Models\Parametro\Ubigeo;
 use App\Models\Salud\DataPacto1;
 use App\Models\Salud\ImporPadronActas;
+use App\Models\Salud\ImporPadronAnemia;
 use Illuminate\Support\Facades\DB;
 
 class IndicadorGeneralMetaRepositorio
@@ -26,14 +27,26 @@ class IndicadorGeneralMetaRepositorio
         $query1 = IndicadorGeneralMeta::distinct()->select('valor')->where('indicadorgeneral', $indicador_id)->where('anio', $anio)->get();
         $base = $query1->count() > 0 ? ($query1->first()->valor ? $query1->first()->valor : 0) : 0;
         // $value->cumple = $value->r2024 == $value->v2024  ? 1 : (intval(date('m')) == $value->r2024 ? 1 : (intval(date('m')) - 1 == $value->r2024  ? 1 : 0));
-        if ($anio == date('Y'))
-            $mm = date('Y-m-d') < date('Y-m-d', strtotime($anio . '-' . (intval(date('m')) + 1) . '-08')) ? date('m') - 1 : date('m');
-        else
-            $mm = $base;
+        // if ($anio == date('Y'))
+        //     $mm = date('Y-m-d') < date('Y-m-d', strtotime($anio . '-' . (intval(date('m')) + 1) . '-08')) ? date('m') - 1 : date('m');
+        // else
+        $mm = $base;
 
         $query2 =  DataPacto1::where('anio', $anio)->select(DB::raw("IF(sum(estado)=$mm,1,0) as conteo"), DB::raw("sum(estado) as conteo2"));
         if (IndicadoresController::$pacto1_anio == $anio) $query2 = $query2->where('mes', '>=', IndicadoresController::$pacto1_mes);
         $query2 = $query2->groupBy('distrito')->orderBy('distrito')->get();
+
+        return $query2->count() > 0 ? $query2->sum('conteo') : 0;
+    }
+
+    public static function getPacto2GLS($indicador_id, $anio)
+    {
+        $query1 = IndicadorGeneralMeta::select('distrito', 'valor')->where('indicadorgeneral', $indicador_id)->where('anio', $anio)->get();
+        $base = $query1->count() > 0 ? ($query1->first()->valor ? $query1->first()->valor : 0) : 0;
+
+        return $query2 =  ImporPadronAnemia::where('anio', $anio)->select('*');
+        if (IndicadoresController::$pacto1_anio == $anio) $query2 = $query2->where('mes', '>=', IndicadoresController::$pacto1_mes);
+        $query2 = $query2->groupBy('ubigeo')->get();
 
         return $query2->count() > 0 ? $query2->sum('conteo') : 0;
     }

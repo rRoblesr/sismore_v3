@@ -1133,8 +1133,9 @@ Route::get('/salud/PowerBi/{id}', [PowerBiController::class, 'saludMenu'])->name
 Route::get('/salud/pactoregional', [IndicadoresController::class, 'PactoRegional'])->name('salud.indicador.pactoregional');
 Route::get('/salud/pactoregional/Actualizarx', [IndicadoresController::class, 'PactoRegionalActualizar'])->name('salud.indicador.pactoregional.actualizar');
 // Route::get('/salud/pactoregional/Actualizarx2', [IndicadoresController::class, 'PactoRegionalActualizar2'])->name('salud.indicador.pactoregional.actualizar2');
-Route::get('/salud/pactoregional/Sal/Reports', [IndicadoresController::class, 'PactoRegionalDetalleReports'])->name('salud.indicador.pactoregional.detalle.reports');
-Route::get('/salud/pactoregional/Edu/Reports', [IndicadoresController::class, 'PactoRegionalEduPacto2Reports'])->name('salud.indicador.pactoregional.edu.pacto2.reports');
+Route::get('/salud/pactoregional/Sal/Reports1', [IndicadoresController::class, 'PactoRegionalDetalleReports'])->name('salud.indicador.pactoregional.detalle.reports');
+Route::get('/salud/pactoregional/Sal/Reports2', [IndicadoresController::class, 'PactoRegionalSalPacto2Reports'])->name('salud.indicador.pactoregional.sal.pacto2.reports');
+Route::get('/salud/pactoregional/Edu/Reports1', [IndicadoresController::class, 'PactoRegionalEduPacto2Reports'])->name('salud.indicador.pactoregional.edu.pacto2.reports');
 Route::get('/salud/pactoregional/{indicador_id}', [IndicadoresController::class, 'PactoRegionalDetalle'])->name('salud.indicador.pactoregional.detalle');
 Route::get('/salud/pactoregional/Exportar/{id}', [IndicadoresController::class, 'exportarPDF'])->name('salud.indicador.pactoregional.exportar.pdf');
 Route::get('/salud/conveniofed', [IndicadoresController::class, 'ConvenioFED'])->name('salud.indicador.conveniofed');
@@ -1148,7 +1149,7 @@ Route::get('/ImporPadronActas/Importar', [ImporPadronActasController::class, 'im
 Route::post('/ImporPadronActas/Importar', [ImporPadronActasController::class, 'guardar'])->name('imporpadronactas.guardar');
 Route::get('/ImporPadronActas/Listar/ImportarDT', [ImporPadronActasController::class, 'ListarDTImportFuenteTodos'])->name('imporpadronactas.listar.importados');
 Route::post('/ImporPadronActas/ListaImportada', [ImporPadronActasController::class, 'ListaImportada'])->name('imporpadronactas.listarimportados');
-Route::get('/ImporPadronActas/eliminar/{id}', [ImporPadronActasController::class, 'eliminar'])->name('imporpadronactas.eliminar');
+Route::get('/ImporPadronActas/eliminar/{fuente}/{id}', [ImporPadronActasController::class, 'eliminar'])->name('imporpadronactas.eliminar');
 
 Route::get('/ImporPadronEESS/Importar', [ImporPadronEstablecimientoController::class, 'importar'])->name('imporpadronestablecimiento.importar');
 Route::post('/ImporPadronEESS/Importar', [ImporPadronEstablecimientoController::class, 'guardar'])->name('imporpadronestablecimiento.guardar');
