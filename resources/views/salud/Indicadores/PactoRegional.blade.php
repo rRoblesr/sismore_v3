@@ -141,7 +141,6 @@
                     <div class="tab-content p-0">
                         <div class="tab-pane p-3 border border-success-0 show active" id="vista1" role="tabpanel"
                             aria-labelledby="vista1-tab">
-
                             <div class="row pricing-plan">
                                 <div class="col-md-12">
                                     <div class="row">
@@ -185,23 +184,23 @@
                                                             <li class="mt-1 pt-1">
                                                                 <div class="row">
                                                                     <div class="col-6 p-0">
-                                                                        <span class="text-green-0 font-weight-bold font-11"
+                                                                        <span class="text-green-0 font-weight-bold font-13"
                                                                             style="font-size: 100%">
                                                                             <i class="mdi mdi-arrow-up-bold"></i>
                                                                             Numerador
-                                                                            <i class="mdi mdi-rotate-180 mdi-alert-circle"
-                                                                                onclick="#"></i>
+                                                                            {{-- <i class="mdi mdi-rotate-180 mdi-alert-circle"
+                                                                                onclick="#"></i> --}}
                                                                         </span>
                                                                         <div class="font-weight-bold"
                                                                             id="num{{ $item->codigo }}">100</div>
                                                                     </div>
                                                                     <div class="col-6 p-0">
-                                                                        <span class="text-green-0 font-weight-bold font-11"
+                                                                        <span class="text-green-0 font-weight-bold font-13"
                                                                             style="font-size: 100%">
                                                                             <i class="mdi mdi-arrow-down-bold"></i>
                                                                             Denominador
-                                                                            <i class="mdi mdi-rotate-180 mdi-alert-circle"
-                                                                                onclick="#"></i>
+                                                                            {{-- <i class="mdi mdi-rotate-180 mdi-alert-circle"
+                                                                                onclick="#"></i> --}}
                                                                         </span>
                                                                         <div class="font-weight-bold"
                                                                             id="den{{ $item->codigo }}">100</div>
@@ -224,20 +223,15 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- end col -->
                                         @endforeach
 
                                     </div>
-                                    <!-- end row -->
                                 </div>
-                                <!-- end Col-10 -->
                             </div>
-
                         </div>
 
                         <div class="tab-pane p-3 border border-success-0" id="vista2" role="tabpanel"
                             aria-labelledby="vista2-tab">
-
                             <div class="row pricing-plan">
                                 <div class="col-md-12">
                                     <div class="row">
@@ -282,23 +276,23 @@
                                                             <li class="mt-1 pt-1">
                                                                 <div class="row">
                                                                     <div class="col-6 p-0">
-                                                                        <span class="text-green-0 font-weight-bold font-11"
+                                                                        <span class="text-green-0 font-weight-bold font-13"
                                                                             style="font-size: 100%">
                                                                             <i class="mdi mdi-arrow-up-bold"></i>
                                                                             Numerador
-                                                                            <i class="mdi mdi-rotate-180 mdi-alert-circle"
-                                                                                onclick="#"></i>
+                                                                            {{-- <i class="mdi mdi-rotate-180 mdi-alert-circle"
+                                                                                onclick="#"></i> --}}
                                                                         </span>
                                                                         <div class="font-weight-bold"
                                                                             id="num{{ $item->codigo }}">100</div>
                                                                     </div>
                                                                     <div class="col-6 p-0">
-                                                                        <span class="text-green-0 font-weight-bold font-11"
+                                                                        <span class="text-green-0 font-weight-bold font-13"
                                                                             style="font-size: 100%">
                                                                             <i class="mdi mdi-arrow-down-bold"></i>
                                                                             Denominador
-                                                                            <i class="mdi mdi-rotate-180 mdi-alert-circle"
-                                                                                onclick="#"></i>
+                                                                            {{-- <i class="mdi mdi-rotate-180 mdi-alert-circle"
+                                                                                onclick="#"></i> --}}
                                                                         </span>
                                                                         <div class="font-weight-bold"
                                                                             id="den{{ $item->codigo }}">100</div>
@@ -321,20 +315,14 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- end col -->
                                         @endforeach
-
-
                                     </div>
                                 </div>
                             </div>
-
-
                         </div>
 
                         <div class="tab-pane p-3 border border-success-0" id="vista3" role="tabpanel"
                             aria-labelledby="vista3-tab">
-
                             <div class="row pricing-plan">
                                 <div class="col-md-12">
                                     <div class="row">
@@ -379,23 +367,23 @@
                                                             <li class="mt-1 pt-1">
                                                                 <div class="row">
                                                                     <div class="col-6 p-0">
-                                                                        <span class="text-green-0 font-weight-bold font-11"
+                                                                        <span class="text-green-0 font-weight-bold font-13"
                                                                             style="font-size: 100%">
                                                                             <i class="mdi mdi-arrow-up-bold"></i>
                                                                             Numerador
-                                                                            <i class="mdi mdi-rotate-180 mdi-alert-circle"
-                                                                                onclick="#"></i>
+                                                                            {{-- <i class="mdi mdi-rotate-180 mdi-alert-circle"
+                                                                                onclick="#"></i> --}}
                                                                         </span>
                                                                         <div class="font-weight-bold"
                                                                             id="num{{ $item->codigo }}">100</div>
                                                                     </div>
                                                                     <div class="col-6 p-0">
-                                                                        <span class="text-green-0 font-weight-bold font-11"
+                                                                        <span class="text-green-0 font-weight-bold font-13"
                                                                             style="font-size: 100%">
                                                                             <i class="mdi mdi-arrow-down-bold"></i>
                                                                             Denominador
-                                                                            <i class="mdi mdi-rotate-180 mdi-alert-circle"
-                                                                                onclick="#"></i>
+                                                                            {{-- <i class="mdi mdi-rotate-180 mdi-alert-circle"
+                                                                                onclick="#"></i> --}}
                                                                         </span>
                                                                         <div class="font-weight-bold"
                                                                             id="den{{ $item->codigo }}">100</div>
@@ -418,13 +406,11 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- end col -->
                                         @endforeach
 
                                     </div>
                                 </div>
                             </div>
-
                         </div>
 
                         <div class="tab-pane p-3 border border-success-0" id="vista4" role="tabpanel"

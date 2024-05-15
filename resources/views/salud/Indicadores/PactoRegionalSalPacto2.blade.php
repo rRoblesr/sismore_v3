@@ -227,7 +227,7 @@
                         <div class="card-body p-0">
                             <div class="row">
                                 <div class="col-12">
-                                    <div class="table-responsive" id="vtabla2">
+                                    <div class="table-responsive" id="vtabla3">
                                     </div>
                                 </div>
                             </div>
@@ -264,6 +264,7 @@
             panelGraficas('anal2');
             panelGraficas('tabla1');
             panelGraficas('tabla2');
+            panelGraficas('tabla3');
         }
 
         function panelGraficas(div) {
@@ -295,9 +296,8 @@
                         $('#gls').text(data.gls);
                         $('#gln').text(data.gln);
                     } else if (div == "anal1") {
-
                         gLineaBasica(div, data.info, '',
-                            'Acumulado mensual del registro de actas de homologacion en el sistema de padrón nominal',
+                            'Avance mensual de la Evaluación del cumplimiento',
                             '');
                     } else if (div == "anal2") {
                         console.log(data.info);
@@ -319,6 +319,10 @@
                         // });
                     } else if (div == "tabla2") {
                         $('#vtabla2').html(data.excel);
+                        // $('.vtabla2-fuente').html('Fuente: ]]' + data.reg.fuente);
+                        // $('.vtabla2-fecha').html('Actualizado: ' + data.reg.fecha);
+                    } else if (div == "tabla3") {
+                        $('#vtabla3').html(data.excel);
                         // $('.vtabla2-fuente').html('Fuente: ]]' + data.reg.fuente);
                         // $('.vtabla2-fecha').html('Actualizado: ' + data.reg.fecha);
                     }
@@ -706,6 +710,7 @@
         function gLineaBasica(div, data, titulo, subtitulo, titulovetical) {
             const colors = ["#5eb9aa", "#f5bd22", "#e65310"];
             Highcharts.chart(div, {
+                // colors: ['#5eb9aa', '#f5bd22', '#ef5350'],
                 title: {
                     text: titulo
                 },
@@ -743,10 +748,16 @@
                     series: {
                         dataLabels: {
                             enabled: true,
+                            formatter: function() {
+                                if (this.colorIndex == 0)
+                                    return this.y + " %";
+                                else
+                                    return Highcharts.numberFormat(this.y, 0);
+                            },
                             style: {
                                 fontSize: '10px',
                                 fontWeight: 'normal',
-                            }
+                            },
                         },
                         /* label: {
                             connectorAllowed: false
@@ -754,8 +765,34 @@
                         pointStart: 2010 */
                     }
                 },
+
+                // plotOptions: {
+                //     /* columns: {
+                //         stacking: 'normal'
+                //     }, */
+                //     series: {
+                //         showInLegend: true,
+                //         borderWidth: 0,
+                //         dataLabels: {
+                //             enabled: true,
+                //             //format: '{point.y:,.0f}',
+                //             //format: '{point.y:.1f}%',
+                //             /* formatter: function() {
+                //                 if (this.colorIndex == 2)
+                //                     return this.y + " %";
+                //                 else
+                //                     return Highcharts.numberFormat(this.y, 0);
+                //             }, */
+                //             style: {
+                //                 fontWeight: 'normal',
+                //                 fontSize: '10px',
+                //             }
+                //         },
+                //     },
+                // },
+
                 series: [{
-                    name: 'Actas Enviadas',
+                    name: 'Recuperados',
                     showInLegend: false,
                     data: data.dat
                 }],
