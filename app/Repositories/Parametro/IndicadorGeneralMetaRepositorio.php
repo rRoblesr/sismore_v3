@@ -235,8 +235,11 @@ class IndicadorGeneralMetaRepositorio
         // } sal_impor_padron_anemia
         $queryx = ImporPadronAnemia::select('pp.nombre as name', DB::raw('sum(den) as den'), DB::raw('sum(num) as num'), DB::raw('round(100*sum(num)/sum(den),1) as ind'))
             ->where('anio', $anio);
-        $queryx = $queryx->join('par_ubigeo as dd', 'dd.id', '=', 'ubigeo');
-        $queryx = $queryx->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia');
+        // $queryx = $queryx->join('par_ubigeo as dd', 'dd.id', '=', 'ubigeo');
+        // $queryx = $queryx->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia');
+        $queryx = $queryx->join('par_establecimiento as es', 'es.cod_unico', '=', 'cod_unico');
+        $queryx = $queryx->join('par_microrred as mr', 'mr.id', '=', 'es.microrred_id');
+        $queryx = $queryx->join('par_red as rr', 'rr.id', '=', 'mr.red_id');
         if (IndicadoresController::$pacto1_anio == $anio)
             $queryx = $queryx->where('mes', '>=', IndicadoresController::$pacto1_mes);
         $queryx = $queryx->groupBy('name')->get();
