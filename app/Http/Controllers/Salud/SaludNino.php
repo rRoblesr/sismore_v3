@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Salud;
+
 use App\Http\Controllers\Controller;
 
 class SaludNino extends Controller
@@ -11,12 +12,12 @@ class SaludNino extends Controller
     }
 
     public function PadronNominal()
-    {   return view('salud.nino.PadronNominal');
+    {
+        return view('salud.nino.PadronNominal');
     }
-	
-	public function ControlCalidad()
-	{	return view('salud.nino.ControlCalidad');		
-	}
 
-    
+    public function ControlCalidad()
+    {
+        return view('salud.nino.ControlCalidad');
+    }
 }

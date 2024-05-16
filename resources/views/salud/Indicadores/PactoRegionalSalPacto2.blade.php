@@ -198,13 +198,21 @@
                     </div>
 
                     <div class="card card-border border border-plomo-0">
-                        <div class="card-header border-success-0 bg-transparent p-0">
-                            {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
+                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                            {{-- <div class="card-widgets">
+                                <button type="button" class="btn btn-success btn-xs"><i
+                                        class="fa fa-file-excel"></i> Descargar</button>
+                            </div> --}}
+                            <h3 class="text-black font-14">Avance acumulado de la evaluación de Cumplimiento por Provincia
+                            </h3>
                         </div>
                         <div class="card-body p-0">
-                            <figure class="highcharts-figure p-0 m-0">
-                                <div id="anal2" style="height: 20rem"></div>
-                            </figure>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="table-responsive" style="height: 18rem" id="vtabla2">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -231,10 +239,6 @@
                                     </div>
                                 </div>
                             </div>
-                            {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                                <span class="float-left vtabla1-fuente">Fuente:</span>
-                                <span class="float-right vtabla1-fecha">Actualizado:</span>
-                            </div> --}}
                         </div>
                     </div>
                 </div>

@@ -464,9 +464,19 @@ class IndicadoresController extends Controller
                 return response()->json(compact('excel', 'base'));
 
             case 'tabla2':
-                return $base = IndicadorGeneralMetaRepositorio::getPacto2tabla2($rq->indicador, $rq->anio);
-                $aniob = $rq->anio;
-                $excel = view('salud.Indicadores.PactoRegionalSalPacto2tabla2', compact('base', 'ndis', 'aniob'))->render();
+                $base = IndicadorGeneralMetaRepositorio::getPacto2tabla2($rq->indicador, $rq->anio);
+                $foot = clone $base[0];
+                $foot->num = 0;
+                $foot->den = 0;
+                $foot->ind = 0;
+                foreach ($base as $key => $value) {
+                    $foot->num += $value->num;
+                    $foot->den += $value->den;
+                }
+                $foot->ind = round(100 * $foot->num / $foot->den, 1);
+                $foot->cumple = 0;
+                // return response()->json(compact('foot', 'base'));
+                $excel = view('salud.Indicadores.PactoRegionalSalPacto2tabla2', compact('base', 'foot'))->render();
                 return response()->json(compact('excel', 'base'));
 
             case 'tabla3':

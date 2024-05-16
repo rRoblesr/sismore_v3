@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Salud;
+
 use App\Http\Controllers\Controller;
 use App\Imports\tablaXImport;
 use App\Models\Administracion\Entidad;
@@ -22,13 +23,17 @@ class SaludPadronNominal extends Controller
     }
 
     public function index()
-    {   return view('salud.padron.principal');
+    {
+        return view('salud.padron.principal');
     }
-	
-	public function listar()
-	{	$draw = 0;        $start = 0;        $length = 0;
-        $idNivel = (session('usuario_id')=='123')?'1':((session('usuario_id')=='154')?'2':((session('usuario_id')=='155')?'3':'4'));
-        $institucion = ($idNivel=='3')?'CALLERIA':(($idNivel=='2')?'5556':'');
+
+    public function listar()
+    {
+        $draw = 0;
+        $start = 0;
+        $length = 0;
+        $idNivel = (session('usuario_id') == '123') ? '1' : ((session('usuario_id') == '154') ? '2' : ((session('usuario_id') == '155') ? '3' : '4'));
+        $institucion = ($idNivel == '3') ? 'CALLERIA' : (($idNivel == '2') ? '5556' : '');
         /*if($idNivel=='3')
             $tablon = PadronCalidad::select('codigo_calidad', 'nombre_calidad', DB::raw('COUNT(*) AS cantidad'))->where('distrito', $institucion)->groupBy('codigo_calidad','nombre_calidad')->get();
         elseif($idNivel=='2')
@@ -46,13 +51,13 @@ class SaludPadronNominal extends Controller
                 $value->EESS,
                 $value->CNV,
                 $value->DNI,
-                $value->nino, 
-                $value->Edad_Anio,                
-                $value->f_hb1,               
-                $value->Rhb1,                
-                $value->f_hb2,               
+                $value->nino,
+                $value->Edad_Anio,
+                $value->f_hb1,
+                $value->Rhb1,
+                $value->f_hb2,
                 $value->Rhb2,
-                $value->f_hb3,               
+                $value->f_hb3,
                 $value->Rhb3,
                 $boton . '&nbsp;' . $boton2,
             );
@@ -63,8 +68,6 @@ class SaludPadronNominal extends Controller
             "recordsFiltered" => $length,
             "data" => $data
         );
-        return response()->json($result);			
-	}
-
-    
+        return response()->json($result);
+    }
 }

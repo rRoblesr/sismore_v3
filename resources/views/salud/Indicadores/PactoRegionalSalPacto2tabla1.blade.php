@@ -17,7 +17,7 @@
                 <tr class="text-center {{ $item->distrito == $ndis ? 'table-warning' : '' }}">
                     <td>{{ $key + 1 }}</td>
                     <td class="text-left">{{ $item->distrito }}</td>
-                    <td>{{ $item->valor }}</td>
+                    <td class="table-warning">{{ $item->valor }}%</td>
                     <td>{{ $item->num }}</td>
                     <td>{{ $item->den }}</td>
                     <td>{!! avance($item->ind) !!}</td>

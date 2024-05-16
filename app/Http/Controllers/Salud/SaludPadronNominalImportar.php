@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Salud;
+
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
@@ -20,7 +21,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
 
 class SaludPadronNominalImportar extends Controller
-{   public $fuente = 36;
+{
+    public $fuente = 36;
     public function __construct()
     {
         $this->middleware('auth');
@@ -39,11 +41,15 @@ class SaludPadronNominalImportar extends Controller
     }
 
     public function index()
-    {   return view('salud.padron.importar');
+    {
+        return view('salud.padron.importar');
     }
-	
-	public function listarHistorial()
-	{	$draw = 0;        $start = 0;        $length = 0;
+
+    public function listarHistorial()
+    {
+        $draw = 0;
+        $start = 0;
+        $length = 0;
         $query = ImportacionRepositorio::Listar_FuenteTodos($this->fuente);
         $data = [];
         foreach ($query as $key => $value) {
@@ -75,8 +81,8 @@ class SaludPadronNominalImportar extends Controller
             "recordsFiltered" => $length,
             "data" => $data
         );
-        return response()->json($result);		
-	}
+        return response()->json($result);
+    }
 
     public function cargarPadron(Request $request)
     {
@@ -119,7 +125,7 @@ class SaludPadronNominalImportar extends Controller
             $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto";
             $this->json_output(403, $mensaje);
         }
-        
+
         /* ajustar fecha */
         $anio = Anio::where('anio', date('Y'))->first();
         if (!$anio) {
@@ -141,34 +147,33 @@ class SaludPadronNominalImportar extends Controller
                 'anio_id' => Anio::where('anio', date('Y', strtotime($importacion->fechaActualizacion)))->first()->id,
                 'created_at' => date('Y-m-d h:i:s'),
             ]);
-            
+
             $errores = [];
             $columnNames = array_keys($array[0][0]);
             PadronJuntos::truncate();
             $id = 10;
             foreach ($array as $key => $value) {
-                
+
                 foreach ($value as $row) {
-                    $data = ['id' => $id++]; 
-                            
+                    $data = ['id' => $id++];
+
                     foreach ($columnNames as $columnName) {
                         if (strpos($columnName, 'fecha_') !== false) {
                             if (!empty($row[$columnName])) {
-                                date_default_timezone_set('UTC');    
+                                date_default_timezone_set('UTC');
                                 $unix_date = ($row[$columnName] - 25569) * 86400;
                                 $data[$columnName] = date("d/m/Y", $unix_date);
                             } else {
-                                $data[$columnName] = null; 
+                                $data[$columnName] = null;
                             }
                         } else {
                             $data[$columnName] = $row[$columnName];
                         }
                     }
                     //echo "x".var_dump($data)."<br>";
-                    PadronJuntos::create($data);                    
+                    PadronJuntos::create($data);
                 }
             }
-
         } catch (Exception $e) {
             $importacion->estado = 'EL';
             $importacion->save();
@@ -196,7 +201,7 @@ class SaludPadronNominalImportar extends Controller
     {
         ini_set('memory_limit', '-1');
         set_time_limit(0);
-        
+
         $request->validate([
             'archivo_excel' => 'required|mimes:xlsx,xls', // Validación para asegurar que se suba un archivo Excel
         ]);
@@ -206,8 +211,5 @@ class SaludPadronNominalImportar extends Controller
         Excel::import(new SaludPadronJuntosImportacion, $archivo); // Utiliza la clase de importación para importar los datos del archivo Excel
 
         return redirect()->back()->with('success', 'Datos importados exitosamente.');
-
     }
-
-    
 }
