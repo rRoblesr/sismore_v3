@@ -383,7 +383,7 @@ class IndicadoresController extends Controller
                 $base = IndicadorGeneralMetaRepositorio::getSalPacto2Mensual($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
                 // return response()->json(compact('base'));
                 $mes = Mes::select('codigo', 'abreviado as mes')->get();
-                $mesmax = date('m'); //$base->max('name');
+                $mesmax = $rq->anio == date('Y') ? date('m') : 12; //$base->max('name');
                 $limit = $rq->anio == 2023 ? IndicadoresController::$pacto1_mes : 0;
                 foreach ($mes as $mm) {
                     if ($mm->codigo >= $limit && $mm->codigo <= $mesmax) {

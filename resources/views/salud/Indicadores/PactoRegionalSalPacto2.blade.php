@@ -290,7 +290,7 @@
         function cargarcuadros() {
             panelGraficas('head');
             panelGraficas('anal1');
-            panelGraficas('anal2');
+            // panelGraficas('anal2');
             panelGraficas('tabla1');
             panelGraficas('tabla2');
             panelGraficas('tabla3');
