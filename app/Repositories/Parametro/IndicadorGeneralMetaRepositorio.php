@@ -277,8 +277,8 @@ class IndicadorGeneralMetaRepositorio
             $query2 = $query2->groupBy('ubigeo')->get();
             $value->r2023 = $query2->count() > 0 ? $query2->first()->conteo : 0;
             if ($anioxx == $anio) {
-                $value->avance = number_format(100 * ($value->v2023 > 0 ? $value->r2023 / $value->v2023 : 0), 1);
-                $value->cumple = $value->r2023 == $value->v2023 ? 1 : 0;
+                $value->avance = $value->r2023;
+                $value->cumple = $value->r2023 >= $value->v2023  ? 1 : 0;
             }
         }
 
@@ -289,9 +289,8 @@ class IndicadorGeneralMetaRepositorio
             $query2 = $query2->groupBy('ubigeo')->get();
             $value->r2024 = $query2->count() > 0 ? $query2->first()->conteo : 0;
             if ($anioxx == $anio) {
-                $value->avance = number_format(100 * ($value->v2024 > 0 ? $value->r2024 / $value->v2024 : 0), 1);
-                // $value->cumple = $value->r2024 == $value->v2024 ? 1 : 0;
-                $value->cumple = $value->r2024 == $value->v2024  ? 1 : 0;
+                $value->avance = $value->r2024;
+                $value->cumple = $value->r2024 >= $value->v2024  ? 1 : 0;
             }
         }
         foreach ($query as $key => $value) {
@@ -301,8 +300,8 @@ class IndicadorGeneralMetaRepositorio
             $query2 = $query2->groupBy('ubigeo')->get();
             $value->r2025 = $query2->count() > 0 ? $query2->first()->conteo : 0;
             if ($anioxx == $anio) {
-                $value->avance = number_format(100 * ($value->v2025 > 0 ? $value->r2025 / $value->v2025 : 0), 1);
-                $value->cumple = $value->r2025 == $value->v2025 ? 1 : 0;
+                $value->avance = $value->r2025;
+                $value->cumple = $value->r2025 >= $value->v2025 ? 1 : 0;
             }
         }
         foreach ($query as $key => $value) {
@@ -312,8 +311,8 @@ class IndicadorGeneralMetaRepositorio
             $query2 = $query2->groupBy('ubigeo')->get();
             $value->r2026 = $query2->count() > 0 ? $query2->first()->conteo : 0;
             if ($anioxx == $anio) {
-                $value->avance = number_format(100 * ($value->v2026 > 0 ? $value->r2026 / $value->v2026 : 0), 1);
-                $value->cumple = $value->r2026 == $value->v2026 ? 1 : 0;
+                $value->avance = $value->r2026;
+                $value->cumple = $value->r2026 >= $value->v2026  ? 1 : 0;
             }
         }
 
