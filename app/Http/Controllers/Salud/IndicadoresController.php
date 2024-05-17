@@ -376,7 +376,7 @@ class IndicadoresController extends Controller
                 $gls = IndicadorGeneralMetaRepositorio::getPacto2GLS($rq->indicador, $rq->anio);
                 $gl = IndicadorGeneralMetaRepositorio::getPacto2GL($rq->indicador, $rq->anio);
                 $gln = intval($gl) - intval($gls);
-                $ri = number_format(100 * ($gl > 0 ? $gls / $gl : 0),1);
+                $ri = number_format(100 * ($gl > 0 ? $gls / $gl : 0), 1);
                 return response()->json(['aa' => $rq->all(), 'ri' => $ri, 'gl' => $gl, 'gls' => $gls, 'gln' => $gln]);
 
             case 'anal1':
@@ -485,6 +485,9 @@ class IndicadoresController extends Controller
 
             case 'tabla3':
                 $base = IndicadorGeneralMetaRepositorio::getPacto2tabla3($rq->indicador, $rq->anio);
+                foreach ($base as $key => $value) {
+                    $value->unico = str_pad($value->unico, 8,'0',STR_PAD_LEFT);
+                }
                 $aniob = $rq->anio;
                 $excel = view('salud.Indicadores.PactoRegionalSalPacto2tabla3', compact('base', 'ndis', 'aniob'))->render();
                 return response()->json(compact('excel', 'base'));
