@@ -40,6 +40,7 @@
                                 <div class="col-lg-1 col-md-1 col-sm-1  ">
                                     <select id="mes" name="mes" class="form-control btn-xs font-11 p-0"
                                         onchange="cargarcuadros();">
+                                        <option value="0">MES</option>
                                         @foreach ($mes as $item)
                                             <option value="{{ $item->id }}">
                                                 {{ $item->mes }}</option>
@@ -48,7 +49,7 @@
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-sm-2">
                                     <select id="provincia" name="provincia" class="form-control btn-xs font-11"
-                                        onchange="cargarDistritos();">
+                                        onchange="cargarDistritos();cargarcuadros();">
                                         <option value="0">PROVINCIA</option>
                                         @foreach ($provincia as $item)
                                             <option value="{{ $item->id }}">
@@ -302,6 +303,7 @@
                 data: {
                     'div': div,
                     "anio": $('#anio').val(),
+                    "mes": $('#mes').val(),
                     "provincia": $('#provincia').val(),
                     "distrito": $('#distrito').val(),
                     "indicador": '{{ $ind->id }}',
