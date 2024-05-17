@@ -21,9 +21,12 @@
                     <td>{!! avance($item->ind) !!}</td>
                     <td>
                         @if ($item->cumple == 1)
-                            <i class="mdi mdi-thumb-up" style="font-size:13px;color:#43beac" title="CUMPLE"></i>
+                            <span class="badge badge-success" style="font-size:80%; width:80px">CUMPLE</span>
+                            {{-- <button type="button"
+                            class="btn btn-xs btn-success-0">&nbsp;&nbsp;&nbsp;Cumple&nbsp;&nbsp;&nbsp;</button> --}}
                         @else
-                            <i class="mdi mdi-thumb-down" style="font-size:13px;color: red" title="NO CUMPLE"></i>
+                            <span class="badge  badge-danger" style="font-size:80%; width:80px">NO CUMPLE</span>
+                            {{-- <button type="button" class="btn btn-xs btn-danger">No Cumple</button> --}}
                         @endif
                     </td>
                 </tr>
@@ -34,8 +37,17 @@
                 <th colspan="2" class="text-right">TOTAL</th>
                 <th class="text-center">{{ number_format($foot->den, 0) }}</th>
                 <th class="text-center">{{ number_format($foot->num, 0) }}</th>
-                <th class="text-center">{{ number_format($foot->ind, 0) }}</th>
-                <th class="text-center">{!! avance($foot->indicador, 1) !!}</th>
+                <td>{!! avance($foot->ind) !!}</td>
+                <td>
+                    @if ($foot->cumple == 1)
+                        <span class="badge badge-success" style="font-size:80%; width:80px">CUMPLE</span>
+                        {{-- <button type="button"
+                        class="btn btn-xs btn-success-0">&nbsp;&nbsp;&nbsp;Cumple&nbsp;&nbsp;&nbsp;</button> --}}
+                    @else
+                        <span class="badge  badge-danger" style="font-size:80%; width:80px">NO CUMPLE</span>
+                        {{-- <button type="button" class="btn btn-xs btn-danger">No Cumple</button> --}}
+                    @endif
+                </td>
             </tr>
         </tfoot>
     @else

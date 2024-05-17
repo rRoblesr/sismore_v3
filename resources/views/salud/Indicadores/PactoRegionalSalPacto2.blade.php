@@ -166,12 +166,13 @@
 
                 <div class="col-lg-6">
                     <div class="card card-border border border-plomo-0">
-                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                        <div class="card-header border-success-0 bg-transparent p-0">
                             {{-- <div class="card-widgets">
                                 <button type="button" class="btn btn-success btn-xs"><i
                                         class="fa fa-file-excel"></i> Descargar</button>
                             </div> --}}
-                            <h3 class="text-black font-14">Avance acumulado de la evaluación de Cumplimiento por Distrito
+                            <h3 class="text-black font-14 mb-0">Avance acumulado de la evaluación de Cumplimiento por
+                                Distrito
                             </h3>
                         </div>
                         <div class="card-body p-0">
@@ -198,12 +199,14 @@
                     </div>
 
                     <div class="card card-border border border-plomo-0">
-                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                        <div class="card-header border-success-0 bg-transparent p-0">
                             {{-- <div class="card-widgets">
-                                <button type="button" class="btn btn-success btn-xs"><i
-                                        class="fa fa-file-excel"></i> Descargar</button>
+                                <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
+                                        class="fa fa-file-excel"></i>
+                                    Descargar</button>
                             </div> --}}
-                            <h3 class="text-black font-14">Avance acumulado de la evaluación de Cumplimiento por Provincia
+                            <h3 class="text-black font-14 mb-0">Avance acumulado de la evaluación de Cumplimiento por
+                                Provincia
                             </h3>
                         </div>
                         <div class="card-body p-0">
@@ -219,17 +222,15 @@
 
             </div>
 
-
-
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card card-border border border-plomo-0">
-                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                            {{-- <div class="card-widgets">
+                        <div class="card-header border-success-0 bg-transparent p-0">
+                            <div class="card-widgets">
                                 <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
                                         class="fa fa-file-excel"></i> Descargar</button>
-                            </div> --}}
-                            <h3 class="text-black font-14">Evaluación de cumplimiento de los logros esperados por distrito
+                            </div>
+                            <h3 class="text-black font-14 mb-0">Listado de establecimientos de salud que fueron evaluados
                             </h3>
                         </div>
                         <div class="card-body p-0">
@@ -244,6 +245,29 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card card-border border border-plomo-0">
+                        <div class="card-header border-success-0 bg-transparent p-0">
+                            <div class="card-widgets">
+                                <button type="button" class="btn btn-success btn-xs" onclick="descargar4()"><i
+                                        class="fa fa-file-excel"></i> Descargar</button>
+                            </div>
+                            <h3 class="text-black font-14 mb-0">Evaluación de cumplimiento de los logros esperados por
+                                distrito
+                            </h3>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="table-responsive" id="vtabla4">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>
@@ -269,6 +293,7 @@
             panelGraficas('tabla1');
             panelGraficas('tabla2');
             panelGraficas('tabla3');
+            panelGraficas('tabla4');
         }
 
         function panelGraficas(div) {
@@ -310,8 +335,6 @@
                             '');
                     } else if (div == "tabla1") {
                         $('#vtabla1').html(data.excel);
-                        // $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
-                        // $('.vtabla1-fecha').html('Actualizado: ' + data.reg.fecha);
                         // $('#tabla1').DataTable({
                         //     responsive: true,
                         //     autoWidth: false,
@@ -323,12 +346,19 @@
                         // });
                     } else if (div == "tabla2") {
                         $('#vtabla2').html(data.excel);
-                        // $('.vtabla2-fuente').html('Fuente: ]]' + data.reg.fuente);
-                        // $('.vtabla2-fecha').html('Actualizado: ' + data.reg.fecha);
                     } else if (div == "tabla3") {
                         $('#vtabla3').html(data.excel);
-                        // $('.vtabla2-fuente').html('Fuente: ]]' + data.reg.fuente);
-                        // $('.vtabla2-fecha').html('Actualizado: ' + data.reg.fecha);
+                        $('#tabla3').DataTable({
+                            responsive: true,
+                            autoWidth: false,
+                            ordered: true,
+                            // searching: false,
+                            // bPaginate: false,
+                            // info: false,
+                            language: table_language,
+                        });
+                    } else if (div == "tabla4") {
+                        $('#vtabla4').html(data.excel);
                     }
 
                 },

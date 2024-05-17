@@ -32,6 +32,7 @@ class SaludPadronNominalSeguimiento extends Controller
         $codigo_institucion = ($cod_2000 == "NULL") ? session('usuario_codigo_institucion') : $cod_2000;
         $codigo_institucion = ($sector == "MI") ? '250101' : $codigo_institucion;
         $nombre_columna = ($sector == 'SA') ? "re.cod_2000" : "re.ubigeo";
+        
         $dato_ipress = DB::table('m_establecimiento as re')->select('re.cod_2000', 're.nom_est', 're.cod_mic', 're.nom_mic', 're.cod_red', 're.nom_red')->where($nombre_columna, $codigo_institucion)->first();
 
         $query = DB::table('m_establecimiento as re')->select('re.cod_red', 're.nom_red')->where('cod_disa', '34');

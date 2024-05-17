@@ -1,4 +1,4 @@
-<table id="tabla1" class="table table-sm table-striped table-bordered font-12 m-0" style="height: 100%">
+<table id="tabla1" class="table table-sm table-striped table-bordered font-11 m-0" style="height: 100%">
     <thead>
         <tr class="bg-success-0 text-white text-center">
             <th rowspan="1" class="text-center">Nº</th>
@@ -31,15 +31,22 @@
                 </tr>
             @endforeach
         </tbody>
-        {{-- <tfoot>
+        <tfoot>
             <tr class="text-center bg-success-0 text-white">
                 <th colspan="2" class="text-right">TOTAL</th>
-                <th class="text-center">{{ number_format($foot->total, 0) }}</th>
-                <th class="text-center">{{ number_format($foot->con, 0) }}</th>
-                <th class="text-center">{{ number_format($foot->sin, 0) }}</th>
-                <th class="text-center">{!! avance($foot->indicador, 1) !!}</th>
+                <th class="text-center">{{ $foot->valor }}%</th>
+                <th class="text-center">{{ number_format($foot->num, 0) }}</th>
+                <th class="text-center">{{ number_format($foot->den, 0) }}</th>
+                <th class="text-center">{!! avance($foot->ind, 1) !!}</th>
+                <td>
+                    @if ($foot->cumple == 1)
+                        <i class="mdi mdi-thumb-up" style="font-size:13px;color:#43beac" title="CUMPLE"></i>
+                    @else
+                        <i class="mdi mdi-thumb-down" style="font-size:13px;color: red" title="NO CUMPLE"></i>
+                    @endif
+                </td>
             </tr>
-        </tfoot> --}}
+        </tfoot>
     @else
         <tbody>
             <tr class="text-center">

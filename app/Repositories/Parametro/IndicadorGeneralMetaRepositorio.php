@@ -233,6 +233,31 @@ class IndicadorGeneralMetaRepositorio
 
     public static function getPacto2tabla3($indicador_id, $anio)
     {
+        $queryx = ImporPadronAnemia::select(
+            'es.cod_unico as unico',
+            'es.nombre_establecimiento as eess',
+            'rr.nombre as red',
+            'mr.nombre as micro',
+            'pp.nombre as pro',
+            'dd.nombre as dis',
+            DB::raw('sum(den) as den'),
+            DB::raw('sum(num) as num'),
+            DB::raw('round(100*sum(num)/sum(den),1) as ind')
+        );
+        $queryx = $queryx->where('anio', $anio);
+        $queryx = $queryx->join('sal_establecimiento as es', 'es.cod_unico', '=', 'sal_impor_padron_anemia.cod_unico');
+        $queryx = $queryx->join('sal_microred as mr', 'mr.id', '=', 'es.microrred_id');
+        $queryx = $queryx->join('sal_red as rr', 'rr.id', '=', 'mr.red_id');
+        $queryx = $queryx->join('par_ubigeo as dd', 'dd.id', '=', 'es.ubigeo_id');
+        $queryx = $queryx->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia');
+        if (IndicadoresController::$pacto1_anio == $anio) $queryx = $queryx->where('mes', '>=', IndicadoresController::$pacto1_mes);
+        $queryx = $queryx->groupBy('unico', 'eess', 'red', 'micro', 'pro', 'dis')->get();
+
+        return $queryx;
+    }
+
+    public static function getPacto2tabla4($indicador_id, $anio)
+    {
         $query = IndicadorGeneralMeta::select(
             'd.id as dis_id',
             'd.nombre as dis',

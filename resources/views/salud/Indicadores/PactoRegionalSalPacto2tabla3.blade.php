@@ -1,54 +1,43 @@
-<table id="tabla3" class="table table-sm table-striped table-bordered font-12 m-0">
+<table id="tabla3" class="table table-sm table-striped table-bordered font-12 m-0" style="height: 100%">
     <thead>
         <tr class="bg-success-0 text-white text-center">
-            <th rowspan="2" class="text-center">Nº</th>
-            <th rowspan="2" class="text-center">Distrito</th>
-            <th rowspan="1" colspan="2" class="text-center">Linea Base</th>
-            <th rowspan="1" colspan="4" class="text-center">Logro Esperados</th>
-            <th rowspan="1" colspan="4" class="text-center">Valores Obtenidos</th>
-            <th rowspan="2" class="text-center">Avance<br>{{ $aniob }}</th>
-            <th rowspan="2" class="text-center">Condición</th>
-        </tr>
-        <tr class="bg-success-0 text-white text-center">
-            <th class="text-center">Año</th>
-            <th class="text-center">Valor</th>
-
-            <th class="text-center">2023</th>
-            <th class="text-center">2024</th>
-            <th class="text-center">2025</th>
-            <th class="text-center">2026</th>
-
-            <th class="text-center">2023</th>
-            <th class="text-center">2024</th>
-            <th class="text-center">2025</th>
-            <th class="text-center">2026</th>
+            <th rowspan="1" class="text-center">Nº</th>
+            <th rowspan="1" class="text-center">Código</th>
+            <th rowspan="1" class="text-center">Establecimiento de salud</th>
+            <th rowspan="1" class="text-center">Red</th>
+            <th rowspan="1" class="text-center">Microrred</th>
+            <th rowspan="1" class="text-center">Provincia</th>
+            <th rowspan="1" class="text-center">Distrito</th>
+            <th rowspan="1" class="text-center">Denominador</th>
+            <th rowspan="1" class="text-center">Numerador</th>
+            <th colspan="1" class="text-center">Indicador</th>
+            <th colspan="1" class="text-center">Condición</th>
         </tr>
 
     </thead>
     @if ($base->count() > 0)
         <tbody>
             @foreach ($base as $key => $item)
-                <tr class="text-center {{ $item->dis == $ndis ? 'table-warning' : '' }}">
+                <tr class="text-center">
                     <td>{{ $key + 1 }}</td>
+                    <td>{{ $item->unico }}</td>
+                    <td class="text-left">{{ $item->eess }}</td>
+                    <td class="text-left">{{ $item->red }}</td>
+                    <td class="text-left">{{ $item->micro }}</td>
+                    <td class="text-left">{{ $item->pro }}</td>
                     <td class="text-left">{{ $item->dis }}</td>
-                    <td>{{ $item->anio_base }}</td>
-                    <td>{{ $item->valor_base }}</td>
-                    <td>{{ $item->v2023 }}%</td>
-                    <td>{{ $item->v2024 }}%</td>
-                    <td>{{ $item->v2025 }}%</td>
-                    <td>{{ $item->v2026 }}%</td>
-                    <td>{{ $item->r2023 }}%</td>
-                    <td>{{ $item->r2024 }}%</td>
-                    <td>{{ $item->r2025 }}%</td>
-                    <td>{{ $item->r2026 }}%</td>
-                    <td>{!! avance($item->avance) !!}</td>{{--  --}}
+                    <td>{{ $item->den }}</td>                    
+                    <td>{{ $item->num }}</td>
+                    <td>{!! avance($item->ind) !!}</td>
                     <td>
                         @if ($item->cumple == 1)
-                            <button type="button"
-                                class="btn btn-xs btn-success-0">&nbsp;&nbsp;&nbsp;Cumple&nbsp;&nbsp;&nbsp;</button>
-                        @else
-                            <button type="button" class="btn btn-xs btn-danger">No Cumple</button>
-                        @endif
+                        <span class="badge badge-success" style="font-size:80%; width:80px">CUMPLE</span>
+                        {{-- <button type="button"
+                            class="btn btn-xs btn-success-0">&nbsp;&nbsp;&nbsp;Cumple&nbsp;&nbsp;&nbsp;</button> --}}
+                    @else
+                        <span class="badge  badge-danger" style="font-size:80%; width:80px">NO CUMPLE</span>
+                        {{-- <button type="button" class="btn btn-xs btn-danger">No Cumple</button> --}}
+                    @endif
                     </td>
                 </tr>
             @endforeach
@@ -56,9 +45,9 @@
         {{-- <tfoot>
             <tr class="text-center bg-success-0 text-white">
                 <th colspan="2" class="text-right">TOTAL</th>
-                <th class="text-center">{{ number_format($foot->total, 0) }}</th>
-                <th class="text-center">{{ number_format($foot->con, 0) }}</th>
-                <th class="text-center">{{ number_format($foot->sin, 0) }}</th>
+                <th class="text-center">{{ number_format($foot->den, 0) }}</th>
+                <th class="text-center">{{ number_format($foot->num, 0) }}</th>
+                <th class="text-center">{{ number_format($foot->ind, 0) }}</th>
                 <th class="text-center">{!! avance($foot->indicador, 1) !!}</th>
             </tr>
         </tfoot> --}}
