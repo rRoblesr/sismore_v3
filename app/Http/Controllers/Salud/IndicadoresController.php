@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Salud;
 
+use App\Exports\pactoregional1Export;
 use App\Http\Controllers\Controller;
 use App\Models\Educacion\Area;
 use App\Models\Educacion\SFL;
@@ -505,34 +506,32 @@ class IndicadoresController extends Controller
         }
     }
 
-    public function PactoRegionalSalPacto2Export(Request $rq)
+    public function PactoRegionalSalPacto2Export($div, $indicador, $anio, $mes, $provincia, $distrito)
     {
-        if ($rq->distrito > 0) $ndis = Ubigeo::find($rq->distrito)->nombre;
+        if ($distrito > 0) $ndis = Ubigeo::find($distrito)->nombre;
         else $ndis = '';
-        switch ($rq->div) {
+        switch ($div) {
             case 'tabla3':
-                $base = IndicadorGeneralMetaRepositorio::getSalPacto2tabla3($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $base = IndicadorGeneralMetaRepositorio::getSalPacto2tabla3($indicador, $anio, $mes, $provincia, $distrito);
                 foreach ($base as $key => $value) {
                     $value->unico = str_pad($value->unico, 8, '0', STR_PAD_LEFT);
                 }
-                $aniob = $rq->anio;
+                $aniob = $anio;
                 return response()->json(compact('base', 'ndis', 'aniob'));
             case 'tabla4':
-                $base = IndicadorGeneralMetaRepositorio::getSalPacto2tabla4($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
-                $aniob = $rq->anio;
+                $base = IndicadorGeneralMetaRepositorio::getSalPacto2tabla4($indicador, $anio, $mes, $provincia, $distrito);
+                $aniob = $anio;
                 return response()->json(compact('base', 'ndis', 'aniob'));
-
-
             default:
                 return [];
         }
     }
 
-    public function reporte7download($ano, $articulo, $ue, $ff, $gg, $partidas)
+    public function reporte7download($div, $indicador, $anio, $mes, $provincia, $distrito)
     {
-        if ($ano > 0) {
+        if ($anio > 0) {
             $name = 'Ejecución de Gastos, según Especifica Detalle ' . date('Y-m-d') . '.xlsx';
-            return Excel::download(new SiafWebRPT7Export($ano, $articulo, $ue, $ff, $gg, $partidas), $name);
+            return Excel::download(new pactoregional1Export($div, $indicador, $anio, $mes, $provincia, $distrito), $name);
         }
     }
 
