@@ -18,6 +18,7 @@ use App\Repositories\Parametro\IndicadorGeneralRepositorio;
 use App\Repositories\Parametro\UbigeoRepositorio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class IndicadoresController extends Controller
 {
@@ -524,6 +525,14 @@ class IndicadoresController extends Controller
 
             default:
                 return [];
+        }
+    }
+
+    public function reporte7download($ano, $articulo, $ue, $ff, $gg, $partidas)
+    {
+        if ($ano > 0) {
+            $name = 'Ejecución de Gastos, según Especifica Detalle ' . date('Y-m-d') . '.xlsx';
+            return Excel::download(new SiafWebRPT7Export($ano, $articulo, $ue, $ff, $gg, $partidas), $name);
         }
     }
 

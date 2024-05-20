@@ -172,8 +172,8 @@
                                 <button type="button" class="btn btn-success btn-xs"><i
                                         class="fa fa-file-excel"></i> Descargar</button>
                             </div> --}}
-                            <h3 class="text-black font-14 mb-0">Avance acumulado de la evaluación de Cumplimiento por
-                                Distrito
+                            <h3 class="text-black font-14 mb-0">
+                                Avance acumulado de la evaluación de Cumplimiento por Distrito
                             </h3>
                         </div>
                         <div class="card-body p-0">
@@ -206,8 +206,8 @@
                                         class="fa fa-file-excel"></i>
                                     Descargar</button>
                             </div> --}}
-                            <h3 class="text-black font-14 mb-0">Avance acumulado de la evaluación de Cumplimiento por
-                                Provincia
+                            <h3 class="text-black font-14 mb-0">
+                                Avance acumulado de la evaluación de Cumplimiento por Red
                             </h3>
                         </div>
                         <div class="card-body p-0">
@@ -228,10 +228,11 @@
                     <div class="card card-border border border-plomo-0">
                         <div class="card-header border-success-0 bg-transparent p-0">
                             <div class="card-widgets">
-                                <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
+                                <button type="button" class="btn btn-success btn-xs" onclick="descargar3()"><i
                                         class="fa fa-file-excel"></i> Descargar</button>
                             </div>
-                            <h3 class="text-black font-14 mb-0">Listado de establecimientos de salud que fueron evaluados
+                            <h3 class="text-black font-14 mb-0">
+                                Listado de establecimientos de salud que fueron evaluados
                             </h3>
                         </div>
                         <div class="card-body p-0">
@@ -254,8 +255,8 @@
                                 <button type="button" class="btn btn-success btn-xs" onclick="descargar4()"><i
                                         class="fa fa-file-excel"></i> Descargar</button>
                             </div>
-                            <h3 class="text-black font-14 mb-0">Evaluación de cumplimiento de los logros esperados por
-                                distrito
+                            <h3 class="text-black font-14 mb-0">
+                                Evaluación de cumplimiento de los logros esperados por Distrito
                             </h3>
                         </div>
                         <div class="card-body p-0">
@@ -426,12 +427,13 @@
             });
         }
 
-        function descargar1() {
-            window.open("{{ url('/') }}/INDICADOR/Home/01/Excel/tabla1/" + $('#anio').val() + "/" + $('#provincia')
-                .val() + "/" + $('#distrito').val() + "/" + $('#gestion').val() + "/0");
+        function descargar3() { ///{div}/{indicador}/{anio}/{mes}/{provincia}/{distrito}'
+            window.open(
+                "{{ route('salud.indicador.pactoregional.sal.pacto2.reports.excel', ['', '', '', '', '', '']) }}/tabla3/{{ $ind->id }}/" +
+                $('#anio').val() + "/" + $('#mes').val() + "/" + $('#provincia').val() + "/" + $('#distrito').val());
         }
 
-        function descargar2() {
+        function descargar4() {
             window.open("{{ url('/') }}/INDICADOR/Home/01/Excel/tabla2/" + $('#anio').val() + "/" + $('#provincia')
                 .val() + "/" + $('#distrito').val() + "/" + $('#gestion').val() + "/" + ugel_select);
         }
