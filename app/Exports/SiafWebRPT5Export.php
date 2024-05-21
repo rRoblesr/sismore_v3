@@ -29,16 +29,23 @@ class SiafWebRPT5Export implements FromView, ShouldAutoSize, WithEvents
         $data = BaseSiafWebRepositorio::listar_fuentefinanciamiento_anio_acticulo_ue_categoria($this->ano, $this->articulo, $this->ue);
         $body = $data['body'];
         $head = $data['head'];
-        $foot = ['pia' => 0, 'pim' => 0, 'cert' => 0, 'dev' => 0, 'eje' => 0, 'saldo1' => 0, 'saldo2' => 0,];
-        foreach ($data['body'] as $key => $value) {
-            $foot['pia'] += $value->pia;
-            $foot['pim'] += $value->pim;
-            $foot['cert'] += $value->cert;
-            $foot['dev'] += $value->dev;
-            $foot['saldo1'] += $value->saldo1;
-            $foot['saldo2'] += $value->saldo2;
+        $foot = clone $data['body'][0];
+        $foot->pia = 0;
+        $foot->pim = 0;
+        $foot->cert = 0;
+        $foot->dev = 0;
+        $foot->saldo1 = 0;
+        $foot->saldo2 = 0;
+        $foot->eje = 0;
+        foreach ($body as $key => $value) {
+            $foot->pia += $value->pia;
+            $foot->pia += $value->pim;
+            $foot->pia += $value->cert;
+            $foot->pia += $value->dev;
+            $foot->pia  += $value->saldo1;
+            $foot->pia  += $value->saldo2;
         }
-        $foot['eje'] = $foot['pim'] > 0 ? number_format(100 * $foot['dev'] / $foot['pim'], 1) : 0;
+        $foot->eje = $foot->pim > 0 ? number_format(100 * $foot->dev / $foot->pim, 1) : 0;
         return view("Presupuesto.BaseSiafWeb.Reporte5Tabla1Export", compact('body', 'head', 'foot'));
     }
 

@@ -18,10 +18,7 @@
     <tbody>
         @foreach ($head as $pos => $item)
             <tr class="text-right font-weight-bold">
-                {{-- <td class="text-center">{{ $pos + 1 }}</td> --}}
-                {{-- <td class="text-center">{{ $item->cfuente }}</td> --}}
                 <td class="text-left">
-                    {{-- <a href="#anal1" onclick="graficar({{ $item->id }},'{{ $item->fuente }}')"></a> --}}
                     {{ $item->cfuente }} {{ $item->fuente }}
                 </td>
                 <td>{{ number_format($item->pia, 0) }}</td>
@@ -37,11 +34,9 @@
             @foreach ($body as $pos => $item2)
                 @if ($item2->cfuente == $item->cfuente)
                     <tr class="text-right">
-                        {{-- <td class="text-center">{{ $pos + 1 }}</td> --}}
-                        {{-- <td class="text-center">{{ $item2->cfuente }}</td> --}}
                         <td class="text-left">
-                            <a href="#anal1"
-                                onclick="graficar({{ $item2->idrubro }},'{{ $item2->rubro }}')">&nbsp;&nbsp;&nbsp;{{ $item2->crubro }} {{ $item2->rubro }}</a>
+                            &nbsp;&nbsp;&nbsp;{{ $item2->crubro }}
+                                {{ $item2->rubro }}
                         </td>
                         <td>{{ number_format($item2->pia, 0) }}</td>
                         <td>{{ number_format($item2->pim, 0) }}</td>
@@ -59,14 +54,14 @@
     <tfoot>
         <tr class="text-center bg-success-1 text-white">
             <th class="text-left" colspan="1">TOTAL</th>
-            <th>{{ number_format($foot['pia'], 0) }}</th>
-            <th>{{ number_format($foot['pim'], 0) }}</th>
-            <th>{{ number_format($foot['cert'], 0) }}</th>
-            <th class="text-center">{!! avance($foot['eje1']) !!}</th>
-            <th>{{ number_format($foot['dev'], 0) }}</th>
-            <th class="text-center">{!! avance($foot['eje']) !!}</th>
-            <th>{{ number_format($foot['saldo1'], 0) }}</th>
-            <th>{{ number_format($foot['saldo2'], 0) }}</th>
+            <th>{{ number_format($foot->pia, 0) }}</th>
+            <th>{{ number_format($foot->pim, 0) }}</th>
+            <th>{{ number_format($foot->cert, 0) }}</th>
+            <th class="text-center">{!! avance($foot->eje1) !!}</th>
+            <th>{{ number_format($foot->dev, 0) }}</th>
+            <th class="text-center">{!! avance($foot->eje) !!}</th>
+            <th>{{ number_format($foot->saldo1, 0) }}</th>
+            <th>{{ number_format($foot->saldo2, 0) }}</th>
         </tr>
     </tfoot>
 </table>
@@ -77,11 +72,17 @@
     function avance($monto)
     {
         if ($monto < 51) {
-            return '<span class="badge badge-pill badge-danger" style="font-size:85%;">' . round($monto, 1) . '%</span>';
+            return '<span class="badge badge-pill badge-danger" style="font-size:85%;">' .
+                round($monto, 1) .
+                '%</span>';
         } elseif ($monto < 75) {
-            return '<span class="badge badge-pill badge-warning" style="font-size:85%;background-color:#eb960d;">' . round($monto, 1) . '%</span>';
+            return '<span class="badge badge-pill badge-warning" style="font-size:85%;background-color:#eb960d;">' .
+                round($monto, 1) .
+                '%</span>';
         } else {
-            return '<span class="badge badge-pill badge-success" style="font-size:85%;">' . round($monto, 1) . '%</span>';
+            return '<span class="badge badge-pill badge-success" style="font-size:85%;">' .
+                round($monto, 1) .
+                '%</span>';
         }
     }
 @endphp
