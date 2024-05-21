@@ -240,7 +240,7 @@ class IndicadorGeneralMetaRepositorio
         return $query;
     }
 
-    public static function getSalPacto2tabla2tabla1($indicador_id, $anio, $mes, $provincia, $distrito)
+    public static function getSalPacto2tabla2tabla1($indicador_id, $anio, $mes, $provincia, $distrito, $red = 0)
     {
         $query = ImporPadronAnemia::select('mr.id as idmicro', 'mr.nombre as micro', DB::raw('sum(den) as den'), DB::raw('sum(num) as num'), DB::raw('round(100*sum(num)/sum(den),1) as ind'))
             ->where('anio', $anio);
@@ -249,6 +249,7 @@ class IndicadorGeneralMetaRepositorio
         $query = $query->join('sal_red as rr', 'rr.id', '=', 'mr.red_id');
         $query = $query->join('par_ubigeo as dd', 'dd.id', '=', 'ubigeo');
         $query = $query->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia');
+        if ($red > 0) $query = $query->where('rr.id',  $red);
         if (IndicadoresController::$pacto1_anio == $anio) $query = $query->where('mes', '>=', IndicadoresController::$pacto1_mes);
         if ($mes > 0) $query = $query->where('mes',  $mes);
         if ($distrito > 0) $query = $query->where('ubigeo',  $distrito);

@@ -276,7 +276,7 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title font-16" id="myModalLabel">Datos del indicador</h5>
+                            <h5 class="modal-title font-16">Datos del indicador</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                         </div>
                         <div class="modal-body">
@@ -286,8 +286,9 @@
                             <div class="card card-border border border-plomo-0">
                                 <div class="card-header border-success-0 bg-transparent p-0">
                                     <h3 class="text-black font-14 mb-0">
-                                        Avance acumulado de la evaluación de Cumplimiento por Red
+                                        Avance acumulado de la evaluación de Cumplimiento por Microrred
                                     </h3>
+                                    <input type="hidden" name="mred" id="mred" value="">
                                 </div>
                                 <div class="card-body p-0">
                                     <div class="row">
@@ -348,6 +349,7 @@
                     "distrito": $('#distrito').val(),
                     "indicador": '{{ $ind->id }}',
                     "codigo": '{{ $ind->codigo }}',
+                    "red": $('#mred').val(),
                 },
                 type: "GET",
                 dataType: "JSON",
@@ -450,9 +452,10 @@
         };
 
         function cargarmicrored(red) {
+            $('#mred').val(red);
             $('#modal_microred').modal('show');
             panelGraficas('tabla2tabla1');
-            
+
         }
 
         function gSimpleColumn(div, datax, titulo, subtitulo, tituloserie) {
