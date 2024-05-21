@@ -224,7 +224,7 @@ class IndicadorGeneralMetaRepositorio
 
     public static function getSalPacto2tabla2($indicador_id, $anio, $mes, $provincia, $distrito)
     {
-        $query = ImporPadronAnemia::select('rr.nombre as provincia', DB::raw('sum(den) as den'), DB::raw('sum(num) as num'), DB::raw('round(100*sum(num)/sum(den),1) as ind'))
+        $query = ImporPadronAnemia::select('rr.id as idred', 'rr.nombre as red', DB::raw('sum(den) as den'), DB::raw('sum(num) as num'), DB::raw('round(100*sum(num)/sum(den),1) as ind'))
             ->where('anio', $anio);
         $query = $query->join('sal_establecimiento as es', 'es.cod_unico', '=', 'sal_impor_padron_anemia.cod_unico');
         $query = $query->join('sal_microred as mr', 'mr.id', '=', 'es.microrred_id');
@@ -235,7 +235,25 @@ class IndicadorGeneralMetaRepositorio
         if ($mes > 0) $query = $query->where('mes',  $mes);
         if ($distrito > 0) $query = $query->where('ubigeo',  $distrito);
         if ($provincia > 0) $query = $query->where('pp.id',  $provincia);
-        $query = $query->groupBy('provincia')->get();
+        $query = $query->groupBy('idred', 'red')->get();
+
+        return $query;
+    }
+
+    public static function getSalPacto2tabla2tabla1($indicador_id, $anio, $mes, $provincia, $distrito)
+    {
+        $query = ImporPadronAnemia::select('mr.id as idmicro', 'mr.nombre as micro', DB::raw('sum(den) as den'), DB::raw('sum(num) as num'), DB::raw('round(100*sum(num)/sum(den),1) as ind'))
+            ->where('anio', $anio);
+        $query = $query->join('sal_establecimiento as es', 'es.cod_unico', '=', 'sal_impor_padron_anemia.cod_unico');
+        $query = $query->join('sal_microred as mr', 'mr.id', '=', 'es.microrred_id');
+        $query = $query->join('sal_red as rr', 'rr.id', '=', 'mr.red_id');
+        $query = $query->join('par_ubigeo as dd', 'dd.id', '=', 'ubigeo');
+        $query = $query->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia');
+        if (IndicadoresController::$pacto1_anio == $anio) $query = $query->where('mes', '>=', IndicadoresController::$pacto1_mes);
+        if ($mes > 0) $query = $query->where('mes',  $mes);
+        if ($distrito > 0) $query = $query->where('ubigeo',  $distrito);
+        if ($provincia > 0) $query = $query->where('pp.id',  $provincia);
+        $query = $query->groupBy('idmicro', 'micro')->get();
 
         return $query;
     }

@@ -2,7 +2,7 @@
     <thead>
         <tr class="bg-success-0 text-white text-center">
             <th rowspan="1" class="text-center">Nº</th>
-            <th rowspan="1" class="text-center">Código</th>
+            <th rowspan="1" class="text-center">Código Unico</th>
             <th rowspan="1" class="text-center">Establecimiento de salud</th>
             <th rowspan="1" class="text-center">Red</th>
             <th rowspan="1" class="text-center">Microrred</th>
@@ -31,11 +31,9 @@
                     <td>{!! avance($item->ind) !!}</td>
                     <td>
                         @if ($item->cumple == 1)
-                        {{-- <span class="badge badge-success" style="font-size:80%; width:80px">CUMPLE</span> --}}
                         <button type="button"
                             class="btn btn-xs btn-success-0 py-0">&nbsp;&nbsp;&nbsp;Cumple&nbsp;&nbsp;&nbsp;</button>
                     @else
-                        {{-- <span class="badge  badge-danger" style="font-size:80%; width:80px">NO CUMPLE</span> --}}
                         <button type="button" class="btn btn-xs btn-danger py-0">No Cumple</button>
                     @endif
                     </td>

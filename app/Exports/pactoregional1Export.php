@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Http\Controllers\Educacion\IndicadorController;
+use App\Http\Controllers\Salud\IndicadoresController;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromView;
@@ -30,19 +31,19 @@ class pactoregional1Export implements FromView, ShouldAutoSize
     public function view(): View
     {
         if ($this->div == 'tabla1') {
-            $mgs = (new IndicadorController())->PactoRegionalSalPacto2Export($this->div, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
-            return view('salud.Indicadores.PactoRegionalSalPacto2tabla3Export', $mgs);
+            $mgs = (new IndicadoresController())->PactoRegionalSalPacto2Export($this->div, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
+            return view('salud.Indicadores.PactoRegionalSalPacto2tabla1Export', $mgs);
         } else if ($this->div == 'tabla2') {
-            $mgs = (new IndicadorController())->PactoRegionalSalPacto2Export($this->div, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
-            return view('salud.Indicadores.PactoRegionalSalPacto2tabla3Export', $mgs);
+            $mgs = (new IndicadoresController())->PactoRegionalSalPacto2Export($this->div, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
+            return view('salud.Indicadores.PactoRegionalSalPacto2tabla2Export', $mgs);
         } else if ($this->div == 'tabla3') {
-            $mgs = (new IndicadorController())->PactoRegionalSalPacto2Export($this->div, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
+            $mgs = (new IndicadoresController())->PactoRegionalSalPacto2Export($this->div, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
             return view('salud.Indicadores.PactoRegionalSalPacto2tabla3Export', $mgs);
         } else if ($this->div == 'tabla4') {
-            $mgs = (new IndicadorController())->PactoRegionalSalPacto2Export($this->div, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
+            $mgs = (new IndicadoresController())->PactoRegionalSalPacto2Export($this->div, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
             return view('salud.Indicadores.PactoRegionalSalPacto2tabla4Export', $mgs);
         } else {
-            $mgs = (new IndicadorController())->PactoRegionalSalPacto2Export($this->div, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
+            $mgs = (new IndicadoresController())->PactoRegionalSalPacto2Export($this->div, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
             return view('salud.Indicadores.PactoRegionalSalPacto2tabla5Export', $mgs);
         }
     }

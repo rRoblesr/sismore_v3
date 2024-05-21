@@ -371,8 +371,7 @@ class IndicadoresController extends Controller
 
     public function PactoRegionalSalPacto2Reports(Request $rq)
     {
-        if ($rq->distrito > 0) $ndis = Ubigeo::find($rq->distrito)->nombre;
-        else $ndis = '';
+        $ndis = $rq->distrito > 0 ? Ubigeo::find($rq->distrito)->nombre : '';
         switch ($rq->div) {
             case 'head':
                 $gls = IndicadorGeneralMetaRepositorio::getSalPacto2GLS($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
@@ -499,7 +498,11 @@ class IndicadoresController extends Controller
                 $aniob = $rq->anio;
                 $excel = view('salud.Indicadores.PactoRegionalSalPacto2tabla4', compact('base', 'ndis', 'aniob'))->render();
                 return response()->json(compact('excel', 'base'));
-
+            case 'tabla2tabla1':
+                $base = IndicadorGeneralMetaRepositorio::getSalPacto2tabla2tabla1($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $aniob = $rq->anio;
+                $excel = view('salud.Indicadores.PactoRegionalSalPacto2tabla2tabla1', compact('base', 'ndis', 'aniob'))->render();
+                return response()->json(compact('excel', 'base'));
 
             default:
                 return [];
@@ -508,29 +511,26 @@ class IndicadoresController extends Controller
 
     public function PactoRegionalSalPacto2Export($div, $indicador, $anio, $mes, $provincia, $distrito)
     {
-        if ($distrito > 0) $ndis = Ubigeo::find($distrito)->nombre;
-        else $ndis = '';
         switch ($div) {
             case 'tabla3':
                 $base = IndicadorGeneralMetaRepositorio::getSalPacto2tabla3($indicador, $anio, $mes, $provincia, $distrito);
                 foreach ($base as $key => $value) {
                     $value->unico = str_pad($value->unico, 8, '0', STR_PAD_LEFT);
                 }
-                $aniob = $anio;
-                return response()->json(compact('base', 'ndis', 'aniob'));
+                return compact('base');
             case 'tabla4':
                 $base = IndicadorGeneralMetaRepositorio::getSalPacto2tabla4($indicador, $anio, $mes, $provincia, $distrito);
                 $aniob = $anio;
-                return response()->json(compact('base', 'ndis', 'aniob'));
+                return compact('base', 'aniob');
             default:
                 return [];
         }
     }
 
-    public function reporte7download($div, $indicador, $anio, $mes, $provincia, $distrito)
+    public function PactoRegionalSalPacto2download($div, $indicador, $anio, $mes, $provincia, $distrito)
     {
         if ($anio > 0) {
-            $name = 'Ejecución de Gastos, según Especifica Detalle ' . date('Y-m-d') . '.xlsx';
+            $name = 'Pacto 2' . date('Y-m-d') . '.xlsx';
             return Excel::download(new pactoregional1Export($div, $indicador, $anio, $mes, $provincia, $distrito), $name);
         }
     }

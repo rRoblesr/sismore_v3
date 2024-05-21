@@ -16,7 +16,7 @@
                 <tr class="text-center">
                     <td>{{ $key + 1 }}</td>
                     <td class="text-left">
-                        <a href="">{{ $item->provincia }}
+                        <a href="javascript:void(0)" onclick="cargarmicrored({{ $item->idred }})">{{ $item->red }}
                         </a>
                     </td>
                     <td>{{ $item->den }}</td>
@@ -24,11 +24,9 @@
                     <td>{!! avance($item->ind) !!}</td>
                     <td>
                         @if ($item->cumple == 1)
-                            {{-- <span class="badge badge-success" style="font-size:80%; width:80px">CUMPLE</span> --}}
                             <button type="button"
                                 class="btn btn-xs btn-success-0 py-0">&nbsp;&nbsp;&nbsp;Cumple&nbsp;&nbsp;&nbsp;</button>
                         @else
-                            {{-- <span class="badge  badge-danger" style="font-size:80%; width:80px">NO CUMPLE</span> --}}
                             <button type="button" class="btn btn-xs btn-danger py-0">No Cumple</button>
                         @endif
                     </td>
@@ -45,7 +43,7 @@
                     @if ($foot->cumple == 1)
                         {{-- <span class="badge badge-success" style="font-size:80%; width:80px">CUMPLE</span> --}}
                         <button type="button"
-                        class="btn btn-xs btn-success-0 py-0">&nbsp;&nbsp;&nbsp;Cumple&nbsp;&nbsp;&nbsp;</button>
+                            class="btn btn-xs btn-success-0 py-0">&nbsp;&nbsp;&nbsp;Cumple&nbsp;&nbsp;&nbsp;</button>
                     @else
                         {{-- <span class="badge  badge-danger" style="font-size:80%; width:80px">NO CUMPLE</span> --}}
                         <button type="button" class="btn btn-xs btn-danger py-0">No Cumple</button>

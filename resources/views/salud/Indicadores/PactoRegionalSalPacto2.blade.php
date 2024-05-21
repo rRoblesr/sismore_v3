@@ -271,6 +271,45 @@
                 </div>
             </div>
 
+            <div id="modal_microred" class="modal fade font-10" tabindex="-1" role="dialog"
+                aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title font-16" id="myModalLabel">Datos del indicador</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        </div>
+                        <div class="modal-body">
+
+                            {{-- <div class="row"> --}}
+                            {{-- <div class="col-lg-6"> --}}
+                            <div class="card card-border border border-plomo-0">
+                                <div class="card-header border-success-0 bg-transparent p-0">
+                                    <h3 class="text-black font-14 mb-0">
+                                        Avance acumulado de la evaluación de Cumplimiento por Red
+                                    </h3>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="row">
+                                        <div class="col-12">{{-- style="height: 40rem"  --}}
+                                            <div class="table-responsive" id="vtabla2tabla1">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- </div> --}}
+                            {{-- </div> --}}
+
+                        </div>
+                        <div class="modal-footer">
+                            {{-- <button type="button" class="btn btn-xs btn-danger waves-effect" data-dismiss="modal">Cerrar</button> --}}
+                            {{-- <button type="button" class="btn btn-primary btn-xs waves-effect waves-light" onclick="verpdf(8)">Ficha Tecnica</button> --}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 @endsection
@@ -349,6 +388,8 @@
                         // });
                     } else if (div == "tabla2") {
                         $('#vtabla2').html(data.excel);
+                    } else if (div == "tabla2tabla1") {
+                        $('#vtabla2tabla1').html(data.excel);
                     } else if (div == "tabla3") {
                         $('#vtabla3').html(data.excel);
                         $('#tabla3').DataTable({
@@ -364,41 +405,6 @@
                         $('#vtabla4').html(data.excel);
                     }
 
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 1");
-                    console.log(jqXHR);
-                },
-            });
-        }
-
-        function cargarTablaNivel(div, ugel) {
-            $.ajax({
-                url: "{{ route('indicador.nuevos.01.tabla') }}",
-                data: {
-                    'div': div,
-                    "anio": $('#anio').val(),
-                    "provincia": $('#provincia').val(),
-                    "distrito": $('#distrito').val(),
-                    "gestion": $('#gestion').val(),
-                    "ugel": ugel
-                },
-                type: "GET",
-                dataType: "JSON",
-                beforeSend: function() {
-                    ugel_select = ugel;
-                    if (div == "tabla1") {
-                        $('#v' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    } else if (div == "tabla2") {
-                        $('#v' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    } else {
-                        $('#' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    }
-                },
-                success: function(data) {
-                    if (div == "tabla2") {
-                        $('#vtabla2').html(data.excel);
-                    }
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");
@@ -429,18 +435,25 @@
 
         function descargar3() { ///{div}/{indicador}/{anio}/{mes}/{provincia}/{distrito}'
             window.open(
-                "{{ route('salud.indicador.pactoregional.sal.pacto2.reports.excel', ['', '', '', '', '', '']) }}/tabla3/{{ $ind->id }}/" +
+                "{{ route('salud.indicador.pactoregional.sal.pacto2.excel', ['', '', '', '', '', '']) }}/tabla3/{{ $ind->id }}/" +
                 $('#anio').val() + "/" + $('#mes').val() + "/" + $('#provincia').val() + "/" + $('#distrito').val());
         }
 
         function descargar4() {
-            window.open("{{ url('/') }}/INDICADOR/Home/01/Excel/tabla2/" + $('#anio').val() + "/" + $('#provincia')
-                .val() + "/" + $('#distrito').val() + "/" + $('#gestion').val() + "/" + ugel_select);
+            window.open(
+                "{{ route('salud.indicador.pactoregional.sal.pacto2.excel', ['', '', '', '', '', '']) }}/tabla4/{{ $ind->id }}/" +
+                $('#anio').val() + "/" + $('#mes').val() + "/" + $('#provincia').val() + "/" + $('#distrito').val());
         }
 
         function verpdf(id) {
             window.open("{{ route('salud.indicador.pactoregional.exportar.pdf', '') }}/" + id);
         };
+
+        function cargarmicrored(red) {
+            $('#modal_microred').modal('show');
+            panelGraficas('tabla2tabla1');
+            
+        }
 
         function gSimpleColumn(div, datax, titulo, subtitulo, tituloserie) {
 
