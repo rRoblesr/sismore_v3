@@ -111,8 +111,9 @@ class IndicadoresController extends Controller
                 $den = $gl;
                 break;
             case 'DIT-SAL-02':
-                $gls = 105.5;
-                $gl = 100;
+                $ind = IndicadorGeneralRepositorio::findNoFichatecnicaCodigo($rq->codigo);
+                $gls = IndicadorGeneralMetaRepositorio::getSalPacto2GLS($ind->id, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $gl = IndicadorGeneralMetaRepositorio::getSalPacto2GL($ind->id, $rq->anio,0, $rq->provincia, $rq->distrito);
                 $num = $gls;
                 $den = $gl;
                 break;
@@ -143,8 +144,6 @@ class IndicadoresController extends Controller
             case 'DIT-EDU-02':
                 $gl = SFLRepositorio::get_locals($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 0)->count();
                 $gls = SFLRepositorio::get_locals($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 1)->count();
-                // $gls = 100;
-                // $gl = 100;
                 $num = $gls;
                 $den = $gl;
                 break;
@@ -530,7 +529,18 @@ class IndicadoresController extends Controller
     public function PactoRegionalSalPacto2download($div, $indicador, $anio, $mes, $provincia, $distrito)
     {
         if ($anio > 0) {
-            $name = 'Pacto 2' . date('Y-m-d') . '.xlsx';
+            switch ($div) {
+                case 'tabla3':
+                    $name = 'Listado de establecimientos de salud ' . date('Y-m-d') . '.xlsx';
+                    break;
+                case 'tabla4':
+                    $name = 'Evaluación de cumplimiento' . date('Y-m-d') . '.xlsx';
+                    break;
+                default:
+                    $name = 'sin nombre.xlsx';
+                    break;
+            }
+
             return Excel::download(new pactoregional1Export($div, $indicador, $anio, $mes, $provincia, $distrito), $name);
         }
     }

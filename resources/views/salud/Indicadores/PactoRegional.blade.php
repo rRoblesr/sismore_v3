@@ -642,7 +642,8 @@
 
         <!-- end row -->
 
-        <div id="modal_datosindicador" class="modal fade font-10" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div id="modal_datosindicador" class="modal fade font-10" tabindex="-1" role="dialog"
+            aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -790,7 +791,10 @@
                 },
                 type: "GET",
                 dataType: "JSON",
-                // beforeSend: function() {},
+                beforeSend: function() {
+                    GaugeSeries('gra' + codigo, 0);
+                    $('#actualizado' + codigo).text('');
+                },
                 success: function(data) {
                     console.log(data);
                     GaugeSeries('gra' + codigo, data.avance);
