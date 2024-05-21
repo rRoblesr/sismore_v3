@@ -26,9 +26,11 @@ class SiafWebRPT5Export implements FromView, ShouldAutoSize, WithEvents
 
     public function view(): View
     {
-        $body = BaseSiafWebRepositorio::listar_fuentefinanciamiento_anio_acticulo_ue_categoria($this->ano, $this->articulo, $this->ue);
+        $data = BaseSiafWebRepositorio::listar_fuentefinanciamiento_anio_acticulo_ue_categoria($this->ano, $this->articulo, $this->ue);
+        $body = $data['body'];
+        $head = $data['head'];
         $foot = ['pia' => 0, 'pim' => 0, 'cert' => 0, 'dev' => 0, 'eje' => 0, 'saldo1' => 0, 'saldo2' => 0,];
-        foreach ($body as $key => $value) {
+        foreach ($data['body'] as $key => $value) {
             $foot['pia'] += $value->pia;
             $foot['pim'] += $value->pim;
             $foot['cert'] += $value->cert;
@@ -37,7 +39,7 @@ class SiafWebRPT5Export implements FromView, ShouldAutoSize, WithEvents
             $foot['saldo2'] += $value->saldo2;
         }
         $foot['eje'] = $foot['pim'] > 0 ? number_format(100 * $foot['dev'] / $foot['pim'], 1) : 0;
-        return view("Presupuesto.BaseSiafWeb.Reporte5Tabla1Export", compact('body', 'foot'));
+        return view("Presupuesto.BaseSiafWeb.Reporte5Tabla1Export", compact('body', 'head', 'foot'));
     }
 
     public function  registerEvents(): array
