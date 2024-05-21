@@ -11,7 +11,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 
-class SiafWebRPT5Export implements FromView, ShouldAutoSize, WithEvents
+class SiafWebRPT5Export implements FromView, ShouldAutoSize
 {
     public $ano;
     public $articulo;
@@ -39,105 +39,13 @@ class SiafWebRPT5Export implements FromView, ShouldAutoSize, WithEvents
         $foot->eje = 0;
         foreach ($body as $key => $value) {
             $foot->pia += $value->pia;
-            $foot->pia += $value->pim;
-            $foot->pia += $value->cert;
-            $foot->pia += $value->dev;
-            $foot->pia  += $value->saldo1;
-            $foot->pia  += $value->saldo2;
+            $foot->pim += $value->pim;
+            $foot->cert += $value->cert;
+            $foot->dev += $value->dev;
+            $foot->saldo1  += $value->saldo1;
+            $foot->saldo2  += $value->saldo2;
         }
         $foot->eje = $foot->pim > 0 ? number_format(100 * $foot->dev / $foot->pim, 1) : 0;
         return view("Presupuesto.BaseSiafWeb.Reporte5Tabla1Export", compact('body', 'head', 'foot'));
-    }
-
-    public function  registerEvents(): array
-    {
-        $head = [
-            'font' => [
-                'bold' => true,
-                'color' => ['rgb' => 'ffffff'],
-            ],
-            'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-            ],
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                //'rotation' => 90,
-                'startColor' => [
-                    'argb' => '317eeb',
-                ],
-                'endColor' => [
-                    'argb' => '317eeb',
-                ],
-
-            ],
-        ];
-        $foot = [
-            'font' => [
-                'bold' => true,
-                'color' => ['rgb' => 'ffffff'],
-            ],
-            'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
-            ],
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                //'rotation' => 90,
-                'startColor' => [
-                    'argb' => '317eeb',
-                ],
-                'endColor' => [
-                    'argb' => '317eeb',
-                ],
-
-            ],
-        ];
-        $body = [
-            'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
-            ],
-        ];
-        $bodya = [
-            'font' => [
-                'bold' => true,
-            ],
-            'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-            ],
-        ];
-        $bodyb = [
-            'font' => [
-                'bold' => false,
-            ],
-            'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT,
-            ],
-        ];
-        $border = [
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                    'color' => ['rgb' => 'EBE8E4'],
-                ],
-
-            ],
-        ];
-        $opt = [AfterSheet::class => function (AfterSheet $event) use ($head, $foot, $body, $bodya, $bodyb, $border) {
-            $event->sheet->getStyle('A1:I1')->applyFromArray($head);
-            //$event->sheet->getStyle('A28:I28')->applyFromArray($foot);
-            $event->sheet->getStyle('B2:I27')->applyFromArray($body);
-            $event->sheet->getStyle('A2:A27')->applyFromArray($bodya);
-            $event->sheet->getStyle('B2:B27')->applyFromArray($bodyb);
-            //$event->sheet->getStyle('A1:I28')->applyFromArray($border);
-        }];
-
-        return $opt;
-
-        /* return [AfterSheet::class => function (AfterSheet $event) use ($head, $foot, $body, $bodya, $border) {
-            $event->sheet->getStyle('A1:M2')->applyFromArray($head);
-            $event->sheet->getStyle('A12:M12')->applyFromArray($foot);
-            $event->sheet->getStyle('B3:M11')->applyFromArray($body);
-            $event->sheet->getStyle('A3:A11')->applyFromArray($bodya);
-            $event->sheet->getStyle('A1:M12')->applyFromArray($border);
-        }]; */
     }
 }
