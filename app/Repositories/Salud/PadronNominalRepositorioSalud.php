@@ -17,14 +17,14 @@ class PadronNominalRepositorioSalud
                 $join->on('v1.dni', '=', 'v2.dni_mo');
             });
         }
-        // if ($id_grupo == 1) {
-        //     $query->where('edad_anio', 0)->where('edad_mes', 0);
-        // } else {
-        //     $query->where('edad_anio', $id_grupo - 2);
-        //     if ($id_grupo == 2) {
-        //         $query->where('edad_mes', '>', 0);
-        //     }
-        // }
+        if ($id_grupo == 1) {
+            $query->where('edad_anio', 0)->where('edad_mes', 0);
+        } else {
+            $query->where('edad_anio', $id_grupo - 2);
+            if ($id_grupo == 2) {
+                $query->where('edad_mes', '>', 0);
+            }
+        }
 
         $result = $query->select('v1.*')->get();
         return $result;
