@@ -87,9 +87,9 @@ class HomeController extends Controller
 
         session()->put(['usuario_id' => auth()->user()->id]);
         /* inicio blas */
-        // session()->put(['usuario_sector' => auth()->user()->sector]);
-        // session()->put(['usuario_nivel' => auth()->user()->nivel]);
-        // session()->put(['usuario_codigo_institucion' => auth()->user()->codigo_institucion]);
+        session()->put(['usuario_sector' => auth()->user()->sector]);
+        session()->put(['usuario_nivel' => auth()->user()->nivel]);
+        session()->put(['usuario_codigo_institucion' => auth()->user()->codigo_institucion]);
         /* fin blas */
         session()->put(['total_sistema' => $sistemas->count()]);
         session()->put(['perfil_administrador_id' => $usuper ? $usuper->perfil_id : 0]);

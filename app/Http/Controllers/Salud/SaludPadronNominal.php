@@ -32,8 +32,8 @@ class SaludPadronNominal extends Controller
         $draw = 0;
         $start = 0;
         $length = 0;
-        $idNivel = (session('usuario_id') == '123') ? '1' : ((session('usuario_id') == '154') ? '2' : ((session('usuario_id') == '155') ? '3' : '4'));
-        $institucion = ($idNivel == '3') ? 'CALLERIA' : (($idNivel == '2') ? '5556' : '');
+        $idNivel = (session('usuario_id') == '123') ? '1' : ((session('usuario_id') == '176') ? '2' : ((session('usuario_id') == '177') ? '3' : '4'));
+        $institucion = $idNivel == '3' ? 'CALLERIA' : ($idNivel == '2' ? '5556' : '');
         /*if($idNivel=='3')
             $tablon = PadronCalidad::select('codigo_calidad', 'nombre_calidad', DB::raw('COUNT(*) AS cantidad'))->where('distrito', $institucion)->groupBy('codigo_calidad','nombre_calidad')->get();
         elseif($idNivel=='2')

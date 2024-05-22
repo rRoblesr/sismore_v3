@@ -22,7 +22,7 @@ use Illuminate\Database\QueryException;
 
 class SaludPadronNominalImportar extends Controller
 {
-    public $fuente = 36;
+    public $fuente = 42;
     public function __construct()
     {
         $this->middleware('auth');

@@ -1063,26 +1063,26 @@ BEGIN
 END
 
 #
- select count(matriculageneral_id) as basica, sum(IF(modalidad_id=1,1,0)) as ebr, sum(IF(modalidad_id=2,1,0)) as ebe, sum(IF(modalidad_id=3,1,0)) as eba 
- from edu_matricula_general_detalle 
- inner join edu_institucioneducativa as ie on ie.id = edu_matricula_general_detalle.institucioneducativa_id 
- inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id 
- inner join par_ubigeo as dt on dt.id = cp.Ubigeo_id 
- inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id 
- where dt.dependencia = 35 and matriculageneral_id = 15;  
+ select count(matriculageneral_id) as basica, sum(IF(modalidad_id=1,1,0)) as ebr, sum(IF(modalidad_id=2,1,0)) as ebe, sum(IF(modalidad_id=3,1,0)) as eba
+ from edu_matricula_general_detalle
+ inner join edu_institucioneducativa as ie on ie.id = edu_matricula_general_detalle.institucioneducativa_id
+ inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id
+ inner join par_ubigeo as dt on dt.id = cp.Ubigeo_id
+ inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id
+ where dt.dependencia = 35 and matriculageneral_id = 15;
 
 
- select count(matriculageneral_id) as basica, sum(IF(modalidad_id=1,1,0)) as ebr, sum(IF(modalidad_id=2,1,0)) as ebe, sum(IF(modalidad_id=3,1,0)) as eba 
- from edu_matricula_general_detalle 
+ select count(matriculageneral_id) as basica, sum(IF(modalidad_id=1,1,0)) as ebr, sum(IF(modalidad_id=2,1,0)) as ebe, sum(IF(modalidad_id=3,1,0)) as eba
+ from edu_matricula_general_detalle
  left join (
- 	select ie.id, dd.id as distrito, dd.dependencia as provincia, tg.dependencia as gestion, aa.id as area 
- 	from edu_institucioneducativa as ie 
- 	left join edu_centropoblado as cp on cp.id=ie.CentroPoblado_id 
- 	inner join par_ubigeo as dd on dd.id=cp.Ubigeo_id  
- 	inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id 
- 	inner join edu_area as aa on aa.id = ie.Area_id 
+ 	select ie.id, dd.id as distrito, dd.dependencia as provincia, tg.dependencia as gestion, aa.id as area
+ 	from edu_institucioneducativa as ie
+ 	left join edu_centropoblado as cp on cp.id=ie.CentroPoblado_id
+ 	inner join par_ubigeo as dd on dd.id=cp.Ubigeo_id
+ 	inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id
+ 	inner join edu_area as aa on aa.id = ie.Area_id
  	where dd.dependencia = 35
- 	) as ie on ie.id=edu_matricula_general_detalle.institucioneducativa_id  
+ 	) as ie on ie.id=edu_matricula_general_detalle.institucioneducativa_id
  where matriculageneral_id = 15 ;
 
 select distinct institucioneducativa_id  from edu_matricula_general_detalle where matriculageneral_id = 15;
@@ -1105,7 +1105,7 @@ BEGIN
 	insert into temp1
 	select imp.id, year(imp.fechaActualizacion),pa.distrito ,pa.fecha_inicial ,pa.fecha_final, pa.fecha_envio ,
 		IF(month(pa.fecha_envio)=month(pa.fecha_final),
-			IF(month(pa.fecha_final)-month(pa.fecha_inicial)=1,month(pa.fecha_inicial),month(pa.fecha_envio))			
+			IF(month(pa.fecha_final)-month(pa.fecha_inicial)=1,month(pa.fecha_inicial),month(pa.fecha_envio))
 		,0) ,
 		IF(year(fecha_inicial)=v_anio and year(fecha_final)=v_anio,
 			if(pa.fecha_envio between pa.fecha_inicial and date_format(date_add(pa.fecha_inicial,interval 1 month),'%Y-%m-07') ,1,0)
@@ -1122,7 +1122,7 @@ BEGIN
 	IF(mes=0,
 		IF(month(fechae)-1=month(fechaf),
 			month(fechaf)
-		,0) 		
+		,0)
 	,mes),
 	IF(estado=0,
 		IF(month(fechaf)=month(fechae) or month(fechaf)+1=month(fechae),
@@ -1184,7 +1184,7 @@ SELECT sum(d01+d02+d03+d04+d05+d06+d07+d08) FROM `edu_impor_censodocente` where 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `datosx`.`sal_pa_procesarPacto1`(IN `v_importacion` INT, IN `v_anio` INT)
 BEGIN
 
-	
+
 
 	drop table if exists temp1;
 	drop table if exists temp2;
@@ -1195,14 +1195,14 @@ BEGIN
 	insert into temp1
 	select imp.id, year(imp.fechaActualizacion),pa.distrito ,pa.fecha_inicial ,pa.fecha_final, pa.fecha_envio ,
 		IF(month(pa.fecha_envio)=month(pa.fecha_final) and fecha_envio<date_format(date_add(pa.fecha_final,interval 1 month),'%Y-%m-08'),
-			IF(month(pa.fecha_final)-month(pa.fecha_inicial)=1 and pa.fecha_final<date_format(pa.fecha_final,'%Y-%m-08') ,month(pa.fecha_inicial),month(pa.fecha_envio))			
+			IF(month(pa.fecha_final)-month(pa.fecha_inicial)=1 and pa.fecha_final<date_format(pa.fecha_final,'%Y-%m-08') ,month(pa.fecha_inicial),month(pa.fecha_envio))
 		,0) ,
 		IF(year(fecha_inicial)=v_anio and year(fecha_final)=v_anio,
 			if(pa.fecha_envio between pa.fecha_inicial and date_format(date_add(pa.fecha_inicial,interval 1 month),'%Y-%m-07') ,1,0)
 		,0) as estado
 	from sal_impor_padron_actas pa
 	left join par_importacion imp on imp.id =pa.importacion_id
-	where year(imp.fechaActualizacion)=v_anio and imp.id=v_importacion 
+	where year(imp.fechaActualizacion)=v_anio and imp.id=v_importacion
 	order by pa.distrito,pa.fecha_envio,fecha_inicial,fecha_final ;
 
 	select * from temp1;
@@ -1212,7 +1212,7 @@ BEGIN
 	IF(mes=0,
 		IF(month(fechae)-1=month(fechaf),
 			month(fechaf)
-		,0) 		
+		,0)
 	,mes),
 	IF(estado=0,
 		IF(month(fechaf)=month(fechae) or month(fechaf)+1=month(fechae),
@@ -1224,8 +1224,8 @@ BEGIN
 
 	select * from temp2;
 
-    
-	
+
+
 
 END
 
@@ -1233,9 +1233,9 @@ END
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `datosx`.`sal_pa_procesarPacto1`(IN `v_importacion` INT, IN `v_anio` INT)
 BEGIN
- 
+
 	delete from sal_data_pacto1 where anio=v_anio;
-	
+
 	drop table if exists temp1;
 	drop table if exists temp2;
 	drop table if exists temp3;
@@ -1245,12 +1245,12 @@ BEGIN
 	insert into temp1
 	select imp.id, year(imp.fechaActualizacion),pa.distrito ,pa.fecha_inicial ,pa.fecha_final, pa.fecha_envio ,
 		IF(pa.fecha_envio<date_format(pa.fecha_envio,'%Y-%m-08'),
-			month(pa.fecha_envio)-1			
+			month(pa.fecha_envio)-1
 		,month(pa.fecha_envio)) as mes,
 		0 as estado
 	from sal_impor_padron_actas pa
 	left join par_importacion imp on imp.id =pa.importacion_id
-	where year(imp.fechaActualizacion)=v_anio and imp.id=v_importacion 
+	where year(imp.fechaActualizacion)=v_anio and imp.id=v_importacion
 	order by pa.distrito,pa.fecha_envio,fecha_inicial,fecha_final ;
 
 	select * from temp1;
@@ -1258,7 +1258,7 @@ BEGIN
 	insert into temp2
 	select importacion, anio, distrito , fechai , fechaf, fechae , mes,
 	IF(mes>0,
-		IF(fechae between fechai and IF(month(fechaf)=mes,date_format(date_add(fechaf,interval 1 month),'%Y-%m-07'),date_format(fechaf,'%Y-%m-07')) 
+		IF(fechae between fechai and IF(month(fechaf)=mes,date_format(date_add(fechaf,interval 1 month),'%Y-%m-07'),date_format(fechaf,'%Y-%m-07'))
 		,1
 		,0)
 	,0)
@@ -1271,7 +1271,7 @@ BEGIN
 	select importacion, anio, distrito, mes, max(estado) from temp2 where mes!=0 group by importacion, anio, distrito, mes;
 
 	update par_importacion set estado="PR" where id=v_importacion;
-	
+
 
 END
 
@@ -1285,9 +1285,9 @@ ALTER TABLE `par_indicador_general` ADD `usuario` INT NULL DEFAULT NULL AFTER `f
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `datosx`.`sal_pa_procesarPacto1`(IN `v_importacion` INT, IN `v_anio` INT)
 BEGIN
-	 
+
 	delete from sal_data_pacto1 where anio=v_anio;
-	
+
 	drop table if exists temp1;
 	drop table if exists temp2;
 	drop table if exists temp3;
@@ -1297,12 +1297,12 @@ BEGIN
 	insert into temp1
 	select imp.id,IF(month(pa.fecha_envio)-1=0,if(pa.fecha_envio>date_format(pa.fecha_envio,'%Y-%m-07'),year(imp.fechaActualizacion),year(imp.fechaActualizacion)-1),year(imp.fechaActualizacion)) ,pa.distrito ,pa.fecha_inicial ,pa.fecha_final, pa.fecha_envio ,
 		IF(pa.fecha_envio<date_format(pa.fecha_envio,'%Y-%m-08'),
-			IF(month(pa.fecha_envio)-1=0,12,month(pa.fecha_envio)-1)			
+			IF(month(pa.fecha_envio)-1=0,12,month(pa.fecha_envio)-1)
 		,month(pa.fecha_envio)) as mes,
 		0 as estado
 	from sal_impor_padron_actas pa
 	left join par_importacion imp on imp.id =pa.importacion_id
-	where year(imp.fechaActualizacion)=v_anio and imp.id=v_importacion 
+	where year(imp.fechaActualizacion)=v_anio and imp.id=v_importacion
 	order by pa.distrito,pa.fecha_envio,fecha_inicial,fecha_final ;
 
 	select * from temp1;
@@ -1310,7 +1310,7 @@ BEGIN
 	insert into temp2
 	select importacion, anio, distrito , fechai , fechaf, fechae , mes,
 	IF(mes>0,
-		IF(fechae between fechai and IF(month(fechaf)=mes,date_format(date_add(fechaf,interval 1 month),'%Y-%m-07'),date_format(fechaf,'%Y-%m-07')) 
+		IF(fechae between fechai and IF(month(fechaf)=mes,date_format(date_add(fechaf,interval 1 month),'%Y-%m-07'),date_format(fechaf,'%Y-%m-07'))
 		,1
 		,0)
 	,0)
@@ -1330,9 +1330,9 @@ END
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `datosx`.`sal_pa_procesarPacto1`(IN `v_importacion` INT, IN `v_anio` INT)
 BEGIN
-	 
+
 	delete from sal_data_pacto1 where anio=v_anio;
-	
+
 	drop table if exists temp1;
 	drop table if exists temp2;
 	drop table if exists temp3;
@@ -1342,12 +1342,12 @@ BEGIN
 	insert into temp1
 	select imp.id,IF(month(pa.fecha_envio)-1=0,if(pa.fecha_envio>date_format(pa.fecha_envio,'%Y-%m-07'),year(imp.fechaActualizacion),year(imp.fechaActualizacion)-1),year(imp.fechaActualizacion)) ,pa.distrito ,pa.fecha_inicial ,pa.fecha_final, pa.fecha_envio ,
 		IF(pa.fecha_envio<date_format(pa.fecha_envio,'%Y-%m-08'),
-			IF(month(pa.fecha_envio)-1=0,12,month(pa.fecha_envio)-1)			
+			IF(month(pa.fecha_envio)-1=0,12,month(pa.fecha_envio)-1)
 		,month(pa.fecha_envio)) as mes,
 		0 as estado
 	from sal_impor_padron_actas pa
 	left join par_importacion imp on imp.id =pa.importacion_id
-	where year(imp.fechaActualizacion)=v_anio and imp.id=v_importacion 
+	where year(imp.fechaActualizacion)=v_anio and imp.id=v_importacion
 	order by pa.distrito,pa.fecha_envio,fecha_inicial,fecha_final ;
 
 	select * from temp1;
@@ -1356,7 +1356,7 @@ BEGIN
 	select importacion, anio, distrito , fechai , fechaf, fechae , mes,
 	IF(mes>0,
 		IF(fechae<fechaf,0,
-		IF(fechae between fechai and IF(month(fechaf)=mes,date_format(date_add(fechaf,interval 1 month),'%Y-%m-07'),date_format(fechaf,'%Y-%m-07')) 
+		IF(fechae between fechai and IF(month(fechaf)=mes,date_format(date_add(fechaf,interval 1 month),'%Y-%m-07'),date_format(fechaf,'%Y-%m-07'))
 		,1
 		,0)
 		)
@@ -1384,7 +1384,7 @@ begin
 	set @ee4:=(select count(*) conteo from edu_sfl sfl inner join edu_institucioneducativa ie on ie.id=sfl.institucioneducativa_id where ie.codLocal=v_local and ie.EstadoInsEdu_id=3 and sfl.estado=4);
 	set @eet:=(select count(*) conteo from edu_sfl sfl inner join edu_institucioneducativa ie on ie.id=sfl.institucioneducativa_id where ie.codLocal=v_local and ie.EstadoInsEdu_id=3);
 
-	return 
+	return
 	IF(@eet=@ee1,1,
 		IF(@eet=@ee2,2,
 			IF(@eet=@ee3,3,
@@ -1397,25 +1397,25 @@ end
 #######################
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `datosx`.`edu_pa_sfl_porlocal`(IN `v_ugel` INT, IN `v_provincia` INT, IN `v_distrito` INT, IN `v_estado` INT)
-BEGIN	  
+BEGIN
 	set @query='
 	select `local`, ugel, provincia, distrito, area, estado from (
 		select `local`, ugel, provincia, distrito,area,ugelid,provinciaid,distritoid,areaid, buscar_estado(`local`) as estado from (
-			select 
+			select
 				`local`, max(ugel_n) as ugel, max(provincia_n) as provincia, max(distrito_n) as distrito, max(distrito_n) as area,
 				max(ugel_id) ugelid, max(provincia_id) provinciaid, max(distrito_id) distritoid, max(area_id) areaid
-			from (       
-				select 
-					iiee.id iiee_id, iiee.codLocal `local`, iiee.Ugel_id ugel_id, pv.id provincia_id, dt.id distrito_id, iiee.Area_id area_id, 
-					uu.nombre ugel_n, pv.nombre provincia_n, dt.nombre distrito_n, aa.nombre area_n 
-				from edu_institucionEducativa as iiee 
-				inner join edu_centropoblado as cp on cp.id = iiee.CentroPoblado_id 
-				inner join edu_area as aa on aa.id = iiee.Area_id 
-				inner join edu_ugel as uu on uu.id = iiee.Ugel_id 
-				inner join par_ubigeo as dt on dt.id = cp.Ubigeo_id 
-				inner join par_ubigeo as pv on pv.id = dt.dependencia 
+			from (
+				select
+					iiee.id iiee_id, iiee.codLocal `local`, iiee.Ugel_id ugel_id, pv.id provincia_id, dt.id distrito_id, iiee.Area_id area_id,
+					uu.nombre ugel_n, pv.nombre provincia_n, dt.nombre distrito_n, aa.nombre area_n
+				from edu_institucionEducativa as iiee
+				inner join edu_centropoblado as cp on cp.id = iiee.CentroPoblado_id
+				inner join edu_area as aa on aa.id = iiee.Area_id
+				inner join edu_ugel as uu on uu.id = iiee.Ugel_id
+				inner join par_ubigeo as dt on dt.id = cp.Ubigeo_id
+				inner join par_ubigeo as pv on pv.id = dt.dependencia
 				where iiee.EstadoInsEdu_id = 3 and iiee.TipoGestion_id in (4, 5, 7, 8) and iiee.estado = "AC" and iiee.NivelModalidad_id not in (14, 15)
-			) as iiee '; 
+			) as iiee ';
 	set @query=concat(@query,' group by `local` ) as tb order by estado )as tbx');
 	set @query=concat(@query,' where 1');
 	set @query=concat(@query,if(v_ugel>0     ,concat(' and ugelid=',v_ugel),''));
@@ -1426,8 +1426,16 @@ BEGIN
 	prepare xxx from @query;
 	execute xxx;
 	deallocate prepare xxx;
-	
+
 END
+
+################################
+ALTER TABLE `adm_usuario`
+ADD `sector` VARCHAR(45) NULL DEFAULT NULL AFTER `cargo`,
+ADD `nivel` VARCHAR(45) NULL DEFAULT NULL AFTER `sector`,
+ADD `codigo_institucion` VARCHAR(45) NULL DEFAULT NULL AFTER `nivel`;
+
+
 
 
 
