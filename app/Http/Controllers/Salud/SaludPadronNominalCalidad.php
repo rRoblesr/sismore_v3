@@ -24,8 +24,8 @@ class SaludPadronNominalCalidad extends Controller
         $start = 0;
         $length = 0;
         $sector = session('usuario_sector');
-        $codigo_institucion = session('usuario_codigo_institucion');
-        $nombre_columna = ($sector == 'SA') ? "cod_eess_atencion" : "ubigeo";
+        $codigo_institucion = '0' . session('usuario_codigo_institucion');
+        $nombre_columna = ($sector == '14') ? "cod_eess_atencion" : "ubigeo";
 
         $tablon = PadronCalidad::select('codigo_calidad', 'nombre_calidad', DB::raw('COUNT(*) AS cantidad'))->where($nombre_columna, $codigo_institucion)->groupBy('codigo_calidad', 'nombre_calidad')->get();
 
@@ -57,8 +57,8 @@ class SaludPadronNominalCalidad extends Controller
         $start = 0;
         $length = 0;
         $sector = session('usuario_sector');
-        $codigo_institucion = session('usuario_codigo_institucion');
-        $nombre_columna = ($sector == 'SA') ? "cod_eess_atencion" : "ubigeo";
+        $codigo_institucion = '0' . session('usuario_codigo_institucion');
+        $nombre_columna = ($sector == '14') ? "cod_eess_atencion" : "ubigeo";
 
         $calidad = PadronCalidad::select('codigo_calidad', 'nombre_calidad')->where('codigo_calidad', $tipo)->where($nombre_columna, $codigo_institucion)->first();
         $tablon = PadronCalidad::select('*')->where('codigo_calidad', $tipo)->where($nombre_columna, $codigo_institucion)->get();

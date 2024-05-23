@@ -10,7 +10,7 @@ class PadronNominalRepositorioSalud
     {
         $sector = session('usuario_sector');
         $query = DB::table('sal_sabana_nino as v1');
-        if ($sector == 'GL' or $sector == 'SA')
+        if ( $sector == '14')//$sector == 'GL' or
             $query->where($nombre_columna, $codigo_institucion);
         if ($sector == 'MI') {
             $query->join('sal_padron_juntos as v2', function ($join) {

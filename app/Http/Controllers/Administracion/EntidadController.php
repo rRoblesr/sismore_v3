@@ -171,10 +171,11 @@ class EntidadController extends Controller
     {
         $term = $rq->term;
         if ($rq->dependencia > 0)
-            $entidades = Entidad::where('dependencia', $rq->dependencia)->where('estado', '0')
+            $entidades = Entidad::where('dependencia', $rq->dependencia)->where('estado', '0')->where('tipoentidad_id', $rq->tipoentidad)
                 ->where(function ($q) use ($term) {
                     $q->where('nombre', 'like', '%' . $term . '%')
-                        ->orWhere('abreviado', 'like', '%' . $term . '%');
+                        ->orWhere('abreviado', 'like', '%' . $term . '%')
+                        ->orWhere('codigo', 'like', '%' . $term . '%');
                 })->get();
         else
             $entidades = Entidad::whereNull('dependencia')->where('estado', '0')
@@ -186,7 +187,7 @@ class EntidadController extends Controller
         if ($entidades->count() > 0) {
             foreach ($entidades as $key => $value) {
                 $data[] = [
-                    'label' => $value->nombre,
+                    'label' => $value->codigo.' '.$value->nombre,
                     'id' => $value->id
                 ];
             }

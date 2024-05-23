@@ -7,6 +7,7 @@ use App\Models\Administracion\Entidad;
 use App\Models\Administracion\Perfil;
 use App\Models\Administracion\Usuario;
 use App\Models\Administracion\UsuarioPerfil;
+use App\Models\Presupuesto\Sector;
 use App\Repositories\Administracion\SistemaRepositorio;
 use App\Repositories\Administracion\UsuarioPerfilRepositorio;
 use App\Repositories\Administracion\UsuarioRepositorio;
@@ -27,7 +28,8 @@ class UsuarioController extends Controller
         //return filter_var('asdsad@hot', FILTER_VALIDATE_EMAIL);
         //$sistemas2 = Sistema::where('estado', '1')->orderBy('nombre')->get();
         $sistemas = SistemaRepositorio::listar_porperfil(session('perfil_administrador_id'));
-        return view('administracion.Usuario.Principal', compact('sistemas'));
+        $sector = Sector::whereIn('id', [1, 2, 4, 14, 18])->get();
+        return view('administracion.Usuario.Principal', compact('sistemas', 'sector'));
     }
     public function Lista_DataTable()
     {

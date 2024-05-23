@@ -4,6 +4,7 @@ use App\Http\Controllers\Administracion\EntidadController;
 use App\Http\Controllers\Administracion\MenuController;
 use App\Http\Controllers\Administracion\PerfilController;
 use App\Http\Controllers\Administracion\SistemaController;
+use App\Http\Controllers\Administracion\TipoEntidadController;
 use App\Http\Controllers\Administracion\UsuarioController;
 use App\Http\Controllers\Educacion\CensoController;
 use App\Http\Controllers\Educacion\CensoDocenteController;
@@ -847,8 +848,9 @@ Route::post('/Entidad/ajax_update_entidad/', [EntidadController::class, 'ajax_up
 Route::get('/Entidad/ajax_delete/{entidad_id}', [EntidadController::class, 'ajax_delete_entidad'])->name('entidad.ajax.delete');
 //Route::get('/Entidad/listar/{unidadejecutora_id}/{dependencia}', [EntidadController::class, 'listarDT']);
 
-Route::get('/Entidad/CargarEntidad/', [EntidadController::class, 'cargarEntidad'])->name('entidad.ajax.cargar');
-Route::get('/Entidad/CargarEntidad/AUTOCOMPLETE', [EntidadController::class, 'autocompletarEntidad'])->name('entidad.autocomplete');
+Route::get('/TipoEntidad/Cargar', [TipoEntidadController::class, 'cargar'])->name('tipoentidad.ajax.cargar');
+Route::get('/Entidad/Cargar/', [EntidadController::class, 'cargarEntidad'])->name('entidad.ajax.cargar');
+Route::get('/Entidad/Cargar/AUTOCOMPLETE', [EntidadController::class, 'autocompletarEntidad'])->name('entidad.autocomplete');
 //Route::get('/PadronEIB/IIEE/autocompletar', [InstEducativaController::class, 'completariiee2'])->name('padroneib.completar.iiee');
 
 Route::get('/administrador/Entidad/Gerencia', [EntidadController::class, 'gerencia'])->name('entidad.gerencia');

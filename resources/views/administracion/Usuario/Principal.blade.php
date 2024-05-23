@@ -172,6 +172,31 @@
                                                         <span class="help-block"></span>
                                                     </div>
                                                     <div class="col-md-6">
+                                                        <label>Sector<span class="required">*</span></label>
+                                                        <select name="sector" id="sector" class="form-control"
+                                                            onchange="cargar_tipoentidad();">
+                                                            <option value="0">OTROS</option>
+                                                            @foreach ($sector as $item)
+                                                                <option value="{{ $item->id }}">
+                                                                    {{ $item->nombre }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                        <span class="help-block"></span>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label>Tipo Entidad<span class="required d-none">*</span></label>
+                                                        <select name="tipoentidad" id="tipoentidad" class="form-control">
+                                                        </select>
+                                                        <span class="help-block"></span>
+                                                    </div>
+                                                    <div class="col-md-6">
                                                         <label>Entidad<span class="required">*</span></label>
                                                         <div class="input-group">
                                                             <input type="hidden" name="entidad" id="entidad">
@@ -435,7 +460,8 @@
                         url: "{{ route('entidad.autocomplete') }}",
                         data: {
                             term: request.term,
-                            dependencia: 0
+                            dependencia: 0,
+                            tipoentidad: $('#sector').val()
                         },
                         dataType: "JSON",
                         success: function(data) {
@@ -466,26 +492,8 @@
                     $('#entidadgerencia').val(ui.item.id);
                 }
             });
-            /* $('#entidadoficinan').autocomplete({
-                minLength: 2,
-                source: function(request, response) {
-                    $.ajax({
-                        url: "{{ route('entidad.autocomplete') }}",
-                        data: {
-                            term: request.term,
-                            dependencia: $('#entidadgerencia').val()
-                        },
-                        dataType: "JSON",
-                        success: function(data) {
-                            response(data);
-                        }
-                    })
-                },
-                select: function(event, ui) {
-                    $('#entidadoficina').val(ui.item.id);
-                }
-            }); */
             tablaPrincipal();
+            cargar_tipoentidad();
         });
 
         function buscardni() {
@@ -970,105 +978,30 @@
             form_entidad = 1;
         }
 
-        /* function savegerencia() {
-            $('#btnSaveEntidad').text('guardando...');
-            $('#btnSaveEntidad').attr('disabled', true);
+        function cargar_tipoentidad() {
+            $("#tipoentidad option").remove();
             $.ajax({
-                url: "{{ route('entidad.ajax.addentidad') }}",
-                type: "POST",
-                data: $('#form_entidad').serialize(),
-                dataType: "JSON",
-                success: function(data) {
-                    if (data.status) {
-                        $('#modal_form_entidad').modal('hide');
-                        cargar_gerencia(data.entidad);
-                        toastr.success("El registro fue creado exitosamente.", 'Mensaje');
-                    } else {
-                        for (var i = 0; i < data.inputerror.length; i++) {
-                            $('[name="' + data.inputerror[i] + '"]').parent().addClass('has-error');
-                            $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]);
-                        }
-                    }
-                    $('#btnSaveEntidad').text('Guardar');
-                    $('#btnSaveEntidad').attr('disabled', false);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    $('#btnSaveEntidad').text('Guardar');
-                    $('#btnSaveEntidad').attr('disabled', false);
-                    toastr.error("El registro no se pudo crear verifique las validaciones.", 'Mensaje');
-                }
-            });
-        } */
-
-        /* function cargar_oficina(id) {
-            $.ajax({
-                url: "{{ route('entidad.ajax.cargar') }}",
+                url: "{{ route('tipoentidad.ajax.cargar') }}",
                 data: {
-                    "dependencia": $('#entidadgerencia').val()
+                    'sector': $('#sector').val(),
                 },
                 type: 'get',
+                dataType: 'json',
                 success: function(data) {
-                    $("#entidadoficina option").remove();
-                    var options = '<option value="">SELECCIONAR</option>';
-                    $.each(data.entidades, function(index, value) {
-                        ss = (id == "" ? "" : (id == value.id ? "selected" : ""));
-                        options += "<option value='" + value.id + "' " + ss + ">" + value.nombre +
+                    console.log(data.tipoentidad.length);
+                    $("#tipoentidad option").remove();
+                    var options = data.tipoentidad.length > 0 ? '' : '<option value="0">OTROS</option>';
+                    $.each(data.tipoentidad, function(index, value) {
+                        // ss = (id == "" ? "" : (id == value.id ? "selected" : ""));
+                        options += "<option value='" + value.id + "'>" + value.nombre +
                             "</option>"
                     });
-                    $("#entidadoficina").append(options);
+                    $("#tipoentidad").append(options);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
                 },
             });
-        } */
-
-        /* function add_oficina() {
-            entidadid = $('#entidadgerencia').val();
-            if (entidadid == 0) {
-                alert('ERROR: seleccionar una Gerencia');
-                return false;
-            }
-            entidadnombre = $('#entidadgerencia option:selected').text();
-            $('#form_entidad')[0].reset();
-            $('#form_entidad .form-group').removeClass('has-error');
-            $('#form_entidad .help-block').empty();
-            $('#dependencia').val(entidadid);
-            $('#entidad_nombre').val(entidadnombre.trim());
-            $('#entidad_nombre').parent().show();
-            $('#modal_form_entidad .modal-title').text('Nueva Oficina');
-            $('#modal_form_entidad').modal('show');
-            form_entidad = 2;
-        } */
-
-        /* function saveoficina() {
-            $('#btnSaveOficina').text('guardando...');
-            $('#btnSaveOficina').attr('disabled', true);
-            $.ajax({
-                url: "{{-- route('usuario.ajax.addoficina') --}}",
-                type: "POST",
-                data: $('#form_oficina').serialize(),
-                dataType: "JSON",
-                success: function(data) {
-                    if (data.status) {
-                        $('#modal_form_oficina').modal('hide');
-                        cargar_oficina(data.codigo);
-                        toastr.success("El registro fue creado exitosamente.", 'Mensaje');
-                    } else {
-                        for (var i = 0; i < data.inputerror.length; i++) {
-                            $('[name="' + data.inputerror[i] + '"]').parent().addClass('has-error');
-                            $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]);
-                        }
-                    }
-                    $('#btnSaveOficina').text('Guardar');
-                    $('#btnSaveOficina').attr('disabled', false);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    $('#btnSaveOficina').text('Guardar');
-                    $('#btnSaveOficina').attr('disabled', false);
-                    toastr.error("El registro no se pudo crear verifique las validaciones.", 'Mensaje');
-                }
-            });
-        } */
+        }
     </script>
 @endsection

@@ -11,7 +11,9 @@ use App\Http\Controllers\Parametro\UbigeoController;
 use App\Http\Controllers\Presupuesto\ImporActividadesProyectosController;
 use App\Http\Controllers\Presupuesto\ImporProyectosController;
 use App\Http\Controllers\Presupuesto\ImporSiafWebController;
+use App\Models\Administracion\Entidad;
 use App\Models\Administracion\Sistema;
+use App\Models\Administracion\TipoEntidad;
 use App\Models\Educacion\Area;
 use App\Models\Educacion\ImporPadronWeb;
 use App\Models\Educacion\Importacion;
@@ -87,9 +89,18 @@ class HomeController extends Controller
 
         session()->put(['usuario_id' => auth()->user()->id]);
         /* inicio blas */
-        session()->put(['usuario_sector' => auth()->user()->sector]);
-        session()->put(['usuario_nivel' => auth()->user()->nivel]);
-        session()->put(['usuario_codigo_institucion' => auth()->user()->codigo_institucion]);
+        $ee1 = Entidad::find(auth()->user()->entidad);
+        $ee2 = Entidad::find($ee1->dependencia);
+        $ee3 = TipoEntidad::find($ee2->tipoentidad_id);
+
+        // session()->put(['usuario_sector' => auth()->user()->sector]);
+        // session()->put(['usuario_nivel' => auth()->user()->nivel]);
+        // session()->put(['usuario_codigo_institucion' => auth()->user()->codigo_institucion]);
+        session()->put(['usuario_sector' => $ee3->sector_id]);
+        session()->put(['usuario_nivel' => $ee3->codigo]);
+        session()->put(['usuario_codigo_institucion' => $ee2->codigo]);
+
+        // return  session('usuario_sector'); //[session()->usuario_sector, session()->usuario_nivel, session()->usuario_codigo_institucion];
         /* fin blas */
         session()->put(['total_sistema' => $sistemas->count()]);
         session()->put(['perfil_administrador_id' => $usuper ? $usuper->perfil_id : 0]);
