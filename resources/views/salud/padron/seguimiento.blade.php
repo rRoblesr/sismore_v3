@@ -11,9 +11,9 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card card-border">
-                    
+
                     <div class="card-header border-success-0 bg-transparent pb-0">
-                        <div class="card-widgets">       
+                        <div class="card-widgets">
                            <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
                                <i class="fa fa-redo"></i> Actualizar</button>
                            <button type="button" class="btn btn-primary btn-xs" onclick="descargarExcelSeguimiento()">
@@ -21,7 +21,7 @@
                         </div>
                         <h3 class="card-title">Seguimiento de Niños(as) del Padron Nominal</h3>
                     </div>
-                    
+
                     <div class="card-body">
                         <div class="row justify-content-between ">
                             <div class="col-md-4">
@@ -38,7 +38,7 @@
                             </div>
                         </div>
                         <div class="row justify-content-between ">
-                            @if(session('usuario_sector')=="SA")
+                            @if(session('usuario_sector')=="14")
                             <div class="col-md-3">
                                 <div class="row form-group">
                                     <label class="col-md-3 col-form-label">RED</label>
@@ -52,7 +52,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(session('usuario_sector')=="SA")
+                            @if(session('usuario_sector')=="14")
                             <div class="col-md-4">
                                 <div class="row form-group">
                                     <label class="col-md-3 col-form-label">MICRORRED</label>
@@ -66,7 +66,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(session('usuario_sector')=="SA")
+                            @if(session('usuario_sector')=="14")
                             <div class="col-md-4">
                                 <div class="row form-group">
                                     <label class="col-md-3 col-form-label">IPRESS</label>
@@ -159,7 +159,7 @@
                 <div class="row">
                  <div class="col-md-12">
                      <div class="form-group no-margin">
-                        
+
                         <div class="alert alert-success">
                            Datos del niñó(a).
                         </div>
@@ -252,7 +252,7 @@
                 </div>
                </div>
 
-               <div class="tab-pane" id="profile-1" role="tabpanel" aria-labelledby="profile-tab-1">                   
+               <div class="tab-pane" id="profile-1" role="tabpanel" aria-labelledby="profile-tab-1">
                  <div class="row">
                    <div class="col-md-12">
                      <div class="table-responsive">
@@ -260,8 +260,8 @@
                           Controles de Recién Nacido.
                        </div>
                        <div id="table-controlrn">
-                
-                       </div>                       
+
+                       </div>
                      </div>
                    </div>
                  </div>
@@ -274,11 +274,11 @@
                           Dosaje de hemoglobina.
                        </div>
                        <div id="table-hemoglobina">
-                
-                       </div>                       
+
+                       </div>
                      </div>
                    </div>
-                 </div>  
+                 </div>
                </div>
                <div class="tab-pane" id="message-1" role="tabpanel" aria-labelledby="message-tab-1">
                  <div class="row">
@@ -288,11 +288,11 @@
                           Suplemento a niños(as).
                        </div>
                        <div id="table-suplemento">
-                
-                       </div>                       
+
+                       </div>
                      </div>
                    </div>
-                 </div>  
+                 </div>
                </div>
                <div class="tab-pane" id="setting-1" role="tabpanel" aria-labelledby="setting-tab-1">
                  <div class="row">
@@ -302,8 +302,8 @@
                           Vacuna de niños(as).
                        </div>
                        <div id="table-vacuna">
-                
-                       </div>                       
+
+                       </div>
                      </div>
                    </div>
                  </div>
@@ -334,12 +334,12 @@
             });
         });
 
-        function mostrarDatosSeguimiento(id) {           
-            
+        function mostrarDatosSeguimiento(id) {
+
             // Obtener la URL utilizando la función route
             var url = "{{ route('salud.padron.seguimiento.mostrardato', ['id' => ':id']) }}";
             url = url.replace(':id', id);
-            
+
             // Enviar solicitud AJAX
             $.ajax({
                 url: url,
@@ -351,7 +351,7 @@
             });
 
         };
-        
+
         function completarDatosSeguimiento(data) {
                 var tipo_doc = (data.dni=='')?'CNV':'DNI';
                 var documento = (data.dni=='')?data.cnv:data.dni;
@@ -380,7 +380,7 @@
                 { id: 9, fechaAtencion: data.f_cred09, edadAtencion: data.edad_cred09 }, { id: 10, fechaAtencion: data.f_cred010, edadAtencion: data.edad_cred010 },
                 { id: 11, fechaAtencion: data.f_cred011, edadAtencion: data.edad_cred011 },
             ];
-            tableHtml += '<br><div class="alert alert-success">Controles de Menor de 12 meses.   </div> ' 
+            tableHtml += '<br><div class="alert alert-success">Controles de Menor de 12 meses.   </div> '
                       +  '<table class="table table-bordered mb-0">' + '<thead>' + '<tr>' + '<th>#</th>' + '<th>Fecha de Atención</th>' + '<th>Edad</th>' + '</tr>' + '</thead>' + '<tbody>';
             dataCtrl.forEach(function(item, index) {
                 if(item.fechaAtencion!='-')
@@ -424,9 +424,9 @@
 
 
             var dataVacuna = [
-                { id: 1, fechaAtencion: data.f_vhep, vacuna: 'HVB RN', edadAtencion: data.edad_vhep }, { id: 2, fechaAtencion: data.f_vbcg, vacuna: 'BCG RN', edadAtencion: data.edad_vbcg }, 
-                { id: 3, fechaAtencion: data.f_vpenta1, vacuna: 'Vac. Pentavalente 1ra Dosis', edadAtencion: data.edad_vpenta1 }, { id: 4, fechaAtencion: data.f_vpenta2, vacuna: 'Vac. Pentavalente 2da Dosis', edadAtencion: data.edad_vpenta2 }, 
-                { id: 5, fechaAtencion: data.f_vpenta3, vacuna: 'Vac. Pentavalente 3ra Dosis', edadAtencion: data.edad_vpenta3 }, { id: 6, fechaAtencion: data.f_vipv1, vacuna: 'Vac. IPV 1ra Dosis', edadAtencion: data.edad_vipv1 }, 
+                { id: 1, fechaAtencion: data.f_vhep, vacuna: 'HVB RN', edadAtencion: data.edad_vhep }, { id: 2, fechaAtencion: data.f_vbcg, vacuna: 'BCG RN', edadAtencion: data.edad_vbcg },
+                { id: 3, fechaAtencion: data.f_vpenta1, vacuna: 'Vac. Pentavalente 1ra Dosis', edadAtencion: data.edad_vpenta1 }, { id: 4, fechaAtencion: data.f_vpenta2, vacuna: 'Vac. Pentavalente 2da Dosis', edadAtencion: data.edad_vpenta2 },
+                { id: 5, fechaAtencion: data.f_vpenta3, vacuna: 'Vac. Pentavalente 3ra Dosis', edadAtencion: data.edad_vpenta3 }, { id: 6, fechaAtencion: data.f_vipv1, vacuna: 'Vac. IPV 1ra Dosis', edadAtencion: data.edad_vipv1 },
                 { id: 7, fechaAtencion: data.f_vipv2, vacuna: 'Vac. IPV 2da Dosis', edadAtencion: data.edad_vipv2 }, { id: 8, fechaAtencion: data.f_vapo1, vacuna: 'Vac. APO 1ra Dosis', edadAtencion: data.edad_vapo1 },
                 , { id: 9, fechaAtencion: data.f_vapo2, vacuna: 'Vac. APO 2da Dosis', edadAtencion: data.edad_vapo2 }, , { id: 10, fechaAtencion: data.f_vapo3, vacuna: 'Vac. APO 3ra Dosis', edadAtencion: data.edad_vapo3 },
             ];
@@ -439,7 +439,7 @@
             tableContainer.innerHTML = tableHtml;
 
 
-        }        
+        }
 
         function cargarListadoGrupoEdad() {
             var grupoEdad = $('#grupoEdad').val();
@@ -449,7 +449,7 @@
             url = url.replace(':cod_2000', cod_2000);
             window.location.href = url;
         }
-        
+
         function cargarListadoGrupoIpress() {
             var grupoEdad = $('#grupoEdad').val();
             var cod_2000 = $('#ipress').val();
@@ -466,7 +466,7 @@
             window.location.href = url;
         }
 
-        
+
 
     </script>
     <script src="{{ asset('/') }}public/assets/libs/jquery-validation/jquery.validate.min.js"></script>

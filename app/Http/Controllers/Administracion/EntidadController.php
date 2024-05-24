@@ -178,10 +178,11 @@ class EntidadController extends Controller
                         ->orWhere('codigo', 'like', '%' . $term . '%');
                 })->get();
         else
-            $entidades = Entidad::whereNull('dependencia')->where('estado', '0')
+            $entidades = Entidad::whereNull('dependencia')->where('estado', '0')->where('tipoentidad_id', $rq->tipoentidad)
                 ->where(function ($q) use ($term) {
                     $q->where('nombre', 'like', '%' . $term . '%')
-                        ->orWhere('abreviado', 'like', '%' . $term . '%');
+                        ->orWhere('abreviado', 'like', '%' . $term . '%')
+                        ->orWhere('codigo', 'like', '%' . $term . '%');
                 })->get();
 
         if ($entidades->count() > 0) {

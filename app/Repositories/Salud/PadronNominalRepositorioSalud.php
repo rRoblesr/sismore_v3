@@ -10,9 +10,9 @@ class PadronNominalRepositorioSalud
     {
         $sector = session('usuario_sector');
         $query = DB::table('sal_sabana_nino as v1');
-        if ( $sector == '14')//$sector == 'GL' or
+        if ($sector == '2' or $sector == '14') //
             $query->where($nombre_columna, $codigo_institucion);
-        if ($sector == 'MI') {
+        if ($sector == '22') { //midis
             $query->join('sal_padron_juntos as v2', function ($join) {
                 $join->on('v1.dni', '=', 'v2.dni_mo');
             });

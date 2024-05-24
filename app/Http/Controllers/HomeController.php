@@ -93,12 +93,15 @@ class HomeController extends Controller
         $ee2 = Entidad::find($ee1->dependencia);
         $ee3 = TipoEntidad::find($ee2->tipoentidad_id);
 
+        // return compact('ee1', 'ee2', 'ee3');
+
         // session()->put(['usuario_sector' => auth()->user()->sector]);
         // session()->put(['usuario_nivel' => auth()->user()->nivel]);
         // session()->put(['usuario_codigo_institucion' => auth()->user()->codigo_institucion]);
         session()->put(['usuario_sector' => $ee3->sector_id]);
         session()->put(['usuario_nivel' => $ee3->codigo]);
-        session()->put(['usuario_codigo_institucion' => $ee2->codigo]);
+        if ($ee3->sector_id == 14 && $ee3->codigo == 4) session()->put(['usuario_codigo_institucion' => '0' . $ee2->codigo]);
+        else session()->put(['usuario_codigo_institucion' => $ee2->codigo]);
 
         // return  session('usuario_sector'); //[session()->usuario_sector, session()->usuario_nivel, session()->usuario_codigo_institucion];
         /* fin blas */
