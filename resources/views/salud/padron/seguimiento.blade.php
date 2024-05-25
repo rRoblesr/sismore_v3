@@ -69,7 +69,7 @@
                             @if(session('usuario_sector')=="14")
                             <div class="col-md-4">
                                 <div class="row form-group">
-                                    <label class="col-md-3 col-form-label">IPRESS</label>
+                                    <label class="col-md-3 col-form-label">EE.SS</label>
                                     <div class="col-md-8">
                                         <select class="form-control btn-xs" name="ipress" id="ipress" onchange="cargarListadoGrupoIpress();">
                                            @foreach ($grupo_ipress as $item)
