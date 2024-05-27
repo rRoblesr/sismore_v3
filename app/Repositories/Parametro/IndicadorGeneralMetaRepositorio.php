@@ -210,6 +210,8 @@ class IndicadorGeneralMetaRepositorio
         foreach ($query as $key => $value) {
             $queryx = ImporPadronAnemia::select(DB::raw('sum(den) as den'), DB::raw('sum(num) as num'), DB::raw('round(100*sum(num)/sum(den),1) as ind'))
                 ->where('anio', $value->anio)->where('ubigeo', $value->distrito_id);
+            if ($mes > 0)
+                $queryx = $queryx->where('mes', $mes);
             if (IndicadoresController::$pacto1_anio == $anio)
                 $queryx = $queryx->where('mes', '>=', IndicadoresController::$pacto1_mes);
             $queryx = $queryx->get()->first();
