@@ -28,7 +28,7 @@ class UsuarioController extends Controller
         //return filter_var('asdsad@hot', FILTER_VALIDATE_EMAIL);
         //$sistemas2 = Sistema::where('estado', '1')->orderBy('nombre')->get();
         $sistemas = SistemaRepositorio::listar_porperfil(session('perfil_administrador_id'));
-        $sector = Sector::whereIn('id', [1, 2, 4, 14, 18])->get();
+        $sector = Sector::whereIn('id', [1, 2, 4, 14, 18, 22])->get();
         return view('administracion.Usuario.Principal', compact('sistemas', 'sector'));
     }
     public function Lista_DataTable()
@@ -181,11 +181,13 @@ class UsuarioController extends Controller
         }
         return response()->json(array('status' => true, 'modulos' => $perfiles));
     }
+
     public function ajax_delete_perfil($usuario_id, $perfil_id) //elimina deverdad *o*
     {
         UsuarioPerfil::where('usuario_id', $usuario_id)->where('perfil_id', $perfil_id)->delete();
         return response()->json(array('status' => true));
     }
+
     private function _validate($request)
     {
         $data = array();
@@ -514,17 +516,29 @@ class UsuarioController extends Controller
     public function ajax_edit($usuario_id)
     {
         $usuario = Usuario::find($usuario_id);
+        // $entidad = Entidad::select(
+        //     'adm_entidad.id as entidad',
+        //     'adm_entidad.id as entidad',
+        //     'v2.id as oficina',
+        //     'adm_entidad.nombre as entidadn',
+        //     'v2.nombre as oficinan',
+        // )
+        //     ->join('adm_entidad as v2', 'v2.dependencia', '=', 'adm_entidad.id')
+        //     ->where('v2.id', $usuario->entidad)
+        //     ->first();
         $entidad = Entidad::select(
-            'adm_entidad.id as entidad',
-            //'v2.id as gerencia',
-            'v2.id as oficina',
-            'adm_entidad.nombre as entidadn',
-            //'v2.nombre as gerencian',
-            'v2.nombre as oficinan',
+            'adm_entidad.id as oficina',
+            'adm_entidad.nombre as oficinan',
+            'ee.id as entidad',
+            'ee.nombre as entidadn',
+            'ee.codigo',
+            'te.id as tipo',
+            'ss.id as sector',
         )
-            ->join('adm_entidad as v2', 'v2.dependencia', '=', 'adm_entidad.id')
-            //->join('adm_entidad as v3', 'v3.dependencia', '=', 'v2.id')
-            ->where('v2.id', $usuario->entidad)
+            ->join('adm_entidad as ee', 'ee.id', '=', 'adm_entidad.dependencia')
+            ->join('adm_tipo_entidad as te', 'te.id', '=', 'ee.tipoentidad_id')
+            ->join('pres_sector as ss', 'ss.id', '=', 'te.sector_id')
+            ->where('adm_entidad.id', $usuario->entidad)
             ->first();
         return response()->json(compact('usuario', 'entidad'));
     }

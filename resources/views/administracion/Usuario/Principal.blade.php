@@ -382,6 +382,13 @@
                     <form action="" id="form_entidad" class="form-horizontal" autocomplete="off">
                         @csrf
                         <input type="hidden" id="dependencia" name="dependencia">
+                        {{-- <div class="form-group">
+                            <label>Tipo Entidad<span class="required">*</span></label>
+                            <input id="entidad_tipoentidad" name="entidad_tipoentidad" class="form-control" type="text"
+                                readonly>
+                            <span class="help-block"></span>
+                        </div> --}}
+
                         <div class="form-group">
                             <label>Entidad<span class="required">*</span></label>
                             <input id="entidad_nombre" name="entidad_nombre" class="form-control" type="text"
@@ -461,7 +468,7 @@
                         data: {
                             term: request.term,
                             dependencia: 0,
-                            tipoentidad: $('#sector').val()
+                            tipoentidad: $('#tipoentidad').val()
                         },
                         dataType: "JSON",
                         success: function(data) {
@@ -689,12 +696,13 @@
                     $('[name="cargo"]').val(data.usuario.cargo);
 
                     $('[name="entidad"]').val(data.entidad ? data.entidad.entidad : 0);
-                    $('[name="entidadn"]').val(data.entidad ? data.entidad.entidadn : '');
+                    $('[name="entidadn"]').val(
+                        data.entidad ? data.entidad.codigo + " " + data.entidad.entidadn : '');
                     $('[name="entidadgerencia"]').val(data.entidad ? data.entidad.oficina : 0);
                     $('[name="entidadgerencian"]').val(data.entidad ? data.entidad.oficinan : '');
-                    //$('[name="entidadoficina"]').val(data.entidad ? data.entidad.oficina : 0);
-                    //$('[name="entidadoficinan"]').val(data.entidad ? data.entidad.oficinan : '');
-
+                    $('[name="sector"]').val(data.entidad ? data.entidad.sector : 0);
+                    cargar_tipoentidad2(data.entidad ? data.entidad.sector : 0,
+                        data.entidad ? data.entidad.tipo : 0);
                     $('#modal_form').modal('show');
                     $('#modal_form .modal-title').text('Modificar Usuario');
                 },
@@ -894,6 +902,7 @@
             $('#form_entidad')[0].reset();
             $('#form_entidad .form-group').removeClass('has-error');
             $('#form_entidad .help-block').empty();
+            // $('#entidad_tipoentidad').val($('#tipoentidad').text());
             $('#entidad_nombre').parent().hide();
             $('#modal_form_entidad .modal-title').text('Nueva Entidad');
             $('#modal_form_entidad').modal('show');
@@ -994,6 +1003,32 @@
                     $.each(data.tipoentidad, function(index, value) {
                         // ss = (id == "" ? "" : (id == value.id ? "selected" : ""));
                         options += "<option value='" + value.id + "'>" + value.nombre +
+                            "</option>"
+                    });
+                    $("#tipoentidad").append(options);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cargar_tipoentidad2(sector, tipo) {
+            $("#tipoentidad option").remove();
+            $.ajax({
+                url: "{{ route('tipoentidad.ajax.cargar') }}",
+                data: {
+                    'sector': sector,
+                },
+                type: 'get',
+                dataType: 'json',
+                success: function(data) {
+                    console.log(data.tipoentidad.length);
+                    $("#tipoentidad option").remove();
+                    var options = data.tipoentidad.length > 0 ? '' : '<option value="0">OTROS</option>';
+                    $.each(data.tipoentidad, function(index, value) {
+                        ss = (tipo == 0 ? "" : (tipo == value.id ? "selected" : ""));
+                        options += "<option value='" + value.id + "' " + ss + ">" + value.nombre +
                             "</option>"
                     });
                     $("#tipoentidad").append(options);
