@@ -1437,7 +1437,19 @@ ADD `codigo_institucion` VARCHAR(45) NULL DEFAULT NULL AFTER `nivel`;
 
 
 
+select * from edu_tipogestion where dependencia in(1,2);
+select * from edu_estadoinsedu;
+select * from edu_nivelmodalidad en ;
+select count(*) from (
+select distinct codLocal  from edu_institucioneducativa where estado='AC' and EstadoInsEdu_id=3 and TipoGestion_id in (4, 5, 7, 8) and NivelModalidad_id not in (14, 15)
+) as tb;
 
+select importacion_id,count(codLocal) from (
+select pw.importacion_id,ie.codLocal from edu_padronweb pw 
+inner join edu_institucioneducativa ie on ie.id=pw.institucioneducativa_id
+where ie.codLocal!='' and ie.TipoGestion_id in (4, 5, 7, 8) and ie.NivelModalidad_id not in (14, 15)and EstadoInsEdu_id=3
+group by pw.importacion_id,ie.codLocal
+) as tb group by importacion_id
 
 
 
