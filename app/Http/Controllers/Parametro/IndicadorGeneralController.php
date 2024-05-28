@@ -116,7 +116,7 @@ class IndicadorGeneralController extends Controller
 
             $data[] = array(
                 $key + 1,
-                '<div style="text-align:center">' . $value->codigo . '</div>',
+                '<div style="text-align:center"><span class="badge" style="color:#797979;">' . $value->codigo . '</span></div>',
                 $value->nombre,
                 $sector->nombre,
                 '<div style="text-align:center">' . $tipo->nombre . '</div>',
@@ -302,7 +302,7 @@ class IndicadorGeneralController extends Controller
         // }
         IndicadorGeneral::Create([
             'codigo' => $request->codigo,
-            'nombre' => $request->nombre,
+            'nombre' => strtoupper($request->nombre),
             'descripcion' => $request->descripcion,
             'numerador' => $request->numerador,
             'denominador' => $request->denominador,
@@ -388,7 +388,7 @@ class IndicadorGeneralController extends Controller
         $sect = Sector::where('id', $rq->sector)->first();
 
         $codigo = $inst ? $inst->abreviado . '-' : '';
-        $codigo .= $sect ? substr($sect->nombre,0,3) . '-' : '';
+        $codigo .= $sect ? substr($sect->nombre, 0, 3) . '-' : '';
 
         $conteo = strlen($codigo) + 2;
 
@@ -416,7 +416,7 @@ class IndicadorGeneralController extends Controller
 
         $indicador = IndicadorGeneral::find($request->id);
         $indicador->codigo = $request->codigo;
-        $indicador->nombre = $request->nombre;
+        $indicador->nombre = strtoupper($request->nombre);
         $indicador->descripcion = $request->descripcion;
         $indicador->numerador = $request->numerador;
         $indicador->denominador = $request->denominador;

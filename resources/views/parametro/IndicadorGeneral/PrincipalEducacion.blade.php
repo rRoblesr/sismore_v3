@@ -133,7 +133,7 @@
                                                                     class="required">*</span></label>
                                                             <select id="instrumento" name="instrumento" class="form-control"
                                                                 onchange="generarcodigo()">
-                                                                <option value="">Seleccionar</option>
+                                                                <option value="">SELECCIONAR</option>
                                                                 @foreach ($instrumento as $item)
                                                                     <option value="{{ $item->id }}">{{ $item->nombre }}
                                                                     </option>
@@ -145,7 +145,7 @@
                                                             <label>Sector</label>
                                                             <select id="sector" name="sector" class="form-control"
                                                                 onchange="generarcodigo()">
-                                                                <option value="">Seleccionar</option>
+                                                                <option value="">SELECCIONAR</option>
                                                                 @foreach ($sector as $item)
                                                                     <option value="{{ $item->id }}">
                                                                         {{ $item->nombre }}
@@ -168,7 +168,7 @@
                                                         <div class="col-md-6">
                                                             <label>Tipo de indicador<span class="required">*</span></label>
                                                             <select id="tipo" name="tipo" class="form-control">
-                                                                <option value="">Seleccionar</option>
+                                                                <option value="">SELECCIONAR</option>
                                                                 @foreach ($tipo as $item)
                                                                     <option value="{{ $item->id }}">
                                                                         {{ $item->nombre }}
@@ -257,7 +257,7 @@
                                                             <label>Frecuencia</label>
                                                             <select id="frecuencia" name="frecuencia"
                                                                 class="form-control">
-                                                                <option value="">Seleccionar</option>
+                                                                <option value="">SELECCIONAR</option>
                                                                 @foreach ($frecuencia as $item)
                                                                     <option value="{{ $item->id }}">
                                                                         {{ $item->nombre }}
@@ -297,7 +297,7 @@
                                                         <div class="col-md-6">
                                                             <label>Unidad de Medida</label>
                                                             <select id="unidad" name="unidad" class="form-control">
-                                                                <option value="">Seleccionar</option>
+                                                                <option value="">SELECCIONAR</option>
                                                                 @foreach ($unidad as $item)
                                                                     <option value="{{ $item->id }}">
                                                                         {{ $item->nombre }}
@@ -436,7 +436,7 @@
                                     <div class="col-md-6">
                                         <label>Instrumento de gestion<span class="required">*</span></label>
                                         <select id="vinstrumento" name="vinstrumento" class="form-control" disabled>
-                                            <option value="">Seleccionar</option>
+                                            <option value="">SELECCIONAR</option>
                                             @foreach ($instrumento as $item)
                                                 <option value="{{ $item->id }}">{{ $item->nombre }}</option>
                                             @endforeach
@@ -460,7 +460,7 @@
                                     <div class="col-md-6">
                                         <label>Dimension</label>
                                         <select id="vdimension" name="vdimension" class="form-control" disabled>
-                                            <option value="">Seleccionar</option>
+                                            <option value="">SELECCIONAR</option>
                                             @foreach ($dimension as $item)
                                                 <option value="{{ $item->id }}">{{ $item->nombre }}</option>
                                             @endforeach
@@ -470,7 +470,7 @@
                                     <div class="col-md-6">
                                         <label>Unidad de Medida</label>
                                         <select id="vunidad" name="vunidad" class="form-control" disabled>
-                                            <option value="">Seleccionar</option>
+                                            <option value="">SELECCIONAR</option>
                                             @foreach ($unidad as $item)
                                                 <option value="{{ $item->id }}">{{ $item->nombre }}</option>
                                             @endforeach
@@ -485,7 +485,7 @@
                                     <div class="col-md-6">
                                         <label>Frecuencia</label>
                                         <select id="vfrecuencia" name="vfrecuencia" class="form-control" disabled>
-                                            <option value="">Seleccionar</option>
+                                            <option value="">SELECCIONAR</option>
                                             @foreach ($frecuencia as $item)
                                                 <option value="{{ $item->id }}">{{ $item->nombre }}</option>
                                             @endforeach
@@ -523,7 +523,7 @@
                                     <div class="col-md-6">
                                         <label>Sector</label>
                                         <select id="vsector" name="vsector" class="form-control" disabled>
-                                            <option value="">Seleccionar</option>
+                                            <option value="">SELECCIONAR</option>
                                             @foreach ($sector as $item)
                                                 <option value="{{ $item->id }}">{{ $item->nombre }}</option>
                                             @endforeach
