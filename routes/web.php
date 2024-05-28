@@ -70,6 +70,7 @@ use App\Http\Controllers\Presupuesto\SubGenericaController;
 use App\Http\Controllers\Presupuesto\SubGenericaDetalleController;
 use App\Http\Controllers\Presupuesto\UnidadEjecutoraController;
 use App\Http\Controllers\Presupuesto\UnidadOrganicaController;
+use App\Http\Controllers\Salud\ActasHomologadasController;
 use App\Http\Controllers\Salud\ImporPadronActasController;
 use App\Http\Controllers\Salud\ImporPadronEstablecimientoController;
 use App\Http\Controllers\Salud\IndicadoresController;
@@ -1182,6 +1183,13 @@ Route::get('/Salud/PadronNominal/Calidad/{codigoCalidad}/{codigoPadron}', [Salud
 Route::get('/Salud/PadronNominal/Importar', [SaludPadronNominalImportar::class, 'index'])->name('salud.padron.importar.index');
 Route::get('/Salud/PadronNominal/Importar/Historial', [SaludPadronNominalImportar::class, 'listarHistorial'])->name('salud.padron.importar.historial');
 Route::post('/Salud/PadronNominal/Importar/Cargar', [SaludPadronNominalImportar::class, 'cargarPadron'])->name('salud.padron.importar.cargar');
+
+Route::get('/Mantenimiento/ActasHomologadas/Principal', [ActasHomologadasController::class, 'principal'])->name('mantenimiento.xindicadorgeneralmeta.listar');
+// Route::get('/Mantenimiento/Actas/Meta/Listar/DIT', [IndicadorGeneralController::class, 'ListarDTMeta_dit'])->name('mantenimiento.xindicadorgeneralmeta.listar.dit');
+// Route::post('/Mantenimiento/Actas/Meta/Add', [IndicadorGeneralController::class, 'ajax_add_meta'])->middleware('auth')->name('mantenimiento.xindicadorgeneralmeta.guardar');
+// Route::post('/Mantenimiento/Actas/Meta/Add/DIT', [IndicadorGeneralController::class, 'ajax_add_meta_dit'])->middleware('auth')->name('mantenimiento.xindicadorgeneralmeta.guardar.dit');
+// Route::post('/Mantenimiento/Actas/Meta/Find/DIT', [IndicadorGeneralController::class, 'ajax_find_meta_dit'])->middleware('auth')->name('mantenimiento.xindicadorgeneralmeta.find.dit');
+// Route::get('/Mantenimiento/Actas/Meta/Delete/{id}', [IndicadorGeneralController::class, 'ajax_delete_meta'])->middleware('auth')->name('mantenimiento.xindicadorgeneralmeta.eliminar');
 
 /******************************************** FIN SALUD ***************************************************/
 
