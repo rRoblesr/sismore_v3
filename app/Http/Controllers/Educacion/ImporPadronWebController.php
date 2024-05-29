@@ -208,6 +208,9 @@ class ImporPadronWebController extends Controller
                 }
             }
         } catch (Exception $e) {
+            $importacion->estado = 'PE';
+            $importacion->save();
+
             $mensaje = "Error en la carga de datos, verifique los datos de su archivo y/o comuniquese con el administrador del sistema" . $e->getMessage();
             $this->json_output(400, $mensaje);
         }
@@ -215,6 +218,9 @@ class ImporPadronWebController extends Controller
         try {
             $procesar = DB::select('call edu_pa_procesarPadronWeb(?,?)', [$importacion->id, auth()->user()->id]);
         } catch (Exception $e) {
+            $importacion->estado = 'PE';
+            $importacion->save();
+
             $mensaje = "Error al procesar la normalizacion de datos." . $e;
             $this->json_output(400, $mensaje);
         }
@@ -318,8 +324,8 @@ class ImporPadronWebController extends Controller
     {
         //$data = ImporPadronWeb::where('importacion_id', $importacion_id)->get();
         $data = DB::table(DB::raw("(
-        SELECT 
-            ie.codModular as cod_mod,      ie.codLocal     as cod_local,                  ie.nombreInstEduc as institucion_educativa, nm.codigo as cod_nivelmod,         nm.nombre as nivel_modalidad,  
+        SELECT
+            ie.codModular as cod_mod,      ie.codLocal     as cod_local,                  ie.nombreInstEduc as institucion_educativa, nm.codigo as cod_nivelmod,         nm.nombre as nivel_modalidad,
             ff.nombre as forma,            cc.codigo       as cod_car,                    cc.nombre as carasteristica,                gg.codigo as cod_genero,           gg.nombre as genero,
             tg1.codigo as cod_gest,        tg1.nombre      as gestion,                    tg2.codigo as cod_ges_dep,                  tg2.nombre as gestion_dependencia, ie.nombreDirector as director,
             ie.telefono,                   ie.direccion    as direccion_centro_educativo, cp.codINEI as codcp_inei,                   cp.codUEMinedu as cod_ccpp,        cp.nombre as centro_poblado,
@@ -328,7 +334,7 @@ class ImporPadronWebController extends Controller
             tt.codigo as cod_tur,          tt.nombre       as turno,                      ei.codigo as cod_estado,                    ei.nombre as estado,               pw.total_alumno_m as talum_hom,
             pw.total_alumno_f as talum_muj,pw.total_alumno as talumno,                    pw.total_docente as tdocente,               pw.total_seccion as tseccion
         FROM edu_padronweb as pw
-        inner join edu_institucioneducativa as ie 	on ie.id=pw.institucioneducativa_id 
+        inner join edu_institucioneducativa as ie 	on ie.id=pw.institucioneducativa_id
         inner join edu_nivelmodalidad as nm 		on nm.id=ie.NivelModalidad_id
         inner join edu_forma as ff 				    on ff.id=ie.Forma_id
         inner join edu_caracteristica as cc 		on cc.id=ie.Caracteristica_id
@@ -343,7 +349,7 @@ class ImporPadronWebController extends Controller
         inner join edu_centropoblado as cp 		    on cp.id=ie.CentroPoblado_id
         inner join par_ubigeo as ub1 				on ub1.id=cp.Ubigeo_id
         inner join par_ubigeo as ub2 				on ub2.id=ub1.dependencia
-        WHERE pw.importacion_id=$importacion_id            
+        WHERE pw.importacion_id=$importacion_id
         ) as tb"))->get();
         return DataTables::of($data)->make(true);
     }

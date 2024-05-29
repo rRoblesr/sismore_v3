@@ -19,6 +19,7 @@ class PadronWeb extends Model
     protected $fillable = [
         'importacion_id',
         'institucioneducativa_id',
+        'estadoinsedu_id',
         'total_alumno_m',
         'total_alumno_f',
         'total_alumno',

@@ -48,11 +48,11 @@ class SFLController extends Controller
         $length = intval($rq->length);
         $est = ['', 'SANEADO', 'NO SANEADO', 'NO REGISTRADO', 'EN PROCESO'];
         $tip = ['', 'AFECTACION EN USO', 'TITULARIDAD', 'APORTE REGLAMENTARIO', 'OTROS'];
-
+//iiee.EstadoInsEdu_id = 3 and  and iiee.estado = 'AC'
         $query = DB::table(DB::raw("(
             select iiee.id, iiee.CentroPoblado_id, iiee.codLocal, iiee.Area_id, iiee.Ugel_id
 	        from edu_institucionEducativa as iiee
-	        where iiee.EstadoInsEdu_id = 3 and iiee.TipoGestion_id in (4, 5, 7, 8) and iiee.estado = 'AC' and iiee.NivelModalidad_id not in (14, 15)
+	        where iiee.TipoGestion_id in (4, 5, 7, 8) and iiee.NivelModalidad_id not in (14, 15) and iiee.EstadoInsEdu_id = 3  and iiee.estado = 'AC'
         ) as iiee"))
             ->join('edu_centropoblado as cp', 'cp.id', '=', 'iiee.CentroPoblado_id')
             ->join('edu_area as aa', 'aa.id', '=', 'iiee.Area_id')
