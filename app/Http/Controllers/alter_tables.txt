@@ -1452,7 +1452,12 @@ group by pw.importacion_id,ie.codLocal
 ) as tb group by importacion_id
 
 
-
+select /*pw.importacion_id,ie.codModular,*/ie.codLocal from edu_padronweb pw 
+inner join par_importacion ii on ii.id=pw.importacion_id
+inner join edu_institucioneducativa ie on ie.id=pw.institucioneducativa_id
+where 1 and ie.TipoGestion_id in (4, 5, 7, 8) and ie.NivelModalidad_id not in (14, 15) and pw.estadoinsedu_id=3 and year(ii.fechaActualizacion)=2024 /*and pw.importacion_id=2505*/ /*and ie.codModular IN('0514232','0273086','1792795')*/
+group by /*pw.importacion_id,*/ie.codLocal  
+ORDER BY /*`pw`.`importacion_id` desc,*/ie.codLocal asc;
 
 
 
