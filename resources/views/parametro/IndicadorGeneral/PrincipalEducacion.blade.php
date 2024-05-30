@@ -822,6 +822,7 @@
 
     <script>
         var save_method = '';
+        var save_method_dit = '';
         var table_principal;
         var table_meta;
         var form_entidad = 0;
@@ -1172,12 +1173,13 @@
         };
 
         function metas_dit(id) {
+            save_method_dit = 'add';
             $('#form_meta_dit')[0].reset();
             $('.form-group').removeClass('has-error');
             $('.help-block').empty();
             $('#modal_meta_dit').modal('show');
             $('.modal-title').text('Agregar Metas');
-            $('#indicadorgeneral_dit').val(id);            
+            $('#indicadorgeneral_dit').val(id);
 
             table_meta = $('#tbmeta_dit').DataTable({
                 responsive: true,
@@ -1233,7 +1235,7 @@
             $('#btnSaveMeta_dit').text('Guardando...');
             $('#btnSaveMeta_dit').attr('disabled', true);
             var url;
-            if (save_method == 'add') {
+            if (save_method_dit == 'add') {
                 url = "{{ route('mantenimiento.indicadorgeneralmeta.guardar.dit') }}";
                 msgsuccess = "El registro fue creado exitosamente.";
                 msgerror = "El registro no se pudo crear verifique las validaciones.";
@@ -1254,6 +1256,7 @@
                         // var valor = $('#valorbase_dit').val();
                         table_meta.ajax.reload(null, false);
                         $('#form_meta_dit')[0].reset();
+                        save_method_dit ='add';
                         // $('#aniobase_dit').val(anio);
                         // $('#valorbase_dit').val(valor);
                         //toastr.success(msgsuccess, 'Mensaje');
@@ -1275,6 +1278,8 @@
         };
 
         function editmeta_dit(id) {
+            save_method_dit = 'update';
+            $('#btnSaveMeta_dit').text('Modificar');
             // save_method = 'update';
             // $('#form')[0].reset();
             // $('.form-group').removeClass('has-error');

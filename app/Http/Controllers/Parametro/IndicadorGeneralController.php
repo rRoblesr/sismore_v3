@@ -689,4 +689,19 @@ class IndicadorGeneralController extends Controller
         $prov = Ubigeo::find($dist->dependencia);
         return response()->json(compact('meta', 'dist', 'prov'));
     }
+
+    public function ajax_update_meta_dit(Request $request)
+    {
+        $this->_validate_meta_dit($request);
+        $meta = IndicadorGeneralMeta::Create([
+            'indicadorgeneral' => $request->indicadorgeneral_dit,
+            'periodo' => '', //$request->periodo,
+            'distrito' => $request->distrito_dit,
+            'anio_base' => 0, //$request->aniobase_dit,
+            'valor_base' => '', //$request->valorbase_dit,
+            'anio' => $request->anioesperado_dit,
+            'valor' => $request->valoresperado_dit
+        ]);
+        return response()->json(['status' => true, 'meta' => $meta]);
+    }
 }
