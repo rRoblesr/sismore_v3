@@ -649,10 +649,11 @@ Route::get('/Mantenimiento/Indicador/Buscar/{id}', [IndicadorGeneralController::
 Route::get('/Mantenimiento/Indicador/Codigo', [IndicadorGeneralController::class, 'generarCodigo'])->name('mantenimiento.indicadorgeneral.codigo');
 
 Route::get('/Mantenimiento/Indicador/Meta/Listar', [IndicadorGeneralController::class, 'ListarDTMeta'])->name('mantenimiento.indicadorgeneralmeta.listar');
-Route::get('/Mantenimiento/Indicador/Meta/Listar/DIT', [IndicadorGeneralController::class, 'ListarDTMeta_dit'])->name('mantenimiento.indicadorgeneralmeta.listar.dit');
 Route::post('/Mantenimiento/Indicador/Meta/Add', [IndicadorGeneralController::class, 'ajax_add_meta'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.guardar');
-Route::post('/Mantenimiento/Indicador/Meta/Add/DIT', [IndicadorGeneralController::class, 'ajax_add_meta_dit'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.guardar.dit');
-Route::post('/Mantenimiento/Indicador/Meta/Find/DIT', [IndicadorGeneralController::class, 'ajax_find_meta_dit'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.find.dit');
+
+Route::get('/Mantenimiento/Indicador/Meta/DIT/Listar', [IndicadorGeneralController::class, 'ListarDTMeta_dit'])->name('mantenimiento.indicadorgeneralmeta.listar.dit');
+Route::post('/Mantenimiento/Indicador/Meta/DIT/Add', [IndicadorGeneralController::class, 'ajax_add_meta_dit'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.guardar.dit');
+Route::get('/Mantenimiento/Indicador/Meta/DIT/Find/{id}', [IndicadorGeneralController::class, 'ajax_find_meta_dit'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.find.dit');
 Route::get('/Mantenimiento/Indicador/Meta/Delete/{id}', [IndicadorGeneralController::class, 'ajax_delete_meta'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.eliminar');
 
 Route::get('/educación/Mantenimiento/PadronEIB', [PadronEIBController::class, 'principal'])->middleware('auth')->name('padroneib.principal');

@@ -312,8 +312,8 @@ class IndicadorGeneralController extends Controller
             'unidad_id' => $request->unidad,
             'frecuencia_id' => $request->frecuencia,
             'fuente_dato' => $request->fuentedato,
-            'anio_base' => 0, //$request->aniobase,
-            'valor_base' => '', //$request->valorbase,
+            'anio_base' => $request->aniobase,
+            'valor_base' => $request->valorbase,
             'sector_id' => $request->sector,
             'oficina_id' => $request->oficina,
             'ficha_tecnica' => $fichatecnica,
@@ -426,8 +426,8 @@ class IndicadorGeneralController extends Controller
         $indicador->unidad_id = $request->unidad;
         $indicador->frecuencia_id = $request->frecuencia;
         $indicador->fuente_dato = $request->fuentedato;
-        // $indicador->anio_base = $request->aniobase;
-        // $indicador->valor_base = $request->valorbase;
+        $indicador->anio_base = $request->aniobase;
+        $indicador->valor_base = $request->valorbase;
         $indicador->sector_id = $request->sector;
         $indicador->oficina_id = $request->oficina;
         if ($file)
@@ -479,14 +479,15 @@ class IndicadorGeneralController extends Controller
         $data = [];
         foreach ($query as $key => $value) {
             $ig = IndicadorGeneral::select('id', 'unidad_id')->where('id', $rq->indicadorgeneral)->first();
-            $btn3 = '&nbsp;<a href="#" class="btn btn-danger btn-xs" onclick="borrarmeta(' . $value->id . ')"  title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
+            $btn = '&nbsp;<a href="#" class="btn btn-primary btn-xs" onclick="modificarmeta(' . $value->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
+            $btn .= '&nbsp;<a href="#" class="btn btn-danger btn-xs" onclick="borrarmeta(' . $value->id . ')"  title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
 
             $data[] = array(
                 $key + 1,
                 '<div style="text-align:center">' . $value->periodo . '</div>',
                 '<div style="text-align:center">' . $value->anio . '</div>',
                 '<div style="text-align:center">' . $value->valor . ($ig->unidad_id == 1 ? '%' : '') . '</div>',
-                "<center>" . $btn3 . "</center>",
+                "<center>" . $btn . "</center>",
             );
         }
         $result = array(
@@ -562,6 +563,8 @@ class IndicadorGeneralController extends Controller
         return response()->json(['status' => true, 'ind' => $ind, 'meta' => $meta]);
     }
 
+
+
     public function ajax_delete_meta($id) //elimina deverdad *o*
     {
         $rer = IndicadorGeneralMeta::find($id);
@@ -582,15 +585,15 @@ class IndicadorGeneralController extends Controller
             $dis = Ubigeo::find($value->distrito);
             // $pro = Ubigeo::find($dis->dependencia);
 
-            // $btn = '&nbsp;<a href="#" class="btn btn-primary btn-xs" onclick="modificarmeta(' . $value->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
-            $btn = '&nbsp;<a href="#" class="btn btn-danger btn-xs" onclick="borrarmeta(' . $value->id . ')"  title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
+            $btn = '&nbsp;<a href="#" class="btn btn-primary btn-xs" onclick="editmeta_dit(' . $value->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
+            $btn .= '&nbsp;<a href="#" class="btn btn-danger btn-xs" onclick="borrarmeta(' . $value->id . ')"  title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
 
             $data[] = array(
                 $key + 1,
                 // '<div style="text-align:center">' . $pro->nombre . '</div>',
                 '<div>' . $dis->nombre . '</div>',
-                '<div style="text-align:center">' . $value->anio_base . '</div>',
-                '<div style="text-align:center">' . $value->valor_base . '</div>',
+                // '<div style="text-align:center">' . $value->anio_base . '</div>',
+                // '<div style="text-align:center">' . $value->valor_base . '</div>',
                 '<div style="text-align:center">' . $value->anio . '</div>',
                 '<div style="text-align:center">' . $value->valor . ($ig->unidad_id == 1 ? '%' : '') . '</div>',
                 "<center>" . $btn . "</center>",
@@ -612,21 +615,21 @@ class IndicadorGeneralController extends Controller
         $data['inputerror'] = array();
         $data['status'] = TRUE;
 
-        if ($request->aniobase_dit < 1) {
-            $data['inputerror'][] = 'aniobase_dit';
-            $data['error_string'][] = 'Este campo es obligatorio.';
-            $data['status'] = FALSE;
-        } else if ($request->aniobase_dit < 2022) {
-            $data['inputerror'][] = 'aniobase_dit';
-            $data['error_string'][] = 'Ingrese un año valido.';
-            $data['status'] = FALSE;
-        }
+        // if ($request->aniobase_dit < 1) {
+        //     $data['inputerror'][] = 'aniobase_dit';
+        //     $data['error_string'][] = 'Este campo es obligatorio.';
+        //     $data['status'] = FALSE;
+        // } else if ($request->aniobase_dit < 2022) {
+        //     $data['inputerror'][] = 'aniobase_dit';
+        //     $data['error_string'][] = 'Ingrese un año valido.';
+        //     $data['status'] = FALSE;
+        // }
 
-        if ($request->valorbase_dit == '') {
-            $data['inputerror'][] = 'valorbase_dit';
-            $data['error_string'][] = 'Este campo es obligatorio.';
-            $data['status'] = FALSE;
-        }
+        // if ($request->valorbase_dit == '') {
+        //     $data['inputerror'][] = 'valorbase_dit';
+        //     $data['error_string'][] = 'Este campo es obligatorio.';
+        //     $data['status'] = FALSE;
+        // }
 
         if ($request->anioesperado_dit < 1) {
             $data['inputerror'][] = 'anioesperado_dit';
@@ -671,8 +674,8 @@ class IndicadorGeneralController extends Controller
             'indicadorgeneral' => $request->indicadorgeneral_dit,
             'periodo' => '', //$request->periodo,
             'distrito' => $request->distrito_dit,
-            'anio_base' => $request->aniobase_dit,
-            'valor_base' => $request->valorbase_dit,
+            'anio_base' => 0, //$request->aniobase_dit,
+            'valor_base' => '', //$request->valorbase_dit,
             'anio' => $request->anioesperado_dit,
             'valor' => $request->valoresperado_dit
         ]);
@@ -682,6 +685,8 @@ class IndicadorGeneralController extends Controller
     public function ajax_find_meta_dit($id)
     {
         $meta = IndicadorGeneralMeta::find($id);
-        return response()->json(compact('meta'));
+        $dist = Ubigeo::find($meta->distrito);
+        $prov = Ubigeo::find($dist->dependencia);
+        return response()->json(compact('meta', 'dist', 'prov'));
     }
 }

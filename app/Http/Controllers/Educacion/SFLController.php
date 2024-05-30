@@ -52,7 +52,8 @@ class SFLController extends Controller
         $query = DB::table(DB::raw("(
             select iiee.id, iiee.CentroPoblado_id, iiee.codLocal, iiee.Area_id, iiee.Ugel_id
 	        from edu_institucionEducativa as iiee
-	        where iiee.TipoGestion_id in (4, 5, 7, 8) and iiee.NivelModalidad_id not in (14, 15) and iiee.EstadoInsEdu_id = 3  and iiee.estado = 'AC'
+            inner join edu_padronweb pw on pw.institucioneducativa_id=iiee.id
+	        where iiee.TipoGestion_id in(4, 5, 7, 8) and iiee.NivelModalidad_id not in(14, 15) and pw.estadoinsedu_id = 3
         ) as iiee"))
             ->join('edu_centropoblado as cp', 'cp.id', '=', 'iiee.CentroPoblado_id')
             ->join('edu_area as aa', 'aa.id', '=', 'iiee.Area_id')

@@ -275,7 +275,7 @@
 
                                                     </div>
                                                 </div>
-                                                {{-- <div class="form-group">
+                                                <div class="form-group">
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <label>Año base</label>
@@ -290,7 +290,7 @@
                                                             <span class="help-block"></span>
                                                         </div>
                                                     </div>
-                                                </div> --}}
+                                                </div>
 
                                                 <div class="form-group">
                                                     <div class="row">
@@ -585,7 +585,7 @@
                         <input type="hidden" id="indicadorgeneral" name="indicadorgeneral" value="">
                         <div class="form-body">
                             <div class="form-group">
-                                <div class="row">
+                                {{-- <div class="row">
                                     <div class="col-md-6">
                                         <label>Año base<span class="required">*</span></label>
                                         <input id="aniobase" name="aniobase" class="form-control" type="number">
@@ -596,7 +596,7 @@
                                         <input id="valorbase" name="valorbase" class="form-control" type="text">
                                         <span class="help-block"></span>
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <div class="row">
                                     <div class="col-md-6">
@@ -704,7 +704,7 @@
                                     </div>
                                 </div>
 
-                                <div class="row">
+                                {{-- <div class="row">
                                     <div class="col-md-6">
                                         <label>Año base<span class="required">*</span></label>
                                         <input id="aniobase_dit" name="aniobase_dit" class="form-control"
@@ -717,7 +717,7 @@
                                             type="text">
                                         <span class="help-block"></span>
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <div class="row">
                                     <div class="col-md-6">
@@ -748,8 +748,8 @@
                                 <tr class="text-white bg-success-0 text-center">
                                     <th>Nº</th>
                                     <th>Distrito</th>
-                                    <th>Año Base</th>
-                                    <th>Valor Base</th>
+                                    {{-- <th>Año Base</th> --}}
+                                    {{-- <th>Valor Base</th> --}}
                                     <th>Año</th>
                                     <th>Meta</th>
                                     <th>Acción</th>
@@ -1240,12 +1240,12 @@
                 success: function(data) {
                     console.log(data)
                     if (data.status) {
-                        var anio = $('#aniobase_dit').val();
-                        var valor = $('#valorbase_dit').val();
+                        // var anio = $('#aniobase_dit').val();
+                        // var valor = $('#valorbase_dit').val();
                         table_meta.ajax.reload(null, false);
                         $('#form_meta_dit')[0].reset();
-                        $('#aniobase_dit').val(anio);
-                        $('#valorbase_dit').val(valor);
+                        // $('#aniobase_dit').val(anio);
+                        // $('#valorbase_dit').val(valor);
                         //toastr.success(msgsuccess, 'Mensaje');
                     } else {
                         for (var i = 0; i < data.inputerror.length; i++) {
@@ -1260,6 +1260,49 @@
                     toastr.error(msgerror, 'Mensaje');
                     $('#btnSaveMeta_dit').text('Guardar');
                     $('#btnSaveMeta_dit').attr('disabled', false);
+                }
+            });
+        };
+
+        function editmeta_dit(id) {
+            // save_method = 'update';
+            // $('#form')[0].reset();
+            // $('.form-group').removeClass('has-error');
+            // $('.help-block').empty();
+            $.ajax({
+                url: "{{ route('mantenimiento.indicadorgeneralmeta.find.dit', '') }}/" + id,
+                type: "GET",
+                dataType: "JSON",
+                success: function(data) {
+                    $('[name="provincia_dit"]').val(data.prov.id);
+                    // $('[name="distrito_dit"]').val(data.dist.id);
+                    $('[name="anioesperado_dit"]').val(data.meta.anio);
+                    $('[name="valoresperado_dit"]').val(data.meta.valor);
+
+                    $.ajax({
+                        url: "{{ route('ubigeo.distrito.25', '') }}/" + data.prov.id,
+                        type: 'GET',
+                        success: function(data2) {
+                            $("#distrito_dit option").remove();
+                            var options = '<option value="0">SELECCIONAR</option>';
+                            $.each(data2, function(index, value) {
+                                ss = (data.dist.id == value.id ? "selected" : "");
+                                console.log(data.dist.id);
+                                console.log(value.id);
+                                console.log(ss);
+                                options += "<option value='" + value.id + "' " + ss + ">" +
+                                    value.nombre +
+                                    "</option>"
+                            });
+                            $("#distrito_dit").append(options);
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.log(jqXHR);
+                        },
+                    });
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert('Error get data from ajax');
                 }
             });
         };
