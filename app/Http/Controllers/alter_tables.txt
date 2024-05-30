@@ -1459,5 +1459,11 @@ where 1 and ie.TipoGestion_id in (4, 5, 7, 8) and ie.NivelModalidad_id not in (1
 group by /*pw.importacion_id,*/ie.codLocal  
 ORDER BY /*`pw`.`importacion_id` desc,*/ie.codLocal asc;
 
+# modificar edu_padronweb con x_padronweb
+update edu_padronweb pw 
+inner join par_importacion ii on ii.id=pw.importacion_id 
+inner join edu_institucioneducativa ie on ie.id=pw.institucioneducativa_id 
+set pw.estadoinsedu_id=(select IF(cod_estado=1,3,IF(cod_estado=2,2,1)) from x_padronweb where cod_mod=ie.codModular and importacion_id=ii.id) 
+WHERE 1 and year(ii.fechaActualizacion)=2024
 
 
