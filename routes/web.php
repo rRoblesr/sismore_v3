@@ -653,6 +653,7 @@ Route::post('/Mantenimiento/Indicador/Meta/Add', [IndicadorGeneralController::cl
 
 Route::get('/Mantenimiento/Indicador/Meta/DIT/Listar', [IndicadorGeneralController::class, 'ListarDTMeta_dit'])->name('mantenimiento.indicadorgeneralmeta.listar.dit');
 Route::post('/Mantenimiento/Indicador/Meta/DIT/Add', [IndicadorGeneralController::class, 'ajax_add_meta_dit'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.guardar.dit');
+Route::post('/Mantenimiento/Indicador/Meta/DIT/Update', [IndicadorGeneralController::class, 'ajax_update_meta_dit'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.editar.dit');
 Route::get('/Mantenimiento/Indicador/Meta/DIT/Find/{id}', [IndicadorGeneralController::class, 'ajax_find_meta_dit'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.find.dit');
 Route::get('/Mantenimiento/Indicador/Meta/Delete/{id}', [IndicadorGeneralController::class, 'ajax_delete_meta'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.eliminar');
 

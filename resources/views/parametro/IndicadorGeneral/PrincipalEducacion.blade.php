@@ -1177,7 +1177,7 @@
             $('.help-block').empty();
             $('#modal_meta_dit').modal('show');
             $('.modal-title').text('Agregar Metas');
-            $('#indicadorgeneral_dit').val(id);
+            $('#indicadorgeneral_dit').val(id);            
 
             table_meta = $('#tbmeta_dit').DataTable({
                 responsive: true,
@@ -1232,8 +1232,18 @@
         function savemeta_dit() {
             $('#btnSaveMeta_dit').text('Guardando...');
             $('#btnSaveMeta_dit').attr('disabled', true);
+            var url;
+            if (save_method == 'add') {
+                url = "{{ route('mantenimiento.indicadorgeneralmeta.guardar.dit') }}";
+                msgsuccess = "El registro fue creado exitosamente.";
+                msgerror = "El registro no se pudo crear verifique las validaciones.";
+            } else {
+                url = "{{ route('mantenimiento.indicadorgeneralmeta.editar.dit') }}";
+                msgsuccess = "El registro fue actualizado exitosamente.";
+                msgerror = "El registro no se pudo actualizar. Verifique la operación";
+            }
             $.ajax({
-                url: "{{ route('mantenimiento.indicadorgeneralmeta.guardar.dit') }}",
+                url: url,
                 type: "POST",
                 data: $('#form_meta_dit').serialize(),
                 dataType: "JSON",
@@ -1278,7 +1288,7 @@
                     // $('[name="distrito_dit"]').val(data.dist.id);
                     $('[name="anioesperado_dit"]').val(data.meta.anio);
                     $('[name="valoresperado_dit"]').val(data.meta.valor);
-
+                    $('#idmeta_dit').val(data.meta.id);
                     $.ajax({
                         url: "{{ route('ubigeo.distrito.25', '') }}/" + data.prov.id,
                         type: 'GET',
