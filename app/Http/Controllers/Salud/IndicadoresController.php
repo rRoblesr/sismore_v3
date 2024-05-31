@@ -352,7 +352,7 @@ class IndicadoresController extends Controller
                 }
                 return response()->json(compact('info', 'base1', 'base2', 'mes'));
             case 'tabla1':
-                $base = IndicadorGeneralMetaRepositorio::getPacto1tabla1($rq->indicador, $rq->anio);
+                $base = IndicadorGeneralMetaRepositorio::getPacto1tabla1($rq->indicador, $rq->anio, $rq->mes);
 
                 $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla1', compact('base', 'ndis'))->render();
                 return response()->json(compact('excel', 'base'));

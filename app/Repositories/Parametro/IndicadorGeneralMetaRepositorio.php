@@ -39,7 +39,7 @@ class IndicadorGeneralMetaRepositorio
         return $query2->count() > 0 ? $query2->sum('conteo') : 0;
     }
 
-    public static function getPacto1tabla1($indicador_id, $anio)
+    public static function getPacto1tabla1($indicador_id, $anio, $mes)
     {
         $query = IndicadorGeneralMeta::select('par_Indicador_general_meta.*', 'd.codigo', 'd.id as distrito_id', 'd.nombre as distrito')->where('indicadorgeneral', $indicador_id)->where('anio', $anio)
             ->join('par_ubigeo as d', 'd.id', '=', 'par_Indicador_general_meta.distrito')->get();
@@ -47,6 +47,8 @@ class IndicadorGeneralMetaRepositorio
             $queryx = DataPacto1::where('anio', $value->anio)->where('distrito', $value->distrito)->select(DB::raw('sum(estado) as conteo'));
             if (IndicadoresController::$pacto1_anio == $anio)
                 $queryx = $queryx->where('mes', '>=', IndicadoresController::$pacto1_mes);
+            if ($mes > 0)
+                $queryx = $queryx->where('mes', $mes);
             $queryx = $queryx->get()->first();
             $value->avance = $queryx->conteo ? $queryx->conteo : 0;
             $value->porcentaje = number_format(100 * ($value->valor > 0 ? $value->avance / $value->valor : 0), 1);
