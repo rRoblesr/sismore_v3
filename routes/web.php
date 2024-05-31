@@ -1138,7 +1138,7 @@ Route::get('/salud/PowerBi/{id}', [PowerBiController::class, 'saludMenu'])->name
 Route::get('/salud/pactoregional', [IndicadoresController::class, 'PactoRegional'])->name('salud.indicador.pactoregional');
 Route::get('/salud/pactoregional/Actualizarx', [IndicadoresController::class, 'PactoRegionalActualizar'])->name('salud.indicador.pactoregional.actualizar');
 // Route::get('/salud/pactoregional/Actualizarx2', [IndicadoresController::class, 'PactoRegionalActualizar2'])->name('salud.indicador.pactoregional.actualizar2');
-Route::get('/salud/pactoregional/Sal/Reports1', [IndicadoresController::class, 'PactoRegionalDetalleReports'])->name('salud.indicador.pactoregional.detalle.reports');
+Route::get('/salud/pactoregional/Sal/Reports1', [IndicadoresController::class, 'PactoRegionalSalPacto1Reports'])->name('salud.indicador.pactoregional.detalle.reports');
 Route::get('/salud/pactoregional/Sal/Reports2', [IndicadoresController::class, 'PactoRegionalSalPacto2Reports'])->name('salud.indicador.pactoregional.sal.pacto2.reports');
 Route::get('/salud/pactoregional/Sal/Reports2/Exportar/{div}/{indicador}/{anio}/{mes}/{provincia}/{distrito}', [IndicadoresController::class, 'PactoRegionalSalPacto2download'])->name('salud.indicador.pactoregional.sal.pacto2.excel');
 Route::get('/salud/pactoregional/Edu/Reports1', [IndicadoresController::class, 'PactoRegionalEduPacto2Reports'])->name('salud.indicador.pactoregional.edu.pacto2.reports');

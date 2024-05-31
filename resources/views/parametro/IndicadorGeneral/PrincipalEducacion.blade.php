@@ -740,6 +740,8 @@
                 <div class="modal-body pt-0" style="text-align:center">
                     <button type="button" class="btn btn-xs btn-primary" id="btnSaveMeta_dit"
                         onclick="savemeta_dit()"><i class="fa fa-plus"></i> Agregar</button>
+                    <button type="button" class="btn btn-xs btn-danger" id="btnSaveMlleta_dit"
+                        onclick="delemeta_dit()"><i class="fa fa-times"></i> Limpiar</button>
                 </div>
                 <div class="modal-body">
                     <div class="table-responsive">
@@ -1250,23 +1252,22 @@
                 data: $('#form_meta_dit').serialize(),
                 dataType: "JSON",
                 success: function(data) {
+                    console.log('savemeta_dit ' + url);
                     console.log(data)
                     if (data.status) {
-                        // var anio = $('#aniobase_dit').val();
-                        // var valor = $('#valorbase_dit').val();
+                        // var anio = $('#aniobase_dit').val();                        // var valor = $('#valorbase_dit').val();
                         table_meta.ajax.reload(null, false);
                         $('#form_meta_dit')[0].reset();
-                        save_method_dit ='add';
-                        // $('#aniobase_dit').val(anio);
-                        // $('#valorbase_dit').val(valor);
-                        //toastr.success(msgsuccess, 'Mensaje');
+                        save_method_dit = 'add';
+                        // $('#aniobase_dit').val(anio);                        // $('#valorbase_dit').val(valor);                        //toastr.success(msgsuccess, 'Mensaje');
+                        delemeta_dit();
                     } else {
                         for (var i = 0; i < data.inputerror.length; i++) {
                             $('[name="' + data.inputerror[i] + '"]').parent().addClass('has-error');
                             $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]);
                         }
                     }
-                    $('#btnSaveMeta_dit').text('Guardar');
+                    // $('#btnSaveMeta_dit').text('Guardar');
                     $('#btnSaveMeta_dit').attr('disabled', false);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
@@ -1279,18 +1280,13 @@
 
         function editmeta_dit(id) {
             save_method_dit = 'update';
-            $('#btnSaveMeta_dit').text('Modificar');
-            // save_method = 'update';
-            // $('#form')[0].reset();
-            // $('.form-group').removeClass('has-error');
-            // $('.help-block').empty();
+            $('#btnSaveMeta_dit').html('<i class="fa fa-edit"></i> Modificar');
             $.ajax({
                 url: "{{ route('mantenimiento.indicadorgeneralmeta.find.dit', '') }}/" + id,
                 type: "GET",
                 dataType: "JSON",
                 success: function(data) {
                     $('[name="provincia_dit"]').val(data.prov.id);
-                    // $('[name="distrito_dit"]').val(data.dist.id);
                     $('[name="anioesperado_dit"]').val(data.meta.anio);
                     $('[name="valoresperado_dit"]').val(data.meta.valor);
                     $('#idmeta_dit').val(data.meta.id);
@@ -1302,9 +1298,6 @@
                             var options = '<option value="0">SELECCIONAR</option>';
                             $.each(data2, function(index, value) {
                                 ss = (data.dist.id == value.id ? "selected" : "");
-                                console.log(data.dist.id);
-                                console.log(value.id);
-                                console.log(ss);
                                 options += "<option value='" + value.id + "' " + ss + ">" +
                                     value.nombre +
                                     "</option>"
@@ -1321,6 +1314,16 @@
                 }
             });
         };
+
+        function delemeta_dit(){
+            $('#btnSaveMeta_dit').html('<i class="fa fa-plus"></i> Agregar');
+            save_method_dit = 'add';
+            $("#idmeta_dit").val('');
+            $("#provincia_dit").val('0');
+            $("#distrito_dit").val('0');
+            $("#anioesperado_dit").val('');
+            $("#valoresperado_dit").val('');
+        }
 
         function borrarmeta(id) {
             bootbox.confirm("Seguro desea Eliminar este registro?", function(result) {

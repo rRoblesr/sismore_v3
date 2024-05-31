@@ -641,16 +641,19 @@ class IndicadorGeneralController extends Controller
             $data['status'] = FALSE;
         }
 
-        if ($request->distrito_dit == '0') {
-            $data['inputerror'][] = 'distrito_dit';
-            $data['error_string'][] = 'Este campo es obligatorio.';
-            $data['status'] = FALSE;
+        if ($request->idmeta_dit > 0) {
         } else {
-            $meta = IndicadorGeneralMeta::where('indicadorgeneral', $request->indicadorgeneral_dit)->where('distrito', $request->distrito_dit)->where('anio', $request->anioesperado_dit)->first();
-            if ($meta) {
+            if ($request->distrito_dit == '0') {
                 $data['inputerror'][] = 'distrito_dit';
-                $data['error_string'][] = 'Distrito ya registrado.';
+                $data['error_string'][] = 'Este campo es obligatorio.';
                 $data['status'] = FALSE;
+            } else {
+                $meta = IndicadorGeneralMeta::where('indicadorgeneral', $request->indicadorgeneral_dit)->where('distrito', $request->distrito_dit)->where('anio', $request->anioesperado_dit)->first();
+                if ($meta) {
+                    $data['inputerror'][] = 'distrito_dit';
+                    $data['error_string'][] = 'Distrito ya registrado.';
+                    $data['status'] = FALSE;
+                }
             }
         }
 
@@ -670,12 +673,13 @@ class IndicadorGeneralController extends Controller
     public function ajax_add_meta_dit(Request $request)
     {
         $this->_validate_meta_dit($request);
+        $ind = IndicadorGeneral::find($request->indicadorgeneral_dit);
         $meta = IndicadorGeneralMeta::Create([
             'indicadorgeneral' => $request->indicadorgeneral_dit,
             'periodo' => '', //$request->periodo,
             'distrito' => $request->distrito_dit,
-            'anio_base' => 0, //$request->aniobase_dit,
-            'valor_base' => '', //$request->valorbase_dit,
+            'anio_base' => $ind->anio_base, // 0, //$request->aniobase_dit,
+            'valor_base' => $ind->valor_base, // '', //$request->valorbase_dit,
             'anio' => $request->anioesperado_dit,
             'valor' => $request->valoresperado_dit
         ]);
@@ -693,15 +697,11 @@ class IndicadorGeneralController extends Controller
     public function ajax_update_meta_dit(Request $request)
     {
         $this->_validate_meta_dit($request);
-        $meta = IndicadorGeneralMeta::Create([
-            'indicadorgeneral' => $request->indicadorgeneral_dit,
-            'periodo' => '', //$request->periodo,
-            'distrito' => $request->distrito_dit,
-            'anio_base' => 0, //$request->aniobase_dit,
-            'valor_base' => '', //$request->valorbase_dit,
-            'anio' => $request->anioesperado_dit,
-            'valor' => $request->valoresperado_dit
-        ]);
+        $meta = IndicadorGeneralMeta::find($request->idmeta_dit);
+        $meta->distrito = $request->distrito_dit;
+        $meta->anio = $request->anioesperado_dit;
+        $meta->valor = $request->valoresperado_dit;
+        $meta->save();
         return response()->json(['status' => true, 'meta' => $meta]);
     }
 }

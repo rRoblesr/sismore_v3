@@ -113,7 +113,7 @@ class IndicadoresController extends Controller
             case 'DIT-SAL-02':
                 $ind = IndicadorGeneralRepositorio::findNoFichatecnicaCodigo($rq->codigo);
                 $gls = IndicadorGeneralMetaRepositorio::getSalPacto2GLS($ind->id, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
-                $gl = IndicadorGeneralMetaRepositorio::getSalPacto2GL($ind->id, $rq->anio,0, $rq->provincia, $rq->distrito);
+                $gl = IndicadorGeneralMetaRepositorio::getSalPacto2GL($ind->id, $rq->anio, 0, $rq->provincia, $rq->distrito);
                 $num = $gls;
                 $den = $gl;
                 break;
@@ -229,9 +229,10 @@ class IndicadoresController extends Controller
                 // return response()->json([$imp]);
                 $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
                 $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios($indicador_id); // Anio::orderBy('anio')->get();
+                $mes = Mes::all();
                 $provincia = UbigeoRepositorio::provincia('25');
                 $aniomax = $imp->anio;
-                return view('salud.Indicadores.PactoRegionalSalPacto1', compact('actualizado', 'anio', 'provincia', 'aniomax', 'ind'));
+                return view('salud.Indicadores.PactoRegionalSalPacto1', compact('actualizado', 'anio', 'mes', 'provincia', 'aniomax', 'ind'));
             case 'DIT-SAL-02':
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_2']);
                 // return response()->json([$imp]);
@@ -267,7 +268,7 @@ class IndicadoresController extends Controller
         }
     }
 
-    public function PactoRegionalDetalleReports(Request $rq)
+    public function PactoRegionalSalPacto1Reports(Request $rq)
     {
         if ($rq->distrito > 0) $ndis = Ubigeo::find($rq->distrito)->nombre;
         else $ndis = '';

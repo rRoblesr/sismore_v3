@@ -24,7 +24,7 @@
                         </div>
                         <div class="card-body p-2">
                             <div class="form-group row align-items-center vh-5 m-0">
-                                <div class="col-lg-7 col-md-7 col-sm-7">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
                                     <h5 class="page-title font-12">Fuente: Padrón Nominal, <br>{{ $actualizado }}</h5>
                                 </div>
                                 <div class="col-lg-1 col-md-1 col-sm-1  ">
@@ -34,6 +34,16 @@
                                             <option value="{{ $item->anio }}"
                                                 {{ $item->anio == $aniomax ? 'selected' : '' }}>
                                                 {{ $item->anio }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-lg-1 col-md-1 col-sm-1  ">
+                                    <select id="mes" name="mes" class="form-control btn-xs font-11 p-0"
+                                        onchange="cargarcuadros();">
+                                        <option value="0">MES</option>
+                                        @foreach ($mes as $item)
+                                            <option value="{{ $item->id }}">
+                                                {{ $item->mes }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -257,6 +267,7 @@
                 data: {
                     'div': div,
                     "anio": $('#anio').val(),
+                    "mes": $('#mes').val(),
                     "provincia": $('#provincia').val(),
                     "distrito": $('#distrito').val(),
                     "indicador": '{{ $ind->id }}',
@@ -323,6 +334,7 @@
                 data: {
                     'div': div,
                     "anio": $('#anio').val(),
+                    "mes": $('#mes').val(),
                     "provincia": $('#provincia').val(),
                     "distrito": $('#distrito').val(),
                     "gestion": $('#gestion').val(),
