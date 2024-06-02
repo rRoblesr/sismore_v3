@@ -1,4 +1,4 @@
-<table id="tabla2" class="table table-sm table-striped table-bordered font-12 m-0" style="height: 100%">
+<table id="tabla2" class="table table-sm table-striped table-bordered font-11 m-0" style="height: 100%">
     <thead>
         <tr class="bg-success-0 text-white text-center">
             <th rowspan="1" class="text-center">Nº</th>
@@ -25,9 +25,9 @@
                     <td>
                         @if ($item->cumple == 1)
                             <button type="button"
-                                class="btn btn-xs btn-success-0 py-0">&nbsp;&nbsp;&nbsp;Cumple&nbsp;&nbsp;&nbsp;</button>
+                                class="btn btn-xs btn-success-0 p-1 font-11 text-nowrap">&nbsp;&nbsp;&nbsp;Cumple&nbsp;&nbsp;&nbsp;</button>
                         @else
-                            <button type="button" class="btn btn-xs btn-danger py-0">No Cumple</button>
+                            <button type="button" class="btn btn-xs btn-danger p-1 font-11 text-nowrap">No Cumple</button>
                         @endif
                     </td>
                 </tr>
@@ -43,10 +43,10 @@
                     @if ($foot->cumple == 1)
                         {{-- <span class="badge badge-success" style="font-size:80%; width:80px">CUMPLE</span> --}}
                         <button type="button"
-                            class="btn btn-xs btn-success-0 py-0">&nbsp;&nbsp;&nbsp;Cumple&nbsp;&nbsp;&nbsp;</button>
+                            class="btn btn-xs btn-success-0 p-1 font-11 text-nowrap">&nbsp;&nbsp;&nbsp;Cumple&nbsp;&nbsp;&nbsp;</button>
                     @else
                         {{-- <span class="badge  badge-danger" style="font-size:80%; width:80px">NO CUMPLE</span> --}}
-                        <button type="button" class="btn btn-xs btn-danger py-0">No Cumple</button>
+                        <button type="button" class="btn btn-xs btn-danger p-1 font-11 text-nowrap">No Cumple</button>
                     @endif
                 </td>
             </tr>

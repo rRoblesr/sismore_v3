@@ -20,18 +20,21 @@
 
         /*  formateando nav-tabs  */
         .nav-tabs .nav-link:not(.active) {
-            border-color: transparent !important;
+            /* border-color: transparent !important; */
         }
 
         .nav-tabs .nav-item .nav-link {
-            background-color: #43beac;
+            /* background-color: #43beac; */
             /* #0080FF; */
-            color: #FFF;
+            /* color: #FFF; */
+            color: #43beac;
         }
 
         .nav-tabs .nav-item .nav-link.active {
-            color: #43beac;
+            /* color: #43beac; */
             /* #0080FF; */
+            background-color: #43beac;
+            color: #FFF;
         }
     </style>
 @endsection
