@@ -19,12 +19,12 @@
                             {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
                                 title='ACTUALIZAR'><i class=" fas fa-history"></i> Actualizar</button> --}}
                         </div>
-                        <h3 class="card-title text-white font-12">SEGUIMIENTO DE NIÑOS</h3>
+                        <h3 class="card-title text-white font-12">SEGUIMIENTO DE NIÑOS [ {{$entidad}} ]</h3>
                     </div>
                     <div class="card-body pb-0">
                         <div class="form-group row align-items-center vh-5">
                             <div class="col-lg-4 col-md-4 col-sm-4">
-                                <h5 class="page-title font-12">SIAGIE - MINEDU, {{ $actualizado='' }}</h5>
+                                <h5 class="page-title font-12">PADRON NOMINAL - DIRESA, {{ $actualizado }}</h5>
                             </div>
                             <div class="col-lg-2 col-md-2 col-sm-2">
                                 <select class="form-control btn-xs" name="grupoEdad" id="grupoEdad"
@@ -164,7 +164,7 @@
                             <div class="col-md-12">
                                 {{-- <div class="table-responsive"> --}}
                                 <table id="datatableS"
-                                    class="table table-sm table-striped table-bordered dt-responsive nowrap font-11"
+                                    class="table table-sm-5 table-striped table-bordered dt-responsive nowrap font-11"
                                     style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                     <thead class="text-white  bg-success-0">
                                         <tr>

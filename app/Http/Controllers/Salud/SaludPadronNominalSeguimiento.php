@@ -55,7 +55,13 @@ class SaludPadronNominalSeguimiento extends Controller
         $grupo_ipress = $query->groupBy('re.cod_2000', 're.nom_est')->get();
 
         // return compact('id_grupo', 'codigo_institucion', 'grupo_edad', 'grupo_red', 'grupo_microred', 'grupo_ipress', 'dato_ipress');
-        return view('salud.padron.seguimiento', compact('id_grupo', 'codigo_institucion', 'grupo_edad', 'grupo_red', 'grupo_microred', 'grupo_ipress', 'dato_ipress'));
+
+        $actualizado = '';
+
+        $entidad = Entidad::find(auth()->user()->entidad);
+        $entidad = Entidad::find($entidad->dependencia);
+        $entidad = $entidad->codigo . ' - ' . $entidad->nombre;
+        return view('salud.padron.seguimiento', compact('id_grupo', 'codigo_institucion', 'grupo_edad', 'grupo_red', 'grupo_microred', 'grupo_ipress', 'dato_ipress', 'actualizado', 'entidad'));
     }
 
     public function columna($sector, $nivel)
@@ -82,6 +88,7 @@ class SaludPadronNominalSeguimiento extends Controller
             }
         }
     }
+
 
     public function listar($id_grupo = 1, $cod_2000 = 'NULL')
     {

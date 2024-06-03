@@ -28,7 +28,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="table-responsive">
-                                    <table id="datatable" class="table table-sm table-striped table-bordered dt-responsive nowrap font-12"
+                                    <table id="datatable" class="table table-sm-5 table-striped table-bordered dt-responsive nowrap font-12"
                                         style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                         <thead class="text-white  bg-success-0">
                                             <tr>

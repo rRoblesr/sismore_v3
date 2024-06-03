@@ -174,6 +174,16 @@
         .requerid {
             color: red;
         }
+
+        .table-sm-3 th,
+        .table-sm-3 td {
+            padding: 0.3rem;
+        }
+
+        .table-sm-5 th,
+        .table-sm-5 td {
+            padding: 0.5rem;
+        }
     </style>
 </head>
 
