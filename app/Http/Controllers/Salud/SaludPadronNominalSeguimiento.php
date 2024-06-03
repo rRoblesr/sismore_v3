@@ -31,6 +31,8 @@ class SaludPadronNominalSeguimiento extends Controller
         $nivel = session('usuario_nivel');
         $codigo = session('usuario_codigo_institucion');
 
+        // return compact('sector', 'nivel', 'codigo');
+
         $codigo_institucion = ($cod_2000 == "NULL") ?  '0' : $cod_2000;
         //$codigo_institucion = ($sector == "MI") ? '250101' : $codigo_institucion;
         $nombre_columna = $this->columna($sector, $nivel); //  ($sector == '14') ? "re.cod_2000" : "re.ubigeo";
@@ -68,7 +70,13 @@ class SaludPadronNominalSeguimiento extends Controller
                     return "re.cod_mic";
                 case '4':
                     return "re.cod_2000";
-
+                default:
+                    return "";
+            }
+        } else if ($sector == '2') {
+            switch ($nivel) {
+                case '1':
+                    return "re.ubigeo";
                 default:
                     return "";
             }

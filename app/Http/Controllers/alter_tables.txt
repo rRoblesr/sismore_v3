@@ -1467,3 +1467,4 @@ set pw.estadoinsedu_id=(select IF(cod_estado=1,3,IF(cod_estado=2,2,1)) from x_pa
 WHERE 1 and year(ii.fechaActualizacion)=2024
 
 
+update `adm_entidad` set tipoentidad_id=7 where length(codigo)=6;

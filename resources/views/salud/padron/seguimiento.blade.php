@@ -86,8 +86,8 @@
                         <div class="card-widgets">
                             <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
                                 <i class="fa fa-redo"></i> Actualizar</button>
-                            <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcelSeguimiento()">
-                                <i class="fa fa-arrow-alt-circle-down"></i> Descargar Excel</button>
+                            <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcelSeguimiento()">{{-- fa fa-arrow-alt-circle-down --}}
+                                <i class="fa fa-file-excel"></i> Descargar</button>
                         </div>
                         <h3 class="card-title font-12">Seguimiento de Niños(as) del Padron Nominal</h3>
                     </div>
