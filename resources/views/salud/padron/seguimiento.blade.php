@@ -752,7 +752,7 @@
 
         function cargarListadoGrupoEdad() {
             var grupoEdad = $('#grupoEdad').val();
-            var cod_2000 = '{{ session('usuario_codigo_institucion') }}';
+            var cod_2000 = '{{ session("usuario_codigo_institucion") }}';
             var url = "{{ route('salud.padron.seguimiento.indexge', [':grupoEdad', ':cod_2000']) }}";
             url = url.replace(':grupoEdad', grupoEdad);
             url = url.replace(':cod_2000', cod_2000);

@@ -31,7 +31,7 @@ class SaludPadronNominalSeguimiento extends Controller
         $nivel = session('usuario_nivel');
         $codigo = session('usuario_codigo_institucion');
 
-        $codigo_institucion = ($cod_2000 == "NULL") ?  $codigo : $cod_2000;
+        $codigo_institucion = ($cod_2000 == "NULL") ?  '0' : $cod_2000;
         //$codigo_institucion = ($sector == "MI") ? '250101' : $codigo_institucion;
         $nombre_columna = $this->columna($sector, $nivel); //  ($sector == '14') ? "re.cod_2000" : "re.ubigeo";
 
@@ -75,24 +75,6 @@ class SaludPadronNominalSeguimiento extends Controller
             }
         }
     }
-    public function columna2($sector, $nivel)
-    {
-        if ($sector == '14') {
-            switch ($nivel) {
-                case '1':
-                    return  "";
-                case '2':
-                    return "re.cod_red";
-                case '3':
-                    return "re.cod_mic";
-                case '4':
-                    return "re.cod_2000";
-
-                default:
-                    return "";
-            }
-        }
-    }
 
     public function listar($id_grupo = 1, $cod_2000 = 'NULL')
     {
@@ -103,7 +85,7 @@ class SaludPadronNominalSeguimiento extends Controller
         $nivel = session('usuario_nivel');
         $codigo = session('usuario_codigo_institucion');
 
-        $codigo_institucion = ($cod_2000 == "NULL") ? $codigo : $cod_2000;
+        $codigo_institucion = ($cod_2000 == "NULL") ? '0' : $cod_2000;
         $nombre_columna =  ($sector == '14') ? "renaes" : "ubigeo";
         //echo $nombre_columna." - ".$codigo_institucion;
         $query = PadronNominalRepositorioSalud::Listar_PadronSabana($nombre_columna, $codigo_institucion, $id_grupo);
@@ -189,7 +171,8 @@ class SaludPadronNominalSeguimiento extends Controller
             "recordsTotal" => $start,
             "recordsFiltered" => $length,
             "data" => $data,
-            "ci" => $codigo_institucion
+            "codigo_institucion" => $codigo_institucion,
+            "id_grupo" => $id_grupo
         );
         return response()->json($result);
     }
