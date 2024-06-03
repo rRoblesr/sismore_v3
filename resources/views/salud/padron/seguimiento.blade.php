@@ -19,7 +19,7 @@
                             {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
                                 title='ACTUALIZAR'><i class=" fas fa-history"></i> Actualizar</button> --}}
                         </div>
-                        <h3 class="card-title text-white font-12">SEGUIMIENTO DE NIÑOS [ {{$entidad}} ]</h3>
+                        <h3 class="card-title text-white font-12">SEGUIMIENTO DE NIÑOS [ {{ $entidad }} ]</h3>
                     </div>
                     <div class="card-body pb-0">
                         <div class="form-group row align-items-center vh-5">
@@ -86,7 +86,8 @@
                         <div class="card-widgets">
                             <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
                                 <i class="fa fa-redo"></i> Actualizar</button>
-                            <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcelSeguimiento()">{{-- fa fa-arrow-alt-circle-down --}}
+                            <button type="button" class="btn btn-success-0 btn-xs"
+                                onclick="descargarExcelSeguimiento()">{{-- fa fa-arrow-alt-circle-down --}}
                                 <i class="fa fa-file-excel"></i> Descargar</button>
                         </div>
                         <h3 class="card-title font-12">Seguimiento de Niños(as) del Padron Nominal</h3>
@@ -752,7 +753,7 @@
 
         function cargarListadoGrupoEdad() {
             var grupoEdad = $('#grupoEdad').val();
-            var cod_2000 = '{{ session("usuario_codigo_institucion") }}';
+            var cod_2000 = '{{ session('usuario_codigo_institucion') }}';
             var url = "{{ route('salud.padron.seguimiento.indexge', [':grupoEdad', ':cod_2000']) }}";
             url = url.replace(':grupoEdad', grupoEdad);
             url = url.replace(':cod_2000', cod_2000);

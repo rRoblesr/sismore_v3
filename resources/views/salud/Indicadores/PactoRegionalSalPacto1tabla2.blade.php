@@ -45,9 +45,9 @@
                     <td>
                         @if ($item->cumple == 1)
                             <button type="button"
-                                class="btn btn-xs btn-success-0">&nbsp;&nbsp;&nbsp;Cumple&nbsp;&nbsp;&nbsp;</button>
+                                class="btn btn-xs btn-success-0 p-1 font-11 text-nowrap">&nbsp;&nbsp;&nbsp;Cumple&nbsp;&nbsp;&nbsp;</button>
                         @else
-                            <button type="button" class="btn btn-xs btn-danger">No Cumple</button>
+                            <button type="button" class="btn btn-xs btn-danger p-1 font-11 text-nowrap">No Cumple</button>
                         @endif
                     </td>
                 </tr>

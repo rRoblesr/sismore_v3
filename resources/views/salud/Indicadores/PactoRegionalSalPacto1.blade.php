@@ -303,21 +303,20 @@
                             '');
                     } else if (div == "tabla1") {
                         $('#vtabla1').html(data.excel);
-                        // $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
-                        // $('.vtabla1-fecha').html('Actualizado: ' + data.reg.fecha);
-                        // $('#tabla1').DataTable({
-                        //     responsive: true,
-                        //     autoWidth: false,
-                        //     ordered: true,
-                        //     searching: false,
-                        //     bPaginate: false,
-                        //     info: false,
-                        //     language: table_language,
-                        // });
+                        $('#tabla1').DataTable({
+                            // responsive: false,
+                            // autoWidth: false,
+                            // ordered: true,
+                            // searching: false,
+                            // bPaginate: false,
+                            // info: false,
+                            // language: table_language,
+                            paging: false,
+                            info: false,
+                            searching: false,
+                        });
                     } else if (div == "tabla2") {
                         $('#vtabla2').html(data.excel);
-                        // $('.vtabla2-fuente').html('Fuente: ]]' + data.reg.fuente);
-                        // $('.vtabla2-fecha').html('Actualizado: ' + data.reg.fecha);
                     }
 
                 },
