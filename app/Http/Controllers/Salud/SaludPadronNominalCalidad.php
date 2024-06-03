@@ -15,6 +15,11 @@ class SaludPadronNominalCalidad extends Controller
 
     public function index()
     {
+        // $sector = session('usuario_sector');
+        // $nivel = session('usuario_nivel');
+        // $codigo = session('usuario_codigo_institucion');
+        // return compact('sector', 'nivel', 'codigo');
+
         return view('salud.padron.calidad');
     }
 

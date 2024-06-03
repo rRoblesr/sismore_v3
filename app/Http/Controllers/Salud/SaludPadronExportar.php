@@ -19,7 +19,7 @@ class SaludPadronExportar extends Controller
   public function descargarExcel($codigo_calidad)
   {
     $sector = session('usuario_sector');
-    $nombre_columna = ($sector == 'SA') ? "cod_eess_atencion" : "ubigeo";
+    $nombre_columna = ($sector == '14') ? "cod_eess_atencion" : "ubigeo";
     $codigo_institucion = session('usuario_codigo_institucion');
 
     return Excel::download(new SaludPadronDatosExport($codigo_calidad, $nombre_columna, $codigo_institucion), 'datos_padron_calidad.xlsx');
@@ -29,7 +29,7 @@ class SaludPadronExportar extends Controller
   {
     ini_set('memory_limit', '1024M');
     $sector = session('usuario_sector');
-    $nombre_columna = ($sector == 'SA') ? "renaes" : "ubigeo";
+    $nombre_columna = ($sector == '14') ? "renaes" : "ubigeo";
     $codigo_institucion = session('usuario_codigo_institucion');
 
     return Excel::download(new SaludPadronSeguimientoExport($id_grupo, $nombre_columna, $codigo_institucion), 'datos_seguimiento_nino.xlsx');

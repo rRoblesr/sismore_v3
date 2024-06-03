@@ -35,8 +35,7 @@ class SaludPadronNominalSeguimiento extends Controller
         //$codigo_institucion = ($sector == "MI") ? '250101' : $codigo_institucion;
         $nombre_columna = $this->columna($sector, $nivel); //  ($sector == '14') ? "re.cod_2000" : "re.ubigeo";
 
-        $dato_ipress = DB::table('m_establecimiento as re')->select('re.cod_2000', 're.nom_est', 're.cod_mic', 're.nom_mic', 're.cod_red', 're.nom_red')
-            ->where($nombre_columna, $codigo)->first();
+        $dato_ipress = DB::table('m_establecimiento as re')->select('re.cod_2000', 're.nom_est', 're.cod_mic', 're.nom_mic', 're.cod_red', 're.nom_red')->where($nombre_columna, $codigo)->first();
 
         // return compact('sector', 'nivel', 'codigo', 'codigo_institucion', 'cod_2000', 'nombre_columna', 'dato_ipress');
 
@@ -62,7 +61,7 @@ class SaludPadronNominalSeguimiento extends Controller
         if ($sector == '14') {
             switch ($nivel) {
                 case '1':
-                    return  "";
+                    return "re.cod_disa";
                 case '2':
                     return "re.cod_red";
                 case '3':

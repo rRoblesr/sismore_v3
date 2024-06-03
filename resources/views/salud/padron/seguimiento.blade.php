@@ -756,6 +756,7 @@
             var url = "{{ route('salud.padron.seguimiento.indexge', [':grupoEdad', ':cod_2000']) }}";
             url = url.replace(':grupoEdad', grupoEdad);
             url = url.replace(':cod_2000', cod_2000);
+            // console.log(url);
             window.location.href = url;
         }
 
@@ -765,6 +766,7 @@
             var url = "{{ route('salud.padron.seguimiento.indexge', [':grupoEdad', ':cod_2000']) }}";
             url = url.replace(':grupoEdad', grupoEdad);
             url = url.replace(':cod_2000', cod_2000);
+            // console.log(url);
             window.location.href = url;
         }
 
