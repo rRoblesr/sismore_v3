@@ -31,13 +31,14 @@ class SaludPadronNominalSeguimiento extends Controller
         $nivel = session('usuario_nivel');
         $codigo = session('usuario_codigo_institucion');
 
-        $codigo_institucion =($cod_2000 == "NULL") ?  $codigo : $cod_2000;
+        $codigo_institucion = ($cod_2000 == "NULL") ?  $codigo : $cod_2000;
         //$codigo_institucion = ($sector == "MI") ? '250101' : $codigo_institucion;
         $nombre_columna = $this->columna($sector, $nivel); //  ($sector == '14') ? "re.cod_2000" : "re.ubigeo";
 
-        $dato_ipress = DB::table('m_establecimiento as re')->select('re.cod_2000', 're.nom_est', 're.cod_mic', 're.nom_mic', 're.cod_red', 're.nom_red')->where($nombre_columna, $codigo_institucion)->first();
+        $dato_ipress = DB::table('m_establecimiento as re')->select('re.cod_2000', 're.nom_est', 're.cod_mic', 're.nom_mic', 're.cod_red', 're.nom_red')
+            ->where($nombre_columna, $codigo)->first();
 
-        // return compact('sector', 'nivel', 'codigo', 'codigo_institucion', 'nombre_columna', 'dato_ipress');
+        // return compact('sector', 'nivel', 'codigo', 'codigo_institucion', 'cod_2000', 'nombre_columna', 'dato_ipress');
 
         $query = DB::table('m_establecimiento as re')->select('re.cod_red', 're.nom_red')->where('cod_disa', '34');
         if ($sector == '14' and $nivel >= '2') $query->where('re.cod_red', $dato_ipress->cod_red);

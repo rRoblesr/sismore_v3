@@ -22,11 +22,17 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="table-responsive">
-                                    <table id="datatable" class="table table-striped table-bordered dt-responsive nowrap"
-                                        style="font-size: 12px">
-                                        <thead class="text-primary">
+                                    <table id="datatable"
+                                        class="table table-sm table-striped table-bordered dt-responsive nowrap font-12"
+                                        style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                        <thead class="text-white  bg-success-0">
                                             <tr>
-                                                <th>N°</th>  <th>Tipo</th>  <th>Descripción</th>   <th>Descripción</th>  <th>Cantidad</th>  <th>Acción</th>
+                                                <th>N°</th>
+                                                <th>Tipo</th>
+                                                <th>Descripción</th>
+                                                <th>Descripción</th>
+                                                <th>Cantidad</th>
+                                                <th>Acción</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -49,7 +55,7 @@
                 responsive: true,
                 autoWidth: false,
                 ordered: true,
-                searching: false, 
+                searching: false,
                 lengthChange: false,
                 language: table_language,
                 ajax: "{{ route('salud.padron.calidad.listadogeneral') }}",

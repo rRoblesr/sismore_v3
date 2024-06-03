@@ -103,6 +103,7 @@ class HomeController extends Controller
         if ($ee3->sector_id == 14 && $ee3->codigo == 4) session()->put(['usuario_codigo_institucion' => '0' . $ee2->codigo]);
         else session()->put(['usuario_codigo_institucion' => $ee2->codigo]);
 
+        // return [session('usuario_sector'), session('usuario_nivel'), session('usuario_codigo_institucion')];
         // return  session('usuario_sector'); //[session()->usuario_sector, session()->usuario_nivel, session()->usuario_codigo_institucion];
         /* fin blas */
         session()->put(['total_sistema' => $sistemas->count()]);
