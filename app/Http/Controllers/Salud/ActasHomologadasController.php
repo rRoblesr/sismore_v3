@@ -35,7 +35,7 @@ class ActasHomologadasController extends Controller
 
     public function principal()
     {
-        return view('salud.Indicadores.PactoRegional', compact('indsal', 'indedu', 'indviv', 'anio', 'provincia', 'aniomax'));
+        return view('salud.Indicadores.PactoRegional',[]);
     }
 
     public function PactoRegional()

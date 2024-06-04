@@ -303,18 +303,18 @@
                             '');
                     } else if (div == "tabla1") {
                         $('#vtabla1').html(data.excel);
-                        $('#tabla1').DataTable({
-                            // responsive: false,
-                            // autoWidth: false,
-                            // ordered: true,
-                            // searching: false,
-                            // bPaginate: false,
-                            // info: false,
-                            // language: table_language,
-                            paging: false,
-                            info: false,
-                            searching: false,
-                        });
+                        // $('#tabla1').DataTable({
+                        //     // responsive: false,
+                        //     // autoWidth: false,
+                        //     // ordered: true,
+                        //     // searching: false,
+                        //     // bPaginate: false,
+                        //     // info: false,
+                        //     // language: table_language,
+                        //     paging: false,
+                        //     info: false,
+                        //     searching: false,
+                        // });
                     } else if (div == "tabla2") {
                         $('#vtabla2').html(data.excel);
                     }

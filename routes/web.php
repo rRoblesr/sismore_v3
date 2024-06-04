@@ -1186,7 +1186,8 @@ Route::get('/Salud/PadronNominal/Importar', [SaludPadronNominalImportar::class, 
 Route::get('/Salud/PadronNominal/Importar/Historial', [SaludPadronNominalImportar::class, 'listarHistorial'])->name('salud.padron.importar.historial');
 Route::post('/Salud/PadronNominal/Importar/Cargar', [SaludPadronNominalImportar::class, 'cargarPadron'])->name('salud.padron.importar.cargar');
 
-Route::get('/Mantenimiento/ActasHomologadas/Principal', [ActasHomologadasController::class, 'principal'])->name('mantenimiento.xindicadorgeneralmeta.listar');
+Route::get('/Salud/actas', [ActasHomologadasController::class, 'principal'])->name('mantenimiento.actashomologadas.principal');
+// Route::get('/Mantenimiento/ActasHomologadas/Principal', [ActasHomologadasController::class, 'principal'])->name('mantenimiento.xindicadorgeneralmeta.listar');
 // Route::get('/Mantenimiento/Actas/Meta/Listar/DIT', [IndicadorGeneralController::class, 'ListarDTMeta_dit'])->name('mantenimiento.xindicadorgeneralmeta.listar.dit');
 // Route::post('/Mantenimiento/Actas/Meta/Add', [IndicadorGeneralController::class, 'ajax_add_meta'])->middleware('auth')->name('mantenimiento.xindicadorgeneralmeta.guardar');
 // Route::post('/Mantenimiento/Actas/Meta/Add/DIT', [IndicadorGeneralController::class, 'ajax_add_meta_dit'])->middleware('auth')->name('mantenimiento.xindicadorgeneralmeta.guardar.dit');
@@ -1253,6 +1254,9 @@ Route::get('/recursos/highcharts', function () {
     return view('graficos/Highcharts');
 });
 
+Route::get('/recursos/pruebas', function () {
+    return view('prueba/prueba1');
+});
 //Route::get('/indicadores/{codigo}', [Indicador-GeneralController::class, 'generarCodigo']);//prueba
 
 /* Route::get('/juego', function () {
