@@ -461,7 +461,7 @@ class UsuarioController extends Controller
         $usuario->sexo = $request->sexop;
         $usuario->celular = $request->celularp;
         $usuario->cargo = $request->cargop;
-        //$usuario->entidad = $request->entidadoficinap;
+        $usuario->entidad = $request->oficinap;
         if ($request->password != '')
             $usuario->password = Hash::make($request->password);
         $usuario->save();

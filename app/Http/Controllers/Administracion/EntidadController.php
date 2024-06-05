@@ -161,9 +161,9 @@ class EntidadController extends Controller
     public function cargarEntidad(Request $rq)
     {
         if ($rq->get('dependencia') > 0)
-            $entidades = Entidad::where('dependencia', $rq->get('dependencia'))->where('estado', '0')->orderBy('nombre', 'asc')->get();
+            $entidades = Entidad::where('dependencia', $rq->get('dependencia'))->where('estado', '0')->orderBy('codigo', 'asc')->orderBy('nombre', 'asc')->get();
         else
-            $entidades = Entidad::whereNull('dependencia')->where('estado', '0')->orderBy('nombre', 'asc')->get();
+            $entidades = Entidad::whereNull('dependencia')->where('tipoentidad_id', $rq->tipoentidad)->where('estado', '0')->orderBy('codigo', 'asc')->orderBy('nombre', 'asc')->get();
         return response()->json(compact('entidades'));
     }
 
@@ -188,7 +188,7 @@ class EntidadController extends Controller
         if ($entidades->count() > 0) {
             foreach ($entidades as $key => $value) {
                 $data[] = [
-                    'label' => $value->codigo.' '.$value->nombre,
+                    'label' => $value->codigo . ' ' . $value->nombre,
                     'id' => $value->id
                 ];
             }

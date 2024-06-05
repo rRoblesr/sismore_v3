@@ -1022,13 +1022,15 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <label>Tipo Entidad<span class="required d-none">*</span></label>
-                                                    <select name="tipoentidadp" id="tipoentidadp" class="form-control">
+                                                    <select name="tipoentidadp" id="tipoentidadp" class="form-control"
+                                                        onchange="cargarentidadp(this.value, 0)">
                                                     </select>
                                                     <span class="help-block"></span>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label>Entidad<span class="required">*</span></label>
-                                                    <select name="entidadp" id="entidadp" class="form-control">
+                                                    <select name="entidadp" id="entidadp" class="form-control"
+                                                        onchange="cargaroficinap(this.value, 0)">
                                                         <option value="">SELECCIONAR</option>
                                                     </select>
                                                     <span class="help-block"></span>
@@ -1040,8 +1042,7 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <label>Oficina<span class="required">*</span></label>
-                                                    <select name="entidadgerenciap" id="entidadgerenciap"
-                                                        class="form-control">
+                                                    <select name="oficinap" id="oficinap" class="form-control">
                                                         <option value="">SELECCIONAR</option>
                                                     </select>
                                                     <span class="help-block"></span>
@@ -1362,103 +1363,15 @@
                     $('[name="usuariop"]').val(data.usuario.usuario);
                     $('[name="tipop"]').val(data.usuario.tipo);
                     $('[name="cargop"]').val(data.usuario.cargo);
-                    if (data.entidad) {
-                        var de1 = data.entidad.entidad;
-                        //var de2 = data.entidad.gerencia;
-                        var de2 = data.entidad.oficina;
-                        /* begin entidad */
-                        $.ajax({
-                            url: "{{ route('entidad.ajax.cargar') }}",
-                            data: {
-                                "dependencia": 0
-                            },
-                            type: 'get',
-                            success: function(data1) {
-                                $("#entidadp option").remove();
-                                var options = '<option value="">SELECCIONAR</option>';
-                                $.each(data1.entidades, function(index, value) {
-                                    ss = (de1 == value
-                                        .id ? "selected" :
-                                        "");
-                                    options += "<option value='" + value.id + "' " + ss +
-                                        ">" + value.nombre +
-                                        "</option>"
-                                });
-                                $("#entidadp").append(options);
-                                /* begin gerencia */
-                                $.ajax({
-                                    url: "{{ route('entidad.ajax.cargar') }}",
-                                    data: {
-                                        "dependencia": de1
-                                    },
-                                    type: 'get',
-                                    success: function(data2) {
-                                        $("#entidadgerenciap option").remove();
-                                        var options =
-                                            '<option value="">SELECCIONAR</option>';
-                                        $.each(data2.entidades, function(index, value) {
-                                            ss = (de2 == value
-                                                .id ? "selected" : "");
-                                            options += "<option value='" + value
-                                                .id + "' " + ss + ">" + value
-                                                .nombre +
-                                                "</option>"
-                                        });
-                                        $("#entidadgerenciap").append(options);
-                                        /* begin oficina */
-                                        /* $.ajax({
-                                            url: "{{ route('entidad.ajax.cargar') }}",
-                                            data: {
-                                                "dependencia": de2
-                                            },
-                                            type: 'get',
-                                            success: function(data3) {
-                                                $("#entidadoficinap option")
-                                                    .remove();
-                                                var options =
-                                                    '<option value="">SELECCIONAR</option>';
-                                                $.each(data3.entidades,
-                                                    function(index,
-                                                        value) {
-                                                        ss = (de3 ==
-                                                            value
-                                                            .id ?
-                                                            "selected" :
-                                                            "");
-                                                        options +=
-                                                            "<option value='" +
-                                                            value.id +
-                                                            "' " + ss +
-                                                            ">" + value
-                                                            .nombre +
-                                                            "</option>"
-                                                    });
-                                                $("#entidadoficinap")
-                                                    .append(
-                                                        options);
-                                            },
-                                            error: function(jqXHR, textStatus,
-                                                errorThrown) {
-                                                console.log(jqXHR);
-                                            },
-                                        }); */
-                                        /* end oficina */
-                                    },
-                                    error: function(jqXHR, textStatus, errorThrown) {
-                                        console.log(jqXHR);
-                                    },
-                                });
-                                /* end gerencia */
-                            },
-                            error: function(jqXHR, textStatus, errorThrown) {
-                                console.log(jqXHR);
-                            },
-                        });
-                        /* end entidad */
-                    }
 
                     cargarsector(data.entidad.sector);
-                    if (data.entidad.sector > 0) cargartipoentidadp(data.entidad.sector, data.entidad.tipo);
+                    if (data.entidad.sector > 0)
+                        cargartipoentidadp(data.entidad.sector, data.entidad.tipo);
+                    if (data.entidad.tipo > 0)
+                        cargarentidadp(data.entidad.tipo, data.entidad.entidad);
+                    if (data.entidad.entidad > 0)
+                        cargaroficinap(data.entidad.entidad, data.entidad.oficina);
+
                     $('#modal_perfil_usuario').modal('show');
                     $('#modal_perfil_usuario .modal-title').text('Modificar Datos Personales');
                 },
@@ -1513,23 +1426,24 @@
             });
         }
 
-        function cargarentidadp(entidad, id) {
+        function cargarentidadp(tipoentidad, id) {
             $.ajax({
                 url: "{{ route('entidad.ajax.cargar') }}",
                 data: {
-                    "dependencia": entidad
+                    "tipoentidad": tipoentidad,
+                    "dependencia": 0
                 },
                 type: 'get',
                 success: function(data) {
-                    $("#unidadejecutorap option").remove();
+                    $("#entidadp option").remove();
                     var options = '<option value="">SELECCIONAR</option>';
-                    $.each(data.unidadejecutadora, function(index, value) {
+                    $.each(data.entidades, function(index, value) {
                         ss = (id == "" ? "" : (id == value.id ? "selected" : ""));
                         options += "<option value='" + value.id + "' " + ss + ">";
-                        options += value.unidad_ejecutora;
+                        options += value.codigo + '|' + value.nombre;
                         options += "</option>";
                     });
-                    $("#unidadejecutorap").append(options);
+                    $("#entidadp").append(options);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -1537,67 +1451,29 @@
             });
         }
 
-        /* function cargar_entidad(id) {
+        function cargaroficinap(entidad, id) {
             $.ajax({
-                url: "{{ url('/') }}/Usuario/CargarEntidad/3",
+                url: "{{ route('entidad.ajax.cargar') }}",
+                data: {
+                    "dependencia": entidad
+                },
                 type: 'get',
                 success: function(data) {
-                    $("#unidadejecutorap option").remove();
+                    $("#oficinap option").remove();
                     var options = '<option value="">SELECCIONAR</option>';
-                    $.each(data.unidadejecutadora, function(index, value) {
+                    $.each(data.entidades, function(index, value) {
                         ss = (id == "" ? "" : (id == value.id ? "selected" : ""));
-                        options += "<option value='" + value.id + "' " + ss + ">" + value
-                            .unidad_ejecutora +
-                            "</option>"
+                        options += "<option value='" + value.id + "' " + ss + ">";
+                        options += value.nombre;
+                        options += "</option>";
                     });
-                    $("#unidadejecutorap").append(options);
+                    $("#oficinap").append(options);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
                 },
             });
-        } */
-
-        /* function cargar_gerencia2(id) {
-            $("#entidadoficina option").remove();
-            $.ajax({
-                url: "{{ url('/') }}/Usuario/CargarGerencia/" + $('#unidadejecutorap').val(),
-                type: 'get',
-                success: function(data) {
-                    $("#entidadgerenciap option").remove();
-                    var options = '<option value="">SELECCIONAR</option>';
-                    $.each(data.gerencias, function(index, value) {
-                        ss = (id == "" ? "" : (id == value.id ? "selected" : ""));
-                        options += "<option value='" + value.id + "' " + ss + ">" + value.entidad +
-                            "</option>"
-                    });
-                    $("#entidadgerenciap").append(options);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
-        } */
-
-        /* function cargar_oficina2(id) {
-            $.ajax({
-                url: "{{ url('/') }}/Usuario/CargarOficina/" + $('#entidadgerenciap').val(),
-                type: 'get',
-                success: function(data) {
-                    $("#entidadoficinap option").remove();
-                    var options = '<option value="">SELECCIONAR</option>';
-                    $.each(data.oficinas, function(index, value) {
-                        ss = (id == "" ? "" : (id == value.id ? "selected" : ""));
-                        options += "<option value='" + value.id + "' " + ss + ">" + value.entidad +
-                            "</option>"
-                    });
-                    $("#entidadoficinap").append(options);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
-        } */
+        }
     </script>
     @yield('js')
 </body>
