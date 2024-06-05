@@ -191,6 +191,7 @@ class HomeController extends Controller
     {
         $sistema_id = Sistema::where('nombre', $sistema_nombre)->first()->id;
         session()->put(['sistema_publico_id' => $sistema_id]);
+        
         switch ($sistema_id) {
             case (1):
                 return $this->educacion_publico($sistema_id);
@@ -1426,6 +1427,30 @@ class HomeController extends Controller
         }
     }
 
+    // public function educacion_publico($sistema_id)
+    // { //return Schema::hasTable('edu_area')?'existe':'no existe';
+    //     if (!Schema::hasTable('edu_area')) {
+    //         return view('paginabloqueado'); //viv_centropoblado_datass
+    //     }
+
+    //     $actualizado = '';
+    //     $tipo_acceso = 0;
+    //     $imgd = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
+    //     $anio = $imgd->anio;
+
+    //     $provincias = UbigeoRepositorio::provincia('25'); //Ubigeo::select('v2.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();
+    //     $distritos = UbigeoRepositorio::distrito('25', 0); //Ubigeo::select('v3.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->join('par_ubigeo as v3', 'v3.dependencia', '=', 'v2.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();
+    //     $ambitos = Area::select('id', DB::raw('upper(nombre) as nombre'))->get();
+
+    //     return  view('homepublico', compact(
+    //         'tipo_acceso',
+    //         'provincias',
+    //         'distritos',
+    //         'ambitos',
+    //         'anio',
+    //     ));
+    // }
+
     public function educacion_publico($sistema_id)
     {
         $actualizado = '';
@@ -1457,6 +1482,7 @@ class HomeController extends Controller
             $importables['nexus_minedu'] = $imp3 == null;
             return  view('homepublico', compact('importacion_id', 'importables', 'actualizado'));
         }
+        // return  view('homepublico',[]);
     }
 
     public function educaciongrafica1()
