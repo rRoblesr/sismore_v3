@@ -45,6 +45,7 @@
         </div>
 
         <!--Widget-4 -->
+
         <div class="row">
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="card-box border border-plomo-0">
@@ -261,7 +262,26 @@
                     thousandsSep: ","
                 }
             });
-            cargarCards();
+            // cargarCards();
+            var data = {
+                'cat': ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', ],
+                'dat': [0.596, 0.543, 0.571, 0.591, 0.564, 0.537, 0.572, 0.60809847527, 0.6575241822, 0.594, ]
+            };
+            gLineaBasica('anal1', data, '',
+                'Porcentaje de niñas y niños menores de cinco años de edad con desnutricion cronica(PATRON OMS)',
+                '');
+            var data = {
+                'cat': ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', ],
+                'dat': [0.261, 0.24, 0.248, 0.194, 0.178, 0.177, 0.174, 0.17541049234, 0.196901, 0.191, ]
+            };
+            // var dataInPercentage = data['dat'].map(function(value) {
+            //     return value * 100;
+            // });
+            // // console.log(dataInPercentage);
+            gLineaBasica('anal2', data, '',
+                'Porcentaje de niñas y niños entre 6 a 35 meses  de edad con anemia',
+                '');
+
         });
 
         function cargarCards() {
@@ -338,178 +358,8 @@
                 },
                 success: function(data) {
                     switch (div) {
-                        case "siagie001":
-                            gAnidadaColumn(div,
-                                data.info.cat,
-                                data.info.dat,
-                                '',
-                                'Numero de estudiantes matriculados en educacion basica regular, periodo 2018 - 2023',
-                                data.info.maxbar
-                            );
-                            $('#span-siagie001-fuente').html("Fuente: " + data.reg.fuente);
-                            $('#span-siagie001-fecha').html("Actualizado: " + data.reg.fecha);
-                            break;
-                        case "censodocente001":
-                            gAnidadaColumn(div,
-                                data.info.cat,
-                                data.info.dat,
-                                '',
-                                'Numero de docentes en educacion basica regular, periodo 2018 - 2023',
-                                data.info.maxbar
-                            );
-                            $('#span-censodocente001-fuente').html("Fuente: " + data.reg.fuente);
-                            $('#span-censodocente001-fecha').html("Actualizado: " + data.reg.fecha);
-                            break;
-                        case "container1":
-                            gsemidona(div, 0, ['#5eb9aa', '#F9FFFE']);
-                            $('#span-container1-fuente').html("Fuente: " + 'MINEDU');
-                            $('#span-container1-fecha').html("Actualizado: " + '31/12/2022');
-                            break;
-                        case "container2":
-                            gsemidona(div, 0, ['#5eb9aa',
-                                '#F9FFFE'
-                            ]); // ['#f5bd22', '#FDEEC7']);
-                            $('#span-container2-fuente').html("Fuente: " + 'MINEDU');
-                            $('#span-container2-fecha').html("Actualizado: " + '31/12/2022');
-                            break;
-                        case "container3":
-                            gsemidona(div, 0, ['#5eb9aa', '#F9FFFE']); // ['#e65310', '#FDD1BD']);
-                            $('#span-container3-fuente').html("Fuente: " + 'MINEDU');
-                            $('#span-container3-fecha').html("Actualizado: " + '31/12/2022');
-                            break;
-                        case "dtanal1":
-                            gsemidona(div, data.info.indicador, ['#5eb9aa', '#F9FFFE']);
-                            $('#span-dtanal1-fuente').html("Fuente: " + data.info.fuente);
-                            $('#span-dtanal1-fecha').html("Actualizado: " + data.info.fecha);
-                            break;
-                        case "dtanal2":
-                            gsemidona(div, data.info.indicador, ['#5eb9aa', '#F9FFFE']);
-                            $('#span-dtanal2-fuente').html("Fuente: " + data.info.fuente);
-                            $('#span-dtanal2-fecha').html("Actualizado: " + data.info.fecha);
-                            break;
-                        case "dtanal3":
-                            gsemidona(div, data.info.indicador, ['#5eb9aa', '#F9FFFE']);
-                            $('#span-dtanal3-fuente').html("Fuente: " + data.info.fuente);
-                            $('#span-dtanal3-fecha').html("Actualizado: " + data.info.fecha);
-                            break;
-                        case "iiee1":
-                            gsemidona(div, 99.1, ['#5eb9aa', '#F9FFFE']);
-                            $('#span-iiee1-fuente').html("Fuente: " + 'MINEDU');
-                            $('#span-iiee1-fecha').html("Actualizado: " + '31/12/2022');
-                            break;
-                        case "iiee2":
-                            gsemidona(div, 76.0, ['#5eb9aa', '#F9FFFE']); // ['#f5bd22', '#FDEEC7']);
-                            $('#span-iiee2-fuente').html("Fuente: " + 'MINEDU');
-                            $('#span-iiee2-fecha').html("Actualizado: " + '31/12/2022');
-                            break;
-                        case "iiee3":
-                            gsemidona(div, 94.9, ['#5eb9aa', '#F9FFFE']); // ['#e65310', '#FDD1BD']);
-                            $('#span-iiee3-fuente').html("Fuente: " + 'MINEDU');
-                            $('#span-iiee3-fecha').html("Actualizado: " + '31/12/2022');
-                            break;
-                        case "iiee4":
-                            gsemidona(div, 99.1, ['#5eb9aa', '#F9FFFE']);
-                            $('#span-iiee4-fuente').html("Fuente: " + 'MINEDU');
-                            $('#span-iiee4-fecha').html("Actualizado: " + '31/12/2022');
-                            break;
-                        case "iiee5":
-                            gsemidona(div, 76.0, ['#5eb9aa', '#F9FFFE']); // ['#f5bd22', '#FDEEC7']);
-                            $('#span-iiee5-fuente').html("Fuente: " + 'MINEDU');
-                            $('#span-iiee5-fecha').html("Actualizado: " + '31/12/2022');
-                            break;
-                        case "iiee6":
-                            gsemidona(div, 94.9, ['#5eb9aa', '#F9FFFE']); // ['#e65310', '#FDD1BD']);
-                            $('#span-iiee6-fuente').html("Fuente: " + 'MINEDU');
-                            $('#span-iiee6-fecha').html("Actualizado: " + '31/12/2022');
-                            break;
+                        case "xx":
 
-                        case "skills001":
-                            $('.skills001 h6 span').html(data.info.indicador + "%");
-                            $('.skills001 .progress-bar').css('width', data.info.indicador + '%')
-                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
-                            break;
-                        case "skills002":
-                            $('.skills002 h6 span').html(data.info.indicador + "%");
-                            $('.skills002 .progress-bar').css('width', data.info.indicador + '%')
-                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
-                        case "skills003":
-                            $('.skills003 h6 span').html(data.info.indicador + "%");
-                            $('.skills003 .progress-bar').css('width', data.info.indicador + '%')
-                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
-                            break;
-                        case "skills004":
-                            $('.skills004 h6 span').html(data.info.indicador + "%");
-                            $('.skills004 .progress-bar').css('width', data.info.indicador + '%')
-                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
-                            break;
-                        case "skills005":
-                            $('.skills005 h6 span').html(data.info.indicador + "%");
-                            $('.skills005 .progress-bar').css('width', data.info.indicador + '%')
-                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
-                            $('#span-skills005-fuente').html("Fuente: " + data.reg.fuente);
-                            $('#span-skills005-fecha').html("Actualizado: " + data.reg.fecha);
-                            break;
-                        case "skills006":
-                            $('.skills006 h6 span').html(data.info.indicador + "%");
-                            $('.skills006 .progress-bar').css('width', data.info.indicador + '%')
-                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
-
-                            break;
-                        case "skills007":
-                            $('.skills007 h6 span').html(data.info.indicador + "%");
-                            $('.skills007 .progress-bar').css('width', data.info.indicador + '%')
-                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
-                            break;
-                        case "skills008":
-                            $('.skills008 h6 span').html(data.info.indicador + "%");
-                            $('.skills008 .progress-bar').css('width', data.info.indicador + '%')
-                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
-                            break;
-                        case "skills009":
-                            $('.skills009 h6 span').html(data.info.indicador + "%");
-                            $('.skills009 .progress-bar').css('width', data.info.indicador + '%')
-                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
-                            break;
-                        case "skills010":
-                            $('.skills010 h6 span').html(data.info.indicador + "%");
-                            $('.skills010 .progress-bar').css('width', data.info.indicador + '%')
-                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 84 ? 'bg-success-0' :
-                                    (data.info.indicador > 49 ? 'bg-warning-0' : 'bg-orange-0'));
-                            $('#span-skills010-fuente').html("Fuente: " + data.reg.fuente);
-                            $('#span-skills010-fecha').html("Actualizado: " + data.reg.fecha);
-                            break;
-                        case "tabla1":
-                            $('#vtabla1').html(data.excel);
-                            $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
-                            $('.vtabla1-fecha').html('Actualizado: ' + data.reg.fecha);
-                            $('#tabla1').DataTable({
-                                responsive: true,
-                                autoWidth: false,
-                                ordered: true,
-                                searching: false,
-                                bPaginate: false,
-                                info: false,
-                                language: table_language,
-                            });
                             break;
                         default:
                             break;
@@ -523,285 +373,98 @@
             });
         }
 
-        function cargarDistritos() {
-            $.ajax({
-                url: "{{ route('plaza.cargardistritos', '') }}/" + $('#provincia').val(),
-                type: 'GET',
-                success: function(data) {
-                    $("#distrito option").remove();
-                    var options = '<option value="0">DISTRITO</option>';
-                    $.each(data.distritos, function(index, value) {
-                        //ss = (id == value.id ? "selected" : "");
-                        options += "<option value='" + value.id + "'>" + value.nombre +
-                            "</option>"
-                    });
-                    $("#distrito").append(options);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
-        }
 
-        function datosIndicador(id) {
-            $.ajax({
-                url: "{{ route('mantenimiento.indicadorgeneral.buscar.1', '') }}/" + id,
-                type: "GET",
-                dataType: "JSON",
-                success: function(data) {
-                    console.log(data);
-                    if (data.ie) {
-                        $('#indicador').val(data.ie.id);
-                        $('#indicadornombre').val(data.ie.nombre);
-                        $('#indicadordescripcion').val(data.ie.descripcion);
-                        $('#indicadorinstrumento').val(data.ie.instrumento);
-                        $('#indicadortipo').val(data.ie.tipo);
-                        $('#indicadorfuentedato').val(data.ie.fuente_dato);
-                        $('#modal_datosindicador .modal-footer').html(
-                            '<button type="button" class="btn btn-xs btn-danger waves-effect" data-dismiss="modal">Cerrar</button><button type="button" class="btn btn-primary btn-xs waves-effect waves-light" onclick="verpdf(' +
-                            id + ')">Ficha Tecnica</button>');
-                        $('#modal_datosindicador').modal('show');
-                    } else {
-                        toastr.error('ERROR, Indicador no encontrado, consulte al administrador', 'Mensaje');
-                    }
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR DE INDICADOR");
-                    console.log(jqXHR);
-                },
-            });
-        };
 
-        function verpdf(id) {
-            window.open("{{ route('mantenimiento.indicadorgeneral.exportar.pdf', '') }}/" + id);
-        };
-
-        function gSimpleColumn(div, datax, titulo, subtitulo, tituloserie) {
-
+        function gLineaBasica(div, data, titulo, subtitulo, titulovetical) {
+            const colors = ["#5eb9aa", "#f5bd22", "#e65310"];
             Highcharts.chart(div, {
-                chart: {
-                    type: 'column',
-                },
-                title: {
-                    enabled: false,
-                    text: titulo,
-                },
-                subtitle: {
-                    enabled: false,
-                    //text: subtitulo,
-                },
-                xAxis: {
-                    type: 'category',
-                },
-                yAxis: {
-                    /* max: 100, */
-                    title: {
-                        enabled: false,
-                        text: 'Porcentaje',
-                    }
-                },
-                /* colors: [
-                    '#8085e9',
-                    '#2b908f',
-                ], */
-                series: [{
-                    showInLegend: tituloserie != '',
-                    name: tituloserie,
-                    label: {
-                        enabled: false
-                    },
-                    colorByPoint: false,
-                    data: datax,
-                }],
-                tooltip: {
-                    pointFormat: '<span style="color:{point.color}">\u25CF</span> Hay: <b>{point.y}</b><br/>',
-                    shared: true
-                },
-                plotOptions: {
-                    series: {
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                        },
-                    }
-                },
-                exporting: {
-                    enabled: false
-                },
-                credits: false,
-            });
-        }
-
-        function gPie(div, datos, titulo, subtitulo, tituloserie) {
-            Highcharts.chart(div, {
-                chart: {
-                    plotBackgroundColor: null,
-                    plotBorderWidth: null,
-                    plotShadow: false,
-                    type: 'pie'
-                },
-                title: {
-                    enabled: false,
-                    text: titulo, //'Browser market shares in January, 2018'
-                },
-                subtitle: {
-                    enabled: false,
-                    //text: subtitulo,
-                },
-                tooltip: {
-                    //pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
-                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
-                },
-                accessibility: {
-                    point: {
-                        valueSuffix: '%'
-                    }
-                },
-                plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: true,
-                            //format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                            format: '{point.y:,0f} ( {point.percentage:.1f}% )',
-                            connectorColor: 'silver'
-                        }
-                    }
-                },
-                /* plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: true,
-                            //format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                            format: '{point.percentage:.1f}% ({point.y})',
-                            connectorColor: 'silver'
-                        }
-                    }
-                }, */
-                series: [{
-                    showInLegend: true,
-                    //name: 'Share',
-                    data: datos,
-                }],
-                exporting: {
-                    enabled: false
-                },
-                credits: false,
-            });
-        }
-
-        function gBasicColumn(div, categorias, datos, titulo, subtitulo) {
-            Highcharts.chart(div, {
-                chart: {
-                    type: 'column'
-                },
                 title: {
                     text: titulo
                 },
                 subtitle: {
                     text: subtitulo
                 },
-                xAxis: {
-                    categories: categorias,
-                },
                 yAxis: {
-
-                    min: 0,
                     title: {
-                        text: 'Rainfall (mm)',
-                        enabled: false
+                        text: titulovetical
+                    },
+                    labels: {
+                        // formatter: function() {
+                        //     return this.value + '%';
+                        // },
+                        formatter: function() {
+                            return (this.value * 100).toFixed(1) + '%';
+                        },
+                        style: {
+                            fontSize: '10px'
+                        }
+                    },
+                    min: 0,
+                },
+                xAxis: {
+                    categories: data.cat,
+                    labels: {
+                        style: {
+                            fontSize: '10px'
+                        }
                     }
+                    /* accessibility: {
+                        rangeDescription: 'Range: 2010 to 2017'
+                    } */
                 },
-
-                tooltip: {
-                    pointFormat: '<span style="color:{point.color}">\u25CF</span> Hay: <b>{point.y}</b><br/>',
-                    shared: true
-                },
+                /* legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle'
+                }, */
                 plotOptions: {
                     series: {
-                        borderWidth: 0,
                         dataLabels: {
                             enabled: true,
-                        },
-                    }
-                },
-                series: datos,
-                credits: false,
-            });
-        }
-
-        function gsemidona(div, valor, colors) {
-            Highcharts.chart(div, {
-                chart: {
-                    plotBackgroundColor: null,
-                    plotBorderWidth: 0,
-                    plotShadow: false,
-                    height: 200,
-                },
-                title: {
-                    text: valor + '%', // 'Browser<br>shares<br>January<br>2022',
-                    align: 'center',
-                    verticalAlign: 'middle',
-                    y: 15, //60,
-                    style: {
-                        //fontWeight: 'bold',
-                        //color: 'orange',
-                        fontSize: '30'
-                    }
-                },
-                tooltip: {
-                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                },
-                accessibility: {
-                    point: {
-                        valueSuffix: '%'
-                    }
-                },
-                plotOptions: {
-                    pie: {
-                        dataLabels: {
-                            enabled: true,
-                            distance: -50,
                             style: {
-                                fontWeight: 'bold',
-                                color: 'white'
-                            },
-
+                                fontSize: '10px',
+                                fontWeight: 'normal',
+                            }
                         },
-                        startAngle: -90,
-                        endAngle: 90,
-                        center: ['50%', '50%'], //['50%', '75%'],
-                        size: '120%',
-                        borderColor: '#98a6ad',
-                        colors: colors,
+                        /* label: {
+                            connectorAllowed: false
+                        },
+                        pointStart: 2010 */
+                    },
+                    line: {
+                        dataLabels: {
+                            enabled: true,
+                            // format: '{y:.2f}%',
+                            formatter: function() {
+                                return (this.y * 100).toFixed(1) + '%';
+                            }
+                        }
                     }
                 },
                 series: [{
-                    type: 'pie',
-                    name: 'Avance',
-                    innerSize: '65%',
-                    data: [
-                        ['', valor],
-                        //['Edge', 11.97],
-                        //['Firefox', 5.52],
-                        //['Safari', 2.98],
-                        //['Internet Explorer', 1.90],
-                        {
-                            name: '',
-                            y: 100 - valor,
-                            dataLabels: {
-                                enabled: false
+                    name: 'Ucayali',
+                    showInLegend: false,
+                    data: data.dat
+                }],
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 500
+                        },
+                        chartOptions: {
+                            legend: {
+                                layout: 'horizontal',
+                                align: 'center',
+                                verticalAlign: 'bottom'
                             }
                         }
-                    ]
-                }],
-                exporting: {
-                    enabled: false
+                    }]
                 },
-                credits: false
+                exporting: {
+                    enabled: true,
+                },
+                credits: false,
+
             });
         }
 
@@ -814,14 +477,14 @@
                 chart: {
                     zoomType: 'xy',
                 },
-                colors: ['#5eb9aa', '#f5bd22', '#ef5350'],
+                colors: ['#5eb9aa', '#ef5350', '#f5bd22', '#ef5350'],
                 title: {
                     text: titulo, //'Browser market shares in January, 2018'
                 },
                 subtitle: {
                     text: subtitulo,
                     style: {
-                        fontSize: '10px',
+                        fontSize: '11px',
                     }
                 },
                 xAxis: [{
@@ -842,14 +505,16 @@
                                 fontSize: '10px',
                             }
                         },
-                        // labels: {
-                        //     //format: '{value}°C',
-                        //     //style: {
-                        //     //    color: Highcharts.getOptions().colors[2]
-                        //     //}
-                        // },
                         title: {
                             enabled: false,
+                        },
+                        /* labels: {
+                            //format: '{value}°C',
+                            //style: {
+                            //    color: Highcharts.getOptions().colors[2]
+                            //}
+                        }, */
+                        title: {
                             text: 'Matriculados',
                             style: {
                                 //color: Highcharts.getOptions().colors[2],
@@ -880,8 +545,8 @@
                             //}
                         }, */
                         //min: -200,
-                        min: -600,
-                        max: 400,
+                        min: 0,
+                        max: 120,
                         opposite: true,
                     },
                     /* { // Tertiary yAxis
@@ -913,12 +578,12 @@
                             enabled: true,
                             //format: '{point.y:,.0f}',
                             //format: '{point.y:.1f}%',
-                            /* formatter: function() {
-                                if (this.colorIndex == 2)
+                            formatter: function() {
+                                if (this.colorIndex == 1)
                                     return this.y + " %";
                                 else
                                     return Highcharts.numberFormat(this.y, 0);
-                            }, */
+                            },
                             style: {
                                 fontWeight: 'normal',
                                 fontSize: '10px',
