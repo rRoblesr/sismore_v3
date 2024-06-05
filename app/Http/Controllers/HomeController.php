@@ -191,16 +191,15 @@ class HomeController extends Controller
     {
         $sistema_id = Sistema::where('nombre', $sistema_nombre)->first()->id;
         session()->put(['sistema_publico_id' => $sistema_id]);
-        
+
         switch ($sistema_id) {
             case (1):
                 return $this->educacion_publico($sistema_id);
             case (2):
                 return $this->vivienda_publico($sistema_id);
-                break;
             case (3):
                 return $this->salud_publico($sistema_id);
-                //case (4):return $this->administracion($sistema_id);break;
+                //case (4):return $this->administracion($sistema_id);
             case (5):
                 return $this->presupuesto_publico($sistema_id);
             case (6):
