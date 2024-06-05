@@ -550,7 +550,8 @@
                         @elseif (session('sistema_id') == 5)
                             <div class="row">
                                 <div class="col-12">
-                                    @if (!isset($tipo_acceso))<br>
+                                    @if (!isset($tipo_acceso))
+                                        <br>
                                         @if ($titlePage != '')
                                             {{-- <div class="page-title-box">
                                                 <h4 class="page-title">{{ $titlePage }}</h4>
@@ -933,150 +934,146 @@
                             <input type="hidden" id="idp" name="idp">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <div class="card pb-0">
-                                        {{-- <div class="card-header">
-                                    <h3 class="card-title"></h3>
-                                </div> --}}
-                                        <div class="card-body">
-                                            <div class="form">
-                                                <div class="form-group">
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <label>DNI<span class="required">*</span></label>
-                                                            <input id="dnip" name="dnip" class="form-control"
-                                                                type="text" maxlength="8"
-                                                                onKeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;">
-                                                            <span class="help-block"></span>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label>Nombres<span class="required">*</span></label>
-                                                            <input id="nombrep" name="nombrep" class="form-control"
-                                                                type="text"
-                                                                onkeyup="this.value=this.value.toUpperCase()">
-                                                            <span class="help-block"></span>
-                                                        </div>
-                                                    </div>
+                                    <div class="form">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>DNI<span class="required">*</span></label>
+                                                    <input id="dnip" name="dnip" class="form-control"
+                                                        type="text" maxlength="8"
+                                                        onKeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;"
+                                                        readonly>
+                                                    <span class="help-block"></span>
                                                 </div>
-                                                <div class="form-group">
-                                                    <div class="row">
-
-                                                        <div class="col-md-6">
-                                                            <label>Apellido Paterno<span class="required">*</span></label>
-                                                            <input id="apellido1p" name="apellido1p" class="form-control"
-                                                                type="text"
-                                                                onkeyup="this.value=this.value.toUpperCase()">
-                                                            <span class="help-block"></span>
-                                                        </div>
-
-                                                        <div class="col-md-6">
-                                                            <label>Apellido Materno<span class="required">*</span></label>
-                                                            <input id="apellido2p" name="apellido2p" class="form-control"
-                                                                type="text"
-                                                                onkeyup="this.value=this.value.toUpperCase()">
-                                                            <span class="help-block"></span>
-                                                        </div>
-
-
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="row">
-
-                                                        <div class="col-md-6">
-                                                            <label>Sexo<span class="required">*</span></label>
-                                                            <select id="sexop" name="sexop" class="form-control">
-                                                                <option value="M">MASCULINO</option>
-                                                                <option value="F">FEMENINO</option>
-                                                            </select>
-                                                            <span class="help-block"></span>
-                                                        </div>
-
-                                                        <div class="col-md-6">
-                                                            <label>Correo Electronico<span
-                                                                    class="required">*</span></label>
-                                                            <input id="emailp" name="emailp" class="form-control"
-                                                                type="email" required>
-                                                            <span class="help-block"></span>
-                                                        </div>
-
-
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <label>Celular
-                                                                <!--span class="required">*</span-->
-                                                            </label>
-                                                            <input id="celularp" name="celularp" class="form-control"
-                                                                type="text">
-                                                            <span class="help-block"></span>
-                                                        </div>
-
-                                                        <div class="col-md-6">
-                                                            <label>Oficinas<span class="required">*</span></label>
-                                                            <select name="entidadp" id="entidadp" class="form-control"
-                                                                disabled>
-                                                                <option value="">SELECCIONAR</option>
-                                                            </select>
-                                                            <span class="help-block"></span>
-                                                        </div>
-
-
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <label>Oficina<span class="required">*</span></label>
-                                                            <select name="entidadgerenciap" id="entidadgerenciap"
-                                                                class="form-control" disabled>
-                                                                <option value="">SELECCIONAR</option>
-                                                            </select>
-                                                            <span class="help-block"></span>
-                                                        </div>
-                                                        {{-- <div class="col-md-6">
-                                                            <label>Oficinas<span class="required">*</span></label>
-                                                            <select name="entidadoficinap" id="entidadoficinap"
-                                                                class="form-control" disabled>
-                                                                <option value="">SELECCIONAR</option>
-                                                            </select>
-                                                            <span class="help-block"></span>
-                                                        </div> --}}
-                                                        <div class="col-md-6">
-                                                            <label>Cargo<span class="required">*</span></label>
-                                                            <input type="text" name="cargop" id="cargop"
-                                                                class="form-control" readonly>
-                                                            <span class="help-block"></span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <label>Usuario<span class="required">*</span></label>
-                                                            <input id="usuariop" name="usuariop" class="form-control"
-                                                                type="text">
-                                                            <span class="help-block"></span>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label>Contraseña<span class="required"
-                                                                    id="password-required">*</span></label>
-                                                            <input id="passwordp" name="passwordp" class="form-control"
-                                                                type="password">
-                                                            <span class="help-block"></span>
-                                                        </div>
-                                                    </div>
+                                                <div class="col-md-6">
+                                                    <label>Nombres<span class="required">*</span></label>
+                                                    <input id="nombrep" name="nombrep" class="form-control"
+                                                        type="text" onkeyup="this.value=this.value.toUpperCase()"
+                                                        readonly>
+                                                    <span class="help-block"></span>
                                                 </div>
                                             </div>
-                                            <!-- .form -->
                                         </div>
-                                        <!-- card-body -->
+                                        <div class="form-group">
+                                            <div class="row">
+
+                                                <div class="col-md-6">
+                                                    <label>Apellido Paterno<span class="required">*</span></label>
+                                                    <input id="apellido1p" name="apellido1p" class="form-control"
+                                                        type="text" onkeyup="this.value=this.value.toUpperCase()"
+                                                        readonly>
+                                                    <span class="help-block"></span>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label>Apellido Materno<span class="required">*</span></label>
+                                                    <input id="apellido2p" name="apellido2p" class="form-control"
+                                                        type="text" onkeyup="this.value=this.value.toUpperCase()"
+                                                        readonly>
+                                                    <span class="help-block"></span>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+
+                                                <div class="col-md-6">
+                                                    <label>Sexo<span class="required">*</span></label>
+                                                    <select id="sexop" name="sexop" class="form-control">
+                                                        <option value="M">MASCULINO</option>
+                                                        <option value="F">FEMENINO</option>
+                                                    </select>
+                                                    <span class="help-block"></span>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label>Correo Electronico<span class="required">*</span></label>
+                                                    <input id="emailp" name="emailp" class="form-control"
+                                                        type="email" required>
+                                                    <span class="help-block"></span>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>Celular
+                                                        <!--span class="required">*</span-->
+                                                    </label>
+                                                    <input id="celularp" name="celularp" class="form-control"
+                                                        type="text">
+                                                    <span class="help-block"></span>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label>Sector<span class="required">*</span></label>
+                                                    <select name="sectorp" id="sectorp" class="form-control"
+                                                        onchange="cargartipoentidadp(this.value,0);">
+                                                        {{-- <option value="0">OTROS</option> --}}
+                                                    </select>
+                                                    <span class="help-block"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>Tipo Entidad<span class="required d-none">*</span></label>
+                                                    <select name="tipoentidadp" id="tipoentidadp" class="form-control">
+                                                    </select>
+                                                    <span class="help-block"></span>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label>Entidad<span class="required">*</span></label>
+                                                    <select name="entidadp" id="entidadp" class="form-control">
+                                                        <option value="">SELECCIONAR</option>
+                                                    </select>
+                                                    <span class="help-block"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>Oficina<span class="required">*</span></label>
+                                                    <select name="entidadgerenciap" id="entidadgerenciap"
+                                                        class="form-control">
+                                                        <option value="">SELECCIONAR</option>
+                                                    </select>
+                                                    <span class="help-block"></span>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label>Cargo<span class="required">*</span></label>
+                                                    <input type="text" name="cargop" id="cargop"
+                                                        class="form-control" readonly>
+                                                    <span class="help-block"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>Usuario<span class="required">*</span></label>
+                                                    <input id="usuariop" name="usuariop" class="form-control"
+                                                        type="text">
+                                                    <span class="help-block"></span>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label>Contraseña<span class="required"
+                                                            id="password-required">*</span></label>
+                                                    <input id="passwordp" name="passwordp" class="form-control"
+                                                        type="password">
+                                                    <span class="help-block"></span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <!-- card -->
                                 </div>
-                                <!-- col -->
                             </div>
                         </form>
                     </div>
@@ -1294,12 +1291,7 @@
                 "previous": "anterior"
             }
         };
-        $(document).ready(function() {
-            @auth
-            //cargar_entidad(0);
-        @endauth
-
-        });
+        $(document).ready(function() {});
         /* toastr.options = {
             "closeButton": true,
             "debug": false,
@@ -1355,7 +1347,7 @@
             $('.col-md-6').removeClass('has-error');
             $('.help-block').empty();
             $.ajax({
-                url: "{{ url('/') }}/Usuario/ajax_edit/" + id,
+                url: "{{ route('usuario.find', '') }}/" + id,
                 type: "GET",
                 dataType: "JSON",
                 success: function(data) {
@@ -1464,12 +1456,84 @@
                         });
                         /* end entidad */
                     }
+
+                    cargarsector(data.entidad.sector);
+                    if (data.entidad.sector > 0) cargartipoentidadp(data.entidad.sector, data.entidad.tipo);
                     $('#modal_perfil_usuario').modal('show');
                     $('#modal_perfil_usuario .modal-title').text('Modificar Datos Personales');
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     toastr.error('Error get data from ajax', 'Mensaje');
                 }
+            });
+        }
+
+        function cargarsector(id) {
+            $.ajax({
+                url: "{{ route('usuario.cargarsector.x') }}",
+                type: 'get',
+                success: function(data) {
+                    $("#sectorp option").remove();
+                    var options = '<option value="0">OTROS</option>';
+                    $.each(data.sector, function(index, value) {
+                        ss = (id == "" ? "" : (id == value.id ? "selected" : ""));
+                        options += "<option value='" + value.id + "' " + ss + ">";
+                        options += value.nombre;
+                        options += "</option>";
+                    });
+                    $("#sectorp").append(options);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cargartipoentidadp(sector, id) {
+            $.ajax({
+                url: "{{ route('tipoentidad.ajax.cargar') }}",
+                data: {
+                    sector: sector,
+                },
+                type: 'get',
+                success: function(data) {
+                    $("#tipoentidadp option").remove();
+                    var options = '<option value="0">OTROS</option>';
+                    $.each(data.tipoentidad, function(index, value) {
+                        ss = (id == "" ? "" : (id == value.id ? "selected" : ""));
+                        options += "<option value='" + value.id + "' " + ss + ">";
+                        options += value.nombre;
+                        options += "</option>";
+                    });
+                    $("#tipoentidadp").append(options);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cargarentidadp(entidad, id) {
+            $.ajax({
+                url: "{{ route('entidad.ajax.cargar') }}",
+                data: {
+                    "dependencia": entidad
+                },
+                type: 'get',
+                success: function(data) {
+                    $("#unidadejecutorap option").remove();
+                    var options = '<option value="">SELECCIONAR</option>';
+                    $.each(data.unidadejecutadora, function(index, value) {
+                        ss = (id == "" ? "" : (id == value.id ? "selected" : ""));
+                        options += "<option value='" + value.id + "' " + ss + ">";
+                        options += value.unidad_ejecutora;
+                        options += "</option>";
+                    });
+                    $("#unidadejecutorap").append(options);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
             });
         }
 

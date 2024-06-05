@@ -516,16 +516,6 @@ class UsuarioController extends Controller
     public function ajax_edit($usuario_id)
     {
         $usuario = Usuario::find($usuario_id);
-        // $entidad = Entidad::select(
-        //     'adm_entidad.id as entidad',
-        //     'adm_entidad.id as entidad',
-        //     'v2.id as oficina',
-        //     'adm_entidad.nombre as entidadn',
-        //     'v2.nombre as oficinan',
-        // )
-        //     ->join('adm_entidad as v2', 'v2.dependencia', '=', 'adm_entidad.id')
-        //     ->where('v2.id', $usuario->entidad)
-        //     ->first();
         $entidad = Entidad::select(
             'adm_entidad.id as oficina',
             'adm_entidad.nombre as oficinan',
@@ -566,6 +556,17 @@ class UsuarioController extends Controller
         return response()->json(array('status' => true, 'estado' => $usuario->estado));
     }
 
+    public function cargarsectorx()
+    {
+        $sector = Sector::whereIn('id', [1, 2, 4, 14, 18, 22])->get();
+        return response()->json(compact('sector'));
+    }
+    
+    public function cargartipoentidadx()
+    {
+        $sector = Sector::whereIn('id', [1, 2, 4, 14, 18, 22])->get();
+        return response()->json(compact('sector'));
+    }
     /* public function cargarEntidad($tipogobierno_id)
     {
         $unidadejecutadora = UnidadEjecutora::where('tipogobierno', $tipogobierno_id)->get();

@@ -92,180 +92,177 @@
                         <input type="hidden" id="id" name="id">
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="card card-border">
-                                    <div class="card-header  bg-transparent p-0">
-                                        <h3 class="card-title"></h3>
+                                <div class="form">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>DNI<span class="required">*</span></label>
+                                                <div class="input-group">
+                                                    <input type="number" id="dni" name="dni" class="form-control"
+                                                        placeholder="Numero de Documento" maxlength="8">
+                                                    <span class="help-block"></span>
+                                                    <span class="input-group-append">
+                                                        <button type="button"
+                                                            class="btn waves-effect waves-light btn-primary"
+                                                            onclick="buscardni();" id="btnbuscardni">
+                                                            <i class="fas fa-search"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>Nombre<span class="required">*</span></label>
+                                                <input id="nombre" name="nombre" class="form-control" type="text"
+                                                    onkeyup="this.value=this.value.toUpperCase()">
+                                                <span class="help-block"></span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="card-body">
-                                        <div class="form">
-                                            <div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <label>DNI<span class="required">*</span></label>
-                                                        <div class="input-group">
-                                                            <input type="number" id="dni" name="dni"
-                                                                class="form-control" placeholder="Numero de Documento"
-                                                                maxlength="8">
-                                                            <span class="help-block"></span>
-                                                            <span class="input-group-append">
-                                                                <button type="button"
-                                                                    class="btn waves-effect waves-light btn-primary"
-                                                                    onclick="buscardni();" id="btnbuscardni">
-                                                                    <i class="fas fa-search"></i>
-                                                                </button>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label>Nombre<span class="required">*</span></label>
-                                                        <input id="nombre" name="nombre" class="form-control"
-                                                            type="text" onkeyup="this.value=this.value.toUpperCase()">
-                                                        <span class="help-block"></span>
-                                                    </div>
-                                                </div>
+                                    <div class="form-group">
+                                        <div class="row">
+
+                                            <div class="col-md-6">
+                                                <label>Apellido Paterno<span class="required">*</span></label>
+                                                <input id="apellido1" name="apellido1" class="form-control" type="text"
+                                                    onkeyup="this.value=this.value.toUpperCase()">
+                                                <span class="help-block"></span>
                                             </div>
-                                            <div class="form-group">
-                                                <div class="row">
-
-                                                    <div class="col-md-6">
-                                                        <label>Apellido Paterno<span class="required">*</span></label>
-                                                        <input id="apellido1" name="apellido1" class="form-control"
-                                                            type="text" onkeyup="this.value=this.value.toUpperCase()">
-                                                        <span class="help-block"></span>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label>Apellido Materno<span class="required">*</span></label>
-                                                        <input id="apellido2" name="apellido2" class="form-control"
-                                                            type="text" onkeyup="this.value=this.value.toUpperCase()">
-                                                        <span class="help-block"></span>
-                                                    </div>
-
-
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <label>Sexo<span class="required">*</span></label>
-                                                        <select id="sexo" name="sexo" class="form-control">
-                                                            <option value="M">MASCULINO</option>
-                                                            <option value="F">FEMENINO</option>
-                                                        </select>
-                                                        <span class="help-block"></span>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label>Correo Electronico<span class="required">*</span></label>
-                                                        <input id="email" name="email" class="form-control"
-                                                            type="email" required>
-                                                        <span class="help-block"></span>
-                                                    </div>
-
-                                                </div>
+                                            <div class="col-md-6">
+                                                <label>Apellido Materno<span class="required">*</span></label>
+                                                <input id="apellido2" name="apellido2" class="form-control" type="text"
+                                                    onkeyup="this.value=this.value.toUpperCase()">
+                                                <span class="help-block"></span>
                                             </div>
 
-                                            <div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <label>Celular<span class="required d-none">*</span></label>
-                                                        <input id="celular" name="celular" class="form-control"
-                                                            type="text">
-                                                        <span class="help-block"></span>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label>Sector<span class="required">*</span></label>
-                                                        <select name="sector" id="sector" class="form-control"
-                                                            onchange="cargar_tipoentidad();">
-                                                            <option value="0">OTROS</option>
-                                                            @foreach ($sector as $item)
-                                                                <option value="{{ $item->id }}">
-                                                                    {{ $item->nombre }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                        <span class="help-block"></span>
-                                                    </div>
 
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Sexo<span class="required">*</span></label>
+                                                <select id="sexo" name="sexo" class="form-control">
+                                                    <option value="M">MASCULINO</option>
+                                                    <option value="F">FEMENINO</option>
+                                                </select>
+                                                <span class="help-block"></span>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>Correo Electronico<span class="required">*</span></label>
+                                                <input id="email" name="email" class="form-control" type="email"
+                                                    required>
+                                                <span class="help-block"></span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Celular<span class="required d-none">*</span></label>
+                                                <input id="celular" name="celular" class="form-control"
+                                                    type="text">
+                                                <span class="help-block"></span>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>Sector<span class="required">*</span></label>
+                                                <select name="sector" id="sector" class="form-control"
+                                                    onchange="cargar_tipoentidad();">
+                                                    <option value="0">OTROS</option>
+                                                    @foreach ($sector as $item)
+                                                        <option value="{{ $item->id }}">
+                                                            {{ $item->nombre }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                <span class="help-block"></span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Tipo Entidad<span class="required d-none">*</span></label>
+                                                <select name="tipoentidad" id="tipoentidad" class="form-control">
+                                                </select>
+                                                <span class="help-block"></span>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>Entidad<span class="required">*</span></label>
+                                                <div class="input-group">
+                                                    <input type="hidden" name="entidad" id="entidad">
+                                                    <input type="text" name="entidadn" id="entidadn"
+                                                        class="form-control" placeholder="Buscar">
+                                                    <span class="help-block"></span>
+                                                    <span class="input-group-append">
+                                                        <button type="button"
+                                                            class="btn waves-effect waves-light btn-primary"
+                                                            onclick="add_entidad();">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
+                                                    </span>
                                                 </div>
                                             </div>
 
-                                            <div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <label>Tipo Entidad<span class="required d-none">*</span></label>
-                                                        <select name="tipoentidad" id="tipoentidad" class="form-control">
-                                                        </select>
-                                                        <span class="help-block"></span>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label>Entidad<span class="required">*</span></label>
-                                                        <div class="input-group">
-                                                            <input type="hidden" name="entidad" id="entidad">
-                                                            <input type="text" name="entidadn" id="entidadn"
-                                                                class="form-control" placeholder="Buscar">
-                                                            <span class="help-block"></span>
-                                                            <span class="input-group-append">
-                                                                <button type="button"
-                                                                    class="btn waves-effect waves-light btn-primary"
-                                                                    onclick="add_entidad();">
-                                                                    <i class="fas fa-plus"></i>
-                                                                </button>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Oficina<span class="required">*</span></label>
+                                                <div class="input-group">
+                                                    <input type="hidden" name="entidadgerencia" id="entidadgerencia">
+                                                    <input type="text" name="entidadgerencian" id="entidadgerencian"
+                                                        class="form-control" placeholder="Buscar">
+                                                    <span class="help-block"></span>
+                                                    <span class="input-group-append">
+                                                        <button type="button"
+                                                            class="btn waves-effect waves-light btn-primary"
+                                                            onclick="add_gerencia();">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
+                                                    </span>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <label>Oficina<span class="required">*</span></label>
-                                                        <div class="input-group">
-                                                            <input type="hidden" name="entidadgerencia"
-                                                                id="entidadgerencia">
-                                                            <input type="text" name="entidadgerencian"
-                                                                id="entidadgerencian" class="form-control"
-                                                                placeholder="Buscar">
-                                                            <span class="help-block"></span>
-                                                            <span class="input-group-append">
-                                                                <button type="button"
-                                                                    class="btn waves-effect waves-light btn-primary"
-                                                                    onclick="add_gerencia();">
-                                                                    <i class="fas fa-plus"></i>
-                                                                </button>
-                                                            </span>
-                                                        </div>
-                                                    </div>
 
-                                                    <div class="col-md-6">
-                                                        <label>Cargo<span class="required">*</span></label>
-                                                        <input type="text" name="cargo" id="cargo"
-                                                            class="form-control"
-                                                            onkeyup="this.value=this.value.toUpperCase();"
-                                                            placeholder="Ingrese Cargo">
-                                                        <span class="help-block"></span>
-                                                    </div>
-                                                </div>
+                                            <div class="col-md-6">
+                                                <label>Cargo<span class="required">*</span></label>
+                                                <input type="text" name="cargo" id="cargo" class="form-control"
+                                                    onkeyup="this.value=this.value.toUpperCase();"
+                                                    placeholder="Ingrese Cargo">
+                                                <span class="help-block"></span>
                                             </div>
-                                            <div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <label>Usuario<span class="required">*</span></label>
-                                                        <input id="usuario" name="usuario" class="form-control"
-                                                            type="text">
-                                                        <span class="help-block"></span>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label>Password<span class="required"
-                                                                id="password-required">*</span></label>
-                                                        <input id="password" name="password" class="form-control"
-                                                            type="password">
-                                                        <span class="help-block"></span>
-                                                    </div>
-                                                </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Usuario<span class="required">*</span></label>
+                                                <input id="usuario" name="usuario" class="form-control"
+                                                    type="text">
+                                                <span class="help-block"></span>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>Password<span class="required"
+                                                        id="password-required">*</span></label>
+                                                <input id="password" name="password" class="form-control"
+                                                    type="password">
+                                                <span class="help-block"></span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                {{-- <div class="card card-border">
+                                    <div class="card-header  bg-transparent p-0">
+                                        <h3 class="card-title"></h3>
+                                    </div>
+                                    <div class="card-body">
+                                        
+                                    </div>
+                                </div> --}}
                             </div>
                         </div>
                     </form>
@@ -508,7 +505,7 @@
                 $('#btnbuscardni').html("<i class='fa fa-spinner fa-spin'></i>");
                 $.ajax({
                     url: "https://apiperu.dev/api/dni/" + $('#dni').val() +
-                        "?api_token=06693f71e2099b8bfca1cefc7a36cdafef2b292f31ad4e5bcfb8535de0698c34",
+                        "?api_token=bdfa8657e3b70aaacabe568201917549aa8ada6bdd6cf3e1707c4e7e26dae946",
                     type: 'GET',
                     beforeSend: function() {
                         $('[name="nombre"]').val("");
