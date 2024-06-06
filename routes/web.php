@@ -465,7 +465,7 @@ Route::post('/TextosEscolares/ReporteUgel/{importacion_id}', [TextosEscolaresCon
 
 
 /* ************ */
-Route::get('/educación/TecnicoProductiva', [TecnicoProductivaController::class, 'principal'])->middleware('auth')->name('tecnicoproductiva.principal');
+Route::get('/educación/TecnicoProductiva', [TecnicoProductivaController::class, 'principal'])->name('tecnicoproductiva.principal');
 Route::get('/TecnicoProductiva/Principal/Head', [TecnicoProductivaController::class, 'principalHead'])->name('tecnicoproductiva.principal.head');
 Route::get('/TecnicoProductiva/Principal/Tabla', [TecnicoProductivaController::class, 'principalTabla'])->name('tecnicoproductiva.principal.tabla');
 Route::get('/TecnicoProductiva/Ugeles', [TecnicoProductivaController::class, 'ugel'])->name('tecnicoproductiva.ugel');
@@ -488,7 +488,7 @@ Route::post('/TecnicoProductiva/GraficoBarrasPrincipal/{anio_id}', [TabletaContr
 */
 /***************** */
 
-Route::get('/educación/SuperiorPedagogico', [SuperiorPedagogicoController::class, 'principal'])->middleware('auth')->name('superiorpedagogico.principal');
+Route::get('/educación/SuperiorPedagogico', [SuperiorPedagogicoController::class, 'principal'])->name('superiorpedagogico.principal');
 Route::get('/SuperiorPedagogico/Principal/Head', [SuperiorPedagogicoController::class, 'principalHead'])->name('superiorpedagogico.principal.head');
 Route::get('/SuperiorPedagogico/Principal/Tabla', [SuperiorPedagogicoController::class, 'principalTabla'])->name('superiorpedagogico.principal.tabla');
 Route::get('/SuperiorPedagogico/Ugeles', [SuperiorPedagogicoController::class, 'ugel'])->name('superiorpedagogico.ugel');
@@ -496,7 +496,7 @@ Route::get('/SuperiorPedagogico/Areas', [SuperiorPedagogicoController::class, 'a
 Route::get('/SuperiorPedagogico/IIEE', [SuperiorPedagogicoController::class, 'iiee'])->name('superiorpedagogico.iiee');
 Route::get('/SuperiorPedagogico/Exportar/Excel/{anio}/{ugel}/{area}/{gestion}', [SuperiorPedagogicoController::class, 'download']);
 
-Route::get('/educación/SuperiorTecnologico', [SuperiorTecnologicoController::class, 'principal'])->middleware('auth')->name('superiortecnologico.principal');
+Route::get('/educación/SuperiorTecnologico', [SuperiorTecnologicoController::class, 'principal'])->name('superiortecnologico.principal');
 Route::get('/SuperiorTecnologico/Principal/Head', [SuperiorTecnologicoController::class, 'principalHead'])->name('superiortecnologico.principal.head');
 Route::get('/SuperiorTecnologico/Principal/Tabla', [SuperiorTecnologicoController::class, 'principalTabla'])->name('superiortecnologico.principal.tabla');
 Route::get('/SuperiorTecnologico/Ugeles', [SuperiorTecnologicoController::class, 'ugel'])->name('superiortecnologico.ugel');
@@ -504,7 +504,7 @@ Route::get('/SuperiorTecnologico/Areas', [SuperiorTecnologicoController::class, 
 Route::get('/SuperiorTecnologico/IIEE', [SuperiorTecnologicoController::class, 'iiee'])->name('superiortecnologico.iiee');
 Route::get('/SuperiorTecnologico/Exportar/Excel/{anio}/{ugel}/{area}/{gestion}', [SuperiorTecnologicoController::class, 'download']);
 
-Route::get('/educación/SuperiorArtistico', [SuperiorArtisticoController::class, 'principal'])->middleware('auth')->name('superiorartistico.principal');
+Route::get('/educación/SuperiorArtistico', [SuperiorArtisticoController::class, 'principal'])->name('superiorartistico.principal');
 Route::get('/SuperiorArtistico/Principal/Head', [SuperiorArtisticoController::class, 'principalHead'])->name('superiorartistico.principal.head');
 Route::get('/SuperiorArtistico/Principal/Tabla', [SuperiorArtisticoController::class, 'principalTabla'])->name('superiorartistico.principal.tabla');
 Route::get('/SuperiorArtistico/Ugeles', [SuperiorArtisticoController::class, 'ugel'])->name('superiorartistico.ugel');
@@ -564,7 +564,7 @@ Route::post('/INDICADOR/ece/plaza', [PLazaController::class, 'datoIndicadorPLaza
 Route::get('/INDICADOR/Principal', [IndicadorController::class, 'principal'])->middleware('auth')->name('indicador.principal');
 Route::get('/INDICADOR/AJAX/LISTAR', [IndicadorController::class, 'ListarDT'])->name('indicador.ajax.listar');
 
-Route::get('/educación/PersonalDocente', [CensoDocenteController::class, 'PersonalDocente'])->middleware('auth')->name('Docentes.principal');
+Route::get('/educación/PersonalDocente', [CensoDocenteController::class, 'PersonalDocente'])->name('Docentes.principal');
 Route::get('/Plaza/Docentes/Principal222', [CensoDocenteController::class, 'PersonalDocenteTabla'])->middleware('auth')->name('censodocente.personaldocente');
 
 //Route::get('/Plaza/Docentes/Principal', [PLazaController::class, 'DocentesPrincipal'])->middleware('auth')->name('Docentes.principal');

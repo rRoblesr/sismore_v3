@@ -216,10 +216,10 @@ class MatriculaGeneralRepositorio
         if ($provincia > 0 || $distrito > 0 || $gestion > 0 || $area > 0)
             $query = $query->join(DB::raw('(
                 select ie.id, dd.id as distrito, dd.dependencia as provincia, tg.dependencia as gestion, aa.id as area
-                from edu_institucioneducativa as ie 
-                inner join edu_centropoblado as cp on cp.id=ie.CentroPoblado_id 
-                inner join par_ubigeo as dd on dd.id=cp.Ubigeo_id  
-                inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id 
+                from edu_institucioneducativa as ie
+                inner join edu_centropoblado as cp on cp.id=ie.CentroPoblado_id
+                inner join par_ubigeo as dd on dd.id=cp.Ubigeo_id
+                inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id
                 inner join edu_area as aa on aa.id = ie.Area_id) as ie'), 'ie.id', '=', 'edu_matricula_general_detalle.institucioneducativa_id');
         if ($provincia > 0) $query = $query->where('provincia', $provincia);
         if ($distrito > 0) $query = $query->where('distrito', $distrito);
@@ -1167,7 +1167,7 @@ class MatriculaGeneralRepositorio
                 inner join par_anio        as anio on anio.id=mg.anio_id
                 where imp.estado='PR'
                 ) as mg on mg.id=mgd.matriculageneral_id
-            ) as mgd"));
+            ) as mgd"))->where('anio', '>', 0);
 
         // $query = $query->join(DB::raw('(select id, NivelModalidad_id,  TipoGestion_id, Ugel_id, Area_id from edu_institucioneducativa) as ie'), 'ie.id', '=', 'mgd.institucioneducativa_id', 'left')
         //     ->join('edu_ugel as uu', 'uu.id', '=', 'ie.Ugel_id')
@@ -1187,10 +1187,10 @@ class MatriculaGeneralRepositorio
         // if ($provincia > 0 || $distrito > 0 || $gestion > 0 || $area > 0)
         $query = $query->join(DB::raw('(
                 select ie.id, dd.id as distrito, dd.dependencia as provincia, tg.dependencia as gestion, aa.id as area, nm.codigo,nm.nombre
-                from edu_institucioneducativa as ie 
-                inner join edu_centropoblado as cp on cp.id=ie.CentroPoblado_id 
-                inner join par_ubigeo as dd on dd.id=cp.Ubigeo_id  
-                inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id 
+                from edu_institucioneducativa as ie
+                inner join edu_centropoblado as cp on cp.id=ie.CentroPoblado_id
+                inner join par_ubigeo as dd on dd.id=cp.Ubigeo_id
+                inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id
                 inner join edu_area as aa on aa.id = ie.Area_id
                 inner join edu_nivelmodalidad as nm on nm.id = ie.NivelModalidad_id
                 where nm.tipo="EBR") as ie'), 'ie.id', '=', 'mgd.institucioneducativa_id');

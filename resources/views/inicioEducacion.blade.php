@@ -400,7 +400,8 @@
                 {{-- <div class="card-header"> --}}
                 <div class="card card-border border border-plomo-0">
                     <div class="card-header border-success-0 bg-success-0">{{--  --}}
-                        <h3 class="card-title font-12 text-white">Locales Educativos de Educacion Basica con acceso a Servicios
+                        <h3 class="card-title font-12 text-white">Locales Educativos de Educacion Basica con acceso a
+                            Servicios
                             Basicos
                         </h3>
                     </div>
@@ -493,8 +494,8 @@
                         <div id="anal1" style="height: 20rem"></div>
                         {{-- </figure> --}}
                         <div class="font-weight-bold text-muted mb-0 font-9">
-                            <span class="float-left" id="span-skills005-fuente">Fuente: ENDES - INEI</span>
-                            <span class="float-right" id="span-skills005-fecha">Actualizado: 19 de marzo 2024</span>
+                            <span class="float-left" id="span-skills005-fuente">Fuente: UMC - MINEDU</span>
+                            <span class="float-right" id="span-skills005-fecha">Actualizado: 30/04/2024</span>
                         </div>
                     </div>
                 </div>
@@ -503,15 +504,85 @@
             <div class="col-lg-6">
                 <div class="card card-border border border-plomo-0">
                     <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                        <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11"></h3>
+                        <h3 class="card-title font-11">Número de locales escolares, según ugel</h3>
+                        {{-- <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11">Número de locales escolares, según ugel</h3> --}}
                     </div>
                     <div class="card-body p-0">
-                        {{-- <figure class="highcharts-figure p-0"> --}}
-                        <div id="anal2" style="height: 20rem"></div>
-                        {{-- </figure> --}}
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive" style="height: 20rem" id="vtabla2x">
+                                    <table id="tablaX2"
+                                        class="table table-sm table-striped table-bordered font-11 m-0"
+                                        style="height: 100%">
+                                        <thead>
+                                            <tr class="bg-success-0 text-white text-center">
+                                                <th rowspan="1" class="text-center">UGEL</th>
+                                                <th rowspan="1" class="text-center">Locales Escolares</th>
+                                                <th rowspan="1" class="text-center">Saneado</th>
+                                                <th rowspan="1" class="text-center">No Saneado</th>
+                                                <th colspan="1" class="text-center">Proceso SFL</th>
+                                                <th colspan="1" class="text-center">Sin Informacion</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="text-center">
+                                                <td class="text-left">CORONEL PORTILLO</td>
+                                                <td> 774</td>
+                                                <td>180</td>
+                                                <td>575</td>
+                                                <td>15</td>
+                                                <td>4</td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td class="text-left">ATALAYA</td>
+                                                <td> 365</td>
+                                                <td>31</td>
+                                                <td>302</td>
+                                                <td>29</td>
+                                                <td>3</td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td class="text-left">PADRE ABAD</td>
+                                                <td> 263 </td>
+                                                <td>89</td>
+                                                <td>169</td>
+                                                <td>3</td>
+                                                <td>2</td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td class="text-left">PURUS</td>
+                                                <td> 58 </td>
+                                                <td>4</td>
+                                                <td>52</td>
+                                                <td>1</td>
+                                                <td>1</td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td class="text-left">DREU</td>
+                                                <td>10</td>
+                                                <td>8</td>
+                                                <td>2</td>
+                                                <td>0</td>
+                                                <td>0</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr class="text-center bg-success-0 text-white">
+                                                <th colspan="1" class="text-right">TOTAL</th>
+                                                <th class="text-center">1,470</th>
+                                                <th class="text-center">312</th>
+                                                <td>1,100</td>
+                                                <td>48</td>
+                                                <td>10</td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>"
+                                </div>
+                            </div>
+                        </div>
                         <div class="font-weight-bold text-muted mb-0 font-9">
-                            <span class="float-left" id="span-skills005-fuente">Fuente: ENDES - INEI</span>
-                            <span class="float-right" id="span-skills005-fecha">Actualizado: 19 de marzo 2024</span>
+                            <span class="float-left" id="span-skills005-fuente">Fuente: PADRON WEB</span>
+                            <span class="float-right" id="span-skills005-fecha">Actualizado: 21/05/2024</span>
                         </div>
                     </div>
                 </div>
@@ -1158,10 +1229,45 @@
                 }
             });
             cargarCards();
-            var data = {
-                'cat': ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', ],
-                'dat': [0.261, 0.24, 0.248, 0.194, 0.178, 0.177, 0.174, 0.17541049234, 0.196901, 0.191, ]
-            };
+
+            // var categoria = [2019, 2022, 2023];
+            var categoria = ['Lectura', 'Matematica'];
+            var series = [{
+                    'type': 'column',
+                    'yAxis': 0,
+                    'name': 2019,
+                    'data': [16.4, 9.9]
+                },
+                {
+                    'type': 'column',
+                    'yAxis': 0,
+                    'name': 2022,
+                    'data': [14.9, 9.1]
+
+                },
+                {
+                    'type': 'column',
+                    'yAxis': 0,
+                    'name': 2023,
+                    'data': [17.3, 13.0]
+
+                }
+            ];
+            // console.log(categoria);
+            // console.log(series);
+            gcolumn2('anal1',
+                categoria,
+                series,
+                '',
+                'Resultado de alumnos del cuarto grado de primaria que se encuentran en el nivel satisfactorio en Lectura y Matemática'
+            );
+
+            // gcolumn2('anal2',
+            //     categoria,
+            //     series,
+            //     '',
+            //     'Número de locales escolares, según ugel'
+            // );
         });
 
         function cargarCards() {
@@ -1901,6 +2007,101 @@
                     enabled: true
                 },
                 credits: false,
+            });
+        }
+
+        function gcolumn2(div, categoria, series, titulo, subtitulo) {
+            Highcharts.chart(div, {
+                chart: {
+                    type: 'column'
+                },
+                colors: ['#5eb9aa', '#f5bd22', '#ef5350'],
+                title: {
+                    text: titulo,
+                    //align: 'left'
+                },
+                subtitle: {
+                    text: subtitulo,
+                    style: {
+                        fontSize: '11px',
+                    }
+                    //align: 'left'
+                },
+                xAxis: {
+                    categories: categoria,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                            //color:'blue',
+                        }
+                    }
+                    //crosshair: true,
+                    //accessibility: {
+                    //    description: 'Countries'
+                    //}
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        enabled: false,
+                        text: '1000 metric tons (MT)'
+                    },
+                    labels: {
+                        enabled: true,
+                        style: {
+                            //color: Highcharts.getOptions().colors[2],
+                            fontSize: '10px',
+                        }
+                    },
+
+                },
+                tooltip: {
+                    //valueSuffix: ' (1000 MT)'
+                },
+                plotOptions: {
+                    series: {
+                        //stacking: 'normal', //normal, overlap, percent,stream
+                        pointPadding: 0.1, //size de colunma
+                        borderWidth: 0, //borde de columna
+
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontSize: '10px',
+                                fontWeight: 'normal',
+                            },
+                            formatter: function() {
+                                return this.y.toFixed(1) + '%';
+                            }
+                        },
+                    },
+                    column: {
+                        dataLabels: {
+                            enabled: true,
+                            //inside: true,
+                            style: {
+                                fontWeight: 'normal',
+                                fontSize: '10px',
+                                //color: 'white',
+                                //textShadow:false,//quita sombra//para versiones antiguas
+                                textOutline: false, //quita sombra
+                            }
+                        }
+                    },
+                },
+                legend: {
+                    itemStyle: {
+                        //color: "#333333",
+                        //cursor: "pointer",
+                        fontSize: "10px",
+                        //fontWeight: "normal",
+                        //textOverflow: "ellipsis"
+                    },
+                },
+                series: series,
+                credits: {
+                    enabled: false
+                },
             });
         }
     </script>

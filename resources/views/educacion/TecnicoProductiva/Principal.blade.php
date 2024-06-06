@@ -344,6 +344,8 @@
                         $('#span-anal1-fecha').html('Actualizado: ' + data.foot.fecha);
                     }
                     if (div == "anal2") {
+                        console.log(data.info.categoria);
+                        console.log(data.info.series);
                         gcolumn2(div,
                             data.info.categoria,
                             data.info.series,

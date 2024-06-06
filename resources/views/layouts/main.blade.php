@@ -776,13 +776,168 @@
                         </div>
 
                         <ul class="metismenu" id="side-menu">
-                            <li>
-                                <a href="{{ route('acceso.publico.modulo', session('sistema_publico_id')) }}"
-                                    class="waves-effect">
-                                    <i class="mdi mdi-home"></i>
-                                    <span> Dashboard </span>
-                                </a>
-                            </li>
+                            @switch(session('sistema_publico_id'))
+                                {{-- educacion --}}
+                                @case(1)
+                                    <li>
+                                        <a href="{{ route('acceso.publico.modulo', 'EDUCACION') }}" class="waves-effect">
+                                            <i class="mdi mdi-home"></i>
+                                            <span> Dashboard </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('indicador.nuevos.01') }}" class="waves-effect">
+                                            <i class="fas fa-user-nurse"></i>
+                                            <span> Avance Matricula </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('matriculageneral.ebr.principal') }}" class="waves-effect">
+                                            <i class="fas fa-user-md"></i>
+                                            <span> Básica Regular </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('matriculageneral.ebe.principal') }}" class="waves-effect">
+                                            <i class="mdi mdi-nutrition"></i>
+                                            <span> Básica Especial </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('matriculageneral.eba.principal') }}" class="waves-effect">
+                                            <i class="mdi mdi-shield-sun"></i>
+                                            <span> Básica Alternativa </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('tecnicoproductiva.principal') }}" class="waves-effect">
+                                            <i class="fas fa-user-friends"></i>
+                                            <span> Técnico Productivo </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('superiorpedagogico.principal') }}" class="waves-effect">
+                                            <i class="fas fa-brain"></i>
+                                            <span> Superior Pedagógico </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('superiortecnologico.principal') }}" class="waves-effect">
+                                            <i class="fas fa-brain"></i>
+                                            <span> Superior Tecnológico </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('superiorartistico.principal') }}" class="waves-effect">
+                                            <i class="fas fa-brain"></i>
+                                            <span> Superior Artístico </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('Docentes.principal') }}" class="waves-effect">
+                                            <i class="fas fa-brain"></i>
+                                            <span> Personal Docente </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('powerbi.salud.menu', '185') }}" class="waves-effect">
+                                            <i class="fas fa-brain"></i>
+                                            <span> Servicios Básicos </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('salud.indicador.pactoregional') }}" class="waves-effect">
+                                            <i class="fas fa-chart-bar"></i>
+                                            <span> Pacto Regional </span>
+                                        </a>
+                                    </li>
+                                @break
+
+                                {{-- vivienda --}}
+                                @case(2)
+                                    <li>
+                                        <a href="{{ route('acceso.publico.modulo', 'VIVIENDA') }}" class="waves-effect">
+                                            <i class="mdi mdi-home"></i>
+                                            <span> Dashboard </span>
+                                        </a>
+                                    </li>
+                                @break
+
+                                {{-- salud --}}
+                                @case(3)
+                                    <li>
+                                        <a href="{{ route('acceso.publico.modulo', 'SALUD') }}" class="waves-effect">
+                                            <i class="mdi mdi-home"></i>
+                                            <span> Dashboard </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('powerbi.salud.menu', '186') }}" class="waves-effect">
+                                            <i class="fas fa-user-nurse"></i>
+                                            <span> Materno </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('powerbi.salud.menu', '183') }}" class="waves-effect">
+                                            <i class="fas fa-user-md"></i>
+                                            <span> Etapa Vida Niño </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('powerbi.salud.menu', '262') }}" class="waves-effect">
+                                            <i class="mdi mdi-nutrition"></i>
+                                            <span> Alimentación </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('powerbi.salud.menu', '184') }}" class="waves-effect">
+                                            <i class="mdi mdi-shield-sun"></i>
+                                            <span> Inmunización </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('powerbi.salud.menu', '178') }}" class="waves-effect">
+                                            <i class="fas fa-user-friends"></i>
+                                            <span> Adolescente </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('powerbi.salud.menu', '185') }}" class="waves-effect">
+                                            <i class="fas fa-brain"></i>
+                                            <span> Salud Mental </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('salud.indicador.pactoregional') }}" class="waves-effect">
+                                            <i class="fas fa-chart-bar"></i>
+                                            <span> Pacto Regional </span>
+                                        </a>
+                                    </li>
+                                @break
+
+                                {{-- presupuesto --}}
+                                @case(5)
+                                    <li>
+                                        <a href="{{ route('acceso.publico.modulo', 'PRESUPUESTO') }}" class="waves-effect">
+                                            <i class="mdi mdi-home"></i>
+                                            <span> Dashboard </span>
+                                        </a>
+                                    </li>
+                                @break
+
+                                {{-- trabajo --}}
+                                @case(6)
+                                    <li>
+                                        <a href="{{ route('acceso.publico.modulo', 'TRABAJO') }}" class="waves-effect">
+                                            <i class="mdi mdi-home"></i>
+                                            <span> Dashboard </span>
+                                        </a>
+                                    </li>
+                                @break
+
+                                @default
+                            @endswitch
+
 
                         </ul>
 
