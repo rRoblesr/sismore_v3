@@ -8,7 +8,7 @@
     @extends('layouts.main', ['titlePage' => $ps[session('sistema_publico_id') - 1]])
     @section('content')
         @if (session('sistema_publico_id') == 1)
-            @include('inicioEducacionPublico')
+            @include('inicioEducacion')
         @elseif (session('sistema_publico_id') == 2)
             @include('inicioVivienda')
         @elseif (session('sistema_publico_id') == 3)

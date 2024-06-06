@@ -659,13 +659,13 @@ class HomeController extends Controller
         if (!Schema::hasTable('edu_area')) {
             return view('paginabloqueado'); //viv_centropoblado_datass
         }
-
+return 'xxx';
         $actualizado = '';
         $tipo_acceso = 0;
         $imgd = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
         $anio = $imgd->anio;
 
-        $provincias = UbigeoRepositorio::provincia('25'); //Ubigeo::select('v2.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();
+        return $provincias = UbigeoRepositorio::provincia('25'); //Ubigeo::select('v2.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();
         $distritos = UbigeoRepositorio::distrito('25', 0); //Ubigeo::select('v3.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->join('par_ubigeo as v3', 'v3.dependencia', '=', 'v2.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();
         $ambitos = Area::select('id', DB::raw('upper(nombre) as nombre'))->get();
 
@@ -1452,36 +1452,36 @@ class HomeController extends Controller
 
     public function educacion_publico($sistema_id)
     {
-        $actualizado = '';
-        $tipo_acceso = 1;
-        $imp = ImportacionRepositorio::Max_yearPadronWeb(); //padron web
-        $imp2 = ImportacionRepositorio::Max_yearSiagieMatricula(); //siagie
-        $imp3 = ImportacionRepositorio::Max_porfuente(2); //nexus
+        // $actualizado = '';
+        // $tipo_acceso = 1;
+        // $imp = ImportacionRepositorio::Max_yearPadronWeb(); //padron web
+        // $imp2 = ImportacionRepositorio::Max_yearSiagieMatricula(); //siagie
+        // $imp3 = ImportacionRepositorio::Max_porfuente(2); //nexus
 
-        if ($imp->count() > 0 && $imp2->count() > 0 && $imp3 != null) {
-            $importacion_id = $imp->first()->id;
-            $matricula_id = $imp2->first()->mat;
+        // if ($imp->count() > 0 && $imp2->count() > 0 && $imp3 != null) {
+        //     $importacion_id = $imp->first()->id;
+        //     $matricula_id = $imp2->first()->mat;
 
-            $info['se'] = PadronWebRepositorio::count_institucioneducativa($imp->first()->id);
-            $info['le'] = PadronWebRepositorio::count_localesescolares($imp->first()->id);
-            $info['tm'] = MatriculaDetalleRepositorio::count_matriculados($imp2->first()->mat);
-            $info['do'] = PlazaRepositorio::count_docente($imp3);
+        //     $info['se'] = PadronWebRepositorio::count_institucioneducativa($imp->first()->id);
+        //     $info['le'] = PadronWebRepositorio::count_localesescolares($imp->first()->id);
+        //     $info['tm'] = MatriculaDetalleRepositorio::count_matriculados($imp2->first()->mat);
+        //     $info['do'] = PlazaRepositorio::count_docente($imp3);
 
-            $info['dt0'] = MatriculaDetalleRepositorio::listar_estudiantesMatriculadosDeEducacionBasicaPorUgel($imp2);
-            $info['dt1'] = PadronWebRepositorio::listar_totalServicosLocalesSecciones($imp);
-            //$strPadronWeb = strtotime($imp->fecha);
-            $strSiagie = strtotime($imp2->first()->fecha);
-            //$strNexus = strtotime($imp3->fecha);
-            $actualizado = 'Actualizado al ' . date('d', $strSiagie) . ' de ' . $this->mes[date('m', $strSiagie) - 1] . ' del ' . date('Y', $strSiagie);
-            return  view('homepublico', compact('importacion_id', 'info', 'imp', 'matricula_id', 'actualizado'));
-        } else {
-            $importacion_id = null;
-            $importables['padron_web'] = $imp->count() == 0;
-            $importables['siagie_matricula'] = $imp2->count() == 0;
-            $importables['nexus_minedu'] = $imp3 == null;
-            return  view('homepublico', compact('importacion_id', 'importables', 'actualizado'));
-        }
-        // return  view('homepublico',[]);
+        //     $info['dt0'] = MatriculaDetalleRepositorio::listar_estudiantesMatriculadosDeEducacionBasicaPorUgel($imp2);
+        //     $info['dt1'] = PadronWebRepositorio::listar_totalServicosLocalesSecciones($imp);
+        //     //$strPadronWeb = strtotime($imp->fecha);
+        //     $strSiagie = strtotime($imp2->first()->fecha);
+        //     //$strNexus = strtotime($imp3->fecha);
+        //     $actualizado = 'Actualizado al ' . date('d', $strSiagie) . ' de ' . $this->mes[date('m', $strSiagie) - 1] . ' del ' . date('Y', $strSiagie);
+        //     return  view('homepublico', compact('importacion_id', 'info', 'imp', 'matricula_id', 'actualizado'));
+        // } else {
+        //     $importacion_id = null;
+        //     $importables['padron_web'] = $imp->count() == 0;
+        //     $importables['siagie_matricula'] = $imp2->count() == 0;
+        //     $importables['nexus_minedu'] = $imp3 == null;
+        //     return  view('homepublico', compact('importacion_id', 'importables', 'actualizado'));
+        // }
+        return  view('homepublico',[]);
     }
 
     public function educaciongrafica1()
