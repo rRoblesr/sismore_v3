@@ -313,8 +313,8 @@
                 {{-- <div class="card card-default card-fill"> --}}
                 {{-- <div class="card-header"> --}}
                 <div class="card card-border border border-plomo-0">
-                    <div class="card-header border-success-0 bg-transparent pb-0">
-                        <h3 class="card-title font-12">Matricula Educativa, segun modalidades</h3>
+                    <div class="card-header border-success-0 bg-success-0">{{--  bg-transparent pb-0 --}}
+                        <h3 class="card-title font-12 text-white">Matricula Educativa, segun modalidades</h3>
                     </div>
                     <div class="card-body pb-0">
                         <div class="mb-4 skills001">
@@ -399,8 +399,8 @@
                 {{-- <div class="card card-default card-fill"> --}}
                 {{-- <div class="card-header"> --}}
                 <div class="card card-border border border-plomo-0">
-                    <div class="card-header border-success-0 bg-transparent pb-0">
-                        <h3 class="card-title font-12">Locales Educativos de Educacion Basica con acceso a Servicios
+                    <div class="card-header border-success-0 bg-success-0">{{--  --}}
+                        <h3 class="card-title font-12 text-white">Locales Educativos de Educacion Basica con acceso a Servicios
                             Basicos
                         </h3>
                     </div>
@@ -478,6 +478,43 @@
                     </div>
                 </div>
 
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-lg-6">
+                <div class="card card-border border border-plomo-0">
+                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                        <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11"></h3>
+                    </div>
+                    <div class="card-body p-0">
+                        {{-- <figure class="highcharts-figure p-0"> --}}
+                        <div id="anal1" style="height: 20rem"></div>
+                        {{-- </figure> --}}
+                        <div class="font-weight-bold text-muted mb-0 font-9">
+                            <span class="float-left" id="span-skills005-fuente">Fuente: ENDES - INEI</span>
+                            <span class="float-right" id="span-skills005-fecha">Actualizado: 19 de marzo 2024</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card card-border border border-plomo-0">
+                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                        <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11"></h3>
+                    </div>
+                    <div class="card-body p-0">
+                        {{-- <figure class="highcharts-figure p-0"> --}}
+                        <div id="anal2" style="height: 20rem"></div>
+                        {{-- </figure> --}}
+                        <div class="font-weight-bold text-muted mb-0 font-9">
+                            <span class="float-left" id="span-skills005-fuente">Fuente: ENDES - INEI</span>
+                            <span class="float-right" id="span-skills005-fecha">Actualizado: 19 de marzo 2024</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1121,6 +1158,10 @@
                 }
             });
             cargarCards();
+            var data = {
+                'cat': ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', ],
+                'dat': [0.261, 0.24, 0.248, 0.194, 0.178, 0.177, 0.174, 0.17541049234, 0.196901, 0.191, ]
+            };
         });
 
         function cargarCards() {

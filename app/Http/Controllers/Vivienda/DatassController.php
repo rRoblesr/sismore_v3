@@ -18,7 +18,7 @@ class DatassController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        // $this->middleware('auth');
     }
 
     public function importar()
@@ -90,7 +90,7 @@ class DatassController extends Controller
                         $row['realiza_cloracion'] .
                         $row['tipo_sistema_agua'] .
                         $row['tipo_sistema_cloracion'];/* 49 */
-                        //$row['estado_infraestructura']
+                    //$row['estado_infraestructura']
                 }
             }
         } catch (Exception $e) {

@@ -644,6 +644,10 @@ class HomeController extends Controller
     public function vivienda_publico($sistema_id)
     {
 
+        if (!Schema::hasTable('viv_centropoblado_datass')) {
+            return view('paginabloqueado'); //
+        }
+
         $vUrl = "https://datastudio.google.com/embed/reporting/6c73c567-559b-4dd6-8608-64a0b502c85c/page/XXx8C";
         // $imp = Importacion::select(DB::raw('max(id) as maximo'))->where('fuenteimportacion_id', '7')->where('estado', 'PR')->first();
         $importacion = ImportacionRepositorio::ImportacionMax_porfuente('7');
@@ -652,6 +656,7 @@ class HomeController extends Controller
 
         $fechaVersion = Utilitario::fecha_formato_texto_completo($importacion->fechaActualizacion);
         return view('homepublico', compact('sistema_id', 'importacion_id', 'vUrl', 'fechaVersion'));
+        // return view('homepublico', compact('sistema_id', 'importacion_id', 'vUrl', 'fechaVersion'));
     }
 
     public function educacion($sistema_id)
@@ -659,13 +664,13 @@ class HomeController extends Controller
         if (!Schema::hasTable('edu_area')) {
             return view('paginabloqueado'); //viv_centropoblado_datass
         }
-return 'xxx';
+        // return 'xxx';
         $actualizado = '';
         $tipo_acceso = 0;
         $imgd = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
         $anio = $imgd->anio;
 
-        return $provincias = UbigeoRepositorio::provincia('25'); //Ubigeo::select('v2.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();
+        $provincias = UbigeoRepositorio::provincia('25'); //Ubigeo::select('v2.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();
         $distritos = UbigeoRepositorio::distrito('25', 0); //Ubigeo::select('v3.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->join('par_ubigeo as v3', 'v3.dependencia', '=', 'v2.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();
         $ambitos = Area::select('id', DB::raw('upper(nombre) as nombre'))->get();
 
@@ -1426,31 +1431,32 @@ return 'xxx';
         }
     }
 
-    // public function educacion_publico($sistema_id)
-    // { //return Schema::hasTable('edu_area')?'existe':'no existe';
-    //     if (!Schema::hasTable('edu_area')) {
-    //         return view('paginabloqueado'); //viv_centropoblado_datass
-    //     }
-
-    //     $actualizado = '';
-    //     $tipo_acceso = 0;
-    //     $imgd = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-    //     $anio = $imgd->anio;
-
-    //     $provincias = UbigeoRepositorio::provincia('25'); //Ubigeo::select('v2.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();
-    //     $distritos = UbigeoRepositorio::distrito('25', 0); //Ubigeo::select('v3.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->join('par_ubigeo as v3', 'v3.dependencia', '=', 'v2.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();
-    //     $ambitos = Area::select('id', DB::raw('upper(nombre) as nombre'))->get();
-
-    //     return  view('homepublico', compact(
-    //         'tipo_acceso',
-    //         'provincias',
-    //         'distritos',
-    //         'ambitos',
-    //         'anio',
-    //     ));
-    // }
-
     public function educacion_publico($sistema_id)
+    { //return Schema::hasTable('edu_area')?'existe':'no existe';
+        if (!Schema::hasTable('edu_area')) {
+            return view('paginabloqueado'); //viv_centropoblado_datass
+        }
+        // return session()->all();
+        $actualizado = '';
+        $tipo_acceso = 0;
+        $imgd = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
+        $anio = $imgd->anio;
+
+        $provincias = UbigeoRepositorio::provincia('25'); //Ubigeo::select('v2.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();
+        $distritos = UbigeoRepositorio::distrito('25', 0); //Ubigeo::select('v3.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->join('par_ubigeo as v3', 'v3.dependencia', '=', 'v2.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();
+        $ambitos = Area::select('id', DB::raw('upper(nombre) as nombre'))->get();
+
+        return  view('homepublico', compact(
+            'tipo_acceso',
+            'provincias',
+            'distritos',
+            'ambitos',
+            'anio',
+            'actualizado'
+        ));
+    }
+
+    public function educacion_publicoxxx($sistema_id)
     {
         // $actualizado = '';
         // $tipo_acceso = 1;
@@ -1481,7 +1487,7 @@ return 'xxx';
         //     $importables['nexus_minedu'] = $imp3 == null;
         //     return  view('homepublico', compact('importacion_id', 'importables', 'actualizado'));
         // }
-        return  view('homepublico',[]);
+        return  view('homepublico', []);
     }
 
     public function educaciongrafica1()
@@ -1556,6 +1562,7 @@ return 'xxx';
 
     public function salud_publico($sistema_id)
     {
+        // return session()->all();
         return view('homepublico', []);
     }
 

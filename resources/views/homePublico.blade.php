@@ -1,7 +1,7 @@
 {{-- @extends('layouts.main',['titlePage'=>'']) --}}
 @php
     // $ps = ['Modulo Educación', 'Modulo Vivienda', 'Modulo Salud', 'Modulo Administrador', 'Modulo Presupuesto', 'Modulo Trabajo'];
-    $ps = ['Modulo Educación', '', '', 'Modulo Administrador', '', 'Modulo Trabajo'];
+    $ps = ['', '', '', 'Modulo Administrador', '', 'Modulo Trabajo'];
 @endphp
 
 @guest
