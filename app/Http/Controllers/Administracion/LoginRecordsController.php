@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Administracion\LoginRecords;
 use App\Models\Parametro\Icono;
 use App\Models\Administracion\Sistema;
+use App\Models\Administracion\Usuario;
+use App\Repositories\Administracion\EntidadRepositorio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -16,13 +18,43 @@ class LoginRecordsController extends Controller
     {
         $this->middleware('auth');
     }
-    public function principal()
+    public function reporte()
     {
         $data = LoginRecords::all();
-        return view('administracion.LoginRecords.Principal', compact('data'));
+        return view('administracion.LoginRecords.Reporte', compact('data'));
     }
 
-    public function listarDT()
+    public function ListarDT(Request $rq)
+    {
+        $draw = intval($rq->draw);
+        $start = intval($rq->start);
+        $length = intval($rq->length);
+
+        $query = LoginRecords::orderBy('id', 'desc')->get();
+        $data = [];
+        foreach ($query as $key => $value) {
+            $usu = Usuario::find($value->usuario);
+            $ofi = EntidadRepositorio::migas($usu->entidad);
+            $data[] = array(
+                $key + 1,
+                $usu->nombre . ', ' . $usu->apellido1 . ' ' . $usu->apellido2,
+                $ofi->entidadn,
+                $value->login,
+                $value->logout,
+            );
+        }
+        $result = array(
+            "draw" => $draw,
+            "recordsTotal" => $start,
+            "recordsFiltered" => $length,
+            "data" => $data,
+            // "ofi" => $ofi,
+            // "usu" => $usu,
+        );
+        return response()->json($result);
+    }
+
+    public function listarjjjDT()
     {
         $data = Sistema::orderBy('pos', 'desc')->get();
         return  datatables()::of($data)

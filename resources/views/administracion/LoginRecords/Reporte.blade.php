@@ -16,25 +16,25 @@
                     <div class="col-md-12">
                         <div class="card card-border">
                             <div class="card-header border-success-0 bg-transparent pb-0">
-                                <div class="card-widgets">
-                                    <button type="button" class="btn btn-primary btn-xs" onclick="add()"><i
-                                            class="fa fa-plus"></i> Nuevo</button>
-                                </div>
+                                {{-- <div class="card-widgets"><button type="button" class="btn btn-primary btn-xs" onclick="add()"><i class="fa fa-plus"></i> Nuevo</button></div> --}}
                                 <h4 class="card-title">lista de Ingresos </h4>
                             </div>
 
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <br>
-                                    <table id="dtPrincipal" class="table table-striped table-bordered" style="width:100%">
+                                    <table id="tabla" class="table table-sm table-striped table-bordered font-11">
                                         <thead class="cabecera-dataTable table-success-0 text-white">
-                                            <th>Nº</th>
-                                            <th>Usuario</th>
-                                            <th>Entidad</th>
-                                            <th>Login</th>
-                                            <th>Logout</th>
-                                            {{-- <th>Aciones</th> --}}
+                                            <tr>
+                                                <th>Nº</th>
+                                                <th>Usuario</th>
+                                                <th>Entidad</th>
+                                                <th>Login</th>
+                                                <th>Logout</th>
+                                                {{-- <th>Aciones</th> --}}
+                                            </tr>
                                         </thead>
+
                                     </table>
                                 </div>
 
@@ -81,8 +81,7 @@
                                 <label>Posicion
                                     <!--span class="required">*</span-->
                                 </label>
-                                <input id="pos" name="pos" class="form-control" type="number"
-                                    value="{{ $posmax }}">
+                                <input id="pos" name="pos" class="form-control" type="number" value=" ">
                                 <span class="help-block"></span>
                             </div>
 
@@ -113,20 +112,27 @@
             var save_method = '';
             var table_principal;
 
-            $("input").change(function() {
-                $(this).parent().parent().removeClass('has-error');
-                $(this).next().empty();
+            // $("input").change(function() {
+            //     $(this).parent().parent().removeClass('has-error');
+            //     $(this).next().empty();
+            // });
+            // $("textarea").change(function() {
+            //     $(this).parent().parent().removeClass('has-error');
+            //     $(this).next().empty();
+            // });
+            // $("select").change(function() {
+            //     $(this).parent().parent().removeClass('has-error');
+            //     $(this).next().empty();
+            // });
+
+            table_principal = $('#tabla').DataTable({
+                responsive: true,
+                autoWidth: false,
+                ordered: false,
+                destroy: true,
+                language: table_language,
+                ajax: "{{ route('loginrecords.reporte.listar') }}",
             });
-            $("textarea").change(function() {
-                $(this).parent().parent().removeClass('has-error');
-                $(this).next().empty();
-            });
-            $("select").change(function() {
-                $(this).parent().parent().removeClass('has-error');
-                $(this).next().empty();
-            });
-            listarDT();
-            /* se eliminara */
         });
 
         function add() {
