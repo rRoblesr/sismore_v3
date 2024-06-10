@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Administracion;
 
+use App\Models\Administracion\Entidad;
 use Illuminate\Support\Facades\DB;
 
 class EntidadRepositorio
@@ -19,5 +20,24 @@ class EntidadRepositorio
             ->where('v2.id', $oficina)
             ->get()->first();
         return $data;
+    }
+
+    public static function migas($oficina)
+    {
+        $query = Entidad::select(
+            'adm_entidad.id as oficina',
+            'adm_entidad.nombre as oficinan',
+            'ee.id as entidad',
+            'ee.nombre as entidadn',
+            'ee.codigo',
+            'te.id as tipo',
+            'ss.id as sector',
+        )
+            ->join('adm_entidad as ee', 'ee.id', '=', 'adm_entidad.dependencia')
+            ->join('adm_tipo_entidad as te', 'te.id', '=', 'ee.tipoentidad_id')
+            ->join('pres_sector as ss', 'ss.id', '=', 'te.sector_id')
+            ->where('adm_entidad.id', $oficina)
+            ->first();
+        return $query;
     }
 }

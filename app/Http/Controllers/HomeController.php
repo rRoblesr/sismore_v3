@@ -179,7 +179,7 @@ class HomeController extends Controller
 
     public function accesopublico()
     {
-        $sistemas = Sistema::select('id as sistema_id', 'nombre', 'icono')->where('id', '!=', 4)->orderBy('pos')->get();
+        $sistemas = SistemaRepositorio::accesopublico();
         if ($sistemas) {
             session(['sistemas_publico' => $sistemas]);
             session(['sistema_publico_id' => $sistemas->first()->sistema_id]);
@@ -190,9 +190,14 @@ class HomeController extends Controller
 
     public function accesopublicomodulo($sistema_nombre)
     {
+        if (!session()->has('sistemas_publico')) {
+            session()->put(['sistemas_publico' => SistemaRepositorio::accesopublico()]);
+        }
+        // return [session()->all(), $sistema_nombre, session()->has('sistema_publico_id')];
         $sistema_id = Sistema::where('nombre', $sistema_nombre)->first()->id;
         session()->put(['sistema_publico_id' => $sistema_id]);
-
+        session()->put(['sistema_publico_nombre' => $sistema_nombre]);
+        // return session()->all();
         switch ($sistema_id) {
             case (1):
                 return $this->educacion_publico($sistema_id);
@@ -200,7 +205,8 @@ class HomeController extends Controller
                 return $this->vivienda_publico($sistema_id);
             case (3):
                 return $this->salud_publico($sistema_id);
-                //case (4):return $this->administracion($sistema_id);
+                // case (4):
+                //     return $this->administracion($sistema_id);
             case (5):
                 return $this->presupuesto_publico($sistema_id);
             case (6):

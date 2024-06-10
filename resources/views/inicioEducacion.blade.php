@@ -10,782 +10,761 @@
     </style>
 @endsection
 
-<div>
-    <div id="container-speed" class="chart-container"></div>
+<div class="row">
+    <div class="col-lg-4 col-md-4 col-sm-4">
+        <h4 class="page-title font-16">MODULO EDUCACIÓN</h4>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        <select id="provincia" name="provincia" class="form-control btn-xs font-11"
+            onchange="cargarDistritos(),cargarCards();">
+            <option value="0">PROVINCIA</option>
+            @foreach ($provincias as $item)
+                <option value="{{ $item->id }}"> {{ $item->nombre }}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        <select id="distrito" name="distrito" class="form-control btn-xs font-11" onchange="cargarCards();">
+            <option value="0">DISTRITO</option>
+            @foreach ($distritos as $item)
+                <option value="{{ $item->id }}">{{ $item->nombre }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        <select id="tipogestion" name="tipogestion" class="form-control btn-xs font-11" onchange="cargarCards();">
+            <option value="0">TIPO DE GESTIÓN</option>
+            <option value="12">PUBLICA</option>
+            <option value="3">PRIVADA</option>
+        </select>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        <select id="ambito" name="ambito" class="form-control btn-xs font-11" onchange="cargarCards();">
+            <option value="0">ÁMBITO</option>
+            @foreach ($ambitos as $item)
+                <option value="{{ $item->id }}">{{ $item->nombre }}
+                </option>
+            @endforeach
+        </select>
+    </div>
 </div>
 
-<div class="content">
-    <div class="container-fluid">
-        <div class="form-group row align-items-center vh-5">
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <h4 class="page-title font-16">MODULO EDUCACIÓN</h4>
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-2">
-                <select id="provincia" name="provincia" class="form-control btn-xs font-11"
-                    onchange="cargarDistritos(),cargarCards();">
-                    <option value="0">PROVINCIA</option>
-                    @foreach ($provincias as $item)
-                        <option value="{{ $item->id }}"> {{ $item->nombre }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-2">
-                <select id="distrito" name="distrito" class="form-control btn-xs font-11" onchange="cargarCards();">
-                    <option value="0">DISTRITO</option>
-                    @foreach ($distritos as $item)
-                        <option value="{{ $item->id }}">{{ $item->nombre }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-2">
-                <select id="tipogestion" name="tipogestion" class="form-control btn-xs font-11"
-                    onchange="cargarCards();">
-                    <option value="0">TIPO DE GESTIÓN</option>
-                    <option value="12">PUBLICA</option>
-                    <option value="3">PRIVADA</option>
-                </select>
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-2">
-                <select id="ambito" name="ambito" class="form-control btn-xs font-11" onchange="cargarCards();">
-                    <option value="0">ÁMBITO</option>
-                    @foreach ($ambitos as $item)
-                        <option value="{{ $item->id }}">{{ $item->nombre }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
-
-        {{-- <div class="row">
-            <div class="col-lg-3 col-md-3 col-sm-6">
-                <div class="card-box">
-                    <div class="media">
-                        <div class="avatar-md rounded-circle mr-2 centrador">
-                            <i class="ion ion-logo-usd avatar-title font-26 text-white"></i>
-                            <img src="{{ asset('/') }}public/img/icon/servicios.png" alt="" class="imagen">
-                        </div>
-                        <div class="avatar-md bg-success rounded-circle mr-2">
-                            <i class=" ion-md-home avatar-title font-26 text-white"></i>
-                        </div>
-                        <div class="media-body align-self-center">
-                            <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold">
-                                    <span data-plugin="counterup" id="servicio"></span>
-                                </h4>
-                                <p class="mb-0 mt-1 text-truncate">Servicios Educativos</p>
-                            </div>
-                        </div>
-                    </div>
+{{-- <div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6">
+        <div class="card-box">
+            <div class="media">
+                <div class="avatar-md rounded-circle mr-2 centrador">
+                    <i class="ion ion-logo-usd avatar-title font-26 text-white"></i>
+                    <img src="{{ asset('/') }}public/img/icon/servicios.png" alt="" class="imagen">
                 </div>
-            </div>
-
-            <div class="col-md-3 col-xl-3">
-                <div class="card-box">
-                    <div class="media">
-                        <div class="avatar-md rounded-circle mr-2 centrador">
-                            <i class="ion ion-logo-usd avatar-title font-26 text-white"></i>
-                            <img src="{{ asset('/') }}public/img/icon/locales.png" alt="" class="imagen">
-                        </div>
-                        <div class="avatar-md bg-info rounded-circle mr-2">
-                            <i class=" ion ion-md-person avatar-title font-26 text-white"></i>
-                        </div>
-                        <div class="media-body align-self-center">
-                            <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold">
-                                    <span data-plugin="counterup" id="local"></span>
-                                </h4>
-                                <p class="mb-0 mt-1 text-truncate">Locales Escolares </p>
-                            </div>
-                        </div>
-                    </div>
+                <div class="avatar-md bg-success rounded-circle mr-2">
+                    <i class=" ion-md-home avatar-title font-26 text-white"></i>
                 </div>
-            </div>
-
-            <div class="col-md-3 col-xl-3">
-                <div class="card-box">
-                    <div class="media">
-                        <div class="avatar-md rounded-circle mr-2 centrador">
-                            <i class="ion ion-logo-usd avatar-title font-26 text-white"></i>
-                            <img src="{{ asset('/') }}public/img/icon/matriculas.png" alt="" class="imagen">
-                        </div>
-                        <div class="avatar-md bg-info rounded-circle mr-2">
-                            <i class=" ion ion-md-person avatar-title font-26 text-white"></i>
-                        </div>
-                        <div class="media-body align-self-center">
-                            <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold">
-                                    <span data-plugin="counterup" id="alumno"></span>
-                                </h4>
-                                <p class="mb-0 mt-1 text-truncate">Estudiantes</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3 col-xl-3">
-                <div class="card-box">
-                    <div class="media">
-                        <div class="avatar-md rounded-circle mr-2 centrador">
-                            <i class="ion ion-logo-usd avatar-title font-26 text-white"></i>
-                            <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class="imagen">
-                        </div>
-                        <div class="avatar-md bg-info rounded-circle mr-2">
-                            <i class=" ion ion-md-person avatar-title font-26 text-white"></i>
-                        </div>
-                        <div class="media-body align-self-center">
-                            <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold">
-                                    <span data-plugin="counterup" id="docente"></span>
-                                </h4>
-                                <p class="mb-0 mt-1 text-truncate">Docentes</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
-
-        <!--Widget-4 -->
-        <div class="row">
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="card-box border border-plomo-0 card-f2-c1">{{--  card-border border border-plomo-0 --}}
-                    <div class="media">
-                        <div class="text-center">
-                            <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
-                                width="70%" height="70%">
-                        </div>
-                        <div class="media-body align-self-center">
-                            <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold">
-                                    <span data-plugin="counterup" id="basico"></span>
-                                </h4>
-                                <p class="mb-0 mt-1 text-truncate">Matriculados - {{ $anio }}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-0 font-9">
-                        <h6 class="">Avance <span class="float-right" id="ibasico">0%</span></h6>
-                        <div class="progress progress-sm m-0">
-                            <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="90"
-                                aria-valuemin="0" aria-valuemax="100" style="width: 100%" id="bbasico">
-                                <span class="sr-only">0% Complete</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="card-box border border-plomo-0 card-f2-c2">
-                    <div class="media">
-                        <div class="text-center">
-                            <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
-                                width="70%" height="70%">
-                        </div>
-                        <div class="media-body align-self-center">
-                            <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold">
-                                    <span data-plugin="counterup" id="ebr"></span>
-                                </h4>
-                                <p class="mb-0 mt-1 text-truncate">
-                                    <a href="{{ route('matriculageneral.ebr.principal') }}"
-                                        title="Ir a Matricula EBR">Matricula EBR</a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-0 font-9">
-                        <h6 class="">Avance <span class="float-right" id="iebr">0%</span></h6>
-                        <div class="progress progress-sm m-0">
-                            <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="60"
-                                aria-valuemin="0" aria-valuemax="100" style="width: 100%" id="bebr">
-                                <span class="sr-only">0% Complete</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="card-box border border-plomo-0 card-f2-c3">
-                    <div class="media">
-                        <div class="text-center">
-                            <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
-                                width="70%" height="70%">
-                        </div>
-                        <div class="media-body align-self-center">
-                            <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold">
-                                    <span data-plugin="counterup" id="ebe"></span>
-                                </h4>
-                                <p class="mb-0 mt-1 text-truncate">
-                                    <a href="{{ route('matriculageneral.ebe.principal') }}"
-                                        title="Ir a Matricula EBE">Matricula EBE</a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-0 font-9">
-                        <h6 class="">Avance <span class="float-right" id="iebe">0%</span></h6>
-                        <div class="progress progress-sm m-0">
-                            <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="60"
-                                aria-valuemin="0" aria-valuemax="100" style="width: 100%" id="bebe">
-                                <span class="sr-only">0% Complete</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="card-box border border-plomo-0 card-f2-c4">
-                    <div class="media">
-                        <div class="text-center">
-                            <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
-                                width="70%" height="70%">
-                        </div>
-                        <div class="media-body align-self-center">
-                            <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold">
-                                    <span data-plugin="counterup" id="eba"></span>
-                                </h4>
-                                <p class="mb-0 mt-1 text-truncate">
-                                    <a href="{{ route('matriculageneral.eba.principal') }}"
-                                        title="Ir a Matricula EBA">Matricula EBA</a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-0 font-9">
-                        <h6 class="">Avance <span class="float-right" id="ieba">0%</span></h6>
-                        <div class="progress progress-sm m-0">
-                            <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="60"
-                                aria-valuemin="0" aria-valuemax="100" style="width: 100%" id="beba">
-                                <span class="sr-only">0% Complete</span>
-                            </div>
-                        </div>
+                <div class="media-body align-self-center">
+                    <div class="text-right">
+                        <h4 class="font-20 my-0 font-weight-bold">
+                            <span data-plugin="counterup" id="servicio"></span>
+                        </h4>
+                        <p class="mb-0 mt-1 text-truncate">Servicios Educativos</p>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="card card-border border border-plomo-0">
-                    <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
-                        <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11"></h3>
-                    </div>
-                    <div class="card-body p-0">
-                        <figure class="highcharts-figure m-0">
-                            <div id="siagie001" style="height: 20rem"></div>
-                        </figure>
-                        <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                            <span class="float-left" id="span-siagie001-fuente">Fuente:</span>
-                            <span class="float-right" id="span-siagie001-fecha">Actualizado:</span>
-                        </div>
-                    </div>
+    <div class="col-md-3 col-xl-3">
+        <div class="card-box">
+            <div class="media">
+                <div class="avatar-md rounded-circle mr-2 centrador">
+                    <i class="ion ion-logo-usd avatar-title font-26 text-white"></i>
+                    <img src="{{ asset('/') }}public/img/icon/locales.png" alt="" class="imagen">
                 </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="card card-border border border-plomo-0">
-                    <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
-                        <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11"></h3>
-                    </div>
-                    <div class="card-body p-0">
-                        {{-- <div id="container" ></div> --}}
-                        <figure class="highcharts-figure m-0">
-                            <div id="censodocente001" style="height: 20rem"></div>
-                        </figure>
-                        <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                            <span class="float-left" id="span-censodocente001-fuente">Fuente:</span>
-                            <span class="float-right" id="span-censodocente001-fecha">Actualizado:</span>
-                        </div>
-                    </div>
+                <div class="avatar-md bg-info rounded-circle mr-2">
+                    <i class=" ion ion-md-person avatar-title font-26 text-white"></i>
                 </div>
-            </div>
-
-        </div>
-
-        <div class="row">
-            <div class="col-lg-6">
-                {{-- <div class="card card-default card-fill"> --}}
-                {{-- <div class="card-header"> --}}
-                <div class="card card-border border border-plomo-0">
-                    <div class="card-header border-success-0 bg-success-0">{{--  bg-transparent pb-0 --}}
-                        <h3 class="card-title font-12 text-white">Matricula Educativa, segun modalidades</h3>
-                    </div>
-                    <div class="card-body pb-0">
-                        <div class="mb-4 skills001">
-                            <h6 class="font-12"><a href="{{ route('matriculadetalle.interculturalbilingue') }}"
-                                    class="link">Porcentajes de
-                                    estudiantes matriculados del modelo de servicio EIB</a><span
-                                    class="float-right">0%</span></h6>
-                            <div class="progress progress-sm">
-                                <div class="progress-bar wow animated progress-animated" role="progressbar"
-                                    aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-                                    <span class="sr-only">60% Complete</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mb-4 skills002">
-                            <h6 class="font-12"><a href="{{ route('superiorpedagogico.principal') }}"
-                                    class="link">Porcentajes de
-                                    estudiantes
-                                    matriculados en Educacion Superior Pedagogica</a><span
-                                    class="float-right">0%</span></h6>
-                            <div class="progress progress-sm">
-                                <div class="progress-bar wow animated progress-animated" role="progressbar"
-                                    aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-                                    <span class="sr-only">90% Complete</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mb-4 skills003">
-                            <h6 class="font-12"><a href="{{ route('superiortecnologico.principal') }}"
-                                    class="link">Porcentajes de
-                                    estudiantes
-                                    matriculados en Educacion Superior Tecnologica</a><span
-                                    class="float-right">0%</span></h6>
-                            <div class="progress progress-sm">
-                                <div class="progress-bar wow animated progress-animated" role="progressbar"
-                                    aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-                                    <span class="sr-only">80% Complete</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mb-4 skills004">
-                            <h6 class="font-12"><a href="{{ route('superiorartistico.principal') }}"
-                                    class="link">Porcentajes de
-                                    estudiantes
-                                    matriculados en Educacion Superior Artistica</a><span class="float-right">0%</span>
-                            </h6>
-                            <div class="progress progress-sm mb-0">
-                                <div class="progress-bar wow animated progress-animated" role="progressbar"
-                                    aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-                                    <span class="sr-only">95% Complete</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mb-4 skills005">
-                            <h6 class="font-12"><a href="{{ route('tecnicoproductiva.principal') }}"
-                                    class="link">Porcentajes de
-                                    estudiantes
-                                    matriculado en Educacion Tecnica-Productiva</a><span class="float-right">0%</span>
-                            </h6>
-                            <div class="progress progress-sm mb-0">
-                                <div class="progress-bar wow animated progress-animated" role="progressbar"
-                                    aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-                                    <span class="sr-only">95% Complete</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="font-weight-bold text-muted mb-0 font-9">
-                            <span class="float-left" id="span-skills005-fuente">Fuente:</span>
-                            <span class="float-right" id="span-skills005-fecha">Actualizado:</span>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="col-lg-6">
-                {{-- <div class="card card-default card-fill"> --}}
-                {{-- <div class="card-header"> --}}
-                <div class="card card-border border border-plomo-0">
-                    <div class="card-header border-success-0 bg-success-0">{{--  --}}
-                        <h3 class="card-title font-12 text-white">Locales Educativos de Educacion Basica con acceso a
-                            Servicios
-                            Basicos
-                        </h3>
-                    </div>
-                    <div class="card-body pb-0">
-                        <div class="mb-4 skills006">
-                            <h6 class="font-12"><a href="{{ route('serviciosbasicos.principal') }}"
-                                    class="link">Porcentajes de
-                                    Locales Educativos
-                                    con los tres Servicios
-                                    Basicos</a><span class="float-right">0%</span></h6>
-                            <div class="progress progress-sm">
-                                <div class="progress-bar wow animated progress-animated" role="progressbar"
-                                    aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-                                    <span class="sr-only">60% Complete</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mb-4 skills007">
-                            <h6 class="font-12"><a href="{{ route('serviciosbasicos.principal') }}"
-                                    class="link">Porcentajes de
-                                    Locales Educativos
-                                    conectados a red de Agua Potable</a><span class="float-right">0%</span></h6>
-                            <div class="progress progress-sm">
-                                <div class="progress-bar wow animated progress-animated" role="progressbar"
-                                    aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-                                    <span class="sr-only">90% Complete</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mb-4 skills008">
-                            <h6 class="font-12"><a href="{{ route('serviciosbasicos.principal') }}"
-                                    class="link">Porcentajes de
-                                    Locales Educativos
-                                    conectados a red de Desague</a><span class="float-right">0%</span></h6>
-                            <div class="progress progress-sm">
-                                <div class="progress-bar wow animated progress-animated" role="progressbar"
-                                    aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-                                    <span class="sr-only">80% Complete</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mb-4 skills009">
-                            <h6 class="font-12"><a href="{{ route('serviciosbasicos.principal') }}"
-                                    class="link">Porcentajes de
-                                    Locales Educativos
-                                    conectados a red de Electricidad</a><span class="float-right">0%</span></h6>
-                            <div class="progress progress-sm mb-0">
-                                <div class="progress-bar wow animated progress-animated" role="progressbar"
-                                    aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-                                    <span class="sr-only">95% Complete</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mb-4 skills010">
-                            <h6 class="font-12"><a href="{{ route('serviciosbasicos.principal') }}"
-                                    class="link">Porcentajes de
-                                    Locales Educativos
-                                    que cuentan con acceso a Internet</a><span class="float-right">0%</span></h6>
-                            <div class="progress progress-sm mb-0">
-                                <div class="progress-bar wow animated progress-animated" role="progressbar"
-                                    aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-                                    <span class="sr-only">95% Complete</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="font-weight-bold text-muted mb-0 font-9">
-                            <span class="float-left" id="span-skills010-fuente">Fuente:</span>
-                            <span class="float-right" id="span-skills010-fecha">Actualizado:</span>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <div class="row">
-
-            <div class="col-lg-6">
-                <div class="card card-border border border-plomo-0">
-                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                        <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11"></h3>
-                    </div>
-                    <div class="card-body p-0">
-                        {{-- <figure class="highcharts-figure p-0"> --}}
-                        <div id="anal1" style="height: 20rem"></div>
-                        {{-- </figure> --}}
-                        <div class="font-weight-bold text-muted mb-0 font-9">
-                            <span class="float-left" id="span-skills005-fuente">Fuente: UMC - MINEDU</span>
-                            <span class="float-right" id="span-skills005-fecha">Actualizado: 30/04/2024</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-6">
-                <div class="card card-border border border-plomo-0">
-                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                        <h3 class="card-title font-11">Número de locales escolares, según ugel</h3>
-                        {{-- <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11">Número de locales escolares, según ugel</h3> --}}
-                    </div>
-                    <div class="card-body p-0">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="table-responsive" style="height: 20rem" id="vtabla2x">
-                                    <table id="tablaX2"
-                                        class="table table-sm table-striped table-bordered font-11 m-0"
-                                        style="height: 100%">
-                                        <thead>
-                                            <tr class="bg-success-0 text-white text-center">
-                                                <th rowspan="1" class="text-center">UGEL</th>
-                                                <th rowspan="1" class="text-center">Locales Escolares</th>
-                                                <th rowspan="1" class="text-center">Saneado</th>
-                                                <th rowspan="1" class="text-center">No Saneado</th>
-                                                <th colspan="1" class="text-center">Proceso SFL</th>
-                                                <th colspan="1" class="text-center">Sin Informacion</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr class="text-center">
-                                                <td class="text-left">CORONEL PORTILLO</td>
-                                                <td> 774</td>
-                                                <td>180</td>
-                                                <td>575</td>
-                                                <td>15</td>
-                                                <td>4</td>
-                                            </tr>
-                                            <tr class="text-center">
-                                                <td class="text-left">ATALAYA</td>
-                                                <td> 365</td>
-                                                <td>31</td>
-                                                <td>302</td>
-                                                <td>29</td>
-                                                <td>3</td>
-                                            </tr>
-                                            <tr class="text-center">
-                                                <td class="text-left">PADRE ABAD</td>
-                                                <td> 263 </td>
-                                                <td>89</td>
-                                                <td>169</td>
-                                                <td>3</td>
-                                                <td>2</td>
-                                            </tr>
-                                            <tr class="text-center">
-                                                <td class="text-left">PURUS</td>
-                                                <td> 58 </td>
-                                                <td>4</td>
-                                                <td>52</td>
-                                                <td>1</td>
-                                                <td>1</td>
-                                            </tr>
-                                            <tr class="text-center">
-                                                <td class="text-left">DREU</td>
-                                                <td>10</td>
-                                                <td>8</td>
-                                                <td>2</td>
-                                                <td>0</td>
-                                                <td>0</td>
-                                            </tr>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr class="text-center bg-success-0 text-white">
-                                                <th colspan="1" class="text-right">TOTAL</th>
-                                                <th class="text-center">1,470</th>
-                                                <th class="text-center">312</th>
-                                                <td>1,100</td>
-                                                <td>48</td>
-                                                <td>10</td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>"
-                                </div>
-                            </div>
-                        </div>
-                        <div class="font-weight-bold text-muted mb-0 font-9">
-                            <span class="float-left" id="span-skills005-fuente">Fuente: PADRON WEB</span>
-                            <span class="float-right" id="span-skills005-fecha">Actualizado: 21/05/2024</span>
-                        </div>
+                <div class="media-body align-self-center">
+                    <div class="text-right">
+                        <h4 class="font-20 my-0 font-weight-bold">
+                            <span data-plugin="counterup" id="local"></span>
+                        </h4>
+                        <p class="mb-0 mt-1 text-truncate">Locales Escolares </p>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-
-        <div class="row d-none">
-            <div class="col-lg-4 col-md-4">
-                <div class="card card-border border border-plomo-0">
-                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2" style="height: 4rem">
-                        <div class="card-widgets">
-                            <a href="{{ route('panelcontrol.educacion.indicador.nuevos.06') }}"
-                                class="waves-effect waves-light"><i class="mdi mdi-file-link text-orange-0"
-                                    title="DETALLE"></i></a>
-
-                            <a href="javascript:void(0)" class="waves-effect waves-light" data-toggle="modal"
-                                data-target="" onclick="datosIndicador(13)"><i
-                                    class="mdi mdi-information text-orange-0" title="INFORMACIÓN"></i></a>
-                        </div>
-                        <h3 class="text-black text-center font-weight-normal font-11 m-0">
-                            Porcentaje de docentes titulados en educación inicial</h3>
-                    </div>
-                    <div class="card-body p-0">
-                        <figure class="highcharts-figure p-0">
-                            <div id="dtanal3" style="height: 7rem"></div>
-                        </figure>
-                        <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                            <span class="float-left" id="span-dtanal3-fuente">Fuente:</span>
-                            <span class="float-right" id="span-dtanal3-fecha">Actualizado:</span>
-                        </div>
+    <div class="col-md-3 col-xl-3">
+        <div class="card-box">
+            <div class="media">
+                <div class="avatar-md rounded-circle mr-2 centrador">
+                    <i class="ion ion-logo-usd avatar-title font-26 text-white"></i>
+                    <img src="{{ asset('/') }}public/img/icon/matriculas.png" alt="" class="imagen">
+                </div>
+                <div class="avatar-md bg-info rounded-circle mr-2">
+                    <i class=" ion ion-md-person avatar-title font-26 text-white"></i>
+                </div>
+                <div class="media-body align-self-center">
+                    <div class="text-right">
+                        <h4 class="font-20 my-0 font-weight-bold">
+                            <span data-plugin="counterup" id="alumno"></span>
+                        </h4>
+                        <p class="mb-0 mt-1 text-truncate">Estudiantes</p>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <div class="col-lg-4 col-md-4">
-                <div class="card card-border border border-plomo-0">
-                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2" style="height: 4rem">
-                        <div class="card-widgets">
-                            <a href="{{ route('panelcontrol.educacion.indicador.nuevos.05') }}"
-                                class="waves-effect waves-light"><i class="mdi mdi-file-link text-orange-0"
-                                    title="DETALLE"></i></a>
-
-                            <a href="javascript:void(0)" class="waves-effect waves-light" data-toggle="modal"
-                                data-target="" onclick="datosIndicador(14)"><i
-                                    class="mdi mdi-information text-orange-0" title="INFORMACIÓN"></i></a>
-                        </div>
-                        <h3 class="text-black text-center font-weight-normal font-11 m-0">
-                            Porcentaje de docentes titulados en educación primaria</h3>
-                    </div>
-                    <div class="card-body p-0">
-                        <figure class="highcharts-figure p-0">
-                            <div id="dtanal2" style="height: 7rem"></div>
-                        </figure>
-                        <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                            <span class="float-left" id="span-dtanal2-fuente">Fuente:</span>
-                            <span class="float-right" id="span-dtanal2-fecha">Actualizado:</span>
-                        </div>
+    <div class="col-md-3 col-xl-3">
+        <div class="card-box">
+            <div class="media">
+                <div class="avatar-md rounded-circle mr-2 centrador">
+                    <i class="ion ion-logo-usd avatar-title font-26 text-white"></i>
+                    <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class="imagen">
+                </div>
+                <div class="avatar-md bg-info rounded-circle mr-2">
+                    <i class=" ion ion-md-person avatar-title font-26 text-white"></i>
+                </div>
+                <div class="media-body align-self-center">
+                    <div class="text-right">
+                        <h4 class="font-20 my-0 font-weight-bold">
+                            <span data-plugin="counterup" id="docente"></span>
+                        </h4>
+                        <p class="mb-0 mt-1 text-truncate">Docentes</p>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div> --}}
 
-            <div class="col-lg-4 col-md-4">
-                <div class="card card-border border border-plomo-0">
-                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2" style="height: 4rem">
-                        <div class="card-widgets">
-                            <a href="{{ route('panelcontrol.educacion.indicador.nuevos.04') }}"
-                                class="waves-effect waves-light"><i class="mdi mdi-file-link text-orange-0"
-                                    title="DETALLE"></i></a>
-
-                            <a href="javascript:void(0)" class="waves-effect waves-light" data-toggle="modal"
-                                data-target="" onclick="datosIndicador(15)"><i
-                                    class="mdi mdi-information text-orange-0" title="INFORMACIÓN"></i></a>
-                        </div>
-                        <h3 class="text-black text-center font-weight-normal font-11 m-0">
-                            Porcentaje de docentes titulados en educación
-                            secundaria</h3>
-                    </div>
-                    <div class="card-body p-0">
-                        <figure class="highcharts-figure p-0">
-                            <div id="dtanal1" style="height: 7rem"></div>
-                        </figure>
-                        <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                            <span class="float-left" id="span-dtanal1-fuente">Fuente:</span>
-                            <span class="float-right" id="span-dtanal1-fecha">Actualizado:</span>
-                        </div>
+<!--Widget-4 -->
+<div class="row">
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card-box border border-plomo-0 card-f2-c1">{{--  card-border border border-plomo-0 --}}
+            <div class="media">
+                <div class="text-center">
+                    <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                        width="70%" height="70%">
+                </div>
+                <div class="media-body align-self-center">
+                    <div class="text-right">
+                        <h4 class="font-20 my-0 font-weight-bold">
+                            <span data-plugin="counterup" id="basico"></span>
+                        </h4>
+                        <p class="mb-0 mt-1 text-truncate">Matriculados - {{ $anio }}</p>
                     </div>
                 </div>
             </div>
+            <div class="mt-0 font-9">
+                <h6 class="">Avance <span class="float-right" id="ibasico">0%</span></h6>
+                <div class="progress progress-sm m-0">
+                    <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="90" aria-valuemin="0"
+                        aria-valuemax="100" style="width: 100%" id="bbasico">
+                        <span class="sr-only">0% Complete</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card-box border border-plomo-0 card-f2-c2">
+            <div class="media">
+                <div class="text-center">
+                    <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                        width="70%" height="70%">
+                </div>
+                <div class="media-body align-self-center">
+                    <div class="text-right">
+                        <h4 class="font-20 my-0 font-weight-bold">
+                            <span data-plugin="counterup" id="ebr"></span>
+                        </h4>
+                        <p class="mb-0 mt-1 text-truncate">
+                            <a href="{{ route('matriculageneral.ebr.principal') }}" title="Ir a Matricula EBR">Matricula
+                                EBR</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-0 font-9">
+                <h6 class="">Avance <span class="float-right" id="iebr">0%</span></h6>
+                <div class="progress progress-sm m-0">
+                    <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                        aria-valuemax="100" style="width: 100%" id="bebr">
+                        <span class="sr-only">0% Complete</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card-box border border-plomo-0 card-f2-c3">
+            <div class="media">
+                <div class="text-center">
+                    <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                        width="70%" height="70%">
+                </div>
+                <div class="media-body align-self-center">
+                    <div class="text-right">
+                        <h4 class="font-20 my-0 font-weight-bold">
+                            <span data-plugin="counterup" id="ebe"></span>
+                        </h4>
+                        <p class="mb-0 mt-1 text-truncate">
+                            <a href="{{ route('matriculageneral.ebe.principal') }}"
+                                title="Ir a Matricula EBE">Matricula EBE</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-0 font-9">
+                <h6 class="">Avance <span class="float-right" id="iebe">0%</span></h6>
+                <div class="progress progress-sm m-0">
+                    <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                        aria-valuemax="100" style="width: 100%" id="bebe">
+                        <span class="sr-only">0% Complete</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card-box border border-plomo-0 card-f2-c4">
+            <div class="media">
+                <div class="text-center">
+                    <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                        width="70%" height="70%">
+                </div>
+                <div class="media-body align-self-center">
+                    <div class="text-right">
+                        <h4 class="font-20 my-0 font-weight-bold">
+                            <span data-plugin="counterup" id="eba"></span>
+                        </h4>
+                        <p class="mb-0 mt-1 text-truncate">
+                            <a href="{{ route('matriculageneral.eba.principal') }}"
+                                title="Ir a Matricula EBA">Matricula EBA</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-0 font-9">
+                <h6 class="">Avance <span class="float-right" id="ieba">0%</span></h6>
+                <div class="progress progress-sm m-0">
+                    <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                        aria-valuemax="100" style="width: 100%" id="beba">
+                        <span class="sr-only">0% Complete</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card card-border border border-plomo-0">
+            <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
+                <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11"></h3>
+            </div>
+            <div class="card-body p-0">
+                <figure class="highcharts-figure m-0">
+                    <div id="siagie001" style="height: 20rem"></div>
+                </figure>
+                <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                    <span class="float-left" id="span-siagie001-fuente">Fuente:</span>
+                    <span class="float-right" id="span-siagie001-fecha">Actualizado:</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card card-border border border-plomo-0">
+            <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
+                <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11"></h3>
+            </div>
+            <div class="card-body p-0">
+                {{-- <div id="container" ></div> --}}
+                <figure class="highcharts-figure m-0">
+                    <div id="censodocente001" style="height: 20rem"></div>
+                </figure>
+                <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                    <span class="float-left" id="span-censodocente001-fuente">Fuente:</span>
+                    <span class="float-right" id="span-censodocente001-fecha">Actualizado:</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        {{-- <div class="card card-default card-fill"> --}}
+        {{-- <div class="card-header"> --}}
+        <div class="card card-border border border-plomo-0">
+            <div class="card-header border-success-0 bg-success-0">{{--  bg-transparent pb-0 --}}
+                <h3 class="card-title font-12 text-white">Matricula Educativa, segun modalidades</h3>
+            </div>
+            <div class="card-body pb-0">
+                <div class="mb-4 skills001">
+                    <h6 class="font-12"><a href="{{ route('matriculadetalle.interculturalbilingue') }}"
+                            class="link">Porcentajes de
+                            estudiantes matriculados del modelo de servicio EIB</a><span class="float-right">0%</span>
+                    </h6>
+                    <div class="progress progress-sm">
+                        <div class="progress-bar wow animated progress-animated" role="progressbar"
+                            aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                            <span class="sr-only">60% Complete</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4 skills002">
+                    <h6 class="font-12"><a href="{{ route('superiorpedagogico.principal') }}"
+                            class="link">Porcentajes de
+                            estudiantes
+                            matriculados en Educacion Superior Pedagogica</a><span class="float-right">0%</span></h6>
+                    <div class="progress progress-sm">
+                        <div class="progress-bar wow animated progress-animated" role="progressbar"
+                            aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                            <span class="sr-only">90% Complete</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4 skills003">
+                    <h6 class="font-12"><a href="{{ route('superiortecnologico.principal') }}"
+                            class="link">Porcentajes de
+                            estudiantes
+                            matriculados en Educacion Superior Tecnologica</a><span class="float-right">0%</span></h6>
+                    <div class="progress progress-sm">
+                        <div class="progress-bar wow animated progress-animated" role="progressbar"
+                            aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                            <span class="sr-only">80% Complete</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4 skills004">
+                    <h6 class="font-12"><a href="{{ route('superiorartistico.principal') }}"
+                            class="link">Porcentajes de
+                            estudiantes
+                            matriculados en Educacion Superior Artistica</a><span class="float-right">0%</span>
+                    </h6>
+                    <div class="progress progress-sm mb-0">
+                        <div class="progress-bar wow animated progress-animated" role="progressbar"
+                            aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                            <span class="sr-only">95% Complete</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4 skills005">
+                    <h6 class="font-12"><a href="{{ route('tecnicoproductiva.principal') }}"
+                            class="link">Porcentajes de
+                            estudiantes
+                            matriculado en Educacion Tecnica-Productiva</a><span class="float-right">0%</span>
+                    </h6>
+                    <div class="progress progress-sm mb-0">
+                        <div class="progress-bar wow animated progress-animated" role="progressbar"
+                            aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                            <span class="sr-only">95% Complete</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="font-weight-bold text-muted mb-0 font-9">
+                    <span class="float-left" id="span-skills005-fuente">Fuente:</span>
+                    <span class="float-right" id="span-skills005-fecha">Actualizado:</span>
+                </div>
+            </div>
         </div>
 
-        {{-- portles --}}
+    </div>
 
-        <div class="row d-none">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-header bg-success-0 py-3 text-white">
-                        <div class="card-widgets">
-                            {{-- <a href="javascript:;" data-toggle="reload"><i class="mdi mdi-refresh"></i></a> --}}
-                            <a data-toggle="collapse" href="#portles1" role="button" aria-expanded="false"
-                                aria-controls="portles1"><i class="mdi mdi-minus"></i></a>
-                            {{-- <a href="#" data-toggle="remove"><i class="mdi mdi-close"></i></a> --}}
+    <div class="col-lg-6">
+        {{-- <div class="card card-default card-fill"> --}}
+        {{-- <div class="card-header"> --}}
+        <div class="card card-border border border-plomo-0">
+            <div class="card-header border-success-0 bg-success-0">{{--  --}}
+                <h3 class="card-title font-12 text-white">Locales Educativos de Educacion Basica con acceso a
+                    Servicios
+                    Basicos
+                </h3>
+            </div>
+            <div class="card-body pb-0">
+                <div class="mb-4 skills006">
+                    <h6 class="font-12"><a href="{{ route('serviciosbasicos.principal') }}"
+                            class="link">Porcentajes de
+                            Locales Educativos
+                            con los tres Servicios
+                            Basicos</a><span class="float-right">0%</span></h6>
+                    <div class="progress progress-sm">
+                        <div class="progress-bar wow animated progress-animated" role="progressbar"
+                            aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                            <span class="sr-only">60% Complete</span>
                         </div>
-                        <h5 class="card-title mb-0 text-white">Cobertura de Matrícula Educativa</h5>
                     </div>
-                    <div id="portles1" class="collapse show">
-                        <div class="card-body pb-0">
-                            <div class="row">
-                                <div class="col-lg-4 col-md-4">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
-                                            style="height: 4rem">
-                                            <div class="card-widgets">
-                                                <a href="{{ route('indicador.nuevos.02') }}"
-                                                    class="waves-effect waves-light"><i
-                                                        class="mdi mdi-file-link text-orange-0"
-                                                        title="DETALLE"></i></a>
+                </div>
 
-                                                <a href="javascript:void(0)" class="waves-effect waves-light"
-                                                    data-toggle="modal" data-target="" onclick="datosIndicador(1)"><i
-                                                        class="mdi mdi-information text-orange-0"
-                                                        title="INFORMACIÓN"></i></a>
-                                            </div>
-                                            <h3 class="text-black text-center font-weight-normal font-11 m-0">
-                                                Tasa neta de matrícula en educación inicial en la población de 3-5 años
-                                                de edad
-                                            </h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            {{-- <div id="container" ></div> --}}
-                                            <figure class="highcharts-figure p-0">
-                                                <div id="container1" style="height: 7rem"></div>
-                                            </figure>
-                                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                                                <span class="float-left" id="span-container1-fuente">Fuente:</span>
-                                                <span class="float-right"
-                                                    id="span-container1-fecha">Actualizado:</span>
-                                            </div>
-                                        </div>
+                <div class="mb-4 skills007">
+                    <h6 class="font-12"><a href="{{ route('serviciosbasicos.principal') }}"
+                            class="link">Porcentajes de
+                            Locales Educativos
+                            conectados a red de Agua Potable</a><span class="float-right">0%</span></h6>
+                    <div class="progress progress-sm">
+                        <div class="progress-bar wow animated progress-animated" role="progressbar"
+                            aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                            <span class="sr-only">90% Complete</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4 skills008">
+                    <h6 class="font-12"><a href="{{ route('serviciosbasicos.principal') }}"
+                            class="link">Porcentajes de
+                            Locales Educativos
+                            conectados a red de Desague</a><span class="float-right">0%</span></h6>
+                    <div class="progress progress-sm">
+                        <div class="progress-bar wow animated progress-animated" role="progressbar"
+                            aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                            <span class="sr-only">80% Complete</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4 skills009">
+                    <h6 class="font-12"><a href="{{ route('serviciosbasicos.principal') }}"
+                            class="link">Porcentajes de
+                            Locales Educativos
+                            conectados a red de Electricidad</a><span class="float-right">0%</span></h6>
+                    <div class="progress progress-sm mb-0">
+                        <div class="progress-bar wow animated progress-animated" role="progressbar"
+                            aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                            <span class="sr-only">95% Complete</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4 skills010">
+                    <h6 class="font-12"><a href="{{ route('serviciosbasicos.principal') }}"
+                            class="link">Porcentajes de
+                            Locales Educativos
+                            que cuentan con acceso a Internet</a><span class="float-right">0%</span></h6>
+                    <div class="progress progress-sm mb-0">
+                        <div class="progress-bar wow animated progress-animated" role="progressbar"
+                            aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                            <span class="sr-only">95% Complete</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="font-weight-bold text-muted mb-0 font-9">
+                    <span class="float-left" id="span-skills010-fuente">Fuente:</span>
+                    <span class="float-right" id="span-skills010-fecha">Actualizado:</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-lg-6">
+        <div class="card card-border border border-plomo-0">
+            <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11"></h3>
+            </div>
+            <div class="card-body p-0">
+                {{-- <figure class="highcharts-figure p-0"> --}}
+                <div id="anal1" style="height: 20rem"></div>
+                {{-- </figure> --}}
+                <div class="font-weight-bold text-muted mb-0 font-9">
+                    <span class="float-left" id="span-skills005-fuente">Fuente: UMC - MINEDU</span>
+                    <span class="float-right" id="span-skills005-fecha">Actualizado: 30/04/2024</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card card-border border border-plomo-0">
+            <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                <h3 class="card-title font-11">Número de locales escolares, según ugel</h3>
+                {{-- <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11">Número de locales escolares, según ugel</h3> --}}
+            </div>
+            <div class="card-body p-0">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive" style="height: 19rem" id="vtabla2x">
+                            <table id="tablaX2" class="table table-sm table-striped table-bordered font-11 m-0"
+                                style="height: 100%">
+                                <thead>
+                                    <tr class="bg-success-0 text-white text-center">
+                                        <th rowspan="1" class="text-center">UGEL</th>
+                                        <th rowspan="1" class="text-center">Locales Escolares</th>
+                                        <th rowspan="1" class="text-center">Saneado</th>
+                                        <th rowspan="1" class="text-center">No Saneado</th>
+                                        <th colspan="1" class="text-center">Proceso SFL</th>
+                                        <th colspan="1" class="text-center">Sin Informacion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="text-center">
+                                        <td class="text-left">CORONEL PORTILLO</td>
+                                        <td> 774</td>
+                                        <td>180</td>
+                                        <td>575</td>
+                                        <td>15</td>
+                                        <td>4</td>
+                                    </tr>
+                                    <tr class="text-center">
+                                        <td class="text-left">ATALAYA</td>
+                                        <td> 365</td>
+                                        <td>31</td>
+                                        <td>302</td>
+                                        <td>29</td>
+                                        <td>3</td>
+                                    </tr>
+                                    <tr class="text-center">
+                                        <td class="text-left">PADRE ABAD</td>
+                                        <td> 263 </td>
+                                        <td>89</td>
+                                        <td>169</td>
+                                        <td>3</td>
+                                        <td>2</td>
+                                    </tr>
+                                    <tr class="text-center">
+                                        <td class="text-left">PURUS</td>
+                                        <td> 58 </td>
+                                        <td>4</td>
+                                        <td>52</td>
+                                        <td>1</td>
+                                        <td>1</td>
+                                    </tr>
+                                    <tr class="text-center">
+                                        <td class="text-left">DREU</td>
+                                        <td>10</td>
+                                        <td>8</td>
+                                        <td>2</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr class="text-center bg-success-0 text-white">
+                                        <th colspan="1" class="text-right">TOTAL</th>
+                                        <th class="text-center">1,470</th>
+                                        <th class="text-center">312</th>
+                                        <td>1,100</td>
+                                        <td>48</td>
+                                        <td>10</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="font-weight-bold text-muted mb-0 font-9">
+                    <span class="float-left" id="span-skills005-fuente">Fuente: PADRON WEB</span>
+                    <span class="float-right" id="span-skills005-fecha">Actualizado: 21/05/2024</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row d-none">
+    <div class="col-lg-4 col-md-4">
+        <div class="card card-border border border-plomo-0">
+            <div class="card-header border-success-0 bg-transparent pb-0 pt-2" style="height: 4rem">
+                <div class="card-widgets">
+                    <a href="{{ route('panelcontrol.educacion.indicador.nuevos.06') }}"
+                        class="waves-effect waves-light"><i class="mdi mdi-file-link text-orange-0"
+                            title="DETALLE"></i></a>
+
+                    <a href="javascript:void(0)" class="waves-effect waves-light" data-toggle="modal" data-target=""
+                        onclick="datosIndicador(13)"><i class="mdi mdi-information text-orange-0"
+                            title="INFORMACIÓN"></i></a>
+                </div>
+                <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                    Porcentaje de docentes titulados en educación inicial</h3>
+            </div>
+            <div class="card-body p-0">
+                <figure class="highcharts-figure p-0">
+                    <div id="dtanal3" style="height: 7rem"></div>
+                </figure>
+                <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                    <span class="float-left" id="span-dtanal3-fuente">Fuente:</span>
+                    <span class="float-right" id="span-dtanal3-fecha">Actualizado:</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-md-4">
+        <div class="card card-border border border-plomo-0">
+            <div class="card-header border-success-0 bg-transparent pb-0 pt-2" style="height: 4rem">
+                <div class="card-widgets">
+                    <a href="{{ route('panelcontrol.educacion.indicador.nuevos.05') }}"
+                        class="waves-effect waves-light"><i class="mdi mdi-file-link text-orange-0"
+                            title="DETALLE"></i></a>
+
+                    <a href="javascript:void(0)" class="waves-effect waves-light" data-toggle="modal" data-target=""
+                        onclick="datosIndicador(14)"><i class="mdi mdi-information text-orange-0"
+                            title="INFORMACIÓN"></i></a>
+                </div>
+                <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                    Porcentaje de docentes titulados en educación primaria</h3>
+            </div>
+            <div class="card-body p-0">
+                <figure class="highcharts-figure p-0">
+                    <div id="dtanal2" style="height: 7rem"></div>
+                </figure>
+                <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                    <span class="float-left" id="span-dtanal2-fuente">Fuente:</span>
+                    <span class="float-right" id="span-dtanal2-fecha">Actualizado:</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-md-4">
+        <div class="card card-border border border-plomo-0">
+            <div class="card-header border-success-0 bg-transparent pb-0 pt-2" style="height: 4rem">
+                <div class="card-widgets">
+                    <a href="{{ route('panelcontrol.educacion.indicador.nuevos.04') }}"
+                        class="waves-effect waves-light"><i class="mdi mdi-file-link text-orange-0"
+                            title="DETALLE"></i></a>
+
+                    <a href="javascript:void(0)" class="waves-effect waves-light" data-toggle="modal" data-target=""
+                        onclick="datosIndicador(15)"><i class="mdi mdi-information text-orange-0"
+                            title="INFORMACIÓN"></i></a>
+                </div>
+                <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                    Porcentaje de docentes titulados en educación
+                    secundaria</h3>
+            </div>
+            <div class="card-body p-0">
+                <figure class="highcharts-figure p-0">
+                    <div id="dtanal1" style="height: 7rem"></div>
+                </figure>
+                <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                    <span class="float-left" id="span-dtanal1-fuente">Fuente:</span>
+                    <span class="float-right" id="span-dtanal1-fecha">Actualizado:</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{{-- portles --}}
+
+<div class="row d-none">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header bg-success-0 py-3 text-white">
+                <div class="card-widgets">
+                    {{-- <a href="javascript:;" data-toggle="reload"><i class="mdi mdi-refresh"></i></a> --}}
+                    <a data-toggle="collapse" href="#portles1" role="button" aria-expanded="false"
+                        aria-controls="portles1"><i class="mdi mdi-minus"></i></a>
+                    {{-- <a href="#" data-toggle="remove"><i class="mdi mdi-close"></i></a> --}}
+                </div>
+                <h5 class="card-title mb-0 text-white">Cobertura de Matrícula Educativa</h5>
+            </div>
+            <div id="portles1" class="collapse show">
+                <div class="card-body pb-0">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4">
+                            <div class="card card-border border border-plomo-0">
+                                <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
+                                    style="height: 4rem">
+                                    <div class="card-widgets">
+                                        <a href="{{ route('indicador.nuevos.02') }}"
+                                            class="waves-effect waves-light"><i
+                                                class="mdi mdi-file-link text-orange-0" title="DETALLE"></i></a>
+
+                                        <a href="javascript:void(0)" class="waves-effect waves-light"
+                                            data-toggle="modal" data-target="" onclick="datosIndicador(1)"><i
+                                                class="mdi mdi-information text-orange-0" title="INFORMACIÓN"></i></a>
+                                    </div>
+                                    <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                                        Tasa neta de matrícula en educación inicial en la población de 3-5 años
+                                        de edad
+                                    </h3>
+                                </div>
+                                <div class="card-body p-0">
+                                    {{-- <div id="container" ></div> --}}
+                                    <figure class="highcharts-figure p-0">
+                                        <div id="container1" style="height: 7rem"></div>
+                                    </figure>
+                                    <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                        <span class="float-left" id="span-container1-fuente">Fuente:</span>
+                                        <span class="float-right" id="span-container1-fecha">Actualizado:</span>
                                     </div>
                                 </div>
-                                <div class="col-lg-4 col-md-4">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
-                                            style="height: 4rem">
-                                            <div class="card-widgets">
-                                                <a href="{{ route('indicador.nuevos.01') }}"
-                                                    class="waves-effect waves-light"><i
-                                                        class="mdi mdi-file-link text-orange-0"
-                                                        title="DETALLE"></i></a>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            <div class="card card-border border border-plomo-0">
+                                <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
+                                    style="height: 4rem">
+                                    <div class="card-widgets">
+                                        <a href="{{ route('indicador.nuevos.01') }}"
+                                            class="waves-effect waves-light"><i
+                                                class="mdi mdi-file-link text-orange-0" title="DETALLE"></i></a>
 
-                                                <a href="javascript:void(0)" class="waves-effect waves-light"
-                                                    data-toggle="modal" data-target="" onclick="datosIndicador(7)"><i
-                                                        class="mdi mdi-information text-orange-0"
-                                                        title="INFORMACIÓN"></i></a>
-                                            </div>
-                                            <h3 class="text-black text-center font-weight-normal font-11 m-0">
-                                                Tasa neta de matricula en educación primaria en la población de 6 a 11
-                                                años de edad</h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            {{-- <div id="container" ></div> --}}
-                                            <figure class="highcharts-figure p-0">
-                                                <div id="container2" style="height: 7rem"></div>
-                                            </figure>
-                                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                                                <span class="float-left" id="span-container2-fuente">Fuente:</span>
-                                                <span class="float-right"
-                                                    id="span-container2-fecha">Actualizado:</span>
-                                            </div>
-                                        </div>
+                                        <a href="javascript:void(0)" class="waves-effect waves-light"
+                                            data-toggle="modal" data-target="" onclick="datosIndicador(7)"><i
+                                                class="mdi mdi-information text-orange-0" title="INFORMACIÓN"></i></a>
+                                    </div>
+                                    <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                                        Tasa neta de matricula en educación primaria en la población de 6 a 11
+                                        años de edad</h3>
+                                </div>
+                                <div class="card-body p-0">
+                                    {{-- <div id="container" ></div> --}}
+                                    <figure class="highcharts-figure p-0">
+                                        <div id="container2" style="height: 7rem"></div>
+                                    </figure>
+                                    <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                        <span class="float-left" id="span-container2-fuente">Fuente:</span>
+                                        <span class="float-right" id="span-container2-fecha">Actualizado:</span>
                                     </div>
                                 </div>
-                                <div class="col-lg-4 col-md-4">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
-                                            style="height: 4rem">
-                                            <div class="card-widgets">
-                                                <a href="javascript:void(0)" class="waves-effect waves-light"><i
-                                                        class="mdi mdi-file-link text-orange-0"
-                                                        title="DETALLE"></i></a>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            <div class="card card-border border border-plomo-0">
+                                <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
+                                    style="height: 4rem">
+                                    <div class="card-widgets">
+                                        <a href="javascript:void(0)" class="waves-effect waves-light"><i
+                                                class="mdi mdi-file-link text-orange-0" title="DETALLE"></i></a>
 
-                                                <a href="javascript:void(0)" class="waves-effect waves-light"
-                                                    data-toggle="modal" data-target="" onclick="datosIndicador(8)"><i
-                                                        class="mdi mdi-information text-orange-0"
-                                                        title="INFORMACIÓN"></i></a>
-                                            </div>
-                                            <h3 class="text-black text-center font-weight-normal font-11 m-0">
-                                                Tasa neta de matricula en educación secundaria en la población de 12 a
-                                                16 años de edad</h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            {{-- <div id="container" ></div> --}}
-                                            <figure class="highcharts-figure p-0">
-                                                <div id="container3" style="height: 7rem"></div>
-                                            </figure>
-                                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                                                <span class="float-left" id="span-container3-fuente">Fuente:</span>
-                                                <span class="float-right"
-                                                    id="span-container3-fecha">Actualizado:</span>
-                                            </div>
-                                        </div>
+                                        <a href="javascript:void(0)" class="waves-effect waves-light"
+                                            data-toggle="modal" data-target="" onclick="datosIndicador(8)"><i
+                                                class="mdi mdi-information text-orange-0" title="INFORMACIÓN"></i></a>
+                                    </div>
+                                    <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                                        Tasa neta de matricula en educación secundaria en la población de 12 a
+                                        16 años de edad</h3>
+                                </div>
+                                <div class="card-body p-0">
+                                    {{-- <div id="container" ></div> --}}
+                                    <figure class="highcharts-figure p-0">
+                                        <div id="container3" style="height: 7rem"></div>
+                                    </figure>
+                                    <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                        <span class="float-left" id="span-container3-fuente">Fuente:</span>
+                                        <span class="float-right" id="span-container3-fecha">Actualizado:</span>
                                     </div>
                                 </div>
                             </div>
@@ -794,314 +773,293 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
-        <div class="row d-none">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-header bg-success-0 py-3 text-white">
-                        <div class="card-widgets">
-                            {{-- <a href="javascript:;" data-toggle="reload"><i class="mdi mdi-refresh"></i></a> --}}
-                            <a data-toggle="collapse" href="#portles2" role="button" aria-expanded="false"
-                                aria-controls="portles2"><i class="mdi mdi-minus"></i></a>
-                            {{-- <a href="#" data-toggle="remove"><i class="mdi mdi-close"></i></a> --}}
-                        </div>
-                        <h5 class="card-title mb-0 text-white">Entorno de Enseñanza</h5>
-                    </div>
-                    <div id="portles2" class="collapse show">
-                        <div class="card-body pb-0">
-                            <div class="row">
-                                <div class="col-lg-4 col-md-4">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
-                                            style="height: 4rem">
-                                            <div class="card-widgets">
-                                                <a href="{{ route('panelcontrol.educacion.indicador.nuevos.06') }}"
-                                                    class="waves-effect waves-light"><i
-                                                        class="mdi mdi-file-link text-orange-0"
-                                                        title="DETALLE"></i></a>
+<div class="row d-none">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header bg-success-0 py-3 text-white">
+                <div class="card-widgets">
+                    {{-- <a href="javascript:;" data-toggle="reload"><i class="mdi mdi-refresh"></i></a> --}}
+                    <a data-toggle="collapse" href="#portles2" role="button" aria-expanded="false"
+                        aria-controls="portles2"><i class="mdi mdi-minus"></i></a>
+                    {{-- <a href="#" data-toggle="remove"><i class="mdi mdi-close"></i></a> --}}
+                </div>
+                <h5 class="card-title mb-0 text-white">Entorno de Enseñanza</h5>
+            </div>
+            <div id="portles2" class="collapse show">
+                <div class="card-body pb-0">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4">
+                            <div class="card card-border border border-plomo-0">
+                                <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
+                                    style="height: 4rem">
+                                    <div class="card-widgets">
+                                        <a href="{{ route('panelcontrol.educacion.indicador.nuevos.06') }}"
+                                            class="waves-effect waves-light"><i
+                                                class="mdi mdi-file-link text-orange-0" title="DETALLE"></i></a>
 
-                                                <a href="javascript:void(0)" class="waves-effect waves-light"
-                                                    data-toggle="modal" data-target=""
-                                                    onclick="datosIndicador(13)"><i
-                                                        class="mdi mdi-information text-orange-0"
-                                                        title="INFORMACIÓN"></i></a>
-                                            </div>
-                                            <h3 class="text-black text-center font-weight-normal font-11 m-0">
-                                                Porcentaje de docentes titulados en educación inicial</h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <figure class="highcharts-figure p-0">
-                                                <div id="dtanal3" style="height: 7rem"></div>
-                                            </figure>
-                                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                                                <span class="float-left" id="span-dtanal3-fuente">Fuente:</span>
-                                                <span class="float-right" id="span-dtanal3-fecha">Actualizado:</span>
-                                            </div>
-                                        </div>
+                                        <a href="javascript:void(0)" class="waves-effect waves-light"
+                                            data-toggle="modal" data-target="" onclick="datosIndicador(13)"><i
+                                                class="mdi mdi-information text-orange-0" title="INFORMACIÓN"></i></a>
+                                    </div>
+                                    <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                                        Porcentaje de docentes titulados en educación inicial</h3>
+                                </div>
+                                <div class="card-body p-0">
+                                    <figure class="highcharts-figure p-0">
+                                        <div id="dtanal3" style="height: 7rem"></div>
+                                    </figure>
+                                    <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                        <span class="float-left" id="span-dtanal3-fuente">Fuente:</span>
+                                        <span class="float-right" id="span-dtanal3-fecha">Actualizado:</span>
                                     </div>
                                 </div>
-
-                                <div class="col-lg-4 col-md-4">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
-                                            style="height: 4rem">
-                                            <div class="card-widgets">
-                                                <a href="{{ route('panelcontrol.educacion.indicador.nuevos.05') }}"
-                                                    class="waves-effect waves-light"><i
-                                                        class="mdi mdi-file-link text-orange-0"
-                                                        title="DETALLE"></i></a>
-
-                                                <a href="javascript:void(0)" class="waves-effect waves-light"
-                                                    data-toggle="modal" data-target=""
-                                                    onclick="datosIndicador(14)"><i
-                                                        class="mdi mdi-information text-orange-0"
-                                                        title="INFORMACIÓN"></i></a>
-                                            </div>
-                                            <h3 class="text-black text-center font-weight-normal font-11 m-0">
-                                                Porcentaje de docentes titulados en educación primaria</h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <figure class="highcharts-figure p-0">
-                                                <div id="dtanal2" style="height: 7rem"></div>
-                                            </figure>
-                                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                                                <span class="float-left" id="span-dtanal2-fuente">Fuente:</span>
-                                                <span class="float-right" id="span-dtanal2-fecha">Actualizado:</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-4 col-md-4">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
-                                            style="height: 4rem">
-                                            <div class="card-widgets">
-                                                <a href="{{ route('panelcontrol.educacion.indicador.nuevos.04') }}"
-                                                    class="waves-effect waves-light"><i
-                                                        class="mdi mdi-file-link text-orange-0"
-                                                        title="DETALLE"></i></a>
-
-                                                <a href="javascript:void(0)" class="waves-effect waves-light"
-                                                    data-toggle="modal" data-target=""
-                                                    onclick="datosIndicador(15)"><i
-                                                        class="mdi mdi-information text-orange-0"
-                                                        title="INFORMACIÓN"></i></a>
-                                            </div>
-                                            <h3 class="text-black text-center font-weight-normal font-11 m-0">
-                                                Porcentaje de docentes titulados en educación
-                                                secundaria</h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <figure class="highcharts-figure p-0">
-                                                <div id="dtanal1" style="height: 7rem"></div>
-                                            </figure>
-                                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                                                <span class="float-left" id="span-dtanal1-fuente">Fuente:</span>
-                                                <span class="float-right" id="span-dtanal1-fecha">Actualizado:</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
                             </div>
-
                         </div>
+
+                        <div class="col-lg-4 col-md-4">
+                            <div class="card card-border border border-plomo-0">
+                                <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
+                                    style="height: 4rem">
+                                    <div class="card-widgets">
+                                        <a href="{{ route('panelcontrol.educacion.indicador.nuevos.05') }}"
+                                            class="waves-effect waves-light"><i
+                                                class="mdi mdi-file-link text-orange-0" title="DETALLE"></i></a>
+
+                                        <a href="javascript:void(0)" class="waves-effect waves-light"
+                                            data-toggle="modal" data-target="" onclick="datosIndicador(14)"><i
+                                                class="mdi mdi-information text-orange-0" title="INFORMACIÓN"></i></a>
+                                    </div>
+                                    <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                                        Porcentaje de docentes titulados en educación primaria</h3>
+                                </div>
+                                <div class="card-body p-0">
+                                    <figure class="highcharts-figure p-0">
+                                        <div id="dtanal2" style="height: 7rem"></div>
+                                    </figure>
+                                    <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                        <span class="float-left" id="span-dtanal2-fuente">Fuente:</span>
+                                        <span class="float-right" id="span-dtanal2-fecha">Actualizado:</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-4">
+                            <div class="card card-border border border-plomo-0">
+                                <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
+                                    style="height: 4rem">
+                                    <div class="card-widgets">
+                                        <a href="{{ route('panelcontrol.educacion.indicador.nuevos.04') }}"
+                                            class="waves-effect waves-light"><i
+                                                class="mdi mdi-file-link text-orange-0" title="DETALLE"></i></a>
+
+                                        <a href="javascript:void(0)" class="waves-effect waves-light"
+                                            data-toggle="modal" data-target="" onclick="datosIndicador(15)"><i
+                                                class="mdi mdi-information text-orange-0" title="INFORMACIÓN"></i></a>
+                                    </div>
+                                    <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                                        Porcentaje de docentes titulados en educación
+                                        secundaria</h3>
+                                </div>
+                                <div class="card-body p-0">
+                                    <figure class="highcharts-figure p-0">
+                                        <div id="dtanal1" style="height: 7rem"></div>
+                                    </figure>
+                                    <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                        <span class="float-left" id="span-dtanal1-fuente">Fuente:</span>
+                                        <span class="float-right" id="span-dtanal1-fecha">Actualizado:</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
+
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
-        <div class="row d-none">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-header bg-success-0 py-3 text-white">
-                        <div class="card-widgets">
-                            {{-- <a href="javascript:;" data-toggle="reload"><i class="mdi mdi-refresh"></i></a> --}}
-                            <a data-toggle="collapse" href="#portles1" role="button" aria-expanded="false"
-                                aria-controls="portles1"><i class="mdi mdi-minus"></i></a>
-                            {{-- <a href="#" data-toggle="remove"><i class="mdi mdi-close"></i></a> --}}
-                        </div>
-                        <h5 class="card-title mb-0 text-white">Instituciones Educativas</h5>
-                    </div>
-                    <div id="portles1" class="collapse show">
-                        <div class="card-body pb-0">
-                            <div class="row">
-                                <div class="col-lg-4 col-md-4">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
-                                            style="height: 4rem">
-                                            <div class="card-widgets">
-                                                <a href="{{ route('indicador.nuevos.02') }}"
-                                                    class="waves-effect waves-light"><i
-                                                        class="mdi mdi-file-link text-orange-0"
-                                                        title="DETALLE"></i></a>
+<div class="row d-none">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header bg-success-0 py-3 text-white">
+                <div class="card-widgets">
+                    {{-- <a href="javascript:;" data-toggle="reload"><i class="mdi mdi-refresh"></i></a> --}}
+                    <a data-toggle="collapse" href="#portles1" role="button" aria-expanded="false"
+                        aria-controls="portles1"><i class="mdi mdi-minus"></i></a>
+                    {{-- <a href="#" data-toggle="remove"><i class="mdi mdi-close"></i></a> --}}
+                </div>
+                <h5 class="card-title mb-0 text-white">Instituciones Educativas</h5>
+            </div>
+            <div id="portles1" class="collapse show">
+                <div class="card-body pb-0">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4">
+                            <div class="card card-border border border-plomo-0">
+                                <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
+                                    style="height: 4rem">
+                                    <div class="card-widgets">
+                                        <a href="{{ route('indicador.nuevos.02') }}"
+                                            class="waves-effect waves-light"><i
+                                                class="mdi mdi-file-link text-orange-0" title="DETALLE"></i></a>
 
-                                                <a href="javascript:void(0)" class="waves-effect waves-light"
-                                                    data-toggle="modal" data-target="" onclick="datosIndicador(1)"><i
-                                                        class="mdi mdi-information text-orange-0"
-                                                        title="INFORMACIÓN"></i></a>
-                                            </div>
-                                            <h3 class="text-black text-center font-weight-normal font-11 m-0">
-                                                Indicador 1
-                                            </h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <figure class="highcharts-figure p-0">
-                                                <div id="iiee1" style="height: 7rem"></div>
-                                            </figure>
-                                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                                                <span class="float-left" id="span-iiee1-fuente">Fuente:</span>
-                                                <span class="float-right" id="span-iiee1-fecha">Actualizado:</span>
-                                            </div>
-                                        </div>
+                                        <a href="javascript:void(0)" class="waves-effect waves-light"
+                                            data-toggle="modal" data-target="" onclick="datosIndicador(1)"><i
+                                                class="mdi mdi-information text-orange-0" title="INFORMACIÓN"></i></a>
                                     </div>
+                                    <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                                        Indicador 1
+                                    </h3>
                                 </div>
-                                <div class="col-lg-4 col-md-4">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
-                                            style="height: 4rem">
-                                            <div class="card-widgets">
-                                                <a href="{{ route('indicador.nuevos.01') }}"
-                                                    class="waves-effect waves-light"><i
-                                                        class="mdi mdi-file-link text-orange-0"
-                                                        title="DETALLE"></i></a>
-
-                                                <a href="javascript:void(0)" class="waves-effect waves-light"
-                                                    data-toggle="modal" data-target="" onclick="datosIndicador(7)"><i
-                                                        class="mdi mdi-information text-orange-0"
-                                                        title="INFORMACIÓN"></i></a>
-                                            </div>
-                                            <h3 class="text-black text-center font-weight-normal font-11 m-0">
-                                                Indicador 2</h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <figure class="highcharts-figure p-0">
-                                                <div id="iiee2" style="height: 7rem"></div>
-                                            </figure>
-                                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                                                <span class="float-left" id="span-iiee2-fuente">Fuente:</span>
-                                                <span class="float-right" id="span-iiee2-fecha">Actualizado:</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-md-4">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
-                                            style="height: 4rem">
-                                            <div class="card-widgets">
-                                                <a href="javascript:void(0)" class="waves-effect waves-light"><i
-                                                        class="mdi mdi-file-link text-orange-0"
-                                                        title="DETALLE"></i></a>
-
-                                                <a href="javascript:void(0)" class="waves-effect waves-light"
-                                                    data-toggle="modal" data-target="" onclick="datosIndicador(8)"><i
-                                                        class="mdi mdi-information text-orange-0"
-                                                        title="INFORMACIÓN"></i></a>
-                                            </div>
-                                            <h3 class="text-black text-center font-weight-normal font-11 m-0">
-                                                Indicador 3</h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <figure class="highcharts-figure p-0">
-                                                <div id="iiee3" style="height: 7rem"></div>
-                                            </figure>
-                                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                                                <span class="float-left" id="span-iiee3-fuente">Fuente:</span>
-                                                <span class="float-right" id="span-iiee3-fecha">Actualizado:</span>
-                                            </div>
-                                        </div>
+                                <div class="card-body p-0">
+                                    <figure class="highcharts-figure p-0">
+                                        <div id="iiee1" style="height: 7rem"></div>
+                                    </figure>
+                                    <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                        <span class="float-left" id="span-iiee1-fuente">Fuente:</span>
+                                        <span class="float-right" id="span-iiee1-fecha">Actualizado:</span>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            <div class="card card-border border border-plomo-0">
+                                <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
+                                    style="height: 4rem">
+                                    <div class="card-widgets">
+                                        <a href="{{ route('indicador.nuevos.01') }}"
+                                            class="waves-effect waves-light"><i
+                                                class="mdi mdi-file-link text-orange-0" title="DETALLE"></i></a>
 
-                            <div class="row">
-                                <div class="col-lg-4 col-md-4">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
-                                            style="height: 4rem">
-                                            <div class="card-widgets">
-                                                <a href="{{ route('indicador.nuevos.02') }}"
-                                                    class="waves-effect waves-light"><i
-                                                        class="mdi mdi-file-link text-orange-0"
-                                                        title="DETALLE"></i></a>
-
-                                                <a href="javascript:void(0)" class="waves-effect waves-light"
-                                                    data-toggle="modal" data-target="" onclick="datosIndicador(1)"><i
-                                                        class="mdi mdi-information text-orange-0"
-                                                        title="INFORMACIÓN"></i></a>
-                                            </div>
-                                            <h3 class="text-black text-center font-weight-normal font-11 m-0">
-                                                Indicador 4
-                                            </h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <figure class="highcharts-figure p-0">
-                                                <div id="iiee4" style="height: 7rem"></div>
-                                            </figure>
-                                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                                                <span class="float-left" id="span-iiee4-fuente">Fuente:</span>
-                                                <span class="float-right" id="span-iiee4-fecha">Actualizado:</span>
-                                            </div>
-                                        </div>
+                                        <a href="javascript:void(0)" class="waves-effect waves-light"
+                                            data-toggle="modal" data-target="" onclick="datosIndicador(7)"><i
+                                                class="mdi mdi-information text-orange-0" title="INFORMACIÓN"></i></a>
+                                    </div>
+                                    <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                                        Indicador 2</h3>
+                                </div>
+                                <div class="card-body p-0">
+                                    <figure class="highcharts-figure p-0">
+                                        <div id="iiee2" style="height: 7rem"></div>
+                                    </figure>
+                                    <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                        <span class="float-left" id="span-iiee2-fuente">Fuente:</span>
+                                        <span class="float-right" id="span-iiee2-fecha">Actualizado:</span>
                                     </div>
                                 </div>
-                                <div class="col-lg-4 col-md-4">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
-                                            style="height: 4rem">
-                                            <div class="card-widgets">
-                                                <a href="{{ route('indicador.nuevos.01') }}"
-                                                    class="waves-effect waves-light"><i
-                                                        class="mdi mdi-file-link text-orange-0"
-                                                        title="DETALLE"></i></a>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            <div class="card card-border border border-plomo-0">
+                                <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
+                                    style="height: 4rem">
+                                    <div class="card-widgets">
+                                        <a href="javascript:void(0)" class="waves-effect waves-light"><i
+                                                class="mdi mdi-file-link text-orange-0" title="DETALLE"></i></a>
 
-                                                <a href="javascript:void(0)" class="waves-effect waves-light"
-                                                    data-toggle="modal" data-target="" onclick="datosIndicador(7)"><i
-                                                        class="mdi mdi-information text-orange-0"
-                                                        title="INFORMACIÓN"></i></a>
-                                            </div>
-                                            <h3 class="text-black text-center font-weight-normal font-11 m-0">
-                                                Indicador 7</h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <figure class="highcharts-figure p-0">
-                                                <div id="iiee5" style="height: 7rem"></div>
-                                            </figure>
-                                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                                                <span class="float-left" id="span-iiee5-fuente">Fuente:</span>
-                                                <span class="float-right" id="span-iiee5-fecha">Actualizado:</span>
-                                            </div>
-                                        </div>
+                                        <a href="javascript:void(0)" class="waves-effect waves-light"
+                                            data-toggle="modal" data-target="" onclick="datosIndicador(8)"><i
+                                                class="mdi mdi-information text-orange-0" title="INFORMACIÓN"></i></a>
+                                    </div>
+                                    <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                                        Indicador 3</h3>
+                                </div>
+                                <div class="card-body p-0">
+                                    <figure class="highcharts-figure p-0">
+                                        <div id="iiee3" style="height: 7rem"></div>
+                                    </figure>
+                                    <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                        <span class="float-left" id="span-iiee3-fuente">Fuente:</span>
+                                        <span class="float-right" id="span-iiee3-fecha">Actualizado:</span>
                                     </div>
                                 </div>
-                                <div class="col-lg-4 col-md-4">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
-                                            style="height: 4rem">
-                                            <div class="card-widgets">
-                                                <a href="javascript:void(0)" class="waves-effect waves-light"><i
-                                                        class="mdi mdi-file-link text-orange-0"
-                                                        title="DETALLE"></i></a>
+                            </div>
+                        </div>
+                    </div>
 
-                                                <a href="javascript:void(0)" class="waves-effect waves-light"
-                                                    data-toggle="modal" data-target="" onclick="datosIndicador(8)"><i
-                                                        class="mdi mdi-information text-orange-0"
-                                                        title="INFORMACIÓN"></i></a>
-                                            </div>
-                                            <h3 class="text-black text-center font-weight-normal font-11 m-0">
-                                                Indicador 6</h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <figure class="highcharts-figure p-0">
-                                                <div id="iiee6" style="height: 7rem"></div>
-                                            </figure>
-                                            <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                                                <span class="float-left" id="span-iiee6-fuente">Fuente:</span>
-                                                <span class="float-right" id="span-iiee6-fecha">Actualizado:</span>
-                                            </div>
-                                        </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4">
+                            <div class="card card-border border border-plomo-0">
+                                <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
+                                    style="height: 4rem">
+                                    <div class="card-widgets">
+                                        <a href="{{ route('indicador.nuevos.02') }}"
+                                            class="waves-effect waves-light"><i
+                                                class="mdi mdi-file-link text-orange-0" title="DETALLE"></i></a>
+
+                                        <a href="javascript:void(0)" class="waves-effect waves-light"
+                                            data-toggle="modal" data-target="" onclick="datosIndicador(1)"><i
+                                                class="mdi mdi-information text-orange-0" title="INFORMACIÓN"></i></a>
+                                    </div>
+                                    <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                                        Indicador 4
+                                    </h3>
+                                </div>
+                                <div class="card-body p-0">
+                                    <figure class="highcharts-figure p-0">
+                                        <div id="iiee4" style="height: 7rem"></div>
+                                    </figure>
+                                    <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                        <span class="float-left" id="span-iiee4-fuente">Fuente:</span>
+                                        <span class="float-right" id="span-iiee4-fecha">Actualizado:</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            <div class="card card-border border border-plomo-0">
+                                <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
+                                    style="height: 4rem">
+                                    <div class="card-widgets">
+                                        <a href="{{ route('indicador.nuevos.01') }}"
+                                            class="waves-effect waves-light"><i
+                                                class="mdi mdi-file-link text-orange-0" title="DETALLE"></i></a>
+
+                                        <a href="javascript:void(0)" class="waves-effect waves-light"
+                                            data-toggle="modal" data-target="" onclick="datosIndicador(7)"><i
+                                                class="mdi mdi-information text-orange-0" title="INFORMACIÓN"></i></a>
+                                    </div>
+                                    <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                                        Indicador 7</h3>
+                                </div>
+                                <div class="card-body p-0">
+                                    <figure class="highcharts-figure p-0">
+                                        <div id="iiee5" style="height: 7rem"></div>
+                                    </figure>
+                                    <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                        <span class="float-left" id="span-iiee5-fuente">Fuente:</span>
+                                        <span class="float-right" id="span-iiee5-fecha">Actualizado:</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            <div class="card card-border border border-plomo-0">
+                                <div class="card-header border-success-0 bg-transparent pb-0 pt-2"
+                                    style="height: 4rem">
+                                    <div class="card-widgets">
+                                        <a href="javascript:void(0)" class="waves-effect waves-light"><i
+                                                class="mdi mdi-file-link text-orange-0" title="DETALLE"></i></a>
+
+                                        <a href="javascript:void(0)" class="waves-effect waves-light"
+                                            data-toggle="modal" data-target="" onclick="datosIndicador(8)"><i
+                                                class="mdi mdi-information text-orange-0" title="INFORMACIÓN"></i></a>
+                                    </div>
+                                    <h3 class="text-black text-center font-weight-normal font-11 m-0">
+                                        Indicador 6</h3>
+                                </div>
+                                <div class="card-body p-0">
+                                    <figure class="highcharts-figure p-0">
+                                        <div id="iiee6" style="height: 7rem"></div>
+                                    </figure>
+                                    <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                                        <span class="float-left" id="span-iiee6-fuente">Fuente:</span>
+                                        <span class="float-right" id="span-iiee6-fecha">Actualizado:</span>
                                     </div>
                                 </div>
                             </div>
@@ -1110,36 +1068,33 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card card-border border border-plomo-0">
-                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                        {{-- <div class="card-widgets">
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card card-border border border-plomo-0">
+            <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                {{-- <div class="card-widgets">
                             <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
                                     class="fa fa-file-excel"></i> Descargar</button>
                         </div> --}}
-                        <h3 class="text-black font-14">Matrícula educativa de estudiantes de educación básica por sexo,
-                            según UGEL</h3>
-                    </div>
-                    <div class="card-body pb-0">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="table-responsive" id="vtabla1">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                            <span class="float-left vtabla1-fuente">Fuente:</span>
-                            <span class="float-right vtabla1-fecha">Actualizado:</span>
+                <h3 class="text-black font-14">Matrícula educativa de estudiantes de educación básica por sexo,
+                    según UGEL</h3>
+            </div>
+            <div class="card-body pb-0">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive" id="vtabla1">
                         </div>
                     </div>
                 </div>
+                <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                    <span class="float-left vtabla1-fuente">Fuente:</span>
+                    <span class="float-right vtabla1-fecha">Actualizado:</span>
+                </div>
             </div>
         </div>
-
-
-
     </div>
 </div>
 

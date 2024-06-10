@@ -14,11 +14,13 @@
     <div id="container-speed" class="chart-container"></div>
 </div>
 
-<div class="row">
-    <div class="col-lg-4 col-md-4 col-sm-4">
-        <h4 class="page-title font-16">MODULO SALUD</h4>
-    </div>
-    {{-- <div class="col-lg-2 col-md-2 col-sm-2">
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-4">
+                <h4 class="page-title font-16">MODULO SALUD</h4>
+            </div>
+            {{-- <div class="col-lg-2 col-md-2 col-sm-2">
                 <select id="provincia" name="provincia" class="form-control btn-xs font-11"
                     onchange="cargarDistritos(),cargarCards();">
                     <option value="0">PROVINCIA</option>
@@ -40,374 +42,391 @@
                     <option value="0">ÁMBITO</option>
                 </select>
             </div> --}}
-</div>
+        </div>
 
-<!--Widget-4 -->
+        <!--Widget-4 -->
 
-<div class="row">
-    <div class="col-lg-3 col-md-6 col-sm-6">
-        <div class="card-box border border-plomo-0">
-            <div class="media">
-                <div class="text-center">
-                    {{-- <i class="ion ion-logo-usd avatar-title font-26 text-white"></i> --}}
-                    <img src="{{ asset('/') }}public/img/sal_hospital.png" alt="" class=""
-                        width="70%" height="70%">
-                </div>
-                {{-- <div class="avatar-md bg-success rounded-circle mr-2">
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card-box border border-plomo-0">
+                    <div class="media">
+                        <div class="text-center">
+                            {{-- <i class="ion ion-logo-usd avatar-title font-26 text-white"></i> --}}
+                            <img src="{{ asset('/') }}public/img/sal_hospital.png" alt="" class=""
+                                width="70%" height="70%">
+                        </div>
+                        {{-- <div class="avatar-md bg-success rounded-circle mr-2">
                                 <i class=" ion-md-home avatar-title font-26 text-white"></i>
                             </div> --}}
-                <div class="media-body align-self-center">
-                    <div class="text-right">
-                        <h4 class="font-20 my-0 font-weight-bold">
-                            <span data-plugin="counterup" id="servicios">308</span>
-                        </h4>
-                        <p class="mb-0 mt-1 text-truncate">Establecimiento de Salud</p>
+                        <div class="media-body align-self-center">
+                            <div class="text-right">
+                                <h4 class="font-20 my-0 font-weight-bold">
+                                    <span data-plugin="counterup" id="servicios">308</span>
+                                </h4>
+                                <p class="mb-0 mt-1 text-truncate">Establecimiento de Salud</p>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
+                <!-- end card-box-->
             </div>
 
-        </div>
-        <!-- end card-box-->
-    </div>
-
-    <div class="col-lg-3 col-md-6 col-sm-6">
-        <div class="card-box border border-plomo-0">
-            <div class="media">
-                <div class="text-center">
-                    {{-- <i class="ion ion-logo-usd avatar-title font-26 text-white"></i> --}}
-                    <img src="{{ asset('/') }}public/img/sal_personal.png" alt="" class=""
-                        width="70%" height="70%">
-                </div>
-                {{-- <div class="avatar-md bg-info rounded-circle mr-2">
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card-box border border-plomo-0">
+                    <div class="media">
+                        <div class="text-center">
+                            {{-- <i class="ion ion-logo-usd avatar-title font-26 text-white"></i> --}}
+                            <img src="{{ asset('/') }}public/img/sal_personal.png" alt="" class=""
+                                width="70%" height="70%">
+                        </div>
+                        {{-- <div class="avatar-md bg-info rounded-circle mr-2">
                                 <i class=" ion ion-md-person avatar-title font-26 text-white"></i>
                             </div> --}}
-                <div class="media-body align-self-center">
-                    <div class="text-right">
-                        <h4 class="font-20 my-0 font-weight-bold">
-                            <span data-plugin="counterup" id="locales">3,674</span>
-                        </h4>
-                        <p class="mb-0 mt-1 text-truncate">Personal de Salud </p>
+                        <div class="media-body align-self-center">
+                            <div class="text-right">
+                                <h4 class="font-20 my-0 font-weight-bold">
+                                    <span data-plugin="counterup" id="locales">3,674</span>
+                                </h4>
+                                <p class="mb-0 mt-1 text-truncate">Personal de Salud </p>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
+                <!-- end card-box-->
             </div>
 
-        </div>
-        <!-- end card-box-->
-    </div>
-
-    <div class="col-lg-3 col-md-6 col-sm-6">
-        <div class="card-box border border-plomo-0">
-            <div class="media">
-                <div class="text-center">
-                    {{-- <i class="ion ion-logo-usd avatar-title font-26 text-white"></i> --}}
-                    <img src="{{ asset('/') }}public/img/sal_medicos.png" alt="" class=""
-                        width="70%" height="70%">
-                </div>
-                {{-- <div class="avatar-md bg-info rounded-circle mr-2">
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card-box border border-plomo-0">
+                    <div class="media">
+                        <div class="text-center">
+                            {{-- <i class="ion ion-logo-usd avatar-title font-26 text-white"></i> --}}
+                            <img src="{{ asset('/') }}public/img/sal_medicos.png" alt="" class=""
+                                width="70%" height="70%">
+                        </div>
+                        {{-- <div class="avatar-md bg-info rounded-circle mr-2">
                                 <i class=" ion ion-md-person avatar-title font-26 text-white"></i>
                             </div> --}}
-                <div class="media-body align-self-center">
-                    <div class="text-right">
-                        <h4 class="font-20 my-0 font-weight-bold">
-                            <span data-plugin="counterup" id="matriculados">506</span>
-                        </h4>
-                        <p class="mb-0 mt-1 text-truncate">Medicos</p>
+                        <div class="media-body align-self-center">
+                            <div class="text-right">
+                                <h4 class="font-20 my-0 font-weight-bold">
+                                    <span data-plugin="counterup" id="matriculados">506</span>
+                                </h4>
+                                <p class="mb-0 mt-1 text-truncate">Medicos</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <!-- end card-box-->
             </div>
-        </div>
-        <!-- end card-box-->
-    </div>
 
-    <div class="col-lg-3 col-md-6 col-sm-6">
-        <div class="card-box border border-plomo-0">
-            <div class="media">
-                <div class="text-center">
-                    {{-- <i class="ion ion-logo-usd avatar-title font-26 text-white"></i> --}}
-                    <img src="{{ asset('/') }}public/img/sal_sis.png" alt="" class="" width="70%"
-                        height="70%">
-                </div>
-                {{-- <div class="avatar-md bg-info rounded-circle mr-2">
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card-box border border-plomo-0">
+                    <div class="media">
+                        <div class="text-center">
+                            {{-- <i class="ion ion-logo-usd avatar-title font-26 text-white"></i> --}}
+                            <img src="{{ asset('/') }}public/img/sal_sis.png" alt="" class=""
+                                width="70%" height="70%">
+                        </div>
+                        {{-- <div class="avatar-md bg-info rounded-circle mr-2">
                                 <i class=" ion ion-md-person avatar-title font-26 text-white"></i>
                             </div> --}}
-                <div class="media-body align-self-center">
-                    <div class="text-right">
-                        <h4 class="font-20 my-0 font-weight-bold">
-                            <span data-plugin="counterup" id="docentes">607,284</span>
-                        </h4>
-                        <p class="mb-0 mt-1 text-truncate">Asegurados al SIS</p>
+                        <div class="media-body align-self-center">
+                            <div class="text-right">
+                                <h4 class="font-20 my-0 font-weight-bold">
+                                    <span data-plugin="counterup" id="docentes">607,284</span>
+                                </h4>
+                                <p class="mb-0 mt-1 text-truncate">Asegurados al SIS</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="row">
+
+            <div class="col-lg-6">
+                <div class="card card-border border border-plomo-0">
+                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                        <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11"></h3>
+                    </div>
+                    <div class="card-body p-0">
+                        {{-- <figure class="highcharts-figure p-0"> --}}
+                        <div id="anal1" style="height: 20rem"></div>
+                        {{-- </figure> --}}
+                        <div class="font-weight-bold text-muted mb-0 font-9">
+                            <span class="float-left" id="span-skills005-fuente">Fuente: ENDES - INEI</span>
+                            <span class="float-right" id="span-skills005-fecha">Actualizado: 19 de marzo 2024</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card card-border border border-plomo-0">
+                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                        <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11"></h3>
+                    </div>
+                    <div class="card-body p-0">
+                        {{-- <figure class="highcharts-figure p-0"> --}}
+                        <div id="anal2" style="height: 20rem"></div>
+                        {{-- </figure> --}}
+                        <div class="font-weight-bold text-muted mb-0 font-9">
+                            <span class="float-left" id="span-skills005-fuente">Fuente: ENDES - INEI</span>
+                            <span class="float-right" id="span-skills005-fecha">Actualizado: 19 de marzo 2024</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{--  --}}
+
+        <div class="row">
+            <div class="col-lg-6">
+                {{-- <div class="card card-default card-fill"> --}}
+                {{-- <div class="card-header"> --}}
+                <div class="card card-border border border-plomo-0">
+                    <div class="card-header border-success-0 bg-success-0">{{--  bg-transparent pb-0 --}}
+                        <h3 class="card-title font-12 text-white">Indicadores Multisectoriales de Anemia Priorizados</h3>
+                    </div>
+                    <div class="card-body pb-0">
+                        <div class="mb-4 skills001">
+                            <h6 class="font-12">
+                                <a href="#" class="link">
+                                    Porcentaje de niños de 4 meses de edad que inician suplementación de
+                                    hierro
+                                </a>
+                                <span class="float-right">71.0%</span>
+                            </h6>
+                            <div class="progress progress-sm">
+                                <div class="progress-bar bg-warning-0 wow animated progress-animated"
+                                    role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                    style="width: 71%">
+                                    <span class="sr-only">71.0% Complete</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 skills002">
+                            <h6 class="font-12">
+                                <a href="#" class="link">
+                                    Porcentaje de niños de 6 a 8 meses de edad con tamizaje de anemia
+                                </a>
+                                <span class="float-right">82.0%</span>
+                            </h6>
+                            <div class="progress progress-sm">
+                                <div class="progress-bar bg-warning-0 wow animated progress-animated"
+                                    role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"
+                                    style="width: 82.0%">
+                                    <span class="sr-only">82.0% Complete</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 skills003">
+                            <h6 class="font-12">
+                                <a href="#" class="link">
+                                    Porcentaje de niños de 6 a 11 meses de edad sin anemia que reciben suplementación
+                                    con hierro
+                                </a>
+                                <span class="float-right">85.1%</span>
+                            </h6>
+                            <div class="progress progress-sm">
+                                <div class="progress-bar bg-warning-0 wow animated progress-animated"
+                                    role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"
+                                    style="width: 85.1%">
+                                    <span class="sr-only">85.1% Complete</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 skills004">
+                            <h6 class="font-12">
+                                <a href="#" class="link">
+                                    Porcentaje de niños de 6 a 11 meses de edad con anemia que inician tratamiento con
+                                    gotas o jarabe con hierro
+                                </a>
+                                <span class="float-right">93.1%</span>
+                            </h6>
+                            <div class="progress progress-sm mb-0">
+                                <div class="progress-bar bg-success-0 wow animated progress-animated"
+                                    role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"
+                                    style="width: 93.1%">
+                                    <span class="sr-only">93.1% Complete</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 skills005">
+                            <h6 class="font-12">
+                                <a href="#" class="link">
+                                    Porcentaje de niños de 4 a 5 meses de edad que reciben al menos una visita
+                                    domiciliaria por personal de salud
+                                </a>
+                                <span class="float-right">30.1%</span>
+                            </h6>
+                            <div class="progress progress-sm mb-0">
+                                <div class="progress-bar bg-orange-0 wow animated progress-animated"
+                                    role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"
+                                    style="width: 30.1%">
+                                    <span class="sr-only">30.1% Complete</span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="mb-4 skills005">
+                            <h6 class="font-12">
+                                <a href="#" class="link">
+                                    Porcentaje de madre de niños de 6 a 8 meses de edad que asisten a sesión
+                                    demostrativa de alimentos
+                                </a>
+                                <span class="float-right">21.7%</span>
+                            </h6>
+                            <div class="progress progress-sm mb-0">
+                                <div class="progress-bar bg-orange-0 wow animated progress-animated"
+                                    role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"
+                                    style="width: 21.7%">
+                                    <span class="sr-only">95% Complete</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="font-weight-bold text-muted mb-0 font-9">
+                            <span class="float-left" id="span-skills005-fuente">Fuente: HIS-MINSA</span>
+                            <span class="float-right" id="span-skills005-fecha">Actualizado: 30/04/2024</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-lg-6">{{-- bg-success-0 bg-orange-0 bg-warning-0 --}}
+                {{-- <div class="card card-default card-fill"> --}}
+                {{-- <div class="card-header"> --}}
+                <div class="card card-border border border-plomo-0">
+                    <div class="card-header border-success-0 bg-success-0">{{--  bg-transparent pb-0 --}}
+                        <h3 class="card-title font-12 text-white">
+                            Ejecucion del Gasto Presupuestal 2024
+                        </h3>
+                    </div>
+                    <div class="card-body pb-0">
+                        <div class="mb-4 skills006">
+                            <h6 class="font-12">
+                                <a href="#" class="link">
+                                    400 DIRECCIÓN REGIONAL DE SALUD <span class="font-weight-bold">(PIM
+                                        95,726,756)</span>
+                                </a>
+                                <span class="float-right">41.24%</span>
+                            </h6>
+                            <div class="progress progress-sm">
+                                <div class="progress-bar bg-orange-0 wow animated progress-animated"
+                                    role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                    style="width: 41.24%">
+                                    <span class="sr-only">41.24% Complete</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 skills007">
+                            <h6 class="font-12">
+                                <a href="#" class="link">
+                                    401 HOSPITAL REGIONAL DE PUCALLPA <span class="font-weight-bold">(PIM
+                                        72,443,020)</span>
+                                </a>
+                                <span class="float-right">40.81%</span>
+                            </h6>
+                            <div class="progress progress-sm">
+                                <div class="progress-bar bg-orange-0 wow animated progress-animated"
+                                    role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"
+                                    style="width: 40.81%">
+                                    <span class="sr-only">40.81% Complete</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 skills008">
+                            <h6 class="font-12">
+                                <a href="#" class="link">
+                                    402 HOSPITAL AMAZÓNICO <span class="font-weight-bold">(PIM 58,427,887)</span>
+                                </a>
+                                <span class="float-right">47.21%</span>
+                            </h6>
+                            <div class="progress progress-sm">
+                                <div class="progress-bar bg-orange-0 wow animated progress-animated"
+                                    role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"
+                                    style="width: 47.21%">
+                                    <span class="sr-only">47.21% Complete</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 skills009">
+                            <h6 class="font-12">
+                                <a href="#" class="link">
+                                    403 RED DE SALUD N° 03 ATALAYA <span class="font-weight-bold">(PIM 43936400)</span>
+                                </a>
+                                <span class="float-right">32.89%</span>
+                            </h6>
+                            <div class="progress progress-sm mb-0">
+                                <div class="progress-bar bg-orange-0 wow animated progress-animated"
+                                    role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"
+                                    style="width: 32.89%">
+                                    <span class="sr-only">32.89% Complete</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 skills010">
+                            <h6 class="font-12">
+                                <a href="#" class="link">
+                                    404 RED DE SALUD N° 04 AGUAYTIA - SAN ALEJANDRO <span class="font-weight-bold">(PIM
+                                        31,929,774)</span>
+                                </a>
+                                <span class="float-right">35.89%</span>
+                            </h6>
+                            <div class="progress progress-sm mb-0">
+                                <div class="progress-bar bg-orange-0 wow animated progress-animated"
+                                    role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"
+                                    style="width: 35.89%">
+                                    <span class="sr-only">35.89% Complete</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 skills010">
+                            <h6 class="font-12">
+                                <a href="#" class="link">
+                                    405 RED DE SALUD N° 01 CORONEL PORTILLO <span class="font-weight-bold">(PIM
+                                        65,913,007)</span>
+                                </a>
+                                <span class="float-right">38.24%</span>
+                            </h6>
+                            <div class="progress progress-sm mb-0">
+                                <div class="progress-bar bg-orange-0 wow animated progress-animated"
+                                    role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"
+                                    style="width: 38.24%">
+                                    <span class="sr-only">38.24% Complete</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="font-weight-bold text-muted mb-0 font-9">
+                            <span class="float-left" id="span-skills005-fuente">Fuente: SIAF WEB-MEF</span>
+                            <span class="float-right" id="span-skills005-fecha">Actualizado: 05/06/2024</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
     </div>
 </div>
-
-<div class="row">
-
-    <div class="col-lg-6">
-        <div class="card card-border border border-plomo-0">
-            <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11"></h3>
-            </div>
-            <div class="card-body p-0">
-                {{-- <figure class="highcharts-figure p-0"> --}}
-                <div id="anal1" style="height: 20rem"></div>
-                {{-- </figure> --}}
-                <div class="font-weight-bold text-muted mb-0 font-9">
-                    <span class="float-left" id="span-skills005-fuente">Fuente: ENDES - INEI</span>
-                    <span class="float-right" id="span-skills005-fecha">Actualizado: 19 de marzo 2024</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-6">
-        <div class="card card-border border border-plomo-0">
-            <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11"></h3>
-            </div>
-            <div class="card-body p-0">
-                {{-- <figure class="highcharts-figure p-0"> --}}
-                <div id="anal2" style="height: 20rem"></div>
-                {{-- </figure> --}}
-                <div class="font-weight-bold text-muted mb-0 font-9">
-                    <span class="float-left" id="span-skills005-fuente">Fuente: ENDES - INEI</span>
-                    <span class="float-right" id="span-skills005-fecha">Actualizado: 19 de marzo 2024</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-lg-6">
-        {{-- <div class="card card-default card-fill"> --}}
-        {{-- <div class="card-header"> --}}
-        <div class="card card-border border border-plomo-0">
-            <div class="card-header border-success-0 bg-success-0">{{--  bg-transparent pb-0 --}}
-                <h3 class="card-title font-12 text-white">Indicadores Multisectoriales de Anemia Priorizados</h3>
-            </div>
-            <div class="card-body pb-0">
-                <div class="mb-4 skills001">
-                    <h6 class="font-12">
-                        <a href="#" class="link">
-                            Porcentaje de niños de 4 meses de edad que inician suplementación de
-                            hierro
-                        </a>
-                        <span class="float-right">71.0%</span>
-                    </h6>
-                    <div class="progress progress-sm">
-                        <div class="progress-bar bg-warning-0 wow animated progress-animated" role="progressbar"
-                            aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 71%">
-                            <span class="sr-only">71.0% Complete</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-4 skills002">
-                    <h6 class="font-12">
-                        <a href="#" class="link">
-                            Porcentaje de niños de 6 a 8 meses de edad con tamizaje de anemia
-                        </a>
-                        <span class="float-right">82.0%</span>
-                    </h6>
-                    <div class="progress progress-sm">
-                        <div class="progress-bar bg-warning-0 wow animated progress-animated" role="progressbar"
-                            aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 82.0%">
-                            <span class="sr-only">82.0% Complete</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-4 skills003">
-                    <h6 class="font-12">
-                        <a href="#" class="link">
-                            Porcentaje de niños de 6 a 11 meses de edad sin anemia que reciben suplementación
-                            con hierro
-                        </a>
-                        <span class="float-right">85.1%</span>
-                    </h6>
-                    <div class="progress progress-sm">
-                        <div class="progress-bar bg-warning-0 wow animated progress-animated" role="progressbar"
-                            aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 85.1%">
-                            <span class="sr-only">85.1% Complete</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-4 skills004">
-                    <h6 class="font-12">
-                        <a href="#" class="link">
-                            Porcentaje de niños de 6 a 11 meses de edad con anemia que inician tratamiento con
-                            gotas o jarabe con hierro
-                        </a>
-                        <span class="float-right">93.1%</span>
-                    </h6>
-                    <div class="progress progress-sm mb-0">
-                        <div class="progress-bar bg-success-0 wow animated progress-animated" role="progressbar"
-                            aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: 93.1%">
-                            <span class="sr-only">93.1% Complete</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-4 skills005">
-                    <h6 class="font-12">
-                        <a href="#" class="link">
-                            Porcentaje de niños de 4 a 5 meses de edad que reciben al menos una visita
-                            domiciliaria por personal de salud
-                        </a>
-                        <span class="float-right">30.1%</span>
-                    </h6>
-                    <div class="progress progress-sm mb-0">
-                        <div class="progress-bar bg-orange-0 wow animated progress-animated" role="progressbar"
-                            aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: 30.1%">
-                            <span class="sr-only">30.1% Complete</span>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="mb-4 skills005">
-                    <h6 class="font-12">
-                        <a href="#" class="link">
-                            Porcentaje de madre de niños de 6 a 8 meses de edad que asisten a sesión
-                            demostrativa de alimentos
-                        </a>
-                        <span class="float-right">21.7%</span>
-                    </h6>
-                    <div class="progress progress-sm mb-0">
-                        <div class="progress-bar bg-orange-0 wow animated progress-animated" role="progressbar"
-                            aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: 21.7%">
-                            <span class="sr-only">95% Complete</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="font-weight-bold text-muted mb-0 font-9">
-                    <span class="float-left" id="span-skills005-fuente">Fuente: HIS-MINSA</span>
-                    <span class="float-right" id="span-skills005-fecha">Actualizado: 30/04/2024</span>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="col-lg-6">{{-- bg-success-0 bg-orange-0 bg-warning-0 --}}
-        {{-- <div class="card card-default card-fill"> --}}
-        {{-- <div class="card-header"> --}}
-        <div class="card card-border border border-plomo-0">
-            <div class="card-header border-success-0 bg-success-0">{{--  bg-transparent pb-0 --}}
-                <h3 class="card-title font-12 text-white">
-                    Ejecucion del Gasto Presupuestal 2024
-                </h3>
-            </div>
-            <div class="card-body pb-0">
-                <div class="mb-4 skills006">
-                    <h6 class="font-12">
-                        <a href="#" class="link">
-                            400 DIRECCIÓN REGIONAL DE SALUD <span class="font-weight-bold">(PIM
-                                95,726,756)</span>
-                        </a>
-                        <span class="float-right">41.24%</span>
-                    </h6>
-                    <div class="progress progress-sm">
-                        <div class="progress-bar bg-orange-0 wow animated progress-animated" role="progressbar"
-                            aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 41.24%">
-                            <span class="sr-only">41.24% Complete</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-4 skills007">
-                    <h6 class="font-12">
-                        <a href="#" class="link">
-                            401 HOSPITAL REGIONAL DE PUCALLPA <span class="font-weight-bold">(PIM
-                                72,443,020)</span>
-                        </a>
-                        <span class="float-right">40.81%</span>
-                    </h6>
-                    <div class="progress progress-sm">
-                        <div class="progress-bar bg-orange-0 wow animated progress-animated" role="progressbar"
-                            aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 40.81%">
-                            <span class="sr-only">40.81% Complete</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-4 skills008">
-                    <h6 class="font-12">
-                        <a href="#" class="link">
-                            402 HOSPITAL AMAZÓNICO <span class="font-weight-bold">(PIM 58,427,887)</span>
-                        </a>
-                        <span class="float-right">47.21%</span>
-                    </h6>
-                    <div class="progress progress-sm">
-                        <div class="progress-bar bg-orange-0 wow animated progress-animated" role="progressbar"
-                            aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 47.21%">
-                            <span class="sr-only">47.21% Complete</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-4 skills009">
-                    <h6 class="font-12">
-                        <a href="#" class="link">
-                            403 RED DE SALUD N° 03 ATALAYA <span class="font-weight-bold">(PIM 43936400)</span>
-                        </a>
-                        <span class="float-right">32.89%</span>
-                    </h6>
-                    <div class="progress progress-sm mb-0">
-                        <div class="progress-bar bg-orange-0 wow animated progress-animated" role="progressbar"
-                            aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: 32.89%">
-                            <span class="sr-only">32.89% Complete</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-4 skills010">
-                    <h6 class="font-12">
-                        <a href="#" class="link">
-                            404 RED DE SALUD N° 04 AGUAYTIA - SAN ALEJANDRO <span class="font-weight-bold">(PIM
-                                31,929,774)</span>
-                        </a>
-                        <span class="float-right">35.89%</span>
-                    </h6>
-                    <div class="progress progress-sm mb-0">
-                        <div class="progress-bar bg-orange-0 wow animated progress-animated" role="progressbar"
-                            aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: 35.89%">
-                            <span class="sr-only">35.89% Complete</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-4 skills010">
-                    <h6 class="font-12">
-                        <a href="#" class="link">
-                            405 RED DE SALUD N° 01 CORONEL PORTILLO <span class="font-weight-bold">(PIM
-                                65,913,007)</span>
-                        </a>
-                        <span class="float-right">38.24%</span>
-                    </h6>
-                    <div class="progress progress-sm mb-0">
-                        <div class="progress-bar bg-orange-0 wow animated progress-animated" role="progressbar"
-                            aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: 38.24%">
-                            <span class="sr-only">38.24% Complete</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="font-weight-bold text-muted mb-0 font-9">
-                    <span class="float-left" id="span-skills005-fuente">Fuente: SIAF WEB-MEF</span>
-                    <span class="float-right" id="span-skills005-fecha">Actualizado: 05/06/2024</span>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-
 
 <div id="modal_datosindicador" class="modal fade font-10" tabindex="-1" role="dialog"
     aria-labelledby="myModalLabel" aria-hidden="true">
@@ -612,8 +631,8 @@
                 subtitle: {
                     text: subtitulo,
                     style: {
-                        fontSize: '13px'
-                    }
+                            fontSize: '13px'
+                        }
                 },
                 yAxis: {
                     title: {
