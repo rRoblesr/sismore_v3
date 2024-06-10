@@ -125,7 +125,7 @@ class HomeController extends Controller
 
     public function sistema_acceder($sistema_nombre)
     {
-        return session()->all();
+        // return session()->all();
         $osistema = Sistema::where('nombre', $sistema_nombre)->first();
         $sistema_id = $osistema->id;
 
