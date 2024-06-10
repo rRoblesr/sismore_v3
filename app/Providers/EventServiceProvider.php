@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Listeners\LogSuccessfulLogin;
+use App\Listeners\LogSuccessfulLogout;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Auth\Events\Registered;
@@ -24,9 +25,9 @@ class EventServiceProvider extends ServiceProvider
         Login::class => [
             LogSuccessfulLogin::class,
         ],
-        // Logout::class => [
-        //     LogSuccessfulLogin::class,
-        // ],
+        Logout::class => [
+            LogSuccessfulLogout::class,
+        ],
     ];
 
 
@@ -37,6 +38,6 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        parent::boot();
     }
 }

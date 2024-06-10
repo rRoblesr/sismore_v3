@@ -27,7 +27,7 @@ class LogSuccessfulLogin
     public function handle($event)
     {
         $user = $event->user;
-        $user->increment('login_count');
+        // $user->increment('login_count');
         LoginRecords::create([
             'usuario' => $user->id,
             'login' => now(),

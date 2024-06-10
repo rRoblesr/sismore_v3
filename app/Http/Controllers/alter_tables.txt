@@ -1476,3 +1476,13 @@ ALTER TABLE `adm_usuario` ADD `login_count` INT NOT NULL AFTER `codigo_instituci
 #######################
 
 CREATE TABLE adm_login_records ( id INT AUTO_INCREMENT PRIMARY KEY, user_id INT, login_at TIMESTAMP NULL, logout_at TIMESTAMP NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP );
+
+CREATE TABLE `adm_login_records` (
+  `id` int(11) auto_increment primary key,
+  `usuario` int(11) DEFAULT NULL,
+  `login` timestamp NULL DEFAULT NULL,
+  `logout` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  foreign key (usuario) references adm_usuario(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
