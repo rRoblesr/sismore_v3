@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Administracion\EntidadController;
+use App\Http\Controllers\Administracion\LoginRecordsController;
 use App\Http\Controllers\Administracion\MenuController;
 use App\Http\Controllers\Administracion\PerfilController;
 use App\Http\Controllers\Administracion\SistemaController;
@@ -863,6 +864,8 @@ Route::get('/administrador/Entidad/Gerencia', [EntidadController::class, 'gerenc
 Route::get('/Entidad/ajax_edit_gerencia/{gerencia_id}', [EntidadController::class, 'ajax_edit_gerencia'])->name('entidad.ajax.edit.gerencia');
 
 Route::get('/Importado/resumen', [ImportacionController::class, 'resumenimportados'])->name('importar.importados');
+
+Route::get('/administrador/LoginRecords/Principal', [LoginRecordsController::class, 'principal'])->name('sistema.principal');
 /**************************************** FIN ADMINISTRADOR ************************************************/
 
 /**************************************** PRESUPUESTO ************************************************/

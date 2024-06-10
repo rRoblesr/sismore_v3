@@ -501,7 +501,7 @@
             <div class="card-body p-0">
                 <div class="row">
                     <div class="col-12">
-                        <div class="table-responsive" style="height: 20rem" id="vtabla2x">
+                        <div class="table-responsive" style="height: 19rem" id="vtabla2x">
                             <table id="tablaX2" class="table table-sm table-striped table-bordered font-11 m-0"
                                 style="height: 100%">
                                 <thead>
@@ -566,7 +566,7 @@
                                         <td>10</td>
                                     </tr>
                                 </tfoot>
-                            </table>"
+                            </table>
                         </div>
                     </div>
                 </div>
