@@ -1468,3 +1468,11 @@ WHERE 1 and year(ii.fechaActualizacion)=2024
 
 
 update `adm_entidad` set tipoentidad_id=7 where length(codigo)=6;
+
+##############
+
+ALTER TABLE `adm_usuario` ADD `login_count` INT NOT NULL AFTER `codigo_institucion`;
+
+#######################
+
+CREATE TABLE adm_login_records ( id INT AUTO_INCREMENT PRIMARY KEY, user_id INT, login_at TIMESTAMP NULL, logout_at TIMESTAMP NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP );

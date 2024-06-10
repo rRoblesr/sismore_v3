@@ -6,7 +6,7 @@ use App\Models\Administracion\LoginRecords;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class LogSuccessfulLogin
+class LogSuccessfulLogout
 {
     /**
      * Create the event listener.
@@ -27,10 +27,9 @@ class LogSuccessfulLogin
     public function handle($event)
     {
         $user = $event->user;
-        $user->increment('login_count');
-        LoginRecords::create([
-            'usuario' => $user->id,
-            'login' => now(),
-        ]);
+        $latestLoginRecord = LoginRecords::where('usuario', $user->id)->latest()->first();
+        if ($latestLoginRecord) {
+            $latestLoginRecord->update(['logout' => now()]);
+        }
     }
 }
