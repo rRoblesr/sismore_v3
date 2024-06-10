@@ -525,87 +525,23 @@
                     <!-- Start Content-->
                     <div class="container-fluid">
 
-                        @if (session('sistema_id') == 1) <br>
-                            {{-- <div class="row">
-                                <div class="col-12">
-                                    @if ($titlePage != '')
-                                        <div class="page-title-box">
-                                            <!--h4 class="page-title">
-                                                        Ejecución Presupuestal del Gobierno Regional de Ucayali
-                                                    </h4-->
-                                            <h4 class="page-title">{{ $titlePage }}</h4>
-
-                                            <div class="page-title-right">
-                                                <ol class="breadcrumb p-0 m-0">
-                                                    {{ $actualizado }}
-                                                </ol>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                        </div>
-                                    @else
-                                        <br>
-                                    @endif
-                                </div>
-                            </div> --}}
-                        @elseif (session('sistema_id') == 5)
-                            <div class="row">
-                                <div class="col-12">
-                                    @if (!isset($tipo_acceso))
-                                        <br>
-                                        @if ($titlePage != '')
-                                            {{-- <div class="page-title-box">
-                                                <h4 class="page-title">{{ $titlePage }}</h4>
-                                                <div class="page-title-right">
-                                                    <ol class="breadcrumb p-0 m-0">
-                                                        @isset($actualizado)
-                                                            {{ $actualizado }}
-                                                        @endisset
-                                                    </ol>
-                                                </div>
-                                                <div class="clearfix"></div>
-                                            </div> --}}
-                                        @else
-                                            {{-- <br> --}}
-                                        @endif
-                                    @else
-                                        <br>
-                                    @endif
-
-                                </div>
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                {{-- <div class="page-title-box">
+                                    <h4 class="page-title">Welcome !</h4>
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb p-0 m-0">
+                                            <li class="breadcrumb-item"><a href="#">Moltran</a></li>
+                                            <li class="breadcrumb-item active">Dashboard</li>
+                                        </ol>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div> --}}
+                                <br>
                             </div>
-                        @else
-                            {{-- <br> --}}
-                            <div class="row">
-                                <div class="col-12">
-                                    @if ($titlePage != '')
-                                        <div class="page-title-box">
-                                            <h4 class="page-title">{{ $titlePage }}</h4>
-                                            <div class="page-title-right">
-                                                <ol class="breadcrumb p-0 m-0">
-                                                    @isset($breadcrumb)
-                                                        @foreach ($breadcrumb as $key => $item)
-                                                            @if ($key == count($breadcrumb) - 1)
-                                                                <li class="breadcrumb-item">{{ $item['titulo'] }}</li>
-                                                            @else
-                                                                <li class="breadcrumb-item"><a
-                                                                        href="{{ $item['url'] }}">{{ $item['titulo'] }}</a>
-                                                                </li>
-                                                            @endif
-                                                        @endforeach
-                                                    @endisset
-                                                </ol>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                        </div>
-                                    @else
-                                        <br>
-                                    @endif
-
-                                </div>
-                            </div>
-
-                        @endif
-
+                        </div>
+                        <!-- end page title -->
 
                         @yield('content')
 
@@ -641,7 +577,7 @@
 
 
         @guest()
-            {{-- @yield('content') --}}
+            {{-- @yield('cont--ent') --}}
 
             <!-- Topbar Start -->
             <div class="navbar-custom bg-green-0">
@@ -782,72 +718,72 @@
                                     <li>
                                         <a href="{{ route('acceso.publico.modulo', 'EDUCACION') }}" class="waves-effect">
                                             <i class="mdi mdi-home"></i>
-                                            <span> Dashboard </span>
+                                            <span> Inicio </span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ route('indicador.nuevos.01') }}" class="waves-effect">
-                                            <i class="fas fa-user-nurse"></i>
+                                            <i class="mdi mdi-school-outline"></i>
                                             <span> Avance Matricula </span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ route('matriculageneral.ebr.principal') }}" class="waves-effect">
-                                            <i class="fas fa-user-md"></i>
+                                            <i class="mdi mdi-school-outline"></i>
                                             <span> Básica Regular </span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ route('matriculageneral.ebe.principal') }}" class="waves-effect">
-                                            <i class="mdi mdi-nutrition"></i>
+                                            <i class="mdi mdi-school-outline"></i>
                                             <span> Básica Especial </span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ route('matriculageneral.eba.principal') }}" class="waves-effect">
-                                            <i class="mdi mdi-shield-sun"></i>
+                                            <i class="mdi mdi-school-outline"></i>
                                             <span> Básica Alternativa </span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ route('tecnicoproductiva.principal') }}" class="waves-effect">
-                                            <i class="fas fa-user-friends"></i>
+                                            <i class="ion ion-ios-people"></i>
                                             <span> Técnico Productivo </span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ route('superiorpedagogico.principal') }}" class="waves-effect">
-                                            <i class="fas fa-brain"></i>
+                                            <i class="ion ion-ios-people"></i>
                                             <span> Superior Pedagógico </span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ route('superiortecnologico.principal') }}" class="waves-effect">
-                                            <i class="fas fa-brain"></i>
+                                            <i class="ion ion-ios-people"></i>
                                             <span> Superior Tecnológico </span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ route('superiorartistico.principal') }}" class="waves-effect">
-                                            <i class="fas fa-brain"></i>
+                                            <i class="ion ion-ios-people"></i>
                                             <span> Superior Artístico </span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ route('Docentes.principal') }}" class="waves-effect">
-                                            <i class="fas fa-brain"></i>
+                                            <i class="ion ion-md-person-add"></i>
                                             <span> Personal Docente </span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ route('powerbi.salud.menu', '185') }}" class="waves-effect">
-                                            <i class="fas fa-brain"></i>
+                                            <i class="ion ion-md-apps"></i>
                                             <span> Servicios Básicos </span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ route('salud.indicador.pactoregional') }}" class="waves-effect">
-                                            <i class="fas fa-chart-bar"></i>
+                                            <i class="mdi mdi-equalizer-outline"></i>
                                             <span> Pacto Regional </span>
                                         </a>
                                     </li>
@@ -858,7 +794,7 @@
                                     <li>
                                         <a href="{{ route('acceso.publico.modulo', 'VIVIENDA') }}" class="waves-effect">
                                             <i class="mdi mdi-home"></i>
-                                            <span> Dashboard </span>
+                                            <span> Inicio </span>
                                         </a>
                                     </li>
                                 @break
@@ -868,7 +804,7 @@
                                     <li>
                                         <a href="{{ route('acceso.publico.modulo', 'SALUD') }}" class="waves-effect">
                                             <i class="mdi mdi-home"></i>
-                                            <span> Dashboard </span>
+                                            <span> Inicio </span>
                                         </a>
                                     </li>
                                     <li>
@@ -920,7 +856,8 @@
                                     <li>
                                         <a href="{{ route('acceso.publico.modulo', 'PRESUPUESTO') }}" class="waves-effect">
                                             <i class="mdi mdi-home"></i>
-                                            <span> Dashboard </span>
+                                            {{-- <span> Dashboard </span> --}}
+                                            <span> Inicio </span>
                                         </a>
                                     </li>
                                 @break
@@ -930,7 +867,7 @@
                                     <li>
                                         <a href="{{ route('acceso.publico.modulo', 'TRABAJO') }}" class="waves-effect">
                                             <i class="mdi mdi-home"></i>
-                                            <span> Dashboard </span>
+                                            <span> Inicio </span>
                                         </a>
                                     </li>
                                 @break
@@ -959,79 +896,26 @@
             <div class="content-page">
                 <div class="content">
 
-
-
                     <!-- Start Content-->
                     <div class="container-fluid">
 
-                        @if (session('sistema_publico_id') == 5)
-                            {{-- <div class="row">
-                                <div class="col-12">
-                                    @if ($titlePage != '')
-                                        <div class="page-title-box">
-                                            <h4 class="page-title">{{ $titlePage }}</h4>
-                                            <div class="page-title-right">
-                                                <ol class="breadcrumb p-0 m-0">
-                                                    {{ $actualizado }}
-                                                </ol>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                        </div>
-                                    @else
-                                        <br>
-                                    @endif
-                                </div>
-                            </div> --}}
-                            <br>
-                        @elseif(session('sistema_publico_id') == 1)
-                            <div class="row">
-                                <div class="col-12">
-                                    @if ($titlePage != '')
-                                        <div class="page-title-box">
-                                            <h4 class="page-title">{{ $titlePage }}</h4>
-                                            <div class="page-title-right">
-                                                <ol class="breadcrumb p-0 m-0">
-                                                    {{ $actualizado }}
-                                                </ol>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                        </div>
-                                    @else
-                                        <br>
-                                    @endif
-                                </div>
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                {{-- <div class="page-title-box">
+                                    <h4 class="page-title">Welcome !</h4>
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb p-0 m-0">
+                                            <li class="breadcrumb-item"><a href="#">Moltran</a></li>
+                                            <li class="breadcrumb-item active">Dashboard</li>
+                                        </ol>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div> --}}
+                                {{-- <br> --}}
                             </div>
-                        @else
-                            <div class="row">
-                                <div class="col-12">
-                                    @if ($titlePage != '')
-                                        <div class="page-title-box">
-                                            <h4 class="page-title">{{ $titlePage }}</h4>
-                                            <div class="page-title-right">
-                                                <ol class="breadcrumb p-0 m-0">
-                                                    @isset($breadcrumb)
-                                                        @foreach ($breadcrumb as $key => $item)
-                                                            @if ($key == count($breadcrumb) - 1)
-                                                                <li class="breadcrumb-item">{{ $item['titulo'] }}</li>
-                                                            @else
-                                                                <li class="breadcrumb-item"><a
-                                                                        href="{{ $item['url'] }}">{{ $item['titulo'] }}</a>
-                                                                </li>
-                                                            @endif
-                                                        @endforeach
-                                                    @endisset
-                                                </ol>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                        </div>
-                                    @else
-                                        <br>
-                                    @endif
-
-                                </div>
-                            </div>
-                        @endif
-
+                        </div>
+                        <!-- end page title -->
 
                         @yield('content')
 
@@ -1057,7 +941,6 @@
                 <!-- end Footer -->
 
             </div>
-
         @endguest
 
         <!-- ============================================================== -->
@@ -1325,25 +1208,25 @@
                                         </div>
                                         <div class="media-body align-self-center">
                                             <div class="text-left">{{-- text-right --}}
-                                                {{-- <h4 class="font-20 my-0 font-weight-bold"><span
-                                                data-plugin="counterup">15852</span></h4> --}}
+                                                {{-- <h4 class="font-20 my-0 font-weight-bold"><span data-plugin="counterup">15852</span></h4> --}}
                                                 <p class="mb-0 mt-1 text-truncate">{{ $sistema->nombre }}</p>
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- <div class="mt-4">
-                                <h6 class="text-uppercase">Target <span class="float-right">60%</span></h6>
-                                <div class="progress progress-sm m-0">
-                                    <div class="progress-bar bg-info" role="progressbar" aria-valuenow="60"
-                                        aria-valuemin="0" aria-valuemax="100" style="width:  100%">
-                                        <span class="sr-only">60% Complete</span>
+                                    <div class="mt-4 d-none">
+                                        <h6 class="text-uppercase">Target <span class="float-right">60%</span></h6>
+                                        <div class="progress progress-sm m-0">
+                                            <div class="progress-bar bg-info" role="progressbar" aria-valuenow="60"
+                                                aria-valuemin="0" aria-valuemax="100" style="width:  100%">
+                                                <span class="sr-only">60% Complete</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div> --}}
                                 </a>
                             </div>
                         </div>
                     @endforeach
+
                 </div>
             </div>
         </div>
