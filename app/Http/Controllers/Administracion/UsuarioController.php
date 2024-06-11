@@ -36,6 +36,7 @@ class UsuarioController extends Controller
         //$data = UsuarioRepositorio::Listar_porperfil(session('perfil_administrador_id'));
         $data = UsuarioRepositorio::Listar_porperfil(session('perfil_administrador_id'));
         return  datatables()::of($data)
+            ->addIndexColumn()
             ->addColumn('nombrecompleto', '{{$apellido1}} {{$apellido2}}, {{$nombre}}')
             ->editColumn('entidad', function ($data) {
                 $ent = EntidadRepositorio::getEntidadOficina($data->entidad);
@@ -561,7 +562,7 @@ class UsuarioController extends Controller
         $sector = Sector::whereIn('id', [1, 2, 4, 14, 18, 22])->get();
         return response()->json(compact('sector'));
     }
-    
+
     public function cargartipoentidadx()
     {
         $sector = Sector::whereIn('id', [1, 2, 4, 14, 18, 22])->get();

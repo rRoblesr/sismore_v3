@@ -15,23 +15,21 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card card-border">
-                            <div class="card-header border-success-0 bg-transparent pb-0">
+                            <div class="card-header border-success-0 bg-transparent pb-2 pl-0">
                                 {{-- <div class="card-widgets"><button type="button" class="btn btn-primary btn-xs" onclick="add()"><i class="fa fa-plus"></i> Nuevo</button></div> --}}
                                 <h4 class="card-title">lista de Ingresos </h4>
                             </div>
-
-                            <div class="card-body">
+                            <div class="card-body p-0">
                                 <div class="table-responsive">
-                                    <br>
-                                    <table id="tabla" class="table table-sm table-striped table-bordered font-11">
+                                    <table id="tabla" class="table table-striped table-bordered font-12">
                                         <thead class="cabecera-dataTable table-success-0 text-white">
                                             <tr>
-                                                <th>Nº</th>
-                                                <th>Usuario</th>
-                                                <th>Entidad</th>
-                                                <th>Oficina</th>
-                                                <th>Login</th>
-                                                <th>Logout</th>
+                                                <th class="text-center">Nº</th>
+                                                <th class="text-center">Usuario</th>
+                                                <th class="text-center">Entidad</th>
+                                                <th class="text-center">Oficina</th>
+                                                <th class="text-center">Login</th>
+                                                <th class="text-center">Logout</th>
                                                 {{-- <th>Aciones</th> --}}
                                             </tr>
                                         </thead>
@@ -133,6 +131,25 @@
                 destroy: true,
                 language: table_language,
                 ajax: "{{ route('loginrecords.reporte.listar') }}",
+                columnDefs: [{
+                        targets: 0,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 3,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 4,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 5,
+                        className: 'text-center'
+                    }
+                    
+
+                ]
             });
         });
 
@@ -236,7 +253,8 @@
             table_principal = $('#dtPrincipal').DataTable({
                 "ajax": "{{ url('/') }}/Sistema/listarDT/",
                 "columns": [{
-                        data: 'nombre'
+                        data: 'nombre',
+                        className: 'text-center'
                     },
                     {
                         data: 'icono'

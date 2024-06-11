@@ -50,7 +50,7 @@
                                             <table id="dtPrincipal" class="table table-striped table-bordered"
                                                 style="width:100%,font-size:12px">
                                                 <thead class="cabecera-dataTable table-success-0 text-white">
-                                                    <!--th>Nº</th-->
+                                                    <th>Nº</th>
                                                     {{-- <th>DNI</th> --}}
                                                     <th>Entidad</th>
                                                     <th>Nombre</th>
@@ -540,6 +540,8 @@
             tabla_principal = $('#dtPrincipal').DataTable({
                 "ajax": "{{ route('Usuario.Lista_DataTable') }}",
                 "columns": [{
+                    data: 'DT_RowIndex'
+                }, {
                     data: 'entidad'
                 }, {
                     data: 'nombrecompleto'
