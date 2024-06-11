@@ -29,6 +29,7 @@
                                                 <th>Nº</th>
                                                 <th>Usuario</th>
                                                 <th>Entidad</th>
+                                                <th>Oficina</th>
                                                 <th>Login</th>
                                                 <th>Logout</th>
                                                 {{-- <th>Aciones</th> --}}

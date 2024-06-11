@@ -1486,3 +1486,13 @@ CREATE TABLE `adm_login_records` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   foreign key (usuario) references adm_usuario(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+##################################
+CREATE TABLE adm_login_navigation (
+    id BIGINT  AUTO_INCREMENT PRIMARY KEY,
+    usuario int  NOT NULL,
+    url VARCHAR(255) NOT NULL,
+    visited_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario) REFERENCES adm_usuario(id)
+);

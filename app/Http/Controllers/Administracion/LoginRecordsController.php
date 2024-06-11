@@ -39,6 +39,7 @@ class LoginRecordsController extends Controller
                 $key + 1,
                 $usu->nombre . ', ' . $usu->apellido1 . ' ' . $usu->apellido2,
                 $ofi->entidadn,
+                $ofi->oficinan,
                 $value->login,
                 $value->logout,
             );
