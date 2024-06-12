@@ -41,40 +41,38 @@
 @endsection
 
 @section('content')
-    <div class="content">
+    <div class="form-group row align-items-center vh-5">
+        <div class="col-lg-7 col-md-6 col-sm-6">
+            <h4 class="page-title font-16">HOMOLOGACION DE ACTAS</h4>
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-1">
+            <select id="anio" name="anio" class="form-control btn-xs font-11 p-0" onchange="getmes();">
+                @foreach ($anio as $item)
+                    <option value="{{ $item }}" {{ $item == date('Y') ? 'selected' : '' }}>
+                        {{ $item }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-1">
+            <select id="mes" name="mes" class="form-control btn-xs font-11 p-0"></select>
+        </div>
+        <div class="col-lg-3 col-md-2 col-sm-2">
+            <select id="municipios" name="municipios" class="form-control btn-xs font-11">
+                <option value="0">MUNICIPIOS</option>
+                @foreach ($muni as $item)
+                    <option value="{{ $item->id }}">
+                        {{ $item->nombre }}</option>
+                @endforeach
 
-        <div class="form-group row align-items-center vh-5">
-            <div class="col-lg-7 col-md-6 col-sm-6">
-                <h4 class="page-title font-16">HOMOLOGACION DE ACTAS</h4>
-            </div>
-            <div class="col-lg-1 col-md-1 col-sm-1">
-                <select id="anio" name="anio" class="form-control btn-xs font-11 p-0" onchange="getmes();">
-                    @foreach ($anio as $item)
-                        <option value="{{ $item }}" {{ $item == date('Y') ? 'selected' : '' }}>
-                            {{ $item }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-lg-1 col-md-1 col-sm-1">
-                <select id="mes" name="mes" class="form-control btn-xs font-11 p-0"></select>
-            </div>
-            <div class="col-lg-3 col-md-2 col-sm-2">
-                <select id="municipios" name="municipios" class="form-control btn-xs font-11">
-                    <option value="0">MUNICIPIOS</option>
-                    @foreach ($muni as $item)
-                        <option value="{{ $item->id }}">
-                            {{ $item->nombre }}</option>
-                    @endforeach
-
-                </select>
-            </div>
-            {{-- <div class="col-lg-2 col-md-2 col-sm-2">
+            </select>
+        </div>
+        {{-- <div class="col-lg-2 col-md-2 col-sm-2">
                 <select id="distrito" name="distrito" class="form-control btn-xs font-11" onchange="cargarpacto1();">
                     <option value="0">DISTRITO</option>
                 </select>
             </div> --}}
 
-            {{-- <div class="col-lg-1 col-md-1 col-sm-1 text-center d-none">
+        {{-- <div class="col-lg-1 col-md-1 col-sm-1 text-center d-none">
                 <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()" title='ACTUALIZAR'>
                     <span class="d-block d-lg-none">
                         <i class=" fas fa-history"></i></span>
@@ -84,10 +82,40 @@
             </div> --}}
 
 
-        </div>
-
-
     </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-border">
+                        <div class="card-header border-success-0 bg-transparent pb-2 pl-0">
+                            {{-- <div class="card-widgets"><button type="button" class="btn btn-primary btn-xs" onclick="add()"><i class="fa fa-plus"></i> Nuevo</button></div> --}}
+                            <h4 class="card-title">lista de actas</h4>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table id="tabla" class="table table-sm table-striped table-bordered font-12">
+                                    <thead class="cabecera-dataTable table-success-0 text-white">
+                                        <tr>
+                                            <th class="text-center">Nº</th>
+                                            <th class="text-center">RED</th>
+                                            <th class="text-center">MICRORED</th>
+                                            <th class="text-center">CODIGO UNICO</th>
+                                            <th class="text-center">ESTABLECIMIENTO</th>
+                                            <th class="text-center">ACCIÓN</th>
+                                        </tr>
+                                    </thead>
+
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- End row -->
+        </div>
+    </div> <!-- End row -->
 @endsection
 @section('js')
     <script type="text/javascript">

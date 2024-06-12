@@ -15,6 +15,7 @@ use App\Models\Salud\ImporPadronActas;
 use App\Models\Salud\ImporPadronAnemia;
 use App\Repositories\Administracion\EntidadRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
+use App\Repositories\Salud\EstablecimientoRepositorio;
 use App\Utilities\Utilitario;
 use Carbon\Carbon;
 use DateTime;
@@ -391,5 +392,35 @@ class ImporPadronActasController extends Controller
         $muni = EntidadRepositorio::entidades(2);
 
         return view('salud.ImporPadronActas.registro', compact('anio', 'muni'));
+    }
+
+    public function registroListarDT(Request $rq)
+    {
+        $draw = intval($rq->draw);
+        $start = intval($rq->start);
+        $length = intval($rq->length);
+
+        $query = EstablecimientoRepositorio::listar(2);
+        $data = [];
+        foreach ($query as $key => $value) {
+
+            $data[] = array(
+                $key + 1,
+                $value->red,
+                $value->microred,
+                $value->cod_unico,
+                $value->eess,
+                '',
+            );
+        }
+        $result = array(
+            "draw" => $draw,
+            "recordsTotal" => $start,
+            "recordsFiltered" => $length,
+            "data" => $data,
+            // "ofi" => $ofi,
+            // "usu" => $usu,
+        );
+        return response()->json($result);
     }
 }
