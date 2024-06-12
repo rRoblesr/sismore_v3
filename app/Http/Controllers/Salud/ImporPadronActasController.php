@@ -46,15 +46,7 @@ class ImporPadronActasController extends Controller
         $fuentes = FuenteImportacion::whereIn('id', [36, 37, 38, 39, 40])->get();
         return view('salud.ImporPadronActas.Importar', compact('fuentes'));
     }
-
-    public function exportar()
-    {
-        /* $imp = Importacion::where(['fuenteimportacion_id' => $this->fuente, 'estado' => 'PR'])->orderBy('fechaActualizacion', 'desc')->first();
-        $mat = Matricula::where('importacion_id', $imp->id)->first();
-        $mensaje = "";
-        return view('educacion.ImporPoblacion.Exportar', compact('mensaje', 'imp', 'mat')); */
-    }
-
+    
     function json_output($status = 200, $msg = 'OK!!', $data = null)
     {
         header('Content-Type:application/json');
@@ -376,10 +368,26 @@ class ImporPadronActasController extends Controller
         return response()->json(array('status' => true));
     }
 
+    public function exportar()
+    {
+        /* $imp = Importacion::where(['fuenteimportacion_id' => $this->fuente, 'estado' => 'PR'])->orderBy('fechaActualizacion', 'desc')->first();
+        $mat = Matricula::where('importacion_id', $imp->id)->first();
+        $mensaje = "";
+        return view('educacion.ImporPoblacion.Exportar', compact('mensaje', 'imp', 'mat')); */
+    }
+
     public function download()
     {
         // $name = 'SIAGIE MATRICULAS ' . date('Y-m-d') . '.xlsx';
         // return Excel::download(new ImporPadronSiagieExport, $name);
         return [];
     }
+
+    public function registro()
+    {
+        
+        return view('educacion.ImporPoblacion.Exportar', compact('mensaje', 'imp', 'mat')); 
+    }
+
+    
 }

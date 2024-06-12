@@ -1164,6 +1164,8 @@ Route::get('/ImporPadronActas/Listar/ImportarDT', [ImporPadronActasController::c
 Route::post('/ImporPadronActas/ListaImportada', [ImporPadronActasController::class, 'ListaImportada'])->name('imporpadronactas.listarimportados');
 Route::get('/ImporPadronActas/eliminar/{fuente}/{id}', [ImporPadronActasController::class, 'eliminar'])->name('imporpadronactas.eliminar');
 
+Route::get('/Salud/actas', [ImporPadronActasController::class, 'registro'])->name('imporpadronactas.registro');
+
 Route::get('/ImporPadronEESS/Importar', [ImporPadronEstablecimientoController::class, 'importar'])->name('imporpadronestablecimiento.importar');
 Route::post('/ImporPadronEESS/Importar', [ImporPadronEstablecimientoController::class, 'guardar'])->name('imporpadronestablecimiento.guardar');
 Route::get('/ImporPadronEESS/Listar/ImportarDT', [ImporPadronEstablecimientoController::class, 'ListarDTImportFuenteTodos'])->name('imporpadronestablecimiento.listar.importados');
@@ -1192,14 +1194,6 @@ Route::get('/Salud/PadronNominal/Calidad/{codigoCalidad}/{codigoPadron}', [Salud
 Route::get('/Salud/PadronNominal/Importar', [SaludPadronNominalImportar::class, 'index'])->name('salud.padron.importar.index');
 Route::get('/Salud/PadronNominal/Importar/Historial', [SaludPadronNominalImportar::class, 'listarHistorial'])->name('salud.padron.importar.historial');
 Route::post('/Salud/PadronNominal/Importar/Cargar', [SaludPadronNominalImportar::class, 'cargarPadron'])->name('salud.padron.importar.cargar');
-
-Route::get('/Salud/actas', [ActasHomologadasController::class, 'principal'])->name('mantenimiento.actashomologadas.principal');
-// Route::get('/Mantenimiento/ActasHomologadas/Principal', [ActasHomologadasController::class, 'principal'])->name('mantenimiento.xindicadorgeneralmeta.listar');
-// Route::get('/Mantenimiento/Actas/Meta/Listar/DIT', [IndicadorGeneralController::class, 'ListarDTMeta_dit'])->name('mantenimiento.xindicadorgeneralmeta.listar.dit');
-// Route::post('/Mantenimiento/Actas/Meta/Add', [IndicadorGeneralController::class, 'ajax_add_meta'])->middleware('auth')->name('mantenimiento.xindicadorgeneralmeta.guardar');
-// Route::post('/Mantenimiento/Actas/Meta/Add/DIT', [IndicadorGeneralController::class, 'ajax_add_meta_dit'])->middleware('auth')->name('mantenimiento.xindicadorgeneralmeta.guardar.dit');
-// Route::post('/Mantenimiento/Actas/Meta/Find/DIT', [IndicadorGeneralController::class, 'ajax_find_meta_dit'])->middleware('auth')->name('mantenimiento.xindicadorgeneralmeta.find.dit');
-// Route::get('/Mantenimiento/Actas/Meta/Delete/{id}', [IndicadorGeneralController::class, 'ajax_delete_meta'])->middleware('auth')->name('mantenimiento.xindicadorgeneralmeta.eliminar');
 
 /******************************************** FIN SALUD ***************************************************/
 
