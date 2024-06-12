@@ -13,6 +13,7 @@ use App\Models\Parametro\Ubigeo;
 use App\Models\Salud\DataPacto1;
 use App\Models\Salud\ImporPadronActas;
 use App\Models\Salud\ImporPadronAnemia;
+use App\Repositories\Administracion\EntidadRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Utilities\Utilitario;
 use Carbon\Carbon;
@@ -46,7 +47,7 @@ class ImporPadronActasController extends Controller
         $fuentes = FuenteImportacion::whereIn('id', [36, 37, 38, 39, 40])->get();
         return view('salud.ImporPadronActas.Importar', compact('fuentes'));
     }
-    
+
     function json_output($status = 200, $msg = 'OK!!', $data = null)
     {
         header('Content-Type:application/json');
@@ -385,9 +386,10 @@ class ImporPadronActasController extends Controller
 
     public function registro()
     {
-        
-        return view('educacion.ImporPoblacion.Exportar', compact('mensaje', 'imp', 'mat')); 
-    }
+        $anio = [2023, 2024, 2025, 2026];
+        $sector = 2;
+        $muni = EntidadRepositorio::entidades(2);
 
-    
+        return view('salud.ImporPadronActas.registro', compact('anio', 'muni'));
+    }
 }

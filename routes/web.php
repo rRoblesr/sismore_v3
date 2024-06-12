@@ -1165,6 +1165,7 @@ Route::post('/ImporPadronActas/ListaImportada', [ImporPadronActasController::cla
 Route::get('/ImporPadronActas/eliminar/{fuente}/{id}', [ImporPadronActasController::class, 'eliminar'])->name('imporpadronactas.eliminar');
 
 Route::get('/Salud/actas', [ImporPadronActasController::class, 'registro'])->name('imporpadronactas.registro');
+Route::get('/Salud/actas/listar', [ImporPadronActasController::class, 'registroListar'])->name('imporpadronactas.registro.listar');
 
 Route::get('/ImporPadronEESS/Importar', [ImporPadronEstablecimientoController::class, 'importar'])->name('imporpadronestablecimiento.importar');
 Route::post('/ImporPadronEESS/Importar', [ImporPadronEstablecimientoController::class, 'guardar'])->name('imporpadronestablecimiento.guardar');

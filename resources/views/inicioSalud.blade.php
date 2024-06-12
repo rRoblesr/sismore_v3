@@ -500,14 +500,15 @@
                 'dat': [0.596, 0.543, 0.571, 0.591, 0.564, 0.537, 0.572, 0.60809847527, 0.6575241822, 0.594, ]
             };
             gLineaBasica('anal1', data, '',
-                'Porcentaje de niñas y niños menores de cinco años de edad con desnutrición crónica',
+                'Porcentaje de niñas y niños entre 6 a 35 meses  de edad con anemia',
                 '');
             var data = {
                 'cat': ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', ],
                 'dat': [0.261, 0.24, 0.248, 0.194, 0.178, 0.177, 0.174, 0.17541049234, 0.196901, 0.191, ]
             };
             gLineaBasica('anal2', data, '',
-                'Porcentaje de niñas y niños entre 6 a 35 meses  de edad con anemia',
+                
+                'Porcentaje de niñas y niños menores de cinco años de edad con desnutrición crónica',
                 '');
 
         });
