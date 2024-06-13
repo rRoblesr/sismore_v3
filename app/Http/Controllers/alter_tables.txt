@@ -1496,3 +1496,19 @@ CREATE TABLE adm_login_navigation (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (usuario) REFERENCES adm_usuario(id)
 );
+
+
+###############################################
+
+SELECT * FROM `sal_establecimiento` where estado='ACTIVO' and ubigeo_id in(57,56,49);
+
+consulta y modificaion huipoca
+SELECT * FROM `sal_establecimiento` where estado='ACTIVO' and cod_unico in(5400 ,5410 ,30638 ,30639 );
+update `sal_establecimiento` set ubigeo_id=56 where estado='ACTIVO' and cod_unico in(5400 ,5410 ,30638 ,30639 );
+
+consulta y modificaion boqueron
+SELECT * FROM `sal_establecimiento` where estado='ACTIVO' and cod_unico in(5399 ,5401 ,5397 ,5403 ,5406 );
+update `sal_establecimiento` set ubigeo_id=57 where estado='ACTIVO' and cod_unico in(5399 ,5401 ,5397 ,5403 ,5406 );
+
+
+

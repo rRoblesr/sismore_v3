@@ -46,7 +46,7 @@
 
 @section('content')
     <div class="form-group row align-items-center vh-5">
-        <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="col-lg-3 col-md-6 col-sm-6">
             <h4 class="page-title font-16">HOMOLOGACION DE ACTAS</h4>
         </div>
         {{-- <div class="col-lg-1 col-md-1 col-sm-1">
@@ -60,19 +60,38 @@
         {{-- <div class="col-lg-1 col-md-1 col-sm-1">
             <select id="mes" name="mes" class="form-control btn-xs font-11 p-0"></select>
         </div> --}}
-        <div class="col-lg-2 col-md-1 col-sm-1">
+        {{-- <div class="col-lg-2 col-md-1 col-sm-1">
             <input type="date" id="fechaf" name="fechaf" class="form-control btn-xs font-11"
                 value="{{ date('Y-m-d') }}">
-            {{-- <select id="mes" name="mes" class="form-control btn-xs font-11 p-0"></select> --}}
-        </div>
-        <div class="col-lg-4 col-md-2 col-sm-2">
-            <select id="municipio" name="municipio" class="form-control btn-xs font-11" onchange="cargartabla()">
+        </div> --}}
+        <div class="col-lg-3 col-md-2 col-sm-2">
+            <select id="vmunicipio" name="vmunicipio" class="form-control btn-xs font-11" onchange="cargartabla()">
                 <option value="0">MUNICIPIOS</option>
                 @foreach ($muni as $item)
                     <option value="{{ $item->id }}">
-                        {{ $item->nombre }}</option>
+                        {{ $item->codigo }}|
+                        {{ $item->nombre }}
+                    </option>
                 @endforeach
 
+            </select>
+        </div>
+        <div class="col-lg-3 col-md-2 col-sm-2">
+            <select id="vred" name="vred" class="form-control btn-xs font-11" onchange="cargartabla()">
+                <option value="0">RED</option>
+                {{-- @foreach ($muni as $item)
+                    <option value="{{ $item->id }}">
+                        {{ $item->nombre }}</option>
+                @endforeach --}}
+            </select>
+        </div>
+        <div class="col-lg-3 col-md-2 col-sm-2">
+            <select id="vmicrored" name="vmicrored" class="form-control btn-xs font-11" onchange="cargartabla()">
+                <option value="0">MICRORED</option>
+                {{-- @foreach ($muni as $item)
+                    <option value="{{ $item->id }}">
+                        {{ $item->nombre }}</option>
+                @endforeach --}}
             </select>
         </div>
         {{-- <div class="col-lg-2 col-md-2 col-sm-2">
@@ -160,7 +179,7 @@
                     "url": "{{ route('imporpadronactas.registro.listar') }}",
                     "type": "GET",
                     "data": {
-                        'municipio': $('#municipio').val(),
+                        'municipio': $('#vmunicipio').val(),
                     },
                 },
                 // columnDefs: [{

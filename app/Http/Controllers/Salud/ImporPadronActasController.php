@@ -405,13 +405,18 @@ class ImporPadronActasController extends Controller
         $data = [];
         foreach ($query as $key => $value) {
 
+            $boton = '';
+
+
+            // $boton .= '<button type="button" onclick="Cancelar(' . $value->id . ')" class="btn btn-danger btn-xs"><i class="fa fa-eye"></i> Cancelar</button>';
+            $boton .= '<button type="button" onclick="confirmar(' . $value->id . ')" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> Confirmar</button>';
             $data[] = array(
                 $key + 1,
                 $value->red,
                 $value->microred,
                 sprintf('%08d', $value->cod_unico),
                 $value->eess,
-                '',
+                $boton,
             );
         }
         $result = array(
@@ -419,8 +424,8 @@ class ImporPadronActasController extends Controller
             "recordsTotal" => $start,
             "recordsFiltered" => $length,
             "data" => $data,
-            "ofi" =>  $rq->municipio,
-            // "usu" => $usu,
+            "municipio" =>  $rq->municipio,
+            "query" => $query,
         );
         return response()->json($result);
     }
