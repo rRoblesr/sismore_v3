@@ -179,6 +179,7 @@ class HomeController extends Controller
 
     public function accesopublico()
     {
+        // return session()->all();
         $sistemas = SistemaRepositorio::accesopublico();
         if ($sistemas) {
             session(['sistemas_publico' => $sistemas]);

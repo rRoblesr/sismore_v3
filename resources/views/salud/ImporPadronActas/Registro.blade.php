@@ -1,5 +1,9 @@
 @extends('layouts.main', ['activePage' => 'usuarios', 'titlePage' => ''])
 @section('css')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <style>
         .centrarmodal {
             display: flex;
@@ -42,22 +46,27 @@
 
 @section('content')
     <div class="form-group row align-items-center vh-5">
-        <div class="col-lg-7 col-md-6 col-sm-6">
+        <div class="col-lg-6 col-md-6 col-sm-6">
             <h4 class="page-title font-16">HOMOLOGACION DE ACTAS</h4>
         </div>
-        <div class="col-lg-1 col-md-1 col-sm-1">
+        {{-- <div class="col-lg-1 col-md-1 col-sm-1">
             <select id="anio" name="anio" class="form-control btn-xs font-11 p-0" onchange="getmes();">
                 @foreach ($anio as $item)
                     <option value="{{ $item }}" {{ $item == date('Y') ? 'selected' : '' }}>
                         {{ $item }}</option>
                 @endforeach
             </select>
-        </div>
-        <div class="col-lg-1 col-md-1 col-sm-1">
+        </div> --}}
+        {{-- <div class="col-lg-1 col-md-1 col-sm-1">
             <select id="mes" name="mes" class="form-control btn-xs font-11 p-0"></select>
+        </div> --}}
+        <div class="col-lg-2 col-md-1 col-sm-1">
+            <input type="date" id="fechaf" name="fechaf" class="form-control btn-xs font-11"
+                value="{{ date('Y-m-d') }}">
+            {{-- <select id="mes" name="mes" class="form-control btn-xs font-11 p-0"></select> --}}
         </div>
-        <div class="col-lg-3 col-md-2 col-sm-2">
-            <select id="municipios" name="municipios" class="form-control btn-xs font-11">
+        <div class="col-lg-4 col-md-2 col-sm-2">
+            <select id="municipio" name="municipio" class="form-control btn-xs font-11" onchange="cargartabla()">
                 <option value="0">MUNICIPIOS</option>
                 @foreach ($muni as $item)
                     <option value="{{ $item->id }}">
@@ -118,7 +127,12 @@
     </div> <!-- End row -->
 @endsection
 @section('js')
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap4.min.js"></script>
     <script type="text/javascript">
+        var table_principal;
         var paleta_colores = ['#5eb9aa', '#F9FFFE', '#f5bd22', '#058DC7', '#50B432', '#9D561B', '#DDDF00', '#24CBE5',
             '#64E572', '#9F9655', '#FFF263', '#6AF9C4'
         ];
@@ -130,7 +144,46 @@
             });
 
             getmes();
+            cargartabla();
+
         });
+
+        function cargartabla() {
+            table_principal = $('#tabla').DataTable({
+                responsive: true,
+                autoWidth: false,
+                ordered: false,
+                destroy: true,
+                language: table_language,
+                destroy: true,
+                ajax: {
+                    "url": "{{ route('imporpadronactas.registro.listar') }}",
+                    "type": "GET",
+                    "data": {
+                        'municipio': $('#municipio').val(),
+                    },
+                },
+                // columnDefs: [{
+                //         targets: 0,
+                //         className: 'text-center'
+                //     },
+                //     {
+                //         targets: 3,
+                //         className: 'text-center'
+                //     },
+                //     {
+                //         targets: 4,
+                //         className: 'text-center'
+                //     },
+                //     {
+                //         targets: 5,
+                //         className: 'text-center'
+                //     }
+
+
+                // ]
+            });
+        }
 
         function getmes() {
             var mesNombre = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE",

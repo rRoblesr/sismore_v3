@@ -387,6 +387,7 @@ class ImporPadronActasController extends Controller
 
     public function registro()
     {
+        // return session()->all();
         $anio = [2023, 2024, 2025, 2026];
         $sector = 2;
         $muni = EntidadRepositorio::entidades(2);
@@ -400,7 +401,7 @@ class ImporPadronActasController extends Controller
         $start = intval($rq->start);
         $length = intval($rq->length);
 
-        $query = EstablecimientoRepositorio::listar(2);
+        $query = EstablecimientoRepositorio::listar(2, $rq->municipio);
         $data = [];
         foreach ($query as $key => $value) {
 
@@ -408,7 +409,7 @@ class ImporPadronActasController extends Controller
                 $key + 1,
                 $value->red,
                 $value->microred,
-                $value->cod_unico,
+                sprintf('%08d', $value->cod_unico),
                 $value->eess,
                 '',
             );
@@ -418,7 +419,7 @@ class ImporPadronActasController extends Controller
             "recordsTotal" => $start,
             "recordsFiltered" => $length,
             "data" => $data,
-            // "ofi" => $ofi,
+            "ofi" =>  $rq->municipio,
             // "usu" => $usu,
         );
         return response()->json($result);
