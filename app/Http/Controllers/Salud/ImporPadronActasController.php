@@ -417,7 +417,7 @@ class ImporPadronActasController extends Controller
         $data = [];
         foreach ($query as $key => $value) {
 
-            $seg=
+            $seg='';
 
             $boton = '';
             // $boton .= '<button type="button" onclick="Cancelar(' . $value->id . ')" class="btn btn-danger btn-xs"><i class="fa fa-eye"></i> Cancelar</button>';
