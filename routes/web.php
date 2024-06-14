@@ -1166,7 +1166,11 @@ Route::post('/ImporPadronActas/ListaImportada', [ImporPadronActasController::cla
 Route::get('/ImporPadronActas/eliminar/{fuente}/{id}', [ImporPadronActasController::class, 'eliminar'])->name('imporpadronactas.eliminar');
 
 Route::get('/Salud/actas', [ImporPadronActasController::class, 'registro'])->name('imporpadronactas.registro');
-Route::get('/Salud/actas/listar', [ImporPadronActasController::class, 'registroListarDT'])->name('imporpadronactas.registro.listar');
+Route::get('/Salud/actas/listar', [ImporPadronActasController::class, 'registro_listarDT'])->name('imporpadronactas.registro.listar');
+Route::post('/Salud/actas/Save', [ImporPadronActasController::class, 'registro_add'])->name('imporpadronactas.registro..guardar');
+Route::post('/Salud/actas/Update', [ImporPadronActasController::class, 'registro_update'])->name('imporpadronactas.registro..modificar');
+// Route::post('/Mantenimiento/RER/ajax_add/', [RERController::class, 'ajax_add']);
+// Route::post('/Mantenimiento/RER/ajax_update/', [RERController::class, 'ajax_update']);
 
 Route::get('/ImporPadronEESS/Importar', [ImporPadronEstablecimientoController::class, 'importar'])->name('imporpadronestablecimiento.importar');
 Route::post('/ImporPadronEESS/Importar', [ImporPadronEstablecimientoController::class, 'guardar'])->name('imporpadronestablecimiento.guardar');
@@ -1199,6 +1203,8 @@ Route::post('/Salud/PadronNominal/Importar/Cargar', [SaludPadronNominalImportar:
 
 Route::get('/EESS/CargarRed', [EstablecimientoController::class, 'cargarRed'])->name('eess.cargarred');
 Route::get('/EESS/CargarMicrored', [EstablecimientoController::class, 'cargarMicrored'])->name('eess.cargarmicrored');
+Route::get('/EESS/Find/{id}', [EstablecimientoController::class, 'ajax_edit'])->name('eess.find');
+
 
 /******************************************** FIN SALUD ***************************************************/
 

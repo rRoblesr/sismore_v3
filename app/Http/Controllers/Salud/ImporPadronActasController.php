@@ -390,12 +390,22 @@ class ImporPadronActasController extends Controller
         // return session()->all();
         $anio = [2023, 2024, 2025, 2026];
         $sector = 2;
-        $muni = EntidadRepositorio::entidades(2);
+
+
+        if (session('usuario_sector') == 2 && session('usuario_nivel') == 1) {
+            $muni = EntidadRepositorio::entidades(2, session('usuario_codigo_institucion'));
+        } else {
+            $muni = EntidadRepositorio::entidades(2, 0);
+        }
+        // return $muni;
+        // session('usuario_codigo_institucion');
+        // return session()->all();
+        // return session('usuario_id');
 
         return view('salud.ImporPadronActas.registro', compact('anio', 'muni'));
     }
 
-    public function registroListarDT(Request $rq)
+    public function registro_listarDT(Request $rq)
     {
         $draw = intval($rq->draw);
         $start = intval($rq->start);
@@ -406,17 +416,16 @@ class ImporPadronActasController extends Controller
         foreach ($query as $key => $value) {
 
             $boton = '';
-
-
             // $boton .= '<button type="button" onclick="Cancelar(' . $value->id . ')" class="btn btn-danger btn-xs"><i class="fa fa-eye"></i> Cancelar</button>';
-            $boton .= '<button type="button" onclick="confirmar(' . $value->id . ')" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> Confirmar</button>';
+            $boton .= '<button class="btn btn-xs btn-success waves-effect waves-light" data-toggle="modal" data-target="#modal_form" 
+            onclick="datos(' . $value->id . ')"></i> Registrar</button>';
             $data[] = array(
                 $key + 1,
                 $value->red,
                 $value->microred,
                 sprintf('%08d', $value->cod_unico),
                 $value->eess,
-                '<input type="number" id="archivos" name="archivos" class="form-control btn-xs font-11" style="width: 50%;box-sizing: border-box;" value="1">',
+                // '<input type="number" id="archivos" name="archivos" class="form-control btn-xs font-11" style="width: 50%;box-sizing: border-box;" value="1">',
                 $boton,
             );
         }
@@ -429,5 +438,43 @@ class ImporPadronActasController extends Controller
             "query" => $query,
         );
         return response()->json($result);
+    }
+
+    private function _registro_validate($request)
+    {
+        $data = array();
+        $data['error_string'] = array();
+        $data['inputerror'] = array();
+        $data['status'] = TRUE;
+
+        if ($request->mffechai == '') {
+            $data['inputerror'][] = 'mffechai';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+
+        if ($request->mffechaf == 0) {
+            $data['inputerror'][] = 'mffechaf';
+            $data['error_string'][] = 'No hay codigos modulares.';
+            $data['status'] = FALSE;
+        }
+
+        if ($request->mfarchivos > 0) {
+        } else {
+            $data['inputerror'][] = 'mfarchivos';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+
+        if ($data['status'] === FALSE) {
+            echo json_encode($data);
+            exit();
+        }
+    }
+
+    public function registro_add(Request $rq)
+    {
+        $this->_registro_validate($rq);
+        return response()->json(array('status' => true, 'msn' => $rq->all()));
     }
 }

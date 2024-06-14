@@ -11,6 +11,7 @@ use App\Models\Parametro\IndicadorGeneral;
 use App\Models\Parametro\IndicadorGeneralMeta;
 use App\Models\Parametro\Mes;
 use App\Models\Parametro\Ubigeo;
+use App\Models\Salud\Establecimiento;
 use App\Models\Salud\ImporPadronActas;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\SFLRepositorio;
@@ -47,4 +48,13 @@ class EstablecimientoController extends Controller
 
         return response()->json(compact('micro'));
     }
+
+    public function ajax_edit($id)
+    {
+        $eess = Establecimiento::find($id);
+
+        return response()->json(compact('eess'));
+    }
+
+    
 }

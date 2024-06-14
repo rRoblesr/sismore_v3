@@ -53,7 +53,11 @@
         <div class="col-lg-3 col-md-2 col-sm-2">
             <select id="vmunicipio" name="vmunicipio" class="form-control btn-xs font-11"
                 onchange="cargarred(),cargartabla()">
-                <option value="0">MUNICIPIOS</option>
+
+                @if ($muni->count() > 1)
+                    <option value="0">MUNICIPIOS</option>
+                @endif
+
                 @foreach ($muni as $item)
                     <option value="{{ $item->id }}">
                         {{ $item->codigo }}|
@@ -81,37 +85,6 @@
 
     </div>
 
-    <div class="row">
-        <div class="col-lg-3 col-md-6 col-sm-6 mb-2">
-            <h4 class="page-title font-16">HOMOLOGACIÓN DE ACTAS</h4>
-        </div>
-        <div class="col-lg-3 col-md-6 col-sm-6 mb-2">
-            <select id="vmunicipio" name="vmunicipio" class="form-control btn-xs font-11"
-                onchange="cargarred(),cargartabla()">
-                <option value="0">MUNICIPIOS</option>
-                @foreach ($muni as $item)
-                    <option value="{{ $item->id }}">
-                        {{ $item->codigo }} | {{ $item->nombre }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-        <div class="col-lg-3 col-md-6 col-sm-6 mb-2">
-            <select id="vred" name="vred" class="form-control btn-xs font-11"
-                onchange="cargarmicrored(),cargartabla()">
-                <option value="0">RED</option>
-            </select>
-        </div>
-        <div class="col-lg-2 col-md-6 col-sm-6 mb-2">
-            <select id="vmicrored" name="vmicrored" class="form-control btn-xs font-11" onchange="cargartabla()">
-                <option value="0">MICRORED</option>
-            </select>
-        </div>
-        <div class="col-lg-1 col-md-6 col-sm-6 mb-2">
-            <input type="date" id="vfechaf" name="vfechaf" class="form-control btn-xs font-11"
-                value="{{ date('Y-m-d') }}" onchange="cargartabla()">
-        </div>
-    </div>
 
     <div class="row">
         <div class="col-md-12">
@@ -132,7 +105,7 @@
                                             <th class="text-center">MICRORED</th>
                                             <th class="text-center">CODIGO UNICO</th>
                                             <th class="text-center">ESTABLECIMIENTO</th>
-                                            <th class="text-center">N° ARCHIVOS</th>
+                                            {{-- <th class="text-center">N° ARCHIVOS</th> --}}
                                             <th class="text-center">ACCIÓN</th>
                                         </tr>
                                     </thead>
@@ -146,6 +119,59 @@
             </div> <!-- End row -->
         </div>
     </div> <!-- End row -->
+
+    <!-- Bootstrap modal -->
+    <div id="modal_form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+        style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="" id="form" class="form-horizontal" autocomplete="off">
+                        @csrf
+                        <input type="hidden" class="form-control" id="mfeess" name="mfeess">
+                        <div class="form-body">
+                            <div class="form-group">
+                                <label>Fecha Envio<span class="required">*</span></label>
+                                <input id="mffechae" name="mffechae" class="form-control" type="text" readonly>
+                                <span class="help-block"></span>
+                            </div>
+                            <div class="form-group">
+                                <label>Fecha Inicial<span class="required">*</span></label>
+                                <input id="mffechai" name="mffechai" class="form-control" type="date"
+                                    value="{{ date('Y-m-d') }}">
+                                <span class="help-block"></span>
+                            </div>
+                            <div class="form-group">
+                                <label>Fecha Final<span class="required">*</span></label>
+                                <input id="mffechaf" name="mffechaf" class="form-control" type="date"
+                                    value="{{ date('Y-m-d') }}">
+                                <span class="help-block"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Numero de Archivos<span class="required">*</span></label>
+                                <input id="mfarchivos" name="mfarchivos" class="form-control" type="number"
+                                    value="0">
+                                <span class="help-block"></span>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                    <button type="button" id="btnSave" onclick="save()" class="btn btn-primary">Guardar</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <!-- End Bootstrap modal -->
 @endsection
 @section('js')
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
@@ -158,6 +184,18 @@
             '#64E572', '#9F9655', '#FFF263', '#6AF9C4'
         ];
         $(document).ready(function() {
+            $("input").change(function() {
+                $(this).parent().removeClass('has-error');
+                $(this).next().empty();
+            });
+            $("textarea").change(function() {
+                $(this).parent().removeClass('has-error');
+                $(this).next().empty();
+            });
+            $("select").change(function() {
+                $(this).parent().removeClass('has-error');
+                $(this).next().empty();
+            });
             Highcharts.setOptions({
                 lang: {
                     thousandsSep: ","
@@ -189,23 +227,30 @@
                         'fechaf': $('#vfechaf').val(),
                     },
                 },
-                columnDefs: [
-                    // {
-                    //     targets: '_all',
-                    //     className: 'text-center'
-                    // },
-                    // {
-                    //     targets: 3,
-                    //     className: 'text-center'
-                    // },
+                columnDefs: [{
+                        targets: 0,
+                        className: 'text-center'
+                    },
                     {
-                        targets: '4',
+                        targets: 1,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 2,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 3,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 4,
                         className: 'text-left'
                     },
-                    // {
-                    //     targets: 5,
-                    //     className: 'text-center'
-                    // }
+                    {
+                        targets: 5,
+                        className: 'text-center'
+                    }
                 ]
             });
         }
@@ -287,6 +332,80 @@
             });
         }
 
+        function datos(eess) {
+            $.ajax({
+                url: "{{ route('eess.find', '') }}/" + eess,
+                type: 'GET',
+                success: function(data) {
+                    $('.modal-title').html('Registrar actas del EE.SS ' + data.eess.nombre_establecimiento);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+            $('#mffechae').val(formatofecha($('#vfechaf').val()));
+        }
+
+        function save() {
+            var save_method = 'add';
+            $('#btnSave').text('guardando...');
+            $('#btnSave').attr('disabled', true);
+            var url;
+            if (save_method == 'add') {
+                url = "{{ route('imporpadronactas.registro..guardar') }}";
+                msgsuccess = "El registro fue creado exitosamente.";
+                msgerror = "El registro no se pudo crear verifique las validaciones.";
+            } else {
+                url = "{{ url('/') }}/Mantenimiento/RER/ajax_update";
+                msgsuccess = "El registro fue actualizado exitosamente.";
+                msgerror = "El registro no se pudo actualizar. Verifique la operación";
+            }
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: $('#form').serialize(),
+                dataType: "JSON",
+                success: function(data) {
+                    console.log(data)
+                    if (data.status) {
+                        $('#modal_form').modal('hide');
+                        reload_table_principal(); //listarDT();
+                        toastr.success(msgsuccess, 'Mensaje');
+                    } else {
+                        for (var i = 0; i < data.inputerror.length; i++) {
+                            $('[name="' + data.inputerror[i] + '"]').parent().addClass('has-error');
+                            $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]);
+                        }
+                    }
+                    $('#btnSave').text('Guardar');
+                    $('#btnSave').attr('disabled', false);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    toastr.error(msgerror, 'Mensaje');
+                    $('#btnSave').text('Guardar');
+                    $('#btnSave').attr('disabled', false);
+                }
+            });
+        };
+
+        function formatofechax(fechaISO) {
+            var fecha = new Date(fechaISO); // usa zona colombiana
+            var dia = String(fecha.getDate()).padStart(2, '0');
+            var mes = String(fecha.getMonth() + 1).padStart(2, '0'); // Los meses empiezan desde 0
+            var anio = fecha.getFullYear();
+            var fechaFormateada = dia + '/' + mes + '/' + anio;
+            return fechaFormateada;
+        }
+
+        function formatofecha(fechaISO) {
+            var partesFecha = fechaISO.split('-');
+            var anio = partesFecha[0];
+            var mes = partesFecha[1];
+            var dia = partesFecha[2];
+            var fechaFormateada = dia + '/' + mes + '/' + anio;
+            return fechaFormateada;
+        }
+
         function cargarDistritos() {
             $.ajax({
                 url: "{{ route('ubigeo.distrito.25', '') }}/" + $('#provincia').val(),
@@ -305,540 +424,6 @@
                     console.log(jqXHR);
                 },
             });
-        }
-
-        function datosIndicador(id) {
-            $.ajax({
-                url: "{{ route('mantenimiento.indicadorgeneral.buscar.1', '') }}/" + id,
-                type: "GET",
-                dataType: "JSON",
-                success: function(data) {
-                    console.log(data);
-                    if (data.ie) {
-                        $('#indicador').val(data.ie.id);
-                        $('#indicadornombre').val(data.ie.nombre);
-                        $('#indicadordescripcion').val(data.ie.descripcion);
-                        $('#indicadornumerador').val(data.ie.numerador);
-                        $('#indicadordenominador').val(data.ie.denominador);
-                        $('#indicadorinstrumento').val(data.ie.instrumento);
-                        $('#indicadortipo').val(data.ie.tipo);
-                        $('#indicadorfuentedato').val(data.ie.fuente_dato);
-                        $('#modal_datosindicador .modal-footer').html(
-                            '<button type="button" class="btn btn-xs btn-danger waves-effect" data-dismiss="modal">Cerrar</button><button type="button" class="btn btn-primary btn-xs waves-effect waves-light" onclick="verpdf(' +
-                            id + ')">Ficha Tecnica</button>');
-                        $('#modal_datosindicador').modal('show');
-                    } else {
-                        toastr.error('ERROR, Indicador no encontrado, consulte al administrador', 'Mensaje');
-                    }
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR DE INDICADOR");
-                    console.log(jqXHR);
-                },
-            });
-        };
-
-        function verpdf(id) {
-            window.open("{{ route('mantenimiento.indicadorgeneral.exportar.pdf', '') }}/" + id);
-        };
-
-        function gSimpleColumn(div, datax, titulo, subtitulo, tituloserie) {
-
-            Highcharts.chart(div, {
-                chart: {
-                    type: 'column',
-                },
-                title: {
-                    enabled: false,
-                    text: titulo,
-                },
-                subtitle: {
-                    enabled: false,
-                    //text: subtitulo,
-                },
-                xAxis: {
-                    type: 'category',
-                },
-                yAxis: {
-                    /* max: 100, */
-                    title: {
-                        enabled: false,
-                        text: 'Porcentaje',
-                    }
-                },
-                /* colors: [
-                    '#8085e9',
-                    '#2b908f',
-                ], */
-                series: [{
-                    showInLegend: tituloserie != '',
-                    name: tituloserie,
-                    label: {
-                        enabled: false
-                    },
-                    colorByPoint: false,
-                    data: datax,
-                }],
-                tooltip: {
-                    pointFormat: '<span style="color:{point.color}">\u25CF</span> Hay: <b>{point.y}</b><br/>',
-                    shared: true
-                },
-                plotOptions: {
-                    series: {
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                        },
-                    }
-                },
-                exporting: {
-                    enabled: false
-                },
-                credits: false,
-            });
-        }
-
-        function gPie(div, datos, titulo, subtitulo, tituloserie) {
-            Highcharts.chart(div, {
-                chart: {
-                    plotBackgroundColor: null,
-                    plotBorderWidth: null,
-                    plotShadow: false,
-                    type: 'pie'
-                },
-                title: {
-                    enabled: false,
-                    text: titulo, //'Browser market shares in January, 2018'
-                },
-                subtitle: {
-                    enabled: false,
-                    //text: subtitulo,
-                },
-                tooltip: {
-                    //pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
-                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
-                },
-                accessibility: {
-                    point: {
-                        valueSuffix: '%'
-                    }
-                },
-                plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: true,
-                            //format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                            format: '{point.y:,0f} ( {point.percentage:.1f}% )',
-                            connectorColor: 'silver'
-                        }
-                    }
-                },
-                /* plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: true,
-                            //format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                            format: '{point.percentage:.1f}% ({point.y})',
-                            connectorColor: 'silver'
-                        }
-                    }
-                }, */
-                series: [{
-                    showInLegend: true,
-                    //name: 'Share',
-                    data: datos,
-                }],
-                exporting: {
-                    enabled: false
-                },
-                credits: false,
-            });
-        }
-
-        function gBasicColumn(div, categorias, datos, titulo, subtitulo) {
-            Highcharts.chart(div, {
-                chart: {
-                    type: 'column'
-                },
-                title: {
-                    text: titulo
-                },
-                subtitle: {
-                    text: subtitulo
-                },
-                xAxis: {
-                    categories: categorias,
-                },
-                yAxis: {
-
-                    min: 0,
-                    title: {
-                        text: 'Rainfall (mm)',
-                        enabled: false
-                    }
-                },
-
-                tooltip: {
-                    pointFormat: '<span style="color:{point.color}">\u25CF</span> Hay: <b>{point.y}</b><br/>',
-                    shared: true
-                },
-                plotOptions: {
-                    series: {
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                        },
-                    }
-                },
-                series: datos,
-                credits: false,
-            });
-        }
-
-        function gsemidona(div, valor, colors) {
-            Highcharts.chart(div, {
-                chart: {
-                    plotBackgroundColor: null,
-                    plotBorderWidth: 0,
-                    plotShadow: false,
-                    height: 200,
-                },
-                title: {
-                    text: valor + '%', // 'Browser<br>shares<br>January<br>2022',
-                    align: 'center',
-                    verticalAlign: 'middle',
-                    y: 15, //60,
-                    style: {
-                        //fontWeight: 'bold',
-                        //color: 'orange',
-                        fontSize: '30'
-                    }
-                },
-                tooltip: {
-                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                },
-                accessibility: {
-                    point: {
-                        valueSuffix: '%'
-                    }
-                },
-                plotOptions: {
-                    pie: {
-                        dataLabels: {
-                            enabled: true,
-                            distance: -50,
-                            style: {
-                                fontWeight: 'bold',
-                                color: 'white'
-                            },
-
-                        },
-                        startAngle: -90,
-                        endAngle: 90,
-                        center: ['50%', '50%'], //['50%', '75%'],
-                        size: '120%',
-                        borderColor: '#98a6ad',
-                        colors: colors,
-                    }
-                },
-                series: [{
-                    type: 'pie',
-                    name: 'Avance',
-                    innerSize: '65%',
-                    data: [
-                        ['', valor],
-                        //['Edge', 11.97],
-                        //['Firefox', 5.52],
-                        //['Safari', 2.98],
-                        //['Internet Explorer', 1.90],
-                        {
-                            name: '',
-                            y: 100 - valor,
-                            dataLabels: {
-                                enabled: false
-                            }
-                        }
-                    ]
-                }],
-                exporting: {
-                    enabled: false
-                },
-                credits: false
-            });
-        }
-
-        function gAnidadaColumn(div, categoria, series, titulo, subtitulo, maxBar) {
-            var rango = categoria.length;
-            var posPorcentaje = rango * 2 + 1;
-            var cont = 0;
-            var porMaxBar = maxBar * 0.5;
-            Highcharts.chart(div, {
-                chart: {
-                    zoomType: 'xy',
-                },
-                colors: ['#5eb9aa', '#f5bd22', '#ef5350'],
-                title: {
-                    text: titulo, //'Browser market shares in January, 2018'
-                },
-                subtitle: {
-                    text: subtitulo,
-                    style: {
-                        fontSize: '10px',
-                    }
-                },
-                xAxis: [{
-                    categories: categoria,
-                    crosshair: true,
-                    labels: {
-                        style: {
-                            fontSize: '10px',
-                        }
-                    }
-                }],
-                yAxis: [{ // Primary yAxis
-                        max: maxBar > 0 ? maxBar + porMaxBar : null,
-                        labels: {
-                            enabled: true,
-                            style: {
-                                //color: Highcharts.getOptions().colors[2],
-                                fontSize: '10px',
-                            }
-                        },
-                        // labels: {
-                        //     //format: '{value}°C',
-                        //     //style: {
-                        //     //    color: Highcharts.getOptions().colors[2]
-                        //     //}
-                        // },
-                        title: {
-                            enabled: false,
-                            text: 'Matriculados',
-                            style: {
-                                //color: Highcharts.getOptions().colors[2],
-                                fontSize: '11px',
-                            }
-                        },
-                        //opposite: true,
-                    }, { // Secondary yAxis
-                        gridLineWidth: 0, //solo indica el tamaño de la linea
-                        labels: {
-                            enabled: false,
-                        },
-                        title: {
-                            enabled: false,
-                        },
-                        /* title: {
-                            //text: 'Rainfall',
-                            text: '%Indicador',
-                            //style: {
-                            //    color: Highcharts.getOptions().colors[0]
-                            //}
-                        }, */
-                        /* labels: {
-                            //format: '{value} mm',
-                            format: '{value} %',
-                            //style: {
-                            //   color: Highcharts.getOptions().colors[0]
-                            //}
-                        }, */
-                        //min: -200,
-                        min: -600,
-                        max: 400,
-                        opposite: true,
-                    },
-                    /* { // Tertiary yAxis
-                        gridLineWidth: 0,
-                        title: {
-                            text: 'Sea-Level Pressure',
-                            style: {
-                                color: Highcharts.getOptions().colors[1]
-                            }
-                        },
-                        labels: {
-                            format: '{value} mb',
-                            style: {
-                                color: Highcharts.getOptions().colors[1]
-                            }
-                        },
-                        opposite: true
-                    } */
-                ],
-                series: series,
-                plotOptions: {
-                    /* columns: {
-                        stacking: 'normal'
-                    }, */
-                    series: {
-                        showInLegend: true,
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                            //format: '{point.y:,.0f}',
-                            //format: '{point.y:.1f}%',
-                            /* formatter: function() {
-                                if (this.colorIndex == 2)
-                                    return this.y + " %";
-                                else
-                                    return Highcharts.numberFormat(this.y, 0);
-                            }, */
-                            style: {
-                                fontWeight: 'normal',
-                                fontSize: '10px',
-                            }
-                        },
-                    },
-                },
-                tooltip: {
-                    shared: true,
-                },
-                legend: {
-                    itemStyle: {
-                        //"color": "#333333",
-                        "cursor": "pointer",
-                        "fontSize": "10px",
-                        "fontWeight": "normal",
-                        "textOverflow": "ellipsis"
-                    },
-                },
-                exporting: {
-                    enabled: true
-                },
-                credits: false,
-            });
-        }
-
-        function GaugeSeries(div, data) {
-            //colors: ['#5eb9aa', '#f5bd22', '#ef5350'],
-            Highcharts.chart(div, {
-                chart: {
-                    height: 165,
-                    margin: [0, 0, 0, 0],
-                    spacing: [0, 0, 0, 0],
-                    type: 'solidgauge'
-                },
-                // yAxis: {
-                //     min: 0,
-                //     max: 100,
-                //     // stops: [
-                //     //     [0.5, '#ef5350'], // red DF5353
-                //     //     [0.9, '#f5bd22'], // yellow
-                //     //     [1, '#5eb9aa'], // green 33A29D
-                //     // ],
-                //     dataClasses: [{
-                //         from: 0,
-                //         to: 50,
-                //         color: '#ef5350'
-                //     }, {
-                //         from: 51,
-                //         to: 99,
-                //         color: '#f5bd22'
-                //     }, {
-                //         from: 100,
-                //         to: 150,
-                //         color: '#5eb9aa'
-                //     }],
-                //     // starOnTick:true,
-                //     lineWidth: 0,
-                //     tickInterval: null,
-                //     minorTickInterval: null,
-                //     // minorTickWidth:null,
-                //     tickAmount: 0,
-                //     labels: {
-                //         enabled: false,
-                //     }
-
-                // },
-                yAxis: {
-                    labels: {
-                        style: {
-                            display: 'none'
-                        }
-                    },
-                    tickLength: 0,
-                    lineColor: 'transparent',
-                    minorTickLength: 0,
-                    minorGridLineWidth: 0,
-                    gridLineWidth: 0,
-
-                    min: 0,
-                    max: 100,
-                    dataClasses: [{
-                        from: 0,
-                        to: 50,
-                        color: '#ef5350'
-                    }, {
-                        from: 51,
-                        to: 99,
-                        color: '#f5bd22'
-                    }, {
-                        from: 100,
-                        to: 150,
-                        color: '#5eb9aa'
-                    }],
-                },
-                pane: {
-                    background: {
-                        innerRadius: '80%',
-                        outerRadius: '100%'
-                    }
-                },
-                accessibility: {
-                    // typeDescription: 'The gauge chart with 1 data point.'
-                },
-                credits: {
-                    enabled: false
-                },
-                exporting: {
-                    enabled: false,
-                },
-                title: {
-                    text: ''
-                },
-
-                plotOptions: {
-                    series: {
-                        // className: 'highcharts-live-kpi',
-                        dataLabels: {
-                            format: '<div style="text-align:center; margin-top: -20px">' +
-                                '<div style="font-size:2.5em;">{y}%</div>' +
-                                '<div style="font-size:12px; opacity:0.4; text-align: center;">Avance</div>' +
-                                '</div>',
-                            useHTML: true,
-                            borderWidth: 0,
-
-                        }
-                    }
-                },
-                series: [{
-                    name: 'Avance',
-                    // data:[80],
-                    innerRadius: '80%',
-                    data: [{
-                        y: data,
-                        colorIndex: '50'
-                    }],
-                    radius: '100%',
-                }],
-                xAxis: {
-                    accessibility: {
-                        // description: 'Days'
-                    }
-                },
-                lang: {
-                    accessibility: {
-                        // chartContainerLabel: 'CPU usage. Highcharts interactive chart.'
-                    }
-                },
-                tooltip: {
-                    valueSuffix: '%'
-                }
-
-            });
-
         }
     </script>
 

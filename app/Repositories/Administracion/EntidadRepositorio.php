@@ -41,15 +41,16 @@ class EntidadRepositorio
         return $query;
     }
 
-    public static function entidades($sector)
+    public static function entidades($sector, $ubigeo)
     {
         $query = Entidad::from('adm_entidad as ee')
             ->join('adm_tipo_entidad as te', function ($join) use ($sector) {
                 $join->on('te.id', '=', 'ee.tipoentidad_id')->where('te.sector_id', '=', $sector);
             })
             ->join('par_ubigeo as uu', 'uu.codigo', '=', 'ee.codigo')
-            ->select('uu.id', 'ee.codigo', 'ee.nombre', 'ee.abreviado')
-            ->orderBy('ee.nombre')->get();
+            ->select('uu.id', 'ee.codigo', 'ee.nombre', 'ee.abreviado');
+        if ($ubigeo > 0) $query = $query->where('uu.codigo', $ubigeo);
+        $query = $query->orderBy('ee.nombre')->get();
         return $query;
     }
 }
