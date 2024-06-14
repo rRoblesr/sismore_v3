@@ -45,21 +45,10 @@
 @endsection
 
 @section('content')
-    <div class="form-group row align-items-center vh-5">
+    <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6">
             <h4 class="page-title font-16">HOMOLOGACION DE ACTAS</h4>
         </div>
-        {{-- <div class="col-lg-1 col-md-1 col-sm-1">
-            <select id="anio" name="anio" class="form-control btn-xs font-11 p-0" onchange="getmes();">
-                @foreach ($anio as $item)
-                    <option value="{{ $item }}" {{ $item == date('Y') ? 'selected' : '' }}>
-                        {{ $item }}</option>
-                @endforeach
-            </select>
-        </div> --}}
-        {{-- <div class="col-lg-1 col-md-1 col-sm-1">
-            <select id="mes" name="mes" class="form-control btn-xs font-11 p-0"></select>
-        </div> --}}
 
         <div class="col-lg-3 col-md-2 col-sm-2">
             <select id="vmunicipio" name="vmunicipio" class="form-control btn-xs font-11"
@@ -90,7 +79,38 @@
                 value="{{ date('Y-m-d') }}" onchange="cargartabla()">
         </div>
 
+    </div>
 
+    <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-6 mb-2">
+            <h4 class="page-title font-16">HOMOLOGACIÓN DE ACTAS</h4>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 mb-2">
+            <select id="vmunicipio" name="vmunicipio" class="form-control btn-xs font-11"
+                onchange="cargarred(),cargartabla()">
+                <option value="0">MUNICIPIOS</option>
+                @foreach ($muni as $item)
+                    <option value="{{ $item->id }}">
+                        {{ $item->codigo }} | {{ $item->nombre }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 mb-2">
+            <select id="vred" name="vred" class="form-control btn-xs font-11"
+                onchange="cargarmicrored(),cargartabla()">
+                <option value="0">RED</option>
+            </select>
+        </div>
+        <div class="col-lg-2 col-md-6 col-sm-6 mb-2">
+            <select id="vmicrored" name="vmicrored" class="form-control btn-xs font-11" onchange="cargartabla()">
+                <option value="0">MICRORED</option>
+            </select>
+        </div>
+        <div class="col-lg-1 col-md-6 col-sm-6 mb-2">
+            <input type="date" id="vfechaf" name="vfechaf" class="form-control btn-xs font-11"
+                value="{{ date('Y-m-d') }}" onchange="cargartabla()">
+        </div>
     </div>
 
     <div class="row">
