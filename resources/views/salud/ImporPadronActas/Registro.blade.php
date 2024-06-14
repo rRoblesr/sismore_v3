@@ -134,11 +134,12 @@
                 <div class="modal-body">
                     <form action="" id="form" class="form-horizontal" autocomplete="off">
                         @csrf
-                        <input type="hidden" class="form-control" id="mfeess" name="mfeess">
+                        <input type="hidden" id="mfubigeo" name="mfubigeo">
+                        <input type="hidden" id="mfeess" name="mfeess">
                         <div class="form-body">
                             <div class="form-group">
                                 <label>Fecha Envio<span class="required">*</span></label>
-                                <input id="mffechae" name="mffechae" class="form-control" type="text" readonly>
+                                <input id="mffechae" name="mffechae" class="form-control" type="date" readonly>
                                 <span class="help-block"></span>
                             </div>
                             <div class="form-group">
@@ -295,7 +296,7 @@
                 type: 'GET',
                 success: function(data) {
                     $("#vred option").remove();
-                    var options = '<option value="0">RED</option>';
+                    var options = data.red.length > 1 ? '<option value="0">RED</option>' : '';
                     $.each(data.red, function(index, value) {
                         //ss = (id == value.id ? "selected" : "");
                         options += `<option value='${value.id}'>${value.nombre}</option>`;
@@ -319,7 +320,7 @@
                 type: 'GET',
                 success: function(data) {
                     $("#vmicrored option").remove();
-                    var options = '<option value="0">MICRORED</option>';
+                    var options = data.micro.length > 1 ? '<option value="0">MICRORED</option>' : '';
                     $.each(data.micro, function(index, value) {
                         //ss = (id == value.id ? "selected" : "");
                         options += `<option value='${value.id}'>${value.nombre}</option>`;
@@ -333,6 +334,9 @@
         }
 
         function datos(eess) {
+            $('#form')[0].reset();
+            $('.form-group').removeClass('has-error');
+            $('.help-block').empty();
             $.ajax({
                 url: "{{ route('eess.find', '') }}/" + eess,
                 type: 'GET',
@@ -343,7 +347,9 @@
                     console.log(jqXHR);
                 },
             });
-            $('#mffechae').val(formatofecha($('#vfechaf').val()));
+            $('#mfeess').val(eess);
+            $('#mffechae').val($('#vfechaf').val());
+            $('#mfubigeo').val($('#vmunicipio').val());
         }
 
         function save() {
@@ -369,7 +375,7 @@
                     console.log(data)
                     if (data.status) {
                         $('#modal_form').modal('hide');
-                        reload_table_principal(); //listarDT();
+                        table_principal.ajax.reload(null, false);
                         toastr.success(msgsuccess, 'Mensaje');
                     } else {
                         for (var i = 0; i < data.inputerror.length; i++) {

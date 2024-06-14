@@ -1515,14 +1515,16 @@ update `sal_establecimiento` set ubigeo_id=57 where estado='ACTIVO' and cod_unic
 CREATE TABLE `sal_padron_actas` (
   `id` int(11) auto_increment primary key,
   `ubigeo_id` int(11) DEFAULT NULL,
+  `establecimiento_id` int(11) DEFAULT NULL,
+  `usuario_id` int(11) DEFAULT NULL,
   `fecha_inicial` date DEFAULT NULL,
   `fecha_final` date DEFAULT NULL,
-  `fecha_envio` date DEFAULT NULL,
-  `usuario_id` int(11) DEFAULT NULL,
+  `fecha_envio` date DEFAULT NULL,  
   `nro_archivos` int(11) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   foreign key(ubigeo_id) references par_ubigeo(id),
+  foreign key(establecimiento_id) references sal_establecimiento(id),
   foreign key(usuario_id) references adm_usuario(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

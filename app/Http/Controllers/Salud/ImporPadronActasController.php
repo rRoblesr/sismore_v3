@@ -13,6 +13,7 @@ use App\Models\Parametro\Ubigeo;
 use App\Models\Salud\DataPacto1;
 use App\Models\Salud\ImporPadronActas;
 use App\Models\Salud\ImporPadronAnemia;
+use App\Models\Salud\PadronActas;
 use App\Repositories\Administracion\EntidadRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Salud\EstablecimientoRepositorio;
@@ -21,6 +22,7 @@ use Carbon\Carbon;
 use DateTime;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
@@ -415,8 +417,11 @@ class ImporPadronActasController extends Controller
         $data = [];
         foreach ($query as $key => $value) {
 
+            $seg=
+
             $boton = '';
             // $boton .= '<button type="button" onclick="Cancelar(' . $value->id . ')" class="btn btn-danger btn-xs"><i class="fa fa-eye"></i> Cancelar</button>';
+
             $boton .= '<button class="btn btn-xs btn-success waves-effect waves-light" data-toggle="modal" data-target="#modal_form" 
             onclick="datos(' . $value->id . ')"></i> Registrar</button>';
             $data[] = array(
@@ -475,6 +480,15 @@ class ImporPadronActasController extends Controller
     public function registro_add(Request $rq)
     {
         $this->_registro_validate($rq);
-        return response()->json(array('status' => true, 'msn' => $rq->all()));
+        $padron = PadronActas::Create([
+            'ubigeo_id' => $rq->mfubigeo,
+            'establecimiento_id' => $rq->mfeess,
+            'usuario_id' => auth()->user()->id,
+            'fecha_inicial' => $rq->mffechai,
+            'fecha_final' => $rq->mffechaf,
+            'fecha_envio' => $rq->mffechae,
+            'nro_archivos' => $rq->nro_archivos,
+        ]);
+        return response()->json(array('status' => true, 'msn' => $rq->all(), 'padron' => 0));
     }
 }
