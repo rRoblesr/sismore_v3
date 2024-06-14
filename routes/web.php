@@ -72,6 +72,7 @@ use App\Http\Controllers\Presupuesto\SubGenericaDetalleController;
 use App\Http\Controllers\Presupuesto\UnidadEjecutoraController;
 use App\Http\Controllers\Presupuesto\UnidadOrganicaController;
 use App\Http\Controllers\Salud\ActasHomologadasController;
+use App\Http\Controllers\Salud\EstablecimientoController;
 use App\Http\Controllers\Salud\ImporPadronActasController;
 use App\Http\Controllers\Salud\ImporPadronEstablecimientoController;
 use App\Http\Controllers\Salud\IndicadoresController;
@@ -1195,6 +1196,9 @@ Route::get('/Salud/PadronNominal/Calidad/{codigoCalidad}/{codigoPadron}', [Salud
 Route::get('/Salud/PadronNominal/Importar', [SaludPadronNominalImportar::class, 'index'])->name('salud.padron.importar.index');
 Route::get('/Salud/PadronNominal/Importar/Historial', [SaludPadronNominalImportar::class, 'listarHistorial'])->name('salud.padron.importar.historial');
 Route::post('/Salud/PadronNominal/Importar/Cargar', [SaludPadronNominalImportar::class, 'cargarPadron'])->name('salud.padron.importar.cargar');
+
+Route::get('/EESS/CargarRed', [EstablecimientoController::class, 'cargarRed'])->name('eess.cargarred');
+Route::get('/EESS/CargarMicrored', [EstablecimientoController::class, 'cargarMicrored'])->name('eess.cargarmicrored');
 
 /******************************************** FIN SALUD ***************************************************/
 

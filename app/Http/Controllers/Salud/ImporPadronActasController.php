@@ -401,7 +401,7 @@ class ImporPadronActasController extends Controller
         $start = intval($rq->start);
         $length = intval($rq->length);
 
-        $query = EstablecimientoRepositorio::listar(2, $rq->municipio);
+        $query = EstablecimientoRepositorio::listar(2, $rq->municipio, $rq->red, $rq->microred);
         $data = [];
         foreach ($query as $key => $value) {
 
@@ -416,6 +416,7 @@ class ImporPadronActasController extends Controller
                 $value->microred,
                 sprintf('%08d', $value->cod_unico),
                 $value->eess,
+                '<input type="number" id="archivos" name="archivos" class="form-control btn-xs font-11" style="width: 50%;box-sizing: border-box;" value="1">',
                 $boton,
             );
         }

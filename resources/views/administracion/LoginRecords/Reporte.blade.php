@@ -147,7 +147,7 @@
                         targets: 5,
                         className: 'text-center'
                     }
-                    
+
 
                 ]
             });

@@ -60,12 +60,10 @@
         {{-- <div class="col-lg-1 col-md-1 col-sm-1">
             <select id="mes" name="mes" class="form-control btn-xs font-11 p-0"></select>
         </div> --}}
-        {{-- <div class="col-lg-2 col-md-1 col-sm-1">
-            <input type="date" id="fechaf" name="fechaf" class="form-control btn-xs font-11"
-                value="{{ date('Y-m-d') }}">
-        </div> --}}
+
         <div class="col-lg-3 col-md-2 col-sm-2">
-            <select id="vmunicipio" name="vmunicipio" class="form-control btn-xs font-11" onchange="cargartabla()">
+            <select id="vmunicipio" name="vmunicipio" class="form-control btn-xs font-11"
+                onchange="cargarred(),cargartabla()">
                 <option value="0">MUNICIPIOS</option>
                 @foreach ($muni as $item)
                     <option value="{{ $item->id }}">
@@ -77,37 +75,20 @@
             </select>
         </div>
         <div class="col-lg-3 col-md-2 col-sm-2">
-            <select id="vred" name="vred" class="form-control btn-xs font-11" onchange="cargartabla()">
+            <select id="vred" name="vred" class="form-control btn-xs font-11"
+                onchange="cargarmicrored(),cargartabla()">
                 <option value="0">RED</option>
-                {{-- @foreach ($muni as $item)
-                    <option value="{{ $item->id }}">
-                        {{ $item->nombre }}</option>
-                @endforeach --}}
             </select>
         </div>
-        <div class="col-lg-3 col-md-2 col-sm-2">
+        <div class="col-lg-2 col-md-2 col-sm-2">
             <select id="vmicrored" name="vmicrored" class="form-control btn-xs font-11" onchange="cargartabla()">
                 <option value="0">MICRORED</option>
-                {{-- @foreach ($muni as $item)
-                    <option value="{{ $item->id }}">
-                        {{ $item->nombre }}</option>
-                @endforeach --}}
             </select>
         </div>
-        {{-- <div class="col-lg-2 col-md-2 col-sm-2">
-                <select id="distrito" name="distrito" class="form-control btn-xs font-11" onchange="cargarpacto1();">
-                    <option value="0">DISTRITO</option>
-                </select>
-            </div> --}}
-
-        {{-- <div class="col-lg-1 col-md-1 col-sm-1 text-center d-none">
-                <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()" title='ACTUALIZAR'>
-                    <span class="d-block d-lg-none">
-                        <i class=" fas fa-history"></i></span>
-                    <span class="d-none d-lg-block text-center">
-                        <i class=" fas fa-history"></i> Actualizar</span>
-                </button>
-            </div> --}}
+        <div class="col-lg-1 col-md-1 col-sm-1">
+            <input type="date" id="vfechaf" name="vfechaf" class="form-control btn-xs font-11"
+                value="{{ date('Y-m-d') }}" onchange="cargartabla()">
+        </div>
 
 
     </div>
@@ -131,6 +112,7 @@
                                             <th class="text-center">MICRORED</th>
                                             <th class="text-center">CODIGO UNICO</th>
                                             <th class="text-center">ESTABLECIMIENTO</th>
+                                            <th class="text-center">N° ARCHIVOS</th>
                                             <th class="text-center">ACCIÓN</th>
                                         </tr>
                                     </thead>
@@ -162,7 +144,9 @@
                 }
             });
 
-            getmes();
+            // getmes();
+            cargarred();
+            cargarmicrored();
             cargartabla();
 
         });
@@ -180,27 +164,29 @@
                     "type": "GET",
                     "data": {
                         'municipio': $('#vmunicipio').val(),
+                        'red': $('#vred').val(),
+                        'microred': $('#vmicrored').val(),
+                        'fechaf': $('#vfechaf').val(),
                     },
                 },
-                // columnDefs: [{
-                //         targets: 0,
-                //         className: 'text-center'
-                //     },
-                //     {
-                //         targets: 3,
-                //         className: 'text-center'
-                //     },
-                //     {
-                //         targets: 4,
-                //         className: 'text-center'
-                //     },
-                //     {
-                //         targets: 5,
-                //         className: 'text-center'
-                //     }
-
-
-                // ]
+                columnDefs: [
+                    // {
+                    //     targets: '_all',
+                    //     className: 'text-center'
+                    // },
+                    // {
+                    //     targets: 3,
+                    //     className: 'text-center'
+                    // },
+                    {
+                        targets: '4',
+                        className: 'text-left'
+                    },
+                    // {
+                    //     targets: 5,
+                    //     className: 'text-center'
+                    // }
+                ]
             });
         }
 
@@ -231,6 +217,54 @@
                 options += `<option value = '${value.id}' ${ss}>${value.nombre}</option>`;
             });
             $("#mes").append(options);
+        }
+
+        function cargarred() {
+            cargarmicrored();
+            $.ajax({
+                url: "{{ route('eess.cargarred') }}",
+                data: {
+                    'sector': 2,
+                    'municipio': $('#vmunicipio').val(),
+                },
+                type: 'GET',
+                success: function(data) {
+                    $("#vred option").remove();
+                    var options = '<option value="0">RED</option>';
+                    $.each(data.red, function(index, value) {
+                        //ss = (id == value.id ? "selected" : "");
+                        options += `<option value='${value.id}'>${value.nombre}</option>`;
+                    });
+                    $("#vred").append(options);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cargarmicrored() {
+            $.ajax({
+                url: "{{ route('eess.cargarmicrored') }}",
+                data: {
+                    'sector': 2,
+                    'municipio': $('#vmunicipio').val(),
+                    'red': $('#vred').val(),
+                },
+                type: 'GET',
+                success: function(data) {
+                    $("#vmicrored option").remove();
+                    var options = '<option value="0">MICRORED</option>';
+                    $.each(data.micro, function(index, value) {
+                        //ss = (id == value.id ? "selected" : "");
+                        options += `<option value='${value.id}'>${value.nombre}</option>`;
+                    });
+                    $("#vmicrored").append(options);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
         }
 
         function cargarDistritos() {
