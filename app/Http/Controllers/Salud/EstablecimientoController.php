@@ -13,6 +13,7 @@ use App\Models\Parametro\Mes;
 use App\Models\Parametro\Ubigeo;
 use App\Models\Salud\Establecimiento;
 use App\Models\Salud\ImporPadronActas;
+use App\Models\Salud\PadronActas;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\SFLRepositorio;
 use App\Repositories\Parametro\IndicadorGeneralMetaRepositorio;
@@ -56,5 +57,42 @@ class EstablecimientoController extends Controller
         return response()->json(compact('eess'));
     }
 
-    
+    public function registro_listarDT(Request $rq)
+    {
+        $draw = intval($rq->draw);
+        $start = intval($rq->start);
+        $length = intval($rq->length);
+
+        $query = EstablecimientoRepositorio::listar(2, $rq->municipio, $rq->red, $rq->microred);
+        $data = [];
+        foreach ($query as $key => $value) {
+            $nactas = PadronActas::where('fecha_envio', $rq->fechaf)->where('establecimiento_id', $value->id)->select(DB::raw('sum(nro_archivos) as nactas'))->get();
+            $boton = '';
+            if (session('usuario_sector') == 2 && session('usuario_nivel') == 1) {
+                $boton .= '<button class="btn btn-xs btn-success waves-effect waves-light" data-toggle="modal" data-target="#modal_form"
+                    onclick="datos(' . $value->id . ')"></i> Registrar</button>';
+            } else {
+                $boton .= '<button class="btn btn-xs btn-primary waves-effect waves-light" data-toggle="modal" data-target="#modal_verdatos"
+                    onclick="verdatos(' . $value->id . ')"><i class="far fa-eye"></i> Registros</button>';
+            }
+            $data[] = array(
+                $key + 1,
+                $value->red,
+                $value->microred,
+                sprintf('%08d', $value->cod_unico),
+                $value->eess,
+                $nactas->count() > 0 ? ($nactas->first()->nactas > 0 ? $nactas->first()->nactas : 0)  : 0,
+                $boton,
+            );
+        }
+        $result = array(
+            "draw" => $draw,
+            "recordsTotal" => $start,
+            "recordsFiltered" => $length,
+            "data" => $data,
+            "municipio" =>  $rq->municipio,
+            "query" => $query,
+        );
+        return response()->json($result);
+    }
 }

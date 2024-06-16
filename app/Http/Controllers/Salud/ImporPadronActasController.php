@@ -413,24 +413,21 @@ class ImporPadronActasController extends Controller
         $start = intval($rq->start);
         $length = intval($rq->length);
 
-        $query = EstablecimientoRepositorio::listar(2, $rq->municipio, $rq->red, $rq->microred);
+        $query = PadronActas::where('fecha_envio', $rq->fechaf)->where('establecimiento_id', $rq->eess)->get();
         $data = [];
         foreach ($query as $key => $value) {
+            // $nactas = PadronActas::where('fecha_envio', $rq->fechaf)->where('establecimiento_id', $value->id)->select(DB::raw('sum(nro_archivos) as nactas'))->get()->first();
 
-            $seg='';
 
             $boton = '';
-            // $boton .= '<button type="button" onclick="Cancelar(' . $value->id . ')" class="btn btn-danger btn-xs"><i class="fa fa-eye"></i> Cancelar</button>';
 
-            $boton .= '<button class="btn btn-xs btn-success waves-effect waves-light" data-toggle="modal" data-target="#modal_form" 
-            onclick="datos(' . $value->id . ')"></i> Registrar</button>';
+            $boton .= '<button class="btn btn-xs btn-danger waves-effect waves-light" onclick="eliminarseguimiento(' . $value->id . ')"><i class="fa fa-trash"></i></button>';
+
             $data[] = array(
                 $key + 1,
-                $value->red,
-                $value->microred,
-                sprintf('%08d', $value->cod_unico),
-                $value->eess,
-                // '<input type="number" id="archivos" name="archivos" class="form-control btn-xs font-11" style="width: 50%;box-sizing: border-box;" value="1">',
+                $value->fecha_inicial,
+                $value->fecha_final,
+                $value->nro_archivos,
                 $boton,
             );
         }
@@ -439,8 +436,8 @@ class ImporPadronActasController extends Controller
             "recordsTotal" => $start,
             "recordsFiltered" => $length,
             "data" => $data,
-            "municipio" =>  $rq->municipio,
-            "query" => $query,
+            // "municipio" =>  $rq->municipio,
+            // "query" => $query,
         );
         return response()->json($result);
     }
@@ -487,8 +484,15 @@ class ImporPadronActasController extends Controller
             'fecha_inicial' => $rq->mffechai,
             'fecha_final' => $rq->mffechaf,
             'fecha_envio' => $rq->mffechae,
-            'nro_archivos' => $rq->nro_archivos,
+            'nro_archivos' => $rq->mfarchivos,
         ]);
         return response()->json(array('status' => true, 'msn' => $rq->all(), 'padron' => 0));
+    }
+
+    public function registro_delete($id)
+    {
+        $padron = PadronActas::find($id);
+        $padron->delete();
+        return response()->json(array('status' => true));
     }
 }

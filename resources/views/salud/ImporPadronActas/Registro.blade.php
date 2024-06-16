@@ -52,7 +52,7 @@
 
         <div class="col-lg-3 col-md-2 col-sm-2">
             <select id="vmunicipio" name="vmunicipio" class="form-control btn-xs font-11"
-                onchange="cargarred(),cargartabla()">
+                onchange="limpiarfiltros();cargarred(),cargartabla()">
 
                 @if ($muni->count() > 1)
                     <option value="0">MUNICIPIOS</option>
@@ -105,11 +105,18 @@
                                             <th class="text-center">MICRORED</th>
                                             <th class="text-center">CODIGO UNICO</th>
                                             <th class="text-center">ESTABLECIMIENTO</th>
-                                            {{-- <th class="text-center">N° ARCHIVOS</th> --}}
+                                            <th class="text-center">N° ARCHIVOS</th>
                                             <th class="text-center">ACCIÓN</th>
                                         </tr>
                                     </thead>
-
+                                    <tbody></tbody>
+                                    <tfoot class="table-success-0 text-white">
+                                        <tr>
+                                            <td class="text-center" colspan="5">TOTAL DE ARCHIVOS</td>
+                                            <td class="text-center tabla_tfoot">0</td>
+                                            <td class="text-center"></td>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
 
@@ -126,7 +133,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"></h5>
+                    <h5 class="modal-title font-14"></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -138,40 +145,147 @@
                         <input type="hidden" id="mfeess" name="mfeess">
                         <div class="form-body">
                             <div class="form-group">
-                                <label>Fecha Envio<span class="required">*</span></label>
-                                <input id="mffechae" name="mffechae" class="form-control" type="date" readonly>
-                                <span class="help-block"></span>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="small">Fecha Envio<span class="required">*</span></label>
+                                        <input id="mffechae" name="mffechae" class="form-control form-control-sm"
+                                            type="date" readonly>
+                                        <span class="help-block"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="small">Fecha Inicial<span class="required">*</span></label>
+                                        <input id="mffechai" name="mffechai" class="form-control form-control-sm"
+                                            type="date" value="{{ date('Y-m-d') }}">
+                                        <span class="help-block"></span>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group">
-                                <label>Fecha Inicial<span class="required">*</span></label>
-                                <input id="mffechai" name="mffechai" class="form-control" type="date"
-                                    value="{{ date('Y-m-d') }}">
-                                <span class="help-block"></span>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="small">Fecha Final<span class="required">*</span></label>
+                                        <input id="mffechaf" name="mffechaf" class="form-control form-control-sm"
+                                            type="date" value="{{ date('Y-m-d') }}">
+                                        <span class="help-block"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="small">Numero de Archivos<span class="required">*</span></label>
+                                        <input id="mfarchivos" name="mfarchivos" class="form-control form-control-sm"
+                                            type="number" value="0">
+                                        <span class="help-block"></span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label>Fecha Final<span class="required">*</span></label>
-                                <input id="mffechaf" name="mffechaf" class="form-control" type="date"
-                                    value="{{ date('Y-m-d') }}">
-                                <span class="help-block"></span>
+                            <div class="text-right">
+                                <button type="button" class="btn btn-xs btn-danger" data-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-xs btn-primary" id="btnSave"
+                                    onclick="save()">Guardar</button>
                             </div>
-
-                            <div class="form-group">
-                                <label>Numero de Archivos<span class="required">*</span></label>
-                                <input id="mfarchivos" name="mfarchivos" class="form-control" type="number"
-                                    value="0">
-                                <span class="help-block"></span>
-                            </div>
-
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                    <button type="button" id="btnSave" onclick="save()" class="btn btn-primary">Guardar</button>
+                <div class="modal-body p-0">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card card-border">
+                                {{-- <div class="card-header border-success-0 bg-transparent pb-2 pl-0"> --}}
+                                {{-- <div class="card"> --}}
+                                {{-- <div class="card-header"> --}}
+                                {{-- <h3 class="card-title" id="card-title-seguimiento"></h3> --}}
+                                {{-- </div> --}}
+                                <div class="card-body p-0">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="table-responsive">
+                                                <table id="tabla_seguimiento"
+                                                    class="table table-sm table-striped table-bordered font-12">
+                                                    <thead class="cabecera-dataTable table-success-0 text-white">
+                                                        <tr>
+                                                            <th class="text-center">Nº</th>
+                                                            <th class="text-center">FECHA INICIAL</th>
+                                                            <th class="text-center">FECHA FINAL</th>
+                                                            <th class="text-center">N° ARCHIVOS</th>
+                                                            <th class="text-center">ACCIÓN</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                    <tfoot class="table-success-0 text-white">
+                                                        <tr>
+                                                            <td class="text-center" colspan="3">TOTAL DE ARCHIVOS</td>
+                                                            <td class="text-center tabla_seguimiento_tfoot">0</td>
+                                                            <td class="text-center"></td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
                 </div>
+                {{-- <div class="modal-footer"></div> --}}
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+    </div>
+    <!-- End Bootstrap modal -->
+
+    <!-- Bootstrap modal -->
+    <div id="modal_registros" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title font-14"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card card-border">
+                                <div class="card-body p-0">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="table-responsive">
+                                                <table id="tabla_registros"
+                                                    class="table table-sm table-striped table-bordered font-12">
+                                                    <thead class="cabecera-dataTable table-success-0 text-white">
+                                                        <tr>
+                                                            <th class="text-center">Nº</th>
+                                                            <th class="text-center">FECHA INICIAL</th>
+                                                            <th class="text-center">FECHA FINAL</th>
+                                                            <th class="text-center">FECHA ENVIO</th>
+                                                            <th class="text-center">N° ARCHIVOS</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                    <tfoot class="table-success-0 text-white">
+                                                        <tr>
+                                                            <td class="text-center" colspan="3">TOTAL DE ARCHIVOS</td>
+                                                            <td class="text-center tabla_registros_tfoot">0</td>
+                                                            <td class="text-center"></td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                {{-- <div class="modal-footer"></div> --}}
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
     <!-- End Bootstrap modal -->
 @endsection
 @section('js')
@@ -181,6 +295,7 @@
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap4.min.js"></script>
     <script type="text/javascript">
         var table_principal;
+        var table_seguimiento;
         var paleta_colores = ['#5eb9aa', '#F9FFFE', '#f5bd22', '#058DC7', '#50B432', '#9D561B', '#DDDF00', '#24CBE5',
             '#64E572', '#9F9655', '#FFF263', '#6AF9C4'
         ];
@@ -219,7 +334,7 @@
                 language: table_language,
                 destroy: true,
                 ajax: {
-                    "url": "{{ route('imporpadronactas.registro.listar') }}",
+                    "url": "{{ route('eess.listar.registro') }}",
                     "type": "GET",
                     "data": {
                         'municipio': $('#vmunicipio').val(),
@@ -251,8 +366,23 @@
                     {
                         targets: 5,
                         className: 'text-center'
+                    },
+                    {
+                        targets: 6,
+                        className: 'text-center'
                     }
-                ]
+                ],
+                drawCallback: function(settings) {
+                    var api = this.api();
+                    // Calcular el total de registros
+                    // var totalRecords = api.rows().count();
+                    // Calcular la suma de la edad (asumiendo que la edad está en la columna 2)
+                    var totalAge = api.column(5).data().reduce(function(a, b) {
+                        return parseInt(a) + parseInt(b);
+                    }, 0);
+                    // Actualizar el contenido del tfoot
+                    $('.tabla_tfoot').html(totalAge);
+                }
             });
         }
 
@@ -286,7 +416,7 @@
         }
 
         function cargarred() {
-            cargarmicrored();
+            // $('#vmicrored option' ).remove();
             $.ajax({
                 url: "{{ route('eess.cargarred') }}",
                 data: {
@@ -302,6 +432,7 @@
                         options += `<option value='${value.id}'>${value.nombre}</option>`;
                     });
                     $("#vred").append(options);
+                    cargarmicrored();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -310,6 +441,7 @@
         }
 
         function cargarmicrored() {
+            $('#vmicrored option').remove();
             $.ajax({
                 url: "{{ route('eess.cargarmicrored') }}",
                 data: {
@@ -333,6 +465,11 @@
             });
         }
 
+        function limpiarfiltros() {
+            $('#vred').val('0');
+            $('#vmicrored').val('0');
+        }
+
         function datos(eess) {
             $('#form')[0].reset();
             $('.form-group').removeClass('has-error');
@@ -341,7 +478,8 @@
                 url: "{{ route('eess.find', '') }}/" + eess,
                 type: 'GET',
                 success: function(data) {
-                    $('.modal-title').html('Registrar actas del EE.SS ' + data.eess.nombre_establecimiento);
+                    $('.modal-title').html('Registrar Actas Homologadas');
+                    // $('#card-title-seguimiento').text('EE.SS: ' + data.eess.nombre_establecimiento);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -350,6 +488,7 @@
             $('#mfeess').val(eess);
             $('#mffechae').val($('#vfechaf').val());
             $('#mfubigeo').val($('#vmunicipio').val());
+            cargarseguimiento(eess);
         }
 
         function save() {
@@ -358,7 +497,7 @@
             $('#btnSave').attr('disabled', true);
             var url;
             if (save_method == 'add') {
-                url = "{{ route('imporpadronactas.registro..guardar') }}";
+                url = "{{ route('imporpadronactas.registro.guardar') }}";
                 msgsuccess = "El registro fue creado exitosamente.";
                 msgerror = "El registro no se pudo crear verifique las validaciones.";
             } else {
@@ -374,7 +513,8 @@
                 success: function(data) {
                     console.log(data)
                     if (data.status) {
-                        $('#modal_form').modal('hide');
+                        // $('#modal_form').modal('hide');
+                        table_seguimiento.ajax.reload(null, false);
                         table_principal.ajax.reload(null, false);
                         toastr.success(msgsuccess, 'Mensaje');
                     } else {
@@ -394,6 +534,109 @@
             });
         };
 
+        function cargarseguimiento(eess) {
+            table_seguimiento = $('#tabla_seguimiento').DataTable({
+                responsive: true,
+                autoWidth: false,
+                // ordered: false,
+                destroy: true,
+                searching: false,
+                info: false,
+                paging: false,
+                lengthChange: false,
+                language: table_language,
+                // language: {
+                //     "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json",
+                //     "lengthMenu": "",
+                //     "search": ""
+                // },
+                destroy: true,
+                ajax: {
+                    "url": "{{ route('imporpadronactas.registro.listar') }}",
+                    "type": "GET",
+                    "data": {
+                        'municipio': $('#vmunicipio').val(),
+                        'red': $('#vred').val(),
+                        'microred': $('#vmicrored').val(),
+                        'fechaf': $('#vfechaf').val(),
+                        'eess': eess,
+                    },
+                },
+                columnDefs: [{
+                        targets: 0,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 1,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 2,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 3,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 4,
+                        className: 'text-center'
+                    }
+                ],
+                drawCallback: function(settings) {
+                    var api = this.api();
+                    // Calcular el total de registros
+                    // var totalRecords = api.rows().count();
+                    // Calcular la suma de la edad (asumiendo que la edad está en la columna 2)
+                    var totalAge = api.column(3).data().reduce(function(a, b) {
+                        return parseInt(a) + parseInt(b);
+                    }, 0);
+                    // Actualizar el contenido del tfoot
+                    $('.tabla_seguimiento_tfoot').html(totalAge);
+                }
+            });
+        }
+
+        function eliminarseguimiento(id) {
+            bootbox.confirm("¿Seguro desea eliminar esta importación?", function(result) {
+                if (result === true) {
+                    $.ajax({
+                        url: "{{ route('imporpadronactas.registro.eliminar', '') }}/" + id,
+                        type: "GET",
+                        dataType: "JSON",
+                        success: function(data) {
+                            table_seguimiento.ajax.reload(null, false);
+                            table_principal.ajax.reload(null, false);
+                            toastr.success('El registro fue eliminado exitosamente.', 'Mensaje');
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            toastr.error(
+                                'No se puede eliminar este registro por seguridad de su base de datos, Contacte al Administrador del Sistema',
+                                'Mensaje');
+                        }
+                    });
+                }
+            });
+        };
+
+        function verdatos(eess) {
+            $.ajax({
+                url: "{{ route('eess.find', '') }}/" + eess,
+                type: 'GET',
+                success: function(data) {
+                    $('.modal-title').html('Actas Homologadas');
+                    // $('#card-title-seguimiento').text('EE.SS: ' + data.eess.nombre_establecimiento);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+            $('#mfeess').val(eess);
+            $('#mffechae').val($('#vfechaf').val());
+            $('#mfubigeo').val($('#vmunicipio').val());
+            cargarseguimiento(eess);
+        }
+
         function formatofechax(fechaISO) {
             var fecha = new Date(fechaISO); // usa zona colombiana
             var dia = String(fecha.getDate()).padStart(2, '0');
@@ -410,26 +653,6 @@
             var dia = partesFecha[2];
             var fechaFormateada = dia + '/' + mes + '/' + anio;
             return fechaFormateada;
-        }
-
-        function cargarDistritos() {
-            $.ajax({
-                url: "{{ route('ubigeo.distrito.25', '') }}/" + $('#provincia').val(),
-                type: 'GET',
-                success: function(data) {
-                    $("#distrito option").remove();
-                    var options = '<option value="0">DISTRITO</option>';
-                    $.each(data, function(index, value) {
-                        //ss = (id == value.id ? "selected" : "");
-                        options += "<option value='" + value.id + "'>" + value.nombre +
-                            "</option>"
-                    });
-                    $("#distrito").append(options);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
         }
     </script>
 
