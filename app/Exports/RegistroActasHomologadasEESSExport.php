@@ -30,6 +30,6 @@ class RegistroActasHomologadasEESSExport implements FromView, ShouldAutoSize
     public function view(): View
     {
         $base = EstablecimientoRepositorio::registroList($this->municipio, $this->red, $this->microred, $this->fechai, $this->fechaf, $this->registrador);
-        return view('salud.ImporPadronActas.RegistroTabla1excelExport.blade', compact('base'));
+        return view('salud.ImporPadronActas.RegistroTabla1excelExport', compact('base'));
     }
 }

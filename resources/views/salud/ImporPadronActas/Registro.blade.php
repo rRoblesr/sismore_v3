@@ -47,9 +47,6 @@
 @section('content')
     <div class="row">
 
-
-
-
         @if ($registrador > 0)
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <h4 class="page-title font-16">HOMOLOGACION DE ACTAS</h4>
@@ -112,7 +109,7 @@
                                     class="form-control form-control-sm font-11 mr-2" value="{{ date('Y-m-d') }}"
                                     onchange="cargartabla()">
                             @endif
-                            <button class="btn btn-xs btn-success" title="DESCARGAR EXCEL"><i
+                            <button class="btn btn-xs btn-success" title="DESCARGAR EXCEL" onclick="descargar1()"><i
                                     class="fa fa-file-excel"></i></button>
                         </div>
                     </div>
@@ -713,10 +710,9 @@
 
         function descargar1() {
             // window.open("{{ url('/') }}/Man/SFL/Download/EXCEL/" + $('#ugel').val() + "/" + $('#provincia').val() + "/" + $('#distrito').val() + "/" + $('#estado').val());
-            window.open("{{ route('imporpadronactas.registro.excel', ['', '', '', '', '', '']) }}//" + $('#vmunicipio')
-                .val() +
-                "/" + $('#vred').val() + "/" + $('#vmicrored').val() + "/" + $('#fechai').val() + "/" + $('#fechaf')
-                .val() + "/{{ $registrador }}");
+            window.open("{{ route('imporpadronactas.registro.excel', ['', '', '', '', '', '']) }}/" + $('#vmunicipio')
+                .val() + "/" + $('#vred').val() + "/" + $('#vmicrored').val() + "/" + $('#vfechai').val() + "/" +
+                $('#vfechaf').val() + "/{{ $registrador }}");
         }
 
         function formatofechax(fechaISO) {
