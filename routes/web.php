@@ -1165,12 +1165,13 @@ Route::get('/ImporPadronActas/Listar/ImportarDT', [ImporPadronActasController::c
 Route::post('/ImporPadronActas/ListaImportada', [ImporPadronActasController::class, 'ListaImportada'])->name('imporpadronactas.listarimportados');
 Route::get('/ImporPadronActas/eliminar/{fuente}/{id}', [ImporPadronActasController::class, 'eliminar'])->name('imporpadronactas.eliminar');
 
-Route::get('/Salud/actas', [ImporPadronActasController::class, 'registro'])->name('imporpadronactas.registro');
-Route::get('/Salud/actas/listar/reg', [ImporPadronActasController::class, 'registro_listarDT'])->name('imporpadronactas.registro.listar');
-Route::get('/Salud/actas/listar/reg/resumen', [ImporPadronActasController::class, 'registro_listarDT_resumen'])->name('imporpadronactas.registro.listar.resumen');
-Route::post('/Salud/actas/Save', [ImporPadronActasController::class, 'registro_add'])->name('imporpadronactas.registro.guardar');
-Route::post('/Salud/actas/Update', [ImporPadronActasController::class, 'registro_update'])->name('imporpadronactas.registro.modificar');
-Route::get('/Salud/actas/Delete/{id}', [ImporPadronActasController::class, 'registro_delete'])->name('imporpadronactas.registro.eliminar');
+Route::get('/Salud/PadronActas', [ImporPadronActasController::class, 'registro'])->name('imporpadronactas.registro');
+Route::get('/Salud/PadronActas/listar/reg', [ImporPadronActasController::class, 'registro_listarDT'])->name('imporpadronactas.registro.listar');
+Route::get('/Salud/PadronActas/listar/reg/resumen', [ImporPadronActasController::class, 'registro_listarDT_resumen'])->name('imporpadronactas.registro.listar.resumen');
+Route::post('/Salud/PadronActas/Save', [ImporPadronActasController::class, 'registro_add'])->name('imporpadronactas.registro.guardar');
+Route::post('/Salud/PadronActas/Update', [ImporPadronActasController::class, 'registro_update'])->name('imporpadronactas.registro.modificar');
+Route::get('/Salud/PadronActas/Delete/{id}', [ImporPadronActasController::class, 'registro_delete'])->name('imporpadronactas.registro.eliminar');
+Route::get('/salud/PadronActas/Registro/Excel/{municipio}/{red}/{microred}/{fechai}/{fechaf}/{registrador}', [ImporPadronActasController::class, 'registro_download'])->name('imporpadronactas.registro.excel');
 
 
 // Route::post('/Mantenimiento/RER/ajax_add/', [RERController::class, 'ajax_add']);

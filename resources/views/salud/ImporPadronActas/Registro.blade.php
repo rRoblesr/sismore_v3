@@ -112,7 +112,8 @@
                                     class="form-control form-control-sm font-11 mr-2" value="{{ date('Y-m-d') }}"
                                     onchange="cargartabla()">
                             @endif
-                            <button class="btn btn-xs btn-success" title="DESCARGAR EXCEL"><i class="fa fa-file-excel"></i></button>
+                            <button class="btn btn-xs btn-success" title="DESCARGAR EXCEL"><i
+                                    class="fa fa-file-excel"></i></button>
                         </div>
                     </div>
                     <h4 class="card-title py-0">lista de actas</h4>
@@ -643,20 +644,6 @@
 
         function verdatos(eess) {
             $('.modal-title').html('Actas Homologadas');
-            // $.ajax({
-            //     url: "{{ route('eess.find', '') }}/" + eess,
-            //     type: 'GET',
-            //     success: function(data) {
-            //         $('.modal-title').html('Actas Homologadas');
-            //         // $('#card-title-seguimiento').text('EE.SS: ' + data.eess.nombre_establecimiento);
-            //     },
-            //     error: function(jqXHR, textStatus, errorThrown) {
-            //         console.log(jqXHR);
-            //     },
-            // });
-            // $('#mfeess').val(eess);
-            // $('#mffechae').val($('#vfechaf').val());
-            // $('#mfubigeo').val($('#vmunicipio').val());
             cargarregistros(eess);
         }
 
@@ -722,6 +709,14 @@
                     $('.tabla_registros_tfoot').html(totalAge);
                 }
             });
+        }
+
+        function descargar1() {
+            // window.open("{{ url('/') }}/Man/SFL/Download/EXCEL/" + $('#ugel').val() + "/" + $('#provincia').val() + "/" + $('#distrito').val() + "/" + $('#estado').val());
+            window.open("{{ route('imporpadronactas.registro.excel', ['', '', '', '', '', '']) }}//" + $('#vmunicipio')
+                .val() +
+                "/" + $('#vred').val() + "/" + $('#vmicrored').val() + "/" + $('#fechai').val() + "/" + $('#fechaf')
+                .val() + "/{{ $registrador }}");
         }
 
         function formatofechax(fechaISO) {

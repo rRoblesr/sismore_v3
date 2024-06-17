@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Salud;
 
 use App\Exports\ImporPadronSiagieExport;
+use App\Exports\RegistroActasHomologadasEESSExport;
 use App\Http\Controllers\Controller;
 use App\Imports\tablaXImport;
 use App\Models\Administracion\Entidad;
@@ -524,5 +525,11 @@ class ImporPadronActasController extends Controller
             // "query" => $query,
         );
         return response()->json($result);
+    }
+
+    public function registro_download($municipio, $red, $microred, $fechai, $fechaf, $registrador)
+    {
+        $name = 'Padron Actas por Establecimientos ' . date('Y-m-d') . '.xlsx';
+        return Excel::download(new RegistroActasHomologadasEESSExport($municipio, $red, $microred, $fechai, $fechaf, $registrador), $name);
     }
 }
