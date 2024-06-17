@@ -393,18 +393,19 @@ class ImporPadronActasController extends Controller
         $anio = [2023, 2024, 2025, 2026];
         $sector = 2;
 
-
         if (session('usuario_sector') == 2 && session('usuario_nivel') == 1) {
             $muni = EntidadRepositorio::entidades(2, session('usuario_codigo_institucion'));
+            $registrador = session('usuario_codigo_institucion');
         } else {
             $muni = EntidadRepositorio::entidades(2, 0);
+            $registrador = 0;
         }
         // return $muni;
         // session('usuario_codigo_institucion');
         // return session()->all();
         // return session('usuario_id');
 
-        return view('salud.ImporPadronActas.registro', compact('anio', 'muni'));
+        return view('salud.ImporPadronActas.registro', compact('anio', 'muni', 'registrador'));
     }
 
     public function registro_listarDT(Request $rq)
@@ -417,10 +418,7 @@ class ImporPadronActasController extends Controller
         $data = [];
         foreach ($query as $key => $value) {
             // $nactas = PadronActas::where('fecha_envio', $rq->fechaf)->where('establecimiento_id', $value->id)->select(DB::raw('sum(nro_archivos) as nactas'))->get()->first();
-
-
             $boton = '';
-
             $boton .= '<button class="btn btn-xs btn-danger waves-effect waves-light" onclick="eliminarseguimiento(' . $value->id . ')"><i class="fa fa-trash"></i></button>';
 
             $data[] = array(
@@ -494,5 +492,37 @@ class ImporPadronActasController extends Controller
         $padron = PadronActas::find($id);
         $padron->delete();
         return response()->json(array('status' => true));
+    }
+
+    public function registro_listarDT_resumen(Request $rq)
+    {
+        $draw = intval($rq->draw);
+        $start = intval($rq->start);
+        $length = intval($rq->length);
+
+        $query = PadronActas::whereBetween('fecha_envio', [$rq->fechai, $rq->fechaf])->where('establecimiento_id', $rq->eess)->get();
+        // $query = PadronActas::where('establecimiento_id', $rq->eess)->get();
+        $data = [];
+        foreach ($query as $key => $value) {
+            $boton = '';
+            // $boton .= '<button class="btn btn-xs btn-danger waves-effect waves-light" onclick="eliminarseguimiento(' . $value->id . ')"><i class="fa fa-trash"></i></button>';
+
+            $data[] = array(
+                $key + 1,
+                $value->fecha_inicial,
+                $value->fecha_final,
+                $value->fecha_envio,
+                $value->nro_archivos,
+            );
+        }
+        $result = array(
+            "draw" => $draw,
+            "recordsTotal" => $start,
+            "recordsFiltered" => $length,
+            "data" => $data,
+            // "municipio" =>  $rq->municipio,
+            // "query" => $query,
+        );
+        return response()->json($result);
     }
 }

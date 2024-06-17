@@ -46,9 +46,19 @@
 
 @section('content')
     <div class="row">
-        <div class="col-lg-3 col-md-6 col-sm-6">
-            <h4 class="page-title font-16">HOMOLOGACION DE ACTAS</h4>
-        </div>
+
+
+
+
+        @if ($registrador > 0)
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <h4 class="page-title font-16">HOMOLOGACION DE ACTAS</h4>
+            </div>
+        @else
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <h4 class="page-title font-16">HOMOLOGACION DE ACTAS</h4>
+            </div>
+        @endif
 
         <div class="col-lg-3 col-md-2 col-sm-2">
             <select id="vmunicipio" name="vmunicipio" class="form-control btn-xs font-11"
@@ -78,52 +88,62 @@
                 <option value="0">MICRORED</option>
             </select>
         </div>
-        <div class="col-lg-1 col-md-1 col-sm-1">
-            <input type="date" id="vfechaf" name="vfechaf" class="form-control btn-xs font-11"
-                value="{{ date('Y-m-d') }}" onchange="cargartabla()">
-        </div>
-
+        @if ($registrador > 0)
+            <div class="col-lg-1 col-md-1 col-sm-1">
+                <input type="date" id="vfechaf" name="vfechaf" class="form-control btn-xs font-11"
+                    value="{{ date('Y-m-d') }}" onchange="cargartabla()">
+            </div>
+        @endif
     </div>
-
 
     <div class="row">
         <div class="col-md-12">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card card-border">
-                        <div class="card-header border-success-0 bg-transparent pb-2 pl-0">
-                            {{-- <div class="card-widgets"><button type="button" class="btn btn-primary btn-xs" onclick="add()"><i class="fa fa-plus"></i> Nuevo</button></div> --}}
-                            <h4 class="card-title">lista de actas</h4>
-                        </div>
-                        <div class="card-body p-0">
-                            <div class="table-responsive">
-                                <table id="tabla" class="table table-sm table-striped table-bordered font-12">
-                                    <thead class="cabecera-dataTable table-success-0 text-white">
-                                        <tr>
-                                            <th class="text-center">Nº</th>
-                                            <th class="text-center">RED</th>
-                                            <th class="text-center">MICRORED</th>
-                                            <th class="text-center">CODIGO UNICO</th>
-                                            <th class="text-center">ESTABLECIMIENTO</th>
-                                            <th class="text-center">N° ARCHIVOS</th>
-                                            <th class="text-center">ACCIÓN</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                    <tfoot class="table-success-0 text-white">
-                                        <tr>
-                                            <td class="text-center" colspan="5">TOTAL DE ARCHIVOS</td>
-                                            <td class="text-center tabla_tfoot">0</td>
-                                            <td class="text-center"></td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-
+            <div class="card card-border">
+                <div class="card-header border-success-0 bg-transparent">
+                    <div class="card-widgets d-flex">
+                        <div class="d-flex align-items-center">
+                            @if ($registrador == 0)
+                                <label for="vfechai" class="small mb-0 mr-2">Fecha&nbsp;Inicial&nbsp;</label>
+                                <input type="date" id="vfechai" name="vfechai"
+                                    class="form-control form-control-sm font-11 mr-2" value="{{ date('Y-m-d') }}"
+                                    onchange="cargartabla()">
+                                <label for="vfechaf" class="small mb-0 mr-2">Fecha&nbsp;Final&nbsp;</label>
+                                <input type="date" id="vfechaf" name="vfechaf"
+                                    class="form-control form-control-sm font-11 mr-2" value="{{ date('Y-m-d') }}"
+                                    onchange="cargartabla()">
+                            @endif
+                            <button class="btn btn-xs btn-success" title="DESCARGAR EXCEL"><i class="fa fa-file-excel"></i></button>
                         </div>
                     </div>
+                    <h4 class="card-title py-0">lista de actas</h4>
                 </div>
-            </div> <!-- End row -->
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table id="tabla" class="table table-sm table-striped table-bordered font-12">
+                            <thead class="cabecera-dataTable table-success-0 text-white">
+                                <tr>
+                                    <th class="text-center">Nº</th>
+                                    <th class="text-center">RED</th>
+                                    <th class="text-center">MICRORED</th>
+                                    <th class="text-center">CODIGO UNICO</th>
+                                    <th class="text-center">ESTABLECIMIENTO</th>
+                                    <th class="text-center">N° ARCHIVOS</th>
+                                    <th class="text-center">ACCIÓN</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot class="table-success-0 text-white">
+                                <tr>
+                                    <td class="text-center" colspan="5">TOTAL DE ARCHIVOS</td>
+                                    <td class="text-center tabla_tfoot">0</td>
+                                    <td class="text-center"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div> <!-- End row -->
 
@@ -266,9 +286,8 @@
                                                     <tbody></tbody>
                                                     <tfoot class="table-success-0 text-white">
                                                         <tr>
-                                                            <td class="text-center" colspan="3">TOTAL DE ARCHIVOS</td>
+                                                            <td class="text-center" colspan="4">TOTAL DE ARCHIVOS</td>
                                                             <td class="text-center tabla_registros_tfoot">0</td>
-                                                            <td class="text-center"></td>
                                                         </tr>
                                                     </tfoot>
                                                 </table>
@@ -296,6 +315,7 @@
     <script type="text/javascript">
         var table_principal;
         var table_seguimiento;
+        var table_registros;
         var paleta_colores = ['#5eb9aa', '#F9FFFE', '#f5bd22', '#058DC7', '#50B432', '#9D561B', '#DDDF00', '#24CBE5',
             '#64E572', '#9F9655', '#FFF263', '#6AF9C4'
         ];
@@ -340,7 +360,9 @@
                         'municipio': $('#vmunicipio').val(),
                         'red': $('#vred').val(),
                         'microred': $('#vmicrored').val(),
+                        'fechai': $('#vfechai').val(),
                         'fechaf': $('#vfechaf').val(),
+                        'registrador': '{{ $registrador }}',
                     },
                 },
                 columnDefs: [{
@@ -620,21 +642,86 @@
         };
 
         function verdatos(eess) {
-            $.ajax({
-                url: "{{ route('eess.find', '') }}/" + eess,
-                type: 'GET',
-                success: function(data) {
-                    $('.modal-title').html('Actas Homologadas');
-                    // $('#card-title-seguimiento').text('EE.SS: ' + data.eess.nombre_establecimiento);
+            $('.modal-title').html('Actas Homologadas');
+            // $.ajax({
+            //     url: "{{ route('eess.find', '') }}/" + eess,
+            //     type: 'GET',
+            //     success: function(data) {
+            //         $('.modal-title').html('Actas Homologadas');
+            //         // $('#card-title-seguimiento').text('EE.SS: ' + data.eess.nombre_establecimiento);
+            //     },
+            //     error: function(jqXHR, textStatus, errorThrown) {
+            //         console.log(jqXHR);
+            //     },
+            // });
+            // $('#mfeess').val(eess);
+            // $('#mffechae').val($('#vfechaf').val());
+            // $('#mfubigeo').val($('#vmunicipio').val());
+            cargarregistros(eess);
+        }
+
+        function cargarregistros(eess) {
+            table_registros = $('#tabla_registros').DataTable({
+                responsive: true,
+                autoWidth: false,
+                // ordered: false,
+                destroy: true,
+                searching: false,
+                info: false,
+                paging: false,
+                lengthChange: false,
+                language: table_language,
+                // language: {
+                //     "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json",
+                //     "lengthMenu": "",
+                //     "search": ""
+                // },
+                destroy: true,
+                ajax: {
+                    "url": "{{ route('imporpadronactas.registro.listar.resumen') }}",
+                    "type": "GET",
+                    "data": {
+                        'municipio': $('#vmunicipio').val(),
+                        'red': $('#vred').val(),
+                        'microred': $('#vmicrored').val(),
+                        'fechai': $('#vfechai').val(),
+                        'fechaf': $('#vfechaf').val(),
+                        'eess': eess,
+                    },
                 },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
+                columnDefs: [{
+                        targets: 0,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 1,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 2,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 3,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 4,
+                        className: 'text-center'
+                    }
+                ],
+                drawCallback: function(settings) {
+                    var api = this.api();
+                    // Calcular el total de registros
+                    // var totalRecords = api.rows().count();
+                    // Calcular la suma de la edad (asumiendo que la edad está en la columna 2)
+                    var totalAge = api.column(4).data().reduce(function(a, b) {
+                        return parseInt(a) + parseInt(b);
+                    }, 0);
+                    // Actualizar el contenido del tfoot
+                    $('.tabla_registros_tfoot').html(totalAge);
+                }
             });
-            $('#mfeess').val(eess);
-            $('#mffechae').val($('#vfechaf').val());
-            $('#mfubigeo').val($('#vmunicipio').val());
-            cargarseguimiento(eess);
         }
 
         function formatofechax(fechaISO) {

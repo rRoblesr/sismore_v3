@@ -1167,6 +1167,7 @@ Route::get('/ImporPadronActas/eliminar/{fuente}/{id}', [ImporPadronActasControll
 
 Route::get('/Salud/actas', [ImporPadronActasController::class, 'registro'])->name('imporpadronactas.registro');
 Route::get('/Salud/actas/listar/reg', [ImporPadronActasController::class, 'registro_listarDT'])->name('imporpadronactas.registro.listar');
+Route::get('/Salud/actas/listar/reg/resumen', [ImporPadronActasController::class, 'registro_listarDT_resumen'])->name('imporpadronactas.registro.listar.resumen');
 Route::post('/Salud/actas/Save', [ImporPadronActasController::class, 'registro_add'])->name('imporpadronactas.registro.guardar');
 Route::post('/Salud/actas/Update', [ImporPadronActasController::class, 'registro_update'])->name('imporpadronactas.registro.modificar');
 Route::get('/Salud/actas/Delete/{id}', [ImporPadronActasController::class, 'registro_delete'])->name('imporpadronactas.registro.eliminar');

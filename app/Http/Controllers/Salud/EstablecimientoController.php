@@ -66,13 +66,18 @@ class EstablecimientoController extends Controller
         $query = EstablecimientoRepositorio::listar(2, $rq->municipio, $rq->red, $rq->microred);
         $data = [];
         foreach ($query as $key => $value) {
-            $nactas = PadronActas::where('fecha_envio', $rq->fechaf)->where('establecimiento_id', $value->id)->select(DB::raw('sum(nro_archivos) as nactas'))->get();
+            if ($rq->registrador == 0) {
+                $nactas = PadronActas::whereBetween('fecha_envio', [$rq->fechai, $rq->fechaf])->where('establecimiento_id', $value->id)->select(DB::raw('sum(nro_archivos) as nactas'))->get();
+            } else {
+                $nactas = PadronActas::where('fecha_envio', $rq->fechaf)->where('establecimiento_id', $value->id)->select(DB::raw('sum(nro_archivos) as nactas'))->get();
+            }
+
             $boton = '';
             if (session('usuario_sector') == 2 && session('usuario_nivel') == 1) {
                 $boton .= '<button class="btn btn-xs btn-success waves-effect waves-light" data-toggle="modal" data-target="#modal_form"
                     onclick="datos(' . $value->id . ')"></i> Registrar</button>';
             } else {
-                $boton .= '<button class="btn btn-xs btn-primary waves-effect waves-light" data-toggle="modal" data-target="#modal_verdatos"
+                $boton .= '<button class="btn btn-xs btn-primary waves-effect waves-light" data-toggle="modal" data-target="#modal_registros"
                     onclick="verdatos(' . $value->id . ')"><i class="far fa-eye"></i> Registros</button>';
             }
             $data[] = array(
