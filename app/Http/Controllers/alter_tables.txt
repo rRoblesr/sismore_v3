@@ -1596,3 +1596,38 @@ CREATE TABLE `sal_padron_actas` (
 </html>
 
 
+################################################################
+
+CREATE TABLE `establecimiento` (
+  `id` int(11) auto_increment primary key,
+  nombre	varchar(100)	NULL DEFAULT NULL,
+ubigeo	varchar(100)	NULL DEFAULT NULL,
+Codigo_Disa	varchar(100)	NULL DEFAULT NULL,
+disa	varchar(100)	NULL DEFAULT NULL,
+cod_red	varchar(100)	NULL DEFAULT NULL,
+red	varchar(100)	NULL DEFAULT NULL,
+cod_microred	varchar(100)	NULL DEFAULT NULL,
+microred	varchar(100)	NULL DEFAULT NULL,
+cod_unico	varchar(100)	NULL DEFAULT NULL,
+cod_sector	varchar(100)	NULL DEFAULT NULL,
+descripcion	varchar(100)	NULL DEFAULT NULL,
+departamento	varchar(100)	NULL DEFAULT NULL,
+provincia	varchar(100)	NULL DEFAULT NULL,
+distrito	varchar(100)	NULL DEFAULT NULL,
+categoria	varchar(100)	NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
