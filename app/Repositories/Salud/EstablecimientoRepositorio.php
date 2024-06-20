@@ -10,7 +10,8 @@ class EstablecimientoRepositorio
 
     public static function listar($sector, $municipio, $red, $microred)
     {
-        $query = Establecimiento::from('sal_establecimiento as es')->select('es.id', 're.nombre as red', 'mi.nombre as microred', 'es.cod_unico', 'es.nombre_establecimiento as eess')
+        $query = Establecimiento::from('sal_establecimiento as es')
+            ->select('es.id', 're.nombre as red', 'mi.nombre as microred', 'es.cod_unico', 'es.nombre_establecimiento as eess')
             ->join('sal_microred as mi', 'mi.id', '=', 'es.microrred_id')
             ->join('sal_red as re', 're.id', '=', 'mi.red_id')
             ->join('par_ubigeo as ub', 'ub.id', '=', 'es.ubigeo_id')
