@@ -397,16 +397,18 @@ class ImporPadronActasController extends Controller
         if (session('usuario_sector') == 2 && session('usuario_nivel') == 1) {
             $muni = EntidadRepositorio::entidades(2, session('usuario_codigo_institucion'));
             $registrador = session('usuario_codigo_institucion');
+            $usuario = $muni->first();
         } else {
             $muni = EntidadRepositorio::entidades(2, 0);
             $registrador = 0;
+            $usuario = false;
         }
-        // return $muni;
+        // return $usuario;
         // session('usuario_codigo_institucion');
         // return session()->all();
         // return session('usuario_id');
 
-        return view('salud.ImporPadronActas.registro', compact('anio', 'muni', 'registrador'));
+        return view('salud.ImporPadronActas.registro', compact('anio', 'muni', 'registrador','usuario'));
     }
 
     public function registro_listarDT(Request $rq)
@@ -448,21 +450,30 @@ class ImporPadronActasController extends Controller
         $length = intval($rq->length);
 
         $query = PadronActas::from('sal_padron_actas as pa')
+            ->select('pa.id', 'es.cod_unico', 'es.nombre_establecimiento as eess', 'pa.fecha_inicial', 'pa.fecha_final', 'pa.fecha_envio', 'pa.nro_archivos')
             ->join('sal_establecimiento as es', 'es.id', '=', 'pa.establecimiento_id')
             ->join('sal_microred as mi', 'mi.id', '=', 'es.microrred_id')
             ->join('sal_red as re', 're.id', '=', 'mi.red_id')
-            ->where('establecimiento_id', $rq->eess)->get();
-            //->where('fecha_envio', $rq->fechaf)
+            ->where('es.ubigeo_id', $rq->municipio);
+        if ($rq->eess) {
+            $query = $query->where('pa.establecimiento_id', $rq->eess);
+        }
+        $query = $query->orderBy('re.codigo')->orderBy('mi.codigo')->orderBy('eess')->orderBy('fecha_envio')->get();
         $data = [];
         foreach ($query as $key => $value) {
             $boton = '';
-            $boton .= '<button class="btn btn-xs btn-danger waves-effect waves-light" onclick="editseguimiento(' . $value->id . ')"><i class="fa fa-trash"></i></button>';
+            $boton .= '<button class="btn btn-xs btn-primary waves-effect waves-light" data-toggle="modal" data-target="#modal_form" onclick="editseguimiento(' . $value->id . ')"><i class="fa fa-pen"></i></button>&nbsp;';
             $boton .= '<button class="btn btn-xs btn-danger waves-effect waves-light" onclick="eliminarseguimiento(' . $value->id . ')"><i class="fa fa-trash"></i></button>';
 
             $data[] = array(
                 $key + 1,
-                $value->fecha_inicial,
-                $value->fecha_final,
+                sprintf('%08d', $value->cod_unico),
+                $value->eess,
+                date('d/m/Y', strtotime($value->fecha_inicial)),
+                date('d/m/Y', strtotime($value->fecha_final)),
+                // $value->fecha_final,
+                // $value->fecha_envio,
+                date('d/m/Y', strtotime($value->fecha_envio)),
                 $value->nro_archivos,
                 $boton,
             );
@@ -529,6 +540,28 @@ class ImporPadronActasController extends Controller
             'nro_archivos' => $rq->mfarchivos,
         ]);
         return response()->json(array('status' => true, 'msn' => $rq->all(), 'padron' => $padron));
+    }
+
+    public function registro_find($id)
+    {
+        $pd = PadronActas::find($id);
+        return response()->json(array('pd' => $pd));
+    }
+
+    public function registro_update(Request $rq)
+    {
+        $this->_registro_validate($rq);
+        $pd = PadronActas::find($rq->mfid);
+        // $pd->ubigeo_id = $rq->mfubigeo;
+        $pd->establecimiento_id = $rq->mfeess;
+        $pd->usuario_id = auth()->user()->id;
+        $pd->fecha_inicial = $rq->mffechai;
+        $pd->fecha_final = $rq->mffechaf;
+        $pd->fecha_envio = $rq->mffechae;
+        $pd->nro_archivos = $rq->mfarchivos;
+        $pd->save();
+
+        return response()->json(array('status' => true, 'msn' => $rq->all(), 'padron' => $pd));
     }
 
     public function registro_delete($id)

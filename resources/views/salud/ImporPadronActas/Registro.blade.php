@@ -47,57 +47,73 @@
 @section('content')
     <div class="row">
 
-        {{-- @if ($registrador > 0)
-            <div class="col-lg-3 col-md-6 col-sm-6">
+
+
+        @if ($registrador > 0)
+            <div class="col-lg-4 col-md-6 col-sm-6">
                 <h4 class="page-title font-16">HOMOLOGACION DE ACTAS</h4>
             </div>
-        @else --}}
-        <div class="col-lg-4 col-md-6 col-sm-6">
-            <h4 class="page-title font-16">HOMOLOGACION DE ACTAS</h4>
-        </div>
+            <input type="hidden" id="vmunicipio" name="vmunicipio" value="{{ $muni->count() == 1 ? $muni[0]->id : 0 }}">
 
-        {{-- @endif --}}
+            <div class="col-lg-3 col-md-2 col-sm-2">
+                <select id="vred" name="vred" class="form-control btn-xs font-11"
+                    onchange="cargarmicrored(),cargartabla2()">
+                    <option value="0">RED</option>
+                </select>
+            </div>
 
+            <div class="col-lg-2 col-md-2 col-sm-2">
+                <select id="vmicrored" name="vmicrored" class="form-control btn-xs font-11" onchange="cargartabla2()">
+                    <option value="0">MICRORED</option>
+                </select>
+            </div>
 
-
-        <div class="col-lg-3 col-md-2 col-sm-2">
-            <select id="vmunicipio" name="vmunicipio" class="form-control btn-xs font-11"
-                onchange="limpiarfiltros();cargarred(),cargartabla()">
-
-                @if ($muni->count() > 1)
-                    <option value="0">MUNICIPIOS</option>
-                @endif
-
-                @foreach ($muni as $item)
-                    <option value="{{ $item->id }}">
-                        {{ $item->codigo }}|
-                        {{ $item->nombre }}
-                    </option>
-                @endforeach
-
-            </select>
-        </div>
-
-        <div class="col-lg-3 col-md-2 col-sm-2">
-            <select id="vred" name="vred" class="form-control btn-xs font-11"
-                onchange="cargarmicrored(),cargartabla()">
-                <option value="0">RED</option>
-            </select>
-        </div>
-
-        <div class="col-lg-2 col-md-2 col-sm-2">
-            <select id="vmicrored" name="vmicrored" class="form-control btn-xs font-11" onchange="cargartabla()">
-                <option value="0">MICRORED</option>
-            </select>
-        </div>
-
-        {{-- @if ($registrador > 0)
-            <div class="col-lg-1 col-md-1 col-sm-1">
+            <div class="col-lg-3 col-md-2 col-sm-2">
+                <select id="veess" name="veess" class="form-control btn-xs font-11" onchange="cargartabla2()">
+                    <option value="0">ESTABLECIMIENTO</option>
+                </select>
+            </div>
+            {{-- <div class="col-lg-1 col-md-1 col-sm-1">
                 <input type="date" id="vfechaf" name="vfechaf" class="form-control btn-xs font-11"
                     value="{{ date('Y-m-d') }}"
                     onchange="cargartabla()">
+            </div> --}}
+        @else
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <h4 class="page-title font-16">HOMOLOGACION DE ACTAS</h4>
             </div>
-        @endif --}}
+            <div class="col-lg-3 col-md-2 col-sm-2">
+                <select id="vmunicipio" name="vmunicipio" class="form-control btn-xs font-11"
+                    onchange="limpiarfiltros();cargarred(),cargartabla2()">
+
+                    @if ($muni->count() > 1)
+                        <option value="0">MUNICIPIOS</option>
+                    @endif
+
+                    @foreach ($muni as $item)
+                        <option value="{{ $item->id }}">
+                            {{ $item->codigo }}|
+                            {{ $item->nombre }}
+                        </option>
+                    @endforeach
+
+                </select>
+            </div>
+
+            <div class="col-lg-3 col-md-2 col-sm-2">
+                <select id="vred" name="vred" class="form-control btn-xs font-11"
+                    onchange="cargarmicrored(),cargartabla()">
+                    <option value="0">RED</option>
+                </select>
+            </div>
+
+            <div class="col-lg-2 col-md-2 col-sm-2">
+                <select id="vmicrored" name="vmicrored" class="form-control btn-xs font-11" onchange="cargartabla()">
+                    <option value="0">MICRORED</option>
+                </select>
+            </div>
+        @endif
+
     </div>
 
     <div class="row">
@@ -129,7 +145,7 @@
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table id="tabla" class="table table-sm table-striped table-bordered font-12">
+                        <table id="tabla" class="table table-sm table-striped table-bordered ">
                             <thead class="cabecera-dataTable table-success-0 text-white">
                                 @if ($registrador > 0)
                                     <tr>
@@ -183,8 +199,8 @@
     </div> <!-- End row -->
 
     <!-- Bootstrap modal -->
-    <div id="modal_form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
-        style="display: none;">
+    <div id="modal_form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true" style="display: none;">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -197,6 +213,7 @@
                     <form action="" id="form" class="form-horizontal" autocomplete="off">
                         @csrf
                         <input type="hidden" id="mfubigeo" name="mfubigeo">
+                        <input type="hidden" id="mfid" name="mfid">
                         {{-- <input type="hidden" id="mfe--ess" name="mfee--ss"> --}}
                         <div class="form-body">
                             <div class="form-group">
@@ -318,6 +335,7 @@
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap4.min.js"></script>
     <script type="text/javascript">
+        var save_method;
         var registrador = '{{ $registrador }}';
         var table_principal;
         var table_seguimiento;
@@ -347,6 +365,8 @@
             // getmes();
             cargarred();
             cargarmicrored();
+            cargareess();
+            vcargareess();
 
             if (registrador == 0) {
                 cargartabla();
@@ -439,6 +459,7 @@
                         'microred': $('#vmicrored').val(),
                         'fechai': $('#vfechai').val(),
                         'fechaf': $('#vfechaf').val(),
+                        'eess': $('#veess').val(),
                         'registrador': '{{ $registrador }}',
                     },
                 },
@@ -460,7 +481,7 @@
                     },
                     {
                         targets: 4,
-                        className: 'text-left'
+                        className: 'text-center'
                     },
                     {
                         targets: 5,
@@ -470,13 +491,14 @@
                         targets: 6,
                         className: 'text-center'
                     }
+                    
                 ],
                 drawCallback: function(settings) {
                     var api = this.api();
                     // Calcular el total de registros
                     // var totalRecords = api.rows().count();
                     // Calcular la suma de la edad (asumiendo que la edad está en la columna 2)
-                    var totalAge = api.column(5).data().reduce(function(a, b) {
+                    var totalAge = api.column(6).data().reduce(function(a, b) {
                         return parseInt(a) + parseInt(b);
                     }, 0);
                     // Actualizar el contenido del tfoot
@@ -589,6 +611,31 @@
             });
         }
 
+        function vcargareess() {
+            $.ajax({
+                url: "{{ route('eess.cargareess') }}",
+                data: {
+                    'sector': 2,
+                    'municipio': $('#vmunicipio').val(),
+                    // 'red': $('#vred').val(),
+                },
+                type: 'GET',
+                success: function(data) {
+                    $("#veess option").remove();
+                    var options = data.eess.length > 1 ? '<option value="0">SELECCIONAR ESTABLECIMIENTO</option>' : '';
+                    $.each(data.eess, function(index, value) {
+                        //ss = (id == value.id ? "selected" : "");
+                        options +=
+                            `<option value='${value.id}'>${value.cod_unico.toString().padStart(8,'0')}|${value.nombre_establecimiento}</option>`;
+                    });
+                    $("#veess").append(options);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
         function limpiarfiltros() {
             $('#vred').val('0');
             $('#vmicrored').val('0');
@@ -615,15 +662,60 @@
             cargarseguimiento(eess);
         }
 
+        function limpiarfrm() {
+            $('#form')[0].reset();
+            $('.form-group').removeClass('has-error');
+            $('.help-block').empty();
+            $('#mfeess').val('0');
+            $('#mffechai').val('');
+            $('#mffechaf').val('');
+            $('#mffechae').val('');
+            $('#mfarchivos').val('0');
+        }
+
         function abrirnuevo() {
+            //modal :modal_form
+            //from  :form
             console.log('abrirnuevo()');
             $('#mfubigeo').val($('#vmunicipio').val());
-            cargareess();
+            $('#modal_form .modal-title').html('Nuevo Registro');
+            // cargareess();
+            save_method = 'add';
 
         }
 
+        function editseguimiento(id) {
+            //modal :modal_form
+            //from  :form
+            save_method = 'update';
+            console.log('editseguimiento()');
+            limpiarfrm();
+            $('#mfubigeo').val($('#vmunicipio').val());
+            $.ajax({
+                url: "{{ route('imporpadronactas.registro.find', '') }}/" + id,
+                type: "GET",
+                dataType: "JSON",
+                success: function(data) {
+                    $('#mfid').val(data.pd.id);
+                    $('#mfeess').val(data.pd.establecimiento_id);
+                    $('#mffechai').val(data.pd.fecha_inicial);
+                    $('#mffechaf').val(data.pd.fecha_final);
+                    $('#mffechae').val(data.pd.fecha_envio);
+                    $('#mfarchivos').val(data.pd.nro_archivos);
+                    $('#modal_form .modal-title').html('Modificar Registro');
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    toastr.error(
+                        'No se puede eliminar este registro por seguridad de su base de datos, Contacte al Administrador del Sistema',
+                        'Mensaje');
+                }
+            });
+            // cargareess();
+        }
+
         function save() {
-            var save_method = 'add';
+            //modal :modal_form
+            //from  :form
             $('#btnSave').text('guardando...');
             $('#btnSave').attr('disabled', true);
             var url;
@@ -632,7 +724,7 @@
                 msgsuccess = "El registro fue creado exitosamente.";
                 msgerror = "El registro no se pudo crear verifique las validaciones.";
             } else {
-                url = "{{ url('/') }}/Mantenimiento/RER/ajax_update";
+                url = "{{ route('imporpadronactas.registro.modificar') }}";
                 msgsuccess = "El registro fue actualizado exitosamente.";
                 msgerror = "El registro no se pudo actualizar. Verifique la operación";
             }
@@ -644,10 +736,14 @@
                 success: function(data) {
                     console.log(data)
                     if (data.status) {
-                        // $('#modal_form').modal('hide');
+                        limpiarfrm();
+
                         // table_seguimiento.ajax.reload(null, false);
                         table_principal.ajax.reload(null, false);
                         toastr.success(msgsuccess, 'Mensaje');
+                        if (save_method != 'add') {
+                            $('#modal_form').modal('hide');
+                        }
                     } else {
                         for (var i = 0; i < data.inputerror.length; i++) {
                             $('[name="' + data.inputerror[i] + '"]').parent().addClass('has-error');
@@ -656,6 +752,7 @@
                     }
                     $('#btnSave').text('Guardar');
                     $('#btnSave').attr('disabled', false);
+                    save_method = 'add';
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     toastr.error(msgerror, 'Mensaje');
