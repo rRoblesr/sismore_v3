@@ -49,6 +49,13 @@ class EstablecimientoController extends Controller
 
         return response()->json(compact('micro'));
     }
+    
+    public function cargarEESS(Request $rq)
+    {
+        $eess = EstablecimientoRepositorio::listEESS($rq->sector, $rq->municipio, 0);
+
+        return response()->json(compact('eess'));
+    }
 
     public function ajax_edit($id)
     {
@@ -75,7 +82,7 @@ class EstablecimientoController extends Controller
             $boton = '';
             if (session('usuario_sector') == 2 && session('usuario_nivel') == 1) {
                 $boton .= '<button class="btn btn-xs btn-success waves-effect waves-light" data-toggle="modal" data-target="#modal_form"
-                    onclick="datos(' . $value->id . ')"></i> Registrar</button>';
+                    onclick="abrirnuevo()"></i> Registrar</button>';
             } else {
                 $boton .= '<button class="btn btn-xs btn-primary waves-effect waves-light" data-toggle="modal" data-target="#modal_registros"
                     onclick="verdatos(' . $value->id . ')"><i class="far fa-eye"></i> Registros</button>';

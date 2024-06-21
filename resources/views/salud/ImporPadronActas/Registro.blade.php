@@ -47,9 +47,6 @@
 @section('content')
     <div class="row">
 
-
-
-
         {{-- @if ($registrador > 0)
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <h4 class="page-title font-16">HOMOLOGACION DE ACTAS</h4>
@@ -118,9 +115,14 @@
                                 <input type="date" id="vfechaf" name="vfechaf"
                                     class="form-control form-control-sm font-11 mr-2" value="{{ date('Y-m-d') }}"
                                     onchange="cargartabla()">
+                            @else
+                                <button class="btn btn-xs btn-primary waves-effect waves-light" data-toggle="modal"
+                                    data-target="#modal_form" title="Agregar Actas" onclick="abrirnuevo()"> <i
+                                        class="fa fa-file"></i>
+                                    Nuevo</button> &nbsp;
                             @endif
-                            <button class="btn btn-xs btn-success" title="DESCARGAR EXCEL" onclick="descargar1()"><i
-                                    class="fa fa-file-excel"></i></button>
+                            <button class="btn btn-xs btn-success" title="DESCARGAR EXCEL" onclick="descargar1()">
+                                <i class="fa fa-file-excel"></i></button>
                         </div>
                     </div>
                     <h4 class="card-title py-0">lista de actas</h4>
@@ -132,8 +134,6 @@
                                 @if ($registrador > 0)
                                     <tr>
                                         <th class="text-center">Nº</th>
-                                        {{-- <th class="text-center">RED</th> --}}
-                                        {{-- <th class="text-center">MICRORED</th> --}}
                                         <th class="text-center">CODIGO UNICO</th>
                                         <th class="text-center">ESTABLECIMIENTO</th>
                                         <th class="text-center">FECHA INICIAL</th>
@@ -156,13 +156,24 @@
 
                             </thead>
                             <tbody></tbody>
-                            <tfoot class="table-success-0 text-white">
-                                <tr>
-                                    <td class="text-center" colspan="5">TOTAL DE ARCHIVOS</td>
-                                    <td class="text-center tabla_tfoot">0</td>
-                                    <td class="text-center"></td>
-                                </tr>
-                            </tfoot>
+                            @if ($registrador > 0)
+                                <tfoot class="table-success-0 text-white">
+                                    <tr>
+                                        <td class="text-center" colspan="6">TOTAL DE ARCHIVOS</td>
+                                        <td class="text-center tabla_tfoot">0</td>
+                                        <td class="text-center"></td>
+                                    </tr>
+                                </tfoot>
+                            @else
+                                <tfoot class="table-success-0 text-white">
+                                    <tr>
+                                        <td class="text-center" colspan="5">TOTAL DE ARCHIVOS</td>
+                                        <td class="text-center tabla_tfoot">0</td>
+                                        <td class="text-center"></td>
+                                    </tr>
+                                </tfoot>
+                            @endif
+
                         </table>
                     </div>
 
@@ -186,20 +197,31 @@
                     <form action="" id="form" class="form-horizontal" autocomplete="off">
                         @csrf
                         <input type="hidden" id="mfubigeo" name="mfubigeo">
-                        <input type="hidden" id="mfeess" name="mfeess">
+                        {{-- <input type="hidden" id="mfe--ess" name="mfee--ss"> --}}
                         <div class="form-body">
                             <div class="form-group">
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <label class="small">Fecha Envio<span class="required">*</span></label>
-                                        <input id="mffechae" name="mffechae" class="form-control form-control-sm"
-                                            type="date" readonly>
+                                    <div class="col-md-12">
+                                        <label class="small">Establecimiento<span class="required">*</span></label>
+                                        <select id="mfeess" name="mfeess"
+                                            class="form-control form-control-sm"></select>
                                         <span class="help-block"></span>
                                     </div>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
                                     <div class="col-md-6">
                                         <label class="small">Fecha Inicial<span class="required">*</span></label>
                                         <input id="mffechai" name="mffechai" class="form-control form-control-sm"
-                                            type="date" value="{{ date('Y-m-d') }}">
+                                            type="date">
+                                        <span class="help-block"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="small">Fecha Final<span class="required">*</span></label>
+                                        <input id="mffechaf" name="mffechaf" class="form-control form-control-sm"
+                                            type="date">
                                         <span class="help-block"></span>
                                     </div>
                                 </div>
@@ -207,9 +229,9 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label class="small">Fecha Final<span class="required">*</span></label>
-                                        <input id="mffechaf" name="mffechaf" class="form-control form-control-sm"
-                                            type="date" value="{{ date('Y-m-d') }}">
+                                        <label class="small">Fecha Envio<span class="required">*</span></label>
+                                        <input id="mffechae" name="mffechae" class="form-control form-control-sm"
+                                            type="date">
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
@@ -218,6 +240,7 @@
                                             type="number" value="0">
                                         <span class="help-block"></span>
                                     </div>
+
                                 </div>
                             </div>
                             <div class="text-right">
@@ -228,54 +251,12 @@
                         </div>
                     </form>
                 </div>
-                <div class="modal-body p-0">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="card card-border">
-                                {{-- <div class="card-header border-success-0 bg-transparent pb-2 pl-0"> --}}
-                                {{-- <div class="card"> --}}
-                                {{-- <div class="card-header"> --}}
-                                {{-- <h3 class="card-title" id="card-title-seguimiento"></h3> --}}
-                                {{-- </div> --}}
-                                <div class="card-body p-0">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="table-responsive">
-                                                <table id="tabla_seguimiento"
-                                                    class="table table-sm table-striped table-bordered font-12">
-                                                    <thead class="cabecera-dataTable table-success-0 text-white">
-                                                        <tr>
-                                                            <th class="text-center">Nº</th>
-                                                            <th class="text-center">FECHA INICIAL</th>
-                                                            <th class="text-center">FECHA FINAL</th>
-                                                            <th class="text-center">N° ARCHIVOS</th>
-                                                            <th class="text-center">ACCIÓN</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody></tbody>
-                                                    <tfoot class="table-success-0 text-white">
-                                                        <tr>
-                                                            <td class="text-center" colspan="3">TOTAL DE ARCHIVOS</td>
-                                                            <td class="text-center tabla_seguimiento_tfoot">0</td>
-                                                            <td class="text-center"></td>
-                                                        </tr>
-                                                    </tfoot>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
                 {{-- <div class="modal-footer"></div> --}}
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
     <!-- End Bootstrap modal -->
+
 
     <!-- Bootstrap modal -->
     <div id="modal_registros" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -337,6 +318,7 @@
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap4.min.js"></script>
     <script type="text/javascript">
+        var registrador = '{{ $registrador }}';
         var table_principal;
         var table_seguimiento;
         var table_registros;
@@ -365,7 +347,14 @@
             // getmes();
             cargarred();
             cargarmicrored();
-            cargartabla();
+
+            if (registrador == 0) {
+                cargartabla();
+            } else {
+                cargartabla2();
+                // datos();
+            }
+
 
         });
 
@@ -379,6 +368,70 @@
                 destroy: true,
                 ajax: {
                     "url": "{{ route('eess.listar.registro') }}",
+                    "type": "GET",
+                    "data": {
+                        'municipio': $('#vmunicipio').val(),
+                        'red': $('#vred').val(),
+                        'microred': $('#vmicrored').val(),
+                        'fechai': $('#vfechai').val(),
+                        'fechaf': $('#vfechaf').val(),
+                        'registrador': '{{ $registrador }}',
+                    },
+                },
+                columnDefs: [{
+                        targets: 0,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 1,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 2,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 3,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 4,
+                        className: 'text-left'
+                    },
+                    {
+                        targets: 5,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 6,
+                        className: 'text-center'
+                    }
+                ],
+                drawCallback: function(settings) {
+                    var api = this.api();
+                    // Calcular el total de registros
+                    // var totalRecords = api.rows().count();
+                    // Calcular la suma de la edad (asumiendo que la edad está en la columna 2)
+                    var totalAge = api.column(5).data().reduce(function(a, b) {
+                        return parseInt(a) + parseInt(b);
+                    }, 0);
+                    // Actualizar el contenido del tfoot
+                    $('.tabla_tfoot').html(totalAge);
+                }
+            });
+        }
+
+        function cargartabla2() {
+            console.log('cargartabla2()');
+            table_principal = $('#tabla').DataTable({
+                responsive: true,
+                autoWidth: false,
+                ordered: false,
+                destroy: true,
+                language: table_language,
+                destroy: true,
+                ajax: {
+                    "url": "{{ route('imporpadronactas.registro.listar.2') }}",
                     "type": "GET",
                     "data": {
                         'municipio': $('#vmunicipio').val(),
@@ -511,6 +564,31 @@
             });
         }
 
+        function cargareess() {
+            $.ajax({
+                url: "{{ route('eess.cargareess') }}",
+                data: {
+                    'sector': 2,
+                    'municipio': $('#vmunicipio').val(),
+                    // 'red': $('#vred').val(),
+                },
+                type: 'GET',
+                success: function(data) {
+                    $("#mfeess option").remove();
+                    var options = data.eess.length > 1 ? '<option value="0">SELECCIONAR</option>' : '';
+                    $.each(data.eess, function(index, value) {
+                        //ss = (id == value.id ? "selected" : "");
+                        options +=
+                            `<option value='${value.id}'>${value.cod_unico.toString().padStart(8,'0')}|${value.nombre_establecimiento}</option>`;
+                    });
+                    $("#mfeess").append(options);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
         function limpiarfiltros() {
             $('#vred').val('0');
             $('#vmicrored').val('0');
@@ -531,10 +609,17 @@
                     console.log(jqXHR);
                 },
             });
-            $('#mfeess').val(eess);
+            $('#mfee--ss').val(eess);
             $('#mffechae').val($('#vfechaf').val());
             $('#mfubigeo').val($('#vmunicipio').val());
             cargarseguimiento(eess);
+        }
+
+        function abrirnuevo() {
+            console.log('abrirnuevo()');
+            $('#mfubigeo').val($('#vmunicipio').val());
+            cargareess();
+
         }
 
         function save() {
@@ -560,7 +645,7 @@
                     console.log(data)
                     if (data.status) {
                         // $('#modal_form').modal('hide');
-                        table_seguimiento.ajax.reload(null, false);
+                        // table_seguimiento.ajax.reload(null, false);
                         table_principal.ajax.reload(null, false);
                         toastr.success(msgsuccess, 'Mensaje');
                     } else {

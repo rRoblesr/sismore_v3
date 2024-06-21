@@ -1617,6 +1617,9 @@ distrito	varchar(100)	NULL DEFAULT NULL,
 categoria	varchar(100)	NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+################################################
+
+SELECT ue.* FROM `pres_unidadejecutora` ue join pres_pliego pl on pl.id=ue.pliego_id join pres_sector se on se.id=pl.sector_id where se.id=22;
 
 
 

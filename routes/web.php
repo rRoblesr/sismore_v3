@@ -1166,7 +1166,8 @@ Route::post('/ImporPadronActas/ListaImportada', [ImporPadronActasController::cla
 Route::get('/ImporPadronActas/eliminar/{fuente}/{id}', [ImporPadronActasController::class, 'eliminar'])->name('imporpadronactas.eliminar');
 
 Route::get('/Salud/PadronActas', [ImporPadronActasController::class, 'registro'])->name('imporpadronactas.registro');
-Route::get('/Salud/PadronActas/listar/reg', [ImporPadronActasController::class, 'registro_listarDT'])->name('imporpadronactas.registro.listar');
+Route::get('/Salud/PadronActas/listar/reg1', [ImporPadronActasController::class, 'registro_listarDT'])->name('imporpadronactas.registro.listar');
+Route::get('/Salud/PadronActas/listar/reg2', [ImporPadronActasController::class, 'registro_listarDT2'])->name('imporpadronactas.registro.listar.2');
 Route::get('/Salud/PadronActas/listar/reg/resumen', [ImporPadronActasController::class, 'registro_listarDT_resumen'])->name('imporpadronactas.registro.listar.resumen');
 Route::post('/Salud/PadronActas/Save', [ImporPadronActasController::class, 'registro_add'])->name('imporpadronactas.registro.guardar');
 Route::post('/Salud/PadronActas/Update', [ImporPadronActasController::class, 'registro_update'])->name('imporpadronactas.registro.modificar');
@@ -1209,6 +1210,7 @@ Route::post('/Salud/PadronNominal/Importar/Cargar', [SaludPadronNominalImportar:
 Route::get('/EESS/List/Registro', [EstablecimientoController::class, 'registro_listarDT'])->name('eess.listar.registro');
 Route::get('/EESS/CargarRed', [EstablecimientoController::class, 'cargarRed'])->name('eess.cargarred');
 Route::get('/EESS/CargarMicrored', [EstablecimientoController::class, 'cargarMicrored'])->name('eess.cargarmicrored');
+Route::get('/EESS/Cargareess', [EstablecimientoController::class, 'cargarEESS'])->name('eess.cargareess');
 Route::get('/EESS/Find/{id}', [EstablecimientoController::class, 'ajax_edit'])->name('eess.find');
 
 

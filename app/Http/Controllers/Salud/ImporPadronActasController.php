@@ -441,6 +441,43 @@ class ImporPadronActasController extends Controller
         return response()->json($result);
     }
 
+    public function registro_listarDT2(Request $rq)
+    {
+        $draw = intval($rq->draw);
+        $start = intval($rq->start);
+        $length = intval($rq->length);
+
+        $query = PadronActas::from('sal_padron_actas as pa')
+            ->join('sal_establecimiento as es', 'es.id', '=', 'pa.establecimiento_id')
+            ->join('sal_microred as mi', 'mi.id', '=', 'es.microrred_id')
+            ->join('sal_red as re', 're.id', '=', 'mi.red_id')
+            ->where('establecimiento_id', $rq->eess)->get();
+            //->where('fecha_envio', $rq->fechaf)
+        $data = [];
+        foreach ($query as $key => $value) {
+            $boton = '';
+            $boton .= '<button class="btn btn-xs btn-danger waves-effect waves-light" onclick="editseguimiento(' . $value->id . ')"><i class="fa fa-trash"></i></button>';
+            $boton .= '<button class="btn btn-xs btn-danger waves-effect waves-light" onclick="eliminarseguimiento(' . $value->id . ')"><i class="fa fa-trash"></i></button>';
+
+            $data[] = array(
+                $key + 1,
+                $value->fecha_inicial,
+                $value->fecha_final,
+                $value->nro_archivos,
+                $boton,
+            );
+        }
+        $result = array(
+            "draw" => $draw,
+            "recordsTotal" => $start,
+            "recordsFiltered" => $length,
+            "data" => $data,
+            // "municipio" =>  $rq->municipio,
+            // "query" => $query,
+        );
+        return response()->json($result);
+    }
+
     private function _registro_validate($request)
     {
         $data = array();
@@ -454,8 +491,14 @@ class ImporPadronActasController extends Controller
             $data['status'] = FALSE;
         }
 
-        if ($request->mffechaf == 0) {
+        if ($request->mffechaf == '') {
             $data['inputerror'][] = 'mffechaf';
+            $data['error_string'][] = 'No hay codigos modulares.';
+            $data['status'] = FALSE;
+        }
+
+        if ($request->mffechae == '') {
+            $data['inputerror'][] = 'mffechae';
             $data['error_string'][] = 'No hay codigos modulares.';
             $data['status'] = FALSE;
         }
@@ -485,7 +528,7 @@ class ImporPadronActasController extends Controller
             'fecha_envio' => $rq->mffechae,
             'nro_archivos' => $rq->mfarchivos,
         ]);
-        return response()->json(array('status' => true, 'msn' => $rq->all(), 'padron' => 0));
+        return response()->json(array('status' => true, 'msn' => $rq->all(), 'padron' => $padron));
     }
 
     public function registro_delete($id)

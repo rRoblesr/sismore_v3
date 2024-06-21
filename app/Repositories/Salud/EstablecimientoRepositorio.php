@@ -69,6 +69,25 @@ class EstablecimientoRepositorio
         return $query;
     }
 
+    public static function listEESS($sector, $municipio, $red)
+    {
+        $query = Establecimiento::from('sal_establecimiento as es')->distinct()->select('es.*')
+            ->join('sal_microred as mi', 'mi.id', '=', 'es.microrred_id')
+            ->join('sal_red as re', 're.id', '=', 'mi.red_id')
+            ->join('par_ubigeo as ub', 'ub.id', '=', 'es.ubigeo_id')
+            ->join('adm_entidad as en', 'en.codigo', '=', 'ub.codigo')
+            ->join('adm_tipo_entidad as te', function ($join) use ($sector) {
+                $join->on('te.id', '=', 'en.tipoentidad_id')
+                    ->where('te.sector_id', '=', $sector);
+            })
+            ->where('es.estado', 'ACTIVO')->where('re.codigo', '!=', '00');
+        if ($municipio > 0) $query = $query->where('ub.id', $municipio);
+        // if ($red > 0) $query = $query->where('re.id', $red);
+        // ->where('re.codigo', '03')
+        $query = $query->orderBy('re.codigo')->orderBy('mi.codigo')->orderBy('es.nombre_establecimiento')->get();
+        return $query;
+    }
+
     public static function registroList($municipio, $red, $microred, $fechai, $fechaf, $registrador)
     {
         $sector = 2;
