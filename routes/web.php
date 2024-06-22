@@ -14,6 +14,7 @@ use App\Http\Controllers\Educacion\ImportacionController;
 use App\Http\Controllers\Educacion\EceController;
 use App\Http\Controllers\Educacion\ImporCensoDocenteController;
 use App\Http\Controllers\Educacion\ImporCensoMatriculaController;
+use App\Http\Controllers\Educacion\ImporEvaluacionMuestralController;
 use App\Http\Controllers\Educacion\ImporISController;
 use App\Http\Controllers\Educacion\IndicadorController;
 use App\Http\Controllers\Educacion\InstEducativaController;
@@ -261,6 +262,8 @@ Route::get('/ImporIS/ListaImportada_DataTable/{importacion_id}', [ImporISControl
 Route::get('/ImporIS/Listar/ImportarDT', [ImporISController::class, 'ListarDTImportFuenteTodos'])->name('imporis.listar.importados');
 Route::get('/ImporIS/eliminar/{id}', [ImporISController::class, 'eliminar']);
 
+
+
 Route::get('/educación/Importar/Nexus', [CuadroAsigPersonalController::class, 'importar'])->name('CuadroAsigPersonal.importar');
 Route::post('/CuadroAsigPersonal/Importar', [CuadroAsigPersonalController::class, 'guardar'])->name('CuadroAsigPersonal.guardar');
 /* Route::get('/CuadroAsigPersonal/lidt/{importacion_id}', [CuadroAsigPersonalController::class, 'ListaImportada_DataTable'])->name('CuadroAsigPersonal.ListaImportada_DataTable'); */
@@ -294,6 +297,12 @@ Route::get('/educación/Importar/ServiciosBasicos/Listar/ImportarDT', [ImporServ
 Route::get('/educación/Importar/ServiciosBasicos/Eliminar/{id}', [ImporServiciosBasicosController::class, 'eliminar'])->name('imporserviciosbasicos.eliminar');
 //Route::get('/educación/Importar/ServiciosBasicos/Exportar', [ImporServiciosBasicosController::class, 'exportar'])->name('imporserviciosbasicos.exportar');
 //Route::get('/educación/Importar/ServiciosBasicos/Exportar/PadronSiagie', [ImporServiciosBasicosController::class, 'download'])->name('imporserviciosbasicos.download');
+
+Route::get('/educación/Importar/EvaluacionMuestral', [ImporEvaluacionMuestralController::class, 'importar'])->name('imporevaluacionmuestral.importar');
+Route::post('/educación/Importar/EvaluacionMuestral/Importar', [ImporEvaluacionMuestralController::class, 'guardar'])->name('imporevaluacionmuestral.guardar');
+Route::post('/educación/Importar/EvaluacionMuestral/ListaImportada/{importacion_id}', [ImporEvaluacionMuestralController::class, 'ListaImportada'])->name('imporevaluacionmuestral.listarimportados');
+Route::get('/educación/Importar/EvaluacionMuestral/Listar/ImportarDT', [ImporEvaluacionMuestralController::class, 'ListarDTImportFuenteTodos'])->name('imporevaluacionmuestral.listar.importados');
+Route::get('/educación/Importar/EvaluacionMuestral/Eliminar/{id}', [ImporEvaluacionMuestralController::class, 'eliminar'])->name('imporevaluacionmuestral.eliminar');
 
 Route::get('/Censo/Importar', [CensoController::class, 'importar'])->name('Censo.importar');
 Route::post('/Censo/Importar', [CensoController::class, 'guardar'])->name('Censo.guardar');
@@ -688,6 +697,9 @@ Route::get('/Man/SFL/Listar/Modular2', [SFLController::class, 'ListarDTModular2'
 Route::post('/Man/SFL/AjaxUpdate/Modular', [SFLController::class, 'ajax_update_modulares'])->middleware('auth')->name('mantenimiento.sfl.modular.modificar');
 Route::get('/Man/SFL/Download/PDF/{id}', [SFLController::class, 'exportarPDF'])->name('mantenimiento.sfl.exportar.pdf');
 Route::get('/Man/SFL/Download/EXCEL/{ugel}/{provincia}/{distrito}/{estado}', [SFLController::class, 'Download']);
+
+
+
 
 /* especiales */
 Route::get('/presupuesto/Principal', [MatriculaDetalleController::class, 'cargarpresupuestoxxx'])->name('educacion.xxx');

@@ -1445,25 +1445,25 @@ select distinct codLocal  from edu_institucioneducativa where estado='AC' and Es
 ) as tb;
 
 select importacion_id,count(codLocal) from (
-select pw.importacion_id,ie.codLocal from edu_padronweb pw 
+select pw.importacion_id,ie.codLocal from edu_padronweb pw
 inner join edu_institucioneducativa ie on ie.id=pw.institucioneducativa_id
 where ie.codLocal!='' and ie.TipoGestion_id in (4, 5, 7, 8) and ie.NivelModalidad_id not in (14, 15)and EstadoInsEdu_id=3
 group by pw.importacion_id,ie.codLocal
 ) as tb group by importacion_id
 
 
-select /*pw.importacion_id,ie.codModular,*/ie.codLocal from edu_padronweb pw 
+select /*pw.importacion_id,ie.codModular,*/ie.codLocal from edu_padronweb pw
 inner join par_importacion ii on ii.id=pw.importacion_id
 inner join edu_institucioneducativa ie on ie.id=pw.institucioneducativa_id
 where 1 and ie.TipoGestion_id in (4, 5, 7, 8) and ie.NivelModalidad_id not in (14, 15) and pw.estadoinsedu_id=3 and year(ii.fechaActualizacion)=2024 /*and pw.importacion_id=2505*/ /*and ie.codModular IN('0514232','0273086','1792795')*/
-group by /*pw.importacion_id,*/ie.codLocal  
+group by /*pw.importacion_id,*/ie.codLocal
 ORDER BY /*`pw`.`importacion_id` desc,*/ie.codLocal asc;
 
 # modificar edu_padronweb con x_padronweb
-update edu_padronweb pw 
-inner join par_importacion ii on ii.id=pw.importacion_id 
-inner join edu_institucioneducativa ie on ie.id=pw.institucioneducativa_id 
-set pw.estadoinsedu_id=(select IF(cod_estado=1,3,IF(cod_estado=2,2,1)) from x_padronweb where cod_mod=ie.codModular and importacion_id=ii.id) 
+update edu_padronweb pw
+inner join par_importacion ii on ii.id=pw.importacion_id
+inner join edu_institucioneducativa ie on ie.id=pw.institucioneducativa_id
+set pw.estadoinsedu_id=(select IF(cod_estado=1,3,IF(cod_estado=2,2,1)) from x_padronweb where cod_mod=ie.codModular and importacion_id=ii.id)
 WHERE 1 and year(ii.fechaActualizacion)=2024
 
 
@@ -1508,7 +1508,7 @@ update `sal_establecimiento` set ubigeo_id=56 where estado='ACTIVO' and cod_unic
 
 consulta y modificaion boqueron
 SELECT * FROM `sal_establecimiento` where estado='ACTIVO' and cod_unico in(5399 ,5401 ,5397 ,5403 ,5406 );
-update `sal_establecimiento` set ubigeo_id=57 where estado='ACTIVO' and cod_unico in(5399 ,5401 ,5397 ,5403 ,5406 ); 
+update `sal_establecimiento` set ubigeo_id=57 where estado='ACTIVO' and cod_unico in(5399 ,5401 ,5397 ,5403 ,5406 );
 
 
 
@@ -1521,7 +1521,7 @@ CREATE TABLE `sal_padron_actas` (
   `usuario_id` int(11) DEFAULT NULL,
   `fecha_inicial` date DEFAULT NULL,
   `fecha_final` date DEFAULT NULL,
-  `fecha_envio` date DEFAULT NULL,  
+  `fecha_envio` date DEFAULT NULL,
   `nro_archivos` int(11) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
@@ -1620,6 +1620,42 @@ categoria	varchar(100)	NULL DEFAULT NULL
 ################################################
 
 SELECT ue.* FROM `pres_unidadejecutora` ue join pres_pliego pl on pl.id=ue.pliego_id join pres_sector se on se.id=pl.sector_id where se.id=22;
+
+##################################################
+
+
+CREATE TABLE `edu_impor_evaluacion_muestral` (
+  `id` int(11) auto_increment primary key,
+  `importacion_id` int(11) DEFAULT NULL,
+  `anio` int(11) DEFAULT NULL,
+  `cod_mod` varchar(7) DEFAULT NULL,
+  `institucion_educativa` varchar(300) DEFAULT NULL,
+  `nivel` varchar(100) DEFAULT NULL,
+  `grado` varchar(100) DEFAULT NULL,
+  `seccion` varchar(100) DEFAULT NULL,
+  `gestion` varchar(100) DEFAULT NULL,
+  `caracteristica` varchar(100) DEFAULT NULL,
+  `codooii` varchar(6) DEFAULT NULL,
+  `codgeo` varchar(6) DEFAULT NULL,
+  `area_geografica` varchar(100) DEFAULT NULL,
+  `sexo` varchar(100) DEFAULT NULL,
+  `medida_l` double DEFAULT NULL,
+  `grupo_l` varchar(15) DEFAULT NULL,
+  `peso_l` double DEFAULT NULL,
+  `medida_m` double DEFAULT NULL,
+  `grupo_m` varchar(15) DEFAULT NULL,
+  `peso_m` double DEFAULT NULL,
+  `medida_cn` double DEFAULT NULL,
+  `grupo_cn` varchar(15) DEFAULT NULL,
+  `peso_cn` double DEFAULT NULL,
+  `medida_cs` double DEFAULT NULL,
+  `grupo_cs` varchar(15) DEFAULT NULL,
+  `peso_cs` double DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  foreign key(importacion_id) references par_importacion(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 
 

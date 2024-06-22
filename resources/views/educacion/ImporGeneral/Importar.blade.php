@@ -63,6 +63,11 @@
                             <h3 class="card-title">HISTORIAL DE IMPORTACIÓN DE SERVICIOS BASICOS</h3>
                         @break
 
+                        @case(46)
+                            {{-- censo educativo - matricula --}}
+                            <h3 class="card-title">HISTORIAL DE IMPORTACIÓN DE EVALUACIÓN MUESTRAL</h3>
+                        @break
+
                         @default
                     @endswitch
 
@@ -519,6 +524,35 @@
                                     </thead>
                                 @break
 
+                                @case(46)
+                                    <thead class="text-primary">
+                                        <th>anio</th>
+                                        <th>cod_mod</th>
+                                        <th>institucion_educativa</th>
+                                        <th>nivel</th>
+                                        <th>grado</th>
+                                        <th>seccion</th>
+                                        <th>gestion</th>
+                                        <th>caracteristica</th>
+                                        <th>codooii</th>
+                                        <th>codgeo</th>
+                                        <th>area_geografica</th>
+                                        <th>sexo</th>
+                                        <th>medida_l</th>
+                                        <th>grupo_l</th>
+                                        <th>peso_l</th>
+                                        <th>medida_m</th>
+                                        <th>grupo_m</th>
+                                        <th>peso_m</th>
+                                        <th>medida_cn</th>
+                                        <th>grupo_cn</th>
+                                        <th>peso_cn</th>
+                                        <th>medida_cs</th>
+                                        <th>grupo_cs</th>
+                                        <th>peso_cs</th>
+                                    </thead>
+                                @break
+
                                 @default
                             @endswitch
 
@@ -641,6 +675,8 @@
                     return "{{ route('impormatriculageneral.listar.importados') }}";
                 case 35:
                     return "{{ route('imporserviciosbasicos.listar.importados') }}";
+                case 46:
+                    return "{{ route('imporevaluacionmuestral.listar.importados') }}";
                 default:
                     return '';
             }
@@ -729,6 +765,8 @@
                     return "{{ route('impormatriculageneral.guardar') }}";
                 case 35:
                     return "{{ route('imporserviciosbasicos.guardar') }}";
+                case 46:
+                    return "{{ route('imporevaluacionmuestral.guardar') }}";
                 default:
                     return '';
             }
@@ -780,6 +818,8 @@
                     return "{{ route('impormatriculageneral.eliminar', '') }}/" + id;
                 case 35:
                     return "{{ route('imporserviciosbasicos.eliminar', '') }}/" + id;
+                case 46:
+                    return "{{ route('imporevaluacionmuestral.eliminar', '') }}/" + id;
                 default:
                     return '';
             }
