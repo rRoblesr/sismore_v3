@@ -1656,6 +1656,11 @@ CREATE TABLE `edu_impor_evaluacion_muestral` (
   foreign key(importacion_id) references par_importacion(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+###################################################
+
+update `edu_impor_evaluacion_muestral` set caracteristica='UNIDOCENTE / MULTIGRADO' where caracteristica='UNIDOCENTE/MULTIGRADO'
+
+
 
 
 

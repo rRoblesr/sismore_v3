@@ -28,6 +28,7 @@ use App\Http\Controllers\Educacion\ImporRERController;
 use App\Http\Controllers\Educacion\ImporServiciosBasicosController;
 use App\Http\Controllers\Educacion\ImporTabletaController;
 use App\Http\Controllers\Educacion\LenguaController;
+use App\Http\Controllers\Educacion\LogrosAprendizajeController;
 use App\Http\Controllers\Educacion\MatriculaDetalleController;
 use App\Http\Controllers\Educacion\MatriculaGeneralController;
 use App\Http\Controllers\Educacion\NivelModalidadController;
@@ -303,6 +304,12 @@ Route::post('/educación/Importar/EvaluacionMuestral/Importar', [ImporEvaluacion
 Route::post('/educación/Importar/EvaluacionMuestral/ListaImportada/{importacion_id}', [ImporEvaluacionMuestralController::class, 'ListaImportada'])->name('imporevaluacionmuestral.listarimportados');
 Route::get('/educación/Importar/EvaluacionMuestral/Listar/ImportarDT', [ImporEvaluacionMuestralController::class, 'ListarDTImportFuenteTodos'])->name('imporevaluacionmuestral.listar.importados');
 Route::get('/educación/Importar/EvaluacionMuestral/Eliminar/{id}', [ImporEvaluacionMuestralController::class, 'eliminar'])->name('imporevaluacionmuestral.eliminar');
+
+Route::get('/educación/LogrosdeAprendizaje/EM', [LogrosAprendizajeController::class, 'evaluacionmuestral'])->name('logrosaprendizaje.evaluacionmuestral');
+Route::get('/educación/LogrosdeAprendizaje/EM/Reportes', [LogrosAprendizajeController::class, 'EvaluacionMuestralReportes'])->name('logrosaprendizaje.evaluacionmuestral.reporte');
+Route::get('/educación/EvaluacionMuestral/cargarnivel/{anio}', [LogrosAprendizajeController::class, 'cargarnivel'])->name('logrosaprendizaje.evaluacionmuestral.cargarnivel');
+Route::get('/educación/EvaluacionMuestral/cargargrado/{anio}/{nivel}', [LogrosAprendizajeController::class, 'cargargrado'])->name('logrosaprendizaje.evaluacionmuestral.cargargrado');
+Route::get('/educación/EvaluacionMuestral/cargarcurso/{anio}/{nivel}/{grado}', [LogrosAprendizajeController::class, 'cargarcurso'])->name('logrosaprendizaje.evaluacionmuestral.cargarcurso');
 
 Route::get('/Censo/Importar', [CensoController::class, 'importar'])->name('Censo.importar');
 Route::post('/Censo/Importar', [CensoController::class, 'guardar'])->name('Censo.guardar');

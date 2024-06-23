@@ -69,17 +69,17 @@ class ImporEvaluacionMuestralController extends Controller
         ini_set('memory_limit', '-1');
         set_time_limit(0);
 
-        $existeMismaFecha = ImportacionRepositorio::Importacion_PE($request->fechaActualizacion, $this->fuente);
-        if ($existeMismaFecha != null) {
-            $mensaje = "Error, Ya existe archivos prendientes de aprobar para la fecha de versión ingresada";
-            $this->json_output(400, $mensaje);
-        }
+        // $existeMismaFecha = ImportacionRepositorio::Importacion_PE($request->fechaActualizacion, $this->fuente);
+        // if ($existeMismaFecha != null) {
+        //     $mensaje = "Error, Ya existe archivos prendientes de aprobar para la fecha de versión ingresada";
+        //     $this->json_output(400, $mensaje);
+        // }
 
-        $existeMismaFecha = ImportacionRepositorio::Importacion_PR($request->fechaActualizacion, $this->fuente);
-        if ($existeMismaFecha != null) {
-            $mensaje = "Error, Ya existe archivos procesados para la fecha de versión ingresada";
-            $this->json_output(400, $mensaje);
-        }
+        // $existeMismaFecha = ImportacionRepositorio::Importacion_PR($request->fechaActualizacion, $this->fuente);
+        // if ($existeMismaFecha != null) {
+        //     $mensaje = "Error, Ya existe archivos procesados para la fecha de versión ingresada";
+        //     $this->json_output(400, $mensaje);
+        // }
 
         $this->validate($request, ['file' => 'required|mimes:xls,xlsx']);
         $archivo = $request->file('file');
@@ -295,12 +295,9 @@ class ImporEvaluacionMuestralController extends Controller
 
     public function eliminar($id)
     {
-        $matricula = Matricula::where('importacion_id', $id)->first();
-        if ($matricula) {
-            MatriculaDetalle::where('matricula_id', $matricula->id)->delete();
-            $matricula->delete();
-        }
-        Importacion::find($id)->delete();
+        $ii = Importacion::find($id);
+        ImporEvaluacionMuestral::where('importacion_id', $id)->delete();
+        $ii->delete();
         return response()->json(array('status' => true));
     }
 

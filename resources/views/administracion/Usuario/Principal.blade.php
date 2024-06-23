@@ -260,7 +260,7 @@
                                         <h3 class="card-title"></h3>
                                     </div>
                                     <div class="card-body">
-                                        
+
                                     </div>
                                 </div> --}}
                             </div>
@@ -505,7 +505,8 @@
                 $('#btnbuscardni').html("<i class='fa fa-spinner fa-spin'></i>");
                 $.ajax({
                     url: "https://apiperu.dev/api/dni/" + $('#dni').val() +
-                        "?api_token=bdfa8657e3b70aaacabe568201917549aa8ada6bdd6cf3e1707c4e7e26dae946",
+                        "?api_token=41ad0f3f2505d2f9b060857d62abdafdba0a1716e4e8ecde51f0327c66acb265",
+                    // "?api_token=bdfa8657e3b70aaacabe568201917549aa8ada6bdd6cf3e1707c4e7e26dae946",
                     type: 'GET',
                     beforeSend: function() {
                         $('[name="nombre"]').val("");
