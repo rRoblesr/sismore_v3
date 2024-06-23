@@ -29,324 +29,279 @@
 @endsection
 
 @section('content')
-    <div class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12 col-md-12">
-                    <div class="card">
-                        <div class="card-header bg-success-0">
-                            <div class="card-widgets">
-                                <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf(6)"
-                                    title='FICHA TÉCNICA'><i class="fas fa-file"></i> Instituciones Educativas</button>
-                                <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
-                                    title='ACTUALIZAR'><i class=" fas fa-history"></i>
-                                    Actualizar</button>{{-- {{ route('indicador.nuevos.01.print') }} --}}
-                                {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="printer()"
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-header bg-success-0">
+                    <div class="card-widgets">
+                        <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf(6)" title='FICHA TÉCNICA'><i
+                                class="fas fa-file"></i> Instituciones Educativas</button>
+                        <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
+                            title='ACTUALIZAR'><i class=" fas fa-history"></i>
+                            Actualizar</button>{{-- {{ route('indicador.nuevos.01.print') }} --}}
+                        {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="printer()"
                                     title='IMPRIMIR'><i class="fa fa-print"></i></button> --}}
 
-                            </div>
-                            <h3 class="card-title text-white">
-                                logros de aprendizaje - evaluación muestral
-                            </h3>
+                    </div>
+                    <h3 class="card-title text-white">
+                        logros de aprendizaje - evaluación muestral
+                    </h3>
+                </div>
+                <div class="card-body pb-0">
+                    <div class="form-group row align-items-center vh-5">
+                        <div class="col-lg-5 col-md-5 col-sm-5">
+                            <h5 class="page-title font-12">Fuente: UMC - MINEDU, {{ $actualizado }}</h5>
                         </div>
-                        <div class="card-body pb-0">
-                            <div class="form-group row align-items-center vh-5">
-                                <div class="col-lg-5 col-md-5 col-sm-5">
-                                    <h5 class="page-title font-12">Fuente: UMC - MINEDU, {{ $actualizado }}</h5>
-                                </div>
-                                <div class="col-lg-1 col-md-1 col-sm-1  ">
-                                    <select id="vanio" name="vanio" class="form-control btn-xs font-11"
-                                        onchange="cargarnivel();cargarCards();">
-                                        <option value="0">AÑO</option>
-                                        @foreach ($anios as $item)
-                                            <option value="{{ $item->anio }}"
-                                                {{ $item->anio == $aniomax ? 'selected' : '' }}>
-                                                {{ $item->anio }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-lg-2 col-md-2 col-sm-2">
-                                    <select id="vnivel" name="vnivel" class="form-control btn-xs font-11"
-                                        onchange="cargargrado();cargarCards();">
-                                        <option value="0">NIVEL</option>
-                                    </select>
-                                </div>
-                                <div class="col-lg-2 col-md-2 col-sm-2">
-                                    <select id="vgrado" name="vgrado" class="form-control btn-xs font-11"
-                                        onchange="cargarcurso();cargarCards();">
-                                        <option value="0">GRADO</option>
-                                    </select>
-                                </div>
-                                <div class="col-lg-2 col-md-2 col-sm-2">
-                                    <select id="vcurso" name="vcurso" class="form-control btn-xs font-11"
-                                        onchange="cargarCards();">
-                                        <option value="0">CURSO</option>
-                                    </select>
-                                </div>
-                            </div>
+                        <div class="col-lg-1 col-md-1 col-sm-1">
+                            <select id="vanio" name="vanio" class="form-control form-control-sm"
+                                onchange="cargarnivel();cargarCards();">
+                                <option value="0">AÑO</option>
+                                @foreach ($anios as $item)
+                                    <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                        {{ $item->anio }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <select id="vnivel" name="vnivel" class="form-control form-control-sm"
+                                onchange="cargargrado();cargarCards();">
+                                <option value="0">NIVEL</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <select id="vgrado" name="vgrado" class="form-control form-control-sm"
+                                onchange="cargarcurso();cargarCards();">
+                                <option value="0">GRADO</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <select id="vcurso" name="vcurso" class="form-control form-control-sm"
+                                onchange="cargarCards();">
+                                <option value="0">CURSO</option>
+                            </select>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!--Widget-4 -->
-            <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card-box border border-plomo-0">
-                        <div class="media">
-                            <div class="text-center">
-                                <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
-                                    width="70%" height="70%">
-                            </div>
-                            <div class="media-body align-self-center">
-                                <div class="text-right">
-                                    <h4 class="font-20 my-0 font-weight-bold">
-                                        <span data-plugin="counterup" id="basico"></span>
-                                    </h4>
-                                    <p class="mb-0 mt-1 text-truncate">Matriculados</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-0 font-9">
-                            <h6 class="">Avance <span class="float-right" id="ibasico">0%</span></h6>
-                            <div class="progress progress-sm m-0">
-                                <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="90"
-                                    aria-valuemin="0" aria-valuemax="100" style="width: 100%" id="bbasico">
-                                    <span class="sr-only">0% Complete</span>
-                                </div>
-                            </div>
-                        </div>
+    <!--Widget-4 -->
+    <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card-box border border-plomo-0">
+                <div class="media">
+                    <div class="text-center">
+                        <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                            width="70%" height="70%">
                     </div>
-                    <!-- end card-box-->
-                </div>
-
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card-box border border-plomo-0">
-                        <div class="media">
-                            <div class="text-center">
-                                <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
-                                    width="70%" height="70%">
-                            </div>
-                            <div class="media-body align-self-center">
-                                <div class="text-right">
-                                    <h4 class="font-20 my-0 font-weight-bold">
-                                        <span data-plugin="counterup" id="ebr"></span>
-                                    </h4>
-                                    <p class="mb-0 mt-1 text-truncate">
-                                        <a href="{{ route('matriculageneral.ebr.principal') }}"
-                                            title="Ir a Matricula EBR">Matricula EBR</a>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-0 font-9">
-                            <h6 class="">Avance <span class="float-right" id="iebr">0%</span></h6>
-                            <div class="progress progress-sm m-0">
-                                <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="60"
-                                    aria-valuemin="0" aria-valuemax="100" style="width: 100%" id="bebr">
-                                    <span class="sr-only">0% Complete</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end card-box-->
-                </div>
-
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card-box border border-plomo-0">
-                        <div class="media">
-                            <div class="text-center">
-                                <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
-                                    width="70%" height="70%">
-                            </div>
-                            <div class="media-body align-self-center">
-                                <div class="text-right">
-                                    <h4 class="font-20 my-0 font-weight-bold">
-                                        <span data-plugin="counterup" id="ebe"></span>
-                                    </h4>
-                                    <p class="mb-0 mt-1 text-truncate">
-                                        <a href="{{ route('matriculageneral.ebe.principal') }}"
-                                            title="Ir a Matricula EBE">Matricula EBE</a>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-0 font-9">
-                            <h6 class="">Avance <span class="float-right" id="iebe">0%</span></h6>
-                            <div class="progress progress-sm m-0">
-                                <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="60"
-                                    aria-valuemin="0" aria-valuemax="100" style="width: 100%" id="bebe">
-                                    <span class="sr-only">0% Complete</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end card-box-->
-                </div>
-
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card-box border border-plomo-0">
-                        <div class="media">
-                            <div class="text-center">
-                                <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
-                                    width="70%" height="70%">
-                            </div>
-                            <div class="media-body align-self-center">
-                                <div class="text-right">
-                                    <h4 class="font-20 my-0 font-weight-bold">
-                                        <span data-plugin="counterup" id="eba"></span>
-                                    </h4>
-                                    <p class="mb-0 mt-1 text-truncate">
-                                        <a href="{{ route('matriculageneral.eba.principal') }}"title="Ir a Matricula EBA">Matricula
-                                            EBA</a>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-0 font-9">
-                            <h6 class="">Avance <span class="float-right" id="ieba">0%</span></h6>
-                            <div class="progress progress-sm m-0">
-                                <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="60"
-                                    aria-valuemin="0" aria-valuemax="100" style="width: 100%" id="beba">
-                                    <span class="sr-only">0% Complete</span>
-                                </div>
-                            </div>
+                    <div class="media-body align-self-center">
+                        <div class="text-right">
+                            <h4 class="font-20 my-0 font-weight-bold">
+                                <span data-plugin="counterup" id="card1"></span>
+                            </h4>
+                            <p class="mb-0 mt-1 text-truncate">Media Promedio</p>
                         </div>
                     </div>
                 </div>
             </div>
+            <!-- end card-box-->
+        </div>
 
-            {{-- portles --}}
-
-            <div class="row">
-
-                <div class="col-lg-6">
-                    <div class="card card-border border border-plomo-0">
-                        <div class="card-header border-success-0 bg-transparent p-0">
-                            {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card-box border border-plomo-0">
+                <div class="media">
+                    <div class="text-center">
+                        <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                            width="70%" height="70%">
+                    </div>
+                    <div class="media-body align-self-center">
+                        <div class="text-right">
+                            <h4 class="font-20 my-0 font-weight-bold">
+                                <span data-plugin="counterup" id="card2"></span>
+                            </h4>
+                            <p class="mb-0 mt-1 text-truncate">
+                                Logro Satisfactorio
+                            </p>
                         </div>
-                        <div class="card-body p-0">
-                            <figure class="highcharts-figure p-0 m-0">
-                                <div id="anal1" style="height: 20rem"></div>
-                            </figure>
-                            {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                    </div>
+                </div>
+            </div>
+            <!-- end card-box-->
+        </div>
+
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card-box border border-plomo-0">
+                <div class="media">
+                    <div class="text-center">
+                        <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                            width="70%" height="70%">
+                    </div>
+                    <div class="media-body align-self-center">
+                        <div class="text-right">
+                            <h4 class="font-20 my-0 font-weight-bold">
+                                <span data-plugin="counterup" id="card3"></span>
+                            </h4>
+                            <p class="mb-0 mt-1 text-truncate">
+                                Estudiantes Evaluados
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end card-box-->
+        </div>
+
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card-box border border-plomo-0">
+                <div class="media">
+                    <div class="text-center">
+                        <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                            width="70%" height="70%">
+                    </div>
+                    <div class="media-body align-self-center">
+                        <div class="text-right">
+                            <h4 class="font-20 my-0 font-weight-bold">
+                                <span data-plugin="counterup" id="card4"></span>
+                            </h4>
+                            <p class="mb-0 mt-1 text-truncate">
+                                II.EE Evaluadas
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- portles --}}
+
+    <div class="row">
+
+        <div class="col-lg-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent p-0">
+                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
+                </div>
+                <div class="card-body p-0">
+                    <figure class="highcharts-figure p-0 m-0">
+                        <div id="anal1" style="height: 20rem"></div>
+                    </figure>
+                    {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
                                 <span class="anal1-fuente">Fuente:</span>
                                 <span class="float-right anal1-fecha">Actualizado:</span>
                             </div> --}}
-                        </div>
-                    </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="col-lg-6">
-                    <div class="card card-border border border-plomo-0">
-                        <div class="card-header border-success-0 bg-transparent p-0">
-                            {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
-                        </div>
-                        <div class="card-body p-0">
-                            <figure class="highcharts-figure p-0 m-0">
-                                <div id="anal2" style="height: 20rem"></div>
-                            </figure>
-                            {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+        <div class="col-lg-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent p-0">
+                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
+                </div>
+                <div class="card-body p-0">
+                    <figure class="highcharts-figure p-0 m-0">
+                        <div id="anal2" style="height: 20rem"></div>
+                    </figure>
+                    {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
                                 <span class="anal2-fuente">Fuente:</span>
                                 <span class="float-right anal2-fecha">Actualizado:</span>
                             </div> --}}
-                        </div>
-                    </div>
                 </div>
-
             </div>
+        </div>
 
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="card card-border border border-plomo-0">
-                        <div class="card-header border-success-0 bg-transparent p-0">
-                            {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
-                        </div>
-                        <div class="card-body p-0">
-                            <figure class="highcharts-figure p-0 m-0">
-                                <div id="anal3" style="height: 20rem"></div>
-                            </figure>
-                            {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent p-0">
+                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
+                </div>
+                <div class="card-body p-0">
+                    <figure class="highcharts-figure p-0 m-0">
+                        <div id="anal3" style="height: 20rem"></div>
+                    </figure>
+                    {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
                                 <span class="anal3-fuente">Fuente:</span>
                                 <span class="float-right anal3-fecha">Actualizado:</span>
                             </div> --}}
-                        </div>
-                    </div>
                 </div>
-                <div class="col-lg-6">
-                    <div class="card card-border border border-plomo-0">
-                        <div class="card-header border-success-0 bg-transparent p-0">
-                            {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
-                        </div>
-                        <div class="card-body p-0">
-                            <figure class="highcharts-figure p-0 m-0">
-                                <div id="anal4" style="height: 20rem"></div>
-                            </figure>
-                            {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent p-0">
+                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
+                </div>
+                <div class="card-body p-0">
+                    <figure class="highcharts-figure p-0 m-0">
+                        <div id="anal4" style="height: 20rem"></div>
+                    </figure>
+                    {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
                                 <span class="anal4-fuente">Fuente:</span>
                                 <span class="float-right anal4-fecha">Actualizado:</span>
                             </div> --}}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                    <div class="card-widgets">
+                        <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
+                                class="fa fa-file-excel"></i> Descargar</button>
+                    </div>
+                    <h3 class="text-black font-14">Avance de la matricula mensual según unidad de gestion educativa
+                        local</h3>
+                </div>
+                <div class="card-body pt-0">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive" id="vtabla1">
+                            </div>
                         </div>
                     </div>
-                </div>
-
-            </div>
-
-
-
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card card-border border border-plomo-0">
-                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                            <div class="card-widgets">
-                                <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
-                                        class="fa fa-file-excel"></i> Descargar</button>
-                            </div>
-                            <h3 class="text-black font-14">Avance de la matricula mensual según unidad de gestion educativa
-                                local</h3>
-                        </div>
-                        <div class="card-body pt-0">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="table-responsive" id="vtabla1">
-                                    </div>
-                                </div>
-                            </div>
-                            {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                    {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
                                 <span class="float-left vtabla1-fuente">Fuente:</span>
                                 <span class="float-right vtabla1-fecha">Actualizado:</span>
                             </div> --}}
-                        </div>
-                    </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card card-border border border-plomo-0">
-                        <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                            <div class="card-widgets">
-                                <button type="button" class="btn btn-primary btn-xs"
-                                    onclick="cargarTablaNivel('tabla2', 0)" title='Actualizar Tabla'><i
-                                        class=" fas fa-history"></i> Actualizar</button>
-                                <button type="button" class="btn btn-success btn-xs" onclick="descargar2()"><i
-                                        class="fa fa-file-excel"></i> Descargar</button>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                    <div class="card-widgets">
+                        <button type="button" class="btn btn-primary btn-xs" onclick="cargarTablaNivel('tabla2', 0)"
+                            title='Actualizar Tabla'><i class=" fas fa-history"></i> Actualizar</button>
+                        <button type="button" class="btn btn-success btn-xs" onclick="descargar2()"><i
+                                class="fa fa-file-excel"></i> Descargar</button>
+                    </div>
+                    <h3 class="text-black font-14">Avance de la matricula mensual según nivel y modalidad</h3>
+                </div>
+                <div class="card-body pt-0">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive" id="vtabla2">
                             </div>
-                            <h3 class="text-black font-14">Avance de la matricula mensual según nivel y modalidad</h3>
                         </div>
-                        <div class="card-body pt-0">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="table-responsive" id="vtabla2">
-                                    </div>
-                                </div>
-                            </div>
-                            {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                    </div>
+                    {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
                                 <span class="float-left vtabla2-fuente">Fuente:</span>
                                 <span class="float-right vtabla2-fecha">Actualizado:</span>
                             </div> --}}
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -372,7 +327,7 @@
 
         function cargarCardsDiv(div) {
             $.ajax({
-                url: "{{ route('indicador.nuevos.01.tabla') }}",
+                url: "{{ route('logrosaprendizaje.evaluacionmuestral.reporte') }}",
                 data: {
                     'div': div,
                     "anio": $('#vanio').val(),
@@ -392,14 +347,13 @@
                     // }
                 },
                 success: function(data) {
+                    console.log(data);
                     if (div == "head") {
-                        gAnidadaColumn(div,
-                            data.info.categoria, data.info.series, '',
-                            'Número de estudiantes matriculados en educación básica, periodo 2018-2023',
-                            data.info.maxbar
-                        );
-                        $('.anal1-fuente').html('Fuente: ' + data.reg.fuente);
-                        $('.anal1-fecha').html('Actualizado: ' + data.reg.fecha);
+                        $('#card1').text(data.card1);
+                        $('#card2').text(data.card2+'%');
+                        $('#card3').text(data.card3);
+                        $('#card4').text(data.card4);
+
                     } else if (div == "anal1") {
                         gAnidadaColumn(div,
                             data.info.categoria, data.info.series, '',
@@ -490,7 +444,7 @@
                 type: 'GET',
                 success: function(data) {
                     $("#vnivel option").remove();
-                    var options = data.length == 1 ? '' : '<option value="0">NIVEL</option>';
+                    var options = data.length == 1 ? '' : ''; // '<option value="0">NIVEL</option>';
                     $.each(data, function(index, value) {
                         //ss = (id == value.id ? "selected" : "");
                         options += "<option value='" + value.nivel + "'>" + value.nivel +
@@ -513,7 +467,7 @@
                 type: 'GET',
                 success: function(data) {
                     $("#vgrado option").remove();
-                    var options = data.length == 1 ? '' : '<option value="0">GRADO</option>';
+                    var options = data.length == 1 ? '' : ''; //'<option value="0">GRADO</option>';
                     $.each(data, function(index, value) {
                         //ss = (id == value.id ? "selected" : "");
                         options += "<option value='" + value.grado + "'>" + value.grado +
@@ -521,7 +475,8 @@
                     });
                     $("#vgrado").append(options);
 
-                    if (data.length == 1) cargarcurso();
+                    // if (data.length == 1)
+                    cargarcurso();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -536,13 +491,15 @@
                 type: 'GET',
                 success: function(data) {
                     $("#vcurso option").remove();
-                    var options = data.length == 1 ? '' : '<option value="0">GRADO</option>';
+                    var options = data.length == 1 ? '' : ''; // '<option value="0">CURSO</option>';
                     $.each(data, function(index, value) {
                         //ss = (id == value.id ? "selected" : "");
                         options += "<option value='" + value.id + "'>" + value.curso +
                             "</option>"
                     });
                     $("#vcurso").append(options);
+
+                    cargarCards();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);

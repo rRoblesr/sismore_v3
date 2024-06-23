@@ -45,4 +45,39 @@ class ImporEvaluacionMuestralRepositorio
 
         return $curso;
     }
+
+    public static function EvaluacionMuestralReportesHead($div, $anio, $nivel, $grado, $curso)
+    {
+        $query = ImporEvaluacionMuestral::select(
+            DB::raw("round(sum(medida_$curso*peso_$curso)/sum(peso_$curso),1) as ponderado"),
+            DB::raw("round(100*sum(IF(grupo_$curso='Satisfactorio',peso_$curso,0))/sum(peso_$curso),1) as satisfactorio"),
+            // DB::raw("sum(medida_$curso*peso_$curso) as c1"),
+            // DB::raw("sum(peso_$curso) as c2")
+            // DB::raw("sum(IF(grupo_$curso='Satisfactorio',medida_$curso*peso_$curso,0)) as l1"),
+            // DB::raw("sum(IF(grupo_$curso='Satisfactorio',peso_$curso,0)) as l1x"),
+            // DB::raw("sum(peso_$curso) as c2"),
+            DB::raw("count(grupo_$curso) as evaluados"),
+            DB::raw("round(count(distinct cod_mod),1) as locales"),
+        )
+            ->where('anio', $anio)->where('nivel', $nivel)->where('grado', $grado)->whereNotNull("grupo_$curso")
+            ->get();
+        return $query->first();
+    }
+
+    // public static function EvaluacionMuestralReportesHead2($div, $anio, $nivel, $grado, $curso)
+    // {
+    //     $query = ImporEvaluacionMuestral::select(
+    //         DB::raw("round(count(cod_modular),1) as ponderado"),
+    //         DB::raw("round(100*sum(IF(grupo_$curso='Satisfactorio',peso_$curso,0))/sum(peso_$curso),1) as satisfactorio"),
+    //         // DB::raw("sum(medida_$curso*peso_$curso) as c1"),
+    //         // DB::raw("sum(peso_$curso) as c2")
+    //         // DB::raw("sum(IF(grupo_$curso='Satisfactorio',medida_$curso*peso_$curso,0)) as l1"),
+    //         // DB::raw("sum(IF(grupo_$curso='Satisfactorio',peso_$curso,0)) as l1x"),
+    //         // DB::raw("sum(peso_$curso) as c2"),
+    //         DB::raw("count(grupo_$curso) as evaluados")
+    //     )
+    //         ->where('anio', $anio)->where('nivel', $nivel)->where('grado', $grado)->whereNotNull("grupo_$curso")
+    //         ->get();
+    //     return $query->first();
+    // }
 }
