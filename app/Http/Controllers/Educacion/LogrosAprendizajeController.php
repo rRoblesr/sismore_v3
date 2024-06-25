@@ -60,11 +60,36 @@ class LogrosAprendizajeController extends Controller
             case 'anal1':
                 return response()->json([]);
             case 'anal2':
-                return response()->json([]);
+                $base = ImporEvaluacionMuestralRepositorio::EvaluacionMuestralReportesanal2($rq->div, $rq->anio, $rq->nivel, $rq->grado, $rq->curso);
+                $categoria = ['PUBLICO', 'PRIVADO'];
+                $data = [];
+                $data[] = ['name' => 'Previo al inicio', 'data' => [$base->a1, $base->a2]];
+                $data[] = ['name' => 'En inicio', 'data' => [$base->i1, $base->i2]];
+                $data[] = ['name' => 'En proceso', 'data' => [$base->p1, $base->p2]];
+                $data[] = ['name' => 'Satisfactorio', 'data' => [$base->s1, $base->s2]];
+                // {
+                //     name: 'Previo al inicio',
+                //     data: [5, 10]
+                // }
+                return response()->json(compact('base', 'categoria', 'data'));
             case 'anal3':
-                return response()->json([]);
+                $base = ImporEvaluacionMuestralRepositorio::EvaluacionMuestralReportesanal3($rq->div, $rq->anio, $rq->nivel, $rq->grado, $rq->curso);
+                $categoria = ['RURAL', 'URBANO'];
+                $data = [];
+                $data[] = ['name' => 'Previo al inicio', 'data' => [$base->a1, $base->a2]];
+                $data[] = ['name' => 'En inicio', 'data' => [$base->i1, $base->i2]];
+                $data[] = ['name' => 'En proceso', 'data' => [$base->p1, $base->p2]];
+                $data[] = ['name' => 'Satisfactorio', 'data' => [$base->s1, $base->s2]];
+                return response()->json(compact('base', 'categoria', 'data'));
             case 'anal4':
-                return response()->json([]);
+                $base = ImporEvaluacionMuestralRepositorio::EvaluacionMuestralReportesanal4($rq->div, $rq->anio, $rq->nivel, $rq->grado, $rq->curso);
+                $categoria = ['HOMBRE', 'MUJER'];
+                $data = [];
+                $data[] = ['name' => 'Previo al inicio', 'data' => [$base->a1, $base->a2]];
+                $data[] = ['name' => 'En inicio', 'data' => [$base->i1, $base->i2]];
+                $data[] = ['name' => 'En proceso', 'data' => [$base->p1, $base->p2]];
+                $data[] = ['name' => 'Satisfactorio', 'data' => [$base->s1, $base->s2]];
+                return response()->json(compact('base', 'categoria', 'data'));
             default:
                 # code...
                 return response()->json([]);

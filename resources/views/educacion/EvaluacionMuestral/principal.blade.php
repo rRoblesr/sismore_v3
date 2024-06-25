@@ -187,10 +187,6 @@
                     <figure class="highcharts-figure p-0 m-0">
                         <div id="anal1" style="height: 20rem"></div>
                     </figure>
-                    {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                                <span class="anal1-fuente">Fuente:</span>
-                                <span class="float-right anal1-fecha">Actualizado:</span>
-                            </div> --}}
                 </div>
             </div>
         </div>
@@ -323,6 +319,10 @@
 
         function cargarCards() {
             cargarCardsDiv('head');
+            cargarCardsDiv('anal1');
+            cargarCardsDiv('anal2');
+            cargarCardsDiv('anal3');
+            cargarCardsDiv('anal4');
         }
 
         function cargarCardsDiv(div) {
@@ -347,35 +347,30 @@
                     // }
                 },
                 success: function(data) {
-                    console.log(data);
+                    // console.log('data');
+                    // console.log(data);
                     if (div == "head") {
                         $('#card1').text(data.card1);
-                        $('#card2').text(data.card2+'%');
+                        $('#card2').text(data.card2 + '%');
                         $('#card3').text(data.card3);
                         $('#card4').text(data.card4);
 
                     } else if (div == "anal1") {
-                        gAnidadaColumn(div,
-                            data.info.categoria, data.info.series, '',
-                            'Número de estudiantes matriculados en educación básica, periodo 2018-2023',
-                            data.info.maxbar
-                        );
-                        $('.anal1-fuente').html('Fuente: ' + data.reg.fuente);
-                        $('.anal1-fecha').html('Actualizado: ' + data.reg.fecha);
+                        gColumn1(div, 0, '',
+                            'Resultado de logros de aprendizaje por años, según nivel de desempeño', '');
                     } else if (div == "anal2") {
-                        gLineaBasica(div, data.info, '',
-                            'Matricula educativa acumulada mensual en educación básica', '');
-                        $('.anal2-fuente').html('Fuente: ' + data.reg.fuente);
-                        $('.anal2-fecha').html('Actualizado: ' + data.reg.fecha);
-                    } else if (div == "anal3") {
-                        gPie2(div, data.info, '', 'Numero de estudiantes matriculados según sexo', '');
-                        $('.anal3-fuente').html('Fuente: ' + data.reg.fuente);
-                        $('.anal3-fecha').html('Actualizado: ' + data.reg.fecha);
-                    } else if (div == "anal4") {
-                        gPie(div, data.info, '', 'Numero de estudiantes matriculados según área geográfica',
+                        // console.log(data.categoria);
+                        gColumn2(div, data.categoria, data.data, '',
+                            'Resultado de logros de aprendizaje por tipo de gestión, según niveles de logro',
                             '');
-                        $('.anal4-fuente').html('Fuente: ' + data.reg.fuente);
-                        $('.anal4-fecha').html('Actualizado: ' + data.reg.fecha);
+                    } else if (div == "anal3") {
+                        gColumn2(div, data.categoria, data.data, '',
+                            'Resultado de logros de aprendizaje por tipo de gestión, según niveles de logro',
+                            '');
+                    } else if (div == "anal4") {
+                        gColumn2(div, data.categoria, data.data, '',
+                            'Resultado de logros de aprendizaje por tipo de gestión, según niveles de logro',
+                            '');
                     } else if (div == "tabla1") {
                         $('#vtabla1').html(data.excel);
                         $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
@@ -403,41 +398,6 @@
             });
         }
 
-        function cargarTablaNivel(div, ugel) {
-            $.ajax({
-                url: "{{ route('indicador.nuevos.01.tabla') }}",
-                data: {
-                    'div': div,
-                    "anio": $('#anio').val(),
-                    "provincia": $('#provincia').val(),
-                    "distrito": $('#distrito').val(),
-                    "gestion": $('#gestion').val(),
-                    "ugel": ugel
-                },
-                type: "GET",
-                dataType: "JSON",
-                beforeSend: function() {
-                    ugel_select = ugel;
-                    if (div == "tabla1") {
-                        $('#v' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    } else if (div == "tabla2") {
-                        $('#v' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    } else {
-                        $('#' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    }
-                },
-                success: function(data) {
-                    if (div == "tabla2") {
-                        $('#vtabla2').html(data.excel);
-                    }
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 1");
-                    console.log(jqXHR);
-                },
-            });
-        }
-
         function cargarnivel() {
             $.ajax({
                 url: "{{ route('logrosaprendizaje.evaluacionmuestral.cargarnivel', '') }}/" + $('#vanio').val(),
@@ -452,7 +412,8 @@
                     });
                     $("#vnivel").append(options);
 
-                    if (data.length == 1) cargargrado();
+                    // if (data.length == 1)
+                    cargargrado();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -507,26 +468,6 @@
             });
         }
 
-        function cargarDistritos() {
-            $.ajax({
-                url: "{{ route('ubigeo.distrito.25', '') }}/" + $('#provincia').val(),
-                type: 'GET',
-                success: function(data) {
-                    $("#distrito option").remove();
-                    var options = '<option value="0">DISTRITO</option>';
-                    $.each(data, function(index, value) {
-                        //ss = (id == value.id ? "selected" : "");
-                        options += "<option value='" + value.id + "'>" + value.nombre +
-                            "</option>"
-                    });
-                    $("#distrito").append(options);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
-        }
-
         function descargar1() {
             window.open("{{ url('/') }}/INDICADOR/Home/01/Excel/tabla1/" + $('#anio').val() + "/" + $('#provincia')
                 .val() + "/" + $('#distrito').val() + "/" + $('#gestion').val() + "/0");
@@ -553,6 +494,122 @@
             //     '); } @media print { body { transform: scale(' + escalaPersonalizada + '); } }';
             // document.head.appendChild(style);
             // window.print();
+        }
+
+        function gColumn1(div, datax, titulo, subtitulo, tituloserie) {
+
+            Highcharts.chart(div, {
+                chart: {
+                    type: 'column'
+                },
+                colors: ['#5eb9aa', '#ef5350', '#f5bd22', '#939393'],
+                title: {
+                    text: ''
+                },
+                subtitle: {
+                    text: subtitulo
+                },
+                xAxis: {
+                    categories: ['2019', '2022', '2023']
+                },
+                yAxis: {
+                    min: 0,
+                    max: 100,
+                    title: {
+                        text: ''
+                    }
+                },
+                legend: {
+                    reversed: true
+                },
+                plotOptions: {
+                    series: {
+                        stacking: 'normal',
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.y}%' // Muestra el valor con un símbolo de porcentaje
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Previo al inicio',
+                    data: [30, 25, 20],
+                    // color: '#CCCCCC'
+                }, {
+                    name: 'En inicio',
+                    data: [15, 16, 20],
+                    // color: '#FF5733'
+                }, {
+                    name: 'En proceso',
+                    data: [25, 20, 20],
+                    // color: '#FFC300'
+                }, {
+                    name: 'Satisfactorio',
+                    data: [30, 40, 38],
+                    // color: '#33FF57'
+                }]
+            });
+        }
+
+        function gColumn2(div, categoria, data, titulo, subtitulo, tituloserie) {
+            Highcharts.chart(div, {
+                chart: {
+                    type: 'column'
+                },
+                colors: ['#5eb9aa', '#ef5350', '#f5bd22', '#939393'],
+                title: {
+                    text: ''
+                },
+                subtitle: {
+                    text: subtitulo
+                },
+                xAxis: {
+                    categories: categoria, // ['PUBLICO', 'PRIVADO'],
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y:.1f} %</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.y:.1f} %'
+                        }
+                    }
+                },
+                series: data,
+                //  [{
+                //     name: 'Previo al inicio',
+                //     data: [5, 10]
+
+                // }, {
+                //     name: 'En inicio',
+                //     data: [10, 15]
+
+                // }, {
+                //     name: 'En proceso',
+                //     data: [20, 25]
+
+                // }, {
+                //     name: 'Satisfactorio',
+                //     data: [30, 40]
+
+                // }]
+            });
         }
 
         function gSimpleColumn(div, datax, titulo, subtitulo, tituloserie) {
