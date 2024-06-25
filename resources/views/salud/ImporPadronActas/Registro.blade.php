@@ -200,7 +200,7 @@
         </div>
     </div> <!-- End row -->
 
-    <div class="row">
+    <div class="row d-none">
         <div class="col-lg-6">
             <div class="alert alert-success alert-dismissible fade show">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
