@@ -886,7 +886,7 @@
                         type: "GET",
                         dataType: "JSON",
                         success: function(data) {
-                            table_seguimiento.ajax.reload(null, false);
+                            // table_seguimiento.ajax.reload(null, false);
                             table_principal.ajax.reload(null, false);
                             toastr.success('El registro fue eliminado exitosamente.', 'Mensaje');
                         },
