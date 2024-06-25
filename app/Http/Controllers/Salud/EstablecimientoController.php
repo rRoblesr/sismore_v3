@@ -49,10 +49,10 @@ class EstablecimientoController extends Controller
 
         return response()->json(compact('micro'));
     }
-    
+
     public function cargarEESS(Request $rq)
     {
-        $eess = EstablecimientoRepositorio::listEESS($rq->sector, $rq->municipio, 0);
+        $eess = EstablecimientoRepositorio::listEESS($rq->sector, $rq->municipio, $rq->red, $rq->microred);
 
         return response()->json(compact('eess'));
     }

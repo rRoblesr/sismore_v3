@@ -1194,6 +1194,8 @@ Route::get('/Salud/PadronActas/find/{id}', [ImporPadronActasController::class, '
 Route::get('/Salud/PadronActas/Delete/{id}', [ImporPadronActasController::class, 'registro_delete'])->name('imporpadronactas.registro.eliminar');
 Route::get('/salud/PadronActas/Registro/Excel/{municipio}/{red}/{microred}/{fechai}/{fechaf}/{registrador}', [ImporPadronActasController::class, 'registro_download'])->name('imporpadronactas.registro.excel');
 
+Route::get('/Salud/PadronActas/Alerta', [ImporPadronActasController::class, 'registro_alerta'])->name('imporpadronactas.registro.alert.1');
+
 
 // Route::post('/Mantenimiento/RER/ajax_add/', [RERController::class, 'ajax_add']);
 // Route::post('/Mantenimiento/RER/ajax_update/', [RERController::class, 'ajax_update']);

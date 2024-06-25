@@ -69,7 +69,7 @@ class EstablecimientoRepositorio
         return $query;
     }
 
-    public static function listEESS($sector, $municipio, $red)
+    public static function listEESS($sector, $municipio, $red, $microred)
     {
         $query = Establecimiento::from('sal_establecimiento as es')->distinct()->select('es.*')
             ->join('sal_microred as mi', 'mi.id', '=', 'es.microrred_id')
@@ -82,7 +82,8 @@ class EstablecimientoRepositorio
             })
             ->where('es.estado', 'ACTIVO')->where('re.codigo', '!=', '00');
         if ($municipio > 0) $query = $query->where('ub.id', $municipio);
-        // if ($red > 0) $query = $query->where('re.id', $red);
+        if ($red > 0) $query = $query->where('re.id', $red);
+        if ($microred > 0) $query = $query->where('mi.id', $microred);
         // ->where('re.codigo', '03')
         $query = $query->orderBy('re.codigo')->orderBy('mi.codigo')->orderBy('es.nombre_establecimiento')->get();
         return $query;

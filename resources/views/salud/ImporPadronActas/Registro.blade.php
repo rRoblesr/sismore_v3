@@ -50,6 +50,7 @@
 
 
         @if ($registrador > 0)
+            {{--  --}}
             <div class="col-lg-4 col-md-6 col-sm-6">
                 <h4 class="page-title font-16">HOMOLOGACION DE ACTAS</h4>
             </div>
@@ -63,7 +64,8 @@
             </div>
 
             <div class="col-lg-2 col-md-2 col-sm-2">
-                <select id="vmicrored" name="vmicrored" class="form-control btn-xs font-11" onchange="cargartabla2()">
+                <select id="vmicrored" name="vmicrored" class="form-control btn-xs font-11"
+                    onchange="vcargareess();cargartabla2()">
                     <option value="0">MICRORED</option>
                 </select>
             </div>
@@ -84,7 +86,7 @@
             </div>
             <div class="col-lg-3 col-md-2 col-sm-2">
                 <select id="vmunicipio" name="vmunicipio" class="form-control btn-xs font-11"
-                    onchange="limpiarfiltros();cargarred(),cargartabla2()">
+                    onchange="limpiarfiltros();cargarred(),cargartabla()">
 
                     @if ($muni->count() > 1)
                         <option value="0">MUNICIPIOS</option>
@@ -141,7 +143,7 @@
                                 <i class="fa fa-file-excel"></i></button>
                         </div>
                     </div>
-                    <h4 class="card-title py-0">lista de actas</h4>
+                    <h4 class="card-title p-0">lista de actas [ {{ $ent->entidadn }} ]</h4>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -197,6 +199,31 @@
             </div>
         </div>
     </div> <!-- End row -->
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="alert alert-success alert-dismissible fade show">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <span id="alerta1"></span>
+            </div>
+
+            <div class="alert alert-success alert-dismissible fade show">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <span id="alerta2"></span>
+            </div>
+            <div class="alert alert-success alert-dismissible fade show">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <span id="alerta3"></span>
+            </div>
+
+        </div>
+    </div>
 
     <!-- Bootstrap modal -->
     <div id="modal_form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -374,7 +401,7 @@
                 cargartabla2();
                 // datos();
             }
-
+            vcargaralert();
 
         });
 
@@ -491,7 +518,7 @@
                         targets: 6,
                         className: 'text-center'
                     }
-                    
+
                 ],
                 drawCallback: function(settings) {
                     var api = this.api();
@@ -579,6 +606,8 @@
                         options += `<option value='${value.id}'>${value.nombre}</option>`;
                     });
                     $("#vmicrored").append(options);
+
+                    vcargareess();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -617,18 +646,42 @@
                 data: {
                     'sector': 2,
                     'municipio': $('#vmunicipio').val(),
-                    // 'red': $('#vred').val(),
+                    'red': $('#vred').val(),
+                    'microred': $('#vmicrored').val(),
                 },
                 type: 'GET',
                 success: function(data) {
                     $("#veess option").remove();
-                    var options = data.eess.length > 1 ? '<option value="0">SELECCIONAR ESTABLECIMIENTO</option>' : '';
+                    var options = data.eess.length > 1 ?
+                        '<option value="0">SELECCIONAR ESTABLECIMIENTO</option>' : '';
                     $.each(data.eess, function(index, value) {
                         //ss = (id == value.id ? "selected" : "");
                         options +=
                             `<option value='${value.id}'>${value.cod_unico.toString().padStart(8,'0')}|${value.nombre_establecimiento}</option>`;
                     });
                     $("#veess").append(options);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function vcargaralert() {
+            $.ajax({
+                url: "{{ route('imporpadronactas.registro.alert.1') }}",
+                data: {
+                    'sector': 2,
+                    'municipio': $('#vmunicipio').val(),
+                    'red': $('#vred').val(),
+                    'microred': $('#vmicrored').val(),
+                },
+                type: 'GET',
+                success: function(data) {
+                    console.log(data);
+                    $('#alerta2').html((data.eess - data.pd) + ' ESTABLECIEMIENTOS QUE NO CUMPLEN EN ENVIAR');
+                    $('#alerta3').html(data.pd + ' ESTABLECIEMIENTOS CUMPLIERON');
+                    $('#alerta1').html(data.eess + ' ESTABLECIEMIENTOS');
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);

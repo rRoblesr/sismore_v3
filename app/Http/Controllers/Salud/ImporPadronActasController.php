@@ -394,6 +394,7 @@ class ImporPadronActasController extends Controller
         $anio = [2023, 2024, 2025, 2026];
         $sector = 2;
 
+        $ent = EntidadRepositorio::migas(auth()->user()->entidad);
         if (session('usuario_sector') == 2 && session('usuario_nivel') == 1) {
             $muni = EntidadRepositorio::entidades(2, session('usuario_codigo_institucion'));
             $registrador = session('usuario_codigo_institucion');
@@ -408,7 +409,7 @@ class ImporPadronActasController extends Controller
         // return session()->all();
         // return session('usuario_id');
 
-        return view('salud.ImporPadronActas.registro', compact('anio', 'muni', 'registrador','usuario'));
+        return view('salud.ImporPadronActas.registro', compact('anio', 'muni', 'registrador', 'usuario', 'ent'));
     }
 
     public function registro_listarDT(Request $rq)
@@ -607,5 +608,12 @@ class ImporPadronActasController extends Controller
     {
         $name = 'Padron Actas por Establecimientos ' . date('Y-m-d') . '.xlsx';
         return Excel::download(new RegistroActasHomologadasEESSExport($municipio, $red, $microred, $fechai, $fechaf, $registrador), $name);
+    }
+
+    public function registro_alerta(Request $rq)
+    {
+        $eess = EstablecimientoRepositorio::listEESS($rq->sector, $rq->municipio,0,0)->count();
+        $pd = PadronActas::join('sal_establecimiento as ee', 'ee.id', '=', 'sal_padron_actas.establecimiento_id')->get()->count();
+        return response()->json(array('eess' => $eess, 'pd' => $pd));
     }
 }
