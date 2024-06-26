@@ -223,17 +223,17 @@ class IndicadorGeneralController extends Controller
             $data['status'] = FALSE;
         }
 
-        // if ($request->aniobase == '') {
-        //     $data['inputerror'][] = 'aniobase';
-        //     $data['error_string'][] = 'Este campo es obligatorio.';
-        //     $data['status'] = FALSE;
-        // }
+        if ($request->aniobase <1) {
+            $data['inputerror'][] = 'aniobase';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
 
-        // if ($request->valorbase == '') {
-        //     $data['inputerror'][] = 'valorbase';
-        //     $data['error_string'][] = 'Este campo es obligatorio.';
-        //     $data['status'] = FALSE;
-        // }
+        if ($request->valorbase == '') {
+            $data['inputerror'][] = 'valorbase';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
 
         if ($request->sector == '') {
             $data['inputerror'][] = 'sector';
@@ -246,6 +246,7 @@ class IndicadorGeneralController extends Controller
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
         }
+
         $file = $request->file('fichatecnica');
         if ($request->id == '') {
             if ($file) {
