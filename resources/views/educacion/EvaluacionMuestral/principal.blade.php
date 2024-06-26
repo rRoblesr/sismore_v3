@@ -356,7 +356,7 @@
                         $('#card4').text(data.card4);
 
                     } else if (div == "anal1") {
-                        gColumn1(div, 0, '',
+                        gColumn1(div, data.categoria, data.data, '',
                             'Resultado de logros de aprendizaje por años, según nivel de desempeño', '');
                     } else if (div == "anal2") {
                         // console.log(data.categoria);
@@ -496,7 +496,7 @@
             // window.print();
         }
 
-        function gColumn1(div, datax, titulo, subtitulo, tituloserie) {
+        function gColumn1(div, categoria, data, titulo, subtitulo, tituloserie) {
 
             Highcharts.chart(div, {
                 chart: {
@@ -510,7 +510,7 @@
                     text: subtitulo
                 },
                 xAxis: {
-                    categories: ['2019', '2022', '2023']
+                    categories: categoria, //['2019', '2022', '2023']
                 },
                 yAxis: {
                     min: 0,
@@ -531,23 +531,24 @@
                         }
                     }
                 },
-                series: [{
-                    name: 'Previo al inicio',
-                    data: [30, 25, 20],
-                    // color: '#CCCCCC'
-                }, {
-                    name: 'En inicio',
-                    data: [15, 16, 20],
-                    // color: '#FF5733'
-                }, {
-                    name: 'En proceso',
-                    data: [25, 20, 20],
-                    // color: '#FFC300'
-                }, {
-                    name: 'Satisfactorio',
-                    data: [30, 40, 38],
-                    // color: '#33FF57'
-                }]
+                series: data,
+                // [{
+                //     name: 'Previo al inicio',
+                //     data: [30, 25, 20],
+                //     // color: '#CCCCCC'
+                // }, {
+                //     name: 'En inicio',
+                //     data: [15, 16, 20],
+                //     // color: '#FF5733'
+                // }, {
+                //     name: 'En proceso',
+                //     data: [25, 20, 20],
+                //     // color: '#FFC300'
+                // }, {
+                //     name: 'Satisfactorio',
+                //     data: [30, 40, 38],
+                //     // color: '#33FF57'
+                // }]
             });
         }
 

@@ -58,7 +58,25 @@ class LogrosAprendizajeController extends Controller
                 return response()->json(compact('card1', 'card2', 'card3', 'card4', 'data'));
 
             case 'anal1':
-                return response()->json([]);
+                $base = ImporEvaluacionMuestralRepositorio::EvaluacionMuestralReportesanal1($rq->div, $rq->nivel, $rq->grado, $rq->curso);
+                $categoria = [];
+                $data = [];
+                $x1 = [];
+                $x2 = [];
+                $x3 = [];
+                $x4 = [];
+                foreach ($base as $key => $value) {
+                    $categoria[] = $value->anio;
+                    $x1[] = $value->a1;
+                    $x2[] = $value->i1;
+                    $x3[] = $value->p1;
+                    $x4[] = $value->s1;
+                }
+                $data[] = ['name' => 'Previo al inicio', 'data' => $x1];
+                $data[] = ['name' => 'En inicio', 'data' => $x2];
+                $data[] = ['name' => 'En proceso', 'data' => $x3];
+                $data[] = ['name' => 'Satisfactorio', 'data' => $x4];
+                return response()->json(compact('base', 'categoria', 'data'));
             case 'anal2':
                 $base = ImporEvaluacionMuestralRepositorio::EvaluacionMuestralReportesanal2($rq->div, $rq->anio, $rq->nivel, $rq->grado, $rq->curso);
                 $categoria = ['PUBLICO', 'PRIVADO'];

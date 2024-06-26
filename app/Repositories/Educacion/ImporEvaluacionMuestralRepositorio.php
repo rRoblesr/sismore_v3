@@ -64,6 +64,20 @@ class ImporEvaluacionMuestralRepositorio
         return $query->first();
     }
 
+    public static function EvaluacionMuestralReportesanal1($div, $nivel, $grado, $curso)
+    {
+        $query = ImporEvaluacionMuestral::select(
+            'anio',
+            DB::raw("round(100*SUM(if(grupo_$curso = 'Satisfactorio',   peso_$curso,0))/SUM(peso_$curso),1) as s1"),
+            DB::raw("round(100*SUM(if(grupo_$curso = 'En proceso',      peso_$curso,0))/SUM(peso_$curso),1) as p1"),
+            DB::raw("round(100*SUM(if(grupo_$curso = 'En inicio',       peso_$curso,0))/SUM(peso_$curso),1) as i1"),
+            DB::raw("round(100*SUM(if(grupo_$curso = 'Previo al inicio',peso_$curso,0))/SUM(peso_$curso),1) as a1"),
+        )
+            ->where('nivel', $nivel)->where('grado', $grado)->whereNotNull("grupo_$curso")
+            ->groupBy('anio')->get();
+        return $query;
+    }
+
     public static function EvaluacionMuestralReportesanal2($div, $anio, $nivel, $grado, $curso)
     {
         $query = ImporEvaluacionMuestral::select(
