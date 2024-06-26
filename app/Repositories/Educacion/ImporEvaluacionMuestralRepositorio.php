@@ -180,12 +180,10 @@ class ImporEvaluacionMuestralRepositorio
     public static function InstitucionesEducativasTabla1($div, $anio, $nivel, $grado, $curso)
     {
         $query = ImporEvaluacionMuestral::from('edu_impor_evaluacion_muestral as em')->select(
-            'pp.id as idprovincia',
-            'pp.nombre as provincia',
-            DB::raw("round(sum(medida_l*peso_l)/sum(peso_l),1) as ponderado"),
-            DB::raw("count(distinct em.cod_mod) as iiee"),
-            DB::raw("count(distinct case when em.gestion = 'PÚBLICO' then em.cod_mod end) as iiee_publico"),
-            DB::raw("count(distinct case when em.gestion = 'PRIVADO' then em.cod_mod end) as iiee_privado"),
+            'uu.nombre as ugel',
+            'dd.nombre as distrito',
+            'em.gestion',
+            'em.area_geografica as area',
             DB::raw("count(em.cod_mod) as alumnos"),
             DB::raw("count(case when em.sexo = 'HOMBRE' then em.id END) as alumnos_hombres"),
             DB::raw("count(case when em.sexo = 'MUJER' then em.id END) as alumnos_mujeres"),
@@ -198,7 +196,7 @@ class ImporEvaluacionMuestralRepositorio
             ->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia')
             ->join('edu_ugel as uu', 'uu.codigo', '=', 'em.codooii')
             ->where('em.anio', $anio)->where('em.nivel', $nivel)->where('em.grado', $grado) //->whereNotNull("em.grupo_$curso")
-            ->groupBy('idprovincia', 'provincia')->get();
+            ->groupBy('ugel','distrito','gestion','area')->get();
         return $query;
     }
 }

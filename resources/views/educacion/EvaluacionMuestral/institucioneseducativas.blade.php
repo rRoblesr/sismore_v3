@@ -222,30 +222,12 @@
                     // }
                 },
                 success: function(data) {
-                    // console.log('data');
-                    // console.log(data);
                     if (div == "head") {
                         $('#card1').text(data.card1);
                         $('#card2').text(data.card2 + '%');
                         $('#card3').text(data.card3);
                         $('#card4').text(data.card4);
 
-                    } else if (div == "anal1") {
-                        gColumn1(div, data.categoria, data.data, '',
-                            'Resultado de logros de aprendizaje por años, según nivel de desempeño', '');
-                    } else if (div == "anal2") {
-                        // console.log(data.categoria);
-                        gColumn2(div, data.categoria, data.data, '',
-                            'Resultado de logros de aprendizaje por tipo de gestión, según niveles de logro',
-                            '');
-                    } else if (div == "anal3") {
-                        gColumn2(div, data.categoria, data.data, '',
-                            'Resultado de logros de aprendizaje por tipo de gestión, según niveles de logro',
-                            '');
-                    } else if (div == "anal4") {
-                        gColumn2(div, data.categoria, data.data, '',
-                            'Resultado de logros de aprendizaje por tipo de gestión, según niveles de logro',
-                            '');
                     } else if (div == "tabla1") {
                         $('#vtabla1-title').html($('#vcurso option:selected').text());
                         $('#vtabla1').html(data.excel);

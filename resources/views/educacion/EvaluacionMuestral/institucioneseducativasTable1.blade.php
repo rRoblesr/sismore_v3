@@ -2,16 +2,14 @@
     <thead>
         <tr class="table-success-0 text-white">
             <th style="text-align: center" rowspan="2">N°</th>
-            <th style="text-align: center" rowspan="2">PROVINCIA</th>
-            <th style="text-align: center" rowspan="2">MEDIA PROMEDIO</th>
-            <th style="text-align: center" colspan="3">II.EE EVALUADAS</th>
-            <th style="text-align: center" colspan="3">ESTUDIANTES EVALUADOS</th>
-            <th style="text-align: center" colspan="4">NIVELES DE LOGRO</th>
+            <th style="text-align: center" rowspan="2">UGEL</th>
+            <th style="text-align: center" rowspan="2">DISTRITO</th>
+            <th style="text-align: center" rowspan="2">GESTIÓN</th>
+            <th style="text-align: center" rowspan="2">ÁREA</th>
+            <th style="text-align: center" colspan="4">CÓDIGO MODULAR</th>
+            <th style="text-align: center" colspan="4">INSTITUCIÓN EDUCATIVA</th>
         </tr>
         <tr class="table-success-0 text-white">
-            <th style="text-align: center">TOTAL </th>
-            <th style="text-align: center">PÚBLICA</th>
-            <th style="text-align: center">PRIVADA</th>
             <th style="text-align: center">TOTAL</th>
             <th style="text-align: center">HOMBRE</th>
             <th style="text-align: center">MUJER</th>
@@ -26,13 +24,10 @@
             @foreach ($base as $key => $item)
                 <tr class="text-center">
                     <td>{{ $key + 1 }}</td>
-                    <td class="text-left"><a href="javascript:void(0)"
-                            onclick="subcargarcard('tabla1_1',{{ $item->idprovincia }});">{{ $item->provincia }}</a>
-                    </td>
-                    <td>{{ number_format($item->ponderado, 1) }}</td>
-                    <td>{{ $item->iiee }}</td>
-                    <td>{{ $item->iiee_publico }}</td>
-                    <td>{{ $item->iiee_privado }}</td>
+                    <td class="text-left">{{ $item->ugel }}</td>
+                    <td>{{ $item->distrito }}</td>
+                    <td>{{ $item->gestion }}</td>
+                    <td>{{ $item->area }}</td>
                     <td>{{ number_format($item->alumnos, 0) }}</td>
                     <td>{{ number_format($item->alumnos_hombres, 0) }}</td>
                     <td>{{ number_format($item->alumnos_mujeres, 0) }}</td>
@@ -44,7 +39,7 @@
             @endforeach
         </tbody>
         <tfoot>
-            <tr class="table-success-0 text-white">
+            {{-- <tr class="table-success-0 text-white">
                 <th colspan="2">Total</th>
                 <th style="text-align: center">{{ number_format($foot->ponderado, 0) }}</th>
                 <th style="text-align: center">{{ number_format($foot->iiee, 0) }}</th>
@@ -57,7 +52,7 @@
                 <th style="text-align: center">{{ number_format($foot->p, 0) }}</th>
                 <th style="text-align: center">{{ number_format($foot->i, 0) }}</th>
                 <th style="text-align: center">{{ number_format($foot->a, 0) }}</th>
-            </tr>
+            </tr> --}}
         </tfoot>
     @else
         <tr class="text-center">
