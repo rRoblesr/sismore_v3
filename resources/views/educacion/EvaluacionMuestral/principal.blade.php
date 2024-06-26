@@ -34,7 +34,8 @@
             <div class="card">
                 <div class="card-header bg-success-0">
                     <div class="card-widgets">
-                        <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf(6)" title='FICHA TÉCNICA'><i
+                        <button type="button" class="btn btn-orange-0 btn-xs"
+                            onclick="{{ route('logrosaprendizaje.evaluacionmuestral.iiee') }}" title=''><i
                                 class="fas fa-file"></i> Instituciones Educativas</button>
                         <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
                             title='ACTUALIZAR'><i class=" fas fa-history"></i>
@@ -59,7 +60,7 @@
                                 @foreach ($anios as $item)
                                     <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
                                         {{ $item->anio }}</option>
-                                @endforeach
+                                @endforeach 
                             </select>
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-2">
@@ -257,7 +258,8 @@
                                 class="fa fa-file-excel"></i> Descargar</button>
                     </div>
                     <h3 class="text-black font-14">
-                        Resultados de los logros de aprendizaje por provincia,segun niveles de logro en <span id="vtabla1-title"></span>
+                        Resultados de los logros de aprendizaje por provincia,segun niveles de logro en <span
+                            id="vtabla1-title"></span>
                     </h3>
                 </div>
                 <div class="card-body pt-0">
@@ -282,7 +284,8 @@
                         <button type="button" class="btn btn-success btn-xs" onclick="descargar2()"><i
                                 class="fa fa-file-excel"></i> Descargar</button>
                     </div>
-                    <h3 class="text-black font-14">Resultados de los logros de aprendizaje por provincia,segun niveles de logro en <span id="vtabla1_1-title"></span></h3>
+                    <h3 class="text-black font-14">Resultados de los logros de aprendizaje por provincia,segun niveles de
+                        logro en <span id="vtabla1_1-title"></span></h3>
                 </div>
                 <div class="card-body pt-0">
                     <div class="row">

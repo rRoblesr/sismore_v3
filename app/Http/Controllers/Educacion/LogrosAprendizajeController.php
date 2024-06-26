@@ -196,7 +196,57 @@ class LogrosAprendizajeController extends Controller
         $importacion_id = $imp->id;
         $fecha = date('d/m/Y', strtotime($imp->fecha));
         $actualizado = '';
-        return view("educacion.evaluacionmuestral.principal", compact('actualizado', 'aniomax', 'anios',  'gestions', 'areas', 'ugels', 'importacion_id', 'fecha'));
+        return view("educacion.EvaluacionMuestral.institucioneseducativas", compact('actualizado', 'aniomax', 'anios',  'gestions', 'areas', 'ugels', 'importacion_id', 'fecha'));
+    }
+
+    public function InstitucionesEducativasReportes(Request $rq)
+    {
+        switch ($rq->div) {
+            case 'head':
+                $data = ImporEvaluacionMuestralRepositorio::EvaluacionMuestralReportesHead($rq->div, $rq->anio, $rq->nivel, $rq->grado, $rq->curso);
+                $card1 = number_format($data->ponderado, 1);
+                $card2 = number_format($data->satisfactorio, 1);
+                $card3 = number_format($data->evaluados, 0);
+                $card4 = number_format($data->locales, 0);
+                return response()->json(compact('card1', 'card2', 'card3', 'card4', 'data'));
+            case 'tabla1':
+                $base = ImporEvaluacionMuestralRepositorio::EvaluacionMuestralReportesTabla1($rq->div, $rq->anio, $rq->nivel, $rq->grado, $rq->curso);
+                // return response()->json(compact('base'));
+                $foot = [];
+                if ($base->count() > 0) {
+                    $foot = clone $base[0];
+                    $foot->ponderado = 0;
+                    $foot->iiee = 0;
+                    $foot->iiee_publico = 0;
+                    $foot->iiee_privado = 0;
+                    $foot->alumnos = 0;
+                    $foot->alumnos_hombres = 0;
+                    $foot->alumnos_mujeres = 0;
+                    $foot->s = 0;
+                    $foot->p = 0;
+                    $foot->i = 0;
+                    $foot->a = 0;
+                    foreach ($base as $key => $value) {
+                        $foot->ponderado += $value->ponderado;
+                        $foot->iiee += $value->iiee;
+                        $foot->iiee_publico += $value->iiee_publico;
+                        $foot->iiee_privado += $value->iiee_privado;
+                        $foot->alumnos += $value->alumnos;
+                        $foot->alumnos_hombres += $value->alumnos_hombres;
+                        $foot->alumnos_mujeres += $value->alumnos_mujeres;
+                        $foot->s += $value->s;
+                        $foot->p += $value->p;
+                        $foot->i += $value->i;
+                        $foot->a += $value->a;
+                    }
+                }
+                $excel = view('educacion.EvaluacionMuestral.institucioneseducativasTable1', compact('base', 'foot'))->render();
+                return response()->json(compact('excel', 'foot'));
+
+            default:
+                # code...
+                return response()->json([]);
+        }
     }
 
     public function cargarnivel($anio)
