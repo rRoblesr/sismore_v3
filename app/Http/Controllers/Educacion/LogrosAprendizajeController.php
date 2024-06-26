@@ -210,7 +210,7 @@ class LogrosAprendizajeController extends Controller
                 $card4 = number_format($data->locales, 0);
                 return response()->json(compact('card1', 'card2', 'card3', 'card4', 'data'));
             case 'tabla1':
-                $base = ImporEvaluacionMuestralRepositorio::EvaluacionMuestralReportesTabla1($rq->div, $rq->anio, $rq->nivel, $rq->grado, $rq->curso);
+                return $base = ImporEvaluacionMuestralRepositorio::InstitucionesEducativasTabla1($rq->div, $rq->anio, $rq->nivel, $rq->grado, $rq->curso);
                 // return response()->json(compact('base'));
                 $foot = [];
                 if ($base->count() > 0) {

@@ -12,8 +12,8 @@
             <div class="card">
                 <div class="card-header bg-success-0">
                     <div class="card-widgets">
-                        {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf(6)" title='FICHA TÉCNICA'><i
-                                class="fas fa-file"></i> Instituciones Educativas</button> --}}
+                        <button type="button" class="btn btn-orange-0 btn-xs" onclick="history.back()" title=''><i
+                                class="fas fa-arrow-left"></i> Volver</button>
                         <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
                             title='ACTUALIZAR'><i class=" fas fa-history"></i>
                             Actualizar</button>{{-- {{ route('indicador.nuevos.01.print') }} --}}
@@ -201,7 +201,7 @@
 
         function cargarCardsDiv(div) {
             $.ajax({
-                url: "{{ route('logrosaprendizaje.evaluacionmuestral.reporte') }}",
+                url: "{{ route('logrosaprendizaje.evaluacionmuestral.iiee.reporte') }}",
                 data: {
                     'div': div,
                     "anio": $('#vanio').val(),
