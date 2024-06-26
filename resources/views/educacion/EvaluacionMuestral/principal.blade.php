@@ -35,7 +35,7 @@
                 <div class="card-header bg-success-0">
                     <div class="card-widgets">
                         <button type="button" class="btn btn-orange-0 btn-xs"
-                            onclick="{{ route('logrosaprendizaje.evaluacionmuestral.iiee') }}" title=''><i
+                            onclick="{{ route('logrosaprendizaje.evaluacionmuestral.iiee') }}" title='XXX'><i
                                 class="fas fa-file"></i> Instituciones Educativas</button>
                         <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
                             title='ACTUALIZAR'><i class=" fas fa-history"></i>

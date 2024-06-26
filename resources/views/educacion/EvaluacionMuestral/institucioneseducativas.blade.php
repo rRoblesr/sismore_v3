@@ -2,29 +2,7 @@
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
     <style>
-        .tablex thead th {
-            padding: 6px;
-            text-align: center;
-        }
 
-        .tablex thead td {
-            padding: 6px;
-            text-align: center;
-            vertical-align: middle;
-            font-weight: bold;
-        }
-
-        .tablex tbody td,
-        .tablex tbody th,
-        .tablex tfoot td,
-        .tablex tfoot th {
-            padding: 6px;
-        }
-
-        .fuentex {
-            font-size: 10px;
-            font-weight: bold;
-        }
     </style>
 @endsection
 
@@ -34,8 +12,8 @@
             <div class="card">
                 <div class="card-header bg-success-0">
                     <div class="card-widgets">
-                        <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf(6)" title='FICHA TÉCNICA'><i
-                                class="fas fa-file"></i> Instituciones Educativas</button>
+                        {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf(6)" title='FICHA TÉCNICA'><i
+                                class="fas fa-file"></i> Instituciones Educativas</button> --}}
                         <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
                             title='ACTUALIZAR'><i class=" fas fa-history"></i>
                             Actualizar</button>{{-- {{ route('indicador.nuevos.01.print') }} --}}
@@ -177,78 +155,6 @@
     {{-- portles --}}
 
     <div class="row">
-
-        <div class="col-lg-6">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent p-0">
-                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
-                </div>
-                <div class="card-body p-0">
-                    <figure class="highcharts-figure p-0 m-0">
-                        <div id="anal1" style="height: 20rem"></div>
-                    </figure>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-6">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent p-0">
-                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
-                </div>
-                <div class="card-body p-0">
-                    <figure class="highcharts-figure p-0 m-0">
-                        <div id="anal2" style="height: 20rem"></div>
-                    </figure>
-                    {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                                <span class="anal2-fuente">Fuente:</span>
-                                <span class="float-right anal2-fecha">Actualizado:</span>
-                            </div> --}}
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="row">
-        <div class="col-lg-6">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent p-0">
-                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
-                </div>
-                <div class="card-body p-0">
-                    <figure class="highcharts-figure p-0 m-0">
-                        <div id="anal3" style="height: 20rem"></div>
-                    </figure>
-                    {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                                <span class="anal3-fuente">Fuente:</span>
-                                <span class="float-right anal3-fecha">Actualizado:</span>
-                            </div> --}}
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent p-0">
-                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
-                </div>
-                <div class="card-body p-0">
-                    <figure class="highcharts-figure p-0 m-0">
-                        <div id="anal4" style="height: 20rem"></div>
-                    </figure>
-                    {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                                <span class="anal4-fuente">Fuente:</span>
-                                <span class="float-right anal4-fecha">Actualizado:</span>
-                            </div> --}}
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-
-
-    <div class="row">
         <div class="col-lg-12">
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
@@ -257,37 +163,14 @@
                                 class="fa fa-file-excel"></i> Descargar</button>
                     </div>
                     <h3 class="text-black font-14">
-                        Resultados de los logros de aprendizaje por provincia,segun niveles de logro en <span id="vtabla1-title"></span>
+                        Resultados de los logros de aprendizaje por provincia,segun niveles de logro en <span
+                            id="vtabla1-title"></span>
                     </h3>
                 </div>
                 <div class="card-body pt-0">
                     <div class="row">
                         <div class="col-12">
                             <div class="table-responsive" id="vtabla1">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                    <div class="card-widgets">
-                        <button type="button" class="btn btn-primary btn-xs" onclick="cargarTablaNivel('tabla2', 0)"
-                            title='Actualizar Tabla'><i class=" fas fa-history"></i> Actualizar</button>
-                        <button type="button" class="btn btn-success btn-xs" onclick="descargar2()"><i
-                                class="fa fa-file-excel"></i> Descargar</button>
-                    </div>
-                    <h3 class="text-black font-14">Resultados de los logros de aprendizaje por provincia,segun niveles de logro en <span id="vtabla1_1-title"></span></h3>
-                </div>
-                <div class="card-body pt-0">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="table-responsive" id="vtabla1_1">
                             </div>
                         </div>
                     </div>
@@ -313,12 +196,7 @@
 
         function cargarCards() {
             cargarCardsDiv('head');
-            cargarCardsDiv('anal1');
-            cargarCardsDiv('anal2');
-            cargarCardsDiv('anal3');
-            cargarCardsDiv('anal4');
             cargarCardsDiv('tabla1');
-            cargarCardsDiv('tabla1_1');
         }
 
         function cargarCardsDiv(div) {
@@ -371,17 +249,6 @@
                     } else if (div == "tabla1") {
                         $('#vtabla1-title').html($('#vcurso option:selected').text());
                         $('#vtabla1').html(data.excel);
-                        // $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
-                        // $('.vtabla1-fecha').html('Actualizado: ' + data.reg.fecha);
-                        // $('#tabla1').DataTable({
-                        //     responsive: true,
-                        //     autoWidth: false,
-                        //     ordered: true,
-                        //     searching: false,
-                        //     bPaginate: false,
-                        //     info: false,
-                        //     language: table_language,
-                        // });
                     } else if (div == "tabla1_1") {
                         $('#vtabla1_1-title').html($('#vcurso option:selected').text());
                         $('#vtabla1_1').html(data.excel);
