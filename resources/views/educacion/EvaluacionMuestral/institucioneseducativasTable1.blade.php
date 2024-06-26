@@ -6,8 +6,10 @@
             <th style="text-align: center" rowspan="2">DISTRITO</th>
             <th style="text-align: center" rowspan="2">GESTIÓN</th>
             <th style="text-align: center" rowspan="2">ÁREA</th>
-            <th style="text-align: center" colspan="4">CÓDIGO MODULAR</th>
-            <th style="text-align: center" colspan="4">INSTITUCIÓN EDUCATIVA</th>
+            <th style="text-align: center" rowspan="2">CÓDIGO MODULAR</th>
+            <th style="text-align: center" rowspan="2">INSTITUCIÓN EDUCATIVA</th>
+            <th style="text-align: center" colspan="3">ESTUDIANTES EVALUADOS</th>
+            <th style="text-align: center" colspan="4">NIVELES DE LOGRO</th>
         </tr>
         <tr class="table-success-0 text-white">
             <th style="text-align: center">TOTAL</th>
@@ -28,6 +30,8 @@
                     <td>{{ $item->distrito }}</td>
                     <td>{{ $item->gestion }}</td>
                     <td>{{ $item->area }}</td>
+                    <td>{{ $item->cod_modular }}</td>
+                    <td>{{ $item->iiee }}</td>
                     <td>{{ number_format($item->alumnos, 0) }}</td>
                     <td>{{ number_format($item->alumnos_hombres, 0) }}</td>
                     <td>{{ number_format($item->alumnos_mujeres, 0) }}</td>

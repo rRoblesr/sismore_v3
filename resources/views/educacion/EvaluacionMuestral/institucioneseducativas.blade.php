@@ -231,6 +231,9 @@
                     } else if (div == "tabla1") {
                         $('#vtabla1-title').html($('#vcurso option:selected').text());
                         $('#vtabla1').html(data.excel);
+                        $('#tabla1').DataTable({
+                            "language": table_language,
+                        });
                     } else if (div == "tabla1_1") {
                         $('#vtabla1_1-title').html($('#vcurso option:selected').text());
                         $('#vtabla1_1').html(data.excel);
