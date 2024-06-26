@@ -128,4 +128,52 @@ class ImporEvaluacionMuestralRepositorio
             ->get();
         return $query->first();
     }
+
+    public static function EvaluacionMuestralReportesTabla1($div, $anio, $nivel, $grado, $curso)
+    {
+        $query = ImporEvaluacionMuestral::from('edu_impor_evaluacion_muestral as em')->select(
+            'pp.id as idprovincia',
+            'pp.nombre as provincia',
+            DB::raw("round(sum(medida_l*peso_l)/sum(peso_l),1) as ponderado"),
+            DB::raw("count(distinct em.cod_mod) as iiee"),
+            DB::raw("count(distinct case when em.gestion = 'PÚBLICO' then em.cod_mod end) as iiee_publico"),
+            DB::raw("count(distinct case when em.gestion = 'PRIVADO' then em.cod_mod end) as iiee_privado"),
+            DB::raw("count(em.cod_mod) as alumnos"),
+            DB::raw("count(case when em.sexo = 'HOMBRE' then em.id END) as alumnos_hombres"),
+            DB::raw("count(case when em.sexo = 'MUJER' then em.id END) as alumnos_mujeres"),
+            DB::raw("round(100*SUM(if(grupo_$curso = 'Satisfactorio',   peso_$curso,0))/SUM(peso_$curso),1) as s"),
+            DB::raw("round(100*SUM(if(grupo_$curso = 'En proceso',      peso_$curso,0))/SUM(peso_$curso),1) as p"),
+            DB::raw("round(100*SUM(if(grupo_$curso = 'En inicio',       peso_$curso,0))/SUM(peso_$curso),1) as i"),
+            DB::raw("round(100*SUM(if(grupo_$curso = 'Previo al inicio',peso_$curso,0))/SUM(peso_$curso),1) as a"),
+        )
+            ->join('par_ubigeo as dd', 'dd.codigo', '=', 'em.codgeo')
+            ->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia')
+            ->where('em.anio', $anio)->where('em.nivel', $nivel)->where('em.grado', $grado) //->whereNotNull("em.grupo_$curso")
+            ->groupBy('idprovincia', 'provincia')->get();
+        return $query;
+    }
+
+    public static function EvaluacionMuestralReportesTabla1_1($div, $anio, $nivel, $grado, $curso, $provincia)
+    {
+        $query = ImporEvaluacionMuestral::from('edu_impor_evaluacion_muestral as em')->select(
+            'dd.nombre as distrito',
+            DB::raw("round(sum(medida_l*peso_l)/sum(peso_l),1) as ponderado"),
+            DB::raw("count(distinct em.cod_mod) as iiee"),
+            DB::raw("count(distinct case when em.gestion = 'PÚBLICO' then em.cod_mod end) as iiee_publico"),
+            DB::raw("count(distinct case when em.gestion = 'PRIVADO' then em.cod_mod end) as iiee_privado"),
+            DB::raw("count(em.cod_mod) as alumnos"),
+            DB::raw("count(case when em.sexo = 'HOMBRE' then em.id END) as alumnos_hombres"),
+            DB::raw("count(case when em.sexo = 'MUJER' then em.id END) as alumnos_mujeres"),
+            DB::raw("round(100*SUM(if(grupo_$curso = 'Satisfactorio',   peso_$curso,0))/SUM(peso_$curso),1) as s"),
+            DB::raw("round(100*SUM(if(grupo_$curso = 'En proceso',      peso_$curso,0))/SUM(peso_$curso),1) as p"),
+            DB::raw("round(100*SUM(if(grupo_$curso = 'En inicio',       peso_$curso,0))/SUM(peso_$curso),1) as i"),
+            DB::raw("round(100*SUM(if(grupo_$curso = 'Previo al inicio',peso_$curso,0))/SUM(peso_$curso),1) as a"),
+        )
+            ->join('par_ubigeo as dd', 'dd.codigo', '=', 'em.codgeo')
+            ->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia')
+            ->where('em.anio', $anio)->where('em.nivel', $nivel)->where('em.grado', $grado); //->whereNotNull("em.grupo_$curso")
+        if ($provincia > 0) $query = $query->where('pp.id', $provincia);
+        $query = $query->groupBy('distrito')->get();
+        return $query;
+    }
 }

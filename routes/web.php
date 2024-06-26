@@ -311,6 +311,8 @@ Route::get('/educación/EvaluacionMuestral/cargarnivel/{anio}', [LogrosAprendiza
 Route::get('/educación/EvaluacionMuestral/cargargrado/{anio}/{nivel}', [LogrosAprendizajeController::class, 'cargargrado'])->name('logrosaprendizaje.evaluacionmuestral.cargargrado');
 Route::get('/educación/EvaluacionMuestral/cargarcurso/{anio}/{nivel}/{grado}', [LogrosAprendizajeController::class, 'cargarcurso'])->name('logrosaprendizaje.evaluacionmuestral.cargarcurso');
 
+Route::get('/educación/LogrosdeAprendizaje/EM/iiee', [LogrosAprendizajeController::class, 'InstitucionesEducativas'])->name('logrosaprendizaje.evaluacionmuestral.iiee');
+
 Route::get('/Censo/Importar', [CensoController::class, 'importar'])->name('Censo.importar');
 Route::post('/Censo/Importar', [CensoController::class, 'guardar'])->name('Censo.guardar');
 Route::get('/Censo/ListaImportada/{importacion_id}', [CensoController::class, 'ListaImportada'])->name('Censo.Censo_Lista');
