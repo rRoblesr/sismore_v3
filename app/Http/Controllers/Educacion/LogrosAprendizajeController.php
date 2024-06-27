@@ -36,10 +36,8 @@ class LogrosAprendizajeController extends Controller
         foreach ($anios as $key => $value) {
             $aniomax = $value->anio;
         }
-        // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporEvaluacionMuestralController::$FUENTE);
-        return $imp = ImportacionRepositorio::ImportacionMax_porfuente_mesletra(ImporEvaluacionMuestralController::$FUENTE);
-        $mesx = Mes::find($imp->mes);
-        $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $mesx->mes . ' del ' . $imp->anio;
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente_mesletra(ImporEvaluacionMuestralController::$FUENTE);
+        $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $imp->mes . ' del ' . $imp->anio;
 
         return view("educacion.evaluacionmuestral.principal", compact('actualizado', 'aniomax', 'anios'));
     }
@@ -187,11 +185,9 @@ class LogrosAprendizajeController extends Controller
         foreach ($anios as $key => $value) {
             $aniomax = $value->anio;
         }
-        $ugels = Ugel::select('id', 'nombre')->where('dependencia', 2)->get();
-        $gestions = [["id" => 12, "nombre" => "Pública"], ["id" => 3, "nombre" => "Privada"]];
-        $areas = Area::select('id', 'nombre')->get();
-        $actualizado = '';
-        return view("educacion.EvaluacionMuestral.institucioneseducativas", compact('actualizado', 'aniomax', 'anios',  'gestions', 'areas', 'ugels'));
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente_mesletra(ImporEvaluacionMuestralController::$FUENTE);
+        $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $imp->mes . ' del ' . $imp->anio;
+        return view("educacion.EvaluacionMuestral.institucioneseducativas", compact('actualizado', 'aniomax', 'anios'));
     }
 
     public function InstitucionesEducativasReportes(Request $rq)

@@ -339,8 +339,7 @@ class ImportacionRepositorio
     {
         $query = ImportacionRepositorio::ImportacionMax_porfuente($fuente);
         $query->mes = Mes::find($query->mes)->mes;
-        return  $query->first();
-        //return Importacion::select(DB::raw('max(id) as maximo'))->where('fuenteimportacion_id', $fuente)->where('estado', 'PR')->first()->maximo;
+        return  $query;
     }
 
     public static function anios_porfuente($fuente)

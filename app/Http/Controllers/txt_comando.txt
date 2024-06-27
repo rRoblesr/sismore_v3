@@ -1,2 +1,5 @@
 
-estoy usando laravel quiero poner un boton en mi html para ejecutar estos comando php artisan route:clear php artisan config:cache php artisan route:cache
+estoy usando laravel quiero poner un boton en mi html para ejecutar estos comando 
+php artisan route:clear 
+php artisan config:cache 
+php artisan route:cache

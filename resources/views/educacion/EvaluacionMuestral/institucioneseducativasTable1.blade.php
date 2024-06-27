@@ -15,10 +15,10 @@
             <th style="text-align: center">TOTAL</th>
             <th style="text-align: center">HOMBRE</th>
             <th style="text-align: center">MUJER</th>
-            <th style="text-align: center">SATISFACTORIO</th>
-            <th style="text-align: center">EN PROCESO</th>
-            <th style="text-align: center">EN INICIO</th>
-            <th style="text-align: center">PREVIO AL INICIO</th>
+            <th style="text-align: center" class="table-success-0">SATISFACTORIO</th>
+            <th style="text-align: center" class="bg-danger">EN PROCESO</th>
+            <th style="text-align: center" class="bg-warning">EN INICIO</th>
+            <th style="text-align: center" class="table-secondary">PREVIO AL INICIO</th>
         </tr>
     </thead>
     @if ($base->count() > 0)
