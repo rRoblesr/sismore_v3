@@ -535,20 +535,6 @@
             window.open("{{ route('mantenimiento.indicadorgeneral.exportar.pdf', '') }}/" + id);
         };
 
-        function printer() {
-            window.print();
-            // var escalaPersonalizada = 0.6; // Cambia esto al valor de escala deseado
-            // var style = document.createElement('style');
-            // style.type = 'text/css';
-            // style.media = 'print';
-            // // style.innerHTML = '@page { size: auto; margin: 0mm; transform: scale(' + escalaPersonalizada +
-            // //     '); } @media print { body { transform: scale(' + escalaPersonalizada + '); } }';
-            // style.innerHTML = '@page { transform: scale(' + escalaPersonalizada +
-            //     '); } @media print { body { transform: scale(' + escalaPersonalizada + '); } }';
-            // document.head.appendChild(style);
-            // window.print();
-        }
-
         function gColumn1(div, categoria, data, titulo, subtitulo, tituloserie) {
 
             Highcharts.chart(div, {
@@ -572,6 +558,14 @@
                     title: {
                         text: ''
                     }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y:.1f} %</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
                 },
                 legend: {
                     reversed: true
