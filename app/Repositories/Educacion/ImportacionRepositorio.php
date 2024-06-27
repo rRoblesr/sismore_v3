@@ -3,6 +3,7 @@
 namespace App\Repositories\Educacion;
 
 use App\Models\Educacion\Importacion;
+use App\Models\Parametro\Mes;
 use Illuminate\Support\Facades\DB;
 
 class ImportacionRepositorio
@@ -334,6 +335,14 @@ class ImportacionRepositorio
         //return Importacion::select(DB::raw('max(id) as maximo'))->where('fuenteimportacion_id', $fuente)->where('estado', 'PR')->first()->maximo;
     }
 
+    public static function ImportacionMax_porfuente_mesletra($fuente)
+    {
+        $query = ImportacionRepositorio::ImportacionMax_porfuente($fuente);
+        $query->mes = Mes::find($query->mes)->mes;
+        return  $query->first();
+        //return Importacion::select(DB::raw('max(id) as maximo'))->where('fuenteimportacion_id', $fuente)->where('estado', 'PR')->first()->maximo;
+    }
+
     public static function anios_porfuente($fuente)
     {
         $query = Importacion::select('id', DB::raw('year(fechaActualizacion) as anio'))
@@ -346,7 +355,7 @@ class ImportacionRepositorio
     {
         $query = Importacion::select('id', DB::raw('year(fechaActualizacion) as anio'))
             ->where('fuenteimportacion_id', $fuente)->where('estado', 'PR')
-            ->orderBy('anio','desc')->first();
+            ->orderBy('anio', 'desc')->first();
         return  $query;
     }
 

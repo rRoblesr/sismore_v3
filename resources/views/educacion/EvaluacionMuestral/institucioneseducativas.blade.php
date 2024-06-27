@@ -78,7 +78,12 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card1"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Media Promedio</p>
+                            <p class="mb-0 mt-1 text-truncate">
+                                <span onclick="" data-toggle="modal" data-target="#ver_mediapromedio">
+                                    <i class="mdi mdi-rotate-180 mdi-alert-circle" style="color:#43beac;"></i>
+                                </span>
+                                Media Promedio
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -99,6 +104,9 @@
                                 <span data-plugin="counterup" id="card2"></span>
                             </h4>
                             <p class="mb-0 mt-1 text-truncate">
+                                <span onclick="" data-toggle="modal" data-target="#ver_logros">
+                                    <i class="mdi mdi-rotate-180 mdi-alert-circle" style="color:#43beac;"></i>
+                                </span>
                                 Logro Satisfactorio
                             </p>
                         </div>
@@ -175,6 +183,48 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="ver_mediapromedio" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header py-0">
+                    {{-- <h5 class="modal-title"></h5> --}}
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-0">
+                    <img src="{{ asset('/') }}public/img/la-em-info1.jpeg" alt="" class="img-fluid">
+                </div>
+                {{-- <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div> --}}
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="ver_logros" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header py-0">
+                    {{-- <h5 class="modal-title"></h5> --}}
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-0">
+                    <img src="{{ asset('/') }}public/img/la-em-info2.jpeg" alt="" class="img-fluid">
+                </div>
+                {{-- <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div> --}}
             </div>
         </div>
     </div>

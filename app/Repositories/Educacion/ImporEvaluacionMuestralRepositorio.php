@@ -48,18 +48,22 @@ class ImporEvaluacionMuestralRepositorio
 
     public static function EvaluacionMuestralReportesHead($div, $anio, $nivel, $grado, $curso)
     {
+        // $query = ImporEvaluacionMuestral::select(
+        //     DB::raw("round(sum(medida_$curso*peso_$curso)/sum(peso_$curso),1) as ponderado"),
+        //     DB::raw("round(100*sum(IF(grupo_$curso='Satisfactorio',peso_$curso,0))/sum(peso_$curso),1) as satisfactorio"),
+        //     DB::raw("count(grupo_$curso) as evaluados"),
+        //     DB::raw("round(count(distinct cod_mod),1) as locales"),
+        // )
+        //     ->where('anio', $anio)->where('nivel', $nivel)->where('grado', $grado)->whereNotNull("grupo_$curso")
+        //     ->get();
+
         $query = ImporEvaluacionMuestral::select(
             DB::raw("round(sum(medida_$curso*peso_$curso)/sum(peso_$curso),1) as ponderado"),
             DB::raw("round(100*sum(IF(grupo_$curso='Satisfactorio',peso_$curso,0))/sum(peso_$curso),1) as satisfactorio"),
-            // DB::raw("sum(medida_$curso*peso_$curso) as c1"),
-            // DB::raw("sum(peso_$curso) as c2")
-            // DB::raw("sum(IF(grupo_$curso='Satisfactorio',medida_$curso*peso_$curso,0)) as l1"),
-            // DB::raw("sum(IF(grupo_$curso='Satisfactorio',peso_$curso,0)) as l1x"),
-            // DB::raw("sum(peso_$curso) as c2"),
-            DB::raw("count(grupo_$curso) as evaluados"),
+            DB::raw("count(id) as evaluados"),
             DB::raw("round(count(distinct cod_mod),1) as locales"),
         )
-            ->where('anio', $anio)->where('nivel', $nivel)->where('grado', $grado)->whereNotNull("grupo_$curso")
+            ->where('anio', $anio)->where('nivel', $nivel)->where('grado', $grado)//->whereNotNull("grupo_$curso")
             ->get();
         return $query->first();
     }
@@ -73,7 +77,7 @@ class ImporEvaluacionMuestralRepositorio
             DB::raw("round(100*SUM(if(grupo_$curso = 'En inicio',       peso_$curso,0))/SUM(peso_$curso),1) as i1"),
             DB::raw("round(100*SUM(if(grupo_$curso = 'Previo al inicio',peso_$curso,0))/SUM(peso_$curso),1) as a1"),
         )
-            ->where('nivel', $nivel)->where('grado', $grado)->whereNotNull("grupo_$curso")
+            ->where('nivel', $nivel)->where('grado', $grado)//->whereNotNull("grupo_$curso")
             ->groupBy('anio')->get();
         return $query;
     }
@@ -184,6 +188,8 @@ class ImporEvaluacionMuestralRepositorio
             'dd.nombre as distrito',
             'em.gestion',
             'em.area_geografica as area',
+            DB::raw('max(em.cod_mod) as modular'),
+            DB::raw('max(em.institucion_educativa) as iiee'),
             DB::raw("count(em.cod_mod) as alumnos"),
             DB::raw("count(case when em.sexo = 'HOMBRE' then em.id END) as alumnos_hombres"),
             DB::raw("count(case when em.sexo = 'MUJER' then em.id END) as alumnos_mujeres"),
@@ -196,7 +202,7 @@ class ImporEvaluacionMuestralRepositorio
             ->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia')
             ->join('edu_ugel as uu', 'uu.codigo', '=', 'em.codooii')
             ->where('em.anio', $anio)->where('em.nivel', $nivel)->where('em.grado', $grado) //->whereNotNull("em.grupo_$curso")
-            ->groupBy('ugel','distrito','gestion','area')->get();
+            ->groupBy('ugel', 'distrito', 'gestion', 'area')->get();
         return $query;
     }
 }

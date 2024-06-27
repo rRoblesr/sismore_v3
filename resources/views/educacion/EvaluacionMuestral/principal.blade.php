@@ -35,8 +35,8 @@
                 <div class="card-header bg-success-0">
                     <div class="card-widgets">
                         <button type="button" class="btn btn-orange-0 btn-xs"
-                            onclick="location.href=`{{ route('logrosaprendizaje.evaluacionmuestral.iiee') }}`" title='XXX'><i
-                                class="fas fa-file"></i> Instituciones Educativas</button>
+                            onclick="location.href=`{{ route('logrosaprendizaje.evaluacionmuestral.iiee') }}`"
+                            title='XXX'><i class="fas fa-file"></i> Instituciones Educativas</button>
                         <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
                             title='ACTUALIZAR'><i class=" fas fa-history"></i>
                             Actualizar</button>{{-- {{ route('indicador.nuevos.01.print') }} --}}
@@ -60,7 +60,7 @@
                                 @foreach ($anios as $item)
                                     <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
                                         {{ $item->anio }}</option>
-                                @endforeach 
+                                @endforeach
                             </select>
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-2">
@@ -101,7 +101,12 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card1"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Media Promedio</p>
+                            <p class="mb-0 mt-1 text-truncate">
+                                <span onclick="" data-toggle="modal" data-target="#ver_mediapromedio">
+                                    <i class="mdi mdi-rotate-180 mdi-alert-circle" style="color:#43beac;"></i>
+                                </span>
+                                Media Promedio
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -122,6 +127,9 @@
                                 <span data-plugin="counterup" id="card2"></span>
                             </h4>
                             <p class="mb-0 mt-1 text-truncate">
+                                <span onclick="" data-toggle="modal" data-target="#ver_logros">
+                                    <i class="mdi mdi-rotate-180 mdi-alert-circle" style="color:#43beac;"></i>
+                                </span>
                                 Logro Satisfactorio
                             </p>
                         </div>
@@ -201,10 +209,6 @@
                     <figure class="highcharts-figure p-0 m-0">
                         <div id="anal2" style="height: 20rem"></div>
                     </figure>
-                    {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                                <span class="anal2-fuente">Fuente:</span>
-                                <span class="float-right anal2-fecha">Actualizado:</span>
-                            </div> --}}
                 </div>
             </div>
         </div>
@@ -221,10 +225,6 @@
                     <figure class="highcharts-figure p-0 m-0">
                         <div id="anal3" style="height: 20rem"></div>
                     </figure>
-                    {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                                <span class="anal3-fuente">Fuente:</span>
-                                <span class="float-right anal3-fecha">Actualizado:</span>
-                            </div> --}}
                 </div>
             </div>
         </div>
@@ -237,10 +237,6 @@
                     <figure class="highcharts-figure p-0 m-0">
                         <div id="anal4" style="height: 20rem"></div>
                     </figure>
-                    {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                                <span class="anal4-fuente">Fuente:</span>
-                                <span class="float-right anal4-fecha">Actualizado:</span>
-                            </div> --}}
                 </div>
             </div>
         </div>
@@ -295,6 +291,48 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="ver_mediapromedio" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header py-0">
+                    {{-- <h5 class="modal-title"></h5> --}}
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-0">
+                    <img src="{{ asset('/') }}public/img/la-em-info1.jpeg" alt="" class="img-fluid">
+                </div>
+                {{-- <div class="modal-footer">
+                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+             </div> --}}
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="ver_logros" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header py-0">
+                    {{-- <h5 class="modal-title"></h5> --}}
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-0">
+                    <img src="{{ asset('/') }}public/img/la-em-info2.jpeg" alt="" class="img-fluid">
+                </div>
+                {{-- <div class="modal-footer">
+             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+         </div> --}}
             </div>
         </div>
     </div>
@@ -374,8 +412,6 @@
                     } else if (div == "tabla1") {
                         $('#vtabla1-title').html($('#vcurso option:selected').text());
                         $('#vtabla1').html(data.excel);
-                        // $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
-                        // $('.vtabla1-fecha').html('Actualizado: ' + data.reg.fecha);
                         // $('#tabla1').DataTable({
                         //     responsive: true,
                         //     autoWidth: false,

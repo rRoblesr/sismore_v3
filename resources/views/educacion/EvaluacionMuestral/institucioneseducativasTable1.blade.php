@@ -30,33 +30,33 @@
                     <td>{{ $item->distrito }}</td>
                     <td>{{ $item->gestion }}</td>
                     <td>{{ $item->area }}</td>
-                    <td>{{ $item->cod_modular }}</td>
+                    <td>{{ $item->modular }}</td>
                     <td>{{ $item->iiee }}</td>
                     <td>{{ number_format($item->alumnos, 0) }}</td>
                     <td>{{ number_format($item->alumnos_hombres, 0) }}</td>
                     <td>{{ number_format($item->alumnos_mujeres, 0) }}</td>
-                    <td>{{ number_format($item->s, 1) }}</td>
-                    <td>{{ number_format($item->p, 1) }}</td>
-                    <td>{{ number_format($item->i, 1) }}</td>
-                    <td>{{ number_format($item->a, 1) }}</td>
+                    <td>{{ number_format($item->s, 1) }}%</td>
+                    <td>{{ number_format($item->p, 1) }}%</td>
+                    <td>{{ number_format($item->i, 1) }}%</td>
+                    <td>{{ number_format($item->a, 1) }}%</td>
                 </tr>
             @endforeach
         </tbody>
         <tfoot>
-            {{-- <tr class="table-success-0 text-white">
-                <th colspan="2">Total</th>
-                <th style="text-align: center">{{ number_format($foot->ponderado, 0) }}</th>
-                <th style="text-align: center">{{ number_format($foot->iiee, 0) }}</th>
-                <th style="text-align: center">{{ number_format($foot->iiee_publico, 0) }}</th>
-                <th style="text-align: center">{{ number_format($foot->iiee_privado, 0) }}</th>
+            <tr class="table-success-0 text-white">
+                <th colspan="7" style="text-align: right">Total</th>
                 <th style="text-align: center">{{ number_format($foot->alumnos, 0) }}</th>
                 <th style="text-align: center">{{ number_format($foot->alumnos_hombres, 0) }}</th>
                 <th style="text-align: center">{{ number_format($foot->alumnos_mujeres, 0) }}</th>
-                <th style="text-align: center">{{ number_format($foot->s, 0) }}</th>
-                <th style="text-align: center">{{ number_format($foot->p, 0) }}</th>
-                <th style="text-align: center">{{ number_format($foot->i, 0) }}</th>
-                <th style="text-align: center">{{ number_format($foot->a, 0) }}</th>
-            </tr> --}}
+                <th style="text-align: center"></th>
+                <th style="text-align: center"></th>
+                <th style="text-align: center"></th>
+                <th style="text-align: center"></th>
+                {{-- <th style="text-align: center">{{ number_format($foot->s, 0) }}</th> --}}
+                {{-- <th style="text-align: center">{{ number_format($foot->p, 0) }}</th> --}}
+                {{-- <th style="text-align: center">{{ number_format($foot->i, 0) }}</th> --}}
+                {{-- <th style="text-align: center">{{ number_format($foot->a, 0) }}</th> --}}
+            </tr>
         </tfoot>
     @else
         <tr class="text-center">

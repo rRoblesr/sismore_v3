@@ -36,14 +36,12 @@ class LogrosAprendizajeController extends Controller
         foreach ($anios as $key => $value) {
             $aniomax = $value->anio;
         }
-        $ugels = Ugel::select('id', 'nombre')->where('dependencia', 2)->get();
-        $gestions = [["id" => 12, "nombre" => "Pública"], ["id" => 3, "nombre" => "Privada"]];
-        $areas = Area::select('id', 'nombre')->get();
-        $imp = Importacion::select('id', 'fechaActualizacion as fecha')->where('estado', 'PR')->where('fuenteImportacion_id', '8')->orderBy('fecha', 'desc')->first();
-        $importacion_id = $imp->id;
-        $fecha = date('d/m/Y', strtotime($imp->fecha));
-        $actualizado = '';
-        return view("educacion.evaluacionmuestral.principal", compact('actualizado', 'aniomax', 'anios',  'gestions', 'areas', 'ugels', 'importacion_id', 'fecha'));
+        // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporEvaluacionMuestralController::$FUENTE);
+        return $imp = ImportacionRepositorio::ImportacionMax_porfuente_mesletra(ImporEvaluacionMuestralController::$FUENTE);
+        $mesx = Mes::find($imp->mes);
+        $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $mesx->mes . ' del ' . $imp->anio;
+
+        return view("educacion.evaluacionmuestral.principal", compact('actualizado', 'aniomax', 'anios'));
     }
 
     public function EvaluacionMuestralReportes(Request $rq)
@@ -192,11 +190,8 @@ class LogrosAprendizajeController extends Controller
         $ugels = Ugel::select('id', 'nombre')->where('dependencia', 2)->get();
         $gestions = [["id" => 12, "nombre" => "Pública"], ["id" => 3, "nombre" => "Privada"]];
         $areas = Area::select('id', 'nombre')->get();
-        $imp = Importacion::select('id', 'fechaActualizacion as fecha')->where('estado', 'PR')->where('fuenteImportacion_id', '8')->orderBy('fecha', 'desc')->first();
-        $importacion_id = $imp->id;
-        $fecha = date('d/m/Y', strtotime($imp->fecha));
         $actualizado = '';
-        return view("educacion.EvaluacionMuestral.institucioneseducativas", compact('actualizado', 'aniomax', 'anios',  'gestions', 'areas', 'ugels', 'importacion_id', 'fecha'));
+        return view("educacion.EvaluacionMuestral.institucioneseducativas", compact('actualizado', 'aniomax', 'anios',  'gestions', 'areas', 'ugels'));
     }
 
     public function InstitucionesEducativasReportes(Request $rq)
@@ -215,33 +210,25 @@ class LogrosAprendizajeController extends Controller
                 $foot = [];
                 if ($base->count() > 0) {
                     $foot = clone $base[0];
-                    // $foot->ponderado = 0;
-                    // $foot->iiee = 0;
-                    // $foot->iiee_publico = 0;
-                    // $foot->iiee_privado = 0;
-                    // $foot->alumnos = 0;
-                    // $foot->alumnos_hombres = 0;
-                    // $foot->alumnos_mujeres = 0;
-                    // $foot->s = 0;
-                    // $foot->p = 0;
-                    // $foot->i = 0;
-                    // $foot->a = 0;
-                    // foreach ($base as $key => $value) {
-                    //     $foot->ponderado += $value->ponderado;
-                    //     $foot->iiee += $value->iiee;
-                    //     $foot->iiee_publico += $value->iiee_publico;
-                    //     $foot->iiee_privado += $value->iiee_privado;
-                    //     $foot->alumnos += $value->alumnos;
-                    //     $foot->alumnos_hombres += $value->alumnos_hombres;
-                    //     $foot->alumnos_mujeres += $value->alumnos_mujeres;
-                    //     $foot->s += $value->s;
-                    //     $foot->p += $value->p;
-                    //     $foot->i += $value->i;
-                    //     $foot->a += $value->a;
-                    // }
+                    $foot->alumnos = 0;
+                    $foot->alumnos_hombres = 0;
+                    $foot->alumnos_mujeres = 0;
+                    $foot->s = 0;
+                    $foot->p = 0;
+                    $foot->i = 0;
+                    $foot->a = 0;
+                    foreach ($base as $key => $value) {
+                        $foot->alumnos += $value->alumnos;
+                        $foot->alumnos_hombres += $value->alumnos_hombres;
+                        $foot->alumnos_mujeres += $value->alumnos_mujeres;
+                        $foot->s += $value->s;
+                        $foot->p += $value->p;
+                        $foot->i += $value->i;
+                        $foot->a += $value->a;
+                    }
                 }
                 $excel = view('educacion.EvaluacionMuestral.institucioneseducativasTable1', compact('base', 'foot'))->render();
-                return response()->json(compact('excel', 'foot'));
+                return response()->json(compact('excel'));
 
             default:
                 # code...
