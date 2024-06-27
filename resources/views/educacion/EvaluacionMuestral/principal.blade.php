@@ -254,7 +254,7 @@
                                 class="fa fa-file-excel"></i> Descargar</button>
                     </div>
                     <h3 class="text-black font-14">
-                        Resultados de los logros de aprendizaje por provincia,segun niveles de logro en <span
+                        Resultados de los logros de aprendizaje por provincia, según niveles de logro en <span
                             id="vtabla1-title"></span>
                     </h3>
                 </div>
@@ -280,7 +280,7 @@
                         <button type="button" class="btn btn-success btn-xs" onclick="descargar2()"><i
                                 class="fa fa-file-excel"></i> Descargar</button>
                     </div>
-                    <h3 class="text-black font-14">Resultados de los logros de aprendizaje por provincia,segun niveles de
+                    <h3 class="text-black font-14">Resultados de los logros de aprendizaje por distrito, según niveles de
                         logro en <span id="vtabla1_1-title"></span></h3>
                 </div>
                 <div class="card-body pt-0">
@@ -412,6 +412,12 @@
                     } else if (div == "tabla1") {
                         $('#vtabla1-title').html($('#vcurso option:selected').text());
                         $('#vtabla1').html(data.excel);
+                        $('#tabla1').DataTable({
+                            "paging": false, // Desactiva la paginación
+                            "searching": false, // Desactiva la búsqueda
+                            info: false,
+                            "ordering": true // Mantiene la funcionalidad de ordenar
+                        });
                         // $('#tabla1').DataTable({
                         //     responsive: true,
                         //     autoWidth: false,
@@ -424,6 +430,12 @@
                     } else if (div == "tabla1_1") {
                         $('#vtabla1_1-title').html($('#vcurso option:selected').text());
                         $('#vtabla1_1').html(data.excel);
+                        $('#tabla1_1').DataTable({
+                            "paging": false, // Desactiva la paginación
+                            "searching": false, // Desactiva la búsqueda
+                            info: false,
+                            "ordering": true // Mantiene la funcionalidad de ordenar
+                        });
                     }
 
                 },

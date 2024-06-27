@@ -15,10 +15,10 @@
             <th style="text-align: center">TOTAL</th>
             <th style="text-align: center">HOMBRE</th>
             <th style="text-align: center">MUJER</th>
-            <th style="text-align: center">SATISFACTORIO</th>
-            <th style="text-align: center">EN PROCESO</th>
-            <th style="text-align: center">EN INICIO</th>
-            <th style="text-align: center">PREVIO AL INICIO</th>
+            <th style="text-align: center" class="bg-success">SATISFACTORIO</th>
+            <th style="text-align: center" class="bg-danger">EN PROCESO</th>
+            <th style="text-align: center" class="bg-warning">EN INICIO</th>
+            <th style="text-align: center" class="bg-secondary">PREVIO AL INICIO</th>
         </tr>
     </thead>
     @if ($base->count() > 0)
@@ -30,10 +30,10 @@
                             onclick="subcargarcard('tabla1_1',{{ $item->idprovincia }});">{{ $item->provincia }}</a>
                     </td>
                     <td>{{ number_format($item->ponderado, 1) }}</td>
-                    <td>{{ $item->iiee }}</td>
+                    <td class="table-warning">{{ $item->iiee }}</td>
                     <td>{{ $item->iiee_publico }}</td>
                     <td>{{ $item->iiee_privado }}</td>
-                    <td>{{ number_format($item->alumnos, 0) }}</td>
+                    <td class="table-warning">{{ number_format($item->alumnos, 0) }}</td>
                     <td>{{ number_format($item->alumnos_hombres, 0) }}</td>
                     <td>{{ number_format($item->alumnos_mujeres, 0) }}</td>
                     <td>{{ number_format($item->s, 1) }}</td>
@@ -45,7 +45,7 @@
         </tbody>
         <tfoot>
             <tr class="table-success-0 text-white">
-                <th colspan="2">Total</th>
+                <th colspan="2" style="text-align: right">Total</th>
                 <th style="text-align: center">{{ number_format($foot->ponderado, 0) }}</th>
                 <th style="text-align: center">{{ number_format($foot->iiee, 0) }}</th>
                 <th style="text-align: center">{{ number_format($foot->iiee_publico, 0) }}</th>

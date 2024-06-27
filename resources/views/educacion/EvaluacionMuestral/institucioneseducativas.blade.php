@@ -171,7 +171,7 @@
                                 class="fa fa-file-excel"></i> Descargar</button>
                     </div>
                     <h3 class="text-black font-14">
-                        Resultados de los logros de aprendizaje por provincia,segun niveles de logro en <span
+                        Resultados de los logros de aprendizaje por institución educativa, según niveles de logro en <span
                             id="vtabla1-title"></span>
                     </h3>
                 </div>

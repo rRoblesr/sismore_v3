@@ -15,10 +15,10 @@
             <th style="text-align: center">TOTAL</th>
             <th style="text-align: center">HOMBRE</th>
             <th style="text-align: center">MUJER</th>
-            <th style="text-align: center" class="table-success-0">SATISFACTORIO</th>
+            <th style="text-align: center" class="bg-success">SATISFACTORIO</th>
             <th style="text-align: center" class="bg-danger">EN PROCESO</th>
             <th style="text-align: center" class="bg-warning">EN INICIO</th>
-            <th style="text-align: center" class="table-secondary">PREVIO AL INICIO</th>
+            <th style="text-align: center" class="bg-secondary">PREVIO AL INICIO</th>
         </tr>
     </thead>
     @if ($base->count() > 0)
@@ -32,7 +32,7 @@
                     <td>{{ $item->area }}</td>
                     <td>{{ $item->modular }}</td>
                     <td>{{ $item->iiee }}</td>
-                    <td>{{ number_format($item->alumnos, 0) }}</td>
+                    <td class="table-warning">{{ number_format($item->alumnos, 0) }}</td>
                     <td>{{ number_format($item->alumnos_hombres, 0) }}</td>
                     <td>{{ number_format($item->alumnos_mujeres, 0) }}</td>
                     <td>{{ number_format($item->s, 1) }}%</td>
