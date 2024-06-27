@@ -118,7 +118,6 @@
 
     </div>
 
-    {{-- tabla 1 --}}
     <div class="row">
         <div class="col-md-12">
             <div class="card card-border">
@@ -148,7 +147,7 @@
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table id="tabla" class="table table-sm table-striped table-bordered font-12">
+                        <table id="tabla" class="table table-sm table-striped table-bordered ">
                             <thead class="cabecera-dataTable table-success-0 text-white">
                                 @if ($registrador > 0)
                                     <tr>
@@ -193,33 +192,6 @@
                                 </tfoot>
                             @endif
 
-                        </table>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div> <!-- End row -->
-
-    {{-- tabla 2 --}}
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card card-border">
-                <div class="card-header border-success-0 bg-transparent">
-                    <div class="card-widgets d-flex">
-                        <div class="d-flex align-items-center">
-                            <button class="btn btn-xs btn-success" title="DESCARGAR EXCEL" onclick="descargar2()">
-                                <i class="fa fa-file-excel"></i></button>
-                        </div>
-                    </div>
-                    <h4 class="card-title p-0">lista de actas [ {{ $ent->entidadn }} ]</h4>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table id="tabla2" class="table table-sm table-striped table-bordered font-12 ">
-                            <thead class="cabecera-dataTable table-success-0 text-white"></thead>
-                            <tbody></tbody>
-                            <tfoot class="table-success-0 text-white"></tfoot>
                         </table>
                     </div>
 
@@ -404,7 +376,6 @@
                 cargartabla2();
                 // datos();
             }
-            cargartabla2x();
             // vcargaralert();
 
         });
@@ -535,30 +506,6 @@
                     // Actualizar el contenido del tfoot
                     $('.tabla_tfoot').html(totalAge);
                 }
-            });
-        }
-
-        function cargartabla2x() {
-            $.ajax({
-                url: "{{ route('eess.listar.registro.2') }}",
-                data: {
-                    'sector': 2,
-                    'municipio': $('#vmunicipio').val(),
-                    'red': $('#vred').val(),
-                    'microred': $('#vmicrored').val(),
-                    'fechai': $('#vfechai').val(),
-                    'fechaf': $('#vfechaf').val(),
-                    'eess': $('#veess').val(),
-                    'registrador': '{{ $registrador }}',
-                },
-                type: 'GET',
-                success: function(data) {
-                    console.log(data);
-                    $('#tabla2').html(data.tabla);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
             });
         }
 
@@ -695,7 +642,27 @@
             });
         }
 
-
+        // function vcargaralert() {
+        //     $.ajax({
+        //         url: "{{ route('imporpadronactas.registro.alert.1') }}",
+        //         data: {
+        //             'sector': 2,
+        //             'municipio': $('#vmunicipio').val(),
+        //             'red': $('#vred').val(),
+        //             'microred': $('#vmicrored').val(),
+        //         },
+        //         type: 'GET',
+        //         success: function(data) {
+        //             console.log(data);
+        //             $('#alerta2').html((data.eess - data.pd) + ' ESTABLECIEMIENTOS QUE NO CUMPLEN EN ENVIAR');
+        //             $('#alerta3').html(data.pd + ' ESTABLECIEMIENTOS CUMPLIERON');
+        //             $('#alerta1').html(data.eess + ' ESTABLECIEMIENTOS');
+        //         },
+        //         error: function(jqXHR, textStatus, errorThrown) {
+        //             console.log(jqXHR);
+        //         },
+        //     });
+        // }
 
         function limpiarfiltros() {
             $('#vred').val('0');

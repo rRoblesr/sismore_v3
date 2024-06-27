@@ -10,6 +10,7 @@ use App\Models\Administracion\Entidad;
 use App\Models\Educacion\ImporCensoDocente;
 use App\Models\Educacion\Importacion;
 use App\Models\Parametro\FuenteImportacion;
+use App\Models\Parametro\Mes;
 use App\Models\Parametro\Ubigeo;
 use App\Models\Salud\DataPacto1;
 use App\Models\Salud\ImporPadronActas;
@@ -490,6 +491,7 @@ class ImporPadronActasController extends Controller
         return response()->json($result);
     }
 
+  
     private function _registro_validate($request)
     {
         $data = array();
@@ -612,7 +614,7 @@ class ImporPadronActasController extends Controller
 
     public function registro_alerta(Request $rq)
     {
-        $eess = EstablecimientoRepositorio::listEESS($rq->sector, $rq->municipio,0,0)->count();
+        $eess = EstablecimientoRepositorio::listEESS($rq->sector, $rq->municipio, 0, 0)->count();
         $pd = PadronActas::join('sal_establecimiento as ee', 'ee.id', '=', 'sal_padron_actas.establecimiento_id')->get()->count();
         return response()->json(array('eess' => $eess, 'pd' => $pd));
     }

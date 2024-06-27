@@ -107,4 +107,49 @@ class EstablecimientoController extends Controller
         );
         return response()->json($result);
     }
+
+    public function registro_listarDT2(Request $rq)
+    {
+        $mes = Mes::all();
+        $tabla = '<thead class="cabecera-dataTable table-success-0 text-white">
+                    <tr>
+                        <th class="text-center">Nº</th>                                                                
+                        <th class="text-center">CODIGO UNICO</th>
+                        <th class="text-center">ESTABLECIMIENTO</th>';
+        foreach ($mes as $key => $value) {
+            $tabla .= '<th class="text-center">' . $value->abreviado . '</th>';
+        }
+
+        $tabla .= '     <th class="text-center">ACCIÓN</th>
+                    </tr>
+                </thead>
+                <tbody>';
+
+
+        $query = EstablecimientoRepositorio::listar(2, $rq->municipio, $rq->red, $rq->microred);
+
+        foreach ($query as $key => $value) {
+            $tabla .= '<tr>';
+            $tabla .= '<td class="text-center">' . ($key + 1) . '</td>';
+            $tabla .= '<td class="text-center">' . $value->cod_unico . '</td>';
+            $tabla .= '<td class="text-center">' . $value->eess . '</td>';
+            foreach ($mes as $mm) {
+                $tabla .= '<th class="text-center">' . 0 . '</th>';
+            }
+            $tabla .= '<td class="text-center"></td>';
+            $tabla .= '</tr>';
+        }
+
+        $tabla .= '</tbody>';
+        $tabla .= '<tfoot class="table-success-0 text-white">
+                    <tr>
+                        <td class="text-center" colspan="3">TOTAL</td>';
+        foreach ($mes as $key => $value) {
+            $tabla .= ' <td class="text-center tabla_tfoot">0</td>';
+        }
+        $tabla .= '     <td class="text-center"></td>
+                    </tr>
+                </tfoot>';
+        return response()->json(['query' => $query, 'tabla' => $tabla]);
+    }
 }
