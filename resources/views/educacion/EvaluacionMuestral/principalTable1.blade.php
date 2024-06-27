@@ -53,10 +53,10 @@
                 <th style="text-align: center">{{ number_format($foot->alumnos, 0) }}</th>
                 <th style="text-align: center">{{ number_format($foot->alumnos_hombres, 0) }}</th>
                 <th style="text-align: center">{{ number_format($foot->alumnos_mujeres, 0) }}</th>
-                <th style="text-align: center">{{ number_format($foot->s, 0) }}</th>
-                <th style="text-align: center">{{ number_format($foot->p, 0) }}</th>
-                <th style="text-align: center">{{ number_format($foot->i, 0) }}</th>
-                <th style="text-align: center">{{ number_format($foot->a, 0) }}</th>
+                <th style="text-align: center"></th>
+                <th style="text-align: center"></th>
+                <th style="text-align: center"></th>
+                <th style="text-align: center"></th>
             </tr>
         </tfoot>
     @else
