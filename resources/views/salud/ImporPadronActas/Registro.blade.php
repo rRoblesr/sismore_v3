@@ -549,6 +549,7 @@
                     'fechai': $('#vfechai').val(),
                     'fechaf': $('#vfechaf').val(),
                     'eess': $('#veess').val(),
+                    'anio': 2024,
                     'registrador': '{{ $registrador }}',
                 },
                 type: 'GET',

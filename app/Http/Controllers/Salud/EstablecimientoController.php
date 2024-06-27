@@ -134,7 +134,16 @@ class EstablecimientoController extends Controller
             $tabla .= '<td class="text-center">' . $value->cod_unico . '</td>';
             $tabla .= '<td class="text-center">' . $value->eess . '</td>';
             foreach ($mes as $mm) {
-                $tabla .= '<th class="text-center">' . 0 . '</th>';
+                $pa = PadronActas::from('sal_padron_actas as pa')
+                    ->select(DB::raw('sum(pa.nro_archivos) as conteo'))
+                    ->join('sal_establecimiento as es', 'es.id', '=', 'pa.establecimiento_id')
+                    ->join('sal_microred as mi', 'mi.id', '=', 'es.microrred_id')
+                    ->join('sal_red as re', 're.id', '=', 'mi.red_id')
+                    // ->where('es.ubigeo_id', $rq->municipio);
+                    ->where('pa.establecimiento_id', $value->id)
+                    ->where('pa.fecha_envio', 'like', $rq->anio . '-' . str_pad($mes, 2, '0', STR_PAD_LEFT) . '-%');
+                $pa = $pa->get()->first(); //->orderBy('fecha_envio')->get();
+                $tabla .= '<th class="text-center">' . $pa->conteo . '</th>';
             }
             $tabla .= '<td class="text-center"></td>';
             $tabla .= '</tr>';
