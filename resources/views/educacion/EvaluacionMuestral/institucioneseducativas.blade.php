@@ -70,8 +70,8 @@
             <div class="card-box border border-plomo-0">
                 <div class="media">
                     <div class="text-center">
-                        <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
-                            width="70%" height="70%">
+                        {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class="" width="70%" height="70%"> --}}
+                        <i class="mdi mdi-lightbulb font-35 text-dark"></i>
                     </div>
                     <div class="media-body align-self-center">
                         <div class="text-right">
@@ -95,8 +95,8 @@
             <div class="card-box border border-plomo-0">
                 <div class="media">
                     <div class="text-center">
-                        <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
-                            width="70%" height="70%">
+                        {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class="" width="70%" height="70%"> --}}
+                        <i class="mdi mdi-chart-bar font-35 text-dark"></i>
                     </div>
                     <div class="media-body align-self-center">
                         <div class="text-right">
@@ -120,8 +120,8 @@
             <div class="card-box border border-plomo-0">
                 <div class="media">
                     <div class="text-center">
-                        <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
-                            width="70%" height="70%">
+                        {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class="" width="70%" height="70%"> --}}
+                        <i class="fas fa-user-friends font-35 text-dark"></i>
                     </div>
                     <div class="media-body align-self-center">
                         <div class="text-right">
@@ -142,8 +142,8 @@
             <div class="card-box border border-plomo-0">
                 <div class="media">
                     <div class="text-center">
-                        <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
-                            width="70%" height="70%">
+                        {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class="" width="70%" height="70%"> --}}
+                        <i class="fas fa-school font-35 text-dark"></i>
                     </div>
                     <div class="media-body align-self-center">
                         <div class="text-right">
@@ -263,13 +263,18 @@
                 type: "GET",
                 dataType: "JSON",
                 beforeSend: function() {
-                    // if (div == "tabla1") {
-                    //     $('#v' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    // } else if (div == "tabla2") {
-                    //     $('#v' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    // } else {
-                    //     $('#' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    // }
+                    if (div == "head") {
+                        $('#card1').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('#card2').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('#card3').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('#card4').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "tabla1") {
+                        $('#vtabla1').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "tabla2") {
+                        $('#v' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else {
+                        $('#' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    }
                 },
                 success: function(data) {
                     if (div == "head") {
