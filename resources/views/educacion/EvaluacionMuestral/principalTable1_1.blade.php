@@ -14,7 +14,7 @@
             <th style="text-align: center">PRIVADA</th>
             <th style="text-align: center">TOTAL</th>
             <th style="text-align: center">HOMBRE</th>
-            <th style="text-align: center">MUJER</th>            
+            <th style="text-align: center">MUJER</th>
             <th style="text-align: center" class="bg-success">SATISFACTORIO</th>
             <th style="text-align: center" class="bg-danger">EN PROCESO</th>
             <th style="text-align: center" class="bg-warning">EN INICIO</th>
@@ -51,10 +51,10 @@
                 <th style="text-align: center">{{ number_format($foot->alumnos, 0) }}</th>
                 <th style="text-align: center">{{ number_format($foot->alumnos_hombres, 0) }}</th>
                 <th style="text-align: center">{{ number_format($foot->alumnos_mujeres, 0) }}</th>
-                <th style="text-align: center"></th>
-                <th style="text-align: center"></th>
-                <th style="text-align: center"></th>
-                <th style="text-align: center"></th>
+                <th style="text-align: center">{{ number_format($foot->s, 1) }}%</th>
+                <th style="text-align: center">{{ number_format($foot->p, 1) }}%</th>
+                <th style="text-align: center">{{ number_format($foot->i, 1) }}%</th>
+                <th style="text-align: center">{{ number_format($foot->a, 1) }}%</th>
                 {{-- <th style="text-align: center">{{ number_format($foot->s, 0) }}</th>
                 <th style="text-align: center">{{ number_format($foot->p, 0) }}</th>
                 <th style="text-align: center">{{ number_format($foot->i, 0) }}</th>
