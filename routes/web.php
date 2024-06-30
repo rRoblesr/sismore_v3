@@ -307,6 +307,7 @@ Route::get('/educación/Importar/EvaluacionMuestral/Eliminar/{id}', [ImporEvalua
 
 Route::get('/educación/LogrosdeAprendizaje/EM', [LogrosAprendizajeController::class, 'evaluacionmuestral'])->name('logrosaprendizaje.evaluacionmuestral');
 Route::get('/educación/LogrosdeAprendizaje/EM/Reportes', [LogrosAprendizajeController::class, 'EvaluacionMuestralReportes'])->name('logrosaprendizaje.evaluacionmuestral.reporte');
+Route::get('/educación/LA/EM/R/E/{div}/{anio}/{nivel}/{grado}/{curso}/{provincia}', [LogrosAprendizajeController::class, 'EvaluacionMuestralReportesExport'])->name('logrosaprendizaje.evaluacionmuestral.reporte.export');
 Route::get('/educación/EvaluacionMuestral/cargarnivel/{anio}', [LogrosAprendizajeController::class, 'cargarnivel'])->name('logrosaprendizaje.evaluacionmuestral.cargarnivel');
 Route::get('/educación/EvaluacionMuestral/cargargrado/{anio}/{nivel}', [LogrosAprendizajeController::class, 'cargargrado'])->name('logrosaprendizaje.evaluacionmuestral.cargargrado');
 Route::get('/educación/EvaluacionMuestral/cargarcurso/{anio}/{nivel}/{grado}', [LogrosAprendizajeController::class, 'cargarcurso'])->name('logrosaprendizaje.evaluacionmuestral.cargarcurso');

@@ -527,13 +527,13 @@
         }
 
         function descargar1() {
-            window.open("{{ url('/') }}/INDICADOR/Home/01/Excel/tabla1/" + $('#anio').val() + "/" + $('#provincia')
-                .val() + "/" + $('#distrito').val() + "/" + $('#gestion').val() + "/0");
+            window.open("{{ route('logrosaprendizaje.evaluacionmuestral.reporte.export',['','','','','',''])/tabla1/" + $('#vanio').val() + "/" +
+            $('#vnivel').val() + "/" + $('#vgrado').val() + "/" + $('#vcurso').val() + "/0");
         }
 
         function descargar2() {
-            window.open("{{ url('/') }}/INDICADOR/Home/01/Excel/tabla2/" + $('#anio').val() + "/" + $('#provincia')
-                .val() + "/" + $('#distrito').val() + "/" + $('#gestion').val() + "/" + ugel_select);
+            // window.open("{{ url('/') }}/INDICADOR/Home/01/Excel/tabla2/" + $('#anio').val() + "/" + $('#provincia')
+            //     .val() + "/" + $('#distrito').val() + "/" + $('#gestion').val() + "/" + ugel_select);
         }
 
         function verpdf(id) {

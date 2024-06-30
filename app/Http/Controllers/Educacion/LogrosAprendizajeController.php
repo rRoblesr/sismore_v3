@@ -178,6 +178,80 @@ class LogrosAprendizajeController extends Controller
         }
     }
 
+    public function EvaluacionMuestralReportesExport($div, $anio, $nivel, $grado, $curso, $provincia)
+    {
+        switch ($div) {
+            case 'tabla1':
+                $base = ImporEvaluacionMuestralRepositorio::EvaluacionMuestralReportesTabla1($div, $anio, $nivel, $grado, $curso);
+                // return response()->json(compact('base'));
+                $foot = [];
+                if ($base->count() > 0) {
+                    $foot = clone $base[0];
+                    $foot->ponderado = 0;
+                    $foot->iiee = 0;
+                    $foot->iiee_publico = 0;
+                    $foot->iiee_privado = 0;
+                    $foot->alumnos = 0;
+                    $foot->alumnos_hombres = 0;
+                    $foot->alumnos_mujeres = 0;
+                    $foot->s = 0;
+                    $foot->p = 0;
+                    $foot->i = 0;
+                    $foot->a = 0;
+                    foreach ($base as $key => $value) {
+                        $foot->ponderado += $value->ponderado;
+                        $foot->iiee += $value->iiee;
+                        $foot->iiee_publico += $value->iiee_publico;
+                        $foot->iiee_privado += $value->iiee_privado;
+                        $foot->alumnos += $value->alumnos;
+                        $foot->alumnos_hombres += $value->alumnos_hombres;
+                        $foot->alumnos_mujeres += $value->alumnos_mujeres;
+                        $foot->s += $value->s;
+                        $foot->p += $value->p;
+                        $foot->i += $value->i;
+                        $foot->a += $value->a;
+                    }
+                }
+                return compact('base', 'foot');
+
+            case 'tabla1_1':
+                $base = ImporEvaluacionMuestralRepositorio::EvaluacionMuestralReportesTabla1_1($div, $anio, $nivel, $grado, $curso, $provincia);
+                // return response()->json(compact('base'));
+                $foot = [];
+                if ($base->count() > 0) {
+                    $foot = clone $base[0];
+                    $foot->ponderado = 0;
+                    $foot->iiee = 0;
+                    $foot->iiee_publico = 0;
+                    $foot->iiee_privado = 0;
+                    $foot->alumnos = 0;
+                    $foot->alumnos_hombres = 0;
+                    $foot->alumnos_mujeres = 0;
+                    $foot->s = 0;
+                    $foot->p = 0;
+                    $foot->i = 0;
+                    $foot->a = 0;
+                    foreach ($base as $key => $value) {
+                        $foot->ponderado += $value->ponderado;
+                        $foot->iiee += $value->iiee;
+                        $foot->iiee_publico += $value->iiee_publico;
+                        $foot->iiee_privado += $value->iiee_privado;
+                        $foot->alumnos += $value->alumnos;
+                        $foot->alumnos_hombres += $value->alumnos_hombres;
+                        $foot->alumnos_mujeres += $value->alumnos_mujeres;
+                        $foot->s += $value->s;
+                        $foot->p += $value->p;
+                        $foot->i += $value->i;
+                        $foot->a += $value->a;
+                    }
+                }
+                return compact('base', 'foot');
+            default:
+                # code...
+                return response()->json([]);
+        }
+    }
+
     public function InstitucionesEducativas()
     {
         $anios = ImporEvaluacionMuestralRepositorio::anios();
