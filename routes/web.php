@@ -307,13 +307,14 @@ Route::get('/educación/Importar/EvaluacionMuestral/Eliminar/{id}', [ImporEvalua
 
 Route::get('/educación/LogrosdeAprendizaje/EM', [LogrosAprendizajeController::class, 'evaluacionmuestral'])->name('logrosaprendizaje.evaluacionmuestral');
 Route::get('/educación/LogrosdeAprendizaje/EM/Reportes', [LogrosAprendizajeController::class, 'EvaluacionMuestralReportes'])->name('logrosaprendizaje.evaluacionmuestral.reporte');
-Route::get('/educación/LA/EM/R/E/{div}/{anio}/{nivel}/{grado}/{curso}/{provincia}', [LogrosAprendizajeController::class, 'EvaluacionMuestralReportesExport'])->name('logrosaprendizaje.evaluacionmuestral.reporte.export');
+Route::get('/educación/LA/EM/R/E/{div}/{anio}/{nivel}/{grado}/{curso}/{provincia}', [LogrosAprendizajeController::class, 'EvaluacionMuestralReportesdownload'])->name('logrosaprendizaje.evaluacionmuestral.reporte.export');
 Route::get('/educación/EvaluacionMuestral/cargarnivel/{anio}', [LogrosAprendizajeController::class, 'cargarnivel'])->name('logrosaprendizaje.evaluacionmuestral.cargarnivel');
 Route::get('/educación/EvaluacionMuestral/cargargrado/{anio}/{nivel}', [LogrosAprendizajeController::class, 'cargargrado'])->name('logrosaprendizaje.evaluacionmuestral.cargargrado');
 Route::get('/educación/EvaluacionMuestral/cargarcurso/{anio}/{nivel}/{grado}', [LogrosAprendizajeController::class, 'cargarcurso'])->name('logrosaprendizaje.evaluacionmuestral.cargarcurso');
 
 Route::get('/educación/LogrosdeAprendizaje/EM/IIEE', [LogrosAprendizajeController::class, 'InstitucionesEducativas'])->name('logrosaprendizaje.evaluacionmuestral.iiee');
 Route::get('/educación/LogrosdeAprendizaje/EM/IIEE/Reportes', [LogrosAprendizajeController::class, 'InstitucionesEducativasReportes'])->name('logrosaprendizaje.evaluacionmuestral.iiee.reporte');
+Route::get('/educación/LA/EM/IIEE/R/E/{div}/{anio}/{nivel}/{grado}/{curso}/{provincia}', [LogrosAprendizajeController::class, 'EMInstitucionesEducativasdownload'])->name('logrosaprendizaje.evaluacionmuestral.iiee.reporte.export');
 
 Route::get('/Censo/Importar', [CensoController::class, 'importar'])->name('Censo.importar');
 Route::post('/Censo/Importar', [CensoController::class, 'guardar'])->name('Censo.guardar');

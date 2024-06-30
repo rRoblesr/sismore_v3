@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Educacion;
 
 use App\Exports\AvanceMatricula1Export;
+use App\Exports\EvaluacionMensualExport;
 use App\Http\Controllers\Controller;
 use App\Models\Educacion\Area;
 use App\Models\Educacion\Importacion;
@@ -252,6 +253,25 @@ class LogrosAprendizajeController extends Controller
         }
     }
 
+    public function EvaluacionMuestralReportesdownload($div, $anio, $nivel, $grado, $curso, $provincia)
+    {
+        if ($anio > 0) {
+            switch ($div) {
+                case 'tabla1':
+                    $name = 'Resultados de los logros de aprendizaje por provincia ' . date('Y-m-d') . '.xlsx';
+                    break;
+                case 'tabla1_1':
+                    $name = 'Resultados de los logros de aprendizaje por distrito ' . date('Y-m-d') . '.xlsx';
+                    break;
+                default:
+                    $name = 'sin nombre.xlsx';
+                    break;
+            }
+
+            return Excel::download(new EvaluacionMensualExport($div, $anio, $nivel, $grado, $curso, $provincia), $name);
+        }
+    }
+
     public function InstitucionesEducativas()
     {
         $anios = ImporEvaluacionMuestralRepositorio::anios();
@@ -305,6 +325,57 @@ class LogrosAprendizajeController extends Controller
                 return response()->json([]);
         }
     }
+
+    public function EMInstitucionesEducativasExport(Request $rq)
+    {
+        switch ($rq->div) {
+            case 'tabla1':
+                $base = ImporEvaluacionMuestralRepositorio::InstitucionesEducativasTabla1($rq->div, $rq->anio, $rq->nivel, $rq->grado, $rq->curso);
+                // return response()->json(compact('base'));
+                $foot = [];
+                if ($base->count() > 0) {
+                    $foot = clone $base[0];
+                    $foot->alumnos = 0;
+                    $foot->alumnos_hombres = 0;
+                    $foot->alumnos_mujeres = 0;
+                    $foot->s = 0;
+                    $foot->p = 0;
+                    $foot->i = 0;
+                    $foot->a = 0;
+                    foreach ($base as $key => $value) {
+                        $foot->alumnos += $value->alumnos;
+                        $foot->alumnos_hombres += $value->alumnos_hombres;
+                        $foot->alumnos_mujeres += $value->alumnos_mujeres;
+                        $foot->s += $value->s;
+                        $foot->p += $value->p;
+                        $foot->i += $value->i;
+                        $foot->a += $value->a;
+                    }
+                }
+                return compact('base', 'foot');
+
+            default:
+                # code...
+                return response()->json([]);
+        }
+    }
+
+    public function EMInstitucionesEducativasdownload($div, $anio, $nivel, $grado, $curso, $provincia)
+    {
+        if ($anio > 0) {
+            switch ($div) {
+                case 'tabla1':
+                    $name = 'Resultados de los logros de aprendizaje por institución educativa ' . date('Y-m-d') . '.xlsx';
+                    break;
+                default:
+                    $name = 'sin nombre.xlsx';
+                    break;
+            }
+
+            return Excel::download(new EvaluacionMensualExport('EM' . $div, $anio, $nivel, $grado, $curso, $provincia), $name);
+        }
+    }
+
 
     public function cargarnivel($anio)
     {

@@ -275,7 +275,7 @@
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
                     <div class="card-widgets">
-                        <button type="button" class="btn btn-primary btn-xs" onclick="cargarTablaNivel('tabla2', 0)"
+                        <button type="button" class="btn btn-primary btn-xs" onclick="cargartabla1_1()"
                             title='Actualizar Tabla'><i class=" fas fa-history"></i> Actualizar</button>
                         <button type="button" class="btn btn-success btn-xs" onclick="descargar2()"><i
                                 class="fa fa-file-excel"></i> Descargar</button>
@@ -456,6 +456,11 @@
             cargarCardsDiv(div);
         }
 
+        function cargartabla1_1(){
+            vprovincia = 0;
+            cargarCardsDiv('tabla1_1');
+        }
+
         function cargarnivel() {
             $.ajax({
                 url: "{{ route('logrosaprendizaje.evaluacionmuestral.cargarnivel', '') }}/" + $('#vanio').val(),
@@ -527,13 +532,17 @@
         }
 
         function descargar1() {
-            window.open("{{ route('logrosaprendizaje.evaluacionmuestral.reporte.export',['','','','','',''])/tabla1/" + $('#vanio').val() + "/" +
-            $('#vnivel').val() + "/" + $('#vgrado').val() + "/" + $('#vcurso').val() + "/0");
+            window.open(
+                "{{ route('logrosaprendizaje.evaluacionmuestral.reporte.export', ['', '', '', '', '', '']) }}/tabla1/" +
+                $('#vanio').val() + "/" + $('#vnivel').val() + "/" + $('#vgrado').val() + "/" + $('#vcurso').val() +
+                "/0");
         }
 
         function descargar2() {
-            // window.open("{{ url('/') }}/INDICADOR/Home/01/Excel/tabla2/" + $('#anio').val() + "/" + $('#provincia')
-            //     .val() + "/" + $('#distrito').val() + "/" + $('#gestion').val() + "/" + ugel_select);
+            window.open(
+                "{{ route('logrosaprendizaje.evaluacionmuestral.reporte.export', ['', '', '', '', '', '']) }}/tabla1_1/" +
+                $('#vanio').val() + "/" + $('#vnivel').val() + "/" + $('#vgrado').val() + "/" + $('#vcurso').val() +
+                "/0");
         }
 
         function verpdf(id) {

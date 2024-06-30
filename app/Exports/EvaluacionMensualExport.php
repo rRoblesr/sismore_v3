@@ -34,9 +34,9 @@ class EvaluacionMensualExport implements FromView, ShouldAutoSize
         if ($this->div == 'tabla1') {
             $mgs = (new LogrosAprendizajeController())->EvaluacionMuestralReportesExport($this->div, $this->anio, $this->nivel, $this->grado, $this->curso, $this->provincia);
             return view('educacion.EvaluacionMuestral.principalTable1Export', $mgs);
-        } else if ($this->div == 'tabla2') {
-            $mgs = []; // (new IndicadoresController())->PactoRegionalSalPacto2Export($this->div, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
-            return view('salud.Indicadores.PactoRegionalSalPacto2tabla2Export', $mgs);
+        } else if ($this->div == 'tabla1_1') {
+            $mgs = (new LogrosAprendizajeController())->EvaluacionMuestralReportesExport($this->div, $this->anio, $this->nivel, $this->grado, $this->curso, $this->provincia);
+            return view('educacion.EvaluacionMuestral.principalTable1_1Export', $mgs);
         } else if ($this->div == 'tabla3') {
             $mgs = []; // (new IndicadoresController())->PactoRegionalSalPacto2Export($this->div, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
             return view('salud.Indicadores.PactoRegionalSalPacto2tabla3Export', $mgs);
