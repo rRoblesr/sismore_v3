@@ -36,17 +36,17 @@
                     <td class="table-warning">{{ number_format($item->alumnos, 0) }}</td>
                     <td>{{ number_format($item->alumnos_hombres, 0) }}</td>
                     <td>{{ number_format($item->alumnos_mujeres, 0) }}</td>
-                    <td>{{ number_format($item->s, 1) }}</td>
-                    <td>{{ number_format($item->p, 1) }}</td>
-                    <td>{{ number_format($item->i, 1) }}</td>
-                    <td>{{ number_format($item->a, 1) }}</td>
+                    <td>{{ number_format($item->s, 1) }}%</td>
+                    <td>{{ number_format($item->p, 1) }}%</td>
+                    <td>{{ number_format($item->i, 1) }}%</td>
+                    <td>{{ number_format($item->a, 1) }}%</td>
                 </tr>
             @endforeach
         </tbody>
         <tfoot>
             <tr class="table-success-0 text-white">
                 <th colspan="2" style="text-align: right">Total</th>
-                <th style="text-align: center">{{ number_format($foot->ponderado, 0) }}</th>
+                <th style="text-align: center">{{ number_format($foot->ponderado, 1) }}</th>
                 <th style="text-align: center">{{ number_format($foot->iiee, 0) }}</th>
                 <th style="text-align: center">{{ number_format($foot->iiee_publico, 0) }}</th>
                 <th style="text-align: center">{{ number_format($foot->iiee_privado, 0) }}</th>
@@ -61,7 +61,7 @@
         </tfoot>
     @else
         <tr class="text-center">
-            <td colspan="18"><a href="javascript:void(0)">Sin información</a></td>
+            {{-- <td colspan="13"><a href="javascript:void(0)">Sin información</a></td> --}}
         </tr>
         </tfoot>
     @endif

@@ -31,7 +31,7 @@
                     <td>{{ $item->gestion }}</td>
                     <td>{{ $item->area }}</td>
                     <td>{{ $item->modular }}</td>
-                    <td>{{ $item->iiee }}</td>
+                    <td class="text-left">{{ $item->iiee }}</td>
                     <td class="table-warning">{{ number_format($item->alumnos, 0) }}</td>
                     <td>{{ number_format($item->alumnos_hombres, 0) }}</td>
                     <td>{{ number_format($item->alumnos_mujeres, 0) }}</td>
