@@ -8,8 +8,9 @@
             <th style="text-align: center" colspan="3">ESTUDIANTES EVALUADOS</th>
             <th style="text-align: center" colspan="4">NIVELES DE LOGRO</th>
         </tr>
+
         <tr class="table-success-0 text-white">
-            <th style="text-align: center">TOTAL </th>
+            <th style="text-align: center">TOTAL</th>
             <th style="text-align: center">PÚBLICA</th>
             <th style="text-align: center">PRIVADA</th>
             <th style="text-align: center">TOTAL</th>
