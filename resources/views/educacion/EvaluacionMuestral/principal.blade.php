@@ -421,7 +421,7 @@
                             "paging": false, // Desactiva la paginación
                             "searching": false, // Desactiva la búsqueda
                             info: false,
-                            "ordering": true // Mantiene la funcionalidad de ordenar
+                            "ordering": true, // Mantiene la funcionalidad de ordenar
                         });
                         // $('#tabla1').DataTable({
                         //     responsive: true,

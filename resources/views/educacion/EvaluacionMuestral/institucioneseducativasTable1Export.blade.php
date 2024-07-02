@@ -1,24 +1,25 @@
 <table id="tabla1" class="table table-sm table-bordered mb-0 font-10">
     <thead>
         <tr class="table-success-0 text-white">
-            <th style="text-align: center" rowspan="2">N°</th>
-            <th style="text-align: center" rowspan="2">UGEL</th>
-            <th style="text-align: center" rowspan="2">DISTRITO</th>
-            <th style="text-align: center" rowspan="2">GESTIÓN</th>
-            <th style="text-align: center" rowspan="2">ÁREA</th>
-            <th style="text-align: center" rowspan="2">CÓDIGO MODULAR</th>
-            <th style="text-align: center" rowspan="2">INSTITUCIÓN EDUCATIVA</th>
-            <th style="text-align: center" colspan="3">ESTUDIANTES EVALUADOS</th>
-            <th style="text-align: center" colspan="4">NIVELES DE LOGRO</th>
+            <th style="background-color:#317eeb;color:#ffffff;text-align:center;" rowspan="2">N°</th>
+            <th style="background-color:#317eeb;color:#ffffff;text-align:center;" rowspan="2">UGEL</th>
+            <th style="background-color:#317eeb;color:#ffffff;text-align:center;" rowspan="2">DISTRITO</th>
+            <th style="background-color:#317eeb;color:#ffffff;text-align:center;" rowspan="2">GESTIÓN</th>
+            <th style="background-color:#317eeb;color:#ffffff;text-align:center;" rowspan="2">ÁREA</th>
+            <th style="background-color:#317eeb;color:#ffffff;text-align:center;" rowspan="2">CÓDIGO MODULAR</th>
+            <th style="background-color:#317eeb;color:#ffffff;text-align:center;" rowspan="2">INSTITUCIÓN EDUCATIVA</th>
+            <th style="background-color:#317eeb;color:#ffffff;text-align:center;" colspan="3">ESTUDIANTES EVALUADOS</th>
+            <th style="background-color:#317eeb;color:#ffffff;text-align:center;" colspan="4">NIVELES DE LOGRO</th>
         </tr>
+       
         <tr class="table-success-0 text-white">
-            <th style="text-align: center">TOTAL</th>
-            <th style="text-align: center">HOMBRE</th>
-            <th style="text-align: center">MUJER</th>
-            <th style="text-align: center" class="bg-success">SATISFACTORIO</th>
-            <th style="text-align: center" class="bg-danger">EN PROCESO</th>
-            <th style="text-align: center" class="bg-warning">EN INICIO</th>
-            <th style="text-align: center" class="bg-secondary">PREVIO AL INICIO</th>
+            <th style="background-color:#317eeb;color:#ffffff;text-align:center;">TOTAL</th>
+            <th style="background-color:#317eeb;color:#ffffff;text-align:center;">HOMBRE</th>
+            <th style="background-color:#317eeb;color:#ffffff;text-align:center;">MUJER</th>
+            <th style="background-color:#33b86c;color:#ffffff;text-align:center;">SATISFACTORIO</th>
+            <th style="background-color:#ef5350;color:#ffffff;text-align:center;">EN PROCESO</th>
+            <th style="background-color:#ffd740;color:#ffffff;text-align:center;">EN INICIO</th>
+            <th style="background-color:#6c757d;color:#ffffff;text-align:center;">PREVIO AL INICIO</th>
         </tr>
     </thead>
     @if ($base->count() > 0)
@@ -45,17 +46,13 @@
         <tfoot>
             <tr class="table-success-0 text-white">
                 <th colspan="7" style="text-align: right">Total</th>
-                <th style="text-align: center">{{ number_format($foot->alumnos, 0) }}</th>
-                <th style="text-align: center">{{ number_format($foot->alumnos_hombres, 0) }}</th>
-                <th style="text-align: center">{{ number_format($foot->alumnos_mujeres, 0) }}</th>
-                <th style="text-align: center"></th>
-                <th style="text-align: center"></th>
-                <th style="text-align: center"></th>
-                <th style="text-align: center"></th>
-                {{-- <th style="text-align: center">{{ number_format($foot->s, 0) }}</th> --}}
-                {{-- <th style="text-align: center">{{ number_format($foot->p, 0) }}</th> --}}
-                {{-- <th style="text-align: center">{{ number_format($foot->i, 0) }}</th> --}}
-                {{-- <th style="text-align: center">{{ number_format($foot->a, 0) }}</th> --}}
+                <th style="background-color:#317eeb;color:#ffffff;text-align:center;">{{ number_format($foot->alumnos, 0) }}</th>
+                <th style="background-color:#317eeb;color:#ffffff;text-align:center;">{{ number_format($foot->alumnos_hombres, 0) }}</th>
+                <th style="background-color:#317eeb;color:#ffffff;text-align:center;">{{ number_format($foot->alumnos_mujeres, 0) }}</th>
+                <th style="background-color:#33b86c;color:#ffffff;text-align:center;">{{ number_format($foot->s, 1) }}%</th>
+                <th style="background-color:#ef5350;color:#ffffff;text-align:center;">{{ number_format($foot->p, 1) }}%</th>
+                <th style="background-color:#ffd740;color:#ffffff;text-align:center;">{{ number_format($foot->i, 1) }}%</th>
+                <th style="background-color:#6c757d;color:#ffffff;text-align:center;">{{ number_format($foot->a, 1) }}%</th>
             </tr>
         </tfoot>
     @else
