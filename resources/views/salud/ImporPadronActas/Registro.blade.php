@@ -49,8 +49,9 @@
 
 
 
+
         @if ($registrador > 0)
-            {{--  --}}
+            {{-- solo por municipios --}}
             <div class="col-lg-4 col-md-6 col-sm-6">
                 <h4 class="page-title font-16">HOMOLOGACION DE ACTAS</h4>
             </div>
@@ -58,35 +59,36 @@
 
             <div class="col-lg-3 col-md-2 col-sm-2">
                 <select id="vred" name="vred" class="form-control btn-xs font-11"
-                    onchange="cargarmicrored(),cargartabla2()">
+                    onchange="cargarmicrored(),cargarTablaMainM()">
                     <option value="0">RED</option>
                 </select>
             </div>
 
             <div class="col-lg-2 col-md-2 col-sm-2">
                 <select id="vmicrored" name="vmicrored" class="form-control btn-xs font-11"
-                    onchange="vcargareess();cargartabla2()">
+                    onchange="vcargareess();cargarTablaMainM()">
                     <option value="0">MICRORED</option>
                 </select>
             </div>
 
             <div class="col-lg-3 col-md-2 col-sm-2">
-                <select id="veess" name="veess" class="form-control btn-xs font-11" onchange="cargartabla2()">
+                <select id="veess" name="veess" class="form-control btn-xs font-11" onchange="cargarTablaMainM()">
                     <option value="0">ESTABLECIMIENTO</option>
                 </select>
             </div>
             {{-- <div class="col-lg-1 col-md-1 col-sm-1">
                 <input type="date" id="vfechaf" name="vfechaf" class="form-control btn-xs font-11"
                     value="{{ date('Y-m-d') }}"
-                    onchange="cargartabla()">
+                    onchange="cargarTablaMainO()">
             </div> --}}
         @else
+            {{-- para todos menos municipios --}}
             <div class="col-lg-4 col-md-6 col-sm-6">
                 <h4 class="page-title font-16">HOMOLOGACION DE ACTAS</h4>
             </div>
             <div class="col-lg-3 col-md-2 col-sm-2">
                 <select id="vmunicipio" name="vmunicipio" class="form-control btn-xs font-11"
-                    onchange="limpiarfiltros();cargarred(),cargartabla()">
+                    onchange="limpiarfiltros();cargarred();cargarTablaMainO();cargarTablaMainMensualM();">
 
                     @if ($muni->count() > 1)
                         <option value="0">MUNICIPIOS</option>
@@ -104,13 +106,13 @@
 
             <div class="col-lg-3 col-md-2 col-sm-2">
                 <select id="vred" name="vred" class="form-control btn-xs font-11"
-                    onchange="cargarmicrored(),cargartabla()">
+                    onchange="cargarmicrored(),cargarTablaMainO()">
                     <option value="0">RED</option>
                 </select>
             </div>
 
             <div class="col-lg-2 col-md-2 col-sm-2">
-                <select id="vmicrored" name="vmicrored" class="form-control btn-xs font-11" onchange="cargartabla()">
+                <select id="vmicrored" name="vmicrored" class="form-control btn-xs font-11" onchange="cargarTablaMainO()">
                     <option value="0">MICRORED</option>
                 </select>
             </div>
@@ -129,11 +131,11 @@
                                 <label for="vfechai" class="small mb-0 mr-2">Fecha&nbsp;Inicial&nbsp;</label>
                                 <input type="date" id="vfechai" name="vfechai"
                                     class="form-control form-control-sm font-11 mr-2" value="{{ date('Y-m-d') }}"
-                                    onchange="cargartabla()">
+                                    onchange="cargarTablaMainO();cargarTablaMainMensualM();">
                                 <label for="vfechaf" class="small mb-0 mr-2">Fecha&nbsp;Final&nbsp;</label>
                                 <input type="date" id="vfechaf" name="vfechaf"
                                     class="form-control form-control-sm font-11 mr-2" value="{{ date('Y-m-d') }}"
-                                    onchange="cargartabla()">
+                                    onchange="cargarTablaMainO();cargarTablaMainMensualM();">
                             @else
                                 <button class="btn btn-xs btn-primary waves-effect waves-light" data-toggle="modal"
                                     data-target="#modal_form" title="Agregar Actas" onclick="abrirnuevo()"> <i
@@ -216,10 +218,10 @@
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table id="tabla2" class="table table-sm table-striped table-bordered font-12 ">
-                            <thead class="cabecera-dataTable table-success-0 text-white"></thead>
+                        <table id="tabla2" class="table table-sm table-striped table-bordered font-12">
+                            {{-- <thead class="cabecera-dataTable table-success-0 text-white"></thead>
                             <tbody></tbody>
-                            <tfoot class="table-success-0 text-white"></tfoot>
+                            <tfoot class="table-success-0 text-white"></tfoot> --}}
                         </table>
                     </div>
 
@@ -399,22 +401,18 @@
             vcargareess();
 
             if (registrador == 0) {
-                cargartabla();
+                cargarTablaMainO(); //otros menos los municipios
             } else {
-                cargartabla2();
-                // datos();
+                cargarTablaMainM(); //solo 1 por municipio
             }
-            cargartabla2x();
-            // vcargaralert();
-
+            cargarTablaMainMensualM(); //por ahora todos
         });
 
-        function cargartabla() {
+        function cargarTablaMainO() {
             table_principal = $('#tabla').DataTable({
                 responsive: true,
                 autoWidth: false,
                 ordered: false,
-                destroy: true,
                 language: table_language,
                 destroy: true,
                 ajax: {
@@ -472,13 +470,12 @@
             });
         }
 
-        function cargartabla2() {
-            console.log('cargartabla2()');
+        function cargarTablaMainM() {
+            console.log('cargarTablaMainM()');
             table_principal = $('#tabla').DataTable({
                 responsive: true,
                 autoWidth: false,
                 ordered: false,
-                destroy: true,
                 language: table_language,
                 destroy: true,
                 ajax: {
@@ -538,7 +535,7 @@
             });
         }
 
-        function cargartabla2x() {
+        function cargarTablaMainMensualM() {
             $.ajax({
                 url: "{{ route('eess.listar.registro.2') }}",
                 data: {
@@ -546,8 +543,8 @@
                     'municipio': $('#vmunicipio').val(),
                     'red': $('#vred').val(),
                     'microred': $('#vmicrored').val(),
-                    'fechai': $('#vfechai').val(),
-                    'fechaf': $('#vfechaf').val(),
+                    // 'fechai': $('#vfechai').val(),
+                    // 'fechaf': $('#vfechaf').val(),
                     'eess': $('#veess').val(),
                     'anio': 2024,
                     'registrador': '{{ $registrador }}',
@@ -556,6 +553,9 @@
                 success: function(data) {
                     console.log(data);
                     $('#tabla2').html(data.tabla);
+                    $('#tabla2').DataTable({
+                        destroy: true,
+                    })
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);

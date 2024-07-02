@@ -116,8 +116,8 @@ class EstablecimientoController extends Controller
                         <th class="text-center">Nº</th>                                                                
                         <th class="text-center">CODIGO UNICO</th>
                         <th class="text-center">ESTABLECIMIENTO</th>';
-        foreach ($mes as $key => $value) {
-            $tabla .= '<th class="text-center">' . $value->abreviado . '</th>';
+        foreach ($mes as $key => $mm) {
+            $tabla .= '<th class="text-center">' . $mm->abreviado . '</th>';
         }
 
         $tabla .= '     <th class="text-center">ACCIÓN</th>
@@ -132,18 +132,18 @@ class EstablecimientoController extends Controller
             $tabla .= '<tr>';
             $tabla .= '<td class="text-center">' . ($key + 1) . '</td>';
             $tabla .= '<td class="text-center">' . $value->cod_unico . '</td>';
-            $tabla .= '<td class="text-center">' . $value->eess . '</td>';
+            $tabla .= '<td class="text-left">' . $value->eess . '</td>';
             foreach ($mes as $mm) {
                 $pa = PadronActas::from('sal_padron_actas as pa')
-                    ->select(DB::raw('sum(pa.nro_archivos) as conteo'))
+                    // ->select(DB::raw('sum(pa.nro_archivos) as conteo'))                    
                     ->join('sal_establecimiento as es', 'es.id', '=', 'pa.establecimiento_id')
                     ->join('sal_microred as mi', 'mi.id', '=', 'es.microrred_id')
                     ->join('sal_red as re', 're.id', '=', 'mi.red_id')
-                    // ->where('es.ubigeo_id', $rq->municipio);
                     ->where('pa.establecimiento_id', $value->id)
-                    ->where('pa.fecha_envio', 'like', $rq->anio . '-' . str_pad($mes, 2, '0', STR_PAD_LEFT) . '-%');
-                $pa = $pa->get()->first(); //->orderBy('fecha_envio')->get();
-                $tabla .= '<th class="text-center">' . $pa->conteo . '</th>';
+                    ->where('pa.fecha_envio', 'like', $rq->anio . '-' . str_pad($mm->codigo, 2, '0', STR_PAD_LEFT) . '-%');
+                // $pa = $pa->where('es.ubigeo_id', $value->municipio);
+                $pa = $pa->sum('pa.nro_archivos'); //->get();//->first(); //->orderBy('fecha_envio')->get();
+                $tabla .= '<td class="text-center">' . $pa . '</td>';
             }
             $tabla .= '<td class="text-center"></td>';
             $tabla .= '</tr>';
@@ -153,12 +153,17 @@ class EstablecimientoController extends Controller
         $tabla .= '<tfoot class="table-success-0 text-white">
                     <tr>
                         <td class="text-center" colspan="3">TOTAL</td>';
-        foreach ($mes as $key => $value) {
-            $tabla .= ' <td class="text-center tabla_tfoot">0</td>';
+        foreach ($mes as $key => $mm) {
+            $footPa = PadronActas::from('sal_padron_actas as pa')
+                ->where('pa.fecha_envio', 'like', $rq->anio . '-' . str_pad($mm->codigo, 2, '0', STR_PAD_LEFT) . '-%');
+            if ($rq->municipio > 0) $footPa = $footPa->where('pa.ubigeo_id', $rq->municipio);
+            $footPa = $footPa->sum('pa.nro_archivos');
+            
+            $tabla .= ' <td class="text-center">' . $footPa . '</td>';
         }
         $tabla .= '     <td class="text-center"></td>
                     </tr>
                 </tfoot>';
-        return response()->json(['query' => $query, 'tabla' => $tabla]);
+        return response()->json(['query' => $query, 'tabla' => $tabla, 'rq' => $rq->all(), 'x' => ($rq->municipio > 0)]);
     }
 }
