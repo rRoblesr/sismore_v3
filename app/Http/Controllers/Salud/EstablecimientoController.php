@@ -171,7 +171,7 @@ class EstablecimientoController extends Controller
         $tabla .= '</tbody>';
         $tabla .= '<tfoot class="table-success-0 text-white">
                     <tr>
-                        <td class="text-center" colspan="4">TOTAL</td>';
+                        <td class="text-center" colspan="4">TOTAL DE ACTAS POR MES</td>';
 
         foreach ($mes as $key => $mm) {
             if ($mm->codigo <= $mesA) {

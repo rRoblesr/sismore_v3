@@ -45,81 +45,109 @@
 @endsection
 
 @section('content')
+
     <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-header bg-success-0">
+                    <div class="card-widgets">
+                        {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="" title='XXX'><i
+                                class="fas fa-file"></i> Instituciones Educativas</button> --}}
+                        <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
+                            title='ACTUALIZAR'><i class=" fas fa-history"></i> Actualizar</button>
+                        @if ($registrador > 0)
+                            <button class="btn btn-xs btn-primary waves-effect waves-light" data-toggle="modal"
+                                data-target="#modal_form" title="Agregar Actas" onclick="abrirnuevo()"> <i
+                                    class="fa fa-file"></i>
+                                Nuevo</button> &nbsp;
+                        @endif
 
+                    </div>
+                    <h3 class="card-title text-white">
+                        ENTIDAD: {{ $ent->entidadn }}
+                    </h3>
+                </div>
+                <div class="card-body pb-0">
+                    <div class="row">
 
+                        @if ($registrador > 0)
+                            {{-- solo por municipios --}}
+                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                <h4 class="page-title font-16">HOMOLOGACION DE ACTAS</h4>
+                            </div>
+                            <input type="hidden" id="vmunicipio" name="vmunicipio"
+                                value="{{ $muni->count() == 1 ? $muni[0]->id : 0 }}">
 
+                            <div class="col-lg-3 col-md-2 col-sm-2">
+                                <select id="vred" name="vred" class="form-control form-control-sm font-11"
+                                    onchange="cargarmicrored(),cargarTablaMainM()">
+                                    <option value="0">RED</option>
+                                </select>
+                            </div>
 
-        @if ($registrador > 0)
-            {{-- solo por municipios --}}
-            <div class="col-lg-4 col-md-6 col-sm-6">
-                <h4 class="page-title font-16">HOMOLOGACION DE ACTAS</h4>
+                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                <select id="vmicrored" name="vmicrored" class="form-control form-control-sm font-11"
+                                    onchange="vcargareess();cargarTablaMainM()">
+                                    <option value="0">MICRORED</option>
+                                </select>
+                            </div>
+
+                            <div class="col-lg-3 col-md-2 col-sm-2">
+                                <select id="veess" name="veess" class="form-control form-control-sm font-11"
+                                    onchange="cargarTablaMainM()">
+                                    <option value="0">ESTABLECIMIENTO</option>
+                                </select>
+                            </div>
+                            {{-- <div class="col-lg-1 col-md-1 col-sm-1">
+                                <input type="date" id="vfechaf" name="vfechaf" class="form-control btn-xs font-11"
+                                    value="{{ date('Y-m-d') }}"
+                                    onchange="cargarTablaMainO()">
+                            </div> --}}
+                        @else
+                            {{-- para todos menos municipios --}}
+                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                <h4 class="page-title font-16">HOMOLOGACION DE ACTAS</h4>
+                            </div>
+                            <div class="col-lg-3 col-md-2 col-sm-2">
+                                <select id="vmunicipio" name="vmunicipio" class="form-control form-control-sm font-11"
+                                    onchange="limpiarfiltros();cargarred();cargarTablaMainO();cargarTablaMainMensualM();">
+
+                                    @if ($muni->count() > 1)
+                                        <option value="0">MUNICIPIOS</option>
+                                    @endif
+
+                                    @foreach ($muni as $item)
+                                        <option value="{{ $item->id }}">
+                                            {{ $item->codigo }}|
+                                            {{ $item->nombre }}
+                                        </option>
+                                    @endforeach
+
+                                </select>
+                            </div>
+
+                            <div class="col-lg-3 col-md-2 col-sm-2">
+                                <select id="vred" name="vred" class="form-control form-control-sm font-11"
+                                    onchange="cargarmicrored(),cargarTablaMainO();cargarTablaMainMensualM();">
+                                    <option value="0">RED</option>
+                                </select>
+                            </div>
+
+                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                <select id="vmicrored" name="vmicrored" class="form-control form-control-sm font-11"
+                                    onchange="cargarTablaMainO();cargarTablaMainMensualM();">
+                                    <option value="0">MICRORED</option>
+                                </select>
+                            </div>
+                        @endif
+
+                    </div>
+                </div>
             </div>
-            <input type="hidden" id="vmunicipio" name="vmunicipio" value="{{ $muni->count() == 1 ? $muni[0]->id : 0 }}">
-
-            <div class="col-lg-3 col-md-2 col-sm-2">
-                <select id="vred" name="vred" class="form-control btn-xs font-11"
-                    onchange="cargarmicrored(),cargarTablaMainM()">
-                    <option value="0">RED</option>
-                </select>
-            </div>
-
-            <div class="col-lg-2 col-md-2 col-sm-2">
-                <select id="vmicrored" name="vmicrored" class="form-control btn-xs font-11"
-                    onchange="vcargareess();cargarTablaMainM()">
-                    <option value="0">MICRORED</option>
-                </select>
-            </div>
-
-            <div class="col-lg-3 col-md-2 col-sm-2">
-                <select id="veess" name="veess" class="form-control btn-xs font-11" onchange="cargarTablaMainM()">
-                    <option value="0">ESTABLECIMIENTO</option>
-                </select>
-            </div>
-            {{-- <div class="col-lg-1 col-md-1 col-sm-1">
-                <input type="date" id="vfechaf" name="vfechaf" class="form-control btn-xs font-11"
-                    value="{{ date('Y-m-d') }}"
-                    onchange="cargarTablaMainO()">
-            </div> --}}
-        @else
-            {{-- para todos menos municipios --}}
-            <div class="col-lg-4 col-md-6 col-sm-6">
-                <h4 class="page-title font-16">HOMOLOGACION DE ACTAS</h4>
-            </div>
-            <div class="col-lg-3 col-md-2 col-sm-2">
-                <select id="vmunicipio" name="vmunicipio" class="form-control btn-xs font-11"
-                    onchange="limpiarfiltros();cargarred();cargarTablaMainO();cargarTablaMainMensualM();">
-
-                    @if ($muni->count() > 1)
-                        <option value="0">MUNICIPIOS</option>
-                    @endif
-
-                    @foreach ($muni as $item)
-                        <option value="{{ $item->id }}">
-                            {{ $item->codigo }}|
-                            {{ $item->nombre }}
-                        </option>
-                    @endforeach
-
-                </select>
-            </div>
-
-            <div class="col-lg-3 col-md-2 col-sm-2">
-                <select id="vred" name="vred" class="form-control btn-xs font-11"
-                    onchange="cargarmicrored(),cargarTablaMainO();cargarTablaMainMensualM();">
-                    <option value="0">RED</option>
-                </select>
-            </div>
-
-            <div class="col-lg-2 col-md-2 col-sm-2">
-                <select id="vmicrored" name="vmicrored" class="form-control btn-xs font-11"
-                    onchange="cargarTablaMainO();cargarTablaMainMensualM();">
-                    <option value="0">MICRORED</option>
-                </select>
-            </div>
-        @endif
-
+        </div>
     </div>
+
+
 
     @if ($registrador > 0)
         {{-- tabla 1 --}}
@@ -129,21 +157,7 @@
                     <div class="card-header border-success-0 bg-transparent">
                         <div class="card-widgets d-flex">
                             <div class="d-flex align-items-center">
-                                @if ($registrador == 0)
-                                    <label for="vfechai" class="small mb-0 mr-2">Fecha&nbsp;Inicial&nbsp;</label>
-                                    <input type="date" id="vfechai" name="vfechai"
-                                        class="form-control form-control-sm font-11 mr-2" value="{{ date('Y-m-d') }}"
-                                        onchange="cargarTablaMainO();cargarTablaMainMensualM();">
-                                    <label for="vfechaf" class="small mb-0 mr-2">Fecha&nbsp;Final&nbsp;</label>
-                                    <input type="date" id="vfechaf" name="vfechaf"
-                                        class="form-control form-control-sm font-11 mr-2" value="{{ date('Y-m-d') }}"
-                                        onchange="cargarTablaMainO();cargarTablaMainMensualM();">
-                                @else
-                                    <button class="btn btn-xs btn-primary waves-effect waves-light" data-toggle="modal"
-                                        data-target="#modal_form" title="Agregar Actas" onclick="abrirnuevo()"> <i
-                                            class="fa fa-file"></i>
-                                        Nuevo</button> &nbsp;
-                                @endif
+
                                 <button class="btn btn-xs btn-success" title="DESCARGAR EXCEL" onclick="descargar1()">
                                     <i class="fa fa-file-excel"></i></button>
                             </div>
@@ -182,7 +196,7 @@
                                 @if ($registrador > 0)
                                     <tfoot class="table-success-0 text-white">
                                         <tr>
-                                            <td class="text-center" colspan="6">TOTAL DE ARCHIVOS</td>
+                                            <td class="text-center" colspan="6">TOTAL DE ACTAS REGISTRADAS</td>
                                             <td class="text-center tabla_tfoot">0</td>
                                             <td class="text-center"></td>
                                         </tr>
@@ -190,7 +204,7 @@
                                 @else
                                     <tfoot class="table-success-0 text-white">
                                         <tr>
-                                            <td class="text-center" colspan="5">TOTAL DE ARCHIVOS</td>
+                                            <td class="text-center" colspan="5">TOTAL DE ACTAS REGISTRADAS</td>
                                             <td class="text-center tabla_tfoot">0</td>
                                             <td class="text-center"></td>
                                         </tr>
@@ -216,7 +230,7 @@
                                     <i class="fa fa-file-excel"></i></button>
                             </div>
                         </div>
-                        <h4 class="card-title p-0">lista de actas [ {{ $ent->entidadn }} ]</h4>
+                        <h4 class="card-title p-0">lista de Establecimientos</h4>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive" id="vtabla2">
@@ -233,7 +247,7 @@
         </div> <!-- End row -->
     @endif
 
-    
+
     <!-- Bootstrap modal -->
     <div id="modal_form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true" style="display: none;">
@@ -405,11 +419,12 @@
             vcargareess();
 
             if (registrador == 0) {
-                cargarTablaMainO(); //otros menos los municipios
+                cargarTablaMainMensualM(); //por ahora todos
+                // cargarTablaMainO(); //otros menos los municipios
             } else {
                 cargarTablaMainM(); //solo 1 por municipio
             }
-            cargarTablaMainMensualM(); //por ahora todos
+            
         });
 
         function cargarTablaMainO() {
@@ -505,7 +520,7 @@
                     },
                     {
                         targets: 2,
-                        className: 'text-center'
+                        className: 'text-left'
                     },
                     {
                         targets: 3,
