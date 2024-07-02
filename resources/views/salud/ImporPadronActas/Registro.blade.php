@@ -217,12 +217,12 @@
                     <h4 class="card-title p-0">lista de actas [ {{ $ent->entidadn }} ]</h4>
                 </div>
                 <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table id="tabla2" class="table table-sm table-striped table-bordered font-12">
+                    <div class="table-responsive" id="vtabla2">
+                        {{-- <table id="tab-la2" class="table table-sm table-striped table-bordered font-12"> --}}
                             {{-- <thead class="cabecera-dataTable table-success-0 text-white"></thead>
                             <tbody></tbody>
                             <tfoot class="table-success-0 text-white"></tfoot> --}}
-                        </table>
+                        {{-- </table> --}}
                     </div>
 
                 </div>
@@ -552,10 +552,10 @@
                 type: 'GET',
                 success: function(data) {
                     console.log(data);
-                    $('#tabla2').html(data.tabla);
+                    $('#vtabla2').html(data.tabla);
                     $('#tabla2').DataTable({
                         destroy: true,
-                    })
+                    });
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
