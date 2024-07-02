@@ -1311,7 +1311,7 @@
                         <option value = '50'> 50</option>
                         <option value = '100'>100</option>
                         <option value = '-1'>Todos</option>
-                        </select>` + " registros por página",
+                        </select>` + " registros",// por página
             "info": "Mostrando la página _PAGE_ de _PAGES_",
             "infoEmpty": "No records available",
             "infoFiltered": "(Filtrado de _MAX_ registros totales)",

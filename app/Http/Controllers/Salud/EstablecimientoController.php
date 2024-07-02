@@ -118,24 +118,26 @@ class EstablecimientoController extends Controller
                 <thead class="cabecera-dataTable table-success-0 text-white">
                     <tr>
                         <th class="text-center">Nº</th>                                                                
+                        <th class="text-center">MUNICIPALIDAD</th>
                         <th class="text-center">CODIGO UNICO</th>
                         <th class="text-center">ESTABLECIMIENTO</th>';
         foreach ($mes as $key => $mm) {
             $tabla .= '<th class="text-center">' . $mm->abreviado . '</th>';
         }
 
-        $tabla .= '     <th class="text-center">ACCIÓN</th>
+        $tabla .= '     <th class="text-center">TOTAL</th>
                     </tr>
                 </thead>
                 <tbody>';
 
-        $query = EstablecimientoRepositorio::listar(2, $rq->municipio, $rq->red, $rq->microred);
+        $query = EstablecimientoRepositorio::listarMunicipalidades(2, $rq->municipio, $rq->red, $rq->microred);
 
         foreach ($query as $key => $value) {
             $tabla .= '<tr>';
             $tabla .= '<td class="text-center">' . ($key + 1) . '</td>';
+            $tabla .= '<td class="text-left">' . $value->muni . '</td>';
             $tabla .= '<td class="text-center">' . $value->cod_unico . '</td>';
-            $tabla .= '<td class="text-left">' . $value->eess . '</td>';
+            $tabla .= '<td class="text-left table-success text-dark">' . $value->eess . '</td>';
             foreach ($mes as $mm) {
                 if ($mm->codigo <= $mesA) {
                     $conteo = PadronActas::from('sal_padron_actas as pa')
@@ -151,14 +153,25 @@ class EstablecimientoController extends Controller
                     $tabla .= '<td class="text-center"></td>';
                 }
             }
-            $tabla .= '<td class="text-center"></td>';
+
+            $conteo = PadronActas::from('sal_padron_actas as pa')
+                ->join('sal_establecimiento as es', 'es.id', '=', 'pa.establecimiento_id')
+                ->join('sal_microred as mi', 'mi.id', '=', 'es.microrred_id')
+                ->join('sal_red as re', 're.id', '=', 'mi.red_id')
+                ->where('pa.establecimiento_id', $value->id)
+                ->where('pa.fecha_envio', 'like', $rq->anio . '-%');                
+            $conteo = $conteo->sum('pa.nro_archivos');
+
+            if ($conteo == 0) $tabla .= '<td class="text-center text-danger table-purple">' . $conteo . '</td>';
+            else $tabla .= '<td class="text-center text-primary font-weight-bold table-purple">' . $conteo . '</td>';
+            // $tabla .= '<td class="text-center">' . $conteo . '</td>';
             $tabla .= '</tr>';
         }
 
         $tabla .= '</tbody>';
         $tabla .= '<tfoot class="table-success-0 text-white">
                     <tr>
-                        <td class="text-center" colspan="3">TOTAL</td>';
+                        <td class="text-center" colspan="4">TOTAL</td>';
 
         foreach ($mes as $key => $mm) {
             if ($mm->codigo <= $mesA) {
