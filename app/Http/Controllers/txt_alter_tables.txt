@@ -1664,6 +1664,27 @@ update `edu_impor_evaluacion_muestral` set caracteristica='UNIDOCENTE / MULTIGRA
 ########################
 select aa.dni dnix,concat(aa.nombres,' ',aa.apellido_paterno,' ',aa.apellido_materno) alumnox,ie.cod_mod cod_modular, ie.nombre_ie iiee,sum(if(ss.estado='SI',1,0)) si,sum(if(ss.estado='NO',1,0)) no, if(sum(if(ss.estado='SI',1,0))>21,'SI','NO') CUMPLE from alumno aa inner join iiee ie on ie.id=aa.iiee_id inner join seguimiento ss on ss.alumno=aa.id group by cod_modular,iiee,dnix,alumnox;
 
+############################
+
+CREATE TABLE `datax1` (
+id int(11) auto_increment primary key,
+nombre_pronoei varchar(100) NULL DEFAULT NULL,
+codi_modular varchar(10) NULL DEFAULT NULL,
+seccion varchar(100) NULL DEFAULT NULL,
+direccion varchar(100) NULL DEFAULT NULL,
+profesora_coordinadora varchar(100) NULL DEFAULT NULL,
+celular_prof_coord varchar(10) NULL DEFAULT NULL,
+nombre_promotora varchar(100) NULL DEFAULT NULL,
+celular_promotora varchar(20) NULL DEFAULT NULL,
+apellido_nombre_alumno varchar(100) NULL DEFAULT NULL,
+dni varchar(12) NULL DEFAULT NULL,
+fecha_nacimiento varchar(10) NULL DEFAULT NULL,
+red_interviene varchar(100) NULL DEFAULT NULL,
+microred_interviene varchar(100) NULL DEFAULT NULL,
+eess_interviene varchar(100) NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+##########################################
 
 
 
