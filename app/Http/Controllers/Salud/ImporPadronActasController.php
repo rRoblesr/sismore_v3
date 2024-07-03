@@ -491,13 +491,19 @@ class ImporPadronActasController extends Controller
         return response()->json($result);
     }
 
-  
+
     private function _registro_validate($request)
     {
         $data = array();
         $data['error_string'] = array();
         $data['inputerror'] = array();
         $data['status'] = TRUE;
+
+        if ($request->mfeess == 0) {
+            $data['inputerror'][] = 'mfeess';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
 
         if ($request->mffechai == '') {
             $data['inputerror'][] = 'mffechai';
@@ -507,13 +513,13 @@ class ImporPadronActasController extends Controller
 
         if ($request->mffechaf == '') {
             $data['inputerror'][] = 'mffechaf';
-            $data['error_string'][] = 'No hay codigos modulares.';
+            $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
         }
 
         if ($request->mffechae == '') {
             $data['inputerror'][] = 'mffechae';
-            $data['error_string'][] = 'No hay codigos modulares.';
+            $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
         }
 

@@ -1686,7 +1686,23 @@ eess_interviene varchar(100) NULL DEFAULT NULL
 
 ##########################################
 
+uniendo 2 tablas de pronoei
 
+SELECT
+    t1.cod_modular,
+    t1.conteo1,
+    t2.conteo2
+FROM
+    (SELECT ie.cod_mod cod_modular, COUNT(aa.id) conteo1
+     FROM alumno aa
+     INNER JOIN iiee ie ON ie.id=aa.iiee_id
+     GROUP BY ie.cod_mod) t1
+LEFT JOIN
+    (SELECT LPAD(codi_modular, 7, '0') cod_modular, COUNT(id) conteo2
+     FROM datax1
+     GROUP BY cod_modular) t2
+ON t1.cod_modular = t2.cod_modular
+ORDER BY t1.cod_modular;
 
 
 
