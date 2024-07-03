@@ -491,7 +491,7 @@ class ImporPadronActasController extends Controller
         return response()->json($result);
     }
 
-  
+
     private function _registro_validate($request)
     {
         $data = array();
@@ -606,10 +606,10 @@ class ImporPadronActasController extends Controller
         return response()->json($result);
     }
 
-    public function registro_download($municipio, $red, $microred, $fechai, $fechaf, $registrador)
+    public function registro_download($div, $anio, $municipio, $red, $microred, $fechai, $fechaf, $registrador)
     {
         $name = 'Padron Actas por Establecimientos ' . date('Y-m-d') . '.xlsx';
-        return Excel::download(new RegistroActasHomologadasEESSExport($municipio, $red, $microred, $fechai, $fechaf, $registrador), $name);
+        return Excel::download(new RegistroActasHomologadasEESSExport($div, $anio,  $municipio, $red, $microred, $fechai, $fechaf, $registrador), $name);
     }
 
     public function registro_alerta(Request $rq)

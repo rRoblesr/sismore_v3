@@ -162,7 +162,7 @@
                                     <i class="fa fa-file-excel"></i></button>
                             </div>
                         </div>
-                        <h4 class="card-title p-0">lista de actas [ {{ $ent->entidadn }} ]</h4>
+                        <h4 class="card-title p-0">Lista de actas registradas por Establecimientos</h4>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
@@ -226,7 +226,7 @@
                     <div class="card-header border-success-0 bg-transparent">
                         <div class="card-widgets d-flex">
                             <div class="d-flex align-items-center">
-                                <button class="btn btn-xs btn-success" title="DESCARGAR EXCEL" onclick="descargar2()">
+                                <button class="btn btn-xs btn-success" title="DESCARGAR EXCEL" onclick="descargarO()">
                                     <i class="fa fa-file-excel"></i></button>
                             </div>
                         </div>
@@ -424,7 +424,7 @@
             } else {
                 cargarTablaMainM(); //solo 1 por municipio
             }
-            
+
         });
 
         function cargarTablaMainO() {
@@ -716,8 +716,6 @@
             });
         }
 
-
-
         function limpiarfiltros() {
             $('#vred').val('0');
             $('#vmicrored').val('0');
@@ -1000,9 +998,15 @@
 
         function descargar1() {
             // window.open("{{ url('/') }}/Man/SFL/Download/EXCEL/" + $('#ugel').val() + "/" + $('#provincia').val() + "/" + $('#distrito').val() + "/" + $('#estado').val());
-            window.open("{{ route('imporpadronactas.registro.excel', ['', '', '', '', '', '']) }}/" + $('#vmunicipio')
+            {{-- window.open("{{ route('imporpadronactas.registro.excel', ['', '', '', '', '', '']) }}/" + $('#vmunicipio')
                 .val() + "/" + $('#vred').val() + "/" + $('#vmicrored').val() + "/" + $('#vfechai').val() + "/" +
-                $('#vfechaf').val() + "/{{ $registrador }}");
+                $('#vfechaf').val() + "/{{ $registrador }}"); --}}
+        }
+
+        function descargarO() {
+            window.open("{{ route('imporpadronactas.registro.excel', ['', '', '', '', '', '', '', '']) }}/otros/2024/" +
+                $('#vmunicipio').val() + "/" + $('#vred').val() + "/" + $('#vmicrored').val() +
+                "/0/0/{{ $registrador }}");
         }
 
         function formatofechax(fechaISO) {
