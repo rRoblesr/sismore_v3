@@ -34,10 +34,10 @@ class SaludPadronNominalSeguimiento extends Controller
         // return compact('sector', 'nivel', 'codigo');
 
         $codigo_institucion = ($cod_2000 == "NULL") ?  '0' : $cod_2000;
-        //$codigo_institucion = ($sector == "MI") ? '250101' : $codigo_institucion;
+        $codigo_institucion = ($sector == "MI") ? '250101' : $codigo_institucion;
         $nombre_columna = $this->columna($sector, $nivel); //  ($sector == '14') ? "re.cod_2000" : "re.ubigeo";
 
-        $dato_ipress = DB::table('m_establecimiento as re')->select('re.cod_2000', 're.nom_est', 're.cod_mic', 're.nom_mic', 're.cod_red', 're.nom_red')->where($nombre_columna, $codigo)->first();
+        $dato_ipress = DB::table('m_establecimiento as re')->select('re.cod_2000', 're.nom_est', 're.cod_mic', 're.nom_mic', 're.cod_red', 're.nom_red')->where($nombre_columna, $codigo_institucion)->first();
 
         // return compact('sector', 'nivel', 'codigo', 'codigo_institucion', 'cod_2000', 'nombre_columna', 'dato_ipress');
 
@@ -86,6 +86,13 @@ class SaludPadronNominalSeguimiento extends Controller
                 default:
                     return "";
             }
+        } else if ($sector == '22') {
+            switch ($nivel) {
+                case '2':
+                    return "re.ubigeo";
+                default:
+                    return "";
+            }
         }
     }
 
@@ -100,6 +107,7 @@ class SaludPadronNominalSeguimiento extends Controller
         $codigo = session('usuario_codigo_institucion');
 
         $codigo_institucion = ($cod_2000 == "NULL") ? '0' : $cod_2000;
+        $codigo_institucion = ($sector == "22") ? $codigo : $codigo_institucion;
         $nombre_columna =  ($sector == '14') ? "renaes" : "ubigeo";
         //echo $nombre_columna." - ".$codigo_institucion;
         $query = PadronNominalRepositorioSalud::Listar_PadronSabana($nombre_columna, $codigo_institucion, $id_grupo);

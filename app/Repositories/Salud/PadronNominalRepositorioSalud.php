@@ -13,9 +13,20 @@ class PadronNominalRepositorioSalud
         if ($sector == '2' or $sector == '14') //
             $query->where($nombre_columna, $codigo_institucion);
         if ($sector == '22') { //midis
-            $query->join('sal_padron_juntos as v2', function ($join) {
-                $join->on('v1.dni', '=', 'v2.dni_mo');
-            });
+            // $query->join('sal_padron_juntos as v2', function ($join) {
+            //     $join->on('v1.dni', '=', 'v2.dni_mo');
+            // });
+            if ($codigo_institucion == '005') {
+                $query->join('sal_padron_juntos as v2', function ($join) {
+                    $join->on('v1.dni', '=', 'v2.dni_mo');
+                });
+            } else {
+                if ($codigo_institucion == '003') {
+                    $query->join('sal_padron_cunamas as v2', function ($join) {
+                        $join->on('v1.dni', '=', 'v2.dni_mo');
+                    });
+                }
+            }
         }
         if ($id_grupo == 1) {
             $query->where('edad_anio', 0)->where('edad_mes', 0);
