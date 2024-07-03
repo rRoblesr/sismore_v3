@@ -232,6 +232,6 @@ class EstablecimientoRepositorio
         $tabla .= '     <td class="text-center text-dark font-weight-bold">' . $conteo . '</td>
                     </tr>
                 </tfoot></table>';
-        return compact('tabla');
+        return $tabla;
     }
 }

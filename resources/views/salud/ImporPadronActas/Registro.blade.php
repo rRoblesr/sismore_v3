@@ -158,7 +158,7 @@
                         <div class="card-widgets d-flex">
                             <div class="d-flex align-items-center">
 
-                                <button class="btn btn-xs btn-success" title="DESCARGAR EXCEL" onclick="descargar1()">
+                                <button class="btn btn-xs btn-success" title="DESCARGAR EXCEL" onclick="descargarO()">
                                     <i class="fa fa-file-excel"></i></button>
                             </div>
                         </div>
