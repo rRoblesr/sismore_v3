@@ -117,7 +117,7 @@ class EstablecimientoController extends Controller
         $tabla = '<table id="tabla2" class="table table-sm table-striped table-bordered font-12">
                 <thead class="cabecera-dataTable table-success-0 text-white">
                     <tr>
-                        <th class="text-center">Nº</th>                                                                
+                        <th class="text-center">Nº</th>
                         <th class="text-center">MUNICIPALIDAD</th>
                         <th class="text-center">CODIGO UNICO</th>
                         <th class="text-center">ESTABLECIMIENTO</th>';
@@ -136,7 +136,7 @@ class EstablecimientoController extends Controller
             $tabla .= '<tr>';
             $tabla .= '<td class="text-center">' . ($key + 1) . '</td>';
             $tabla .= '<td class="text-left">' . $value->muni . '</td>';
-            $tabla .= '<td class="text-center">' . $value->cod_unico . '</td>';
+            $tabla .= '<td class="text-center">' . sprintf('%08d', $value->cod_unico) . '</td>';
             $tabla .= '<td class="text-left table-success text-dark">' . $value->eess . '</td>';
             foreach ($mes as $mm) {
                 if ($mm->codigo <= $mesA) {
@@ -159,7 +159,7 @@ class EstablecimientoController extends Controller
                 ->join('sal_microred as mi', 'mi.id', '=', 'es.microrred_id')
                 ->join('sal_red as re', 're.id', '=', 'mi.red_id')
                 ->where('pa.establecimiento_id', $value->id)
-                ->where('pa.fecha_envio', 'like', $rq->anio . '-%');                
+                ->where('pa.fecha_envio', 'like', $rq->anio . '-%');
             $conteo = $conteo->sum('pa.nro_archivos');
 
             if ($conteo == 0) $tabla .= '<td class="text-center text-danger table-purple">' . $conteo . '</td>';
@@ -184,7 +184,11 @@ class EstablecimientoController extends Controller
                 $tabla .= '<td class="text-center"></td>';
             }
         }
-        $tabla .= '     <td class="text-center"></td>
+
+        $conteo = PadronActas::where('sal_padron_actas.fecha_envio', 'like', $rq->anio . '-%');
+        if ($rq->municipio > 0) $conteo = $conteo->where('sal_padron_actas.ubigeo_id', '=', $rq->municipio);
+        $conteo = $conteo->sum('sal_padron_actas.nro_archivos');
+        $tabla .= '     <td class="text-center text-dark font-weight-bold">' . $conteo . '</td>
                     </tr>
                 </tfoot></table>';
         return response()->json(['query' => $query, 'tabla' => $tabla, 'rq' => $rq->all()]);

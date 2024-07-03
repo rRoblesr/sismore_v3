@@ -10,6 +10,8 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
 class RegistroActasHomologadasEESSExport implements FromView, ShouldAutoSize
 {
+    public $div;
+    public $anio;
     public $municipio;
     public $red;
     public $microred;
@@ -17,8 +19,10 @@ class RegistroActasHomologadasEESSExport implements FromView, ShouldAutoSize
     public $fechaf;
     public $registrador;
 
-    public function __construct($municipio, $red, $microred, $fechai, $fechaf, $registrador)
+    public function __construct($div, $anio, $municipio, $red, $microred, $fechai, $fechaf, $registrador)
     {
+        $this->div = $div;
+        $this->anio = $anio;
         $this->municipio = $municipio;
         $this->red = $red;
         $this->microred = $microred;
@@ -29,7 +33,15 @@ class RegistroActasHomologadasEESSExport implements FromView, ShouldAutoSize
 
     public function view(): View
     {
-        $base = EstablecimientoRepositorio::registroList($this->municipio, $this->red, $this->microred, $this->fechai, $this->fechaf, $this->registrador);
-        return view('salud.ImporPadronActas.RegistroTabla1excelExport', compact('base'));
+        if ($this->div == 'otros') {
+            $base = EstablecimientoRepositorio::otros($this->anio, $this->municipio, $this->red, $this->microred, $this->fechai, $this->fechaf, $this->registrador);
+            return view('salud.ImporPadronActas.RegistroTablaOexcelExport', compact('base'));
+        } else if ($this->div == 'municipalidad') {
+            $base = EstablecimientoRepositorio::registroList($this->municipio, $this->red, $this->microred, $this->fechai, $this->fechaf, $this->registrador);
+            return view('salud.ImporPadronActas.RegistroTabla1excelExport', compact('base'));
+        } else {
+            $base = EstablecimientoRepositorio::registroList($this->municipio, $this->red, $this->microred, $this->fechai, $this->fechaf, $this->registrador);
+            return view('salud.ImporPadronActas.RegistroTabla1excelExport', compact('base'));
+        }
     }
 }

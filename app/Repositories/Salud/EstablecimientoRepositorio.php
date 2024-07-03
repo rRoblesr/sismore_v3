@@ -2,7 +2,9 @@
 
 namespace App\Repositories\Salud;
 
+use App\Models\Parametro\Mes;
 use App\Models\Salud\Establecimiento;
+use App\Models\Salud\PadronActas;
 use Illuminate\Support\Facades\DB;
 
 class EstablecimientoRepositorio
@@ -145,5 +147,91 @@ class EstablecimientoRepositorio
         // if (!$red > 0 && !$microred > 0) $query = $query->where('re.id', $red);
         $query = $query->orderBy('en.nombre')->orderBy('re.codigo')->orderBy('mi.codigo')->orderBy('es.nombre_establecimiento')->get();
         return $query;
+    }
+
+    public static function otros($anio, $municipio, $red, $microred, $fechai, $fechaf, $registrador)
+    {
+        $mes = Mes::all();
+        $anioA = date('Y');
+        $mesA = $anio == date('Y') ? date('m') : 12;
+
+        $tabla = '<table id="tabla2" class="table table-sm table-striped table-bordered font-12">
+                <thead class="cabecera-dataTable table-success-0 text-white">
+                    <tr>
+                        <th class="text-center">Nº</th>
+                        <th class="text-center">MUNICIPALIDAD</th>
+                        <th class="text-center">CODIGO UNICO</th>
+                        <th class="text-center">ESTABLECIMIENTO</th>';
+        foreach ($mes as $key => $mm) {
+            $tabla .= '<th class="text-center">' . $mm->abreviado . '</th>';
+        }
+
+        $tabla .= '     <th class="text-center">TOTAL</th>
+                    </tr>
+                </thead>
+                <tbody>';
+
+        $query = EstablecimientoRepositorio::listarMunicipalidades(2, $municipio, $red, $microred);
+
+        foreach ($query as $key => $value) {
+            $tabla .= '<tr>';
+            $tabla .= '<td class="text-center">' . ($key + 1) . '</td>';
+            $tabla .= '<td class="text-left">' . $value->muni . '</td>';
+            $tabla .= '<td class="text-center">' . sprintf('%08d', $value->cod_unico) . '</td>';
+            $tabla .= '<td class="text-left table-success text-dark">' . $value->eess . '</td>';
+            foreach ($mes as $mm) {
+                if ($mm->codigo <= $mesA) {
+                    $conteo = PadronActas::from('sal_padron_actas as pa')
+                        ->join('sal_establecimiento as es', 'es.id', '=', 'pa.establecimiento_id')
+                        ->join('sal_microred as mi', 'mi.id', '=', 'es.microrred_id')
+                        ->join('sal_red as re', 're.id', '=', 'mi.red_id')
+                        ->where('pa.establecimiento_id', $value->id)
+                        ->where('pa.fecha_envio', 'like', $anio . '-' . str_pad($mm->codigo, 2, '0', STR_PAD_LEFT) . '-%');
+                    $conteo = $conteo->sum('pa.nro_archivos');
+                    if ($conteo == 0) $tabla .= '<td class="text-center text-danger">' . $conteo . '</td>';
+                    else $tabla .= '<td class="text-center text-primary font-weight-bold">' . $conteo . '</td>';
+                } else {
+                    $tabla .= '<td class="text-center"></td>';
+                }
+            }
+
+            $conteo = PadronActas::from('sal_padron_actas as pa')
+                ->join('sal_establecimiento as es', 'es.id', '=', 'pa.establecimiento_id')
+                ->join('sal_microred as mi', 'mi.id', '=', 'es.microrred_id')
+                ->join('sal_red as re', 're.id', '=', 'mi.red_id')
+                ->where('pa.establecimiento_id', $value->id)
+                ->where('pa.fecha_envio', 'like', $anio . '-%');
+            $conteo = $conteo->sum('pa.nro_archivos');
+
+            if ($conteo == 0) $tabla .= '<td class="text-center text-danger table-purple">' . $conteo . '</td>';
+            else $tabla .= '<td class="text-center text-primary font-weight-bold table-purple">' . $conteo . '</td>';
+            // $tabla .= '<td class="text-center">' . $conteo . '</td>';
+            $tabla .= '</tr>';
+        }
+
+        $tabla .= '</tbody>';
+        $tabla .= '<tfoot class="table-success-0 text-white">
+                    <tr>
+                        <td class="text-center" colspan="4">TOTAL DE ACTAS POR MES</td>';
+
+        foreach ($mes as $key => $mm) {
+            if ($mm->codigo <= $mesA) {
+                $conteo = PadronActas::where('sal_padron_actas.fecha_envio', 'like', $anio . '-' . str_pad($mm->codigo, 2, '0', STR_PAD_LEFT) . '-%');
+                if ($municipio > 0) $conteo = $conteo->where('sal_padron_actas.ubigeo_id', '=', $municipio);
+                $conteo = $conteo->sum('sal_padron_actas.nro_archivos');
+                if ($conteo == 0) $tabla .= ' <td class="text-center text-white font-weight-bold">' . $conteo . '</td>';
+                else $tabla .= ' <td class="text-center text-dark font-weight-bold">' . $conteo . '</td>';
+            } else {
+                $tabla .= '<td class="text-center"></td>';
+            }
+        }
+
+        $conteo = PadronActas::where('sal_padron_actas.fecha_envio', 'like', $anio . '-%');
+        if ($municipio > 0) $conteo = $conteo->where('sal_padron_actas.ubigeo_id', '=', $municipio);
+        $conteo = $conteo->sum('sal_padron_actas.nro_archivos');
+        $tabla .= '     <td class="text-center text-dark font-weight-bold">' . $conteo . '</td>
+                    </tr>
+                </tfoot></table>';
+        return $tabla;
     }
 }

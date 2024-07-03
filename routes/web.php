@@ -1198,7 +1198,7 @@ Route::post('/Salud/PadronActas/Save', [ImporPadronActasController::class, 'regi
 Route::post('/Salud/PadronActas/Update', [ImporPadronActasController::class, 'registro_update'])->name('imporpadronactas.registro.modificar');
 Route::get('/Salud/PadronActas/find/{id}', [ImporPadronActasController::class, 'registro_find'])->name('imporpadronactas.registro.find');
 Route::get('/Salud/PadronActas/Delete/{id}', [ImporPadronActasController::class, 'registro_delete'])->name('imporpadronactas.registro.eliminar');
-Route::get('/salud/PadronActas/Registro/Excel/{municipio}/{red}/{microred}/{fechai}/{fechaf}/{registrador}', [ImporPadronActasController::class, 'registro_download'])->name('imporpadronactas.registro.excel');
+Route::get('/salud/PadronActas/Registro/Excel/{div}/{anio}/{municipio}/{red}/{microred}/{fechai}/{fechaf}/{registrador}', [ImporPadronActasController::class, 'registro_download'])->name('imporpadronactas.registro.excel');
 
 Route::get('/Salud/PadronActas/Alerta', [ImporPadronActasController::class, 'registro_alerta'])->name('imporpadronactas.registro.alert.1');
 
