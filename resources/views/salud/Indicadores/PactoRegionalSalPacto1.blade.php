@@ -298,9 +298,10 @@
                             '');
                     } else if (div == "anal2") {
                         console.log(data.info);
-                        gLineaBasica2(div, data.info, '',
-                            'Numero de actas de homolagación registradas en el sistema de padrón nominal por mes',
-                            '');
+                        gColumn(div, data.info.cat, data.info.dat, '',
+                            'Numero de actas de homolagación registradas en el sistema de padrón nominal por mes'
+                        );
+                        // gLineaBasica2(div, data.info, '','Numero de actas de homolagación registradas en el sistema de padrón nominal por mes','');
                     } else if (div == "tabla1") {
                         $('#vtabla1').html(data.excel);
                         // $('#tabla1').DataTable({
@@ -584,6 +585,80 @@
                 exporting: {
                     enabled: true
                 },
+                credits: false,
+            });
+        }
+
+        function gColumn(div, categorias, datos, titulo, subtitulo) {
+            Highcharts.chart(div, {
+                chart: {
+                    type: 'column' // Cambia el tipo de 'line' a 'column'
+                },
+                title: {
+                    text: titulo, // 'Número de actas de homologación registradas en el sistema de padrón nominal por mes'
+                },
+                subtitle: {
+                    text: subtitulo // 'Número de actas de homologación registradas en el sistema de padrón nominal por mes'
+                },
+                xAxis: {
+                    categories: categorias, // ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SET', 'OCT', 'NOV', 'DIC']
+                    labels: {
+                        style: {
+                            fontSize: '10px'
+                        }
+                    },
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        enabled: false,
+                        // text: 'Número de actas'
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px'
+                        }
+                    }
+                },
+                plotOptions: {
+                    // column: {
+                    //     dataLabels: {
+                    //         enabled: true,
+                    //         format: '{y}'
+                    //     }
+                    // },
+                    series: {
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontSize: '10px',
+                                fontWeight: 'normal',
+                            }
+                        },
+                    }
+                },
+                tooltip: {
+                    shared: true,
+                    headerFormat: '<b>{point.key}</b><br/>',
+                    pointFormat: '{series.name}: {point.y}<br/>'
+                },
+                legend: {
+                    itemStyle: {
+                        //"color": "#333333",
+                        "cursor": "pointer",
+                        "fontSize": "10px",
+                        "fontWeight": "normal",
+                        "textOverflow": "ellipsis"
+                    },
+                },
+                series: datos,
+                /* [{
+                                   name: 'Actas Enviadas',
+                                   data: [76, 28, 53, 46, 100, 10, 0, 0, 0, 0, 0, 0]
+                               }, {
+                                   name: 'Actas Aprobadas',
+                                   data: [10, 8, 9, 9, 14, 10, 0, 0, 0, 0, 0, 0]
+                               }] */
                 credits: false,
             });
         }

@@ -345,6 +345,9 @@ class IndicadoresController extends Controller
                 $mesmax1 = $base1->max('name');
                 $mesmax2 = $base2->max('mes');
                 $limit = $rq->anio == 2023 ? IndicadoresController::$pacto1_mes : 0;
+
+                $x1 = [];
+                $x2 = [];
                 foreach ($mes as $mm) {
 
                     if ($mm->codigo >= $limit && $mm->codigo <= $mesmax1) {
@@ -371,10 +374,14 @@ class IndicadoresController extends Controller
                         $mm->y2 = null;
                     }
                     $info['cat'][] = $mm->mes;
-                    $info['dat'][] = $mm->y1;
-                    $info['dat2'][] = $mm->y2;
+                    // $info['dat'][] = $mm->y1;
+                    // $info['dat2'][] = $mm->y2;
+                    $x1[] = $mm->y1;
+                    $x2[] = $mm->y2;
                 }
-                return response()->json(compact('info', 'base1', 'base2', 'mes'));
+                $info['dat'] = [['name' => 'Actas Enviadas', 'data' => $x1], ['name' => 'Actas Aprobadas', 'data' => $x2]];
+                // return response()->json(compact('info', 'base1', 'base2', 'mes'));
+                return response()->json(compact('info'));
             case 'tabla1':
                 $base = IndicadorGeneralMetaRepositorio::getPacto1tabla1($rq->indicador, $rq->anio, $rq->mes);
 

@@ -1258,7 +1258,7 @@ Route::get('/ImporPoblacion/eliminar/{id}', [ImporPoblacionController::class, 'e
 
 
 /*********************************************** EJEMPLOS Y PRUEBAS ************************************************/
-Route::get('/pruebas', [PruebaController::class, 'prueba1']);
+Route::get('/pruebas/prueba', [PruebaController::class, 'prueba2']);
 
 Route::get('/recursos/login1', function () {
     $data = ImporDocentesBilingues::where(DB::raw('length(dni)'), '!=', 8)->get();
@@ -1304,7 +1304,7 @@ Route::get('/recursos/highcharts', function () {
 });
 
 Route::get('/recursos/pruebas', function () {
-    return view('prueba/prueba1');
+    return view('prueba/prueba2');
 });
 //Route::get('/indicadores/{codigo}', [Indicador-GeneralController::class, 'generarCodigo']);//prueba
 

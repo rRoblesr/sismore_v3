@@ -8,3 +8,8 @@ UPDATE `alumno` SET anemia=IF(round(rand()*1,0)=1,'SI','NO') WHERE 1;
 select date(from_unixtime((45169+1-25569)*86400));
 
 select lpad(floor(rand()*99999999),8,'0');
+
+UPDATE alumno aa
+INNER JOIN datax1 dd ON dd.dni = aa.dni 
+AND dd.codi_modular IN (3382012, 3989603, 0584458, 1695710, 0270850, 3877633)
+SET aa.fecha = DATE_FORMAT(STR_TO_DATE(dd.fecha_nacimiento, '%d/%m/%Y'), '%Y-%m-%d');

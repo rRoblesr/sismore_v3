@@ -38,8 +38,8 @@ class LoginRecordsController extends Controller
             $data[] = array(
                 $key + 1,
                 $usu->nombre . ', ' . $usu->apellido1 . ' ' . $usu->apellido2,
-                $ofi->entidadn,
-                $ofi->oficinan,
+                $ofi ? $ofi->entidadn : '',
+                $ofi ? $ofi->oficinan : '',
                 $value->login,
                 $value->logout,
             );
