@@ -50,7 +50,7 @@ class LogrosAprendizajeController extends Controller
                 if ($rq->curso != '0') {
                     $data = ImporEvaluacionMuestralRepositorio::EvaluacionMuestralReportesHead($rq->div, $rq->anio, $rq->nivel, $rq->grado, $rq->curso);
 
-                    $card1 = number_format($data->ponderado, 1);
+                    $card1 = number_format($data->ponderado, 0);
                     $card2 = number_format($data->satisfactorio, 1);
                     $card3 = number_format($data->evaluados, 0);
                     $card4 = number_format($data->locales, 0);
