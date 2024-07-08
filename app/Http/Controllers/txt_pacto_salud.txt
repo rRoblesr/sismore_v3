@@ -43,10 +43,11 @@ INSERT INTO `par_indicador_general_meta` (  `indicadorgeneral`,  `distrito`, `an
 #######################################################################################################
 
 CREATE TABLE `sal_data_pacto3` (
-    `id` int(11) auto_increment primary key,
+    id              int(11) auto_increment primary key,
     importacion_id	int(11)	NULL DEFAULT NULL,
-    cant	        int(11)	NULL DEFAULT NULL,
+    cantidad        int(11)	NULL DEFAULT NULL,
     distrito	    varchar(100)	NULL DEFAULT NULL,
     mes	            int(11)	NULL DEFAULT NULL,
-    anio	        int(11)	NULL DEFAULT NULL
+    anio	        int(11)	NULL DEFAULT NULL,
+    foreign key(importacion_id) references par_importacion(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

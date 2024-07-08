@@ -13,6 +13,7 @@ use App\Models\Parametro\FuenteImportacion;
 use App\Models\Parametro\Mes;
 use App\Models\Parametro\Ubigeo;
 use App\Models\Salud\DataPacto1;
+use App\Models\Salud\DataPacto3;
 use App\Models\Salud\ImporPadronActas;
 use App\Models\Salud\ImporPadronAnemia;
 use App\Models\Salud\PadronActas;
@@ -268,6 +269,82 @@ class ImporPadronActasController extends Controller
 
                 break;
 
+            case ImporPadronActasController::$FUENTE['pacto_3']:
+                $existeMismaFecha = ImportacionRepositorio::Importacion_PE($rq->fechaActualizacion, $rq->fuente);
+                if ($existeMismaFecha != null) {
+                    $mensaje = "Error, Ya existe archivos prendientes de aprobar para la fecha de versión ingresada";
+                    $this->json_output(400, $mensaje);
+                }
+
+                $existeMismaFecha = ImportacionRepositorio::Importacion_PR($rq->fechaActualizacion, $rq->fuente);
+                if ($existeMismaFecha != null) {
+                    $mensaje = "Error, Ya existe archivos procesados para la fecha de versión ingresada";
+                    $this->json_output(400, $mensaje);
+                }
+
+                $this->validate($rq, ['file' => 'required|mimes:xls,xlsx']);
+                $archivo = $rq->file('file');
+                $array = (new tablaXImport)->toArray($archivo);
+
+                if (count($array) != 1) {
+                    $this->json_output(400, 'Error de Hojas, Solo debe tener una HOJA, el LIBRO EXCEL');
+                }
+
+                try {
+                    foreach ($array as $value) {
+                        foreach ($value as $celda => $row) {
+                            if ($celda > 0) break;
+                            $cadena =
+                                $row['cant'] .
+                                $row['distrito'] .
+                                $row['mes'] .
+                                $row['anio'];
+                        }
+                    }
+                } catch (Exception $e) {
+                    $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto";
+                    $this->json_output(403, $mensaje);
+                }
+
+                try {
+                    $importacion = Importacion::Create([
+                        'fuenteImportacion_id' => $rq->fuente, // valor predeterminado
+                        'usuarioId_Crea' => auth()->user()->id,
+                        'fechaActualizacion' => $rq->fechaActualizacion,
+                        'estado' => 'PR'
+                    ]);
+
+                    foreach ($array as $key => $value) {
+                        foreach ($value as $row) {
+                            DataPacto3::Create([
+                                'importacion_id' => $importacion->id,
+                                'cantidad' => $row['cant'],
+                                'distrito' => $row['distrito'],
+                                'mes' => $row['mes'],
+                                'anio' => $row['anio'],
+                            ]);
+                        }
+                    }
+                } catch (Exception $e) {
+                    $importacion->estado = 'PE';
+                    $importacion->save();
+                    $mensaje = "Error en la carga de datos, verifique los datos de su archivo y/o comuniquese con el administrador del sistema" . $e->getMessage();
+                    $this->json_output(400, $mensaje);
+                }
+
+                // try {
+                //     DB::select('call sal_pa_procesarPacto1(?,?)', [$importacion->id, date('Y', strtotime($rq->fechaActualizacion))]);
+                // } catch (Exception $e) {
+                //     $mensaje = "Error al procesar la normalizacion de datos." . $e;
+                //     $tipo = 'danger';
+                //     $this->json_output(400, $mensaje);
+                // }
+
+                $mensaje = "Archivo excel subido y Procesado correctamente .";
+                $this->json_output(200, $mensaje, '');
+
+                break;
+
             default:
                 break;
         }
@@ -363,6 +440,8 @@ class ImporPadronActasController extends Controller
                 Importacion::find($id)->delete();
                 break;
             case 38:
+                DataPacto3::where('importacion_id', $id)->truncate();
+                Importacion::find($id)->delete();
                 break;
             case 39:
                 break;
