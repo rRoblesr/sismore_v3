@@ -215,10 +215,10 @@
                 <div class="col-lg-12">
                     <div class="card card-border border border-plomo-0">
                         <div class="card-header border-success-0 bg-transparent p-0">
-                            {{-- <div class="card-widgets">
+                            <div class="card-widgets">
                                 <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
                                         class="fa fa-file-excel"></i> Descargar</button>
-                            </div> --}}
+                            </div>
                             <h3 class="text-black font-14 mb-0">Evaluación de cumplimiento de los logros esperados por
                                 distrito
                             </h3>
@@ -297,11 +297,13 @@
                             'Acumulado mensual del registro de actas de homologacion en el sistema de padrón nominal',
                             '');
                     } else if (div == "anal2") {
-                        console.log(data.info);
-                        gColumn(div, data.info.cat, data.info.dat, '',
-                            'Numero de actas de homolagación registradas en el sistema de padrón nominal por mes'
-                        );
-                        // gLineaBasica2(div, data.info, '','Numero de actas de homolagación registradas en el sistema de padrón nominal por mes','');
+                        // console.log(data.info);
+                        // gColumn(div, data.info.cat, data.info.dat, '',
+                        //     'Numero de actas de homolagación registradas en el sistema de padrón nominal por mes'
+                        // );
+                        gLineaBasica2(div, data.info, '',
+                            'Numero de actas de homolagación registradas en el sistema de padrón nominal por mes',
+                            '');
                     } else if (div == "tabla1") {
                         $('#vtabla1').html(data.excel);
                         // $('#tabla1').DataTable({

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class pactoregional1Export implements FromView, ShouldAutoSize
+class pactoregionalSal2Export implements FromView, ShouldAutoSize
 {
     public $div;
     public $indicador;

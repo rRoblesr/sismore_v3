@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Salud;
 
 use App\Exports\pactoregional1Export;
+use App\Exports\pactoregional2Export;
+use App\Exports\pactoregionalSal1Export;
+use App\Exports\pactoregionalSal2Export;
 use App\Http\Controllers\Controller;
 use App\Models\Educacion\Area;
 use App\Models\Educacion\SFL;
@@ -337,7 +340,45 @@ class IndicadoresController extends Controller
                     $info['dat'][] = $value->y;
                 }
                 return response()->json(compact('info', 'mes', 'base', 'mesmax'));
-            case 'anal2':
+            case 'anal2': //lineas
+                $base1 = IndicadorGeneralMetaRepositorio::getPacto1Mensual($rq->anio, $rq->distrito);
+                $base2 = IndicadorGeneralMetaRepositorio::getPacto1Mensual2($rq->anio, $rq->distrito);
+                $info = [];
+                $mes = Mes::select('codigo', 'abreviado as mes')->get();
+                $mesmax1 = $base1->max('name');
+                $mesmax2 = $base2->max('mes');
+                $limit = $rq->anio == 2023 ? IndicadoresController::$pacto1_mes : 0;
+                foreach ($mes as $mm) {
+
+                    if ($mm->codigo >= $limit && $mm->codigo <= $mesmax1) {
+                        $mm->y1 = 0;
+                        foreach ($base1 as $bb1) {
+                            if ($bb1->name == $mm->codigo) {
+                                $mm->y1 = (int)$bb1->y;
+                                break;
+                            }
+                        }
+                    } else {
+                        $mm->y1 = null;
+                    }
+
+                    if ($mm->codigo >= $limit && $mm->codigo <= $mesmax2) {
+                        $mm->y2 = 0;
+                        foreach ($base2 as $bb2) {
+                            if ($bb2->mes == $mm->codigo) {
+                                $mm->y2 = (int)$bb2->y;
+                                break;
+                            }
+                        }
+                    } else {
+                        $mm->y2 = null;
+                    }
+                    $info['cat'][] = $mm->mes;
+                    $info['dat'][] = $mm->y1;
+                    $info['dat2'][] = $mm->y2;
+                }
+                return response()->json(compact('info'));
+            case 'anal2-b': //barras
                 $base1 = IndicadorGeneralMetaRepositorio::getPacto1Mensual($rq->anio, $rq->distrito);
                 $base2 = IndicadorGeneralMetaRepositorio::getPacto1Mensual2($rq->anio, $rq->distrito);
                 $info = [];
@@ -397,6 +438,48 @@ class IndicadoresController extends Controller
 
             default:
                 return [];
+        }
+    }
+
+    public function PactoRegionalSalPacto1Export(Request $rq)
+    {
+        if ($rq->distrito > 0) $ndis = Ubigeo::find($rq->distrito)->nombre;
+        else $ndis = '';
+        switch ($rq->div) {
+            // case 'tabla1':
+            //     $base = IndicadorGeneralMetaRepositorio::getPacto1tabla1($rq->indicador, $rq->anio, $rq->mes);
+
+            //     $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla1', compact('base', 'ndis'))->render();
+            //     return compact('excel', 'base');
+
+            case 'tabla2':
+                $base = IndicadorGeneralMetaRepositorio::getPacto1tabla2($rq->indicador, $rq->anio);
+                $aniob = $rq->anio;
+                $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla2Export', compact('base', 'ndis', 'aniob'))->render();
+                return compact('excel', 'base');
+
+
+            default:
+                return [];
+        }
+    }
+
+    public function PactoRegionalSalPacto1download($div, $indicador, $anio, $mes, $provincia, $distrito)
+    {
+        if ($anio > 0) {
+            switch ($div) {
+                // case 'tabla1':
+                //     $name = 'Listado de establecimientos de salud ' . date('Y-m-d') . '.xlsx';
+                //     break;
+                case 'tabla2':
+                    $name = 'Evaluación de cumplimiento de los logros esperados por distrito ' . date('Y-m-d') . '.xlsx';
+                    break;
+                default:
+                    $name = 'sin nombre.xlsx';
+                    break;
+            }
+
+            return Excel::download(new pactoregionalSal1Export($div, $indicador, $anio, $mes, $provincia, $distrito), $name);
         }
     }
 
@@ -573,7 +656,7 @@ class IndicadoresController extends Controller
                     break;
             }
 
-            return Excel::download(new pactoregional1Export($div, $indicador, $anio, $mes, $provincia, $distrito), $name);
+            return Excel::download(new pactoregionalSal2Export($div, $indicador, $anio, $mes, $provincia, $distrito), $name);
         }
     }
 
