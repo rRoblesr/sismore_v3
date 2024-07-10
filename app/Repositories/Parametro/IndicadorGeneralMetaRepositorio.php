@@ -213,7 +213,7 @@ class IndicadorGeneralMetaRepositorio
         $query = $query->join('par_ubigeo as dd', 'dd.id', '=', 'ubigeo');
         $query = $query->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia');
         if (IndicadoresController::$pacto1_anio == $anio) $query = $query->where('mes', '>=', IndicadoresController::$pacto1_mes);
-        if ($mes > 0) $query = $query->where('mes',  $mes);
+        // if ($mes > 0) $query = $query->where('mes', $mes);
         if ($distrito > 0) $query = $query->where('ubigeo',  $distrito);
         if ($provincia > 0) $query = $query->where('pp.id',  $provincia);
         $query = $query->groupBy('name')->orderBy('name')->get();
@@ -228,7 +228,7 @@ class IndicadorGeneralMetaRepositorio
             $queryx = ImporPadronAnemia::select(DB::raw('sum(den) as den'), DB::raw('sum(num) as num'), DB::raw('round(100*sum(num)/sum(den),1) as ind'))
                 ->where('anio', $value->anio)->where('ubigeo', $value->distrito_id);
             if ($mes > 0)
-                $queryx = $queryx->where('mes', $mes);
+                $queryx = $queryx->where('mes', '<=', $mes);
             if (IndicadoresController::$pacto1_anio == $anio)
                 $queryx = $queryx->where('mes', '>=', IndicadoresController::$pacto1_mes);
             $queryx = $queryx->get()->first();
@@ -251,7 +251,7 @@ class IndicadorGeneralMetaRepositorio
         $query = $query->join('par_ubigeo as dd', 'dd.id', '=', 'ubigeo');
         $query = $query->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia');
         if (IndicadoresController::$pacto1_anio == $anio) $query = $query->where('mes', '>=', IndicadoresController::$pacto1_mes);
-        if ($mes > 0) $query = $query->where('mes',  $mes);
+        if ($mes > 0) $query = $query->where('mes','<=',  $mes);
         if ($distrito > 0) $query = $query->where('ubigeo',  $distrito);
         if ($provincia > 0) $query = $query->where('pp.id',  $provincia);
         $query = $query->groupBy('idred', 'red')->get();
@@ -337,6 +337,7 @@ class IndicadorGeneralMetaRepositorio
             $anioxx = 2024;
             $query2 =  ImporPadronAnemia::where('anio', $anioxx)->select(DB::raw("round(100*sum(num)/sum(den),1) as conteo"))->where('ubigeo', $value->dis_id);
             if (IndicadoresController::$pacto1_anio == $anioxx) $query2 = $query2->where('mes', '>=', IndicadoresController::$pacto1_mes);
+            if ($mes > 0) $query2 = $query2->where('mes','<=',  $mes);
             $query2 = $query2->groupBy('ubigeo')->get();
             $value->r2024 = $query2->count() > 0 ? $query2->first()->conteo : 0;
             if ($anioxx == $anio) {

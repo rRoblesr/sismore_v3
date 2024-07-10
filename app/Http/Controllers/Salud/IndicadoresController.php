@@ -441,22 +441,20 @@ class IndicadoresController extends Controller
         }
     }
 
-    public function PactoRegionalSalPacto1Export(Request $rq)
+    public function PactoRegionalSalPacto1Export($div, $indicador, $anio, $mes, $provincia, $distrito)
     {
-        if ($rq->distrito > 0) $ndis = Ubigeo::find($rq->distrito)->nombre;
+        if ($distrito > 0) $ndis = Ubigeo::find($distrito)->nombre;
         else $ndis = '';
-        switch ($rq->div) {
+        switch ($div) {
             // case 'tabla1':
-            //     $base = IndicadorGeneralMetaRepositorio::getPacto1tabla1($rq->indicador, $rq->anio, $rq->mes);
-
+            //     $base = IndicadorGeneralMetaRepositorio::getPacto1tabla1($indicador, $anio, $mes);
             //     $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla1', compact('base', 'ndis'))->render();
             //     return compact('excel', 'base');
 
             case 'tabla2':
-                $base = IndicadorGeneralMetaRepositorio::getPacto1tabla2($rq->indicador, $rq->anio);
-                $aniob = $rq->anio;
-                $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla2Export', compact('base', 'ndis', 'aniob'))->render();
-                return compact('excel', 'base');
+                $base = IndicadorGeneralMetaRepositorio::getPacto1tabla2($indicador, $anio);
+                $aniob = $anio;
+                return compact('base', 'ndis', 'aniob');
 
 
             default:

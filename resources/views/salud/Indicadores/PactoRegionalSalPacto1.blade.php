@@ -387,8 +387,9 @@
         }
 
         function descargar1() {
-            window.open("{{ url('/') }}/INDICADOR/Home/01/Excel/tabla1/" + $('#anio').val() + "/" + $('#provincia')
-                .val() + "/" + $('#distrito').val() + "/" + $('#gestion').val() + "/0");
+            window.open(
+                "{{ route('salud.indicador.pactoregional.sal.pacto1.excel', ['', '', '', '', '', '']) }}/tabla2/{{ $ind->id }}/" +
+                $('#anio').val() + "/" + $('#mes').val() + "/" + $('#provincia').val() + "/" + $('#distrito').val());
         }
 
         function descargar2() {
