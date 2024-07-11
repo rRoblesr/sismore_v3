@@ -1316,7 +1316,7 @@ Route::get('/recursos/correo', function () {
         'message' => 'Este es el contenido del correo.'
     ];
 
-    Mail::to('raroblesr@gmail.com')->send(new MsnCorreo($data));
+    Mail::to('task.diresa@gmail.com')->send(new MsnCorreo($data));
     return 'ronald';
 });
 //Route::get('/indicadores/{codigo}', [Indicador-GeneralController::class, 'generarCodigo']);//prueba
