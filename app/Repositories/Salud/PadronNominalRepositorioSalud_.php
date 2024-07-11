@@ -10,22 +10,18 @@ class PadronNominalRepositorioSalud
     {
         $sector = session('usuario_sector');
         $query = DB::table('sal_sabana_nino as v1');
-        if ($sector == '2' || $sector == '14') 
-        {   $query->join('m_establecimiento as re', function ($join) {
-                $join->on('v1.renaes', '=', 're.cod_2000');
-            });
-            $query->where('re.cod_disa', '34');
+        if ($sector == '2' or $sector == '14') //
             $query->where($nombre_columna, $codigo_institucion);
-        }
-       
         if ($sector == '22') { //midis
-            if($codigo_institucion=='005') {
+            // $query->join('sal_padron_juntos as v2', function ($join) {
+            //     $join->on('v1.dni', '=', 'v2.dni_mo');
+            // });
+            if ($codigo_institucion == '005') {
                 $query->join('sal_padron_juntos as v2', function ($join) {
                     $join->on('v1.dni', '=', 'v2.dni_mo');
                 });
-            }
-            else{
-                if($codigo_institucion=='003') {
+            } else {
+                if ($codigo_institucion == '003') {
                     $query->join('sal_padron_cunamas as v2', function ($join) {
                         $join->on('v1.dni', '=', 'v2.dni_mo');
                     });
