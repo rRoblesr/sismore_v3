@@ -93,6 +93,7 @@ use App\Http\Controllers\Vivienda\CentroPobladoDatassController;
 use App\Http\Controllers\Vivienda\DatassController;
 use App\Http\Controllers\Vivienda\EmapacopsaController;
 use App\Http\Controllers\Vivienda\PadronEmapacopsaController;
+use App\Mail\MsnCorreo;
 use App\Models\Educacion\ImporDocentesBilingues;
 use App\Models\Educacion\ImporServiciosBasicos;
 use App\Models\Educacion\Importacion;
@@ -126,6 +127,7 @@ use App\Repositories\Presupuesto\BaseSiafWebRepositorio;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -1306,6 +1308,16 @@ Route::get('/recursos/highcharts', function () {
 
 Route::get('/recursos/pruebas', function () {
     return view('prueba/prueba2');
+});
+
+Route::get('/recursos/correo', function () {
+    $data = [
+        'title' => 'Título del Correo',
+        'message' => 'Este es el contenido del correo.'
+    ];
+
+    Mail::to('raroblesr@gmail.com')->send(new MsnCorreo($data));
+    return 'ronald';
 });
 //Route::get('/indicadores/{codigo}', [Indicador-GeneralController::class, 'generarCodigo']);//prueba
 
