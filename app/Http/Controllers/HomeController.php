@@ -12,6 +12,7 @@ use App\Http\Controllers\Presupuesto\ImporActividadesProyectosController;
 use App\Http\Controllers\Presupuesto\ImporProyectosController;
 use App\Http\Controllers\Presupuesto\ImporSiafWebController;
 use App\Models\Administracion\Entidad;
+use App\Models\Administracion\Perfil;
 use App\Models\Administracion\Sistema;
 use App\Models\Administracion\TipoEntidad;
 use App\Models\Educacion\Area;
@@ -89,13 +90,18 @@ class HomeController extends Controller
         // return compact('sistemas','usuper','perfils');
 
         session()->put(['usuario_id' => auth()->user()->id]);
-        
+
         /* inicio blas */
         $oficina = EntidadRepositorio::migas(auth()->user()->entidad);
-        session()->put(['usuario_sector' => $oficina->sector]);
-        session()->put(['usuario_nivel' => $oficina->tipo]);
-        if ($oficina->sector == 14 && $oficina->sector == 4) session()->put(['usuario_codigo_institucion' => '0' . $oficina->codigo]);
-        else session()->put(['usuario_codigo_institucion' => $oficina->codigo]);
+        if ($oficina) {
+            session()->put(['entidad_nombre' => $oficina->entidadn]);
+
+            session()->put(['usuario_sector' => $oficina->sector]);
+            session()->put(['usuario_nivel' => $oficina->tipo]);
+            if ($oficina->sector == 14 && $oficina->sector == 4) session()->put(['usuario_codigo_institucion' => '0' . $oficina->codigo]);
+            else session()->put(['usuario_codigo_institucion' => $oficina->codigo]);
+        }
+
 
         // return [session('usuario_sector'), session('usuario_nivel'), session('usuario_codigo_institucion')];
         // return  session('usuario_sector'); //[session()->usuario_sector, session()->usuario_nivel, session()->usuario_codigo_institucion];
@@ -113,7 +119,7 @@ class HomeController extends Controller
         //     session(['dnisismore$' => $usuario->first()->dni]);
         //     session(['passwordsismore$' => $usuario->first()->password]);
         // }
-
+        // return session()->all();
         return $this->sistema_acceder(ucwords($sistemas->first()->nombre));
     }
 
@@ -138,9 +144,14 @@ class HomeController extends Controller
         // session()->forget('menuNivel01');
         // session()->forget('menuNivel02');
 
-        session(['perfil_sistema_id' => session('perfils')->where('sistema_id', $sistema_id)->first()->perfil_id]);
+        $perfil = Perfil::find(session('perfils')->where('sistema_id', $sistema_id)->first()->perfil_id);
+        session(['perfil_sistema_id' => $perfil->id]);
+        session(['perfil_sistema_nombre' => $perfil->nombre]);
+
         session(['sistema_id' => $sistema_id]);
         session(['sistema_nombre' => $osistema->nombre]);
+
+        // return session()->all();
 
         $menuNivel01 = MenuRepositorio::Listar_Nivel01_porUsuario_Sistema(auth()->user()->id, $sistema_id);
         session(['menuNivel01' => $menuNivel01]);
