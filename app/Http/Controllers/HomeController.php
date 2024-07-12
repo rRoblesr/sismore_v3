@@ -25,6 +25,7 @@ use App\Models\Presupuesto\BaseActividadesProyectos;
 use App\Models\Presupuesto\BaseProyectos;
 use App\Models\Presupuesto\BaseSiafWeb;
 use App\Models\Parametro\Ubigeo;
+use App\Repositories\Administracion\EntidadRepositorio;
 use App\Repositories\Administracion\MenuRepositorio;
 use App\Repositories\Administracion\SistemaRepositorio;
 use App\Repositories\Administracion\UsuarioPerfilRepositorio;
@@ -88,20 +89,13 @@ class HomeController extends Controller
         // return compact('sistemas','usuper','perfils');
 
         session()->put(['usuario_id' => auth()->user()->id]);
+        
         /* inicio blas */
-        $ee1 = Entidad::find(auth()->user()->entidad);
-        $ee2 = Entidad::find($ee1->dependencia);
-        $ee3 = TipoEntidad::find($ee2->tipoentidad_id);
-
-        // return compact('ee1', 'ee2', 'ee3');
-
-        // session()->put(['usuario_sector' => auth()->user()->sector]);
-        // session()->put(['usuario_nivel' => auth()->user()->nivel]);
-        // session()->put(['usuario_codigo_institucion' => auth()->user()->codigo_institucion]);
-        session()->put(['usuario_sector' => $ee3->sector_id]);
-        session()->put(['usuario_nivel' => $ee3->codigo]);
-        if ($ee3->sector_id == 14 && $ee3->codigo == 4) session()->put(['usuario_codigo_institucion' => '0' . $ee2->codigo]);
-        else session()->put(['usuario_codigo_institucion' => $ee2->codigo]);
+        $oficina = EntidadRepositorio::migas(auth()->user()->entidad);
+        session()->put(['usuario_sector' => $oficina->sector]);
+        session()->put(['usuario_nivel' => $oficina->tipo]);
+        if ($oficina->sector == 14 && $oficina->sector == 4) session()->put(['usuario_codigo_institucion' => '0' . $oficina->codigo]);
+        else session()->put(['usuario_codigo_institucion' => $oficina->codigo]);
 
         // return [session('usuario_sector'), session('usuario_nivel'), session('usuario_codigo_institucion')];
         // return  session('usuario_sector'); //[session()->usuario_sector, session()->usuario_nivel, session()->usuario_codigo_institucion];

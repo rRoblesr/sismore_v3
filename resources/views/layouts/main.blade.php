@@ -197,6 +197,17 @@
             <div class="navbar-custom bg-green-0">
                 <ul class="list-unstyled topnav-menu float-right mb-0">
 
+                    <li class="d-none d-sm-block">
+                        <form class="app-search" style="max-width: 600px;">
+                            <div class="app-search-box">
+                                <span style="color:white; font-size: 15px;">
+                                    {{-- <strong>SISTEMA DE MONITOREO REGIONAL</strong> --}}
+                                    SISTEMA DE MONITOREO REGIONAL
+                                </span>
+                            </div>
+                        </form>
+                    </li>
+
                     {{-- <li class="dropdown d-none d-lg-block">
                         <a class="nav-link dropdown-toggle mr-0 waves-effect waves-light" data-toggle="dropdown"
                             href="#" role="button" aria-haspopup="false" aria-expanded="false">
@@ -347,7 +358,8 @@
                 <div class="logo-box">
                     <a href="#" class="logo text-center logo-dark">
                         <span class="logo-lg">
-                            <img src="{{ asset('/') }}public/assets/images/logo-dark.png" alt="" height="16">
+                            <img src="{{ asset('/') }}public/assets/images/logo-dark.png" alt=""
+                                height="16">
                             <!-- <span class="logo-lg-text-dark">Moltran</span> -->
                         </span>
                         <span class="logo-sm">
@@ -377,7 +389,7 @@
                 </div>
                 <!-- LOGO -->
 
-                <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
+                <ul class="list-unstyled topnav-menu topnav-menu-left m-0 ">
                     {{-- sanguchito --}}
                     <li>
                         <button class="button-menu-mobile waves-effect waves-light">
@@ -388,10 +400,9 @@
                     <li class="d-none d-sm-block">
                         <form class="app-search" style="max-width: 600px;">
                             <div class="app-search-box">
-                                {{-- <span style="color:white; font-size: 25px;"><strong>S I S M O R
-                                        E</strong></span><br> --}}
-                                <span style="color:white; font-size: 20px;"><strong>SISTEMA DE MONITOREO
-                                        REGIONAL</strong></span>
+                                <span style="color:white; font-size: 20px;">
+                                    <strong>SISTEMA DE MONITOREO REGIONAL</strong>
+                                </span>
                             </div>
                         </form>
                     </li>
@@ -399,8 +410,18 @@
                     {{-- <li class="d-none d-sm-block">
                         <form class="app-search" style="max-width: 600px;">
                             <div class="app-search-box">
-                                <span style="color:white; font-size: 20px;"><strong>SISTEMA DE MONITOREO
-                                        REGIONAL</strong></span>
+                                <span style="color:white; font-size: 20px;">
+                                    <strong>SISTEMA DE MONITOREO REGIONAL</strong>
+                                </span>
+                            </div>
+                        </form>
+                    </li> --}}
+
+                    {{-- <li class="d-none d-sm-block">
+                        <form class="app-search" style="max-width: 600px;">
+                            <div class="app-search-box">
+                                <span style="color:white; font-size: 20px;"><strong>SIS--TEMA DE MONI--TOREO
+                                        REGI--ONAL</strong></span>
                             </div>
                         </form>
                     </li> --}}
@@ -665,8 +686,9 @@
                             <div class="app-search-box">
                                 {{-- <span style="color:white; font-size: 25px;"><strong>S I S M O R
                                         E</strong></span><br> --}}
-                                <span style="color:white; font-size: 20px;"><strong>SISTEMA DE MONITOREO
-                                        REGIONAL</strong></span>
+                                <span style="color:white; font-size: 20px;">
+                                    <strong>SISTEMA DE MONITOREO REGIONAL</strong>
+                                </span>
                             </div>
                         </form>
                     </li>
@@ -1311,7 +1333,7 @@
                         <option value = '50'> 50</option>
                         <option value = '100'>100</option>
                         <option value = '-1'>Todos</option>
-                        </select>` + " registros",// por página
+                        </select>` + " registros", // por página
             "info": "Mostrando la página _PAGE_ de _PAGES_",
             "infoEmpty": "No records available",
             "infoFiltered": "(Filtrado de _MAX_ registros totales)",
