@@ -675,7 +675,7 @@ class IndicadoresController extends Controller
                 return response()->json(['aa' => $rq->all(), 'ri' => $ri, 'gl' => $gl, 'gls' => $gls ? $gls : 0, 'gln' => $gln]);
 
             case 'anal1':
-                $base = IndicadorGeneralMetaRepositorio::getPacto1Mensual($rq->anio, $rq->distrito);
+                $base = IndicadorGeneralMetaRepositorio::getPacto3Mensual($rq->anio, $rq->distrito);
                 $mes = Mes::select('codigo', 'abreviado as mes')->get();
                 $mesmax = $base->max('name');
                 $limit = $rq->anio == 2023 ? IndicadoresController::$pacto1_mes : 0;
@@ -700,7 +700,7 @@ class IndicadoresController extends Controller
                         $vv = $value->y;
                     if ($key > 0) {
                         if ($value->y) {
-                            $value->y += $vv;
+                            // $value->y += $vv;
                             $vv = $value->y;
                         }
                     }
