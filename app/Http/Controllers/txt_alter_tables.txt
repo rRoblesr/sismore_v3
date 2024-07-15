@@ -1708,6 +1708,21 @@ ORDER BY t1.cod_modular;
 
 ##################################################
 
+SELECT mm.anio,uu.codigo,mm.distrito distrito_id,uu.nombre distrito,mm.valor meta FROM par_indicador_general_meta mm 
+inner join par_ubigeo uu on uu.id=mm.distrito where indicadorgeneral=19 order by anio,codigo;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

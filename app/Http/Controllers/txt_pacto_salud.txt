@@ -131,11 +131,43 @@ INSERT INTO `par_indicador_general_meta` (`indicadorgeneral`, `distrito`, `anio_
 #######################################################################################################
 
 CREATE TABLE `sal_data_pacto3` (
-    id              int(11) auto_increment primary key,
-    importacion_id	int(11)	NULL DEFAULT NULL,
-    cantidad        int(11)	NULL DEFAULT NULL,
-    distrito	    varchar(100)	NULL DEFAULT NULL,
-    mes	            int(11)	NULL DEFAULT NULL,
-    anio	        int(11)	NULL DEFAULT NULL,
-    foreign key(importacion_id) references par_importacion(id)
+  `id` int(11) auto_increment primary key,
+  `importacion_id` int(11) DEFAULT NULL,
+  `cantidad` int(11) DEFAULT NULL,
+  `distrito` varchar(50) DEFAULT NULL,
+  `mes` int(11) DEFAULT NULL,
+  `anio` int(11) DEFAULT NULL,
+  foreign key(importacion_id) references par_importacion(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+#####################################################################################################
+
+CREATE TABLE `sal_data_pacto3_denominador` (
+  `id` int(11) auto_increment primary key,
+  `ubigeo_id` int(11) DEFAULT NULL,
+  `anio` int(11) DEFAULT NULL,
+  `codigo` varchar(6) DEFAULT NULL,  
+  `distrito` varchar(50) DEFAULT NULL,
+  `meta` int(11) DEFAULT NULL,     
+  foreign key(ubigeo_id) references par_ubigeo(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+#####################################################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
