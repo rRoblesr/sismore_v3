@@ -33,8 +33,8 @@
                     <td class="text-left">{{ $item->dis }}</td>
                     <td>{{ $item->anio_base }}</td>
                     <td>{{ $item->valor_base }}</td>
-                    <td>{{ $item->v2023 }}</td>
-                    <td>{{ $item->v2024 }}</td>
+                    <td>{{ $item->v2023 }}%</td>
+                    <td>{{ $item->v2024 }}%</td>
                     <td>{{ $item->v2025 }}</td>
                     <td>{{ $item->v2026 }}</td>
                     <td>{{ $item->r2023 }}</td>

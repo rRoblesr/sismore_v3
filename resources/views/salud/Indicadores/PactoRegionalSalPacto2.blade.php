@@ -106,7 +106,7 @@
                                         <span data-plugin="counterup" id="gl"></span>
                                     </h4>
                                     <p class="mb-0 mt-1 text-truncate">
-                                        Gobiernos Locales
+                                        Total Niños(as)
                                     </p>
                                 </div>
                             </div>

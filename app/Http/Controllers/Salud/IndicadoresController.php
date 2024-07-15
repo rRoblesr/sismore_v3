@@ -668,11 +668,11 @@ class IndicadoresController extends Controller
         else $ndis = '';
         switch ($rq->div) {
             case 'head':
-                $gls = IndicadorGeneralMetaRepositorio::getPacto1GLS($rq->indicador, $rq->anio);
-                $gl = IndicadorGeneralMetaRepositorio::getPacto1GL($rq->indicador, $rq->anio);
+                $gls = IndicadorGeneralMetaRepositorio::getSalPacto3GLS($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $gl = IndicadorGeneralMetaRepositorio::getSalPacto3GL($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
                 $gln = $gl - $gls;
                 $ri = number_format(100 * ($gl > 0 ? $gls / $gl : 0));
-                return response()->json(['aa' => $rq->all(), 'ri' => $ri, 'gl' => $gl, 'gls' => $gls, 'gln' => $gln]);
+                return response()->json(['aa' => $rq->all(), 'ri' => $ri, 'gl' => $gl, 'gls' => $gls ? $gls : 0, 'gln' => $gln]);
 
             case 'anal1':
                 $base = IndicadorGeneralMetaRepositorio::getPacto1Mensual($rq->anio, $rq->distrito);
@@ -746,15 +746,15 @@ class IndicadoresController extends Controller
                 }
                 return response()->json(compact('info', 'base1', 'base2', 'mes'));
             case 'tabla1':
-                $base = IndicadorGeneralMetaRepositorio::getPacto1tabla1($rq->indicador, $rq->anio, $rq->mes);
+                $base = IndicadorGeneralMetaRepositorio::getSalPacto3tabla1($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
 
-                $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla1', compact('base', 'ndis'))->render();
+                $excel = view('salud.Indicadores.PactoRegionalSalPacto3tabla1', compact('base', 'ndis'))->render();
                 return response()->json(compact('excel', 'base'));
 
             case 'tabla2':
-                $base = IndicadorGeneralMetaRepositorio::getPacto1tabla2($rq->indicador, $rq->anio);
+                $base = IndicadorGeneralMetaRepositorio::getSalPacto3tabla2($rq->indicador, $rq->anio);
                 $aniob = $rq->anio;
-                $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla2', compact('base', 'ndis', 'aniob'))->render();
+                $excel = view('salud.Indicadores.PactoRegionalSalPacto3tabla2', compact('base', 'ndis', 'aniob'))->render();
                 return response()->json(compact('excel', 'base'));
 
 

@@ -25,7 +25,7 @@
                         <div class="card-body p-2">
                             <div class="form-group row align-items-center vh-5 m-0">
                                 <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <h5 class="page-title font-12">Fuente: Padrón Nominal, <br>{{ $actualizado }}</h5>
+                                    <h5 class="page-title font-12">Fuente: HisMinsa, <br>{{ $actualizado }}</h5>
                                 </div>
                                 <div class="col-lg-1 col-md-1 col-sm-1  ">
                                     <select id="anio" name="anio" class="form-control btn-xs font-11"
@@ -106,7 +106,7 @@
                                         <span data-plugin="counterup" id="gl"></span>
                                     </h4>
                                     <p class="mb-0 mt-1 text-truncate">
-                                        Gobiernos Locales
+                                        Meta Física
                                     </p>
                                 </div>
                             </div>
