@@ -263,7 +263,7 @@
 
         function panelGraficas(div) {
             $.ajax({
-                url: "{{ route('salud.indicador.pactoregional.detalle.reports') }}",
+                url: "{{ route('salud.indicador.pactoregional.sal.pacto3.reports') }}",
                 data: {
                     'div': div,
                     "anio": $('#anio').val(),
@@ -326,43 +326,7 @@
                 },
             });
         }
-
-        function cargarTablaNivel(div, ugel) {
-            $.ajax({
-                url: "{{ route('indicador.nuevos.01.tabla') }}",
-                data: {
-                    'div': div,
-                    "anio": $('#anio').val(),
-                    "mes": $('#mes').val(),
-                    "provincia": $('#provincia').val(),
-                    "distrito": $('#distrito').val(),
-                    "gestion": $('#gestion').val(),
-                    "ugel": ugel
-                },
-                type: "GET",
-                dataType: "JSON",
-                beforeSend: function() {
-                    ugel_select = ugel;
-                    if (div == "tabla1") {
-                        $('#v' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    } else if (div == "tabla2") {
-                        $('#v' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    } else {
-                        $('#' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    }
-                },
-                success: function(data) {
-                    if (div == "tabla2") {
-                        $('#vtabla2').html(data.excel);
-                    }
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 1");
-                    console.log(jqXHR);
-                },
-            });
-        }
-
+ 
         function cargarDistritos() {
             $.ajax({
                 url: "{{ route('ubigeo.distrito.25', '') }}/" + $('#provincia').val(),

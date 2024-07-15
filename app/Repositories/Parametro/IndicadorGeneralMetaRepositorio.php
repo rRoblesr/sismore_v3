@@ -17,6 +17,7 @@ class IndicadorGeneralMetaRepositorio
         return IndicadorGeneralMeta::distinct()->select('anio')->where('indicadorgeneral', $indicador_id)->orderBy('anio')->get();
     }
 
+    //###################### salud pacto 1  #######################
     public static function getPacto1GL($indicador_id, $anio)
     {
         return IndicadorGeneralMeta::where('indicadorgeneral', $indicador_id)->where('anio', $anio)->get()->count();
@@ -74,7 +75,6 @@ class IndicadorGeneralMetaRepositorio
         }
         return $query;
     }
-
 
     public static function getPacto1tabla2($indicador_id, $anio)
     {
@@ -182,7 +182,7 @@ class IndicadorGeneralMetaRepositorio
     {
         return IndicadorGeneralMeta::distinct()->select('anio')->where('indicadorgeneral', $indicador_id)->orderBy('anio')->get();
     }
-
+    //###################### salud pacto 2  #######################
     public static function getSalPacto2GL($indicador_id, $anio, $mes, $provincia, $distrito)
     {
         $query =  ImporPadronAnemia::where('anio', $anio)->select(DB::raw('sum(den) as conteo'));
@@ -251,7 +251,7 @@ class IndicadorGeneralMetaRepositorio
         $query = $query->join('par_ubigeo as dd', 'dd.id', '=', 'ubigeo');
         $query = $query->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia');
         if (IndicadoresController::$pacto1_anio == $anio) $query = $query->where('mes', '>=', IndicadoresController::$pacto1_mes);
-        if ($mes > 0) $query = $query->where('mes','<=',  $mes);
+        if ($mes > 0) $query = $query->where('mes', '<=',  $mes);
         if ($distrito > 0) $query = $query->where('ubigeo',  $distrito);
         if ($provincia > 0) $query = $query->where('pp.id',  $provincia);
         $query = $query->groupBy('idred', 'red')->get();
@@ -337,7 +337,7 @@ class IndicadorGeneralMetaRepositorio
             $anioxx = 2024;
             $query2 =  ImporPadronAnemia::where('anio', $anioxx)->select(DB::raw("round(100*sum(num)/sum(den),1) as conteo"))->where('ubigeo', $value->dis_id);
             if (IndicadoresController::$pacto1_anio == $anioxx) $query2 = $query2->where('mes', '>=', IndicadoresController::$pacto1_mes);
-            if ($mes > 0) $query2 = $query2->where('mes','<=',  $mes);
+            if ($mes > 0) $query2 = $query2->where('mes', '<=',  $mes);
             $query2 = $query2->groupBy('ubigeo')->get();
             $value->r2024 = $query2->count() > 0 ? $query2->first()->conteo : 0;
             if ($anioxx == $anio) {
@@ -370,7 +370,28 @@ class IndicadorGeneralMetaRepositorio
 
         return $query;
     }
+    //###################### salud pacto 3  #######################
+    public static function getSalPacto3tabla1($indicador_id, $anio, $mes, $provincia, $distrito)
+    {
+        $query = IndicadorGeneralMeta::select('par_Indicador_general_meta.*', 'd.codigo', 'd.id as distrito_id', 'd.nombre as distrito')->where('indicadorgeneral', $indicador_id)->where('anio', $anio)
+            ->join('par_ubigeo as d', 'd.id', '=', 'par_Indicador_general_meta.distrito')->get();
+        foreach ($query as $key => $value) {
+            $queryx = ImporPadronAnemia::select(DB::raw('sum(den) as den'), DB::raw('sum(num) as num'), DB::raw('round(100*sum(num)/sum(den),1) as ind'))
+                ->where('anio', $value->anio)->where('ubigeo', $value->distrito_id);
+            if ($mes > 0)
+                $queryx = $queryx->where('mes', '<=', $mes);
+            if (IndicadoresController::$pacto1_anio == $anio)
+                $queryx = $queryx->where('mes', '>=', IndicadoresController::$pacto1_mes);
+            $queryx = $queryx->get()->first();
 
+            $value->num = $queryx->num;
+            $value->den = $queryx->den;
+            $value->ind = $queryx->ind;
+            $value->cumple = floatval($value->ind) >= floatval($value->valor) ? 1 : 0;
+        }
+        return $query;
+    }
+    //###################### educacion pacto 2  #######################
     public static function getEduPacto2anal1($anio, $ugel, $provincia, $distrito, $estado)
     {
         $query = DB::select('call edu_pa_sfl_porlocal_provincia(?,?,?,?)', [$ugel, $provincia, $distrito, $estado]);

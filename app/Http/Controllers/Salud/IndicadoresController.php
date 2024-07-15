@@ -295,6 +295,7 @@ class IndicadoresController extends Controller
         }
     }
 
+    // ############ salud pacto 1 #################
     public function PactoRegionalSalPacto1Reports(Request $rq)
     {
         if ($rq->distrito > 0) $ndis = Ubigeo::find($rq->distrito)->nombre;
@@ -446,10 +447,10 @@ class IndicadoresController extends Controller
         if ($distrito > 0) $ndis = Ubigeo::find($distrito)->nombre;
         else $ndis = '';
         switch ($div) {
-            // case 'tabla1':
-            //     $base = IndicadorGeneralMetaRepositorio::getPacto1tabla1($indicador, $anio, $mes);
-            //     $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla1', compact('base', 'ndis'))->render();
-            //     return compact('excel', 'base');
+                // case 'tabla1':
+                //     $base = IndicadorGeneralMetaRepositorio::getPacto1tabla1($indicador, $anio, $mes);
+                //     $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla1', compact('base', 'ndis'))->render();
+                //     return compact('excel', 'base');
 
             case 'tabla2':
                 $base = IndicadorGeneralMetaRepositorio::getPacto1tabla2($indicador, $anio);
@@ -466,9 +467,9 @@ class IndicadoresController extends Controller
     {
         if ($anio > 0) {
             switch ($div) {
-                // case 'tabla1':
-                //     $name = 'Listado de establecimientos de salud ' . date('Y-m-d') . '.xlsx';
-                //     break;
+                    // case 'tabla1':
+                    //     $name = 'Listado de establecimientos de salud ' . date('Y-m-d') . '.xlsx';
+                    //     break;
                 case 'tabla2':
                     $name = 'Evaluación de cumplimiento de los logros esperados por distrito ' . date('Y-m-d') . '.xlsx';
                     break;
@@ -481,6 +482,7 @@ class IndicadoresController extends Controller
         }
     }
 
+    // ############ salud pacto 2 #################
     public function PactoRegionalSalPacto2Reports(Request $rq)
     {
         $ndis = $rq->distrito > 0 ? Ubigeo::find($rq->distrito)->nombre : '';
@@ -658,6 +660,8 @@ class IndicadoresController extends Controller
         }
     }
 
+    // ############ salud pacto 3 #################
+
     public function PactoRegionalSalPacto3Reports(Request $rq)
     {
         if ($rq->distrito > 0) $ndis = Ubigeo::find($rq->distrito)->nombre;
@@ -758,6 +762,8 @@ class IndicadoresController extends Controller
                 return [];
         }
     }
+
+    // ############ educacion pacto 2 #################
 
     public function PactoRegionalEduPacto2Reports(Request $rq)
     {
