@@ -683,17 +683,13 @@ class HomeController extends Controller
         $imgd = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
         $anio = $imgd->anio;
 
-        $provincias = UbigeoRepositorio::provincia('25'); //Ubigeo::select('v2.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();
-        $distritos = UbigeoRepositorio::distrito('25', 0); //Ubigeo::select('v3.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->join('par_ubigeo as v3', 'v3.dependencia', '=', 'v2.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();
+        $provincias = UbigeoRepositorio::provincia_select('25'); //Ubigeo::select('v2.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();
+        $distritos = UbigeoRepositorio::distrito_select('25', 0); //Ubigeo::select('v3.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->join('par_ubigeo as v3', 'v3.dependencia', '=', 'v2.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();
         $ambitos = Area::select('id', DB::raw('upper(nombre) as nombre'))->get();
 
-        return  view('home', compact(
-            'tipo_acceso',
-            'provincias',
-            'distritos',
-            'ambitos',
-            'anio',
-        ));
+        // return compact('tipo_acceso', 'provincias', 'distritos', 'ambitos', 'anio', 'imgd');
+
+        return  view('home', compact('tipo_acceso', 'provincias', 'distritos', 'ambitos', 'anio',));
     }
 
     public function panelControlEduacionHead(Request $rq)
@@ -721,21 +717,9 @@ class HomeController extends Controller
         $valor3 = number_format($valor3, 0);
         $valor4 = number_format($valor4, 0);
 
-        $imppw = ImportacionRepositorio::aniosMax_porfuente(ImporPadronWebController::$FUENTE);
-        // $servicio = PadronWeb::where('importacion_id', $imppw->id)->distinct()->select('institucioneducativa_id')->get()->count();
-        // $servicio = number_format($servicio, 0);
-        // $local = PadronWeb::where('importacion_id', $imppw->id)
-        //     ->join('edu_institucioneducativa as iiee', 'iiee.id', '=', 'edu_padronweb.institucioneducativa_id')
-        //     ->distinct()->select('iiee.codlocal')->get()->count();
-        // $local = number_format($local, 0);
-        // $impmg = ImportacionRepositorio::aniosMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-        // $mg = MatriculaGeneral::where('importacion_id', $impmg->id)->first();
-        // $alumno = MatriculaGeneralDetalle::where('matriculageneral_id', $mg->id)->count();
-        // $alumno = number_format($alumno, 0);
-        // $impcd = Importacion::select('id', DB::raw('year(fechaActualizacion) as anio'))->where('fuenteimportacion_id', ImporCensoDocenteController::$FUENTE)->where( DB::raw('year(fechaActualizacion)'), $rq->anio)->orderBy('anio', 'asc')->get()->first();
-        // $base = ImporCensoDocenteRepositorio::PersonaDocente('head', $impcd->id, $rq->provincia, $rq->distrito, $rq->tipogestion, 0);
-        // $docente = (int)$base->docentes;
-        // $docente = number_format($docente, 0);
+        // $imppw = ImportacionRepositorio::aniosMax_porfuente(ImporPadronWebController::$FUENTE);
+
+        // return compact('valor1', 'valor2', 'valor3', 'valor4', 'ind1', 'ind2', 'ind3', 'ind4', 'imppw');
         return response()->json(compact('valor1', 'valor2', 'valor3', 'valor4', 'ind1', 'ind2', 'ind3', 'ind4')); //, 'servicio', 'local', 'alumno', 'docente'));
     }
 
@@ -1220,6 +1204,7 @@ class HomeController extends Controller
 
             case 'siagie001':
                 $data = MatriculaGeneralRepositorio::basicaregularopcion2('siagie001', $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
+                return response()->json(compact('data'));
                 $info['cat'] = [];
                 $info['dat'] = [];
                 $rango = '';

@@ -1159,41 +1159,28 @@ class MatriculaGeneralRepositorio
 
     public static function basicaregularopcion2($div, $anio, $provincia, $distrito,  $gestion, $area)
     {
-        $query = DB::table(DB::raw("(
-            select mg.anio as anio, mgd.institucioneducativa_id from edu_matricula_general_detalle as mgd
-            left join (
-                select mg.id, anio.anio from edu_matricula_general mg
-                inner join par_importacion as imp  on imp.id =mg.importacion_id
-                inner join par_anio        as anio on anio.id=mg.anio_id
-                where imp.estado='PR'
-                ) as mg on mg.id=mgd.matriculageneral_id
-            ) as mgd"))->where('anio', '>', 0);
-
-        // $query = $query->join(DB::raw('(select id, NivelModalidad_id,  TipoGestion_id, Ugel_id, Area_id from edu_institucioneducativa) as ie'), 'ie.id', '=', 'mgd.institucioneducativa_id', 'left')
-        //     ->join('edu_ugel as uu', 'uu.id', '=', 'ie.Ugel_id')
-        //     ->join('edu_area as aa', 'aa.id', '=', 'ie.Area_id')
-        //     ->join('edu_tipogestion as tg', 'tg.id', '=', 'ie.TipoGestion_id')
-        //     ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'ie.NivelModalidad_id')
-        //     ->where('nm.tipo', 'EBR');
-
-        // if ($gestion > 0) {
-        //     if ($gestion == 3) {
-        //         $query = $query->where('tg.dependencia', 3);
-        //     } else {
-        //         $query = $query->where('tg.dependencia', '!=', 3);
-        //     }
-        // }
-
-        // if ($provincia > 0 || $distrito > 0 || $gestion > 0 || $area > 0)
-        $query = $query->join(DB::raw('(
-                select ie.id, dd.id as distrito, dd.dependencia as provincia, tg.dependencia as gestion, aa.id as area, nm.codigo,nm.nombre
+        $impor_unicos = "SELECT id, anio 
+                        FROM (
+                            SELECT mg.id, anio.anio, ROW_NUMBER() OVER (PARTITION BY anio.anio ORDER BY mg.id DESC) AS rn FROM edu_matricula_general mg
+                            INNER JOIN par_importacion AS imp ON imp.id = mg.importacion_id
+                            INNER JOIN par_anio AS anio ON anio.id = mg.anio_id
+                            WHERE imp.estado = 'PR') as iu
+                        WHERE rn = 1 ";
+        $iiees = "SELECT ie.id, dd.id as distrito, dd.dependencia as provincia, tg.dependencia as gestion, aa.id as area, nm.codigo,nm.nombre
                 from edu_institucioneducativa as ie
                 inner join edu_centropoblado as cp on cp.id=ie.CentroPoblado_id
                 inner join par_ubigeo as dd on dd.id=cp.Ubigeo_id
                 inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id
                 inner join edu_area as aa on aa.id = ie.Area_id
                 inner join edu_nivelmodalidad as nm on nm.id = ie.NivelModalidad_id
-                where nm.tipo="EBR") as ie'), 'ie.id', '=', 'mgd.institucioneducativa_id');
+                where nm.tipo='EBR'";
+
+        $query = DB::table(DB::raw("(
+            select mg.anio as anio, mgd.institucioneducativa_id from edu_matricula_general_detalle as mgd
+            left join ($impor_unicos) as mg on mg.id=mgd.matriculageneral_id
+            ) as mgd")); //->where('anio', '>', 0);
+
+        $query = $query->join(DB::raw("($iiees) as ie"), 'ie.id', '=', 'mgd.institucioneducativa_id');
         if ($provincia > 0) $query = $query->where('provincia', $provincia);
         if ($distrito > 0) $query = $query->where('distrito', $distrito);
         if ($gestion > 0) $query = $gestion == 3 ? $query->where('gestion', 3) : $query->where('gestion', '!=', 3);

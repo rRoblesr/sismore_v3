@@ -13,3 +13,26 @@ UPDATE alumno aa
 INNER JOIN datax1 dd ON dd.dni = aa.dni 
 AND dd.codi_modular IN (3382012, 3989603, 0584458, 1695710, 0270850, 3877633)
 SET aa.fecha = DATE_FORMAT(STR_TO_DATE(dd.fecha_nacimiento, '%d/%m/%Y'), '%Y-%m-%d');
+
+##################################################################
+
+WITH RankedData AS (
+    SELECT
+        mg.id,
+        anio.anio,
+        ROW_NUMBER() OVER (PARTITION BY anio.anio ORDER BY mg.id DESC) AS rn
+    FROM
+        edu_matricula_general mg
+    INNER JOIN par_importacion AS imp ON imp.id = mg.importacion_id
+    INNER JOIN par_anio AS anio ON anio.id = mg.anio_id
+    WHERE
+        imp.estado = 'PR'
+)
+SELECT
+    id,
+    anio
+FROM
+    RankedData
+WHERE
+    rn = 1;
+#################################################    
