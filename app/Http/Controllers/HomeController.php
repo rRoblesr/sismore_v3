@@ -1204,7 +1204,7 @@ class HomeController extends Controller
 
             case 'siagie001':
                 $data = MatriculaGeneralRepositorio::basicaregularopcion2('siagie001', $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
-                return response()->json(compact('data'));
+                // return response()->json(compact('data'));
                 $info['cat'] = [];
                 $info['dat'] = [];
                 $rango = '';

@@ -1775,6 +1775,49 @@ left join (
 
 	##########################################################################################################
 
+select
+	anio,
+	case
+		when codigo = "A2" OR codigo = "A3" OR codigo = "A5" then "Inicial"
+		else nombre
+	end as nivel,
+	count(anio) as conteo
+from
+	(
+	select mg.anio as anio, mgd.institucioneducativa_id
+	from edu_matricula_general_detalle as mgd
+	inner join (
+		SELECT id, anio
+		FROM
+		    (SELECT
+		        mg.id,
+		        anio.anio,
+		        ROW_NUMBER() OVER (PARTITION BY anio.anio ORDER BY mg.id DESC) AS rn
+		    FROM
+		        edu_matricula_general mg
+		    INNER JOIN par_importacion AS imp ON imp.id = mg.importacion_id
+		    INNER JOIN par_anio AS anio ON anio.id = mg.anio_id
+		    WHERE imp.estado = 'PR') as tb
+		WHERE rn = 1 ) as mg on mg.id = mgd.matriculageneral_id ) as mgd
+inner join (
+	select
+		ie.id,
+		dd.id as distrito,
+		dd.dependencia as provincia,
+		tg.dependencia as gestion,
+		aa.id as area,
+		nm.codigo,
+		nm.nombre
+	from edu_institucioneducativa as ie
+	inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id
+	inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id
+	inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id
+	inner join edu_area as aa on aa.id = ie.Area_id
+	inner join edu_nivelmodalidad as nm on nm.id = ie.NivelModalidad_id
+	where nm.tipo = "EBR" ) as ie on ie.id = mgd.institucioneducativa_id where anio > 0
+group by anio, nivel
+order by anio asc;
+#####################################################################################################
 
 
 

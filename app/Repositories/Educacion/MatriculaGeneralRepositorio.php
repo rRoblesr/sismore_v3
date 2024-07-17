@@ -1176,9 +1176,9 @@ class MatriculaGeneralRepositorio
                 where nm.tipo='EBR'";
 
         $query = DB::table(DB::raw("(
-            select mg.anio as anio, mgd.institucioneducativa_id from edu_matricula_general_detalle as mgd
-            left join ($impor_unicos) as mg on mg.id=mgd.matriculageneral_id
-            ) as mgd")); //->where('anio', '>', 0);
+            SELECT mg.anio as anio, mgd.institucioneducativa_id from edu_matricula_general_detalle as mgd
+            inner join ($impor_unicos) as mg on mg.id=mgd.matriculageneral_id
+            ) as mgd"));
 
         $query = $query->join(DB::raw("($iiees) as ie"), 'ie.id', '=', 'mgd.institucioneducativa_id');
         if ($provincia > 0) $query = $query->where('provincia', $provincia);
