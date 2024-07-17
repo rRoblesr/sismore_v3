@@ -202,7 +202,7 @@
                             <div class="app-search-box">
                                 <span style="color:white; font-size: 15px;">
                                     {{-- <strong>SISTEMA DE MONITOREO REGIONAL</strong> --}}
-                                    {{session('entidad_nombre')}}
+                                    {{ session()->has('entidad_nombre') ? session('entidad_nombre') : 'SIN ENTIDAD' }}
                                     {{-- {{session('')}} --}}
                                 </span>
                             </div>
