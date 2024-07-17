@@ -202,7 +202,7 @@
                             <div class="app-search-box">
                                 <span style="color:white; font-size: 15px;">
                                     {{-- <strong>SISTEMA DE MONITOREO REGIONAL</strong> --}}
-                                    SISTEMA DE MONITOREO REGIONALxxx
+                                    {{session('entidad_nombre')}}
                                     {{-- {{session('')}} --}}
                                 </span>
                             </div>
@@ -480,7 +480,7 @@
                                                     class="mdi mdi-power-settings mr-2"></i> Logout</a></li>
                                     </ul> --}}
                                 </div>
-                                <p class="font-10 text-muted m-0">{{ session('sistema_nombre') }}</p>
+                                {{-- <p class="font-10 text-muted m-0">{{ session('sistema_nombre') }}</p> --}}
                                 <p class="font-10 text-muted m-0">{{ session('perfil_sistema_nombre') }}</p>
                             </div>
                         </div>
