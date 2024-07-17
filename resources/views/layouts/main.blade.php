@@ -480,8 +480,12 @@
                                                     class="mdi mdi-power-settings mr-2"></i> Logout</a></li>
                                     </ul> --}}
                                 </div>
-                                {{-- <p class="font-10 text-muted m-0">{{ session('sistema_nombre') }}</p> --}}
-                                <p class="font-10 text-muted m-0">{{ session('perfil_sistema_nombre') }}</p>
+                                <p class="font-10 text-muted m-0">
+                                    {{ auth()->user()->id == 49 ? (session()->has('sistema_nombre') ? session('sistema_nombre') : 'SIN MODULO') : '' }}
+                                </p>
+                                <p class="font-10 text-muted m-0">
+                                    {{ session()->has('perfil_sistema_nombre') ? session('perfil_sistema_nombre') : 'SIN PERFIL' }}
+                                </p>
                             </div>
                         </div>
 
