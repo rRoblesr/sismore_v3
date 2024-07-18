@@ -36,6 +36,17 @@ class IndicadoresController extends Controller
         // $this->middleware('auth');
     }
 
+    public function PactoRegionalMeta()
+    {
+        $ind = IndicadorGeneralRepositorio::findNoFichatecnicaCodigo('DIT-SAL-01');
+        $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios($ind->id);
+        $distrito = UbigeoRepositorio::distrito_select('25', 0);
+        // $aniomax = $imp->anio;
+        // $data=indicadorgene
+
+        return view('indicadores.PactoRegional.PactoRegionalSalMeta', compact('anio', 'distrito'));
+    }
+
     public function PactoRegional()
     {
         $sector = 14;

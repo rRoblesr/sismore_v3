@@ -1820,6 +1820,7 @@ order by anio asc;
 #####################################################################################################
 
 
+SELECT ig.nombre,igm.distrito iddistrito,uu.nombre distrito, igm.anio,igm.valor FROM par_indicador_general ig inner join par_indicador_general_meta igm on igm.indicadorgeneral=ig.id inner join par_ubigeo uu on uu.id=igm.distrito WHERE sector_id=14;
 
 
 
