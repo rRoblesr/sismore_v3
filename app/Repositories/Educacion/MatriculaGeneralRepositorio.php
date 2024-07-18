@@ -203,9 +203,9 @@ class MatriculaGeneralRepositorio
 
     public static function indicador01head($anio, $provincia, $distrito,  $gestion, $area)
     {
-        $matricula_unica = "SELECT mg.id from par_importacion as imp 
-            inner join edu_matricula_general as mg on mg.importacion_id = imp.id 
-            where estado = 'PR' and anio_id = $anio 
+        $matricula_unica = "SELECT mg.id from par_importacion as imp
+            inner join edu_matricula_general as mg on mg.importacion_id = imp.id
+            where estado = 'PR' and anio_id = $anio
             order by fechaActualizacion desc limit 1";
 
         $ubigeos = "";
@@ -308,9 +308,9 @@ class MatriculaGeneralRepositorio
                 return $query;
 
             case 'anal2':
-                $matricula_unica = "SELECT mg.id from par_importacion as imp 
-                    inner join edu_matricula_general as mg on mg.importacion_id = imp.id 
-                    where estado = 'PR' and anio_id = $anio 
+                $matricula_unica = "SELECT mg.id from par_importacion as imp
+                    inner join edu_matricula_general as mg on mg.importacion_id = imp.id
+                    where estado = 'PR' and anio_id = $anio
                     order by fechaActualizacion desc limit 1";
                 $ubigeos = "";
                 if ($provincia > 0) $ubigeos .= " AND dd.dependencia=$provincia ";
@@ -333,9 +333,9 @@ class MatriculaGeneralRepositorio
                 return $query;
 
             case 'anal3':
-                $matricula_unica = "SELECT mg.id from par_importacion as imp 
-                    inner join edu_matricula_general as mg on mg.importacion_id = imp.id 
-                    where estado = 'PR' and anio_id = $anio 
+                $matricula_unica = "SELECT mg.id from par_importacion as imp
+                    inner join edu_matricula_general as mg on mg.importacion_id = imp.id
+                    where estado = 'PR' and anio_id = $anio
                     order by fechaActualizacion desc limit 1";
 
                 $ubigeos = "";
@@ -358,9 +358,9 @@ class MatriculaGeneralRepositorio
                 return $query;
 
             case 'anal4':
-                $matricula_unica = "SELECT mg.id from par_importacion as imp 
-                    inner join edu_matricula_general as mg on mg.importacion_id = imp.id 
-                    where estado = 'PR' and anio_id = $anio 
+                $matricula_unica = "SELECT mg.id from par_importacion as imp
+                    inner join edu_matricula_general as mg on mg.importacion_id = imp.id
+                    where estado = 'PR' and anio_id = $anio
                     order by fechaActualizacion desc limit 1";
 
                 $ubigeos = "";
@@ -372,7 +372,7 @@ class MatriculaGeneralRepositorio
                     from edu_institucioneducativa as ie
                     inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id
                     inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id $ubigeos
-                    inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id $gestions 
+                    inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id $gestions
                     inner join edu_area as aa on aa.id = ie.Area_id";
 
                 $query = MatriculaGeneralDetalle::from('edu_matricula_general_detalle as mgd');
@@ -383,9 +383,9 @@ class MatriculaGeneralRepositorio
                 return $query;
 
             case 'tabla1':
-                $matricula_unica = "SELECT mg.id from par_importacion as imp 
-                    inner join edu_matricula_general as mg on mg.importacion_id = imp.id 
-                    where estado = 'PR' and anio_id = $anio 
+                $matricula_unica = "SELECT mg.id from par_importacion as imp
+                    inner join edu_matricula_general as mg on mg.importacion_id = imp.id
+                    where estado = 'PR' and anio_id = $anio
                     order by fechaActualizacion desc limit 1";
 
                 $ubigeos = "";
@@ -397,7 +397,7 @@ class MatriculaGeneralRepositorio
                     from edu_institucioneducativa as ie
                     inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id
                     inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id $ubigeos
-                    inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id $gestions 
+                    inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id $gestions
                     inner join edu_ugel as uu on uu.id = ie.Ugel_id";
 
                 $query = MatriculaGeneralDetalle::from('edu_matricula_general_detalle as mgd');
@@ -421,9 +421,9 @@ class MatriculaGeneralRepositorio
                 )->groupBy('idugel', 'ugel')->get();
                 return $query;
             case 'tabla2':
-                $matricula_unica = "SELECT mg.id from par_importacion as imp 
-                    inner join edu_matricula_general as mg on mg.importacion_id = imp.id 
-                    where estado = 'PR' and anio_id = $anio 
+                $matricula_unica = "SELECT mg.id from par_importacion as imp
+                    inner join edu_matricula_general as mg on mg.importacion_id = imp.id
+                    where estado = 'PR' and anio_id = $anio
                     order by fechaActualizacion desc limit 1";
 
                 $ubigeos = "";
@@ -435,7 +435,7 @@ class MatriculaGeneralRepositorio
                     from edu_institucioneducativa as ie
                     inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id
                     inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id $ubigeos
-                    inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id $gestions 
+                    inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id $gestions
                     inner join edu_ugel as uu on uu.id = ie.Ugel_id
                     inner join edu_nivelmodalidad as nm on nm.id = ie.NivelModalidad_id";
 
@@ -1193,7 +1193,26 @@ class MatriculaGeneralRepositorio
 
     public static function basicaregularopcion2($div, $anio, $provincia, $distrito,  $gestion, $area)
     {
-        $impor_unicos = "SELECT id, anio 
+        $impor_unicos = "SELECT id, anio FROM (SELECT mg.id, anio.anio, ROW_NUMBER() OVER (PARTITION BY anio.anio ORDER BY mg.id DESC) AS rn FROM edu_matricula_general mg INNER JOIN par_importacion AS imp ON imp.id = mg.importacion_id INNER JOIN par_anio AS anio ON anio.id = mg.anio_id WHERE imp.estado = 'PR') as iu WHERE rn = 1 ";
+
+        $ubigeos = "";
+        if ($provincia > 0) $ubigeos .= " AND dd.dependencia=$provincia ";
+        if ($distrito > 0) $ubigeos .= " AND dd.id=$distrito ";
+        $gestions = "";
+        if ($gestion > 0) $gestions .= $gestion == 3 ? " AND tg.dependencia=3 " : " AND tg.dependencia!=3 ";
+        $iiees = "SELECT ie.id, case when nm.codigo='A2' OR nm.codigo='A3' OR nm.codigo='A5' then 'Inicial' else nm.nombre end as nivel from edu_institucioneducativa as ie inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id $ubigeos inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id $gestions inner join edu_nivelmodalidad as nm on nm.id = ie.NivelModalidad_id AND nm.tipo='EBR'";
+
+        $query = MatriculaGeneralDetalle::from('edu_matricula_general_detalle as mgd')
+            ->join(DB::raw("(SELECT id, anio FROM (SELECT mg.id, anio.anio, ROW_NUMBER() OVER (PARTITION BY anio.anio ORDER BY mg.id DESC) AS rn FROM edu_matricula_general mg INNER JOIN par_importacion AS imp ON imp.id = mg.importacion_id INNER JOIN par_anio AS anio ON anio.id = mg.anio_id WHERE imp.estado = 'PR') as iu WHERE rn = 1 ) as mg"), 'mg.id', '=', 'mgd.matriculageneral_id');
+            // ->join(DB::raw("($iiees) as ie"), 'ie.id', '=', 'mgd.institucioneducativa_id');
+        // $query = $query->select('mg.anio', 'ie.nivel', DB::raw('count(mgd.id) as conteo'))->groupBy('mg.anio', 'ie.nivel')->get();
+        // $query = $query->get();
+        return $query->select(DB::raw('count(mgd.id)'))->get();
+    }
+
+    public static function basicaregularopcion2xx($div, $anio, $provincia, $distrito,  $gestion, $area)
+    {
+        $impor_unicos = "SELECT id, anio
                         FROM (
                             SELECT mg.id, anio.anio, ROW_NUMBER() OVER (PARTITION BY anio.anio ORDER BY mg.id DESC) AS rn FROM edu_matricula_general mg
                             INNER JOIN par_importacion AS imp ON imp.id = mg.importacion_id
