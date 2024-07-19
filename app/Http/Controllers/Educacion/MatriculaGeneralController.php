@@ -1533,6 +1533,8 @@ class MatriculaGeneralController extends Controller
                 $info['series'] = [];
                 $alto = 0;
                 $btotal = 0;
+                $anioi = 0;
+                $aniof = 0;
                 foreach ($datax as $key => $value) {
                     $dx2[] = null;
                     $dx3[] = null;
@@ -1545,12 +1547,15 @@ class MatriculaGeneralController extends Controller
                     $dx3[$keyi] = $n;
                     $dx4[$keyi] = $d > 0 ? round(100 * $n / $d, 1) : 0;
                     $alto = $n > $alto ? $n : $alto;
+                    if ($keyi == 0) $anioi = $ii->anio;
+                    if ($keyi == $datax->count() - 1) $aniof = $ii->anio;
                 }
                 $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'Matriculados',  'data' => $dx3];
                 $info['series'][] = ['type' => 'spline', 'yAxis' => 1, 'name' => '%Avance', 'tooltip' => ['valueSuffix' => ' %'], 'data' => $dx4];
                 $info['maxbar'] = $alto;
 
                 $reg['fuente'] = 'Siagie - MINEDU';
+                $reg['periodo'] = "$anioi - $aniof";
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
                 return response()->json(compact('info', 'reg'));
