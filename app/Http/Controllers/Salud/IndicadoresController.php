@@ -42,9 +42,19 @@ class IndicadoresController extends Controller
         $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios($ind->id);
         $distrito = UbigeoRepositorio::distrito_select('25', 0);
         // $aniomax = $imp->anio;
-        // $data=indicadorgene
+        $codigos = IndicadorGeneral::from('par_indicador_general as ig')
+            ->select('ig.codigo', 'ig.nombre')
+            // ->select('ig.nombre')
+            ->where('ig.sector_id', 14)
+            ->get();
+        $data = IndicadorGeneral::from('par_indicador_general as ig')
+            ->join('par_indicador_general_meta as igm', 'igm.indicadorgeneral', '=', 'ig.id')
+            ->join('par_ubigeo as uu', 'uu.id', '=', 'igm.distrito')
+            ->select('ig.codigo', 'ig.nombre', 'ig.unidad_id', 'igm.distrito as iddistrito', 'uu.nombre as distrito', 'igm.anio', 'igm.valor')
+            ->where('ig.sector_id', 14)
+            ->get();
 
-        return view('indicadores.PactoRegional.PactoRegionalSalMeta', compact('anio', 'distrito'));
+        return view('indicadores.PactoRegional.PactoRegionalSalMeta', compact('anio', 'distrito', 'codigos', 'data'));
     }
 
     public function PactoRegional()

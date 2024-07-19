@@ -26,30 +26,34 @@
                                             <th class="text-center">Código</th>
                                             <th class="text-center">Indicador</th>
                                             @foreach ($distrito as $item)
-                                            <th class="text-center">{{$item->nombre}}</th>
+                                                <th class="text-center">{{ $item->nombre }}</th>
                                             @endforeach
                                         </tr>
 
                                     </thead>
                                     <tbody>
-                                        {{-- @foreach ($base as $key => $item)
-                                            <tr class="text-center {{ $item->dis == $ndis ? 'table-warning' : '' }}">
-                                                <td>{{ $key + 1 }}</td>
-                                                <td class="text-left">{{ $item->dis }}</td>
-                                                <td>{{ $item->anio_base }}</td>
-                                                <td>{{ $item->valor_base }}</td>
-                                                <td>{{ $item->v2023 }}</td>
-                                                <td>{{ $item->v2024 }}</td>
-                                                <td>{{ $item->v2025 }}</td>
-                                                <td>{{ $item->v2026 }}</td>
-                                                <td>{{ $item->r2023 }}</td>
-                                                <td>{{ $item->r2024 }}</td>
-                                                <td>{{ $item->r2025 }}</td>
-                                                <td>{{ $item->r2026 }}</td>
-                                                <td>{!! avance($item->avance) !!}</td>
 
+                                        @foreach ($anio as $aa)
+                                            <tr class="text-center bg-success-0 text-white">
+                                                <th colspan="2" class="text-right">AÑO</th>
+                                                <th colspan="2" class="text-right">{{ $aa->anio }}</th>
                                             </tr>
-                                        @endforeach --}}
+                                            @foreach ($codigos as $key => $item)
+                                                <tr class="text-center ">
+                                                    {{-- <td>{{ $key + 1 }}</td> --}}
+                                                    <td class="text-left">{{ $item->codigo }}</td>
+                                                    <td class="text-left">{{ $item->nombre }}</td>
+                                                    @foreach ($distrito as $dd)
+                                                        @foreach ($data as $bb)
+                                                            @if ($bb->codigo == $item->codigo && $bb->iddistrito == $dd->id && $bb->anio == $aa->anio)
+                                                                <td>{{ $bb->valor }}{{ $bb->unidad_id == 1 ? '%' : '' }}</td>
+                                                            @endif
+                                                        @endforeach
+                                                    @endforeach
+                                                </tr>
+                                            @endforeach
+                                        @endforeach
+
                                     </tbody>
                                     <tfoot>
                                         {{-- <tr class="text-center bg-success-0 text-white">
@@ -93,11 +97,11 @@
         }
 
         function panelGraficas(div) {
-            
+
         }
 
         function cargarTablaNivel(div, ugel) {
-          
+
         }
 
         function cargarDistritos() {
@@ -121,7 +125,7 @@
         }
 
         function descargar1() {
-             
+
         }
 
         function descargar2() {
