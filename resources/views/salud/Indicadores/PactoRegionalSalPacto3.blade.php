@@ -326,7 +326,7 @@
                 },
             });
         }
- 
+
         function cargarDistritos() {
             $.ajax({
                 url: "{{ route('ubigeo.distrito.25', '') }}/" + $('#provincia').val(),
@@ -664,6 +664,8 @@
             });
         }
 
+
+
         function gLineaBasica(div, data, titulo, subtitulo, titulovetical) {
             const colors = ["#5eb9aa", "#f5bd22", "#e65310"];
             Highcharts.chart(div, {
@@ -743,6 +745,117 @@
         }
 
         function gLineaBasica2(div, data, titulo, subtitulo, titulovetical) {
+            const colors = ["#5eb9aa", "#f5bd22", "#e65310"];
+            Highcharts.chart(div, {
+                // colors: ['#5eb9aa', '#f5bd22', '#ef5350'],
+                title: {
+                    text: titulo
+                },
+                subtitle: {
+                    text: subtitulo
+                },
+                yAxis: {
+                    title: {
+                        text: titulovetical
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px'
+                        }
+                    },
+                    min: 0,
+                },
+                xAxis: {
+                    categories: data.cat,
+                    labels: {
+                        style: {
+                            fontSize: '10px'
+                        }
+                    }
+                    /* accessibility: {
+                        rangeDescription: 'Range: 2010 to 2017'
+                    } */
+                },
+                /* legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle'
+                }, */
+                plotOptions: {
+                    series: {
+                        dataLabels: {
+                            enabled: true,
+                            formatter: function() {
+                                // if (this.colorIndex == 0)
+                                //     return this.y + " %";
+                                // else
+                                return Highcharts.numberFormat(this.y, 1) + " %";
+                            },
+                            style: {
+                                fontSize: '10px',
+                                fontWeight: 'normal',
+                            },
+                        },
+                        /* label: {
+                            connectorAllowed: false
+                        },
+                        pointStart: 2010 */
+                    }
+                },
+
+                // plotOptions: {
+                //     /* columns: {
+                //         stacking: 'normal'
+                //     }, */
+                //     series: {
+                //         showInLegend: true,
+                //         borderWidth: 0,
+                //         dataLabels: {
+                //             enabled: true,
+                //             //format: '{point.y:,.0f}',
+                //             //format: '{point.y:.1f}%',
+                //             /* formatter: function() {
+                //                 if (this.colorIndex == 2)
+                //                     return this.y + " %";
+                //                 else
+                //                     return Highcharts.numberFormat(this.y, 0);
+                //             }, */
+                //             style: {
+                //                 fontWeight: 'normal',
+                //                 fontSize: '10px',
+                //             }
+                //         },
+                //     },
+                // },
+
+                series: [{
+                    name: 'Recuperados',
+                    showInLegend: false,
+                    data: data.dat
+                }],
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 500
+                        },
+                        chartOptions: {
+                            legend: {
+                                layout: 'horizontal',
+                                align: 'center',
+                                verticalAlign: 'bottom'
+                            }
+                        }
+                    }]
+                },
+                exporting: {
+                    enabled: true,
+                },
+                credits: false,
+
+            });
+        }
+
+        function gLineaBasica2xx(div, data, titulo, subtitulo, titulovetical) {
             const colors = ["#5eb9aa", "#f5bd22", "#e65310"];
             Highcharts.chart(div, {
                 title: {

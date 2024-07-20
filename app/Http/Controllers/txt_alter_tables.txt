@@ -1824,6 +1824,60 @@ SELECT ig.nombre,igm.distrito iddistrito,uu.nombre distrito, igm.anio,igm.valor 
 inner join par_indicador_general_meta igm on igm.indicadorgeneral=ig.id
 inner join par_ubigeo uu on uu.id=igm.distrito WHERE sector_id=14;
 
+#######################################################################################################
+
+CREATE TABLE `pvica` (
+    id int(11) auto_increment primary key,
+    ubigeo_ccpp varchar(10) NULL DEFAULT NULL,
+    nombre_ccpp varchar(100) NULL DEFAULT NULL,
+    departamento_cpp varchar(100) NULL DEFAULT NULL,
+    provincia_ccpp varchar(100) NULL DEFAULT NULL,
+    distrito_ccpp varchar(100) NULL DEFAULT NULL,
+    ambito_ccpp varchar(100) NULL DEFAULT NULL,
+    pob_total_ccpp int(11) NULL DEFAULT NULL,
+    pop_servida_ccpp int(11) NULL DEFAULT NULL,
+    quintil_ccpp varchar(2) NULL DEFAULT NULL,
+    dd_ccpp varchar(100) NULL DEFAULT NULL,
+    da_ccpp varchar(4) NULL DEFAULT NULL,
+    codigo_ipress varchar(8) NULL DEFAULT NULL,
+    nombre_ipress varchar(100) NULL DEFAULT NULL,
+    diresa_ipress varchar(100) NULL DEFAULT NULL,
+    red_ipress varchar(100) NULL DEFAULT NULL,
+    microred_ipress varchar(100) NULL DEFAULT NULL,
+    id_sistema_abstecimiento_agua int(11) NULL DEFAULT NULL,
+    tipo_sistema_abstecimiento_agua varchar(100) NULL DEFAULT NULL,
+    nombre_sistema_abstecimiento_agua varchar(100) NULL DEFAULT NULL,
+    id_proveedor_agua int(11) NULL DEFAULT NULL,
+    tipo_proveedor_agua varchar(100) NULL DEFAULT NULL,
+    nombre_proveedor_agua varchar(100) NULL DEFAULT NULL,
+    muestreo int(11) NULL DEFAULT NULL,
+    muestra int(11) NULL DEFAULT NULL,
+    este_coordenadas_muestra int(11) NULL DEFAULT NULL,
+    norte_coordenadas_muestra int(11) NULL DEFAULT NULL,
+    huso_banda_coordenadas_muestra varchar(4) NULL DEFAULT NULL,
+    altura_coordenadas_muestra int(11) NULL DEFAULT NULL,
+    estado_muestreo varchar(100) NULL DEFAULT NULL,
+    fecha_muestreo varchar(10) NULL DEFAULT NULL,
+    fecha_finalizado varchar(20) NULL DEFAULT NULL,
+    id_lugar_muestreo varchar(100) NULL DEFAULT NULL,
+    ubicacion_lugar_muestreo varchar(100) NULL DEFAULT NULL,
+    nombre_lugar_muestreo varchar(100) NULL DEFAULT NULL,
+    horas_dia_continuidad int(11) NULL DEFAULT NULL,
+    dias_semana_continuidad int(11) NULL DEFAULT NULL,
+    cloro_parametros_decreto double NULL DEFAULT NULL,
+    conductividad_parametros_decreto int(11) NULL DEFAULT NULL,
+    ph_parametros_decreto double NULL DEFAULT NULL,
+    temperatura_parametros_decreto double NULL DEFAULT NULL,
+    turbiedad_parametros_decreto double NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+###################################################################
+CREATE TABLE `centropoblado_ninios` (
+    id int(11) auto_increment primary key,
+    ubigeo varchar(10) NULL DEFAULT NULL,
+    cantidad int(11) NULL DEFAULT NULL,
+    distrito varchar(100) NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 

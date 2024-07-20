@@ -409,6 +409,24 @@ class IndicadorGeneralMetaRepositorio
         return $query;
     }
 
+    public static function getPacto3Mensual2($anio, $distrito)
+    {
+        $dst = Ubigeo::find($distrito);
+        $nquery = DataPacto3::select(DB::raw('mes as name'), DB::raw('sum(cantidad) as avance'))->where('anio', $anio);
+        if (IndicadoresController::$pacto1_anio == $anio) $nquery = $nquery->where('mes', '>=', IndicadoresController::$pacto1_mes);
+        if ($distrito > 0) $nquery = $nquery->where('distrito',  $dst->nombre);
+        $nquery = $nquery->groupBy('name')->orderBy('name')->get();
+
+        $dquery = DataPacto3Denominador::where('anio', $anio)->select(DB::raw('sum(meta) as meta'));
+        if ($distrito > 0) $dquery = $dquery->where('distrito',  $dst->nombre);
+        $dquery = $dquery->get()->first();
+
+        foreach ($nquery as $key => $value) {
+            $value->y = round(100 * $value->avance / $dquery->meta, 1);
+        }
+        return $nquery;
+    }
+
     public static function getSalPacto3tabla1($indicador_id, $anio, $mes, $provincia, $distrito)
     {
         $query = IndicadorGeneralMeta::select('par_Indicador_general_meta.*', 'd.codigo', 'd.id as distrito_id', 'd.nombre as distrito')->where('indicadorgeneral', $indicador_id)->where('anio', $anio)
@@ -460,7 +478,7 @@ class IndicadorGeneralMetaRepositorio
             $yquery =  DataPacto3Denominador::where('anio', $anioxx)->select(DB::raw('sum(meta) as conteo'));
             $yquery = $yquery->join('par_ubigeo as dd', 'dd.id', '=', 'ubigeo_id');
             $yquery = $yquery->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia');
-            // if ($value->dis > 0) 
+            // if ($value->dis > 0)
             $yquery = $yquery->where('dd.nombre',  $value->dis);
             $yquery = $yquery->get()->first()->conteo;
 
@@ -485,7 +503,7 @@ class IndicadorGeneralMetaRepositorio
             $yquery =  DataPacto3Denominador::where('anio', $anioxx)->select(DB::raw('sum(meta) as conteo'));
             $yquery = $yquery->join('par_ubigeo as dd', 'dd.id', '=', 'ubigeo_id');
             $yquery = $yquery->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia');
-            // if ($value->dis > 0) 
+            // if ($value->dis > 0)
             $yquery = $yquery->where('dd.nombre',  $value->dis);
             $yquery = $yquery->get()->first()->conteo;
 
