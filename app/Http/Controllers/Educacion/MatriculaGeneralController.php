@@ -752,11 +752,13 @@ class MatriculaGeneralController extends Controller
                 //$dx2 = [];
                 $dx3 = [];
                 $dx4 = [];
-                foreach ($datax as $key => $value) {
-                    //$dx2[] = null;
-                    $dx3[] = null;
-                    $dx4[] = null;
-                }
+                $anioi = 0;
+                $aniof = 0;
+                // foreach ($datax as $key => $value) {
+                //     //$dx2[] = null;
+                //     $dx3[] = null;
+                //     $dx4[] = null;
+                // }
                 foreach ($datax as $keyi => $ii) {
                     $info['categoria'][] = $ii->anio;
                     $n = (int)$ii->suma;
@@ -765,12 +767,16 @@ class MatriculaGeneralController extends Controller
                     $dx3[$keyi] = $n;
                     $dx4[$keyi] = $d > 0 ? round(100 * $n / $d, 1) : 100;
                     $alto = $n > $alto ? $n : $alto;
+                    if ($keyi == 0) $anioi = $ii->anio;
+                    if ($keyi == $datax->count() - 1) $aniof = $ii->anio;
                 }
                 //$alto = 0;
                 $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'Matriculados',  'data' => $dx3];
                 //$info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'Matriculados', 'data' => $dx2];
                 $info['series'][] = ['type' => 'spline', 'yAxis' => 1, 'name' => '%Avance', 'tooltip' => ['valueSuffix' => ' %'], 'data' => $dx4];
                 $info['maxbar'] = $alto;
+                
+                $reg['periodo'] = "período $anioi - $aniof";
                 $reg['fuente'] = 'Siagie - MINEDU';
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
@@ -1535,11 +1541,11 @@ class MatriculaGeneralController extends Controller
                 $btotal = 0;
                 $anioi = 0;
                 $aniof = 0;
-                foreach ($datax as $key => $value) {
-                    $dx2[] = null;
-                    $dx3[] = null;
-                    $dx4[] = null;
-                }
+                // foreach ($datax as $key => $value) {
+                $dx2[] = null;
+                $dx3[] = null;
+                $dx4[] = null;
+                // }
                 foreach ($datax as $keyi => $ii) {
                     $info['categoria'][] = $ii->anio;
                     $n = (int)$ii->conteo;
@@ -1555,7 +1561,7 @@ class MatriculaGeneralController extends Controller
                 $info['maxbar'] = $alto;
 
                 $reg['fuente'] = 'Siagie - MINEDU';
-                $reg['periodo'] = "$anioi - $aniof";
+                $reg['periodo'] = "período $anioi - $aniof";
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
                 return response()->json(compact('info', 'reg'));
@@ -1588,6 +1594,8 @@ class MatriculaGeneralController extends Controller
                 $data = MatriculaGeneralRepositorio::basicaregulartabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
                 $info['cat'] = [];
                 $info['dat'] = [];
+                $anioi = 0;
+                $aniof = 0;
                 foreach ($data->unique('anio') as $key => $value) {
                     $info['cat'][] = $value->anio;
                 }
@@ -1595,18 +1603,21 @@ class MatriculaGeneralController extends Controller
                     $info['dat'][] = ["name" => $value->nivel, "data" => []];
                     $xx[] = [];
                 }
-                foreach ($data as $value) {
-                    foreach ($info['dat'] as $key => $dat) {
+                foreach ($data as $key => $value) {
+                    foreach ($info['dat'] as $key2 => $dat) {
                         if ($value->nivel == $dat['name']) {
-                            $xx[$key][] = $value->conteo;
+                            $xx[$key2][] = $value->conteo;
                         }
                     }
+                    if ($key == 0) $anioi = $value->anio;
+                    if ($key == $data->count() - 1) $aniof = $value->anio;
                 }
                 $info['dat'] = [];
                 foreach ($data->unique('nivel') as $key => $value) {
                     $info['dat'][] = ["name" => $value->nivel, "data" => $xx[$key]];
                 }
 
+                $reg['periodo'] = "$anioi - $aniof";
                 $reg['fuente'] = 'Siagie - MINEDU';
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
@@ -2200,11 +2211,13 @@ class MatriculaGeneralController extends Controller
                 $info['series'] = [];
                 $alto = 0;
                 $btotal = 0;
-                foreach ($datax as $key => $value) {
-                    $dx2[] = null;
-                    $dx3[] = null;
-                    $dx4[] = null;
-                }
+                $anioi = 0;
+                $aniof = 0;
+                // foreach ($datax as $key => $value) {
+                $dx2[] = null;
+                $dx3[] = null;
+                $dx4[] = null;
+                // }
                 foreach ($datax as $keyi => $ii) {
                     $info['categoria'][] = $ii->anio;
                     $n = (int)$ii->conteo;
@@ -2212,11 +2225,14 @@ class MatriculaGeneralController extends Controller
                     $dx3[$keyi] = $n;
                     $dx4[$keyi] = $d > 0 ? round(100 * $n / $d, 1) : 0;
                     $alto = $n > $alto ? $n : $alto;
+                    if ($keyi == 0) $anioi = $ii->anio;
+                    if ($keyi == $datax->count() - 1) $aniof = $ii->anio;
                 }
                 $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'Matriculados',  'data' => $dx3];
                 $info['series'][] = ['type' => 'spline', 'yAxis' => 1, 'name' => '%Avance', 'tooltip' => ['valueSuffix' => ' %'], 'data' => $dx4];
                 $info['maxbar'] = $alto;
 
+                $reg['periodo'] = "período $anioi - $aniof";
                 $reg['fuente'] = 'Siagie - MINEDU';
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
@@ -2252,6 +2268,8 @@ class MatriculaGeneralController extends Controller
                 $info['dat'] = [];
                 $xa = [];
                 $ix = 0;
+                $anioi = 0;
+                $aniof = 0;
                 foreach ($data->unique('anio') as $key => $value) {
                     $info['cat'][] = $value->anio;
                     $xa[$value->anio] = $ix++;
@@ -2260,12 +2278,14 @@ class MatriculaGeneralController extends Controller
                     $info['dat'][] = ["name" => $value->nivel, "data" => []];
                     $xx[] = array_fill(0, count($xa), 0);
                 }
-                foreach ($data as $value) {
-                    foreach ($info['dat'] as $key => $dat) {
+                foreach ($data as $key => $value) {
+                    foreach ($info['dat'] as $key2 => $dat) {
                         if ($value->nivel == $dat['name']) {
-                            $xx[$key][$xa[$value->anio]] = $value->conteo;
+                            $xx[$key2][$xa[$value->anio]] = $value->conteo;
                         }
                     }
+                    if ($key == 0) $anioi = $value->anio;
+                    if ($key == $data->count() - 1) $aniof = $value->anio;
                 }
                 $info['dat'] = [];
                 $ii = 0;
@@ -2273,6 +2293,7 @@ class MatriculaGeneralController extends Controller
                     $info['dat'][] = ["name" => $value->nivel, "data" => $xx[$ii++]];
                 }
 
+                $reg['periodo'] = "$anioi - $aniof";
                 $reg['fuente'] = 'Siagie - MINEDU';
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
@@ -2625,11 +2646,13 @@ class MatriculaGeneralController extends Controller
                 $info['series'] = [];
                 $alto = 0;
                 $btotal = 0;
-                foreach ($datax as $key => $value) {
-                    $dx2[] = null;
-                    $dx3[] = null;
-                    $dx4[] = null;
-                }
+                $anioi = 0;
+                $aniof = 0;
+                // foreach ($datax as $key => $value) {
+                $dx2[] = null;
+                $dx3[] = null;
+                $dx4[] = null;
+                // }
                 foreach ($datax as $keyi => $ii) {
                     $info['categoria'][] = $ii->anio;
                     $n = (int)$ii->conteo;
@@ -2637,15 +2660,18 @@ class MatriculaGeneralController extends Controller
                     $dx3[$keyi] = $n;
                     $dx4[$keyi] = $d > 0 ? round(100 * $n / $d, 1) : 0;
                     $alto = $n > $alto ? $n : $alto;
+                    if ($keyi == 0) $anioi = $ii->anio;
+                    if ($keyi == $datax->count() - 1) $aniof = $ii->anio;
                 }
                 $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'Matriculados',  'data' => $dx3];
                 $info['series'][] = ['type' => 'spline', 'yAxis' => 1, 'name' => '%Avance', 'tooltip' => ['valueSuffix' => ' %'], 'data' => $dx4];
                 $info['maxbar'] = $alto;
 
+                $reg['periodo'] = "período $anioi - $aniof";
                 $reg['fuente'] = 'Siagie - MINEDU';
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
-                $reg['periodo'] = '' . $datax[0]->anio . ' - ' . $datax[$datax->count() - 1]->anio;
+                // $reg['periodo'] = '' . $datax[0]->anio . ' - ' . $datax[$datax->count() - 1]->anio;
                 return response()->json(compact('info', 'reg'));
             case 'anal2':
                 $periodo = Mes::select('codigo', 'abreviado as mes', DB::raw('0 as conteo'))->get();
@@ -2677,6 +2703,8 @@ class MatriculaGeneralController extends Controller
                 $info['dat'] = [];
                 $xa = [];
                 $ix = 0;
+                $anioi = 0;
+                $aniof = 0;
                 foreach ($data->unique('anio') as $key => $value) {
                     $info['cat'][] = $value->anio;
                     $xa[$value->anio] = $ix++;
@@ -2689,12 +2717,14 @@ class MatriculaGeneralController extends Controller
                 $xx[1] = [0, 0];
                 $xx[2] = [0, 0];
 
-                foreach ($data as $value) {
-                    foreach ($info['dat'] as $key => $dat) {
+                foreach ($data as $key => $value) {
+                    foreach ($info['dat'] as $key2 => $dat) {
                         if ($value->nivel == $dat['name']) {
-                            $xx[$key][$xa[$value->anio]] = $value->conteo;
+                            $xx[$key2][$xa[$value->anio]] = $value->conteo;
                         }
                     }
+                    if ($key == 0) $anioi = $value->anio;
+                    if ($key == $data->count() - 1) $aniof = $value->anio;
                 }
                 $info['dat'] = [];
                 $ii = 0;
@@ -2702,6 +2732,7 @@ class MatriculaGeneralController extends Controller
                     $info['dat'][] = ["name" => $value->nivel, "data" => $xx[$ii++]];
                 }
 
+                $reg['periodo'] = "$anioi - $aniof";
                 $reg['fuente'] = 'Siagie - MINEDU';
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));

@@ -467,20 +467,22 @@
                     } else if (div == "anal1") {
                         gAnidadaColumn(div,
                             data.info.categoria, data.info.series, '',
-                            'Número de estudiantes matriculados en educación básica especial, periodo 2018 - 2023',
+                            'Número de estudiantes matriculados en educación básica especial, ' +
+                            data.reg.periodo,
                             data.info.maxbar
                         );
                         $('.anal1-fuente').html('Fuente: ' + data.reg.fuente);
                         $('.anal1-fecha').html('Actualizado: ' + data.reg.fecha);
                     } else if (div == "anal2") {
                         gLineaBasica(div, data.info, '',
-                            'Evolución mensual de la matricula educativa en educación básica especial período 2023',
+                            'Evolución mensual de la matricula educativa en educación básica especial período '+$('#anio option:selected').text(),
                             '');
                         $('.anal2-fuente').html('Fuente: ' + data.reg.fuente);
                         $('.anal2-fecha').html('Actualizado: ' + data.reg.fecha);
                     } else if (div == "anal3") {
                         gLineaMultiple(div, data.info, '',
-                            'Numero de estudiantes matriculados en educación básica especial, según nivel educativo,periodo 2018-2023',
+                            'Numero de estudiantes matriculados en educación básica especial, según nivel educativo, ' +
+                            data.reg.periodo,
                             '');
                         $('.anal3-fuente').html('Fuente: ' + data.reg.fuente);
                         $('.anal3-fecha').html('Actualizado: ' + data.reg.fecha);

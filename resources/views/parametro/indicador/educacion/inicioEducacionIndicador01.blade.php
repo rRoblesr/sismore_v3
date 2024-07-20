@@ -454,7 +454,8 @@
                     if (div == "anal1") {
                         gAnidadaColumn(div,
                             data.info.categoria, data.info.series, '',
-                            'Número de estudiantes matriculados en educación básica, periodo 2018-2023',
+                            'Número de estudiantes matriculados en educación básica, ' +
+                            data.reg.periodo,
                             data.info.maxbar
                         );
                         $('.anal1-fuente').html('Fuente: ' + data.reg.fuente);
