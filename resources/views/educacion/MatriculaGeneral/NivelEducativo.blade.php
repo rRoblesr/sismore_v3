@@ -471,11 +471,11 @@
         });
 
         function cargarCards() {
-            panelGraficas('head');
-            panelGraficas('anal1');
-            panelGraficas('anal2');
-            panelGraficas('anal3');
-            panelGraficas('anal4');
+            // panelGraficas('head');
+            // panelGraficas('anal1');
+            // panelGraficas('anal2');
+            // panelGraficas('anal3');
+            // panelGraficas('anal4');
             panelGraficas('anal5');
             panelGraficas('anal6');
             panelGraficas('tabla1');
