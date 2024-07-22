@@ -200,7 +200,22 @@ CREATE TABLE `sal_data_pacto3_denominador` (
 
 
 
+SELECT cpn.distrito,sum(cpn.cantidad) niños_clorados,cpd.cantidad niños_vivientes,round(100*sum(cpn.cantidad)/cpd.cantidad,2) FROM(
+    SELECT ubigeo_ccpp,nombre_ccpp FROM pvica
+    where cloro_parametros_decreto>=0.5
+    group by ubigeo_ccpp,nombre_ccpp order by ubigeo_ccpp
+) as cp
+inner join centropoblado_ninios cpn on cpn.ubigeo=cp.ubigeo_ccpp 
+inner join (select distrito ,sum(cantidad) cantidad from centropoblado_ninios group by distrito) cpd on cpd.distrito=cpn.distrito
+group by cpn.distrito,cpd.distrito;
 
+select distrito ,sum(cantidad) from centropoblado_ninios group by distrito;
+
+SELECT ubigeo_ccpp,nombre_ccpp FROM pvica
+-- where cloro_parametros_decreto>=0.5
+group by ubigeo_ccpp,nombre_ccpp order by ubigeo_ccpp;
+
+############################################################################
 
 
 
