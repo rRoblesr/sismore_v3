@@ -77,6 +77,8 @@ use App\Http\Controllers\Salud\ActasHomologadasController;
 use App\Http\Controllers\Salud\EstablecimientoController;
 use App\Http\Controllers\Salud\ImporPadronActasController;
 use App\Http\Controllers\Salud\ImporPadronEstablecimientoController;
+use App\Http\Controllers\Salud\ImporPadronPvicaController;
+use App\Http\Controllers\Salud\ImporReportePN05Controller;
 use App\Http\Controllers\Salud\IndicadoresController;
 use App\Http\Controllers\Salud\SaludNino;
 use App\Http\Controllers\Salud\SaludPadronExportar;
@@ -1221,6 +1223,18 @@ Route::post('/ImporPadronEESS/Importar', [ImporPadronEstablecimientoController::
 Route::get('/ImporPadronEESS/Listar/ImportarDT', [ImporPadronEstablecimientoController::class, 'ListarDTImportFuenteTodos'])->name('imporpadronestablecimiento.listar.importados');
 Route::post('/ImporPadronEESS/ListaImportada', [ImporPadronEstablecimientoController::class, 'ListaImportada'])->name('imporpadronestablecimiento.listarimportados');
 Route::get('/ImporPadronEESS/eliminar/{id}', [ImporPadronEstablecimientoController::class, 'eliminar'])->name('imporpadronestablecimiento.eliminar');
+
+Route::get('/ImporPadronPvica/Importar', [ImporPadronPvicaController::class, 'importar'])->name('imporpadronpvica.importar');
+Route::post('/ImporPadronPvica/Importar', [ImporPadronPvicaController::class, 'guardar'])->name('imporpadronpvica.guardar');
+Route::get('/ImporPadronPvica/Listar/ImportarDT', [ImporPadronPvicaController::class, 'ListarDTImportFuenteTodos'])->name('imporpadronpvica.listar.importados');
+Route::post('/ImporPadronPvica/ListaImportada', [ImporPadronPvicaController::class, 'ListaImportada'])->name('imporpadronpvica.listarimportados');
+Route::get('/ImporPadronPvica/eliminar/{id}', [ImporPadronPvicaController::class, 'eliminar'])->name('imporpadronpvica.eliminar');
+
+Route::get('/ImporReportePN05/Importar', [ImporReportePN05Controller::class, 'importar'])->name('imporreportepn05.importar');
+Route::post('/ImporReportePN05/Importar', [ImporReportePN05Controller::class, 'guardar'])->name('imporreportepn05.guardar');
+Route::get('/ImporReportePN05/Listar/ImportarDT', [ImporReportePN05Controller::class, 'ListarDTImportFuenteTodos'])->name('imporreportepn05.listar.importados');
+Route::post('/ImporReportePN05/ListaImportada', [ImporReportePN05Controller::class, 'ListaImportada'])->name('imporreportepn05.listarimportados');
+Route::get('/ImporReportePN05/eliminar/{id}', [ImporReportePN05Controller::class, 'eliminar'])->name('imporreportepn05.eliminar');
 
 Route::get('/Salud/Nino', [SaludNino::class, 'PadronNominal'])->name('salud.nino.padron');
 Route::get('/Salud/Calidad', [SaludNino::class, 'ControlCalidad'])->name('salud.nino.calidad');

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Models\Salud\PadronCalidad;
 
-class SaludPadronNominalCalidad extends Controller
+class SaludPadronNominalCalidad_ extends Controller
 {
     public function __construct()
     {
@@ -29,26 +29,11 @@ class SaludPadronNominalCalidad extends Controller
         $start = 0;
         $length = 0;
         $sector = session('usuario_sector');
-        $nivel = session('usuario_nivel');
-        $codigo_institucion = (($sector=='14' && $nivel==4)?'0':'').session('usuario_codigo_institucion');
+        $codigo_institucion = session('usuario_codigo_institucion');
         $nombre_columna = ($sector == '14') ? "cod_eess_atencion" : "ubigeo";
-        //dd($sector, ' - ', $nivel, ' - ', $nombre_columna, ' . ', $codigo_institucion);
-        $tablon = PadronCalidad::select('codigo_calidad', 'nombre_calidad', DB::raw('COUNT(*) AS cantidad'));
-        if(($sector=='14' && $nivel==4) || $sector=='2')
-            $tablon = $tablon->where($nombre_columna, $codigo_institucion);
-        if( $sector='14' && $nivel==2 ) {   
-            $ipress = DB::table('m_establecimiento')
-                ->select('cod_2000')
-                ->where('cod_disa', '34')->where('cod_red', $codigo_institucion);
 
-            $tablon = $tablon->joinSub($ipress, 'es', function ($join) {
-                    $join->on('cod_eess_atencion', '=', 'es.cod_2000');
-                });
-        }
-            
-        $tablon = $tablon->groupBy('codigo_calidad', 'nombre_calidad')->get();
+        $tablon = PadronCalidad::select('codigo_calidad', 'nombre_calidad', DB::raw('COUNT(*) AS cantidad'))->where($nombre_columna, $codigo_institucion)->groupBy('codigo_calidad', 'nombre_calidad')->get();
 
-        //dd($tablon);
         $data = [];
         foreach ($tablon as $key => $value) {
             $boton = "<button type='button' onclick=\"verListadoTipo('$value->codigo_calidad')\" class='btn btn-primary btn-xs'><i class='fa fa-list'></i> </button>";
@@ -76,30 +61,12 @@ class SaludPadronNominalCalidad extends Controller
         $draw = 0;
         $start = 0;
         $length = 0;
-        $sector = session('usuario_sector');$nivel = session('usuario_nivel');
-        $codigo_institucion = (($sector=='14' && $nivel==4)?'0':'').session('usuario_codigo_institucion');
+        $sector = session('usuario_sector');
+        $codigo_institucion =  session('usuario_codigo_institucion');
         $nombre_columna = ($sector == '14') ? "cod_eess_atencion" : "ubigeo";
 
-        $calidad = PadronCalidad::select('codigo_calidad', 'nombre_calidad')->where('codigo_calidad', $tipo)->first();
-        //dd($calidad);
-        $tablon = PadronCalidad::select('*')->where('codigo_calidad', $tipo);
-
-        if(($sector=='14' && $nivel==4) || $sector=='2')
-            $tablon = $tablon->where($nombre_columna, $codigo_institucion);
-        if( $sector='14' && $nivel==2 ) {   
-            $ipress = DB::table('m_establecimiento')
-                ->select('cod_2000')
-                ->where('cod_disa', '34')->where('cod_red', $codigo_institucion);
-
-            $tablon = $tablon->joinSub($ipress, 'es', function ($join) {
-                    $join->on('cod_eess_atencion', '=', 'es.cod_2000');
-                });
-        }
-            
-        $tablon = $tablon->get();
-
-
-        //dd($tablon);
+        $calidad = PadronCalidad::select('codigo_calidad', 'nombre_calidad')->where('codigo_calidad', $tipo)->where($nombre_columna, $codigo_institucion)->first();
+        $tablon = PadronCalidad::select('*')->where('codigo_calidad', $tipo)->where($nombre_columna, $codigo_institucion)->get();
         //$ugels = Ugel::select('id', 'nombre', 'codigo')->where('codigo', 'like', '25%')->orderBy('nombre', 'asc')->get();
         return view('salud.padron.calidadListadoTipo', compact('tablon', 'calidad'));
     }

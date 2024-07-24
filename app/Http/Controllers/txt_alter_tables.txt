@@ -1879,6 +1879,41 @@ CREATE TABLE `centropoblado_ninios` (
     distrito varchar(100) NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+####################################################################
+
+CREATE TABLE `sal_padron_pvica` (
+    id int(11) auto_increment primary key,
+				importacion_id int(11) DEFAULT NULL,
+    ubigeo_ccpp varchar(10) NULL DEFAULT NULL,
+    nombre_ccpp varchar(100) NULL DEFAULT NULL,
+    departamento_cpp varchar(100) NULL DEFAULT NULL,
+    distrito_ccpp varchar(100) NULL DEFAULT NULL,
+    ambito_ccpp varchar(100) NULL DEFAULT NULL,
+    nombre_ipress varchar(100) NULL DEFAULT NULL,
+    diresa_ipress varchar(100) NULL DEFAULT NULL,
+    red_ipress varchar(100) NULL DEFAULT NULL,
+    microred_ipress varchar(100) NULL DEFAULT NULL,
+    ubicacion_lugar_muestreo varchar(100) NULL DEFAULT NULL,
+    nombre_lugar_muestreo varchar(100) NULL DEFAULT NULL,
+    horas_dia_continuidad int(11) NULL DEFAULT NULL,
+    dias_semana_continuidad int(11) NULL DEFAULT NULL,
+    cloro_parametros_decreto double NULL DEFAULT NULL,
+    conductividad_parametros_decreto int(11) NULL DEFAULT NULL,
+    ph_parametros_decreto double NULL DEFAULT NULL,
+    temperatura_parametros_decreto double NULL DEFAULT NULL,
+    turbiedad_parametros_decreto double NULL DEFAULT NULL,
+				foreign key(importacion_id) references par_importacion(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `sal_reporte_pn05` (
+    id int(11) auto_increment primary key,
+				importacion_id int(11) DEFAULT NULL,
+    distrito varchar(6) NULL DEFAULT NULL,
+    centro_poblado varchar(9) NULL DEFAULT NULL,
+    nro_ninios int(11) NULL DEFAULT NULL,
+				foreign key(importacion_id) references par_importacion(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 
 

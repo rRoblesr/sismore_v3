@@ -95,10 +95,9 @@ class HomeController extends Controller
         $oficina = EntidadRepositorio::migas(auth()->user()->entidad);
         if ($oficina) {
             session()->put(['entidad_nombre' => $oficina->entidadn]);
-
             session()->put(['usuario_sector' => $oficina->sector]);
             session()->put(['usuario_nivel' => $oficina->tipo]);
-            if ($oficina->sector == 14 && $oficina->sector == 4) session()->put(['usuario_codigo_institucion' => '0' . $oficina->codigo]);
+            if ($oficina->sector == 14 && $oficina->tipo == 4) session()->put(['usuario_codigo_institucion' => '0' . $oficina->codigo]);
             else session()->put(['usuario_codigo_institucion' => $oficina->codigo]);
         }
 
