@@ -1909,7 +1909,7 @@ CREATE TABLE `sal_reporte_pn05` (
     id int(11) auto_increment primary key,
 				importacion_id int(11) DEFAULT NULL,
     distrito varchar(6) NULL DEFAULT NULL,
-    centro_poblado varchar(9) NULL DEFAULT NULL,
+    centro_poblado varchar(10) NULL DEFAULT NULL,
     nro_ninios int(11) NULL DEFAULT NULL,
 				foreign key(importacion_id) references par_importacion(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -148,8 +148,8 @@ class ImporPadronPvicaController extends Controller
             $importacion->estado = 'PR';
             $importacion->save();
         } catch (Exception $e) {
-            // $importacion->estado = 'EL';
-            // $importacion->save();
+            $importacion->estado = 'PE';
+            $importacion->save();
 
             $mensaje = "Error en la carga de datos, verifique los datos de su archivo y/o comuniquese con el administrador del sistema - " . $e->getMessage();
             $this->json_output(400, $mensaje);
@@ -209,19 +209,12 @@ class ImporPadronPvicaController extends Controller
     public function ListaImportada(Request $rq)
     {
         $data = ImporPadronEstablecimiento::all();
-        // PoblacionDetalle::where('pp.importacion_id', $rq->importacion_id)
-        //     ->join('par_poblacion as pp', 'pp.id', '=', 'par_poblacion_detalle.poblacion_id')
-        //     ->join('par_ubigeo as uu', 'uu.id', '=', 'par_poblacion_detalle.ubigeo_id')
-        //     ->select('uu.codigo', 'par_poblacion_detalle.sexo', 'par_poblacion_detalle.edad', 'par_poblacion_detalle.total')->get();
         return DataTables::of($data)->make(true);
     }
 
     /* metodo para eliminar una importacion */
     public function eliminar($id)
     {
-        // $poblacion = Poblacion::where('importacion_id', $id)->first();
-        // PoblacionDetalle::where('poblacion_id', $poblacion->id)->delete();
-        // $poblacion->delete();
         ImporPadronPvica::where('importacion_id', $id)->delete();
         Importacion::find($id)->delete();
         return response()->json(array('status' => true));

@@ -172,7 +172,7 @@
                 autoWidth: false,
                 ordered: true,
                 language: table_language,
-                ajax: "{{ route('imporpadronestablecimiento.listar.importados') }}",
+                ajax: "{{ route('imporreportepn05.listar.importados') }}",
                 type: "POST",
             });
         });
@@ -204,7 +204,7 @@
                     return xhr;
                 },
                 type: "POST",
-                url: "{{ route('imporpadronestablecimiento.guardar') }}",
+                url: "{{ route('imporreportepn05.guardar') }}",
                 dataType: "json",
                 contentType: false,
                 processData: false,
@@ -245,7 +245,7 @@
             bootbox.confirm("¿Seguro desea eliminar esta importación?", function(result) {
                 if (result === true) {
                     $.ajax({
-                        url: "{{ route('imporpadronestablecimiento.eliminar', '') }}/" + id,
+                        url: "{{ route('imporreportepn05.eliminar', '') }}/" + id,
                         type: "GET",
                         dataType: "JSON",
                         success: function(data) {
@@ -277,7 +277,7 @@
                         "headers": {
                             'X-CSRF-TOKEN': $('input[name=_token]').val()
                         },
-                        "url": "{{ route('imporpadronestablecimiento.listarimportados') }}",
+                        "url": "{{ route('imporreportepn05.listarimportados') }}",
                         "data": {
                             "importacion_id": id
                         },

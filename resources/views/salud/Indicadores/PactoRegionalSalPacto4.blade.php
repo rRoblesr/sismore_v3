@@ -263,7 +263,7 @@
 
         function panelGraficas(div) {
             $.ajax({
-                url: "{{ route('salud.indicador.pactoregional.detalle.reports') }}",
+                url: "{{ route('salud.indicador.pactoregional.sal.pacto4.reports') }}",
                 data: {
                     'div': div,
                     "anio": $('#anio').val(),

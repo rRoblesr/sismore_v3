@@ -11,6 +11,7 @@ use App\Models\Parametro\ImporPoblacion;
 use App\Models\Parametro\PoblacionDetalle;
 use App\Models\Salud\Establecimiento;
 use App\Models\Salud\ImporPadronEstablecimiento;
+use App\Models\Salud\ImporReportePN05;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use Exception;
 use Illuminate\Http\Request;
@@ -78,32 +79,9 @@ class ImporReportePN05Controller extends Controller
                 foreach ($value as $celda => $row) {
                     if ($celda > 0) break;
                     $cadena =
-                        $row['cod_unico'] .
-                        $row['nombre_establecimiento'] .
-                        $row['responsable'] .
-                        $row['direccion'] .
-                        $row['telefono'] .
-                        $row['horario'] .
-                        $row['doc_categorizacion'] .
-                        $row['numero_documento'] .
-                        $row['inicio_actividad'] .
-                        $row['categoria'] .
-                        $row['estado'] .
-                        $row['institucion'] .
-                        $row['clasificacion_eess'] .
-                        $row['tipo_eess'] .
-                        $row['cod_disa'] .
-                        $row['disa'] .
-                        $row['cod_red'] .
-                        $row['red'] .
-                        $row['cod_microrred'] .
-                        $row['microrred'] .
-                        $row['sec_ejec'] .
-                        $row['ubigeo'] .
-                        $row['norte'] .
-                        $row['este'] .
-                        $row['cota'] .
-                        $row['camas'];
+                        $row['distrito'] .
+                        $row['centro_poblado'] .
+                        $row['nro_ninios'];
                 }
             }
         } catch (Exception $e) {
@@ -129,51 +107,30 @@ class ImporReportePN05Controller extends Controller
 
             foreach ($array as $key => $value) {
                 foreach ($value as $row) {
-                    $nuevo = ImporPadronEstablecimiento::Create([
+                    $nuevo = ImporReportePN05::Create([
                         'importacion_id' => $importacion->id,
-                        'cod_unico' => $row['cod_unico'],
-                        'nombre_establecimiento' => $row['nombre_establecimiento'],
-                        'responsable' => $row['responsable'],
-                        'direccion' => $row['direccion'],
-                        'telefono' => $row['telefono'],
-                        'horario' => $row['horario'],
-                        'doc_categorizacion' => $row['doc_categorizacion'],
-                        'numero_documento' => $row['numero_documento'],
-                        'inicio_actividad' => $row['inicio_actividad'],
-                        'categoria' => $row['categoria'],
-                        'estado' => $row['estado'],
-                        'institucion' => $row['institucion'],
-                        'clasificacion_eess' => $row['clasificacion_eess'],
-                        'tipo_eess' => $row['tipo_eess'],
-                        'cod_disa' => $row['cod_disa'],
-                        'disa' => $row['disa'],
-                        'cod_red' => $row['cod_red'],
-                        'red' => $row['red'],
-                        'cod_microrred' => $row['cod_microrred'],
-                        'microrred' => $row['microrred'],
-                        'sec_ejec' => $row['sec_ejec'],
-                        'ubigeo' => $row['ubigeo'],
-                        'norte' => $row['norte'],
-                        'este' => $row['este'],
-                        'cota' => $row['cota'],
-                        'camas' => $row['camas']
+                        'distrito' => $row['distrito'],
+                        'centro_poblado' => $row['centro_poblado'],
+                        'nro_ninios' => $row['nro_ninios']
                     ]);
                 }
             }
+            $importacion->estado = 'PR';
+            $importacion->save();
         } catch (Exception $e) {
-            // $importacion->estado = 'EL';
-            // $importacion->save();
+            $importacion->estado = 'PE';
+            $importacion->save();
 
             $mensaje = "Error en la carga de datos, verifique los datos de su archivo y/o comuniquese con el administrador del sistema - " . $e->getMessage();
             $this->json_output(400, $mensaje);
         }
 
-        try {
-            DB::select('call sal_pa_procesarPadronEstablecimiento(?,?)', [$importacion->id, auth()->user()->id]);
-        } catch (Exception $e) {
-            $mensaje = "Error al procesar la normalizacion de datos." . $e;
-            $this->json_output(400, $mensaje);
-        }
+        // try {
+        //     DB::select('call sal_pa_procesarPadronEstablecimiento(?,?)', [$importacion->id, auth()->user()->id]);
+        // } catch (Exception $e) {
+        //     $mensaje = "Error al procesar la normalizacion de datos." . $e;
+        //     $this->json_output(400, $mensaje);
+        // }
         $mensaje = "Archivo excel subido y Procesado correctamente .";
         $this->json_output(200, $mensaje, '');
     }
@@ -222,21 +179,13 @@ class ImporReportePN05Controller extends Controller
     public function ListaImportada(Request $rq)
     {
         $data = ImporPadronEstablecimiento::all();
-        // PoblacionDetalle::where('pp.importacion_id', $rq->importacion_id)
-        //     ->join('par_poblacion as pp', 'pp.id', '=', 'par_poblacion_detalle.poblacion_id')
-        //     ->join('par_ubigeo as uu', 'uu.id', '=', 'par_poblacion_detalle.ubigeo_id')
-        //     ->select('uu.codigo', 'par_poblacion_detalle.sexo', 'par_poblacion_detalle.edad', 'par_poblacion_detalle.total')->get();
         return DataTables::of($data)->make(true);
     }
 
     /* metodo para eliminar una importacion */
     public function eliminar($id)
     {
-        // $poblacion = Poblacion::where('importacion_id', $id)->first();
-        // PoblacionDetalle::where('poblacion_id', $poblacion->id)->delete();
-        // $poblacion->delete();
-        ImporPadronEstablecimiento::where('importacion_id', $id)->delete();
-        Establecimiento::where('importacion_id', $id)->delete();
+        ImporReportePN05::where('importacion_id', $id)->delete();
         Importacion::find($id)->delete();
         return response()->json(array('status' => true));
     }
