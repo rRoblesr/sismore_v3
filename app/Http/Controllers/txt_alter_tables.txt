@@ -1914,7 +1914,28 @@ CREATE TABLE `sal_reporte_pn05` (
 				foreign key(importacion_id) references par_importacion(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+#########################################################################
 
+SELECT cpn.distrito,sum(cpn.cantidad) niños_clorados,cpd.cantidad niños_vivientes,round(100*sum(cpn.cantidad)/cpd.cantidad,2) FROM(
+    SELECT ubigeo_ccpp,nombre_ccpp FROM pvica
+    where cloro_parametros_decreto>=0.5
+    group by ubigeo_ccpp,nombre_ccpp order by ubigeo_ccpp
+) as cp
+inner join centropoblado_ninios cpn on cpn.ubigeo=cp.ubigeo_ccpp 
+inner join (select distrito ,sum(cantidad) cantidad from centropoblado_ninios group by distrito) cpd on cpd.distrito=cpn.distrito
+group by cpn.distrito,cpd.distrito;
+
+select distrito ,sum(cantidad) from centropoblado_ninios group by distrito;
+
+
+SELECT cpn.distrito,sum(cpn.nro_ninios) niños_clorados,cpd.cantidad niños_vivientes,round(100*sum(cpn.nro_ninios)/cpd.cantidad,2) FROM(
+    SELECT importacion_id,ubigeo_ccpp,nombre_ccpp FROM sal_padron_pvica 
+    where cloro_parametros_decreto>=0.5 and importacion_id =2582
+    group by importacion_id,ubigeo_ccpp,nombre_ccpp order by ubigeo_ccpp
+) as cp
+inner join sal_reporte_pn05 cpn on cpn.centro_poblado =cp.ubigeo_ccpp and cpn.importacion_id=2587
+inner join (select distrito ,sum(nro_ninios) cantidad from sal_reporte_pn05 where importacion_id =2587 group by distrito) cpd on cpd.distrito=cpn.distrito
+group by cpn.distrito,cpd.distrito;
 
 
 
