@@ -2,7 +2,9 @@
 
 namespace App\Repositories\Parametro;
 
+use App\Http\Controllers\Salud\ImporReportePN05Controller;
 use App\Http\Controllers\Salud\IndicadoresController;
+use App\Models\Educacion\Importacion;
 use App\Models\Parametro\IndicadorGeneralMeta;
 use App\Models\Parametro\Ubigeo;
 use App\Models\Salud\DataPacto1;
@@ -10,6 +12,7 @@ use App\Models\Salud\DataPacto3;
 use App\Models\Salud\DataPacto3Denominador;
 use App\Models\Salud\ImporPadronActas;
 use App\Models\Salud\ImporPadronAnemia;
+use App\Models\Salud\ImporReportePN05;
 use Illuminate\Support\Facades\DB;
 
 class IndicadorGeneralMetaRepositorio
@@ -559,6 +562,9 @@ class IndicadorGeneralMetaRepositorio
     //###################### salud pacto 4  #######################
     public static function getSalPacto4GL($indicador_id, $anio, $mes, $provincia, $distrito)
     {
+        return $imp = Importacion::where(DB::raw('month(fechaActualizacion)'), 6)->where('estado', 'PR')->where('fuenteimportacion_id', ImporReportePN05Controller::$FUENTE)
+        ->get()->first();
+        $ninos = ImporReportePN05::where('importacion_id', 6546)->get();
         $dst = Ubigeo::find($distrito);
         $query =  DataPacto3Denominador::where('anio', $anio)->select(DB::raw('sum(meta) as conteo'));
         $query = $query->join('par_ubigeo as dd', 'dd.id', '=', 'ubigeo_id');
@@ -738,6 +744,8 @@ class IndicadorGeneralMetaRepositorio
 
         return $query;
     }
+
+    
 
     //###################### educacion pacto 2  #######################
     public static function getEduPacto2anal1($anio, $ugel, $provincia, $distrito, $estado)

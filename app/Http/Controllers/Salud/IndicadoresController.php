@@ -8,6 +8,7 @@ use App\Exports\pactoregionalSal1Export;
 use App\Exports\pactoregionalSal2Export;
 use App\Http\Controllers\Controller;
 use App\Models\Educacion\Area;
+use App\Models\Educacion\Importacion;
 use App\Models\Educacion\SFL;
 use App\Models\Parametro\Anio;
 use App\Models\Parametro\IndicadorGeneral;
@@ -15,6 +16,7 @@ use App\Models\Parametro\IndicadorGeneralMeta;
 use App\Models\Parametro\Mes;
 use App\Models\Parametro\Ubigeo;
 use App\Models\Salud\ImporPadronActas;
+use App\Models\Salud\ImporPadronPvica;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\SFLRepositorio;
 use App\Repositories\Parametro\IndicadorGeneralMetaRepositorio;
@@ -281,7 +283,10 @@ class IndicadoresController extends Controller
                 // return response()->json([$imp]);
                 $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
                 $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios($indicador_id); // Anio::orderBy('anio')->get();
-                $mes = Mes::all();
+                $mes =  [];
+                // Importacion::from('par_importacion as ii')->join('par_mes as mm','mm.codigo','=',DB::raw('month(ii.fechaActualizacion)'))
+                // ->where('ii.estado', 'PR')->where('ii.fuenteimportacion_id', ImporReportePN05Controller::$FUENTE)->where(DB::raw('year(ii.fechaActualizacion)'),date('Y'))
+                // ->select('mm.codigo as id', 'mm.mes')->get();
                 $provincia = UbigeoRepositorio::provincia('25');
                 $aniomax = $imp->anio;
                 return view('salud.Indicadores.PactoRegionalSalPacto4', compact('actualizado', 'anio', 'mes', 'provincia', 'aniomax', 'ind'));
@@ -794,10 +799,10 @@ class IndicadoresController extends Controller
         else $ndis = '';
         switch ($rq->div) {
             case 'head':
-                $gls = IndicadorGeneralMetaRepositorio::getSalPacto3GLS($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
-                $gl = IndicadorGeneralMetaRepositorio::getSalPacto3GL($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
-                $gln = $gl - $gls;
-                $ri = number_format(100 * ($gl > 0 ? $gls / $gl : 0));
+                $gls = IndicadorGeneralMetaRepositorio::getSalPacto4GLS($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $gl = IndicadorGeneralMetaRepositorio::getSalPacto4GL($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $gln = 0; // $gl - $gls;
+                $ri = 0; // number_format(100 * ($gl > 0 ? $gls / $gl : 0));
                 return response()->json(['aa' => $rq->all(), 'ri' => $ri, 'gl' => $gl, 'gls' => $gls ? $gls : 0, 'gln' => $gln]);
 
             case 'anal1':
@@ -889,6 +894,14 @@ class IndicadoresController extends Controller
             default:
                 return [];
         }
+    }
+
+    public function cargarMesPvica($anio)
+    {
+        $mes =  Importacion::from('par_importacion as ii')->join('par_mes as mm', 'mm.codigo', '=', DB::raw('month(ii.fechaActualizacion)'))
+            ->where('ii.estado', 'PR')->where('ii.fuenteimportacion_id', ImporPadronPvicaController::$FUENTE)->where(DB::raw('year(ii.fechaActualizacion)'), $anio)
+            ->select('mm.codigo as id', 'mm.mes')->get();
+        return response()->json($mes);
     }
 
     // ############ educacion pacto 2 #################

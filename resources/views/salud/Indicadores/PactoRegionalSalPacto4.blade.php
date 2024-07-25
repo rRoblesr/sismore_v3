@@ -25,7 +25,9 @@
                         <div class="card-body p-2">
                             <div class="form-group row align-items-center vh-5 m-0">
                                 <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <h5 class="page-title font-12">Fuente: Padrón Nominal, <br>{{ $actualizado }}</h5>
+                                    <h5 class="page-title font-12">Fuente: Padrón PVICA, Padrón Nominal
+                                        <br>{{ $actualizado }}
+                                    </h5>
                                 </div>
                                 <div class="col-lg-1 col-md-1 col-sm-1  ">
                                     <select id="anio" name="anio" class="form-control btn-xs font-11"
@@ -249,6 +251,7 @@
                     thousandsSep: ","
                 }
             });
+            cargarMes();
             cargarDistritos();
             cargarcuadros();
         });
@@ -376,6 +379,23 @@
                             "</option>"
                     });
                     $("#distrito").append(options);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cargarMes() {
+            $.ajax({
+                url: "{{ route('salud.indicador.pactoregional.sal.pacto4.cargarmes', '') }}/" + $('#anio').val(),
+                type: 'GET',
+                success: function(data) {
+                    $('#mes').empty();
+                    $('#mes').append('<option value="0">Mes</option>');
+                    for (const value of data) {
+                        $('#mes').append(`<option value="${value.id}">${value.mes}</option>`);
+                    }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
