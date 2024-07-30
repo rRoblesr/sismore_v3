@@ -41,41 +41,6 @@
             background-color: #43beac;
             color: #FFF;
         }
-
-        /* Asegúrate de mantener las fuentes originales */
-        /* table {
-                font-family: Arial, sans-serif;
-                border-collapse: collapse;
-                width: 100%;
-            } */
-
-        /* th, */
-        td {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        /* th {
-                padding-top: 12px;
-                padding-bottom: 12px;
-                text-align: left;
-                background-color: #4CAF50;
-                color: white;
-            } */
-
-        /* Estilo para sombrear la fila cuando se pasa el mouse sobre ella */
-        tr {
-            transition: background-color 0.3s;
-            /* Añade una transición suave */
-        }
-
-        tbody tr:hover {
-            background-color: #ddd !important;
-        }
     </style>
 @endsection
 
@@ -183,8 +148,8 @@
     </div>
 
 
+
     @if ($registrador > 0)
-        {{-- @if (false) --}}
         {{-- tabla 1 --}}
         <div class="row">
             <div class="col-md-12">
@@ -254,40 +219,39 @@
             </div>
         </div> <!-- End row -->
     @else
-    @endif
-
-    {{-- tabla 2 --}}
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card card-border">
-                <div class="card-header border-success-0 bg-transparent">
-                    <div class="card-widgets d-flex">
-                        <div class="d-flex align-items-center">
-                            <button class="btn btn-xs btn-success" title="DESCARGAR EXCEL" onclick="descargarO()">
-                                <i class="fa fa-file-excel"></i></button>
+        {{-- tabla 2 --}}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent">
+                        <div class="card-widgets d-flex">
+                            <div class="d-flex align-items-center">
+                                <button class="btn btn-xs btn-success" title="DESCARGAR EXCEL" onclick="descargarO()">
+                                    <i class="fa fa-file-excel"></i></button>
+                            </div>
                         </div>
+                        <h4 class="card-title p-0">lista de Establecimientos</h4>
                     </div>
-                    <h4 class="card-title p-0">lista de Establecimientos</h4>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive" id="vtabla2">
-                        {{-- <table id="tab-la2" class="table table-sm table-striped table-bordered font-12"> --}}
-                        {{-- <thead class="cabecera-dataTable table-success-0 text-white"></thead>
-                    <tbody></tbody>
-                    <tfoot class="table-success-0 text-white"></tfoot> --}}
-                        {{-- </table> --}}
-                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive" id="vtabla2">
+                            {{-- <table id="tab-la2" class="table table-sm table-striped table-bordered font-12"> --}}
+                            {{-- <thead class="cabecera-dataTable table-success-0 text-white"></thead>
+                            <tbody></tbody>
+                            <tfoot class="table-success-0 text-white"></tfoot> --}}
+                            {{-- </table> --}}
+                        </div>
 
+                    </div>
                 </div>
             </div>
-        </div>
-    </div> <!-- End row -->
+        </div> <!-- End row -->
+    @endif
 
 
     <!-- Bootstrap modal -->
     <div id="modal_form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true" style="display: none;">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title font-14"></h5>
@@ -300,19 +264,19 @@
                         @csrf
                         <input type="hidden" id="mfubigeo" name="mfubigeo">
                         <input type="hidden" id="mfid" name="mfid">
-                        <input type="hidden" id="mfeess" name="mfeess">
                         {{-- <input type="hidden" id="mfe--ess" name="mfee--ss"> --}}
                         <div class="form-body">
-                            {{-- <div class="form-group">
+                            <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <label class="small">Establecimiento<span class="required">*</span></label>
                                         <select id="mfeess" name="mfeess"
                                             class="form-control form-control-sm"></select>
                                         <span class="help-block"></span>
-                                    </div> 
+                                    </div>
+
                                 </div>
-                            </div> --}}
+                            </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
@@ -346,39 +310,68 @@
 
                                 </div>
                             </div>
-                            <div class="text-center">
+                            <div class="text-right">
                                 <button type="button" class="btn btn-xs btn-danger" data-dismiss="modal">Cerrar</button>
                                 <button type="button" class="btn btn-xs btn-primary" id="btnSave"
                                     onclick="save()">Guardar</button>
                             </div>
                         </div>
                     </form>
+                </div>
+                {{-- <div class="modal-footer"></div> --}}
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <!-- End Bootstrap modal -->
 
+
+    <!-- Bootstrap modal -->
+    <div id="modal_registros" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title font-14"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-0">
                     <div class="row">
-                        <div class="col-12">
-                            <div class="table-responsive">
-                                <table id="tabla_registros" class="table table-sm table-striped table-bordered font-12">
-                                    <thead class="cabecera-dataTable table-success-0 text-white">
-                                        <tr>
-                                            <th class="text-center">Nº</th>
-                                            <th class="text-center">FECHA INICIAL</th>
-                                            <th class="text-center">FECHA FINAL</th>
-                                            <th class="text-center">FECHA ENVIO</th>
-                                            <th class="text-center">N° ARCHIVOS</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                    <tfoot class="table-success-0 text-white">
-                                        <tr>
-                                            <td class="text-center" colspan="4">TOTAL DE ARCHIVOS</td>
-                                            <td class="text-center tabla_registros_tfoot">0</td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
+                        <div class="col-lg-12">
+                            <div class="card card-border">
+                                <div class="card-body p-0">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="table-responsive">
+                                                <table id="tabla_registros"
+                                                    class="table table-sm table-striped table-bordered font-12">
+                                                    <thead class="cabecera-dataTable table-success-0 text-white">
+                                                        <tr>
+                                                            <th class="text-center">Nº</th>
+                                                            <th class="text-center">FECHA INICIAL</th>
+                                                            <th class="text-center">FECHA FINAL</th>
+                                                            <th class="text-center">FECHA ENVIO</th>
+                                                            <th class="text-center">N° ARCHIVOS</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                    <tfoot class="table-success-0 text-white">
+                                                        <tr>
+                                                            <td class="text-center" colspan="4">TOTAL DE ARCHIVOS</td>
+                                                            <td class="text-center tabla_registros_tfoot">0</td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                     </div>
+
                 </div>
                 {{-- <div class="modal-footer"></div> --}}
             </div><!-- /.modal-content -->
@@ -429,138 +422,137 @@
                 cargarTablaMainMensualM(); //por ahora todos
                 // cargarTablaMainO(); //otros menos los municipios
             } else {
-                cargarTablaMainMensualM(); //por ahora todos
-                // cargarTablaMainM(); //solo 1 por municipio
+                cargarTablaMainM(); //solo 1 por municipio
             }
 
         });
 
-        // function cargarTablaMainO() {
-        //     table_principal = $('#tabla').DataTable({
-        //         responsive: true,
-        //         autoWidth: false,
-        //         ordered: false,
-        //         language: table_language,
-        //         destroy: true,
-        //         ajax: {
-        //             "url": "{{ route('eess.listar.registro') }}",
-        //             "type": "GET",
-        //             "data": {
-        //                 'municipio': $('#vmunicipio').val(),
-        //                 'red': $('#vred').val(),
-        //                 'microred': $('#vmicrored').val(),
-        //                 'fechai': $('#vfechai').val(),
-        //                 'fechaf': $('#vfechaf').val(),
-        //                 'registrador': '{{ $registrador }}',
-        //             },
-        //         },
-        //         columnDefs: [{
-        //                 targets: 0,
-        //                 className: 'text-center'
-        //             },
-        //             {
-        //                 targets: 1,
-        //                 className: 'text-center'
-        //             },
-        //             {
-        //                 targets: 2,
-        //                 className: 'text-center'
-        //             },
-        //             {
-        //                 targets: 3,
-        //                 className: 'text-center'
-        //             },
-        //             {
-        //                 targets: 4,
-        //                 className: 'text-left'
-        //             },
-        //             {
-        //                 targets: 5,
-        //                 className: 'text-center'
-        //             },
-        //             {
-        //                 targets: 6,
-        //                 className: 'text-center'
-        //             }
-        //         ],
-        //         drawCallback: function(settings) {
-        //             var api = this.api();
-        //             // Calcular el total de registros
-        //             // var totalRecords = api.rows().count();
-        //             // Calcular la suma de la edad (asumiendo que la edad está en la columna 2)
-        //             var totalAge = api.column(5).data().reduce(function(a, b) {
-        //                 return parseInt(a) + parseInt(b);
-        //             }, 0);
-        //             // Actualizar el contenido del tfoot
-        //             $('.tabla_tfoot').html(totalAge);
-        //         }
-        //     });
-        // }
+        function cargarTablaMainO() {
+            table_principal = $('#tabla').DataTable({
+                responsive: true,
+                autoWidth: false,
+                ordered: false,
+                language: table_language,
+                destroy: true,
+                ajax: {
+                    "url": "{{ route('eess.listar.registro') }}",
+                    "type": "GET",
+                    "data": {
+                        'municipio': $('#vmunicipio').val(),
+                        'red': $('#vred').val(),
+                        'microred': $('#vmicrored').val(),
+                        'fechai': $('#vfechai').val(),
+                        'fechaf': $('#vfechaf').val(),
+                        'registrador': '{{ $registrador }}',
+                    },
+                },
+                columnDefs: [{
+                        targets: 0,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 1,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 2,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 3,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 4,
+                        className: 'text-left'
+                    },
+                    {
+                        targets: 5,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 6,
+                        className: 'text-center'
+                    }
+                ],
+                drawCallback: function(settings) {
+                    var api = this.api();
+                    // Calcular el total de registros
+                    // var totalRecords = api.rows().count();
+                    // Calcular la suma de la edad (asumiendo que la edad está en la columna 2)
+                    var totalAge = api.column(5).data().reduce(function(a, b) {
+                        return parseInt(a) + parseInt(b);
+                    }, 0);
+                    // Actualizar el contenido del tfoot
+                    $('.tabla_tfoot').html(totalAge);
+                }
+            });
+        }
 
-        // function cargarTablaMainM() {
-        //     console.log('cargarTablaMainM()');
-        //     table_principal = $('#tabla').DataTable({
-        //         responsive: true,
-        //         autoWidth: false,
-        //         ordered: false,
-        //         language: table_language,
-        //         destroy: true,
-        //         ajax: {
-        //             "url": "{{ route('imporpadronactas.registro.listar.2') }}",
-        //             "type": "GET",
-        //             "data": {
-        //                 'municipio': $('#vmunicipio').val(),
-        //                 'red': $('#vred').val(),
-        //                 'microred': $('#vmicrored').val(),
-        //                 'fechai': $('#vfechai').val(),
-        //                 'fechaf': $('#vfechaf').val(),
-        //                 'eess': $('#veess').val(),
-        //                 'registrador': '{{ $registrador }}',
-        //             },
-        //         },
-        //         columnDefs: [{
-        //                 targets: 0,
-        //                 className: 'text-center'
-        //             },
-        //             {
-        //                 targets: 1,
-        //                 className: 'text-center'
-        //             },
-        //             {
-        //                 targets: 2,
-        //                 className: 'text-left'
-        //             },
-        //             {
-        //                 targets: 3,
-        //                 className: 'text-center'
-        //             },
-        //             {
-        //                 targets: 4,
-        //                 className: 'text-center'
-        //             },
-        //             {
-        //                 targets: 5,
-        //                 className: 'text-center'
-        //             },
-        //             {
-        //                 targets: 6,
-        //                 className: 'text-center'
-        //             }
+        function cargarTablaMainM() {
+            console.log('cargarTablaMainM()');
+            table_principal = $('#tabla').DataTable({
+                responsive: true,
+                autoWidth: false,
+                ordered: false,
+                language: table_language,
+                destroy: true,
+                ajax: {
+                    "url": "{{ route('imporpadronactas.registro.listar.2') }}",
+                    "type": "GET",
+                    "data": {
+                        'municipio': $('#vmunicipio').val(),
+                        'red': $('#vred').val(),
+                        'microred': $('#vmicrored').val(),
+                        'fechai': $('#vfechai').val(),
+                        'fechaf': $('#vfechaf').val(),
+                        'eess': $('#veess').val(),
+                        'registrador': '{{ $registrador }}',
+                    },
+                },
+                columnDefs: [{
+                        targets: 0,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 1,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 2,
+                        className: 'text-left'
+                    },
+                    {
+                        targets: 3,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 4,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 5,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 6,
+                        className: 'text-center'
+                    }
 
-        //         ],
-        //         drawCallback: function(settings) {
-        //             var api = this.api();
-        //             // Calcular el total de registros
-        //             // var totalRecords = api.rows().count();
-        //             // Calcular la suma de la edad (asumiendo que la edad está en la columna 2)
-        //             var totalAge = api.column(6).data().reduce(function(a, b) {
-        //                 return parseInt(a) + parseInt(b);
-        //             }, 0);
-        //             // Actualizar el contenido del tfoot
-        //             $('.tabla_tfoot').html(totalAge);
-        //         }
-        //     });
-        // }
+                ],
+                drawCallback: function(settings) {
+                    var api = this.api();
+                    // Calcular el total de registros
+                    // var totalRecords = api.rows().count();
+                    // Calcular la suma de la edad (asumiendo que la edad está en la columna 2)
+                    var totalAge = api.column(6).data().reduce(function(a, b) {
+                        return parseInt(a) + parseInt(b);
+                    }, 0);
+                    // Actualizar el contenido del tfoot
+                    $('.tabla_tfoot').html(totalAge);
+                }
+            });
+        }
 
         function cargarTablaMainMensualM() {
             $.ajax({
@@ -754,34 +746,20 @@
             $('#form')[0].reset();
             $('.form-group').removeClass('has-error');
             $('.help-block').empty();
+            $('#mfeess').val('0');
+            $('#mffechai').val('');
+            $('#mffechaf').val('');
+            $('#mffechae').val('');
+            $('#mfarchivos').val('0');
         }
 
-        // function abrirnuevo() {
-        //     //modal :modal_form
-        //     //from  :form
-        //     console.log('abrirnuevo()');
-        //     $('#mfubi---geo').val($('#vmunicipio').val());
-        //     $('#mod__al_form .modal-title').html('Nuevo Registro');
-        //     // cargareess();
-        //     save_method = 'add';
-        // }
-
-        function abrir_actas_registadas(eess, eess_nombre, mes) {
+        function abrirnuevo() {
             //modal :modal_form
             //from  :form
-            console.log('abrir_actas_registadas()');
+            console.log('abrirnuevo()');
             $('#mfubigeo').val($('#vmunicipio').val());
-            $('#mfeess').val(eess);
-            // fechaAM(anio, mes, rango)
-            // console.log(fechaAM(2024, (mes < 10 ? '0' : '') + mes , true));
-            // console.log(fechaAM(2024, (mes < 10 ? '0' : '') + mes , false));
-            // console.log(datex());
-            $('#mffechai').val(fechaAM(2024, (mes < 10 ? '0' : '') + mes, true));
-            $('#mffechaf').val(fechaAM(2024, (mes < 10 ? '0' : '') + mes, false));
-            $('#mffechae').val(datex());
-            $('#modal_form').modal('show');
-            $('#modal_form .modal-title').html('Nuevo Registro de Acta, EE.SS ' + eess_nombre);
-            cargarregistros(eess, mes);
+            $('#modal_form .modal-title').html('Nuevo Registro');
+            // cargareess();
             save_method = 'add';
 
         }
@@ -838,15 +816,11 @@
                 success: function(data) {
                     console.log(data)
                     if (data.status) {
-                        // limpiarfrm();
-                        table_registros.ajax.reload(null, false);
-                        cargarTablaMainMensualM();
-                        // table_principal.ajax.reload(null, false);
+                        limpiarfrm();
+
+                        // table_seguimiento.ajax.reload(null, false);
+                        table_principal.ajax.reload(null, false);
                         toastr.success(msgsuccess, 'Mensaje');
-                        $('#mffechai').val(fechaAM(2024, (mes < 10 ? '0' : '') + mes, true));
-                        $('#mffechaf').val(fechaAM(2024, (mes < 10 ? '0' : '') + mes, false));
-                        $('#mffechae').val(datex());
-                        $('#mfarchivos').val(0);
                         if (save_method != 'add') {
                             $('#modal_form').modal('hide');
                         }
@@ -953,12 +927,12 @@
             });
         };
 
-        // function verdatos(eess) {
-        //     $('.modal-title').html('Actas Homologadas');
-        //     cargar--registros(eess);
-        // }
+        function verdatos(eess) {
+            $('.modal-title').html('Actas Homologadas');
+            cargarregistros(eess);
+        }
 
-        function cargarregistros(eess, mes) {
+        function cargarregistros(eess) {
             table_registros = $('#tabla_registros').DataTable({
                 responsive: true,
                 autoWidth: false,
@@ -984,7 +958,6 @@
                         'microred': $('#vmicrored').val(),
                         'fechai': $('#vfechai').val(),
                         'fechaf': $('#vfechaf').val(),
-                        'fecha': "2024-" + (mes < 10 ? '0' : '') + mes + "-",
                         'eess': eess,
                     },
                 },
@@ -1052,35 +1025,6 @@
             var dia = partesFecha[2];
             var fechaFormateada = dia + '/' + mes + '/' + anio;
             return fechaFormateada;
-        }
-
-        function fechaAM(anio, mes, rango) {
-            var fecha = `${anio}-${mes}-`;
-            var ultimoDia = new Date(anio, mes, 0).getDate(); //obtenerUltimoDiaDelMes(anio, mes);
-            var fecha1 = fecha + "01";
-            var fecha2 = fecha + (ultimoDia < 10 ? "0" + ultimoDia : ultimoDia);
-
-            if (rango) return fecha + "01";
-            return fecha + (ultimoDia < 10 ? "0" + ultimoDia : ultimoDia);
-            console.log(fecha1); // "2024-07-01"
-            console.log(fecha2); // "2024-07-31"
-
-        }
-
-        function datex() {
-            // Obtener la fecha actual
-            var fechaActual = new Date();
-
-            // Extraer el año, mes y día
-            var anio = fechaActual.getFullYear();
-            var mes = ("0" + (fechaActual.getMonth() + 1)).slice(-2); // Los meses en JavaScript son de 0 a 11
-            var dia = ("0" + fechaActual.getDate()).slice(-2);
-
-            // Formatear la fecha en "YYYY-MM-DD"
-            var fechaHoy = anio + "-" + mes + "-" + dia;
-
-            console.log(fechaHoy);
-            return fechaHoy;
         }
     </script>
 

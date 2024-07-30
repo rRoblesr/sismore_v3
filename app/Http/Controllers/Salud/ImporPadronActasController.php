@@ -473,9 +473,9 @@ class ImporPadronActasController extends Controller
         // return session()->all();
         $anio = [2023, 2024, 2025, 2026];
         $sector = 2;
-
+        // return session()->all();       
         $ent = EntidadRepositorio::migas(auth()->user()->entidad);
-        if (session('usuario_sector') == 2 && session('usuario_nivel') == 1) {
+        if (session('usuario_sector') == 2 && session('usuario_nivel') == 7) {
             $muni = EntidadRepositorio::entidades(2, session('usuario_codigo_institucion'));
             $registrador = session('usuario_codigo_institucion');
             $usuario = $muni->first();
@@ -665,7 +665,8 @@ class ImporPadronActasController extends Controller
         $start = intval($rq->start);
         $length = intval($rq->length);
 
-        $query = PadronActas::whereBetween('fecha_envio', [$rq->fechai, $rq->fechaf])->where('establecimiento_id', $rq->eess)->get();
+        $query = PadronActas::where('fecha_envio', 'like', $rq->fecha . '%')->where('establecimiento_id', $rq->eess)->get();
+        // $query = PadronActas::whereBetween('fecha_envio', [$rq->fechai, $rq->fechaf])->where('establecimiento_id', $rq->eess)->get();
         // $query = PadronActas::where('establecimiento_id', $rq->eess)->get();
         $data = [];
         foreach ($query as $key => $value) {

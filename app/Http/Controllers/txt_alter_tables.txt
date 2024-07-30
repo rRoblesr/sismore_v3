@@ -1938,7 +1938,48 @@ inner join (select distrito ,sum(nro_ninios) cantidad from sal_reporte_pn05 wher
 group by cpn.distrito,cpd.distrito;
 
 
+###################################################################################
 
+CREATE TABLE `par_poblacion_proyectada` (
+    id int(11) auto_increment primary key,
+				anio int(11) DEFAULT NULL,
+				fuente varchar(20) NULL DEFAULT NULL,
+				departamento varchar(100) NULL DEFAULT NULL,
+				edad int(11) DEFAULT NULL,
+				rango varchar(20) NULL DEFAULT NULL,
+				mujer int(11) DEFAULT NULL,
+				hombre int(11) DEFAULT NULL,
+				total int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `par_poblacion_padron_nominal` (
+    id int(11) auto_increment primary key,
+				anio int(11) DEFAULT NULL,
+				mes varchar(20) NULL DEFAULT NULL,
+				ubigeo varchar(6) NULL DEFAULT NULL,
+				cnv int(11) DEFAULT NULL,
+				seguro int(11) DEFAULT NULL,
+				sexo int(11) DEFAULT NULL,
+				28dias int(11) DEFAULT NULL,
+				0_5meses int(11) DEFAULT NULL,
+				6_11meses int(11) DEFAULT NULL,
+				0_12meses int(11) DEFAULT NULL,
+				0a int(11) DEFAULT NULL,
+				1a int(11) DEFAULT NULL,
+				2a int(11) DEFAULT NULL,
+				3a int(11) DEFAULT NULL,
+				4a int(11) DEFAULT NULL,
+				5a int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `par_poblacion_diresa` (
+    id int(11) auto_increment primary key,
+				ubigeo  varchar(6) NULL DEFAULT NULL,
+				sexo  varchar(20) NULL DEFAULT NULL,
+				edad  varchar(20) NULL DEFAULT NULL,
+				rango  varchar(20) NULL DEFAULT NULL,
+				total int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 
