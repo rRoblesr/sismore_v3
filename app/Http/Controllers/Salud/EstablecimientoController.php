@@ -102,8 +102,8 @@ class EstablecimientoController extends Controller
             "recordsTotal" => $start,
             "recordsFiltered" => $length,
             "data" => $data,
-            "municipio" =>  $rq->municipio,
-            "query" => $query,
+            // "municipio" =>  $rq->municipio,
+            // "query" => $query,
         );
         return response()->json($result);
     }
@@ -114,7 +114,7 @@ class EstablecimientoController extends Controller
         $anioA = date('Y');
         $mesA = $rq->anio == date('Y') ? date('m') : 12;
 
-        $tabla = '<table id="tabla2" class="table table-striped table-bordered font-10">
+        $tabla = '<table id="tabla2" class="table table-striped table-bordered font-12">
                 <thead class="cabecera-dataTable table-success-0 text-white">
                     <tr>
                         <th class="text-center">Nº</th>
@@ -140,22 +140,23 @@ class EstablecimientoController extends Controller
             $tabla .= '<td class="text-left table-success text-dark">' . $value->eess . '</td>';
             foreach ($mes as $mm) {
                 if ($mm->codigo <= $mesA) {
-                    $conteo = PadronActas::from('sal_padron_actas as pa')->where('pa.establecimiento_id', $value->id)->where('pa.fecha_envio', 'like', $rq->anio . '-' . str_pad($mm->codigo, 2, '0', STR_PAD_LEFT) . '-%');
-                    $conteo = $conteo->sum('pa.nro_archivos');
-                    if ($conteo == 0) $tabla .= '<td class="text-center text-danger"><button type="button" class="btn btn-xs btn-outline-danger waves-effect" onclick="abrir_actas_registadas(' . $value->id . ',`' . $value->eess . '`,' . $mm->codigo . ')">' . $conteo . '</button></td>';
-                    else $tabla .= '<td class="text-center text-primary font-weight-bold"><button type="button" class="btn btn-xs btn-outline-primary waves-effect" onclick="abrir_actas_registadas(' . $value->id . ',`' . $value->eess . '`,' . $mm->codigo . ')">' . $conteo . '</button></td>';
+                    $conteo = PadronActas::from('sal_padron_actas as pa')->where('pa.establecimiento_id', $value->id)->where('pa.fecha_envio', 'like', $rq->anio . '-' . str_pad($mm->codigo, 2, '0', STR_PAD_LEFT) . '-%')->sum('pa.nro_archivos');
+                    if ($conteo == 0) {
+                        $tabla .= '<td class="text-center text-danger"><button type="button" class="btn btn-xs btn-outline-danger waves-effect" onclick="abrir_actas_registadas(' . $value->id . ',' . $rq->registrador . ',`' . $value->eess . '`,' . $mm->codigo . ')">' . $conteo . '</button></td>';
+                    } else {
+                        $tabla .= '<td class="text-center text-primary font-weight-bold"><button type="button" class="btn btn-xs btn-outline-primary waves-effect" onclick="abrir_actas_registadas(' . $value->id . ',' . $rq->registrador . ',`' . $value->eess . '`,' . $mm->codigo . ')">' . $conteo . '</button></td>';
+                    }
                 } else {
                     $tabla .= '<td class="text-center"></td>';
                 }
             }
 
-            $conteo = PadronActas::from('sal_padron_actas as pa')
-                ->where('pa.establecimiento_id', $value->id)
-                ->where('pa.fecha_envio', 'like', $rq->anio . '-%');
-            $conteo = $conteo->sum('pa.nro_archivos');
-
-            if ($conteo == 0) $tabla .= '<td class="text-center text-danger table-purple">' . $conteo . '</td>';
-            else $tabla .= '<td class="text-center text-primary font-weight-bold table-purple">' . $conteo . '</td>';
+            $conteo = PadronActas::from('sal_padron_actas as pa')->where('pa.establecimiento_id', $value->id)->where('pa.fecha_envio', 'like', $rq->anio . '-%')->sum('pa.nro_archivos');
+            if ($conteo == 0) {
+                $tabla .= '<td class="text-center text-danger table-purple">' . $conteo . '</td>';
+            } else {
+                $tabla .= '<td class="text-center text-primary font-weight-bold table-purple">' . $conteo . '</td>';
+            }
             // $tabla .= '<td class="text-center">' . $conteo . '</td>';
             $tabla .= '</tr>';
         }
@@ -170,8 +171,11 @@ class EstablecimientoController extends Controller
                 $conteo = PadronActas::where('sal_padron_actas.fecha_envio', 'like', $rq->anio . '-' . str_pad($mm->codigo, 2, '0', STR_PAD_LEFT) . '-%');
                 if ($rq->municipio > 0) $conteo = $conteo->where('sal_padron_actas.ubigeo_id', '=', $rq->municipio);
                 $conteo = $conteo->sum('sal_padron_actas.nro_archivos');
-                if ($conteo == 0) $tabla .= ' <td class="text-center text-white font-weight-bold">' . $conteo . '</td>';
-                else $tabla .= ' <td class="text-center text-dark font-weight-bold">' . $conteo . '</td>';
+                if ($conteo == 0) {
+                    $tabla .= ' <td class="text-center text-white font-weight-bold">' . $conteo . '</td>';
+                } else {
+                    $tabla .= ' <td class="text-center text-dark font-weight-bold">' . $conteo . '</td>';
+                }
             } else {
                 $tabla .= '<td class="text-center"></td>';
             }

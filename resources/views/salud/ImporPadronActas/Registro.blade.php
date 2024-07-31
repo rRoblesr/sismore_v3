@@ -43,11 +43,11 @@
         }
 
         /* Asegúrate de mantener las fuentes originales */
-        /* table {
-                font-family: Arial, sans-serif;
-                border-collapse: collapse;
-                width: 100%;
-            } */
+        /* table { */
+        /* font-family: Arial, sans-serif; */
+        /* border-collapse: collapse; */
+        /* width: 100%; */
+        /* } */
 
         /* th, */
         td {
@@ -59,13 +59,13 @@
             background-color: #f2f2f2;
         }
 
-        /* th {
-                padding-top: 12px;
-                padding-bottom: 12px;
-                text-align: left;
-                background-color: #4CAF50;
-                color: white;
-            } */
+        /* th { */
+        /* padding-top: 12px; */
+        /* padding-bottom: 12px; */
+        /* text-align: left; */
+        /* background-color: #4CAF50; */
+        /* color: white; */
+        /* } */
 
         /* Estilo para sombrear la fila cuando se pasa el mouse sobre ella */
         tr {
@@ -83,35 +83,43 @@
 
     <div class="row">
         <div class="col-lg-12 col-md-12">
-            <div class="card">
-                <div class="card-header bg-success-0">
-                    <div class="card-widgets">
-                        {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="" title='XXX'><i
+            <div class="card card-border">
+                <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
+                    {{-- <div class="card-widgets"> --}}
+                    {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="" title='XXX'><i
                                 class="fas fa-file"></i> Instituciones Educativas</button> --}}
-                        <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
-                            title='ACTUALIZAR'><i class=" fas fa-history"></i> Actualizar</button>
-                        @if ($registrador > 0)
+                    {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
+                            title='ACTUALIZAR'><i class=" fas fa-history"></i> Actualizar</button> --}}
+                    {{-- @if ($registrador > 0)
                             <button class="btn btn-xs btn-primary waves-effect waves-light" data-toggle="modal"
                                 data-target="#modal_form" title="Agregar Actas" onclick="abrirnuevo()"> <i
                                     class="fa fa-file"></i>
                                 Nuevo</button> &nbsp;
-                        @endif
+                        @endif --}}
 
-                    </div>
-                    <h3 class="card-title text-white">
-                        ENTIDAD: {{ $ent->entidadn }}
-                    </h3>
+                    {{-- </div> --}}
+                    <h3 class="card-title text-white"></h3>
                 </div>
                 <div class="card-body pb-0">
                     <div class="row">
-
                         @if ($registrador > 0)
                             {{-- solo por municipios --}}
-                            <div class="col-lg-4 col-md-6 col-sm-6">
+                            <div class="col-lg-3 col-md-6 col-sm-6">
                                 <h4 class="page-title font-16">HOMOLOGACION DE ACTAS</h4>
                             </div>
                             <input type="hidden" id="vmunicipio" name="vmunicipio"
                                 value="{{ $muni->count() == 1 ? $muni[0]->id : 0 }}">
+
+                            <div class="col-lg-1 col-md-1 col-sm-1">
+                                <select id="vanio" name="vanio" class="form-control form-control-sm font-11"
+                                    onchange="">
+                                    <option value="0">AÑO</option>
+                                    @foreach ($anio as $item)
+                                        <option value="{{ $item->anio }}"
+                                            {{ $item->anio == date('Y') ? 'selected' : '' }}>{{ $item->anio }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
 
                             <div class="col-lg-3 col-md-2 col-sm-2">
                                 <select id="vred" name="vred" class="form-control form-control-sm font-11"
@@ -140,12 +148,25 @@
                             </div> --}}
                         @else
                             {{-- para todos menos municipios --}}
-                            <div class="col-lg-4 col-md-6 col-sm-6">
+                            <div class="col-lg-3 col-md-6 col-sm-6">
                                 <h4 class="page-title font-16">HOMOLOGACION DE ACTAS</h4>
                             </div>
+
+                            <div class="col-lg-1 col-md-1 col-sm-1">
+                                <select id="vanio" name="vanio" class="form-control form-control-sm font-11"
+                                    onchange="">
+                                    <option value="0">AÑO</option>
+                                    @foreach ($anio as $item)
+                                        <option value="{{ $item->anio }}"
+                                            {{ $item->anio == date('Y') ? 'selected' : '' }}>
+                                            {{ $item->anio }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                             <div class="col-lg-3 col-md-2 col-sm-2">
                                 <select id="vmunicipio" name="vmunicipio" class="form-control form-control-sm font-11"
-                                    onchange="limpiarfiltros();cargarred();cargarTablaMainO();cargarTablaMainMensualM();">
+                                    onchange="limpiarfiltros();cargarred();cargarTablaMainMensualM();">
 
                                     @if ($muni->count() > 1)
                                         <option value="0">MUNICIPIOS</option>
@@ -163,14 +184,14 @@
 
                             <div class="col-lg-3 col-md-2 col-sm-2">
                                 <select id="vred" name="vred" class="form-control form-control-sm font-11"
-                                    onchange="cargarmicrored(),cargarTablaMainO();cargarTablaMainMensualM();">
+                                    onchange="cargarmicrored(),cargarTablaMainMensualM();">
                                     <option value="0">RED</option>
                                 </select>
                             </div>
 
                             <div class="col-lg-2 col-md-2 col-sm-2">
                                 <select id="vmicrored" name="vmicrored" class="form-control form-control-sm font-11"
-                                    onchange="cargarTablaMainO();cargarTablaMainMensualM();">
+                                    onchange="cargarTablaMainMensualM();">
                                     <option value="0">MICRORED</option>
                                 </select>
                             </div>
@@ -252,7 +273,8 @@
                     </div>
                 </div>
             </div>
-        </div> <!-- End row -->
+        </div>
+        <!-- End row -->
     @else
     @endif
 
@@ -298,6 +320,7 @@
                 <div class="modal-body">
                     <form action="" id="form" class="form-horizontal" autocomplete="off">
                         @csrf
+                        <input type="hidden" id="mfmes" name="mfmes">
                         <input type="hidden" id="mfubigeo" name="mfubigeo">
                         <input type="hidden" id="mfid" name="mfid">
                         <input type="hidden" id="mfeess" name="mfeess">
@@ -365,6 +388,7 @@
                                             <th class="text-center">FECHA FINAL</th>
                                             <th class="text-center">FECHA ENVIO</th>
                                             <th class="text-center">N° ARCHIVOS</th>
+                                            <th class="text-center">ACCIÓN</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -372,6 +396,7 @@
                                         <tr>
                                             <td class="text-center" colspan="4">TOTAL DE ARCHIVOS</td>
                                             <td class="text-center tabla_registros_tfoot">0</td>
+                                            <td class="text-center"></td>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -563,6 +588,7 @@
         // }
 
         function cargarTablaMainMensualM() {
+            console.log('{{ $registrador }}');
             $.ajax({
                 url: "{{ route('eess.listar.registro.2') }}",
                 data: {
@@ -573,12 +599,12 @@
                     // 'fechai': $('#vfechai').val(),
                     // 'fechaf': $('#vfechaf').val(),
                     'eess': $('#veess').val(),
-                    'anio': 2024,
+                    'anio': $('#vanio').val(),
                     'registrador': '{{ $registrador }}',
                 },
                 type: 'GET',
                 success: function(data) {
-                    console.log(data);
+                    // console.log(data);
                     $('#vtabla2').html(data.tabla);
                     $('#tabla2').DataTable({
                         language: table_language,
@@ -766,24 +792,29 @@
         //     save_method = 'add';
         // }
 
-        function abrir_actas_registadas(eess, eess_nombre, mes) {
+        function abrir_actas_registadas(eess, registrador, eess_nombre, mes) {
             //modal :modal_form
             //from  :form
             console.log('abrir_actas_registadas()');
-            $('#mfubigeo').val($('#vmunicipio').val());
-            $('#mfeess').val(eess);
-            // fechaAM(anio, mes, rango)
-            // console.log(fechaAM(2024, (mes < 10 ? '0' : '') + mes , true));
-            // console.log(fechaAM(2024, (mes < 10 ? '0' : '') + mes , false));
-            // console.log(datex());
-            $('#mffechai').val(fechaAM(2024, (mes < 10 ? '0' : '') + mes, true));
-            $('#mffechaf').val(fechaAM(2024, (mes < 10 ? '0' : '') + mes, false));
-            $('#mffechae').val(datex());
-            $('#modal_form').modal('show');
-            $('#modal_form .modal-title').html('Nuevo Registro de Acta, EE.SS ' + eess_nombre);
+            $('#mfmes').val(mes);
+            if (registrador > 0) {
+                $('#mfubigeo').val($('#vmunicipio').val());
+                $('#mfeess').val(eess);
+                // fechaAM(anio, mes, rango)
+                // console.log(fechaAM(2024, (mes < 10 ? '0' : '') + mes , true));
+                // console.log(fechaAM(2024, (mes < 10 ? '0' : '') + mes , false));
+                // console.log(datex());
+                $('#mffechai').val(fechaAM($('#vanio').val(), (mes < 10 ? '0' : '') + mes, true));
+                $('#mffechaf').val(fechaAM($('#vanio').val(), (mes < 10 ? '0' : '') + mes, false));
+                $('#mffechae').val(datex());
+                $('#modal_form .modal-title').html('NUEVO REGISTRO EN ' + eess_nombre);
+                save_method = 'add';
+            } else {
+                $('#form').addClass('d-none');
+                $('#modal_form .modal-title').html('NUMERO DE ACTAS EN ' + eess_nombre);
+            }
             cargarregistros(eess, mes);
-            save_method = 'add';
-
+            $('#modal_form').modal('show');
         }
 
         function editseguimiento(id) {
@@ -836,15 +867,16 @@
                 data: $('#form').serialize(),
                 dataType: "JSON",
                 success: function(data) {
-                    console.log(data)
+                    var mes = $('#mfmes').val();
+                    // console.log(data)
                     if (data.status) {
                         // limpiarfrm();
                         table_registros.ajax.reload(null, false);
                         cargarTablaMainMensualM();
                         // table_principal.ajax.reload(null, false);
                         toastr.success(msgsuccess, 'Mensaje');
-                        $('#mffechai').val(fechaAM(2024, (mes < 10 ? '0' : '') + mes, true));
-                        $('#mffechaf').val(fechaAM(2024, (mes < 10 ? '0' : '') + mes, false));
+                        $('#mffechai').val(fechaAM($('#vanio').val(), (mes < 10 ? '0' : '') + mes, true));
+                        $('#mffechaf').val(fechaAM($('#vanio').val(), (mes < 10 ? '0' : '') + mes, false));
                         $('#mffechae').val(datex());
                         $('#mfarchivos').val(0);
                         if (save_method != 'add') {
@@ -984,7 +1016,7 @@
                         'microred': $('#vmicrored').val(),
                         'fechai': $('#vfechai').val(),
                         'fechaf': $('#vfechaf').val(),
-                        'fecha': "2024-" + (mes < 10 ? '0' : '') + mes + "-",
+                        'fecha': $('#vanio').val() + "-" + (mes < 10 ? '0' : '') + mes + "-",
                         'eess': eess,
                     },
                 },
@@ -1031,9 +1063,9 @@
         }
 
         function descargarO() {
-            window.open("{{ route('imporpadronactas.registro.excel', ['', '', '', '', '', '', '', '']) }}/otros/2024/" +
-                $('#vmunicipio').val() + "/" + $('#vred').val() + "/" + $('#vmicrored').val() +
-                "/0/0/{{ $registrador }}");
+            window.open("{{ route('imporpadronactas.registro.excel', ['', '', '', '', '', '', '', '']) }}/otros/" +
+                $('#vanio').val() + "/" + $('#vmunicipio').val() + "/" + $('#vred').val() + "/" +
+                $('#vmicrored').val() + "/0/0/{{ $registrador }}");
         }
 
         function formatofechax(fechaISO) {
@@ -1062,8 +1094,8 @@
 
             if (rango) return fecha + "01";
             return fecha + (ultimoDia < 10 ? "0" + ultimoDia : ultimoDia);
-            console.log(fecha1); // "2024-07-01"
-            console.log(fecha2); // "2024-07-31"
+            // console.log(fecha1); // "2024-07-01"
+            // console.log(fecha2); // "2024-07-31"
 
         }
 

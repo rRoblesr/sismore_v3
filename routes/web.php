@@ -50,6 +50,7 @@ use App\Http\Controllers\Parametro\FuenteImportacionController;
 use App\Http\Controllers\Parametro\IconoController;
 use App\Http\Controllers\Parametro\ImporPoblacionController;
 use App\Http\Controllers\Parametro\IndicadorGeneralController;
+use App\Http\Controllers\Parametro\PoblacionController;
 use App\Http\Controllers\Parametro\UbigeoController;
 use App\Http\Controllers\PowerBiController;
 use App\Http\Controllers\Presupuesto\BaseGastosController;
@@ -1281,6 +1282,10 @@ Route::post('/ImporPoblacion/Importar', [ImporPoblacionController::class, 'guard
 Route::get('/ImporPoblacion/Listar/ImportarDT', [ImporPoblacionController::class, 'ListarDTImportFuenteTodos'])->name('imporpoblacion.listar.importados');
 Route::post('/ImporPoblacion/ListaImportada', [ImporPoblacionController::class, 'ListaImportada'])->name('imporpoblacion.listarimportados');
 Route::get('/ImporPoblacion/eliminar/{id}', [ImporPoblacionController::class, 'eliminar'])->name('imporpoblacion.eliminar');
+
+Route::get('/Poblacion/Principal', [PoblacionController::class, 'poblacionprincipal'])->name('poblacionprincipal.principal');
+Route::get('/Poblacion/Principalx', [PoblacionController::class, 'poblacionprincipaltabla'])->name('poblacionprincipal.tablas');
+// Route::get('/MatriculaGeneral/EBR/Excel/{div}/{anio}/{ugel}/{gestion}/{area}/{provincia}', [MatriculaGeneralController::class, 'basicaregularDownload']);
 
 /****************************************** FIN PARAMETRO ***************************************************/
 

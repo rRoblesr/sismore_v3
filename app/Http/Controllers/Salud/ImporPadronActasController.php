@@ -19,6 +19,7 @@ use App\Models\Salud\ImporPadronAnemia;
 use App\Models\Salud\PadronActas;
 use App\Repositories\Administracion\EntidadRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
+use App\Repositories\Parametro\IndicadorGeneralMetaRepositorio;
 use App\Repositories\Salud\EstablecimientoRepositorio;
 use App\Utilities\Utilitario;
 use Carbon\Carbon;
@@ -471,7 +472,7 @@ class ImporPadronActasController extends Controller
     public function registro()
     {
         // return session()->all();
-        $anio = [2023, 2024, 2025, 2026];
+        // $anio = [2023, 2024, 2025, 2026];
         $sector = 2;
         // return session()->all();       
         $ent = EntidadRepositorio::migas(auth()->user()->entidad);
@@ -484,6 +485,8 @@ class ImporPadronActasController extends Controller
             $registrador = 0;
             $usuario = false;
         }
+        $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios(17);
+
         // return $usuario;
         // session('usuario_codigo_institucion');
         // return session()->all();
@@ -671,7 +674,8 @@ class ImporPadronActasController extends Controller
         $data = [];
         foreach ($query as $key => $value) {
             $boton = '';
-            // $boton .= '<button class="btn btn-xs btn-danger waves-effect waves-light" onclick="eliminarseguimiento(' . $value->id . ')"><i class="fa fa-trash"></i></button>';
+            $boton .= '<button class="btn btn-xs btn-primary waves-effect waves-light" onclick="eliminar(' . $value->id . ')"><i class="fa fa-pen"></i></button>&nbsp;';
+            $boton .= '<button class="btn btn-xs btn-danger waves-effect waves-light" onclick="eliminar(' . $value->id . ')"><i class="fa fa-trash"></i></button>';
 
             $data[] = array(
                 $key + 1,
@@ -679,6 +683,7 @@ class ImporPadronActasController extends Controller
                 $value->fecha_final,
                 $value->fecha_envio,
                 $value->nro_archivos,
+                $boton
             );
         }
         $result = array(
@@ -686,8 +691,8 @@ class ImporPadronActasController extends Controller
             "recordsTotal" => $start,
             "recordsFiltered" => $length,
             "data" => $data,
-            // "municipio" =>  $rq->municipio,
-            // "query" => $query,
+            "municipio" =>  $rq->municipio,
+            "query" => $query,
         );
         return response()->json($result);
     }
