@@ -112,7 +112,7 @@
 
                             <div class="col-lg-1 col-md-1 col-sm-1">
                                 <select id="vanio" name="vanio" class="form-control form-control-sm font-11"
-                                    onchange="">
+                                    onchange="cargarTablaMainMensualM()">
                                     <option value="0">AÑO</option>
                                     @foreach ($anio as $item)
                                         <option value="{{ $item->anio }}"
@@ -123,21 +123,21 @@
 
                             <div class="col-lg-3 col-md-2 col-sm-2">
                                 <select id="vred" name="vred" class="form-control form-control-sm font-11"
-                                    onchange="cargarmicrored(),cargarTablaMainM()">
+                                    onchange="cargarmicrored(),cargarTablaMainMensualM()">
                                     <option value="0">RED</option>
                                 </select>
                             </div>
 
                             <div class="col-lg-2 col-md-2 col-sm-2">
                                 <select id="vmicrored" name="vmicrored" class="form-control form-control-sm font-11"
-                                    onchange="vcargareess();cargarTablaMainM()">
+                                    onchange="vcargareess();cargarTablaMainMensualM()">
                                     <option value="0">MICRORED</option>
                                 </select>
                             </div>
 
                             <div class="col-lg-3 col-md-2 col-sm-2">
                                 <select id="veess" name="veess" class="form-control form-control-sm font-11"
-                                    onchange="cargarTablaMainM()">
+                                    onchange="cargarTablaMainMensualM()">
                                     <option value="0">ESTABLECIMIENTO</option>
                                 </select>
                             </div>
@@ -207,7 +207,7 @@
     @if ($registrador > 0)
         {{-- @if (false) --}}
         {{-- tabla 1 --}}
-        <div class="row">
+        <div class="row d-none">
             <div class="col-md-12">
                 <div class="card card-border">
                     <div class="card-header border-success-0 bg-transparent">
@@ -419,6 +419,7 @@
     <script type="text/javascript">
         var save_method;
         var registrador = '{{ $registrador }}';
+        var mes_actual = {{ date('m') }};
         var table_principal;
         var table_seguimiento;
         var table_registros;
@@ -800,15 +801,15 @@
             if (registrador > 0) {
                 $('#mfubigeo').val($('#vmunicipio').val());
                 $('#mfeess').val(eess);
-                // fechaAM(anio, mes, rango)
-                // console.log(fechaAM(2024, (mes < 10 ? '0' : '') + mes , true));
-                // console.log(fechaAM(2024, (mes < 10 ? '0' : '') + mes , false));
-                // console.log(datex());
                 $('#mffechai').val(fechaAM($('#vanio').val(), (mes < 10 ? '0' : '') + mes, true));
                 $('#mffechaf').val(fechaAM($('#vanio').val(), (mes < 10 ? '0' : '') + mes, false));
-                $('#mffechae').val(datex());
+                if (mes == mes_actual)
+                    $('#mffechae').val(datex());
+                else
+                    $('#mffechae').val(fechaAM($('#vanio').val(), (mes < 10 ? '0' : '') + mes, false));
                 $('#modal_form .modal-title').html('NUEVO REGISTRO EN ' + eess_nombre);
                 save_method = 'add';
+                $('#btnSave').text('Guardar');
             } else {
                 $('#form').addClass('d-none');
                 $('#modal_form .modal-title').html('NUMERO DE ACTAS EN ' + eess_nombre);
@@ -817,12 +818,14 @@
             $('#modal_form').modal('show');
         }
 
-        function editseguimiento(id) {
+        function modificar_acta(id) {
             //modal :modal_form
             //from  :form
             save_method = 'update';
-            console.log('editseguimiento()');
-            limpiarfrm();
+
+            $('#btnSave').text('Modificar');
+            console.log('modificar_acta(id)');
+            // limpiarfrm();
             $('#mfubigeo').val($('#vmunicipio').val());
             $.ajax({
                 url: "{{ route('imporpadronactas.registro.find', '') }}/" + id,
@@ -835,7 +838,8 @@
                     $('#mffechaf').val(data.pd.fecha_final);
                     $('#mffechae').val(data.pd.fecha_envio);
                     $('#mfarchivos').val(data.pd.nro_archivos);
-                    $('#modal_form .modal-title').html('Modificar Registro');
+
+                    $('#modal_form .modal-title').html('MODIFICAR REGISTRO');
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     toastr.error(
@@ -843,7 +847,6 @@
                         'Mensaje');
                 }
             });
-            // cargareess();
         }
 
         function save() {
@@ -877,11 +880,15 @@
                         toastr.success(msgsuccess, 'Mensaje');
                         $('#mffechai').val(fechaAM($('#vanio').val(), (mes < 10 ? '0' : '') + mes, true));
                         $('#mffechaf').val(fechaAM($('#vanio').val(), (mes < 10 ? '0' : '') + mes, false));
-                        $('#mffechae').val(datex());
+                        if (mes == mes_actual)
+                            $('#mffechae').val(datex());
+                        else
+                            $('#mffechae').val(fechaAM($('#vanio').val(), (mes < 10 ? '0' : '') + mes, false));
                         $('#mfarchivos').val(0);
-                        if (save_method != 'add') {
-                            $('#modal_form').modal('hide');
-                        }
+                        $('#btnSave').text('GUARDAR');
+                        // if (save_method != 'add') {
+                        //     $('#modal_form').modal('hide');
+                        // }
                     } else {
                         for (var i = 0; i < data.inputerror.length; i++) {
                             $('[name="' + data.inputerror[i] + '"]').parent().addClass('has-error');
@@ -963,7 +970,7 @@
             });
         }
 
-        function eliminarseguimiento(id) {
+        function eliminar_acta(id) {
             bootbox.confirm("¿Seguro desea eliminar esta importación?", function(result) {
                 if (result === true) {
                     $.ajax({
@@ -972,7 +979,9 @@
                         dataType: "JSON",
                         success: function(data) {
                             // table_seguimiento.ajax.reload(null, false);
-                            table_principal.ajax.reload(null, false);
+                            // table_principal.ajax.reload(null, false);
+                            table_registros.ajax.reload(null, false);
+                            cargarTablaMainMensualM();
                             toastr.success('El registro fue eliminado exitosamente.', 'Mensaje');
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
@@ -1018,6 +1027,7 @@
                         'fechaf': $('#vfechaf').val(),
                         'fecha': $('#vanio').val() + "-" + (mes < 10 ? '0' : '') + mes + "-",
                         'eess': eess,
+                        'registrador': '{{ $registrador }}',
                     },
                 },
                 columnDefs: [{
@@ -1038,6 +1048,10 @@
                     },
                     {
                         targets: 4,
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 5,
                         className: 'text-center'
                     }
                 ],

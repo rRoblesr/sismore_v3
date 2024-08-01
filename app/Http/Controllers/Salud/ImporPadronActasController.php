@@ -674,9 +674,10 @@ class ImporPadronActasController extends Controller
         $data = [];
         foreach ($query as $key => $value) {
             $boton = '';
-            $boton .= '<button class="btn btn-xs btn-primary waves-effect waves-light" onclick="eliminar(' . $value->id . ')"><i class="fa fa-pen"></i></button>&nbsp;';
-            $boton .= '<button class="btn btn-xs btn-danger waves-effect waves-light" onclick="eliminar(' . $value->id . ')"><i class="fa fa-trash"></i></button>';
-
+            if ($rq->registrador > 0) {
+                $boton .= '<button class="btn btn-xs btn-primary waves-effect waves-light" onclick="modificar_acta(' . $value->id . ')"><i class="fa fa-pen"></i></button>&nbsp;';
+                $boton .= '<button class="btn btn-xs btn-danger waves-effect waves-light" onclick="eliminar_acta(' . $value->id . ')"><i class="fa fa-trash"></i></button>';
+            }
             $data[] = array(
                 $key + 1,
                 $value->fecha_inicial,
