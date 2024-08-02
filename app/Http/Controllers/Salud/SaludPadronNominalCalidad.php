@@ -30,7 +30,7 @@ class SaludPadronNominalCalidad extends Controller
         $length = 0;
         $sector = session('usuario_sector');
         $nivel = session('usuario_nivel');
-        $codigo_institucion = (($sector=='14' && $nivel==4)?'0':'').session('usuario_codigo_institucion');
+        $codigo_institucion = session('usuario_codigo_institucion');
         $nombre_columna = ($sector == '14') ? "cod_eess_atencion" : "ubigeo";
         //dd($sector, ' - ', $nivel, ' - ', $nombre_columna, ' . ', $codigo_institucion);
         $tablon = PadronCalidad::select('codigo_calidad', 'nombre_calidad', DB::raw('COUNT(*) AS cantidad'));
@@ -77,7 +77,7 @@ class SaludPadronNominalCalidad extends Controller
         $start = 0;
         $length = 0;
         $sector = session('usuario_sector');$nivel = session('usuario_nivel');
-        $codigo_institucion = (($sector=='14' && $nivel==4)?'0':'').session('usuario_codigo_institucion');
+        $codigo_institucion = session('usuario_codigo_institucion');
         $nombre_columna = ($sector == '14') ? "cod_eess_atencion" : "ubigeo";
 
         $calidad = PadronCalidad::select('codigo_calidad', 'nombre_calidad')->where('codigo_calidad', $tipo)->first();
