@@ -2,468 +2,239 @@
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
     <style>
-        .tablex thead th {
-            padding: 6px;
-            text-align: center;
-        }
-
-        .tablex thead td {
-            padding: 6px;
-            text-align: center;
-            vertical-align: middle;
-            font-weight: bold;
-        }
-
-        .tablex tbody td,
-        .tablex tbody th,
-        .tablex tfoot td,
-        .tablex tfoot th {
-            padding: 6px;
-        }
-
-        .fuentex {
-            font-size: 10px;
-            font-weight: bold;
-        }
     </style>
 @endsection
 
 @section('content')
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-12 col-md-12">
-                <div class="card">
-                    <div class="card-header bg-success-0">
-                        <div class="card-widgets">
-                            <button type="button" class="btn btn-orange-0 btn-xs"
-                                onclick="location.href=`{{ route('matriculageneral.niveleducativo.principal') }}`"
-                                title=''><i class="fas fa-align-justify"></i> Nivel Educativo</button>
-                            {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf(6)"
-                                    title='FICHA TÉCNICA'><i class="fas fa-file"></i> Ficha Técnica</button> --}}
-                            <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
-                                title='ACTUALIZAR'><i class=" fas fa-history"></i> Actualizar</button>
-                            {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
-                                    title='IMPRIMIR'><i class="fa fa-print"></i></button> --}}
-                        </div>
-                        <h3 class="card-title text-white">Educación Básica Regular</h3>
-                    </div>
-                    <div class="card-body pb-0">
-                        <div class="form-group row align-items-center vh-5">
-                            <div class="col-lg-5 col-md-5 col-sm-5">
-                                <h5 class="page-title font-12">SIAGIE - MINEDU, {{ $actualizado }}</h5>
-                            </div>
-                            <div class="col-lg-1 col-md-1 col-sm-1  ">
-                                <select id="anio" name="anio" class="form-control btn-xs font-11"
-                                    onchange="cargarCards();">
-                                    <option value="0">AÑO</option>
-                                    @foreach ($anios as $item)
-                                        <option value="{{ $item->id }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
-                                            {{ $item->anio }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-lg-2 col-md-2 col-sm-2">
-                                <select id="ugel" name="ugel" class="form-control btn-xs font-11"
-                                    onchange="cargarCards();">
-                                    <option value="0">UGEL</option>
-                                    @foreach ($ugel as $item)
-                                        <option value="{{ $item->id }}">{{ $item->nombre }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-lg-2 col-md-2 col-sm-2">
-                                <select id="gestion" name="gestion" class="form-control btn-xs font-11"
-                                    onchange="cargarCards();">
-                                    <option value="0">TIPO DE GESTIÓN</option>
-                                    <option value="12">PUBLICA</option>
-                                    <option value="3">PRIVADA</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-2 col-md-2 col-sm-2">
-                                <select id="area" name="area" class="form-control btn-xs font-11"
-                                    onchange="cargarCards();">
-                                    <option value="0">ÁMBITO GEOGRÁFICO</option>
-                                    @foreach ($area as $item)
-                                        <option value="{{ $item->id }}">{{ $item->nombre }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+    <div class="row">
+        <div class="col-lg-4 col-md-4 col-sm-4">
+            <h4 class="page-title font-16">DEPARTAMENTO DE UCAYALI</h4>
+        </div>
+    </div>
 
+    <!--Widget-4 -->
+    <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card-box border border-plomo-0">
+                <div class="media">
+                    <div class="text-center">
+                        <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                            width="70%" height="70%">
+                    </div>
+                    <div class="media-body align-self-center">
+                        <div class="text-right">
+                            <h4 class="font-20 my-0 font-weight-bold">
+                                <span data-plugin="counterup" id="normal"></span>
+                            </h4>
+                            <p class="mb-0 mt-1 text-truncate">Población 2024</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end card-box-->
+        </div>
+
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card-box border border-plomo-0">
+                <div class="media">
+                    <div class="text-center">
+                        <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                            width="70%" height="70%">
+                    </div>
+                    <div class="media-body align-self-center">
+                        <div class="text-right">
+                            <h4 class="font-20 my-0 font-weight-bold">
+                                <span data-plugin="counterup" id="eib"></span>
+                            </h4>
+                            <p class="mb-0 mt-1 text-truncate">Población 0 a 5 años</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end card-box-->
+        </div>
+
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card-box border border-plomo-0">
+                <div class="media">
+                    <div class="text-center">
+                        <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                            width="70%" height="70%">
+                    </div>
+                    <div class="media-body align-self-center">
+                        <div class="text-right">
+                            <h4 class="font-20 my-0 font-weight-bold">
+                                <span data-plugin="counterup" id="foraneo"></span>
+                            </h4>
+                            <p class="mb-0 mt-1 text-truncate">Centros Poblados</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end card-box-->
+        </div>
+
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card-box border border-plomo-0">
+                <div class="media">
+                    <div class="text-center">
+                        <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                            width="70%" height="70%">
+                    </div>
+                    <div class="media-body align-self-center">
+                        <div class="text-right">
+                            <h4 class="font-20 my-0 font-weight-bold">
+                                <span data-plugin="counterup" id="limitado"></span>
+                            </h4>
+                            <p class="mb-0 mt-1 text-truncate">Pueblos Indigenas</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!--Widget-4 -->
-        <div class="row">
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="card-box border border-plomo-0">
-                    <div class="media">
-                        <div class="text-center">
-                            <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
-                                width="70%" height="70%">
-                        </div>
-                        <div class="media-body align-self-center">
-                            <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold">
-                                    <span data-plugin="counterup" id="normal"></span>
-                                </h4>
-                                <p class="mb-0 mt-1 text-truncate">Total Matriculados</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-0 font-9">
-                        <h6 class="">Avance <span class="float-right" id="inormal">0%</span></h6>
-                        <div class="progress progress-sm m-0">
-                            <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="90" aria-valuemin="0"
-                                aria-valuemax="100" style="width: 100%" id="bnormal">
-                                <span class="sr-only">0% Complete</span>
-                            </div>
-                        </div>
-                    </div>
+    {{-- portles --}}
+
+    <div class="row">
+
+        <div class="col-lg-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
                 </div>
-                <!-- end card-box-->
-            </div>
-
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="card-box border border-plomo-0">
-                    <div class="media">
-                        <div class="text-center">
-                            <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
-                                width="70%" height="70%">
-                        </div>
-                        <div class="media-body align-self-center">
-                            <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold">
-                                    <span data-plugin="counterup" id="eib"></span>
-                                </h4>
-                                <p class="mb-0 mt-1 text-truncate">Matriculados Inicial </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-0 font-9">
-                        <h6 class="">Avance <span class="float-right" id="ieib">0%</span></h6>
-                        <div class="progress progress-sm m-0">
-                            <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="90"
-                                aria-valuemin="0" aria-valuemax="100" style="width: 100%" id="beib">
-                                <span class="sr-only">0% Complete</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- end card-box-->
-            </div>
-
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="card-box border border-plomo-0">
-                    <div class="media">
-                        <div class="text-center">
-                            <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
-                                width="70%" height="70%">
-                        </div>
-                        <div class="media-body align-self-center">
-                            <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold">
-                                    <span data-plugin="counterup" id="foraneo"></span>
-                                </h4>
-                                <p class="mb-0 mt-1 text-truncate">Matriculados Primaria</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-0 font-9">
-                        <h6 class="">Avance <span class="float-right" id="iforaneo">0%</span></h6>
-                        <div class="progress progress-sm m-0">
-                            <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="90"
-                                aria-valuemin="0" aria-valuemax="100" style="width: 100%" id="bforaneo">
-                                <span class="sr-only">0% Complete</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- end card-box-->
-            </div>
-
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="card-box border border-plomo-0">
-                    <div class="media">
-                        <div class="text-center">
-                            <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
-                                width="70%" height="70%">
-                        </div>
-                        <div class="media-body align-self-center">
-                            <div class="text-right">
-                                <h4 class="font-20 my-0 font-weight-bold">
-                                    <span data-plugin="counterup" id="limitado"></span>
-                                </h4>
-                                <p class="mb-0 mt-1 text-truncate">Matriculados Secundaria</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-0 font-9">
-                        <h6 class="">Avance <span class="float-right" id="ilimitado">0%</span></h6>
-                        <div class="progress progress-sm m-0">
-                            <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="90"
-                                aria-valuemin="0" aria-valuemax="100" style="width: 100%" id="blimitado">
-                                <span class="sr-only">0% Complete</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {{-- portles --}}
-
-        <div class="row">
-
-            <div class="col-lg-6">
-                <div class="card card-border border border-plomo-0">
-                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                        {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
-                    </div>
-                    <div class="card-body p-0">
-                        <figure class="highcharts-figure p-0 m-0">
-                            <div id="anal1" style="height: 20rem"></div>
-                        </figure>
-                        {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                <div class="card-body p-0">
+                    <figure class="highcharts-figure p-0 m-0">
+                        <div id="anal1" style="height: 20rem"></div>
+                    </figure>
+                    {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
                             <span class="anal1-fuente">Fuente:</span>
                             <span class="float-right anal1-fecha">Actualizado:</span>
                         </div> --}}
-                    </div>
                 </div>
             </div>
+        </div>
 
-            <div class="col-lg-6">
-                <div class="card card-border border border-plomo-0">
-                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                        {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
-                    </div>
-                    <div class="card-body p-0">
-                        <figure class="highcharts-figure p-0 m-0">
-                            <div id="anal2" style="height: 20rem"></div>
-                        </figure>
-                        {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+        <div class="col-lg-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
+                </div>
+                <div class="card-body p-0">
+                    <figure class="highcharts-figure p-0 m-0">
+                        <div id="anal2" style="height: 20rem"></div>
+                    </figure>
+                    {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
                             <span class="anal2-fuente">Fuente:</span>
                             <span class="float-right anal2-fecha">Actualizado:</span>
                         </div> --}}
-                    </div>
                 </div>
             </div>
-
         </div>
 
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="card card-border border border-plomo-0">
-                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                        {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
-                    </div>
-                    <div class="card-body p-0">
-                        <figure class="highcharts-figure p-0 m-0">
-                            <div id="anal3" style="height: 20rem"></div>
-                        </figure>
-                        {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
+                </div>
+                <div class="card-body p-0">
+                    <figure class="highcharts-figure p-0 m-0">
+                        <div id="anal3" style="height: 20rem"></div>
+                    </figure>
+                    {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
                             <span class="anal3-fuente">Fuente:</span>
                             <span class="float-right anal3-fecha">Actualizado:</span>
                         </div> --}}
-                    </div>
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="card card-border border border-plomo-0">
-                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                        {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
-                    </div>
-                    <div class="card-body p-0">
-                        <figure class="highcharts-figure p-0 m-0">
-                            <div id="anal4" style="height: 20rem"></div>
-                        </figure>
-                        {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+        </div>
+        <div class="col-lg-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
+                </div>
+                <div class="card-body p-0">
+                    <figure class="highcharts-figure p-0 m-0">
+                        <div id="anal4" style="height: 20rem"></div>
+                    </figure>
+                    {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
                             <span class="anal4-fuente">Fuente:</span>
                             <span class="float-right anal4-fecha">Actualizado:</span>
                         </div> --}}
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="row d-none">
-            <div class="col-lg-6">
-                <div class="card card-border border border-plomo-0">
-                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                        <div class="card-widgets">
-                            {{-- <a href="javascript:void(0)" class="waves-effect waves-light"><i
-                                        class=" mdi mdi-download text-orange-0"></i></a> --}}
-
-                            <a href="javascript:void(0)" class="waves-effect waves-light" data-toggle="modal"
-                                data-target="#myModal"><i class="mdi mdi-information text-orange-0"></i></a>
-                        </div>
-                        <h3 class="text-black text-center font-weight-normal font-11">
-                            Número de estudiantes matriculados en educación básica regular, según sexo</h3>
-                    </div>
-                    <div class="card-body p-0">
-                        {{-- <figure class="highcharts-figure p-0 m-0">
-                            <div id="anal5" style="height: 15rem"></div>
-                        </figure> --}}
-                        <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                            <span class="anal5-fuente">Fuente:</span>
-                            <span class="float-right anal5-fecha">Actualizado:</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="card card-border border border-plomo-0">
-                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                        <div class="card-widgets">
-                            {{-- <a href="javascript:void(0)" class="waves-effect waves-light"><i
-                                        class=" mdi mdi-download text-orange-0"></i></a> --}}
-
-                            <a href="javascript:void(0)" class="waves-effect waves-light" data-toggle="modal"
-                                data-target="#myModal"><i class="mdi mdi-information text-orange-0"></i></a>
-                        </div>
-                        <h3 class="text-black text-center font-weight-normal font-11">Número
-                            de estudiantes matriculados en educación básica regular por UGEL</h3>
-                    </div>
-                    <div class="card-body p-0">
-                        {{-- <figure class="highcharts-figure p-0 m-0">
-                            <div id="anal6" style="height: 15rem"></div>
-                        </figure> --}}
-                        <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                            <span class="anal6-fuente">Fuente:</span>
-                            <span class="float-right anal6-fecha">Actualizado:</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="row d-none">
-            <div class="col-lg-6">
-                <div class="card card-border border border-plomo-0">
-                    <div class="card-header border-success-0 bg-transparent p-0">
-                        {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
-                    </div>
-                    <div class="card-body p-0">
-                        <figure class="highcharts-figure p-0 m-0">
-                            <div id="anal7" style="height: 20rem"></div>
-                        </figure>
-                        {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                            <span class="anal7-fuente">Fuente:</span>
-                            <span class="float-right anal7-fecha">Actualizado:</span>
-                        </div> --}}
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="card card-border border border-plomo-0">
-                    <div class="card-header border-success-0 bg-transparent p-0">
-                        {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
-                    </div>
-                    <div class="card-body p-0">
-                        <figure class="highcharts-figure p-0 m-0">
-                            <div id="anal8" style="height: 20rem"></div>
-                        </figure>
-                        {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                            <span class="anal8-fuente">Fuente:</span>
-                            <span class="float-right anal8-fecha">Actualizado:</span>
-                        </div> --}}
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card card-border border border-plomo-0">
-                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                        <div class="card-widgets">
-                            <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
-                                    class="fa fa-file-excel"></i> Descargar</button>
-                        </div>
-                        <h3 class="text-black font-14">Matricula educativa de estudiantes por Provincia, según Nivel
-                            Educativo y Sexo</h3>
-                    </div>
-                    <div class="card-body pt-0 pb-0">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="table-responsive" id="vtabla1">
-                                </div>
-                            </div>
-                        </div>
-                        {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9 p-0">
-                            <span class="float-left vtabla1-fuente">Fuente: </span>
-                            <span class="float-right vtabla1-fecha">Actualizado:</span>
-                        </div> --}}
-                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card card-border border border-plomo-0">
-                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                        <div class="card-widgets">
-                            <button type="button" class="btn btn-primary btn-xs"
-                                onclick="cargarTablaDistritos('tabla2', 0)" title='Actualizar Tabla'><i
-                                    class=" fas fa-history"></i> Actualizar</button>
-                            <button type="button" class="btn btn-success btn-xs" onclick="descargar2()"><i
-                                    class="fa fa-file-excel"></i> Descargar</button>
-                        </div>
-                        <h3 class="text-black font-14">Matricula educativa de estudiantes por Distrito, según Nivel
-                            Educativo y Sexo</h3>
-                    </div>
-                    <div class="card-body pt-0 pb-0">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="table-responsive" id="vtabla2">
-                                </div>
-                            </div>
-                        </div>
-                        {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                            <span class="float-left vtabla2-fuente">Fuente: </span>
-                            <span class="float-right vtabla2-fecha">Actualizado:</span>
-                        </div> --}}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Bootstrap modal -->
-        <div id="modal_centropoblado" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-            aria-hidden="true" style="display: none;">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="text-black font-14">
-                            Número de estudiantes matriculados en educación básica regular por
-                            centro poblado, según nivel educativo
-                        </h5>
-                        &nbsp;
-                        <button type="button" class="btn btn-success btn-xs text-right" onclick="descargar3()">
-                            <i class="fa fa-file-excel"></i> Descargar</button>
-
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="table-responsive" id="vtabla3">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End Bootstrap modal -->
     </div>
+ 
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
+                </div>
+                <div class="card-body p-0">
+                    <figure class="highcharts-figure p-0 m-0">
+                        <div id="anal5" style="height: 20rem"></div>
+                    </figure>
+                    {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                            <span class="anal3-fuente">Fuente:</span>
+                            <span class="float-right anal3-fecha">Actualizado:</span>
+                        </div> --}}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
+                </div>
+                <div class="card-body p-0">
+                    <figure class="highcharts-figure p-0 m-0">
+                        <div id="anal6" style="height: 20rem"></div>
+                    </figure>
+                    {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                            <span class="anal4-fuente">Fuente:</span>
+                            <span class="float-right anal4-fecha">Actualizado:</span>
+                        </div> --}}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bootstrap modal -->
+    <div id="modal_centropoblado" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="text-black font-14">
+                        Número de estudiantes matriculados en educación básica regular por
+                        centro poblado, según nivel educativo
+                    </h5>
+                    &nbsp;
+                    <button type="button" class="btn btn-success btn-xs text-right" onclick="descargar3()">
+                        <i class="fa fa-file-excel"></i> Descargar</button>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive" id="vtabla3">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Bootstrap modal -->
 @endsection
 
 @section('js')
@@ -480,17 +251,17 @@
         });
 
         function cargarCards() {
-            panelGraficas('head');
-            panelGraficas('anal1');
-            panelGraficas('anal2');
-            panelGraficas('anal3');
-            panelGraficas('anal4');
+            // panelGraficas('head');
+            // panelGraficas('anal1');
+            // panelGraficas('anal2');
+            // panelGraficas('anal3');
+            // panelGraficas('anal4');
             // panelGraficas('anal5');
             // panelGraficas('anal6');
             // panelGraficas('anal7');
             // panelGraficas('anal8');
-            panelGraficas('tabla1');
-            panelGraficas('tabla2');
+            // panelGraficas('tabla1');
+            // panelGraficas('tabla2');
         }
 
         function panelGraficas(div) {
