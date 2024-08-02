@@ -2,22 +2,11 @@
 
 namespace App\Http\Controllers\Parametro;
 
-use App\Exports\ImporPadronSiagieExport;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Educacion\ImporMatriculaGeneralController;
-use App\Imports\tablaXImport;
-use App\Models\Administracion\Entidad;
-use App\Models\Educacion\ImporMatricula;
-use App\Models\Educacion\Importacion;
-use App\Models\Educacion\Matricula;
 use App\Models\Parametro\Anio;
-use App\Models\Parametro\ImporPoblacion;
 use App\Models\Parametro\Mes;
-use App\Models\Parametro\Poblacion;
-use App\Models\Parametro\PoblacionDetalle;
-use App\Repositories\Educacion\ImporMatriculaRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
-use App\Repositories\Educacion\MatriculaDetalleRepositorio;
 use App\Repositories\Educacion\MatriculaGeneralRepositorio;
 use App\Utilities\Utilitario;
 use Carbon\Carbon;
