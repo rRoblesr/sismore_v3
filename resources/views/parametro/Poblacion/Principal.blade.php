@@ -24,7 +24,7 @@
                     <div class="media-body align-self-center">
                         <div class="text-right">
                             <h4 class="font-20 my-0 font-weight-bold">
-                                <span data-plugin="counterup" id="normal"></span>
+                                <span data-plugin="counterup" id="card1"></span>
                             </h4>
                             <p class="mb-0 mt-1 text-truncate">Población 2024</p>
                         </div>
@@ -44,7 +44,7 @@
                     <div class="media-body align-self-center">
                         <div class="text-right">
                             <h4 class="font-20 my-0 font-weight-bold">
-                                <span data-plugin="counterup" id="eib"></span>
+                                <span data-plugin="counterup" id="card2"></span>
                             </h4>
                             <p class="mb-0 mt-1 text-truncate">Población 0 a 5 años</p>
                         </div>
@@ -64,7 +64,7 @@
                     <div class="media-body align-self-center">
                         <div class="text-right">
                             <h4 class="font-20 my-0 font-weight-bold">
-                                <span data-plugin="counterup" id="foraneo"></span>
+                                <span data-plugin="counterup" id="card3"></span>
                             </h4>
                             <p class="mb-0 mt-1 text-truncate">Centros Poblados</p>
                         </div>
@@ -84,7 +84,7 @@
                     <div class="media-body align-self-center">
                         <div class="text-right">
                             <h4 class="font-20 my-0 font-weight-bold">
-                                <span data-plugin="counterup" id="limitado"></span>
+                                <span data-plugin="counterup" id="card4"></span>
                             </h4>
                             <p class="mb-0 mt-1 text-truncate">Pueblos Indigenas</p>
                         </div>
