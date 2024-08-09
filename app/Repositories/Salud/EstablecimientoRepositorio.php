@@ -47,6 +47,23 @@ class EstablecimientoRepositorio
                     ->where('te.sector_id', '=', $sector);
             })
             ->where('es.estado', 'ACTIVO')->where('re.codigo', '!=', '00')->whereNotIn('cod_unico', [28683, 30785, 27062, 29247]);
+
+        switch (session('usuario_nivel')) {
+            case '1':
+                break;
+            case '2':
+                $query = $query->where('re.codigo', session('usuario_codigo'));
+                break;
+            case '3':
+                $query = $query->where('mi.codigo', session('usuario_codigo'));
+                break;
+            case '4':
+                $query = $query->where('es.cod_unico', session('usuario_codigo'));
+                break;
+            default:
+
+                break;
+        }
         if ($municipio > 0) $query = $query->where('ub.id', $municipio);
         // if ($red > 0) $query = $query->where('re.id', $red);
         // if ($microred > 0) $query = $query->where('mi.id', $microred);
@@ -97,7 +114,7 @@ class EstablecimientoRepositorio
 
     public static function listEESS($sector, $municipio, $red, $microred)
     {
-        $query = Establecimiento::from('sal_establecimiento as es')->distinct()->select('es.*')
+        $query = Establecimiento::from('sal_establecimiasdasento as es')->distinct()->select('es.*')
             ->join('sal_microred as mi', 'mi.id', '=', 'es.microrred_id')
             ->join('sal_red as re', 're.id', '=', 'mi.red_id')
             ->join('par_ubigeo as ub', 'ub.id', '=', 'es.ubigeo_id')
@@ -107,10 +124,11 @@ class EstablecimientoRepositorio
                     ->where('te.sector_id', '=', $sector);
             })
             ->where('es.estado', 'ACTIVO')->where('re.codigo', '!=', '00');
+
         if ($municipio > 0) $query = $query->where('ub.id', $municipio);
         if ($red > 0) $query = $query->where('re.id', $red);
         if ($microred > 0) $query = $query->where('mi.id', $microred);
-        // ->where('re.codigo', '03')
+
         $query = $query->orderBy('re.codigo')->orderBy('mi.codigo')->orderBy('es.nombre_establecimiento')->get();
         return $query;
     }

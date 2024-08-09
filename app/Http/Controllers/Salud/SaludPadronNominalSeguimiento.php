@@ -29,17 +29,26 @@ class SaludPadronNominalSeguimiento extends Controller
 
         $sector = session('usuario_sector');
         $nivel = session('usuario_nivel');
-        $codigo = session('usuario_codigo_institucion');
-
-        //return compact('sector', 'nivel', 'codigo');
+        $codigo = session('usuario_codigo_institucion');        
 
         $codigo_institucion = ($cod_2000 == "NULL") ?  $codigo : $cod_2000;
+        //$nivel = ($cod_2000 == "NULL") ?  $nivel : '4';
+        
+
         $codigo_institucion = ($sector == "22") ? '250101' : $codigo_institucion;
+
+        //return compact('sector', 'nivel', 'codigo_institucion');
+
+
+
         $nombre_columna = $this->columna($sector, $nivel); //  ($sector == '14') ? "re.cod_2000" : "re.ubigeo";
+        $nombre_columna = ($cod_2000 == "NULL") ? $nombre_columna : "re.cod_2000";
+
+        //return compact('sector', 'nivel', 'codigo_institucion', 'nombre_columna');
 
         $dato_ipress = DB::table('m_establecimiento as re')->select('re.cod_2000', 're.nom_est', 're.cod_mic', 're.nom_mic', 're.cod_red', 're.nom_red')->where('re.cod_disa','34')->where($nombre_columna, $codigo_institucion)->first();
 
-        //return compact('sector', 'nivel', 'codigo', 'codigo_institucion', 'cod_2000', 'nombre_columna', 'dato_ipress');
+        //return compact('dato_ipress');
 
         $query = DB::table('m_establecimiento as re')->select('re.cod_red', 're.nom_red')->where('cod_disa', '34');
         if ($sector == '14' and $nivel >= '2') $query->where('re.cod_red', $dato_ipress->cod_red);
@@ -107,12 +116,16 @@ class SaludPadronNominalSeguimiento extends Controller
         $nivel = session('usuario_nivel');
         $codigo = session('usuario_codigo_institucion');
 
-        //return compact('sector', 'nivel', 'codigo');
+        //return compact('sector', 'nivel', 'codigo', 'cod_2000');
 
         $codigo_institucion = ($cod_2000 == "NULL") ? '0' : $cod_2000;
         $codigo_institucion = ($sector == "22") ? $codigo : $codigo_institucion;
-        $nombre_columna = $this->columna($sector, $nivel); //  ($sector == '14') ? "re.cod_2000" : "re.ubigeo";
+        //$nombre_columna = $this->columna($sector, $nivel); //  ($sector == '14') ? "re.cod_2000" : "re.ubigeo";
         //echo $nombre_columna." - ".$codigo_institucion;
+
+        $nombre_columna = (strlen($cod_2000) != "9") ? $this->columna($sector, $nivel) : "re.cod_2000";
+        //return $nombre_columna." - ".$codigo_institucion;
+
         $query = PadronNominalRepositorioSalud::Listar_PadronSabana($nombre_columna, $codigo_institucion, $id_grupo);
         //return $query;
         $data = [];

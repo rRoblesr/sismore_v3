@@ -130,7 +130,7 @@
 
                             <div class="col-lg-2 col-md-2 col-sm-2">
                                 <select id="vmicrored" name="vmicrored" class="form-control form-control-sm font-11"
-                                    onchange="vcargareess();cargarTablaMainMensualM()">
+                                    onchange="cargarTablaMainMensualM()">{{-- vcargareess(); --}}
                                     <option value="0">MICRORED</option>
                                 </select>
                             </div>
@@ -448,8 +448,8 @@
             // getmes();
             cargarred();
             cargarmicrored();
-            cargareess();
-            vcargareess();
+            // cargareess();
+            // vcargareess();
 
             if (registrador == 0) {
                 cargarTablaMainMensualM(); //por ahora todos
@@ -691,7 +691,7 @@
                     });
                     $("#vmicrored").append(options);
 
-                    vcargareess();
+                    // vcargareess();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -699,57 +699,57 @@
             });
         }
 
-        function cargareess() {
-            $.ajax({
-                url: "{{ route('eess.cargareess') }}",
-                data: {
-                    'sector': 2,
-                    'municipio': $('#vmunicipio').val(),
-                    // 'red': $('#vred').val(),
-                },
-                type: 'GET',
-                success: function(data) {
-                    $("#mfeess option").remove();
-                    var options = data.eess.length > 1 ? '<option value="0">SELECCIONAR</option>' : '';
-                    $.each(data.eess, function(index, value) {
-                        //ss = (id == value.id ? "selected" : "");
-                        options +=
-                            `<option value='${value.id}'>${value.cod_unico.toString().padStart(8,'0')}|${value.nombre_establecimiento}</option>`;
-                    });
-                    $("#mfeess").append(options);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
-        }
+        // function cargareess() {
+        //     $.ajax({
+        //         url: "{{ route('eess.cargareess') }}",
+        //         data: {
+        //             'sector': 2,
+        //             'municipio': $('#vmunicipio').val(),
+        //             // 'red': $('#vred').val(),
+        //         },
+        //         type: 'GET',
+        //         success: function(data) {
+        //             $("#mfeess option").remove();
+        //             var options = data.eess.length > 1 ? '<option value="0">SELECCIONAR</option>' : '';
+        //             $.each(data.eess, function(index, value) {
+        //                 //ss = (id == value.id ? "selected" : "");
+        //                 options +=
+        //                     `<option value='${value.id}'>${value.cod_unico.toString().padStart(8,'0')}|${value.nombre_establecimiento}</option>`;
+        //             });
+        //             $("#mfeess").append(options);
+        //         },
+        //         error: function(jqXHR, textStatus, errorThrown) {
+        //             console.log(jqXHR);
+        //         },
+        //     });
+        // }
 
-        function vcargareess() {
-            $.ajax({
-                url: "{{ route('eess.cargareess') }}",
-                data: {
-                    'sector': 2,
-                    'municipio': $('#vmunicipio').val(),
-                    'red': $('#vred').val(),
-                    'microred': $('#vmicrored').val(),
-                },
-                type: 'GET',
-                success: function(data) {
-                    $("#veess option").remove();
-                    var options = data.eess.length > 1 ?
-                        '<option value="0">SELECCIONAR ESTABLECIMIENTO</option>' : '';
-                    $.each(data.eess, function(index, value) {
-                        //ss = (id == value.id ? "selected" : "");
-                        options +=
-                            `<option value='${value.id}'>${value.cod_unico.toString().padStart(8,'0')}|${value.nombre_establecimiento}</option>`;
-                    });
-                    $("#veess").append(options);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
-        }
+        // function vcargareess() {
+        //     $.ajax({
+        //         url: "{{ route('eess.cargareess') }}",
+        //         data: {
+        //             'sector': 2,
+        //             'municipio': $('#vmunicipio').val(),
+        //             'red': $('#vred').val(),
+        //             'microred': $('#vmicrored').val(),
+        //         },
+        //         type: 'GET',
+        //         success: function(data) {
+        //             $("#veess option").remove();
+        //             var options = data.eess.length > 1 ?
+        //                 '<option value="0">SELECCIONAR ESTABLECIMIENTO</option>' : '';
+        //             $.each(data.eess, function(index, value) {
+        //                 //ss = (id == value.id ? "selected" : "");
+        //                 options +=
+        //                     `<option value='${value.id}'>${value.cod_unico.toString().padStart(8,'0')}|${value.nombre_establecimiento}</option>`;
+        //             });
+        //             $("#veess").append(options);
+        //         },
+        //         error: function(jqXHR, textStatus, errorThrown) {
+        //             console.log(jqXHR);
+        //         },
+        //     });
+        // }
 
         function limpiarfiltros() {
             $('#vred').val('0');
