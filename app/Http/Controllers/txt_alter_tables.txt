@@ -1942,6 +1942,7 @@ group by cpn.distrito,cpd.distrito;
 
 CREATE TABLE `par_poblacion_proyectada` (
     id int(11) auto_increment primary key,
+				importacion_id int(11) DEFAULT NULL,
 				anio int(11) DEFAULT NULL,
 				fuente varchar(20) NULL DEFAULT NULL,
 				departamento varchar(100) NULL DEFAULT NULL,
@@ -1949,11 +1950,13 @@ CREATE TABLE `par_poblacion_proyectada` (
 				rango varchar(20) NULL DEFAULT NULL,
 				mujer int(11) DEFAULT NULL,
 				hombre int(11) DEFAULT NULL,
-				total int(11) DEFAULT NULL
+				total int(11) DEFAULT NULL,
+				foreign key(importacion_id) references par_importacion(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `par_poblacion_padron_nominal` (
     id int(11) auto_increment primary key,
+				importacion_id int(11) DEFAULT NULL,
 				anio int(11) DEFAULT NULL,
 				mes varchar(20) NULL DEFAULT NULL,
 				ubigeo varchar(6) NULL DEFAULT NULL,
@@ -1969,16 +1972,77 @@ CREATE TABLE `par_poblacion_padron_nominal` (
 				2a int(11) DEFAULT NULL,
 				3a int(11) DEFAULT NULL,
 				4a int(11) DEFAULT NULL,
-				5a int(11) DEFAULT NULL
+				5a int(11) DEFAULT NULL,
+				foreign key(importacion_id) references par_importacion(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `par_poblacion_diresa` (
     id int(11) auto_increment primary key,
+				importacion_id int(11) DEFAULT NULL,
 				ubigeo  varchar(6) NULL DEFAULT NULL,
 				sexo  varchar(20) NULL DEFAULT NULL,
 				edad  varchar(20) NULL DEFAULT NULL,
 				rango  varchar(20) NULL DEFAULT NULL,
-				total int(11) DEFAULT NULL
+				total int(11) DEFAULT NULL,
+				foreign key(importacion_id) references par_importacion(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `par_pueblos_indigenas` (
+    id int(11) auto_increment primary key,
+				importacion_id int(11) DEFAULT NULL,
+				nombre_localidad varchar(100) NULL DEFAULT NULL,
+				tipo_localidad varchar(100) NULL DEFAULT NULL,
+				ambito_pueblo_indígena varchar(100) NULL DEFAULT NULL,
+				nombre_pueblo_indígena varchar(100) NULL DEFAULT NULL,
+				referencia varchar(100) NULL DEFAULT NULL,
+				ubigeo varchar(6) NULL DEFAULT NULL,
+				ubigeo_cp varchar(10) NULL DEFAULT NULL,
+				fuente varchar(200) NULL DEFAULT NULL,
+				resolucion_reconocimiento varchar(100) NULL DEFAULT NULL,
+				fecha_reconocimiento date NULL DEFAULT NULL,
+				resolucion_plano varchar(200) NULL DEFAULT NULL,
+				fecha_plano date NULL DEFAULT NULL,
+				resolución_titulo varchar(100) NULL DEFAULT NULL,
+				fecha_titulo date NULL DEFAULT NULL,
+				nro_titulo varchar(100) NULL DEFAULT NULL,
+				partida_electronica int(11)  NULL DEFAULT NULL,
+				area_titulada double NULL DEFAULT NULL,
+				area_uso double NULL DEFAULT NULL,
+				area_protegida double NULL DEFAULT NULL,
+				total_superfie double NULL DEFAULT NULL,
+				estado varchar(100) NULL DEFAULT NULL,
+				observacion varchar(300) NULL DEFAULT NULL,
+				edad_0_4 int(11)  NULL DEFAULT NULL,
+				edad_5_14 int(11)  NULL DEFAULT NULL,
+				edad_15_29 int(11)  NULL DEFAULT NULL,
+				edad_30_64 int(11)  NULL DEFAULT NULL,
+				edad_65_mas int(11)  NULL DEFAULT NULL,
+				poblacion_hombre int(11)  NULL DEFAULT NULL,
+				poblacion_mujer int(11)  NULL DEFAULT NULL,
+				poblacion_total int(11)  NULL DEFAULT NULL,
+				hogares int(11)  NULL DEFAULT NULL,
+				viviendas int(11)  NULL DEFAULT NULL,
+				viviendas_sin_agua int(11)  NULL DEFAULT NULL,
+				viviendas_sin_desague int(11)  NULL DEFAULT NULL,
+				viviendas_sin_electricidad int(11)  NULL DEFAULT NULL,
+				codigo_ipress varchar(8) NULL DEFAULT NULL,
+				nombre_ipress varchar(150) NULL DEFAULT NULL,
+				categoría_ipress varchar(100) NULL DEFAULT NULL,
+				estado_ipress varchar(100) NULL DEFAULT NULL,
+				tipo_ipress varchar(100) NULL DEFAULT NULL,
+				red_salud varchar(150) NULL DEFAULT NULL,
+				codigo_modulo varchar(7) NULL DEFAULT NULL,
+				niveles_educativos varchar(150) NULL DEFAULT NULL,
+				inicial int(11)  NULL DEFAULT NULL,
+				primaria int(11)  NULL DEFAULT NULL,
+				secundaria int(11)  NULL DEFAULT NULL,
+				modalidad varchar(20) NULL DEFAULT NULL,
+				total_EIB int(11)  NULL DEFAULT NULL,
+				total_EBR int(11)  NULL DEFAULT NULL,
+				forma varchar(150) NULL DEFAULT NULL,
+				escolarizada int(11)  NULL DEFAULT NULL,
+				no_escolarizada int(11)  NULL DEFAULT NULL,
+				foreign key(importacion_id) references par_importacion(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
