@@ -402,7 +402,8 @@
                         <form class="app-search" style="max-width: 600px;">
                             <div class="app-search-box">
                                 <span style="color:white; font-size: 20px;">
-                                    <strong>SISTEMA DE MONITOREO REGIONAL</strong>
+                                    
+                                    <strong>MODULO {{ session()->has('sistema_nombre') ? session('sistema_nombre') : 'SIN MODULO' }}</strong>
                                 </span>
                             </div>
                         </form>
@@ -481,6 +482,7 @@
                                     </ul> --}}
                                 </div>
                                 <p class="font-10 text-muted m-0">
+
                                     {{ auth()->user()->id == 49 ? (session()->has('sistema_nombre') ? session('sistema_nombre') : 'SIN MODULO') : '' }}
                                 </p>
                                 <p class="font-10 text-muted m-0">

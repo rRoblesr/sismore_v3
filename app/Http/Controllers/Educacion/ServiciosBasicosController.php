@@ -305,7 +305,7 @@ class ServiciosBasicosController extends Controller
                 } else if ($rq->servicio == 3) {
                     $tservicio = 'Luz';
                 } else if ($rq->servicio == 4) {
-                    $tservicio = 'Tres Servicios';
+                    $tservicio = 'Servicios';
                 } else if ($rq->servicio == 5) {
                     $tservicio = 'Internet';
                 }
