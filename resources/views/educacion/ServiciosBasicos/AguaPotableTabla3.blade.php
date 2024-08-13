@@ -66,7 +66,7 @@
     function avance($monto)
     {
         if ($monto < 51) {
-            return '<span class="badge badge-pill badge-danger" style="font-size:90%;">' .
+            return '<span class="badge badge-pill badge-danger" style="font-size:90%;width:40px">' .
                 round($monto, 1) .
                 '%</span>';
         } elseif ($monto < 100) {
@@ -91,9 +91,9 @@
     function sino($valor)
     {
         if ($valor == 'NO') {
-            return '<span class="badge badge-pill badge-danger" style="font-size:90%;">NO</span>';
+            return '<span class="badge badge-pill badge-danger" style="font-size:90%;width:30px">NO</span>';
         } else {
-            return '<span class="badge badge-pill badge-success" style="font-size:90%;">SI</span>';
+            return '<span class="badge badge-pill badge-success" style="font-size:90%;width:30px">SI</span>';
         }
     }
 @endphp

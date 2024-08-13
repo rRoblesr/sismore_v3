@@ -542,8 +542,9 @@ class ServiciosBasicosRepositorio
                 $query = ImporServiciosBasicos::select(
                     'distrito as name',
                     //DB::raw("(100*count(id)/$total) as y"),
-                    // DB::raw("(100*sum(IF($tipo=1,1,0))/count(id)) as y"),
-                    DB::raw("sum(IF($tipo=1,1,0)) as y"),
+                    DB::raw("(100*sum(IF($tipo=1,1,0))/count(id)) as y"),
+                    // DB::raw("sum(IF($tipo=1,1,0)) as y"),
+                    // DB::raw("round(100*sum(IF($tipo=1,1,0))/count(*),1) as y"),
                     DB::raw("count(*) as x"),
                 )->where('importacion_id', $anio);
                 // if ($provincia > 0) {
@@ -556,12 +557,12 @@ class ServiciosBasicosRepositorio
                 // }
                 // if ($area > 0) $query = $query->where('cod_area', $area);
 
-                $query = $query->groupBy('name')->orderBy('x', 'desc')->get();
+                $query = $query->groupBy('name')->orderBy('y', 'desc')->get();
 
-                foreach ($query as $key => $value) {
-                    $value->y = round($value->y, 0);
-                    // $value->color = '#317eeb'; // $value->name == 'UCAYALI' ? '#ef5350' : '#317eeb';
-                }
+                // foreach ($query as $key => $value) {
+                //     $value->y = round($value->y, 0);
+                //     // $value->color = '#317eeb'; // $value->name == 'UCAYALI' ? '#ef5350' : '#317eeb';
+                // }
                 return $query;
 
             case 'tabla1':
@@ -574,7 +575,7 @@ class ServiciosBasicosRepositorio
                         DB::raw("count(id) as total"),
                         DB::raw("sum(IF(agua_final=1,1,0)) as con"),
                         DB::raw("count(id)-sum(IF(agua_final=1,1,0)) as sin"),
-                        DB::raw("(100*count(id)/$total) as indicador")
+                        DB::raw("(100*sum(IF(agua_final=1,1,0))/count(id)) as indicador")
                     );
                 else if ($servicio == 2)
                     $query = $query->select(
@@ -582,7 +583,7 @@ class ServiciosBasicosRepositorio
                         DB::raw("count(id) as total"),
                         DB::raw("sum(IF(desague_final=1,1,0)) as con"),
                         DB::raw("count(id)-sum(IF(desague_final=1,1,0)) as sin"),
-                        DB::raw("(100*count(id)/$total) as indicador")
+                        DB::raw("(100*sum(IF(desague_final=1,1,0))/count(id)) as indicador")
                     );
                 else if ($servicio == 3)
                     $query = $query->select(
@@ -590,7 +591,7 @@ class ServiciosBasicosRepositorio
                         DB::raw("count(id) as total"),
                         DB::raw("sum(IF(luz_final=1,1,0)) as con"),
                         DB::raw("count(id)-sum(IF(luz_final=1,1,0)) as sin"),
-                        DB::raw("(100*count(id)/$total) as indicador")
+                        DB::raw("(100*sum(IF(luz_final=1,1,0))/count(id)) as indicador")
                     );
                 else if ($servicio == 4)
                     $query = $query->select(
@@ -598,7 +599,7 @@ class ServiciosBasicosRepositorio
                         DB::raw("count(id) as total"),
                         DB::raw("sum(IF(tres_servicios_final=1,1,0)) as con"),
                         DB::raw("count(id)-sum(IF(tres_servicios_final=1,1,0)) as sin"),
-                        DB::raw("(100*count(id)/$total) as indicador")
+                        DB::raw("(100*sum(IF(tres_servicios_final=1,1,0))/count(id)) as indicador")
                     );
                 else if ($servicio == 5)
                     $query = $query->select(
@@ -606,7 +607,7 @@ class ServiciosBasicosRepositorio
                         DB::raw("count(id) as total"),
                         DB::raw("sum(IF(internet_final=1,1,0)) as con"),
                         DB::raw("count(id)-sum(IF(internet_final=1,1,0)) as sin"),
-                        DB::raw("(100*count(id)/$total) as indicador")
+                        DB::raw("(100*sum(IF(internet_final=1,1,0))/count(id)) as indicador")
                     );
                 // if ($provincia > 0) {
                 //     $pp = Ubigeo::find($provincia);
@@ -633,7 +634,7 @@ class ServiciosBasicosRepositorio
                         DB::raw("count(id) as total"),
                         DB::raw("sum(IF(agua_final=1,1,0)) as con"),
                         DB::raw("count(id)-sum(IF(agua_final=1,1,0)) as sin"),
-                        DB::raw("(100*count(id)/$total) as indicador"),
+                        DB::raw("(100*sum(IF(agua_final=1,1,0))/count(id)) as indicador"),
                         DB::raw("sum(IF(modalidad='EBR',1,0)) as EBRtotal"),
                         DB::raw("sum(IF(modalidad='EBR' and agua_final=1,1,0)) as EBRcon"),
                         DB::raw("sum(IF(modalidad='EBR',1,0))-sum(IF(modalidad='EBR' and agua_final=1,1,0)) as EBRsin"),
@@ -650,7 +651,7 @@ class ServiciosBasicosRepositorio
                         DB::raw("count(id) as total"),
                         DB::raw("sum(IF(desague_final=1,1,0)) as con"),
                         DB::raw("count(id)-sum(IF(desague_final=1,1,0)) as sin"),
-                        DB::raw("(100*count(id)/$total) as indicador"),
+                        DB::raw("(100*sum(IF(desague_final=1,1,0))/count(id)) as indicador"),
                         DB::raw("sum(IF(modalidad='Educación Básica Regular (EBR)',1,0)) as EBRtotal"),
                         DB::raw("sum(IF(modalidad='Educación Básica Regular (EBR)' and desague_final=1,1,0)) as EBRcon"),
                         DB::raw("sum(IF(modalidad='Educación Básica Regular (EBR)',1,0))-sum(IF(modalidad='Educación Básica Regular (EBR)' and desague_final=1,1,0)) as EBRsin"),
@@ -667,7 +668,7 @@ class ServiciosBasicosRepositorio
                         DB::raw("count(id) as total"),
                         DB::raw("sum(IF(luz_final=1,1,0)) as con"),
                         DB::raw("count(id)-sum(IF(luz_final=1,1,0)) as sin"),
-                        DB::raw("(100*count(id)/$total) as indicador"),
+                        DB::raw("(100*sum(IF(luz_final=1,1,0))/count(id)) as indicador"),
                         DB::raw("sum(IF(modalidad='Educación Básica Regular (EBR)',1,0)) as EBRtotal"),
                         DB::raw("sum(IF(modalidad='Educación Básica Regular (EBR)' and luz_final=1,1,0)) as EBRcon"),
                         DB::raw("sum(IF(modalidad='Educación Básica Regular (EBR)',1,0))-sum(IF(modalidad='Educación Básica Regular (EBR)' and luz_final=1,1,0)) as EBRsin"),
@@ -684,7 +685,7 @@ class ServiciosBasicosRepositorio
                         DB::raw("count(id) as total"),
                         DB::raw("sum(IF(tres_servicios_final=1,1,0)) as con"),
                         DB::raw("count(id)-sum(IF(tres_servicios_final=1,1,0)) as sin"),
-                        DB::raw("(100*count(id)/$total) as indicador"),
+                        DB::raw("(100*sum(IF(tres_servicios_final=1,1,0))/count(id)) as indicador"),
                         DB::raw("sum(IF(modalidad='Educación Básica Regular (EBR)',1,0)) as EBRtotal"),
                         DB::raw("sum(IF(modalidad='Educación Básica Regular (EBR)' and tres_servicios_final=1,1,0)) as EBRcon"),
                         DB::raw("sum(IF(modalidad='Educación Básica Regular (EBR)',1,0))-sum(IF(modalidad='Educación Básica Regular (EBR)' and tres_servicios_final=1,1,0)) as EBRsin"),
@@ -701,7 +702,7 @@ class ServiciosBasicosRepositorio
                         DB::raw("count(id) as total"),
                         DB::raw("sum(IF(internet_final=1,1,0)) as con"),
                         DB::raw("count(id)-sum(IF(internet_final=1,1,0)) as sin"),
-                        DB::raw("(100*count(id)/$total) as indicador"),
+                        DB::raw("(100*sum(IF(internet_final=1,1,0))/count(id)) as indicador"),
                         DB::raw("sum(IF(modalidad='Educación Básica Regular (EBR)',1,0)) as EBRtotal"),
                         DB::raw("sum(IF(modalidad='Educación Básica Regular (EBR)' and internet_final=1,1,0)) as EBRcon"),
                         DB::raw("sum(IF(modalidad='Educación Básica Regular (EBR)',1,0))-sum(IF(modalidad='Educación Básica Regular (EBR)' and internet_final=1,1,0)) as EBRsin"),

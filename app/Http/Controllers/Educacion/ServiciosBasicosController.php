@@ -288,14 +288,15 @@ class ServiciosBasicosController extends Controller
                 $dx2 = [];
                 foreach ($data as $key => $value) {
                     $info['categoria'][] = $value->name;
-                    $dx1[] = (int)$value->y;
-                    $dx2[] = (int)$value->x - (int)$value->y;
+                    $dx1[] = round($value->y,1);
+                    // $dx1[] = (int)$value->y;
+                    // $dx2[] = (int)$value->x - (int)$value->y;
                 }
 
                 $info['series'][] = ['name' => 'L.E con Agua', 'data' => $dx1];
-                $info['series'][] = ['name' => 'Locales Escolares', 'data' => $dx2];
+                // $info['series'][] = ['name' => 'Locales Escolares', 'data' => $dx2];
 
-                return response()->json(compact('info'));
+                return response()->json(compact('info','data'));
             case 'tabla1':
                 if ($rq->servicio == 1) {
                     $tservicio = 'Agua';

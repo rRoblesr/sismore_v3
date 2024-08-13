@@ -1474,9 +1474,10 @@
         });
 
         function cargarCards() {
-            $('.cabeceravista1 h3').text('Porcentajes de Locales Educativos con los tres Servicios Basicos');
-            $('.vtabla1vista1 h3').text('Locales Educativos con los tres servicios basicos, según Distritos');
-            $('.vtabla2vista1 h3').text('Locales Educativos con los tres servicios basicos, según Provincia');
+            $('.cabeceravista1 h3').html('Porcentajes de Locales Educativos con los tres Servicios Basicos');
+            $('#vtabla1vista1').closest('.card').find('h3').text('Locales Educativos con los tres servicios basicos, según Distritos');
+            // $('.vtabla2vista1 h3').html('Locales Educativos con los tres servicios basicos, según Provincia');
+
 
             panelGraficas('head');
             panelGraficas('anal1');
@@ -1543,6 +1544,7 @@
                             info: false,
                             language: table_language,
                         });
+
                     } else if (div == "tabla2") {
                         $('#vtabla2vista1').html(data.excel);
                         $('#tabla2vista1').DataTable({
@@ -1576,7 +1578,8 @@
 
         function cargarCardsvista2() {
             $('.cabeceravista2 h3').text('Porcentajes de Locales Escolares Públicos conectados a red de Agua Potable');
-            $('.vtabla1vista2 h3').text('Locales Educativos conectados a red de agua potable, según Distritos');
+            $('#vtabla1vista2').closest('.card').find('h3').text('Locales Educativos conectados a red de agua potable, según Distritos');
+            // $('.vtabla1vista2 h3').text('Locales Educativos conectados a red de agua potable, según Distritos');
             $('.vtabla2vista2 h3').text('Locales Educativos conectados a red de agua potable, según Provincia');
 
             panelGraficasvista2('head');
@@ -1679,7 +1682,8 @@
 
         function cargarCardsvista3() {
             $('.cabeceravista3 h3').text('Porcentajes de Locales Educativos conectados a red de Desague');
-            $('.vtabla1vista3 h3').text('Locales Educativos conectados a red de desague, según Distritos');
+            // $('.vtabla1vista3 h3').text('Locales Educativos conectados a red de desague, según Distritos');
+            $('#vtabla1vista3').closest('.card').find('h3').text('Locales Educativos conectados a red de desague, según Distritos');
             $('.vtabla2vista3 h3').text('Locales Educativos conectados a red de desague, según Provincia');
             panelGraficasvista3('head');
             panelGraficasvista3('anal1');
@@ -1781,7 +1785,8 @@
 
         function cargarCardsvista4() {
             $('.cabeceravista4 h3').text('Porcentajes de Locales Educativos conectados a red de Electricidad');
-            $('.vtabla1vista4 h3').text('Locales Educativos conectados a red de electricidad, según Distritos');
+            // $('.vtabla1vista4 h3').text('Locales Educativos conectados a red de electricidad, según Distritos');
+            $('#vtabla1vista4').closest('.card').find('h3').text('Locales Educativos conectados a red de electricidad, según Distritos');
             $('.vtabla2vista4 h3').text('Locales Educativos conectados a red de electricidad, según Provincia');
             panelGraficasvista4('head');
             panelGraficasvista4('anal1');
@@ -1883,7 +1888,8 @@
 
         function cargarCardsvista5() {
             $('.cabeceravista5 h3').text('Porcentajes de Locales Educativos que cuentan con acceso a Internet');
-            $('.vtabla1vista5 h3').text('Locales Educativos que cuentan con acceso a Internet, según Distritos');
+            // $('.vtabla1vista5 h3').text('Locales Educativos que cuentan con acceso a Internet, según Distritos');
+            $('#vtabla1vista5').closest('.card').find('h3').text('Locales Educativos que cuentan con acceso a Internet, según Distritos');
             $('.vtabla2vista5 h3').text('Locales Educativos que cuentan con acceso a Internet, según Provincia');
             panelGraficasvista5('head');
             panelGraficasvista5('anal1');
@@ -3189,7 +3195,7 @@
                     //marginBottom: 90
                 },
                 // colors: ['#5eb9aa', '#ef5350'],
-                colors: ['#f5bd22', '#5eb9aa', '#ef5350'],
+                colors: [ '#5eb9aa', '#f5bd22','#ef5350'],
                 title: {
                     text: titulo,
                 },
@@ -3230,6 +3236,11 @@
                         dataLabels: {
                             enabled: true,
                             inside: true,
+                            formatter: function() {
+                                // return Highcharts.numberFormat(this.percentage, 1) + '%'; // Mostrar porcentaje con 1 decimal
+                                return Highcharts.numberFormat(this.y, 1) + '%'; // Mostrar porcentaje con 1 decimal
+                            },
+                            // format: '{point.y}%',
                             style: {
                                 fontWeight: 'normal',
                                 fontSize: '10px',
@@ -3252,6 +3263,8 @@
                 series: series,
                 tooltip: {
                     shared: true,
+                    pointFormat: '{series.name}: <b>{point.y}%</b>',
+                    // pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: <b>{point.percentage:.1f}%</b><br/>' // Muestra el porcentaje en el tooltip
                 },
                 credits: {
                     enabled: false
