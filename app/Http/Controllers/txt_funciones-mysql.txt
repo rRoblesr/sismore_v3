@@ -36,3 +36,16 @@ FROM
 WHERE
     rn = 1;
 #################################################    
+
+################# tablas relacionadas ##################    
+SELECT TABLE_NAME FROM information_schema.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA = 'bdsismore' AND REFERENCED_TABLE_NAME = 'par_importacion';
+
+
+#################################################    
+SELECT TABLE_NAME AS tabla_relacionada, COLUMN_NAME AS columna_en_tabla_relacionada, CONSTRAINT_NAME AS nombre_llave_foranea, REFERENCED_TABLE_NAME AS tabla_referenciada, REFERENCED_COLUMN_NAME AS columna_en_tabla_referenciada FROM information_schema.KEY_COLUMN_USAGE WHERE TABLE_NAME = 'par_centropoblado';
+
+#################################################    
+
+
+
+

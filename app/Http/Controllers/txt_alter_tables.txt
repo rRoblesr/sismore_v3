@@ -2046,6 +2046,39 @@ CREATE TABLE `par_pueblos_indigenas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
+CREATE TABLE `par_centropobladox` (
+    id int(11) auto_increment primary key,
+				importacion_id int(11) DEFAULT NULL,
+				departamento varchar(150) NULL DEFAULT NULL,
+				provincia varchar(150) NULL DEFAULT NULL,
+				distrito varchar(150) NULL DEFAULT NULL,
+				ubigeo varchar(6) NULL DEFAULT NULL,
+				ubigeo_cp varchar(10) NULL DEFAULT NULL,
+				centro_poblado varchar(200) NULL DEFAULT NULL,
+				tipo_administrativo varchar(150) NULL DEFAULT NULL,
+				categoria varchar(150) NULL DEFAULT NULL,
+				pueblo_indigena varchar(200) NULL DEFAULT NULL,
+				zonautmenwgs84 varchar(20) NULL DEFAULT NULL,
+				coordenadaseste double DEFAULT NULL,
+				coordenadasnorte double DEFAULT NULL,
+				altitud double DEFAULT NULL,
+				longitud double DEFAULT NULL,
+				latitud double DEFAULT NULL,
+				area_residencia varchar(150) NULL DEFAULT NULL,
+				total_poblacion int(11) DEFAULT NULL,
+				poblacion_hombre int(11) DEFAULT NULL,
+				poblacion_mujer int(11) DEFAULT NULL,
+				poblacion_con_viviendas int(11) DEFAULT NULL,
+				poblacion_con_agua int(11) DEFAULT NULL,
+				poblacion_con_desague int(11) DEFAULT NULL,
+				total_viviendas int(11) DEFAULT NULL,
+				viviendas_con_agua int(11) DEFAULT NULL,
+				viviendas_con_desague int(11) DEFAULT NULL,
+				foreign key(importacion_id) references par_importacion(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
 
 
 
