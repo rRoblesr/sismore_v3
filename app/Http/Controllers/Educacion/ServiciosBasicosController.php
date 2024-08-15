@@ -261,7 +261,7 @@ class ServiciosBasicosController extends Controller
                     $alto = (int)$value->x > $alto ? (int)$value->x : $alto;
                 }
                 $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'Numerador', 'data' => $dx2];
-                $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'Denuminador',  'data' => $dx1];
+                $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'Denominador',  'data' => $dx1];
                 $info['series'][] = ['type' => 'spline', 'yAxis' => 1, 'name' => 'Indicador',   'tooltip' => ['valueSuffix' => ' %'], 'data' => $dx3];
                 return response()->json(compact('info', 'alto'));
 

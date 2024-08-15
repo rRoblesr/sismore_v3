@@ -3228,6 +3228,7 @@
                 },
                 plotOptions: {
                     series: {
+                        showInLegend: false,
                         stacking: 'normal', //normal, overlap, percent,stream
                         pointPadding: 0, //size de colunma
                         borderWidth: 0 //borde de columna
