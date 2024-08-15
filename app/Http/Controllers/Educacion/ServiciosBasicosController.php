@@ -252,7 +252,10 @@ class ServiciosBasicosController extends Controller
                 $dx2 = [];
                 $dx3 = [];
                 $alto = 0;
+                $rango = '';
                 foreach ($data as $key => $value) {
+                    if ($key == 0) $rango .= $value->anio . ' - ';
+                    if ($key == count($data) - 1) $rango .= $value->anio;
                     $info['categoria'][] = $value->anio;
                     $dx1[] = (float)$value->y;
                     $dx2[] = (float)$value->x;
@@ -263,7 +266,7 @@ class ServiciosBasicosController extends Controller
                 $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'Numerador', 'data' => $dx2];
                 $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'Denominador',  'data' => $dx1];
                 $info['series'][] = ['type' => 'spline', 'yAxis' => 1, 'name' => 'Indicador',   'tooltip' => ['valueSuffix' => ' %'], 'data' => $dx3];
-                return response()->json(compact('info', 'alto'));
+                return response()->json(compact('info', 'alto', 'rango'));
 
 
             case 'anal2':
@@ -288,7 +291,7 @@ class ServiciosBasicosController extends Controller
                 $dx2 = [];
                 foreach ($data as $key => $value) {
                     $info['categoria'][] = $value->name;
-                    $dx1[] = round($value->y,1);
+                    $dx1[] = round($value->y, 1);
                     // $dx1[] = (int)$value->y;
                     // $dx2[] = (int)$value->x - (int)$value->y;
                 }
@@ -296,7 +299,7 @@ class ServiciosBasicosController extends Controller
                 $info['series'][] = ['name' => 'L.E con Agua', 'data' => $dx1];
                 // $info['series'][] = ['name' => 'Locales Escolares', 'data' => $dx2];
 
-                return response()->json(compact('info','data'));
+                return response()->json(compact('info', 'data'));
             case 'tabla1':
                 if ($rq->servicio == 1) {
                     $tservicio = 'Agua';
