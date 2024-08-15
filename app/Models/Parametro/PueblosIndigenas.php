@@ -17,7 +17,6 @@ class PueblosIndigenas extends Model
      * @var array
      */
     protected $fillable = [
-        'importacion_id',
         'nombre_localidad',
         'tipo_localidad',
         'ambito_pueblo_indígena',
