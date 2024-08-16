@@ -266,7 +266,7 @@
 
         function panelGraficas(div) {
             $.ajax({
-                url: "{{ route('matriculageneral.ebr.tablas') }}",
+                url: "{{ route('poblacionprincipal.principal.tablas') }}",
                 data: {
                     'div': div,
                     "anio": $('#anio').val(),

@@ -1517,8 +1517,8 @@
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Numero de Locales Educativos con los tres servicios basicos, Periodo ' + data
-                            .rango,
+                            'Numero de Locales Educativos con los tres servicios basicos, Periodo ' + 
+                            data.rango,
                             data.alto
                         );
                     } else if (div == "anal2") {
@@ -1526,7 +1526,7 @@
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Locales Educativos con los tres servicios basicos, según Provincia'
+                            'Locales Educativos con los tres servicios basicos, según Ugel'
                         );
                     } else if (div == "anal3") {
                         gbar('anal3vista1',
@@ -1624,7 +1624,8 @@
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Locales Educativos conectados a red de agua potable, según Distritos',
+                            'Locales Educativos conectados a red de agua potable, Periodo ' + 
+                            data.rango,
                             data.alto
                         );
                     } else if (div == "anal2") {
@@ -1632,7 +1633,7 @@
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Locales Educativos conectados a red de agua potable, según Distritos',
+                            'Locales Educativos conectados a red de agua potable, según Ugel',
                         );
                     } else if (div == "anal3") {
                         gbar('anal3vista2',
@@ -1728,7 +1729,8 @@
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Locales Educativos conectados a red de desague, según Distritos',
+                            'Locales Educativos conectados a red de desague, Periodo ' + 
+                            data.rango,
                             data.alto
                         );
                     } else if (div == "anal2") {
@@ -1736,7 +1738,7 @@
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Locales Educativos conectados a red de desague, según Distritos',
+                            'Locales Educativos conectados a red de desague, según Ugel',
                         );
                     } else if (div == "anal3") {
                         gbar('anal3vista3',
@@ -1832,7 +1834,8 @@
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Locales Educativos conectados a red de electricidad, según Distritos',
+                            'Locales Educativos conectados a red de electricidad, Periodo ' + 
+                            data.rango,
                             data.alto
                         );
                     } else if (div == "anal2") {
@@ -1840,7 +1843,7 @@
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Locales Educativos conectados a red de electricidad, según Distritos',
+                            'Locales Educativos conectados a red de electricidad, según Ugel',
                         );
                     } else if (div == "anal3") {
                         gbar('anal3vista4',
@@ -1936,7 +1939,8 @@
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Locales Educativos que cuentan con acceso a Internet, según Distritos',
+                            'Locales Educativos que cuentan con acceso a Internet, Periodo ' + 
+                            data.rango,
                             data.alto
                         );
                     } else if (div == "anal2") {
@@ -1944,7 +1948,7 @@
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Locales Educativos que cuentan con acceso a Internet, según Distritos',
+                            'Locales Educativos que cuentan con acceso a Internet, según Ugel',
                         );
                     } else if (div == "anal3") {
                         gbar('anal3vista5',

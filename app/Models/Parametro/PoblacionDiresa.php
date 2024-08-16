@@ -18,7 +18,7 @@ class PoblacionDiresa extends Model
      */
     protected $fillable = [
         'importacion_id',
-        'ubigeo',
+        'ubigeo_id',
         'sexo',
         'edad',
         'rango',

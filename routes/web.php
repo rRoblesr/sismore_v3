@@ -1254,7 +1254,7 @@ Route::post('/ImporPoblacion/ListaImportada', [ImporPoblacionController::class, 
 Route::get('/ImporPoblacion/eliminar/{id}', [ImporPoblacionController::class, 'eliminar'])->name('imporpoblacion.eliminar');
 
 Route::get('/Poblacion/Principal', [PoblacionController::class, 'poblacionprincipal'])->name('poblacionprincipal.principal');
-Route::get('/Poblacion/Principalx', [PoblacionController::class, 'poblacionprincipaltabla'])->name('poblacionprincipal.tablas');
+Route::get('/Poblacion/Principalx', [PoblacionController::class, 'poblacionprincipaltabla'])->name('poblacionprincipal.principal.tablas');
 // Route::get('/MatriculaGeneral/EBR/Excel/{div}/{anio}/{ugel}/{gestion}/{area}/{provincia}', [MatriculaGeneralController::class, 'basicaregularDownload']);
 
 /****************************************** FIN PARAMETRO ***************************************************/

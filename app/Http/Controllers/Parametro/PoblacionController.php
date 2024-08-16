@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Educacion\ImporMatriculaGeneralController;
 use App\Models\Parametro\Anio;
 use App\Models\Parametro\Mes;
+use App\Models\Parametro\PoblacionProyectada;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\MatriculaGeneralRepositorio;
+use App\Repositories\Parametro\PoblacionProyectadaRepositorio;
 use App\Utilities\Utilitario;
 use Carbon\Carbon;
 use Exception;
@@ -50,31 +52,12 @@ class PoblacionController extends Controller
     {
         switch ($rq->div) {
             case 'head':
-                $mh = MatriculaGeneralRepositorio::basicaregulartabla('mhead', $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
-                $valor1 = (int)$mh->conteo;
-                $valor2 = (int)$mh->conteoi;
-                $valor3 = (int)$mh->conteop;
-                $valor4 = (int)$mh->conteos;
-                $aa = Anio::find($rq->anio);
-                $aav =  -1 + (int)$aa->anio;
-                $aa = Anio::where('anio', $aav)->first();
-                $mh = MatriculaGeneralRepositorio::metaEBR($rq->anio == 3 ? 3 : $aa->id, $rq->ugel, $rq->gestion,  $rq->area);
-                $valor1x = (int)$mh->conteo;
-                $valor2x = (int)$mh->conteoi;
-                $valor3x = (int)$mh->conteop;
-                $valor4x = (int)$mh->conteos;
+                $card1 = PoblacionProyectadaRepositorio::conteo(2024, '');
+                $card2 = PoblacionProyectadaRepositorio::conteo(2024, '');
+                $card3 = PoblacionProyectadaRepositorio::conteo(2024, '');
+                $card4 = PoblacionProyectadaRepositorio::conteo(2024, '');
 
-                $ind1 = number_format($valor1x > 0 ? 100 * $valor1 / $valor1x : 0, 1);
-                $ind2 = number_format($valor2x > 0 ? 100 * $valor2 / $valor2x : 0, 1);
-                $ind3 = number_format($valor3x > 0 ? 100 * $valor3 / $valor3x : 0, 1);
-                $ind4 = number_format($valor4x > 0 ? 100 * $valor4 / $valor4x : 0, 1);
-
-                $valor1 = number_format($valor1, 0);
-                $valor2 = number_format($valor2, 0);
-                $valor3 = number_format($valor3, 0);
-                $valor4 = number_format($valor4, 0);
-
-                return response()->json(compact('valor1', 'valor2', 'valor3', 'valor4', 'ind1', 'ind2', 'ind3', 'ind4'));
+                return response()->json(compact('card1', 'card', 'card3', 'card4'));
             case 'anal1':
                 $datax = MatriculaGeneralRepositorio::basicaregulartabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
                 $info['series'] = [];

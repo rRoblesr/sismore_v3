@@ -2,7 +2,7 @@
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
     <style>
-      
+
     </style>
 @endsection
 
@@ -19,7 +19,7 @@
                                 {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick=""><i
                                         class="ion ion-logo-usd"></i> Ficha Técnica</button> --}}
                                 <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"><i
-                                        class="ion ion-logo-usd"></i> Actualizar</button>
+                                        class="fa fa-redo"></i> Actualizar</button>
                                 {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="printer()"
                                     title='IMPRIMIR'><i class="fa fa-print"></i></button> --}}
                             </div>
@@ -378,7 +378,7 @@
                             break;
                         case "anal2":
                             gPie(div, data.puntos, '',
-                                'Número de personal docente, según sexo', '');
+                                'Número de personal docente, según sexo', '', 1);
                             break;
                         case "anal3":
                             gAnidadaColumn(div,
@@ -503,8 +503,11 @@
             // window.print();
         }
 
-        function gPie(div, datos, titulo, subtitulo, tituloserie) {
-            const colors = ["#5eb9aa", "#f5bd22", "#e65310"];
+        function gPie(div, datos, titulo, subtitulo, tituloserie, color = 0) {
+            const colors = [
+                ["#5eb9aa", "#f5bd22", "#e65310"],
+                ["#5eb9aa", "#e65310"]
+            ];
             Highcharts.chart(div, {
                 chart: {
                     plotBackgroundColor: null,
@@ -512,6 +515,7 @@
                     plotShadow: false,
                     type: 'pie'
                 },
+                colors: colors[color],
                 title: {
                     enabled: false,
                     text: titulo, //'Browser market shares in January, 2018'
@@ -538,7 +542,7 @@
                     pie: {
                         allowPointSelect: true,
                         cursor: 'pointer',
-                        colors,
+                        // colors,
                         dataLabels: {
                             enabled: true,
                             //format: '<b>{point.name}</b>: {point.percentage:.1f} %',
@@ -727,7 +731,7 @@
                         stacking: 'normal'
                     }, */
                     series: {
-                        showInLegend: false,
+                        showInLegend: true,
                         borderWidth: 0,
                         dataLabels: {
                             enabled: true,

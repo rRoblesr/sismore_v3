@@ -19,8 +19,8 @@ class PoblacionPN extends Model
     protected $fillable = [
         'importacion_id',
         'anio',
-        'mes',
-        'ubigeo',
+        'mes_id',
+        'ubigeo_id',
         'cnv',
         'seguro',
         'sexo',
