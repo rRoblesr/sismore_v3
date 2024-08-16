@@ -7,8 +7,32 @@
 
 @section('content')
     <div class="row">
-        <div class="col-lg-4 col-md-4 col-sm-4">
+        <div class="col-lg-7 col-md-4 col-sm-4">
             <h4 class="page-title font-16">DEPARTAMENTO DE UCAYALI</h4>
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-1  ">
+            <select id="vanio" name="vanio" class="form-control form-control-sm" onchange="cargarCards();">
+                <option value="0">AÑO</option>
+                @foreach ($anios as $item)
+                    <option value="{{ $item->anio }}" {{ $item->anio == date('Y') ? 'selected' : '' }}>
+                        {{ $item->anio }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-2">
+            <select id="vprovincia" name="vprovincia" class="form-control form-control-sm"
+                onchange="cargarDistritos();cargarCards();">
+                <option value="0">PROVINCIA</option>
+                @foreach ($provincia as $item)
+                    <option value="{{ $item->id }}"> {{ $item->nombre }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-2">
+            <select id="vdistrito" name="vdistrito" class="form-control form-control-sm" onchange="cargarCards();">
+                <option value="0">DISTRITO</option>
+
+            </select>
         </div>
     </div>
 
@@ -169,7 +193,7 @@
         </div>
 
     </div>
- 
+
     <div class="row">
         <div class="col-lg-6">
             <div class="card card-border border border-plomo-0">
@@ -251,7 +275,7 @@
         });
 
         function cargarCards() {
-            // panelGraficas('head');
+            panelGraficas('head');
             // panelGraficas('anal1');
             // panelGraficas('anal2');
             // panelGraficas('anal3');
@@ -269,11 +293,9 @@
                 url: "{{ route('poblacionprincipal.principal.tablas') }}",
                 data: {
                     'div': div,
-                    "anio": $('#anio').val(),
-                    "ugel": $('#ugel').val(),
-                    "gestion": $('#gestion').val(),
-                    "area": $('#area').val(),
-                    "provincia": 0
+                    "anio": $('#vanio').val(),
+                    "provincia": $('#vprovincia').val(),
+                    "distrito": $('#vdistrito').val(),
                 },
                 type: "GET",
                 dataType: "JSON",
@@ -297,40 +319,45 @@
                 },
                 success: function(data) {
                     if (div == 'head') {
-                        $('#normal').text(data.valor1);
-                        $('#eib').text(data.valor2);
-                        $('#foraneo').text(data.valor3);
-                        $('#limitado').text(data.valor4);
-                        $('#inormal').text(data.ind1 + '%');
-                        $('#ieib').text(data.ind2 + '%');
-                        $('#iforaneo').text(data.ind3 + '%');
-                        $('#ilimitado').text(data.ind4 + '%');
-                        //$('#bbasico').css('width','100px');
-                        $('#bnormal').css('width', data.ind1 + '%')
-                            .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
-                            .addClass(data.ind1 > 95 ? 'bg-success-0' : (data.ind1 > 75 ? 'bg-warning-0' :
-                                'bg-orange-0'));
-                        $('#beib').css('width', data.ind2 + '%')
-                            .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
-                            .addClass(data.ind2 > 95 ? 'bg-success-0' : (data.ind2 > 75 ? 'bg-warning-0' :
-                                'bg-orange-0'));
-                        $('#bforaneo').css('width', data.ind3 + '%')
-                            .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
-                            .addClass(data.ind3 > 95 ? 'bg-success-0' : (data.ind3 > 75 ? 'bg-warning-0' :
-                                'bg-orange-0'));
-                        $('#blimitado').css('width', data.ind4 + '%')
-                            .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
-                            .addClass(data.ind4 > 95 ? 'bg-success-0' : (data.ind4 > 75 ? 'bg-warning-0' :
-                                'bg-orange-0'));
-                    } else if (div == "anal1") {
-                        gAnidadaColumn(div,
-                            data.info.categoria, data.info.series, '',
-                            'Número de estudiantes matriculados en educación básica regular, ' +
-                            data.reg.periodo,
-                            data.info.maxbar
-                        );
-                        $('.anal1-fuente').html('Fuente: ' + data.reg.fuente);
-                        $('.anal1-fecha').html('Actualizado: ' + data.reg.fecha);
+                        $('#card1').text(data.card1);
+                        $('#card2').text(data.card2);
+                        $('#card3').text(data.card3);
+                        $('#card4').text(data.card4);
+
+                        //     $('#normal').text(data.valor1);
+                        //     $('#eib').text(data.valor2);
+                        //     $('#foraneo').text(data.valor3);
+                        //     $('#limitado').text(data.valor4);
+                        //     $('#inormal').text(data.ind1 + '%');
+                        //     $('#ieib').text(data.ind2 + '%');
+                        //     $('#iforaneo').text(data.ind3 + '%');
+                        //     $('#ilimitado').text(data.ind4 + '%');
+                        //     //$('#bbasico').css('width','100px');
+                        //     $('#bnormal').css('width', data.ind1 + '%')
+                        //         .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
+                        //         .addClass(data.ind1 > 95 ? 'bg-success-0' : (data.ind1 > 75 ? 'bg-warning-0' :
+                        //             'bg-orange-0'));
+                        //     $('#beib').css('width', data.ind2 + '%')
+                        //         .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
+                        //         .addClass(data.ind2 > 95 ? 'bg-success-0' : (data.ind2 > 75 ? 'bg-warning-0' :
+                        //             'bg-orange-0'));
+                        //     $('#bforaneo').css('width', data.ind3 + '%')
+                        //         .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
+                        //         .addClass(data.ind3 > 95 ? 'bg-success-0' : (data.ind3 > 75 ? 'bg-warning-0' :
+                        //             'bg-orange-0'));
+                        //     $('#blimitado').css('width', data.ind4 + '%')
+                        //         .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
+                        //         .addClass(data.ind4 > 95 ? 'bg-success-0' : (data.ind4 > 75 ? 'bg-warning-0' :
+                        //             'bg-orange-0'));
+                        // } else if (div == "anal1") {
+                        //     gAnidadaColumn(div,
+                        //         data.info.categoria, data.info.series, '',
+                        //         'Número de estudiantes matriculados en educación básica regular, ' +
+                        //         data.reg.periodo,
+                        //         data.info.maxbar
+                        //     );
+                        //     $('.anal1-fuente').html('Fuente: ' + data.reg.fuente);
+                        //     $('.anal1-fecha').html('Actualizado: ' + data.reg.fecha);
                     } else if (div == "anal2") {
                         gLineaBasica(div, data.info, '',
                             'Evolución mensual de la matricula educativa en educación básica regular período ' +
@@ -485,17 +512,17 @@
 
         function cargarDistritos() {
             $.ajax({
-                url: "{{ route('ubigeo.distrito.25', '') }}/" + $('#provincia').val(),
+                url: "{{ route('ubigeo.distrito.25', '') }}/" + $('#vprovincia').val(),
                 type: 'GET',
                 success: function(data) {
-                    $("#distrito option").remove();
+                    $("#vdistrito option").remove();
                     var options = '<option value="0">DISTRITO</option>';
                     $.each(data, function(index, value) {
                         //ss = (id == value.id ? "selected" : "");
                         options += "<option value='" + value.id + "'>" + value.nombre +
                             "</option>"
                     });
-                    $("#distrito").append(options);
+                    $("#vdistrito").append(options);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);

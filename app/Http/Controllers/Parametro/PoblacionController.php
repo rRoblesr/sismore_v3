@@ -10,6 +10,7 @@ use App\Models\Parametro\PoblacionProyectada;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\MatriculaGeneralRepositorio;
 use App\Repositories\Parametro\PoblacionProyectadaRepositorio;
+use App\Repositories\Parametro\UbigeoRepositorio;
 use App\Utilities\Utilitario;
 use Carbon\Carbon;
 use Exception;
@@ -30,34 +31,22 @@ class PoblacionController extends Controller
 
     public function poblacionprincipal()
     {
-        $actualizado = '';
-        $tipo_acceso = 0;
+        $anios = PoblacionProyectada::distinct()->select('anio')->get();
+        $provincia = UbigeoRepositorio::provincia_select('25');
 
-        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE); //nexus
-
-        $actualizado = ''; // 'Actualizado al ' . $imp->dia . ' de ' . $this->mes[$imp->mes - 1] . ' del ' . $imp->anio;
-
-        $anios = MatriculaGeneralRepositorio::anios();
-        $aniomax = MatriculaGeneralRepositorio::anioMax();
-        //$provincia = UbigeoRepositorio::provincia25();
-        $ugel = MatriculaGeneralRepositorio::ugels();
-        $area = MatriculaGeneralRepositorio::areas();
-
-        $fecha = '';
-
-        return view('parametro.Poblacion.Principal', compact('anios', 'aniomax', 'actualizado', 'ugel', 'area', 'fecha'));
+        return view('parametro.Poblacion.Principal', compact('anios',  'provincia'));
     }
 
     public function poblacionprincipaltabla(Request $rq)
     {
         switch ($rq->div) {
             case 'head':
-                $card1 = PoblacionProyectadaRepositorio::conteo(2024, '');
-                $card2 = PoblacionProyectadaRepositorio::conteo(2024, '');
+                $card1 = PoblacionProyectadaRepositorio::conteo($rq->anio, '');
+                $card2 = PoblacionProyectadaRepositorio::conteo($rq->anio, 'UCAYALI');
                 $card3 = PoblacionProyectadaRepositorio::conteo(2024, '');
                 $card4 = PoblacionProyectadaRepositorio::conteo(2024, '');
 
-                return response()->json(compact('card1', 'card', 'card3', 'card4'));
+                return response()->json(compact('card1', 'card2', 'card3', 'card4'));
             case 'anal1':
                 $datax = MatriculaGeneralRepositorio::basicaregulartabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
                 $info['series'] = [];
