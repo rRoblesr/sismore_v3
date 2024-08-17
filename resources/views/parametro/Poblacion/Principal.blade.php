@@ -276,8 +276,8 @@
 
         function cargarCards() {
             panelGraficas('head');
-            // panelGraficas('anal1');
-            // panelGraficas('anal2');
+            panelGraficas('anal1');
+            panelGraficas('anal2');
             // panelGraficas('anal3');
             // panelGraficas('anal4');
             // panelGraficas('anal5');
@@ -324,47 +324,20 @@
                         $('#card3').text(data.card3);
                         $('#card4').text(data.card4);
 
-                        //     $('#normal').text(data.valor1);
-                        //     $('#eib').text(data.valor2);
-                        //     $('#foraneo').text(data.valor3);
-                        //     $('#limitado').text(data.valor4);
-                        //     $('#inormal').text(data.ind1 + '%');
-                        //     $('#ieib').text(data.ind2 + '%');
-                        //     $('#iforaneo').text(data.ind3 + '%');
-                        //     $('#ilimitado').text(data.ind4 + '%');
-                        //     //$('#bbasico').css('width','100px');
-                        //     $('#bnormal').css('width', data.ind1 + '%')
-                        //         .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
-                        //         .addClass(data.ind1 > 95 ? 'bg-success-0' : (data.ind1 > 75 ? 'bg-warning-0' :
-                        //             'bg-orange-0'));
-                        //     $('#beib').css('width', data.ind2 + '%')
-                        //         .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
-                        //         .addClass(data.ind2 > 95 ? 'bg-success-0' : (data.ind2 > 75 ? 'bg-warning-0' :
-                        //             'bg-orange-0'));
-                        //     $('#bforaneo').css('width', data.ind3 + '%')
-                        //         .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
-                        //         .addClass(data.ind3 > 95 ? 'bg-success-0' : (data.ind3 > 75 ? 'bg-warning-0' :
-                        //             'bg-orange-0'));
-                        //     $('#blimitado').css('width', data.ind4 + '%')
-                        //         .removeClass('bg-success-0 bg-orange-0 bg-warning-0')
-                        //         .addClass(data.ind4 > 95 ? 'bg-success-0' : (data.ind4 > 75 ? 'bg-warning-0' :
-                        //             'bg-orange-0'));
-                        // } else if (div == "anal1") {
-                        //     gAnidadaColumn(div,
-                        //         data.info.categoria, data.info.series, '',
-                        //         'Número de estudiantes matriculados en educación básica regular, ' +
-                        //         data.reg.periodo,
-                        //         data.info.maxbar
-                        //     );
-                        //     $('.anal1-fuente').html('Fuente: ' + data.reg.fuente);
-                        //     $('.anal1-fecha').html('Actualizado: ' + data.reg.fecha);
+                    } else if (div == "anal1") {
+                        // gAnidadaColumn(div,
+                        //     data.info.categoria, data.info.series, '',
+                        //     'Número de estudiantes matriculados en educación básica regular, ' +
+                        //     data.reg.periodo,
+                        //     data.info.maxbar
+                        // );
                     } else if (div == "anal2") {
-                        gLineaBasica(div, data.info, '',
-                            'Evolución mensual de la matricula educativa en educación básica regular período ' +
-                            $('#anio option:selected').text(),
-                            '');
-                        $('.anal2-fuente').html('Fuente: ' + data.reg.fuente);
-                        $('.anal2-fecha').html('Actualizado: ' + data.reg.fecha);
+                        // gLineaBasica(div, data.info, '',
+                        //     'Evolución mensual de la matricula educativa en educación básica regular período ' +
+                        //     $('#anio option:selected').text(),
+                        //     '');
+                        // $('.anal2-fuente').html('Fuente: ' + data.reg.fuente);
+                        // $('.anal2-fecha').html('Actualizado: ' + data.reg.fecha);
                     } else if (div == "anal3") {
                         gLineaMultiple(div, data.info, '',
                             'Numero de estudiantes matriculados en educación básica regular, según nivel educativo, ' +

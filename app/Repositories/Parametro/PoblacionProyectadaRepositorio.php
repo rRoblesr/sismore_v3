@@ -17,6 +17,14 @@ class PoblacionProyectadaRepositorio
         return $query->sum('total');
     }
 
+    // public static function conteo_provincia($anio, $departamento)
+    // {
+    //     $query = PoblacionProyectada::where('anio', $anio);
+    //     if ($departamento != '')
+    //         $query = $query->where('departamento', $departamento);
+    //     return $query->groupBy('provincia')->sum('total');
+    // }
+
     public static function total6a11($anio_id)
     {
         $query = PoblacionDetalle::select(DB::raw('sum(total) as conteo'))

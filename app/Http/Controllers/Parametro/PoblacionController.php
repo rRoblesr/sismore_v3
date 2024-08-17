@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Educacion\ImporMatriculaGeneralController;
 use App\Models\Parametro\Anio;
 use App\Models\Parametro\Mes;
+use App\Models\Parametro\PoblacionDiresa;
 use App\Models\Parametro\PoblacionProyectada;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\MatriculaGeneralRepositorio;
@@ -48,61 +49,14 @@ class PoblacionController extends Controller
 
                 return response()->json(compact('card1', 'card2', 'card3', 'card4'));
             case 'anal1':
-                $datax = MatriculaGeneralRepositorio::basicaregulartabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
-                $info['series'] = [];
-                $alto = 0;
-                $btotal = 0;
-                $anioi = 0;
-                $aniof = 0;
-                // foreach ($datax as $key => $value) {
-                $dx2[] = null;
-                $dx3[] = null;
-                $dx4[] = null;
-                // }
-                foreach ($datax as $keyi => $ii) {
-                    $info['categoria'][] = $ii->anio;
-                    $n = (int)$ii->conteo;
-                    $d = $ii->anio == 2018 ? $n : (int)$datax[$keyi - 1]->conteo;
-                    $dx3[$keyi] = $n;
-                    $dx4[$keyi] = $d > 0 ? round(100 * $n / $d, 1) : 0;
-                    $alto = $n > $alto ? $n : $alto;
-                    if ($keyi == 0) $anioi = $ii->anio;
-                    if ($keyi == $datax->count() - 1) $aniof = $ii->anio;
-                }
-                $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'Matriculados',  'data' => $dx3];
-                $info['series'][] = ['type' => 'spline', 'yAxis' => 1, 'name' => '%Avance', 'tooltip' => ['valueSuffix' => ' %'], 'data' => $dx4];
-                $info['maxbar'] = $alto;
+                $info=PoblacionDiresa::from('par_poblacion_diresa as pd')->join('par_ubigeo as dd','dd.id','=','pd.ubigeo_id')
+                ->join('par_ubigeo as pp','pp.id','=','dd.dependencia')->select('pp.nombre',DB::raw('SUM(pd.total) conteo'))->groupBy('pp.nombre')->get();
 
-                $reg['fuente'] = 'Siagie - MINEDU';
-                $reg['periodo'] = "período $anioi - $aniof";
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-                $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
-                return response()->json(compact('info', 'reg'));
+                return response()->json(compact('info'));
             case 'anal2':
-                $periodo = Mes::select('codigo', 'abreviado as mes', DB::raw('0 as conteo'))->get();
-                $datax = MatriculaGeneralRepositorio::basicaregulartabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
-                $info['cat'] = [];
-                $info['dat'] = [];
-                $mesmax = $datax->max('mes');
-                foreach ($periodo as $key => $pp) {
-                    $info['cat'][$key] = $pp->mes;
-                    if ($pp->codigo > $mesmax) {
-                        $info['dat'][$key] = null;
-                    } else {
-                        $info['dat'][$key] = 0;
-                        foreach ($datax as $dd) {
-                            if ($dd->mes == $pp->codigo) {
-                                $info['dat'][$key] = $key > 0 ? $info['dat'][$key - 1] + $dd->conteo : $dd->conteo;
-                                break;
-                            }
-                        }
-                    }
-                }
+                $info=PoblacionDiresa::from('par_poblacion_diresa as pd')->select('pd.rango','pd.sexo',DB::raw('SUM(pd.total) conteo'))->groupBy('rango','sexo')->orderBy('rango')->get();
 
-                $reg['fuente'] = 'Siagie - MINEDU';
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-                $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
-                return response()->json(compact('info', 'reg', 'datax'));
+                return response()->json(compact('info'));
             case 'anal3':
                 $data = MatriculaGeneralRepositorio::basicaregulartabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
                 $info['cat'] = [];
