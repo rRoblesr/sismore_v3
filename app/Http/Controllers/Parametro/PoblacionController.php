@@ -71,8 +71,19 @@ class PoblacionController extends Controller
                 }
                 return response()->json(compact('info', 'data'));
             case 'anal3':
-                $data = PoblacionPN::from('par_poblacion_padron_nominal as pn')->join('par_sexo as s', 's.id', '=', 'pn.sexo_id')
-                    ->select('pn.anio', 's.nombre as sexo', DB::raw('sum(0a+1a+2a+3a+4a+5a) as conteo'))->where('anio', '>', 2018)->groupBy('anio', 'sexo')->get();
+                // $data = PoblacionPN::from('par_poblacdddion_padron_nominal as pn')->join('par_sexo as s', 's.id', '=', 'pn.sexo_id')
+                //     ->select('pn.anio', 's.nombre as sexo', DB::raw('sum(0a+1a+2a+3a+4a+5a) as conteo'))->where('anio', '>', 2018)->groupBy('anio', 'sexo')->get();
+                $anio = date('Y');
+                $data = PoblacionPN::from('par_poblacion_padron_nominal as pn')
+                    ->join('par_sexo as s', 's.id', '=', 'pn.sexo_id')
+                    ->select('pn.anio', 's.nombre as sexo', DB::raw('sum(0a+1a+2a+3a+4a+5a) as conteo'))
+                    ->where(function ($q) use ($anio) {
+                        $q->where('pn.anio', '<', $anio)->where('pn.mes_id', '=', 12);
+                    })
+                    ->orWhere(function ($q) use ($anio) {
+                        $q->where('pn.anio', '=', $anio)->where('pn.mes_id', '=', PoblacionPN::where('anio', $anio)->max('mes_id'));
+                    })
+                    ->groupBy('anio', 'sexo')->get();
                 $info['categoria'] = [];
                 $info['men'] = [];
                 $info['women'] = [];
@@ -94,7 +105,7 @@ class PoblacionController extends Controller
             case 'anal4':
                 $data = PoblacionPN::from('par_poblacion_padron_nominal as pn')->join('par_sexo as s', 's.id', '=', 'pn.sexo_id')
                     ->select('pn.anio', 's.nombre as sexo', DB::raw('sum(0a) as c0a'), DB::raw('sum(1a) as c1a'), DB::raw('sum(2a) as c2a'), DB::raw('sum(3a) as c3a'), DB::raw('sum(4a) as c4a'), DB::raw('sum(5a) as c5a'))
-                    ->where('anio', 2024)->groupBy('anio', 'sexo')->get();
+                    ->where('anio', 2024)->where('mes_id', 5)->groupBy('anio', 'sexo')->get();
                 $info['categoria'] = ['<1A', '1A', '2A', '3A', '4A', '5A'];
                 $info['men'] = [(int)$data[0]->c0a, (int)$data[0]->c1a, (int)$data[0]->c2a, (int)$data[0]->c3a, (int)$data[0]->c4a, (int)$data[0]->c5a];
                 $info['women'] = [(int)$data[1]->c0a, (int)$data[1]->c1a, (int)$data[1]->c2a, (int)$data[1]->c3a, (int)$data[1]->c4a, (int)$data[1]->c5a];
@@ -107,25 +118,26 @@ class PoblacionController extends Controller
                         'pn.anio',
                         'u.nombre as distrito',
                         DB::raw('sum(0a+1a+2a+3a+4a+5a) as total'),
+                        DB::raw('sum(IF(sexo_id=1,0a+1a+2a+3a+4a+5a,0)) as th'),
+                        DB::raw('sum(IF(sexo_id=2,0a+1a+2a+3a+4a+5a,0)) as tm'),
                         DB::raw('sum(0a) as c0a'),
                         DB::raw('sum(1a) as c1a'),
                         DB::raw('sum(2a) as c2a'),
                         DB::raw('sum(3a) as c3a'),
                         DB::raw('sum(4a) as c4a'),
                         DB::raw('sum(5a) as c5a'),
-                        DB::raw('sum("28dias") as ee1'),
-                        DB::raw('sum("0_5meses") as ee2'),
-                        DB::raw('sum("6_11meses") as ee3')
+                        DB::raw('sum(28dias) as ee1'),
+                        DB::raw('sum(0_5meses) as ee2'),
+                        DB::raw('sum(6_11meses) as ee3')
                     )
-                    ->where('anio', 2024)->groupBy('anio', 'distrito')->get();
-                // $aniox = Anio::find($rq->anio);
-                // $anioy = Anio::where('anio', $aniox->anio - 1)->first();
-                // $meta = MatriculaGeneralRepositorio::metaEBRProvincia($rq->anio == 3 ? 3 : $anioy->id, $rq->ugel, $rq->gestion,  $rq->area);
-                // $base = MatriculaGeneralRepositorio::basicaregulartabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
+                    ->where('anio', 2024)->where('mes_id', 5)->groupBy('anio', 'distrito')->get();
+
                 $foot = [];
                 if ($base->count() > 0) {
                     $foot = clone $base[0];
                     $foot->total = 0;
+                    $foot->th = 0;
+                    $foot->tm = 0;
                     $foot->c0a = 0;
                     $foot->c1a = 0;
                     $foot->c2a = 0;
@@ -135,10 +147,10 @@ class PoblacionController extends Controller
                     $foot->ee1 = 0;
                     $foot->ee2 = 0;
                     $foot->ee3 = 0;
-
                     foreach ($base as $key => $value) {
-                        $value->total = 0;
                         $foot->total += $value->total;
+                        $foot->th += $value->th;
+                        $foot->tm += $value->tm;
                         $foot->c0a += $value->c0a;
                         $foot->c1a += $value->c1a;
                         $foot->c2a += $value->c2a;
@@ -149,247 +161,11 @@ class PoblacionController extends Controller
                         $foot->ee2 += $value->ee2;
                         $foot->ee3 += $value->ee3;
                     }
-                    // $foot->avance = $foot->meta > 0 ? 100 * $foot->tt / $foot->meta : 0;
                 }
-                $excel = ''; //view('educacion.MatriculaGeneral.BasicaRegularTabla1', compact('base', 'foot'))->render();
+                $excel = view('parametro.Poblacion.PrincipalTabla1', compact('base', 'foot'))->render();
 
-                // $reg['fuente'] = 'Siagie - MINEDU';
-                // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-                // $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
-                return response()->json(compact('excel','foot', 'base'));
-            case 'tabla1x':
-                $aniox = Anio::find($rq->anio);
-                $anioy = Anio::where('anio', $aniox->anio - 1)->first();
-                $meta = MatriculaGeneralRepositorio::metaEBRProvincia($rq->anio == 3 ? 3 : $anioy->id, $rq->ugel, $rq->gestion,  $rq->area);
-                $base = MatriculaGeneralRepositorio::basicaregulartabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
-                $foot = [];
-                if ($base->count() > 0) {
-                    $foot = clone $base[0];
-                    $foot->meta = 0;
-                    $foot->tt = 0;
-                    $foot->th = 0;
-                    $foot->tm = 0;
-                    $foot->thi = 0;
-                    $foot->tmi = 0;
-                    $foot->thp = 0;
-                    $foot->tmp = 0;
-                    $foot->ths = 0;
-                    $foot->tms = 0;
+                return response()->json(compact('excel', 'foot', 'base'));
 
-                    foreach ($base as $key => $value) {
-                        $value->meta = 0;
-                        foreach ($meta as $kk => $mm) {
-                            if ($value->provincia == $mm->provincia) {
-                                $value->meta = $mm->conteo;
-                                break;
-                            }
-                        }
-                        $value->avance = $value->meta > 0 ? 100 * $value->tt / $value->meta : 0;
-                        $foot->meta += $value->meta;
-                        $foot->tt += $value->tt;
-                        $foot->th += $value->th;
-                        $foot->tm += $value->tm;
-                        $foot->thi += $value->thi;
-                        $foot->tmi += $value->tmi;
-                        $foot->thp += $value->thp;
-                        $foot->tmp += $value->tmp;
-                        $foot->ths += $value->ths;
-                        $foot->tms += $value->tms;
-                    }
-                    $foot->avance = $foot->meta > 0 ? 100 * $foot->tt / $foot->meta : 0;
-                }
-                $excel = view('educacion.MatriculaGeneral.BasicaRegularTabla1', compact('base', 'foot'))->render();
-                // return response()->json(compact('excel'));
-
-                $reg['fuente'] = 'Siagie - MINEDU';
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-                $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
-                return response()->json(compact('excel', 'reg'));
-            case 'tabla2':
-                $aniox = Anio::find($rq->anio);
-                $anioy = Anio::where('anio', $aniox->anio - 1)->first();
-                $meta = MatriculaGeneralRepositorio::metaEBRDistrito($rq->anio == 3 ? 3 : $anioy->id, $rq->ugel, $rq->gestion,  $rq->area, $rq->provincia);
-                $base = MatriculaGeneralRepositorio::basicaregulartabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area, $rq->provincia);
-                $foot = [];
-                if ($base->count() > 0) {
-                    $foot = clone $base[0];
-                    $foot->meta = 0;
-                    $foot->tt = 0;
-                    $foot->th = 0;
-                    $foot->tm = 0;
-                    $foot->ci = 0;
-                    $foot->cii = 0;
-                    $foot->ciii = 0;
-                    $foot->civ = 0;
-                    $foot->cv = 0;
-                    $foot->cvi = 0;
-                    $foot->cvii = 0;
-
-                    foreach ($base as $key => $value) {
-                        $value->meta = 0;
-                        foreach ($meta as $kk => $mm) {
-                            if ($value->distrito == $mm->distrito) {
-                                $value->meta = $mm->conteo;
-                                break;
-                            }
-                        }
-                        $value->avance = $value->meta > 0 ? 100 * $value->tt / $value->meta : 0;
-                        $foot->meta += $value->meta;
-                        $foot->tt += $value->tt;
-                        $foot->th += $value->th;
-                        $foot->tm += $value->tm;
-                        $foot->ci += $value->ci;
-                        $foot->cii += $value->cii;
-                        $foot->ciii += $value->ciii;
-                        $foot->civ += $value->civ;
-                        $foot->cv += $value->cv;
-                        $foot->cvi += $value->cvi;
-                        $foot->cvii += $value->cvii;
-                    }
-                    $foot->avance = $foot->meta > 0 ? 100 * $foot->tt / $foot->meta : 0;
-                }
-
-                $excel = view('educacion.MatriculaGeneral.BasicaRegularTabla2', compact('base', 'foot'))->render();
-                $reg['fuente'] = 'Siagie - MINEDU';
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-                $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
-                return response()->json(compact('excel', 'reg'));
-            case 'tabla2x':
-                $aniox = Anio::find($rq->anio);
-                $anioy = Anio::where('anio', $aniox->anio - 1)->first();
-                $meta = MatriculaGeneralRepositorio::metaEBRDistrito($rq->anio == 3 ? 3 : $anioy->id, $rq->ugel, $rq->gestion,  $rq->area, $rq->provincia);
-                $base = MatriculaGeneralRepositorio::basicaregulartabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area, $rq->provincia);
-                $foot = [];
-                if ($base->count() > 0) {
-                    $foot = clone $base[0];
-                    $foot->meta = 0;
-                    $foot->tt = 0;
-                    $foot->th = 0;
-                    $foot->tm = 0;
-                    $foot->thi = 0;
-                    $foot->tmi = 0;
-                    $foot->thp = 0;
-                    $foot->tmp = 0;
-                    $foot->ths = 0;
-                    $foot->tms = 0;
-
-                    foreach ($base as $key => $value) {
-                        $value->meta = 0;
-                        foreach ($meta as $kk => $mm) {
-                            if ($value->distrito == $mm->distrito) {
-                                $value->meta = $mm->conteo;
-                                break;
-                            }
-                        }
-                        $value->avance = $value->meta > 0 ? 100 * $value->tt / $value->meta : 0;
-                        $foot->meta += $value->meta;
-                        $foot->tt += $value->tt;
-                        $foot->th += $value->th;
-                        $foot->tm += $value->tm;
-                        $foot->thi += $value->thi;
-                        $foot->tmi += $value->tmi;
-                        $foot->thp += $value->thp;
-                        $foot->tmp += $value->tmp;
-                        $foot->ths += $value->ths;
-                        $foot->tms += $value->tms;
-                    }
-                    $foot->avance = $foot->meta > 0 ? 100 * $foot->tt / $foot->meta : 0;
-                }
-
-                $excel = view('educacion.MatriculaGeneral.BasicaRegularTabla2', compact('base', 'foot'))->render();
-                $reg['fuente'] = 'Siagie - MINEDU';
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-                $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
-                return response()->json(compact('excel', 'reg'));
-            case 'tabla3':
-                $aniox = Anio::find($rq->anio);
-                $anioy = Anio::where('anio', $aniox->anio - 1)->first();
-                $meta = MatriculaGeneralRepositorio::metaEBRCentroPoblado($rq->anio == 3 ? 3 : $anioy->id, $rq->ugel, $rq->gestion,  $rq->area, $rq->provincia);
-                $base = MatriculaGeneralRepositorio::basicaregulartabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area, $rq->provincia);
-                $foot = [];
-                if ($base->count() > 0) {
-                    $foot = clone $base[0];
-                    $foot->meta = 0;
-                    $foot->tt = 0;
-                    $foot->th = 0;
-                    $foot->tm = 0;
-                    $foot->ci = 0;
-                    $foot->cii = 0;
-                    $foot->ciii = 0;
-                    $foot->civ = 0;
-                    $foot->cv = 0;
-                    $foot->cvi = 0;
-                    $foot->cvii = 0;
-
-                    foreach ($base as $key => $value) {
-                        $value->meta = 0;
-                        foreach ($meta as $kk => $mm) {
-                            if ($value->centropoblado == $mm->centropoblado) {
-                                $value->meta = $mm->conteo;
-                                break;
-                            }
-                        }
-                        $value->avance = $value->meta > 0 ? 100 * $value->tt / $value->meta : 0;
-                        $foot->meta += $value->meta;
-                        $foot->tt += $value->tt;
-                        $foot->th += $value->th;
-                        $foot->tm += $value->tm;
-                        $foot->ci += $value->ci;
-                        $foot->cii += $value->cii;
-                        $foot->ciii += $value->ciii;
-                        $foot->civ += $value->civ;
-                        $foot->cv += $value->cv;
-                        $foot->cvi += $value->cvi;
-                        $foot->cvii += $value->cvii;
-                    }
-                    $foot->avance = $foot->meta > 0 ? 100 * $foot->tt / $foot->meta : 0;
-                }
-                $excel = view('educacion.MatriculaGeneral.BasicaRegularTabla3', compact('base', 'foot'))->render();
-                return response()->json(compact('excel'));
-
-            case 'tabla3x':
-                $aniox = Anio::find($rq->anio);
-                $anioy = Anio::where('anio', $aniox->anio - 1)->first();
-                $meta = MatriculaGeneralRepositorio::metaEBRCentroPoblado($rq->anio == 3 ? 3 : $anioy->id, $rq->ugel, $rq->gestion,  $rq->area, $rq->provincia);
-                $base = MatriculaGeneralRepositorio::basicaregulartabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area, $rq->provincia);
-                $foot = [];
-                if ($base->count() > 0) {
-                    $foot = clone $base[0];
-                    $foot->meta = 0;
-                    $foot->tt = 0;
-                    $foot->th = 0;
-                    $foot->tm = 0;
-                    $foot->thi = 0;
-                    $foot->tmi = 0;
-                    $foot->thp = 0;
-                    $foot->tmp = 0;
-                    $foot->ths = 0;
-                    $foot->tms = 0;
-
-                    foreach ($base as $key => $value) {
-                        $value->meta = 0;
-                        foreach ($meta as $kk => $mm) {
-                            if ($value->centropoblado == $mm->centropoblado) {
-                                $value->meta = $mm->conteo;
-                                break;
-                            }
-                        }
-                        $value->avance = $value->meta > 0 ? 100 * $value->tt / $value->meta : 0;
-                        $foot->meta += $value->meta;
-                        $foot->tt += $value->tt;
-                        $foot->th += $value->th;
-                        $foot->tm += $value->tm;
-                        $foot->thi += $value->thi;
-                        $foot->tmi += $value->tmi;
-                        $foot->thp += $value->thp;
-                        $foot->tmp += $value->tmp;
-                        $foot->ths += $value->ths;
-                        $foot->tms += $value->tms;
-                    }
-                    $foot->avance = $foot->meta > 0 ? 100 * $foot->tt / $foot->meta : 0;
-                }
-                $excel = view('educacion.MatriculaGeneral.BasicaRegularTabla3', compact('base', 'foot'))->render();
-                return response()->json(compact('excel'));
             default:
                 return [];
         }

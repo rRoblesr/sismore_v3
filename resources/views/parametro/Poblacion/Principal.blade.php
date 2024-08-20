@@ -226,6 +226,30 @@
 
     </div>
 
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                    <div class="card-widgets">
+                        <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
+                                class="fa fa-file-excel"></i> Descargar</button>
+                    </div>
+                    <h3 class="text-black font-14">
+                        Población del Padrón Nominal de niñas y niños menos  de 6 años por distritos, según sexo y edades
+                    </h3>
+                </div>
+                <div class="card-body pt-0 pb-0">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive" id="vtabla1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Bootstrap modal -->
     <div id="modal_centropoblado" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -373,7 +397,7 @@
                         $('.anal8-fuente').html('Fuente: ' + data.reg.fuente);
                         $('.anal8-fecha').html('Actualizado: ' + data.reg.fecha);
                     } else if (div == "tabla1") {
-                        // $('#vtabla1').html(data.excel);
+                        $('#vtabla1').html(data.excel);
                         // $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
                         // $('.vtabla1-fecha').html('Actualizado: ' + data.reg.fecha);
                         // $('#tabla1').DataTable({
