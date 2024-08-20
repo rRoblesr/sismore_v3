@@ -2,6 +2,42 @@
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
     <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            /* Ajusta según sea necesario */
+        }
+
+        .credits {
+            position: absolute;
+            bottom: 10px;
+            /* Ajusta según sea necesario */
+            width: 100%;
+            text-align: center;
+            font-size: 10px;
+            color: #666;
+        }
+
+        .credits-left {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            /* Ajusta según sea necesario */
+            text-align: left;
+            font-size: 10px;
+            color: #666;
+        }
+
+        .credits-right {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            /* Ajusta según sea necesario */
+            text-align: right;
+            font-size: 10px;
+            color: #666;
+        }
     </style>
 @endsection
 
@@ -129,7 +165,7 @@
                 </div>
                 <div class="card-body p-0">
                     <figure class="highcharts-figure p-0 m-0">
-                        <div id="anal1" style="height: 20rem"></div>
+                        <div id="anal1" style="height: 35rem"></div>
                     </figure>
                     {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
                             <span class="anal1-fuente">Fuente:</span>
@@ -146,7 +182,7 @@
                 </div>
                 <div class="card-body p-0">
                     <figure class="highcharts-figure p-0 m-0">
-                        <div id="anal2" style="height: 20rem"></div>
+                        <div id="anal2" style="height: 35rem"></div>
                     </figure>
                     {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
                             <span class="anal2-fuente">Fuente:</span>
@@ -168,10 +204,8 @@
                     <figure class="highcharts-figure p-0 m-0">
                         <div id="anal3" style="height: 20rem"></div>
                     </figure>
-                    {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                            <span class="anal3-fuente">Fuente:</span>
-                            <span class="float-right anal3-fecha">Actualizado:</span>
-                        </div> --}}
+                    <div class="credits-left">Fuente: RENIEC - PADRÓN NOMINAL</div>
+                    <div class="credits-right">Actualizado: JULIO 2024</div>
                 </div>
             </div>
         </div>
@@ -184,51 +218,14 @@
                     <figure class="highcharts-figure p-0 m-0">
                         <div id="anal4" style="height: 20rem"></div>
                     </figure>
-                    {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                            <span class="anal4-fuente">Fuente:</span>
-                            <span class="float-right anal4-fecha">Actualizado:</span>
-                        </div> --}}
+                    <div class="credits-left">Fuente: RENIEC - PADRÓN NOMINAL</div>
+                    <div class="credits-right">Actualizado: JULIO 2024</div>
                 </div>
             </div>
         </div>
 
     </div>
 
-    <div class="row">
-        <div class="col-lg-6">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
-                </div>
-                <div class="card-body p-0">
-                    <figure class="highcharts-figure p-0 m-0">
-                        <div id="anal5" style="height: 20rem"></div>
-                    </figure>
-                    {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                            <span class="anal3-fuente">Fuente:</span>
-                            <span class="float-right anal3-fecha">Actualizado:</span>
-                        </div> --}}
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
-                </div>
-                <div class="card-body p-0">
-                    <figure class="highcharts-figure p-0 m-0">
-                        <div id="anal6" style="height: 20rem"></div>
-                    </figure>
-                    {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                            <span class="anal4-fuente">Fuente:</span>
-                            <span class="float-right anal4-fecha">Actualizado:</span>
-                        </div> --}}
-                </div>
-            </div>
-        </div>
-
-    </div>
 
     <!-- Bootstrap modal -->
     <div id="modal_centropoblado" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -265,6 +262,7 @@
     <script type="text/javascript">
         var distrito_select = 0;
         var distrito_select = 0;
+        var anal2;
         $(document).ready(function() {
             Highcharts.setOptions({
                 lang: {
@@ -278,13 +276,9 @@
             panelGraficas('head');
             panelGraficas('anal1');
             panelGraficas('anal2');
-            // panelGraficas('anal3');
-            // panelGraficas('anal4');
-            // panelGraficas('anal5');
-            // panelGraficas('anal6');
-            // panelGraficas('anal7');
-            // panelGraficas('anal8');
-            // panelGraficas('tabla1');
+            panelGraficas('anal3');
+            panelGraficas('anal4');
+            panelGraficas('tabla1');
             // panelGraficas('tabla2');
         }
 
@@ -301,21 +295,21 @@
                 dataType: "JSON",
                 beforeSend: function() {
 
-                    if (div == "head") {
-                        $('#normal').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                        $('#eib').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                        $('#foraneo').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                        $('#limitado').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    } else if (div == "tabla1") {
-                        $('#v' + div).html(
-                            '<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    } else if (div == "tabla2") {
-                        $('#v' + div).html(
-                            '<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    } else {
-                        $('#' + div).html(
-                            '<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    }
+                    // if (div == "head") {
+                    //     $('#normal').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    //     $('#eib').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    //     $('#foraneo').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    //     $('#limitado').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    // } else if (div == "tabla1") {
+                    //     $('#v' + div).html(
+                    //         '<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    // } else if (div == "tabla2") {
+                    //     $('#v' + div).html(
+                    //         '<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    // } else {
+                    //     $('#' + div).html(
+                    //         '<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    // }
                 },
                 success: function(data) {
                     if (div == 'head') {
@@ -325,32 +319,37 @@
                         $('#card4').text(data.card4);
 
                     } else if (div == "anal1") {
-                        // gAnidadaColumn(div,
-                        //     data.info.categoria, data.info.series, '',
-                        //     'Número de estudiantes matriculados en educación básica regular, ' +
-                        //     data.reg.periodo,
-                        //     data.info.maxbar
-                        // );
+
                     } else if (div == "anal2") {
-                        // gLineaBasica(div, data.info, '',
-                        //     'Evolución mensual de la matricula educativa en educación básica regular período ' +
-                        //     $('#anio option:selected').text(),
-                        //     '');
-                        // $('.anal2-fuente').html('Fuente: ' + data.reg.fuente);
-                        // $('.anal2-fecha').html('Actualizado: ' + data.reg.fecha);
+                        // var data = {
+                        //     categories: ['0-05', '06-11', '12-17', '18-24', '25-29', '30-34', '35-39',
+                        //         '40-44', '45-49', '50-54', '55-59', '60-64', '65-69', '70-74', '75-79',
+                        //         '80+'
+                        //     ],
+                        //     men: [-1597861, -1819584, -1771431, -1885995, -1448952, -1352564, -1251619, -
+                        //         1146545, -1029330, -874058, -750415, -609156, -477954, -348419, -247920,
+                        //         -289359
+                        //     ],
+                        //     women: [1543870, 1757072, 1714052, 1847317, 1437795, 1344458, 1244901, 1146179,
+                        //         1041181, 897454, 775648, 633270, 514119, 378325, 278172, 378255
+                        //     ]
+                        // };
+                        anal2 = gbar2(div, data.info, '', 'Pirámide poblacional, según sexo  y grupo etario',
+                            '');
                     } else if (div == "anal3") {
-                        gLineaMultiple(div, data.info, '',
-                            'Numero de estudiantes matriculados en educación básica regular, según nivel educativo, ' +
-                            data.reg.periodo,
-                            '');
-                        $('.anal3-fuente').html('Fuente: ' + data.reg.fuente);
-                        $('.anal3-fecha').html('Actualizado: ' + data.reg.fecha);
+                        // var data = {
+                        //     categoria: ['2019', '2020', '2021', '2022', '2023', '2024'],
+                        //     men: [18, 20, 30, 30, 29, 26],
+                        //     women: [22, 25, 28, 25, 27, 24],
+                        // };
+                        gColumn1(div, data.info, '',
+                            'Población del Padrón Nominal de niños y niñas menores de 6 años, según sexo, período ' +
+                            data.rango
+                        );
                     } else if (div == "anal4") {
-                        gPie(div, data.info, '',
-                            'Numero de estudiantes matriculados en educación básica, según nivel educativo',
-                            '');
-                        $('.anal4-fuente').html('Fuente: ' + data.reg.fuente);
-                        $('.anal4-fecha').html('Actualizado: ' + data.reg.fecha);
+                        gColumn1(div, data.info, '',
+                            'Población del Padrón Nominal de niños y niñas menores de 6 años por edades , según sexo' 
+                        );
                     } else if (div == "anal5") {
                         gPie(div, data.info, '', '', '');
                         $('.anal5-fuente').html('Fuente: ' + data.reg.fuente);
@@ -374,18 +373,18 @@
                         $('.anal8-fuente').html('Fuente: ' + data.reg.fuente);
                         $('.anal8-fecha').html('Actualizado: ' + data.reg.fecha);
                     } else if (div == "tabla1") {
-                        $('#vtabla1').html(data.excel);
-                        $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
-                        $('.vtabla1-fecha').html('Actualizado: ' + data.reg.fecha);
-                        $('#tabla1').DataTable({
-                            responsive: true,
-                            autoWidth: false,
-                            ordered: true,
-                            searching: false,
-                            bPaginate: false,
-                            info: false,
-                            language: table_language,
-                        });
+                        // $('#vtabla1').html(data.excel);
+                        // $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
+                        // $('.vtabla1-fecha').html('Actualizado: ' + data.reg.fecha);
+                        // $('#tabla1').DataTable({
+                        //     responsive: true,
+                        //     autoWidth: false,
+                        //     ordered: true,
+                        //     searching: false,
+                        //     bPaginate: false,
+                        //     info: false,
+                        //     language: table_language,
+                        // });
                     } else if (div == "tabla2") {
                         provincia_select = 0;
                         $('#vtabla2').html(data.excel);
@@ -522,6 +521,91 @@
             window.open("{{ route('mantenimiento.indicadorgeneral.exportar.pdf', '') }}/" + id);
         };
 
+        function gbar2(div, data, titulo, subtitulo, tituloserie) {
+            return Highcharts.chart(div, {
+                chart: {
+                    type: 'bar'
+                },
+                title: {
+                    text: titulo
+                },
+                subtitle: {
+                    text: subtitulo
+                },
+                xAxis: [{
+                    categories: data.categoria,
+                    reversed: false,
+                    labels: {
+                        step: 1
+                    },
+                    lineWidth: 0, // Desactiva la línea del eje X
+                    tickWidth: 0 // Desactiva las marcas de graduación (ticks)
+                }],
+                yAxis: {
+
+                    title: {
+                        text: null
+                    },
+                    labels: {
+                        enabled: false,
+                        formatter: function() {
+                            return Math.abs(this.value) + '';
+                        }
+                    },
+
+                },
+                plotOptions: {
+                    // series: {
+                    //     stacking: 'normal'
+                    // }
+                    series: {
+                        stacking: 'normal',
+                        dataLabels: {
+                            enabled: true, // Habilita la visualización de los valores en las barras
+                            formatter: function() {
+                                return Highcharts.numberFormat(Math.abs(this.y),
+                                    0); // Formatea los números con separadores de miles
+                            },
+                            backgroundColor: 'none', // Elimina el fondo de las etiquetas
+                            borderRadius: 0, // Opcional: elimina cualquier borde redondeado
+                            padding: 0, // Opcional: elimina cualquier relleno
+                            style: {
+                                color: 'black', // Color del texto
+                                textOutline: 'none' // Elimina el contorno del texto
+                            }
+                        }
+                    }
+                },
+                tooltip: {
+                    shared: true, // Muestra los valores de todas las series en el mismo tooltip
+                    // formatter: function() {
+                    //     return '<b>' + this.series.name + ', edad ' + this.point.category + '</b><br/>' +
+                    //         'Población: ' + Highcharts.numberFormat(Math.abs(this.point.y), 0);
+                    // },
+                    formatter: function() {
+                        let tooltipText = '<b>' + this.x + '</b><br/>'; // Muestra la categoría (edad)
+                        this.points.forEach(function(point) {
+                            tooltipText += point.series.name + ': ' + Highcharts.numberFormat(Math.abs(
+                                point.y), 0) + '<br/>';
+                        });
+                        return tooltipText;
+                    }
+                },
+                series: [{
+                    name: 'Hombres',
+                    data: data.men,
+                    color: '#66BB6A'
+                }, {
+                    name: 'Mujeres',
+                    data: data.women,
+                    color: '#388E3C'
+                }],
+                credits: {
+                    enabled: false
+                }
+            });
+        }
+
         function gSimpleColumn(div, datax, titulo, subtitulo, tituloserie) {
 
             Highcharts.chart(div, {
@@ -642,6 +726,82 @@
                     enabled: true
                 },
                 credits: false,
+            });
+        }
+
+        function gColumn1(div, data, titulo, subtitulo) {
+            Highcharts.chart(div, {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: titulo
+                },
+                subtitle: {
+                    text: subtitulo //null // Si no necesitas un subtítulo, puedes dejarlo como null
+                },
+                xAxis: {
+                    categories: data.categoria, //
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: null // Puedes agregar un título si lo necesitas
+                    }
+                },
+                tooltip: {
+                    shared: true, // Muestra los valores de todas las series en el mismo tooltip
+                    formatter: function() {
+                        let tooltipText = '<b>Año: ' + this.x + '</b><br/>'; // Muestra la categoría (año)
+                        this.points.forEach(function(point) {
+                            tooltipText += point.series.name + ': ' + Highcharts.numberFormat(Math.abs(
+                                point.y), 0) + '<br/>';
+                        });
+                        return tooltipText;
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        stacking: 'normal', // Apila las columnas
+                        dataLabels: {
+                            enabled: true,
+                            formatter: function() {
+                                return Highcharts.numberFormat(Math.abs(this.y),
+                                    0); // Formatea los números con separadores de miles
+                            },
+                            style: {
+                                color: 'black',
+                                textOutline: 'none'
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Hombre',
+                    data: data.men, // 
+                    color: '#00BFAE' // Color turquesa
+                }, {
+                    name: 'Mujer',
+                    data: data.women, // [22, 25, 28, 25, 27, 24],
+                    color: '#EC407A' // Color rosado
+                }],
+                credits: {
+                    enabled: false,
+                    text: 'Fuente: RENIEC - PADRÓN NOMINAL | Actualizado: JULIO 2024',
+                    href: null,
+                    position: {
+                        align: 'center',
+                        verticalAlign: 'bottom',
+                        x: 0,
+                        y: -5
+                    },
+                    style: {
+                        color: '#666',
+                        fontSize: '10px',
+                        textAlign: 'center'
+                    }
+                }
             });
         }
 

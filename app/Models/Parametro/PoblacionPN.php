@@ -23,7 +23,7 @@ class PoblacionPN extends Model
         'ubigeo_id',
         'cnv',
         'seguro',
-        'sexo',
+        'sexo_id',
         '28dias',
         '0_5meses',
         '6_11meses',
