@@ -42,19 +42,19 @@ class PoblacionController extends Controller
     {
         switch ($rq->div) {
             case 'head':
-                $card1 = PoblacionProyectadaRepositorio::conteo($rq->anio, '');
-                $card2 = PoblacionProyectadaRepositorio::conteo($rq->anio, 'UCAYALI');
+                $card1 = number_format(PoblacionProyectadaRepositorio::conteo($rq->anio, ''));
+                $card2 = number_format(PoblacionProyectadaRepositorio::conteo($rq->anio, 'UCAYALI'));
                 $card3 = PoblacionProyectadaRepositorio::conteo(2024, '');
                 $card4 = PoblacionProyectadaRepositorio::conteo(2024, '');
 
                 return response()->json(compact('card1', 'card2', 'card3', 'card4'));
             case 'anal1':
-                $info=PoblacionDiresa::from('par_poblacion_diresa as pd')->join('par_ubigeo as dd','dd.id','=','pd.ubigeo_id')
-                ->join('par_ubigeo as pp','pp.id','=','dd.dependencia')->select('pp.nombre',DB::raw('SUM(pd.total) conteo'))->groupBy('pp.nombre')->get();
+                $info = PoblacionDiresa::from('par_poblacion_diresa as pd')->join('par_ubigeo as dd', 'dd.id', '=', 'pd.ubigeo_id')
+                    ->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia')->select('pp.nombre', DB::raw('SUM(pd.total) conteo'))->groupBy('pp.nombre')->get();
 
                 return response()->json(compact('info'));
             case 'anal2':
-                $info=PoblacionDiresa::from('par_poblacion_diresa as pd')->select('pd.rango','pd.sexo',DB::raw('SUM(pd.total) conteo'))->groupBy('rango','sexo')->orderBy('rango')->get();
+                $info = PoblacionDiresa::from('par_poblacion_diresa as pd')->select('pd.rango', 'pd.sexo', DB::raw('SUM(pd.total) conteo'))->groupBy('rango', 'sexo')->orderBy('rango')->get();
 
                 return response()->json(compact('info'));
             case 'anal3':
