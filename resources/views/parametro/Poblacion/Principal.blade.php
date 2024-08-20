@@ -50,7 +50,7 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card1"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Población 2024</p>
+                            <p class="mb-0 mt-1 text-truncate">Población Perú</p>
                         </div>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card2"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Población 0 a 5 años</p>
+                            <p class="mb-0 mt-1 text-truncate">Población Ucayali</p>
                         </div>
                     </div>
                 </div>
@@ -110,7 +110,7 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card4"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Pueblos Indigenas</p>
+                            <p class="mb-0 mt-1 text-truncate">Pueblos Indígenas</p>
                         </div>
                     </div>
                 </div>

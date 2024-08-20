@@ -1307,7 +1307,7 @@ Route::get('/recursos/highcharts', function () {
 });
 
 Route::get('/recursos/pruebas', function () {
-    return view('prueba/prueba8');
+    return view('prueba/prueba9');
 });
 
 Route::get('/recursos/correo', function () {
