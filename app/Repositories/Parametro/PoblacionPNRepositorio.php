@@ -3,32 +3,49 @@
 namespace App\Repositories\Parametro;
 
 use App\Models\Parametro\PoblacionDetalle;
+use App\Models\Parametro\PoblacionPN;
 use App\Models\Parametro\Ubigeo;
 use Illuminate\Support\Facades\DB;
 
 class PoblacionPNRepositorio
 {
-    public static function total3a5($anio_id)
+
+    public static function conteo($anio, $mes, $departamento, $provincia, $distrito, $sexo)
     {
-        $query = PoblacionDetalle::select(DB::raw('sum(total) as conteo'))
-            ->join('par_poblacion as pp', 'pp.id', '=', 'par_poblacion_detalle.poblacion_id')
-            ->where('pp.anio_id', $anio_id)->whereIn('edad', ['e3', 'e4', 'e5'])->where('ubigeo', 'like', '25%')->first()->conteo;
-        return $query;
+        $query = PoblacionPN::from('par_poblacion_padron_nominal as pn')
+            ->join('par_ubigeo as dis', 'dis.id', '=', 'pn.ubigeo_id')
+            ->join('par_ubigeo as pro', 'pro.id', '=', 'dis.dependencia')
+            ->join('par_ubigeo as dep', 'dep.id', '=', 'pro.dependencia')
+            ->where('pn.anio', $anio);
+        if ($sexo > 0)
+            $query = $query->where('pn.sexo_id', $sexo);
+        if ($mes > 0)
+            $query = $query->where('pn.mes_id', $mes);
+        if ($departamento != '00')
+            $query = $query->where('dep.codigo', $departamento);
+        if ($provincia != '00')
+            $query = $query->where('pro.codigo', $provincia);
+        if ($distrito != '00')
+            $query = $query->where('dis.id', $distrito);
+        return $query->sum('pn.0a+pn.1a+pn.2a+pn.3a+pn.4a+pn.5a');
     }
 
-    public static function total6a11($anio_id)
+    public static function conteomesmax($anio, $departamento, $provincia, $distrito, $sexo)
     {
-        $query = PoblacionDetalle::select(DB::raw('sum(total) as conteo'))
-            ->join('par_poblacion as pp', 'pp.id', '=', 'par_poblacion_detalle.poblacion_id')
-            ->where('pp.anio_id', $anio_id)->whereIn('edad', ['e6', 'e7', 'e8', 'e9', 'e10', 'e11'])->where('ubigeo', 'like', '25%')->first()->conteo;
-        return $query;
-    }
-
-    public static function total12a16($anio_id)
-    {
-        $query = PoblacionDetalle::select(DB::raw('sum(total) as conteo'))
-            ->join('par_poblacion as pp', 'pp.id', '=', 'par_poblacion_detalle.poblacion_id')
-            ->where('pp.anio_id', $anio_id)->whereIn('edad', ['e12', 'e13', 'e14', 'e15', 'e16'])->where('ubigeo', 'like', '25%')->first()->conteo;
-        return $query;
+        $mesMax = PoblacionPN::where('anio', $anio)->max('mes_id');
+        $query = PoblacionPN::from('par_poblacion_padron_nominal as pn')
+            ->join('par_ubigeo as dis', 'dis.id', '=', 'pn.ubigeo_id')
+            ->join('par_ubigeo as pro', 'pro.id', '=', 'dis.dependencia')
+            ->join('par_ubigeo as dep', 'dep.id', '=', 'pro.dependencia')
+            ->where('pn.anio', $anio)->where('pn.mes_id', $mesMax);
+        if ($sexo > 0)
+            $query = $query->where('pn.sexo_id', $sexo);
+        if ($departamento != '00')
+            $query = $query->where('dep.codigo', $departamento);
+        if ($provincia != '00')
+            $query = $query->where('pro.codigo', $provincia);
+        if ($distrito >0)
+            $query = $query->where('dis.id', $distrito);
+        return $query->sum(DB::raw('pn.0a+pn.1a+pn.2a+pn.3a+pn.4a+pn.5a'));
     }
 }

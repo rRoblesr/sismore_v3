@@ -9,13 +9,19 @@ use Illuminate\Support\Facades\DB;
 
 class PoblacionProyectadaRepositorio
 {
-    public static function conteo($anio, $departamento)
+    public static function conteo($anio, $departamento, $sexo = 0)
     {
         $query = PoblacionProyectada::where('anio', $anio);
-        if ($departamento != '')
-            $query = $query->where('departamento', $departamento);
-        return $query->sum('total');
+        if ($departamento > '00')
+            $query = $query->where('codigo', $departamento);
+        if ($sexo == 1)
+            return $query->sum('hombre');
+        if ($sexo == 2)
+            return $query->sum('mujer');
+        else
+            return $query->sum('total');
     }
+
 
     // public static function conteo_provincia($anio, $departamento)
     // {

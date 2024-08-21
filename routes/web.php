@@ -79,6 +79,7 @@ use App\Http\Controllers\Salud\ImporPadronEstablecimientoController;
 use App\Http\Controllers\Salud\ImporPadronPvicaController;
 use App\Http\Controllers\Salud\ImporReportePN05Controller;
 use App\Http\Controllers\Salud\IndicadoresController;
+use App\Http\Controllers\Salud\PadronNominal;
 use App\Http\Controllers\Salud\SaludNino;
 use App\Http\Controllers\Salud\SaludPadronExportar;
 use App\Http\Controllers\Salud\SaludPadronNominal;
@@ -1211,6 +1212,8 @@ Route::get('/ImporReportePN05/Listar/ImportarDT', [ImporReportePN05Controller::c
 Route::post('/ImporReportePN05/ListaImportada', [ImporReportePN05Controller::class, 'ListaImportada'])->name('imporreportepn05.listarimportados');
 Route::get('/ImporReportePN05/eliminar/{id}', [ImporReportePN05Controller::class, 'eliminar'])->name('imporreportepn05.eliminar');
 
+Route::get('/Salud/PadronNominal/Seguimientos', [PadronNominal::class, 'seguimiento_ninio'])->name('salud.padronnominal.seguimiento');
+
 Route::get('/Salud/Nino', [SaludNino::class, 'PadronNominal'])->name('salud.nino.padron');
 Route::get('/Salud/Calidad', [SaludNino::class, 'ControlCalidad'])->name('salud.nino.calidad');
 
@@ -1255,6 +1258,9 @@ Route::get('/ImporPoblacion/eliminar/{id}', [ImporPoblacionController::class, 'e
 
 Route::get('/Poblacion/Principal', [PoblacionController::class, 'poblacionprincipal'])->name('poblacionprincipal.principal');
 Route::get('/Poblacion/Principalx', [PoblacionController::class, 'poblacionprincipaltabla'])->name('poblacionprincipal.principal.tablas');
+
+Route::get('/Poblacion/Peru', [PoblacionController::class, 'poblacionprincipalperu'])->name('poblacionprincipal.peru');
+Route::get('/Poblacion/Perux', [PoblacionController::class, 'poblacionprincipalperutabla'])->name('poblacionprincipal.peru.tablas');
 // Route::get('/MatriculaGeneral/EBR/Excel/{div}/{anio}/{ugel}/{gestion}/{area}/{provincia}', [MatriculaGeneralController::class, 'basicaregularDownload']);
 
 /****************************************** FIN PARAMETRO ***************************************************/

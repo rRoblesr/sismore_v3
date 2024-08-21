@@ -38,39 +38,81 @@
             font-size: 10px;
             color: #666;
         }
+
+        /* #anal1 {
+                                                                position: relative;
+                                                            } */
+
+        .spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2em;
+            /* Ajusta el tamaño según sea necesario */
+        }
     </style>
 @endsection
 
 @section('content')
     <div class="row">
-        <div class="col-lg-7 col-md-4 col-sm-4">
-            <h4 class="page-title font-16">DEPARTAMENTO DE UCAYALI</h4>
-        </div>
-        <div class="col-lg-1 col-md-1 col-sm-1  ">
-            <select id="vanio" name="vanio" class="form-control form-control-sm" onchange="cargarCards();">
-                <option value="0">AÑO</option>
-                @foreach ($anios as $item)
-                    <option value="{{ $item->anio }}" {{ $item->anio == date('Y') ? 'selected' : '' }}>
-                        {{ $item->anio }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="col-lg-2 col-md-2 col-sm-2">
-            <select id="vprovincia" name="vprovincia" class="form-control form-control-sm"
-                onchange="cargarDistritos();cargarCards();">
-                <option value="00">PROVINCIA</option>
-                @foreach ($provincia as $item)
-                    <option value="{{ $item->id }}"> {{ $item->nombre }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="col-lg-2 col-md-2 col-sm-2">
-            <select id="vdistrito" name="vdistrito" class="form-control form-control-sm" onchange="cargarCards();">
-                <option value="0">DISTRITO</option>
+        <div class="col-lg-12 col-md-12">
+            <div class="card ">
+                <div class="card-header bg-success-0 ">
+                    <div class="card-widgets">
+                        {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="" title='XXX'><i
+                            class="fas fa-file"></i> Instituciones Educativas</button> --}}
+                        <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
+                            title='ACTUALIZAR'><i class=" fas fa-history"></i> Actualizar</button>
+                        {{-- @if ($registrador > 0)
+                        <button class="btn btn-xs btn-primary waves-effect waves-light" data-toggle="modal"
+                            data-target="#modal_form" title="Agregar Actas" onclick="abrirnuevo()"> <i
+                                class="fa fa-file"></i>
+                            Nuevo</button> &nbsp;
+                    @endif --}}
 
-            </select>
+                    </div>
+                    <h3 class="card-title text-white">POBLACIÓN ESTIMADA Y PROYECTADA 2021-2030</h3>
+                </div>
+                <div class="card-body pb-0">
+                    <div class="row">
+                        <div class="col-lg-7 col-md-4 col-sm-4">
+                            <h4 class="page-title font-12">Fuente: INEI</h4>
+                        </div>
+                        <div class="col-lg-1 col-md-1 col-sm-1  ">
+                            <select id="vanio" name="vanio" class="form-control form-control-sm"
+                                onchange="cargarCards();">
+                                <option value="0">AÑO</option>
+                                @foreach ($anios as $item)
+                                    <option value="{{ $item->anio }}" {{ $item->anio == date('Y') ? 'selected' : '' }}>
+                                        {{ $item->anio }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <select id="vdepartamento" name="vdepartamento" class="form-control form-control-sm"
+                                onchange="cargarCards();">
+                                <option value="0">DEPARTAMENTO</option>
+                                @foreach ($departamento as $item)
+                                    <option value="{{ $item->codigo }}"> {{ $item->departamento }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <select id="vsexo" name="vsexo" class="form-control form-control-sm"
+                                onchange="cargarCards();">
+                                <option value="0">SEXO</option>
+                                <option value="1">HOMBRE</option>
+                                <option value="2">MUJER</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+
 
     <!--Widget-4 -->
     <div class="row">
@@ -86,11 +128,7 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card1"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">
-                                <a href="{{ route('poblacionprincipal.peru') }}">
-                                    Población Perú
-                                </a>
-                            </p>
+                            <p class="mb-0 mt-1 text-truncate">Población Perú</p>
                         </div>
                     </div>
                 </div>
@@ -110,7 +148,7 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card2"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Población Ucayali</p>
+                            <p class="mb-0 mt-1 text-truncate">Población Hombre</p>
                         </div>
                     </div>
                 </div>
@@ -130,7 +168,7 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card3"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Centros Poblados</p>
+                            <p class="mb-0 mt-1 text-truncate">Población Mujer</p>
                         </div>
                     </div>
                 </div>
@@ -150,7 +188,7 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card4"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Pueblos Indígenas</p>
+                            <p class="mb-0 mt-1 text-truncate">Población 0 a 5 años</p>
                         </div>
                     </div>
                 </div>
@@ -169,7 +207,7 @@
                 </div>
                 <div class="card-body p-0">
                     <figure class="highcharts-figure p-0 m-0">
-                        <div id="anal1" style="height: 35rem"></div>
+                        <div id="anal1" style="height: 20rem"></div>
                     </figure>
                     {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
                             <span class="anal1-fuente">Fuente:</span>
@@ -186,7 +224,7 @@
                 </div>
                 <div class="card-body p-0">
                     <figure class="highcharts-figure p-0 m-0">
-                        <div id="anal2" style="height: 35rem"></div>
+                        <div id="anal2" style="height: 20rem"></div>
                     </figure>
                     {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
                             <span class="anal2-fuente">Fuente:</span>
@@ -206,7 +244,7 @@
                 </div>
                 <div class="card-body p-0">
                     <figure class="highcharts-figure p-0 m-0">
-                        <div id="anal3" style="height: 20rem"></div>
+                        <div id="anal3" style="height: 35rem"></div>
                     </figure>
                     <div class="credits-left">Fuente: RENIEC - PADRÓN NOMINAL</div>
                     <div class="credits-right">Actualizado: JULIO 2024</div>
@@ -220,7 +258,7 @@
                 </div>
                 <div class="card-body p-0">
                     <figure class="highcharts-figure p-0 m-0">
-                        <div id="anal4" style="height: 20rem"></div>
+                        <div id="anal4" style="height: 35rem"></div>
                     </figure>
                     <div class="credits-left">Fuente: RENIEC - PADRÓN NOMINAL</div>
                     <div class="credits-right">Actualizado: JULIO 2024</div>
@@ -229,6 +267,39 @@
         </div>
 
     </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
+                </div>
+                <div class="card-body p-0">
+                    <figure class="highcharts-figure p-0 m-0">
+                        <div id="anal5" style="height: 20rem"></div>
+                    </figure>
+                    <div class="credits-left">Fuente: RENIEC - PADRÓN NOMINAL</div>
+                    <div class="credits-right">Actualizado: JULIO 2024</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
+                </div>
+                <div class="card-body p-0">
+                    <figure class="highcharts-figure p-0 m-0">
+                        <div id="anal6" style="height: 20rem"></div>
+                    </figure>
+                    <div class="credits-left">Fuente: RENIEC - PADRÓN NOMINAL</div>
+                    <div class="credits-right">Actualizado: JULIO 2024</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
 
     <div class="row">
         <div class="col-lg-12">
@@ -290,7 +361,12 @@
     <script type="text/javascript">
         var distrito_select = 0;
         var distrito_select = 0;
+        var anal1;
         var anal2;
+        var anal3;
+        var anal4;
+        var anal5;
+        var anal6;
         $(document).ready(function() {
             Highcharts.setOptions({
                 lang: {
@@ -306,38 +382,32 @@
             panelGraficas('anal2');
             panelGraficas('anal3');
             panelGraficas('anal4');
+            panelGraficas('anal5');
+            panelGraficas('anal6');
             panelGraficas('tabla1');
-            // panelGraficas('tabla2');
+            panelGraficas('tabla2');
         }
 
         function panelGraficas(div) {
             $.ajax({
-                url: "{{ route('poblacionprincipal.principal.tablas') }}",
+                url: "{{ route('poblacionprincipal.peru.tablas') }}",
                 data: {
                     'div': div,
                     "anio": $('#vanio').val(),
-                    "provincia": $('#vprovincia').val(),
-                    "distrito": $('#vdistrito').val(),
+                    "departamento": $('#vdepartamento').val(),
+                    "sexo": $('#vsexo').val(),
                 },
                 type: "GET",
                 dataType: "JSON",
                 beforeSend: function() {
-
-                    // if (div == "head") {
-                    //     $('#normal').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    //     $('#eib').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    //     $('#foraneo').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    //     $('#limitado').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    // } else if (div == "tabla1") {
-                    //     $('#v' + div).html(
-                    //         '<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    // } else if (div == "tabla2") {
-                    //     $('#v' + div).html(
-                    //         '<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    // } else {
-                    //     $('#' + div).html(
-                    //         '<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    // }
+                    if (div == "head") {
+                        $('#card1').html('<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('#card2').html('<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('#card3').html('<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('#card4').html('<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "anal1") {
+                        $('#anal1').html('<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    }
                 },
                 success: function(data) {
                     if (div == 'head') {
@@ -347,37 +417,27 @@
                         $('#card4').text(data.card4);
 
                     } else if (div == "anal1") {
-
+                        var data = {
+                            categoria: ['2021', '2022', '2023', '2024', '2025', '2026', '2027', '2028',
+                                '2029', '2030'
+                            ],
+                            serie: [5, 6, 6.5, 6.2, 6.8, 7, 7.1, 6.9, 6.7, 6.4],
+                        }
+                        anal1 = gLinea(div, data, '', 'Población estimada y proyectada, periodo 2021-2030');
                     } else if (div == "anal2") {
-                        // var data = {
-                        //     categories: ['0-05', '06-11', '12-17', '18-24', '25-29', '30-34', '35-39',
-                        //         '40-44', '45-49', '50-54', '55-59', '60-64', '65-69', '70-74', '75-79',
-                        //         '80+'
-                        //     ],
-                        //     men: [-1597861, -1819584, -1771431, -1885995, -1448952, -1352564, -1251619, -
-                        //         1146545, -1029330, -874058, -750415, -609156, -477954, -348419, -247920,
-                        //         -289359
-                        //     ],
-                        //     women: [1543870, 1757072, 1714052, 1847317, 1437795, 1344458, 1244901, 1146179,
-                        //         1041181, 897454, 775648, 633270, 514119, 378325, 278172, 378255
-                        //     ]
-                        // };
-                        anal2 = gbar2(div, data.info, '', 'Pirámide poblacional, según sexo  y grupo etario',
-                            '');
+                        var data = {
+                            categoria: ['2021', '2022', '2023', '2024', '2025', '2026', '2027', '2028',
+                                '2029', '2030'
+                            ],
+                            serie: [5, 6, 6.5, 6.2, 6.8, 7, 7.1, 6.9, 6.7, 6.4],
+                        }
+                        anal2 = gLinea(div, data, '', 'Población estimada de 0 a 5 años, periodo 2021-2030');
                     } else if (div == "anal3") {
-                        // var data = {
-                        //     categoria: ['2019', '2020', '2021', '2022', '2023', '2024'],
-                        //     men: [18, 20, 30, 30, 29, 26],
-                        //     women: [22, 25, 28, 25, 27, 24],
-                        // };
-                        gColumn1(div, data.info, '',
-                            'Población del Padrón Nominal de niños y niñas menores de 6 años, según sexo, período ' +
-                            data.rango
-                        );
+                        anal3 = gbar2(div, data.info, '', 'Pirámide poblacional, según sexo  y grupo etario',
+                            '');
                     } else if (div == "anal4") {
-                        gColumn1(div, data.info, '',
-                            'Población del Padrón Nominal de niños y niñas menores de 6 años por edades , según sexo'
-                        );
+                        anal4 = gbar2(div, data.info, '', 'Pirámide poblacional, según sexo  y grupo etario',
+                            '');
                     } else if (div == "anal5") {
                         gPie(div, data.info, '', '', '');
                         $('.anal5-fuente').html('Fuente: ' + data.reg.fuente);
@@ -548,6 +608,75 @@
         function verpdf(id) {
             window.open("{{ route('mantenimiento.indicadorgeneral.exportar.pdf', '') }}/" + id);
         };
+
+        function gLinea(div, data, titulo, subtitulo) {
+            return Highcharts.chart(div, {
+                chart: {
+                    type: 'line',
+                    // borderRadius: 10,
+                    // borderWidth: 1,
+                    // borderColor: '#000'
+                },
+                title: {
+                    text: titulo
+                },
+                subtitle: {
+                    text: subtitulo
+                },
+                xAxis: {
+                    categories: data.categoria,
+                    labels: {
+                        style: {
+                            fontSize: '10px' // Ajusta el tamaño de la fuente
+                        }
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: ''
+                    },
+                    max: 8,
+                    tickInterval: 1,
+                    labels: {
+                        style: {
+                            fontSize: '10px' // Ajusta el tamaño de la fuente
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Población',
+                    data: data.serie,
+                    marker: {
+                        symbol: 'circle',
+                        radius: 4
+                    },
+                    color: '#d2232a'
+                }],
+                plotOptions: {
+                    series: {
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.y:.1f} mil',
+                            style: {
+                                color: '#000'
+                            },
+                            align: 'right',
+                            crop: false,
+                            overflow: 'none'
+                        }
+                    }
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.y:.1f} mil</b>'
+                },
+                legend: {
+                    enabled: false // Ocultar la leyenda
+                },
+                credits: {
+                    enabled: false
+                }
+            });
+        }
 
         function gbar2(div, data, titulo, subtitulo, tituloserie) {
             return Highcharts.chart(div, {
