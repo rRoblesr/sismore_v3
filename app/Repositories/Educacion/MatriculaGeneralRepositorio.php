@@ -691,7 +691,7 @@ class MatriculaGeneralRepositorio
                 //             INNER JOIN par_importacion AS imp ON imp.id = mg.importacion_id AND imp.estado = 'PR'
                 //             INNER JOIN par_anio AS aa ON aa.id = mg.anio_id
                 //             ORDER BY aa.anio DESC ) as tb1
-                //         WHERE rn = 1 LIMIT 6 ) as tb2 
+                //         WHERE rn = 1 LIMIT 6 ) as tb2
                 //     ORDER BY anio desc) as tb3";
 
                 $mat_uni_max = "SELECT id, anio
@@ -1073,14 +1073,14 @@ class MatriculaGeneralRepositorio
                 if ($gestion > 0) $gestions .= $gestion == 3 ? " AND tg.dependencia=3 " : " AND tg.dependencia!=3 ";
                 $areas = "";
                 if ($area > 0) $areas .= " AND aa.id=$area ";
-                $iiees = "SELECT ie.id, nm.codigo, pp.id as idprovincia, pp.nombre as provincia 
+                $iiees = "SELECT ie.id, nm.codigo, pp.id as idprovincia, pp.nombre as provincia
                     from edu_institucioneducativa as ie
                     inner join edu_ugel as uu on uu.id = ie.Ugel_id $ugels
                     inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id $gestions
                     inner join edu_area as aa on aa.id = ie.Area_id $areas
-                    inner join edu_nivelmodalidad as nm on nm.id = ie.NivelModalidad_id AND nm.tipo='EBR' 
-                    inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id 
-                    inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id 
+                    inner join edu_nivelmodalidad as nm on nm.id = ie.NivelModalidad_id AND nm.tipo='EBR'
+                    inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id
+                    inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id
                     inner join par_ubigeo as pp on pp.id = dd.dependencia ";
 
                 $query = MatriculaGeneralDetalle::from('edu_matricula_general_detalle as mgd');
@@ -1118,14 +1118,14 @@ class MatriculaGeneralRepositorio
                 if ($gestion > 0) $gestions .= $gestion == 3 ? " AND tg.dependencia=3 " : " AND tg.dependencia!=3 ";
                 $areas = "";
                 if ($area > 0) $areas .= " AND aa.id=$area ";
-                $iiees = "SELECT ie.id, nm.codigo, dd.id as iddistrito, dd.nombre as distrito 
+                $iiees = "SELECT ie.id, nm.codigo, dd.id as iddistrito, dd.nombre as distrito
                     from edu_institucioneducativa as ie
                     inner join edu_ugel as uu on uu.id = ie.Ugel_id $ugels
                     inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id $gestions
                     inner join edu_area as aa on aa.id = ie.Area_id $areas
-                    inner join edu_nivelmodalidad as nm on nm.id = ie.NivelModalidad_id AND nm.tipo='EBR' 
-                    inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id 
-                    inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id 
+                    inner join edu_nivelmodalidad as nm on nm.id = ie.NivelModalidad_id AND nm.tipo='EBR'
+                    inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id
+                    inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id
                     inner join par_ubigeo as pp on pp.id = dd.dependencia ";
 
                 $query = MatriculaGeneralDetalle::from('edu_matricula_general_detalle as mgd');
@@ -1160,11 +1160,11 @@ class MatriculaGeneralRepositorio
                 $gestions = $gestion > 0 ? ($gestion == 3 ? " AND tg.dependencia=3 " : " AND tg.dependencia!=3 ") : "";
                 $areas = $area > 0 ? " AND aa.id=$area " : "";
                 $distritos = $provincia > 0 ? " AND dd.id=$provincia " : "";
-                $iiees = "SELECT ie.id,nm.codigo , cp.nombre as centropoblado 
+                $iiees = "SELECT ie.id,nm.codigo , cp.nombre as centropoblado
                     from edu_institucioneducativa as ie
-                    inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id 
+                    inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id
                     inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id $distritos
-                    inner join par_ubigeo as pp on pp.id = dd.dependencia 
+                    inner join par_ubigeo as pp on pp.id = dd.dependencia
                     inner join edu_ugel as uu on uu.id = ie.Ugel_id $ugels
                     inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id $gestions
                     inner join edu_area as aa on aa.id = ie.Area_id $areas
@@ -1278,8 +1278,8 @@ class MatriculaGeneralRepositorio
 
     public static function basicaregularopcion2($div, $anio, $provincia, $distrito,  $gestion, $area)
     {
-        $impor_unicos = "SELECT id, anio FROM (SELECT mg.id, anio.anio, ROW_NUMBER() OVER (PARTITION BY anio.anio ORDER BY mg.id DESC) AS rn 
-            FROM edu_matricula_general mg INNER JOIN par_importacion AS imp ON imp.id = mg.importacion_id INNER JOIN par_anio AS anio ON anio.id = mg.anio_id 
+        $impor_unicos = "SELECT id, anio FROM (SELECT mg.id, anio.anio, ROW_NUMBER() OVER (PARTITION BY anio.anio ORDER BY mg.id DESC) AS rn
+            FROM edu_matricula_general mg INNER JOIN par_importacion AS imp ON imp.id = mg.importacion_id INNER JOIN par_anio AS anio ON anio.id = mg.anio_id
             WHERE imp.estado = 'PR') as iu WHERE rn = 1 ";
 
         $ubigeos = "";
@@ -1287,11 +1287,11 @@ class MatriculaGeneralRepositorio
         if ($distrito > 0) $ubigeos .= " AND dd.id = $distrito ";
         $gestions = "";
         if ($gestion > 0) $gestions .= $gestion == 3 ? " AND tg.dependencia=3 " : " AND tg.dependencia!=3 ";
-        $iiees = "SELECT ie.id, case when nm.codigo='A2' OR nm.codigo='A3' OR nm.codigo='A5' then 'Inicial' else nm.nombre end as nivel 
-            from edu_institucioneducativa as ie 
-            inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id 
-            inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id $ubigeos 
-            inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id $gestions 
+        $iiees = "SELECT ie.id, case when nm.codigo='A2' OR nm.codigo='A3' OR nm.codigo='A5' then 'Inicial' else nm.nombre end as nivel
+            from edu_institucioneducativa as ie
+            inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id
+            inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id $ubigeos
+            inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id $gestions
             inner join edu_nivelmodalidad as nm on nm.id = ie.NivelModalidad_id AND nm.tipo='EBR'";
 
         $query = MatriculaGeneralDetalle::from('edu_matricula_general_detalle as mgd');
@@ -1348,8 +1348,8 @@ class MatriculaGeneralRepositorio
         if ($area > 0) $areas .= " AND aa.id=$area ";
         $iiees = "SELECT ie.id, pp.nombre as provincia
             from edu_institucioneducativa as ie
-            inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id 
-            inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id 
+            inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id
+            inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id
             inner join par_ubigeo as pp on pp.id = dd.dependencia
             inner join edu_ugel as uu on uu.id = ie.Ugel_id $ugels
             inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id $gestions
@@ -1373,10 +1373,10 @@ class MatriculaGeneralRepositorio
         $ugels = $ugel > 0 ? " AND uu.id=$ugel " : "";
         $gestions = $gestion > 0 ? ($gestion == 3 ? " AND tg.dependencia=3 " : " AND tg.dependencia!=3 ") : "";
         $areas = $area > 0 ? " AND aa.id=$area " : "";
-        $iiees = "SELECT ie.id, nm.codigo, dd.id as iddistrito, dd.nombre as distrito 
+        $iiees = "SELECT ie.id, nm.codigo, dd.id as iddistrito, dd.nombre as distrito
             from edu_institucioneducativa as ie
-            inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id 
-            inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id 
+            inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id
+            inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id
             inner join par_ubigeo as pp on pp.id = dd.dependencia
             inner join edu_ugel as uu on uu.id = ie.Ugel_id $ugels
             inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id $gestions
@@ -1401,11 +1401,11 @@ class MatriculaGeneralRepositorio
         $gestions = $gestion > 0 ? ($gestion == 3 ? " AND tg.dependencia=3 " : " AND tg.dependencia!=3 ") : "";
         $areas = $area > 0 ? " AND aa.id=$area " : "";
         $distritos = $provincia > 0 ? " AND dd.id=$provincia " : "";
-        $iiees = "SELECT ie.id, cp.nombre as centropoblado 
+        $iiees = "SELECT ie.id, cp.nombre as centropoblado
             from edu_institucioneducativa as ie
-            inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id 
+            inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id
             inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id $distritos
-            inner join par_ubigeo as pp on pp.id = dd.dependencia 
+            inner join par_ubigeo as pp on pp.id = dd.dependencia
             inner join edu_ugel as uu on uu.id = ie.Ugel_id $ugels
             inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id $gestions
             inner join edu_area as aa on aa.id = ie.Area_id $areas
@@ -1764,7 +1764,7 @@ class MatriculaGeneralRepositorio
                 if ($dependencia > 0) $dependencias .= " AND tg.id=$dependencia ";
                 $iiees = "SELECT ie.id, nm.codigo
                     from edu_institucioneducativa as ie
-                    inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id 
+                    inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id
                     inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id $distritos
                     inner join par_ubigeo as pp on pp.id = dd.dependencia
                     inner join edu_ugel as uu on uu.id = ie.Ugel_id $ugels
@@ -1827,7 +1827,7 @@ class MatriculaGeneralRepositorio
                 if ($dependencia > 0) $dependencias .= " AND tg.id=$dependencia ";
                 $iiees = "SELECT ie.id
                     from edu_institucioneducativa as ie
-                    inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id 
+                    inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id
                     inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id $distritos
                     inner join par_ubigeo as pp on pp.id = dd.dependencia
                     inner join edu_ugel as uu on uu.id = ie.Ugel_id $ugels
@@ -1886,7 +1886,7 @@ class MatriculaGeneralRepositorio
                 if ($dependencia > 0) $dependencias .= " AND tg.id=$dependencia ";
                 $iiees = "SELECT ie.id, nm.codigo
                     from edu_institucioneducativa as ie
-                    inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id 
+                    inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id
                     inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id $distritos
                     inner join par_ubigeo as pp on pp.id = dd.dependencia
                     inner join edu_ugel as uu on uu.id = ie.Ugel_id $ugels
@@ -1945,7 +1945,7 @@ class MatriculaGeneralRepositorio
                 if ($dependencia > 0) $dependencias .= " AND tg.id=$dependencia ";
                 $iiees = "SELECT ie.id, case when nm.codigo='A2' OR nm.codigo='A3' OR nm.codigo='A5' then 'Inicial' else nm.nombre end as nivel
                     from edu_institucioneducativa as ie
-                    inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id 
+                    inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id
                     inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id $distritos
                     inner join par_ubigeo as pp on pp.id = dd.dependencia
                     inner join edu_ugel as uu on uu.id = ie.Ugel_id $ugels
@@ -2007,7 +2007,7 @@ class MatriculaGeneralRepositorio
                 if ($dependencia > 0) $dependencias .= " AND tg.id=$dependencia ";
                 $iiees = "SELECT ie.id, case when nm.codigo='E0' then 'Prite' when nm.codigo='E1' then 'Inicial' when nm.codigo='E2' then 'Primaria' else nm.nombre end as nivel
                     from edu_institucioneducativa as ie
-                    inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id 
+                    inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id
                     inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id $distritos
                     inner join par_ubigeo as pp on pp.id = dd.dependencia
                     inner join edu_ugel as uu on uu.id = ie.Ugel_id $ugels
@@ -2189,9 +2189,9 @@ class MatriculaGeneralRepositorio
                 if ($distrito > 0) $distritos .= " AND dd.id=$distrito ";
                 $dependencias = "";
                 if ($dependencia > 0) $dependencias .= " AND tg.id=$dependencia ";
-                $iiees = "SELECT ie.id, nm.codigo, pp.id as idprovincia, pp.nombre as provincia 
+                $iiees = "SELECT ie.id, nm.codigo, pp.id as idprovincia, pp.nombre as provincia
                     from edu_institucioneducativa as ie
-                    inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id 
+                    inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id
                     inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id $distritos
                     inner join par_ubigeo as pp on pp.id = dd.dependencia
                     inner join edu_ugel as uu on uu.id = ie.Ugel_id $ugels
@@ -2267,9 +2267,9 @@ class MatriculaGeneralRepositorio
                 if ($provincia > 0) $provincias .= " AND pp.id=$provincia ";
                 $dependencias = "";
                 if ($dependencia > 0) $dependencias .= " AND tg.id=$dependencia ";
-                $iiees = "SELECT ie.id, nm.codigo, dd.id as iddistrito, dd.nombre as distrito 
+                $iiees = "SELECT ie.id, nm.codigo, dd.id as iddistrito, dd.nombre as distrito
                     from edu_institucioneducativa as ie
-                    inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id 
+                    inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id
                     inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id $distritos
                     inner join par_ubigeo as pp on pp.id = dd.dependencia $provincias
                     inner join edu_ugel as uu on uu.id = ie.Ugel_id $ugels
@@ -2352,7 +2352,7 @@ class MatriculaGeneralRepositorio
         if ($dependencia > 0) $dependencias .= " AND tg.id=$dependencia ";
         $iiees = "SELECT ie.id, nm.codigo
             from edu_institucioneducativa as ie
-            inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id 
+            inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id
             inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id $distritos
             inner join par_ubigeo as pp on pp.id = dd.dependencia
             inner join edu_ugel as uu on uu.id = ie.Ugel_id $ugels
@@ -2414,7 +2414,7 @@ class MatriculaGeneralRepositorio
         if ($dependencia > 0) $dependencias .= " AND tg.id=$dependencia ";
         $iiees = "SELECT ie.id, pp.nombre as provincia
             from edu_institucioneducativa as ie
-            inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id 
+            inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id
             inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id $distritos
             inner join par_ubigeo as pp on pp.id = dd.dependencia
             inner join edu_ugel as uu on uu.id = ie.Ugel_id $ugels
@@ -2471,9 +2471,9 @@ class MatriculaGeneralRepositorio
         if ($provincia > 0) $provincias .= " AND pp.id=$provincia ";
         $dependencias = "";
         if ($dependencia > 0) $dependencias .= " AND tg.id=$dependencia ";
-        $iiees = "SELECT ie.id, nm.codigo, dd.id as iddistrito, dd.nombre as distrito 
+        $iiees = "SELECT ie.id, nm.codigo, dd.id as iddistrito, dd.nombre as distrito
             from edu_institucioneducativa as ie
-            inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id 
+            inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id
             inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id $distritos
             inner join par_ubigeo as pp on pp.id = dd.dependencia $provincias
             inner join edu_ugel as uu on uu.id = ie.Ugel_id $ugels
@@ -2521,33 +2521,6 @@ class MatriculaGeneralRepositorio
                 );
                 return $query = $query->first();
 
-                // $mg = Importacion::select('mg.*')
-                //     ->join('edu_matricula_general as mg', 'mg.importacion_id', '=', 'par_importacion.id')
-                //     ->where('estado', 'PR')->where('anio_id', $anio)
-                //     ->orderBy('fechaActualizacion', 'desc')->first();
-
-                // $query = MatriculaGeneralDetalle::select(
-                //     DB::raw('count(matriculageneral_id) as conteo'),
-                //     DB::raw('sum(IF(nm.codigo="D1" and grado_id in (1,2),1,0)) as conteox'),
-                //     DB::raw('sum(IF(nm.codigo="D1" and grado_id in (3,4,5),1,0)) as conteoi'),
-                //     DB::raw('sum(IF(nm.codigo="D2",1,0)) as conteop')
-                // );
-                // $query = $query->join('edu_institucioneducativa as ie', 'ie.id', '=', 'edu_matricula_general_detalle.institucioneducativa_id')
-                //     ->join('edu_ugel as uu', 'uu.id', '=', 'ie.Ugel_id')
-                //     ->join('edu_area as aa', 'aa.id', '=', 'ie.Area_id')
-                //     ->join('edu_tipogestion as tg', 'tg.id', '=', 'ie.TipoGestion_id')
-                //     ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'ie.NivelModalidad_id');
-                // if ($ugel > 0) $query = $query->where('uu.id', $ugel);
-                // if ($area > 0) $query = $query->where('aa.id', $area);
-                // if ($gestion > 0) {
-                //     if ($gestion == 3) {
-                //         $query = $query->where('tg.dependencia', 3);
-                //     } else {
-                //         $query = $query->where('tg.dependencia', '!=', 3);
-                //     }
-                // }
-                // $query = $query->where('matriculageneral_id', $mg->id)->where('nm.tipo', 'EBA');
-                // return $query = $query->first();
             case 'anal1':/*  */
 
                 $mat_uni_max = "SELECT id, anio
@@ -2575,7 +2548,7 @@ class MatriculaGeneralRepositorio
                 $query = MatriculaGeneralDetalle::from('edu_matricula_general_detalle as mgd')
                     ->join(DB::raw("($mat_uni_max) as mg"), 'mg.id', '=', 'mgd.matriculageneral_id')
                     ->join(DB::raw("($iiees) as ie"), 'ie.id', '=', 'mgd.institucioneducativa_id');
-                $query = $query->select('mg.anio', DB::raw('count(mgd.id) as conteo'))->orderBy('mg.anio', 'asc')->groupBy('mg.anio')->get();
+                $query = $query->select('mg.anio', DB::raw('count(mgd.id) as conteo'))->groupBy('anio')->orderBy('mg.anio', 'asc')->get();
                 return $query;
 
 
@@ -2806,7 +2779,7 @@ class MatriculaGeneralRepositorio
                 if ($gestion > 0) $gestions .= $gestion == 3 ? " AND tg.dependencia=3 " : " AND tg.dependencia!=3 ";
                 $areas = "";
                 if ($area > 0) $areas .= " AND aa.id=$area ";
-                $iiees = "SELECT ie.id 
+                $iiees = "SELECT ie.id
                 from edu_institucioneducativa as ie
                 inner join edu_ugel as uu on uu.id = ie.Ugel_id $ugels
                 inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id $gestions
@@ -2971,14 +2944,14 @@ class MatriculaGeneralRepositorio
                 if ($gestion > 0) $gestions .= $gestion == 3 ? " AND tg.dependencia=3 " : " AND tg.dependencia!=3 ";
                 $areas = "";
                 if ($area > 0) $areas .= " AND aa.id=$area ";
-                $iiees = "SELECT ie.id, nm.codigo, pp.id as idprovincia, pp.nombre as provincia 
+                $iiees = "SELECT ie.id, nm.codigo, pp.id as idprovincia, pp.nombre as provincia
                     from edu_institucioneducativa as ie
                     inner join edu_ugel as uu on uu.id = ie.Ugel_id $ugels
                     inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id $gestions
                     inner join edu_area as aa on aa.id = ie.Area_id $areas
-                    inner join edu_nivelmodalidad as nm on nm.id = ie.NivelModalidad_id AND nm.tipo='EBR' 
-                    inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id 
-                    inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id 
+                    inner join edu_nivelmodalidad as nm on nm.id = ie.NivelModalidad_id AND nm.tipo='EBR'
+                    inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id
+                    inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id
                     inner join par_ubigeo as pp on pp.id = dd.dependencia ";
 
                 $query = MatriculaGeneralDetalle::from('edu_matricula_general_detalle as mgd');
@@ -3015,14 +2988,14 @@ class MatriculaGeneralRepositorio
                 if ($gestion > 0) $gestions .= $gestion == 3 ? " AND tg.dependencia=3 " : " AND tg.dependencia!=3 ";
                 $areas = "";
                 if ($area > 0) $areas .= " AND aa.id=$area ";
-                $iiees = "SELECT ie.id, nm.codigo, dd.id as iddistrito, dd.nombre as distrito 
+                $iiees = "SELECT ie.id, nm.codigo, dd.id as iddistrito, dd.nombre as distrito
                     from edu_institucioneducativa as ie
                     inner join edu_ugel as uu on uu.id = ie.Ugel_id $ugels
                     inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id $gestions
                     inner join edu_area as aa on aa.id = ie.Area_id $areas
-                    inner join edu_nivelmodalidad as nm on nm.id = ie.NivelModalidad_id AND nm.tipo='EBR' 
-                    inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id 
-                    inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id 
+                    inner join edu_nivelmodalidad as nm on nm.id = ie.NivelModalidad_id AND nm.tipo='EBR'
+                    inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id
+                    inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id
                     inner join par_ubigeo as pp on pp.id = dd.dependencia ";
 
                 $query = MatriculaGeneralDetalle::from('edu_matricula_general_detalle as mgd');
@@ -3098,8 +3071,8 @@ class MatriculaGeneralRepositorio
         if ($area > 0) $areas .= " AND aa.id=$area ";
         $iiees = "SELECT ie.id, pp.nombre as provincia
             from edu_institucioneducativa as ie
-            inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id 
-            inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id 
+            inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id
+            inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id
             inner join par_ubigeo as pp on pp.id = dd.dependencia
             inner join edu_ugel as uu on uu.id = ie.Ugel_id $ugels
             inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id $gestions
@@ -3126,10 +3099,10 @@ class MatriculaGeneralRepositorio
         if ($gestion > 0) $gestions .= $gestion == 3 ? " AND tg.dependencia=3 " : " AND tg.dependencia!=3 ";
         $areas = "";
         if ($area > 0) $areas .= " AND aa.id=$area ";
-        $iiees = "SELECT ie.id, nm.codigo, dd.id as iddistrito, dd.nombre as distrito 
+        $iiees = "SELECT ie.id, nm.codigo, dd.id as iddistrito, dd.nombre as distrito
             from edu_institucioneducativa as ie
-            inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id 
-            inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id 
+            inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id
+            inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id
             inner join par_ubigeo as pp on pp.id = dd.dependencia
             inner join edu_ugel as uu on uu.id = ie.Ugel_id $ugels
             inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id $gestions
