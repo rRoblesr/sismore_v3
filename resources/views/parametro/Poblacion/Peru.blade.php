@@ -40,8 +40,8 @@
         }
 
         /* #anal1 {
-                                                                position: relative;
-                                                            } */
+                                                                                    position: relative;
+                                                                                } */
 
         .spinner {
             position: absolute;
@@ -207,7 +207,7 @@
                 </div>
                 <div class="card-body p-0">
                     <figure class="highcharts-figure p-0 m-0">
-                        <div id="anal1" style="height: 20rem"></div>
+                        <div id="anal1" style="height: 35rem"></div>
                     </figure>
                     {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
                             <span class="anal1-fuente">Fuente:</span>
@@ -224,7 +224,7 @@
                 </div>
                 <div class="card-body p-0">
                     <figure class="highcharts-figure p-0 m-0">
-                        <div id="anal2" style="height: 20rem"></div>
+                        <div id="anal2" style="height: 35rem"></div>
                     </figure>
                     {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
                             <span class="anal2-fuente">Fuente:</span>
@@ -244,10 +244,10 @@
                 </div>
                 <div class="card-body p-0">
                     <figure class="highcharts-figure p-0 m-0">
-                        <div id="anal3" style="height: 35rem"></div>
+                        <div id="anal3" style="height: 20rem"></div>
                     </figure>
-                    <div class="credits-left">Fuente: RENIEC - PADRÓN NOMINAL</div>
-                    <div class="credits-right">Actualizado: JULIO 2024</div>
+                    {{-- <div class="credits-left">Fuente: RENIEC - PADRÓN NOMINAL</div>
+                    <div class="credits-right">Actualizado: JULIO 2024</div> --}}
                 </div>
             </div>
         </div>
@@ -258,10 +258,10 @@
                 </div>
                 <div class="card-body p-0">
                     <figure class="highcharts-figure p-0 m-0">
-                        <div id="anal4" style="height: 35rem"></div>
+                        <div id="anal4" style="height: 20rem"></div>
                     </figure>
-                    <div class="credits-left">Fuente: RENIEC - PADRÓN NOMINAL</div>
-                    <div class="credits-right">Actualizado: JULIO 2024</div>
+                    {{-- <div class="credits-left">Fuente: RENIEC - PADRÓN NOMINAL</div>
+                    <div class="credits-right">Actualizado: JULIO 2024</div> --}}
                 </div>
             </div>
         </div>
@@ -406,8 +406,19 @@
                         $('#card3').html('<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
                         $('#card4').html('<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
                     } else if (div == "anal1") {
-                        $('#anal1').html('<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('#' + div).html('<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "anal2") {
+                        $('#' + div).html('<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "anal3") {
+                        $('#' + div).html('<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "anal4") {
+                        $('#' + div).html('<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "anal5") {
+                        $('#' + div).html('<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "anal6") {
+                        $('#' + div).html('<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
                     }
+
                 },
                 success: function(data) {
                     if (div == 'head') {
@@ -417,14 +428,21 @@
                         $('#card4').text(data.card4);
 
                     } else if (div == "anal1") {
+                        anal1 = gbar2(div, data.info, '', 'Pirámide poblacional, según sexo  y grupo etario',
+                            '');
+                    } else if (div == "anal2") {
+                        anal4 = gbar2(div, data.info, '', 'Pirámide poblacional, según sexo  y grupo etario',
+                            '');
+                    } else if (div == "anal3") {
                         var data = {
                             categoria: ['2021', '2022', '2023', '2024', '2025', '2026', '2027', '2028',
                                 '2029', '2030'
                             ],
                             serie: [5, 6, 6.5, 6.2, 6.8, 7, 7.1, 6.9, 6.7, 6.4],
                         }
-                        anal1 = gLinea(div, data, '', 'Población estimada y proyectada, periodo 2021-2030');
-                    } else if (div == "anal2") {
+                        anal3 = gLinea(div, data, '', 'Población estimada y proyectada, periodo 2021-2030');
+
+                    } else if (div == "anal4") {
                         var data = {
                             categoria: ['2021', '2022', '2023', '2024', '2025', '2026', '2027', '2028',
                                 '2029', '2030'
@@ -432,12 +450,6 @@
                             serie: [5, 6, 6.5, 6.2, 6.8, 7, 7.1, 6.9, 6.7, 6.4],
                         }
                         anal2 = gLinea(div, data, '', 'Población estimada de 0 a 5 años, periodo 2021-2030');
-                    } else if (div == "anal3") {
-                        anal3 = gbar2(div, data.info, '', 'Pirámide poblacional, según sexo  y grupo etario',
-                            '');
-                    } else if (div == "anal4") {
-                        anal4 = gbar2(div, data.info, '', 'Pirámide poblacional, según sexo  y grupo etario',
-                            '');
                     } else if (div == "anal5") {
                         gPie(div, data.info, '', '', '');
                         $('.anal5-fuente').html('Fuente: ' + data.reg.fuente);
@@ -1038,7 +1050,7 @@
                 },
                 series: [{
                     name: 'Hombre',
-                    data: data.men, // 
+                    data: data.men, //
                     color: '#00BFAE' // Color turquesa
                 }, {
                     name: 'Mujer',

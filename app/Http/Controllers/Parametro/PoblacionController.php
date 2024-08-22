@@ -193,8 +193,7 @@ class PoblacionController extends Controller
 
                 return response()->json(compact('card1', 'card2', 'card3', 'card4'));
             case 'anal1':
-                $info = PoblacionProyectada::select('anio',DB::raw('sum(total) as gente'))->where('anio', '>', 2020)->groupBy('anio')->get();
-
+                $info = PoblacionProyectada::select('anio', DB::raw('sum(total) as gente'))->where('anio', '>', 2020)->groupBy('anio')->get();
                 return response()->json(compact('info'));
             case 'anal2':
                 $data = PoblacionDiresa::from('par_poblacion_diresa as pd')->select('pd.rango', 'pd.sexo', DB::raw('SUM(pd.total) conteo'))

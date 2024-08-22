@@ -110,7 +110,11 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card2"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Población Ucayali</p>
+                            <p class="mb-0 mt-1 text-truncate">
+                                <a href="#">
+                                    Población Ucayali
+                                </a>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -564,7 +568,10 @@
                     categories: data.categoria,
                     reversed: false,
                     labels: {
-                        step: 1
+                        step: 1,
+                        style: {
+                            fontSize: '10px' // Ajusta el tamaño de la fuente
+                        }
                     },
                     lineWidth: 0, // Desactiva la línea del eje X
                     tickWidth: 0 // Desactiva las marcas de graduación (ticks)
@@ -578,6 +585,9 @@
                         enabled: false,
                         formatter: function() {
                             return Math.abs(this.value) + '';
+                        },
+                        style: {
+                            fontSize: '10px' // Ajusta el tamaño de la fuente
                         }
                     },
 
@@ -872,12 +882,22 @@
                 },
                 xAxis: {
                     categories: data.categoria, //
-                    crosshair: true
+                    crosshair: true,
+                    labels: {
+                        style: {
+                            fontSize: '10px' // Ajusta el tamaño de la fuente
+                        }
+                    }
                 },
                 yAxis: {
                     min: 0,
                     title: {
                         text: null // Puedes agregar un título si lo necesitas
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px' // Ajusta el tamaño de la fuente
+                        }
                     }
                 },
                 tooltip: {
@@ -909,7 +929,7 @@
                 },
                 series: [{
                     name: 'Hombre',
-                    data: data.men, // 
+                    data: data.men, //
                     color: '#00BFAE' // Color turquesa
                 }, {
                     name: 'Mujer',

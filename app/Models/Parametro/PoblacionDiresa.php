@@ -21,7 +21,8 @@ class PoblacionDiresa extends Model
         'ubigeo_id',
         'sexo',
         'edad',
-        'rango',
+        'grupo_etareo',
+        'etapa_vida',
         'total',
     ];
 
