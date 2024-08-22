@@ -22,6 +22,19 @@ class PoblacionProyectadaRepositorio
             return $query->sum('total');
     }
 
+    public static function conteo05($anio, $departamento, $sexo)
+    {
+        $query = PoblacionProyectada::where('anio', $anio)->whereIn('edad', [0, 1, 2, 3, 4, 5]);
+        if ($departamento > '00')
+            $query = $query->where('codigo', $departamento);
+        if ($sexo == 1)
+            return $query->sum('hombre');
+        if ($sexo == 2)
+            return $query->sum('mujer');
+        else
+            return $query->sum('total');
+    }
+
 
     // public static function conteo_provincia($anio, $departamento)
     // {
