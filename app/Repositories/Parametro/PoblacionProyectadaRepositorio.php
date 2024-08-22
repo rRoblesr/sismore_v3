@@ -35,6 +35,25 @@ class PoblacionProyectadaRepositorio
             return $query->sum('total');
     }
 
+    public static function grupoetareo_sexo($anio, $departamento)
+    {
+        $query = PoblacionProyectada::select('grupo_etareo', DB::raw('SUM(hombre) hconteo'), DB::raw('SUM(mujer) mconteo'))
+            ->where('anio', $anio);
+        if ($departamento > '00')
+            $query = $query->where('codigo', $departamento);
+        $query = $query->groupBy('grupo_etareo')->orderBy('grupo_etareo')->get();
+        return $query;
+    }
+
+    public static function conteo_anios($departamento)
+    {
+        $query = PoblacionProyectada::select('anio', DB::raw('SUM(total) conteo'), DB::raw('SUM(hombre) hconteo'), DB::raw('SUM(mujer) mconteo'))->where('anio','>',2020);
+        if ($departamento > '00')
+            $query = $query->where('codigo', $departamento);
+        $query = $query->groupBy('anio')->orderBy('anio')->get();
+        return $query;
+    }
+
 
     // public static function conteo_provincia($anio, $departamento)
     // {

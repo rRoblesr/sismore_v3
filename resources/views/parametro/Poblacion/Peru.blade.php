@@ -40,8 +40,8 @@
         }
 
         /* #anal1 {
-                                                                                    position: relative;
-                                                                                } */
+                                                                                                position: relative;
+                                                                                            } */
 
         .spinner {
             position: absolute;
@@ -434,13 +434,22 @@
                         anal4 = gbar2(div, data.info, '', 'Pirámide poblacional, según sexo  y grupo etario',
                             '');
                     } else if (div == "anal3") {
-                        var data = {
-                            categoria: ['2021', '2022', '2023', '2024', '2025', '2026', '2027', '2028',
-                                '2029', '2030'
+                        // var data = {
+                        //     categoria: ['2021', '2022', '2023', '2024', '2025', '2026', '2027', '2028',
+                        //         '2029', '2030'
+                        //     ],
+                        //     serie: [5, 6, 6.5, 6.2, 6.8, 7, 7.1, 6.9, 6.7, 6.4],
+                        // }
+
+                        var datax = {
+                            "categoria": ["2021", "2022", "2023", "2024", "2025", "2026", "2027", "2028",
+                                "2029", "2030"
                             ],
-                            serie: [5, 6, 6.5, 6.2, 6.8, 7, 7.1, 6.9, 6.7, 6.4],
+                            "serie": [330, 334, 337, 340, 344, 347, 350, 352, 355, 358]
                         }
-                        anal3 = gLinea(div, data, '', 'Población estimada y proyectada, periodo 2021-2030');
+                        console.log(datax);
+                        anal3 = gLinea(div, datax, '',
+                            'Población estimada y proyectada, periodo 2021-2030');
 
                     } else if (div == "anal4") {
                         var data = {
@@ -451,29 +460,29 @@
                         }
                         anal2 = gLinea(div, data, '', 'Población estimada de 0 a 5 años, periodo 2021-2030');
                     } else if (div == "anal5") {
-                        gPie(div, data.info, '', '', '');
-                        $('.anal5-fuente').html('Fuente: ' + data.reg.fuente);
-                        $('.anal5-fecha').html('Actualizado: ' + data.reg.fecha);
+                        // gPie(div, data.info, '', '', '');
+                        // $('.anal5-fuente').html('Fuente: ' + data.reg.fuente);
+                        // $('.anal5-fecha').html('Actualizado: ' + data.reg.fecha);
                     } else if (div == "anal6") {
-                        gAnidadaColumn2(div,
-                            data.info.categoria, data.info.series, '', '', data.info.maxbar
-                        );
-                        $('.anal6-fuente').html('Fuente: ' + data.reg.fuente);
-                        $('.anal6-fecha').html('Actualizado: ' + data.reg.fecha);
+                        // gAnidadaColumn2(div,
+                        //     data.info.categoria, data.info.series, '', '', data.info.maxbar
+                        // );
+                        // $('.anal6-fuente').html('Fuente: ' + data.reg.fuente);
+                        // $('.anal6-fecha').html('Actualizado: ' + data.reg.fecha);
                     } else if (div == "anal7") {
-                        gbar(div, data.info.categoria, data.info.series, '',
-                            'Número de estudiantes extranjeros matriculados en educación básica por sexo regular, según país de nacimiento',
-                            '');
-                        $('.anal7-fuente').html('Fuente: ' + data.reg.fuente);
-                        $('.anal7-fecha').html('Actualizado: ' + data.reg.fecha);
+                        // gbar(div, data.info.categoria, data.info.series, '',
+                        //     'Número de estudiantes extranjeros matriculados en educación básica por sexo regular, según país de nacimiento',
+                        //     '');
+                        // $('.anal7-fuente').html('Fuente: ' + data.reg.fuente);
+                        // $('.anal7-fecha').html('Actualizado: ' + data.reg.fecha);
                     } else if (div == "anal8") {
-                        gbar(div, data.info.categoria, data.info.series, '',
-                            'Número de estudiantes con discapacidad matriculados en educación básica regular por sexo, según tipo de discapacidad',
-                            '');
-                        $('.anal8-fuente').html('Fuente: ' + data.reg.fuente);
-                        $('.anal8-fecha').html('Actualizado: ' + data.reg.fecha);
+                        // gbar(div, data.info.categoria, data.info.series, '',
+                        //     'Número de estudiantes con discapacidad matriculados en educación básica regular por sexo, según tipo de discapacidad',
+                        //     '');
+                        // $('.anal8-fuente').html('Fuente: ' + data.reg.fuente);
+                        // $('.anal8-fecha').html('Actualizado: ' + data.reg.fecha);
                     } else if (div == "tabla1") {
-                        $('#vtabla1').html(data.excel);
+                        // $('#vtabla1').html(data.excel);
                         // $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
                         // $('.vtabla1-fecha').html('Actualizado: ' + data.reg.fecha);
                         // $('#tabla1').DataTable({
@@ -486,19 +495,19 @@
                         //     language: table_language,
                         // });
                     } else if (div == "tabla2") {
-                        provincia_select = 0;
-                        $('#vtabla2').html(data.excel);
-                        $('.vtabla2-fuente').html('Fuente: ' + data.reg.fuente);
-                        $('.vtabla2-fecha').html('Actualizado: ' + data.reg.fecha);
-                        $('#tabla2').DataTable({
-                            responsive: true,
-                            autoWidth: false,
-                            ordered: true,
-                            searching: false,
-                            bPaginate: false,
-                            info: false,
-                            language: table_language,
-                        });
+                        // provincia_select = 0;
+                        // $('#vtabla2').html(data.excel);
+                        // $('.vtabla2-fuente').html('Fuente: ' + data.reg.fuente);
+                        // $('.vtabla2-fecha').html('Actualizado: ' + data.reg.fecha);
+                        // $('#tabla2').DataTable({
+                        //     responsive: true,
+                        //     autoWidth: false,
+                        //     ordered: true,
+                        //     searching: false,
+                        //     bPaginate: false,
+                        //     info: false,
+                        //     language: table_language,
+                        // });
                     }
 
                 },

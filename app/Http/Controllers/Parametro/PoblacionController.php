@@ -55,11 +55,10 @@ class PoblacionController extends Controller
             case 'anal1':
                 $info = PoblacionDiresa::from('par_poblacion_diresa as pd')->join('par_ubigeo as dd', 'dd.id', '=', 'pd.ubigeo_id')
                     ->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia')->select('pp.nombre', DB::raw('SUM(pd.total) conteo'))->groupBy('pp.nombre')->get();
-
                 return response()->json(compact('info'));
             case 'anal2':
-                $data = PoblacionDiresa::from('par_poblacion_diresa as pd')->select('pd.rango', 'pd.sexo', DB::raw('SUM(pd.total) conteo'))
-                    ->whereNotIn('rango', ['6-11 meses', '28 dias', '0-5 meses', 'gestantes', 'nacimientos'])->groupBy('rango', 'sexo')->orderBy('rango')->get();
+                $data = PoblacionDiresa::from('par_poblacion_diresa as pd')->select('pd.grupo_etareo as rango', 'pd.sexo', DB::raw('SUM(pd.total) conteo'))
+                    ->whereNotIn('grupo_etareo', ['28 dias', '0-5 meses', '6-11 meses',  'gestantes', 'nacimientos'])->groupBy('rango', 'sexo')->orderBy('rango')->get();
                 $info['categoria'] = [];
                 $info['men'] = [];
                 $info['women'] = [];
@@ -189,41 +188,41 @@ class PoblacionController extends Controller
                 $card1 = number_format(PoblacionProyectadaRepositorio::conteo($rq->anio, $rq->departamento, 0));
                 $card2 = number_format(PoblacionProyectadaRepositorio::conteo($rq->anio, $rq->departamento, 1));
                 $card3 = number_format(PoblacionProyectadaRepositorio::conteo($rq->anio, $rq->departamento, 2));
-                $card4 = number_format(PoblacionPNRepositorio::conteomesmax($rq->anio,  $rq->departamento, '00', 0, 0));
+                $card4 = number_format(PoblacionProyectadaRepositorio::conteo05($rq->anio, $rq->departamento, 0));
+                // $card4 = number_format(PoblacionPNRepositorio::conteomesmax($rq->anio,  $rq->departamento, '00', 0, 0));
 
                 return response()->json(compact('card1', 'card2', 'card3', 'card4'));
             case 'anal1':
                 $info = PoblacionProyectada::select('anio', DB::raw('sum(total) as gente'))->where('anio', '>', 2020)->groupBy('anio')->get();
                 return response()->json(compact('info'));
             case 'anal2':
-                $data = PoblacionDiresa::from('par_poblacion_diresa as pd')->select('pd.rango', 'pd.sexo', DB::raw('SUM(pd.total) conteo'))
-                    ->whereNotIn('rango', ['6-11 meses', '28 dias', '0-5 meses', 'gestantes', 'nacimientos'])->groupBy('rango', 'sexo')->orderBy('rango')->get();
+                $data = PoblacionProyectadaRepositorio::grupoetareo_sexo($rq->anio, $rq->departamento);
                 $info['categoria'] = [];
                 $info['men'] = [];
                 $info['women'] = [];
-                foreach ($data->unique('rango') as $key => $value) {
-                    $info['categoria'][] = $value->rango == '85 y más' ? '85 - +' : $value->rango;
-                }
                 foreach ($data as $key => $value) {
-                    if ($value->sexo == 'HOMBRE')
-                        $info['men'][] = -(int)$value->conteo;
-                    else
-                        $info['women'][] = (int)$value->conteo;
+                    $info['categoria'][] = $value->grupo_etareo == '80 y más' ? '80 - +' : $value->grupo_etareo;
+                    $info['men'][] = -(int)$value->hconteo;
+                    $info['women'][] = (int)$value->mconteo;
                 }
                 return response()->json(compact('info', 'data'));
             case 'anal3':
-                $info = PoblacionDiresa::from('par_poblacion_diresa as pd')->join('par_ubigeo as dd', 'dd.id', '=', 'pd.ubigeo_id')
-                    ->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia')->select('pp.nombre', DB::raw('SUM(pd.total) conteo'))->groupBy('pp.nombre')->get();
-
+                $data = PoblacionProyectadaRepositorio::conteo_anios($rq->departamento);
+                $info['categoria'] = [];
+                $info['serie'] = [];
+                foreach ($data as $key => $value) {
+                    $info['categoria'][] = ''.$value->anio;
+                    $info['serie'][] = round((int)$value->conteo / 100000);
+                }
                 return response()->json(compact('info'));
             case 'anal4':
-                $data = PoblacionDiresa::from('par_poblacion_diresa as pd')->select('pd.rango', 'pd.sexo', DB::raw('SUM(pd.total) conteo'))
-                    ->whereNotIn('rango', ['6-11 meses', '28 dias', '0-5 meses', 'gestantes', 'nacimientos'])->groupBy('rango', 'sexo')->orderBy('rango')->get();
+                $data = PoblacionDiresa::from('par_poblacion_diresa as pd')->select('pd.grupo_etareo', 'pd.sexo', DB::raw('SUM(pd.total) conteo'))
+                    ->whereNotIn('grupo_etareo', ['6-11 meses', '28 dias', '0-5 meses', 'gestantes', 'nacimientos'])->groupBy('grupo_etareo', 'sexo')->orderBy('grupo_etareo')->get();
                 $info['categoria'] = [];
                 $info['men'] = [];
                 $info['women'] = [];
-                foreach ($data->unique('rango') as $key => $value) {
-                    $info['categoria'][] = $value->rango == '85 y más' ? '85 - +' : $value->rango;
+                foreach ($data->unique('grupo_etareo') as $key => $value) {
+                    $info['categoria'][] = $value->grupo_etareo == '85 y más' ? '85 - +' : $value->grupo_etareo;
                 }
                 foreach ($data as $key => $value) {
                     if ($value->sexo == 'HOMBRE')
