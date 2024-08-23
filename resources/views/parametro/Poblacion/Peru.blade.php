@@ -40,8 +40,8 @@
         }
 
         /* #anal1 {
-                                                                                                position: relative;
-                                                                                            } */
+                                                                                                    position: relative;
+                                                                                                } */
 
         .spinner {
             position: absolute;
@@ -434,21 +434,17 @@
                         anal4 = gbar2(div, data.info, '', 'Pirámide poblacional, según sexo  y grupo etario',
                             '');
                     } else if (div == "anal3") {
-                        // var data = {
-                        //     categoria: ['2021', '2022', '2023', '2024', '2025', '2026', '2027', '2028',
-                        //         '2029', '2030'
-                        //     ],
+                        // var dataxx = {
+                        //     categoria: ['2021', '2022', '2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030'],
                         //     serie: [5, 6, 6.5, 6.2, 6.8, 7, 7.1, 6.9, 6.7, 6.4],
                         // }
 
-                        var datax = {
-                            "categoria": ["2021", "2022", "2023", "2024", "2025", "2026", "2027", "2028",
-                                "2029", "2030"
-                            ],
-                            "serie": [330, 334, 337, 340, 344, 347, 350, 352, 355, 358]
-                        }
-                        console.log(datax);
-                        anal3 = gLinea(div, datax, '',
+                        // var datax = {
+                        //     categoria: ["2021", "2022", "2023", "2024", "2025", "2026", "2027", "2028", "2029", "2030"],
+                        //     serie: [330, 334, 337, 340, 344, 347, 350, 352, 355, 358]
+                        // }
+                        // console.log(datax);
+                        anal3 = gLinea(div, data.info, '',
                             'Población estimada y proyectada, periodo 2021-2030');
 
                     } else if (div == "anal4") {
@@ -656,8 +652,8 @@
                     title: {
                         text: ''
                     },
-                    max: 8,
-                    tickInterval: 1,
+                    // max: 8,
+                    // tickInterval: 1,
                     labels: {
                         style: {
                             fontSize: '10px' // Ajusta el tamaño de la fuente
@@ -677,7 +673,7 @@
                     series: {
                         dataLabels: {
                             enabled: true,
-                            format: '{point.y:.1f} mil',
+                            // format: '{point.y:.1f} mil',
                             style: {
                                 color: '#000'
                             },
@@ -688,7 +684,7 @@
                     }
                 },
                 tooltip: {
-                    pointFormat: '{series.name}: <b>{point.y:.1f} mil</b>'
+                    // pointFormat: '{series.name}: <b>{point.y:.1f} mil</b>'
                 },
                 legend: {
                     enabled: false // Ocultar la leyenda

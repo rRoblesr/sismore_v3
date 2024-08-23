@@ -212,7 +212,7 @@ class PoblacionController extends Controller
                 $info['serie'] = [];
                 foreach ($data as $key => $value) {
                     $info['categoria'][] = ''.$value->anio;
-                    $info['serie'][] = round((int)$value->conteo / 100000);
+                    $info['serie'][] = (int)$value->conteo;
                 }
                 return response()->json(compact('info'));
             case 'anal4':
