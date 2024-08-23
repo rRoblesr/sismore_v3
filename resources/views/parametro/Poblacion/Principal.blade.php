@@ -731,14 +731,15 @@
                         return tooltipText;
                     }
                 },
+                colors:['#5eb9aa', '#ef5350', '#f5bd22', '#ef5350'],
                 series: [{
                     name: 'Hombres',
                     data: data.men,
-                    color: '#66BB6A'
+                    // color: '#66BB6A'
                 }, {
                     name: 'Mujeres',
                     data: data.women,
-                    color: '#388E3C'
+                    // color: '#388E3C'
                 }],
                 credits: {
                     enabled: false

@@ -40,8 +40,8 @@
         }
 
         /* #anal1 {
-                                                                                                                                                                            position: relative;
-                                                                                                                                                                        } */
+                                                                                                                                                                                    position: relative;
+                                                                                                                                                                                } */
 
         .spinner {
             position: absolute;
@@ -788,14 +788,15 @@
                         return tooltipText;
                     }
                 },
+                colors:['#5eb9aa', '#ef5350', '#f5bd22', '#ef5350'],
                 series: [{
                     name: 'Hombres',
                     data: data.men,
-                    color: '#66BB6A'
+                    // color: '#66BB6A'
                 }, {
                     name: 'Mujeres',
                     data: data.women,
-                    color: '#388E3C'
+                    // color: '#388E3C'
                 }],
                 credits: {
                     enabled: false
@@ -1801,9 +1802,9 @@
                 },
 
                 colorAxis: {
-                    min: 0,
-                    max: 30,
-                    //tickPixelInterval: 100,
+                    // min: 150000,
+                    // max: 15000000,
+                    // tickPixelInterval: 5000000,
                     maxColor: "#e6ebf5",
                     minColor: "#003399",
                     /*maxColor: '#F1EEF6',
@@ -1917,12 +1918,30 @@
                 tooltip: {
                     formatter: function() {
                         return '<b>' + this.point.name + '</b><br>' +
-                            'Población: ' + this.point.value;
+                            'Población: ' + Highcharts.numberFormat(this.point.value, 0);
                     }
                 },
-                credits: {
-                    enabled: false
-                },
+
+                // tooltip: {
+                //     backgroundColor: 'none',
+                //     borderWidth: 0,
+                //     shadow: false,
+                //     useHTML: true,
+                //     padding: 0,
+                //     pointFormat: '<span class="f32"><span class="flag ' +
+                //         '{point.properties.hc-key}">' +
+                //         '</span></span> {point.name}<br>' +
+                //         '<span style="font-size:30px">{point.value}/km²</span>',
+                //     positioner: function() {
+                //         return {
+                //             x: 0,
+                //             y: 250
+                //         };
+                //     }
+                // },
+                // credits: {
+                //     enabled: false
+                // },
             });
         }
     </script>

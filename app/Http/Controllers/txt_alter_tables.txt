@@ -2081,4 +2081,113 @@ CREATE TABLE `par_centropobladox` (
 
 
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Highcharts Drilldown Map of Peru</title>
+    <script src="https://code.highcharts.com/highmaps.js"></script>
+    <script src="https://code.highcharts.com/modules/drilldown.js"></script>
+    <script src="https://code.highcharts.com/map-collections/countries/pe/pe-all.js"></script>
+    <!-- Aquí podrías incluir los mapas de detalle para los departamentos -->
+    <script src="https://code.highcharts.com/map-collections/countries/pe/pe-uc.js"></script> <!-- Ucayali por ejemplo -->
+</head>
+<body>
+    <div id="container" style="height: 600px; width: 100%;"></div>
 
+    <script>
+        Highcharts.mapChart('container', {
+            chart: {
+                map: 'countries/pe/pe-all'
+            },
+
+            title: {
+                text: 'Mapa de Perú con Drilldown'
+            },
+
+            subtitle: {
+                text: 'Haga clic en un departamento para ver el detalle'
+            },
+
+            mapNavigation: {
+                enabled: true,
+                buttonOptions: {
+                    verticalAlign: 'top'
+                }
+            },
+
+            colorAxis: {
+                min: 0,
+                max: 1000000,
+                minColor: '#E6E7E8',
+                maxColor: '#005645'
+            },
+
+            series: [{
+                data: [
+                    ['pe-uc', 1000], // Ucayali
+                    ['pe-lo', 5000], // Lima
+                    // Otros departamentos...
+                ],
+                name: 'Población',
+                states: {
+                    hover: {
+                        color: '#BADA55'
+                    }
+                },
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.name}'
+                },
+                point: {
+                    events: {
+                        click: function() {
+                            var drilldownMap = null;
+                            if (this.drilldown) {
+                                drilldownMap = 'countries/pe/' + this.drilldown;
+                            }
+                            this.series.chart.addSeriesAsDrilldown(this, {
+                                name: this.name,
+                                mapData: Highcharts.maps[drilldownMap],
+                                data: [
+                                    // Aquí agregarías los datos detallados del drilldown
+                                    ['pe-uc-ucayali', 500],
+                                    ['pe-uc-coronel-portillo', 300],
+                                    // Más datos...
+                                ],
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '{point.name}'
+                                }
+                            });
+                        }
+                    }
+                }
+            }],
+            
+            drilldown: {
+                series: [],
+                breadcrumbs: {
+                    format: '< Back to {series.name}',
+                    buttonTheme: {
+                        fill: '#f7f7f7',
+                        padding: 8,
+                        stroke: '#cccccc',
+                        'stroke-width': 1
+                    },
+                    floating: true,
+                    position: {
+                        align: 'right'
+                    },
+                    showFullPath: false
+                }
+            },
+
+            credits: {
+                enabled: false
+            }
+        });
+    </script>
+</body>
+</html>

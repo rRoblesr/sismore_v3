@@ -22,7 +22,34 @@ use function PHPUnit\Framework\isNull;
 
 class PoblacionController extends Controller
 {
-    public $pe_states = ['01' => 'pe-am', '02' => 'pe-an', '03' => 'pe-ap', '04' => 'pe-ar', '05' => 'pe-ay', '06' => 'pe-cj', '07' => 'pe-3341', '08' => 'pe-cs', '09' => 'pe-hv', '10' => 'pe-hc', '11' => 'pe-ic', '12' => 'pe-ju', '13' => 'pe-ll', '14' => 'pe-lb', '15' => 'pe-lr', '16' => 'pe-lo', '17' => 'pe-md', '18' => 'pe-mq', '19' => 'pe-pa', '20' => 'pe-pi', '21' => 'pe-cl', '22' => 'pe-sm', '23' => 'pe-ta', '24' => 'pe-tu', '25' => 'pe-uc', '26' => 'pe-145'];
+    public $pe_states = [
+        '01' => 'pe-am',
+        '02' => 'pe-an',
+        '03' => 'pe-ap',
+        '04' => 'pe-ar',
+        '05' => 'pe-ay',
+        '06' => 'pe-cj',
+        '07' => 'pe-3341',
+        '08' => 'pe-cs',
+        '09' => 'pe-hv',
+        '10' => 'pe-hc',
+        '11' => 'pe-ic',
+        '12' => 'pe-ju',
+        '13' => 'pe-ll',
+        '14' => 'pe-lb',
+        '15' => 'pe-lr',
+        '16' => 'pe-lo',
+        '17' => 'pe-md',
+        '18' => 'pe-mq',
+        '19' => 'pe-pa',
+        '20' => 'pe-pi',
+        '21' => 'pe-cl',
+        '22' => 'pe-sm',
+        '23' => 'pe-ta',
+        '24' => 'pe-tu',
+        '25' => 'pe-uc',
+        '26' => 'pe-145'
+    ];
     /* codigo unico de la fuente de importacion */
     public function __construct()
     {
@@ -193,6 +220,7 @@ class PoblacionController extends Controller
                 foreach ($data as $key => $value) {
                     $info[] = [$this->pe_states[$value->codigo], (int)$value->conteo];
                 }
+                // $info[] = ['pe-145', 0];
                 return response()->json(compact('info', 'data'));
 
             case 'anal2':
