@@ -22,7 +22,7 @@ use function PHPUnit\Framework\isNull;
 
 class PoblacionController extends Controller
 {
-    public $pe_states = [1 => 'pe-am',        2 => 'pe-an',        3 => 'pe-ap',        4 => 'pe-ar',        5 => 'pe-ay',        6 => 'pe-cj',        7 => 'pe-3341',        8 => 'pe-cs',        9 => 'pe-hv',        10 => 'pe-hc',        11 => 'pe-ic',        12 => 'pe-ju',        13 => 'pe-ll',        14 => 'pe-lb',        15 => 'pe-lr',        16 => 'pe-lo',        17 => 'pe-md',        18 => 'pe-mq',        19 => 'pe-pa',        20 => 'pe-pi',        21 => 'pe-cl',        22 => 'pe-sm',        23 => 'pe-ta',        24 => 'pe-tu',        25 => 'pe-uc',        26 => 'pe-145'];
+    public $pe_states = ['01' => 'pe-am', '02' => 'pe-an', '03' => 'pe-ap', '04' => 'pe-ar', '05' => 'pe-ay', '06' => 'pe-cj', '07' => 'pe-3341', '08' => 'pe-cs', '09' => 'pe-hv', '10' => 'pe-hc', '11' => 'pe-ic', '12' => 'pe-ju', '13' => 'pe-ll', '14' => 'pe-lb', '15' => 'pe-lr', '16' => 'pe-lo', '17' => 'pe-md', '18' => 'pe-mq', '19' => 'pe-pa', '20' => 'pe-pi', '21' => 'pe-cl', '22' => 'pe-sm', '23' => 'pe-ta', '24' => 'pe-tu', '25' => 'pe-uc', '26' => 'pe-145'];
     /* codigo unico de la fuente de importacion */
     public function __construct()
     {
@@ -185,12 +185,16 @@ class PoblacionController extends Controller
                 $card3 = number_format(PoblacionProyectadaRepositorio::conteo($rq->anio, $rq->departamento, 2));
                 $card4 = number_format(PoblacionProyectadaRepositorio::conteo05($rq->anio, $rq->departamento, 0));
                 // $card4 = number_format(PoblacionPNRepositorio::conteomesmax($rq->anio,  $rq->departamento, '00', 0, 0));
-
                 return response()->json(compact('card1', 'card2', 'card3', 'card4'));
-            case 'anal1':
 
-                $info = PoblacionProyectada::select('anio', DB::raw('sum(total) as gente'))->where('anio', '>', 2020)->groupBy('anio')->get();
-                return response()->json(compact('info'));
+            case 'anal1':
+                $data = PoblacionProyectadaRepositorio::conteo_departamento($rq->anio, 0);
+                $info = [];
+                foreach ($data as $key => $value) {
+                    $info[] = [$this->pe_states[$value->codigo], (int)$value->conteo];
+                }
+                return response()->json(compact('info', 'data'));
+
             case 'anal2':
                 $data = PoblacionProyectadaRepositorio::grupoetareo_sexo($rq->anio, $rq->departamento);
                 $info['categoria'] = [];
@@ -202,15 +206,17 @@ class PoblacionController extends Controller
                     $info['women'][] = (int)$value->mconteo;
                 }
                 return response()->json(compact('info', 'data'));
+
             case 'anal3':
                 $data = PoblacionProyectadaRepositorio::conteo_anios($rq->departamento);
                 $info['categoria'] = [];
                 $info['serie'] = [];
                 foreach ($data as $key => $value) {
-                    $info['categoria'][] = ''.$value->anio;
+                    $info['categoria'][] = '' . $value->anio;
                     $info['serie'][] = (int)$value->conteo;
                 }
                 return response()->json(compact('info'));
+
             case 'anal4':
                 $data = PoblacionProyectadaRepositorio::conteo05_anios($rq->departamento);
                 $info['categoria'] = [];
@@ -220,6 +226,7 @@ class PoblacionController extends Controller
                     $info['serie'][] = (int)$value->conteo;
                 }
                 return response()->json(compact('info'));
+
             case 'tabla1':
                 $base = PoblacionProyectadaRepositorio::conteo_anios_tabla1();
                 $foot = [];
@@ -255,7 +262,6 @@ class PoblacionController extends Controller
                     }
                 }
                 $excel = view('parametro.Poblacion.PeruTabla1', compact('base', 'foot'))->render();
-
                 return response()->json(compact('excel', 'foot', 'base'));
 
             default:

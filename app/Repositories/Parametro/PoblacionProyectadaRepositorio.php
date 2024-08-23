@@ -83,6 +83,11 @@ class PoblacionProyectadaRepositorio
         return $query;
     }
 
+    public static function conteo_departamento($anio, $sexo)
+    {
+        return  $query = PoblacionProyectada::select('codigo', 'departamento', DB::raw('sum(total) as conteo'))->where('anio', $anio)->groupBy('codigo', 'departamento')->get();
+    }
+
 
     // public static function conteo_provincia($anio, $departamento)
     // {

@@ -40,8 +40,8 @@
         }
 
         /* #anal1 {
-                                                                                                    position: relative;
-                                                                                                } */
+                                                                                                                                                                            position: relative;
+                                                                                                                                                                        } */
 
         .spinner {
             position: absolute;
@@ -309,12 +309,13 @@
                     thousandsSep: ","
                 }
             });
+            panelGraficas('anal1');
             cargarCards();
         });
 
         function cargarCards() {
             panelGraficas('head');
-            panelGraficas('anal1');
+            // panelGraficas('anal1');
             panelGraficas('anal2');
             panelGraficas('anal3');
             panelGraficas('anal4');
@@ -364,35 +365,35 @@
                         $('#card4').text(data.card4);
 
                     } else if (div == "anal1") {
-                        var xxx = [
-                            ["pe-lo", 1],
-                            ["pe-uc", 2],
-                            ["pe-ic", 3],
-                            ["pe-ju", 4],
-                            ["pe-tu", 5],
-                            ["pe-ar", 6],
-                            ["pe-cj", 7],
-                            ["pe-ay", 8],
-                            ["pe-ta", 9],
-                            ["pe-am", 10],
-                            ["pe-pi", 11],
-                            ["pe-cs", 12],
-                            ["pe-lb", 13],
-                            ["pe-hv", 14],
-                            ["pe-sm", 15],
-                            ["pe-ll", 16],
-                            ["pe-mq", 17],
-                            ["pe-ap", 18],
-                            ["pe-cl", 19],
-                            ["pe-hc", 20],
-                            ["pe-md", 21],
-                            ["pe-pa", 22],
-                            ["pe-3341", 23],
-                            ["pe-lr", 24],
-                            ["pe-an", 25],
-                            ["pe-145", 26]
-                        ]
-                        anal1 = maps01(div, xxx, '', '');
+                        // var datax = [
+                        //     ["pe-lo", 1],
+                        //     ["pe-uc", 2],
+                        //     ["pe-ic", 3],
+                        //     ["pe-ju", 4],
+                        //     ["pe-tu", 5],
+                        //     ["pe-ar", 6],
+                        //     ["pe-cj", 7],
+                        //     ["pe-ay", 8],
+                        //     ["pe-ta", 9],
+                        //     ["pe-am", 10],
+                        //     ["pe-pi", 11],
+                        //     ["pe-cs", 12],
+                        //     ["pe-lb", 13],
+                        //     ["pe-hv", 14],
+                        //     ["pe-sm", 15],
+                        //     ["pe-ll", 16],
+                        //     ["pe-mq", 17],
+                        //     ["pe-ap", 18],
+                        //     ["pe-cl", 19],
+                        //     ["pe-hc", 20],
+                        //     ["pe-md", 21],
+                        //     ["pe-pa", 22],
+                        //     ["pe-3341", 23],
+                        //     ["pe-lr", 24],
+                        //     ["pe-an", 25],
+                        //     ["pe-145", 26]
+                        // ]
+                        anal1 = maps01(div, data.info, '', '');
                     } else if (div == "anal2") {
                         anal2 = gbar2(div, data.info, '',
                             'Pirámide poblacional, según sexo  y grupo etario', '');
@@ -1774,6 +1775,8 @@
         }
 
         function maps01(div, data, titulo, subtitulo) {
+            let selectedCode = null;
+            let originalColors = {};
             return Highcharts.mapChart(div, {
                 chart: {
                     map: 'countries/pe/pe-all'
@@ -1815,11 +1818,108 @@
                             color: '#BADA55'
                         }
                     },
+                    // dataLabels: {
+                    //     enabled: true,
+                    //     // format: '{point.value}°',
+                    //     format: '{point.name}'
+                    // }
+
                     dataLabels: {
                         enabled: true,
-                        format: '{point.value}°'
+                        // format: '{point.name}: {point.value}',
+                        format: '{point.name}',
+                        color: '#FFFFFF',
+                        style: {
+                            fontSize: '10px',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    point: {
+                        // events: {
+                        //     // click: function() {
+                        //     //     // alert('Departamento: ' + this.name + '\nPoblación: ' + this.value);
+                        //     //     // console.log(this.properties['fips']);
+                        //     //     var codigo=this.properties['fips'].substring(2);
+                        //     //     console.log(codigo);
+                        //     //     $('#vdepartamento').val(codigo);
+                        //     //     cargarCards();
+                        //     // }
+                        //     click: function() {
+                        //         let point = this;
+                        //         let code = point.properties['hc-key'];
+
+                        //         // Remover selección previa
+                        //         if (selectedCode) {
+                        //             this.series.chart.series[0].points.forEach(function(p) {
+                        //                 if (p.properties['hc-key'] === selectedCode) {
+                        //                     p.update({
+                        //                         color: Highcharts.getOptions().colors[
+                        //                             0] // Color original
+                        //                     });
+                        //                 }
+                        //             });
+                        //         }
+
+                        //         // Marcar el punto seleccionado
+                        //         point.update({
+                        //             color: '#FF0000' // Color de selección
+                        //         });
+
+                        //         // Almacenar el código del departamento seleccionado
+                        //         selectedCode = code;
+
+                        //         alert('Código: ' + code + '\nDepartamento: ' + point.name +
+                        //             '\nPoblación: ' + point.value);
+                        //     }
+                        // }
+                        events: {
+                            mouseOver: function() {
+                                if (!originalColors[this.properties['hc-key']]) {
+                                    originalColors[this.properties['hc-key']] = this
+                                        .color; // Almacena el color original
+                                }
+                            },
+                            click: function() {
+                                let point = this;
+                                let code = point.properties['hc-key'];
+
+                                // Remover selección previa
+                                if (selectedCode) {
+                                    this.series.chart.series[0].points.forEach(function(p) {
+                                        if (p.properties['hc-key'] === selectedCode) {
+                                            p.update({
+                                                color: originalColors[selectedCode] ||
+                                                    Highcharts.getOptions().colors[
+                                                        0] // Color original
+                                            });
+                                        }
+                                    });
+                                }
+
+                                // Marcar el punto seleccionado
+                                point.update({
+                                    color: '#FF0000' // Color de selección
+                                });
+
+                                // Almacenar el código del departamento seleccionado
+                                selectedCode = code;
+
+                                // alert('Código: ' + code + '\nDepartamento: ' + point.name +
+                                //     '\nPoblación: ' + point.value);
+
+                                var codigo = this.properties['fips'].substring(2);
+                                $('#vdepartamento').val(codigo);
+                                cargarCards();
+                            }
+                        }
                     }
                 }],
+                tooltip: {
+                    formatter: function() {
+                        return '<b>' + this.point.name + '</b><br>' +
+                            'Población: ' + this.point.value;
+                    }
+                },
                 credits: {
                     enabled: false
                 },
