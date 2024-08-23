@@ -3,17 +3,11 @@
 namespace App\Http\Controllers\Parametro;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Educacion\ImporMatriculaGeneralController;
-use App\Models\Parametro\Anio;
 use App\Models\Parametro\CentroPoblado;
-use App\Models\Parametro\Mes;
 use App\Models\Parametro\PoblacionDiresa;
 use App\Models\Parametro\PoblacionPN;
 use App\Models\Parametro\PoblacionProyectada;
 use App\Models\Parametro\PueblosIndigenas;
-use App\Repositories\Educacion\ImportacionRepositorio;
-use App\Repositories\Educacion\MatriculaGeneralRepositorio;
-use App\Repositories\Parametro\PoblacionPNRepositorio;
 use App\Repositories\Parametro\PoblacionProyectadaRepositorio;
 use App\Repositories\Parametro\UbigeoRepositorio;
 use App\Utilities\Utilitario;
@@ -28,6 +22,7 @@ use function PHPUnit\Framework\isNull;
 
 class PoblacionController extends Controller
 {
+    public $pe_states = [1 => 'pe-am',        2 => 'pe-an',        3 => 'pe-ap',        4 => 'pe-ar',        5 => 'pe-ay',        6 => 'pe-cj',        7 => 'pe-3341',        8 => 'pe-cs',        9 => 'pe-hv',        10 => 'pe-hc',        11 => 'pe-ic',        12 => 'pe-ju',        13 => 'pe-ll',        14 => 'pe-lb',        15 => 'pe-lr',        16 => 'pe-lo',        17 => 'pe-md',        18 => 'pe-mq',        19 => 'pe-pa',        20 => 'pe-pi',        21 => 'pe-cl',        22 => 'pe-sm',        23 => 'pe-ta',        24 => 'pe-tu',        25 => 'pe-uc',        26 => 'pe-145'];
     /* codigo unico de la fuente de importacion */
     public function __construct()
     {
@@ -193,6 +188,7 @@ class PoblacionController extends Controller
 
                 return response()->json(compact('card1', 'card2', 'card3', 'card4'));
             case 'anal1':
+
                 $info = PoblacionProyectada::select('anio', DB::raw('sum(total) as gente'))->where('anio', '>', 2020)->groupBy('anio')->get();
                 return response()->json(compact('info'));
             case 'anal2':
@@ -211,119 +207,54 @@ class PoblacionController extends Controller
                 $info['categoria'] = [];
                 $info['serie'] = [];
                 foreach ($data as $key => $value) {
-                    $info['categoria'][] = ''.$value->anio;
-                    $info['serie'][] = round((int)$value->conteo / 100000);
+                    $info['categoria'][] = '' . $value->anio;
+                    $info['serie'][] = (int)$value->conteo;
                 }
                 return response()->json(compact('info'));
             case 'anal4':
-                $data = PoblacionDiresa::from('par_poblacion_diresa as pd')->select('pd.grupo_etareo', 'pd.sexo', DB::raw('SUM(pd.total) conteo'))
-                    ->whereNotIn('grupo_etareo', ['6-11 meses', '28 dias', '0-5 meses', 'gestantes', 'nacimientos'])->groupBy('grupo_etareo', 'sexo')->orderBy('grupo_etareo')->get();
+                $data = PoblacionProyectadaRepositorio::conteo05_anios($rq->departamento);
                 $info['categoria'] = [];
-                $info['men'] = [];
-                $info['women'] = [];
-                foreach ($data->unique('grupo_etareo') as $key => $value) {
-                    $info['categoria'][] = $value->grupo_etareo == '85 y más' ? '85 - +' : $value->grupo_etareo;
-                }
+                $info['serie'] = [];
                 foreach ($data as $key => $value) {
-                    if ($value->sexo == 'HOMBRE')
-                        $info['men'][] = -(int)$value->conteo;
-                    else
-                        $info['women'][] = (int)$value->conteo;
+                    $info['categoria'][] = '' . $value->anio;
+                    $info['serie'][] = (int)$value->conteo;
                 }
-                return response()->json(compact('info', 'data'));
-            case 'anal5':
-                // $data = PoblacionPN::from('par_poblacdddion_padron_nominal as pn')->join('par_sexo as s', 's.id', '=', 'pn.sexo_id')
-                //     ->select('pn.anio', 's.nombre as sexo', DB::raw('sum(0a+1a+2a+3a+4a+5a) as conteo'))->where('anio', '>', 2018)->groupBy('anio', 'sexo')->get();
-                $anio = date('Y');
-                $data = PoblacionPN::from('par_poblacion_padron_nominal as pn')
-                    ->join('par_sexo as s', 's.id', '=', 'pn.sexo_id')
-                    ->select('pn.anio', 's.nombre as sexo', DB::raw('sum(0a+1a+2a+3a+4a+5a) as conteo'))
-                    ->where(function ($q) use ($anio) {
-                        $q->where('pn.anio', '<', $anio)->where('pn.mes_id', '=', 12);
-                    })
-                    ->orWhere(function ($q) use ($anio) {
-                        $q->where('pn.anio', '=', $anio)->where('pn.mes_id', '=', PoblacionPN::where('anio', $anio)->max('mes_id'));
-                    })
-                    ->groupBy('anio', 'sexo')->get();
-                $info['categoria'] = [];
-                $info['men'] = [];
-                $info['women'] = [];
-                $rango = '';
-                foreach ($data->unique('anio') as $value) {
-                    $info['categoria'][] = $value->anio;
-                }
-                foreach ($info['categoria'] as $key => $value) {
-                    if ($key == 0) $rango .= $value . ' - ';
-                    if ($key == count($info['categoria']) - 1) $rango .= $value;
-                }
-                foreach ($data as $key => $value) {
-                    if ($value->sexo == 'HOMBRE')
-                        $info['men'][] = (int)$value->conteo;
-                    else
-                        $info['women'][] = (int)$value->conteo;
-                }
-                return response()->json(compact('info', 'rango', 'data'));
-            case 'anal6':
-                $data = PoblacionPN::from('par_poblacion_padron_nominal as pn')->join('par_sexo as s', 's.id', '=', 'pn.sexo_id')
-                    ->select('pn.anio', 's.nombre as sexo', DB::raw('sum(0a) as c0a'), DB::raw('sum(1a) as c1a'), DB::raw('sum(2a) as c2a'), DB::raw('sum(3a) as c3a'), DB::raw('sum(4a) as c4a'), DB::raw('sum(5a) as c5a'))
-                    ->where('anio', 2024)->where('mes_id', 5)->groupBy('anio', 'sexo')->get();
-                $info['categoria'] = ['<1A', '1A', '2A', '3A', '4A', '5A'];
-                $info['men'] = [(int)$data[0]->c0a, (int)$data[0]->c1a, (int)$data[0]->c2a, (int)$data[0]->c3a, (int)$data[0]->c4a, (int)$data[0]->c5a];
-                $info['women'] = [(int)$data[1]->c0a, (int)$data[1]->c1a, (int)$data[1]->c2a, (int)$data[1]->c3a, (int)$data[1]->c4a, (int)$data[1]->c5a];
-
-                return response()->json(compact('info', 'data'));
-
+                return response()->json(compact('info'));
             case 'tabla1':
-                $base = PoblacionPN::from('par_poblacion_padron_nominal as pn')->join('par_ubigeo as u', 'u.id', '=', 'pn.ubigeo_id')
-                    ->select(
-                        'pn.anio',
-                        'u.nombre as distrito',
-                        DB::raw('sum(0a+1a+2a+3a+4a+5a) as total'),
-                        DB::raw('sum(IF(sexo_id=1,0a+1a+2a+3a+4a+5a,0)) as th'),
-                        DB::raw('sum(IF(sexo_id=2,0a+1a+2a+3a+4a+5a,0)) as tm'),
-                        DB::raw('sum(0a) as c0a'),
-                        DB::raw('sum(1a) as c1a'),
-                        DB::raw('sum(2a) as c2a'),
-                        DB::raw('sum(3a) as c3a'),
-                        DB::raw('sum(4a) as c4a'),
-                        DB::raw('sum(5a) as c5a'),
-                        DB::raw('sum(28dias) as ee1'),
-                        DB::raw('sum(0_5meses) as ee2'),
-                        DB::raw('sum(6_11meses) as ee3')
-                    )
-                    ->where('anio', 2024)->where('mes_id', 5)->groupBy('anio', 'distrito')->get();
-
+                $base = PoblacionProyectadaRepositorio::conteo_anios_tabla1();
                 $foot = [];
                 if ($base->count() > 0) {
                     $foot = clone $base[0];
                     $foot->total = 0;
-                    $foot->th = 0;
-                    $foot->tm = 0;
-                    $foot->c0a = 0;
-                    $foot->c1a = 0;
-                    $foot->c2a = 0;
-                    $foot->c3a = 0;
-                    $foot->c4a = 0;
-                    $foot->c5a = 0;
-                    $foot->ee1 = 0;
-                    $foot->ee2 = 0;
-                    $foot->ee3 = 0;
+                    $foot->c2024h = 0;
+                    $foot->c2024m = 0;
+                    $foot->c2021 = 0;
+                    $foot->c2022 = 0;
+                    $foot->c2023 = 0;
+                    $foot->c2024 = 0;
+                    $foot->c2025 = 0;
+                    $foot->c2026 = 0;
+                    $foot->c2027 = 0;
+                    $foot->c2028 = 0;
+                    $foot->c2029 = 0;
+                    $foot->c2030 = 0;
                     foreach ($base as $key => $value) {
                         $foot->total += $value->total;
-                        $foot->th += $value->th;
-                        $foot->tm += $value->tm;
-                        $foot->c0a += $value->c0a;
-                        $foot->c1a += $value->c1a;
-                        $foot->c2a += $value->c2a;
-                        $foot->c3a += $value->c3a;
-                        $foot->c4a += $value->c4a;
-                        $foot->c5a += $value->c5a;
-                        $foot->ee1 += $value->ee1;
-                        $foot->ee2 += $value->ee2;
-                        $foot->ee3 += $value->ee3;
+                        $foot->c2024h += $value->c2024h;
+                        $foot->c2024m += $value->c2024m;
+                        $foot->c2021 += $value->c2021;
+                        $foot->c2022 += $value->c2022;
+                        $foot->c2023 += $value->c2023;
+                        $foot->c2024 += $value->c2024;
+                        $foot->c2025 += $value->c2025;
+                        $foot->c2026 += $value->c2026;
+                        $foot->c2027 += $value->c2027;
+                        $foot->c2028 += $value->c2028;
+                        $foot->c2029 += $value->c2029;
+                        $foot->c2030 += $value->c2030;
                     }
                 }
-                $excel = view('parametro.Poblacion.PrincipalTabla1', compact('base', 'foot'))->render();
+                $excel = view('parametro.Poblacion.PeruTabla1', compact('base', 'foot'))->render();
 
                 return response()->json(compact('excel', 'foot', 'base'));
 

@@ -40,8 +40,8 @@
         }
 
         /* #anal1 {
-                                                                                                position: relative;
-                                                                                            } */
+                                                                                                                                                                                        position: relative;
+                                                                                                                                                                                    } */
 
         .spinner {
             position: absolute;
@@ -269,39 +269,6 @@
     </div>
 
     <div class="row">
-        <div class="col-lg-6">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
-                </div>
-                <div class="card-body p-0">
-                    <figure class="highcharts-figure p-0 m-0">
-                        <div id="anal5" style="height: 20rem"></div>
-                    </figure>
-                    <div class="credits-left">Fuente: RENIEC - PADRÓN NOMINAL</div>
-                    <div class="credits-right">Actualizado: JULIO 2024</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
-                </div>
-                <div class="card-body p-0">
-                    <figure class="highcharts-figure p-0 m-0">
-                        <div id="anal6" style="height: 20rem"></div>
-                    </figure>
-                    <div class="credits-left">Fuente: RENIEC - PADRÓN NOMINAL</div>
-                    <div class="credits-right">Actualizado: JULIO 2024</div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-
-    <div class="row">
         <div class="col-lg-12">
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
@@ -310,7 +277,7 @@
                                 class="fa fa-file-excel"></i> Descargar</button>
                     </div>
                     <h3 class="text-black font-14">
-                        Población del Padrón Nominal de niñas y niños menos de 6 años por distritos, según sexo y edades
+                        Población estimada por departamento, segùn sexo y rango de edades
                     </h3>
                 </div>
                 <div class="card-body pt-0 pb-0">
@@ -324,43 +291,12 @@
             </div>
         </div>
     </div>
-
-
-    <!-- Bootstrap modal -->
-    <div id="modal_centropoblado" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true" style="display: none;">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="text-black font-14">
-                        Número de estudiantes matriculados en educación básica regular por
-                        centro poblado, según nivel educativo
-                    </h5>
-                    &nbsp;
-                    <button type="button" class="btn btn-success btn-xs text-right" onclick="descargar3()">
-                        <i class="fa fa-file-excel"></i> Descargar</button>
-
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="table-responsive" id="vtabla3">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Bootstrap modal -->
 @endsection
 
 @section('js')
     <script type="text/javascript">
         var distrito_select = 0;
-        var distrito_select = 0;
+        // var distrito_select = 0;
         var anal1;
         var anal2;
         var anal3;
@@ -382,10 +318,7 @@
             panelGraficas('anal2');
             panelGraficas('anal3');
             panelGraficas('anal4');
-            panelGraficas('anal5');
-            panelGraficas('anal6');
             panelGraficas('tabla1');
-            panelGraficas('tabla2');
         }
 
         function panelGraficas(div) {
@@ -417,6 +350,9 @@
                         $('#' + div).html('<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
                     } else if (div == "anal6") {
                         $('#' + div).html('<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "tabla1") {
+                        $('#v' + div).html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
                     }
 
                 },
@@ -428,61 +364,46 @@
                         $('#card4').text(data.card4);
 
                     } else if (div == "anal1") {
-                        anal1 = gbar2(div, data.info, '', 'Pirámide poblacional, según sexo  y grupo etario',
-                            '');
+                        var xxx = [
+                            ["pe-lo", 1],
+                            ["pe-uc", 2],
+                            ["pe-ic", 3],
+                            ["pe-ju", 4],
+                            ["pe-tu", 5],
+                            ["pe-ar", 6],
+                            ["pe-cj", 7],
+                            ["pe-ay", 8],
+                            ["pe-ta", 9],
+                            ["pe-am", 10],
+                            ["pe-pi", 11],
+                            ["pe-cs", 12],
+                            ["pe-lb", 13],
+                            ["pe-hv", 14],
+                            ["pe-sm", 15],
+                            ["pe-ll", 16],
+                            ["pe-mq", 17],
+                            ["pe-ap", 18],
+                            ["pe-cl", 19],
+                            ["pe-hc", 20],
+                            ["pe-md", 21],
+                            ["pe-pa", 22],
+                            ["pe-3341", 23],
+                            ["pe-lr", 24],
+                            ["pe-an", 25],
+                            ["pe-145", 26]
+                        ]
+                        anal1 = maps01(div, xxx, '', '');
                     } else if (div == "anal2") {
-                        anal4 = gbar2(div, data.info, '', 'Pirámide poblacional, según sexo  y grupo etario',
-                            '');
+                        anal2 = gbar2(div, data.info, '',
+                            'Pirámide poblacional, según sexo  y grupo etario', '');
                     } else if (div == "anal3") {
-                        // var data = {
-                        //     categoria: ['2021', '2022', '2023', '2024', '2025', '2026', '2027', '2028',
-                        //         '2029', '2030'
-                        //     ],
-                        //     serie: [5, 6, 6.5, 6.2, 6.8, 7, 7.1, 6.9, 6.7, 6.4],
-                        // }
-
-                        var datax = {
-                            "categoria": ["2021", "2022", "2023", "2024", "2025", "2026", "2027", "2028",
-                                "2029", "2030"
-                            ],
-                            "serie": [330, 334, 337, 340, 344, 347, 350, 352, 355, 358]
-                        }
-                        console.log(datax);
-                        anal3 = gLinea(div, datax, '',
+                        anal3 = gLinea(div, data.info, '',
                             'Población estimada y proyectada, periodo 2021-2030');
-
                     } else if (div == "anal4") {
-                        var data = {
-                            categoria: ['2021', '2022', '2023', '2024', '2025', '2026', '2027', '2028',
-                                '2029', '2030'
-                            ],
-                            serie: [5, 6, 6.5, 6.2, 6.8, 7, 7.1, 6.9, 6.7, 6.4],
-                        }
-                        anal2 = gLinea(div, data, '', 'Población estimada de 0 a 5 años, periodo 2021-2030');
-                    } else if (div == "anal5") {
-                        // gPie(div, data.info, '', '', '');
-                        // $('.anal5-fuente').html('Fuente: ' + data.reg.fuente);
-                        // $('.anal5-fecha').html('Actualizado: ' + data.reg.fecha);
-                    } else if (div == "anal6") {
-                        // gAnidadaColumn2(div,
-                        //     data.info.categoria, data.info.series, '', '', data.info.maxbar
-                        // );
-                        // $('.anal6-fuente').html('Fuente: ' + data.reg.fuente);
-                        // $('.anal6-fecha').html('Actualizado: ' + data.reg.fecha);
-                    } else if (div == "anal7") {
-                        // gbar(div, data.info.categoria, data.info.series, '',
-                        //     'Número de estudiantes extranjeros matriculados en educación básica por sexo regular, según país de nacimiento',
-                        //     '');
-                        // $('.anal7-fuente').html('Fuente: ' + data.reg.fuente);
-                        // $('.anal7-fecha').html('Actualizado: ' + data.reg.fecha);
-                    } else if (div == "anal8") {
-                        // gbar(div, data.info.categoria, data.info.series, '',
-                        //     'Número de estudiantes con discapacidad matriculados en educación básica regular por sexo, según tipo de discapacidad',
-                        //     '');
-                        // $('.anal8-fuente').html('Fuente: ' + data.reg.fuente);
-                        // $('.anal8-fecha').html('Actualizado: ' + data.reg.fecha);
+                        anal4 = gLinea(div, data.info, '',
+                            'Población estimada de 0 a 5 años, periodo 2021-2030');
                     } else if (div == "tabla1") {
-                        // $('#vtabla1').html(data.excel);
+                        $('#vtabla1').html(data.excel);
                         // $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
                         // $('.vtabla1-fecha').html('Actualizado: ' + data.reg.fecha);
                         // $('#tabla1').DataTable({
@@ -494,22 +415,7 @@
                         //     info: false,
                         //     language: table_language,
                         // });
-                    } else if (div == "tabla2") {
-                        // provincia_select = 0;
-                        // $('#vtabla2').html(data.excel);
-                        // $('.vtabla2-fuente').html('Fuente: ' + data.reg.fuente);
-                        // $('.vtabla2-fecha').html('Actualizado: ' + data.reg.fecha);
-                        // $('#tabla2').DataTable({
-                        //     responsive: true,
-                        //     autoWidth: false,
-                        //     ordered: true,
-                        //     searching: false,
-                        //     bPaginate: false,
-                        //     info: false,
-                        //     language: table_language,
-                        // });
                     }
-
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");
@@ -656,8 +562,8 @@
                     title: {
                         text: ''
                     },
-                    max: 8,
-                    tickInterval: 1,
+                    // max: 8,
+                    // tickInterval: 1,
                     labels: {
                         style: {
                             fontSize: '10px' // Ajusta el tamaño de la fuente
@@ -677,7 +583,7 @@
                     series: {
                         dataLabels: {
                             enabled: true,
-                            format: '{point.y:.1f} mil',
+                            // format: '{point.y:.1f}',
                             style: {
                                 color: '#000'
                             },
@@ -688,7 +594,7 @@
                     }
                 },
                 tooltip: {
-                    pointFormat: '{series.name}: <b>{point.y:.1f} mil</b>'
+                    // pointFormat: '{series.name}: <b>{point.y:.1f}</b>'
                 },
                 legend: {
                     enabled: false // Ocultar la leyenda
@@ -1856,13 +1762,73 @@
                 credits: false,
             });
         }
+
+        function maps01(div, data, titulo, subtitulo) {
+            return Highcharts.mapChart(div, {
+                chart: {
+                    map: 'countries/pe/pe-all'
+                },
+
+                title: {
+                    text: titulo, //'Reportes de Mapa'
+                },
+
+                subtitle: {
+                    text: subtitulo, //'Un descripción de reportes'
+                    style: {
+                        fontSize: '11px'
+                    }
+                },
+
+                mapNavigation: {
+                    enabled: true,
+                    buttonOptions: {
+                        verticalAlign: 'top'
+                    }
+                },
+
+                colorAxis: {
+                    min: 0,
+                    max: 30,
+                    //tickPixelInterval: 100,
+                    maxColor: "#e6ebf5",
+                    minColor: "#003399",
+                    /*maxColor: '#F1EEF6',
+                    minColor: '#900037'*/
+                },
+
+                series: [{
+                    data: data,
+                    name: 'Población',
+                    states: {
+                        hover: {
+                            color: '#BADA55'
+                        }
+                    },
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.value}°'
+                    }
+                }],
+                credits: {
+                    enabled: false
+                },
+            });
+        }
     </script>
+
+    {{-- jrmt-mapero --}}
+    <script src="https://code.highcharts.com/maps/highmaps.js"></script>
+    <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/mapdata/countries/pe/pe-all.js"></script>
 
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
+
     <!-- optional -->
     <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 

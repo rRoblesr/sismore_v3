@@ -47,10 +47,39 @@ class PoblacionProyectadaRepositorio
 
     public static function conteo_anios($departamento)
     {
-        $query = PoblacionProyectada::select('anio', DB::raw('SUM(total) conteo'), DB::raw('SUM(hombre) hconteo'), DB::raw('SUM(mujer) mconteo'))->where('anio','>',2020);
+        $query = PoblacionProyectada::select('anio', DB::raw('SUM(total) conteo'), DB::raw('SUM(hombre) hconteo'), DB::raw('SUM(mujer) mconteo'))->where('anio', '>', 2020);
         if ($departamento > '00')
             $query = $query->where('codigo', $departamento);
         $query = $query->groupBy('anio')->orderBy('anio')->get();
+        return $query;
+    }
+
+    public static function conteo05_anios($departamento)
+    {
+        $query = PoblacionProyectada::select('anio', DB::raw('SUM(total) conteo'), DB::raw('SUM(hombre) hconteo'), DB::raw('SUM(mujer) mconteo'))->where('anio', '>', 2020)->whereIn('edad', [0, 1, 2, 3, 4, 5]);
+        if ($departamento > '00')
+            $query = $query->where('codigo', $departamento);
+        $query = $query->groupBy('anio')->orderBy('anio')->get();
+        return $query;
+    }
+
+    public static function conteo_anios_tabla1()
+    {
+        $query = PoblacionProyectada::select(
+            'departamento',
+            DB::raw('sum(IF(anio=2024,total,0)) as c2024h'),
+            DB::raw('sum(IF(anio=2024,total,0)) as c2024m'),
+            DB::raw('sum(IF(anio=2021,total,0)) as c2021'),
+            DB::raw('sum(IF(anio=2022,total,0)) as c2022'),
+            DB::raw('sum(IF(anio=2023,total,0)) as c2023'),
+            DB::raw('sum(IF(anio=2024,total,0)) as c2024'),
+            DB::raw('sum(IF(anio=2025,total,0)) as c2025'),
+            DB::raw('sum(IF(anio=2026,total,0)) as c2026'),
+            DB::raw('sum(IF(anio=2027,total,0)) as c2027'),
+            DB::raw('sum(IF(anio=2028,total,0)) as c2028'),
+            DB::raw('sum(IF(anio=2029,total,0)) as c2029'),
+            DB::raw('sum(IF(anio=2030,total,0)) as c2030')
+        )->where('anio', '>', 2020)->groupBy('departamento')->get();
         return $query;
     }
 
