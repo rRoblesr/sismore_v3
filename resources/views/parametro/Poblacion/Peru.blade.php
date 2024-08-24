@@ -665,7 +665,7 @@
                             borderRadius: 0, // Opcional: elimina cualquier borde redondeado
                             padding: 0, // Opcional: elimina cualquier relleno
                             style: {
-                                color: 'black', // Color del texto
+                                color: 'white', // Color del texto
                                 textOutline: 'none' // Elimina el contorno del texto
                             }
                         }
@@ -788,7 +788,7 @@
                         return tooltipText;
                     }
                 },
-                colors:['#5eb9aa', '#ef5350', '#f5bd22', '#ef5350'],
+                colors:['#5eb9a0', '#ef5350', '#f5bd22', '#ef5350'],
                 series: [{
                     name: 'Hombres',
                     data: data.men,
@@ -1835,6 +1835,7 @@
                             fontWeight: 'bold'
                         }
                     },
+                    legend:{enabled:false,},
                     point: {
                         // events: {
                         //     // click: function() {
