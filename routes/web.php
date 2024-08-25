@@ -1313,7 +1313,7 @@ Route::get('/recursos/highcharts', function () {
 });
 
 Route::get('/recursos/pruebas', function () {
-    return view('prueba/prueba9');
+    return view('prueba/prueba10');
 });
 
 Route::get('/recursos/correo', function () {

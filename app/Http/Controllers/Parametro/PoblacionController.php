@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Parametro;
 
 use App\Http\Controllers\Controller;
 use App\Models\Parametro\CentroPoblado;
+use App\Models\Parametro\EtapaVida;
 use App\Models\Parametro\PoblacionDiresa;
 use App\Models\Parametro\PoblacionPN;
 use App\Models\Parametro\PoblacionProyectada;
@@ -68,8 +69,8 @@ class PoblacionController extends Controller
     {
         switch ($rq->div) {
             case 'head':
-                $card1 = number_format(PoblacionProyectadaRepositorio::conteo($rq->anio, '', 0));
-                $card2 = number_format(PoblacionProyectadaRepositorio::conteo($rq->anio, '25', 0));
+                $card1 = number_format(PoblacionProyectadaRepositorio::conteo($rq->anio, '', 0, 0));
+                $card2 = number_format(PoblacionProyectadaRepositorio::conteo($rq->anio, '25', 0, 0));
                 $card3 = number_format(CentroPoblado::count());
                 $card4 = number_format(PueblosIndigenas::count());
 
@@ -199,18 +200,20 @@ class PoblacionController extends Controller
     {
         $anios = PoblacionProyectada::distinct()->select('anio')->get();
         $departamento = PoblacionProyectada::distinct()->select('codigo', 'departamento')->where('anio', date('Y'))->get();
+        $etapavida = EtapaVida::all();
 
-        return view('parametro.Poblacion.Peru', compact('anios',  'departamento'));
+        return view('parametro.Poblacion.Peru', compact('anios',  'departamento', 'etapavida'));
     }
 
     public function poblacionprincipalperutabla(Request $rq)
     {
         switch ($rq->div) {
             case 'head':
-                $card1 = number_format(PoblacionProyectadaRepositorio::conteo($rq->anio, $rq->departamento, 0));
-                $card2 = number_format(PoblacionProyectadaRepositorio::conteo($rq->anio, $rq->departamento, 1));
-                $card3 = number_format(PoblacionProyectadaRepositorio::conteo($rq->anio, $rq->departamento, 2));
-                $card4 = number_format(PoblacionProyectadaRepositorio::conteo05($rq->anio, $rq->departamento, 0));
+                $card1 = number_format(PoblacionProyectadaRepositorio::conteo($rq->anio, $rq->departamento, $rq->etapavida, $rq->sexo));
+                $card2 = number_format(PoblacionProyectadaRepositorio::conteo($rq->anio, $rq->departamento, $rq->etapavida, 1));
+                $card3 = number_format(PoblacionProyectadaRepositorio::conteo($rq->anio, $rq->departamento, $rq->etapavida, 2));
+                $card4 = number_format(PoblacionProyectadaRepositorio::conteo05($rq->anio, $rq->departamento, $rq->etapavida, $rq->sexo));
+
                 // $card4 = number_format(PoblacionPNRepositorio::conteomesmax($rq->anio,  $rq->departamento, '00', 0, 0));
                 return response()->json(compact('card1', 'card2', 'card3', 'card4'));
 
@@ -224,7 +227,7 @@ class PoblacionController extends Controller
                 return response()->json(compact('info', 'data'));
 
             case 'anal2':
-                $data = PoblacionProyectadaRepositorio::grupoetareo_sexo($rq->anio, $rq->departamento);
+                $data = PoblacionProyectadaRepositorio::grupoetareo_sexo($rq->anio, $rq->departamento, $rq->etapavida);
                 $info['categoria'] = [];
                 $info['men'] = [];
                 $info['women'] = [];

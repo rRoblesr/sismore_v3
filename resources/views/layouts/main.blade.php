@@ -383,8 +383,8 @@
                             <!-- <span class="logo-lg-text-dark">M</span> -->
                             {{-- <img src="{{ asset('/') }}public/assets/images/logo-sm.png" alt=""
                                 height="25"> --}}
-                            <img src="{{ asset('/') }}public/assets/images/logo-sm-blanco.png" alt=""
-                                height="30">
+                            <img src="{{ asset('/') }}public/assets/images/logo-sm-ico.png" alt=""
+                                height="50">
                         </span>
                     </a>
                 </div>
@@ -402,7 +402,7 @@
                         <form class="app-search" style="max-width: 600px;">
                             <div class="app-search-box">
                                 <span style="color:white; font-size: 20px;">
-                                    
+
                                     <strong>MODULO {{ session()->has('sistema_nombre') ? session('sistema_nombre') : 'SIN MODULO' }}</strong>
                                 </span>
                             </div>

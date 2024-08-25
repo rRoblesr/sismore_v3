@@ -39,9 +39,9 @@
             color: #666;
         }
 
-        /* #anal1 {
-                                                                                                                                                                                    position: relative;
-                                                                                                                                                                                } */
+        /* #anal1 { */
+        /* position: relative; */
+        /* } */
 
         .spinner {
             position: absolute;
@@ -50,6 +50,25 @@
             transform: translate(-50%, -50%);
             font-size: 2em;
             /* Ajusta el tamaño según sea necesario */
+        }
+
+        /*  */
+        .custom-select-container {
+            position: relative;
+        }
+
+        .custom-select-container label {
+            position: absolute;
+            top: -7px;
+            left: 10px;
+            background-color: white;
+            padding: 0 5px;
+            font-size: 10px;
+            color: #0d6efd;
+        }
+
+        .custom-select-container select {
+            /* padding-left: 10px; */
         }
     </style>
 @endsection
@@ -65,7 +84,7 @@
                         <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
                             title='ACTUALIZAR'><i class=" fas fa-history"></i> Actualizar</button>
                         {{-- @if ($registrador > 0)
-                        <button class="btn btn-xs btn-primary waves-effect waves-light" data-toggle="modal"
+                        <button class="btn btn-xs btn-primary waves-effect waves-light" data-toggle="moda   l"
                             data-target="#modal_form" title="Agregar Actas" onclick="abrirnuevo()"> <i
                                 class="fa fa-file"></i>
                             Nuevo</button> &nbsp;
@@ -76,35 +95,56 @@
                 </div>
                 <div class="card-body pb-0">
                     <div class="row">
-                        <div class="col-lg-7 col-md-4 col-sm-4">
+                        <div class="col-lg-5 col-md-4 col-sm-4">
                             <h4 class="page-title font-12">Fuente: INEI</h4>
                         </div>
                         <div class="col-lg-1 col-md-1 col-sm-1  ">
-                            <select id="vanio" name="vanio" class="form-control form-control-sm"
-                                onchange="cargarCards();">
-                                <option value="0">AÑO</option>
-                                @foreach ($anios as $item)
-                                    <option value="{{ $item->anio }}" {{ $item->anio == date('Y') ? 'selected' : '' }}>
-                                        {{ $item->anio }}</option>
-                                @endforeach
-                            </select>
+                            <div class="custom-select-container">
+                                <label for="vanio">AÑO</label>
+                                <select id="vanio" name="vanio" class="form-control form-control-sm"
+                                    onchange="cargarCards();">
+                                    @foreach ($anios as $item)
+                                        <option value="{{ $item->anio }}"
+                                            {{ $item->anio == date('Y') ? 'selected' : '' }}>
+                                            {{ $item->anio }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-2">
-                            <select id="vdepartamento" name="vdepartamento" class="form-control form-control-sm"
-                                onchange="cargarCards();">
-                                <option value="0">DEPARTAMENTO</option>
-                                @foreach ($departamento as $item)
-                                    <option value="{{ $item->codigo }}"> {{ $item->departamento }}</option>
-                                @endforeach
-                            </select>
+                            <div class="custom-select-container">
+                                <label for="vdepartamento" class="">DEPARTAMENTO</label>
+                                <select id="vdepartamento" name="vdepartamento" class="form-control form-control-sm"
+                                    onchange="cargarCards();">
+                                    <option value="00"></option>
+                                    @foreach ($departamento as $item)
+                                        <option value="{{ $item->codigo }}"> {{ $item->departamento }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-2">
-                            <select id="vsexo" name="vsexo" class="form-control form-control-sm"
-                                onchange="cargarCards();">
-                                <option value="0">SEXO</option>
-                                <option value="1">HOMBRE</option>
-                                <option value="2">MUJER</option>
-                            </select>
+                            <div class="custom-select-container">
+                                <label for="vetapavida" class="">ETAPA DE VIDA</label>
+                                <select id="vetapavida" name="vetapavida" class="form-control form-control-sm"
+                                    onchange="cargarCards();">
+                                    <option value="0"></option>
+                                    @foreach ($etapavida as $item)
+                                        <option value="{{ $item->id }}"> {{ $item->nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="custom-select-container">
+                                <label for="vsexo" class="">SEXO</label>
+                                <select id="vsexo" name="vsexo" class="form-control form-control-sm"
+                                    onchange="cargarCards();">
+                                    <option value="0"></option>
+                                    <option value="1">HOMBRE</option>
+                                    <option value="2">MUJER</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -128,7 +168,7 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card1"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Población Perú</p>
+                            <p class="mb-0 mt-1 text-truncate">Población</p>
                         </div>
                     </div>
                 </div>
@@ -330,6 +370,7 @@
                     "anio": $('#vanio').val(),
                     "departamento": $('#vdepartamento').val(),
                     "sexo": $('#vsexo').val(),
+                    "etapavida": $('#vetapavida').val(),
                 },
                 type: "GET",
                 dataType: "JSON",
@@ -358,6 +399,9 @@
 
                 },
                 success: function(data) {
+                    var mapa_selected = 'Peru: ';
+                    console.log($('#vdepartamento').val());
+                    // if($('#vdepartamento').val()>'00')
                     if (div == 'head') {
                         $('#card1').text(data.card1);
                         $('#card2').text(data.card2);
@@ -396,7 +440,7 @@
                         anal1 = maps01(div, data.info, '', '');
                     } else if (div == "anal2") {
                         anal2 = gbar2(div, data.info, '',
-                            'Pirámide poblacional, según sexo  y grupo etario', '');
+                            mapa_selected + 'Pirámide poblacional, según sexo  y grupo etario', '');
                     } else if (div == "anal3") {
                         // var dataxx = {
                         //     categoria: ['2021', '2022', '2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030'],
@@ -409,10 +453,10 @@
                         // }
                         // console.log(datax);
                         anal3 = gLinea(div, data.info, '',
-                            'Población estimada y proyectada, periodo 2021-2030');
+                            mapa_selected + 'Población estimada y proyectada, periodo 2021-2030');
                     } else if (div == "anal4") {
                         anal4 = gLinea(div, data.info, '',
-                            'Población estimada de 0 a 5 años, periodo 2021-2030');
+                            mapa_selected + 'Población estimada de 0 a 5 años, periodo 2021-2030');
                     } else if (div == "tabla1") {
                         $('#vtabla1').html(data.excel);
                         // $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
@@ -627,14 +671,27 @@
                 subtitle: {
                     text: subtitulo
                 },
+                legend: {
+                    enabled: true,
+                    itemStyle: {
+                        //color: "#333333",
+                        // cursor: "pointer",
+                        fontSize: "11px",
+                        // fontWeight: "normal",
+                        // textOverflow: "ellipsis"
+                    },
+                },
                 xAxis: [{
                     categories: data.categoria,
                     reversed: false,
                     labels: {
-                        step: 1
+                        step: 1,
+                        style: {
+                            fontSize: '11px' // Ajusta el tamaño de la fuente
+                        }
                     },
                     lineWidth: 0, // Desactiva la línea del eje X
-                    tickWidth: 0 // Desactiva las marcas de graduación (ticks)
+                    tickWidth: 0, // Desactiva las marcas de graduación (ticks)
                 }],
                 yAxis: {
 
@@ -645,9 +702,11 @@
                         enabled: false,
                         formatter: function() {
                             return Math.abs(this.value) + '';
+                        },
+                        style: {
+                            fontSize: '10px' // Ajusta el tamaño de la fuente
                         }
                     },
-
                 },
                 plotOptions: {
                     // series: {
@@ -780,7 +839,8 @@
                     //         'Población: ' + Highcharts.numberFormat(Math.abs(this.point.y), 0);
                     // },
                     formatter: function() {
-                        let tooltipText = '<b>' + this.x + '</b><br/>'; // Muestra la categoría (edad)
+                        let tooltipText = '<b>Grupo Etéreo:' + this.x +
+                            '</b><br/>'; // Muestra la categoría (edad)
                         this.points.forEach(function(point) {
                             tooltipText += point.series.name + ': ' + Highcharts.numberFormat(Math.abs(
                                 point.y), 0) + '<br/>';
@@ -788,7 +848,7 @@
                         return tooltipText;
                     }
                 },
-                colors:['#5eb9a0', '#ef5350', '#f5bd22', '#ef5350'],
+                colors: ['#5eb9a0', '#ef5350', '#f5bd22', '#ef5350'],
                 series: [{
                     name: 'Hombres',
                     data: data.men,
@@ -1805,10 +1865,13 @@
                     // min: 150000,
                     // max: 15000000,
                     // tickPixelInterval: 5000000,
-                    maxColor: "#e6ebf5",
-                    minColor: "#003399",
+                    mixColor: "#e6ebf5",
+                    manColor: "#003399",
                     /*maxColor: '#F1EEF6',
                     minColor: '#900037'*/
+                    legend: {
+                        enabled: false // Desactiva la leyenda de color
+                    }
                 },
 
                 series: [{
@@ -1824,6 +1887,8 @@
                     //     // format: '{point.value}°',
                     //     format: '{point.name}'
                     // }
+                    borderColor: '#cac9c9',
+                    // borderWidth: 1.5,
 
                     dataLabels: {
                         enabled: true,
@@ -1835,7 +1900,9 @@
                             fontWeight: 'bold'
                         }
                     },
-                    legend:{enabled:false,},
+                    // legend: {
+                    //     enabled: false
+                    // },
                     point: {
                         // events: {
                         //     // click: function() {
@@ -1900,7 +1967,7 @@
 
                                 // Marcar el punto seleccionado
                                 point.update({
-                                    color: '#FF0000' // Color de selección
+                                    color: '#bada55' // Color de selección
                                 });
 
                                 // Almacenar el código del departamento seleccionado
@@ -1940,9 +2007,9 @@
                 //         };
                 //     }
                 // },
-                // credits: {
-                //     enabled: false
-                // },
+                credits: {
+                    enabled: false
+                },
             });
         }
     </script>

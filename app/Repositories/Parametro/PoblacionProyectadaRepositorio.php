@@ -9,39 +9,51 @@ use Illuminate\Support\Facades\DB;
 
 class PoblacionProyectadaRepositorio
 {
-    public static function conteo($anio, $departamento, $sexo = 0)
+    public static function conteo($anio, $departamento, $etapavida, $sexo = 0)
     {
-        $query = PoblacionProyectada::where('anio', $anio);
+        $query = PoblacionProyectada::from('par_poblacion_proyectada as pr')->where('pr.anio', $anio);
+        if ($etapavida > 0)
+            $query = $query->join('par_grupoedad as ge', function ($join) use ($etapavida) {
+                $join->on('ge.edad', '=', 'pr.edad')->where('ge.etapavida', $etapavida);
+            });
         if ($departamento > '00')
-            $query = $query->where('codigo', $departamento);
+            $query = $query->where('pr.codigo', $departamento);
         if ($sexo == 1)
-            return $query->sum('hombre');
+            return $query->sum('pr.hombre');
         if ($sexo == 2)
-            return $query->sum('mujer');
+            return $query->sum('pr.mujer');
         else
-            return $query->sum('total');
+            return $query->sum('pr.total');
     }
 
-    public static function conteo05($anio, $departamento, $sexo)
+    public static function conteo05($anio, $departamento, $etapavida, $sexo)
     {
-        $query = PoblacionProyectada::where('anio', $anio)->whereIn('edad', [0, 1, 2, 3, 4, 5]);
+        $query = PoblacionProyectada::from('par_poblacion_proyectada as pr')->where('pr.anio', $anio)->whereIn('pr.edad', [0, 1, 2, 3, 4, 5]);
+        if ($etapavida > 0)
+            $query = $query->join('par_grupoedad as ge', function ($join) use ($etapavida) {
+                $join->on('ge.edad', '=', 'pr.edad')->where('ge.etapavida', $etapavida);
+            });
         if ($departamento > '00')
-            $query = $query->where('codigo', $departamento);
+            $query = $query->where('pr.codigo', $departamento);
         if ($sexo == 1)
-            return $query->sum('hombre');
+            return $query->sum('pr.hombre');
         if ($sexo == 2)
-            return $query->sum('mujer');
+            return $query->sum('pr.mujer');
         else
-            return $query->sum('total');
+            return $query->sum('pr.total');
     }
 
-    public static function grupoetareo_sexo($anio, $departamento)
+    public static function grupoetareo_sexo($anio, $departamento, $etapavida)
     {
-        $query = PoblacionProyectada::select('grupo_etareo', DB::raw('SUM(hombre) hconteo'), DB::raw('SUM(mujer) mconteo'))
-            ->where('anio', $anio);
+        $query = PoblacionProyectada::from('par_poblacion_proyectada as pr')->select('pr.grupo_etareo', DB::raw('SUM(pr.hombre) hconteo'), DB::raw('SUM(pr.mujer) mconteo'))
+            ->where('pr.anio', $anio);
+        if ($etapavida > 0)
+            $query = $query->join('par_grupoedad as ge', function ($join) use ($etapavida) {
+                $join->on('ge.edad', '=', 'pr.edad')->where('ge.etapavida', $etapavida);
+            });
         if ($departamento > '00')
-            $query = $query->where('codigo', $departamento);
-        $query = $query->groupBy('grupo_etareo')->orderBy('grupo_etareo')->get();
+            $query = $query->where('pr.codigo', $departamento);
+        $query = $query->groupBy('pr.grupo_etareo')->orderBy('pr.grupo_etareo')->get();
         return $query;
     }
 
