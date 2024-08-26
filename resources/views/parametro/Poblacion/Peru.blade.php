@@ -102,7 +102,7 @@
                             <div class="custom-select-container">
                                 <label for="vanio">AÑO</label>
                                 <select id="vanio" name="vanio" class="form-control form-control-sm"
-                                    onchange="cargarCards();">
+                                    onchange="panelGraficas('anal1');cargarCards();">
                                     @foreach ($anios as $item)
                                         <option value="{{ $item->anio }}"
                                             {{ $item->anio == date('Y') ? 'selected' : '' }}>
@@ -115,7 +115,7 @@
                             <div class="custom-select-container">
                                 <label for="vdepartamento" class="">DEPARTAMENTO</label>
                                 <select id="vdepartamento" name="vdepartamento" class="form-control form-control-sm"
-                                    onchange="cargarCards();">
+                                    onchange="panelGraficas('anal1');cargarCards();">
                                     <option value="00"></option>
                                     @foreach ($departamento as $item)
                                         <option value="{{ $item->codigo }}"> {{ $item->departamento }}</option>
@@ -343,6 +343,7 @@
         var anal4;
         var anal5;
         var anal6;
+        let selectedCode = null;
         $(document).ready(function() {
             Highcharts.setOptions({
                 lang: {
@@ -399,9 +400,13 @@
 
                 },
                 success: function(data) {
-                    var mapa_selected = 'Peru: ';
-                    console.log($('#vdepartamento').val());
-                    // if($('#vdepartamento').val()>'00')
+                    var mapa_selected = 'PERÚ: ';
+
+                    if ($('#vdepartamento').val() > '00') {
+                        // console.log($('#vdepartamento option:selected').text());
+                        mapa_selected = $('#vdepartamento option:selected').text() + ': ';
+                    }
+
                     if (div == 'head') {
                         $('#card1').text(data.card1);
                         $('#card2').text(data.card2);
@@ -437,21 +442,55 @@
                         //     ["pe-an", 25],
                         //     ["pe-145", 26]
                         // ]
-                        anal1 = maps01(div, data.info, '', '');
+
+                        anal1 = maps01(div, data.info, '',
+                            'Población estimada y proyectada, según departamento');
+                        // selectedCode = null;
+                        console.log("vdepartamento1:" + $('#vdepartamento').val());
+                        console.log("selectedCode1:" + selectedCode);
+
+                        if ($('#vdepartamento').val() > '00') {
+                            var serie = anal1.series[0];
+                            var point = serie.points.find(
+                                p => p.properties['fips'].substring(2) === $('#vdepartamento').val()
+                            );
+
+                            console.log("************************************************");
+                            console.log("selectedCode2:" + selectedCode);
+                            console.log('fips:' + point.properties['fips'].substring(2));
+                            console.log('vdepartamento2:' + $('#vdepartamento').val());
+                            console.log('hc-key:' + point.properties['hc-key']);
+                            console.log("************************************************");
+
+                            if (point) {
+                                // Remover selección previa si existe
+                                // if (selectedCode) {
+                                //     let prevPoint = serie.points.find(
+                                //         p => p.properties['hc-key'] === selectedCode
+                                //     );
+                                //     if (prevPoint) {
+                                //         prevPoint.update({
+                                //             color: originalColors[selectedCode] || Highcharts
+                                //                 .getOptions().colors[0]
+                                //         });
+                                //     }
+                                // }
+
+                                // Resaltar el nuevo departamento
+                                point.update({
+                                    color: '#bada55'
+                                });
+
+                                // Actualizar el código seleccionado
+                                selectedCode = point.properties['hc-key'];
+                            }
+                        }
+
+
                     } else if (div == "anal2") {
                         anal2 = gbar2(div, data.info, '',
                             mapa_selected + 'Pirámide poblacional, según sexo  y grupo etario', '');
                     } else if (div == "anal3") {
-                        // var dataxx = {
-                        //     categoria: ['2021', '2022', '2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030'],
-                        //     serie: [5, 6, 6.5, 6.2, 6.8, 7, 7.1, 6.9, 6.7, 6.4],
-                        // }
-
-                        // var datax = {
-                        //     categoria: ["2021", "2022", "2023", "2024", "2025", "2026", "2027", "2028", "2029", "2030"],
-                        //     serie: [330, 334, 337, 340, 344, 347, 350, 352, 355, 358]
-                        // }
-                        // console.log(datax);
                         anal3 = gLinea(div, data.info, '',
                             mapa_selected + 'Población estimada y proyectada, periodo 2021-2030');
                     } else if (div == "anal4") {
@@ -1836,7 +1875,7 @@
         }
 
         function maps01(div, data, titulo, subtitulo) {
-            let selectedCode = null;
+
             let originalColors = {};
             return Highcharts.mapChart(div, {
                 chart: {
@@ -1953,6 +1992,7 @@
                                 let code = point.properties['hc-key'];
 
                                 // Remover selección previa
+                                console.log('selectedCode e:' + selectedCode);
                                 if (selectedCode) {
                                     this.series.chart.series[0].points.forEach(function(p) {
                                         if (p.properties['hc-key'] === selectedCode) {
