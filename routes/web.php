@@ -1261,6 +1261,9 @@ Route::get('/Poblacion/Principalx', [PoblacionController::class, 'poblacionprinc
 
 Route::get('/Poblacion/Peru', [PoblacionController::class, 'poblacionprincipalperu'])->name('poblacionprincipal.peru');
 Route::get('/Poblacion/Perux', [PoblacionController::class, 'poblacionprincipalperutabla'])->name('poblacionprincipal.peru.tablas');
+
+Route::get('/Poblacion/Peru/Ucayali', [PoblacionController::class, 'poblacionprincipalucayali'])->name('poblacionprincipal.peru.ucayali');
+Route::get('/Poblacion/Peru/ucayalix', [PoblacionController::class, 'poblacionprincipalucayalitabla'])->name('poblacionprincipal.peru.ucayali.tablas');
 // Route::get('/MatriculaGeneral/EBR/Excel/{div}/{anio}/{ugel}/{gestion}/{area}/{provincia}', [MatriculaGeneralController::class, 'basicaregularDownload']);
 
 /****************************************** FIN PARAMETRO ***************************************************/

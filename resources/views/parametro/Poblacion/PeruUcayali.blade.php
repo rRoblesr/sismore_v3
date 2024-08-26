@@ -91,12 +91,12 @@
                     @endif --}}
 
                     </div>
-                    <h3 class="card-title text-white">POBLACIÓN ESTIMADA Y PROYECTADA 2021-2030</h3>
+                    <h3 class="card-title text-white">POBLACIÓN ESTIMADA DEL DEPARTAMENTO DE UCAYALI</h3>
                 </div>
                 <div class="card-body pb-0">
                     <div class="row">
                         <div class="col-lg-5 col-md-4 col-sm-4">
-                            <h4 class="page-title font-12">Fuente: INEI</h4>
+                            <h4 class="page-title font-12">Fuente: INEI - MINSA</h4>
                         </div>
                         <div class="col-lg-1 col-md-1 col-sm-1  ">
                             <div class="custom-select-container">
@@ -111,7 +111,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2">
+                        {{-- <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="vdepartamento" class="">DEPARTAMENTO</label>
                                 <select id="vdepartamento" name="vdepartamento" class="form-control form-control-sm"
@@ -122,8 +122,8 @@
                                     @endforeach
                                 </select>
                             </div>
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2">
+                        </div> --}}
+                        {{-- <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="vetapavida" class="">ETAPA DE VIDA</label>
                                 <select id="vetapavida" name="vetapavida" class="form-control form-control-sm"
@@ -134,8 +134,8 @@
                                     @endforeach
                                 </select>
                             </div>
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2">
+                        </div> --}}
+                        {{-- <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="vsexo" class="">SEXO</label>
                                 <select id="vsexo" name="vsexo" class="form-control form-control-sm"
@@ -145,7 +145,7 @@
                                     <option value="2">MUJER</option>
                                 </select>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -309,6 +309,38 @@
     </div>
 
     <div class="row">
+        <div class="col-lg-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
+                </div>
+                <div class="card-body p-0">
+                    <figure class="highcharts-figure p-0 m-0">
+                        <div id="anal5" style="height: 20rem"></div>
+                    </figure>
+                    {{-- <div class="credits-left">Fuente: RENIEC - PADRÓN NOMINAL</div>
+                    <div class="credits-right">Actualizado: JULIO 2024</div> --}}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
+                </div>
+                <div class="card-body p-0">
+                    <figure class="highcharts-figure p-0 m-0">
+                        <div id="anal6" style="height: 20rem"></div>
+                    </figure>
+                    {{-- <div class="credits-left">Fuente: RENIEC - PADRÓN NOMINAL</div>
+                    <div class="credits-right">Actualizado: JULIO 2024</div> --}}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
         <div class="col-lg-12">
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
@@ -378,12 +410,14 @@
             panelGraficas('anal2');
             panelGraficas('anal3');
             panelGraficas('anal4');
+            panelGraficas('anal5');
+            panelGraficas('anal6');
             panelGraficas('tabla1');
         }
 
         function panelGraficas(div) {
             $.ajax({
-                url: "{{ route('poblacionprincipal.peru.tablas') }}",
+                url: "{{ route('poblacionprincipal.peru.ucayali.tablas') }}",
                 data: {
                     'div': div,
                     "anio": $('#vanio').val(),
@@ -418,7 +452,7 @@
 
                 },
                 success: function(data) {
-                    var mapa_selected = 'PERÚ: ';
+                    var mapa_selected = '';
 
                     if ($('#vdepartamento').val() > '00') {
                         mapa_selected = $('#vdepartamento option:selected').text() + ': ';
@@ -1057,8 +1091,64 @@
             });
         }
 
+        function gPie2(div, data, titulo, subtitulo, tituloserie) {
+            // const colors = ["#5eb9aa", "#f5bd22", "#e65310"];
+            return Highcharts.chart('container', {
+                chart: {
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Porcentaje de la Población Estimada, según etapa de vida'
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            distance: -50, // Para que los labels estén dentro de la porción del gráfico
+                            style: {
+                                color: 'white',
+                                textOutline: '0px contrast'
+                            }
+                        },
+                        showInLegend: true
+                    }
+                },
+                series: [{
+                    name: 'Población',
+                    colorByPoint: true,
+                    data: [{
+                        name: 'Niño',
+                        y: 10,
+                        color: '#1E90FF' // Azul
+                    }, {
+                        name: 'Adolescente',
+                        y: 13,
+                        color: '#FF4500' // Rojo
+                    }, {
+                        name: 'Joven',
+                        y: 20,
+                        color: '#800080' // Morado
+                    }, {
+                        name: 'Adulto',
+                        y: 27,
+                        color: '#FFD700' // Amarillo
+                    }, {
+                        name: 'Adulto Mayor',
+                        y: 30,
+                        color: '#40E0D0' // Turquesa
+                    }]
+                }]
+            });
+        }
+
         function gColumn1(div, data, titulo, subtitulo) {
-            Highcharts.chart(div, {
+            return Highcharts.chart(div, {
                 chart: {
                     type: 'column'
                 },

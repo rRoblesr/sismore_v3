@@ -259,11 +259,12 @@ class PoblacionController extends Controller
                 return response()->json(compact('info'));
 
             case 'tabla1':
-                $base = PoblacionProyectadaRepositorio::conteo_anios_tabla1();
+                $base = PoblacionProyectadaRepositorio::conteo_anios_tabla1($rq->anio);
                 $foot = [];
                 if ($base->count() > 0) {
                     $foot = clone $base[0];
                     $foot->total = 0;
+                    $foot->c2024t = 0;
                     $foot->c2024h = 0;
                     $foot->c2024m = 0;
                     $foot->c2021 = 0;
@@ -278,6 +279,7 @@ class PoblacionController extends Controller
                     $foot->c2030 = 0;
                     foreach ($base as $key => $value) {
                         $foot->total += $value->total;
+                        $foot->c2024t += $value->c2024t;
                         $foot->c2024h += $value->c2024h;
                         $foot->c2024m += $value->c2024m;
                         $foot->c2021 += $value->c2021;
@@ -292,7 +294,137 @@ class PoblacionController extends Controller
                         $foot->c2030 += $value->c2030;
                     }
                 }
-                $excel = view('parametro.Poblacion.PeruTabla1', compact('base', 'foot'))->render();
+                $anio = $rq->anio;
+                $excel = view('parametro.Poblacion.PeruTabla1', compact('base', 'foot', 'anio'))->render();
+                return response()->json(compact('excel', 'foot', 'base'));
+
+            default:
+                return [];
+        }
+    }
+
+    public function poblacionprincipalucayali()
+    {
+        $anios = PoblacionProyectada::distinct()->select('anio')->get();
+        $departamento = PoblacionProyectada::distinct()->select('codigo', 'departamento')->where('anio', date('Y'))->get();
+        $etapavida = EtapaVida::all();
+
+        return view('parametro.Poblacion.PeruUcayali', compact('anios',  'departamento', 'etapavida'));
+    }
+
+    public function poblacionprincipalucayalitabla(Request $rq)
+    {
+        switch ($rq->div) {
+            case 'head':
+                $card1 = number_format(PoblacionProyectadaRepositorio::conteo($rq->anio, '25', $rq->etapavida, $rq->sexo));
+                $card2 = number_format(PoblacionProyectadaRepositorio::conteo($rq->anio, '25', $rq->etapavida, 1));
+                $card3 = number_format(PoblacionProyectadaRepositorio::conteo($rq->anio, '25', $rq->etapavida, 2));
+                $card4 = number_format(PoblacionProyectadaRepositorio::conteo05($rq->anio, '25', $rq->etapavida, $rq->sexo));
+
+                // $card4 = number_format(PoblacionPNRepositorio::conteomesmax($rq->anio,  $rq->departamento, '00', 0, 0));
+                return response()->json(compact('card1', 'card2', 'card3', 'card4'));
+
+            case 'anal1':
+                $data = PoblacionProyectadaRepositorio::conteo_departamento($rq->anio, 0);
+                $info = [];
+                foreach ($data as $key => $value) {
+                    $info[] = [$this->pe_states[$value->codigo], (int)$value->conteo];
+                }
+                // $info[] = ['pe-145', 0];
+                return response()->json(compact('info', 'data'));
+
+            case 'anal2':
+                $data = PoblacionProyectadaRepositorio::grupoetareo_sexo($rq->anio, '25', $rq->etapavida);
+                $info['categoria'] = [];
+                $info['men'] = [];
+                $info['women'] = [];
+                foreach ($data as $key => $value) {
+                    $info['categoria'][] = $value->grupo_etareo == '80 y más' ? '80 - +' : $value->grupo_etareo;
+                    $info['men'][] = -(int)$value->hconteo;
+                    $info['women'][] = (int)$value->mconteo;
+                }
+                return response()->json(compact('info', 'data'));
+
+            case 'anal3':
+
+                $data = PoblacionProyectadaRepositorio::conteo_anios('25');
+                $info['categoria'] = [];
+                $info['serie'] = [];
+                foreach ($data as $key => $value) {
+                    $info['categoria'][] = '' . $value->anio;
+                    $info['serie'][] = (int)$value->conteo;
+                }
+                return response()->json(compact('info'));
+
+            case 'anal4':
+                $data = PoblacionProyectadaRepositorio::conteo_anio_etapa($rq->anio, '25');
+                $info['categoria'] = [];
+                $info['serie'] = [];
+                // foreach ($data as $key => $value) {
+                //     $info['categoria'][] = '' . $value->anio;
+                //     $info['serie'][] = (int)$value->conteo;
+                // }
+                return response()->json(compact('info', 'data'));
+
+            case 'anal5':
+                $data = PoblacionProyectadaRepositorio::conteo_anios('25');
+                $info['categoria'] = [];
+                $info['serie'] = [];
+                foreach ($data as $key => $value) {
+                    $info['categoria'][] = '' . $value->anio;
+                    $info['serie'][0][] = (int)$value->hconteo;
+                    $info['serie'][1][] = (int)$value->mconteo;
+                }
+                return response()->json(compact('info'));
+
+            case 'anal6':
+
+                $data = PoblacionProyectadaRepositorio::conteo_anio_etapa($rq->anio, '25');
+                $info['categoria'] = [];
+                $info['serie'] = [];
+                // foreach ($data as $key => $value) {
+                //     $info['categoria'][] = '' . $value->anio;
+                //     $info['serie'][] = (int)$value->conteo;
+                // }
+
+            case 'tabla1':
+                $base = PoblacionProyectadaRepositorio::conteo_anios_tabla1($rq->anio);
+                $foot = [];
+                if ($base->count() > 0) {
+                    $foot = clone $base[0];
+                    $foot->total = 0;
+                    $foot->c2024t = 0;
+                    $foot->c2024h = 0;
+                    $foot->c2024m = 0;
+                    $foot->c2021 = 0;
+                    $foot->c2022 = 0;
+                    $foot->c2023 = 0;
+                    $foot->c2024 = 0;
+                    $foot->c2025 = 0;
+                    $foot->c2026 = 0;
+                    $foot->c2027 = 0;
+                    $foot->c2028 = 0;
+                    $foot->c2029 = 0;
+                    $foot->c2030 = 0;
+                    foreach ($base as $key => $value) {
+                        $foot->total += $value->total;
+                        $foot->c2024t += $value->c2024t;
+                        $foot->c2024h += $value->c2024h;
+                        $foot->c2024m += $value->c2024m;
+                        $foot->c2021 += $value->c2021;
+                        $foot->c2022 += $value->c2022;
+                        $foot->c2023 += $value->c2023;
+                        $foot->c2024 += $value->c2024;
+                        $foot->c2025 += $value->c2025;
+                        $foot->c2026 += $value->c2026;
+                        $foot->c2027 += $value->c2027;
+                        $foot->c2028 += $value->c2028;
+                        $foot->c2029 += $value->c2029;
+                        $foot->c2030 += $value->c2030;
+                    }
+                }
+                $anio = $rq->anio;
+                $excel = view('parametro.Poblacion.PeruTabla1', compact('base', 'foot', 'anio'))->render();
                 return response()->json(compact('excel', 'foot', 'base'));
 
             default:

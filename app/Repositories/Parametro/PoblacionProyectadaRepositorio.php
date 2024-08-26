@@ -43,6 +43,18 @@ class PoblacionProyectadaRepositorio
             return $query->sum('pr.total');
     }
 
+    public static function conteo_anio_etapa($anio, $departamento)
+    {
+        $query = PoblacionProyectada::from('par_poblacion_proyectada as pr')->where('pr.anio', $anio);
+        $query = $query->join('par_grupoedad as ge', function ($join) {
+            $join->on('ge.edad', '=', 'pr.edad');
+        });
+        if ($departamento > '00')
+            $query = $query->where('pr.codigo', $departamento);
+
+        return $query->select('ge.etapavida', DB::raw('sum(total) as conteo'), DB::raw('sum(hombre) as hconteo'), DB::raw('sum(mujer) as mconteo'))->groupBy('ge.etapavida')->get();
+    }
+
     public static function grupoetareo_sexo($anio, $departamento, $etapavida)
     {
         $query = PoblacionProyectada::from('par_poblacion_proyectada as pr')->select('pr.grupo_etareo', DB::raw('SUM(pr.hombre) hconteo'), DB::raw('SUM(pr.mujer) mconteo'))
@@ -75,12 +87,13 @@ class PoblacionProyectadaRepositorio
         return $query;
     }
 
-    public static function conteo_anios_tabla1()
+    public static function conteo_anios_tabla1($anio)
     {
         $query = PoblacionProyectada::select(
             'departamento',
-            DB::raw('sum(IF(anio=2024,total,0)) as c2024h'),
-            DB::raw('sum(IF(anio=2024,total,0)) as c2024m'),
+            DB::raw("sum(IF(anio=$anio,total,0)) as c2024t"),
+            DB::raw("sum(IF(anio=$anio,hombre,0)) as c2024h"),
+            DB::raw("sum(IF(anio=$anio,mujer,0)) as c2024m"),
             DB::raw('sum(IF(anio=2021,total,0)) as c2021'),
             DB::raw('sum(IF(anio=2022,total,0)) as c2022'),
             DB::raw('sum(IF(anio=2023,total,0)) as c2023'),
