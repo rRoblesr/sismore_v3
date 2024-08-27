@@ -22,7 +22,6 @@ class PoblacionDiresa extends Model
         'sexo',
         'edad',
         'grupo_etareo',
-        'etapa_vida',
         'total',
     ];
 

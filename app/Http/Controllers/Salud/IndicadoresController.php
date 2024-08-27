@@ -303,7 +303,14 @@ class IndicadoresController extends Controller
                 // return '';
 
             case 'DIT-EDU-01':
-                return '';
+                $ff = SFL::select(DB::raw('max(fecha_registro) as ff'))->first();
+                $actualizado = 'Actualizado al ' . date('d', strtotime($ff->ff)) . ' de ' . $this->mesname[date('m', strtotime($ff->ff)) - 1] . ' del ' . date('Y', strtotime($ff->ff));
+                $anio = SFL::distinct()->select(DB::raw('year(fecha_registro) as anio'))->orderBy('anio')->get();
+                $provincia = UbigeoRepositorio::provincia('25');
+                $area = Area::all();
+                $aniomax = $anio->max('anio');
+                return view('salud.Indicadores.PactoRegionalEduPacto1', compact('actualizado', 'anio', 'provincia', 'aniomax', 'area', 'ind'));
+
             case 'DIT-EDU-02':
                 $ff = SFL::select(DB::raw('max(fecha_registro) as ff'))->first();
                 $actualizado = 'Actualizado al ' . date('d', strtotime($ff->ff)) . ' de ' . $this->mesname[date('m', strtotime($ff->ff)) - 1] . ' del ' . date('Y', strtotime($ff->ff));
