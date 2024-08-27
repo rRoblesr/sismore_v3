@@ -95,10 +95,10 @@
                 </div>
                 <div class="card-body pb-0">
                     <div class="row">
-                        <div class="col-lg-5 col-md-4 col-sm-4">
+                        <div class="col-lg-10 col-md-4 col-sm-4">
                             <h4 class="page-title font-12">Fuente: INEI - MINSA</h4>
                         </div>
-                        <div class="col-lg-1 col-md-1 col-sm-1  ">
+                        <div class="col-lg-2 col-md-1 col-sm-1  ">
                             <div class="custom-select-container">
                                 <label for="vanio">AÑO</label>
                                 <select id="vanio" name="vanio" class="form-control form-control-sm"
@@ -246,9 +246,9 @@
                     {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
                 </div>
                 <div class="card-body p-0">
-                    <figure class="highcharts-figure p-0 m-0">
-                        <div id="anal1" style="height: 35rem"></div>
-                    </figure>
+                    {{-- <figure class="highcharts-figure p-0 m-0"> --}}
+                    <div id="anal1" style="height: 35rem"></div>
+                    {{-- </figure> --}}
                     {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
                             <span class="anal1-fuente">Fuente:</span>
                             <span class="float-right anal1-fecha">Actualizado:</span>
@@ -263,9 +263,9 @@
                     {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
                 </div>
                 <div class="card-body p-0">
-                    <figure class="highcharts-figure p-0 m-0">
-                        <div id="anal2" style="height: 35rem"></div>
-                    </figure>
+                    {{-- <figure class="highcharts-figure p-0 m-0"> --}}
+                    <div id="anal2" style="height: 35rem"></div>
+                    {{-- </figure> --}}
                     {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
                             <span class="anal2-fuente">Fuente:</span>
                             <span class="float-right anal2-fecha">Actualizado:</span>
@@ -283,9 +283,9 @@
                     {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
                 </div>
                 <div class="card-body p-0">
-                    <figure class="highcharts-figure p-0 m-0">
-                        <div id="anal3" style="height: 20rem"></div>
-                    </figure>
+                    {{-- <figure class="highcharts-figure p-0 m-0"> --}}
+                    <div id="anal3" style="height: 20rem"></div>
+                    {{-- </figure> --}}
                     {{-- <div class="credits-left">Fuente: RENIEC - PADRÓN NOMINAL</div>
                     <div class="credits-right">Actualizado: JULIO 2024</div> --}}
                 </div>
@@ -297,9 +297,9 @@
                     {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
                 </div>
                 <div class="card-body p-0">
-                    <figure class="highcharts-figure p-0 m-0">
-                        <div id="anal4" style="height: 20rem"></div>
-                    </figure>
+                    {{-- <figure class="highcharts-figure p-0 m-0"> --}}
+                    <div id="anal4" style="height: 20rem"></div>
+                    {{-- </figure> --}}
                     {{-- <div class="credits-left">Fuente: RENIEC - PADRÓN NOMINAL</div>
                     <div class="credits-right">Actualizado: JULIO 2024</div> --}}
                 </div>
@@ -315,9 +315,9 @@
                     {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
                 </div>
                 <div class="card-body p-0">
-                    <figure class="highcharts-figure p-0 m-0">
-                        <div id="anal5" style="height: 20rem"></div>
-                    </figure>
+                    {{-- <figure class="highcharts-figure p-0 m-0"> --}}
+                    <div id="anal5" style="height: 20rem"></div>
+                    {{-- </figure> --}}
                     {{-- <div class="credits-left">Fuente: RENIEC - PADRÓN NOMINAL</div>
                     <div class="credits-right">Actualizado: JULIO 2024</div> --}}
                 </div>
@@ -329,9 +329,9 @@
                     {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
                 </div>
                 <div class="card-body p-0">
-                    <figure class="highcharts-figure p-0 m-0">
-                        <div id="anal6" style="height: 20rem"></div>
-                    </figure>
+                    {{-- <figure class="highcharts-figure p-0 m-0"> --}}
+                    <div id="anal6" style="height: 20rem"></div>
+                    {{-- </figure> --}}
                     {{-- <div class="credits-left">Fuente: RENIEC - PADRÓN NOMINAL</div>
                     <div class="credits-right">Actualizado: JULIO 2024</div> --}}
                 </div>
@@ -556,11 +556,17 @@
                         anal2 = gbar2(div, data.info, '',
                             mapa_selected + 'Pirámide poblacional, según sexo  y grupo etario', '');
                     } else if (div == "anal3") {
-                        anal3 = gLinea(div, data.info, '',
-                            mapa_selected + 'Población estimada y proyectada, periodo 2021-2030');
+                        anal3 = gColumnx(div, data.info, '',
+                            'Población estimada y proyectada, periodo 2019-2024', 'Año')
                     } else if (div == "anal4") {
-                        anal4 = gLinea(div, data.info, '',
-                            mapa_selected + 'Población estimada de 0 a 5 años, periodo 2021-2030');
+                        anal4 = gPie2(div, data.info, '',
+                            'Porcentaje de la Población Estimada, según etapa de vida');
+                    } else if (div == "anal5") {
+                        anal5 = gColumnx(div, data.info, '',
+                            'Población estimada y proyectada, periodo 2019-2024', 'Año')
+                    } else if (div == "anal6") {
+                        anal6 = gColumnx(div, data.info, '',
+                            'Población estimada y proyectada, periodo 2019-2024', 'Etapa Vida')
                     } else if (div == "tabla1") {
                         $('#vtabla1').html(data.excel);
                         // $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
@@ -1091,17 +1097,30 @@
             });
         }
 
-        function gPie2(div, data, titulo, subtitulo, tituloserie) {
-            // const colors = ["#5eb9aa", "#f5bd22", "#e65310"];
-            return Highcharts.chart('container', {
+        function gPie2(div, serie, titulo, subtitulo) {
+            return Highcharts.chart(div, {
                 chart: {
-                    type: 'pie'
+                    type: 'pie',
+                    borderColor: '#CCC', // Borde gris claro
+                    borderWidth: 2, // Ancho del borde
+                    plotShadow: true // Sombra alrededor del gráfico
                 },
                 title: {
-                    text: 'Porcentaje de la Población Estimada, según etapa de vida'
+                    text: titulo
+                },
+                subtitle: {
+                    text: subtitulo
                 },
                 tooltip: {
-                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    // pointFormat: '{series.name}: <b>{point.y:.0f}</b><br>Porcentaje: <b>{point.percentage:.1f}%</b>'
+                    // pointFormatter: function() {return this.series.name + ': <b>' +Highcharts.numberFormat(this.y, 0, ',', '.') +'</b><br>Porcentaje: <b>' +Highcharts.numberFormat(this.percentage, 1, ',', '.') +'%</b>';},
+                    pointFormatter: function() {
+                        return this.series.name + ': <b>' +
+                            Highcharts.numberFormat(this.y, 0) +
+                            '</b><br>Porcentaje: <b>' +
+                            Highcharts.numberFormat(this.percentage, 1) +
+                            '%</b>';
+                    }
                 },
                 plotOptions: {
                     pie: {
@@ -1109,49 +1128,143 @@
                         cursor: 'pointer',
                         dataLabels: {
                             enabled: true,
-                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                            distance: -50, // Para que los labels estén dentro de la porción del gráfico
+                            format: '{point.name} <br><b>{point.percentage:.1f} %</b>',
                             style: {
-                                color: 'white',
-                                textOutline: '0px contrast'
+                                fontWeight: 'bold'
                             }
                         },
-                        showInLegend: true
+                        showInLegend: false
                     }
                 },
-                series: [{
-                    name: 'Población',
-                    colorByPoint: true,
-                    data: [{
-                        name: 'Niño',
-                        y: 10,
-                        color: '#1E90FF' // Azul
-                    }, {
-                        name: 'Adolescente',
-                        y: 13,
-                        color: '#FF4500' // Rojo
-                    }, {
-                        name: 'Joven',
-                        y: 20,
-                        color: '#800080' // Morado
-                    }, {
-                        name: 'Adulto',
-                        y: 27,
-                        color: '#FFD700' // Amarillo
-                    }, {
-                        name: 'Adulto Mayor',
-                        y: 30,
-                        color: '#40E0D0' // Turquesa
-                    }]
-                }]
+                series: serie,
+                credits: {
+                    enabled: false,
+                }
             });
         }
 
-        function gColumn1(div, data, titulo, subtitulo) {
+        function gPie2x(div, serie, titulo, subtitulo) {
+            // const colors = ["#5eb9aa", "#f5bd22", "#e65310"];
+            return Highcharts.chart(div, {
+                chart: {
+                    type: 'pie',
+                    borderColor: '#CCC', // Borde gris claro
+                    borderWidth: 2, // Ancho del borde
+                    plotShadow: true // Sombra alrededor del gráfico
+                },
+                title: {
+                    text: titulo
+                },
+                subtitle: {
+                    text: subtitulo
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.y:.0f}</b><br>Porcentaje: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.name} <br><b>{point.percentage:.1f} %</b>',
+                            style: {
+                                fontWeight: 'bold'
+                            }
+                        },
+                        showInLegend: false
+                    }
+                },
+                series: serie,
+                // [{
+                //     name: 'Porcentaje',
+                //     colorByPoint: true,
+                //     data: [{
+                //         name: 'Adulto',
+                //         y: 20.3,
+                //         color: '#00CED1' // Color del sector (Turquesa)
+                //     }, {
+                //         name: 'Adulto Mayor',
+                //         y: 20.3,
+                //         color: '#FFA500' // Color del sector (Naranja)
+                //     }, {
+                //         name: 'Joven',
+                //         y: 20.3,
+                //         color: '#8A2BE2' // Color del sector (Violeta)
+                //     }, {
+                //         name: 'Adolescente',
+                //         y: 20.3,
+                //         color: '#FF0000' // Color del sector (Rojo)
+                //     }, {
+                //         name: 'Niño',
+                //         y: 15.8,
+                //         color: '#1E90FF' // Color del sector (Azul)
+                //     }]
+                // }]
+                credits: {
+                    enabled: false,
+                }
+            });
+            // Highcharts.chart('anal4', {
+            //     chart: {
+            //         type: 'pie'
+            //     },
+            //     title: {
+            //         text: 'Porcentaje de la Población Estimada, según etapa de vida'
+            //     },
+            //     tooltip: {
+            //         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            //     },
+            //     plotOptions: {
+            //         pie: {
+            //             allowPointSelect: true,
+            //             cursor: 'pointer',
+            //             dataLabels: {
+            //                 enabled: true,
+            //                 format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+            //                 distance: -50, // Para que los labels estén dentro de la porción del gráfico
+            //                 style: {
+            //                     color: 'white',
+            //                     textOutline: '0px contrast'
+            //                 }
+            //             },
+            //             showInLegend: true
+            //         }
+            //     },
+            //     series: [{
+            //         name: 'Población',
+            //         colorByPoint: true,
+            //         data: [{
+            //             name: 'Niño',
+            //             y: 10,
+            //             color: '#1E90FF' // Azul
+            //         }, {
+            //             name: 'Adolescente',
+            //             y: 13,
+            //             color: '#FF4500' // Rojo
+            //         }, {
+            //             name: 'Joven',
+            //             y: 20,
+            //             color: '#800080' // Morado
+            //         }, {
+            //             name: 'Adulto',
+            //             y: 27,
+            //             color: '#FFD700' // Amarillo
+            //         }, {
+            //             name: 'Adulto Mayor',
+            //             y: 30,
+            //             color: '#40E0D0' // Turquesa
+            //         }]
+            //     }]
+            // });
+        }
+
+        function gColumnx(div, data, titulo, subtitulo, tooltip) {
             return Highcharts.chart(div, {
                 chart: {
                     type: 'column'
                 },
+                colors: ['#5eb9a0', '#ef5350', '#f5bd22', '#ef5350'],
                 title: {
                     text: titulo
                 },
@@ -1160,18 +1273,29 @@
                 },
                 xAxis: {
                     categories: data.categoria, //
-                    crosshair: true
+                    crosshair: true,
+                    labels: {
+                        style: {
+                            fontSize: '11px' // Ajusta el tamaño de la fuente
+                        }
+                    },
                 },
                 yAxis: {
                     min: 0,
                     title: {
                         text: null // Puedes agregar un título si lo necesitas
-                    }
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '11px' // Ajusta el tamaño de la fuente
+                        }
+                    },
                 },
                 tooltip: {
                     shared: true, // Muestra los valores de todas las series en el mismo tooltip
                     formatter: function() {
-                        let tooltipText = '<b>Año: ' + this.x + '</b><br/>'; // Muestra la categoría (año)
+                        let tooltipText = '<b>' + tooltip + ': ' + this.x +
+                            '</b><br/>'; // Muestra la categoría (año)
                         this.points.forEach(function(point) {
                             tooltipText += point.series.name + ': ' + Highcharts.numberFormat(Math.abs(
                                 point.y), 0) + '<br/>';
@@ -1181,7 +1305,7 @@
                 },
                 plotOptions: {
                     column: {
-                        stacking: 'normal', // Apila las columnas
+                        stacking: data.serie.length > 1 ? 'normal' : null, // Apila las columnas
                         dataLabels: {
                             enabled: true,
                             formatter: function() {
@@ -1189,21 +1313,24 @@
                                     0); // Formatea los números con separadores de miles
                             },
                             style: {
-                                color: 'black',
-                                textOutline: 'none'
+                                color: data.serie.length > 1 ? 'white' : 'black',
+                                textOutline: 'none',
+                                fontSize: '10px'
                             }
                         }
                     }
                 },
-                series: [{
-                    name: 'Hombre',
-                    data: data.men, //
-                    color: '#00BFAE' // Color turquesa
-                }, {
-                    name: 'Mujer',
-                    data: data.women, // [22, 25, 28, 25, 27, 24],
-                    color: '#EC407A' // Color rosado
-                }],
+                series: data.serie,
+                legend: {
+                    enabled: data.serie.length > 1,
+                    itemStyle: {
+                        //color: "#333333",
+                        // cursor: "pointer",
+                        fontSize: "11px",
+                        // fontWeight: "normal",
+                        // textOverflow: "ellipsis"
+                    },
+                },
                 credits: {
                     enabled: false,
                     text: 'Fuente: RENIEC - PADRÓN NOMINAL | Actualizado: JULIO 2024',
