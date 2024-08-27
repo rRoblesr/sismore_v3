@@ -46,13 +46,13 @@ class PoblacionProyectadaRepositorio
     public static function conteo_anio_etapa($anio, $departamento)
     {
         $query = PoblacionProyectada::from('par_poblacion_proyectada as pr')->where('pr.anio', $anio);
-        $query = $query->join('par_grupoedad as ge', function ($join) {
-            $join->on('ge.edad', '=', 'pr.edad');
-        });
+        $query = $query->join('par_grupoedad as ge', 'ge.edad', '=', 'pr.edad');
+        $query = $query->join('par_etapa_vida as ev', 'ev.id', '=', 'ge.etapavida');
         if ($departamento > '00')
             $query = $query->where('pr.codigo', $departamento);
 
-        return $query->select('ge.etapavida', DB::raw('sum(total) as conteo'), DB::raw('sum(hombre) as hconteo'), DB::raw('sum(mujer) as mconteo'))->groupBy('ge.etapavida')->get();
+        return $query->select('ge.etapavida','ev.nombre', DB::raw('sum(total) as conteo'), DB::raw('sum(hombre) as hconteo'), DB::raw('sum(mujer) as mconteo'))
+        ->groupBy('ge.etapavida','ev.nombre')->get();
     }
 
     public static function grupoetareo_sexo($anio, $departamento, $etapavida)
@@ -72,6 +72,15 @@ class PoblacionProyectadaRepositorio
     public static function conteo_anios($departamento)
     {
         $query = PoblacionProyectada::select('anio', DB::raw('SUM(total) conteo'), DB::raw('SUM(hombre) hconteo'), DB::raw('SUM(mujer) mconteo'))->where('anio', '>', 2020);
+        if ($departamento > '00')
+            $query = $query->where('codigo', $departamento);
+        $query = $query->groupBy('anio')->orderBy('anio')->get();
+        return $query;
+    }
+
+    public static function conteo_between_anios($departamento, $anioi, $aniof)
+    {
+        $query = PoblacionProyectada::select('anio', DB::raw('SUM(total) conteo'), DB::raw('SUM(hombre) hconteo'), DB::raw('SUM(mujer) mconteo'))->whereBetween('anio', [$anioi, $aniof]);
         if ($departamento > '00')
             $query = $query->where('codigo', $departamento);
         $query = $query->groupBy('anio')->orderBy('anio')->get();
