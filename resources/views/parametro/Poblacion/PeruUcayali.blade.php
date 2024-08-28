@@ -385,21 +385,23 @@
                 }
             });
             var mapData = Highcharts.maps['countries/pe/pe-all'];
-            mapData.features.forEach(function(feature) {
-                if (feature.properties['fips'] === "PE21") { // Condición para Puno
-                    feature.properties['woe-name'] = "Puno";
-                    feature.properties['name'] = "Puno";
-                    feature.properties['alt-name'] = null;
-                }
+            console.log(otros);
+            console.log(provincia);
+            // mapData.features.forEach(function(feature) {
+            //     if (feature.properties['fips'] === "PE21") { // Condición para Puno
+            //         feature.properties['woe-name'] = "Puno";
+            //         feature.properties['name'] = "Puno";
+            //         feature.properties['alt-name'] = null;
+            //     }
 
-                if (feature.properties['hc-key'] === "pe-3341") { // Condición para Callao
-                    feature.properties['fips'] = "PE07";
-                }
+            //     if (feature.properties['hc-key'] === "pe-3341") { // Condición para Callao
+            //         feature.properties['fips'] = "PE07";
+            //     }
 
-                if (feature.properties['hc-key'] === "pe-145") { // Condición para Lima Provincia
-                }
-                // Puedes agregar más condiciones para otras ciudades si es necesario
-            });
+            //     if (feature.properties['hc-key'] === "pe-145") { // Condición para Lima Provincia
+            //     }
+            //     // Puedes agregar más condiciones para otras ciudades si es necesario
+            // });
             panelGraficas('anal1');
             cargarCards();
         });
@@ -2125,7 +2127,7 @@
         function maps01(div, data, titulo, subtitulo) {
             return Highcharts.mapChart(div, {
                 chart: {
-                    map: 'countries/pe/pe-all'
+                    map: otros //'countries/pe/pe-all'
                 },
 
                 title: {
@@ -2160,7 +2162,7 @@
                 },
 
                 series: [{
-                    data: data,
+                    // data: data,
                     name: 'Población',
                     states: {
                         hover: {
@@ -2304,6 +2306,9 @@
     <script src="https://code.highcharts.com/maps/highmaps.js"></script>
     <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/mapdata/countries/pe/pe-all.js"></script>
+
+    <script src="{{ asset('/') }}public/pe-pv-states.js"></script>
+    <script src="{{ asset('/') }}public/us-ct-all.js"></script>
 
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>

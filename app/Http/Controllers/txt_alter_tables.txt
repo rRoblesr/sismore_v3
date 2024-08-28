@@ -2212,3 +2212,12 @@ var datax = {
     serie: [330, 334, 337, 340, 344, 347, 350, 352, 355, 358]
     }
 
+CREATE TABLE `edu_sfl_pacto02` (
+    id int(11) auto_increment primary key,
+				`local` varchar(10) DEFAULT NULL,
+				ugel  varchar(100) NULL DEFAULT NULL,
+				provincia  varchar(100) NULL DEFAULT NULL,
+				distrito  varchar(100) NULL DEFAULT NULL,
+				area  varchar(20) NULL DEFAULT NULL,
+				estado int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
