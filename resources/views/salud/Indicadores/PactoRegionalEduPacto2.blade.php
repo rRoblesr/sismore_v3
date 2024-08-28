@@ -39,6 +39,12 @@
                                     </select>
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-sm-2">
+                                    <select id="mes" name="mes" class="form-control btn-xs font-11"
+                                        onchange="cargarDistritos();">
+                                        <option value="0">MES</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-2">
                                     <select id="provincia" name="provincia" class="form-control btn-xs font-11"
                                         onchange="cargarDistritos();">
                                         <option value="0">PROVINCIA</option>
@@ -53,17 +59,7 @@
                                         onchange="cargarcuadros();">
                                         <option value="0">DISTRITO</option>
                                     </select>
-                                </div>
-                                <div class="col-lg-2 col-md-2 col-sm-2">
-                                    <select id="area" name="area" class="form-control btn-xs font-11"
-                                        onchange="cargarcuadros();">
-                                        <option value="0">ÁREA GEOGRÁFICO</option>
-                                        @foreach ($area as $item)
-                                            <option value="{{ $item->id }}">
-                                                {{ strtoupper($item->nombre) }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                                </div>                                
                             </div>
                         </div>
                     </div>

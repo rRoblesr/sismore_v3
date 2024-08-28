@@ -9,6 +9,7 @@ use App\Exports\pactoregionalSal2Export;
 use App\Http\Controllers\Controller;
 use App\Models\Educacion\Area;
 use App\Models\Educacion\Importacion;
+use App\Models\Educacion\MatriculaGeneralDetalle;
 use App\Models\Educacion\SFL;
 use App\Models\Parametro\Anio;
 use App\Models\Parametro\IndicadorGeneral;
@@ -21,6 +22,7 @@ use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\SFLRepositorio;
 use App\Repositories\Parametro\IndicadorGeneralMetaRepositorio;
 use App\Repositories\Parametro\IndicadorGeneralRepositorio;
+use App\Repositories\Parametro\PoblacionPNRepositorio;
 use App\Repositories\Parametro\UbigeoRepositorio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -913,37 +915,37 @@ class IndicadoresController extends Controller
 
     // ############ educacion pacto 2 #################
 
-    public function PactoRegionalEduPacto2Reports(Request $rq)
+    public function PactoRegionalEduPacto1Reports(Request $rq)
     {
         if ($rq->distrito > 0) $ndis = Ubigeo::find($rq->distrito)->nombre;
         else $ndis = '';
         switch ($rq->div) {
             case 'head':
-                $loc = SFLRepositorio::get_locals($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 0)->count();
-                $ssa = SFLRepositorio::get_locals($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 1)->count();
-                $nsa = $loc - $ssa; //SFLRepositorio::listado_iiee($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 1)->count();
+                $loc = (int)PoblacionPNRepositorio::conteo3a5($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 1);
+                $ssa = MatriculaGeneralDetalle::where('matriculageneral_id', 18)->whereIn('edad', [3, 4, 5])->get()->count();
+                $nsa = $loc - $ssa;
                 $rin = number_format(100 * ($loc > 0 ? $ssa / $loc : 0));
-                return response()->json(['rq' => $rq->all(), 'loc' => $loc, 'ssa' => $ssa, 'nsa' => $nsa, 'rin' => $rin]);
+                return response()->json(['rq' => $rq->all(), 'loc' => number_format($loc, 0), 'ssa' => number_format($ssa, 0), 'nsa' => number_format($nsa), 'rin' => $rin]);
 
             case 'anal1':
                 $base = IndicadorGeneralMetaRepositorio::getEduPacto2anal1($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 0);
+                // return response()->json(compact('base'));
                 $info['series'] = [];
-                $dx1 = [];
-                $dx2 = [];
+                $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' =>    'SANEADO', 'data' => []];
+                $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'NO SANEADO', 'data' => []];
                 foreach ($base as $keyi => $ii) {
                     $info['categoria'][] = $ii->provincia;
-                    $dx1[$keyi] = (int)$ii->t1;
-                    $dx2[$keyi] = (int)$ii->tt - (int)$ii->t1;
+                    $info['series'][0]['data'][] = (int)$ii->si;
+                    $info['series'][1]['data'][] = (int)$ii->no;
+                    // $dx1[$keyi] = (int)$ii->t1;
+                    // $dx2[$keyi] = (int)$ii->tt - (int)$ii->t1;
                 }
-                // $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'SANEADO',  'data' => $dx2];
-                // $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'NO SANEADO', 'data' => $dx3];
-                $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' =>    'SANEADO', 'data' => $dx1];
-                $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'NO SANEADO', 'data' => $dx2];
                 return response()->json(compact('info', 'base'));
-                // return [];
             case 'anal2':
-                $tt = SFLRepositorio::get_locals($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 0)->count();
-                $ssa = SFLRepositorio::get_locals($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 1)->count();
+                // $tt = SFLRepositorio::get_locals($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 0)->count();
+                // $ssa = SFLRepositorio::get_locals($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 1)->count();
+                $tt = SFLRepositorio::get_localsx($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 0); //->count();
+                $ssa = SFLRepositorio::get_localsx($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 1); //->count();
                 $nsa = $tt - $ssa;
                 $info = [];
                 $info[] = ['name' => 'SANEADO', 'y' => $ssa];
@@ -961,8 +963,86 @@ class IndicadoresController extends Controller
                 return response()->json(compact('excel', 'base'));
 
             case 'tabla2':
-                // $excel = DB::select('call edu_pa_sfl_porlocal_distrito(?,?,?,?)', [0, 0, 0, 0]);
-                // return response()->json(compact('excel'));
+                // $npro = Ubigeo::where(DB::raw('length(codigo)'), 4)->where('nombre', 'CORONEL PORTILLO')->first();
+                // $ndis = Ubigeo::where(DB::raw('length(codigo)'), 6)->where('nombre', 'CALLERIA')->first();
+                // // $excel = DB::select('call edu_pa_sfl_porlocal_distrito(?,?,?,?)', [0, 0, 0, 0]);
+                // return response()->json(compact('npro', 'ndis'));
+                $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla2($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 0);
+                $aniob = $rq->anio;
+                $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla2', compact('base', 'ndis', 'aniob'))->render();
+                return response()->json(compact('excel', 'base'));
+
+            case 'tabla3':
+                $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla3($rq->indicador, $rq->anio);
+                $aniob = $rq->anio;
+                $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla3', compact('base', 'ndis', 'aniob'))->render();
+                return response()->json(compact('excel', 'base'));
+            case 'tabla4':
+                $base = SFLRepositorio::get_iiee(2024, 0, 0, 0, 0);
+                // $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla3($rq->indicador, $rq->anio);
+                $aniob = $rq->anio;
+                $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla4', compact('base', 'ndis', 'aniob'))->render();
+                return response()->json(compact('excel', 'base'));
+
+            default:
+                return [];
+        }
+    }
+
+    // ############ educacion pacto 2 #################
+
+    public function PactoRegionalEduPacto2Reports(Request $rq)
+    {
+        if ($rq->distrito > 0) $ndis = Ubigeo::find($rq->distrito)->nombre;
+        else $ndis = '';
+        switch ($rq->div) {
+            case 'head':
+                $loc = SFLRepositorio::get_localsx($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 0); //->count();
+                $ssa = SFLRepositorio::get_localsx($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 1); //->count();
+                $nsa = $loc - $ssa; //SFLRepositorio::listado_iiee($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 1)->count();
+                $rin = number_format(100 * ($loc > 0 ? $ssa / $loc : 0));
+                return response()->json(['rq' => $rq->all(), 'loc' => $loc, 'ssa' => $ssa, 'nsa' => $nsa, 'rin' => $rin]);
+
+            case 'anal1':
+                $base = IndicadorGeneralMetaRepositorio::getEduPacto2anal1($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 0);
+                // return response()->json(compact('base'));
+                $info['series'] = [];
+                $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' =>    'SANEADO', 'data' => []];
+                $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'NO SANEADO', 'data' => []];
+                foreach ($base as $keyi => $ii) {
+                    $info['categoria'][] = $ii->provincia;
+                    $info['series'][0]['data'][] = (int)$ii->si;
+                    $info['series'][1]['data'][] = (int)$ii->no;
+                    // $dx1[$keyi] = (int)$ii->t1;
+                    // $dx2[$keyi] = (int)$ii->tt - (int)$ii->t1;
+                }
+                return response()->json(compact('info', 'base'));
+            case 'anal2':
+                // $tt = SFLRepositorio::get_locals($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 0)->count();
+                // $ssa = SFLRepositorio::get_locals($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 1)->count();
+                $tt = SFLRepositorio::get_localsx($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 0); //->count();
+                $ssa = SFLRepositorio::get_localsx($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 1); //->count();
+                $nsa = $tt - $ssa;
+                $info = [];
+                $info[] = ['name' => 'SANEADO', 'y' => $ssa];
+                $info[] = ['name' => 'NO SANEADO', 'y' => $nsa];
+                // $info = MatriculaGeneralRepositorio::indicador01tabla($rq->div, $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion, $rq->area, 0);
+                $reg['fuente'] = 'Siagie - MINEDU';
+                // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
+                // $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
+                return response()->json(compact('info', 'reg'));
+                // return [];
+            case 'tabla1':
+                $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla1($rq->indicador, $rq->anio);
+
+                $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla1', compact('base', 'ndis'))->render();
+                return response()->json(compact('excel', 'base'));
+
+            case 'tabla2':
+                // $npro = Ubigeo::where(DB::raw('length(codigo)'), 4)->where('nombre', 'CORONEL PORTILLO')->first();
+                // $ndis = Ubigeo::where(DB::raw('length(codigo)'), 6)->where('nombre', 'CALLERIA')->first();
+                // // $excel = DB::select('call edu_pa_sfl_porlocal_distrito(?,?,?,?)', [0, 0, 0, 0]);
+                // return response()->json(compact('npro', 'ndis'));
                 $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla2($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 0);
                 $aniob = $rq->anio;
                 $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla2', compact('base', 'ndis', 'aniob'))->render();

@@ -16,12 +16,12 @@
             @foreach ($base as $key => $item)
                 <tr class="text-center">
                     <td class="text-left">{{ $item->distrito }}</td>
-                    <td>{{ $item->tt }}</td>
-                    <td>{{ $item->t1 }}</td>
-                    <td>{!! avance($item->indicador) !!}</td>
-                    <td>{{ $item->t2 }}</td>
-                    <td>{{ $item->t3 }}</td>
-                    <td>{{ $item->t4 }}</td>
+                    <td>{{ $item->conteo }}</td>
+                    <td>{{ $item->si }}</td>
+                    <td>{!! avance(100*$item->si/$item->conteo) !!}</td>
+                    <td>{{ $item->no }}</td>
+                    <td>{{ $item->pro }}</td>
+                    <td>{{ $item->sin }}</td>
                 </tr>
             @endforeach
         </tbody>

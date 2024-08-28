@@ -26,7 +26,7 @@
                         <div class="card-body p-2">
                             <div class="form-group row align-items-center vh-5 m-0">
                                 <div class="col-lg-5 col-md-5 col-sm-5">
-                                    <h5 class="page-title font-12">Fuente: Padrón Nominal, <br>{{ $actualizado }}</h5>
+                                    <h5 class="page-title font-12">Fuente: Padrón Nominal, SIAGIE <br>{{ $actualizado }}</h5>
                                 </div>
                                 <div class="col-lg-1 col-md-1 col-sm-1  ">
                                     <select id="anio" name="anio" class="form-control btn-xs font-11 p-0"
@@ -36,6 +36,16 @@
                                                 {{ $item->anio == $aniomax ? 'selected' : '' }}>
                                                 {{ $item->anio }}</option>
                                         @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-2">
+                                    <select id="provincia" name="provincia" class="form-control btn-xs font-11"
+                                        onchange="cargarDistritos();">
+                                        <option value="0">MES</option>
+                                        {{-- @foreach ($mes as $item)
+                                            <option value="{{ $item->id }}">
+                                                {{ $item->nombre }}</option>
+                                        @endforeach --}}
                                     </select>
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-sm-2">
@@ -54,16 +64,7 @@
                                         <option value="0">DISTRITO</option>
                                     </select>
                                 </div>
-                                <div class="col-lg-2 col-md-2 col-sm-2">
-                                    <select id="area" name="area" class="form-control btn-xs font-11"
-                                        onchange="cargarcuadros();">
-                                        <option value="0">ÁREA GEOGRÁFICO</option>
-                                        @foreach ($area as $item)
-                                            <option value="{{ $item->id }}">
-                                                {{ strtoupper($item->nombre) }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -107,7 +108,7 @@
                                         <span data-plugin="counterup" id="loc"></span>
                                     </h4>
                                     <p class="mb-0 mt-1 text-truncate">
-                                        Locales Escolares
+                                        Población
                                     </p>
                                 </div>
                             </div>
@@ -130,7 +131,7 @@
                                         <span data-plugin="counterup" id="ssa"></span>
                                     </h4>
                                     <p class="mb-0 mt-1 text-truncate">
-                                        L.E. Saneados
+                                        Matriculados
                                     </p>
                                 </div>
                             </div>
@@ -153,7 +154,7 @@
                                         <span data-plugin="counterup" id="nsa"></span>
                                     </h4>
                                     <p class="mb-0 mt-1 text-truncate">
-                                        L.E. No Saneados
+                                        No Matriculados
                                     </p>
                                 </div>
                             </div>
@@ -321,7 +322,7 @@
 
         function panelGraficas(div) {
             $.ajax({
-                url: "{{ route('salud.indicador.pactoregional.edu.pacto2.reports') }}",
+                url: "{{ route('salud.indicador.pactoregional.edu.pacto1.reports') }}",
                 data: {
                     'div': div,
                     "anio": $('#anio').val(),
