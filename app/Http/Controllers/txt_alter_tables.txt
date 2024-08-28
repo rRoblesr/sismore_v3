@@ -2221,3 +2221,23 @@ CREATE TABLE `edu_sfl_pacto02` (
 				area  varchar(20) NULL DEFAULT NULL,
 				estado int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `edu_pa_sfl_porlocal`(IN `v_ugel` INT, IN `v_provincia` INT, IN `v_distrito` INT, IN `v_estado` INT)
+BEGIN
+	set @query='\r\n\t INSERT INTO `edu_sfl_pacto02`(  `local`, `ugel`, `provincia`, `distrito`, `area`, `estado`) select `local`, ugel, provincia, distrito, area, estado from (\r\n\t\tselect `local`, ugel, provincia, distrito,area,ugelid,provinciaid,distritoid,areaid, buscar_estado(`local`) as estado from (\r\n\t\t\tselect \r\n\t\t\t\t`local`, max(ugel_n) as ugel, max(provincia_n) as provincia, max(distrito_n) as distrito, max(distrito_n) as area,\r\n\t\t\t\tmax(ugel_id) ugelid, max(provincia_id) provinciaid, max(distrito_id) distritoid, max(area_id) areaid\r\n\t\t\tfrom (       \r\n\t\t\t\tselect \r\n\t\t\t\t\tiiee.id iiee_id, iiee.codLocal `local`, iiee.Ugel_id ugel_id, pv.id provincia_id, dt.id distrito_id, iiee.Area_id area_id, \r\n\t\t\t\t\tuu.nombre ugel_n, pv.nombre provincia_n, dt.nombre distrito_n, aa.nombre area_n \r\n\t\t\t\tfrom edu_institucionEducativa as iiee \r\n\t\t\t\tinner join edu_centropoblado as cp on cp.id = iiee.CentroPoblado_id \r\n\t\t\t\tinner join edu_area as aa on aa.id = iiee.Area_id \r\n\t\t\t\tinner join edu_ugel as uu on uu.id = iiee.Ugel_id \r\n\t\t\t\tinner join par_ubigeo as dt on dt.id = cp.Ubigeo_id \r\n\t\t\t\tinner join par_ubigeo as pv on pv.id = dt.dependencia \r\n\t\t\t\twhere iiee.EstadoInsEdu_id = 3 and iiee.TipoGestion_id in (4, 5, 7, 8) and iiee.estado = "AC" and iiee.NivelModalidad_id not in (14, 15)\r\n\t\t\t) as iiee ';
+	set @query=concat(@query,' group by `local` ) as tb order by estado )as tbx');
+	set @query=concat(@query,' where 1');
+	set @query=concat(@query,if(v_ugel>0     ,concat(' and ugelid=',v_ugel),''));
+	set @query=concat(@query,if(v_provincia>0,concat(' and provinciaid=',v_provincia),''));
+	set @query=concat(@query,if(v_distrito>0 ,concat(' and distritoid=',v_distrito),''));
+	set @query=concat(@query,if(v_estado>0   ,concat(' and estado=',v_estado),''));
+
+	prepare xxx from @query;
+	execute xxx;
+	deallocate prepare xxx;
+
+END$$
+DELIMITER ;
+
