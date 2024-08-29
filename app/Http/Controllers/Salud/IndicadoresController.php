@@ -15,6 +15,7 @@ use App\Models\Parametro\Anio;
 use App\Models\Parametro\IndicadorGeneral;
 use App\Models\Parametro\IndicadorGeneralMeta;
 use App\Models\Parametro\Mes;
+use App\Models\Parametro\PoblacionPN;
 use App\Models\Parametro\Ubigeo;
 use App\Models\Salud\ImporPadronActas;
 use App\Models\Salud\ImporPadronPvica;
@@ -942,20 +943,21 @@ class IndicadoresController extends Controller
                 }
                 return response()->json(compact('info', 'base'));
             case 'anal2':
-                // $tt = SFLRepositorio::get_locals($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 0)->count();
-                // $ssa = SFLRepositorio::get_locals($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 1)->count();
-                $tt = SFLRepositorio::get_localsx($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 0); //->count();
-                $ssa = SFLRepositorio::get_localsx($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 1); //->count();
-                $nsa = $tt - $ssa;
                 $info = [];
-                $info[] = ['name' => 'SANEADO', 'y' => $ssa];
-                $info[] = ['name' => 'NO SANEADO', 'y' => $nsa];
-                // $info = MatriculaGeneralRepositorio::indicador01tabla($rq->div, $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion, $rq->area, 0);
-                $reg['fuente'] = 'Siagie - MINEDU';
-                // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-                // $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
-                return response()->json(compact('info', 'reg'));
-                // return [];
+                $info['categoria'] = ['3 Años', '4 Años', '5 Años'];
+
+                $data1 = MatriculaGeneralDetalle::select('edad', DB::raw('count(id) as conteo'))
+                    ->where('matriculageneral_id', 18)->whereIn('edad', [3, 4, 5])
+                    ->groupBy('edad')->get();
+                foreach ($data1 as $key => $value) {
+                    $info['serie'][1][] = $value->conteo;
+                }
+
+                $data2 = PoblacionPN::from('par_poblacion_padron_nominal as pn')->select(DB::raw('sum(3a) as a3'), DB::raw('sum(4a) as a4'), DB::raw('sum(5a) as a5'))
+                    ->where('pn.anio', 2024)->get()->first();
+                $info['serie'][0] = [(int)$data2->a3, (int)$data2->a4, (int)$data2->a5];
+                $info['serie'][3] = [100 * $info['serie'][1][0] / $info['serie'][0][0], 100 * $info['serie'][1][1] / $info['serie'][0][1], 100 * $info['serie'][1][2] / $info['serie'][0][2]];
+                return response()->json(compact('info'));
             case 'tabla1':
                 $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla1($rq->indicador, $rq->anio);
 
