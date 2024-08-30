@@ -959,7 +959,7 @@ class IndicadoresController extends Controller
                 $info['serie'][3] = [100 * $info['serie'][1][0] / $info['serie'][0][0], 100 * $info['serie'][1][1] / $info['serie'][0][1], 100 * $info['serie'][1][2] / $info['serie'][0][2]];
                 return response()->json(compact('info'));
             case 'tabla1':
-                $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla1($rq->indicador, $rq->anio);
+                $base = IndicadorGeneralMetaRepositorio::getEduPacto1tabla1($rq->indicador, $rq->anio);
 
                 $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla1', compact('base', 'ndis'))->render();
                 return response()->json(compact('excel', 'base'));
