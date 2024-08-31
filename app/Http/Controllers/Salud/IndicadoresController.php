@@ -937,6 +937,7 @@ class IndicadoresController extends Controller
                     $info['serie'][] = $ii->ind;
                 }
                 return response()->json(compact('info', 'base'));
+
             case 'anal2':
                 $info = [];
                 $info['categoria'] = ['3 Años', '4 Años', '5 Años'];
@@ -953,31 +954,50 @@ class IndicadoresController extends Controller
                 $info['serie'][0] = [(int)$data2->a3, (int)$data2->a4, (int)$data2->a5];
                 $info['serie'][3] = [100 * $info['serie'][1][0] / $info['serie'][0][0], 100 * $info['serie'][1][1] / $info['serie'][0][1], 100 * $info['serie'][1][2] / $info['serie'][0][2]];
                 return response()->json(compact('info'));
+
             case 'tabla1':
                 $base = IndicadorGeneralMetaRepositorio::getEduPacto1tabla1($rq->indicador, $rq->anio, $rq->mes, 0, $rq->distrito);
                 $excel = view('salud.Indicadores.PactoRegionalEduPacto1tabla1', compact('base', 'ndis'))->render();
                 return response()->json(compact('excel', 'base'));
 
             case 'tabla2':
-                // $npro = Ubigeo::where(DB::raw('length(codigo)'), 4)->where('nombre', 'CORONEL PORTILLO')->first();
-                // $ndis = Ubigeo::where(DB::raw('length(codigo)'), 6)->where('nombre', 'CALLERIA')->first();
-                // // $excel = DB::select('call edu_pa_sfl_porlocal_distrito(?,?,?,?)', [0, 0, 0, 0]);
-                // return response()->json(compact('npro', 'ndis'));
-                $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla2($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 0);
+                $base = IndicadorGeneralMetaRepositorio::getEduPacto1tabla2($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $foot = clone $base[0];
+                $foot->conteo = 0;
+                $foot->hconteo = 0;
+                $foot->mconteo = 0;
+                $foot->conteo3 = 0;
+                $foot->hconteo3 = 0;
+                $foot->mconteo3 = 0;
+                $foot->conteo4 = 0;
+                $foot->hconteo4 = 0;
+                $foot->mconteo4 = 0;
+                $foot->conteo5 = 0;
+                $foot->hconteo5 = 0;
+                $foot->mconteo5 = 0;
+
+                foreach ($base as $key => $value) {
+                    $foot->conteo += $value->conteo;
+                    $foot->hconteo += $value->hconteo;
+                    $foot->mconteo += $value->mconteo;
+                    $foot->conteo3 += $value->conteo3;
+                    $foot->hconteo3 += $value->hconteo3;
+                    $foot->mconteo3 += $value->mconteo3;
+                    $foot->conteo4 += $value->conteo4;
+                    $foot->hconteo4 += $value->hconteo4;
+                    $foot->mconteo4 += $value->mconteo4;
+                    $foot->conteo5 += $value->conteo5;
+                    $foot->hconteo5 += $value->hconteo5;
+                    $foot->mconteo5+= $value->mconteo5;
+                }
                 $aniob = $rq->anio;
-                $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla2', compact('base', 'ndis', 'aniob'))->render();
-                return response()->json(compact('excel', 'base'));
+                $excel = view('salud.Indicadores.PactoRegionalEduPacto1tabla2', compact('base', 'foot', 'ndis', 'aniob'))->render();
+                return response()->json(compact('excel'));
 
             case 'tabla3':
-                $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla3($rq->indicador, $rq->anio);
+                $base = IndicadorGeneralMetaRepositorio::getEduPacto1tabla3($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
                 $aniob = $rq->anio;
-                $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla3', compact('base', 'ndis', 'aniob'))->render();
-                return response()->json(compact('excel', 'base'));
-            case 'tabla4':
-                $base = SFLRepositorio::get_iiee(2024, 0, 0, 0, 0);
-                // $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla3($rq->indicador, $rq->anio);
-                $aniob = $rq->anio;
-                $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla4', compact('base', 'ndis', 'aniob'))->render();
+                $excel = view('salud.Indicadores.PactoRegionalEduPacto1tabla3', compact('base', 'ndis', 'aniob'))->render();
                 return response()->json(compact('excel', 'base'));
 
             default:

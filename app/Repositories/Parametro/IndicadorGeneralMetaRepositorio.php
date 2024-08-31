@@ -784,6 +784,43 @@ class IndicadorGeneralMetaRepositorio
         return $query;
     }
 
+    public static function getEduPacto1tabla2($indicador_id, $anio, $mes, $provincia, $distrito)
+    {
+        $query = DB::table('edu_cubo_pacto1_matriculados')->select(
+            'nivelmodalidad',
+            DB::raw('sum(total) as conteo'),
+            DB::raw('sum(if(sexo_id=1,total,0)) as hconteo'),
+            DB::raw('sum(if(sexo_id=2,total,0)) as mconteo'),
+            DB::raw('sum(if(edad=3,total,0)) as conteo3'),
+            DB::raw('sum(if(edad=3 and sexo_id=1,total,0)) as hconteo3'),
+            DB::raw('sum(if(edad=3 and sexo_id=2,total,0)) as mconteo3'),
+            DB::raw('sum(if(edad=4,total,0)) as conteo4'),
+            DB::raw('sum(if(edad=4 and sexo_id=1,total,0)) as hconteo4'),
+            DB::raw('sum(if(edad=4 and sexo_id=2,total,0)) as mconteo4'),
+            DB::raw('sum(if(edad=5,total,0)) as conteo5'),
+            DB::raw('sum(if(edad=5 and sexo_id=1,total,0)) as hconteo5'),
+            DB::raw('sum(if(edad=5 and sexo_id=2,total,0)) as mconteo5')
+        )->groupBy('nivelmodalidad')->orderBy('nivelmodalidad_codigo', 'asc')->get();
+
+        return $query;
+    }
+
+    public static function getEduPacto1tabla3($indicador_id, $anio, $mes, $provincia, $distrito)
+    {
+        $query = IndicadorGeneralMeta::from('par_indicador_general_meta as igm')->select(
+            'ds.nombre as dis',
+            'anio_base',
+            'valor_base',
+            DB::raw('max(if(anio=2023,valor,0)) as v2023'),
+            DB::raw('max(if(anio=2024,valor,0)) as v2024'),
+            DB::raw('max(if(anio=2025,valor,0)) as v2025'),
+            DB::raw('max(if(anio=2026,valor,0)) as v2026'),
+        )->where('indicadorgeneral', $indicador_id)
+            ->join('par_ubigeo as ds', 'ds.id', '=', 'igm.distrito')->groupBy('dis', 'anio_base', 'valor_base')->get();
+
+        return $query;
+    }
+
 
     //###################### educacion pacto 2  #######################
     public static function getEduPacto2anal1($anio, $ugel, $provincia, $distrito, $estado)

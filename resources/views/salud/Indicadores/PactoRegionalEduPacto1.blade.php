@@ -1,6 +1,17 @@
 @extends('layouts.main', ['titlePage' => ''])
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
+    <style>
+        /* Cambia el tamaño de fuente del campo de búsqueda */
+.dataTables_wrapper .dataTables_filter  {
+    font-size: 10px;
+}
+
+/* Cambia el tamaño de fuente del selector de cantidad de registros */
+.dataTables_wrapper .dataTables_length  {
+    font-size: 10px;
+}
+    </style>
 @endsection
 
 @section('content')
@@ -216,21 +227,17 @@
                                 <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
                                         class="fa fa-file-excel"></i> Descargar</button>
                             </div> --}}
-                    <h3 class="text-black font-14 mb-0">Evaluación de cumplimiento de los logros esperados por
-                        distrito
+                    <h3 class="text-black font-14 mb-0">
+                        Matrícula de estudiantes de educación incial por edades y sexo, según nivel educativo
                     </h3>
                 </div>
                 <div class="card-body p-0">
                     <div class="row">
                         <div class="col-12">
-                            <div class="table-responsive" id="vtabla3">
+                            <div class="table-responsive" id="vtabla2">
                             </div>
                         </div>
                     </div>
-                    {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                                <span class="float-left vtabla1-fuente">Fuente:</span>
-                                <span class="float-right vtabla1-fecha">Actualizado:</span>
-                            </div> --}}
                 </div>
             </div>
         </div>
@@ -244,22 +251,17 @@
                                 <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
                                         class="fa fa-file-excel"></i> Descargar</button>
                             </div> --}}
-                    <h3 class="text-black font-14 mb-0">Listado de Instituciones Educativas Pùblicas, Segùn estado
-                        de
-                        Saneamiento Fisico Legal
+                    <h3 class="text-black font-14 mb-0">
+                        Evaluación de los cumplimientos de los logros esperados por distritos
                     </h3>
                 </div>
                 <div class="card-body p-0">
                     <div class="row">
                         <div class="col-12">
-                            <div class="table-responsive" id="vtabla4">
+                            <div class="table-responsive" id="vtabla3">
                             </div>
                         </div>
                     </div>
-                    {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                                <span class="float-left vtabla1-fuente">Fuente:</span>
-                                <span class="float-right vtabla1-fecha">Actualizado:</span>
-                            </div> --}}
                 </div>
             </div>
         </div>
@@ -287,7 +289,6 @@
             panelGraficas('tabla1');
             panelGraficas('tabla2');
             panelGraficas('tabla3');
-            panelGraficas('tabla4');
         }
 
         function panelGraficas(div) {
@@ -365,8 +366,15 @@
                         // });
                     } else if (div == "tabla2") {
                         $('#vtabla2').html(data.excel);
-                        // $('.vtabla2-fuente').html('Fuente: ]]' + data.reg.fuente);
-                        // $('.vtabla2-fecha').html('Actualizado: ' + data.reg.fecha);
+                        // $('#tabla2').DataTable({
+                        //     responsive: true,
+                        //     autoWidth: false,
+                        //     ordered: true,
+                        //     // searching: false,
+                        //     // bPaginate: false,
+                        //     // info: false,
+                        //     language: table_language,
+                        // });
                     } else if (div == "tabla3") {
                         $('#vtabla3').html(data.excel);
                         // $('.vtabla2-fuente').html('Fuente: ]]' + data.reg.fuente);

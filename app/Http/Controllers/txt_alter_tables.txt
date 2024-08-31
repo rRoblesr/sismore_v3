@@ -2251,6 +2251,13 @@ CREATE TABLE `edu_cubo_pacto1_matriculados` (
     provincia_id int(11) DEFAULT NULL,
     distrito varchar(100) NULL DEFAULT NULL,
     distrito_id int(11) DEFAULT NULL,
+    cod_modular varchar(10) NULL DEFAULT NULL,
+    nombre_iiee varchar(100) NULL DEFAULT NULL,
+    nivelmodalidad_id  int(11) DEFAULT NULL,
+    nivelmodalidad_codigo varchar(3) NULL DEFAULT NULL,
+    nivelmodalidad varchar(50) NULL DEFAULT NULL,
+    sexo_id  int(11) DEFAULT NULL,
+    sexo varchar(15) NULL DEFAULT NULL,
     edad int(11) DEFAULT NULL,
     total int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
