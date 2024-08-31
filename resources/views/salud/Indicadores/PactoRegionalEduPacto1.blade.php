@@ -496,7 +496,7 @@
                     }
                 },
                 series: [{
-                    name: 'Población',
+                    name: 'Avance',
                     data: [],
                     marker: {
                         symbol: 'circle',
@@ -508,7 +508,7 @@
                     series: {
                         dataLabels: {
                             enabled: true,
-                            // format: '{point.y:.1f} mil',
+                            format: '{point.y:.1f}%',
                             style: {
                                 color: '#000'
                             },
@@ -519,7 +519,7 @@
                     }
                 },
                 tooltip: {
-                    // pointFormat: '{series.name}: <b>{point.y:.1f} mil</b>'
+                    pointFormat: '{series.name}: <b>{point.y:.1f}%</b>'
                 },
                 legend: {
                     enabled: false // Ocultar la leyenda
