@@ -31,19 +31,18 @@
                             <select id="anio" name="anio" class="form-control btn-xs font-11 p-0"
                                 onchange="cargarcuadros();">
                                 @foreach ($anio as $item)
-                                    <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                    <option value="{{ $item->anio }}" {{ $item->anio == date('Y') ? 'selected' : '' }}>
                                         {{ $item->anio }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-2">
-                            <select id="provincia" name="provincia" class="form-control btn-xs font-11"
-                                onchange="cargarDistritos();">
-                                <option value="0">MES</option>
-                                {{-- @foreach ($mes as $item)
-                                            <option value="{{ $item->id }}">
-                                                {{ $item->nombre }}</option>
-                                        @endforeach --}}
+                            <select id="mes" name="mes" class="form-control btn-xs font-11"
+                                onchange="cargarcuadros();">
+                                @foreach ($mes as $item)
+                                    <option value="{{ $item->id }}"{{ $item->id == date('m') - 3 ? ' selected ' : '' }}>
+                                        {{ $item->mes }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-2">
@@ -277,11 +276,8 @@
                     thousandsSep: ","
                 }
             });
-
             cargarDistritos();
             cargarcuadros();
-
-
         });
 
         function cargarcuadros() {
@@ -303,7 +299,6 @@
                     "mes": $('#mes').val(),
                     "provincia": $('#provincia').val(),
                     "distrito": $('#distrito').val(),
-                    "area": $('#area').val(),
                     "indicador": '{{ $ind->id }}',
                     "codigo": '{{ $ind->codigo }}',
                 },
@@ -331,9 +326,10 @@
                         }, {
                             text: 'Avance Mensual de la evaluación del cumplimiento'
                         });
-                        anal1.series[0].setData([22, 25, 32]);
+                        // anal1.series[0].setData([22, 25, 32]);
+                        anal1.series[0].setData(data.info.serie);
                         anal1.xAxis[0].update({
-                            categories: ['4 Años', '5 Años', '6 Años']
+                            categories: data.info.categoria, //['4 Años', '5 Años', '6 Años']
                         });
                     } else if (div == "anal2") {
                         anal2 = gcolumn1(div);

@@ -19,7 +19,9 @@ use App\Models\Parametro\PoblacionPN;
 use App\Models\Parametro\Ubigeo;
 use App\Models\Salud\ImporPadronActas;
 use App\Models\Salud\ImporPadronPvica;
+use App\Repositories\Educacion\CuboPacto1Repositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
+use App\Repositories\Educacion\MatriculaGeneralRepositorio;
 use App\Repositories\Educacion\SFLRepositorio;
 use App\Repositories\Parametro\IndicadorGeneralMetaRepositorio;
 use App\Repositories\Parametro\IndicadorGeneralRepositorio;
@@ -306,13 +308,11 @@ class IndicadoresController extends Controller
                 // return '';
 
             case 'DIT-EDU-01':
-                $ff = SFL::select(DB::raw('max(fecha_registro) as ff'))->first();
-                $actualizado = 'Actualizado al ' . date('d', strtotime($ff->ff)) . ' de ' . $this->mesname[date('m', strtotime($ff->ff)) - 1] . ' del ' . date('Y', strtotime($ff->ff));
-                $anio = SFL::distinct()->select(DB::raw('year(fecha_registro) as anio'))->orderBy('anio')->get();
+                $actualizado = 'Actualizado al ';
+                $anio = IndicadorGeneralMeta::distinct()->select('anio')->where('indicadorgeneral', $indicador_id)->get();
+                $mes = Mes::select('id', 'mes')->where('codigo', '<=', date('m'))->get();
                 $provincia = UbigeoRepositorio::provincia('25');
-                $area = Area::all();
-                $aniomax = $anio->max('anio');
-                return view('salud.Indicadores.PactoRegionalEduPacto1', compact('actualizado', 'anio', 'provincia', 'aniomax', 'area', 'ind'));
+                return view('salud.Indicadores.PactoRegionalEduPacto1', compact('actualizado', 'anio', 'mes', 'provincia',  'ind'));
 
             case 'DIT-EDU-02':
                 $ff = SFL::select(DB::raw('max(fecha_registro) as ff'))->first();
@@ -914,7 +914,7 @@ class IndicadoresController extends Controller
         return response()->json($mes);
     }
 
-    // ############ educacion pacto 2 #################
+    // ############ educacion pacto 1 #################
 
     public function PactoRegionalEduPacto1Reports(Request $rq)
     {
@@ -922,24 +922,19 @@ class IndicadoresController extends Controller
         else $ndis = '';
         switch ($rq->div) {
             case 'head':
-                $loc = (int)PoblacionPNRepositorio::conteo3a5($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 1);
-                $ssa = MatriculaGeneralDetalle::where('matriculageneral_id', 18)->whereIn('edad', [3, 4, 5])->get()->count();
+                $loc = (int)PoblacionPNRepositorio::conteo3a5_acumulado($rq->anio, $rq->mes, $rq->provincia, $rq->distrito, 0);
+                $ssa = CuboPacto1Repositorio::pacto1_matriculados($rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
                 $nsa = $loc - $ssa;
                 $rin = number_format(100 * ($loc > 0 ? $ssa / $loc : 0));
                 return response()->json(['rq' => $rq->all(), 'loc' => number_format($loc, 0), 'ssa' => number_format($ssa, 0), 'nsa' => number_format($nsa), 'rin' => $rin]);
 
             case 'anal1':
-                $base = IndicadorGeneralMetaRepositorio::getEduPacto2anal1($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 0);
-                // return response()->json(compact('base'));
+                $base = IndicadorGeneralMetaRepositorio::getEduPacto1anal1($rq->indicador, $rq->anio, 0, 0, $rq->distrito, 0);
+                $info['categoria'] = [];
                 $info['series'] = [];
-                $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' =>    'SANEADO', 'data' => []];
-                $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'NO SANEADO', 'data' => []];
                 foreach ($base as $keyi => $ii) {
-                    $info['categoria'][] = $ii->provincia;
-                    $info['series'][0]['data'][] = (int)$ii->si;
-                    $info['series'][1]['data'][] = (int)$ii->no;
-                    // $dx1[$keyi] = (int)$ii->t1;
-                    // $dx2[$keyi] = (int)$ii->tt - (int)$ii->t1;
+                    $info['categoria'][] = $ii->mes;
+                    $info['serie'][] = $ii->ind;
                 }
                 return response()->json(compact('info', 'base'));
             case 'anal2':
@@ -959,9 +954,8 @@ class IndicadoresController extends Controller
                 $info['serie'][3] = [100 * $info['serie'][1][0] / $info['serie'][0][0], 100 * $info['serie'][1][1] / $info['serie'][0][1], 100 * $info['serie'][1][2] / $info['serie'][0][2]];
                 return response()->json(compact('info'));
             case 'tabla1':
-                $base = IndicadorGeneralMetaRepositorio::getEduPacto1tabla1($rq->indicador, $rq->anio);
-
-                $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla1', compact('base', 'ndis'))->render();
+                $base = IndicadorGeneralMetaRepositorio::getEduPacto1tabla1($rq->indicador, $rq->anio, $rq->mes, 0, $rq->distrito);
+                $excel = view('salud.Indicadores.PactoRegionalEduPacto1tabla1', compact('base', 'ndis'))->render();
                 return response()->json(compact('excel', 'base'));
 
             case 'tabla2':

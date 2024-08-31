@@ -6,6 +6,8 @@ use App\Http\Controllers\Salud\ImporReportePN05Controller;
 use App\Http\Controllers\Salud\IndicadoresController;
 use App\Models\Educacion\Importacion;
 use App\Models\Parametro\IndicadorGeneralMeta;
+use App\Models\Parametro\Mes;
+use App\Models\Parametro\PoblacionPN;
 use App\Models\Parametro\Ubigeo;
 use App\Models\Salud\DataPacto1;
 use App\Models\Salud\DataPacto3;
@@ -13,6 +15,7 @@ use App\Models\Salud\DataPacto3Denominador;
 use App\Models\Salud\ImporPadronActas;
 use App\Models\Salud\ImporPadronAnemia;
 use App\Models\Salud\ImporReportePN05;
+use App\Repositories\Educacion\CuboPacto1Repositorio;
 use Illuminate\Support\Facades\DB;
 
 class IndicadorGeneralMetaRepositorio
@@ -746,17 +749,36 @@ class IndicadorGeneralMetaRepositorio
     }
     //###################### educacion pacto 1  #######################
 
-    public static function getEduPacto1tabla1($indicador_id, $anio)
+    public static function getEduPacto1anal1($indicador_id, $anio, $mes, $provincia, $distrito)
+    {
+        $est = CuboPacto1Repositorio::pacto1_matriculados_mensual($anio, 0, 0, $distrito);
+        $ppn = PoblacionPNRepositorio::conteo3a5_mensual($anio, 0, 0, $distrito, 0);
+        $query = Mes::select('id', 'abreviado as mes')->get();
+        foreach ($query as $key => $value) {
+            $value->est = null;
+            $value->pob = null;
+            $value->ind = null;
+            foreach ($est as $ee) {
+                if ($ee->mes_id == $value->id) $value->est = $ee->conteo;
+            }
+            foreach ($ppn as $pp) {
+                if ($pp->mes_id == $value->id) $value->pob = $pp->conteo;
+            }
+            $value->ind = $value->pob == null ? null : round(100 * ($value->est / $value->pob), 1);
+        }
+        return $query;
+    }
+
+    public static function getEduPacto1tabla1($indicador_id, $anio, $mes, $provincia, $distrito)
     {
         $query = IndicadorGeneralMeta::select('par_Indicador_general_meta.*', 'd.codigo', 'd.id as distrito_id', 'd.nombre as distrito')->where('indicadorgeneral', $indicador_id)->where('anio', $anio)
             ->join('par_ubigeo as d', 'd.id', '=', 'par_Indicador_general_meta.distrito')->get();
         foreach ($query as $key => $value) {
-            // $query = DataPacto1::where('anio', $value->anio)->where('distrito', $value->distrito)->select(DB::raw('sum(estado) as conteo'));
-            // if (IndicadoresController::$pacto1_anio == $anio)
-            //     $query = $query->where('mes', '>=', IndicadoresController::$pacto1_mes);
-            // $query = $query->get()->first();
-            $value->avance = 0; //$query->conteo ? $query->conteo : 0;
-            $value->porcentaje = 0; //number_format(100 * ($value->valor > 0 ? $value->avance / $value->valor : 0), 1);
+            $poblacion = PoblacionPNRepositorio::conteo3a5_acumulado($anio, $mes, 0, $value->distrito_id, 0);
+            $cubo = CuboPacto1Repositorio::pacto1_matriculados_mes_a($anio, $mes, 0, $value->distrito_id);
+            $value->den = $poblacion ? $poblacion : 0;
+            $value->num = $cubo ? $cubo->first()->conteo : 0;
+            $value->porcentaje = round(100 * ($value->den > 0 ? $value->num / $value->den : 0), 1);
             $value->cumple = $value->valor == $value->avance ? 1 : 0;
         }
         return $query;

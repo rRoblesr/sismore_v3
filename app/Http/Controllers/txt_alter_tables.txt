@@ -2241,3 +2241,16 @@ BEGIN
 END$$
 DELIMITER ;
 
+
+CREATE TABLE `edu_cubo_pacto1_matriculados` (
+    id int(11) auto_increment primary key,
+    anio int(11) DEFAULT NULL,
+    mes varchar(100) NULL DEFAULT NULL,
+    mes_id int(11) DEFAULT NULL,
+    provincia varchar(100) NULL DEFAULT NULL,
+    provincia_id int(11) DEFAULT NULL,
+    distrito varchar(100) NULL DEFAULT NULL,
+    distrito_id int(11) DEFAULT NULL,
+    edad int(11) DEFAULT NULL,
+    total int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
