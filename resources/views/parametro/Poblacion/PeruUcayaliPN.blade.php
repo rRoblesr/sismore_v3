@@ -103,7 +103,7 @@
                             <div class="custom-select-container">
                                 <label for="vanio">AÑO</label>
                                 <select id="vanio" name="vanio" class="form-control form-control-sm"
-                                    onchange="cargar_mes;cargarCards();">
+                                    onchange="cargar_mes();">
                                     @foreach ($anios as $item)
                                         <option value="{{ $item->anio }}"
                                             {{ $item->anio == date('Y') ? 'selected' : '' }}>
@@ -116,7 +116,7 @@
                             <div class="custom-select-container">
                                 <label for="vmes">MES</label>
                                 <select id="vmes" name="vmes" class="form-control form-control-sm"
-                                    onchange="cargar_provincia();cargarCards();">
+                                    onchange="cargar_provincia();">
                                 </select>
                             </div>
                         </div>
@@ -124,7 +124,7 @@
                             <div class="custom-select-container">
                                 <label for="vprovincia">PROVINCIA</label>
                                 <select id="vprovincia" name="vprovincia" class="form-control form-control-sm"
-                                    onchange="cargar_distrito();cargarCards();">
+                                    onchange="cargar_distrito();">
                                 </select>
                             </div>
                         </div>
@@ -142,8 +142,6 @@
             </div>
         </div>
     </div>
-
-
 
     <!--Widget-4 -->
     <div class="row">
@@ -236,11 +234,7 @@
                     {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
                 </div>
                 <div class="card-body p-0">
-                    {{-- <figure class="highcharts-figure p-0 m-0"> --}}
-                    <div id="anal5" style="height: 20rem"></div>
-                    {{-- </figure> --}}
-                    {{-- <div class="credits-left">Fuente: RENIEC - PADRÓN NOMINAL</div>
-                    <div class="credits-right">Actualizado: JULIO 2024</div> --}}
+                    <div id="anal1" style="height: 20rem"></div>
                 </div>
             </div>
         </div>
@@ -250,11 +244,7 @@
                     {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
                 </div>
                 <div class="card-body p-0">
-                    {{-- <figure class="highcharts-figure p-0 m-0"> --}}
-                    <div id="anal6" style="height: 20rem"></div>
-                    {{-- </figure> --}}
-                    {{-- <div class="credits-left">Fuente: RENIEC - PADRÓN NOMINAL</div>
-                    <div class="credits-right">Actualizado: JULIO 2024</div> --}}
+                    <div id="anal2" style="height: 20rem"></div>
                 </div>
             </div>
         </div>
@@ -316,10 +306,6 @@
         // var distrito_select = 0;
         var anal1;
         var anal2;
-        var anal3;
-        var anal4;
-        var anal5;
-        var anal6;
         let selectedCode = null;
         let originalColors = {};
 
@@ -331,18 +317,12 @@
             });
             cargar_mes();
 
-            panelGraficas('anal1');
-            cargarCards();
         });
 
         function cargarCards() {
             panelGraficas('head');
-            // panelGraficas('anal1');
-            // panelGraficas('anal2');
-            // panelGraficas('anal3');
-            // panelGraficas('anal4');
-            panelGraficas('anal5');
-            panelGraficas('anal6');
+            panelGraficas('anal1');
+            panelGraficas('anal2');
             panelGraficas('tabla1');
             panelGraficas('tabla2');
         }
@@ -369,15 +349,10 @@
                         $('#' + div).html('<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
                     } else if (div == "anal2") {
                         $('#' + div).html('<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
-                    } else if (div == "anal3") {
-                        $('#' + div).html('<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
-                    } else if (div == "anal4") {
-                        $('#' + div).html('<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
-                    } else if (div == "anal5") {
-                        $('#' + div).html('<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
-                    } else if (div == "anal6") {
-                        $('#' + div).html('<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
                     } else if (div == "tabla1") {
+                        $('#v' + div).html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "tabla2") {
                         $('#v' + div).html(
                             '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
                     }
@@ -389,12 +364,12 @@
                         $('#card2').text(data.card2);
                         $('#card3').text(data.card3);
                         $('#card4').text(data.card4);
-                    } else if (div == "anal5") {
-                        anal5 = gColumnx(div, data.info, '',
+                    } else if (div == "anal1") {
+                        anal1 = gColumnx(div, data.info, '',
                             'Población de niños y niñas menores de 6 años, según sexo, periodo 2019- 2024',
                             'Año')
-                    } else if (div == "anal6") {
-                        anal6 = gColumnx(div, data.info, '',
+                    } else if (div == "anal2") {
+                        anal2 = gColumnx(div, data.info, '',
                             'Población de niños y niñas menores de 6 años, según sexo', 'Etapa Vida')
                     } else if (div == "tabla1") {
                         $('#vtabla1').html(data.excel);
@@ -422,79 +397,6 @@
                         //     info: false,
                         //     language: table_language,
                         // });
-                    }
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 1");
-                    console.log(jqXHR);
-                },
-            });
-        }
-
-        function cargarTablaDistritos(div, provincia) {
-            provincia_select = provincia;
-            $.ajax({
-                url: "{{ route('matriculageneral.ebr.tablas') }}",
-                data: {
-                    'div': div,
-                    "anio": $('#anio').val(),
-                    "ugel": $('#ugel').val(),
-                    "gestion": $('#gestion').val(),
-                    "area": $('#area').val(),
-                    "provincia": provincia
-                },
-                type: "GET",
-                dataType: "JSON",
-                beforeSend: function() {
-                    $('#vtabla2').html(
-                        '<span><i class="fa fa-spinner fa-spin"></i></span>');
-                },
-                success: function(data) {
-                    if (div == "tabla2") {
-                        $('#vtabla2').html(data.excel);
-                        $('#tabla2').DataTable({
-                            responsive: true,
-                            autoWidth: false,
-                            ordered: true,
-                            searching: false,
-                            bPaginate: false,
-                            info: false,
-                            language: table_language,
-                        });
-                    }
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 1");
-                    console.log(jqXHR);
-                },
-            });
-        }
-
-        function cargarTablaCentroPoblado(div, distrito) {
-            distrito_select = distrito;
-            $('#modal_centropoblado').modal('show');
-            $.ajax({
-                url: "{{ route('matriculageneral.ebr.tablas') }}",
-                data: {
-                    'div': div,
-                    "anio": $('#anio').val(),
-                    "ugel": $('#ugel').val(),
-                    "gestion": $('#gestion').val(),
-                    "area": $('#area').val(),
-                    "provincia": distrito
-                },
-                type: "GET",
-                dataType: "JSON",
-                beforeSend: function() {
-                    $('#vtabla3').html(
-                        '<span><i class="fa fa-spinner fa-spin"></i></span>');
-                },
-                success: function(data) {
-                    if (div == "tabla3") {
-                        $('#vtabla3').html(data.excel);
-                        $('#tabla3').DataTable({
-                            "language": table_language,
-                        });
                     }
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
@@ -568,6 +470,7 @@
                         options += `<option value='${value.id}'>${value.nombre}</option>`;
                     });
                     $("#vdistrito").append(options);
+                    cargarCards();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);

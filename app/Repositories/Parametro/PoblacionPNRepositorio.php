@@ -43,6 +43,102 @@ class PoblacionPNRepositorio
         return $query->sum(DB::raw('pn.0a + pn.1a + pn.2a + pn.3a + pn.4a + pn.5a'));
     }
 
+    public static function conteo_anios_sexo($mes, $provincia, $distrito)
+    {
+        $query = PoblacionPN::from('par_poblacion_padron_nominal as pn')
+            ->select(
+                'pn.anio',
+                DB::raw('sum(pn.0a + pn.1a + pn.2a + pn.3a + pn.4a + pn.5a) as conteo'),
+                DB::raw('sum(if(sexo_id=1,pn.0a + pn.1a + pn.2a + pn.3a + pn.4a + pn.5a,0)) as hconteo'),
+                DB::raw('sum(if(sexo_id=2,pn.0a + pn.1a + pn.2a + pn.3a + pn.4a + pn.5a,0)) as mconteo')
+            )
+            ->join('par_ubigeo as ds', 'ds.id', '=', 'pn.ubigeo_id')
+            ->join('par_ubigeo as pv', 'pv.id', '=', 'ds.dependencia');
+        if ($mes > 0) $query = $query->where('pn.mes_id', $mes);
+        if ($provincia > 0) $query = $query->where('pv.id', $provincia);
+        if ($distrito > 0) $query = $query->where('ds.id', $distrito);
+        $query = $query->groupBy('anio')->get();
+        return $query;
+    }
+
+    public static function conteo_edad_sexo($anio, $mes, $provincia, $distrito)
+    {
+        $query = PoblacionPN::from('par_poblacion_padron_nominal as pn')
+            ->select(
+                DB::raw('case when pn.sexo_id=1 then "HOMBRE" when pn.sexo_id=2 then "MUJER" end as sexo'),
+                DB::raw('sum(pn.0a) as edad0'),
+                DB::raw('sum(pn.1a) as edad1'),
+                DB::raw('sum(pn.2a) as edad2'),
+                DB::raw('sum(pn.3a) as edad3'),
+                DB::raw('sum(pn.4a) as edad4'),
+                DB::raw('sum(pn.5a) as edad5'),
+            )
+            ->join('par_ubigeo as ds', 'ds.id', '=', 'pn.ubigeo_id')
+            ->join('par_ubigeo as pv', 'pv.id', '=', 'ds.dependencia')
+            ->where('pn.anio', $anio);
+        if ($mes > 0) $query = $query->where('pn.mes_id', $mes);
+        if ($provincia > 0) $query = $query->where('pv.id', $provincia);
+        if ($distrito > 0) $query = $query->where('ds.id', $distrito);
+        $query = $query->groupBy('sexo_id', 'sexo')->get();
+        return $query;
+    }
+
+    public static function conteo_seguro_edades($anio, $mes, $provincia, $distrito)
+    {
+        $query = PoblacionPN::from('par_poblacion_padron_nominal as pn')
+            ->select(
+                'seguro',
+                DB::raw('sum(pn.0a + pn.1a + pn.2a + pn.3a + pn.4a + pn.5a) as conteo'),
+                DB::raw('sum(if(sexo_id=1,pn.0a + pn.1a + pn.2a + pn.3a + pn.4a + pn.5a,0)) as hconteo'),
+                DB::raw('sum(if(sexo_id=2,pn.0a + pn.1a + pn.2a + pn.3a + pn.4a + pn.5a,0)) as mconteo'),
+                DB::raw('sum(pn.0a) as edad0'),
+                DB::raw('sum(pn.1a) as edad1'),
+                DB::raw('sum(pn.2a) as edad2'),
+                DB::raw('sum(pn.3a) as edad3'),
+                DB::raw('sum(pn.4a) as edad4'),
+                DB::raw('sum(pn.5a) as edad5'),
+                DB::raw('sum(pn.28dias) as edad28'),
+                DB::raw('sum(pn.0_5meses) as edad05'),
+                DB::raw('sum(pn.6_11meses) as edad611'),
+            )
+            ->join('par_ubigeo as ds', 'ds.id', '=', 'pn.ubigeo_id')
+            ->join('par_ubigeo as pv', 'pv.id', '=', 'ds.dependencia')
+            ->where('pn.anio', $anio);
+        if ($mes > 0) $query = $query->where('pn.mes_id', $mes);
+        if ($provincia > 0) $query = $query->where('pv.id', $provincia);
+        if ($distrito > 0) $query = $query->where('ds.id', $distrito);
+        $query = $query->groupBy('seguro')->get();
+        return $query;
+    }
+
+    public static function conteo_distrito_edades($anio, $mes, $provincia, $distrito)
+    {
+        $query = PoblacionPN::from('par_poblacion_padron_nominal as pn')
+            ->select(
+                'ds.nombre as distrito',
+                DB::raw('sum(pn.0a + pn.1a + pn.2a + pn.3a + pn.4a + pn.5a) as conteo'),
+                DB::raw('sum(if(sexo_id=1,pn.0a + pn.1a + pn.2a + pn.3a + pn.4a + pn.5a,0)) as hconteo'),
+                DB::raw('sum(if(sexo_id=2,pn.0a + pn.1a + pn.2a + pn.3a + pn.4a + pn.5a,0)) as mconteo'),
+                DB::raw('sum(pn.0a) as edad0'),
+                DB::raw('sum(pn.1a) as edad1'),
+                DB::raw('sum(pn.2a) as edad2'),
+                DB::raw('sum(pn.3a) as edad3'),
+                DB::raw('sum(pn.4a) as edad4'),
+                DB::raw('sum(pn.5a) as edad5'),
+                DB::raw('sum(pn.28dias) as edad28'),
+                DB::raw('sum(pn.0_5meses) as edad05'),
+                DB::raw('sum(pn.6_11meses) as edad611'),
+            )
+            ->join('par_ubigeo as ds', 'ds.id', '=', 'pn.ubigeo_id')
+            ->join('par_ubigeo as pv', 'pv.id', '=', 'ds.dependencia')
+            ->where('pn.anio', $anio);
+        if ($mes > 0) $query = $query->where('pn.mes_id', $mes);
+        if ($provincia > 0) $query = $query->where('pv.id', $provincia);
+        if ($distrito > 0) $query = $query->where('ds.id', $distrito);
+        $query = $query->groupBy('distrito')->get();
+        return $query;
+    }
+
     public static function conteo_cnv($anio, $mes, $provincia, $distrito, $sexo, $cnv)
     {
         $query = PoblacionPN::from('par_poblacion_padron_nominal as pn')
