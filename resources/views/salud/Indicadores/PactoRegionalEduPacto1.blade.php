@@ -3,14 +3,14 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
     <style>
         /* Cambia el tamaño de fuente del campo de búsqueda */
-.dataTables_wrapper .dataTables_filter  {
-    font-size: 10px;
-}
+        .dataTables_wrapper .dataTables_filter {
+            font-size: 10px;
+        }
 
-/* Cambia el tamaño de fuente del selector de cantidad de registros */
-.dataTables_wrapper .dataTables_length  {
-    font-size: 10px;
-}
+        /* Cambia el tamaño de fuente del selector de cantidad de registros */
+        .dataTables_wrapper .dataTables_length {
+            font-size: 10px;
+        }
     </style>
 @endsection
 
@@ -51,7 +51,7 @@
                             <select id="mes" name="mes" class="form-control btn-xs font-11"
                                 onchange="cargarcuadros();">
                                 @foreach ($mes as $item)
-                                    <option value="{{ $item->id }}"{{ $item->id == date('m') - 3 ? ' selected ' : '' }}>
+                                    <option value="{{ $item->id }}"{{ $item->id == date('m') ? ' selected ' : '' }}>
                                         {{ $item->mes }}</option>
                                 @endforeach
                             </select>
@@ -340,6 +340,9 @@
                             text: 'Tasa neta de matrícula inicial de 3 a 5 años'
                         });
 
+                        anal2.yAxis[0].update({
+                            max: 2 * data.alto
+                        });
                         anal2.series[0].setData(data.info.serie[0]);
                         anal2.series[1].setData(data.info.serie[1]);
                         anal2.series[2].setData(data.info.serie[2]);
@@ -575,34 +578,55 @@
                 // },
                 yAxis: [{ // Eje Y principal para las columnas
                     min: 0,
+                    // max:40000,
                     title: {
                         text: ''
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '11px',
+                            //color:'blue',
+                        }
                     }
                 }, { // Eje Y secundario para la línea
                     title: {
                         text: ''
                     },
+                    labels: {
+                        enabled: false,
+                        style: {
+                            fontSize: '11px',
+                            //color:'blue',
+                        }
+                    },
                     opposite: true, // Ponerlo al lado derecho
-                    min: 0
+                    min: -150
                 }],
                 tooltip: {
                     shared: true
                 },
                 plotOptions: {
+                    // pointPadding: 0.2, // Ajuste de separación entre barras
+                    // borderWidth: 0, // Sin borde
                     column: {
                         dataLabels: {
                             enabled: true
                         }
-                    }
+                    },
+                    // series: {
+                    //     groupPadding: 0.1 // Ajusta la separación entre grupos de barras
+                    // }
                 },
                 series: [{
                     name: 'Población',
                     data: [18, 20, 30], // Datos de la población
                     // color: '#00B4D8' // Color de la barra de Población
+                    // zIndex: 0 // Asegura que las barras estén debajo de la línea
                 }, {
                     name: 'Matriculados',
                     data: [18, 20, 30], // Datos de los matriculados
                     // color: '#F4A261' // Color de la barra de Matriculados
+                    // zIndex: 0 // Asegura que las barras estén debajo de la línea
                 }, {
                     type: 'line',
                     name: 'Porcentaje',
@@ -615,7 +639,6 @@
                     },
                     showInLegend: false,
                     dataLabels: {
-
                         enabled: true,
                         format: '{y} %', // Formato de los labels del porcentaje
                         style: {

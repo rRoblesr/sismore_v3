@@ -925,6 +925,7 @@ class IndicadoresController extends Controller
                 $loc = (int)PoblacionPNRepositorio::conteo3a5_acumulado($rq->anio, $rq->mes, $rq->provincia, $rq->distrito, 0);
                 $ssa = CuboPacto1Repositorio::pacto1_matriculados($rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
                 $nsa = $loc - $ssa;
+                $nsa = $nsa >= 0 ? $nsa : 0;
                 $rin = number_format(100 * ($loc > 0 ? $ssa / $loc : 0));
                 return response()->json(['rq' => $rq->all(), 'loc' => number_format($loc, 0), 'ssa' => number_format($ssa, 0), 'nsa' => number_format($nsa), 'rin' => $rin]);
 
@@ -940,20 +941,30 @@ class IndicadoresController extends Controller
 
             case 'anal2':
                 $info = [];
+                $alto = 0;
                 $info['categoria'] = ['3 Años', '4 Años', '5 Años'];
-
-                $data1 = MatriculaGeneralDetalle::select('edad', DB::raw('count(id) as conteo'))
-                    ->where('matriculageneral_id', 18)->whereIn('edad', [3, 4, 5])
-                    ->groupBy('edad')->get();
+                $data1 = CuboPacto1Repositorio::pacto1_matriculados_edad($rq->anio, $rq->mes, 0, $rq->distrito);
                 foreach ($data1 as $key => $value) {
-                    $info['serie'][1][] = $value->conteo;
+                    $info['serie'][1][] = (int)$value->conteo;
+                    if ($value->conteo > $alto) $alto = (int)$value->conteo;
                 }
 
                 $data2 = PoblacionPN::from('par_poblacion_padron_nominal as pn')->select(DB::raw('sum(3a) as a3'), DB::raw('sum(4a) as a4'), DB::raw('sum(5a) as a5'))
-                    ->where('pn.anio', 2024)->get()->first();
+                    ->where('pn.anio', $rq->anio);
+                if ($rq->mes > 0) $data2 = $data2->where('mes_id', $rq->mes);
+                // if ($rq->provincia > 0) $data2 = $data2->where('mes_id', $rq->provincia);
+                if ($rq->distrito > 0) $data2 = $data2->where('ubigeo_id', $rq->distrito);
+                $data2 = $data2->get()->first();
+                if ($data2->a3 > $alto) $alto = (int)$data2->a3;
+                if ($data2->a4 > $alto) $alto = (int)$data2->a4;
+                if ($data2->a5 > $alto) $alto = (int)$data2->a5;
                 $info['serie'][0] = [(int)$data2->a3, (int)$data2->a4, (int)$data2->a5];
-                $info['serie'][3] = [100 * $info['serie'][1][0] / $info['serie'][0][0], 100 * $info['serie'][1][1] / $info['serie'][0][1], 100 * $info['serie'][1][2] / $info['serie'][0][2]];
-                return response()->json(compact('info'));
+                $info['serie'][2] = [
+                    round(100 * ($info['serie'][0][0] > 0 ? $info['serie'][1][0] / $info['serie'][0][0] : 0), 1),
+                    round(100 * ($info['serie'][0][0] > 0 ? $info['serie'][1][1] / $info['serie'][0][1] : 0), 1),
+                    round(100 * ($info['serie'][0][0] > 0 ?  $info['serie'][1][2] / $info['serie'][0][2] : 0), 1)
+                ];
+                return response()->json(compact('info', 'alto'));
 
             case 'tabla1':
                 $base = IndicadorGeneralMetaRepositorio::getEduPacto1tabla1($rq->indicador, $rq->anio, $rq->mes, 0, $rq->distrito);
@@ -988,7 +999,7 @@ class IndicadoresController extends Controller
                     $foot->mconteo4 += $value->mconteo4;
                     $foot->conteo5 += $value->conteo5;
                     $foot->hconteo5 += $value->hconteo5;
-                    $foot->mconteo5+= $value->mconteo5;
+                    $foot->mconteo5 += $value->mconteo5;
                 }
                 $aniob = $rq->anio;
                 $excel = view('salud.Indicadores.PactoRegionalEduPacto1tabla2', compact('base', 'foot', 'ndis', 'aniob'))->render();
