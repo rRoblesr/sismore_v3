@@ -260,6 +260,34 @@ class PoblacionController extends Controller
                 return response()->json(compact('info'));
 
             case 'tabla1':
+                $base = PoblacionProyectadaRepositorio::conteo_departamento_etapavida($rq->anio);
+                $foot = [];
+                if ($base->count() > 0) {
+                    $foot = clone $base[0];
+                    $foot->conteo = 0;
+                    $foot->hconteo = 0;
+                    $foot->mconteo = 0;
+                    $foot->ev1 = 0;
+                    $foot->ev2 = 0;
+                    $foot->ev3 = 0;
+                    $foot->ev4 = 0;
+                    $foot->ev5 = 0;
+                    foreach ($base as $key => $value) {
+                        $foot->conteo += $value->conteo;
+                        $foot->hconteo += $value->hconteo;
+                        $foot->mconteo += $value->mconteo;
+                        $foot->ev1 += $value->ev1;
+                        $foot->ev2 += $value->ev2;
+                        $foot->ev3 += $value->ev3;
+                        $foot->ev4 += $value->ev4;
+                        $foot->ev5 += $value->ev5;
+                    }
+                }
+                $anio = $rq->anio;
+                $excel = view('parametro.Poblacion.PeruTabla1', compact('base', 'foot', 'anio'))->render();
+                return response()->json(compact('excel', 'foot', 'base'));
+
+            case 'tabla1x':
                 $base = PoblacionProyectadaRepositorio::conteo_anios_tabla1($rq->anio);
                 $foot = [];
                 if ($base->count() > 0) {

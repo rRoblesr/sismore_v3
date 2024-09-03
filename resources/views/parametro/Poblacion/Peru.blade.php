@@ -116,7 +116,7 @@
                                 <label for="vdepartamento" class="">DEPARTAMENTO</label>
                                 <select id="vdepartamento" name="vdepartamento" class="form-control form-control-sm"
                                     onchange="panelGraficas('anal1');cargarCards();">
-                                    <option value="00"></option>
+                                    <option value="00">TODOS</option>
                                     @foreach ($departamento as $item)
                                         <option value="{{ $item->codigo }}"> {{ $item->departamento }}</option>
                                     @endforeach
@@ -128,7 +128,7 @@
                                 <label for="vetapavida" class="">ETAPA DE VIDA</label>
                                 <select id="vetapavida" name="vetapavida" class="form-control form-control-sm"
                                     onchange="cargarCards();">
-                                    <option value="0"></option>
+                                    <option value="0">TODOS</option>
                                     @foreach ($etapavida as $item)
                                         <option value="{{ $item->id }}"> {{ $item->nombre }}</option>
                                     @endforeach
@@ -140,7 +140,7 @@
                                 <label for="vsexo" class="">SEXO</label>
                                 <select id="vsexo" name="vsexo" class="form-control form-control-sm"
                                     onchange="cargarCards();">
-                                    <option value="0"></option>
+                                    <option value="0">TODOS</option>
                                     <option value="1">HOMBRE</option>
                                     <option value="2">MUJER</option>
                                 </select>

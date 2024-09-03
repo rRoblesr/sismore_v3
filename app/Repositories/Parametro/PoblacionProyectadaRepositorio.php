@@ -51,8 +51,8 @@ class PoblacionProyectadaRepositorio
         if ($departamento > '00')
             $query = $query->where('pr.codigo', $departamento);
 
-        return $query->select('ge.etapavida','ev.nombre', DB::raw('sum(total) as conteo'), DB::raw('sum(hombre) as hconteo'), DB::raw('sum(mujer) as mconteo'))
-        ->groupBy('ge.etapavida','ev.nombre')->get();
+        return $query->select('ge.etapavida', 'ev.nombre', DB::raw('sum(total) as conteo'), DB::raw('sum(hombre) as hconteo'), DB::raw('sum(mujer) as mconteo'))
+            ->groupBy('ge.etapavida', 'ev.nombre')->get();
     }
 
     public static function grupoetareo_sexo($anio, $departamento, $etapavida)
@@ -114,6 +114,26 @@ class PoblacionProyectadaRepositorio
             DB::raw('sum(IF(anio=2029,total,0)) as c2029'),
             DB::raw('sum(IF(anio=2030,total,0)) as c2030')
         )->where('anio', '>', 2020)->groupBy('departamento')->get();
+        return $query;
+    }
+
+    public static function conteo_departamento_etapavida($anio)
+    {
+        $query = PoblacionProyectada::from('par_poblacion_proyectada as pr')
+            ->select(
+                'pr.departamento',
+                DB::raw('SUM(total) as conteo'),
+                DB::raw('SUM(hombre) as hconteo'),
+                DB::raw('SUM(mujer) as mconteo'),
+                DB::raw('SUM(IF(etapavida=1,total,0)) as ev1'),
+                DB::raw('SUM(IF(etapavida=2,total,0)) as ev2'),
+                DB::raw('SUM(IF(etapavida=3,total,0)) as ev3'),
+                DB::raw('SUM(IF(etapavida=4,total,0)) as ev4'),
+                DB::raw('SUM(IF(etapavida=5,total,0)) as ev5'),
+            )
+            ->join('par_grupoedad as ge', 'ge.edad', '=', 'pr.edad')
+            ->where('pr.anio', $anio)
+            ->groupBy('pr.departamento')->get();
         return $query;
     }
 
