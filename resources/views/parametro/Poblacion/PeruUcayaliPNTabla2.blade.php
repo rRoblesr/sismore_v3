@@ -1,8 +1,8 @@
-<table id="tabla1" class="table table-sm table-striped table-bordered font-11">
+<table id="tabla2" class="table table-sm table-striped table-bordered font-10">
     <thead>
         <tr class="bg-success-0 text-white text-center">
             <th rowspan="2" class="text-center">N°</th>
-            <th rowspan="2" class="text-center">Tipo Seguro</th>
+            <th rowspan="2" class="text-center">Distritos</th>
             <th colspan="3" class="text-center">Población</th>
             <th colspan="6" class="text-center">Edades Simples</th>
             <th colspan="3" class="text-center">Edades especiales</th>
@@ -28,7 +28,7 @@
             @foreach ($base as $key => $item)
                 <tr class="text-center">
                     <td>{{ $key + 1 }}</td>
-                    <td class="text-left">{{ $item->seguro }}</td>
+                    <td class="text-left">{{ $item->distrito }}</td>
                     <td class="text-center table-warning">{{ number_format($item->conteo, 0) }}</td>
                     <td class="text-center">{{ number_format($item->hconteo, 0) }}</td>
                     <td class="text-center">{{ number_format($item->mconteo, 0) }}</td>

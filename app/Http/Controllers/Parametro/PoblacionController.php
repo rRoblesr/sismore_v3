@@ -497,34 +497,36 @@ class PoblacionController extends Controller
 
                 $foot = [];
                 if ($base->count() > 0) {
-                    // $foot = clone $base[0];
-                    // $foot->conteo = 0;
-                    // $foot->hconteo = 0;
-                    // $foot->mconteo = 0;
-                    // $foot->ev1 = 0;
-                    // $foot->ev2 = 0;
-                    // $foot->ev3 = 0;
-                    // $foot->ev4 = 0;
-                    // $foot->ev5 = 0;
-                    // $foot->nacimiento = 0;
-                    // $foot->gestante = 0;
-                    // $foot->fertiles = 0;
-                    // foreach ($base as $key => $value) {
-                    //     $foot->conteo += $value->conteo;
-                    //     $foot->hconteo += $value->hconteo;
-                    //     $foot->mconteo += $value->mconteo;
-                    //     $foot->ev1 += $value->ev1;
-                    //     $foot->ev2 += $value->ev2;
-                    //     $foot->ev3 += $value->ev3;
-                    //     $foot->ev4 += $value->ev4;
-                    //     $foot->ev5 += $value->ev5;
-                    //     $foot->nacimiento += $value->nacimiento;
-                    //     $foot->gestante += $value->gestante;
-                    //     $foot->fertiles += $value->fertiles;
-                    // }
+                    $foot = clone $base[0];
+                    $foot->conteo = 0;
+                    $foot->hconteo = 0;
+                    $foot->mconteo = 0;
+                    $foot->edad0 = 0;
+                    $foot->edad1 = 0;
+                    $foot->edad2 = 0;
+                    $foot->edad3 = 0;
+                    $foot->edad4 = 0;
+                    $foot->edad5 = 0;
+                    $foot->edad28 = 0;
+                    $foot->edad05 = 0;
+                    $foot->edad611 = 0;
+                    foreach ($base as $key => $value) {
+                        $foot->conteo += $value->conteo;
+                        $foot->hconteo += $value->hconteo;
+                        $foot->mconteo += $value->mconteo;
+                        $foot->edad0 += $value->edad0;
+                        $foot->edad1 += $value->edad1;
+                        $foot->edad2 += $value->edad2;
+                        $foot->edad3 += $value->edad3;
+                        $foot->edad4 += $value->edad4;
+                        $foot->edad5 += $value->edad5;
+                        $foot->edad28 += $value->edad28;
+                        $foot->edad05 += $value->edad05;
+                        $foot->edad611 += $value->edad611;
+                    }
                 }
                 $anio = $rq->anio;
-                $excel = []; //view('parametro.Poblacion.PeruUcayaliTabla1', compact('base', 'foot', 'anio'))->render();
+                $excel = view('parametro.Poblacion.PeruUcayaliPNTabla1', compact('base', 'foot', 'anio'))->render();
                 return response()->json(compact('excel', 'foot', 'base'));
 
             case 'tabla2':
@@ -532,34 +534,36 @@ class PoblacionController extends Controller
 
                 $foot = [];
                 if ($base->count() > 0) {
-                    // $foot = clone $base[0];
-                    // $foot->conteo = 0;
-                    // $foot->hconteo = 0;
-                    // $foot->mconteo = 0;
-                    // $foot->ev1 = 0;
-                    // $foot->ev2 = 0;
-                    // $foot->ev3 = 0;
-                    // $foot->ev4 = 0;
-                    // $foot->ev5 = 0;
-                    // $foot->nacimiento = 0;
-                    // $foot->gestante = 0;
-                    // $foot->fertiles = 0;
-                    // foreach ($base as $key => $value) {
-                    //     $foot->conteo += $value->conteo;
-                    //     $foot->hconteo += $value->hconteo;
-                    //     $foot->mconteo += $value->mconteo;
-                    //     $foot->ev1 += $value->ev1;
-                    //     $foot->ev2 += $value->ev2;
-                    //     $foot->ev3 += $value->ev3;
-                    //     $foot->ev4 += $value->ev4;
-                    //     $foot->ev5 += $value->ev5;
-                    //     $foot->nacimiento += $value->nacimiento;
-                    //     $foot->gestante += $value->gestante;
-                    //     $foot->fertiles += $value->fertiles;
-                    // }
+                    $foot = clone $base[0];
+                    $foot->conteo = 0;
+                    $foot->hconteo = 0;
+                    $foot->mconteo = 0;
+                    $foot->edad0 = 0;
+                    $foot->edad1 = 0;
+                    $foot->edad2 = 0;
+                    $foot->edad3 = 0;
+                    $foot->edad4 = 0;
+                    $foot->edad5 = 0;
+                    $foot->edad28 = 0;
+                    $foot->edad05 = 0;
+                    $foot->edad611 = 0;
+                    foreach ($base as $key => $value) {
+                        $foot->conteo += $value->conteo;
+                        $foot->hconteo += $value->hconteo;
+                        $foot->mconteo += $value->mconteo;
+                        $foot->edad0 += $value->edad0;
+                        $foot->edad1 += $value->edad1;
+                        $foot->edad2 += $value->edad2;
+                        $foot->edad3 += $value->edad3;
+                        $foot->edad4 += $value->edad4;
+                        $foot->edad5 += $value->edad5;
+                        $foot->edad28 += $value->edad28;
+                        $foot->edad05 += $value->edad05;
+                        $foot->edad611 += $value->edad611;
+                    }
                 }
                 $anio = $rq->anio;
-                $excel = []; //view('parametro.Poblacion.PeruUcayaliTabla1', compact('base', 'foot', 'anio'))->render();
+                $excel = view('parametro.Poblacion.PeruUcayaliPNTabla2', compact('base', 'foot', 'anio'))->render();
                 return response()->json(compact('excel', 'foot', 'base'));
 
             default:
