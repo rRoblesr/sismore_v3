@@ -152,8 +152,6 @@
         </div>
     </div>
 
-
-
     <!--Widget-4 -->
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6">
@@ -237,7 +235,6 @@
     </div>
 
     {{-- portles --}}
-
     <div class="row">
 
         <div class="col-lg-6">
@@ -377,6 +374,7 @@
         var anal6;
         let selectedCode = null;
         let originalColors = {};
+        var mapData;
 
         $(document).ready(function() {
             Highcharts.setOptions({
@@ -384,9 +382,10 @@
                     thousandsSep: ","
                 }
             });
-            var mapData = Highcharts.maps['countries/pe/pe-all'];
-            console.log(otros);
-            console.log(provincia);
+            mapData = otros;
+            ///Highcharts.maps['countries/pe/pe-all'];
+            // console.log(otros);
+            // console.log(provincia);
             // mapData.features.forEach(function(feature) {
             //     if (feature.properties['fips'] === "PE21") { // Condición para Puno
             //         feature.properties['woe-name'] = "Puno";
@@ -472,64 +471,64 @@
                             ["pe-uc-cp", 2],
                             ["pe-uc-at", 3],
                             ["pe-uc-pr", 4],
-                        ]
+                        ];
 
                         anal1 = maps01(div, datax, '',
-                            'Población estimada y proyectada, según departamento');
+                            'Población Estimada y Proyectada, según Provincia y Distritos');
                         // selectedCode = null;
                         // console.log("vdepartamento1:" + $('#vdepartamento').val());
                         // console.log("selectedCode1:" + selectedCode);
 
-                        if ($('#vdepartamento').val() > '00') {
-                            // originalColors = {};
-                            var serie = anal1.series[0];
-                            // console.log("serie.name     :" + serie.name);
-                            // console.log("serie.data     :" + serie.data.length);
-                            // console.log("serie.color    :" + serie.color);
-                            // console.log("serie.type     :" + serie.type);
-                            // console.log("serie.visible  :" + serie.visible);
-                            // console.log("serie.index    :" + serie.index);
-                            // console.log("serie.options  :" + serie.options);
+                        // if ($('#vdepartamento').val() > '00') {
+                        // originalColors = {};
+                        // var serie = anal1.series[0];
+                        // console.log("serie.name     :" + serie.name);
+                        // console.log("serie.data     :" + serie.data.length);
+                        // console.log("serie.color    :" + serie.color);
+                        // console.log("serie.type     :" + serie.type);
+                        // console.log("serie.visible  :" + serie.visible);
+                        // console.log("serie.index    :" + serie.index);
+                        // console.log("serie.options  :" + serie.options);
 
-                            var depa = $('#vdepartamento').val();
-                            var point = serie.points.find(
-                                p => p.properties['fips'] && p.properties['fips'].substring(2) === depa
-                            );
+                        // var depa = $('#vdepartamento').val();
+                        // var point = serie.points.find(
+                        //     p => p.properties['fips'] && p.properties['fips'].substring(2) === depa
+                        // );
 
-                            console.log("************************************************");
-                            console.log("selectedCode2:" + selectedCode);
-                            console.log('fips:' + point.properties['fips'].substring(2));
-                            console.log('vdepartamento2:' + $('#vdepartamento').val());
-                            console.log('hc-key:' + point.properties['hc-key']);
-                            console.log("************************************************");
+                        // console.log("************************************************");
+                        // console.log("selectedCode2:" + selectedCode);
+                        // console.log('fips:' + point.properties['fips'].substring(2));
+                        // console.log('vdepartamento2:' + $('#vdepartamento').val());
+                        // console.log('hc-key:' + point.properties['hc-key']);
+                        // console.log("************************************************");
 
-                            if (point) {
-                                if (!originalColors[point.properties['hc-key']]) {
-                                    originalColors[point.properties['hc-key']] = point
-                                        .color; // Almacena el color original
-                                }
-                                // Remover selección previa si existe
-                                if (selectedCode) {
-                                    let prevPoint = serie.points.find(
-                                        p => p.properties['hc-key'] === selectedCode
-                                    );
-                                    if (prevPoint) {
-                                        prevPoint.update({
-                                            color: originalColors[selectedCode] || Highcharts
-                                                .getOptions().colors[0]
-                                        });
-                                    }
-                                }
+                        // if (point) {
+                        //     if (!originalColors[point.properties['hc-key']]) {
+                        //         originalColors[point.properties['hc-key']] = point
+                        //             .color; // Almacena el color original
+                        //     }
+                        //     // Remover selección previa si existe
+                        //     if (selectedCode) {
+                        //         let prevPoint = serie.points.find(
+                        //             p => p.properties['hc-key'] === selectedCode
+                        //         );
+                        //         if (prevPoint) {
+                        //             prevPoint.update({
+                        //                 color: originalColors[selectedCode] || Highcharts
+                        //                     .getOptions().colors[0]
+                        //             });
+                        //         }
+                        //     }
 
-                                // Resaltar el nuevo departamento
-                                point.update({
-                                    color: '#bada55'
-                                });
+                        //     // Resaltar el nuevo departamento
+                        //     point.update({
+                        //         color: '#bada55'
+                        //     });
 
-                                // Actualizar el código seleccionado
-                                selectedCode = point.properties['hc-key'];
-                            }
-                        }
+                        //     // Actualizar el código seleccionado
+                        //     selectedCode = point.properties['hc-key'];
+                        // }
+                        // }
 
 
                     } else if (div == "anal2") {
@@ -2105,7 +2104,7 @@
         function maps01(div, data, titulo, subtitulo) {
             return Highcharts.mapChart(div, {
                 chart: {
-                    map: otros //'countries/pe/pe-all'
+                    map: mapData, //otros //'countries/pe/pe-all'
                 },
 
                 title: {
@@ -2208,43 +2207,43 @@
                         // }
                         events: {
                             mouseOver: function() {
-                                if (!originalColors[this.properties['hc-key']]) {
-                                    originalColors[this.properties['hc-key']] = this
-                                        .color; // Almacena el color original
-                                }
+                                // if (!originalColors[this.properties['hc-key']]) {
+                                //     originalColors[this.properties['hc-key']] = this
+                                //         .color; // Almacena el color original
+                                // }
                             },
                             click: function() {
                                 let point = this;
                                 let code = point.properties['hc-key'];
-
-                                // Remover selección previa
                                 console.log('selectedCode e:' + code);
-                                if (selectedCode) {
-                                    this.series.chart.series[0].points.forEach(function(p) {
-                                        if (p.properties['hc-key'] === selectedCode) {
-                                            p.update({
-                                                color: originalColors[selectedCode] ||
-                                                    Highcharts.getOptions().colors[
-                                                        0] // Color original
-                                            });
-                                        }
-                                    });
-                                }
+                                // Remover selección previa
+                                // console.log('selectedCode e:' + code);
+                                // if (selectedCode) {
+                                //     this.series.chart.series[0].points.forEach(function(p) {
+                                //         if (p.properties['hc-key'] === selectedCode) {
+                                //             p.update({
+                                //                 color: originalColors[selectedCode] ||
+                                //                     Highcharts.getOptions().colors[
+                                //                         0] // Color original
+                                //             });
+                                //         }
+                                //     });
+                                // }
 
                                 // Marcar el punto seleccionado
-                                point.update({
-                                    color: '#bada55' // Color de selección
-                                });
+                                // point.update({
+                                //     color: '#bada55' // Color de selección
+                                // });
 
                                 // Almacenar el código del departamento seleccionado
-                                selectedCode = code;
+                                // selectedCode = code;
 
                                 // alert('Código: ' + code + '\nDepartamento: ' + point.name +
                                 //     '\nPoblación: ' + point.value);
 
-                                var codigo = this.properties['fips'].substring(2);
-                                $('#vdepartamento').val(codigo);
-                                cargarCards();
+                                // var codigo = this.properties['fips'].substring(2);
+                                // $('#vdepartamento').val(codigo);
+                                // cargarCards();
                             }
                         }
                     }
