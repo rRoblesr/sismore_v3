@@ -467,36 +467,14 @@
                         $('#card4').text(data.card4);
 
                     } else if (div == "anal1") {
-                        // var datax = [
-                        //     ["pe-lo", 1],
-                        //     ["pe-uc", 2],
-                        //     ["pe-ic", 3],
-                        //     ["pe-ju", 4],
-                        //     ["pe-tu", 5],
-                        //     ["pe-ar", 6],
-                        //     ["pe-cj", 7],
-                        //     ["pe-ay", 8],
-                        //     ["pe-ta", 9],
-                        //     ["pe-am", 10],
-                        //     ["pe-pi", 11],
-                        //     ["pe-cs", 12],
-                        //     ["pe-lb", 13],
-                        //     ["pe-hv", 14],
-                        //     ["pe-sm", 15],
-                        //     ["pe-ll", 16],
-                        //     ["pe-mq", 17],
-                        //     ["pe-ap", 18],
-                        //     ["pe-cl", 19],
-                        //     ["pe-hc", 20],
-                        //     ["pe-md", 21],
-                        //     ["pe-pa", 22],
-                        //     ["pe-3341", 23],
-                        //     ["pe-lr", 24],
-                        //     ["pe-an", 25],
-                        //     ["pe-145", 26]
-                        // ]
+                        var datax = [
+                            ["pe-uc-pa", 1],
+                            ["pe-uc-cp", 2],
+                            ["pe-uc-at", 3],
+                            ["pe-uc-pr", 4],
+                        ]
 
-                        anal1 = maps01(div, data.info, '',
+                        anal1 = maps01(div, datax, '',
                             'Población estimada y proyectada, según departamento');
                         // selectedCode = null;
                         // console.log("vdepartamento1:" + $('#vdepartamento').val());
