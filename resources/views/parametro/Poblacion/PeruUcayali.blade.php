@@ -467,10 +467,10 @@
 
                     } else if (div == "anal1") {
                         var datax = [
-                            ["pe-uc-pa", 1],
-                            ["pe-uc-cp", 2],
-                            ["pe-uc-at", 3],
-                            ["pe-uc-pr", 4],
+                            ["pe-uc-pa", 10],
+                            ["pe-uc-cp", 20],
+                            ["pe-uc-at", 30],
+                            ["pe-uc-pr", 40],
                         ];
 
                         anal1 = maps01(div, datax, '',
