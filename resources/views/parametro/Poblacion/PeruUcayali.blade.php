@@ -143,9 +143,13 @@
         <div class="col-lg-3 col-md-6 col-sm-6">
             <div class="card-box border border-plomo-0">
                 <div class="media">
-                    <div class="text-center">
+                    {{-- <div class="text-center">
                         <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
                             width="70%" height="70%">
+                    </div> --}}
+                    <div class="avatar-md mr-2">
+                        <i class="ion ion-ios-people avatar-title font-40 text-dark"></i>
+                        {{-- <i class="ion ion-ios-people avatar-title font-26 text-white"></i> --}}
                     </div>
                     <div class="media-body align-self-center">
                         <div class="text-right">
@@ -163,9 +167,13 @@
         <div class="col-lg-3 col-md-6 col-sm-6">
             <div class="card-box border border-plomo-0">
                 <div class="media">
-                    <div class="text-center">
+                    {{-- <div class="text-center">
                         <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
                             width="70%" height="70%">
+                    </div> --}}
+                    <div class="avatar-md mr-2">
+                        <i class="mdi mdi-human-male avatar-title font-44 text-dark"></i>
+                        {{-- <i class="ion ion-ios-people avatar-title font-26 text-white"></i> --}}
                     </div>
                     <div class="media-body align-self-center">
                         <div class="text-right">
@@ -183,9 +191,13 @@
         <div class="col-lg-3 col-md-6 col-sm-6">
             <div class="card-box border border-plomo-0">
                 <div class="media">
-                    <div class="text-center">
+                    {{-- <div class="text-center">
                         <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
                             width="70%" height="70%">
+                    </div> --}}
+                    <div class="avatar-md mr-2">
+                        <i class="ion ion-ios-woman avatar-title font-40 text-dark"></i>
+                        {{-- <i class="ion ion-ios-people avatar-title font-26 text-white"></i> --}}
                     </div>
                     <div class="media-body align-self-center">
                         <div class="text-right">
@@ -203,9 +215,13 @@
         <div class="col-lg-3 col-md-6 col-sm-6">
             <div class="card-box border border-plomo-0">
                 <div class="media">
-                    <div class="text-center">
+                    {{-- <div class="text-center">
                         <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
                             width="70%" height="70%">
+                    </div> --}}
+                    <div class="avatar-md mr-2">
+                        <i class="fas fa-child avatar-title font-40 text-dark"></i>
+                        {{-- <i class="ion ion-ios-people avatar-title font-26 text-white"></i> --}}
                     </div>
                     <div class="media-body align-self-center">
                         <div class="text-right">
@@ -369,7 +385,7 @@
                 }
             });
             cargar_distritos();
-            mapData = otros;//Highcharts.maps["countries/pe/pe-all"] ;
+            mapData = otros; //Highcharts.maps["countries/pe/pe-all"] ;
             // console.log(mapData.features.length);
             // mapData.features.forEach(element => {
             //     console.log(element);

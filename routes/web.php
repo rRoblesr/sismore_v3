@@ -1282,7 +1282,7 @@ Route::get('/Poblacion/Perux', [PoblacionController::class, 'poblacionprincipalp
 Route::get('/Poblacion/Peru/Ucayali', [PoblacionController::class, 'poblacionprincipalucayali'])->name('poblacionprincipal.peru.ucayali');
 Route::get('/Poblacion/Peru/ucayalix', [PoblacionController::class, 'poblacionprincipalucayalitabla'])->name('poblacionprincipal.peru.ucayali.tablas');
 
-Route::get('/Poblacion/Peru/Ucayali/PN', [PoblacionController::class, 'poblacionprincipalucayalipn'])->name('poblacionprincipal.peru.ucayali.pn');
+Route::get('/Poblacion/Peru/Ucayali/PadrónNominal', [PoblacionController::class, 'poblacionprincipalucayalipn'])->name('poblacionprincipal.peru.ucayali.pn');
 Route::get('/Poblacion/Peru/ucayali/PNx', [PoblacionController::class, 'poblacionprincipalucayalitablapn'])->name('poblacionprincipal.peru.ucayali.pn.tablas');
 Route::get('/Poblacion/Peru/ucayali/PN/mes', [PoblacionController::class, 'poblacionprincipalucayalitablapnmes'])->name('poblacionprincipal.peru.ucayali.pn.mes');
 Route::get('/Poblacion/Peru/ucayali/PN/provincia', [PoblacionController::class, 'poblacionprincipalucayalitablapnprovincia'])->name('poblacionprincipal.peru.ucayali.pn.provincia');
