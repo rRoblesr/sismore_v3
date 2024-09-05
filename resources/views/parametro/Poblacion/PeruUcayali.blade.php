@@ -95,7 +95,7 @@
                 </div>
                 <div class="card-body pb-0">
                     <div class="row">
-                        <div class="col-lg-10 col-md-4 col-sm-4">
+                        <div class="col-lg-6 col-md-4 col-sm-4">
                             <h4 class="page-title font-12">Fuente: INEI - MINSA</h4>
                         </div>
                         <div class="col-lg-2 col-md-1 col-sm-1  ">
@@ -111,41 +111,27 @@
                                 </select>
                             </div>
                         </div>
-                        {{-- <div class="col-lg-2 col-md-2 col-sm-2">
+                        <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
-                                <label for="vdepartamento" class="">DEPARTAMENTO</label>
-                                <select id="vdepartamento" name="vdepartamento" class="form-control form-control-sm"
-                                    onchange="panelGraficas('anal1');cargarCards();">
-                                    <option value="00"></option>
-                                    @foreach ($departamento as $item)
-                                        <option value="{{ $item->codigo }}"> {{ $item->departamento }}</option>
+                                <label for="vprovincia" class="">PROVINCIA</label>
+                                <select id="vprovincia" name="vprovincia" class="form-control form-control-sm"
+                                    onchange="cargar_distritos();cargarCards();">
+                                    <option value="0">TODOS</option>
+                                    @foreach ($provincia as $item)
+                                        <option value="{{ $item->id }}">{{ $item->nombre }}</option>
                                     @endforeach
                                 </select>
                             </div>
-                        </div> --}}
-                        {{-- <div class="col-lg-2 col-md-2 col-sm-2">
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
-                                <label for="vetapavida" class="">ETAPA DE VIDA</label>
-                                <select id="vetapavida" name="vetapavida" class="form-control form-control-sm"
+                                <label for="vdistrito" class="">DISTRITO</label>
+                                <select id="vdistrito" name="vdistrito" class="form-control form-control-sm"
                                     onchange="cargarCards();">
-                                    <option value="0"></option>
-                                    @foreach ($etapavida as $item)
-                                        <option value="{{ $item->id }}"> {{ $item->nombre }}</option>
-                                    @endforeach
+                                    <option value="0">TODOS</option>
                                 </select>
                             </div>
-                        </div> --}}
-                        {{-- <div class="col-lg-2 col-md-2 col-sm-2">
-                            <div class="custom-select-container">
-                                <label for="vsexo" class="">SEXO</label>
-                                <select id="vsexo" name="vsexo" class="form-control form-control-sm"
-                                    onchange="cargarCards();">
-                                    <option value="0"></option>
-                                    <option value="1">HOMBRE</option>
-                                    <option value="2">MUJER</option>
-                                </select>
-                            </div>
-                        </div> --}}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -382,7 +368,13 @@
                     thousandsSep: ","
                 }
             });
+            cargar_distritos();
             mapData = otros;
+            console.log(mapData.features.length);
+            mapData.features.forEach(element => {
+                console.log(element);
+            });
+            
             ///Highcharts.maps['countries/pe/pe-all'];
             // console.log(otros);
             // console.log(provincia);
@@ -422,9 +414,8 @@
                 data: {
                     'div': div,
                     "anio": $('#vanio').val(),
-                    "departamento": $('#vdepartamento').val(),
-                    "sexo": $('#vsexo').val(),
-                    "etapavida": $('#vetapavida').val(),
+                    "provincia": $('#vprovincia').val(),
+                    "distrito": $('#vdistrito').val(),
                 },
                 type: "GET",
                 dataType: "JSON",
@@ -466,14 +457,14 @@
                         $('#card4').text(data.card4);
 
                     } else if (div == "anal1") {
-                        var datax = [
-                            ["pe-uc-pa", 10],
-                            ["pe-uc-cp", 20],
-                            ["pe-uc-at", 30],
-                            ["pe-uc-pr", 40],
-                        ];
+                        // var datax = [
+                        //     ["pe-uc-pa", 10],
+                        //     ["pe-uc-cp", 20],
+                        //     ["pe-uc-at", 30],
+                        //     ["pe-uc-pr", 40],
+                        // ];
 
-                        anal1 = maps01(div, datax, '',
+                        anal1 = maps01(div, data.info, '',
                             'Población Estimada y Proyectada, según Provincia y Distritos');
                         // selectedCode = null;
                         // console.log("vdepartamento1:" + $('#vdepartamento').val());
@@ -641,17 +632,15 @@
             });
         }
 
-        function cargarDistritos() {
+        function cargar_distritos() {
             $.ajax({
                 url: "{{ route('ubigeo.distrito.25', '') }}/" + $('#vprovincia').val(),
                 type: 'GET',
                 success: function(data) {
                     $("#vdistrito option").remove();
-                    var options = '<option value="0">DISTRITO</option>';
+                    var options = '<option value="0">TODOS</option>';
                     $.each(data, function(index, value) {
-                        //ss = (id == value.id ? "selected" : "");
-                        options += "<option value='" + value.id + "'>" + value.nombre +
-                            "</option>"
+                        options += `<option value='${value.id}'>${value.nombre}</option>`
                     });
                     $("#vdistrito").append(options);
                 },
@@ -1080,9 +1069,9 @@
             return Highcharts.chart(div, {
                 chart: {
                     type: 'pie',
-                    borderColor: '#CCC', // Borde gris claro
-                    borderWidth: 2, // Ancho del borde
-                    plotShadow: true // Sombra alrededor del gráfico
+                    // borderColor: '#CCC', // Borde gris claro
+                    // borderWidth: 2, // Ancho del borde
+                    // plotShadow: true // Sombra alrededor del gráfico
                 },
                 title: {
                     text: titulo

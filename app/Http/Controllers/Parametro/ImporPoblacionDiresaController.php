@@ -2,23 +2,15 @@
 
 namespace App\Http\Controllers\Parametro;
 
-use App\Exports\ImporPadronSiagieExport;
 use App\Http\Controllers\Controller;
 use App\Imports\tablaXImport;
 use App\Models\Administracion\Entidad;
-use App\Models\Educacion\ImporMatricula;
 use App\Models\Educacion\Importacion;
-use App\Models\Educacion\Matricula;
 use App\Models\Parametro\Anio;
-use App\Models\Parametro\ImporPoblacion;
-use App\Models\Parametro\Poblacion;
-use App\Models\Parametro\PoblacionDetalle;
 use App\Models\Parametro\PoblacionDiresa;
 use App\Models\Parametro\Sexo;
 use App\Models\Parametro\Ubigeo;
-use App\Repositories\Educacion\ImporMatriculaRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
-use App\Repositories\Educacion\MatriculaDetalleRepositorio;
 use App\Utilities\Utilitario;
 use Carbon\Carbon;
 use Exception;
@@ -124,11 +116,12 @@ class ImporPoblacionDiresaController extends Controller
 
             foreach ($array as $key => $value) {
                 foreach ($value as $row) {
-                    // $ubi = Ubigeo::where('codigo', $row['ubigeo'])->where(DB::raw('length(codigo)'), 6)->first();
+                    $ubigeo = Ubigeo::where('codigo', $row['ubigeo'])->where(DB::raw('length(codigo)'), 6)->first();
+                    $sexo = Sexo::where('nombre', $row['sexo'])->first();
                     $padronPoblacion = PoblacionDiresa::Create([
                         'importacion_id' => $importacion->id,
-                        'ubigeo_id ' => optional(Ubigeo::where('codigo', $row['ubigeo'])->where(DB::raw('length(codigo)'), 6)->first())->id,
-                        'sexo_id' => Sexo::where('nombre', $row['sexo'])->first()->id,
+                        'ubigeo_id' => $ubigeo ? $ubigeo->id : null,
+                        'sexo_id' => $sexo ? $sexo->id : null,
                         'edad' => $row['edad'],
                         'grupo_etareo' => $row['grupo_etareo'],
                         'etapa_vida' => $row['etapa_vida'],
