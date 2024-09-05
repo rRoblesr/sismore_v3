@@ -27,7 +27,6 @@ class PoblacionPN extends Model
         '28dias',
         '0_5meses',
         '6_11meses',
-        '0_12meses',
         '0a',
         '1a',
         '2a',

@@ -2261,3 +2261,7 @@ CREATE TABLE `edu_cubo_pacto1_matriculados` (
     edad int(11) DEFAULT NULL,
     total int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+
+
+
+update `par_poblacion_proyectada` set codigo=(select codigo from par_ubigeo where nombre=departamento and length(codigo)=2)

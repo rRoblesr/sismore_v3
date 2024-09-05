@@ -17,12 +17,13 @@ class PoblacionProyectada extends Model
      * @var array
      */
     protected $fillable = [
-        'importacion_id',
         'anio',
         'fuente',
+        'codigo',
         'departamento',
         'edad',
-        'rango',
+        'grupo_etareo',
+        'etapa_vida',
         'mujer',
         'hombre',
         'total',

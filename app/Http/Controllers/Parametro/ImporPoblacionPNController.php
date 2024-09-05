@@ -11,8 +11,12 @@ use App\Models\Educacion\Importacion;
 use App\Models\Educacion\Matricula;
 use App\Models\Parametro\Anio;
 use App\Models\Parametro\ImporPoblacion;
+use App\Models\Parametro\Mes;
 use App\Models\Parametro\Poblacion;
 use App\Models\Parametro\PoblacionDetalle;
+use App\Models\Parametro\PoblacionPN;
+use App\Models\Parametro\Sexo;
+use App\Models\Parametro\Ubigeo;
 use App\Repositories\Educacion\ImporMatriculaRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\MatriculaDetalleRepositorio;
@@ -26,11 +30,11 @@ use Yajra\DataTables\DataTables;
 
 use function PHPUnit\Framework\isNull;
 
-class ImporPoblacionController extends Controller
+class ImporPoblacionPNController extends Controller
 {
     /* codigo unico de la fuente de importacion */
-    public $fuente = 31;
-    public static $FUENTE = 31;
+    public $fuente = 47;
+    public static $FUENTE = 47;
     public function __construct()
     {
         $this->middleware('auth');
@@ -87,10 +91,21 @@ class ImporPoblacionController extends Controller
                 foreach ($value as $celda => $row) {
                     if ($celda > 0) break;
                     $cadena =
+                        $row['anio'] .
+                        $row['mes'] .
                         $row['ubigeo'] .
+                        $row['cnv'] .
+                        $row['seguro'] .
                         $row['sexo'] .
-                        $row['edad'] .
-                        $row['total'];
+                        $row['28dias'] .
+                        $row['0_5meses'] .
+                        $row['6_11meses'] .
+                        $row['0a'] .
+                        $row['1a'] .
+                        $row['2a'] .
+                        $row['3a'] .
+                        $row['4a'] .
+                        $row['5a'];
                 }
             }
         } catch (Exception $e) {
@@ -114,20 +129,26 @@ class ImporPoblacionController extends Controller
                 'estado' => 'PE'
             ]);
 
-            $poblacion = Poblacion::Create([
-                'importacion_id' => $importacion->id,
-                'anio_id' => Anio::where('anio', date('Y', strtotime($importacion->fechaActualizacion)))->first()->id,
-                'created_at' => date('Y-m-d h:i:s'),
-            ]);
-
             foreach ($array as $key => $value) {
                 foreach ($value as $row) {
-                    $padronPoblacion = ImporPoblacion::Create([
+                    $padronPoblacion = PoblacionPN::Create([
                         'importacion_id' => $importacion->id,
-                        'ubigeo' => $row['ubigeo'],
-                        'sexo' => $row['sexo'],
-                        'edad' => $row['edad'],
-                        'total' => $row['total']
+                        'anio' => $row['anio'],
+                        'mes_id ' =>  Mes::where('nombre', $row['mes'])->first()->id,
+                        'ubigeo_id ' =>  Ubigeo::where('codigo', $row['ubigeo'])->first()->id,
+                        'cnv' => $row['cnv'],
+                        'seguro' => $row['seguro'],
+                        'sexo_id ' => Sexo::where('nombre', $row['sexo'])->first()->id,
+                        '28dias' => $row['28dias'],
+                        '0_5meses' => $row['0_5meses'],
+                        '6_11meses' => $row['6_11meses'],
+                        '0_12meses' => $row['0_12meses'],
+                        '0a' => $row['0a'],
+                        '1a' => $row['1a'],
+                        '2a' => $row['2a'],
+                        '3a' => $row['3a'],
+                        '4a' => $row['4a'],
+                        '5a' => $row['5a'],
                     ]);
                 }
             }
@@ -139,16 +160,16 @@ class ImporPoblacionController extends Controller
             $this->json_output(400, $mensaje);
         }
 
-        try {
-            DB::select('call par_pa_procesarImporPoblacion(?,?)', [$importacion->id, $poblacion->id]);
-        } catch (Exception $e) {
-            $importacion->estado = 'EL';
-            $importacion->save();
+        // try {
+        //     DB::select('call par_pa_procesarImporPoblacion(?,?)', [$importacion->id, $poblacion->id]);
+        // } catch (Exception $e) {
+        //     $importacion->estado = 'EL';
+        //     $importacion->save();
 
-            $mensaje = "Error al procesar la normalizacion de datos." . $e;
-            $tipo = 'danger';
-            $this->json_output(400, $mensaje);
-        }
+        //     $mensaje = "Error al procesar la normalizacion de datos." . $e;
+        //     $tipo = 'danger';
+        //     $this->json_output(400, $mensaje);
+        // }
         $mensaje = "Archivo excel subido y Procesado correctamente .";
         $this->json_output(200, $mensaje, '');
     }
@@ -196,21 +217,19 @@ class ImporPoblacionController extends Controller
     /* metodo para cargar una importacion especifica */
     public function ListaImportada(Request $rq)
     {
-        $data = PoblacionDetalle::where('pp.importacion_id', $rq->importacion_id)
-            ->join('par_poblacion as pp', 'pp.id', '=', 'par_poblacion_detalle.poblacion_id')
-            ->join('par_ubigeo as uu', 'uu.id', '=', 'par_poblacion_detalle.ubigeo_id')
-            ->select('uu.codigo', 'par_poblacion_detalle.sexo', 'par_poblacion_detalle.edad', 'par_poblacion_detalle.total')->get();
+        $data = [];
+        //  PoblacionDetalle::where('pp.importacion_id', $rq->importacion_id)
+        //     ->join('par_poblacion as pp', 'pp.id', '=', 'par_poblacion_detalle.poblacion_id')
+        //     ->join('par_ubigeo as uu', 'uu.id', '=', 'par_poblacion_detalle.ubigeo_id')
+        //     ->select('uu.codigo', 'par_poblacion_detalle.sexo', 'par_poblacion_detalle.edad', 'par_poblacion_detalle.total')->get();
         return DataTables::of($data)->make(true);
     }
 
     /* metodo para eliminar una importacion */
     public function eliminar($id)
     {
-        $poblacion = Poblacion::where('importacion_id', $id)->first();
-        PoblacionDetalle::where('poblacion_id', $poblacion->id)->delete();
-        $poblacion->delete();
+        PoblacionPN::where('importacion_id', $id)->first();
         Importacion::find($id)->delete();
         return response()->json(array('status' => true));
     }
-
 }

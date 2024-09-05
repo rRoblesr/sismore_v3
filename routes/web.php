@@ -48,6 +48,8 @@ use App\Http\Controllers\Parametro\ClasificadorController;
 use App\Http\Controllers\Parametro\FuenteImportacionController;
 use App\Http\Controllers\Parametro\IconoController;
 use App\Http\Controllers\Parametro\ImporPoblacionController;
+use App\Http\Controllers\Parametro\ImporPoblacionDiresaController;
+use App\Http\Controllers\Parametro\ImporPoblacionPNController;
 use App\Http\Controllers\Parametro\IndicadorGeneralController;
 use App\Http\Controllers\Parametro\PoblacionController;
 use App\Http\Controllers\Parametro\UbigeoController;
@@ -1253,11 +1255,23 @@ Route::get('/EESS/Find/{id}', [EstablecimientoController::class, 'ajax_edit'])->
 
 
 /*********************************************** PARAMETRO ************************************************/
-Route::get('/ImporPoblacion/Importar', [ImporPoblacionController::class, 'importar'])->name('imporpoblacion.importar');
-Route::post('/ImporPoblacion/Importar', [ImporPoblacionController::class, 'guardar'])->name('imporpoblacion.guardar');
-Route::get('/ImporPoblacion/Listar/ImportarDT', [ImporPoblacionController::class, 'ListarDTImportFuenteTodos'])->name('imporpoblacion.listar.importados');
-Route::post('/ImporPoblacion/ListaImportada', [ImporPoblacionController::class, 'ListaImportada'])->name('imporpoblacion.listarimportados');
-Route::get('/ImporPoblacion/eliminar/{id}', [ImporPoblacionController::class, 'eliminar'])->name('imporpoblacion.eliminar');
+// Route::get('/ImporPoblacion/Importar', [ImporPoblacionController::class, 'importar'])->name('imporpoblacion.importar');
+// Route::post('/ImporPoblacion/Importar', [ImporPoblacionController::class, 'guardar'])->name('imporpoblacion.guardar');
+// Route::get('/ImporPoblacion/Listar/ImportarDT', [ImporPoblacionController::class, 'ListarDTImportFuenteTodos'])->name('imporpoblacion.listar.importados');
+// Route::post('/ImporPoblacion/ListaImportada', [ImporPoblacionController::class, 'ListaImportada'])->name('imporpoblacion.listarimportados');
+// Route::get('/ImporPoblacion/eliminar/{id}', [ImporPoblacionController::class, 'eliminar'])->name('imporpoblacion.eliminar');
+
+Route::get('/ImporPoblacionD/Importar', [ImporPoblacionDiresaController::class, 'importar'])->name('imporpoblacion.importar');
+Route::post('/ImporPoblacionD/Importar', [ImporPoblacionDiresaController::class, 'guardar'])->name('imporpoblacion.guardar');
+Route::get('/ImporPoblacionD/Listar/ImportarDT', [ImporPoblacionDiresaController::class, 'ListarDTImportFuenteTodos'])->name('imporpoblacion.listar.importados');
+Route::post('/ImporPoblacionD/ListaImportada', [ImporPoblacionDiresaController::class, 'ListaImportada'])->name('imporpoblacion.listarimportados');
+Route::get('/ImporPoblacionD/eliminar/{id}', [ImporPoblacionDiresaController::class, 'eliminar'])->name('imporpoblacion.eliminar');
+
+Route::get('/ImporPoblacionPN/Importar', [ImporPoblacionPNController::class, 'importar'])->name('imporpoblacionpn.importar');
+Route::post('/ImporPoblacionPN/Importar', [ImporPoblacionPNController::class, 'guardar'])->name('imporpoblacionpn.guardar');
+Route::get('/ImporPoblacionPN/Listar/ImportarDT', [ImporPoblacionPNController::class, 'ListarDTImportFuenteTodos'])->name('imporpoblacionpn.listar.importados');
+Route::post('/ImporPoblacionPN/ListaImportada', [ImporPoblacionPNController::class, 'ListaImportada'])->name('imporpoblacionpn.listarimportados');
+Route::get('/ImporPoblacionPN/eliminar/{id}', [ImporPoblacionPNController::class, 'eliminar'])->name('imporpoblacionpn.eliminar');
 
 Route::get('/Poblacion/Principal', [PoblacionController::class, 'poblacionprincipal'])->name('poblacionprincipal.principal');
 Route::get('/Poblacion/Principalx', [PoblacionController::class, 'poblacionprincipaltabla'])->name('poblacionprincipal.principal.tablas');

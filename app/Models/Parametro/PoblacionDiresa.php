@@ -19,9 +19,10 @@ class PoblacionDiresa extends Model
     protected $fillable = [
         'importacion_id',
         'ubigeo_id',
-        'sexo',
+        'sexo_id',
         'edad',
         'grupo_etareo',
+        'etapa_vida',
         'total',
     ];
 
