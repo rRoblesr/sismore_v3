@@ -87,7 +87,7 @@ class PoblacionPNRepositorio
     {
         $query = PoblacionPN::from('par_poblacion_padron_nominal as pn')
             ->select(
-                'seguro',
+                's.codigo as seguro',
                 DB::raw('sum(pn.0a + pn.1a + pn.2a + pn.3a + pn.4a + pn.5a) as conteo'),
                 DB::raw('sum(if(sexo_id=1,pn.0a + pn.1a + pn.2a + pn.3a + pn.4a + pn.5a,0)) as hconteo'),
                 DB::raw('sum(if(sexo_id=2,pn.0a + pn.1a + pn.2a + pn.3a + pn.4a + pn.5a,0)) as mconteo'),
@@ -103,11 +103,12 @@ class PoblacionPNRepositorio
             )
             ->join('par_ubigeo as ds', 'ds.id', '=', 'pn.ubigeo_id')
             ->join('par_ubigeo as pv', 'pv.id', '=', 'ds.dependencia')
+            ->join('par_seguro as s', 's.id', '=', 'pn.seguro')
             ->where('pn.anio', $anio);
         if ($mes > 0) $query = $query->where('pn.mes_id', $mes);
         if ($provincia > 0) $query = $query->where('pv.id', $provincia);
         if ($distrito > 0) $query = $query->where('ds.id', $distrito);
-        $query = $query->groupBy('seguro')->get();
+        $query = $query->groupBy('s.codigo','seguro')->get();
         return $query;
     }
 

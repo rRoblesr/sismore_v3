@@ -369,12 +369,12 @@
                 }
             });
             cargar_distritos();
-            mapData = otros;
-            console.log(mapData.features.length);
-            mapData.features.forEach(element => {
-                console.log(element);
-            });
-            
+            mapData = otros;//Highcharts.maps["countries/pe/pe-all"] ;
+            // console.log(mapData.features.length);
+            // mapData.features.forEach(element => {
+            //     console.log(element);
+            // });
+
             ///Highcharts.maps['countries/pe/pe-all'];
             // console.log(otros);
             // console.log(provincia);
@@ -446,8 +446,8 @@
                 success: function(data) {
                     var mapa_selected = '';
 
-                    if ($('#vdepartamento').val() > '00') {
-                        mapa_selected = $('#vdepartamento option:selected').text() + ': ';
+                    if ($('#vprovincia').val() > 0) {
+                        mapa_selected = $('#vprovincia option:selected').text() + ': ';
                     }
 
                     if (div == 'head') {
@@ -457,20 +457,50 @@
                         $('#card4').text(data.card4);
 
                     } else if (div == "anal1") {
+                        // console.log(data.info);
+                        var datax = [
+                            ["pe-uc-pa", 10],
+                            ["pe-uc-cp", 20],
+                            ["pe-uc-at", 30],
+                            ["pe-uc-pr", 40],
+                        ];
+
                         // var datax = [
-                        //     ["pe-uc-pa", 10],
-                        //     ["pe-uc-cp", 20],
-                        //     ["pe-uc-at", 30],
-                        //     ["pe-uc-pr", 40],
+                        //     ["pe-lo", 1],
+                        //     ["pe-uc", 2],
+                        //     ["pe-ic", 3],
+                        //     ["pe-ju", 4],
+                        //     ["pe-tu", 5],
+                        //     ["pe-ar", 6],
+                        //     ["pe-cj", 7],
+                        //     ["pe-ay", 8],
+                        //     ["pe-ta", 9],
+                        //     ["pe-am", 10],
+                        //     ["pe-pi", 11],
+                        //     ["pe-cs", 12],
+                        //     ["pe-lb", 13],
+                        //     ["pe-hv", 14],
+                        //     ["pe-sm", 15],
+                        //     ["pe-ll", 16],
+                        //     ["pe-mq", 17],
+                        //     ["pe-ap", 18],
+                        //     ["pe-cl", 19],
+                        //     ["pe-hc", 20],
+                        //     ["pe-md", 21],
+                        //     ["pe-pa", 22],
+                        //     ["pe-3341", 23],
+                        //     ["pe-lr", 24],
+                        //     ["pe-an", 25],
+                        //     ["pe-145", 26]
                         // ];
 
-                        anal1 = maps01(div, data.info, '',
+                        anal1 = maps01(div, datax, '',
                             'Población Estimada y Proyectada, según Provincia y Distritos');
                         // selectedCode = null;
-                        // console.log("vdepartamento1:" + $('#vdepartamento').val());
+                        // console.log("vdepartamento1:" + $('#vprovincia').val());
                         // console.log("selectedCode1:" + selectedCode);
 
-                        // if ($('#vdepartamento').val() > '00') {
+                        // if ($('#vprovincia').val() > 0) {
                         // originalColors = {};
                         // var serie = anal1.series[0];
                         // console.log("serie.name     :" + serie.name);
@@ -481,7 +511,7 @@
                         // console.log("serie.index    :" + serie.index);
                         // console.log("serie.options  :" + serie.options);
 
-                        // var depa = $('#vdepartamento').val();
+                        // var depa = $('#vprovincia').val();
                         // var point = serie.points.find(
                         //     p => p.properties['fips'] && p.properties['fips'].substring(2) === depa
                         // );
@@ -489,7 +519,7 @@
                         // console.log("************************************************");
                         // console.log("selectedCode2:" + selectedCode);
                         // console.log('fips:' + point.properties['fips'].substring(2));
-                        // console.log('vdepartamento2:' + $('#vdepartamento').val());
+                        // console.log('vdepartamento2:' + $('#vprovincia').val());
                         // console.log('hc-key:' + point.properties['hc-key']);
                         // console.log("************************************************");
 
@@ -2163,7 +2193,7 @@
                         //     //     // console.log(this.properties['fips']);
                         //     //     var codigo=this.properties['fips'].substring(2);
                         //     //     console.log(codigo);
-                        //     //     $('#vdepartamento').val(codigo);
+                        //     //     $('#vprovincia').val(codigo);
                         //     //     cargarCards();
                         //     // }
                         //     click: function() {
@@ -2231,7 +2261,7 @@
                                 //     '\nPoblación: ' + point.value);
 
                                 // var codigo = this.properties['fips'].substring(2);
-                                // $('#vdepartamento').val(codigo);
+                                // $('#vprovincia').val(codigo);
                                 // cargarCards();
                             }
                         }
@@ -2275,6 +2305,7 @@
 
     <script src="{{ asset('/') }}public/pe-pv-states.js"></script>
     <script src="{{ asset('/') }}public/us-ct-all.js"></script>
+    <script src="{{ asset('/') }}public/pe-all-01.js"></script>
 
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>

@@ -354,7 +354,6 @@
             });
             var mapData = Highcharts.maps['countries/pe/pe-all'];
             mapData.features.forEach(function(feature) {
-                console.log(feature);
                 if (feature.properties['fips'] === "PE21") { // Condición para Puno
                     feature.properties['woe-name'] = "Puno";
                     feature.properties['name'] = "Puno";
@@ -388,7 +387,7 @@
                 data: {
                     'div': div,
                     "anio": $('#vanio').val(),
-                    "departamento": $('#vprovincia').val(),
+                    "departamento": $('#vdepartamento').val(),
                     "sexo": $('#vsexo').val(),
                     "etapavida": $('#vetapavida').val(),
                 },
@@ -421,8 +420,8 @@
                 success: function(data) {
                     var mapa_selected = 'PERÚ: ';
 
-                    if ($('#vprovincia').val() > 0) {
-                        mapa_selected = $('#vprovincia option:selected').text() + ': ';
+                    if ($('#vdepartamento').val() > '00') {
+                        mapa_selected = $('#vdepartamento option:selected').text() + ': ';
                     }
 
                     if (div == 'head') {
@@ -432,13 +431,42 @@
                         $('#card4').text(data.card4);
 
                     } else if (div == "anal1") {
+                        // var datax = [
+                        //     ["pe-lo", 1],
+                        //     ["pe-uc", 2],
+                        //     ["pe-ic", 3],
+                        //     ["pe-ju", 4],
+                        //     ["pe-tu", 5],
+                        //     ["pe-ar", 6],
+                        //     ["pe-cj", 7],
+                        //     ["pe-ay", 8],
+                        //     ["pe-ta", 9],
+                        //     ["pe-am", 10],
+                        //     ["pe-pi", 11],
+                        //     ["pe-cs", 12],
+                        //     ["pe-lb", 13],
+                        //     ["pe-hv", 14],
+                        //     ["pe-sm", 15],
+                        //     ["pe-ll", 16],
+                        //     ["pe-mq", 17],
+                        //     ["pe-ap", 18],
+                        //     ["pe-cl", 19],
+                        //     ["pe-hc", 20],
+                        //     ["pe-md", 21],
+                        //     ["pe-pa", 22],
+                        //     ["pe-3341", 23],
+                        //     ["pe-lr", 24],
+                        //     ["pe-an", 25],
+                        //     ["pe-145", 26]
+                        // ]
+
                         anal1 = maps01(div, data.info, '',
                             'Población estimada y proyectada, según departamento');
                         // selectedCode = null;
-                        // console.log("vdepartamento1:" + $('#vprovincia').val());
+                        // console.log("vdepartamento1:" + $('#vdepartamento').val());
                         // console.log("selectedCode1:" + selectedCode);
 
-                        if ($('#vprovincia').val() > 0) {
+                        if ($('#vdepartamento').val() > '00') {
                             // originalColors = {};
                             var serie = anal1.series[0];
                             // console.log("serie.name     :" + serie.name);
@@ -449,7 +477,7 @@
                             // console.log("serie.index    :" + serie.index);
                             // console.log("serie.options  :" + serie.options);
 
-                            var depa = $('#vprovincia').val();
+                            var depa = $('#vdepartamento').val();
                             var point = serie.points.find(
                                 p => p.properties['fips'] && p.properties['fips'].substring(2) === depa
                             );
@@ -457,7 +485,7 @@
                             console.log("************************************************");
                             console.log("selectedCode2:" + selectedCode);
                             console.log('fips:' + point.properties['fips'].substring(2));
-                            console.log('vdepartamento2:' + $('#vprovincia').val());
+                            console.log('vdepartamento2:' + $('#vdepartamento').val());
                             console.log('hc-key:' + point.properties['hc-key']);
                             console.log("************************************************");
 
@@ -1950,7 +1978,7 @@
                         //     //     // console.log(this.properties['fips']);
                         //     //     var codigo=this.properties['fips'].substring(2);
                         //     //     console.log(codigo);
-                        //     //     $('#vprovincia').val(codigo);
+                        //     //     $('#vdepartamento').val(codigo);
                         //     //     cargarCards();
                         //     // }
                         //     click: function() {
@@ -2018,7 +2046,7 @@
                                 //     '\nPoblación: ' + point.value);
 
                                 var codigo = this.properties['fips'].substring(2);
-                                $('#vprovincia').val(codigo);
+                                $('#vdepartamento').val(codigo);
                                 cargarCards();
                             }
                         }
