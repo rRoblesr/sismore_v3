@@ -1,4 +1,4 @@
-Highcharts.maps["countries/pe/pe-all"] = {
+Highcharts.maps["countries/pe/pe-allx"] = {
     title: "Peru",
     version: "2.3.0",
     type: "FeatureCollection",

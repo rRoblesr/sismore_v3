@@ -102,7 +102,7 @@ class PoblacionDiresaRepositorio
         if ($provincia > 0) $query = $query->where('pv.id', $provincia);
         if ($distrito > 0) $query = $query->where('ds.id', $distrito);
         if ($sexo > 0) $query = $query->where('sexo_id', $sexo);
-        $query = $query->groupBy('etapa_vida')->orderBy('etapa_vida')->get();
+        $query = $query->groupBy('etapa_vida')->orderByRaw('FIELD("NIÑO","ADOLECENTE","JOVEN","ADULTO","ADULTO MAYOR")')->get();
         return $query;
     }
 

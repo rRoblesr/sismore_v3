@@ -115,7 +115,7 @@
                             <div class="custom-select-container">
                                 <label for="vprovincia" class="">PROVINCIA</label>
                                 <select id="vprovincia" name="vprovincia" class="form-control form-control-sm"
-                                    onchange="cargar_distritos();cargarCards();">
+                                    onchange="cargar_distritos();panelGraficas('anal1');cargarCards();">
                                     <option value="0">TODOS</option>
                                     @foreach ($provincia as $item)
                                         <option value="{{ $item->id }}">{{ $item->nombre }}</option>
@@ -385,10 +385,11 @@
                 }
             });
             cargar_distritos();
-            mapData = otros; //Highcharts.maps["countries/pe/pe-all"] ;
+            mapData = otros;
+            // mapData = Highcharts.maps["countries/pe/pe-all"];
             // console.log(mapData.features.length);
             // mapData.features.forEach(element => {
-            //     console.log(element);
+            console.log(mapData);
             // });
 
             ///Highcharts.maps['countries/pe/pe-all'];
@@ -510,62 +511,66 @@
                         //     ["pe-145", 26]
                         // ];
 
-                        anal1 = maps01(div, datax, '',
+                        // var datax = [
+                        //     ["pe-uc", 2]
+                        // ];
+
+                        anal1 = maps01(div, data.info, '',
                             'Población Estimada y Proyectada, según Provincia y Distritos');
                         // selectedCode = null;
                         // console.log("vdepartamento1:" + $('#vprovincia').val());
                         // console.log("selectedCode1:" + selectedCode);
 
-                        // if ($('#vprovincia').val() > 0) {
-                        // originalColors = {};
-                        // var serie = anal1.series[0];
-                        // console.log("serie.name     :" + serie.name);
-                        // console.log("serie.data     :" + serie.data.length);
-                        // console.log("serie.color    :" + serie.color);
-                        // console.log("serie.type     :" + serie.type);
-                        // console.log("serie.visible  :" + serie.visible);
-                        // console.log("serie.index    :" + serie.index);
-                        // console.log("serie.options  :" + serie.options);
+                        if ($('#vprovincia').val() > 0) {
+                            // originalColors = {};
+                            var serie = anal1.series[0];
+                            // console.log("serie.name     :" + serie.name);
+                            // console.log("serie.data     :" + serie.data.length);
+                            // console.log("serie.color    :" + serie.color);
+                            // console.log("serie.type     :" + serie.type);
+                            // console.log("serie.visible  :" + serie.visible);
+                            // console.log("serie.index    :" + serie.index);
+                            // console.log("serie.options  :" + serie.options);
 
-                        // var depa = $('#vprovincia').val();
-                        // var point = serie.points.find(
-                        //     p => p.properties['fips'] && p.properties['fips'].substring(2) === depa
-                        // );
+                            var depa = $('#vprovincia').val();
+                            var point = serie.points.find(
+                                p => p.properties['fips'] && p.properties['fips'].substring(2) === depa
+                            );
 
-                        // console.log("************************************************");
-                        // console.log("selectedCode2:" + selectedCode);
-                        // console.log('fips:' + point.properties['fips'].substring(2));
-                        // console.log('vdepartamento2:' + $('#vprovincia').val());
-                        // console.log('hc-key:' + point.properties['hc-key']);
-                        // console.log("************************************************");
+                            // console.log("************************************************");
+                            // console.log("selectedCode2:" + selectedCode);
+                            // console.log('fips:' + point.properties['fips'].substring(2));
+                            // console.log('vdepartamento2:' + $('#vprovincia').val());
+                            // console.log('hc-key:' + point.properties['hc-key']);
+                            // console.log("************************************************");
 
-                        // if (point) {
-                        //     if (!originalColors[point.properties['hc-key']]) {
-                        //         originalColors[point.properties['hc-key']] = point
-                        //             .color; // Almacena el color original
-                        //     }
-                        //     // Remover selección previa si existe
-                        //     if (selectedCode) {
-                        //         let prevPoint = serie.points.find(
-                        //             p => p.properties['hc-key'] === selectedCode
-                        //         );
-                        //         if (prevPoint) {
-                        //             prevPoint.update({
-                        //                 color: originalColors[selectedCode] || Highcharts
-                        //                     .getOptions().colors[0]
-                        //             });
-                        //         }
-                        //     }
+                            if (point) {
+                                if (!originalColors[point.properties['hc-key']]) {
+                                    originalColors[point.properties['hc-key']] = point
+                                        .color; // Almacena el color original
+                                }
+                                // Remover selección previa si existe
+                                if (selectedCode) {
+                                    let prevPoint = serie.points.find(
+                                        p => p.properties['hc-key'] === selectedCode
+                                    );
+                                    if (prevPoint) {
+                                        prevPoint.update({
+                                            color: originalColors[selectedCode] || Highcharts
+                                                .getOptions().colors[0]
+                                        });
+                                    }
+                                }
 
-                        //     // Resaltar el nuevo departamento
-                        //     point.update({
-                        //         color: '#bada55'
-                        //     });
+                                // Resaltar el nuevo departamento
+                                point.update({
+                                    color: '#bada55'
+                                });
 
-                        //     // Actualizar el código seleccionado
-                        //     selectedCode = point.properties['hc-key'];
-                        // }
-                        // }
+                                // Actualizar el código seleccionado
+                                selectedCode = point.properties['hc-key'];
+                            }
+                        }
 
 
                     } else if (div == "anal2") {
@@ -2139,7 +2144,9 @@
         function maps01(div, data, titulo, subtitulo) {
             return Highcharts.mapChart(div, {
                 chart: {
-                    map: mapData, //otros //'countries/pe/pe-all'
+                    // map: 'countries/pe/pe-allx'
+                    // map: 'countries/pe/pe-pv-all'
+                    map: mapData
                 },
 
                 title: {
@@ -2168,13 +2175,13 @@
                     manColor: "#003399",
                     /*maxColor: '#F1EEF6',
                     minColor: '#900037'*/
-                    legend: {
-                        enabled: false // Desactiva la leyenda de color
-                    }
+                    // legend: {
+                    //     enabled: false // Desactiva la leyenda de color
+                    // }
                 },
 
                 series: [{
-                    // data: data,
+                    data: data,
                     name: 'Población',
                     states: {
                         hover: {
@@ -2191,12 +2198,23 @@
 
                     dataLabels: {
                         enabled: true,
-                        // format: '{point.name}: {point.value}',
-                        format: '{point.name}',
-                        color: '#FFFFFF',
+                        // format: '{point.name} {point.value}',
+                        // format: '{point.name}',
+                        useHTML: true, // Permite el uso de etiquetas HTML
+                        // format: '<div style="text-align:center;">{point.name}<br><span style="font-size:12px;">{point.value}</span></div>', // Centra y da un salto de línea
+
+                        // color: '#FFFFFF',
+                        // style: {
+                        //     fontSize: '10px',
+                        //     fontWeight: 'bold'
+                        // }
+
+                        format: '<div style="text-align:center;">{point.name}<br><span style="font-size:12px;">{point.value:,0f}</span></div>',
                         style: {
                             fontSize: '10px',
-                            fontWeight: 'bold'
+                            fontWeight: 'bold',
+                            color: '#FFFFFF',
+                            textShadow: '0px 0px 3px #000000' // Aplica sombra negra para simular el borde
                         }
                     },
                     // legend: {
@@ -2209,7 +2227,7 @@
                         //     //     // console.log(this.properties['fips']);
                         //     //     var codigo=this.properties['fips'].substring(2);
                         //     //     console.log(codigo);
-                        //     //     $('#vprovincia').val(codigo);
+                        //     //     $('#vdepartamento').val(codigo);
                         //     //     cargarCards();
                         //     // }
                         //     click: function() {
@@ -2242,43 +2260,44 @@
                         // }
                         events: {
                             mouseOver: function() {
-                                // if (!originalColors[this.properties['hc-key']]) {
-                                //     originalColors[this.properties['hc-key']] = this
-                                //         .color; // Almacena el color original
-                                // }
+                                if (!originalColors[this.properties['hc-key']]) {
+                                    originalColors[this.properties['hc-key']] = this
+                                        .color; // Almacena el color original
+                                }
                             },
                             click: function() {
                                 let point = this;
                                 let code = point.properties['hc-key'];
-                                console.log('selectedCode e:' + code);
+
                                 // Remover selección previa
-                                // console.log('selectedCode e:' + code);
-                                // if (selectedCode) {
-                                //     this.series.chart.series[0].points.forEach(function(p) {
-                                //         if (p.properties['hc-key'] === selectedCode) {
-                                //             p.update({
-                                //                 color: originalColors[selectedCode] ||
-                                //                     Highcharts.getOptions().colors[
-                                //                         0] // Color original
-                                //             });
-                                //         }
-                                //     });
-                                // }
+                                console.log('selectedCode e:' + code);
+                                if (selectedCode) {
+                                    this.series.chart.series[0].points.forEach(function(p) {
+                                        if (p.properties['hc-key'] === selectedCode) {
+                                            p.update({
+                                                color: originalColors[selectedCode] ||
+                                                    Highcharts.getOptions().colors[
+                                                        0] // Color original
+                                            });
+                                        }
+                                    });
+                                }
 
                                 // Marcar el punto seleccionado
-                                // point.update({
-                                //     color: '#bada55' // Color de selección
-                                // });
+                                point.update({
+                                    color: '#bada55' // Color de selección
+                                });
 
                                 // Almacenar el código del departamento seleccionado
-                                // selectedCode = code;
+                                selectedCode = code;
 
                                 // alert('Código: ' + code + '\nDepartamento: ' + point.name +
                                 //     '\nPoblación: ' + point.value);
 
-                                // var codigo = this.properties['fips'].substring(2);
-                                // $('#vprovincia').val(codigo);
-                                // cargarCards();
+                                var codigo = this.properties['fips'].substring(2);
+                                console.log(codigo);
+                                $('#vprovincia').val(codigo);
+                                cargarCards();
                             }
                         }
                     }
@@ -2317,11 +2336,12 @@
     {{-- jrmt-mapero --}}
     <script src="https://code.highcharts.com/maps/highmaps.js"></script>
     <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/mapdata/countries/pe/pe-all.js"></script>
+    {{-- <script src="https://code.highcharts.com/mapdata/countries/pe/pe-all.js"></script> --}}
 
-    <script src="{{ asset('/') }}public/pe-pv-states.js"></script>
-    <script src="{{ asset('/') }}public/us-ct-all.js"></script>
-    <script src="{{ asset('/') }}public/pe-all-01.js"></script>
+    {{-- <script src="{{ asset('/') }}public/pe-pv-states.js"></script> --}}
+    {{-- <script src="{{ asset('/') }}public/us-ct-all.js"></script> --}}
+    <script src="{{ asset('/') }}public/us-ct-ally.js"></script>
+    {{-- <script src="{{ asset('/') }}public/pe-allx.js"></script> --}}
 
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>

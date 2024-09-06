@@ -62,7 +62,7 @@ class PoblacionController extends Controller
         '2503' => 'pe-uc-pa',
         '2504' => 'pe-uc-pr',
     ];
-    
+
     /* codigo unico de la fuente de importacion */
     public function __construct()
     {
@@ -76,7 +76,7 @@ class PoblacionController extends Controller
 
         return view('parametro.Poblacion.Principal', compact('anios',  'provincia'));
     }
-
+    
     public function poblacionprincipaltabla(Request $rq)
     {
         switch ($rq->div) {
