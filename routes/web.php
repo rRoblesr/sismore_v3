@@ -1171,6 +1171,10 @@ Route::get('/salud/pactoregional/Exportar/{id}', [IndicadoresController::class, 
 
 Route::get('/salud/conveniofed', [IndicadoresController::class, 'ConvenioFED'])->name('salud.indicador.conveniofed');
 
+Route::get('/salud/pdrc', [IndicadoresController::class, 'PDRC'])->name('salud.indicador.pdrc');
+
+Route::get('/salud/pei', [IndicadoresController::class, 'PEI'])->name('salud.indicador.pei');
+
 
 Route::get('/salud/pruebas', function () {
     return view('pruebas3');

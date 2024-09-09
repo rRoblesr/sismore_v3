@@ -1115,4 +1115,14 @@ class IndicadoresController extends Controller
     {
         return view('salud.Indicadores.ConvenioFED');
     }
+
+    public function PDRC()
+    {
+        return view('salud.Indicadores.ConvenioFED');
+    }
+
+    public function PEI()
+    {
+        return view('salud.Indicadores.ConvenioFED');
+    }
 }
