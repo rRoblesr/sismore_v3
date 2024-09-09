@@ -53,42 +53,62 @@
                                     <h5 class="page-title font-12">{{ $actualizado }}</h5>
                                 </div>
                                 <div class="col-lg-1 col-md-1 col-sm-1  ">
-                                    <select id="anio" name="anio" class="form-control btn-xs font-11"
-                                        onchange="cargarCards();">
-                                        <option value="0">AÑO</option>
-                                        @foreach ($anios as $item)
-                                            <option value="{{ $item->id }}"
-                                                {{ $item->anio == $anioMax ? 'selected' : '' }}>
-                                                {{ $item->anio }}</option>
-                                        @endforeach
-                                    </select>
+                                    <div class="custom-select-container">
+                                        <label for="anio">AÑO</label>
+                                        <select id="anio" name="anio" class="form-control form-control-sm"
+                                            onchange="cargarCards();">
+                                            {{-- <option value="0">TODOS</option> --}}
+                                            @foreach ($anios as $item)
+                                                <option value="{{ $item->id }}"
+                                                    {{ $item->anio == $anioMax ? 'selected' : '' }}>
+                                                    {{ $item->anio }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-sm-2">
-                                    <select id="provincia" name="provincia" class="form-control btn-xs font-11"
-                                        onchange="cargarDistritos();cargarCards();">
-                                        <option value="0">PROVINCIA</option>
-                                        @foreach ($provincias as $item)
-                                            <option value="{{ $item->id }}"> {{ $item->nombre }}</option>
-                                        @endforeach
-                                    </select>
+                                    <div class="custom-select-container">
+                                        <label for="provincia">PROVINCIA</label>
+                                        <select id="provincia" name="provincia" class="form-control form-control-sm"
+                                            onchange="cargarDistritos();cargarCards();">
+                                            <option value="0">TODOS</option>
+                                            @foreach ($provincias as $item)
+                                                <option value="{{ $item->id }}"> {{ $item->nombre }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-sm-2">
-                                    <select id="distrito" name="distrito" class="form-control btn-xs font-11"
-                                        onchange="cargarCards();">
-                                        <option value="0">DISTRITO</option>
-                                        @foreach ($distritos as $item)
-                                            <option value="{{ $item->id }}">{{ $item->nombre }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                    <div class="custom-select-container">
+                                        <label for="distrito">DISTRITO</label>
+                                        <select id="distrito" name="distrito" class="form-control form-control-sm"
+                                            onchange="cargarCards();">
+                                            <option value="0">TODOS</option>
+                                            @foreach ($distritos as $item)
+                                                <option value="{{ $item->id }}">{{ $item->nombre }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-sm-2">
-                                    <select id="tipogestion" name="tipogestion" class="form-control btn-xs font-11"
-                                        onchange="cargarCards();">
-                                        <option value="0">TIPO DE GESTIÓN</option>
-                                        <option value="12">PUBLICA</option>
-                                        <option value="3">PRIVADA</option>
-                                    </select>
+                                    <div class="custom-select-container">
+                                        <label for="tipogestion">TIPO DE GESTIÓN</label>
+                                        <select id="tipogestion" name="tipogestion" class="form-control form-control-sm"
+                                            onchange="cargarCards();">
+                                            <option value="0">TODOS</option>
+                                            <option value="12">PUBLICA</option>
+                                            <option value="3">PRIVADA</option>
+                                        </select>
+                                    </div>
+
+
                                 </div>
                             </div>
                         </div>

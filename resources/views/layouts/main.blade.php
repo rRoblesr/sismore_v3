@@ -184,6 +184,27 @@
         .table-sm-5 td {
             padding: 0.5rem;
         }
+
+        /*  */
+        .custom-select-container {
+            position: relative;
+        }
+
+        .custom-select-container label {
+            position: absolute;
+            top: -7px;
+            left: 10px;
+            background-color: white;
+            padding: 0 5px;
+            font-size: 10px;
+            /*color: #0d6efd;*/
+        }
+
+        .custom-select-container select {
+            /* padding-left: 10px; */
+        }
+
+        /*  */
     </style>
 </head>
 
@@ -403,7 +424,8 @@
                             <div class="app-search-box">
                                 <span style="color:white; font-size: 20px;">
 
-                                    <strong>MODULO {{ session()->has('sistema_nombre') ? session('sistema_nombre') : 'SIN MODULO' }}</strong>
+                                    <strong>MODULO
+                                        {{ session()->has('sistema_nombre') ? session('sistema_nombre') : 'SIN MODULO' }}</strong>
                                 </span>
                             </div>
                         </form>

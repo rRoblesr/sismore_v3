@@ -15,38 +15,50 @@
         <h4 class="page-title font-16">MODULO EDUCACIÓN</h4>
     </div>
     <div class="col-lg-2 col-md-2 col-sm-2">
-        <select id="provincia" name="provincia" class="form-control btn-xs font-11"
-            onchange="cargarDistritos(),cargarCards();">
-            <option value="0">PROVINCIA</option>
-            @foreach ($provincias as $item)
-                <option value="{{ $item->id }}"> {{ $item->nombre }}</option>
-            @endforeach
-        </select>
+        <div class="custom-select-container">
+            <label for="provincia">PROVINCIA</label>
+            <select id="provincia" name="provincia" class="form-control form-control-sm"
+                onchange="cargarDistritos(),cargarCards();">
+                <option value="0">TODOS</option>
+                @foreach ($provincias as $item)
+                    <option value="{{ $item->id }}"> {{ $item->nombre }}</option>
+                @endforeach
+            </select>
+        </div>
     </div>
     <div class="col-lg-2 col-md-2 col-sm-2">
-        <select id="distrito" name="distrito" class="form-control btn-xs font-11" onchange="cargarCards();">
-            <option value="0">DISTRITO</option>
-            @foreach ($distritos as $item)
-                <option value="{{ $item->id }}">{{ $item->nombre }}
-                </option>
-            @endforeach
-        </select>
+        <div class="custom-select-container">
+            <label for="distrito">DISTRITO</label>
+            <select id="distrito" name="distrito" class="form-control form-control-sm" onchange="cargarCards();">
+                <option value="0">TODOS</option>
+                @foreach ($distritos as $item)
+                    <option value="{{ $item->id }}">{{ $item->nombre }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
     </div>
     <div class="col-lg-2 col-md-2 col-sm-2">
-        <select id="tipogestion" name="tipogestion" class="form-control btn-xs font-11" onchange="cargarCards();">
-            <option value="0">TIPO DE GESTIÓN</option>
-            <option value="12">PUBLICA</option>
-            <option value="3">PRIVADA</option>
-        </select>
+        <div class="custom-select-container">
+            <label for="tipogestion">TIPO DE GESTIÓN</label>
+            <select id="tipogestion" name="tipogestion" class="form-control form-control-sm" onchange="cargarCards();">
+                <option value="0">TODOS</option>
+                <option value="12">PUBLICA</option>
+                <option value="3">PRIVADA</option>
+            </select>
+        </div>
     </div>
     <div class="col-lg-2 col-md-2 col-sm-2">
-        <select id="ambito" name="ambito" class="form-control btn-xs font-11" onchange="cargarCards();">
-            <option value="0">ÁMBITO</option>
-            @foreach ($ambitos as $item)
-                <option value="{{ $item->id }}">{{ $item->nombre }}
-                </option>
-            @endforeach
-        </select>
+        <div class="custom-select-container">
+            <label for="ambito">ÁMBITO</label>
+            <select id="ambito" name="ambito" class="form-control form-control-sm" onchange="cargarCards();">
+                <option value="0">TODOS</option>
+                @foreach ($ambitos as $item)
+                    <option value="{{ $item->id }}">{{ $item->nombre }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
     </div>
 </div>
 
@@ -580,7 +592,7 @@
 </div>
 
 
-<div class="row d-none">
+{{-- <div class="row d-none">
     <div class="col-lg-4 col-md-4">
         <div class="card card-border border border-plomo-0">
             <div class="card-header border-success-0 bg-transparent pb-0 pt-2" style="height: 4rem">
@@ -656,14 +668,14 @@
                     <div id="dtanal1" style="height: 7rem"></div>
                 </figure>
                 <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                    <span class="float-left" id="span-dtanal1-fuente">Fuente:</span>
-                    <span class="float-right" id="span-dtanal1-fecha">Actualizado:</span>
+                    <span class="float-left" id="span-dtanal1-fuente">Fuente:asdasd</span>
+                    <span class="float-right" id="span-dtanal1-fecha">Actualizado:asdasd</span>
                 </div>
             </div>
         </div>
     </div>
 
-</div>
+</div> --}}
 
 {{-- portles --}}
 
@@ -1386,9 +1398,7 @@
                             $('#span-container1-fecha').html("Actualizado: " + '31/12/2022');
                             break;
                         case "container2":
-                            gsemidona(div, 0, ['#5eb9aa',
-                                '#F9FFFE'
-                            ]); // ['#f5bd22', '#FDEEC7']);
+                            gsemidona(div, 0, ['#5eb9aa', '#F9FFFE']); // ['#f5bd22', '#FDEEC7']);
                             $('#span-container2-fuente').html("Fuente: " + 'MINEDU');
                             $('#span-container2-fecha').html("Actualizado: " + '31/12/2022');
                             break;
@@ -1398,6 +1408,7 @@
                             $('#span-container3-fecha').html("Actualizado: " + '31/12/2022');
                             break;
                         case "dtanal1":
+                            console.log(data.info);
                             gsemidona(div, data.info.indicador, ['#5eb9aa', '#F9FFFE']);
                             $('#span-dtanal1-fuente').html("Fuente: " + data.info.fuente);
                             $('#span-dtanal1-fecha').html("Actualizado: " + data.info.fecha);
@@ -1769,7 +1780,7 @@
                     style: {
                         //fontWeight: 'bold',
                         //color: 'orange',
-                        fontSize: '30'
+                        fontSize: '30px'
                     }
                 },
                 tooltip: {
@@ -1821,7 +1832,9 @@
                 exporting: {
                     enabled: false
                 },
-                credits: false
+                credits: {
+                    enabled: false
+                }
             });
         }
 
