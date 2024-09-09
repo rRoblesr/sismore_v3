@@ -388,9 +388,10 @@
             mapData = otros2;
             // mapData = Highcharts.maps["countries/pe/pe-all"];
             // console.log(mapData.features.length);
-            // mapData.features.forEach(element => {
-            console.log(mapData);
-            // });
+            mapData.features.forEach(element => {
+                console.log(element.properties['hc-key']);
+                // console.log(element.properties['hc-key'] +' - '+element.properties['name']+ ': ' + element.properties['fips']);
+            });
 
             ///Highcharts.maps['countries/pe/pe-all'];
             // console.log(otros);
@@ -514,6 +515,8 @@
                         // var datax = [
                         //     ["pe-uc", 2]
                         // ];
+
+
 
                         anal1 = maps01(div, data.info, '',
                             'Población Estimada y Proyectada, según Provincia y Distritos');

@@ -19851,7 +19851,7 @@ var otros2 = {
             type: "Feature",
             properties: {
                 name: "CALLERIA",
-                "hc-key": "pe-uc-ca",
+                "hc-key": "pe-uc-cp-ca",
 
                 "hc-group": "admin1",
                 "hc-middle-x": 0.49,
@@ -22063,7 +22063,7 @@ var otros2 = {
             type: "Feature",
             properties: {
                 name: "CAMPOVERDE",
-                "hc-key": "pe-uc-cv",
+                "hc-key": "pe-uc-cp-cv",
 
                 "hc-group": "admin1",
                 "hc-middle-x": 0.49,
@@ -22074,7 +22074,7 @@ var otros2 = {
                 "alt-name": null,
                 "woe-id": "2346478",
                 subregion: null,
-                fips: "PE37",
+                fips: "PE42",
                 "postal-code": "CV",
                 country: "Peru",
                 "type-en": "Distrito",
@@ -24955,7 +24955,7 @@ var otros2 = {
             type: "Feature",
             properties: {
                 name: "IPARIA",
-                "hc-key": "pe-uc-ip",
+                "hc-key": "pe-uc-cp-ip",
 
                 "hc-group": "admin1",
                 "hc-middle-x": 0.49,
@@ -28436,7 +28436,7 @@ var otros2 = {
             type: "Feature",
             properties: {
                 name: "MASISEA",
-                "hc-key": "pe-uc-ms",
+                "hc-key": "pe-uc-cp-ms",
 
                 "hc-group": "admin1",
                 "hc-middle-x": 0.49,
@@ -28940,7 +28940,7 @@ var otros2 = {
             type: "Feature",
             properties: {
                 name: "YARINACOCHA",
-                "hc-key": "pe-uc-yr",
+                "hc-key": "pe-uc-cp-yr",
 
                 "hc-group": "admin1",
                 "hc-middle-x": 0.49,
@@ -31795,7 +31795,7 @@ var otros2 = {
             type: "Feature",
             properties: {
                 name: "NUEVA REQUENA",
-                "hc-key": "pe-uc-nr",
+                "hc-key": "pe-uc-cp-nr",
 
                 "hc-group": "admin1",
                 "hc-middle-x": 0.49,
@@ -32281,7 +32281,7 @@ var otros2 = {
             type: "Feature",
             properties: {
                 name: "MANANTAY",
-                "hc-key": "pe-uc-mn",
+                "hc-key": "pe-uc-cp-mn",
 
                 "hc-group": "admin1",
                 "hc-middle-x": 0.49,
@@ -38165,7 +38165,7 @@ var otros2 = {
             type: "Feature",
             properties: {
                 name: "RAYMONDI",
-                "hc-key": "pe-uc-ry",
+                "hc-key": "pe-uc-at-ry",
 
                 "hc-group": "admin1",
                 "hc-middle-x": 0.49,
@@ -42740,7 +42740,7 @@ var otros2 = {
             type: "Feature",
             properties: {
                 name: "SEPAHUA",
-                "hc-key": "pe-uc-sp",
+                "hc-key": "pe-uc-at-sp",
 
                 "hc-group": "admin1",
                 "hc-middle-x": 0.49,
@@ -45228,7 +45228,7 @@ var otros2 = {
             type: "Feature",
             properties: {
                 name: "TAHUANIA",
-                "hc-key": "pe-uc-th",
+                "hc-key": "pe-uc-at-th",
 
                 "hc-group": "admin1",
                 "hc-middle-x": 0.49,
@@ -51206,7 +51206,7 @@ var otros2 = {
             type: "Feature",
             properties: {
                 name: "YURUA",
-                "hc-key": "pe-uc-yu",
+                "hc-key": "pe-uc-at-yu",
 
                 "hc-group": "admin1",
                 "hc-middle-x": 0.49,
@@ -57836,7 +57836,7 @@ var otros2 = {
             type: "Feature",
             properties: {
                 name: "PURUS",
-                "hc-key": "pe-uc-pr",
+                "hc-key": "pe-uc-pr-pr",
 
                 "hc-group": "admin1",
                 "hc-middle-x": 0.49,
