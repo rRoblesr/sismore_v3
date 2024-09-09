@@ -385,7 +385,7 @@
                 }
             });
             cargar_distritos();
-            mapData = otros;
+            mapData = otros2;
             // mapData = Highcharts.maps["countries/pe/pe-all"];
             // console.log(mapData.features.length);
             // mapData.features.forEach(element => {
@@ -2341,6 +2341,7 @@
     {{-- <script src="{{ asset('/') }}public/pe-pv-states.js"></script> --}}
     {{-- <script src="{{ asset('/') }}public/us-ct-all.js"></script> --}}
     <script src="{{ asset('/') }}public/us-ct-ally.js"></script>
+    <script src="{{ asset('/') }}public/us-ct-allz.js"></script>
     {{-- <script src="{{ asset('/') }}public/pe-allx.js"></script> --}}
 
     <script src="https://code.highcharts.com/highcharts.js"></script>
