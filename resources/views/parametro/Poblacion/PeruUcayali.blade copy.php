@@ -386,7 +386,6 @@
             });
             cargar_distritos();
             mapData = otros;
-
             // mapData = Highcharts.maps["countries/pe/pe-all"];
             // console.log(mapData.features.length);
             mapData.features.forEach((element, key) => {
@@ -477,16 +476,95 @@
 
                     } else if (div == "anal1") {
                         // console.log(data.info);
-                        
-                        if ($('#vprovincia').val() == 0) {
-                            anal1 = maps01(div, data.info, '',
-                                'Población Estimada y Proyectada, según Provincia y Distritos');
-                        } else if ($('#vprovincia').val() > 0) {
+                        // var datax = [
+                        //     ["pe-uc-pa", 10],
+                        //     ["pe-uc-cp", 20],
+                        //     ["pe-uc-at", 30],
+                        //     ["pe-uc-pr", 40],
+                        // ];
+
+                        // var datax = [
+                        //     ["pe-lo", 1],
+                        //     ["pe-uc", 2],
+                        //     ["pe-ic", 3],
+                        //     ["pe-ju", 4],
+                        //     ["pe-tu", 5],
+                        //     ["pe-ar", 6],
+                        //     ["pe-cj", 7],
+                        //     ["pe-ay", 8],
+                        //     ["pe-ta", 9],
+                        //     ["pe-am", 10],
+                        //     ["pe-pi", 11],
+                        //     ["pe-cs", 12],
+                        //     ["pe-lb", 13],
+                        //     ["pe-hv", 14],
+                        //     ["pe-sm", 15],
+                        //     ["pe-ll", 16],
+                        //     ["pe-mq", 17],
+                        //     ["pe-ap", 18],
+                        //     ["pe-cl", 19],
+                        //     ["pe-hc", 20],
+                        //     ["pe-md", 21],
+                        //     ["pe-pa", 22],
+                        //     ["pe-3341", 23],
+                        //     ["pe-lr", 24],
+                        //     ["pe-an", 25],
+                        //     ["pe-145", 26]
+                        // ];
+
+                        // var datax = [
+                        //     ["pe-uc", 2]
+                        // ];
+                        // var datax = [
+                        //     ["pe-uc-pa-pa", 1],
+                        //     ["pe-uc-pa-ir", 2],
+                        //     ["pe-uc-pa-cu", 3],
+                        //     ["pe-uc-pa-ns", 4],
+                        //     ["pe-uc-pa-ax", 5],
+                        //     ["pe-uc-cp-ca", 6],
+                        //     ["pe-uc-cp-cv", 7],
+                        //     ["pe-uc-cp-ip", 8],
+                        //     ["pe-uc-cp-ms", 9],
+                        //     ["pe-uc-cp-yr", 10],
+                        //     ["pe-uc-cp-nr", 11],
+                        //     ["pe-uc-cp-mn", 12],
+                        //     ["pe-uc-at-ry", 13],
+                        //     ["pe-uc-at-sp", 14],
+                        //     ["pe-uc-at-th", 15],
+                        //     ["pe-uc-at-yu", 16],
+                        //     ["pe-uc-pr-pr", 17],
+                        // ];
+
+
+
+                        anal1 = maps01(div, data.info, '',
+                            'Población Estimada y Proyectada, según Provincia y Distritos');
+                        // selectedCode = null;
+                        // console.log("vdepartamento1:" + $('#vprovincia').val());
+                        // console.log("selectedCode1:" + selectedCode);
+
+                        if ($('#vprovincia').val() > 0) {
+                            // originalColors = {};
                             var serie = anal1.series[0];
+                            // console.log("serie.name     :" + serie.name);
+                            // console.log("serie.data     :" + serie.data.length);
+                            // console.log("serie.color    :" + serie.color);
+                            // console.log("serie.type     :" + serie.type);
+                            // console.log("serie.visible  :" + serie.visible);
+                            // console.log("serie.index    :" + serie.index);
+                            // console.log("serie.options  :" + serie.options);
+
                             var depa = $('#vprovincia').val();
                             var point = serie.points.find(
                                 p => p.properties['fips'] && p.properties['fips'].substring(2) === depa
                             );
+
+                            // console.log("************************************************");
+                            // console.log("selectedCode2:" + selectedCode);
+                            // console.log('fips:' + point.properties['fips'].substring(2));
+                            // console.log('vdepartamento2:' + $('#vprovincia').val());
+                            // console.log('hc-key:' + point.properties['hc-key']);
+                            // console.log("************************************************");
 
                             if (point) {
                                 if (!originalColors[point.properties['hc-key']]) {

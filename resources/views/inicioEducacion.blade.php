@@ -776,7 +776,7 @@
     </div>
 </div>
 
-<div class="row d-none">
+<div class="row">
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header bg-success-0 py-3 text-white">
