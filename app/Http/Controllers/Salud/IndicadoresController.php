@@ -310,9 +310,26 @@ class IndicadoresController extends Controller
             case 'DIT-EDU-01':
                 $actualizado = 'Actualizado al ';
                 $anio = IndicadorGeneralMeta::distinct()->select('anio')->where('indicadorgeneral', $indicador_id)->get();
-                $mes = Mes::select('id', 'mes')->where('codigo', '<=', date('m'))->get();
+                // return $aniosmat = DB::table('par_mes as m')->select('m.id', 'm.mes', DB::raw('CASE 
+                //                             WHEN m.id > 1 AND SUM(c.total) IS NULL THEN NULL
+                //                             ELSE SUM(c.total)
+                //                         END as conteo'))
+                //     ->leftJoin('edu_cubo_pacto1_matriculados as c', function ($join) use ($anio) {
+                //         $join->on('c.mes_id', '=', 'm.id')->whereIn('c.nivelmodalidad_codigo', ['A2', 'A3', 'A5'])->where('c.anio', $anio->max('anio'));
+                //     })
+                //     ->groupBy('m.id', 'm.mes')->orderBy('m.id')->get();
+
+                $am = DB::table('edu_cubo_pacto1_matriculados')->whereIn('nivelmodalidad_codigo', ['A2', 'A3', 'A5'])->where('anio', $anio->max('anio'))->max('mes_id');
+                $ap = PoblacionPN::where('anio', $anio->max('anio'))->max('mes_id');
+                $aniomax = 0;
+                if ($aniomax < $am) $aniomax = $am;
+                if ($aniomax < $ap) $aniomax = $ap;
+                $aniomin = 20;
+                if ($aniomin > $am) $aniomin = $am;
+                if ($aniomin > $ap) $aniomin = $ap;
+                $mes = Mes::select('id', 'mes')->where('codigo', '<=', $aniomax)->get();
                 $provincia = UbigeoRepositorio::provincia('25');
-                return view('salud.Indicadores.PactoRegionalEduPacto1', compact('actualizado', 'anio', 'mes', 'provincia',  'ind'));
+                return view('salud.Indicadores.PactoRegionalEduPacto1', compact('actualizado', 'anio', 'mes', 'aniomin', 'provincia',  'ind'));
 
             case 'DIT-EDU-02':
                 $ff = SFL::select(DB::raw('max(fecha_registro) as ff'))->first();
@@ -926,10 +943,12 @@ class IndicadoresController extends Controller
                 $ssa = CuboPacto1Repositorio::pacto1_matriculados($rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
                 $nsa = $loc - $ssa;
                 $nsa = $nsa >= 0 ? $nsa : 0;
-                $rin = number_format(100 * ($loc > 0 ? $ssa / $loc : 0));
+                $rin = number_format(100 * ($loc > 0 ? $ssa / $loc : 0), 1);
                 return response()->json(['rq' => $rq->all(), 'loc' => number_format($loc, 0), 'ssa' => number_format($ssa, 0), 'nsa' => number_format($nsa), 'rin' => $rin]);
 
             case 'anal1':
+                $est = CuboPacto1Repositorio::pacto1_matriculados_mensual($rq->anio, 0, 0, $rq->distrito);
+                $ppn = PoblacionPNRepositorio::conteo3a5_mensual($rq->anio, 0, 0, $rq->distrito, 0);
                 $base = IndicadorGeneralMetaRepositorio::getEduPacto1anal1($rq->indicador, $rq->anio, 0, 0, $rq->distrito, 0);
                 $info['categoria'] = [];
                 $info['series'] = [];
@@ -937,7 +956,7 @@ class IndicadoresController extends Controller
                     $info['categoria'][] = $ii->mes;
                     $info['serie'][] = $ii->ind;
                 }
-                return response()->json(compact('info', 'base'));
+                return response()->json(compact('info', 'base', 'est', 'ppn'));
 
             case 'anal2':
                 $info = [];

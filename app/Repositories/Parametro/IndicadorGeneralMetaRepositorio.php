@@ -758,13 +758,15 @@ class IndicadorGeneralMetaRepositorio
             $value->est = null;
             $value->pob = null;
             $value->ind = null;
+            $acumulado = 0;
             foreach ($est as $ee) {
-                if ($ee->mes_id == $value->id) $value->est = $ee->conteo;
+                $acumulado += $ee->conteo;
+                if ($ee->mes_id == $value->id) $value->est = $acumulado;
             }
             foreach ($ppn as $pp) {
                 if ($pp->mes_id == $value->id) $value->pob = $pp->conteo;
             }
-            $value->ind = $value->pob == null ? null : round(100 * ($value->est / $value->pob), 1);
+            $value->ind = $value->est == null && $key > 0 ? null : round(100 * ($value->pob > 0 ? $value->est / $value->pob : 0), 1);
         }
         return $query;
     }

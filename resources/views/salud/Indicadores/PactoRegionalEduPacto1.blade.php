@@ -39,38 +39,57 @@
                             </h5>
                         </div>
                         <div class="col-lg-1 col-md-1 col-sm-1  ">
-                            <select id="anio" name="anio" class="form-control btn-xs font-11 p-0"
-                                onchange="cargarcuadros();">
-                                @foreach ($anio as $item)
-                                    <option value="{{ $item->anio }}" {{ $item->anio == date('Y') ? 'selected' : '' }}>
-                                        {{ $item->anio }}</option>
-                                @endforeach
-                            </select>
+                            <div class="custom-select-container">
+                                <label for="anio">AÑO</label>
+                                <select id="anio" name="anio" class="form-control btn-xs font-11 p-0"
+                                    onchange="cargarcuadros();">
+                                    @foreach ($anio as $item)
+                                        <option value="{{ $item->anio }}"
+                                            {{ $item->anio == date('Y') ? 'selected' : '' }}>
+                                            {{ $item->anio }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-2">
-                            <select id="mes" name="mes" class="form-control btn-xs font-11"
-                                onchange="cargarcuadros();">
-                                @foreach ($mes as $item)
-                                    <option value="{{ $item->id }}"{{ $item->id == date('m') ? ' selected ' : '' }}>
-                                        {{ $item->mes }}</option>
-                                @endforeach
-                            </select>
+                            <div class="custom-select-container">
+                                <label for="mes">MES </label>
+                                <select id="mes" name="mes" class="form-control btn-xs font-11"
+                                    onchange="cargarcuadros();">
+                                    @foreach ($mes as $item)
+                                        <option value="{{ $item->id }}"{{ $item->id == $aniomin ? ' selected ' : '' }}>
+                                            {{ $item->mes }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-2">
-                            <select id="provincia" name="provincia" class="form-control btn-xs font-11"
-                                onchange="cargarDistritos();">
-                                <option value="0">PROVINCIA</option>
-                                @foreach ($provincia as $item)
-                                    <option value="{{ $item->id }}">
-                                        {{ $item->nombre }}</option>
-                                @endforeach
-                            </select>
+                            <div class="custom-select-container">
+                                <label for="provincia">PROVINCIA</label>
+                                <select id="provincia" name="provincia" class="form-control btn-xs font-11"
+                                    onchange="cargarDistritos();">
+                                    <option value="0">TODOS</option>
+                                    @foreach ($provincia as $item)
+                                        <option value="{{ $item->id }}">
+                                            {{ $item->nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-2">
-                            <select id="distrito" name="distrito" class="form-control btn-xs font-11"
-                                onchange="cargarcuadros();">
-                                <option value="0">DISTRITO</option>
-                            </select>
+                            <div class="custom-select-container">
+                                <label for="distrito">DISTRITO</label>
+                                <select id="distrito" name="distrito" class="form-control btn-xs font-11"
+                                    onchange="cargarcuadros();">
+                                    <option value="0">TODOS</option>
+                                </select>
+                            </div>
+
+
                         </div>
 
                     </div>
@@ -116,7 +135,7 @@
                                 <span data-plugin="counterup" id="loc"></span>
                             </h4>
                             <p class="mb-0 mt-1 text-truncate">
-                                Población
+                                Denominador
                             </p>
                         </div>
                     </div>
@@ -139,7 +158,7 @@
                                 <span data-plugin="counterup" id="ssa"></span>
                             </h4>
                             <p class="mb-0 mt-1 text-truncate">
-                                Matriculados
+                                Numerador
                             </p>
                         </div>
                     </div>
@@ -162,7 +181,7 @@
                                 <span data-plugin="counterup" id="nsa"></span>
                             </h4>
                             <p class="mb-0 mt-1 text-truncate">
-                                No Matriculados
+                                Brecha
                             </p>
                         </div>
                     </div>
@@ -444,7 +463,7 @@
                 type: 'GET',
                 success: function(data) {
                     $("#distrito option").remove();
-                    var options = '<option value="0">DISTRITO</option>';
+                    var options = '<option value="0">TODOS</option>';
                     $.each(data, function(index, value) {
                         //ss = (id == value.id ? "selected" : "");
                         options += "<option value='" + value.id + "'>" + value.nombre +

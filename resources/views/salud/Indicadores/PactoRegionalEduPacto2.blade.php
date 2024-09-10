@@ -29,37 +29,56 @@
                                     <h5 class="page-title font-12">Fuente: Padrón Nominal, <br>{{ $actualizado }}</h5>
                                 </div>
                                 <div class="col-lg-1 col-md-1 col-sm-1  ">
-                                    <select id="anio" name="anio" class="form-control btn-xs font-11 p-0"
-                                        onchange="cargarcuadros();">
-                                        @foreach ($anio as $item)
-                                            <option value="{{ $item->anio }}"
-                                                {{ $item->anio == $aniomax ? 'selected' : '' }}>
-                                                {{ $item->anio }}</option>
-                                        @endforeach
-                                    </select>
+                                    <div class="custom-select-container">
+                                        <label for="anio">AÑO</label>
+                                        <select id="anio" name="anio" class="form-control btn-xs font-11 p-0"
+                                            onchange="cargarcuadros();">
+                                            @foreach ($anio as $item)
+                                                <option value="{{ $item->anio }}"
+                                                    {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                                    {{ $item->anio }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-sm-2">
-                                    <select id="mes" name="mes" class="form-control btn-xs font-11"
-                                        onchange="cargarDistritos();">
-                                        <option value="0">MES</option>
-                                    </select>
+                                    <div class="custom-select-container">
+                                        <label for="mes">MES</label>
+                                        <select id="mes" name="mes" class="form-control btn-xs font-11"
+                                            onchange="cargarDistritos();">
+                                        </select>
+                                    </div>
+
+
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-sm-2">
-                                    <select id="provincia" name="provincia" class="form-control btn-xs font-11"
-                                        onchange="cargarDistritos();">
-                                        <option value="0">PROVINCIA</option>
-                                        @foreach ($provincia as $item)
-                                            <option value="{{ $item->id }}">
-                                                {{ $item->nombre }}</option>
-                                        @endforeach
-                                    </select>
+                                    <div class="custom-select-container">
+                                        <label for="provincia">PROVINCIA</label>
+                                        <select id="provincia" name="provincia" class="form-control btn-xs font-11"
+                                            onchange="cargarDistritos();">
+                                            <option value="0">TODOS</option>
+                                            @foreach ($provincia as $item)
+                                                <option value="{{ $item->id }}">
+                                                    {{ $item->nombre }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-sm-2">
-                                    <select id="distrito" name="distrito" class="form-control btn-xs font-11"
-                                        onchange="cargarcuadros();">
-                                        <option value="0">DISTRITO</option>
-                                    </select>
-                                </div>                                
+                                    <div class="custom-select-container">
+                                        <label for="distrito">DISTRITO</label>
+                                        <select id="distrito" name="distrito" class="form-control btn-xs font-11"
+                                            onchange="cargarcuadros();">
+                                            <option value="0">TODOS</option>
+                                        </select>
+                                    </div>
+
+
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -103,7 +122,7 @@
                                         <span data-plugin="counterup" id="loc"></span>
                                     </h4>
                                     <p class="mb-0 mt-1 text-truncate">
-                                        Locales Escolares
+                                        Denominador
                                     </p>
                                 </div>
                             </div>
@@ -126,7 +145,7 @@
                                         <span data-plugin="counterup" id="ssa"></span>
                                     </h4>
                                     <p class="mb-0 mt-1 text-truncate">
-                                        L.E. Saneados
+                                        Numerador
                                     </p>
                                 </div>
                             </div>
@@ -149,7 +168,7 @@
                                         <span data-plugin="counterup" id="nsa"></span>
                                     </h4>
                                     <p class="mb-0 mt-1 text-truncate">
-                                        L.E. No Saneados
+                                        Brecha
                                     </p>
                                 </div>
                             </div>
@@ -169,7 +188,8 @@
                                 <button type="button" class="btn btn-success btn-xs"><i
                                         class="fa fa-file-excel"></i> Descargar</button>
                             </div> --}}
-                            <h3 class="text-black font-14 mb-0">Avance acumulado de la evaluación de Cumplimiento por Distrito
+                            <h3 class="text-black font-14 mb-0">Avance acumulado de la evaluación de Cumplimiento por
+                                Distrito
                             </h3>
                         </div>
                         <div class="card-body p-0">
@@ -211,18 +231,19 @@
                         </div>
                         <div class="card-body p-0">
                             {{-- <figure class="highcharts-figure p-0 m-0"> --}}
-                                <div id="anal1" style="height: 20rem"></div>
+                            <div id="anal1" style="height: 20rem"></div>
                             {{-- </figure> --}}
                         </div>
-                    </div></div>
-                    <div class="col-lg-6">
+                    </div>
+                </div>
+                <div class="col-lg-6">
                     <div class="card card-border border border-plomo-0">
                         <div class="card-header border-success-0 bg-transparent p-0">
                             <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
                         </div>
                         <div class="card-body p-0">
                             {{-- <figure class="highcharts-figure p-0 m-0"> --}}
-                                <div id="anal2" style="height: 20rem"></div>
+                            <div id="anal2" style="height: 20rem"></div>
                             {{-- </figure> --}}
                         </div>
                     </div>
@@ -240,7 +261,8 @@
                                 <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
                                         class="fa fa-file-excel"></i> Descargar</button>
                             </div> --}}
-                            <h3 class="text-black font-14 mb-0">Evaluación de cumplimiento de los logros esperados por distrito
+                            <h3 class="text-black font-14 mb-0">Evaluación de cumplimiento de los logros esperados por
+                                distrito
                             </h3>
                         </div>
                         <div class="card-body p-0">
@@ -267,7 +289,8 @@
                                 <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
                                         class="fa fa-file-excel"></i> Descargar</button>
                             </div> --}}
-                            <h3 class="text-black font-14 mb-0">Listado de Instituciones Educativas Pùblicas, Segùn estado de
+                            <h3 class="text-black font-14 mb-0">Listado de Instituciones Educativas Pùblicas, Segùn estado
+                                de
                                 Saneamiento Fisico Legal
                             </h3>
                         </div>
@@ -444,7 +467,7 @@
                 type: 'GET',
                 success: function(data) {
                     $("#distrito option").remove();
-                    var options = '<option value="0">DISTRITO</option>';
+                    var options = '<option value="0">TODOS</option>';
                     $.each(data, function(index, value) {
                         //ss = (id == value.id ? "selected" : "");
                         options += "<option value='" + value.id + "'>" + value.nombre +
