@@ -536,15 +536,15 @@
                         $('#vtabla1').html(data.excel);
                         // $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
                         // $('.vtabla1-fecha').html('Actualizado: ' + data.reg.fecha);
-                        // $('#tabla1').DataTable({
-                        //     responsive: true,
-                        //     autoWidth: false,
-                        //     ordered: true,
-                        //     searching: false,
-                        //     bPaginate: false,
-                        //     info: false,
-                        //     language: table_language,
-                        // });
+                        $('#tabla1').DataTable({
+                            responsive: true,
+                            autoWidth: false,
+                            ordered: true,
+                            searching: false,
+                            bPaginate: false,
+                            info: false,
+                            language: table_language,
+                        });
                     }
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {

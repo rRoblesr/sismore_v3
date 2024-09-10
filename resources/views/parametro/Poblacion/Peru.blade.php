@@ -95,7 +95,7 @@
                 </div>
                 <div class="card-body pb-0">
                     <div class="row">
-                        <div class="col-lg-5 col-md-4 col-sm-4">
+                        <div class="col-lg-7 col-md-4 col-sm-4">
                             <h4 class="page-title font-12">Fuente: INEI</h4>
                         </div>
                         <div class="col-lg-1 col-md-1 col-sm-1  ">
@@ -135,7 +135,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2">
+                        {{-- <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="vsexo" class="">SEXO</label>
                                 <select id="vsexo" name="vsexo" class="form-control form-control-sm"
@@ -145,7 +145,7 @@
                                     <option value="2">MUJER</option>
                                 </select>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -548,15 +548,15 @@
                         $('#vtabla1').html(data.excel);
                         // $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
                         // $('.vtabla1-fecha').html('Actualizado: ' + data.reg.fecha);
-                        // $('#tabla1').DataTable({
-                        //     responsive: true,
-                        //     autoWidth: false,
-                        //     ordered: true,
-                        //     searching: false,
-                        //     bPaginate: false,
-                        //     info: false,
-                        //     language: table_language,
-                        // });
+                        $('#tabla1').DataTable({
+                            responsive: true,
+                            autoWidth: false,
+                            ordered: true,
+                            searching: false,
+                            bPaginate: false,
+                            info: false,
+                            language: table_language,
+                        });
                     }
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {

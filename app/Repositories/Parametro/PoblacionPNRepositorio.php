@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Parametro;
 
+use App\Models\Parametro\Mes;
 use App\Models\Parametro\PoblacionDetalle;
 use App\Models\Parametro\PoblacionPN;
 use App\Models\Parametro\Ubigeo;
@@ -53,7 +54,7 @@ class PoblacionPNRepositorio
                 DB::raw('sum(if(sexo_id=2,pn.0a + pn.1a + pn.2a + pn.3a + pn.4a + pn.5a,0)) as mconteo')
             )
             ->join('par_ubigeo as ds', 'ds.id', '=', 'pn.ubigeo_id')
-            ->join('par_ubigeo as pv', 'pv.id', '=', 'ds.dependencia');
+            ->join('par_ubigeo as pv', 'pv.id', '=', 'ds.dependencia')->where('anio', '>', 2018);
         if ($mes > 0) $query = $query->where('pn.mes_id', $mes);
         if ($provincia > 0) $query = $query->where('pv.id', $provincia);
         if ($distrito > 0) $query = $query->where('ds.id', $distrito);
@@ -83,6 +84,24 @@ class PoblacionPNRepositorio
         return $query;
     }
 
+    public static function conteo_mes($anio, $mes, $provincia, $distrito)
+    {
+        $query = Mes::from('par_mes as m')
+            ->select(
+                'm.id',
+                'm.abreviado',
+                DB::raw('COALESCE(SUM(pn.0a + pn.1a + pn.2a + pn.3a + pn.4a + pn.5a), NULL) as conteo')
+            )
+            ->leftJoin('par_poblacion_padron_nominal as pn', function ($join) use ($anio, $provincia, $distrito) {
+                $join->on('m.id', '=', 'pn.mes_id')->where('pn.anio', '=', $anio);
+                if ($provincia > 0)                    $join->where('pn.provincia_id', '=', $provincia);
+                if ($distrito > 0)                    $join->where('pn.distrito_id', '=', $distrito);
+            })
+            ->groupBy('m.id', 'm.abreviado')
+            ->orderBy('m.id');
+        return $query->get();
+    }
+
     public static function conteo_seguro_edades($anio, $mes, $provincia, $distrito)
     {
         $query = PoblacionPN::from('par_poblacion_padron_nominal as pn')
@@ -108,7 +127,7 @@ class PoblacionPNRepositorio
         if ($mes > 0) $query = $query->where('pn.mes_id', $mes);
         if ($provincia > 0) $query = $query->where('pv.id', $provincia);
         if ($distrito > 0) $query = $query->where('ds.id', $distrito);
-        $query = $query->groupBy('s.codigo','seguro')->get();
+        $query = $query->groupBy('s.codigo', 'seguro')->get();
         return $query;
     }
 

@@ -76,7 +76,7 @@ class PoblacionController extends Controller
 
         return view('parametro.Poblacion.Principal', compact('anios',  'provincia'));
     }
-    
+
     public function poblacionprincipaltabla(Request $rq)
     {
         switch ($rq->div) {
@@ -519,6 +519,29 @@ class PoblacionController extends Controller
                 }
                 return response()->json(compact('info', 'data'));
 
+            case 'anal3':
+                $data = PoblacionPNRepositorio::conteo_anios_sexo($rq->mes, $rq->provincia, $rq->distrito);
+                $info['categoria'] = [];
+                $info['serie'] = [];
+                $info['serie'][0]['name'][] = 'Hombre';
+                // $info['serie'][1]['name'][] = 'Mujer';
+                foreach ($data as $key => $value) {
+                    $info['categoria'][] = '' . $value->anio;
+                    $info['serie'][0]['data'][] = (int)$value->conteo;
+                    // $info['serie'][1]['data'][] = (int)$value->mconteo;
+                }
+                return response()->json(compact('info'));
+
+            case 'anal4':
+                $data = PoblacionPNRepositorio::conteo_mes($rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $info['serie'] = [];
+                $info['serie'][0]['name'] = 'Hombre';
+                foreach ($data as $key => $value) {
+                    $info['categoria'][] = '' . $value->abreviado;
+                    $info['serie'][0]['data'][] = $value->conteo != null ? (int)$value->conteo : $value->conteo;
+                    // $info['serie'][1]['data'][] = ;
+                }
+                return response()->json(compact('info', 'data'));
             case 'tabla1':
                 $base = PoblacionPNRepositorio::conteo_seguro_edades($rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
 
