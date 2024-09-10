@@ -1118,11 +1118,11 @@ class IndicadoresController extends Controller
 
     public function PDRC()
     {
-        return view('salud.Indicadores.ConvenioFED');
+        return view('salud.Indicadores.PDRC');
     }
 
     public function PEI()
     {
-        return view('salud.Indicadores.ConvenioFED');
+        return view('salud.Indicadores.PEI');
     }
 }
