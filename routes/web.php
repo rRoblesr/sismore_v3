@@ -1148,6 +1148,8 @@ Route::get('/salud/PowerBi/{id}', [PowerBiController::class, 'saludMenu'])->name
 Route::get('/indicador/pactoregional/meta', [IndicadoresController::class, 'PactoRegionalMeta'])->name('indicador.pactoregional.meta');
 
 Route::get('/salud/pactoregional', [IndicadoresController::class, 'PactoRegional'])->name('salud.indicador.pactoregional');
+Route::get('/salud/pactoregional/edu', [IndicadoresController::class, 'PactoRegionalEdu'])->name('salud.indicador.pactoregional.edu');
+Route::get('/salud/pactoregional/sal', [IndicadoresController::class, 'PactoRegionalSal'])->name('salud.indicador.pactoregional.sal');
 Route::get('/salud/pactoregional/Actualizarx', [IndicadoresController::class, 'PactoRegionalActualizar'])->name('salud.indicador.pactoregional.actualizar');
 // Route::get('/salud/pactoregional/Actualizarx2', [IndicadoresController::class, 'PactoRegionalActualizar2'])->name('salud.indicador.pactoregional.actualizar2');
 Route::get('/salud/pactoregional/Sal/Reports1', [IndicadoresController::class, 'PactoRegionalSalPacto1Reports'])->name('salud.indicador.pactoregional.detalle.reports');
@@ -1166,6 +1168,7 @@ Route::get('/salud/pactoregional/Sal/Reports4/mes/{anio}', [IndicadoresControlle
 Route::get('/salud/pactoregional/Edu/Reports1', [IndicadoresController::class, 'PactoRegionalEduPacto1Reports'])->name('salud.indicador.pactoregional.edu.pacto1.reports');
 
 Route::get('/salud/pactoregional/Edu/Reports2', [IndicadoresController::class, 'PactoRegionalEduPacto2Reports'])->name('salud.indicador.pactoregional.edu.pacto2.reports');
+
 Route::get('/salud/pactoregional/{indicador_id}', [IndicadoresController::class, 'PactoRegionalDetalle'])->name('salud.indicador.pactoregional.detalle');
 Route::get('/salud/pactoregional/Exportar/{id}', [IndicadoresController::class, 'exportarPDF'])->name('salud.indicador.pactoregional.exportar.pdf');
 

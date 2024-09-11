@@ -889,10 +889,10 @@ class IndicadorGeneralMetaRepositorio
         // $query = DB::select('call edu_pa_sfl_porlocal_provincia(?,?,?,?)', [$ugel, $provincia, $distrito, $estado]);
         // return $query;
 
-        $npro = Ubigeo::where(DB::raw('length(codigo)'), 4)->where('nombre', $provincia)->first();
-        $ndis = Ubigeo::where(DB::raw('length(codigo)'), 6)->where('nombre', $distrito)->first();
-
-        $query = DB::table('edu_sfl_resumen_pacto02')->select(
+        // $npro = Ubigeo::where(DB::raw('length(codigo)'), 4)->where('nombre', $provincia)->first();
+        // $ndis = Ubigeo::where(DB::raw('length(codigo)'), 6)->where('nombre', $distrito)->first();
+        // 
+        $query = DB::table('edu_cubo_pacto02_local')->select(
             'provincia',
             DB::raw('count(local) as conteo'),
             DB::raw('sum(if(estado=1,1,0)) as si'),
@@ -900,9 +900,9 @@ class IndicadorGeneralMetaRepositorio
         );
 
         if ($provincia > 0)
-            $query = $query->where('provincia', $npro->nombre);
+            $query = $query->where('provincia_id', $provincia);
         if ($distrito > 0)
-            $query = $query->where('distrito', $ndis->nombre);
+            $query = $query->where('distrito_id', $distrito);
         if ($estado > 0)
             $query = $query->where('estado', $estado);
 
@@ -928,10 +928,10 @@ class IndicadorGeneralMetaRepositorio
 
     public static function getEduPacto2tabla2($anio, $ugel, $provincia, $distrito, $estado)
     {
-        $npro = Ubigeo::where(DB::raw('length(codigo)'), 4)->where('nombre', $provincia)->first();
-        $ndis = Ubigeo::where(DB::raw('length(codigo)'), 6)->where('nombre', $distrito)->first();
+        // $npro = Ubigeo::where(DB::raw('length(codigo)'), 4)->where('nombre', $provincia)->first();
+        // $ndis = Ubigeo::where(DB::raw('length(codigo)'), 6)->where('nombre', $distrito)->first();
         // $query = DB::select('call edu_pa_sfl_porlocal_distrito(?,?,?,?)', [$ugel, $provincia, $distrito, $estado]);
-        $query = DB::table('edu_sfl_resumen_pacto02')->select(
+        $query = DB::table('edu_cubo_pacto02_local')->select(
             'distrito',
             DB::raw('count(local) as conteo'),
             DB::raw('sum(IF(estado=1,1,0)) as si'),
@@ -939,12 +939,9 @@ class IndicadorGeneralMetaRepositorio
             DB::raw('sum(IF(estado=3,1,0)) as pro'),
             DB::raw('sum(IF(estado=4,1,0)) as sin'),
         );
-        // if ($provincia > 0)
-        //     $query = $query->where('provincia', $provincia);
-        // if ($distrito > 0)
-        //     $query = $query->where('distrito', $distrito);
-        // if ($estado > 0)
-        //     $query = $query->where('estado', $distrito);
+        if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
+        if ($distrito > 0) $query = $query->where('distrito_id', $distrito);
+        if ($estado > 0) $query = $query->where('estado', $distrito);
 
         $query = $query->groupBy('distrito')->get();
         return $query;

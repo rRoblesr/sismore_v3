@@ -87,6 +87,52 @@ class IndicadoresController extends Controller
         return view('salud.Indicadores.PactoRegional', compact('indsal', 'indedu', 'indviv', 'anio', 'provincia', 'aniomax'));
     }
 
+    public function PactoRegionalEdu()
+    {
+        $sector = 14;
+        $instrumento = 8;
+        $indsal = IndicadorGeneralRepositorio::find_pactoregional($sector, $instrumento);
+        $sector = 4;
+        $instrumento = 8;
+        $indedu = IndicadorGeneralRepositorio::find_pactoregional($sector, $instrumento);
+        $sector = 18;
+        $instrumento = 8;
+        $indviv = IndicadorGeneralRepositorio::find_pactoregional($sector, $instrumento);
+
+        $ind = IndicadorGeneralRepositorio::findNoFichatecnicaCodigo('DIT-SAL-01');
+        $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios($ind->id);
+        $provincia = UbigeoRepositorio::provincia('25');
+
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_1']);
+        // // return response()->json(compact('imp'));
+        $aniomax = $imp->anio;
+
+        return view('salud.Indicadores.PactoRegionalEdu', compact('indsal', 'indedu', 'indviv', 'anio', 'provincia', 'aniomax'));
+    }
+
+    public function PactoRegionalSal()
+    {
+        $sector = 14;
+        $instrumento = 8;
+        $indsal = IndicadorGeneralRepositorio::find_pactoregional($sector, $instrumento);
+        $sector = 4;
+        $instrumento = 8;
+        $indedu = IndicadorGeneralRepositorio::find_pactoregional($sector, $instrumento);
+        $sector = 18;
+        $instrumento = 8;
+        $indviv = IndicadorGeneralRepositorio::find_pactoregional($sector, $instrumento);
+
+        $ind = IndicadorGeneralRepositorio::findNoFichatecnicaCodigo('DIT-SAL-01');
+        $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios($ind->id);
+        $provincia = UbigeoRepositorio::provincia('25');
+
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_1']);
+        // // return response()->json(compact('imp'));
+        $aniomax = $imp->anio;
+
+        return view('salud.Indicadores.PactoRegionalSal', compact('indsal', 'indedu', 'indviv', 'anio', 'provincia', 'aniomax'));
+    }
+
     public function PactoRegionalActualizar2(Request $rq)
     {
         $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_1']);
@@ -167,26 +213,26 @@ class IndicadoresController extends Controller
                 $den = $gl;
                 break;
             case 'DIT-EDU-01':
-                $gls = 75;
-                $gl = 100;
+                $gl = (int)PoblacionPNRepositorio::conteo3a5_acumulado($rq->anio, 5, $rq->provincia, $rq->distrito, 0);
+                $gls = CuboPacto1Repositorio::pacto1_matriculados($rq->anio, 5, $rq->provincia, $rq->distrito);
                 $num = $gls;
                 $den = $gl;
                 break;
             case 'DIT-EDU-02':
-                $gl = SFLRepositorio::get_locals($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 0)->count();
-                $gls = SFLRepositorio::get_locals($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 1)->count();
+                $gl = SFLRepositorio::get_localsx($rq->anio, 0, $rq->provincia, $rq->distrito, 0);
+                $gls = SFLRepositorio::get_localsx($rq->anio, 0, $rq->provincia, $rq->distrito, 1);
                 $num = $gls;
                 $den = $gl;
                 break;
             case 'DIT-EDU-03':
-                $gls = 102;
-                $gl = 100;
+                $gls = 0;
+                $gl = 0;
                 $num = $gls;
                 $den = $gl;
                 break;
             case 'DIT-EDU-04':
-                $gls = 25;
-                $gl = 100;
+                $gls = 0;
+                $gl = 0;
                 $num = $gls;
                 $den = $gl;
                 break;
