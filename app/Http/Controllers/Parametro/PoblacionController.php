@@ -525,26 +525,26 @@ class PoblacionController extends Controller
                 return response()->json(compact('info', 'data'));
 
             case 'anal3':
-                $data = PoblacionPNRepositorio::conteo_anios_sexo($rq->mes, $rq->provincia, $rq->distrito);
-                $info['categoria'] = [];
-                $info['serie'] = [];
-                foreach ($data as $key => $value) {
-                    $info['categoria'][] = '' . $value->anio;
-                    $info['serie'][] = (int)$value->conteo;
-                }
-                return response()->json(compact('info', 'data'));
-
                 // $data = PoblacionPNRepositorio::conteo_anios_sexo($rq->mes, $rq->provincia, $rq->distrito);
                 // $info['categoria'] = [];
                 // $info['serie'] = [];
-                // $info['serie'][0]['name'][] = 'Hombre';
-                // // $info['serie'][1]['name'][] = 'Mujer';
                 // foreach ($data as $key => $value) {
                 //     $info['categoria'][] = '' . $value->anio;
-                //     $info['serie'][0]['data'][] = (int)$value->conteo;
-                //     // $info['serie'][1]['data'][] = (int)$value->mconteo;
+                //     $info['serie'][] = (int)$value->conteo;
                 // }
-                // return response()->json(compact('info'));
+                // return response()->json(compact('info', 'data'));
+
+                $data = PoblacionPNRepositorio::conteo_anios_sexo($rq->mes, $rq->provincia, $rq->distrito);
+                $info['categoria'] = [];
+                $info['serie'] = [];
+                $info['serie'][0]['name'][] = 'Hombre';
+                // $info['serie'][1]['name'][] = 'Mujer';
+                foreach ($data as $key => $value) {
+                    $info['categoria'][] = '' . $value->anio;
+                    $info['serie'][0]['data'][] = (int)$value->conteo;
+                    // $info['serie'][1]['data'][] = (int)$value->mconteo;
+                }
+                return response()->json(compact('info'));
 
             case 'anal4':
                 $data = PoblacionPNRepositorio::conteo_mes($rq->anio, $rq->mes, $rq->provincia, $rq->distrito);

@@ -415,9 +415,9 @@
                         anal2 = gColumnx(div, data.info, '',
                             'Población de niños y niñas menores de 6 años, según sexo', 'Etapa Vida')
                     } else if (div == "anal3") {
-                        // anal3 = gColumnx(div, data.info, '', 'Población de niños y niñas menores de 6 años, periodo 2019- 2024', 'Año')
-                        anal3 = gLinea(div, data.info, '',
-                            'Población de niños y niñas menores de 6 años, periodo 2019- 2024');
+                        anal3 = gColumnx(div, data.info, '', 'Población de niños y niñas menores de 6 años, periodo 2019- 2024', 'Año')
+                        // anal3 = gLinea(div, data.info, '',
+                        //     'Población de niños y niñas menores de 6 años, periodo 2019- 2024');
                     } else if (div == "anal4") {
                         // anal4 = gColumnx(div, data.info, '', 'Población de niños y niñas menores de 6 años, según Mes')
                         anal4 = gLinea(div, data.info, '',
