@@ -388,19 +388,26 @@
                         // });
                     } else if (div == "tabla2") {
                         $('#vtabla2').html(data.excel);
-                        // $('#tabla2').DataTable({
-                        //     responsive: true,
-                        //     autoWidth: false,
-                        //     ordered: true,
-                        //     // searching: false,
-                        //     // bPaginate: false,
-                        //     // info: false,
-                        //     language: table_language,
-                        // });
+                        $('#tabla2').DataTable({
+                            responsive: true,
+                            autoWidth: false,
+                            ordered: true,
+                            searching: false,
+                            bPaginate: false,
+                            info: false,
+                            language: table_language,
+                        });
                     } else if (div == "tabla3") {
                         $('#vtabla3').html(data.excel);
-                        // $('.vtabla2-fuente').html('Fuente: ]]' + data.reg.fuente);
-                        // $('.vtabla2-fecha').html('Actualizado: ' + data.reg.fecha);
+                        $('#tabla3').DataTable({
+                            responsive: true,
+                            autoWidth: false,
+                            ordered: true,
+                            searching: false,
+                            bPaginate: false,
+                            info: false,
+                            language: table_language,
+                        });
                     } else if (div == "tabla4") {
                         $('#vtabla4').html(data.excel);
                         $('#tabla4').DataTable({

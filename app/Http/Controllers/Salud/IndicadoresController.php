@@ -215,14 +215,14 @@ class IndicadoresController extends Controller
             case 'DIT-EDU-01':
                 $gl = (int)PoblacionPNRepositorio::conteo3a5_acumulado($rq->anio, 5, $rq->provincia, $rq->distrito, 0);
                 $gls = CuboPacto1Repositorio::pacto1_matriculados($rq->anio, 5, $rq->provincia, $rq->distrito);
-                $num = $gls;
-                $den = $gl;
+                $num = number_format($gls, 0);
+                $den = number_format($gl);
                 break;
             case 'DIT-EDU-02':
                 $gl = SFLRepositorio::get_localsx($rq->anio, 0, $rq->provincia, $rq->distrito, 0);
                 $gls = SFLRepositorio::get_localsx($rq->anio, 0, $rq->provincia, $rq->distrito, 1);
-                $num = $gls;
-                $den = $gl;
+                $num = number_format($gls, 0);
+                $den = number_format($gl);
                 break;
             case 'DIT-EDU-03':
                 $gls = 0;

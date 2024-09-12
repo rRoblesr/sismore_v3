@@ -267,46 +267,10 @@
         });
 
         function cargarpacto1() {
-            // cargarActualizar('DIT-SAL-01');
-            // cargarActualizar('DIT-SAL-02');
-            // cargarActualizar('DIT-SAL-03');
-            // cargarActualizar('DIT-SAL-04');
-            // cargarActualizar('DIT-SAL-05');
-
             cargarActualizar('DIT-EDU-01');
             cargarActualizar('DIT-EDU-02');
             cargarActualizar('DIT-EDU-03');
             cargarActualizar('DIT-EDU-04');
-
-            // GaugeSeries('graeducacion01', 71);
-            // GaugeSeries('graeducacion02', 82);
-            // GaugeSeries('graeducacion03', 92);
-            // GaugeSeries('graeducacion04', 99);
-            // GaugeSeries('graeducacion05', 62);
-            // GaugeSeries('graeducacion06', 62);
-
-            cargarActualizar('DIT-VIV-01');
-            cargarActualizar('DIT-VIV-02');
-            cargarActualizar('DIT-VIV-03');
-            cargarActualizar('DIT-VIV-04');
-
-            // GaugeSeries('gravivienda01', 71);
-            // GaugeSeries('gravivienda02', 82);
-            // GaugeSeries('gravivienda03', 92);
-            // GaugeSeries('gravivienda04', 99);
-            // GaugeSeries('gravivienda05', 62);
-
-            // cargarActualizar('DIT-ART-01');
-            // cargarActualizar('DIT-ART-02');
-            // cargarActualizar('DIT-ART-03');
-            // cargarActualizar('DIT-ART-04');
-
-            GaugeSeries('graarticulacion01', 71);
-            GaugeSeries('graarticulacion02', 82);
-            GaugeSeries('graarticulacion03', 92);
-            GaugeSeries('graarticulacion04', 99);
-            // GaugeSeries('graarticulacion05', 62);
-
         }
 
         function cargarActualizar(codigo) {
