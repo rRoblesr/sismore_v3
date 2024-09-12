@@ -31,7 +31,7 @@ class SFLController extends Controller
     public function principal()
     {
         $ugel = InstitucionEducativa::distinct()->select('uu.*')
-            ->join('edu_ugel as uu', 'uu.id', '=', 'edu_institucioneducativa.Ugel_id')
+            ->join('edu_ugel as uu', 'uu.id', '=', 'edu_institucioneducativa.Ugel_id')->where('uu.estado','AC')
             ->get();
         $provincia = InstitucionEducativa::distinct()->select('pv.*')
             ->join('edu_centropoblado as cp', 'cp.id', '=', 'edu_institucioneducativa.CentroPoblado_id')

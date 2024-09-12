@@ -67,35 +67,55 @@
                 <h4 class="page-title font-16">Saneamiento Físico Legal </h4>
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2">
-                <select id="ugel" name="ugel" class="form-control btn-xs font-11" onchange="cargarCards();">
-                    <option value="0">UGEL</option>
-                    @foreach ($ugel as $item)
-                        <option value="{{ $item->id }}">{{ $item->nombre }}</option>
-                    @endforeach
-                </select>
+                <div class="custom-select-container">
+                    <label for="ugel">UGEL</label>
+                    <select id="ugel" name="ugel" class="form-control btn-xs font-11" onchange="cargarCards();">
+                        <option value="0">TODOS</option>
+                        @foreach ($ugel as $item)
+                            <option value="{{ $item->id }}">{{ $item->nombre }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2">
-                <select id="provincia" name="provincia" class="form-control btn-xs font-11"
-                    onchange="cargar_distrito();cargarCards();">
-                    <option value="0">PROVINCIA</option>
-                    @foreach ($provincia as $item)
-                        <option value="{{ $item->id }}">{{ $item->nombre }}</option>
-                    @endforeach
-                </select>
+                <div class="custom-select-container">
+                    <label for="provincia">PROVINCIA</label>
+                    <select id="provincia" name="provincia" class="form-control btn-xs font-11"
+                        onchange="cargar_distrito();cargarCards();">
+                        <option value="0">TODOS</option>
+                        @foreach ($provincia as $item)
+                            <option value="{{ $item->id }}">{{ $item->nombre }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2">
-                <select id="distrito" name="distrito" class="form-control btn-xs font-11" onchange="cargarCards();">
-                    <option value="0">DISTRITO</option>
-                </select>
+                <div class="custom-select-container">
+                    <label for="distrito">DISTRITO</label>
+                    <select id="distrito" name="distrito" class="form-control btn-xs font-11" onchange="cargarCards();">
+                        <option value="0">TODOS</option>
+                    </select>
+                </div>
+
+
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2">
-                <select id="estado" name="area" class="form-control btn-xs font-11" onchange="cargarCards();">
-                    <option value="0">ESTADO</option>
-                    <option value="1">SANEADO</option>
-                    <option value="2">NO SANEADO</option>
-                    <option value="3">NO REGISTRADO</option>
-                    <option value="4">EN PROCESO</option>
-                </select>
+                <div class="custom-select-container">
+                    <label for="estado">ESTADO</label>
+                    <select id="estado" name="area" class="form-control btn-xs font-11" onchange="cargarCards();">
+                        <option value="0">TODOS</option>
+                        <option value="1">SANEADO</option>
+                        <option value="2">NO SANEADO</option>
+                        <option value="3">NO REGISTRADO</option>
+                        <option value="4">EN PROCESO</option>
+                    </select>
+                </div>
+
+
             </div>
         </div>
 
@@ -878,7 +898,7 @@
                 dataType: "JSON",
                 success: function(data) {
                     $('#distrito option ').remove();
-                    var opt = '<option value="0">DISTRITO</option>';
+                    var opt = '<option value="0">TODOS</option>';
                     $.each(data, function(index, vv) {
                         opt += '<option value="' + vv.id + '">' + vv.nombre + '</option>';
                     });

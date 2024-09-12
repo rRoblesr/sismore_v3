@@ -254,9 +254,11 @@ class PoblacionController extends Controller
                 $data = PoblacionProyectadaRepositorio::conteo_anios($rq->departamento);
                 $info['categoria'] = [];
                 $info['serie'] = [];
+                $info['punto'] = [];
                 foreach ($data as $key => $value) {
                     $info['categoria'][] = '' . $value->anio;
                     $info['serie'][] = (int)$value->conteo;
+                    $info['punto'][] = [$value->anio, (int)$value->conteo];
                 }
                 return response()->json(compact('info'));
 

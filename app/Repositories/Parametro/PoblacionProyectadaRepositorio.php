@@ -71,7 +71,7 @@ class PoblacionProyectadaRepositorio
 
     public static function conteo_anios($departamento)
     {
-        $query = PoblacionProyectada::select('anio', DB::raw('SUM(total) conteo'), DB::raw('SUM(hombre) hconteo'), DB::raw('SUM(mujer) mconteo'))->where('anio', '>', 2020);
+        $query = PoblacionProyectada::select('anio', DB::raw('SUM(total) conteo'), DB::raw('SUM(hombre) hconteo'), DB::raw('SUM(mujer) mconteo')); //->where('anio', '>', 2020);
         if ($departamento > '00')
             $query = $query->where('codigo', $departamento);
         $query = $query->groupBy('anio')->orderBy('anio')->get();
@@ -89,7 +89,7 @@ class PoblacionProyectadaRepositorio
 
     public static function conteo05_anios($departamento)
     {
-        $query = PoblacionProyectada::select('anio', DB::raw('SUM(total) conteo'), DB::raw('SUM(hombre) hconteo'), DB::raw('SUM(mujer) mconteo'))->where('anio', '>', 2020)->whereIn('edad', [0, 1, 2, 3, 4, 5]);
+        $query = PoblacionProyectada::select('anio', DB::raw('SUM(total) conteo'), DB::raw('SUM(hombre) hconteo'), DB::raw('SUM(mujer) mconteo'))->whereIn('edad', [0, 1, 2, 3, 4, 5]);     //->where('anio', '>', 2020);
         if ($departamento > '00')
             $query = $query->where('codigo', $departamento);
         $query = $query->groupBy('anio')->orderBy('anio')->get();
@@ -151,19 +151,19 @@ class PoblacionProyectadaRepositorio
     //     return $query->groupBy('provincia')->sum('total');
     // }
 
-    public static function total6a11($anio_id)
-    {
-        $query = PoblacionDetalle::select(DB::raw('sum(total) as conteo'))
-            ->join('par_poblacion as pp', 'pp.id', '=', 'par_poblacion_detalle.poblacion_id')
-            ->where('pp.anio_id', $anio_id)->whereIn('edad', ['e6', 'e7', 'e8', 'e9', 'e10', 'e11'])->where('ubigeo', 'like', '25%')->first()->conteo;
-        return $query;
-    }
+    // public static function total6a11($anio_id)
+    // {
+    //     $query = PoblacionDetalle::select(DB::raw('sum(total) as conteo'))
+    //         ->join('par_poblacion as pp', 'pp.id', '=', 'par_poblacion_detalle.poblacion_id')
+    //         ->where('pp.anio_id', $anio_id)->whereIn('edad', ['e6', 'e7', 'e8', 'e9', 'e10', 'e11'])->where('ubigeo', 'like', '25%')->first()->conteo;
+    //     return $query;
+    // }
 
-    public static function total12a16($anio_id)
-    {
-        $query = PoblacionDetalle::select(DB::raw('sum(total) as conteo'))
-            ->join('par_poblacion as pp', 'pp.id', '=', 'par_poblacion_detalle.poblacion_id')
-            ->where('pp.anio_id', $anio_id)->whereIn('edad', ['e12', 'e13', 'e14', 'e15', 'e16'])->where('ubigeo', 'like', '25%')->first()->conteo;
-        return $query;
-    }
+    // public static function total12a16($anio_id)
+    // {
+    //     $query = PoblacionDetalle::select(DB::raw('sum(total) as conteo'))
+    //         ->join('par_poblacion as pp', 'pp.id', '=', 'par_poblacion_detalle.poblacion_id')
+    //         ->where('pp.anio_id', $anio_id)->whereIn('edad', ['e12', 'e13', 'e14', 'e15', 'e16'])->where('ubigeo', 'like', '25%')->first()->conteo;
+    //     return $query;
+    // }
 }
