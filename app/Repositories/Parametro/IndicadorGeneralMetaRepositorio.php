@@ -788,7 +788,7 @@ class IndicadorGeneralMetaRepositorio
 
     public static function getEduPacto1tabla2($indicador_id, $anio, $mes, $provincia, $distrito)
     {
-        $query = DB::table('edu_cubo_pacto1_matriculados')->select(
+        $query = DB::table('edu_cubo_pacto01_matriculados')->select(
             'nivelmodalidad',
             DB::raw('sum(total) as conteo'),
             DB::raw('sum(if(sexo_id=1,total,0)) as hconteo'),
@@ -891,7 +891,7 @@ class IndicadorGeneralMetaRepositorio
 
         // $npro = Ubigeo::where(DB::raw('length(codigo)'), 4)->where('nombre', $provincia)->first();
         // $ndis = Ubigeo::where(DB::raw('length(codigo)'), 6)->where('nombre', $distrito)->first();
-        // 
+        //
         $query = DB::table('edu_cubo_pacto02_local')->select(
             'provincia',
             DB::raw('count(local) as conteo'),

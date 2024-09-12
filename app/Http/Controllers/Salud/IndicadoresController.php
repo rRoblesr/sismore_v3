@@ -356,7 +356,7 @@ class IndicadoresController extends Controller
             case 'DIT-EDU-01':
                 $actualizado = 'Actualizado al ';
                 $anio = IndicadorGeneralMeta::distinct()->select('anio')->where('indicadorgeneral', $indicador_id)->get();
-                // return $aniosmat = DB::table('par_mes as m')->select('m.id', 'm.mes', DB::raw('CASE 
+                // return $aniosmat = DB::table('par_mes as m')->select('m.id', 'm.mes', DB::raw('CASE
                 //                             WHEN m.id > 1 AND SUM(c.total) IS NULL THEN NULL
                 //                             ELSE SUM(c.total)
                 //                         END as conteo'))
@@ -365,7 +365,7 @@ class IndicadoresController extends Controller
                 //     })
                 //     ->groupBy('m.id', 'm.mes')->orderBy('m.id')->get();
 
-                $am = DB::table('edu_cubo_pacto1_matriculados')->whereIn('nivelmodalidad_codigo', ['A2', 'A3', 'A5'])->where('anio', $anio->max('anio'))->max('mes_id');
+                $am = DB::table('edu_cubo_pacto01_matriculados')->whereIn('nivelmodalidad_codigo', ['A2', 'A3', 'A5'])->where('anio', $anio->max('anio'))->max('mes_id');
                 $ap = PoblacionPN::where('anio', $anio->max('anio'))->max('mes_id');
                 $aniomax = 0;
                 if ($aniomax < $am) $aniomax = $am;
