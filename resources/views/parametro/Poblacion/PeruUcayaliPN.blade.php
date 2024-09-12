@@ -242,7 +242,29 @@
         </div>
     </div>
 
-    {{-- portles --}}
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
+                </div>
+                <div class="card-body p-0">
+                    <div id="anal3" style="height: 20rem"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
+                </div>
+                <div class="card-body p-0">
+                    <div id="anal4" style="height: 20rem"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 
     <div class="row">
         <div class="col-lg-6">
@@ -262,30 +284,6 @@
                 </div>
                 <div class="card-body p-0">
                     <div id="anal2" style="height: 20rem"></div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="row">
-        <div class="col-lg-6">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
-                </div>
-                <div class="card-body p-0">
-                    <div id="anal3" style="height: 20rem"></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
-                </div>
-                <div class="card-body p-0">
-                    <div id="anal4" style="height: 20rem"></div>
                 </div>
             </div>
         </div>
@@ -417,12 +415,13 @@
                         anal2 = gColumnx(div, data.info, '',
                             'Población de niños y niñas menores de 6 años, según sexo', 'Etapa Vida')
                     } else if (div == "anal3") {
-                        anal3 = gColumnx(div, data.info, '',
-                            'Población de niños y niñas menores de 6 años, periodo 2019- 2024',
-                            'Año')
+                        // anal3 = gColumnx(div, data.info, '', 'Población de niños y niñas menores de 6 años, periodo 2019- 2024', 'Año')
+                        anal3 = gLinea(div, data.info, '',
+                            'Población de niños y niñas menores de 6 años, periodo 2019- 2024');
                     } else if (div == "anal4") {
-                        anal4 = gColumnx(div, data.info, '',
-                            'Población de niños y niñas menores de 6 años, según Mes')
+                        // anal4 = gColumnx(div, data.info, '', 'Población de niños y niñas menores de 6 años, según Mes')
+                        anal4 = gLinea(div, data.info, '',
+                            'Población de niños y niñas menores de 6 años, según Mes');
                     } else if (div == "tabla1") {
                         $('#vtabla1').html(data.excel);
                         // $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
