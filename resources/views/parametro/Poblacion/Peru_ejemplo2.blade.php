@@ -367,29 +367,6 @@
             Highcharts.setOptions({
                 lang: {
                     thousandsSep: ","
-                },
-                xAxis: {
-                    labels: {
-                        style: {
-                            fontSize: '11px' // Tamaño de fuente para todas las etiquetas del eje X
-                        }
-                    },
-                    title: {
-                        text: ''
-                    }
-                },
-                yAxis: {
-                    labels: {
-                        style: {
-                            fontSize: '11px' // Tamaño de fuente para todas las etiquetas del eje X
-                        }
-                    },
-                    title: {
-                        text: ''
-                    }
-                },
-                credits: {
-                    enabled: false
                 }
             });
             var mapData = Highcharts.maps['countries/pe/pe-all'];
@@ -471,11 +448,52 @@
                         $('#card4').text(data.card4);
 
                     } else if (div == "anal1") {
+                        // var datax = [
+                        //     ["pe-lo", 1],
+                        //     ["pe-uc", 2],
+                        //     ["pe-ic", 3],
+                        //     ["pe-ju", 4],
+                        //     ["pe-tu", 5],
+                        //     ["pe-ar", 6],
+                        //     ["pe-cj", 7],
+                        //     ["pe-ay", 8],
+                        //     ["pe-ta", 9],
+                        //     ["pe-am", 10],
+                        //     ["pe-pi", 11],
+                        //     ["pe-cs", 12],
+                        //     ["pe-lb", 13],
+                        //     ["pe-hv", 14],
+                        //     ["pe-sm", 15],
+                        //     ["pe-ll", 16],
+                        //     ["pe-mq", 17],
+                        //     ["pe-ap", 18],
+                        //     ["pe-cl", 19],
+                        //     ["pe-hc", 20],
+                        //     ["pe-md", 21],
+                        //     ["pe-pa", 22],
+                        //     ["pe-3341", 23],
+                        //     ["pe-lr", 24],
+                        //     ["pe-an", 25],
+                        //     ["pe-145", 26]
+                        // ]
+
                         anal1 = maps01(div, data.info, '',
                             'Población estimada y proyectada, según departamento');
+                        // selectedCode = null;
+                        // console.log("vdepartamento1:" + $('#vdepartamento').val());
+                        // console.log("selectedCode1:" + selectedCode);
 
                         if ($('#vdepartamento').val() > '00') {
+                            // originalColors = {};
                             var serie = anal1.series[0];
+                            // console.log("serie.name     :" + serie.name);
+                            // console.log("serie.data     :" + serie.data.length);
+                            // console.log("serie.color    :" + serie.color);
+                            // console.log("serie.type     :" + serie.type);
+                            // console.log("serie.visible  :" + serie.visible);
+                            // console.log("serie.index    :" + serie.index);
+                            // console.log("serie.options  :" + serie.options);
+
                             var depa = $('#vdepartamento').val();
                             var point = serie.points.find(
                                 p => p.properties['fips'] && p.properties['fips'].substring(2) === depa
@@ -521,18 +539,56 @@
                         anal2 = gbar2(div, data.info, '',
                             mapa_selected + 'Pirámide poblacional, según sexo  y grupo etario', '');
                     } else if (div == "anal3") {
-                        anal3 = gLineaPuntos(div, data.info.punto);
-                        anal3.setTitle({
-                            text: ''
-                        }, {
-                            text: mapa_selected + 'Población estimada y proyectada, periodo 2021-2030'
-                        });
-                        anal3.update({
-                            legend: {
-                                enabled: false
-                            }
-                        });
+                        // anal3 = gLinea(div, data.info, '', mapa_selected + 'Población estimada y proyectada, periodo 2021-2030');}
+                        // const data = [
+                        //     [Date.UTC(1995, 0, 1), 24242600],
+                        //     [Date.UTC(1996, 0, 1), 24689213],
+                        //     [Date.UTC(1997, 0, 1), 25145317],
+                        //     [Date.UTC(1998, 0, 1), 25592876],
+                        //     [Date.UTC(1999, 0, 1), 26013829],
+                        //     [Date.UTC(2000, 0, 1), 26390142],
+                        //     [Date.UTC(2001, 0, 1), 26714547],
+                        //     [Date.UTC(2002, 0, 1), 26999085],
+                        //     [Date.UTC(2003, 0, 1), 27254632],
+                        //     [Date.UTC(2004, 0, 1), 27492091],
+                        //     [Date.UTC(2005, 0, 1), 27722342],
+                        //     [Date.UTC(2006, 0, 1), 27934784],
+                        //     [Date.UTC(2007, 0, 1), 28122158],
+                        //     [Date.UTC(2008, 0, 1), 28300372],
+                        //     [Date.UTC(2009, 0, 1), 28485319],
+                        //     [Date.UTC(2010, 0, 1), 28692915],
+                        //     [Date.UTC(2011, 0, 1), 28905725],
+                        //     [Date.UTC(2012, 0, 1), 29113162],
+                        //     [Date.UTC(2013, 0, 1), 29341346],
+                        //     [Date.UTC(2014, 0, 1), 29616414],
+                        //     [Date.UTC(2015, 0, 1), 29964499],
+                        //     [Date.UTC(2016, 0, 1), 30422831],
+                        //     [Date.UTC(2017, 0, 1), 30973992],
+                        //     [Date.UTC(2018, 0, 1), 31562130],
+                        //     [Date.UTC(2019, 0, 1), 32131400],
+                        //     [Date.UTC(2020, 0, 1), 32625948],
+                        //     [Date.UTC(2021, 0, 1), 33035304],
+                        //     [Date.UTC(2022, 0, 1), 33396698],
+                        //     [Date.UTC(2023, 0, 1), 33725844],
+                        //     [Date.UTC(2024, 0, 1), 34038457],
+                        //     [Date.UTC(2025, 0, 1), 34350244],
+                        //     [Date.UTC(2026, 0, 1), 34660114],
+                        //     [Date.UTC(2027, 0, 1), 34957600],
+                        //     [Date.UTC(2028, 0, 1), 35244330],
+                        //     [Date.UTC(2029, 0, 1), 35521943],
+                        //     [Date.UTC(2030, 0, 1), 35792079]
+                        // ];
 
+                        // this.points.forEach(function(point) {
+                        //     tooltipText += point.series.name + ': ' + Highcharts.numberFormat(Math.abs(
+                        //         point.y), 0) + '<br/>';
+                        // });
+                        // data.info.punto.forEach(function(ee) {
+                        //     console.log(ee[0]);
+                        //     ee[0] = Date.UTC(ee[0], 0, 1);
+                        // });
+                        // console.log(data);
+                        anal3 = gLineaPuntos(div, data.info.punto);
                     } else if (div == "anal4") {
                         anal4 = gLinea(div, data.info, '',
                             mapa_selected + 'Población estimada de 0 a 5 años, periodo 2021-2030');
@@ -676,12 +732,12 @@
                     }
                 },
                 title: {
-                    // text: 'Población desde 1995 hasta 2030',
-                    // align: 'left'
+                    text: 'Población desde 1995 hasta 2030',
+                    align: 'left'
                 },
                 subtitle: {
-                    // text: 'Using the Boost module',
-                    // align: 'left'
+                    text: 'Using the Boost module',
+                    align: 'left'
                 },
                 accessibility: {
                     screenReaderSection: {
@@ -705,9 +761,6 @@
                         text: 'Población'
                     }
                 },
-                // legend: {
-                //     enabled: series.data.length == 1 ? false : true
-                // },
                 series: [{
                     data: data,
                     lineWidth: 0.5,

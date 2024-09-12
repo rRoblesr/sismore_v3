@@ -258,7 +258,8 @@ class PoblacionController extends Controller
                 foreach ($data as $key => $value) {
                     $info['categoria'][] = '' . $value->anio;
                     $info['serie'][] = (int)$value->conteo;
-                    $info['punto'][] = [$value->anio, (int)$value->conteo];
+                    $info['punto'][] = [mktime(0, 0, 0, 1, 1, (int)$value->anio) * 1000, (int)$value->conteo];
+                    // $info['punto'][] = [(int)$value->anio, (int)$value->conteo];
                 }
                 return response()->json(compact('info'));
 
