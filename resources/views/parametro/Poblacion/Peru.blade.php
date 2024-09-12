@@ -374,18 +374,12 @@
                             fontSize: '11px' // Tamaño de fuente para todas las etiquetas del eje X
                         }
                     },
-                    title: {
-                        text: ''
-                    }
                 },
                 yAxis: {
                     labels: {
                         style: {
                             fontSize: '11px' // Tamaño de fuente para todas las etiquetas del eje X
                         }
-                    },
-                    title: {
-                        text: ''
                     }
                 },
                 credits: {
@@ -534,8 +528,18 @@
                         });
 
                     } else if (div == "anal4") {
-                        anal4 = gLinea(div, data.info, '',
-                            mapa_selected + 'Población estimada de 0 a 5 años, periodo 2021-2030');
+                        // anal4 = gLinea(div, data.info, '', mapa_selected + 'Población estimada de 0 a 5 años, periodo 2021-2030');
+                        anal4 = gLineaPuntos(div, data.info.punto);
+                        anal4.setTitle({
+                            text: ''
+                        }, {
+                            text: mapa_selected + 'Población estimada de 0 a 5 años, periodo 2021-2030'
+                        });
+                        anal4.update({
+                            legend: {
+                                enabled: false
+                            }
+                        });
                     } else if (div == "tabla1") {
                         $('#vtabla1').html(data.excel);
                         $('#tabla1').DataTable({
@@ -697,12 +701,12 @@
                 xAxis: {
                     type: 'datetime',
                     title: {
-                        text: 'Año'
+                        text: ''
                     }
                 },
                 yAxis: {
                     title: {
-                        text: 'Población'
+                        text: ''
                     }
                 },
                 // legend: {
