@@ -47,7 +47,7 @@
                                     <div class="custom-select-container">
                                         <label for="mes">MES</label>
                                         <select id="mes" name="mes" class="form-control btn-xs font-11"
-                                            onchange="cargarDistritos();">
+                                            onchange="cargarDistritos();cargarcuadros();">
                                             @foreach ($mes as $item)
                                                 <option value="{{ $item->id }}"
                                                     {{ $item->id == $mesmax ? 'selected' : '' }}> {{ $item->mes }}
@@ -349,9 +349,10 @@
                 data: {
                     'div': div,
                     "anio": $('#anio').val(),
+                    "mes": $('#mes').val(),
                     "provincia": $('#provincia').val(),
                     "distrito": $('#distrito').val(),
-                    "area": $('#area').val(),
+                    // "area": $('#area').val(),
                     "indicador": '{{ $ind->id }}',
                     "codigo": '{{ $ind->codigo }}',
                 },
@@ -437,6 +438,7 @@
                 data: {
                     'div': div,
                     "anio": $('#anio').val(),
+                    
                     "provincia": $('#provincia').val(),
                     "distrito": $('#distrito').val(),
                     "gestion": $('#gestion').val(),

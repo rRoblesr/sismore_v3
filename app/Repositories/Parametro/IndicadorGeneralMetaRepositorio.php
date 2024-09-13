@@ -901,9 +901,9 @@ class IndicadorGeneralMetaRepositorio
         $query = IndicadorGeneralMeta::select('par_Indicador_general_meta.*', 'd.codigo', 'd.id as distrito_id', 'd.nombre as distrito')->where('indicadorgeneral', $indicador_id)->where('anio', $anio)
             ->join('par_ubigeo as d', 'd.id', '=', 'par_Indicador_general_meta.distrito')->get();
         foreach ($query as $key => $value) {
-            $data = CuboPacto2Repositorio::getEduPacto2tabla1($anio, $mes, $provincia, $distrito, $estado);
+            $data = CuboPacto2Repositorio::getEduPacto2tabla1($anio, $mes, 0, $value->distrito_id, 0);
             $value->avance = $data->count() > 0 ? ($data->first()->conteo ? $data->first()->conteo : 0) : 0; //$query->conteo ? $query->conteo : 0;
-            $value->porcentaje = 0; //number_format(100 * ($value->valor > 0 ? $value->avance / $value->valor : 0), 1);
+            $value->porcentaje = number_format(100 * ($value->valor > 0 ? $value->avance / $value->valor : 0), 1);
             $value->cumple = $value->valor == $value->avance ? 1 : 0;
         }
         return $query;
@@ -942,7 +942,9 @@ class IndicadorGeneralMetaRepositorio
             DB::raw('max(if(anio=2026,valor,0)) as v2026'),
         )->where('indicadorgeneral', $indicador_id)
             ->join('par_ubigeo as d', 'd.id', '=', 'par_indicador_general_meta.distrito')->groupBy('dis', 'anio_base', 'valor_base')->get();
-
+        foreach ($query as $key => $value) {
+            $value->r2023 = 0;
+        }
         return $query;
     }
 }
