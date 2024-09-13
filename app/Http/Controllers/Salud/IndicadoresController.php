@@ -89,17 +89,11 @@ class IndicadoresController extends Controller
 
     public function PactoRegionalEdu()
     {
-        $sector = 14;
-        $instrumento = 8;
-        $indsal = IndicadorGeneralRepositorio::find_pactoregional($sector, $instrumento);
         $sector = 4;
         $instrumento = 8;
         $indedu = IndicadorGeneralRepositorio::find_pactoregional($sector, $instrumento);
-        $sector = 18;
-        $instrumento = 8;
-        $indviv = IndicadorGeneralRepositorio::find_pactoregional($sector, $instrumento);
 
-        $ind = IndicadorGeneralRepositorio::findNoFichatecnicaCodigo('DIT-SAL-01');
+        $ind = IndicadorGeneralRepositorio::findNoFichatecnicaCodigo('DIT-EDU-01');
         $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios($ind->id);
         $provincia = UbigeoRepositorio::provincia('25');
 
@@ -107,7 +101,7 @@ class IndicadoresController extends Controller
         // // return response()->json(compact('imp'));
         $aniomax = $imp->anio;
 
-        return view('salud.Indicadores.PactoRegionalEdu', compact('indsal', 'indedu', 'indviv', 'anio', 'provincia', 'aniomax'));
+        return view('salud.Indicadores.PactoRegionalEdu', compact('indedu', 'anio', 'provincia', 'aniomax'));
     }
 
     public function PactoRegionalSal()
@@ -378,13 +372,17 @@ class IndicadoresController extends Controller
                 return view('salud.Indicadores.PactoRegionalEduPacto1', compact('actualizado', 'anio', 'mes', 'aniomin', 'provincia',  'ind'));
 
             case 'DIT-EDU-02':
-                $ff = SFL::select(DB::raw('max(fecha_registro) as ff'))->first();
+                $ff = SFL::select(DB::raw('max(fecha_inscripcion) as ff'))->first();
                 $actualizado = 'Actualizado al ' . date('d', strtotime($ff->ff)) . ' de ' . $this->mesname[date('m', strtotime($ff->ff)) - 1] . ' del ' . date('Y', strtotime($ff->ff));
-                $anio = SFL::distinct()->select(DB::raw('year(fecha_registro) as anio'))->orderBy('anio')->get();
+                // $anio = SFL::distinct()->select(DB::raw('year(fecha_inscripcion) as anio'))->orderBy('anio')->get();
+                $anio = IndicadorGeneralMeta::distinct()->select('anio')->where('indicadorgeneral', $indicador_id)->get();
                 $provincia = UbigeoRepositorio::provincia('25');
-                $area = Area::all();
+                //SFL::from('edu_sfl as sfl')->distinct()->select(DB::raw('month(sfl.fecha_inscripcion) as mes')
+                $mes = DB::table(DB::raw('(select distinct month(fecha_inscripcion) as mes from edu_sfl)as sfl'))
+                    ->join('par_mes as m', 'm.id', '=', 'sfl.mes')->select('m.id', 'm.mes')->get();
                 $aniomax = $anio->max('anio');
-                return view('salud.Indicadores.PactoRegionalEduPacto2', compact('actualizado', 'anio', 'provincia', 'aniomax', 'area', 'ind'));
+                $mesmax = $mes->max('id');
+                return view('salud.Indicadores.PactoRegionalEduPacto2', compact('actualizado', 'anio', 'mes', 'provincia', 'aniomax',  'mesmax', 'ind'));
             case 'DIT-EDU-03':
                 return '';
             case 'DIT-EDU-04':

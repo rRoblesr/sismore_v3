@@ -48,6 +48,11 @@
                                         <label for="mes">MES</label>
                                         <select id="mes" name="mes" class="form-control btn-xs font-11"
                                             onchange="cargarDistritos();">
+                                            @foreach ($mes as $item)
+                                                <option value="{{ $item->id }}"
+                                                    {{ $item->id == $mesmax ? 'selected' : '' }}> {{ $item->mes }}
+                                                </option>
+                                            @endforeach
                                         </select>
                                     </div>
 
