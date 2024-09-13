@@ -16,6 +16,7 @@ use App\Models\Salud\ImporPadronActas;
 use App\Models\Salud\ImporPadronAnemia;
 use App\Models\Salud\ImporReportePN05;
 use App\Repositories\Educacion\CuboPacto1Repositorio;
+use App\Repositories\Educacion\CuboPacto2Repositorio;
 use Illuminate\Support\Facades\DB;
 
 class IndicadorGeneralMetaRepositorio
@@ -884,7 +885,7 @@ class IndicadorGeneralMetaRepositorio
 
 
     //###################### educacion pacto 2  #######################
-    public static function getEduPacto2anal1($anio, $ugel, $provincia, $distrito, $estado)
+    public static function getEduPacto2anal1($anio, $mes, $provincia, $distrito, $estado)
     {
         // $query = DB::select('call edu_pa_sfl_porlocal_provincia(?,?,?,?)', [$ugel, $provincia, $distrito, $estado]);
         // return $query;
@@ -892,34 +893,16 @@ class IndicadorGeneralMetaRepositorio
         // $npro = Ubigeo::where(DB::raw('length(codigo)'), 4)->where('nombre', $provincia)->first();
         // $ndis = Ubigeo::where(DB::raw('length(codigo)'), 6)->where('nombre', $distrito)->first();
         //
-        $query = DB::table('edu_cubo_pacto02_local')->select(
-            'provincia',
-            DB::raw('count(local) as conteo'),
-            DB::raw('sum(if(estado=1,1,0)) as si'),
-            DB::raw('sum(if(estado!=1,1,0)) as no'),
-        );
-
-        if ($provincia > 0)
-            $query = $query->where('provincia_id', $provincia);
-        if ($distrito > 0)
-            $query = $query->where('distrito_id', $distrito);
-        if ($estado > 0)
-            $query = $query->where('estado', $estado);
-
-        $query = $query->groupBy('provincia')->get();
-        return $query;
+        return CuboPacto2Repositorio::getEduPacto2anal1($anio, $mes, $provincia, $distrito, $estado);
     }
 
-    public static function getEduPacto2tabla1($indicador_id, $anio)
+    public static function getEduPacto2tabla1($indicador_id, $anio, $mes, $provincia, $distrito, $estado)
     {
         $query = IndicadorGeneralMeta::select('par_Indicador_general_meta.*', 'd.codigo', 'd.id as distrito_id', 'd.nombre as distrito')->where('indicadorgeneral', $indicador_id)->where('anio', $anio)
             ->join('par_ubigeo as d', 'd.id', '=', 'par_Indicador_general_meta.distrito')->get();
         foreach ($query as $key => $value) {
-            // $query = DataPacto1::where('anio', $value->anio)->where('distrito', $value->distrito)->select(DB::raw('sum(estado) as conteo'));
-            // if (IndicadoresController::$pacto1_anio == $anio)
-            //     $query = $query->where('mes', '>=', IndicadoresController::$pacto1_mes);
-            // $query = $query->get()->first();
-            $value->avance = 0; //$query->conteo ? $query->conteo : 0;
+            $data = CuboPacto2Repositorio::getEduPacto2tabla1($anio, $mes, $provincia, $distrito, $estado);
+            $value->avance = $data->count() > 0 ? ($data->first()->conteo ? $data->first()->conteo : 0) : 0; //$query->conteo ? $query->conteo : 0;
             $value->porcentaje = 0; //number_format(100 * ($value->valor > 0 ? $value->avance / $value->valor : 0), 1);
             $value->cumple = $value->valor == $value->avance ? 1 : 0;
         }
