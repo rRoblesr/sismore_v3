@@ -947,6 +947,7 @@ class IndicadorGeneralMetaRepositorio
             $anioxx = 2023;
             $poblacion = PoblacionPNRepositorio::conteo3a5_acumulado($anioxx, $mes, 0, $value->dis_id, 0);
             $cubo = CuboPacto1Repositorio::pacto1_matriculados_mes_a($anioxx, $mes, 0, $value->dis_id);
+            $data = CuboPacto2Repositorio::getEduPacto2tabla1($anio, $mes, 0, $value->distrito_id, 0);
             $den = $poblacion ? $poblacion : 0;
             $num = $cubo->first() ? $cubo->first()->conteo : 0;
             $value->r2023 = round($den > 0 ? 100 * $num / $den : 0, 1);
