@@ -933,6 +933,7 @@ class IndicadorGeneralMetaRepositorio
     public static function getEduPacto2tabla3($indicador_id, $anio, $mes, $provincia, $distrito, $estado)
     {
         $query = IndicadorGeneralMeta::select(
+            'd.id as dis_id',
             'd.nombre as dis',
             'anio_base',
             'valor_base',
@@ -941,13 +942,13 @@ class IndicadorGeneralMetaRepositorio
             DB::raw('max(if(anio=2025,valor,0)) as v2025'),
             DB::raw('max(if(anio=2026,valor,0)) as v2026'),
         )->where('indicadorgeneral', $indicador_id)
-            ->join('par_ubigeo as d', 'd.id', '=', 'par_indicador_general_meta.distrito')->groupBy('dis', 'anio_base', 'valor_base')->get();
+            ->join('par_ubigeo as d', 'd.id', '=', 'par_indicador_general_meta.distrito')->groupBy('dis_id','dis', 'anio_base', 'valor_base')->get();
+
 
         foreach ($query as $key => $value) {
             $anioxx = 2023;
             $poblacion = PoblacionPNRepositorio::conteo3a5_acumulado($anioxx, $mes, 0, $value->dis_id, 0);
             $cubo = CuboPacto1Repositorio::pacto1_matriculados_mes_a($anioxx, $mes, 0, $value->dis_id);
-            $data = CuboPacto2Repositorio::getEduPacto2tabla1($anio, $mes, 0, $value->distrito_id, 0);
             $den = $poblacion ? $poblacion : 0;
             $num = $cubo->first() ? $cubo->first()->conteo : 0;
             $value->r2023 = round($den > 0 ? 100 * $num / $den : 0, 1);
@@ -955,11 +956,47 @@ class IndicadorGeneralMetaRepositorio
                 $value->avance = number_format($value->r2023, 1);
                 $value->cumple = $value->r2023 >= $value->v2023 ? 1 : 0;
             }
+        }
 
-            $value->r2023 = 0;
-            $value->r2024 = 0;
-            $value->r2025 = 0;
-            $value->r2026 = 0;
+        foreach ($query as $key => $value) {
+            $anioxx = 2024;
+            // $poblacion = PoblacionPNRepositorio::conteo3a5_acumulado($anioxx, $mes, 0, $value->dis_id, 0);
+            // $cubo = CuboPacto1Repositorio::pacto1_matriculados_mes_a($anioxx, $mes, 0, $value->dis_id);
+            $cubo = CuboPacto2Repositorio::getEduPacto2tabla1($anioxx, $mes, 0, $value->dis_id, 0);
+            $den = 50;//$poblacion ? $poblacion : 0;
+            $num = $cubo->first() ? $cubo->first()->conteo : 0;
+            $value->r2024 = round($den > 0 ? 100 * $num / $den : 0, 1);
+            if ($anioxx == $anio) {
+                $value->avance = number_format($value->r2024, 1);
+                $value->cumple = $value->r2024 >= $value->v2024 ? 1 : 0;
+                // $value->cumple = $value->r2024 == $value->v2024  ? 1 : (intval(date('m')) == $value->r2024 ? 1 : (intval(date('m')) - 1 == $value->r2024  ? 1 : 0));
+            }
+        }
+
+        foreach ($query as $key => $value) {
+            $anioxx = 2025;
+            $poblacion = PoblacionPNRepositorio::conteo3a5_acumulado($anioxx, $mes, 0, $value->dis_id, 0);
+            $cubo = CuboPacto1Repositorio::pacto1_matriculados_mes_a($anioxx, $mes, 0, $value->dis_id);
+            $den = $poblacion ? $poblacion : 0;
+            $num = $cubo->first() ? $cubo->first()->conteo : 0;
+            $value->r2025 = round($den > 0 ? 100 * $num / $den : 0, 1);
+            if ($anioxx == $anio) {
+                $value->avance = number_format($value->r2025, 1);
+                $value->cumple = $value->r2025 >= $value->v2025 ? 1 : 0;
+            }
+        }
+
+        foreach ($query as $key => $value) {
+            $anioxx = 2026;
+            $poblacion = PoblacionPNRepositorio::conteo3a5_acumulado($anioxx, $mes, 0, $value->dis_id, 0);
+            $cubo = CuboPacto1Repositorio::pacto1_matriculados_mes_a($anioxx, $mes, 0, $value->dis_id);
+            $den = $poblacion ? $poblacion : 0;
+            $num = $cubo->first() ? $cubo->first()->conteo : 0;
+            $value->r2026 = round($den > 0 ? 100 * $num / $den : 0, 1);
+            if ($anioxx == $anio) {
+                $value->avance = number_format($value->r2026, 1);
+                $value->cumple = $value->r2026 >= $value->v2026 ? 1 : 0;
+            }
         }
         return $query;
     }
