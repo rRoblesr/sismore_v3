@@ -782,7 +782,7 @@ class IndicadorGeneralMetaRepositorio
             $value->den = $poblacion ? $poblacion : 0;
             $value->num = $cubo ? $cubo->first()->conteo : 0;
             $value->porcentaje = round(100 * ($value->den > 0 ? $value->num / $value->den : 0), 1);
-            $value->cumple = $value->valor == $value->avance ? 1 : 0;
+            $value->cumple = $value->porcentaje >= $value->valor ? 1 : 0;
         }
         return $query;
     }
@@ -803,7 +803,7 @@ class IndicadorGeneralMetaRepositorio
             DB::raw('sum(if(edad=5,total,0)) as conteo5'),
             DB::raw('sum(if(edad=5 and sexo_id=1,total,0)) as hconteo5'),
             DB::raw('sum(if(edad=5 and sexo_id=2,total,0)) as mconteo5')
-        )->where('anio', $anio);
+        )->where('anio', $anio)->whereIn('nivelmodalidad_codigo', ['A2', 'A3', 'A5']);
         if ($mes > 0) $query = $query->where('mes_id', '<=',  $mes);
         if ($provincia > 0) $query = $query->where('provincia_id',  $provincia);
         if ($distrito > 0) $query = $query->where('distrito_id',  $distrito);
@@ -836,7 +836,7 @@ class IndicadorGeneralMetaRepositorio
             $value->r2023 = round($den > 0 ? 100 * $num / $den : 0, 1);
             if ($anioxx == $anio) {
                 $value->avance = number_format($value->r2023, 1);
-                $value->cumple = $value->r2023 == $value->v2023 ? 1 : 0;
+                $value->cumple = $value->r2023 >= $value->v2023 ? 1 : 0;
             }
         }
 
@@ -849,7 +849,7 @@ class IndicadorGeneralMetaRepositorio
             $value->r2024 = round($den > 0 ? 100 * $num / $den : 0, 1);
             if ($anioxx == $anio) {
                 $value->avance = number_format($value->r2024, 1);
-                $value->cumple = $value->r2024 == $value->v2024 ? 1 : 0;
+                $value->cumple = $value->r2024 >= $value->v2024 ? 1 : 0;
                 // $value->cumple = $value->r2024 == $value->v2024  ? 1 : (intval(date('m')) == $value->r2024 ? 1 : (intval(date('m')) - 1 == $value->r2024  ? 1 : 0));
             }
         }
@@ -863,7 +863,7 @@ class IndicadorGeneralMetaRepositorio
             $value->r2025 = round($den > 0 ? 100 * $num / $den : 0, 1);
             if ($anioxx == $anio) {
                 $value->avance = number_format($value->r2025, 1);
-                $value->cumple = $value->r2025 == $value->v2025 ? 1 : 0;
+                $value->cumple = $value->r2025 >= $value->v2025 ? 1 : 0;
             }
         }
 
@@ -876,7 +876,7 @@ class IndicadorGeneralMetaRepositorio
             $value->r2026 = round($den > 0 ? 100 * $num / $den : 0, 1);
             if ($anioxx == $anio) {
                 $value->avance = number_format($value->r2026, 1);
-                $value->cumple = $value->r2026 == $value->v2026 ? 1 : 0;
+                $value->cumple = $value->r2026 >= $value->v2026 ? 1 : 0;
             }
         }
 
@@ -904,7 +904,7 @@ class IndicadorGeneralMetaRepositorio
             $data = CuboPacto2Repositorio::getEduPacto2tabla1($anio, $mes, 0, $value->distrito_id, 0);
             $value->avance = $data->count() > 0 ? ($data->first()->conteo ? $data->first()->conteo : 0) : 0; //$query->conteo ? $query->conteo : 0;
             $value->porcentaje = number_format(100 * ($value->valor > 0 ? $value->avance / $value->valor : 0), 1);
-            $value->cumple = $value->valor == $value->avance ? 1 : 0;
+            $value->cumple = $value->avance >= $value->valor ? 1 : 0;
         }
         return $query;
     }
@@ -930,7 +930,7 @@ class IndicadorGeneralMetaRepositorio
         return $query;
     }
 
-    public static function getEduPacto2tabla3($indicador_id, $anio)
+    public static function getEduPacto2tabla3($indicador_id, $anio, $mes, $provincia, $distrito, $estado)
     {
         $query = IndicadorGeneralMeta::select(
             'd.nombre as dis',
@@ -942,8 +942,23 @@ class IndicadorGeneralMetaRepositorio
             DB::raw('max(if(anio=2026,valor,0)) as v2026'),
         )->where('indicadorgeneral', $indicador_id)
             ->join('par_ubigeo as d', 'd.id', '=', 'par_indicador_general_meta.distrito')->groupBy('dis', 'anio_base', 'valor_base')->get();
+
         foreach ($query as $key => $value) {
+            $anioxx = 2023;
+            $poblacion = PoblacionPNRepositorio::conteo3a5_acumulado($anioxx, $mes, 0, $value->dis_id, 0);
+            $cubo = CuboPacto1Repositorio::pacto1_matriculados_mes_a($anioxx, $mes, 0, $value->dis_id);
+            $den = $poblacion ? $poblacion : 0;
+            $num = $cubo->first() ? $cubo->first()->conteo : 0;
+            $value->r2023 = round($den > 0 ? 100 * $num / $den : 0, 1);
+            if ($anioxx == $anio) {
+                $value->avance = number_format($value->r2023, 1);
+                $value->cumple = $value->r2023 >= $value->v2023 ? 1 : 0;
+            }
+
             $value->r2023 = 0;
+            $value->r2024 = 0;
+            $value->r2025 = 0;
+            $value->r2026 = 0;
         }
         return $query;
     }

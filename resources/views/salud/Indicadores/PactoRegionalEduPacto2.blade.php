@@ -127,6 +127,9 @@
                                         <span data-plugin="counterup" id="loc"></span>
                                     </h4>
                                     <p class="mb-0 mt-1 text-truncate">
+                                        <span onclick="" data-toggle="modal" data-target="#info_denominador">
+                                            <i class="mdi mdi-rotate-180 mdi-alert-circle" style="color:#43beac;"></i>
+                                        </span>
                                         Denominador
                                     </p>
                                 </div>
@@ -150,6 +153,9 @@
                                         <span data-plugin="counterup" id="ssa"></span>
                                     </h4>
                                     <p class="mb-0 mt-1 text-truncate">
+                                        <span onclick="" data-toggle="modal" data-target="#info_denominador">
+                                            <i class="mdi mdi-rotate-180 mdi-alert-circle" style="color:#43beac;"></i>
+                                        </span>
                                         Numerador
                                     </p>
                                 </div>
@@ -438,7 +444,7 @@
                 data: {
                     'div': div,
                     "anio": $('#anio').val(),
-                    
+
                     "provincia": $('#provincia').val(),
                     "distrito": $('#distrito').val(),
                     "gestion": $('#gestion').val(),

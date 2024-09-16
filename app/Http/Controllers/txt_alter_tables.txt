@@ -2265,3 +2265,6 @@ CREATE TABLE `edu_cubo_pacto1_matriculados` (
 
 
 update `par_poblacion_proyectada` set codigo=(select codigo from par_ubigeo where nombre=departamento and length(codigo)=2)
+
+
+update edu_matricula_general_detalle mgd inner join edu_matricula_general mg on mg.id=mgd.matriculageneral_id inner join par_anio as a on a.id=mg.anio_id set mgd.edad=TIMESTAMPDIFF(YEAR, mgd.fecha_nacimiento, concat(a.anio,'-03-31') );

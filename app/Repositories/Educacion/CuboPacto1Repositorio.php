@@ -21,7 +21,7 @@ class CuboPacto1Repositorio
     public static function pacto1_matriculados_mes_a($anio, $mes, $provincia, $distrito)
     {
         $query = DB::table('edu_cubo_pacto01_matriculados')->select('distrito', DB::raw('sum(total) as conteo'))
-            ->where('anio', $anio)->where('mes_id', '<=', $mes);
+            ->where('anio', $anio)->where('mes_id', '<=', $mes)->whereIn('nivelmodalidad_codigo', ['A2', 'A3', 'A5']);
         if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
         if ($distrito > 0) $query = $query->where('distrito_id', $distrito);
         $query = $query->groupBy('distrito')->get();
@@ -40,7 +40,7 @@ class CuboPacto1Repositorio
 
     public static function pacto1_matriculados_edad($anio, $mes, $provincia, $distrito)
     {
-        $query = DB::table('edu_cubo_pacto01_matriculados')->select('edad', DB::raw('sum(total) as conteo'))->where('anio', $anio);
+        $query = DB::table('edu_cubo_pacto01_matriculados')->select('edad', DB::raw('sum(total) as conteo'))->where('anio', $anio)->whereIn('nivelmodalidad_codigo', ['A2', 'A3', 'A5']);
         if ($mes > 0) $query = $query->where('mes_id', '<=', $mes);
         if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
         if ($distrito > 0) $query = $query->where('distrito_id', $distrito);

@@ -113,7 +113,9 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="rin"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Resultado del Indicador</p>
+                            <p class="mb-0 mt-1 text-truncate">
+                                Resultado del Indicador
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -135,6 +137,9 @@
                                 <span data-plugin="counterup" id="loc"></span>
                             </h4>
                             <p class="mb-0 mt-1 text-truncate">
+                                <span onclick="" data-toggle="modal" data-target="#info_denominador">
+                                    <i class="mdi mdi-rotate-180 mdi-alert-circle" style="color:#43beac;"></i>
+                                </span>
                                 Denominador
                             </p>
                         </div>
@@ -158,6 +163,9 @@
                                 <span data-plugin="counterup" id="ssa"></span>
                             </h4>
                             <p class="mb-0 mt-1 text-truncate">
+                                <span onclick="" data-toggle="modal" data-target="#info_numerador">
+                                    <i class="mdi mdi-rotate-180 mdi-alert-circle" style="color:#43beac;"></i>
+                                </span>
                                 Numerador
                             </p>
                         </div>

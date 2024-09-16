@@ -1090,8 +1090,9 @@ class IndicadoresController extends Controller
                 $loc = SFLRepositorio::get_localsx($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 0); //->count();
                 $ssa = SFLRepositorio::get_localsx($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 1); //->count();
                 $nsa = $loc - $ssa; //SFLRepositorio::listado_iiee($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 1)->count();
-                $rin = number_format(100 * ($loc > 0 ? $ssa / $loc : 0));
-                return response()->json(['rq' => $rq->all(), 'loc' => $loc, 'ssa' => $ssa, 'nsa' => $nsa, 'rin' => $rin]);
+                $rin = number_format(100 * ($loc > 0 ? $ssa / $loc : 0), 1);
+                return response()->json(['rq' => $rq->all(), 'loc' => number_format($loc, 0), 'ssa' => number_format($ssa, 0), 'nsa' => number_format($nsa), 'rin' => $rin]);
+                // return response()->json(['rq' => $rq->all(), 'loc' => $loc, 'ssa' => $ssa, 'nsa' => $nsa, 'rin' => $rin]);
 
             case 'anal1':
                 $base = IndicadorGeneralMetaRepositorio::getEduPacto2anal1($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 0);
@@ -1139,7 +1140,7 @@ class IndicadoresController extends Controller
                 return response()->json(compact('excel', 'base'));
 
             case 'tabla3':
-                $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla3($rq->indicador, $rq->anio);
+                $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla3($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito, 0);
                 $aniob = $rq->anio;
                 $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla3', compact('base', 'ndis', 'aniob'))->render();
                 return response()->json(compact('excel', 'base'));

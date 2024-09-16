@@ -33,14 +33,14 @@
                     <td class="text-left">{{ $item->dis }}</td>
                     <td>{{ $item->anio_base }}</td>
                     <td>{{ $item->valor_base }}</td>
-                    <td>{{ $item->v2023 }}</td>
-                    <td>{{ $item->v2024 }}</td>
-                    <td>{{ $item->v2025 }}</td>
-                    <td>{{ $item->v2026 }}</td>
-                    <td>{{ $item->r2023 }}</td>
-                    <td>{{ $item->r2024 }}</td>
-                    <td>{{ $item->r2025 }}</td>
-                    <td>{{ $item->r2026 }}</td>
+                    <td>{{ date('Y') >= 2023 ? $item->v2023 : '' }}</td>
+                    <td>{{ date('Y') >= 2024 ? $item->v2024 : '' }}</td>
+                    <td>{{ date('Y') >= 2025 ? $item->v2025 : '' }}</td>
+                    <td>{{ date('Y') >= 2026 ? $item->v2026 : '' }}</td>
+                    <td>{{ date('Y') >= 2023 ? $item->r2023 : '' }}</td>
+                    <td>{{ date('Y') >= 2024 ? $item->r2024 : '' }}</td>
+                    <td>{{ date('Y') >= 2025 ? $item->r2025 : '' }}</td>
+                    <td>{{ date('Y') >= 2026 ? $item->r2026 : '' }}</td>
                     <td>{!! avance($item->avance) !!}</td>{{--  --}}
                     <td>
                         @if ($item->cumple == 1)
