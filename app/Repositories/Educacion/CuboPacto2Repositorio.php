@@ -17,14 +17,10 @@ class CuboPacto2Repositorio
             DB::raw('sum(if(estado!=1,1,0)) as no'),
         ); //->where(DB::raw('year(fecha_inscripcion)'), $anio);
 
-        if ($mes > 0)
-            $query = $query->where(DB::raw('month(fecha_inscripcion)'), $mes);
-        if ($provincia > 0)
-            $query = $query->where('provincia_id', $provincia);
-        if ($distrito > 0)
-            $query = $query->where('distrito_id', $distrito);
-        if ($estado > 0)
-            $query = $query->where('estado', $estado);
+        if ($mes > 0) $query = $query->where(DB::raw('month(fecha_inscripcion)'), $mes);
+        if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
+        if ($distrito > 0) $query = $query->where('distrito_id', $distrito);
+        if ($estado > 0) $query = $query->where('estado', $estado);
 
         $query = $query->groupBy('provincia')->get();
         return $query;

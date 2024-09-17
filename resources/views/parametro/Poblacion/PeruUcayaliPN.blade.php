@@ -599,7 +599,7 @@
                             style: {
                                 color: '#000'
                             },
-                            align: 'right',
+                            align: 'left',
                             crop: false,
                             overflow: 'none'
                         }

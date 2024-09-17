@@ -293,7 +293,7 @@ class IndicadoresController extends Controller
 
     public function PactoRegionalDetalle($indicador_id)
     {
-        $ind = IndicadorGeneral::find($indicador_id);
+        $ind = IndicadorGeneralRepositorio::findNoFichatecnica($indicador_id);
         switch ($ind->codigo) {
             case 'DIT-SAL-01':
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_1']);
@@ -359,8 +359,8 @@ class IndicadoresController extends Controller
                 //     })
                 //     ->groupBy('m.id', 'm.mes')->orderBy('m.id')->get();
 
-                $am = DB::table('edu_cubo_pacto01_matriculados')->whereIn('nivelmodalidad_codigo', ['A2', 'A3', 'A5'])->where('anio', $anio->max('anio'))->max('mes_id');
-                $ap = PoblacionPN::where('anio', $anio->max('anio'))->max('mes_id');
+                $am = DB::table('edu_cubo_pacto01_matriculados')->whereIn('nivelmodalidad_codigo', ['A2', 'A3', 'A5'])->where('anio', $anio->where('anio', '<=', date('Y'))->max('anio'))->max('mes_id');
+                $ap = PoblacionPN::where('anio', $anio->where('anio', '<=', date('Y'))->max('anio'))->max('mes_id');
                 $aniomax = 0;
                 if ($aniomax < $am) $aniomax = $am;
                 if ($aniomax < $ap) $aniomax = $ap;
@@ -369,6 +369,7 @@ class IndicadoresController extends Controller
                 if ($aniomin > $ap) $aniomin = $ap;
                 $mes = Mes::select('id', 'mes')->where('codigo', '<=', $aniomax)->get();
                 $provincia = UbigeoRepositorio::provincia('25');
+                // return response()->json(['anio' => $anio, 'am' => $am, 'ap' => $ap, 'aniomax' => $aniomax, 'aniomin' => $aniomin, 'mes' => $mes, 'provincia' => $provincia]);
                 return view('salud.Indicadores.PactoRegionalEduPacto1', compact('actualizado', 'anio', 'mes', 'aniomin', 'provincia',  'ind'));
 
             case 'DIT-EDU-02':
@@ -979,6 +980,7 @@ class IndicadoresController extends Controller
 
     public function PactoRegionalEduPacto1Reports(Request $rq)
     {
+        $ind = IndicadorGeneralRepositorio::findNoFichatecnica($rq->indicador);
         if ($rq->distrito > 0) $ndis = Ubigeo::find($rq->distrito)->nombre;
         else $ndis = '';
         switch ($rq->div) {
