@@ -962,10 +962,11 @@ class IndicadorGeneralMetaRepositorio
             $anioxx = 2024;
             // $poblacion = PoblacionPNRepositorio::conteo3a5_acumulado($anioxx, $mes, 0, $value->dis_id, 0);
             // $cubo = CuboPacto1Repositorio::pacto1_matriculados_mes_a($anioxx, $mes, 0, $value->dis_id);
+            $cubo1 = CuboPacto2Repositorio::getEduPacto2tabla1x($anioxx, 0, 0, $value->dis_id, 0);
             $cubo = CuboPacto2Repositorio::getEduPacto2tabla1($anioxx, $mes, 0, $value->dis_id, 0);
-            $den = 50;//$poblacion ? $poblacion : 0;
+            $den =1;//$cubo1->first() ? $cubo1->first()->conteo : 0;
             $num = $cubo->first() ? $cubo->first()->conteo : 0;
-            $value->r2024 = round($den > 0 ? 100 * $num / $den : 0, 1);
+            $value->r2024 = round($den > 0 ? $num / $den : 0, 1);
             if ($anioxx == $anio) {
                 $value->avance = number_format($value->r2024, 1);
                 $value->cumple = $value->r2024 >= $value->v2024 ? 1 : 0;
