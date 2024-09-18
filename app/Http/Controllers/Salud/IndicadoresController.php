@@ -7,6 +7,8 @@ use App\Exports\pactoregional2Export;
 use App\Exports\pactoregionalSal1Export;
 use App\Exports\pactoregionalSal2Export;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Educacion\ImporMatriculaGeneralController;
+use App\Http\Controllers\Educacion\MatriculaGeneralController;
 use App\Models\Educacion\Area;
 use App\Models\Educacion\Importacion;
 use App\Models\Educacion\MatriculaGeneralDetalle;
@@ -180,6 +182,7 @@ class IndicadoresController extends Controller
                 $gl = IndicadorGeneralMetaRepositorio::getPacto1GL($ind->id, $rq->anio);
                 $num = $gls;
                 $den = $gl;
+                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
                 break;
             case 'DIT-SAL-02':
                 $ind = IndicadorGeneralRepositorio::findNoFichatecnicaCodigo($rq->codigo);
@@ -187,103 +190,121 @@ class IndicadoresController extends Controller
                 $gl = IndicadorGeneralMetaRepositorio::getSalPacto2GL($ind->id, $rq->anio, 0, $rq->provincia, $rq->distrito);
                 $num = $gls;
                 $den = $gl;
+                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
                 break;
             case 'DIT-SAL-03':
                 $gls = 0;
                 $gl = 0;
                 $num = $gls;
                 $den = $gl;
+                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
                 break;
             case 'DIT-SAL-04':
                 $gls = 0;
                 $gl = 0;
                 $num = $gls;
                 $den = $gl;
+                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
                 break;
             case 'DIT-SAL-05':
                 $gls = 0;
                 $gl = 0;
                 $num = $gls;
                 $den = $gl;
+                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
                 break;
             case 'DIT-EDU-01':
                 $gl = (int)PoblacionPNRepositorio::conteo3a5_acumulado($rq->anio, 5, $rq->provincia, $rq->distrito, 0);
                 $gls = CuboPacto1Repositorio::pacto1_matriculados($rq->anio, 5, $rq->provincia, $rq->distrito);
                 $num = number_format($gls, 0);
-                $den = number_format($gl);
+                $den = number_format($gl, 0);
+                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
+                $actualizado =  'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion));
                 break;
             case 'DIT-EDU-02':
                 $gl = SFLRepositorio::get_localsx($rq->anio, 0, $rq->provincia, $rq->distrito, 0);
                 $gls = SFLRepositorio::get_localsx($rq->anio, 0, $rq->provincia, $rq->distrito, 1);
                 $num = number_format($gls, 0);
-                $den = number_format($gl);
+                $den = number_format($gl, 0);
+                $fecha = SFLRepositorio::inscripcion_max($rq->anio, 0, $rq->provincia, $rq->distrito, 1);
+                $actualizado =  'Actualizado: ' . date('d/m/Y', strtotime($fecha));
                 break;
             case 'DIT-EDU-03':
                 $gls = 0;
                 $gl = 0;
                 $num = $gls;
                 $den = $gl;
+                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: __/__/____';
                 break;
             case 'DIT-EDU-04':
                 $gls = 0;
                 $gl = 0;
                 $num = $gls;
                 $den = $gl;
+                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: __/__/____';
                 break;
             case 'DIT-VIV-01':
                 $gls = 25;
                 $gl = 100;
                 $num = $gls;
                 $den = $gl;
+                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
                 break;
             case 'DIT-VIV-02':
                 $gls = 50;
                 $gl = 100;
                 $num = $gls;
                 $den = $gl;
+                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
                 break;
             case 'DIT-VIV-03':
                 $gls = 75;
                 $gl = 100;
                 $num = $gls;
                 $den = $gl;
+                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
                 break;
             case 'DIT-VIV-04':
                 $gls = 100.9;
                 $gl = 100;
                 $num = $gls;
                 $den = $gl;
+                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
                 break;
             case 'DIT-ART-01':
                 $gls = 25;
                 $gl = 100;
                 $num = $gls;
                 $den = $gl;
+                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
                 break;
             case 'DIT-ART-02':
                 $gls = 50;
                 $gl = 100;
                 $num = $gls;
                 $den = $gl;
+                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
                 break;
             case 'DIT-ART-03':
                 $gls = 75;
                 $gl = 100;
                 $num = $gls;
                 $den = $gl;
+                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
                 break;
             case 'DIT-ART-04':
                 $gls = 100.9;
                 $gl = 100;
                 $num = $gls;
                 $den = $gl;
+                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
                 break;
             default:
                 break;
         }
 
-        $avance =  round(100 * ($gl > 0 ? $gls / $gl : 0));
-        $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
+        $avance =  round(100 * ($gl > 0 ? $gls / $gl : 0), 1);
+
         $meta = '100%';
 
         $cumple = $gls >= $gl;

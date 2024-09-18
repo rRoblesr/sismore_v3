@@ -151,9 +151,6 @@ class SFLRepositorio
 
     public static function get_localsx($anio, $ugel, $provincia, $distrito, $estado)
     {
-        // $npro = Ubigeo::where(DB::raw('length(codigo)'), 4)->where('nombre', $provincia)->first();
-        // $ndis = Ubigeo::where(DB::raw('length(codigo)'), 6)->where('nombre', $distrito)->first();
-        // $query = DB::select('call edu_pa_sfl_porlocal_distrito(?,?,?,?)', [$ugel, $provincia, $distrito, $estado]);
         $query = DB::table('edu_cubo_pacto02_local')->select(
             DB::raw('count(local) as conteo')
         );
@@ -163,5 +160,18 @@ class SFLRepositorio
 
         $query = $query->first();
         return $query->conteo;
+    }
+
+    public static function inscripcion_max($anio, $mes, $provincia, $distrito, $estado)
+    {
+        $query = DB::table('edu_cubo_pacto02_local')->select(
+            DB::raw('max(fecha_inscripcion) as fecha')
+        );
+        if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
+        if ($distrito > 0) $query = $query->where('distrito_id', $distrito);
+        if ($estado > 0) $query = $query->where('estado', $estado);
+
+        $query = $query->first();
+        return $query->fecha;
     }
 }

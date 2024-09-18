@@ -54,11 +54,11 @@
 @php
     function avance($monto)
     {
-        if ($monto < 51) {
+        if ($monto <= 75) {
             return '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px">' .
                 round($monto, 1) .
                 '%</span>';
-        } elseif ($monto < 100) {
+        } elseif ($monto <= 95) {
             return '<span class="badge badge-pill badge-warning" style="font-size:90%; width:50px">' .
                 round($monto, 1) .
                 '%</span>';

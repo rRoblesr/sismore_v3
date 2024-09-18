@@ -165,7 +165,7 @@
                                                         <div class="col-md-6">
                                                             <label>Código<span class="required">*</span></label>
                                                             <input type="text" id="codigo" name="codigo"
-                                                                class="form-control" size="10" maxlength="10">
+                                                                class="form-control" size="20" maxlength="20">
                                                             <span class="help-block"></span>
                                                         </div>
                                                         <div class="col-md-6">
@@ -588,51 +588,21 @@
                         <input type="hidden" id="indicadorgeneral" name="indicadorgeneral" value="">
                         <div class="form-body">
                             <div class="form-group">
-                                {{-- <div class="row">
-                                    <div class="col-md-6">
-                                        <label>Año base<span class="required">*</span></label>
-                                        <input id="aniobase" name="aniobase" class="form-control" type="number">
-                                        <span class="help-block"></span>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Valor base<span class="required">*</span></label>
-                                        <input id="valorbase" name="valorbase" class="form-control" type="text">
-                                        <span class="help-block"></span>
-                                    </div>
-                                </div> --}}
-
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <label>Provincia<span class="required">*</span></label>
-                                        <select name="provincia" id="provincia" class="form-control"
-                                            onchange="cargarDistritos('',0)">
-                                            <option value="0">SELECCIONAR</option>
-
-                                        </select>
-                                        <span class="help-block"></span>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Distrito<span class="required">*</span></label>
-                                        <select name="distrito" id="distrito" class="form-control">
-                                            <option value="0">SELECCIONAR</option>
-                                        </select>
-                                        <span class="help-block"></span>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    {{-- <div class="col-md-4">
+                                    <div class="col-md-4">
                                         <label>periodo<span class="required">*</span></label>
                                         <input id="periodo" name="periodo" class="form-control" type="text">
                                         <span class="help-block"></span>
-                                    </div> --}}
-                                    <div class="col-md-6">
+                                    </div>
+
+                                    <div class="col-md-4">
                                         <label>Año esperado<span class="required">*</span></label>
                                         <input id="anioesperado" name="anioesperado" class="form-control"
                                             type="number">
                                         <span class="help-block"></span>
                                     </div>
-                                    <div class="col-md-6">
+
+                                    <div class="col-md-4">
                                         <label>Valor esperado<span class="required">*</span></label>
                                         <input id="valoresperado" name="valoresperado" class="form-control"
                                             type="text">
@@ -1158,7 +1128,7 @@
             $('.form-group').removeClass('has-error');
             $('.help-block').empty();
             $('#modal_meta').modal('show');
-            $('.modal-title').text('Agregar Metas');
+            $('.modal-title').text('Registro de Logros Esperados');
             $('#indicadorgeneral').val(id);
             table_meta = $('#tbmeta').DataTable({
                 responsive: true,
@@ -1318,7 +1288,7 @@
             });
         };
 
-        function delemeta_dit(){
+        function delemeta_dit() {
             $('#btnSaveMeta_dit').html('<i class="fa fa-plus"></i> Agregar');
             save_method_dit = 'add';
             $("#idmeta_dit").val('');

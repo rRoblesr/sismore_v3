@@ -48,27 +48,36 @@
                 <h4 class="page-title font-16">PACTO REGIONAL</h4>
             </div>
             <div class="col-lg-1 col-md-1 col-sm-1">
-                <select id="anio" name="anio" class="form-control btn-xs font-11 p-0" onchange="cargarpacto1();">
-                    @foreach ($anio as $item)
-                        <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
-                            {{ $item->anio }}</option>
-                    @endforeach
-                </select>
+                <div class="custom-select-container">
+                    <label for="anio">AÑO</label>
+                    <select id="anio" name="anio" class="form-control btn-xs font-11 p-0" onchange="cargarpacto1();">
+                        @foreach ($anio as $item)
+                            <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                {{ $item->anio }}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2">
-                <select id="provincia" name="provincia" class="form-control btn-xs font-11" onchange="cargarDistritos();">
-                    <option value="0">PROVINCIA</option>
-                    @foreach ($provincia as $item)
-                        <option value="{{ $item->id }}">
-                            {{ $item->nombre }}</option>
-                    @endforeach
-
-                </select>
+                <div class="custom-select-container">
+                    <label for="provincia">PROVINCIA</label>
+                    <select id="provincia" name="provincia" class="form-control btn-xs font-11"
+                        onchange="cargarDistritos();">
+                        <option value="0">TODOS</option>
+                        @foreach ($provincia as $item)
+                            <option value="{{ $item->id }}">
+                                {{ $item->nombre }}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2">
-                <select id="distrito" name="distrito" class="form-control btn-xs font-11" onchange="cargarpacto1();">
-                    <option value="0">DISTRITO</option>
-                </select>
+                <div class="custom-select-container">
+                    <label for="distrito">DISTRITO</label>
+                    <select id="distrito" name="distrito" class="form-control btn-xs font-11" onchange="cargarpacto1();">
+                        <option value="0">TODOS</option>
+                    </select>
+                </div>
             </div>
 
             <div class="col-lg-1 col-md-1 col-sm-1 text-center">
