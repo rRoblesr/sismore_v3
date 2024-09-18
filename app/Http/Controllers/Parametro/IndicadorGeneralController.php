@@ -480,7 +480,7 @@ class IndicadorGeneralController extends Controller
         $data = [];
         foreach ($query as $key => $value) {
             $ig = IndicadorGeneral::select('id', 'unidad_id')->where('id', $rq->indicadorgeneral)->first();
-            $btn = '&nbsp;<a href="#" class="btn btn-primary btn-xs" onclick="modificarmeta(' . $value->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
+            $btn = '&nbsp;<a href="#" class="btn btn-primary btn-xs" onclick="editmeta(' . $value->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
             $btn .= '&nbsp;<a href="#" class="btn btn-danger btn-xs" onclick="borrarmeta(' . $value->id . ')"  title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
 
             $data[] = array(

@@ -1206,6 +1206,26 @@
             });
         };
 
+        function editmeta(id) {
+            save_method_dit = 'update';
+            $('#btnSaveMeta_dit').html('<i class="fa fa-edit"></i> Modificar');
+            $.ajax({
+                url: "{{ route('mantenimiento.indicadorgeneralmeta.find.dit', '') }}/" + id,
+                type: "GET",
+                dataType: "JSON",
+                success: function(data) {
+                    $('[name="provincia_dit"]').val(data.prov.id);
+                    $('[name="anioesperado_dit"]').val(data.meta.anio);
+                    $('[name="valoresperado_dit"]').val(data.meta.valor);
+                    $('#idmeta_dit').val(data.meta.id);
+                    
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert('Error get data from ajax');
+                }
+            });
+        };
+
         function savemeta_dit() {
             $('#btnSaveMeta_dit').text('Guardando...');
             $('#btnSaveMeta_dit').attr('disabled', true);
