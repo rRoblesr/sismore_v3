@@ -1517,7 +1517,7 @@
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Numero de Locales Educativos con los tres servicios basicos, Periodo ' + 
+                            'Numero de Locales Educativos con los tres servicios basicos, Periodo ' +
                             data.rango,
                             data.alto
                         );
@@ -1624,7 +1624,7 @@
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Locales Educativos conectados a red de agua potable, Periodo ' + 
+                            'Locales Educativos conectados a red de agua potable, Periodo ' +
                             data.rango,
                             data.alto
                         );
@@ -1729,7 +1729,7 @@
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Locales Educativos conectados a red de desague, Periodo ' + 
+                            'Locales Educativos conectados a red de desague, Periodo ' +
                             data.rango,
                             data.alto
                         );
@@ -1834,7 +1834,7 @@
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Locales Educativos conectados a red de electricidad, Periodo ' + 
+                            'Locales Educativos conectados a red de electricidad, Periodo ' +
                             data.rango,
                             data.alto
                         );
@@ -1939,7 +1939,7 @@
                             data.info.categoria,
                             data.info.series,
                             '',
-                            'Locales Educativos que cuentan con acceso a Internet, Periodo ' + 
+                            'Locales Educativos que cuentan con acceso a Internet, Periodo ' +
                             data.rango,
                             data.alto
                         );
@@ -3201,6 +3201,7 @@
             Highcharts.chart(div, {
                 chart: {
                     type: 'bar',
+                    height: '100%'
                     //marginLeft: 50,
                     //marginBottom: 90
                 },
@@ -3250,7 +3251,7 @@
                             formatter: function() {
                                 // return Highcharts.numberFormat(this.percentage, 1) + '%'; // Mostrar porcentaje con 1 decimal
                                 return Highcharts.numberFormat(this.y, 1) +
-                                '%'; // Mostrar porcentaje con 1 decimal
+                                    '%'; // Mostrar porcentaje con 1 decimal
                             },
                             // format: '{point.y}%',
                             style: {

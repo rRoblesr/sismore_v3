@@ -115,6 +115,18 @@
                             </div>
                             <h5 class="text-white font-14 font-weight-normal mt-1 mb-1"><i class="mdi mdi-school"
                                     style="font-size: 20px"></i>
+                                    @switch($key)
+                                        @case(0)
+                                        @case(1)
+                                        OER.03 - 
+                                            @break
+                                            @case(2)
+                                            @case(3)
+                                            OER.03 - 
+                                                @break
+                                        @default
+                                            
+                                    @endswitch
                                 Indicador {{ $key + 1 }}</h5>
                             {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                             {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
@@ -306,8 +318,9 @@
                         '<span class="badge badge-success m-2" style="font-size: 90%; width:100px"> <i class="mdi mdi-thumb-up"></i> CUMPLE</span>' :
                         '<span class="badge badge-danger m-2" style="font-size: 90%; width:100px"> <i class="mdi mdi-thumb-down"></i> NO CUMPLE</span>'
                     );
-                    $('#num' + codigo).text(data.num.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 }));
-                    $('#den' + codigo).text(data.den.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 }));
+                    $('#num' + codigo).text(data.num.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }));
+                    $('#den' + codigo).text(data.den.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }));
+                    
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR cargarActualizar");
