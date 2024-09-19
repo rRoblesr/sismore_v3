@@ -472,6 +472,26 @@
             });
         }
 
+        function cargarMes() {
+            $.ajax({
+                url: "{{ route('ubigeo.distrito.25', '') }}/" + $('#provincia').val(),
+                type: 'GET',
+                success: function(data) {
+                    $("#distrito option").remove();
+                    var options = '<option value="0">TODOS</option>';
+                    $.each(data, function(index, value) {
+                        //ss = (id == value.id ? "selected" : "");
+                        options += "<option value='" + value.id + "'>" + value.nombre +
+                            "</option>"
+                    });
+                    $("#distrito").append(options);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
         function cargarDistritos() {
             $.ajax({
                 url: "{{ route('ubigeo.distrito.25', '') }}/" + $('#provincia').val(),

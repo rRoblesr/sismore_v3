@@ -416,6 +416,7 @@ class IndicadoresController extends Controller
                 $aniomin = 20;
                 if ($aniomin > $am) $aniomin = $am;
                 if ($aniomin > $ap) $aniomin = $ap;
+                // $mes = Mes::select('id', 'mes')->where('codigo', '<=', ($aniomax < date('Y') ? 12 : $aniomax))->get();
                 $mes = Mes::select('id', 'mes')->where('codigo', '<=', $aniomax)->get();
                 $provincia = UbigeoRepositorio::provincia('25');
                 // return response()->json(['anio' => $anio, 'am' => $am, 'ap' => $ap, 'aniomax' => $aniomax, 'aniomin' => $aniomin, 'mes' => $mes, 'provincia' => $provincia]);
