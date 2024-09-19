@@ -171,7 +171,7 @@ class LogrosAprendizajeController extends Controller
                 } else {
                     $excel = '';
                 }
-                return response()->json(compact('excel'));
+                return response()->json(compact('excel','base','foot'));
 
             case 'tabla1_1':
                 if ($rq->curso != '0') {

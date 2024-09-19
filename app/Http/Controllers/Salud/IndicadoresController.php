@@ -299,6 +299,34 @@ class IndicadoresController extends Controller
                 $den = $gl;
                 $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
                 break;
+            case 'PDRC-EDU-01':
+                $gls = 100.9;
+                $gl = 100;
+                $num = $gls;
+                $den = $gl;
+                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
+                break;
+            case 'PDRC-EDU-02':
+                $gls = 100.9;
+                $gl = 100;
+                $num = $gls;
+                $den = $gl;
+                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
+                break;
+            case 'PDRC-EDU-03':
+                $gls = 100.9;
+                $gl = 100;
+                $num = $gls;
+                $den = $gl;
+                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
+                break;
+            case 'PDRC-EDU-04':
+                $gls = 100.9;
+                $gl = 100;
+                $num = $gls;
+                $den = $gl;
+                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
+                break;
             default:
                 break;
         }
@@ -1203,9 +1231,95 @@ class IndicadoresController extends Controller
         return view('salud.Indicadores.ConvenioFED');
     }
 
+    public function PDRCActualizar(Request $rq)
+    {
+        $imp = null;
+        $gls = 0;
+        $gl = 0;
+        switch ($rq->codigo) {
+            case 'PDRC-EDU-01':
+                $gls = 2169;
+                $gl = 13233.94;
+                $num = $gls;
+                $den = $gl;
+                $actualizado =    'Actualizado: 31/12/2023';
+                break;
+            case 'PDRC-EDU-02':
+                $gls = 1307.6;
+                $gl = 13233.94;
+                $num = $gls;
+                $den = $gl;
+                $actualizado =  'Actualizado: 31/12/2023';
+                break;
+            case 'PDRC-EDU-03':
+                $gls = 4052;
+                $gl = 4757;
+                $num = $gls;
+                $den = $gl;
+                $actualizado =  'Actualizado: 20/11/2023';
+                break;
+            case 'PDRC-EDU-04':
+                $gls = 3158;
+                $gl = 4075;
+                $num = $gls;
+                $den = $gl;
+                $actualizado =   'Actualizado: 31/12/2023';
+                break;
+            default:
+                break;
+        }
+
+        $avance =  round(100 * ($gl > 0 ? $gls / $gl : 0), 1);
+
+        $meta = '100%';
+
+        $cumple = $gls >= $gl;
+
+        return response()->json(compact('avance', 'actualizado', 'meta', 'cumple', 'num', 'den'));
+    }
+
+    public function PDRCDetalle($indicador_id)
+    {
+        $ind = IndicadorGeneralRepositorio::findNoFichatecnica($indicador_id);
+        switch ($ind->codigo) {
+            case 'PDRC-EDU-01':
+
+                return redirect()->route('logrosaprendizaje.evaluacionmuestral');
+
+            case 'PDRC-EDU-02':
+                return redirect()->route('logrosaprendizaje.evaluacionmuestral');
+
+            case 'PDRC-EDU-03':
+                return redirect()->route('panelcontrol.educacion.indicador.nuevos.05');
+
+            case 'PDRC-EDU-04':
+                return redirect()->route('panelcontrol.educacion.indicador.nuevos.04');
+
+            default:
+                return 'ERROR, PAGINA NO ENCONTRADA';
+        }
+    }
+
     public function PDRC()
     {
         return view('salud.Indicadores.PDRC');
+    }
+
+    public function PDRCEdu()
+    {
+        $sector = 4;
+        $instrumento = 1;
+        $indedu = IndicadorGeneralRepositorio::find_pactoregional($sector, $instrumento);
+
+        $ind = IndicadorGeneralRepositorio::findNoFichatecnicaCodigo('PDRC-EDU-01');
+        $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios($ind->id);
+        $provincia = UbigeoRepositorio::provincia('25');
+
+        // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_1']);
+        // // return response()->json(compact('imp'));
+        $aniomax = date('Y');
+
+        return view('salud.Indicadores.PDRCEdu', compact('indedu', 'anio', 'provincia', 'aniomax'));
     }
 
     public function PEI()

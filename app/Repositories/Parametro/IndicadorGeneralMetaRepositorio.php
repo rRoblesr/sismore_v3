@@ -1001,4 +1001,11 @@ class IndicadorGeneralMetaRepositorio
         }
         return $query;
     }
+
+    //PDRC EDUCACION
+
+    // public static function getpdrcAnios($indicador_id)
+    // {
+    //     return IndicadorGeneralMeta::distinct()->select('anio')->where('indicadorgeneral', $indicador_id)->orderBy('anio')->get();
+    // }
 }

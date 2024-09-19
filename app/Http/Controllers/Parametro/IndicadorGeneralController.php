@@ -550,7 +550,22 @@ class IndicadorGeneralController extends Controller
         return response()->json(['status' => true, 'ind' => $ind, 'meta' => $meta]);
     }
 
+    public function ajax_find_meta($id)
+    {
+        $meta = IndicadorGeneralMeta::find($id);
+        return response()->json(compact('meta'));
+    }
 
+    public function ajax_update_meta(Request $request)
+    {
+        $this->_validate_meta($request);
+        $meta = IndicadorGeneralMeta::find($request->idmeta);
+        $meta->periodo = $request->periodo;
+        $meta->anio = $request->anioesperado;
+        $meta->valor = $request->valoresperado;
+        $meta->save();
+        return response()->json(['status' => true, 'meta' => $meta]);
+    }
 
     public function ajax_delete_meta($id) //elimina deverdad *o*
     {

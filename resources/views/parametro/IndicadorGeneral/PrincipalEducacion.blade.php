@@ -614,8 +614,10 @@
                     </form>
                 </div>
                 <div class="modal-body pt-0" style="text-align:center">
-                    <button type="button" class="btn btn-xs btn-primary" id="btnSaveMeta" onclick="savemeta()"><i
+                    <button type="button" class="btn btn-xs btn-primary" id="btnSaveMeta_pdrc" onclick="savemeta()"><i
                             class="fa fa-plus"></i> Agregar</button>
+                    <button type="button" class="btn btn-xs btn-danger" id="btnSaveMlleta_prdc"
+                        onclick="delemeta_pdrc()"><i class="fa fa-times"></i> Limpiar</button>
                 </div>
                 <div class="modal-body">
                     <div class="table-responsive">
@@ -797,6 +799,7 @@
 
     <script>
         var save_method = '';
+        var save_method_meta_pdrc = '';
         var save_method_dit = '';
         var table_principal;
         var table_meta;
@@ -1124,12 +1127,14 @@
         };
 
         function metas(id) {
+            save_method_meta_pdrc = 'add';
             $('#form_meta')[0].reset();
             $('.form-group').removeClass('has-error');
             $('.help-block').empty();
             $('#modal_meta').modal('show');
             $('.modal-title').text('Registro de Logros Esperados');
             $('#indicadorgeneral').val(id);
+            $('#btnSaveMeta_pdrc').html('<i class="fa fa-plus"></i> Agregar');
             table_meta = $('#tbmeta').DataTable({
                 responsive: true,
                 autoWidth: false,
@@ -1155,6 +1160,7 @@
             $('#modal_meta_dit').modal('show');
             $('.modal-title').text('Agregar Metas');
             $('#indicadorgeneral_dit').val(id);
+            $('#btnSaveMeta_dit').html('<i class="fa fa-plus"></i> Agregar');
 
             table_meta = $('#tbmeta_dit').DataTable({
                 responsive: true,
@@ -1177,17 +1183,30 @@
         function savemeta() {
             $('#btnSaveMeta').text('Guardando...');
             $('#btnSaveMeta').attr('disabled', true);
+            // $.ajax({
+            //     url: "{{ route('mantenimiento.indicadorgeneralmeta.guardar') }}",
+            var url;
+            if (save_method_dit == 'add') {
+                url = "{{ route('mantenimiento.indicadorgeneralmeta.guardar') }}";
+                msgsuccess = "El registro fue creado exitosamente.";
+                msgerror = "El registro no se pudo crear verifique las validaciones.";
+            } else {
+                url = "{{ route('mantenimiento.indicadorgeneralmeta.editar') }}";
+                msgsuccess = "El registro fue actualizado exitosamente.";
+                msgerror = "El registro no se pudo actualizar. Verifique la operación";
+            }
             $.ajax({
-                url: "{{ route('mantenimiento.indicadorgeneralmeta.guardar') }}",
+                url: url,
                 type: "POST",
                 data: $('#form_meta').serialize(),
                 dataType: "JSON",
                 success: function(data) {
                     console.log(data)
                     if (data.status) {
-                        //$('#modal_meta').modal('hide');
                         table_meta.ajax.reload(null, false);
                         $('#form_meta')[0].reset();
+                        save_method_meta_pdrc = 'add';
+                        delemeta_pdrc();
                         //toastr.success(msgsuccess, 'Mensaje');
                     } else {
                         for (var i = 0; i < data.inputerror.length; i++) {
@@ -1207,18 +1226,18 @@
         };
 
         function editmeta(id) {
-            save_method_dit = 'update';
-            $('#btnSaveMeta_dit').html('<i class="fa fa-edit"></i> Modificar');
+            save_method_meta_pdrc = 'update';
+            $('#btnSaveMeta_pdrc').html('<i class="fa fa-edit"></i> Modificar');
             $.ajax({
-                url: "{{ route('mantenimiento.indicadorgeneralmeta.find.dit', '') }}/" + id,
+                url: "{{ route('mantenimiento.indicadorgeneralmeta.find', '') }}/" + id,
                 type: "GET",
                 dataType: "JSON",
                 success: function(data) {
-                    $('[name="provincia_dit"]').val(data.prov.id);
-                    $('[name="anioesperado_dit"]').val(data.meta.anio);
-                    $('[name="valoresperado_dit"]').val(data.meta.valor);
-                    $('#idmeta_dit').val(data.meta.id);
-                    
+                    $('[name="periodo"]').val(data.meta.periodo);
+                    $('[name="anioesperado"]').val(data.meta.anio);
+                    $('[name="valoresperado"]').val(data.meta.valor);
+                    $('#idmeta').val(data.meta.id);
+
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     alert('Error get data from ajax');
@@ -1245,8 +1264,8 @@
                 data: $('#form_meta_dit').serialize(),
                 dataType: "JSON",
                 success: function(data) {
-                    console.log('savemeta_dit ' + url);
-                    console.log(data)
+                    // console.log('savemeta_dit ' + url);
+                    // console.log(data)
                     if (data.status) {
                         // var anio = $('#aniobase_dit').val();                        // var valor = $('#valorbase_dit').val();
                         table_meta.ajax.reload(null, false);
@@ -1316,6 +1335,15 @@
             $("#distrito_dit").val('0');
             $("#anioesperado_dit").val('');
             $("#valoresperado_dit").val('');
+        }
+
+        function delemeta_pdrc() {
+            $('#btnSaveMeta_pdrc').html('<i class="fa fa-plus"></i> Agregar');
+            save_method_meta_pdrc = 'add';
+            $("#idmeta").val('');
+            $("#periodo").val('');
+            $("#anioesperado").val('');
+            $("#valoresperado").val('');
         }
 
         function borrarmeta(id) {

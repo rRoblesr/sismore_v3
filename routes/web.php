@@ -651,6 +651,8 @@ Route::get('/Mantenimiento/Indicador/Codigo', [IndicadorGeneralController::class
 
 Route::get('/Mantenimiento/Indicador/Meta/Listar', [IndicadorGeneralController::class, 'ListarDTMeta'])->name('mantenimiento.indicadorgeneralmeta.listar');
 Route::post('/Mantenimiento/Indicador/Meta/Add', [IndicadorGeneralController::class, 'ajax_add_meta'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.guardar');
+Route::post('/Mantenimiento/Indicador/Meta/Update', [IndicadorGeneralController::class, 'ajax_update_meta'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.editar');
+Route::get('/Mantenimiento/Indicador/Meta/Find/{id}', [IndicadorGeneralController::class, 'ajax_find_meta'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.find');
 
 Route::get('/Mantenimiento/Indicador/Meta/DIT/Listar', [IndicadorGeneralController::class, 'ListarDTMeta_dit'])->name('mantenimiento.indicadorgeneralmeta.listar.dit');
 Route::post('/Mantenimiento/Indicador/Meta/DIT/Add', [IndicadorGeneralController::class, 'ajax_add_meta_dit'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.guardar.dit');
@@ -1174,7 +1176,9 @@ Route::get('/salud/pactoregional/Exportar/{id}', [IndicadoresController::class, 
 
 Route::get('/salud/conveniofed', [IndicadoresController::class, 'ConvenioFED'])->name('salud.indicador.conveniofed');
 
-Route::get('/salud/pdrc', [IndicadoresController::class, 'PDRC'])->name('salud.indicador.pdrc');
+Route::get('/salud/pdrc/Actualizar', [IndicadoresController::class, 'PDRCActualizar'])->name('salud.indicador.pdrc.actualizar');
+Route::get('/salud/pdrc/edu', [IndicadoresController::class, 'PDRCEdu'])->name('salud.indicador.pdrc.edu');
+Route::get('/salud/pdrc/{indicador_id}', [IndicadoresController::class, 'PDRCDetalle'])->name('salud.indicador.pdrc.detalle');
 
 Route::get('/salud/pei', [IndicadoresController::class, 'PEI'])->name('salud.indicador.pei');
 

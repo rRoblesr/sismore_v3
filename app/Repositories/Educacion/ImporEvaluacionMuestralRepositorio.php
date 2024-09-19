@@ -171,6 +171,8 @@ class ImporEvaluacionMuestralRepositorio
             DB::raw("round(100*SUM(if(grupo_$curso = 'En proceso',      peso_$curso,0))/SUM(peso_$curso),1) as p"),
             DB::raw("round(100*SUM(if(grupo_$curso = 'En inicio',       peso_$curso,0))/SUM(peso_$curso),1) as i"),
             DB::raw("round(100*SUM(if(grupo_$curso = 'Previo al inicio',peso_$curso,0))/SUM(peso_$curso),1) as a"),
+            DB::raw("SUM(if(grupo_$curso = 'Satisfactorio', peso_$curso, 0)) as sn"),
+            DB::raw("SUM(peso_$curso) as sd"),
         )
             ->join('par_ubigeo as dd', 'dd.codigo', '=', 'em.codgeo')
             ->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia')

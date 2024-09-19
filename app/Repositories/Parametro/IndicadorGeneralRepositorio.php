@@ -28,7 +28,7 @@ class IndicadorGeneralRepositorio
             'sector_id',
             'oficina_id',
             'estado'
-        )->where('sector_id', $sector)->where('instrumento_id', $instrumento)->where('estado', '0')->get();
+        )->where('sector_id', $sector)->where('instrumento_id', $instrumento)->where('estado', '0')->orderBy('codigo')->get();
         return $query;
     }
 
