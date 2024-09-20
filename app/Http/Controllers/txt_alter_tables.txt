@@ -2268,3 +2268,88 @@ update `par_poblacion_proyectada` set codigo=(select codigo from par_ubigeo wher
 
 
 update edu_matricula_general_detalle mgd inner join edu_matricula_general mg on mg.id=mgd.matriculageneral_id inner join par_anio as a on a.id=mg.anio_id set mgd.edad=TIMESTAMPDIFF(YEAR, mgd.fecha_nacimiento, concat(a.anio,'-03-31') );
+
+
+
+CREATE TABLE `salud_padron_nominal` (
+    id int(11) auto_increment primary key,tipo_documento  varchar(200) NULL DEFAULT NULL,
+código_padron_nominal  varchar(200) NULL DEFAULT NULL,
+numero_certificado  varchar(200) NULL DEFAULT NULL,
+código_unico_identidad  varchar(200) NULL DEFAULT NULL,
+número_documento  varchar(200) NULL DEFAULT NULL,
+estado_tramite  varchar(200) NULL DEFAULT NULL,
+fecha_tramite  varchar(200) NULL DEFAULT NULL,
+apellido_paterno_ninio  varchar(200) NULL DEFAULT NULL,
+apellido_materno_ninio  varchar(200) NULL DEFAULT NULL,
+nombres_ninio  varchar(200) NULL DEFAULT NULL,
+sexo_ninio  varchar(200) NULL DEFAULT NULL,
+fecha_nacimiento_ninio  varchar(200) NULL DEFAULT NULL,
+edad_anio  varchar(200) NULL DEFAULT NULL,
+edad_ninio  varchar(200) NULL DEFAULT NULL,
+eje_vial  varchar(200) NULL DEFAULT NULL,
+descripcion  varchar(200) NULL DEFAULT NULL,
+referencia_dirección  varchar(200) NULL DEFAULT NULL,
+ubigeo_distrito  varchar(200) NULL DEFAULT NULL,
+departamento  varchar(200) NULL DEFAULT NULL,
+provincia  varchar(200) NULL DEFAULT NULL,
+distrito  varchar(200) NULL DEFAULT NULL,
+ubigeo_centro_poblado  varchar(200) NULL DEFAULT NULL,
+nombre_centro_poblado  varchar(200) NULL DEFAULT NULL,
+area_centro_poblado  varchar(200) NULL DEFAULT NULL,
+menor_visitado  varchar(200) NULL DEFAULT NULL,
+menor_encontrado  varchar(200) NULL DEFAULT NULL,
+fecha_visita  varchar(200) NULL DEFAULT NULL,
+fuente_datos  varchar(200) NULL DEFAULT NULL,
+fecha_fuente_datos  varchar(200) NULL DEFAULT NULL,
+código_eess_nacimiento  varchar(200) NULL DEFAULT NULL,
+nombre_eess_nacimiento  varchar(200) NULL DEFAULT NULL,
+código_eess  varchar(200) NULL DEFAULT NULL,
+nombre_eess  varchar(200) NULL DEFAULT NULL,
+frecuencia_atencion  varchar(200) NULL DEFAULT NULL,
+código_eess_adscripción  varchar(200) NULL DEFAULT NULL,
+nombre_eess_adscripción  varchar(200) NULL DEFAULT NULL,
+tipo_seguro  varchar(200) NULL DEFAULT NULL,
+programas_sociales_niño  varchar(200) NULL DEFAULT NULL,
+codigo_institucion_educativa  varchar(200) NULL DEFAULT NULL,
+nombre_institucion_ educativa  varchar(200) NULL DEFAULT NULL,
+relacion_apoderado_menor  varchar(200) NULL DEFAULT NULL,
+tipo_documento_madre  varchar(200) NULL DEFAULT NULL,
+numero_documento_madre  varchar(200) NULL DEFAULT NULL,
+apellido_paterno_madre  varchar(200) NULL DEFAULT NULL,
+apellido_materno_madre  varchar(200) NULL DEFAULT NULL,
+nombres_madre  varchar(200) NULL DEFAULT NULL,
+celular_madre  varchar(200) NULL DEFAULT NULL,
+email_madre  varchar(200) NULL DEFAULT NULL,
+grado_instrucción_madre  varchar(200) NULL DEFAULT NULL,
+lengua_habitual_madre  varchar(200) NULL DEFAULT NULL,
+relacion_jefe_familia_menor  varchar(200) NULL DEFAULT NULL,
+tipo_documento_jefe  varchar(200) NULL DEFAULT NULL,
+numero_documento_jefe  varchar(200) NULL DEFAULT NULL,
+apellido_paterno_jefe  varchar(200) NULL DEFAULT NULL,
+apellido_materno_jefe  varchar(200) NULL DEFAULT NULL,
+nombres_jefe  varchar(200) NULL DEFAULT NULL,
+estado_registro  varchar(200) NULL DEFAULT NULL,
+fecha_creacion_registro  varchar(200) NULL DEFAULT NULL,
+usuario_crea  varchar(200) NULL DEFAULT NULL,
+fecha_modificación_registro  varchar(200) NULL DEFAULT NULL,
+usuario_modifica  varchar(200) NULL DEFAULT NULL,
+entidad  varchar(200) NULL DEFAULT NULL,
+tipo_registro  varchar(200) NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
