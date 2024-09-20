@@ -1266,6 +1266,13 @@ class IndicadoresController extends Controller
                 $den = $gl;
                 $actualizado =   'Actualizado: 31/12/2023';
                 break;
+                case 'PDRC-EDU-05':
+                    $gls = 139;
+                    $gl = 1449;
+                    $num = $gls;
+                    $den = $gl;
+                    $actualizado =   'Actualizado: 31/12/2023';
+                    break;
             default:
                 break;
         }
@@ -1295,6 +1302,8 @@ class IndicadoresController extends Controller
 
             case 'PDRC-EDU-04':
                 return redirect()->route('panelcontrol.educacion.indicador.nuevos.04');
+                case 'PDRC-EDU-05':
+                    return redirect()->route('serviciosbasicos.principal');
 
             default:
                 return 'ERROR, PAGINA NO ENCONTRADA';
