@@ -118,14 +118,14 @@
                                     @switch($key)
                                         @case(0)
                                         @case(1)
-                                        OER.03 - 
+                                        OER.03 -
                                             @break
                                             @case(2)
                                             @case(3)
-                                            OER.03 - 
+                                            OER.03 -
                                                 @break
                                         @default
-                                            
+
                                     @endswitch
                                 Indicador {{ $key + 1 }}</h5>
                             {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
@@ -292,6 +292,7 @@
             cargarActualizar('PDRC-EDU-02');
             cargarActualizar('PDRC-EDU-03');
             cargarActualizar('PDRC-EDU-04');
+            cargarActualizar('PDRC-EDU-05');
         }
 
         function cargarActualizar(codigo) {
@@ -320,7 +321,7 @@
                     );
                     $('#num' + codigo).text(data.num.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }));
                     $('#den' + codigo).text(data.den.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }));
-                    
+
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR cargarActualizar");
