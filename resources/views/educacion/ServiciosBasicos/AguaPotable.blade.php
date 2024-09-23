@@ -38,141 +38,155 @@
             background-color: #43beac;
             color: #FFF;
         }
+
+        /*  */
+        .same-height {
+            height: 47.5rem;
+            /* Ajusta la altura según tu necesidad */
+        }
+
+        .card-body {
+            height: calc(100% - 3rem);
+            /* Ajusta el padding y la altura del header si es necesario */
+        }
+
+        .table-responsive,
+        #anal3vista1 {
+            height: 100%;
+        }
     </style>
 @endsection
 
 @section('content')
-    <div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card-box p-0">
+                <ul class="nav nav-tabs border-0" role="tablist">{{-- nav-justified  --}}
+                    <li class="nav-item">
+                        <a class="nav-link border border-success-0 border-bottom-0 active" id="vista1-tab" data-toggle="tab"
+                            href="#vista1" role="tab" aria-controls="vista1" aria-selected="true">
+                            <span class="d-block d-sm-none">
+                                {{-- <i class="mdi mdi-home-variant-outline font-18"></i> --}}
+                                <i class="mdi mdi-shield-plus font-18"></i>
+                            </span>
+                            <span class="d-none d-sm-block text-center" style="width:180px">
+                                <i class="mdi mdi-shield-plus"></i> SERVICIOS BÁSICOS</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link border border-success-0 border-bottom-0" id="vista2-tab" data-toggle="tab"
+                            href="#vista2" role="tab" aria-controls="vista2" aria-selected="false">
+                            <span class="d-block d-sm-none">
+                                {{-- <i class="mdi mdi-account-outline font-18"></i> --}}
+                                <i class="mdi mdi-school font-18"></i>
+                            </span>
+                            <span class="d-none d-sm-block text-center" style="width:130px">
+                                <i class="mdi mdi-school"></i> AGUA</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link border border-success-0 border-bottom-0" id="vista3-tab" data-toggle="tab"
+                            href="#vista3" role="tab" aria-controls="vista3" aria-selected="false">
+                            <span class="d-block d-sm-none">
+                                <i class="mdi mdi-home font-18"></i>
+                            </span>
+                            <span class="d-none d-sm-block text-center" style="width:130px">
+                                <i class="mdi mdi-home"></i> DESAGUE</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link border border-success-0 border-bottom-0" id="vista4-tab" data-toggle="tab"
+                            href="#vista4" role="tab" aria-controls="vista4" aria-selected="false">
+                            <span class="d-block d-sm-none">
+                                <i class="mdi mdi-plus-circle-outline font-18"></i>
+                            </span>
+                            <span class="d-none d-sm-block text-center" style="width:130px">
+                                <i class="mdi mdi-plus-circle-outline"></i> ELECTRICIDAD</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link border border-success-0 border-bottom-0" id="vista5-tab" data-toggle="tab"
+                            href="#vista5" role="tab" aria-controls="vista5" aria-selected="false">
+                            <span class="d-block d-sm-none">
+                                <i class="mdi mdi-plus-circle-outline font-18"></i>
+                            </span>
+                            <span class="d-none d-sm-block text-center" style="width:130px">
+                                <i class="mdi mdi-plus-circle-outline"></i> INTERNET</span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content p-0">
+                    <div class="tab-pane p-3 border border-success-0 show active" id="vista1" role="tabpanel"
+                        aria-labelledby="vista1-tab">
 
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card-box p-0">
-                    <ul class="nav nav-tabs border-0" role="tablist">{{-- nav-justified  --}}
-                        <li class="nav-item">
-                            <a class="nav-link border border-success-0 border-bottom-0 active" id="vista1-tab"
-                                data-toggle="tab" href="#vista1" role="tab" aria-controls="vista1" aria-selected="true">
-                                <span class="d-block d-sm-none">
-                                    {{-- <i class="mdi mdi-home-variant-outline font-18"></i> --}}
-                                    <i class="mdi mdi-shield-plus font-18"></i>
-                                </span>
-                                <span class="d-none d-sm-block text-center" style="width:180px">
-                                    <i class="mdi mdi-shield-plus"></i> SERVICIOS BÁSICOS</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link border border-success-0 border-bottom-0" id="vista2-tab" data-toggle="tab"
-                                href="#vista2" role="tab" aria-controls="vista2" aria-selected="false">
-                                <span class="d-block d-sm-none">
-                                    {{-- <i class="mdi mdi-account-outline font-18"></i> --}}
-                                    <i class="mdi mdi-school font-18"></i>
-                                </span>
-                                <span class="d-none d-sm-block text-center" style="width:130px">
-                                    <i class="mdi mdi-school"></i> AGUA</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link border border-success-0 border-bottom-0" id="vista3-tab" data-toggle="tab"
-                                href="#vista3" role="tab" aria-controls="vista3" aria-selected="false">
-                                <span class="d-block d-sm-none">
-                                    <i class="mdi mdi-home font-18"></i>
-                                </span>
-                                <span class="d-none d-sm-block text-center" style="width:130px">
-                                    <i class="mdi mdi-home"></i> DESAGUE</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link border border-success-0 border-bottom-0" id="vista4-tab" data-toggle="tab"
-                                href="#vista4" role="tab" aria-controls="vista4" aria-selected="false">
-                                <span class="d-block d-sm-none">
-                                    <i class="mdi mdi-plus-circle-outline font-18"></i>
-                                </span>
-                                <span class="d-none d-sm-block text-center" style="width:130px">
-                                    <i class="mdi mdi-plus-circle-outline"></i> ELECTRICIDAD</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link border border-success-0 border-bottom-0" id="vista5-tab" data-toggle="tab"
-                                href="#vista5" role="tab" aria-controls="vista5" aria-selected="false">
-                                <span class="d-block d-sm-none">
-                                    <i class="mdi mdi-plus-circle-outline font-18"></i>
-                                </span>
-                                <span class="d-none d-sm-block text-center" style="width:130px">
-                                    <i class="mdi mdi-plus-circle-outline"></i> INTERNET</span>
-                            </a>
-                        </li>
-                    </ul>
-                    <div class="tab-content p-0">
-                        <div class="tab-pane p-3 border border-success-0 show active" id="vista1" role="tabpanel"
-                            aria-labelledby="vista1-tab">
-
-                            <div class="row">
-                                <div class="col-lg-12 col-md-12">
-                                    <div class="card">
-                                        <div class="card-header bg-success-0 cabeceravista1">
-                                            <div class="card-widgets">
-                                                {{-- <button type="button" class="btn btn-orange-0 btn-xs"
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12">
+                                <div class="card">
+                                    <div class="card-header bg-success-0 cabeceravista1">
+                                        <div class="card-widgets">
+                                            {{-- <button type="button" class="btn btn-orange-0 btn-xs"
                                                     onclick="location.href=`{{ route('matriculageneral.niveleducativo.principal') }}`"
                                                     title=''><i class="fas fa-align-justify"></i> Nivel Educativo</button> --}}
-                                                {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf(6)"
+                                            {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf(6)"
                                                         title='FICHA TÉCNICA'><i class="fas fa-file"></i> Ficha Técnica</button> --}}
-                                                <button type="button" class="btn btn-orange-0 btn-xs"
-                                                    onclick="location.reload()" title='ACTUALIZAR'><i
-                                                        class=" fas fa-history"></i> Actualizar</button>
-                                                {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
+                                            <button type="button" class="btn btn-orange-0 btn-xs"
+                                                onclick="location.reload()" title='ACTUALIZAR'><i
+                                                    class=" fas fa-history"></i> Actualizar</button>
+                                            {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
                                                         title='IMPRIMIR'><i class="fa fa-print"></i></button> --}}
-                                            </div>
-                                            <h3 class="card-title text-white"></h3>
                                         </div>
-                                        <div class="card-body py-0">
-                                            <div class="form-group row align-items-center vh-5">
-                                                <div class="col-lg-5 col-md-5 col-sm-5">
-                                                    <h5 class="page-title font-11">CENSO EDUCATIVO-MINEDU,
-                                                        <br>{{ $actualizado }}
-                                                    </h5>
-                                                </div>
-                                                <div class="col-lg-1 col-md-1 col-sm-1  ">
-                                                    <select id="aniovista1" name="aniovista1"
-                                                        class="form-control btn-xs font-11" onchange="cargarCards();">
-                                                        <option value="0">AÑO</option>
-                                                        @foreach ($anios as $item)
-                                                            <option value="{{ $item->id }}"
-                                                                {{ $item->anio == $aniomax ? 'selected' : '' }}>
-                                                                {{ $item->anio }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-lg-2 col-md-2 col-sm-2">
-                                                    <select id="provinciavista1" name="provinciavista1"
-                                                        class="form-control btn-xs font-11"
-                                                        onchange="cargarDistritos();cargarCards();">
-                                                        <option value="0">PROVINCIA</option>
-                                                        @foreach ($provincia as $item)
-                                                            <option value="{{ $item->id }}">{{ $item->nombre }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-lg-2 col-md-2 col-sm-2">
-                                                    <select id="distritovista1" name="distritovista1"
-                                                        class="form-control btn-xs font-11" onchange="cargarCards();">
-                                                        <option value="0">DISTRITO</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-lg-2 col-md-2 col-sm-2">
-                                                    <select id="areavista1" name="areavista1"
-                                                        class="form-control btn-xs font-11" onchange="cargarCards();">
-                                                        <option value="0">ÁMBITO GEOGRÁFICO</option>
-                                                        @foreach ($area as $item)
-                                                            <option value="{{ $item->id }}">{{ $item->nombre }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
+                                        <h3 class="card-title text-white"></h3>
+                                    </div>
+                                    <div class="card-body py-0">
+                                        <div class="form-group row align-items-center vh-5">
+                                            <div class="col-lg-5 col-md-5 col-sm-5">
+                                                <h5 class="page-title font-11">CENSO EDUCATIVO-MINEDU,
+                                                    <br>{{ $actualizado }}
+                                                </h5>
+                                            </div>
+                                            <div class="col-lg-1 col-md-1 col-sm-1  ">
+                                                <select id="aniovista1" name="aniovista1"
+                                                    class="form-control btn-xs font-11" onchange="cargarCards();">
+                                                    <option value="0">AÑO</option>
+                                                    @foreach ($anios as $item)
+                                                        <option value="{{ $item->id }}"
+                                                            {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                                            {{ $item->anio }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <select id="provinciavista1" name="provinciavista1"
+                                                    class="form-control btn-xs font-11"
+                                                    onchange="cargarDistritos();cargarCards();">
+                                                    <option value="0">PROVINCIA</option>
+                                                    @foreach ($provincia as $item)
+                                                        <option value="{{ $item->id }}">{{ $item->nombre }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <select id="distritovista1" name="distritovista1"
+                                                    class="form-control btn-xs font-11" onchange="cargarCards();">
+                                                    <option value="0">DISTRITO</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <select id="areavista1" name="areavista1"
+                                                    class="form-control btn-xs font-11" onchange="cargarCards();">
+                                                    <option value="0">ÁMBITO GEOGRÁFICO</option>
+                                                    @foreach ($area as $item)
+                                                        <option value="{{ $item->id }}">{{ $item->nombre }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
 
-                                                {{-- <input type="hidden" id="serviciovista1" name="serviciovista1" --}}
-                                                {{-- value="4"> --}}
+                                            {{-- <input type="hidden" id="serviciovista1" name="serviciovista1" --}}
+                                            {{-- value="4"> --}}
 
-                                                {{-- <div class="col-lg-2 col-md-2 col-sm-2">
+                                            {{-- <div class="col-lg-2 col-md-2 col-sm-2">
                                                     <select id="servicio" name="servicio" class="form-control btn-xs font-11"
                                                         onchange="cargarCards();">
                                                         <option value="1">AGUA</option>
@@ -183,262 +197,290 @@
                                                     </select>
                                                 </div> --}}
 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Widget-4 -->
+                        <div class="row">
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="card-box border border-plomo-0">
+                                    <div class="media">
+                                        <div class="text-center">
+                                            {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                            <i class="mdi mdi-finance font-35 text-green-0"></i>
+                                        </div>
+                                        <div class="media-body align-self-center card1vista1">
+                                            <div class="text-right">
+                                                <h4 class="font-20 my-0 font-weight-bold">
+                                                    <span data-plugin="counterup"></span>
+                                                </h4>
+                                                <p class="mb-0 mt-1 text-truncate">Resultado del Indicador</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end card-box-->
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="card-box border border-plomo-0">
+                                    <div class="media">
+                                        <div class="text-center">
+                                            {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                            <i class=" mdi mdi-city font-35 text-green-0"></i>
+                                        </div>
+                                        <div class="media-body align-self-center card2vista1">
+                                            <div class="text-right">
+                                                <h4 class="font-20 my-0 font-weight-bold">
+                                                    <span data-plugin="counterup"></span>
+                                                </h4>
+                                                <p class="mb-0 mt-1 text-truncate">Total de II.EE</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end card-box-->
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="card-box border border-plomo-0">
+                                    <div class="media">
+                                        <div class="text-center">
+                                            {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                            <i class="mdi mdi-thumb-up font-35 text-green-0"></i>
+                                        </div>
+                                        <div class="media-body align-self-center card3vista1">
+                                            <div class="text-right">
+                                                <h4 class="font-20 my-0 font-weight-bold">
+                                                    <span data-plugin="counterup"></span>
+                                                </h4>
+                                                <p class="mb-0 mt-1 text-truncate">II.EE con Agua</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end card-box-->
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="card-box border border-plomo-0">
+                                    <div class="media">
+                                        <div class="text-center">
+                                            {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                            <i class="mdi mdi-thumb-down font-35 text-green-0"></i>
+                                        </div>
+                                        <div class="media-body align-self-center card4vista1">
+                                            <div class="text-right">
+                                                <h4 class="font-20 my-0 font-weight-bold">
+                                                    <span data-plugin="counterup"></span>
+                                                </h4>
+                                                <p class="mb-0 mt-1 text-truncate">II.EE sin Agua</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- portles --}}
+
+                        <div class="row">
+
+                            <div class="col-lg-6">
+                                <div class="card card-border border border-plomo-0">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black text-center font-weight-normal font-11"></h3>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div id="anal1vista1" style="height: 20rem"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="card card-border border border-plomo-0">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black text-center font-weight-normal font-11"></h3>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div id="anal2vista1" style="height: 20rem"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <div class="card card-border border border-plomo-0 same-height">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div id="anal3vista1"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6">
+                                <div class="card card-border border border-plomo-0 same-height">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black font-14 mb-0">Locales Educativos conectados a red de agua
+                                            potable, según Distritos
+                                        </h3>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="table-responsive" id="vtabla1vista1"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        {{-- <div class="row">
+
+                            <div class="col-lg-6 col-md-6">
+                                <div class="card card-border border border-plomo-0">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div id="anal3vista1"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="card card-border border border-plomo-0 vtabla1">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black font-14 mb-0">Locales Educativos conectados a red de agua
+                                            potable, según Distritos
+                                        </h3>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="table-responsive" id="vtabla1vista1">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!--Widget-4 -->
-                            <div class="row">
-                                <div class="col-lg-3 col-md-6 col-sm-6">
-                                    <div class="card-box border border-plomo-0">
-                                        <div class="media">
-                                            <div class="text-center">
-                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%"> --}}
-                                                <i class="mdi mdi-finance font-35 text-green-0"></i>
-                                            </div>
-                                            <div class="media-body align-self-center card1vista1">
-                                                <div class="text-right">
-                                                    <h4 class="font-20 my-0 font-weight-bold">
-                                                        <span data-plugin="counterup"></span>
-                                                    </h4>
-                                                    <p class="mb-0 mt-1 text-truncate">Resultado del Indicador</p>
+                        </div> --}}
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card card-border border border-plomo-0">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <div class="card-widgets">
+                                            <button type="button" class="btn btn-success btn-xs"
+                                                onclick="descargar1vista1()"><i class="fa fa-file-excel"></i>
+                                                Descargar</button>
+                                        </div>
+                                        <h3 class="text-black font-14">Locales Educativos conectados</h3>
+                                    </div>
+                                    <div class="card-body pt-0 pb-0">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="table-responsive" id="vtabla3vista1">
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <!-- end card-box-->
-                                </div>
-
-                                <div class="col-lg-3 col-md-6 col-sm-6">
-                                    <div class="card-box border border-plomo-0">
-                                        <div class="media">
-                                            <div class="text-center">
-                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%"> --}}
-                                                <i class=" mdi mdi-city font-35 text-green-0"></i>
-                                            </div>
-                                            <div class="media-body align-self-center card2vista1">
-                                                <div class="text-right">
-                                                    <h4 class="font-20 my-0 font-weight-bold">
-                                                        <span data-plugin="counterup"></span>
-                                                    </h4>
-                                                    <p class="mb-0 mt-1 text-truncate">Total de II.EE</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- end card-box-->
-                                </div>
-
-                                <div class="col-lg-3 col-md-6 col-sm-6">
-                                    <div class="card-box border border-plomo-0">
-                                        <div class="media">
-                                            <div class="text-center">
-                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%"> --}}
-                                                <i class="mdi mdi-thumb-up font-35 text-green-0"></i>
-                                            </div>
-                                            <div class="media-body align-self-center card3vista1">
-                                                <div class="text-right">
-                                                    <h4 class="font-20 my-0 font-weight-bold">
-                                                        <span data-plugin="counterup"></span>
-                                                    </h4>
-                                                    <p class="mb-0 mt-1 text-truncate">II.EE con Agua</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- end card-box-->
-                                </div>
-
-                                <div class="col-lg-3 col-md-6 col-sm-6">
-                                    <div class="card-box border border-plomo-0">
-                                        <div class="media">
-                                            <div class="text-center">
-                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%"> --}}
-                                                <i class="mdi mdi-thumb-down font-35 text-green-0"></i>
-                                            </div>
-                                            <div class="media-body align-self-center card4vista1">
-                                                <div class="text-right">
-                                                    <h4 class="font-20 my-0 font-weight-bold">
-                                                        <span data-plugin="counterup"></span>
-                                                    </h4>
-                                                    <p class="mb-0 mt-1 text-truncate">II.EE sin Agua</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {{-- portles --}}
-
-                            <div class="row">
-
-                                <div class="col-lg-6">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent p-0">
-                                            <h3 class="text-black text-center font-weight-normal font-11"></h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <div id="anal1vista1" style="height: 20rem"></div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent p-0">
-                                            <h3 class="text-black text-center font-weight-normal font-11"></h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <div id="anal2vista1" style="height: 20rem"></div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-
-                                <div class="col-lg-6">
-                                    <div class="card card-border border border-plomo-0" style="height: 47.5rem">
-                                        <div class="card-header border-success-0 bg-transparent p-0">
-                                            <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <div id="anal3vista1" style="height: 100%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6">
-                                    <div class="card card-border border border-plomo-0 vtabla1" style="height: 47.5rem">
-                                        <div class="card-header border-success-0 bg-transparent p-0">
-                                            <h3 class="text-black font-14 mb-0">Locales Educativos conectados a red de agua
-                                                potable, según Distritos
-                                            </h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <div class="table-responsive" id="vtabla1vista1">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent p-0">
-                                            <div class="card-widgets">
-                                                <button type="button" class="btn btn-success btn-xs"
-                                                    onclick="descargar1vista1()"><i class="fa fa-file-excel"></i>
-                                                    Descargar</button>
-                                            </div>
-                                            <h3 class="text-black font-14">Locales Educativos conectados</h3>
-                                        </div>
-                                        <div class="card-body pt-0 pb-0">
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <div class="table-responsive" id="vtabla3vista1">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9 p-0">
+                                        {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9 p-0">
                                                 <span class="float-left vtabxla1-fuente">Fuente: </span>
                                                 <span class="float-right vtaxbla1-fecha">Actualizado:</span>
                                             </div> --}}
-                                        </div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
 
-                        <div class="tab-pane p-3 border border-success-0" id="vista2" role="tabpanel"
-                            aria-labelledby="vista2-tab">
+                    </div>
 
-                            <div class="row">
-                                <div class="col-lg-12 col-md-12">
-                                    <div class="card">
-                                        <div class="card-header bg-success-0 cabeceravista2">
-                                            <div class="card-widgets">
-                                                {{-- <button type="button" class="btn btn-orange-0 btn-xs"
+                    <div class="tab-pane p-3 border border-success-0" id="vista2" role="tabpanel"
+                        aria-labelledby="vista2-tab">
+
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12">
+                                <div class="card">
+                                    <div class="card-header bg-success-0 cabeceravista2">
+                                        <div class="card-widgets">
+                                            {{-- <button type="button" class="btn btn-orange-0 btn-xs"
                                                     onclick="location.href=`{{ route('matriculageneral.niveleducativo.principal') }}`"
                                                     title=''><i class="fas fa-align-justify"></i> Nivel Educativo</button> --}}
-                                                {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf(6)"
+                                            {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf(6)"
                                                         title='FICHA TÉCNICA'><i class="fas fa-file"></i> Ficha Técnica</button> --}}
-                                                <button type="button" class="btn btn-orange-0 btn-xs"
-                                                    onclick="location.reload()" title='ACTUALIZAR'><i
-                                                        class=" fas fa-history"></i> Actualizar</button>
-                                                {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
+                                            <button type="button" class="btn btn-orange-0 btn-xs"
+                                                onclick="location.reload()" title='ACTUALIZAR'><i
+                                                    class=" fas fa-history"></i> Actualizar</button>
+                                            {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
                                                         title='IMPRIMIR'><i class="fa fa-print"></i></button> --}}
-                                            </div>
-                                            <h3 class="card-title text-white"></h3>
                                         </div>
-                                        <div class="card-body py-0">
-                                            <div class="form-group row align-items-center vh-5">
-                                                <div class="col-lg-5 col-md-5 col-sm-5">
-                                                    <h5 class="page-title font-11">CENSO EDUCATIVO-MINEDU,
-                                                        <br>{{ $actualizado }}
-                                                    </h5>
-                                                </div>
-                                                <div class="col-lg-1 col-md-1 col-sm-1  ">
-                                                    <select id="aniovista2" name="aniovista2"
-                                                        class="form-control btn-xs font-11"
-                                                        onchange="cargarCardsvista2();">
-                                                        <option value="0">AÑO</option>
-                                                        @foreach ($anios as $item)
-                                                            <option value="{{ $item->id }}"
-                                                                {{ $item->anio == $aniomax ? 'selected' : '' }}>
-                                                                {{ $item->anio }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-lg-2 col-md-2 col-sm-2">
-                                                    <select id="provinciavista2" name="provinciavista2"
-                                                        class="form-control btn-xs font-11"
-                                                        onchange="cargarDistritosvista2();cargarCardsvista2();">
-                                                        <option value="0">PROVINCIA</option>
-                                                        @foreach ($provincia as $item)
-                                                            <option value="{{ $item->id }}">{{ $item->nombre }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-lg-2 col-md-2 col-sm-2">
-                                                    <select id="distritovista2" name="distritovista2"
-                                                        class="form-control btn-xs font-11"
-                                                        onchange="cargarCardsvista2();">
-                                                        <option value="0">DISTRITO</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-lg-2 col-md-2 col-sm-2">
-                                                    <select id="areavista2" name="areavista2"
-                                                        class="form-control btn-xs font-11"
-                                                        onchange="cargarCardsvista2();">
-                                                        <option value="0">ÁMBITO GEOGRÁFICO</option>
-                                                        @foreach ($area as $item)
-                                                            <option value="{{ $item->id }}">{{ $item->nombre }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
+                                        <h3 class="card-title text-white"></h3>
+                                    </div>
+                                    <div class="card-body py-0">
+                                        <div class="form-group row align-items-center vh-5">
+                                            <div class="col-lg-5 col-md-5 col-sm-5">
+                                                <h5 class="page-title font-11">CENSO EDUCATIVO-MINEDU,
+                                                    <br>{{ $actualizado }}
+                                                </h5>
+                                            </div>
+                                            <div class="col-lg-1 col-md-1 col-sm-1  ">
+                                                <select id="aniovista2" name="aniovista2"
+                                                    class="form-control btn-xs font-11" onchange="cargarCardsvista2();">
+                                                    <option value="0">AÑO</option>
+                                                    @foreach ($anios as $item)
+                                                        <option value="{{ $item->id }}"
+                                                            {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                                            {{ $item->anio }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <select id="provinciavista2" name="provinciavista2"
+                                                    class="form-control btn-xs font-11"
+                                                    onchange="cargarDistritosvista2();cargarCardsvista2();">
+                                                    <option value="0">PROVINCIA</option>
+                                                    @foreach ($provincia as $item)
+                                                        <option value="{{ $item->id }}">{{ $item->nombre }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <select id="distritovista2" name="distritovista2"
+                                                    class="form-control btn-xs font-11" onchange="cargarCardsvista2();">
+                                                    <option value="0">DISTRITO</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <select id="areavista2" name="areavista2"
+                                                    class="form-control btn-xs font-11" onchange="cargarCardsvista2();">
+                                                    <option value="0">ÁMBITO GEOGRÁFICO</option>
+                                                    @foreach ($area as $item)
+                                                        <option value="{{ $item->id }}">{{ $item->nombre }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
 
-                                                {{-- <input type="hidden" id="serviciovista2" name="serviciovista2" --}}
-                                                {{-- value="4"> --}}
+                                            {{-- <input type="hidden" id="serviciovista2" name="serviciovista2" --}}
+                                            {{-- value="4"> --}}
 
-                                                {{-- <div class="col-lg-2 col-md-2 col-sm-2">
+                                            {{-- <div class="col-lg-2 col-md-2 col-sm-2">
                                                     <select id="servicio" name="servicio" class="form-control btn-xs font-11"
                                                         onchange="cargarCards();">
                                                         <option value="1">AGUA</option>
@@ -449,175 +491,150 @@
                                                     </select>
                                                 </div> --}}
 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Widget-4 -->
+                        <div class="row">
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="card-box border border-plomo-0">
+                                    <div class="media">
+                                        <div class="text-center">
+                                            {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                            <i class="mdi mdi-finance font-35 text-green-0"></i>
+                                        </div>
+                                        <div class="media-body align-self-center card1vista2">
+                                            <div class="text-right">
+                                                <h4 class="font-20 my-0 font-weight-bold">
+                                                    <span data-plugin="counterup"></span>
+                                                </h4>
+                                                <p class="mb-0 mt-1 text-truncate">Resultado del Indicador</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end card-box-->
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="card-box border border-plomo-0">
+                                    <div class="media">
+                                        <div class="text-center">
+                                            {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                            <i class=" mdi mdi-city font-35 text-green-0"></i>
+                                        </div>
+                                        <div class="media-body align-self-center card2vista2">
+                                            <div class="text-right">
+                                                <h4 class="font-20 my-0 font-weight-bold">
+                                                    <span data-plugin="counterup"></span>
+                                                </h4>
+                                                <p class="mb-0 mt-1 text-truncate">Total de II.EE</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end card-box-->
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="card-box border border-plomo-0">
+                                    <div class="media">
+                                        <div class="text-center">
+                                            {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                            <i class="mdi mdi-thumb-up font-35 text-green-0"></i>
+                                        </div>
+                                        <div class="media-body align-self-center card3vista2">
+                                            <div class="text-right">
+                                                <h4 class="font-20 my-0 font-weight-bold">
+                                                    <span data-plugin="counterup"></span>
+                                                </h4>
+                                                <p class="mb-0 mt-1 text-truncate">II.EE con Agua</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end card-box-->
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="card-box border border-plomo-0">
+                                    <div class="media">
+                                        <div class="text-center">
+                                            {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                            <i class="mdi mdi-thumb-down font-35 text-green-0"></i>
+                                        </div>
+                                        <div class="media-body align-self-center card4vista2">
+                                            <div class="text-right">
+                                                <h4 class="font-20 my-0 font-weight-bold">
+                                                    <span data-plugin="counterup"></span>
+                                                </h4>
+                                                <p class="mb-0 mt-1 text-truncate">II.EE sin Agua</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <!--Widget-4 -->
-                            <div class="row">
-                                <div class="col-lg-3 col-md-6 col-sm-6">
-                                    <div class="card-box border border-plomo-0">
-                                        <div class="media">
-                                            <div class="text-center">
-                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%"> --}}
-                                                <i class="mdi mdi-finance font-35 text-green-0"></i>
-                                            </div>
-                                            <div class="media-body align-self-center card1vista2">
-                                                <div class="text-right">
-                                                    <h4 class="font-20 my-0 font-weight-bold">
-                                                        <span data-plugin="counterup"></span>
-                                                    </h4>
-                                                    <p class="mb-0 mt-1 text-truncate">Resultado del Indicador</p>
-                                                </div>
-                                            </div>
-                                        </div>
+                        {{-- portles --}}
+
+                        <div class="row">
+
+                            <div class="col-lg-6">
+                                <div class="card card-border border border-plomo-0">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black text-center font-weight-normal font-11"></h3>
                                     </div>
-                                    <!-- end card-box-->
-                                </div>
-
-                                <div class="col-lg-3 col-md-6 col-sm-6">
-                                    <div class="card-box border border-plomo-0">
-                                        <div class="media">
-                                            <div class="text-center">
-                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%"> --}}
-                                                <i class=" mdi mdi-city font-35 text-green-0"></i>
-                                            </div>
-                                            <div class="media-body align-self-center card2vista2">
-                                                <div class="text-right">
-                                                    <h4 class="font-20 my-0 font-weight-bold">
-                                                        <span data-plugin="counterup"></span>
-                                                    </h4>
-                                                    <p class="mb-0 mt-1 text-truncate">Total de II.EE</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- end card-box-->
-                                </div>
-
-                                <div class="col-lg-3 col-md-6 col-sm-6">
-                                    <div class="card-box border border-plomo-0">
-                                        <div class="media">
-                                            <div class="text-center">
-                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%"> --}}
-                                                <i class="mdi mdi-thumb-up font-35 text-green-0"></i>
-                                            </div>
-                                            <div class="media-body align-self-center card3vista2">
-                                                <div class="text-right">
-                                                    <h4 class="font-20 my-0 font-weight-bold">
-                                                        <span data-plugin="counterup"></span>
-                                                    </h4>
-                                                    <p class="mb-0 mt-1 text-truncate">II.EE con Agua</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- end card-box-->
-                                </div>
-
-                                <div class="col-lg-3 col-md-6 col-sm-6">
-                                    <div class="card-box border border-plomo-0">
-                                        <div class="media">
-                                            <div class="text-center">
-                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%"> --}}
-                                                <i class="mdi mdi-thumb-down font-35 text-green-0"></i>
-                                            </div>
-                                            <div class="media-body align-self-center card4vista2">
-                                                <div class="text-right">
-                                                    <h4 class="font-20 my-0 font-weight-bold">
-                                                        <span data-plugin="counterup"></span>
-                                                    </h4>
-                                                    <p class="mb-0 mt-1 text-truncate">II.EE sin Agua</p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="card-body p-0">
+                                        <div id="anal1vista2" style="height: 20rem"></div>
                                     </div>
                                 </div>
                             </div>
 
-                            {{-- portles --}}
-
-                            <div class="row">
-
-                                <div class="col-lg-6">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent p-0">
-                                            <h3 class="text-black text-center font-weight-normal font-11"></h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <div id="anal1vista2" style="height: 20rem"></div>
-                                        </div>
+                            <div class="col-lg-6">
+                                <div class="card card-border border border-plomo-0">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black text-center font-weight-normal font-11"></h3>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div id="anal2vista2" style="height: 20rem"></div>
                                     </div>
                                 </div>
-
-                                <div class="col-lg-6">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent p-0">
-                                            <h3 class="text-black text-center font-weight-normal font-11"></h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <div id="anal2vista2" style="height: 20rem"></div>
-                                        </div>
-                                    </div>
-                                </div>
-
                             </div>
 
-                            <div class="row">
+                        </div>
 
-                                <div class="col-lg-6">
-                                    <div class="card card-border border border-plomo-0" style="height: 47.5rem">
-                                        <div class="card-header border-success-0 bg-transparent p-0">
-                                            <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <div id="anal3vista2" style="height: 100%"></div>
-                                        </div>
+                        <div class="row">
+
+                            <div class="col-lg-6">
+                                <div class="card card-border border border-plomo-0" style="height: 47.5rem">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div id="anal3vista2" style="height: 100%"></div>
                                     </div>
                                 </div>
-
-                                <div class="col-lg-6">
-                                    <div class="card card-border border border-plomo-0 vtabla1" style="height: 47.5rem">
-                                        <div class="card-header border-success-0 bg-transparent p-0">
-                                            <h3 class="text-black font-14 mb-0">Locales Educativos conectados a red de agua
-                                                potable, según Distritos
-                                            </h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <div class="table-responsive" id="vtabla1vista2">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
                             </div>
 
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent p-0">
-                                            <div class="card-widgets">
-                                                <button type="button" class="btn btn-success btn-xs"
-                                                    onclick="descargar1vista2()"><i class="fa fa-file-excel"></i>
-                                                    Descargar</button>
-                                            </div>
-                                            <h3 class="text-black font-14">Locales Educativos conectados</h3>
-                                        </div>
-                                        <div class="card-body pt-0 pb-0">
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <div class="table-responsive" id="vtabla3vista2">
-                                                    </div>
+                            <div class="col-lg-6">
+                                <div class="card card-border border border-plomo-0 vtabla1" style="height: 47.5rem">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black font-14 mb-0">Locales Educativos conectados a red de agua
+                                            potable, según Distritos
+                                        </h3>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="table-responsive" id="vtabla1vista2">
                                                 </div>
                                             </div>
                                         </div>
@@ -627,80 +644,102 @@
 
                         </div>
 
-                        <div class="tab-pane p-3 border border-success-0" id="vista3" role="tabpanel"
-                            aria-labelledby="vista3-tab">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card card-border border border-plomo-0">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <div class="card-widgets">
+                                            <button type="button" class="btn btn-success btn-xs"
+                                                onclick="descargar1vista2()"><i class="fa fa-file-excel"></i>
+                                                Descargar</button>
+                                        </div>
+                                        <h3 class="text-black font-14">Locales Educativos conectados</h3>
+                                    </div>
+                                    <div class="card-body pt-0 pb-0">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="table-responsive" id="vtabla3vista2">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                            <div class="row">
-                                <div class="col-lg-12 col-md-12">
-                                    <div class="card">
-                                        <div class="card-header bg-success-0 cabeceravista3">
-                                            <div class="card-widgets">
-                                                {{-- <button type="button" class="btn btn-orange-0 btn-xs"
+                    </div>
+
+                    <div class="tab-pane p-3 border border-success-0" id="vista3" role="tabpanel"
+                        aria-labelledby="vista3-tab">
+
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12">
+                                <div class="card">
+                                    <div class="card-header bg-success-0 cabeceravista3">
+                                        <div class="card-widgets">
+                                            {{-- <button type="button" class="btn btn-orange-0 btn-xs"
                                                     onclick="location.href=`{{ route('matriculageneral.niveleducativo.principal') }}`"
                                                     title=''><i class="fas fa-align-justify"></i> Nivel Educativo</button> --}}
-                                                {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf(6)"
+                                            {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf(6)"
                                                         title='FICHA TÉCNICA'><i class="fas fa-file"></i> Ficha Técnica</button> --}}
-                                                <button type="button" class="btn btn-orange-0 btn-xs"
-                                                    onclick="location.reload()" title='ACTUALIZAR'><i
-                                                        class=" fas fa-history"></i> Actualizar</button>
-                                                {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
+                                            <button type="button" class="btn btn-orange-0 btn-xs"
+                                                onclick="location.reload()" title='ACTUALIZAR'><i
+                                                    class=" fas fa-history"></i> Actualizar</button>
+                                            {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
                                                         title='IMPRIMIR'><i class="fa fa-print"></i></button> --}}
-                                            </div>
-                                            <h3 class="card-title text-white"></h3>
                                         </div>
-                                        <div class="card-body py-0">
-                                            <div class="form-group row align-items-center vh-5">
-                                                <div class="col-lg-5 col-md-5 col-sm-5">
-                                                    <h5 class="page-title font-11">CENSO EDUCATIVO-MINEDU,
-                                                        <br>{{ $actualizado }}
-                                                    </h5>
-                                                </div>
-                                                <div class="col-lg-1 col-md-1 col-sm-1  ">
-                                                    <select id="aniovista3" name="aniovista3"
-                                                        class="form-control btn-xs font-11"
-                                                        onchange="cargarCardsvista3();">
-                                                        <option value="0">AÑO</option>
-                                                        @foreach ($anios as $item)
-                                                            <option value="{{ $item->id }}"
-                                                                {{ $item->anio == $aniomax ? 'selected' : '' }}>
-                                                                {{ $item->anio }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-lg-2 col-md-2 col-sm-2">
-                                                    <select id="provinciavista3" name="provinciavista3"
-                                                        class="form-control btn-xs font-11"
-                                                        onchange="cargarDistritosvista3();cargarCardsvista3();">
-                                                        <option value="0">PROVINCIA</option>
-                                                        @foreach ($provincia as $item)
-                                                            <option value="{{ $item->id }}">{{ $item->nombre }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-lg-2 col-md-2 col-sm-2">
-                                                    <select id="distritovista3" name="distritovista3"
-                                                        class="form-control btn-xs font-11"
-                                                        onchange="cargarCardsvista3();">
-                                                        <option value="0">DISTRITO</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-lg-2 col-md-2 col-sm-2">
-                                                    <select id="areavista3" name="areavista3"
-                                                        class="form-control btn-xs font-11"
-                                                        onchange="cargarCardsvista3();">
-                                                        <option value="0">ÁMBITO GEOGRÁFICO</option>
-                                                        @foreach ($area as $item)
-                                                            <option value="{{ $item->id }}">{{ $item->nombre }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
+                                        <h3 class="card-title text-white"></h3>
+                                    </div>
+                                    <div class="card-body py-0">
+                                        <div class="form-group row align-items-center vh-5">
+                                            <div class="col-lg-5 col-md-5 col-sm-5">
+                                                <h5 class="page-title font-11">CENSO EDUCATIVO-MINEDU,
+                                                    <br>{{ $actualizado }}
+                                                </h5>
+                                            </div>
+                                            <div class="col-lg-1 col-md-1 col-sm-1  ">
+                                                <select id="aniovista3" name="aniovista3"
+                                                    class="form-control btn-xs font-11" onchange="cargarCardsvista3();">
+                                                    <option value="0">AÑO</option>
+                                                    @foreach ($anios as $item)
+                                                        <option value="{{ $item->id }}"
+                                                            {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                                            {{ $item->anio }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <select id="provinciavista3" name="provinciavista3"
+                                                    class="form-control btn-xs font-11"
+                                                    onchange="cargarDistritosvista3();cargarCardsvista3();">
+                                                    <option value="0">PROVINCIA</option>
+                                                    @foreach ($provincia as $item)
+                                                        <option value="{{ $item->id }}">{{ $item->nombre }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <select id="distritovista3" name="distritovista3"
+                                                    class="form-control btn-xs font-11" onchange="cargarCardsvista3();">
+                                                    <option value="0">DISTRITO</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <select id="areavista3" name="areavista3"
+                                                    class="form-control btn-xs font-11" onchange="cargarCardsvista3();">
+                                                    <option value="0">ÁMBITO GEOGRÁFICO</option>
+                                                    @foreach ($area as $item)
+                                                        <option value="{{ $item->id }}">{{ $item->nombre }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
 
-                                                {{-- <input type="hidden" id="serviciovista3" name="serviciovista3" --}}
-                                                {{-- value="4"> --}}
+                                            {{-- <input type="hidden" id="serviciovista3" name="serviciovista3" --}}
+                                            {{-- value="4"> --}}
 
-                                                {{-- <div class="col-lg-2 col-md-2 col-sm-2">
+                                            {{-- <div class="col-lg-2 col-md-2 col-sm-2">
                                                     <select id="servicio" name="servicio" class="form-control btn-xs font-11"
                                                         onchange="cargarCards();">
                                                         <option value="1">AGUA</option>
@@ -711,175 +750,150 @@
                                                     </select>
                                                 </div> --}}
 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Widget-4 -->
+                        <div class="row">
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="card-box border border-plomo-0">
+                                    <div class="media">
+                                        <div class="text-center">
+                                            {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                            <i class="mdi mdi-finance font-35 text-green-0"></i>
+                                        </div>
+                                        <div class="media-body align-self-center card1vista3">
+                                            <div class="text-right">
+                                                <h4 class="font-20 my-0 font-weight-bold">
+                                                    <span data-plugin="counterup"></span>
+                                                </h4>
+                                                <p class="mb-0 mt-1 text-truncate">Resultado del Indicador</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end card-box-->
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="card-box border border-plomo-0">
+                                    <div class="media">
+                                        <div class="text-center">
+                                            {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                            <i class=" mdi mdi-city font-35 text-green-0"></i>
+                                        </div>
+                                        <div class="media-body align-self-center card2vista3">
+                                            <div class="text-right">
+                                                <h4 class="font-20 my-0 font-weight-bold">
+                                                    <span data-plugin="counterup"></span>
+                                                </h4>
+                                                <p class="mb-0 mt-1 text-truncate">Total de II.EE</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end card-box-->
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="card-box border border-plomo-0">
+                                    <div class="media">
+                                        <div class="text-center">
+                                            {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                            <i class="mdi mdi-thumb-up font-35 text-green-0"></i>
+                                        </div>
+                                        <div class="media-body align-self-center card3vista3">
+                                            <div class="text-right">
+                                                <h4 class="font-20 my-0 font-weight-bold">
+                                                    <span data-plugin="counterup"></span>
+                                                </h4>
+                                                <p class="mb-0 mt-1 text-truncate">II.EE con Agua</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end card-box-->
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="card-box border border-plomo-0">
+                                    <div class="media">
+                                        <div class="text-center">
+                                            {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                            <i class="mdi mdi-thumb-down font-35 text-green-0"></i>
+                                        </div>
+                                        <div class="media-body align-self-center card4vista3">
+                                            <div class="text-right">
+                                                <h4 class="font-20 my-0 font-weight-bold">
+                                                    <span data-plugin="counterup"></span>
+                                                </h4>
+                                                <p class="mb-0 mt-1 text-truncate">II.EE sin Agua</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <!--Widget-4 -->
-                            <div class="row">
-                                <div class="col-lg-3 col-md-6 col-sm-6">
-                                    <div class="card-box border border-plomo-0">
-                                        <div class="media">
-                                            <div class="text-center">
-                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%"> --}}
-                                                <i class="mdi mdi-finance font-35 text-green-0"></i>
-                                            </div>
-                                            <div class="media-body align-self-center card1vista3">
-                                                <div class="text-right">
-                                                    <h4 class="font-20 my-0 font-weight-bold">
-                                                        <span data-plugin="counterup"></span>
-                                                    </h4>
-                                                    <p class="mb-0 mt-1 text-truncate">Resultado del Indicador</p>
-                                                </div>
-                                            </div>
-                                        </div>
+                        {{-- portles --}}
+
+                        <div class="row">
+
+                            <div class="col-lg-6">
+                                <div class="card card-border border border-plomo-0">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black text-center font-weight-normal font-11"></h3>
                                     </div>
-                                    <!-- end card-box-->
-                                </div>
-
-                                <div class="col-lg-3 col-md-6 col-sm-6">
-                                    <div class="card-box border border-plomo-0">
-                                        <div class="media">
-                                            <div class="text-center">
-                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%"> --}}
-                                                <i class=" mdi mdi-city font-35 text-green-0"></i>
-                                            </div>
-                                            <div class="media-body align-self-center card2vista3">
-                                                <div class="text-right">
-                                                    <h4 class="font-20 my-0 font-weight-bold">
-                                                        <span data-plugin="counterup"></span>
-                                                    </h4>
-                                                    <p class="mb-0 mt-1 text-truncate">Total de II.EE</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- end card-box-->
-                                </div>
-
-                                <div class="col-lg-3 col-md-6 col-sm-6">
-                                    <div class="card-box border border-plomo-0">
-                                        <div class="media">
-                                            <div class="text-center">
-                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%"> --}}
-                                                <i class="mdi mdi-thumb-up font-35 text-green-0"></i>
-                                            </div>
-                                            <div class="media-body align-self-center card3vista3">
-                                                <div class="text-right">
-                                                    <h4 class="font-20 my-0 font-weight-bold">
-                                                        <span data-plugin="counterup"></span>
-                                                    </h4>
-                                                    <p class="mb-0 mt-1 text-truncate">II.EE con Agua</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- end card-box-->
-                                </div>
-
-                                <div class="col-lg-3 col-md-6 col-sm-6">
-                                    <div class="card-box border border-plomo-0">
-                                        <div class="media">
-                                            <div class="text-center">
-                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%"> --}}
-                                                <i class="mdi mdi-thumb-down font-35 text-green-0"></i>
-                                            </div>
-                                            <div class="media-body align-self-center card4vista3">
-                                                <div class="text-right">
-                                                    <h4 class="font-20 my-0 font-weight-bold">
-                                                        <span data-plugin="counterup"></span>
-                                                    </h4>
-                                                    <p class="mb-0 mt-1 text-truncate">II.EE sin Agua</p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="card-body p-0">
+                                        <div id="anal1vista3" style="height: 20rem"></div>
                                     </div>
                                 </div>
                             </div>
 
-                            {{-- portles --}}
-
-                            <div class="row">
-
-                                <div class="col-lg-6">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent p-0">
-                                            <h3 class="text-black text-center font-weight-normal font-11"></h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <div id="anal1vista3" style="height: 20rem"></div>
-                                        </div>
+                            <div class="col-lg-6">
+                                <div class="card card-border border border-plomo-0">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black text-center font-weight-normal font-11"></h3>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div id="anal2vista3" style="height: 20rem"></div>
                                     </div>
                                 </div>
-
-                                <div class="col-lg-6">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent p-0">
-                                            <h3 class="text-black text-center font-weight-normal font-11"></h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <div id="anal2vista3" style="height: 20rem"></div>
-                                        </div>
-                                    </div>
-                                </div>
-
                             </div>
 
-                            <div class="row">
+                        </div>
 
-                                <div class="col-lg-6">
-                                    <div class="card card-border border border-plomo-0" style="height: 47.5rem">
-                                        <div class="card-header border-success-0 bg-transparent p-0">
-                                            <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <div id="anal3vista3" style="height: 100%"></div>
-                                        </div>
+                        <div class="row">
+
+                            <div class="col-lg-6">
+                                <div class="card card-border border border-plomo-0" style="height: 47.5rem">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div id="anal3vista3" style="height: 100%"></div>
                                     </div>
                                 </div>
-
-                                <div class="col-lg-6">
-                                    <div class="card card-border border border-plomo-0 vtabla1" style="height: 47.5rem">
-                                        <div class="card-header border-success-0 bg-transparent p-0">
-                                            <h3 class="text-black font-14 mb-0">Locales Educativos conectados a red de agua
-                                                potable, según Distritos
-                                            </h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <div class="table-responsive" id="vtabla1vista3">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
                             </div>
 
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent p-0">
-                                            <div class="card-widgets">
-                                                <button type="button" class="btn btn-success btn-xs"
-                                                    onclick="descargar1vista3()"><i class="fa fa-file-excel"></i>
-                                                    Descargar</button>
-                                            </div>
-                                            <h3 class="text-black font-14">Locales Educativos conectados</h3>
-                                        </div>
-                                        <div class="card-body pt-0 pb-0">
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <div class="table-responsive" id="vtabla3vista3">
-                                                    </div>
+                            <div class="col-lg-6">
+                                <div class="card card-border border border-plomo-0 vtabla1" style="height: 47.5rem">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black font-14 mb-0">Locales Educativos conectados a red de agua
+                                            potable, según Distritos
+                                        </h3>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="table-responsive" id="vtabla1vista3">
                                                 </div>
                                             </div>
                                         </div>
@@ -889,80 +903,102 @@
 
                         </div>
 
-                        <div class="tab-pane p-3 border border-success-0" id="vista4" role="tabpanel"
-                            aria-labelledby="vista4-tab">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card card-border border border-plomo-0">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <div class="card-widgets">
+                                            <button type="button" class="btn btn-success btn-xs"
+                                                onclick="descargar1vista3()"><i class="fa fa-file-excel"></i>
+                                                Descargar</button>
+                                        </div>
+                                        <h3 class="text-black font-14">Locales Educativos conectados</h3>
+                                    </div>
+                                    <div class="card-body pt-0 pb-0">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="table-responsive" id="vtabla3vista3">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                            <div class="row">
-                                <div class="col-lg-12 col-md-12">
-                                    <div class="card">
-                                        <div class="card-header bg-success-0 cabeceravista4">
-                                            <div class="card-widgets">
-                                                {{-- <button type="button" class="btn btn-orange-0 btn-xs"
+                    </div>
+
+                    <div class="tab-pane p-3 border border-success-0" id="vista4" role="tabpanel"
+                        aria-labelledby="vista4-tab">
+
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12">
+                                <div class="card">
+                                    <div class="card-header bg-success-0 cabeceravista4">
+                                        <div class="card-widgets">
+                                            {{-- <button type="button" class="btn btn-orange-0 btn-xs"
                                                     onclick="location.href=`{{ route('matriculageneral.niveleducativo.principal') }}`"
                                                     title=''><i class="fas fa-align-justify"></i> Nivel Educativo</button> --}}
-                                                {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf(6)"
+                                            {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf(6)"
                                                         title='FICHA TÉCNICA'><i class="fas fa-file"></i> Ficha Técnica</button> --}}
-                                                <button type="button" class="btn btn-orange-0 btn-xs"
-                                                    onclick="location.reload()" title='ACTUALIZAR'><i
-                                                        class=" fas fa-history"></i> Actualizar</button>
-                                                {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
+                                            <button type="button" class="btn btn-orange-0 btn-xs"
+                                                onclick="location.reload()" title='ACTUALIZAR'><i
+                                                    class=" fas fa-history"></i> Actualizar</button>
+                                            {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
                                                         title='IMPRIMIR'><i class="fa fa-print"></i></button> --}}
-                                            </div>
-                                            <h3 class="card-title text-white"></h3>
                                         </div>
-                                        <div class="card-body py-0">
-                                            <div class="form-group row align-items-center vh-5">
-                                                <div class="col-lg-5 col-md-5 col-sm-5">
-                                                    <h5 class="page-title font-11">CENSO EDUCATIVO-MINEDU,
-                                                        <br>{{ $actualizado }}
-                                                    </h5>
-                                                </div>
-                                                <div class="col-lg-1 col-md-1 col-sm-1  ">
-                                                    <select id="aniovista4" name="aniovista4"
-                                                        class="form-control btn-xs font-11"
-                                                        onchange="cargarCardsvista4();">
-                                                        <option value="0">AÑO</option>
-                                                        @foreach ($anios as $item)
-                                                            <option value="{{ $item->id }}"
-                                                                {{ $item->anio == $aniomax ? 'selected' : '' }}>
-                                                                {{ $item->anio }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-lg-2 col-md-2 col-sm-2">
-                                                    <select id="provinciavista4" name="provinciavista4"
-                                                        class="form-control btn-xs font-11"
-                                                        onchange="cargarDistritosvista4();cargarCardsvista4();">
-                                                        <option value="0">PROVINCIA</option>
-                                                        @foreach ($provincia as $item)
-                                                            <option value="{{ $item->id }}">{{ $item->nombre }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-lg-2 col-md-2 col-sm-2">
-                                                    <select id="distritovista4" name="distritovista4"
-                                                        class="form-control btn-xs font-11"
-                                                        onchange="cargarCardsvista4();">
-                                                        <option value="0">DISTRITO</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-lg-2 col-md-2 col-sm-2">
-                                                    <select id="areavista4" name="areavista4"
-                                                        class="form-control btn-xs font-11"
-                                                        onchange="cargarCardsvista4();">
-                                                        <option value="0">ÁMBITO GEOGRÁFICO</option>
-                                                        @foreach ($area as $item)
-                                                            <option value="{{ $item->id }}">{{ $item->nombre }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
+                                        <h3 class="card-title text-white"></h3>
+                                    </div>
+                                    <div class="card-body py-0">
+                                        <div class="form-group row align-items-center vh-5">
+                                            <div class="col-lg-5 col-md-5 col-sm-5">
+                                                <h5 class="page-title font-11">CENSO EDUCATIVO-MINEDU,
+                                                    <br>{{ $actualizado }}
+                                                </h5>
+                                            </div>
+                                            <div class="col-lg-1 col-md-1 col-sm-1  ">
+                                                <select id="aniovista4" name="aniovista4"
+                                                    class="form-control btn-xs font-11" onchange="cargarCardsvista4();">
+                                                    <option value="0">AÑO</option>
+                                                    @foreach ($anios as $item)
+                                                        <option value="{{ $item->id }}"
+                                                            {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                                            {{ $item->anio }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <select id="provinciavista4" name="provinciavista4"
+                                                    class="form-control btn-xs font-11"
+                                                    onchange="cargarDistritosvista4();cargarCardsvista4();">
+                                                    <option value="0">PROVINCIA</option>
+                                                    @foreach ($provincia as $item)
+                                                        <option value="{{ $item->id }}">{{ $item->nombre }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <select id="distritovista4" name="distritovista4"
+                                                    class="form-control btn-xs font-11" onchange="cargarCardsvista4();">
+                                                    <option value="0">DISTRITO</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <select id="areavista4" name="areavista4"
+                                                    class="form-control btn-xs font-11" onchange="cargarCardsvista4();">
+                                                    <option value="0">ÁMBITO GEOGRÁFICO</option>
+                                                    @foreach ($area as $item)
+                                                        <option value="{{ $item->id }}">{{ $item->nombre }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
 
-                                                {{-- <input type="hidden" id="serviciovista4" name="serviciovista4" --}}
-                                                {{-- value="4"> --}}
+                                            {{-- <input type="hidden" id="serviciovista4" name="serviciovista4" --}}
+                                            {{-- value="4"> --}}
 
-                                                {{-- <div class="col-lg-2 col-md-2 col-sm-2">
+                                            {{-- <div class="col-lg-2 col-md-2 col-sm-2">
                                                     <select id="servicio" name="servicio" class="form-control btn-xs font-11"
                                                         onchange="cargarCards();">
                                                         <option value="1">AGUA</option>
@@ -973,175 +1009,150 @@
                                                     </select>
                                                 </div> --}}
 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Widget-4 -->
+                        <div class="row">
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="card-box border border-plomo-0">
+                                    <div class="media">
+                                        <div class="text-center">
+                                            {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                            <i class="mdi mdi-finance font-35 text-green-0"></i>
+                                        </div>
+                                        <div class="media-body align-self-center card1vista4">
+                                            <div class="text-right">
+                                                <h4 class="font-20 my-0 font-weight-bold">
+                                                    <span data-plugin="counterup"></span>
+                                                </h4>
+                                                <p class="mb-0 mt-1 text-truncate">Resultado del Indicador</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end card-box-->
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="card-box border border-plomo-0">
+                                    <div class="media">
+                                        <div class="text-center">
+                                            {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                            <i class=" mdi mdi-city font-35 text-green-0"></i>
+                                        </div>
+                                        <div class="media-body align-self-center card2vista4">
+                                            <div class="text-right">
+                                                <h4 class="font-20 my-0 font-weight-bold">
+                                                    <span data-plugin="counterup"></span>
+                                                </h4>
+                                                <p class="mb-0 mt-1 text-truncate">Total de II.EE</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end card-box-->
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="card-box border border-plomo-0">
+                                    <div class="media">
+                                        <div class="text-center">
+                                            {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                            <i class="mdi mdi-thumb-up font-35 text-green-0"></i>
+                                        </div>
+                                        <div class="media-body align-self-center card3vista4">
+                                            <div class="text-right">
+                                                <h4 class="font-20 my-0 font-weight-bold">
+                                                    <span data-plugin="counterup"></span>
+                                                </h4>
+                                                <p class="mb-0 mt-1 text-truncate">II.EE con Agua</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end card-box-->
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="card-box border border-plomo-0">
+                                    <div class="media">
+                                        <div class="text-center">
+                                            {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                            <i class="mdi mdi-thumb-down font-35 text-green-0"></i>
+                                        </div>
+                                        <div class="media-body align-self-center card4vista4">
+                                            <div class="text-right">
+                                                <h4 class="font-20 my-0 font-weight-bold">
+                                                    <span data-plugin="counterup"></span>
+                                                </h4>
+                                                <p class="mb-0 mt-1 text-truncate">II.EE sin Agua</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <!--Widget-4 -->
-                            <div class="row">
-                                <div class="col-lg-3 col-md-6 col-sm-6">
-                                    <div class="card-box border border-plomo-0">
-                                        <div class="media">
-                                            <div class="text-center">
-                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%"> --}}
-                                                <i class="mdi mdi-finance font-35 text-green-0"></i>
-                                            </div>
-                                            <div class="media-body align-self-center card1vista4">
-                                                <div class="text-right">
-                                                    <h4 class="font-20 my-0 font-weight-bold">
-                                                        <span data-plugin="counterup"></span>
-                                                    </h4>
-                                                    <p class="mb-0 mt-1 text-truncate">Resultado del Indicador</p>
-                                                </div>
-                                            </div>
-                                        </div>
+                        {{-- portles --}}
+
+                        <div class="row">
+
+                            <div class="col-lg-6">
+                                <div class="card card-border border border-plomo-0">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black text-center font-weight-normal font-11"></h3>
                                     </div>
-                                    <!-- end card-box-->
-                                </div>
-
-                                <div class="col-lg-3 col-md-6 col-sm-6">
-                                    <div class="card-box border border-plomo-0">
-                                        <div class="media">
-                                            <div class="text-center">
-                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%"> --}}
-                                                <i class=" mdi mdi-city font-35 text-green-0"></i>
-                                            </div>
-                                            <div class="media-body align-self-center card2vista4">
-                                                <div class="text-right">
-                                                    <h4 class="font-20 my-0 font-weight-bold">
-                                                        <span data-plugin="counterup"></span>
-                                                    </h4>
-                                                    <p class="mb-0 mt-1 text-truncate">Total de II.EE</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- end card-box-->
-                                </div>
-
-                                <div class="col-lg-3 col-md-6 col-sm-6">
-                                    <div class="card-box border border-plomo-0">
-                                        <div class="media">
-                                            <div class="text-center">
-                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%"> --}}
-                                                <i class="mdi mdi-thumb-up font-35 text-green-0"></i>
-                                            </div>
-                                            <div class="media-body align-self-center card3vista4">
-                                                <div class="text-right">
-                                                    <h4 class="font-20 my-0 font-weight-bold">
-                                                        <span data-plugin="counterup"></span>
-                                                    </h4>
-                                                    <p class="mb-0 mt-1 text-truncate">II.EE con Agua</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- end card-box-->
-                                </div>
-
-                                <div class="col-lg-3 col-md-6 col-sm-6">
-                                    <div class="card-box border border-plomo-0">
-                                        <div class="media">
-                                            <div class="text-center">
-                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%"> --}}
-                                                <i class="mdi mdi-thumb-down font-35 text-green-0"></i>
-                                            </div>
-                                            <div class="media-body align-self-center card4vista4">
-                                                <div class="text-right">
-                                                    <h4 class="font-20 my-0 font-weight-bold">
-                                                        <span data-plugin="counterup"></span>
-                                                    </h4>
-                                                    <p class="mb-0 mt-1 text-truncate">II.EE sin Agua</p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="card-body p-0">
+                                        <div id="anal1vista4" style="height: 20rem"></div>
                                     </div>
                                 </div>
                             </div>
 
-                            {{-- portles --}}
-
-                            <div class="row">
-
-                                <div class="col-lg-6">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent p-0">
-                                            <h3 class="text-black text-center font-weight-normal font-11"></h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <div id="anal1vista4" style="height: 20rem"></div>
-                                        </div>
+                            <div class="col-lg-6">
+                                <div class="card card-border border border-plomo-0">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black text-center font-weight-normal font-11"></h3>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div id="anal2vista4" style="height: 20rem"></div>
                                     </div>
                                 </div>
-
-                                <div class="col-lg-6">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent p-0">
-                                            <h3 class="text-black text-center font-weight-normal font-11"></h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <div id="anal2vista4" style="height: 20rem"></div>
-                                        </div>
-                                    </div>
-                                </div>
-
                             </div>
 
-                            <div class="row">
+                        </div>
 
-                                <div class="col-lg-6">
-                                    <div class="card card-border border border-plomo-0" style="height: 47.5rem">
-                                        <div class="card-header border-success-0 bg-transparent p-0">
-                                            <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <div id="anal3vista4" style="height: 100%"></div>
-                                        </div>
+                        <div class="row">
+
+                            <div class="col-lg-6">
+                                <div class="card card-border border border-plomo-0" style="height: 47.5rem">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div id="anal3vista4" style="height: 100%"></div>
                                     </div>
                                 </div>
-
-                                <div class="col-lg-6">
-                                    <div class="card card-border border border-plomo-0 vtabla1" style="height: 47.5rem">
-                                        <div class="card-header border-success-0 bg-transparent p-0">
-                                            <h3 class="text-black font-14 mb-0">Locales Educativos conectados a red de agua
-                                                potable, según Distritos
-                                            </h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <div class="table-responsive" id="vtabla1vista4">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
                             </div>
 
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent p-0">
-                                            <div class="card-widgets">
-                                                <button type="button" class="btn btn-success btn-xs"
-                                                    onclick="descargar1vista4()"><i class="fa fa-file-excel"></i>
-                                                    Descargar</button>
-                                            </div>
-                                            <h3 class="text-black font-14">Locales Educativos conectados</h3>
-                                        </div>
-                                        <div class="card-body pt-0 pb-0">
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <div class="table-responsive" id="vtabla3vista4">
-                                                    </div>
+                            <div class="col-lg-6">
+                                <div class="card card-border border border-plomo-0 vtabla1" style="height: 47.5rem">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black font-14 mb-0">Locales Educativos conectados a red de agua
+                                            potable, según Distritos
+                                        </h3>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="table-responsive" id="vtabla1vista4">
                                                 </div>
                                             </div>
                                         </div>
@@ -1151,80 +1162,102 @@
 
                         </div>
 
-                        <div class="tab-pane p-3 border border-success-0" id="vista5" role="tabpanel"
-                            aria-labelledby="vista5-tab">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card card-border border border-plomo-0">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <div class="card-widgets">
+                                            <button type="button" class="btn btn-success btn-xs"
+                                                onclick="descargar1vista4()"><i class="fa fa-file-excel"></i>
+                                                Descargar</button>
+                                        </div>
+                                        <h3 class="text-black font-14">Locales Educativos conectados</h3>
+                                    </div>
+                                    <div class="card-body pt-0 pb-0">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="table-responsive" id="vtabla3vista4">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                            <div class="row">
-                                <div class="col-lg-12 col-md-12">
-                                    <div class="card">
-                                        <div class="card-header bg-success-0 cabeceravista5">
-                                            <div class="card-widgets">
-                                                {{-- <button type="button" class="btn btn-orange-0 btn-xs"
+                    </div>
+
+                    <div class="tab-pane p-3 border border-success-0" id="vista5" role="tabpanel"
+                        aria-labelledby="vista5-tab">
+
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12">
+                                <div class="card">
+                                    <div class="card-header bg-success-0 cabeceravista5">
+                                        <div class="card-widgets">
+                                            {{-- <button type="button" class="btn btn-orange-0 btn-xs"
                                                     onclick="location.href=`{{ route('matriculageneral.niveleducativo.principal') }}`"
                                                     title=''><i class="fas fa-align-justify"></i> Nivel Educativo</button> --}}
-                                                {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf(6)"
+                                            {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf(6)"
                                                         title='FICHA TÉCNICA'><i class="fas fa-file"></i> Ficha Técnica</button> --}}
-                                                <button type="button" class="btn btn-orange-0 btn-xs"
-                                                    onclick="location.reload()" title='ACTUALIZAR'><i
-                                                        class=" fas fa-history"></i> Actualizar</button>
-                                                {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
+                                            <button type="button" class="btn btn-orange-0 btn-xs"
+                                                onclick="location.reload()" title='ACTUALIZAR'><i
+                                                    class=" fas fa-history"></i> Actualizar</button>
+                                            {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
                                                         title='IMPRIMIR'><i class="fa fa-print"></i></button> --}}
-                                            </div>
-                                            <h3 class="card-title text-white"></h3>
                                         </div>
-                                        <div class="card-body py-0">
-                                            <div class="form-group row align-items-center vh-5">
-                                                <div class="col-lg-5 col-md-5 col-sm-5">
-                                                    <h5 class="page-title font-11">CENSO EDUCATIVO-MINEDU,
-                                                        <br>{{ $actualizado }}
-                                                    </h5>
-                                                </div>
-                                                <div class="col-lg-1 col-md-1 col-sm-1  ">
-                                                    <select id="aniovista5" name="aniovista5"
-                                                        class="form-control btn-xs font-11"
-                                                        onchange="cargarCardsvista5();">
-                                                        <option value="0">AÑO</option>
-                                                        @foreach ($anios as $item)
-                                                            <option value="{{ $item->id }}"
-                                                                {{ $item->anio == $aniomax ? 'selected' : '' }}>
-                                                                {{ $item->anio }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-lg-2 col-md-2 col-sm-2">
-                                                    <select id="provinciavista5" name="provinciavista5"
-                                                        class="form-control btn-xs font-11"
-                                                        onchange="cargarDistritosvista5();cargarCardsvista5();">
-                                                        <option value="0">PROVINCIA</option>
-                                                        @foreach ($provincia as $item)
-                                                            <option value="{{ $item->id }}">{{ $item->nombre }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-lg-2 col-md-2 col-sm-2">
-                                                    <select id="distritovista5" name="distritovista5"
-                                                        class="form-control btn-xs font-11"
-                                                        onchange="cargarCardsvista5();">
-                                                        <option value="0">DISTRITO</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-lg-2 col-md-2 col-sm-2">
-                                                    <select id="areavista5" name="areavista5"
-                                                        class="form-control btn-xs font-11"
-                                                        onchange="cargarCardsvista5();">
-                                                        <option value="0">ÁMBITO GEOGRÁFICO</option>
-                                                        @foreach ($area as $item)
-                                                            <option value="{{ $item->id }}">{{ $item->nombre }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
+                                        <h3 class="card-title text-white"></h3>
+                                    </div>
+                                    <div class="card-body py-0">
+                                        <div class="form-group row align-items-center vh-5">
+                                            <div class="col-lg-5 col-md-5 col-sm-5">
+                                                <h5 class="page-title font-11">CENSO EDUCATIVO-MINEDU,
+                                                    <br>{{ $actualizado }}
+                                                </h5>
+                                            </div>
+                                            <div class="col-lg-1 col-md-1 col-sm-1  ">
+                                                <select id="aniovista5" name="aniovista5"
+                                                    class="form-control btn-xs font-11" onchange="cargarCardsvista5();">
+                                                    <option value="0">AÑO</option>
+                                                    @foreach ($anios as $item)
+                                                        <option value="{{ $item->id }}"
+                                                            {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                                            {{ $item->anio }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <select id="provinciavista5" name="provinciavista5"
+                                                    class="form-control btn-xs font-11"
+                                                    onchange="cargarDistritosvista5();cargarCardsvista5();">
+                                                    <option value="0">PROVINCIA</option>
+                                                    @foreach ($provincia as $item)
+                                                        <option value="{{ $item->id }}">{{ $item->nombre }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <select id="distritovista5" name="distritovista5"
+                                                    class="form-control btn-xs font-11" onchange="cargarCardsvista5();">
+                                                    <option value="0">DISTRITO</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <select id="areavista5" name="areavista5"
+                                                    class="form-control btn-xs font-11" onchange="cargarCardsvista5();">
+                                                    <option value="0">ÁMBITO GEOGRÁFICO</option>
+                                                    @foreach ($area as $item)
+                                                        <option value="{{ $item->id }}">{{ $item->nombre }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
 
-                                                {{-- <input type="hidden" id="serviciovista5" name="serviciovista5" --}}
-                                                {{-- value="4"> --}}
+                                            {{-- <input type="hidden" id="serviciovista5" name="serviciovista5" --}}
+                                            {{-- value="4"> --}}
 
-                                                {{-- <div class="col-lg-2 col-md-2 col-sm-2">
+                                            {{-- <div class="col-lg-2 col-md-2 col-sm-2">
                                                     <select id="servicio" name="servicio" class="form-control btn-xs font-11"
                                                         onchange="cargarCards();">
                                                         <option value="1">AGUA</option>
@@ -1235,175 +1268,150 @@
                                                     </select>
                                                 </div> --}}
 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Widget-4 -->
+                        <div class="row">
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="card-box border border-plomo-0">
+                                    <div class="media">
+                                        <div class="text-center">
+                                            {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                            <i class="mdi mdi-finance font-35 text-green-0"></i>
+                                        </div>
+                                        <div class="media-body align-self-center card1vista5">
+                                            <div class="text-right">
+                                                <h4 class="font-20 my-0 font-weight-bold">
+                                                    <span data-plugin="counterup"></span>
+                                                </h4>
+                                                <p class="mb-0 mt-1 text-truncate">Resultado del Indicador</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end card-box-->
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="card-box border border-plomo-0">
+                                    <div class="media">
+                                        <div class="text-center">
+                                            {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                            <i class=" mdi mdi-city font-35 text-green-0"></i>
+                                        </div>
+                                        <div class="media-body align-self-center card2vista5">
+                                            <div class="text-right">
+                                                <h4 class="font-20 my-0 font-weight-bold">
+                                                    <span data-plugin="counterup"></span>
+                                                </h4>
+                                                <p class="mb-0 mt-1 text-truncate">Total de II.EE</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end card-box-->
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="card-box border border-plomo-0">
+                                    <div class="media">
+                                        <div class="text-center">
+                                            {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                            <i class="mdi mdi-thumb-up font-35 text-green-0"></i>
+                                        </div>
+                                        <div class="media-body align-self-center card3vista5">
+                                            <div class="text-right">
+                                                <h4 class="font-20 my-0 font-weight-bold">
+                                                    <span data-plugin="counterup"></span>
+                                                </h4>
+                                                <p class="mb-0 mt-1 text-truncate">II.EE con Agua</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end card-box-->
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="card-box border border-plomo-0">
+                                    <div class="media">
+                                        <div class="text-center">
+                                            {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
+                                                    class="" width="70%" height="70%"> --}}
+                                            <i class="mdi mdi-thumb-down font-35 text-green-0"></i>
+                                        </div>
+                                        <div class="media-body align-self-center card4vista5">
+                                            <div class="text-right">
+                                                <h4 class="font-20 my-0 font-weight-bold">
+                                                    <span data-plugin="counterup"></span>
+                                                </h4>
+                                                <p class="mb-0 mt-1 text-truncate">II.EE sin Agua</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <!--Widget-4 -->
-                            <div class="row">
-                                <div class="col-lg-3 col-md-6 col-sm-6">
-                                    <div class="card-box border border-plomo-0">
-                                        <div class="media">
-                                            <div class="text-center">
-                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%"> --}}
-                                                <i class="mdi mdi-finance font-35 text-green-0"></i>
-                                            </div>
-                                            <div class="media-body align-self-center card1vista5">
-                                                <div class="text-right">
-                                                    <h4 class="font-20 my-0 font-weight-bold">
-                                                        <span data-plugin="counterup"></span>
-                                                    </h4>
-                                                    <p class="mb-0 mt-1 text-truncate">Resultado del Indicador</p>
-                                                </div>
-                                            </div>
-                                        </div>
+                        {{-- portles --}}
+
+                        <div class="row">
+
+                            <div class="col-lg-6">
+                                <div class="card card-border border border-plomo-0">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black text-center font-weight-normal font-11"></h3>
                                     </div>
-                                    <!-- end card-box-->
-                                </div>
-
-                                <div class="col-lg-3 col-md-6 col-sm-6">
-                                    <div class="card-box border border-plomo-0">
-                                        <div class="media">
-                                            <div class="text-center">
-                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%"> --}}
-                                                <i class=" mdi mdi-city font-35 text-green-0"></i>
-                                            </div>
-                                            <div class="media-body align-self-center card2vista5">
-                                                <div class="text-right">
-                                                    <h4 class="font-20 my-0 font-weight-bold">
-                                                        <span data-plugin="counterup"></span>
-                                                    </h4>
-                                                    <p class="mb-0 mt-1 text-truncate">Total de II.EE</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- end card-box-->
-                                </div>
-
-                                <div class="col-lg-3 col-md-6 col-sm-6">
-                                    <div class="card-box border border-plomo-0">
-                                        <div class="media">
-                                            <div class="text-center">
-                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%"> --}}
-                                                <i class="mdi mdi-thumb-up font-35 text-green-0"></i>
-                                            </div>
-                                            <div class="media-body align-self-center card3vista5">
-                                                <div class="text-right">
-                                                    <h4 class="font-20 my-0 font-weight-bold">
-                                                        <span data-plugin="counterup"></span>
-                                                    </h4>
-                                                    <p class="mb-0 mt-1 text-truncate">II.EE con Agua</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- end card-box-->
-                                </div>
-
-                                <div class="col-lg-3 col-md-6 col-sm-6">
-                                    <div class="card-box border border-plomo-0">
-                                        <div class="media">
-                                            <div class="text-center">
-                                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt=""
-                                                    class="" width="70%" height="70%"> --}}
-                                                <i class="mdi mdi-thumb-down font-35 text-green-0"></i>
-                                            </div>
-                                            <div class="media-body align-self-center card4vista5">
-                                                <div class="text-right">
-                                                    <h4 class="font-20 my-0 font-weight-bold">
-                                                        <span data-plugin="counterup"></span>
-                                                    </h4>
-                                                    <p class="mb-0 mt-1 text-truncate">II.EE sin Agua</p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="card-body p-0">
+                                        <div id="anal1vista5" style="height: 20rem"></div>
                                     </div>
                                 </div>
                             </div>
 
-                            {{-- portles --}}
-
-                            <div class="row">
-
-                                <div class="col-lg-6">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent p-0">
-                                            <h3 class="text-black text-center font-weight-normal font-11"></h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <div id="anal1vista5" style="height: 20rem"></div>
-                                        </div>
+                            <div class="col-lg-6">
+                                <div class="card card-border border border-plomo-0">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black text-center font-weight-normal font-11"></h3>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div id="anal2vista5" style="height: 20rem"></div>
                                     </div>
                                 </div>
-
-                                <div class="col-lg-6">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent p-0">
-                                            <h3 class="text-black text-center font-weight-normal font-11"></h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <div id="anal2vista5" style="height: 20rem"></div>
-                                        </div>
-                                    </div>
-                                </div>
-
                             </div>
 
-                            <div class="row">
+                        </div>
 
-                                <div class="col-lg-6">
-                                    <div class="card card-border border border-plomo-0" style="height: 47.5rem">
-                                        <div class="card-header border-success-0 bg-transparent p-0">
-                                            <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <div id="anal3vista5" style="height: 100%"></div>
-                                        </div>
+                        <div class="row">
+
+                            <div class="col-lg-6">
+                                <div class="card card-border border border-plomo-0" style="height: 47.5rem">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div id="anal3vista5" style="height: 100%"></div>
                                     </div>
                                 </div>
-
-                                <div class="col-lg-6">
-                                    <div class="card card-border border border-plomo-0 vtabla1" style="height: 47.5rem">
-                                        <div class="card-header border-success-0 bg-transparent p-0">
-                                            <h3 class="text-black font-14 mb-0">Locales Educativos conectados a red de agua
-                                                potable, según Distritos
-                                            </h3>
-                                        </div>
-                                        <div class="card-body p-0">
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <div class="table-responsive" id="vtabla1vista5">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
                             </div>
 
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="card card-border border border-plomo-0">
-                                        <div class="card-header border-success-0 bg-transparent p-0">
-                                            <div class="card-widgets">
-                                                <button type="button" class="btn btn-success btn-xs"
-                                                    onclick="descargar1vista5()"><i class="fa fa-file-excel"></i>
-                                                    Descargar</button>
-                                            </div>
-                                            <h3 class="text-black font-14">Locales Educativos conectados</h3>
-                                        </div>
-                                        <div class="card-body pt-0 pb-0">
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <div class="table-responsive" id="vtabla3vista5">
-                                                    </div>
+                            <div class="col-lg-6">
+                                <div class="card card-border border border-plomo-0 vtabla1" style="height: 47.5rem">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black font-14 mb-0">Locales Educativos conectados a red de agua
+                                            potable, según Distritos
+                                        </h3>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="table-responsive" id="vtabla1vista5">
                                                 </div>
                                             </div>
                                         </div>
@@ -1412,42 +1420,62 @@
                             </div>
 
                         </div>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card card-border border border-plomo-0">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <div class="card-widgets">
+                                            <button type="button" class="btn btn-success btn-xs"
+                                                onclick="descargar1vista5()"><i class="fa fa-file-excel"></i>
+                                                Descargar</button>
+                                        </div>
+                                        <h3 class="text-black font-14">Locales Educativos conectados</h3>
+                                    </div>
+                                    <div class="card-body pt-0 pb-0">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="table-responsive" id="vtabla3vista5">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
+    <div id="modal_centropoblado" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="text-black font-14">
+                        Número de estudiantes matriculados en educación básica regular por
+                        centro poblado, según nivel educativo
+                    </h5>
+                    &nbsp;
+                    <button type="button" class="btn btn-success btn-xs text-right" onclick="descargar3()">
+                        <i class="fa fa-file-excel"></i> Descargar</button>
 
-
-        <!-- Bootstrap modal -->
-        <div id="modal_centropoblado" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-            aria-hidden="true" style="display: none;">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="text-black font-14">
-                            Número de estudiantes matriculados en educación básica regular por
-                            centro poblado, según nivel educativo
-                        </h5>
-                        &nbsp;
-                        <button type="button" class="btn btn-success btn-xs text-right" onclick="descargar3()">
-                            <i class="fa fa-file-excel"></i> Descargar</button>
-
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive" id="vtabla3">
                     </div>
-                    <div class="modal-body">
-                        <div class="table-responsive" id="vtabla3">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
-        <!-- End Bootstrap modal -->
     </div>
 @endsection
 
@@ -3201,7 +3229,7 @@
             Highcharts.chart(div, {
                 chart: {
                     type: 'bar',
-                    height: '100%'
+                    // height: '100%'
                     //marginLeft: 50,
                     //marginBottom: 90
                 },
