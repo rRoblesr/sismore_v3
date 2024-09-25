@@ -1228,7 +1228,9 @@ Route::get('/ImporReportePN05/Listar/ImportarDT', [ImporReportePN05Controller::c
 Route::post('/ImporReportePN05/ListaImportada', [ImporReportePN05Controller::class, 'ListaImportada'])->name('imporreportepn05.listarimportados');
 Route::get('/ImporReportePN05/eliminar/{id}', [ImporReportePN05Controller::class, 'eliminar'])->name('imporreportepn05.eliminar');
 
-Route::get('/Salud/PadronNominal/Seguimientos', [PadronNominal::class, 'seguimiento_ninio'])->name('salud.padronnominal.seguimiento');
+Route::get('/Salud/PadronNominal/Seguimientosx', [PadronNominal::class, 'seguimiento_ninio'])->name('salud.padronnominal.seguimiento');
+
+Route::get('/Salud/PadronNominal/Calidadx', [PadronNominal::class, 'calidad'])->name('salud.padronnominal.calidad');
 
 Route::get('/Salud/Nino', [SaludNino::class, 'PadronNominal'])->name('salud.nino.padron');
 Route::get('/Salud/Calidad', [SaludNino::class, 'ControlCalidad'])->name('salud.nino.calidad');

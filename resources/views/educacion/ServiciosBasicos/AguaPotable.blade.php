@@ -41,7 +41,7 @@
 
         /*  */
         .same-height {
-            height: 47.5rem;
+            height: 45.5rem;
             /* Ajusta la altura según tu necesidad */
         }
 
@@ -51,8 +51,52 @@
         }
 
         .table-responsive,
-        #anal3vista1 {
+        #anal3vista1,
+        #anal3vista2,
+        #anal3vista3,
+        #anal3vista4,
+        #anal3vista5,
+        #anal3vista6 {
             height: 100%;
+        }
+
+        #vtabla1vista1,
+        #vtabla1vista2,
+        #vtabla1vista3,
+        #vtabla1vista4,
+        #vtabla1vista5,
+        #vtabla1vista6 table {
+            table-layout: auto;
+            /* Deja que la tabla ajuste el tamaño según el contenido */
+        }
+
+        #vtabla1vista1,
+        #vtabla1vista2,
+        #vtabla1vista3,
+        #vtabla1vista4,
+        #vtabla1vista5,
+        #vtabla1vista6 table td {
+            white-space: nowrap;
+            /* Impide que el texto se divida en líneas múltiples */
+        }
+
+        #tabla1vista1,
+        #tabla1vista2,
+        #tabla1vista3,
+        #tabla1vista4,
+        #tabla1vista5,
+        #tabla1vista6 table.dataTable {
+            margin-bottom: 0px !important;
+        }
+
+        #aniovista1,
+        #aniovista2,
+        #aniovista3,
+        #aniovista4,
+        #aniovista5
+        {
+        padding-left: 2px;
+        padding-right: 2px;
         }
     </style>
 @endsection
@@ -144,58 +188,59 @@
                                                     <br>{{ $actualizado }}
                                                 </h5>
                                             </div>
-                                            <div class="col-lg-1 col-md-1 col-sm-1  ">
-                                                <select id="aniovista1" name="aniovista1"
-                                                    class="form-control btn-xs font-11" onchange="cargarCards();">
-                                                    <option value="0">AÑO</option>
-                                                    @foreach ($anios as $item)
-                                                        <option value="{{ $item->id }}"
-                                                            {{ $item->anio == $aniomax ? 'selected' : '' }}>
-                                                            {{ $item->anio }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="col-lg-2 col-md-2 col-sm-2">
-                                                <select id="provinciavista1" name="provinciavista1"
-                                                    class="form-control btn-xs font-11"
-                                                    onchange="cargarDistritos();cargarCards();">
-                                                    <option value="0">PROVINCIA</option>
-                                                    @foreach ($provincia as $item)
-                                                        <option value="{{ $item->id }}">{{ $item->nombre }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="col-lg-2 col-md-2 col-sm-2">
-                                                <select id="distritovista1" name="distritovista1"
-                                                    class="form-control btn-xs font-11" onchange="cargarCards();">
-                                                    <option value="0">DISTRITO</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-lg-2 col-md-2 col-sm-2">
-                                                <select id="areavista1" name="areavista1"
-                                                    class="form-control btn-xs font-11" onchange="cargarCards();">
-                                                    <option value="0">ÁMBITO GEOGRÁFICO</option>
-                                                    @foreach ($area as $item)
-                                                        <option value="{{ $item->id }}">{{ $item->nombre }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
 
-                                            {{-- <input type="hidden" id="serviciovista1" name="serviciovista1" --}}
-                                            {{-- value="4"> --}}
-
-                                            {{-- <div class="col-lg-2 col-md-2 col-sm-2">
-                                                    <select id="servicio" name="servicio" class="form-control btn-xs font-11"
-                                                        onchange="cargarCards();">
-                                                        <option value="1">AGUA</option>
-                                                        <option value="2">DESAGUE</option>
-                                                        <option value="3">LUZ</option>
-                                                        <option value="4">TRES SERVICIOS</option>
-                                                        <option value="5">INTERNET</option>
+                                            <div class="col-lg-1 col-md-1 col-sm-1">
+                                                <div class="custom-select-container">
+                                                    <label for="aniovista1">AÑO</label>
+                                                    <select id="aniovista1" name="aniovista1"
+                                                        class="form-control form-control-sm" onchange="cargarCards();">
+                                                        @foreach ($anios as $item)
+                                                            <option value="{{ $item->id }}"
+                                                                {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                                                {{ $item->anio }}</option>
+                                                        @endforeach
                                                     </select>
-                                                </div> --}}
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <div class="custom-select-container">
+                                                    <label for="provinciavista1">PROVINCIA</label>
+                                                    <select id="provinciavista1" name="provinciavista1"
+                                                        class="form-control form-control-sm"
+                                                        onchange="cargarDistritos();cargarCards();">
+                                                        <option value="0">TODOS</option>
+                                                        @foreach ($provincia as $item)
+                                                            <option value="{{ $item->id }}">{{ $item->nombre }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <div class="custom-select-container">
+                                                    <label for="distritovista1">DISTRITO</label>
+                                                    <select id="distritovista1" name="distritovista1"
+                                                        class="form-control form-control-sm" onchange="cargarCards();">
+                                                        <option value="0">TODOS</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <div class="custom-select-container">
+                                                    <label for="areavista1">ÁMBITO GEOGRÁFICO</label>
+                                                    <select id="areavista1" name="areavista1"
+                                                        class="form-control form-control-sm" onchange="cargarCards();">
+                                                        <option value="0">TODOS</option>
+                                                        @foreach ($area as $item)
+                                                            <option value="{{ $item->id }}">{{ $item->nombre }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
 
                                         </div>
                                     </div>
@@ -438,9 +483,74 @@
                                                     <br>{{ $actualizado }}
                                                 </h5>
                                             </div>
+
+                                            <div class="col-lg-1 col-md-1 col-sm-1 d-flex align-items-center">
+                                                <div class="custom-select-container">
+                                                    <label for="aniovista2">AÑO</label>
+                                                    <select id="aniovista2" name="aniovista2"
+                                                        class="form-control form-control-sm"
+                                                        onchange="cargarCardsvista2();">
+                                                        @foreach ($anios as $item)
+                                                            <option value="{{ $item->id }}"
+                                                                {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                                                {{ $item->anio }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <div class="custom-select-container">
+                                                    <label for="provinciavista2">PROVINCIA</label>
+                                                    <select id="provinciavista2" name="provinciavista2"
+                                                        class="form-control form-control-sm"
+                                                        onchange="cargarDistritosvista2();cargarCardsvista2();">
+                                                        <option value="0">TODOS</option>
+                                                        @foreach ($provincia as $item)
+                                                            <option value="{{ $item->id }}">{{ $item->nombre }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <div class="custom-select-container">
+                                                    <label for="distritovista2">DISTRITO</label>
+                                                    <select id="distritovista2" name="distritovista2"
+                                                        class="form-control form-control-sm"
+                                                        onchange="cargarCardsvista2();">
+                                                        <option value="0">TODOS</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <div class="custom-select-container">
+                                                    <label for="areavista2">ÁMBITO GEOGRÁFICO</label>
+                                                    <select id="areavista2" name="areavista2"
+                                                        class="form-control form-control-sm"
+                                                        onchange="cargarCardsvista2();">
+                                                        <option value="0">TODOS</option>
+                                                        @foreach ($area as $item)
+                                                            <option value="{{ $item->id }}">{{ $item->nombre }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        {{--  --}}
+                                        {{-- <div class="form-group row align-items-center vh-5">
+                                            <div class="col-lg-5 col-md-5 col-sm-5">
+                                                <h5 class="page-title font-11">CENSO EDUCATIVO-MINEDU,
+                                                    <br>{{ $actualizado }}
+                                                </h5>
+                                            </div>
                                             <div class="col-lg-1 col-md-1 col-sm-1  ">
                                                 <select id="aniovista2" name="aniovista2"
-                                                    class="form-control btn-xs font-11" onchange="cargarCardsvista2();">
+                                                    class="form-control form-control-sm" onchange="cargarCardsvista2();">
                                                     <option value="0">AÑO</option>
                                                     @foreach ($anios as $item)
                                                         <option value="{{ $item->id }}"
@@ -451,7 +561,7 @@
                                             </div>
                                             <div class="col-lg-2 col-md-2 col-sm-2">
                                                 <select id="provinciavista2" name="provinciavista2"
-                                                    class="form-control btn-xs font-11"
+                                                    class="form-control form-control-sm"
                                                     onchange="cargarDistritosvista2();cargarCardsvista2();">
                                                     <option value="0">PROVINCIA</option>
                                                     @foreach ($provincia as $item)
@@ -462,13 +572,13 @@
                                             </div>
                                             <div class="col-lg-2 col-md-2 col-sm-2">
                                                 <select id="distritovista2" name="distritovista2"
-                                                    class="form-control btn-xs font-11" onchange="cargarCardsvista2();">
+                                                    class="form-control form-control-sm" onchange="cargarCardsvista2();">
                                                     <option value="0">DISTRITO</option>
                                                 </select>
                                             </div>
                                             <div class="col-lg-2 col-md-2 col-sm-2">
                                                 <select id="areavista2" name="areavista2"
-                                                    class="form-control btn-xs font-11" onchange="cargarCardsvista2();">
+                                                    class="form-control form-control-sm" onchange="cargarCardsvista2();">
                                                     <option value="0">ÁMBITO GEOGRÁFICO</option>
                                                     @foreach ($area as $item)
                                                         <option value="{{ $item->id }}">{{ $item->nombre }}
@@ -477,21 +587,8 @@
                                                 </select>
                                             </div>
 
-                                            {{-- <input type="hidden" id="serviciovista2" name="serviciovista2" --}}
-                                            {{-- value="4"> --}}
 
-                                            {{-- <div class="col-lg-2 col-md-2 col-sm-2">
-                                                    <select id="servicio" name="servicio" class="form-control btn-xs font-11"
-                                                        onchange="cargarCards();">
-                                                        <option value="1">AGUA</option>
-                                                        <option value="2">DESAGUE</option>
-                                                        <option value="3">LUZ</option>
-                                                        <option value="4">TRES SERVICIOS</option>
-                                                        <option value="5">INTERNET</option>
-                                                    </select>
-                                                </div> --}}
-
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
@@ -612,6 +709,36 @@
                         </div>
 
                         <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <div class="card card-border border border-plomo-0 same-height">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div id="anal3vista2"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6">
+                                <div class="card card-border border border-plomo-0 same-height">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black font-14 mb-0">Locales Educativos conectados a red de agua
+                                            potable, según Distritos
+                                        </h3>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="table-responsive" id="vtabla1vista2"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- <div class="row">
 
                             <div class="col-lg-6">
                                 <div class="card card-border border border-plomo-0" style="height: 47.5rem">
@@ -642,7 +769,7 @@
                                 </div>
                             </div>
 
-                        </div>
+                        </div> --}}
 
                         <div class="row">
                             <div class="col-lg-12">
@@ -697,9 +824,74 @@
                                                     <br>{{ $actualizado }}
                                                 </h5>
                                             </div>
+
+                                            <div class="col-lg-1 col-md-1 col-sm-1 d-flex align-items-center">
+                                                <div class="custom-select-container">
+                                                    <label for="aniovista3">AÑO</label>
+                                                    <select id="aniovista3" name="aniovista3"
+                                                        class="form-control form-control-sm"
+                                                        onchange="cargarCardsvista3();">
+                                                        @foreach ($anios as $item)
+                                                            <option value="{{ $item->id }}"
+                                                                {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                                                {{ $item->anio }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <div class="custom-select-container">
+                                                    <label for="provinciavista3">PROVINCIA</label>
+                                                    <select id="provinciavista3" name="provinciavista3"
+                                                        class="form-control form-control-sm"
+                                                        onchange="cargarDistritosvista3();cargarCardsvista3();">
+                                                        <option value="0">TODOS</option>
+                                                        @foreach ($provincia as $item)
+                                                            <option value="{{ $item->id }}">{{ $item->nombre }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <div class="custom-select-container">
+                                                    <label for="distritovista3">DISTRITO</label>
+                                                    <select id="distritovista3" name="distritovista3"
+                                                        class="form-control form-control-sm"
+                                                        onchange="cargarCardsvista3();">
+                                                        <option value="0">TODOS</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <div class="custom-select-container">
+                                                    <label for="areavista3">ÁMBITO GEOGRÁFICO</label>
+                                                    <select id="areavista3" name="areavista3"
+                                                        class="form-control form-control-sm"
+                                                        onchange="cargarCardsvista3();">
+                                                        <option value="0">TODOS</option>
+                                                        @foreach ($area as $item)
+                                                            <option value="{{ $item->id }}">{{ $item->nombre }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        {{--  --}}
+                                        {{-- <div class="form-group row align-items-center vh-5">
+                                            <div class="col-lg-5 col-md-5 col-sm-5">
+                                                <h5 class="page-title font-11">CENSO EDUCATIVO-MINEDU,
+                                                    <br>{{ $actualizado }}
+                                                </h5>
+                                            </div>
                                             <div class="col-lg-1 col-md-1 col-sm-1  ">
                                                 <select id="aniovista3" name="aniovista3"
-                                                    class="form-control btn-xs font-11" onchange="cargarCardsvista3();">
+                                                    class="form-control form-control-sm" onchange="cargarCardsvista3();">
                                                     <option value="0">AÑO</option>
                                                     @foreach ($anios as $item)
                                                         <option value="{{ $item->id }}"
@@ -710,7 +902,7 @@
                                             </div>
                                             <div class="col-lg-2 col-md-2 col-sm-2">
                                                 <select id="provinciavista3" name="provinciavista3"
-                                                    class="form-control btn-xs font-11"
+                                                    class="form-control form-control-sm"
                                                     onchange="cargarDistritosvista3();cargarCardsvista3();">
                                                     <option value="0">PROVINCIA</option>
                                                     @foreach ($provincia as $item)
@@ -721,13 +913,13 @@
                                             </div>
                                             <div class="col-lg-2 col-md-2 col-sm-2">
                                                 <select id="distritovista3" name="distritovista3"
-                                                    class="form-control btn-xs font-11" onchange="cargarCardsvista3();">
+                                                    class="form-control form-control-sm" onchange="cargarCardsvista3();">
                                                     <option value="0">DISTRITO</option>
                                                 </select>
                                             </div>
                                             <div class="col-lg-2 col-md-2 col-sm-2">
                                                 <select id="areavista3" name="areavista3"
-                                                    class="form-control btn-xs font-11" onchange="cargarCardsvista3();">
+                                                    class="form-control form-control-sm" onchange="cargarCardsvista3();">
                                                     <option value="0">ÁMBITO GEOGRÁFICO</option>
                                                     @foreach ($area as $item)
                                                         <option value="{{ $item->id }}">{{ $item->nombre }}
@@ -735,22 +927,9 @@
                                                     @endforeach
                                                 </select>
                                             </div>
+ 
 
-                                            {{-- <input type="hidden" id="serviciovista3" name="serviciovista3" --}}
-                                            {{-- value="4"> --}}
-
-                                            {{-- <div class="col-lg-2 col-md-2 col-sm-2">
-                                                    <select id="servicio" name="servicio" class="form-control btn-xs font-11"
-                                                        onchange="cargarCards();">
-                                                        <option value="1">AGUA</option>
-                                                        <option value="2">DESAGUE</option>
-                                                        <option value="3">LUZ</option>
-                                                        <option value="4">TRES SERVICIOS</option>
-                                                        <option value="5">INTERNET</option>
-                                                    </select>
-                                                </div> --}}
-
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
@@ -871,6 +1050,36 @@
                         </div>
 
                         <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <div class="card card-border border border-plomo-0 same-height">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div id="anal3vista3"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6">
+                                <div class="card card-border border border-plomo-0 same-height">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black font-14 mb-0">Locales Educativos conectados a red de agua
+                                            potable, según Distritos
+                                        </h3>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="table-responsive" id="vtabla1vista3"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- <div class="row">
 
                             <div class="col-lg-6">
                                 <div class="card card-border border border-plomo-0" style="height: 47.5rem">
@@ -901,7 +1110,7 @@
                                 </div>
                             </div>
 
-                        </div>
+                        </div> --}}
 
                         <div class="row">
                             <div class="col-lg-12">
@@ -956,9 +1165,74 @@
                                                     <br>{{ $actualizado }}
                                                 </h5>
                                             </div>
+
+                                            <div class="col-lg-1 col-md-1 col-sm-1 d-flex align-items-center">
+                                                <div class="custom-select-container">
+                                                    <label for="aniovista4">AÑO</label>
+                                                    <select id="aniovista4" name="aniovista4"
+                                                        class="form-control form-control-sm"
+                                                        onchange="cargarCardsvista4();">
+                                                        @foreach ($anios as $item)
+                                                            <option value="{{ $item->id }}"
+                                                                {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                                                {{ $item->anio }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <div class="custom-select-container">
+                                                    <label for="provinciavista4">PROVINCIA</label>
+                                                    <select id="provinciavista4" name="provinciavista4"
+                                                        class="form-control form-control-sm"
+                                                        onchange="cargarDistritosvista4();cargarCardsvista4();">
+                                                        <option value="0">TODOS</option>
+                                                        @foreach ($provincia as $item)
+                                                            <option value="{{ $item->id }}">{{ $item->nombre }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <div class="custom-select-container">
+                                                    <label for="distritovista4">DISTRITO</label>
+                                                    <select id="distritovista4" name="distritovista4"
+                                                        class="form-control form-control-sm"
+                                                        onchange="cargarCardsvista4();">
+                                                        <option value="0">TODOS</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <div class="custom-select-container">
+                                                    <label for="areavista4">ÁMBITO GEOGRÁFICO</label>
+                                                    <select id="areavista4" name="areavista4"
+                                                        class="form-control form-control-sm"
+                                                        onchange="cargarCardsvista4();">
+                                                        <option value="0">TODOS</option>
+                                                        @foreach ($area as $item)
+                                                            <option value="{{ $item->id }}">{{ $item->nombre }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        {{--  --}}
+                                        {{-- <div class="form-group row align-items-center vh-5">
+                                            <div class="col-lg-5 col-md-5 col-sm-5">
+                                                <h5 class="page-title font-11">CENSO EDUCATIVO-MINEDU,
+                                                    <br>{{ $actualizado }}
+                                                </h5>
+                                            </div>
                                             <div class="col-lg-1 col-md-1 col-sm-1  ">
                                                 <select id="aniovista4" name="aniovista4"
-                                                    class="form-control btn-xs font-11" onchange="cargarCardsvista4();">
+                                                    class="form-control form-control-sm" onchange="cargarCardsvista4();">
                                                     <option value="0">AÑO</option>
                                                     @foreach ($anios as $item)
                                                         <option value="{{ $item->id }}"
@@ -969,7 +1243,7 @@
                                             </div>
                                             <div class="col-lg-2 col-md-2 col-sm-2">
                                                 <select id="provinciavista4" name="provinciavista4"
-                                                    class="form-control btn-xs font-11"
+                                                    class="form-control form-control-sm"
                                                     onchange="cargarDistritosvista4();cargarCardsvista4();">
                                                     <option value="0">PROVINCIA</option>
                                                     @foreach ($provincia as $item)
@@ -980,13 +1254,13 @@
                                             </div>
                                             <div class="col-lg-2 col-md-2 col-sm-2">
                                                 <select id="distritovista4" name="distritovista4"
-                                                    class="form-control btn-xs font-11" onchange="cargarCardsvista4();">
+                                                    class="form-control form-control-sm" onchange="cargarCardsvista4();">
                                                     <option value="0">DISTRITO</option>
                                                 </select>
                                             </div>
                                             <div class="col-lg-2 col-md-2 col-sm-2">
                                                 <select id="areavista4" name="areavista4"
-                                                    class="form-control btn-xs font-11" onchange="cargarCardsvista4();">
+                                                    class="form-control form-control-sm" onchange="cargarCardsvista4();">
                                                     <option value="0">ÁMBITO GEOGRÁFICO</option>
                                                     @foreach ($area as $item)
                                                         <option value="{{ $item->id }}">{{ $item->nombre }}
@@ -994,22 +1268,7 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-
-                                            {{-- <input type="hidden" id="serviciovista4" name="serviciovista4" --}}
-                                            {{-- value="4"> --}}
-
-                                            {{-- <div class="col-lg-2 col-md-2 col-sm-2">
-                                                    <select id="servicio" name="servicio" class="form-control btn-xs font-11"
-                                                        onchange="cargarCards();">
-                                                        <option value="1">AGUA</option>
-                                                        <option value="2">DESAGUE</option>
-                                                        <option value="3">LUZ</option>
-                                                        <option value="4">TRES SERVICIOS</option>
-                                                        <option value="5">INTERNET</option>
-                                                    </select>
-                                                </div> --}}
-
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
@@ -1130,6 +1389,36 @@
                         </div>
 
                         <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <div class="card card-border border border-plomo-0 same-height">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div id="anal3vista4"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6">
+                                <div class="card card-border border border-plomo-0 same-height">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black font-14 mb-0">Locales Educativos conectados a red de agua
+                                            potable, según Distritos
+                                        </h3>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="table-responsive" id="vtabla1vista4"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- <div class="row">
 
                             <div class="col-lg-6">
                                 <div class="card card-border border border-plomo-0" style="height: 47.5rem">
@@ -1160,7 +1449,7 @@
                                 </div>
                             </div>
 
-                        </div>
+                        </div> --}}
 
                         <div class="row">
                             <div class="col-lg-12">
@@ -1215,9 +1504,74 @@
                                                     <br>{{ $actualizado }}
                                                 </h5>
                                             </div>
+
+                                            <div class="col-lg-1 col-md-1 col-sm-1 d-flex align-items-center">
+                                                <div class="custom-select-container">
+                                                    <label for="aniovista5">AÑO</label>
+                                                    <select id="aniovista5" name="aniovista5"
+                                                        class="form-control form-control-sm"
+                                                        onchange="cargarCardsvista5();">
+                                                        @foreach ($anios as $item)
+                                                            <option value="{{ $item->id }}"
+                                                                {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                                                {{ $item->anio }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <div class="custom-select-container">
+                                                    <label for="provinciavista5">PROVINCIA</label>
+                                                    <select id="provinciavista5" name="provinciavista5"
+                                                        class="form-control form-control-sm"
+                                                        onchange="cargarDistritosvista5();cargarCardsvista5();">
+                                                        <option value="0">TODOS</option>
+                                                        @foreach ($provincia as $item)
+                                                            <option value="{{ $item->id }}">{{ $item->nombre }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <div class="custom-select-container">
+                                                    <label for="distritovista5">DISTRITO</label>
+                                                    <select id="distritovista5" name="distritovista5"
+                                                        class="form-control form-control-sm"
+                                                        onchange="cargarCardsvista5();">
+                                                        <option value="0">TODOS</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <div class="custom-select-container">
+                                                    <label for="areavista5">ÁMBITO GEOGRÁFICO</label>
+                                                    <select id="areavista5" name="areavista5"
+                                                        class="form-control form-control-sm"
+                                                        onchange="cargarCardsvista5();">
+                                                        <option value="0">TODOS</option>
+                                                        @foreach ($area as $item)
+                                                            <option value="{{ $item->id }}">{{ $item->nombre }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        {{--  --}}
+                                        {{-- <div class="form-group row align-items-center vh-5">
+                                            <div class="col-lg-5 col-md-5 col-sm-5">
+                                                <h5 class="page-title font-11">CENSO EDUCATIVO-MINEDU,
+                                                    <br>{{ $actualizado }}
+                                                </h5>
+                                            </div>
                                             <div class="col-lg-1 col-md-1 col-sm-1  ">
                                                 <select id="aniovista5" name="aniovista5"
-                                                    class="form-control btn-xs font-11" onchange="cargarCardsvista5();">
+                                                    class="form-control form-control-sm" onchange="cargarCardsvista5();">
                                                     <option value="0">AÑO</option>
                                                     @foreach ($anios as $item)
                                                         <option value="{{ $item->id }}"
@@ -1228,7 +1582,7 @@
                                             </div>
                                             <div class="col-lg-2 col-md-2 col-sm-2">
                                                 <select id="provinciavista5" name="provinciavista5"
-                                                    class="form-control btn-xs font-11"
+                                                    class="form-control form-control-sm"
                                                     onchange="cargarDistritosvista5();cargarCardsvista5();">
                                                     <option value="0">PROVINCIA</option>
                                                     @foreach ($provincia as $item)
@@ -1239,13 +1593,13 @@
                                             </div>
                                             <div class="col-lg-2 col-md-2 col-sm-2">
                                                 <select id="distritovista5" name="distritovista5"
-                                                    class="form-control btn-xs font-11" onchange="cargarCardsvista5();">
+                                                    class="form-control form-control-sm" onchange="cargarCardsvista5();">
                                                     <option value="0">DISTRITO</option>
                                                 </select>
                                             </div>
                                             <div class="col-lg-2 col-md-2 col-sm-2">
                                                 <select id="areavista5" name="areavista5"
-                                                    class="form-control btn-xs font-11" onchange="cargarCardsvista5();">
+                                                    class="form-control form-control-sm" onchange="cargarCardsvista5();">
                                                     <option value="0">ÁMBITO GEOGRÁFICO</option>
                                                     @foreach ($area as $item)
                                                         <option value="{{ $item->id }}">{{ $item->nombre }}
@@ -1253,22 +1607,9 @@
                                                     @endforeach
                                                 </select>
                                             </div>
+ 
 
-                                            {{-- <input type="hidden" id="serviciovista5" name="serviciovista5" --}}
-                                            {{-- value="4"> --}}
-
-                                            {{-- <div class="col-lg-2 col-md-2 col-sm-2">
-                                                    <select id="servicio" name="servicio" class="form-control btn-xs font-11"
-                                                        onchange="cargarCards();">
-                                                        <option value="1">AGUA</option>
-                                                        <option value="2">DESAGUE</option>
-                                                        <option value="3">LUZ</option>
-                                                        <option value="4">TRES SERVICIOS</option>
-                                                        <option value="5">INTERNET</option>
-                                                    </select>
-                                                </div> --}}
-
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
@@ -1389,6 +1730,36 @@
                         </div>
 
                         <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <div class="card card-border border border-plomo-0 same-height">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div id="anal3vista5"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6">
+                                <div class="card card-border border border-plomo-0 same-height">
+                                    <div class="card-header border-success-0 bg-transparent p-0">
+                                        <h3 class="text-black font-14 mb-0">Locales Educativos conectados a red de agua
+                                            potable, según Distritos
+                                        </h3>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="table-responsive" id="vtabla1vista5"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- <div class="row">
 
                             <div class="col-lg-6">
                                 <div class="card card-border border border-plomo-0" style="height: 47.5rem">
@@ -1419,7 +1790,7 @@
                                 </div>
                             </div>
 
-                        </div>
+                        </div> --}}
 
                         <div class="row">
                             <div class="col-lg-12">
@@ -1530,7 +1901,33 @@
                 },
                 type: "GET",
                 dataType: "JSON",
-                beforeSend: function() {},
+                beforeSend: function() {
+                    if (div == "head") {
+                        $('.card1vista1 span').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('.card2vista1 span').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('.card3vista1 span').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('.card4vista1 span').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "anal1") {
+                        $('#' + div + 'vista1').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "anal2") {
+                        $('#' + div + 'vista1').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "anal3") {
+                        $('#' + div + 'vista1').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "tabla1") {
+                        $('#v' + div + 'vista1').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "tabla2") {
+                        $('#v' + div + 'vista1').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    }
+                },
                 success: function(data) {
                     if (div == 'head') {
                         $('.card1vista1 span').text(data.valor1 + "%");
@@ -1636,7 +2033,31 @@
                 type: "GET",
                 dataType: "JSON",
                 beforeSend: function() {
-
+                    if (div == "head") {
+                        $('.card1vista2 span').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('.card2vista2 span').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('.card3vista2 span').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('.card4vista2 span').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "anal1") {
+                        $('#' + div + 'vista2').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "anal2") {
+                        $('#' + div + 'vista2').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "anal3") {
+                        $('#' + div + 'vista2').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "tabla1") {
+                        $('#v' + div + 'vista2').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "tabla2") {
+                        $('#v' + div + 'vista2').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    }
                 },
                 success: function(data) {
                     if (div == 'head') {
@@ -1741,7 +2162,31 @@
                 type: "GET",
                 dataType: "JSON",
                 beforeSend: function() {
-
+                    if (div == "head") {
+                        $('.card1vista3 span').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('.card2vista3 span').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('.card3vista3 span').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('.card4vista3 span').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "anal1") {
+                        $('#' + div + 'vista3').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "anal2") {
+                        $('#' + div + 'vista3').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "anal3") {
+                        $('#' + div + 'vista3').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "tabla1") {
+                        $('#v' + div + 'vista3').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "tabla2") {
+                        $('#v' + div + 'vista3').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    }
                 },
                 success: function(data) {
                     if (div == 'head') {
@@ -1846,7 +2291,31 @@
                 type: "GET",
                 dataType: "JSON",
                 beforeSend: function() {
-
+                    if (div == "head") {
+                        $('.card1vista4 span').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('.card2vista4 span').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('.card3vista4 span').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('.card4vista4 span').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "anal1") {
+                        $('#' + div + 'vista4').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "anal2") {
+                        $('#' + div + 'vista4').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "anal3") {
+                        $('#' + div + 'vista4').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "tabla1") {
+                        $('#v' + div + 'vista4').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "tabla2") {
+                        $('#v' + div + 'vista4').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    }
                 },
                 success: function(data) {
                     if (div == 'head') {
@@ -1951,7 +2420,31 @@
                 type: "GET",
                 dataType: "JSON",
                 beforeSend: function() {
-
+                    if (div == "head") {
+                        $('.card1vista5 span').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('.card2vista5 span').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('.card3vista5 span').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                        $('.card4vista5 span').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "anal1") {
+                        $('#' + div + 'vista5').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "anal2") {
+                        $('#' + div + 'vista5').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "anal3") {
+                        $('#' + div + 'vista5').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "tabla1") {
+                        $('#v' + div + 'vista5').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    } else if (div == "tabla2") {
+                        $('#v' + div + 'vista5').html(
+                            '<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                    }
                 },
                 success: function(data) {
                     if (div == 'head') {
@@ -2033,7 +2526,7 @@
                 type: 'GET',
                 success: function(data) {
                     $("#distritovista1 option").remove();
-                    var options = '<option value="0">DISTRITO</option>';
+                    var options = '<option value="0">TODOS</option>';
                     $.each(data, function(index, value) {
                         //ss = (id == value.id ? "selected" : "");
                         options += "<option value='" + value.id + "'>" + value.nombre +
