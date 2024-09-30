@@ -2353,3 +2353,4 @@ tipo_registro  varchar(200) NULL DEFAULT NULL
 
 
 
+

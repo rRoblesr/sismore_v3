@@ -168,12 +168,12 @@ class ImporPadronEstablecimientoController extends Controller
             $this->json_output(400, $mensaje);
         }
 
-        try {
-            DB::select('call sal_pa_procesarPadronEstablecimiento(?,?)', [$importacion->id, auth()->user()->id]);
-        } catch (Exception $e) {
-            $mensaje = "Error al procesar la normalizacion de datos." . $e;
-            $this->json_output(400, $mensaje);
-        }
+        // try {
+        //     DB::select('call sal_pa_procesarPadronEstablecimiento(?,?)', [$importacion->id, auth()->user()->id]);
+        // } catch (Exception $e) {
+        //     $mensaje = "Error al procesar la normalizacion de datos." . $e;
+        //     $this->json_output(400, $mensaje);
+        // }
         $mensaje = "Archivo excel subido y Procesado correctamente .";
         $this->json_output(200, $mensaje, '');
     }
