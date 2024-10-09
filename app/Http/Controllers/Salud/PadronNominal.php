@@ -74,4 +74,10 @@ class PadronNominal extends Controller
         $actualizado='';
         return view('salud.PadronNominal.seguimiento',compact('actualizado'));
     }
+
+    public function calidad()
+    {
+        $actualizado='';
+        return view('salud.PadronNominal.calidad',compact('actualizado'));
+    }
 }

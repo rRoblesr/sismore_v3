@@ -23,7 +23,7 @@
                 </tr>
             @endforeach
         </tbody>
-        <tfoot>
+        {{-- <tfoot>
             <tr class="text-center bg-success-0 text-white">
                 <th colspan="2" class="text-right">TOTAL</th>
                 <th class="text-center">{{ number_format($foot->total, 0) }}</th>
@@ -31,7 +31,7 @@
                 <th class="text-center">{{ number_format($foot->sin, 0) }}</th>
                 <th class="text-center">{!! avance($foot->indicador, 1) !!}</th>
             </tr>
-        </tfoot>
+        </tfoot> --}}
     @else
         <tbody>
             <tr class="text-center">

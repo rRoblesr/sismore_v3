@@ -2357,3 +2357,4 @@ update `sal_establecimiento` set codigo_unico=LPAD(cod_unico, 8, '0')
 
 
 
+
