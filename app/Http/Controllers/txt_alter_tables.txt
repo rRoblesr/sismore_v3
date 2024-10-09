@@ -2337,6 +2337,10 @@ entidad  varchar(200) NULL DEFAULT NULL,
 tipo_registro  varchar(200) NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 
+update `sal_establecimiento` set codigo_unico=LPAD(cod_unico, 8, '0')
+7163,4141,34032,4151,4208
+
+
 
 CREATE TABLE `sal_import_padron_nominal` (
     id int(11) auto_increment primary key,
