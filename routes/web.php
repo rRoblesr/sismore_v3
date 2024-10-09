@@ -78,6 +78,7 @@ use App\Http\Controllers\Presupuesto\UnidadOrganicaController;
 use App\Http\Controllers\Salud\EstablecimientoController;
 use App\Http\Controllers\Salud\ImporPadronActasController;
 use App\Http\Controllers\Salud\ImporPadronEstablecimientoController;
+use App\Http\Controllers\Salud\ImporPadronNominalController;
 use App\Http\Controllers\Salud\ImporPadronPvicaController;
 use App\Http\Controllers\Salud\ImporReportePN05Controller;
 use App\Http\Controllers\Salud\IndicadoresController;
@@ -1251,9 +1252,9 @@ Route::get('/Salud/PadronNominal/Calidad/Descargar/{codigoCalidad}', [SaludPadro
 Route::get('/Salud/PadronNominal/Calidad/{tipo}', [SaludPadronNominalCalidad::class, 'listadoTipo'])->name('salud.padron.calidad.listadotipo');
 Route::get('/Salud/PadronNominal/Calidad/{codigoCalidad}/{codigoPadron}', [SaludPadronNominalCalidad::class, 'mostrarDatos'])->name('salud.padron.calidad.mostrardato');
 
-Route::get('/Salud/PadronNominal/Importar', [SaludPadronNominalImportar::class, 'index'])->name('salud.padron.importar.index');
-Route::get('/Salud/PadronNominal/Importar/Historial', [SaludPadronNominalImportar::class, 'listarHistorial'])->name('salud.padron.importar.historial');
-Route::post('/Salud/PadronNominal/Importar/Cargar', [SaludPadronNominalImportar::class, 'cargarPadron'])->name('salud.padron.importar.cargar');
+// Route::get('/Salud/PadronNominal/Importar', [SaludPadronNominalImportar::class, 'index'])->name('salud.padron.importar.index');
+// Route::get('/Salud/PadronNominal/Importar/Historial', [SaludPadronNominalImportar::class, 'listarHistorial'])->name('salud.padron.importar.historial');
+// Route::post('/Salud/PadronNominal/Importar/Cargar', [SaludPadronNominalImportar::class, 'cargarPadron'])->name('salud.padron.importar.cargar');
 
 Route::get('/EESS/List/Registro', [EstablecimientoController::class, 'registro_listarDT'])->name('eess.listar.registro');
 Route::get('/EESS/List/Registro/reg2', [EstablecimientoController::class, 'registro_listarDT2'])->name('eess.listar.registro.2');
@@ -1261,6 +1262,12 @@ Route::get('/EESS/CargarRed', [EstablecimientoController::class, 'cargarRed'])->
 Route::get('/EESS/CargarMicrored', [EstablecimientoController::class, 'cargarMicrored'])->name('eess.cargarmicrored');
 Route::get('/EESS/Cargareess', [EstablecimientoController::class, 'cargarEESS'])->name('eess.cargareess');
 Route::get('/EESS/Find/{id}', [EstablecimientoController::class, 'ajax_edit'])->name('eess.find');
+
+Route::get('/salud/PadronNominal/Importar', [ImporPadronNominalController::class, 'importar'])->name('salud.padron.importar.index');//->name('salud.padronnominal.importar');
+Route::post('/salud/PadronNominal/Importar', [ImporPadronNominalController::class, 'guardar'])->name('imporpadronnominal.guardar');
+Route::get('/salud/PadronNominal/Listar/ImportarDT', [ImporPadronNominalController::class, 'ListarDTImportFuenteTodos'])->name('imporpadronnominal.listar.importados');
+Route::post('/salud/PadronNominal/ListaImportada', [ImporPadronNominalController::class, 'ListaImportada'])->name('imporpadronnominal.listarimportados');
+Route::get('/salud/PadronNominal/eliminar/{id}', [ImporPadronNominalController::class, 'eliminar'])->name('imporpadronnominal.eliminar');
 
 
 /******************************************** FIN SALUD ***************************************************/
