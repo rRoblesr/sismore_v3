@@ -6,7 +6,7 @@
     {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"> --}}
 @endsection
 @section('content')
-    <div class="row">
+    <div class="row d-none">
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-header bg-success-0">
@@ -26,24 +26,39 @@
                         </div>
 
                         <div class="col-lg-2 col-md-2 col-sm-2">
-                            <select class="form-control btn-xs" name="red" id="red"
-                                onchange="cargar_lista();">
-                                <option value="0">RED</option>
-                            </select>
+
+
+                            <div class="custom-select-container">
+                                <label for="provincia">RED</label>
+                                <select class="form-control btn-xs" name="vred" id="vred"
+                                    onchange="cargar_lista();">
+                                    <option value="0">TODOS</option>
+                                </select>
+                            </div>
                         </div>
 
                         <div class="col-lg-2 col-md-2 col-sm-2">
-                            <select class="form-control btn-xs" name="microred" id="microred"
-                                onchange="cargar_lista();">
-                                <option value="0">MICRORRED</option>
-                            </select>
+
+
+                            <div class="custom-select-container">
+                                <label for="provincia">MICRORED</label>
+                                <select class="form-control btn-xs" name="vmicrored" id="vmicrored"
+                                    onchange="cargar_lista();">
+                                    <option value="0">TODOS</option>
+                                </select>
+                            </div>
                         </div>
 
                         <div class="col-lg-2 col-md-2 col-sm-2">
-                            <select class="form-control btn-xs" name="ipress" id="ipress"
-                                onchange="cargar_lista();">
-                                <option value="0">EE.SS</option>
-                            </select>
+
+
+                            <div class="custom-select-container">
+                                <label for="provincia">EE.SS</label>
+                                <select class="form-control btn-xs" name="veess" id="veess"
+                                    onchange="cargar_lista();">
+                                    <option value="0">TODOS</option>
+                                </select>
+                            </div>
                         </div>
 
                     </div>
@@ -92,16 +107,7 @@
     <script>
         var table_principal = '';
         $(document).ready(function() {
-            table_principal = $('#datatable').DataTable({
-                responsive: true,
-                autoWidth: false,
-                ordered: true,
-                searching: false,
-                lengthChange: false,
-                language: table_language,
-                ajax: "{{ route('salud.padronnominal.calidad.listado') }}",
-                type: "POST",
-            });
+            cargar_lista();
         });
 
         // function verListadoTipo(tipo) {
@@ -112,6 +118,24 @@
         //     // También puedes redirigir a esa URL si lo deseas
         //     window.location.href = url;
         // }
+
+        function cargar_lista() {
+            table_principal = $('#datatable').DataTable({
+                responsive: true,
+                autoWidth: false,
+                ordered: true,
+                searching: false,
+                lengthChange: false,
+                language: table_language,
+                ajax: "{{ route('salud.padronnominal.calidad.listado') }}",
+                data: {
+                    red: $('vred').val(),
+                    microred: $('vmicrored').val(),
+                    eess: $('veess').val()
+                },
+                type: "POST",
+            });
+        }
     </script>
     <script src="{{ asset('/') }}public/assets/libs/jquery-validation/jquery.validate.min.js"></script>
     <!-- Validation init js-->

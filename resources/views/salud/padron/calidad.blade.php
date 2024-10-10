@@ -30,7 +30,6 @@
                                                 <th>N°</th>
                                                 <th>Tipo</th>
                                                 <th>Descripción</th>
-                                                <th>Descripción</th>
                                                 <th>Cantidad</th>
                                                 <th>Acción</th>
                                             </tr>
