@@ -2342,7 +2342,7 @@ update `sal_establecimiento` set codigo_unico=LPAD(cod_unico, 8, '0')
 
 
 
-CREATE TABLE `sal_import_padron_nominal` (
+CREATE TABLE `sal_impor_padron_nominal` (
     id int(11) auto_increment primary key,
 				importacion_id int(11) DEFAULT NULL,
 				padron	 varchar(100) NULL DEFAULT NULL,
@@ -2372,30 +2372,31 @@ CREATE TABLE `sal_import_padron_nominal` (
 
 CREATE TABLE `sal_padron_nominal` (
     id int(11) auto_increment primary key,
-				importacion_id int(11) DEFAULT NULL,
-				padron	 varchar(100) NULL DEFAULT NULL,
-				cnv	 varchar(100) NULL DEFAULT NULL,
-				cui	 varchar(100) NULL DEFAULT NULL,
-				dni	 varchar(100) NULL DEFAULT NULL,
-				apellido_paterno	 varchar(100) NULL DEFAULT NULL,
-				apellido_materno	 varchar(100) NULL DEFAULT NULL,
-				nombre	 varchar(100) NULL DEFAULT NULL,
-				genero	 varchar(100) NULL DEFAULT NULL,
-				fecha_nacimiento	 varchar(100) NULL DEFAULT NULL,
-				direccion	 varchar(200) NULL DEFAULT NULL,
-				ubigeo	 varchar(100) NULL DEFAULT NULL,
-				centro_poblado	 varchar(100) NULL DEFAULT NULL,
-				codigo_unico_nacimiento	 varchar(100) NULL DEFAULT NULL,
-				codigo_unico_atencion	 varchar(100) NULL DEFAULT NULL,
-				seguro	 varchar(100) NULL DEFAULT NULL,
-				tipo_doc_madre	 varchar(100) NULL DEFAULT NULL,
-				num_doc_madre	 varchar(100) NULL DEFAULT NULL,
-				apellido_paterno_madre	 varchar(100) NULL DEFAULT NULL,
-				celular_ma	 varchar(100) NULL DEFAULT NULL,
-				lengua_ma	 varchar(100) NULL DEFAULT NULL,
-				visita	 varchar(100) NULL DEFAULT NULL,
-				menor_encontrado	 varchar(100) NULL DEFAULT NULL,
-				foreign key(importacion_id) references par_importacion(id)
+    importacion_id int(11) DEFAULT NULL,
+	padron	varchar(12) NULL DEFAULT NULL,
+	cnv	 varchar(12) NULL DEFAULT NULL,
+	cui	 varchar(12) NULL DEFAULT NULL,
+	dni	 varchar(12) NULL DEFAULT NULL,
+	apellido_paterno	 varchar(50) NULL DEFAULT NULL,
+	apellido_materno	 varchar(50) NULL DEFAULT NULL,
+	nombre	 varchar(50) NULL DEFAULT NULL,
+	genero	 varchar(1) NULL DEFAULT NULL,
+	fecha_nacimiento	date NULL DEFAULT NULL,
+    edad int NULL DEFAULT NULL,
+	direccion	 varchar(200) NULL DEFAULT NULL,
+	ubigeo	 varchar(6) NULL DEFAULT NULL,
+	centro_poblado	 varchar(10) NULL DEFAULT NULL,
+	codigo_unico_nacimiento	 varchar(6) NULL DEFAULT NULL,
+	codigo_unico_atencion	 varchar(6) NULL DEFAULT NULL,
+	seguro	 varchar(15) NULL DEFAULT NULL,
+	tipo_doc_madre	 varchar(25) NULL DEFAULT NULL,
+	num_doc_madre	 varchar(15) NULL DEFAULT NULL,
+	apellido_paterno_madre	 varchar(50) NULL DEFAULT NULL,
+	celular_ma	 varchar(15) NULL DEFAULT NULL,
+	lengua_ma	 varchar(25) NULL DEFAULT NULL,
+	visita	 int NULL DEFAULT NULL,
+	menor_encontrado	int NULL DEFAULT NULL,
+	foreign key(importacion_id) references par_importacion(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 
 SELECT max(length(padron)),max(length(cnv)),max(length(cui)),max(length(dni)),max(length(apellido_paterno)),max(length(apellido_materno)), max(length(nombre)),max(length(genero)),max(length(fecha_nacimiento)),max(length(direccion)),max(length(ubigeo)) ,max(length(centro_poblado)),max(length(codigo_unico_nacimiento)),max(length(codigo_unico_atencion)),max(length(seguro)),max(length(tipo_doc_madre)) ,max(length(num_doc_madre)),max(length(apellido_paterno_madre)),max(length(celular_ma)),max(length(lengua_ma)) ,max(length(visita)),max(length(menor_encontrado)) FROM `sal_impor_padron_nominal`;
