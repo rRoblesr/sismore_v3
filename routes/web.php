@@ -690,8 +690,14 @@ Route::get('/Man/SFL/Listar/Modular2', [SFLController::class, 'ListarDTModular2'
 Route::post('/Man/SFL/AjaxUpdate/Modular', [SFLController::class, 'ajax_update_modulares'])->middleware('auth')->name('mantenimiento.sfl.modular.modificar');
 Route::get('/Man/SFL/Download/PDF/{id}', [SFLController::class, 'exportarPDF'])->name('mantenimiento.sfl.exportar.pdf');
 Route::get('/Man/SFL/Download/EXCEL/{ugel}/{provincia}/{distrito}/{estado}', [SFLController::class, 'Download']);
+Route::get('/Man/SFL/Download/plantilla', [SFLController::class, 'download_plantilla'])->name('mantenimiento.sfl.exportar.plantilla');
+Route::post('/Man/SFL/Download/plantilla/visualizar', [SFLController::class, 'cargar_plantilla'])->name('mantenimiento.sfl.exportar.plantilla.cargar');
+Route::post('/Man/SFL/Download/plantilla/guardar', [SFLController::class, 'plantilla_guardar'])->name('mantenimiento.sfl.exportar.plantilla.guardar');
 
-
+// Route::get('/xx/descargar-excel', function () {
+//     $filePath = base_path('plantillas_excels/plantilla_sfl.xlsx');  // Ruta absoluta al archivo en la raíz del proyecto
+//     return response()->download($filePath);
+// });
 
 
 /* especiales */
@@ -1264,7 +1270,7 @@ Route::get('/EESS/CargarMicrored', [EstablecimientoController::class, 'cargarMic
 Route::get('/EESS/Cargareess', [EstablecimientoController::class, 'cargarEESS'])->name('eess.cargareess');
 Route::get('/EESS/Find/{id}', [EstablecimientoController::class, 'ajax_edit'])->name('eess.find');
 
-Route::get('/Salud/PadronNominal/Importar', [ImporPadronNominalController::class, 'importar'])->name('salud.padron.importar.index');//->name('salud.padronnominal.importar');
+Route::get('/Salud/PadronNominal/Importar', [ImporPadronNominalController::class, 'importar'])->name('salud.padron.importar.index'); //->name('salud.padronnominal.importar');
 Route::post('/Salud/PadronNominal/Importar', [ImporPadronNominalController::class, 'guardar'])->name('imporpadronnominal.guardar');
 Route::get('/Salud/PadronNominal/Listar/ImportarDT', [ImporPadronNominalController::class, 'ListarDTImportFuenteTodos'])->name('imporpadronnominal.listar.importados');
 Route::post('/Salud/PadronNominal/ListaImportada', [ImporPadronNominalController::class, 'ListaImportada'])->name('imporpadronnominal.listarimportados');

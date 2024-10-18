@@ -2401,6 +2401,17 @@ CREATE TABLE `sal_padron_nominal` (
 
 SELECT max(length(padron)),max(length(cnv)),max(length(cui)),max(length(dni)),max(length(apellido_paterno)),max(length(apellido_materno)), max(length(nombre)),max(length(genero)),max(length(fecha_nacimiento)),max(length(direccion)),max(length(ubigeo)) ,max(length(centro_poblado)),max(length(codigo_unico_nacimiento)),max(length(codigo_unico_atencion)),max(length(seguro)),max(length(tipo_doc_madre)) ,max(length(num_doc_madre)),max(length(apellido_paterno_madre)),max(length(celular_ma)),max(length(lengua_ma)) ,max(length(visita)),max(length(menor_encontrado)) FROM `sal_impor_padron_nominal`;
 
+////
+
+
+
+update `edu_sfl` set zona_registral='ZONA N° VI - OFICINA REGISTRAL DE PUCALLPA';
+
+
+ALTER TABLE `edu_sfl` ADD `anotacion` INT NOT NULL AFTER `zona_registral`;
+
+
+
 
 
 

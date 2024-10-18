@@ -61,111 +61,114 @@
     </style>
 @endsection
 @section('content')
-    <div class="content">
-        <div class="form-group row align-items-center vh-5">
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <h4 class="page-title font-16">Saneamiento Físico Legal </h4>
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-2">
-                <div class="custom-select-container">
-                    <label for="ugel">UGEL</label>
-                    <select id="ugel" name="ugel" class="form-control btn-xs font-11" onchange="cargarCards();">
-                        <option value="0">TODOS</option>
-                        @foreach ($ugel as $item)
-                            <option value="{{ $item->id }}">{{ $item->nombre }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-2">
-                <div class="custom-select-container">
-                    <label for="provincia">PROVINCIA</label>
-                    <select id="provincia" name="provincia" class="form-control btn-xs font-11"
-                        onchange="cargar_distrito();cargarCards();">
-                        <option value="0">TODOS</option>
-                        @foreach ($provincia as $item)
-                            <option value="{{ $item->id }}">{{ $item->nombre }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-2">
-                <div class="custom-select-container">
-                    <label for="distrito">DISTRITO</label>
-                    <select id="distrito" name="distrito" class="form-control btn-xs font-11" onchange="cargarCards();">
-                        <option value="0">TODOS</option>
-                    </select>
-                </div>
-
-
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-2">
-                <div class="custom-select-container">
-                    <label for="estado">ESTADO</label>
-                    <select id="estado" name="area" class="form-control btn-xs font-11" onchange="cargarCards();">
-                        <option value="0">TODOS</option>
-                        <option value="1">SANEADO</option>
-                        <option value="2">NO SANEADO</option>
-                        <option value="3">NO REGISTRADO</option>
-                        <option value="4">EN PROCESO</option>
-                    </select>
-                </div>
-
-
-            </div>
+    <div class="form-group row align-items-center vh-5">
+        <div class="col-lg-4 col-md-4 col-sm-4">
+            <h4 class="page-title font-16">Saneamiento Físico Legal </h4>
         </div>
+        <div class="col-lg-2 col-md-2 col-sm-2">
+            <div class="custom-select-container">
+                <label for="ugel">UGEL</label>
+                <select id="ugel" name="ugel" class="form-control btn-xs font-11" onchange="cargarCards();">
+                    <option value="0">TODOS</option>
+                    @foreach ($ugel as $item)
+                        <option value="{{ $item->id }}">{{ $item->nombre }}</option>
+                    @endforeach
+                </select>
+            </div>
 
-        <form class="cmxform form-horizontal tasi-form upload_file">
-            @csrf
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card card-border">
-                        <div class="card-header border-success-0 bg-transparent pb-0">
-                            <div class="card-widgets">
-                                <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i
-                                        class="fa fa-redo"></i> Actualizar</button>
-                                {{-- <button type="button" class="btn btn-primary btn-xs" onclick="add()"><i
+
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-2">
+            <div class="custom-select-container">
+                <label for="provincia">PROVINCIA</label>
+                <select id="provincia" name="provincia" class="form-control btn-xs font-11"
+                    onchange="cargar_distrito();cargarCards();">
+                    <option value="0">TODOS</option>
+                    @foreach ($provincia as $item)
+                        <option value="{{ $item->id }}">{{ $item->nombre }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-2">
+            <div class="custom-select-container">
+                <label for="distrito">DISTRITO</label>
+                <select id="distrito" name="distrito" class="form-control btn-xs font-11" onchange="cargarCards();">
+                    <option value="0">TODOS</option>
+                </select>
+            </div>
+
+
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-2">
+            <div class="custom-select-container">
+                <label for="estado">ESTADO</label>
+                <select id="estado" name="area" class="form-control btn-xs font-11" onchange="cargarCards();">
+                    <option value="0">TODOS</option>
+                    <option value="1">SANEADO</option>
+                    <option value="2">NO SANEADO</option>
+                    <option value="3">NO REGISTRADO</option>
+                    <option value="4">EN PROCESO</option>
+                </select>
+            </div>
+
+
+        </div>
+    </div>
+
+    <form class="cmxform form-horizontal tasi-form upload_file">
+        @csrf
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent pb-0">
+                        <div class="card-widgets">
+                            {{-- <button type="button" class="btn btn-success btn-xs" onclick="descargarplantilla()"><i
+                                    class="fa fa-file-excel"></i> Plantilla</button> --}}
+                            <button type="button" class="btn btn-success btn-xs" onclick="abrirvistaprevia()"><i
+                                    class="fa fa-file-excel"></i> Plantilla</button>
+                            <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i
+                                    class="fa fa-redo"></i> Actualizar</button>
+                            {{-- <button type="button" class="btn btn-primary btn-xs" onclick="add()"><i
                                         class="fa fa-plus"></i>
                                     Nuevo</button> --}}
-                                <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
-                                        class="fa fa-file-excel"></i> Descargar</button>
-                            </div>
-                            <h3 class="card-title"></h3>
+
+                            <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
+                                    class="fa fa-file-excel"></i> Descargar</button>
+                        </div>
+                        <h3 class="card-title"></h3>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="tbprincipal" class="table table-striped table-bordered tablex"
+                                style="font-size: 12px">
+                                <thead class="cabecera-dataTable">
+                                    <tr class="text-white bg-success-0">
+                                        <th>Nº</th>
+                                        <th>Código Local</th>
+                                        <th>Total II.EE</th>
+                                        <th>UGEL</th>
+                                        <th>Provincia</th>
+                                        <th>Distrito</th>
+                                        <th>Área</th>
+                                        <th>Fecha Inscripción</th>
+                                        <th>Tipo SFL</th>
+                                        <th>Estado SFL</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
                         </div>
 
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="tbprincipal" class="table table-striped table-bordered tablex"
-                                    style="font-size: 12px">
-                                    <thead class="cabecera-dataTable">
-                                        <tr class="text-white bg-success-0">
-                                            <th>Nº</th>
-                                            <th>Código Local</th>
-                                            <th>Total II.EE</th>
-                                            <th>UGEL</th>
-                                            <th>Provincia</th>
-                                            <th>Distrito</th>
-                                            <th>Área</th>
-                                            <th>Fecha Inscripción</th>
-                                            <th>Tipo SFL</th>
-                                            <th>Estado SFL</th>
-                                            <th>Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-                            </div>
-
-                        </div>
                     </div>
                 </div>
-            </div> <!-- End row -->
-        </form>
-    </div>
+            </div>
+        </div> <!-- End row -->
+    </form>
 
     <!-- Bootstrap modal -->
     <div id="modal_form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
@@ -265,14 +268,6 @@
                                                 <input id="fecha" name="fecha" class="form-control" type="date"
                                                     placeholder="Ingrese fecha de registro">
                                             </div>
-                                            {{-- <div class="col-md-6">
-                                                <label for="documento">Cargar Documento</label><br>
-                                                <label for="documento" class="btn btn-primary">
-                                                    <i class="fas fa-cloud-upload-alt"></i> Cargar</label>
-                                                <input id="documento" name="documento" class="form-control d-none"
-                                                    type="file" accept="application/pdf">
-                                                <span class="help-block"></span>
-                                            </div> --}}
 
                                             <div class="col-md-6">
                                                 <label>Cargar Documento</label>
@@ -355,9 +350,12 @@
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-4">
-                                        <label>Zona Registral</label>
-                                        <input id="zonamodulares" name="zonamodulares" class="form-control"
-                                            type="text" placeholder="Ingrese zona registral">
+                                        <label>Anotación</label>
+                                        <select id="anotacionmodulares" name="anotacionmodulares" class="form-control">
+                                            <option value="0">SELECCIONAR</option>
+                                            <option value="1">PREVENTIVA</option>
+                                            <option value="2">DEFINITIVA</option>
+                                        </select>
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-4">
@@ -372,14 +370,6 @@
                                             type="date" placeholder="Ingrese fecha de registro">
                                         <span class="help-block"></span>
                                     </div>
-                                    {{-- <div class="col-md-4">
-                                        <label for="documento">Cargar Documento</label><br>
-                                        <label for="documento" class="btn btn-primary">
-                                            <i class="fas fa-cloud-upload-alt"></i> Cargar</label>
-                                        <input id="documento" name="documento" class="form-control d-none"
-                                            type="file" accept="application/pdf">
-                                        <span class="help-block"></span>
-                                    </div> --}}
 
                                     <div class="col-md-12">
                                         <label>Cargar Documento</label>
@@ -512,6 +502,82 @@
         </div>
     </div>
     <!-- End Bootstrap modal -->
+
+    <!-- Bootstrap modal -->
+    <div id="modal_vistaprevia" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-body">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>Descargar</label>
+                                    <input id="descargarplantilla" name="descargarplantilla"
+                                        class="form-control btn-primary" type="button" value="Plantilla"
+                                        onclick="descargarplantilla()">
+                                    {{-- <input class="btn btn-primary" type="but}ton" value="Input"> --}}
+
+                                    <span class="help-block"></span>
+                                </div>
+
+                                <div class="col-md-8">
+                                    <label>Cargar Plantilla</label>
+                                    <div class="input-group">
+                                        <input id="cargarplantilla" name="cargarplantilla" class="form-control d-none"
+                                            type="file" accept="application/xlsx">
+                                        <input id="cargarplantilla_nombre" name="cargarplantilla_nombre"
+                                            class="form-control" type="text" placeholder="Seleccione Archivo"
+                                            readonly>
+                                        <span class="input-group-append">
+                                            <label for="cargarplantilla" class="btn btn-primary btn-file-documento">
+                                                <i class="fas fa-cloud-upload-alt"></i> </label>
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="table-responsive">
+                                <table id="tbvistaprevia" class="table table-striped table-bordered tablex"
+                                    style="font-size: 12px">
+                                    <thead class="cabecera-dataTable">
+                                        <tr class="text-white bg-success-0">
+                                            {{-- <th>Nº</th> --}}
+                                            <th>Código Modular</th>
+                                            <th>Estado</th>
+                                            <th>Tipo</th>
+                                            <th>Partida Electronica</th>
+                                            <th>Anotacion</th>
+                                            <th>Fecha Registro</th>
+                                            <th>Fecha Inscripción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                    <button type="button" id="btnSavePlantilla" onclick="saveplantilla()"
+                        class="btn btn-primary">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Bootstrap modal -->
 @endsection
 
 @section('js')
@@ -531,6 +597,7 @@
         var table_principal;
         var table_modulares;
         var table_ver;
+        var table_vistaprevia;
         var form_entidad = 0;
         $(document).ready(function() {
             cargar_distrito();
@@ -551,6 +618,66 @@
                 var fileName = $(this).val().split("\\").pop();
                 $('#documentomodulares_nombre').val(fileName);
 
+            });
+
+            $("#cargarplantilla").on("change", function() {
+                var fileInput = $('#cargarplantilla')[0]; // Obtén el input de tipo file
+                var fileName = fileInput.files[0].name; // Extrae el nombre del archivo seleccionado
+                $('#cargarplantilla_nombre').val(fileName);
+
+                if (fileInput.files.length > 0) {
+                    var formData = new FormData();
+                    formData.append('archivo', fileInput.files[0]);
+                    formData.append('_token', "{{ csrf_token() }}");
+                    $.ajax({
+                        url: "{{ route('mantenimiento.sfl.exportar.plantilla.cargar') }}",
+                        type: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
+                            table_vistaprevia = $('#tbvistaprevia').DataTable({
+                                data: response.data,
+                                responsive: true,
+                                autoWidth: false,
+                                ordered: false,
+                                language: table_language,
+                                destroy: true,
+                                // columns: [{
+                                //         data: 'columna1'
+                                //     }, // Mapea las columnas según tus datos
+                                //     {
+                                //         data: 'columna2'
+                                //     },
+                                //     {
+                                //         data: 'columna3'
+                                //     },
+                                //     // Agrega más columnas según sea necesario
+                                // ]
+                            });
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.error("Error al cargar el archivo:", errorThrown);
+                        }
+                    });
+                    // $.ajax({
+                    //     url: "{{ route('mantenimiento.sfl.exportar.plantilla.cargar') }}",
+                    //     type: "POST",
+                    //     data: formData,
+                    //     dataType: "JSON",
+                    //     cache: false,
+                    //     contentType: false,
+                    //     processData: false,
+                    //     success: function(data) {
+                    //         console.log("Archivo cargado correctamente", data);
+                    //     },
+                    //     error: function(jqXHR, textStatus, errorThrown) {
+                    //         console.error("Error al cargar el archivo:", errorThrown);
+                    //     }
+                    // });
+                } else {
+                    console.log("No se ha seleccionado ningún archivo");
+                }
             });
 
 
@@ -800,9 +927,11 @@
                 success: function(data) {
                     $('[name="idsfl"]').val(data.sfl.id);
                     $('[name="estadomodulares"]').val(data.sfl.estado);
-                    $('[name="tipomodulares"]').val(data.sfl.tipo == null ? 0 : data.sfl.tipo);
+                    $('[name="tipomodulares"]').val(data.sfl.tipo == null ? 0 : data.sfl
+                        .tipo); //anotacionmodulares
                     $('[name="partidamodulares"]').val(data.sfl.partida_electronica);
-                    $('[name="zonamodulares"]').val(data.sfl.zona_registral);
+                    $('[name="anotacionmodulares"]').val(data.sfl.anotacion);
+                    // $('[name="zona-modulares"]').val(data.sfl.zona-_registral);
                     $('[name="fechamodulares"]').val(data.sfl.fecha_registro);
                     $('[name="fechainscripcion"]').val(data.sfl.fecha_inscripcion);
                 },
@@ -913,6 +1042,59 @@
         function descargar1() {
             window.open("{{ url('/') }}/Man/SFL/Download/EXCEL/" + $('#ugel').val() + "/" + $('#provincia')
                 .val() + "/" + $('#distrito').val() + "/" + $('#estado').val());
+        }
+
+        function descargarplantilla() {
+            window.open("{{ route('mantenimiento.sfl.exportar.plantilla') }}", '_blank');
+        }
+
+        function abrirvistaprevia() {
+            $('#cargarplantilla').val(null);
+            $('#cargarplantilla_nombre').val('');
+            table_vistaprevia = $('#tbvistaprevia').DataTable({
+                data: [],
+                responsive: true,
+                autoWidth: false,
+                ordered: false,
+                language: table_language,
+                destroy: true,
+            });
+            $('#modal_vistaprevia .modal-title').text('PLANTILLA');
+            $('#modal_vistaprevia').modal('show');
+        }
+
+        function saveplantilla() {
+            var fileInput = $('#cargarplantilla')[0]; // Obtén el input de tipo file
+            if (fileInput.files.length > 0) {
+                var formData = new FormData();
+                formData.append('archivo', fileInput.files[0]);
+                formData.append('_token', "{{ csrf_token() }}");
+                $.ajax({
+                    url: "{{ route('mantenimiento.sfl.exportar.plantilla.guardar') }}",
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(data);
+                        if (data.modular.length > 0) {
+                            var mod = '';
+                            data.modular.forEach(function(elemento, index) {
+                                mod += elemento + '\n';
+                            });
+                            alert("estos códigos modulares no existen en la base de datos\n" + mod);
+                        }
+                        table_principal.ajax.reload(null, false);
+                        $('#modal_vistaprevia').modal('hide');
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error("Error al cargar el archivo:", errorThrown);
+                    }
+                });
+            } else {
+                console.log("No se ha seleccionado ningún archivo");
+            }
         }
     </script>
 @endsection

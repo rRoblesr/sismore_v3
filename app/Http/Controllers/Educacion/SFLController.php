@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Educacion;
 
 use App\Exports\SFLExport;
 use App\Http\Controllers\Controller;
+use App\Imports\tablaXImport;
 use App\Models\Administracion\Entidad;
 use App\Models\Educacion\Area;
 use App\Models\Educacion\InstitucionEducativa;
@@ -14,10 +15,12 @@ use App\Models\Parametro\IndicadorGeneralMeta;
 use App\Models\Presupuesto\Sector;
 use App\Repositories\Parametro\IndicadorGeneralRepositorio;
 use App\Repositories\Parametro\UbigeoRepositorio;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use phpDocumentor\Reflection\PseudoTypes\False_;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpParser\Node\Stmt\Else_;
 
 class SFLController extends Controller
@@ -31,7 +34,7 @@ class SFLController extends Controller
     public function principal()
     {
         $ugel = InstitucionEducativa::distinct()->select('uu.*')
-            ->join('edu_ugel as uu', 'uu.id', '=', 'edu_institucioneducativa.Ugel_id')->where('uu.estado','AC')
+            ->join('edu_ugel as uu', 'uu.id', '=', 'edu_institucioneducativa.Ugel_id')->where('uu.estado', 'AC')
             ->get();
         $provincia = InstitucionEducativa::distinct()->select('pv.*')
             ->join('edu_centropoblado as cp', 'cp.id', '=', 'edu_institucioneducativa.CentroPoblado_id')
@@ -48,7 +51,7 @@ class SFLController extends Controller
         $length = intval($rq->length);
         $est = ['', 'SANEADO', 'NO SANEADO', 'NO REGISTRADO', 'EN PROCESO'];
         $tip = ['', 'AFECTACION EN USO', 'TITULARIDAD', 'APORTE REGLAMENTARIO', 'OTROS'];
-//iiee.EstadoInsEdu_id = 3 and  and iiee.estado = 'AC'
+        //iiee.EstadoInsEdu_id = 3 and  and iiee.estado = 'AC'
         $query = DB::table(DB::raw("(
             select iiee.id, iiee.CentroPoblado_id, iiee.codLocal, iiee.Area_id, iiee.Ugel_id
 	        from edu_institucionEducativa as iiee
@@ -827,6 +830,12 @@ class SFLController extends Controller
             $data['status'] = FALSE;
         }
 
+        // if ($request->anotacionmodulares > 0) {
+        //     $data['inputerror'][] = 'anotacionmodulares';
+        //     $data['error_string'][] = 'Este campo es obligatorio.';
+        //     $data['status'] = FALSE;
+        // }
+
         if ($data['status'] === FALSE) {
             echo json_encode($data);
             exit();
@@ -857,7 +866,8 @@ class SFLController extends Controller
             $ie->estado = $request->estadomodulares;
             $ie->tipo = $request->tipomodulares == 0 ? null : $request->tipomodulares;
             $ie->partida_electronica = $request->partidamodulares;
-            $ie->zona_registral = $request->zonamodulares;
+            $ie->zona_registral = 'ZONA N° VI - OFICINA REGISTRAL DE PUCALLPA';
+            $ie->anotacion = $request->anotacionmodulares;
             $ie->fecha_registro = $request->fechamodulares;
             $ie->fecha_inscripcion = $request->fechainscripcion;
             if ($documento)
@@ -869,7 +879,8 @@ class SFLController extends Controller
                 'estado' => $request->estadomodulares,
                 'tipo' => ($request->tipomodulares == 0 ? NULL : $request->tipomodulares),
                 'partida_electronica' => $request->partidamodulares == '' ? NULL : $request->partidamodulares,
-                'zona_registral' => $request->zonamodulares == '' ? NULL : $request->zonamodulares,
+                'zona_registral' => 'ZONA N° VI - OFICINA REGISTRAL DE PUCALLPA', //$request->zonamodulares == '' ? NULL : $request->zonamodulares,
+                'anotacion' => $request->anotacionmodulares,
                 'fecha_registro' => $request->fechamodulares,
                 'fecha_inscripcion' => $request->fechainscripcion,
                 'documento' => $documento,
@@ -931,5 +942,178 @@ class SFLController extends Controller
         $query = $query->get();
 
         return ["base" => $query];
+    }
+
+    public function download_plantillaxx()
+    {
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(storage_path('plantillas_excels/plantilla_sfl.xlsx'));
+        $sheet = $spreadsheet->getActiveSheet();
+        $query = sfl::all();
+        $fila = 2; // Comenzamos en la fila 2 (asumiendo que la fila 1 es de encabezado)
+        foreach ($query as $value) {
+            $ie = InstitucionEducativa::find($value->institucioneducativa_id);
+            $sheet->setCellValue('A' . $fila, $ie->codModular);
+            $sheet->setCellValue('B' . $fila, $value->estado);
+            $sheet->setCellValue('C' . $fila, $value->tipo);
+            $sheet->setCellValue('D' . $fila, $value->partida_electronica);
+            $sheet->setCellValue('E' . $fila, $value->anotacion);
+            $sheet->setCellValue('F' . $fila, $value->fecha_registro);
+            $sheet->setCellValue('G' . $fila, $value->fecha_inscripcion);
+            $fila++;
+        }
+        $writer = new Xlsx($spreadsheet);
+        $fileName = 'plantilla_sfl.xlsx';
+        $path = storage_path('plantillas_excels/' . $fileName);
+        $writer->save($path);
+
+        return response()->download($path)->deleteFileAfterSend(true);
+    }
+
+    public function download_plantillaxxx()
+    {
+        // Ajusta la ruta para acceder a la carpeta en la raíz del proyecto
+        $plantillaPath = base_path('plantillas_excels/plantilla_sfl.xlsx');
+
+        // if (!file_exists($plantillaPath)) {
+        //     return response()->json(['error' => 'La plantilla no existe.'], 404);
+        // }
+
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($plantillaPath);
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Obtener datos
+        $query = SFL::all();
+        $fila = 2; // Comenzamos en la fila 2 (asumiendo que la fila 1 es de encabezado)
+
+        foreach ($query as $value) {
+            // Buscar institución educativa por ID
+            $ie = InstitucionEducativa::find($value->institucioneducativa_id);
+            if (!$ie) {
+                continue; // Si no se encuentra la institución, pasar al siguiente registro
+            }
+
+            // Rellenar las celdas
+            $sheet->setCellValue('A' . $fila, $ie->codModular);
+            $sheet->setCellValue('B' . $fila, $value->estado);
+            $sheet->setCellValue('C' . $fila, $value->tipo);
+            $sheet->setCellValue('D' . $fila, $value->partida_electronica);
+            $sheet->setCellValue('E' . $fila, $value->anotacion);
+            $sheet->setCellValue('F' . $fila, $value->fecha_registro);  // Verifica el formato de fecha
+            $sheet->setCellValue('G' . $fila, $value->fecha_inscripcion); // Verifica el formato de fecha
+            $fila++;
+        }
+
+        // Guardar el archivo Excel en la carpeta de la raíz
+        $fileName = 'plantilla_sfl_rellena.xlsx';
+        $savePath = base_path('plantillas_excels/' . $fileName);
+
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $writer->save($savePath);
+
+        // Verificar si el archivo fue creado correctamente
+        if (file_exists($savePath)) {
+            return response()->download($savePath)->deleteFileAfterSend(true);
+        } else {
+            return response()->json(['error' => 'No se pudo generar el archivo Excel.'], 500);
+        }
+    }
+
+    public function download_plantilla()
+    {
+        $filePath = base_path('plantillas_excels/plantilla_sfl.xlsx');  // Ruta absoluta al archivo en la raíz del proyecto
+        return response()->download($filePath);
+    }
+
+    public function cargar_plantilla(Request $rq)
+    {
+        $rq->validate([
+            'archivo' => 'required|mimes:xlsx',
+        ]);
+
+        $query = Excel::toArray(new tablaXImport, $rq->file('archivo'));
+
+        $draw = intval($rq->draw);
+        $start = intval($rq->start);
+        $length = intval($rq->length);
+
+        $data = [];
+
+        foreach ($query[0] as $key => $value) {
+            $btn = '';
+
+            $data[] = array(
+                // $key + 1,
+                $value['codigo_modular'],
+                $value['estado_sfl'],
+                $value['tipo_sfl'],
+                $value['partida_electronica'],
+                $value['anotacion'],
+                $this->fechaExcel($value['fecha_registro']),
+                $this->fechaExcel($value['fecha_inscripcion']),
+            );
+        }
+        $result = array(
+            "draw" => $draw,
+            "recordsTotal" => $start,
+            "recordsFiltered" => $length,
+            "data" => $data,
+        );
+        return response()->json($result);
+    }
+
+    public function plantilla_guardar(Request $rq)
+    {
+        $rq->validate([
+            'archivo' => 'required|mimes:xlsx',
+        ]);
+
+        $estados = ['SANEADO' => 1, 'NO SANEADO' => 2, 'NO REGISTRADO' => 3, 'EN PROCESO' => 4];
+        $tipos = ['AFECTACION EN USO' => 1, 'TITULARIDAD' => 2, 'APORTE REGLAMENTARIO' => 3, 'OTROS' => 4];
+        $anotacion = ['PREVENTIVA' => 1, 'DEFINITIVA' => 2];
+
+        $query = Excel::toArray(new tablaXImport, $rq->file('archivo'));
+        $notmodular = [];
+        foreach ($query[0] as $key => $value) {
+            $modular = str_pad($value['codigo_modular'], 7, '0', STR_PAD_LEFT);
+            $iiee = InstitucionEducativa::where('codModular', $modular)->first();
+            if ($iiee) {
+                $sfl = SFL::where('institucioneducativa_id', $iiee->id)->first();
+                if ($sfl) {
+                    $sfl->estado = $estados[$value['estado_sfl']] ?? 0;
+                    $sfl->tipo = $tipos[$value['tipo_sfl']] ?? 0;
+                    $sfl->partida_electronica = $value['partida_electronica'];
+                    $sfl->anotacion = $anotacion[$value['anotacion']] ?? 0;
+                    $sfl->fecha_registro = $this->fechaExcel($value['fecha_registro']);
+                    $sfl->fecha_inscripcion = $this->fechaExcel($value['fecha_inscripcion']);
+                    $sfl->save();
+                } else {
+                    SFL::create([
+                        'institucioneducativa_id' => $iiee->id,
+                        'estado' => $estados[$value['estado_sfl']] ?? 0,
+                        'tipo' => $tipos[$value['tipo_sfl']] ?? 0,
+                        'partida_electronica' => $value['partida_electronica'],
+                        'zona_registral' => 'ZONA N° VI - OFICINA REGISTRAL DE PUCALLPA',
+                        'anotacion' => $anotacion[$value['anotacion']] ?? 0,
+                        'fecha_registro' => $this->fechaExcel($value['fecha_registro']),
+                        'fecha_inscripcion' => $this->fechaExcel($value['fecha_inscripcion']),
+                    ]);
+                }
+            } else {
+                $notmodular[] = $modular;
+            }
+        }
+        return response()->json(['status' => TRUE, 'modular' => $notmodular]);
+    }
+
+    public function fechaExcel($ff)
+    {
+        if ($ff) {
+            if ($ff != 'NULL') {
+                $unix = (intval($ff) - 25569) * 86400;
+                $php = new DateTime("@$unix");
+                return $php->format('Y-m-d');
+            }
+        }
+        return null;
     }
 }
