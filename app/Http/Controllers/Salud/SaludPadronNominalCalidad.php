@@ -34,18 +34,18 @@ class SaludPadronNominalCalidad extends Controller
         $nombre_columna = ($sector == '14') ? "cod_eess_atencion" : "ubigeo";
         //dd($sector, ' - ', $nivel, ' - ', $nombre_columna, ' . ', $codigo_institucion);
         $tablon = PadronCalidad::select('codigo_calidad', 'nombre_calidad', DB::raw('COUNT(*) AS cantidad'));
-        if(($sector=='14' && $nivel==4) || $sector=='2')
+        if (($sector == '14' && $nivel == 4) || $sector == '2')
             $tablon = $tablon->where($nombre_columna, $codigo_institucion);
-        if( $sector='14' && $nivel==2 ) {   
+        if ($sector = '14' && $nivel == 2) {
             $ipress = DB::table('m_establecimiento')
                 ->select('cod_2000')
                 ->where('cod_disa', '34')->where('cod_red', $codigo_institucion);
 
             $tablon = $tablon->joinSub($ipress, 'es', function ($join) {
-                    $join->on('cod_eess_atencion', '=', 'es.cod_2000');
-                });
+                $join->on('cod_eess_atencion', '=', 'es.cod_2000');
+            });
         }
-            
+
         $tablon = $tablon->groupBy('codigo_calidad', 'nombre_calidad')->get();
 
         //dd($tablon);
@@ -55,7 +55,6 @@ class SaludPadronNominalCalidad extends Controller
             $data[] = array(
                 $key + 1,
                 $value->codigo_calidad,
-                $value->nombre_calidad,
                 $value->nombre_calidad,
                 $value->cantidad,
                 $boton . '&nbsp;',
@@ -76,7 +75,8 @@ class SaludPadronNominalCalidad extends Controller
         $draw = 0;
         $start = 0;
         $length = 0;
-        $sector = session('usuario_sector');$nivel = session('usuario_nivel');
+        $sector = session('usuario_sector');
+        $nivel = session('usuario_nivel');
         $codigo_institucion = session('usuario_codigo_institucion');
         $nombre_columna = ($sector == '14') ? "cod_eess_atencion" : "ubigeo";
 
@@ -84,18 +84,18 @@ class SaludPadronNominalCalidad extends Controller
         //dd($calidad);
         $tablon = PadronCalidad::select('*')->where('codigo_calidad', $tipo);
 
-        if(($sector=='14' && $nivel==4) || $sector=='2')
+        if (($sector == '14' && $nivel == 4) || $sector == '2')
             $tablon = $tablon->where($nombre_columna, $codigo_institucion);
-        if( $sector='14' && $nivel==2 ) {   
+        if ($sector = '14' && $nivel == 2) {
             $ipress = DB::table('m_establecimiento')
                 ->select('cod_2000')
                 ->where('cod_disa', '34')->where('cod_red', $codigo_institucion);
 
             $tablon = $tablon->joinSub($ipress, 'es', function ($join) {
-                    $join->on('cod_eess_atencion', '=', 'es.cod_2000');
-                });
+                $join->on('cod_eess_atencion', '=', 'es.cod_2000');
+            });
         }
-            
+
         $tablon = $tablon->get();
 
 

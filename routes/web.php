@@ -1257,7 +1257,7 @@ Route::get('/Salud/PadronNominal/Calidad/{tipo}', [SaludPadronNominalCalidad::cl
 Route::get('/Salud/PadronNominal/Calidad/{codigoCalidad}/{codigoPadron}', [SaludPadronNominalCalidad::class, 'mostrarDatos'])->name('salud.padron.calidad.mostrardato');
 
 Route::get('/Salud/PadronNominal/Calidadx', [PadronNominal::class, 'calidad'])->name('salud.padronnominal.calidad');
-Route::get('/Salud/PadronNominal/Calidadx/Tabla', [PadronNominal::class, 'calidadListado'])->name('salud.padronnominal.calidad.listado');
+Route::get('/Salud/PadronNominal/Calidadx/Listado', [PadronNominal::class, 'calidadListado'])->name('salud.padronnominal.calidad.listado');
 
 // Route::get('/Salud/PadronNominal/Importar', [SaludPadronNominalImportar::class, 'index'])->name('salud.padron.importar.index');
 // Route::get('/Salud/PadronNominal/Importar/Historial', [SaludPadronNominalImportar::class, 'listarHistorial'])->name('salud.padron.importar.historial');

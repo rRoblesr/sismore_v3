@@ -78,13 +78,16 @@ class PadronNominal extends Controller
 
     public function calidad()
     {
+        // return $red = PadronCalidad::from('sal_padron_calidad as pc')
+        //     ->join('sal_establecimiento as e', 'e.codigo_unico', '=', 'pc.cod_eess_atencion')
+        //     ->join('sal_microred as mr', 'mr.id', '=', 'e.microrred_id')
+        //     ->join('sal_red as r', 'r.id', '=', 'mr.red_id')->distinct()->select('r.*')->get();
         $actualizado = '';
         return view('salud.PadronNominal.calidad', compact('actualizado'));
     }
 
-    public function calidadListado()
+    public function calidadListado(Request $rq)
     {
-
         $draw = 0;
         $start = 0;
         $length = 0;
@@ -107,7 +110,11 @@ class PadronNominal extends Controller
         // }
         // $tablon = $tablon->groupBy('codigo_calidad', 'nombre_calidad')->get();
 
-        $query = PadronCalidad::select('codigo_calidad', 'nombre_calidad', DB::raw('COUNT(*) AS cantidad'))->groupBy('codigo_calidad', 'nombre_calidad')->get();
+        $query = PadronCalidad::select('codigo_calidad', 'nombre_calidad', DB::raw('COUNT(*) AS cantidad'));
+        // if ($rq->red > 0) $query = $query->where('red', $rq->red);
+        // if ($rq->microred > 0) $query = $query->where('microred', $rq->microred);
+        // if ($rq->eess > 0) $query = $query->where('ipress', $rq->eess);
+        $query = $query->groupBy('codigo_calidad', 'nombre_calidad')->get();
 
         //dd($tablon);
         $data = [];
