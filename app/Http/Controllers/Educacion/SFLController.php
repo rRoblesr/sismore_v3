@@ -969,7 +969,7 @@ class SFLController extends Controller
         return response()->download($path)->deleteFileAfterSend(true);
     }
 
-    public function download_plantillaxxx()
+    public function download_plantilla()
     {
         // Ajusta la ruta para acceder a la carpeta en la raíz del proyecto
         $plantillaPath = base_path('plantillas_excels/plantilla_sfl.xlsx');
@@ -1018,7 +1018,7 @@ class SFLController extends Controller
         }
     }
 
-    public function download_plantilla()
+    public function download_plantilla0()
     {
         $filePath = base_path('plantillas_excels/plantilla_sfl.xlsx');  // Ruta absoluta al archivo en la raíz del proyecto
         return response()->download($filePath);
