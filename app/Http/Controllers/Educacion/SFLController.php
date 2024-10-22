@@ -20,6 +20,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use phpDocumentor\Reflection\PseudoTypes\False_;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpParser\Node\Stmt\Else_;
 
@@ -971,28 +975,177 @@ class SFLController extends Controller
 
     public function download_plantilla()
     {
-        // Ajusta la ruta para acceder a la carpeta en la raíz del proyecto
+        $estados = [1 => 'SANEADO', 2 => 'NO SANEADO', 3 => 'NO REGISTRADO', 4 => 'EN PROCESO'];
+        $tipos = [1 => 'AFECTACION EN USO', 2 => 'TITULARIDAD', 3 => 'APORTE REGLAMENTARIO', 4 => 'OTROS'];
+        $anotacion = [1 => 'PREVENTIVA', 2 => 'DEFINITIVA'];
+
         $plantillaPath = base_path('plantillas_excels/plantilla_sfl.xlsx');
 
-        // if (!file_exists($plantillaPath)) {
-        //     return response()->json(['error' => 'La plantilla no existe.'], 404);
-        // }
+        if (!file_exists($plantillaPath)) {
+            return response()->json(['error' => 'La plantilla no existe.'], 404);
+        }
+
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($plantillaPath);
+        // $sheet = $spreadsheet->getActiveSheet();
+        $sheet = $spreadsheet->setActiveSheetIndex(0);
+
+        $query = SFL::all();
+        $fila = 2;
+        foreach ($query as $value) {
+            $ie = InstitucionEducativa::find($value->institucioneducativa_id);
+            if (!$ie) {
+                continue;
+            }
+            $sheet->setCellValueExplicit('A' . $fila, $ie->codModular, DataType::TYPE_STRING);
+            $sheet->setCellValue('B' . $fila, $estados[$value->estado] ?? '');
+            $sheet->setCellValue('C' . $fila, $tipos[$value->tipo] ?? '');
+            $sheet->setCellValue('D' . $fila, $value->partida_electronica);
+            $sheet->setCellValue('E' . $fila, $anotacion[$value->anotacion] ?? '');
+            $sheet->setCellValue('F' . $fila, $value->fecha_registro == null ? null : date('d/m/Y', strtotime($value->fecha_registro)));
+            $sheet->setCellValue('G' . $fila, $value->fecha_inscripcion == null ? null : date('d/m/Y', strtotime($value->fecha_inscripcion)));
+            $fila++;
+        }
+
+        $validation = $sheet->getCell('B2')->getDataValidation();
+        $validation->setType(DataValidation::TYPE_LIST);
+        $validation->setErrorStyle(DataValidation::STYLE_STOP);
+        $validation->setAllowBlank(true);
+        $validation->setShowInputMessage(true);
+        $validation->setShowErrorMessage(true);
+        $validation->setShowDropDown(true);
+        $validation->setErrorTitle('Valor no válido');
+        $validation->setError('Por favor seleccione un valor de la lista.');
+        $validation->setPromptTitle('Seleccionar de la lista');
+        $validation->setPrompt('Por favor seleccione un valor de la lista desplegable.');
+        $validation->setFormula1('"SANEADO,NO SANEADO,NO REGISTRADO,EN PROCESO"'); // Lista de valores
+
+        for ($i = 2; $i < $fila; $i++) {
+            $sheet->getCell('B' . $i)->setDataValidation(clone $validation);
+        }
+
+        $validation = $sheet->getCell('C2')->getDataValidation();
+        $validation->setType(DataValidation::TYPE_LIST);
+        $validation->setErrorStyle(DataValidation::STYLE_STOP);
+        $validation->setAllowBlank(true);
+        $validation->setShowInputMessage(true);
+        $validation->setShowErrorMessage(true);
+        $validation->setShowDropDown(true);
+        $validation->setErrorTitle('Valor no válido');
+        $validation->setError('Por favor seleccione un valor de la lista.');
+        $validation->setPromptTitle('Seleccionar de la lista');
+        $validation->setPrompt('Por favor seleccione un valor de la lista desplegable.');
+        $validation->setFormula1('"AFECTACION EN USO,TITULARIDAD,APORTE REGLAMENTARIO,OTROS"'); // Lista de valores
+
+        // Aplicar la validación a toda la columna C, en las filas relevantes (desde la fila 2 hasta la última)
+        for ($i = 2; $i < $fila; $i++) {
+            $sheet->getCell('C' . $i)->setDataValidation(clone $validation);
+        }
+
+        $validation = $sheet->getCell('E2')->getDataValidation();
+        $validation->setType(DataValidation::TYPE_LIST);
+        $validation->setErrorStyle(DataValidation::STYLE_STOP);
+        $validation->setAllowBlank(true);
+        $validation->setShowInputMessage(true);
+        $validation->setShowErrorMessage(true);
+        $validation->setShowDropDown(true);
+        $validation->setErrorTitle('Valor no válido');
+        $validation->setError('Por favor seleccione un valor de la lista.');
+        $validation->setPromptTitle('Seleccionar de la lista');
+        $validation->setPrompt('Por favor seleccione un valor de la lista desplegable.');
+        $validation->setFormula1('"PREVENTIVA,DEFINITIVA"'); // Lista de valores
+
+        // Aplicar la validación a toda la columna C, en las filas relevantes (desde la fila 2 hasta la última)
+        for ($i = 2; $i < $fila; $i++) {
+            $sheet->getCell('E' . $i)->setDataValidation(clone $validation);
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="plantilla_sfl.xlsx"');
+        header('Cache-Control: max-age=0');
+        $writer->save('php://output');
+        exit;
+    }
+
+    public function download_plantillaoptx()
+    {
+        $estados = [1 => 'SANEADO', 2 => 'NO SANEADO', 3 => 'NO REGISTRADO', 4 => 'EN PROCESO'];
+        $tipos = [1 => 'AFECTACION EN USO', 2 => 'TITULARIDAD', 3 => 'APORTE REGLAMENTARIO', 4 => 'OTROS'];
+        $anotacion = [1 => 'PREVENTIVA', 2 => 'DEFINITIVA'];
+
+        $plantillaPath = base_path('plantillas_excels/plantilla_sfl.xlsx');
+
+        if (!file_exists($plantillaPath)) {
+            return response()->json(['error' => 'La plantilla no existe.'], 404);
+        }
 
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($plantillaPath);
         $sheet = $spreadsheet->getActiveSheet();
 
-        // Obtener datos
+        // Obtener la última fila con datos
+        // $highestRow = $sheet->getHighestRow();
+
+        // Limpiar todas las filas desde la 2 (asumiendo que la cabecera está en la fila 1)
+        // for ($row = 2; $row <= $highestRow; $row++) {
+        //     $sheet->removeRow($row);
+        // }
+
+        $query = SFL::all();
+        $fila = 2; // Comenzamos en la fila 2 (cabecera en la fila 1)
+
+        foreach ($query as $value) {
+            $ie = InstitucionEducativa::find($value->institucioneducativa_id);
+            if (!$ie) {
+                continue;
+            }
+            $sheet->setCellValueExplicit('A' . $fila, $ie->codModular, DataType::TYPE_STRING);
+            $sheet->setCellValue('B' . $fila, $estados[$value->estado] ?? '');
+            $sheet->setCellValue('C' . $fila, $tipos[$value->tipo] ?? '');
+            $sheet->setCellValue('D' . $fila, $value->partida_electronica);
+            $sheet->setCellValue('E' . $fila, $anotacion[$value->anotacion] ?? '');
+
+            // Convertir fechas al formato de Excel si es necesario
+            // $sheet->setCellValue('F' . $fila, Date::PHPToExcel($value->fecha_registro));
+            $sheet->setCellValue('F' . $fila, $value->fecha_registro == null ? null : date('d/m/Y', strtotime($value->fecha_registro)));
+            // $sheet->setCellValue('F' . $fila, $value->fecha_registro == null ? null : Date::PHPToExcel(strtotime($value->fecha_registro)));
+            // $sheet->getStyle('F' . $fila)->getNumberFormat()->setFormatCode('dd/mm/yyyy');
+            // $sheet->setCellValue('G' . $fila, Date::PHPToExcel($value->fecha_inscripcion));
+            $sheet->setCellValue('G' . $fila, $value->fecha_inscripcion == null ? null : date('d/m/Y', strtotime($value->fecha_inscripcion)));
+            // $sheet->setCellValue('G' . $fila, $value->fecha_inscripcion == null ? null : Date::PHPToExcel(strtotime($value->fecha_inscripcion)));
+            // $sheet->getStyle('G' . $fila)->getNumberFormat()->setFormatCode('dd/mm/yyyy');
+
+            $fila++;
+        }
+
+        // Enviar el archivo al navegador sin guardarlo en el servidor
+        $writer = new Xlsx($spreadsheet);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="plantilla_sfl.xlsx"');
+        header('Cache-Control: max-age=0');
+        $writer->save('php://output');
+        exit;
+    }
+
+    public function download_plantilla_opt2()
+    {
+        $plantillaPath = base_path('plantillas_excels/plantilla_sfl.xlsx');
+
+        if (!file_exists($plantillaPath)) {
+            return response()->json(['error' => 'La plantilla no existe.'], 404);
+        }
+
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($plantillaPath);
+        $sheet = $spreadsheet->getActiveSheet();
+
         $query = SFL::all();
         $fila = 2; // Comenzamos en la fila 2 (asumiendo que la fila 1 es de encabezado)
 
         foreach ($query as $value) {
-            // Buscar institución educativa por ID
             $ie = InstitucionEducativa::find($value->institucioneducativa_id);
             if (!$ie) {
                 continue; // Si no se encuentra la institución, pasar al siguiente registro
             }
 
-            // Rellenar las celdas
             $sheet->setCellValue('A' . $fila, $ie->codModular);
             $sheet->setCellValue('B' . $fila, $value->estado);
             $sheet->setCellValue('C' . $fila, $value->tipo);
@@ -1003,24 +1156,71 @@ class SFLController extends Controller
             $fila++;
         }
 
-        // Guardar el archivo Excel en la carpeta de la raíz
-        $fileName = 'plantilla_sfl_rellena.xlsx';
+        $fileName = 'plantilla_sfl.xlsx';
         $savePath = base_path('plantillas_excels/' . $fileName);
 
-        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $writer = new Xlsx($spreadsheet);
         $writer->save($savePath);
 
-        // Verificar si el archivo fue creado correctamente
         if (file_exists($savePath)) {
-            return response()->download($savePath)->deleteFileAfterSend(true);
+            return response()->download($savePath); //->deleteFileAfterSend(true);
         } else {
             return response()->json(['error' => 'No se pudo generar el archivo Excel.'], 500);
         }
     }
 
-    public function download_plantilla0()
+    public function download_plantillaasdasd()
     {
-        $filePath = base_path('plantillas_excels/plantilla_sfl.xlsx');  // Ruta absoluta al archivo en la raíz del proyecto
+        $plantillaPath = base_path('plantillas_excels/plantilla_sfl.xlsx');
+
+        if (!file_exists($plantillaPath)) {
+            return response()->json(['error' => 'La plantilla no existe.'], 404);
+        }
+
+        // Cargar la plantilla
+        $spreadsheet = IOFactory::load($plantillaPath);
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $query = SFL::all();
+        $fila = 2; // Comenzamos en la fila 2 (asumiendo que la fila 1 es de encabezado)
+
+        foreach ($query as $value) {
+            $ie = InstitucionEducativa::find($value->institucioneducativa_id);
+            if (!$ie) {
+                continue; // Si no se encuentra la institución, pasar al siguiente registro
+            }
+
+            $sheet->setCellValue('A' . $fila, $ie->codModular);
+            $sheet->setCellValue('B' . $fila, $value->estado);
+            $sheet->setCellValue('C' . $fila, $value->tipo);
+            $sheet->setCellValue('D' . $fila, $value->partida_electronica);
+            $sheet->setCellValue('E' . $fila, $value->anotacion);
+            $sheet->setCellValue('F' . $fila, \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($value->fecha_registro));
+            $sheet->setCellValue('G' . $fila, \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($value->fecha_inscripcion));
+            $fila++;
+        }
+
+        $fileName = 'plantilla_sfl.xlsx';
+        $savePath = base_path('plantillas_excels/' . $fileName);
+
+        // Crear el escritor Xlsx
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+
+        try {
+            // Guardar el archivo Excel
+            $writer->save($savePath);
+
+            // Limpiar buffers y descargar el archivo
+            ob_end_clean();
+            return response()->download($savePath);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'No se pudo generar el archivo Excel. ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function download_plantillasdfsdf()
+    {
+        $filePath = base_path('plantillas_excels/plantilla_sfl.xlsx');
         return response()->download($filePath);
     }
 
@@ -1105,15 +1305,36 @@ class SFLController extends Controller
         return response()->json(['status' => TRUE, 'modular' => $notmodular]);
     }
 
+    // public function fechaExcel($ff)
+    // {
+    //     if ($ff) {
+    //         if ($ff != 'NULL') {
+    //             $unix = (intval($ff) - 25569) * 86400;
+    //             $php = new DateTime("@$unix");
+    //             return $php->format('Y-m-d');
+    //         }
+    //     }
+    //     return null;
+    // }
     public function fechaExcel($ff)
     {
         if ($ff) {
-            if ($ff != 'NULL') {
-                $unix = (intval($ff) - 25569) * 86400;
+            // Si la fecha es numérica (formato serial de Excel)
+            if (is_numeric($ff)) {
+                $unix = ($ff - 25569) * 86400; // Convertir de formato Excel a Unix timestamp
                 $php = new DateTime("@$unix");
-                return $php->format('Y-m-d');
+                return $php->format('Y-m-d');   // Devolver en formato Y-m-d
+            }
+
+            // Si la fecha es una cadena (formato dd/mm/yyyy)
+            if (preg_match('/\d{2}\/\d{2}\/\d{4}/', $ff)) {
+                $php = DateTime::createFromFormat('d/m/Y', $ff); // Convertir de formato dd/mm/yyyy a DateTime
+                if ($php) {
+                    return $php->format('Y-m-d');   // Devolver en formato Y-m-d
+                }
             }
         }
+
         return null;
     }
 }

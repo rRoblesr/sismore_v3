@@ -549,8 +549,8 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="table-responsive">
-                                <table id="tbvistaprevia" class="table table-striped table-bordered tablex"
-                                    style="font-size: 12px">
+                                <table id="tbvistaprevia" class="table table-sm table-striped table-bordered"
+                                    style="font-size: 11px">
                                     <thead class="cabecera-dataTable">
                                         <tr class="text-white bg-success-0">
                                             {{-- <th>Nº</th> --}}
@@ -1063,7 +1063,9 @@
             $('#modal_vistaprevia').modal('show');
         }
 
-        function saveplantilla() {
+        function saveplantilla() { //btnSavePlantilla
+            $('#btnSavePlantilla').html('<i class="fa fa-spinner fa-pulse"></i> guardando...');
+            $('#btnSavePlantilla').attr('disabled', true);
             var fileInput = $('#cargarplantilla')[0]; // Obtén el input de tipo file
             if (fileInput.files.length > 0) {
                 var formData = new FormData();
@@ -1087,13 +1089,19 @@
                         }
                         table_principal.ajax.reload(null, false);
                         $('#modal_vistaprevia').modal('hide');
+                        $('#btnSavePlantilla').html('Guardar');
+                        $('#btnSavePlantilla').attr('disabled', false);
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         console.error("Error al cargar el archivo:", errorThrown);
+                        $('#btnSavePlantilla').html('Guardar');
+                        $('#btnSavePlantilla').attr('disabled', false);
                     }
                 });
             } else {
                 console.log("No se ha seleccionado ningún archivo");
+                $('#btnSavePlantilla').html('Guardar');
+                $('#btnSavePlantilla').attr('disabled', false);
             }
         }
     </script>
