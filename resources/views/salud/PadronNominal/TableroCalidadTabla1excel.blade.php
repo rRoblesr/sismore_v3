@@ -1,21 +1,18 @@
 <table id="tabla1" class="table table-striped table-bordered tablex" style="font-size:11px;">
     <thead>
         <tr class="table-success-0 text-white">
-            <th rowspan="2">UGEL</th>
-            <th colspan="5">TABLETAS</th>
-            <th colspan="5">CARGADORES SOLARES</th>
+            <th rowspan="2">N°</th>
+            <th colspan="5">Registro con Observaciones</th>
+            <th colspan="5">Total</th>
+            <th colspan="5">Edades de Niños y Niñas menores a 6 años</th>
         </tr>
         <tr class="table-success-0 text-white">
-            <th>Programado</th>
-            <th>Entregado</th>
-            <th>Avance</th>
-            <th>Devueltas</th>
-            <th>Perdidas</th>
-            <th>Programado</th>
-            <th>Entregado</th>
-            <th>Avance</th>
-            <th>Devueltas</th>
-            <th>Perdidas</th>
+            <th>{{ '<' }} 1 A</th>
+            <th>1 A</th>
+            <th>2 A</th>
+            <th>3 A</th>
+            <th>4 A</th>
+            <th>5 A</th>
         </tr>
     </thead>
     <tbody>
@@ -58,11 +55,17 @@
     function avance($monto)
     {
         if ($monto < 51) {
-            return '<span class="badge badge-pill badge-danger" style="font-size:90%;">' . round($monto, 2) . '%</span>';
+            return '<span class="badge badge-pill badge-danger" style="font-size:90%;">' .
+                round($monto, 2) .
+                '%</span>';
         } elseif ($monto < 76) {
-            return '<span class="badge badge-pill badge-warning" style="font-size:90%;background-color:#eb960d;">' . round($monto, 2) . '%</span>';
+            return '<span class="badge badge-pill badge-warning" style="font-size:90%;background-color:#eb960d;">' .
+                round($monto, 2) .
+                '%</span>';
         } else {
-            return '<span class="badge badge-pill badge-success" style="font-size:90%;">' . round($monto, 2) . '%</span>';
+            return '<span class="badge badge-pill badge-success" style="font-size:90%;">' .
+                round($monto, 2) .
+                '%</span>';
         }
     }
 @endphp

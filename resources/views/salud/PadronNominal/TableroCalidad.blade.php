@@ -194,7 +194,7 @@
                     <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11"></h3>
                 </div>
                 <div class="card-body p-0">
-                    <div id="anal1" style="height: 20rem"></div>
+                    <div id="anal1"></div>
                 </div>
             </div>
         </div>
@@ -204,7 +204,7 @@
                     <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11"></h3>
                 </div>
                 <div class="card-body p-0">
-                    <div id="anal2" style="height: 20rem"></div>
+                    <div id="anal2"></div>
                 </div>
             </div>
         </div>
@@ -215,7 +215,7 @@
                     <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11"></h3>
                 </div>
                 <div class="card-body p-0">
-                    <div id="anal3" style="height: 20rem"></div>
+                    <div id="anal3"></div>
                 </div>
             </div>
         </div>
@@ -225,7 +225,7 @@
                     <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11"></h3>
                 </div>
                 <div class="card-body p-0">
-                    <div id="anal4" style="height: 20rem"></div>
+                    <div id="anal4"></div>
                 </div>
             </div>
         </div>
@@ -289,10 +289,11 @@
 
         function cargarCards() {
             panelGraficas('head');
-            // panelGraficas('anal1');
-            // panelGraficas('anal2');
-            // panelGraficas('anal3');
-            // panelGraficas('tabla1');
+            panelGraficas('anal1');
+            panelGraficas('anal2');
+            panelGraficas('anal3');
+            panelGraficas('anal4');
+            panelGraficas('tabla1');
             // panelGraficas('tabla2');
         }
 
@@ -370,11 +371,20 @@
                             });
                             break;
                         case 'anal1':
+                            console.log(data.avance);
+                            GaugeSeries('anal1', data.avance, 'Niños y Niñas con DNI');
                             break;
                         case 'anal2':
+                            GaugeSeries('anal2', data.avance, 'Niños y Niñas Visitados');
+                            break;
+                        case 'anal3':
+                            GaugeSeries('anal3', data.avance, 'Niños y Niñas con EESS');
+                            break;
+                        case 'anal4':
+                            GaugeSeries('anal4', data.avance, 'Niños y Niñas con Seguro');
                             break;
                         case 'tabla1':
-                            $('#ctabla1').html(data.excel);
+                            // $('#ctabla1').html(data.excel);
                             break;
                         case 'tabla2':
                             $('#ctabla2').html(data.excel);
@@ -398,363 +408,247 @@
             });
         }
 
-        function gSimpleColumn(div, datax, titulo, subtitulo, tituloserie) {
-
+        function GaugeSeries(div, data, title) {
             Highcharts.chart(div, {
                 chart: {
-                    type: 'column',
-                },
-                title: {
-                    enabled: false,
-                    text: titulo,
-                },
-                subtitle: {
-                    enabled: false,
-                    //text: subtitulo,
-                },
-                xAxis: {
-                    type: 'category',
-                },
-                yAxis: {
-                    /* max: 100, */
-                    title: {
-                        enabled: false,
-                        text: 'Porcentaje',
-                    }
-                },
-                /* colors: [
-                    '#8085e9',
-                    '#2b908f',
-                ], */
-                series: [{
-                    showInLegend: tituloserie != '',
-                    name: tituloserie,
-                    label: {
-                        enabled: false
-                    },
-                    colorByPoint: false,
-                    data: datax,
-                }],
-                tooltip: {
-                    pointFormat: '<span style="color:{point.color}">\u25CF</span> Hay: <b>{point.y}</b><br/>',
-                    shared: true
-                },
-                plotOptions: {
-                    series: {
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                        },
-                    }
-                },
-                exporting: {
-                    enabled: false
-                },
-                credits: false,
-            });
-        }
-
-        function gPie(div, datos, titulo, subtitulo, tituloserie) {
-            Highcharts.chart(div, {
-                chart: {
-                    plotBackgroundColor: null,
-                    plotBorderWidth: null,
-                    plotShadow: false,
-                    type: 'pie'
-                },
-                title: {
-                    enabled: false,
-                    text: titulo, //'Browser market shares in January, 2018'
-                },
-                subtitle: {
-                    enabled: false,
-                    //text: subtitulo,
-                },
-                tooltip: {
-                    //pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
-                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
-                },
-                accessibility: {
-                    point: {
-                        valueSuffix: '%'
-                    }
-                },
-                plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: true,
-                            //format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                            format: '{point.y:,0f} ( {point.percentage:.1f}% )',
-                            connectorColor: 'silver'
-                        }
-                    }
-                },
-                /* plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: true,
-                            //format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                            format: '{point.percentage:.1f}% ({point.y})',
-                            connectorColor: 'silver'
-                        }
-                    }
-                }, */
-                series: [{
-                    showInLegend: true,
-                    //name: 'Share',
-                    data: datos,
-                }],
-                exporting: {
-                    enabled: false
-                },
-                credits: false,
-            });
-        }
-
-        function gBasicColumn(div, categorias, datos, titulo, subtitulo) {
-            Highcharts.chart(div, {
-                chart: {
-                    type: 'column'
-                },
-                title: {
-                    text: titulo
-                },
-                subtitle: {
-                    text: subtitulo
-                },
-                xAxis: {
-                    categories: categorias,
-                },
-                yAxis: {
-
-                    min: 0,
-                    title: {
-                        text: 'Rainfall (mm)',
-                        enabled: false
-                    }
-                },
-
-                tooltip: {
-                    pointFormat: '<span style="color:{point.color}">\u25CF</span> Hay: <b>{point.y}</b><br/>',
-                    shared: true
-                },
-                plotOptions: {
-                    series: {
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                        },
-                    }
-                },
-                series: datos,
-                credits: false,
-            });
-        }
-
-        function gsemidona(div, valor, colors) {
-            Highcharts.chart(div, {
-                chart: {
-                    plotBackgroundColor: null,
-                    plotBorderWidth: 0,
-                    plotShadow: false,
                     height: 200,
+                    type: 'solidgauge',
+                    margin: [10, 10, 10, 10],
+                    spacing: [10, 10, 10, 10]
                 },
                 title: {
-                    text: valor + '%', // 'Browser<br>shares<br>January<br>2022',
-                    align: 'center',
-                    verticalAlign: 'middle',
-                    y: 15, //60,
+                    text: title,
+                    verticalAlign: 'top',
                     style: {
-                        //fontWeight: 'bold',
-                        //color: 'orange',
-                        fontSize: '30'
+                        fontSize: '12px',
+                        fontWeight: 'normal'
                     }
                 },
-                tooltip: {
-                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                pane: {
+                    startAngle: 0,
+                    endAngle: 360,
+                    background: [{ // Fondo del anillo
+                        outerRadius: '100%',
+                        innerRadius: '80%',
+                        backgroundColor: Highcharts.color('#E0E0E0').setOpacity(0.3).get(),
+                        borderWidth: 0
+                    }]
                 },
-                accessibility: {
-                    point: {
-                        valueSuffix: '%'
-                    }
+                yAxis: {
+                    min: 0,
+                    max: 100,
+                    lineWidth: 0,
+                    tickPositions: []
                 },
                 plotOptions: {
-                    pie: {
+                    solidgauge: {
                         dataLabels: {
-                            enabled: true,
-                            distance: -50,
-                            style: {
-                                fontWeight: 'bold',
-                                color: 'white'
-                            },
-
+                            format: '<div style="text-align:center"><span style="font-size:24px">{y}%</span><br/>' +
+                                '<span style="font-size:12px;opacity:0.6">Avance</span></div>',
+                            y: -25,
+                            borderWidth: 0,
+                            useHTML: true
                         },
-                        startAngle: -90,
-                        endAngle: 90,
-                        center: ['50%', '50%'], //['50%', '75%'],
-                        size: '120%',
-                        borderColor: '#98a6ad',
-                        colors: colors,
+                        // linecap: 'round',
+                        // rounded: true
                     }
                 },
                 series: [{
-                    type: 'pie',
                     name: 'Avance',
-                    innerSize: '65%',
-                    data: [
-                        ['', valor],
-                        //['Edge', 11.97],
-                        //['Firefox', 5.52],
-                        //['Safari', 2.98],
-                        //['Internet Explorer', 1.90],
-                        {
-                            name: '',
-                            y: 100 - valor,
-                            dataLabels: {
-                                enabled: false
-                            }
-                        }
-                    ]
+                    data: [{
+                        y: data,
+                        color: data >= 95 ? '#5eb9aa' : (data >= 75 ? '#f5bd22' :
+                            '#ef5350')
+                    }],
+                    innerRadius: '80%',
+                    radius: '100%',
                 }],
-                exporting: {
+                tooltip: {
                     enabled: false
                 },
-                credits: false
+                credits: {
+                    enabled: false
+                },
+                exporting: {
+                    enabled: false
+                }
             });
         }
 
-        function gAnidadaColumn(div, categoria, series, titulo, subtitulo) {
+        function GaugeSeriesyyy(div, data) {
             Highcharts.chart(div, {
                 chart: {
-                    zoomType: 'xy',
+                    height: 165,
+                    margin: [0, 0, 0, 0],
+                    spacing: [0, 0, 0, 0],
+                    type: 'solidgauge'
                 },
-                title: {
-                    text: titulo, //'Browser market shares in January, 2018'
-                },
-                subtitle: {
-                    text: subtitulo,
-                },
-                xAxis: [{
-                    categories: categoria,
-                    crosshair: true
-                }],
-                yAxis: [{ // Primary yAxis
-                        //max: 2000000000,
-                        labels: {
-                            enabled: false,
+                yAxis: {
+                    min: 0,
+                    max: 150,
+                    dataClasses: [{
+                            from: 0,
+                            to: 50,
+                            color: '#ef5350'
                         },
-                        title: {
-                            enabled: false,
+                        {
+                            from: 51,
+                            to: 99,
+                            color: '#f5bd22'
                         },
-                        /* labels: {
-                            format: '{value}°C',
-                            style: {
-                                color: Highcharts.getOptions().colors[2]
-                            }
-                        },
-                        title: {
-                            text: 'Temperature',
-                            style: {
-                                color: Highcharts.getOptions().colors[2]
-                            }
-                        }, */
-                        //opposite: true,
-                    }, { // Secondary yAxis
-                        gridLineWidth: 0,
-                        labels: {
-                            enabled: false,
-                        },
-                        title: {
-                            enabled: false,
-                        },
-                        /* title: {
-                            text: 'Rainfall',
-                            style: {
-                                color: Highcharts.getOptions().colors[0]
-                            }
-                        },
-                        labels: {
-                            format: '{value} mm',
-                            style: {
-                                color: Highcharts.getOptions().colors[0]
-                            }
-                        }, */
-                        min: -200,
-                        max: 150,
-                        opposite: true,
+                        {
+                            from: 100,
+                            to: 150,
+                            color: '#5eb9aa'
+                        }
+                    ],
+                    labels: {
+                        enabled: false
                     },
-                    /* { // Tertiary yAxis
-                                       gridLineWidth: 0,
-                                       title: {
-                                           text: 'Sea-Level Pressure',
-                                           style: {
-                                               color: Highcharts.getOptions().colors[1]
-                                           }
-                                       },
-                                       labels: {
-                                           format: '{value} mb',
-                                           style: {
-                                               color: Highcharts.getOptions().colors[1]
-                                           }
-                                       },
-                                       opposite: true
-                                   } */
-                ],
-                series: series,
-                plotOptions: {
-                    /* columns: {
-                        stacking: 'normal'
-                    }, */
-                    series: {
-                        //showInLegend: false,
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                            //format: '{point.y:,.0f}',
-                            //format: '{point.y:.1f}%',
-                            /* formatter: function() {
-                                if (this.y > 1000000) {
-                                    return Highcharts.numberFormat(this.y / 1000000, 0) + "M";
-                                } else if (this.y > 1000) {
-                                    return Highcharts.numberFormat(this.y / 1000, 0) + "K";
-                                } else if (this.y < 101) {
-                                    return this.y + "%";
-                                } else {
-                                    return this.y;
-                                }
-                            }, */
-                            style: {
-                                fontWeight: 'normal',
-                            }
-                        },
-                    },
+                    tickLength: 0,
+                    lineWidth: 0, // Remueve la línea del borde del gauge
+                    gridLineWidth: 0 // Elimina las líneas de división
                 },
-                tooltip: {
-                    shared: true,
+                pane: {
+                    background: [{
+                        // Sin borde, remueve el efecto de seccionado
+                        outerRadius: '100%',
+                        innerRadius: '80%',
+                        borderWidth: 0
+                    }]
                 },
-                legend: {
-                    itemStyle: {
-                        //"color": "#333333",
-                        "cursor": "pointer",
-                        "fontSize": "10px",
-                        "fontWeight": "normal",
-                        "textOverflow": "ellipsis"
-                    },
+                credits: {
+                    enabled: false
                 },
                 exporting: {
                     enabled: false
                 },
-                credits: false,
+                title: {
+                    text: ''
+                },
+                plotOptions: {
+                    solidgauge: {
+                        dataLabels: {
+                            format: '<div style="text-align:center; margin-top: -20px">' +
+                                '<div style="font-size:2.5em;">{y}%</div>' +
+                                '<div style="font-size:12px; opacity:0.4;">Avance</div>' +
+                                '</div>',
+                            useHTML: true,
+                            borderWidth: 0,
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Avance',
+                    innerRadius: '80%',
+                    data: [{
+                        y: data,
+                        color: data >= 100 ? '#5eb9aa' : (data >= 51 ? '#f5bd22' :
+                            '#ef5350')
+                    }],
+                    radius: '100%',
+                }],
+                tooltip: {
+                    valueSuffix: '%',
+                    backgroundColor: '#FFFFFF',
+                    borderColor: 'gray',
+                    shadow: true,
+                    style: {
+                        fontSize: '12px'
+                    }
+                }
+            });
+        }
+
+        function GaugeSeriesxx(div, data) {
+            Highcharts.chart(div, {
+                chart: {
+                    height: 165,
+                    margin: [0, 0, 0, 0],
+                    spacing: [0, 0, 0, 0],
+                    type: 'solidgauge'
+                },
+                yAxis: {
+                    min: 0,
+                    max: 150, // Ajustado al máximo de dataClasses
+                    dataClasses: [{
+                            from: 0,
+                            to: 50,
+                            color: '#ef5350'
+                        },
+                        {
+                            from: 51,
+                            to: 99,
+                            color: '#f5bd22'
+                        },
+                        {
+                            from: 100,
+                            to: 150,
+                            color: '#5eb9aa'
+                        }
+                    ],
+                    labels: {
+                        enabled: false
+                    },
+                    tickLength: 0,
+                    lineColor: 'transparent',
+                    gridLineWidth: 0
+                },
+                pane: {
+                    background: {
+                        innerRadius: '80%',
+                        outerRadius: '100%'
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                exporting: {
+                    enabled: false
+                },
+                title: {
+                    text: ''
+                },
+                plotOptions: {
+                    solidgauge: {
+                        dataLabels: {
+                            format: '<div style="text-align:center; margin-top: -20px">' +
+                                '<div style="font-size:2.5em;">{y}%</div>' +
+                                '<div style="font-size:12px; opacity:0.4;">Avance</div>' +
+                                '</div>',
+                            useHTML: true,
+                            borderWidth: 0,
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Avance',
+                    innerRadius: '80%',
+                    data: [{
+                        y: data,
+                        color: data >= 100 ? '#5eb9aa' : (data >= 51 ? '#f5bd22' :
+                            '#ef5350') // Ajuste de color por valor
+                    }],
+                    radius: '100%',
+                }],
+                tooltip: {
+                    valueSuffix: '%',
+                    backgroundColor: '#FFFFFF',
+                    borderColor: 'gray',
+                    shadow: true,
+                    style: {
+                        fontSize: '12px'
+                    }
+                }
             });
         }
     </script>
 
+
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/highcharts-more.js"></script>
+    <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
     <!-- optional -->
     <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>

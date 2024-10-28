@@ -129,7 +129,94 @@ class PadronNominal extends Controller
                 $card3 = number_format($card3, 0);
                 $card4 = number_format($card4, 0);
                 return response()->json(compact('card1', 'card2', 'card3', 'card4'));
-
+            case 'anal1':
+                $sql1 = "SELECT * FROM par_importacion
+                        WHERE fuenteimportacion_id = ? AND estado = 'PR'
+                            AND DATE_FORMAT(fechaActualizacion, '%Y-%m') = (
+                                SELECT DATE_FORMAT(MAX(fechaActualizacion), '%Y-%m') FROM par_importacion 
+                                WHERE fuenteimportacion_id = ? AND estado = 'PR' AND YEAR(fechaActualizacion) = ?
+                            )
+                        ORDER BY fechaActualizacion DESC limit 1";
+                // $impMaxAnio = DB::table(DB::raw("($sql1) as tb"))->setBindings([$fuente, $fuente, $rq->anio])->first();
+                $query1 = DB::select($sql1, [$fuente, $fuente, $rq->anio]);
+                $impMaxAnio = $query1 ? $query1[0]->id : 0;
+                $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->count();
+                $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('tipo_doc', 'DNI')->count();
+                $avance = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
+                return response()->json(compact('avance'));
+            case 'anal2':
+                $sql1 = "SELECT * FROM par_importacion
+                        WHERE fuenteimportacion_id = ? AND estado = 'PR'
+                            AND DATE_FORMAT(fechaActualizacion, '%Y-%m') = (
+                                SELECT DATE_FORMAT(MAX(fechaActualizacion), '%Y-%m') FROM par_importacion 
+                                WHERE fuenteimportacion_id = ? AND estado = 'PR' AND YEAR(fechaActualizacion) = ?
+                            )
+                        ORDER BY fechaActualizacion DESC limit 1";
+                // $impMaxAnio = DB::table(DB::raw("($sql1) as tb"))->setBindings([$fuente, $fuente, $rq->anio])->first();
+                $query1 = DB::select($sql1, [$fuente, $fuente, $rq->anio]);
+                $impMaxAnio = $query1 ? $query1[0]->id : 0;
+                $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->count();
+                $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('visita', '1')->count();
+                $avance = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
+                return response()->json(compact('avance'));
+            case 'anal3':
+                $sql1 = "SELECT * FROM par_importacion
+                        WHERE fuenteimportacion_id = ? AND estado = 'PR'
+                            AND DATE_FORMAT(fechaActualizacion, '%Y-%m') = (
+                                SELECT DATE_FORMAT(MAX(fechaActualizacion), '%Y-%m') FROM par_importacion 
+                                WHERE fuenteimportacion_id = ? AND estado = 'PR' AND YEAR(fechaActualizacion) = ?
+                            )
+                        ORDER BY fechaActualizacion DESC limit 1";
+                $query1 = DB::select($sql1, [$fuente, $fuente, $rq->anio]);
+                $impMaxAnio = $query1 ? $query1[0]->id : 0;
+                $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->count();
+                $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('cui_atencion', '>', '0')->count();
+                $avance = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
+                return response()->json(compact('avance'));
+            case 'anal4':
+                $sql1 = "SELECT * FROM par_importacion
+                        WHERE fuenteimportacion_id = ? AND estado = 'PR'
+                            AND DATE_FORMAT(fechaActualizacion, '%Y-%m') = (
+                                SELECT DATE_FORMAT(MAX(fechaActualizacion), '%Y-%m') FROM par_importacion 
+                                WHERE fuenteimportacion_id = ? AND estado = 'PR' AND YEAR(fechaActualizacion) = ?
+                            )
+                        ORDER BY fechaActualizacion DESC limit 1";
+                $query1 = DB::select($sql1, [$fuente, $fuente, $rq->anio]);
+                $impMaxAnio = $query1 ? $query1[0]->id : 0;
+                $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->count();
+                $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)
+                    ->where(function ($query) {
+                        $query->whereRaw("FIND_IN_SET('1',seguro) > 0")
+                            ->orWhereRaw("FIND_IN_SET('2',seguro) > 0")
+                            ->orWhereRaw("FIND_IN_SET('3',seguro) > 0")
+                            ->orWhereRaw("FIND_IN_SET('4',seguro) > 0")
+                            ->orWhereNotNull('seguro');
+                    })
+                    ->count();
+                $avance = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
+                return response()->json(compact('avance', 'v1', 'v2'));
+            case 'tabla1':
+                $sql1 = "SELECT * FROM par_importacion
+                        WHERE fuenteimportacion_id = ? AND estado = 'PR'
+                            AND DATE_FORMAT(fechaActualizacion, '%Y-%m') = (
+                                SELECT DATE_FORMAT(MAX(fechaActualizacion), '%Y-%m') FROM par_importacion 
+                                WHERE fuenteimportacion_id = ? AND estado = 'PR' AND YEAR(fechaActualizacion) = ?
+                            )
+                        ORDER BY fechaActualizacion DESC limit 1";
+                $query1 = DB::select($sql1, [$fuente, $fuente, $rq->anio]);
+                $impMaxAnio = $query1 ? $query1[0]->id : 0;
+                $base = Mes::select('id')->where('id', '<', 11)->get();
+                $base[0]->criterio = 'Registros sin Número de Documento(DNI, CNV, CUI)';
+                $base[1]->criterio = 'Registros Duplicados del Número de Documento';
+                $base[2]->criterio = 'Registros sin Nombre Completos';
+                $base[3]->criterio = 'Registros sin Seguro de Salud';
+                $base[4]->criterio = 'Registros sin Visitas Domiciliarias';
+                $base[5]->criterio = 'Registros de Niños y Niñas Visitados y no Encontrados';
+                $base[6]->criterio = 'Registros sin Establecimiento de Atención';
+                $base[7]->criterio = 'Registros de Establecimiento de Atención de Otra Región';
+                $base[8]->criterio = 'Registros de Establecimiento de salud  de Otro Distrito';
+                $base[9]->criterio = 'Registros sin Nombres Completo de la Madre ';
+                return response()->json(compact('base'));
             default:
                 # code...
                 return [];
