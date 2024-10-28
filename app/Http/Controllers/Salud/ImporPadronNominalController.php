@@ -348,6 +348,17 @@ class ImporPadronNominalController extends Controller
             return $this->json_output(400, "Error en la carga de datos: " . $e->getMessage());
         }
 
+        try {
+            DB::select('call sal_pa_procesarControlCalidadColumnas(?)', [$importacion->id]);
+        } catch (Exception $e) {
+            // Si ocurre un error, actualizar el estado a 'PE' (pendiente) si es necesario
+            $importacion->estado = 'PE';
+            $importacion->save();
+
+            $mensaje = "Error al procesar la normalizacion de datos. " . $e->getMessage();
+            return $this->json_output(400, $mensaje);
+        }
+
         return $this->json_output(200, "Archivo Excel subido y procesado correctamente.");
     }
 

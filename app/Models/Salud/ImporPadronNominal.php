@@ -49,6 +49,7 @@ class ImporPadronNominal extends Model
         'nombres_madre',
         'celular_madre',
         'grado_instruccion',
-        'lengua_madre'
+        'lengua_madre',
+        'repetido'
     ];
 }

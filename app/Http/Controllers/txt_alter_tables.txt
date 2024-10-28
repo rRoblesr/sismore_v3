@@ -2424,8 +2424,10 @@ update `edu_sfl` set zona_registral='ZONA N° VI - OFICINA REGISTRAL DE PUCALLPA
 ALTER TABLE `edu_sfl` ADD `anotacion` INT NOT NULL AFTER `zona_registral`;
 
 
+// sirve para enumerar repetidos en un consulta
+select * from (SELECT id, importacion_id, padron, num_doc, tipo_doc, ROW_NUMBER() OVER(PARTITION BY tipo_doc, num_doc ORDER BY id) AS repetido FROM sal_impor_padron_nominal where importacion_id=2703 ORDER BY `repetido` DESC) as tb where num_doc='93939106';
 
-
+SELECT num_doc, COUNT(*) AS cantidad_repetidos FROM sal_impor_padron_nominal where importacion_id=2708 GROUP BY num_doc HAVING cantidad_repetidos > 2;
 
 
 
