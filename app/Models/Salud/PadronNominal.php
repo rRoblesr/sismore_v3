@@ -5,7 +5,7 @@ namespace App\Models\Salud;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ImporPadronNominal extends Model
+class PadronNominal extends Model
 {
     use HasFactory;
 
@@ -23,6 +23,8 @@ class ImporPadronNominal extends Model
         'cnv',
         'cui',
         'dni',
+        'num_doc',
+        'tipo_doc',
         'apellido_paterno',
         'apellido_materno',
         'nombre',
@@ -31,15 +33,22 @@ class ImporPadronNominal extends Model
         'direccion',
         'ubigeo',
         'centro_poblado',
-        'codigo_unico_nacimiento',
-        'codigo_unico_atencion',
+        'area_ccpp',
+        'cui_nacimiento',
+        'cui_atencion',
         'seguro',
+        'programa_social',
+        'visita',
+        'menor_encontrado',
+        'codigo_ie',
+        'nombre_ie',
         'tipo_doc_madre',
         'num_doc_madre',
         'apellido_paterno_madre',
-        'celular_ma',
-        'lengua_ma',
-        'visita',
-        'menor_encontrado'
+        'apellido_materno_madre',
+        'nombres_madre',
+        'celular_madre',
+        'grado_instruccion',
+        'lengua_madre'
     ];
 }

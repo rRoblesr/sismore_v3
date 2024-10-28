@@ -3,7 +3,12 @@
 namespace App\Http\Controllers\Salud;
 
 use App\Http\Controllers\Controller;
+use App\Models\Educacion\Importacion;
+use App\Models\Parametro\Mes;
+use App\Models\Salud\ImporPadronNominal;
 use App\Models\Salud\PadronCalidad;
+use App\Repositories\Educacion\ImportacionRepositorio;
+use App\Repositories\Parametro\UbigeoRepositorio;
 use App\Repositories\Salud\PadronNominalRepositorioSalud;
 use Exception;
 use Illuminate\Http\Request;
@@ -14,6 +19,17 @@ class PadronNominal extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+    }
+
+    public function meses($anio)
+    {
+        $mes = Importacion::distinct()->select(DB::raw('month(fechaActualizacion) as id'))
+            ->where(DB::raw('year(fechaActualizacion)'), $anio)->where('estado', 'PR')->where('fuenteImportacion_id', ImporPadronNominalController::$FUENTE)
+            ->orderBy('id')->get();
+        foreach ($mes as $key => $value) {
+            $value->mes = Mes::find($value->id)->mes;
+        }
+        return response()->json($mes);
     }
 
     public function index()
@@ -76,65 +92,47 @@ class PadronNominal extends Controller
         return view('salud.PadronNominal.seguimiento', compact('actualizado'));
     }
 
-    public function calidad()
+    public function tablero_calidad()
     {
-        // return $red = PadronCalidad::from('sal_padron_calidad as pc')
-        //     ->join('sal_establecimiento as e', 'e.codigo_unico', '=', 'pc.cod_eess_atencion')
-        //     ->join('sal_microred as mr', 'mr.id', '=', 'e.microrred_id')
-        //     ->join('sal_red as r', 'r.id', '=', 'mr.red_id')->distinct()->select('r.*')->get();
-        $actualizado = '';
-        return view('salud.PadronNominal.calidad', compact('actualizado'));
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronNominalController::$FUENTE); //nexus $imp3
+        $mes = Mes::find($imp->mes);
+        $anios = ImportacionRepositorio::anios_porfuente(ImporPadronNominalController::$FUENTE);
+        $provincias = UbigeoRepositorio::provincia_select('25');
+        // compact('imp', 'mes');
+        $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $mes->mes . ' del ' . $imp->anio;
+        return view('salud.PadronNominal.TableroCalidad', compact('actualizado', 'anios', 'provincias'));
     }
 
-    public function calidadListado(Request $rq)
+    public function tablero_calidad_reporte(Request $rq)
     {
-        $draw = 0;
-        $start = 0;
-        $length = 0;
-        // $sector = session('usuario_sector');
-        // $nivel = session('usuario_nivel');
-        // $codigo_institucion = session('usuario_codigo_institucion');
-        // $nombre_columna = ($sector == '14') ? "cod_eess_atencion" : "ubigeo";
-        // //dd($sector, ' - ', $nivel, ' - ', $nombre_columna, ' . ', $codigo_institucion);
-        // $tablon = PadronCalidad::select('codigo_calidad', 'nombre_calidad', DB::raw('COUNT(*) AS cantidad'));
-        // if (($sector == '14' && $nivel == 4) || $sector == '2')
-        //     $tablon = $tablon->where($nombre_columna, $codigo_institucion);
-        // if ($sector = '14' && $nivel == 2) {
-        //     $ipress = DB::table('m_establecimiento')
-        //         ->select('cod_2000')
-        //         ->where('cod_disa', '34')->where('cod_red', $codigo_institucion);
+        $fuente = ImporPadronNominalController::$FUENTE;
+        switch ($rq->div) {
+            case 'head':
+                $sql1 = "SELECT * FROM par_importacion
+                        WHERE fuenteimportacion_id = ? AND estado = 'PR'
+                            AND DATE_FORMAT(fechaActualizacion, '%Y-%m') = (
+                                SELECT DATE_FORMAT(MAX(fechaActualizacion), '%Y-%m') FROM par_importacion 
+                                WHERE fuenteimportacion_id = ? AND estado = 'PR' AND YEAR(fechaActualizacion) = ?
+                            )
+                        ORDER BY fechaActualizacion DESC limit 1";
+                // $impMaxAnio = DB::table(DB::raw("($sql1) as tb"))->setBindings([$fuente, $fuente, $rq->anio])->first();
+                $query1 = DB::select($sql1, [$fuente, $fuente, $rq->anio]);
+                $impMaxAnio = $query1 ? $query1[0]->id : 0;
 
-        //     $tablon = $tablon->joinSub($ipress, 'es', function ($join) {
-        //         $join->on('cod_eess_atencion', '=', 'es.cod_2000');
-        //     });
-        // }
-        // $tablon = $tablon->groupBy('codigo_calidad', 'nombre_calidad')->get();
+                $card1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->count();
+                $card2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('tipo_doc', 'DNI')->count();
+                $card3 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('tipo_doc', 'CNV')->count();
+                $card4 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('tipo_doc', 'CUI')->count();
 
-        $query = PadronCalidad::select('codigo_calidad', 'nombre_calidad', DB::raw('COUNT(*) AS cantidad'));
-        // if ($rq->red > 0) $query = $query->where('red', $rq->red);
-        // if ($rq->microred > 0) $query = $query->where('microred', $rq->microred);
-        // if ($rq->eess > 0) $query = $query->where('ipress', $rq->eess);
-        $query = $query->groupBy('codigo_calidad', 'nombre_calidad')->get();
+                $card1 = number_format($card1, 0);
+                $card2 = number_format($card2, 0);
+                $card3 = number_format($card3, 0);
+                $card4 = number_format($card4, 0);
+                return response()->json(compact('card1', 'card2', 'card3', 'card4'));
 
-        //dd($tablon);
-        $data = [];
-        foreach ($query as $key => $value) {
-            $boton = "<button type='button' onclick=\"verListadoTipo('$value->codigo_calidad')\" class='btn btn-primary btn-xs'><i class='fa fa-list'></i> </button>";
-            $data[] = array(
-                $key + 1,
-                $value->codigo_calidad,
-                $value->nombre_calidad,
-                $value->cantidad,
-                $boton . '&nbsp;',
-            );
+            default:
+                # code...
+                return [];
         }
-
-        $result = array(
-            "draw" => $draw,
-            "recordsTotal" => $start,
-            "recordsFiltered" => $length,
-            "data" => $data
-        );
-        return response()->json($result);
     }
 }
