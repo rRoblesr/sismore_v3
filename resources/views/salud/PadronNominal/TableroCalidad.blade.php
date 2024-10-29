@@ -384,7 +384,7 @@
                             GaugeSeries('anal4', data.avance, 'Porcentaje con EESS de atención');
                             break;
                         case 'tabla1':
-                            // $('#ctabla1').html(data.excel);
+                            $('#ctabla1').html(data.excel);
                             break;
                         case 'tabla2':
                             $('#ctabla2').html(data.excel);

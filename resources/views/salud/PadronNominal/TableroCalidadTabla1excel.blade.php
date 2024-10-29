@@ -2,9 +2,9 @@
     <thead>
         <tr class="table-success-0 text-white">
             <th rowspan="2">N°</th>
-            <th colspan="5">Registro con Observaciones</th>
-            <th colspan="5">Total</th>
-            <th colspan="5">Edades de Niños y Niñas menores a 6 años</th>
+            <th rowspan="2">Registro con Observaciones</th>
+            <th rowspan="2">Total</th>
+            <th colspan="6">Edades de Niños y Niñas menores a 6 años</th>
         </tr>
         <tr class="table-success-0 text-white">
             <th>{{ '<' }} 1 A</th>
@@ -19,9 +19,9 @@
         @foreach ($base as $key => $item)
             <tr class="text-center">
                 <td>{{ $key + 1 }}</td>
-                <td class="text-left">{{ $item->criterio }}</td>
-                <td>{{ number_format($item->t1, 0) }}</td>
-                <td>{{ number_format($item->t2, 0) }}</td>
+                <td class="text-left"><a href="#">{{ $item->criterio }}</a></td>
+                <td>{{ number_format($item->total, 0) }}</td>
+                {{-- <td>{{ number_format($item->t2, 0) }}</td>
                 <td class="table-warning text-center">{!! avance($item->t3) !!}</td>
                 <td>{{ number_format($item->t4, 0) }}</td>
                 <td>{{ number_format($item->t5, 0) }}</td>
@@ -29,25 +29,10 @@
                 <td>{{ number_format($item->c2, 0) }}</td>
                 <td class="table-warning text-center">{!! avance($item->c3) !!}</td>
                 <td>{{ number_format($item->c4, 0) }}</td>
-                <td>{{ number_format($item->c5, 0) }}</td>
+                <td>{{ number_format($item->c5, 0) }}</td> --}}
             </tr>
         @endforeach
     </tbody>
-    <tfoot>
-        <tr class="table-success-0 text-white text-center">
-            <td class="text-left">TOTAL</td>
-            <td>{{ number_format($foot->t1, 0) }}</td>
-            <td>{{ number_format($foot->t2, 0) }}</td>
-            <td class="text-center">{!! avance($item->t3) !!}</td>
-            <td>{{ number_format($foot->t4, 0) }}</td>
-            <td>{{ number_format($foot->t5, 0) }}</td>
-            <td>{{ number_format($foot->c1, 0) }}</td>
-            <td>{{ number_format($foot->c2, 0) }}</td>
-            <td class="text-center">{!! avance($item->c3) !!}</td>
-            <td>{{ number_format($foot->c4, 0) }}</td>
-            <td>{{ number_format($foot->c5, 0) }}</td>
-        </tr>
-    </tfoot>
 </table>
 
 

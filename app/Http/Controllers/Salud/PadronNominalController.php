@@ -211,6 +211,7 @@ class PadronNominalController extends Controller
                         ORDER BY fechaActualizacion DESC limit 1";
                 $query1 = DB::select($sql1, [$fuente, $fuente, $rq->anio]);
                 $impMaxAnio = $query1 ? $query1[0]->id : 0;
+
                 $base = Mes::select('id')->get();
                 $base[0]->criterio = 'Registro sin Número de Documento(DNI, CNV, CUI)';
                 $base[1]->criterio = 'Registro Duplicados del Número de Documento';
@@ -224,7 +225,45 @@ class PadronNominalController extends Controller
                 $base[9]->criterio = 'Registro sin Nombres Completo de la Madre ';
                 $base[10]->criterio = 'Registro sin Grado de Instrucción de la Madre ';
                 $base[11]->criterio = 'Registro sin Lengua Habitual de la Madre ';
-                return response()->json(compact('base'));
+
+                $cri1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('tipo_doc', 'padron')->count();
+                $base[0]->total = $cri1;
+                $cri2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '2')->count();
+                $base[1]->total = $cri2;
+                $cri3 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where(function ($q) {
+                    $q->where('apellido_paterno', '')->orWhere('apellido_materno', '')->orWhere('nombre', '')->orWhereNull('apellido_paterno')->orWhereNull('apellido_materno')->orWhereNull('nombre');
+                })->count();
+                $base[2]->total = $cri3;
+                $cri4 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where(function ($q) {
+                    // $q->whereRaw("FIND_IN_SET('0',seguro) > 0")->orWhereNull('seguro');
+                    // $q->whereRaw("seguro = '0' OR FIND_IN_SET('0', seguro) > 0 AND seguro NOT LIKE '%,%'")
+                    $q->whereRaw("seguro = '0' or seguro = '0,'")->orWhereNull('seguro');
+                    // $q->WhereNull('seguro');
+                })->count();
+                $base[3]->total = $cri4;
+                $cri5 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('visita','!=', '1')->count();
+                $base[4]->total = $cri5;
+                $cri6 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('visita', '1')->where('menor_encontrado','!=', '1')->count();
+                $base[5]->total = $cri6;
+                $cri7 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('cui_atencion', '0')->count();
+                $base[6]->total = $cri7;
+                $cri8 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '2')->count();
+                $base[7]->total = $cri8;
+                $cri9 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '2')->count();
+                $base[8]->total = $cri9;
+                $cri10 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '2')->count();
+                $base[9]->total = $cri10;
+                $cri11 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '2')->count();
+                $base[10]->total = $cri11;
+                $cri12 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '2')->count();
+                $base[11]->total = $cri12;
+
+                // $foot = [];
+                // if ($base->count() > 0) {
+                //     $foot = clone $base[0];
+                // }
+                $excel = view('salud.PadronNominal.TableroCalidadTabla1excel', compact('base'))->render();
+                return response()->json(compact('excel'));
             default:
                 # code...
                 return [];
