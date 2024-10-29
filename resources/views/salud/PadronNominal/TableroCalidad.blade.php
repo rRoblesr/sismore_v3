@@ -294,7 +294,7 @@
             panelGraficas('anal3');
             panelGraficas('anal4');
             panelGraficas('tabla1');
-            // panelGraficas('tabla2');
+            panelGraficas('tabla2');
         }
 
         function cargarDistritos() {
@@ -388,12 +388,12 @@
                             break;
                         case 'tabla2':
                             $('#ctabla2').html(data.excel);
-                            $('#tabla2').DataTable({
-                                responsive: true,
-                                autoWidth: false,
-                                ordered: true,
-                                language: table_language,
-                            });
+                            // $('#tabla2').DataTable({
+                            //     responsive: true,
+                            //     autoWidth: false,
+                            //     ordered: true,
+                            //     language: table_language,
+                            // });
                             break;
 
                         default:

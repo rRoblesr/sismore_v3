@@ -235,15 +235,12 @@ class PadronNominalController extends Controller
                 })->count();
                 $base[2]->total = $cri3;
                 $cri4 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where(function ($q) {
-                    // $q->whereRaw("FIND_IN_SET('0',seguro) > 0")->orWhereNull('seguro');
-                    // $q->whereRaw("seguro = '0' OR FIND_IN_SET('0', seguro) > 0 AND seguro NOT LIKE '%,%'")
                     $q->whereRaw("seguro = '0' or seguro = '0,'")->orWhereNull('seguro');
-                    // $q->WhereNull('seguro');
                 })->count();
                 $base[3]->total = $cri4;
-                $cri5 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('visita','!=', '1')->count();
+                $cri5 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('visita', '!=', '1')->count();
                 $base[4]->total = $cri5;
-                $cri6 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('visita', '1')->where('menor_encontrado','!=', '1')->count();
+                $cri6 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('visita', '1')->where('menor_encontrado', '!=', '1')->count();
                 $base[5]->total = $cri6;
                 $cri7 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('cui_atencion', '0')->count();
                 $base[6]->total = $cri7;
@@ -251,11 +248,17 @@ class PadronNominalController extends Controller
                 $base[7]->total = $cri8;
                 $cri9 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '2')->count();
                 $base[8]->total = $cri9;
-                $cri10 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '2')->count();
+                $cri10 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where(function ($q) {
+                    $q->where('apellido_paterno_madre', '')->orWhere('apellido_materno_madre', '')->orWhere('nombres_madre', '')->orWhereNull('apellido_paterno_madre')->orWhereNull('apellido_materno_madre')->orWhereNull('nombres_madre');
+                })->count();
                 $base[9]->total = $cri10;
-                $cri11 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '2')->count();
+                $cri11 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where(function ($q) {
+                    $q->where('grado_instruccion', '')->orWhereNull('grado_instruccion');
+                })->count();
                 $base[10]->total = $cri11;
-                $cri12 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '2')->count();
+                $cri12 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where(function ($q) {
+                    $q->where('lengua_madre', '')->orWhereNull('lengua_madre');
+                })->count();
                 $base[11]->total = $cri12;
 
                 // $foot = [];
@@ -264,6 +267,77 @@ class PadronNominalController extends Controller
                 // }
                 $excel = view('salud.PadronNominal.TableroCalidadTabla1excel', compact('base'))->render();
                 return response()->json(compact('excel'));
+
+            case 'tabla2':
+                $sql1 = "SELECT * FROM par_importacion
+                            WHERE fuenteimportacion_id = ? AND estado = 'PR'
+                                AND DATE_FORMAT(fechaActualizacion, '%Y-%m') = (
+                                    SELECT DATE_FORMAT(MAX(fechaActualizacion), '%Y-%m') FROM par_importacion 
+                                    WHERE fuenteimportacion_id = ? AND estado = 'PR' AND YEAR(fechaActualizacion) = ?
+                                )
+                            ORDER BY fechaActualizacion DESC limit 1";
+                $query1 = DB::select($sql1, [$fuente, $fuente, $rq->anio]);
+                $impMaxAnio = $query1 ? $query1[0]->id : 0;
+
+                $base = ImporPadronNominal::join('par_ubigeo as u', 'u.codigo', '=', 'sal_impor_padron_nominal.ubigeo')->where('importacion_id', $impMaxAnio)->select(
+                    'u.nombre as distrito',
+                    DB::raw('count(*) as pob'),
+                    DB::raw('sum(if(genero="M",1,0)) as pobm'),
+                    DB::raw('sum(if(genero="F",1,0)) as pobf'),
+                    DB::raw('sum(if(tipo_edad in("D","M"),1,0)) as pob0'),
+                    DB::raw('sum(if(edad=1 and tipo_edad="A",1,0)) as pob1'),
+                    DB::raw('sum(if(edad=2 and tipo_edad="A",1,0)) as pob2'),
+                    DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
+                    DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
+                    DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
+                    DB::raw('sum(if(tipo_doc="DNI",1,0)) as dni'),
+                    DB::raw('sum(case when FIND_IN_SET("1", seguro) > 0 then 1 
+                          when FIND_IN_SET("2", seguro) > 0 then 1 
+                          when FIND_IN_SET("3", seguro) > 0 then 1 
+                          when FIND_IN_SET("4", seguro) > 0 then 1 
+                          else 0 end) as seguro'),
+                    DB::raw('sum(case when FIND_IN_SET("1", seguro) > 0 then 1 
+                          when FIND_IN_SET("2", seguro) > 0 then 1 
+                          when FIND_IN_SET("5", seguro) > 0 then 1 
+                          when FIND_IN_SET("5", seguro) > 0 then 1 
+                          when FIND_IN_SET("7", seguro) > 0 then 1 
+                          when FIND_IN_SET("8", seguro) > 0 then 1 
+                          else 0 end) as programa')
+                )->groupBy('distrito')->orderBy('ubigeo')->get();
+
+                $foot = [];
+                if ($base->count() > 0) {
+                    $foot = clone $base[0];
+                    $foot->pob = 0;
+                    $foot->pobm = 0;
+                    $foot->pobf = 0;
+                    $foot->pob0 = 0;
+                    $foot->pob1 = 0;
+                    $foot->pob2 = 0;
+                    $foot->pob3 = 0;
+                    $foot->pob4 = 0;
+                    $foot->pob5 = 0;
+                    $foot->dni = 0;
+                    $foot->seguro = 0;
+                    $foot->programa = 0;
+                    foreach ($base as $key => $value) {
+                        $foot->pob += $value->pob;
+                        $foot->pobm += $value->pobm;
+                        $foot->pobf += $value->pobf;
+                        $foot->pob0 += $value->pob0;
+                        $foot->pob1 += $value->pob1;
+                        $foot->pob2 += $value->pob2;
+                        $foot->pob3 += $value->pob3;
+                        $foot->pob4 += $value->pob4;
+                        $foot->pob5 += $value->pob5;
+                        $foot->dni += $value->dni;
+                        $foot->seguro += $value->seguro;
+                        $foot->programa += $value->programa;
+                    }
+                }
+
+                $excel = view('salud.PadronNominal.TableroCalidadTabla2excel', compact('base', 'foot'))->render();
+                return response()->json(compact('excel', 'base', 'foot'));
             default:
                 # code...
                 return [];
