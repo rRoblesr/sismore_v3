@@ -119,10 +119,17 @@ class PadronNominal extends Controller
                 $query1 = DB::select($sql1, [$fuente, $fuente, $rq->anio]);
                 $impMaxAnio = $query1 ? $query1[0]->id : 0;
 
-                $card1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->count();
-                $card2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('tipo_doc', 'DNI')->count();
-                $card3 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('tipo_doc', 'CNV')->count();
-                $card4 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('tipo_doc', 'CUI')->count();
+                $card1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->count();
+                $card2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->where('tipo_doc', 'DNI')->count();
+                $card3 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')
+                    ->where(function ($query) {
+                        $query->whereRaw("FIND_IN_SET('1',seguro) > 0")
+                            ->orWhereRaw("FIND_IN_SET('2',seguro) > 0")
+                            ->orWhereRaw("FIND_IN_SET('3',seguro) > 0")
+                            ->orWhereRaw("FIND_IN_SET('4',seguro) > 0")
+                            ->orWhereNotNull('seguro');
+                    })->count();
+                $card4 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->where('cui_atencion', '>', 0)->count();
 
                 $card1 = number_format($card1, 0);
                 $card2 = number_format($card2, 0);
@@ -140,8 +147,8 @@ class PadronNominal extends Controller
                 // $impMaxAnio = DB::table(DB::raw("($sql1) as tb"))->setBindings([$fuente, $fuente, $rq->anio])->first();
                 $query1 = DB::select($sql1, [$fuente, $fuente, $rq->anio]);
                 $impMaxAnio = $query1 ? $query1[0]->id : 0;
-                $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->count();
-                $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('tipo_doc', 'DNI')->count();
+                $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->count();
+                $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->where('visita', '1')->count();
                 $avance = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
                 return response()->json(compact('avance'));
             case 'anal2':
@@ -155,8 +162,8 @@ class PadronNominal extends Controller
                 // $impMaxAnio = DB::table(DB::raw("($sql1) as tb"))->setBindings([$fuente, $fuente, $rq->anio])->first();
                 $query1 = DB::select($sql1, [$fuente, $fuente, $rq->anio]);
                 $impMaxAnio = $query1 ? $query1[0]->id : 0;
-                $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->count();
-                $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('visita', '1')->count();
+                $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->count();
+                $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->where('tipo_doc', 'DNI')->count();
                 $avance = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
                 return response()->json(compact('avance'));
             case 'anal3':
@@ -169,8 +176,15 @@ class PadronNominal extends Controller
                         ORDER BY fechaActualizacion DESC limit 1";
                 $query1 = DB::select($sql1, [$fuente, $fuente, $rq->anio]);
                 $impMaxAnio = $query1 ? $query1[0]->id : 0;
-                $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->count();
-                $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('cui_atencion', '>', '0')->count();
+                $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->count();
+                $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')
+                    ->where(function ($query) {
+                        $query->whereRaw("FIND_IN_SET('1',seguro) > 0")
+                            ->orWhereRaw("FIND_IN_SET('2',seguro) > 0")
+                            ->orWhereRaw("FIND_IN_SET('3',seguro) > 0")
+                            ->orWhereRaw("FIND_IN_SET('4',seguro) > 0")
+                            ->orWhereNotNull('seguro');
+                    })->count();
                 $avance = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
                 return response()->json(compact('avance'));
             case 'anal4':
@@ -183,16 +197,8 @@ class PadronNominal extends Controller
                         ORDER BY fechaActualizacion DESC limit 1";
                 $query1 = DB::select($sql1, [$fuente, $fuente, $rq->anio]);
                 $impMaxAnio = $query1 ? $query1[0]->id : 0;
-                $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->count();
-                $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)
-                    ->where(function ($query) {
-                        $query->whereRaw("FIND_IN_SET('1',seguro) > 0")
-                            ->orWhereRaw("FIND_IN_SET('2',seguro) > 0")
-                            ->orWhereRaw("FIND_IN_SET('3',seguro) > 0")
-                            ->orWhereRaw("FIND_IN_SET('4',seguro) > 0")
-                            ->orWhereNotNull('seguro');
-                    })
-                    ->count();
+                $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->count();
+                $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->where('cui_atencion', '>', 0)->count();
                 $avance = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
                 return response()->json(compact('avance', 'v1', 'v2'));
             case 'tabla1':
@@ -205,17 +211,19 @@ class PadronNominal extends Controller
                         ORDER BY fechaActualizacion DESC limit 1";
                 $query1 = DB::select($sql1, [$fuente, $fuente, $rq->anio]);
                 $impMaxAnio = $query1 ? $query1[0]->id : 0;
-                $base = Mes::select('id')->where('id', '<', 11)->get();
-                $base[0]->criterio = 'Registros sin Número de Documento(DNI, CNV, CUI)';
-                $base[1]->criterio = 'Registros Duplicados del Número de Documento';
-                $base[2]->criterio = 'Registros sin Nombre Completos';
-                $base[3]->criterio = 'Registros sin Seguro de Salud';
-                $base[4]->criterio = 'Registros sin Visitas Domiciliarias';
-                $base[5]->criterio = 'Registros de Niños y Niñas Visitados y no Encontrados';
-                $base[6]->criterio = 'Registros sin Establecimiento de Atención';
-                $base[7]->criterio = 'Registros de Establecimiento de Atención de Otra Región';
-                $base[8]->criterio = 'Registros de Establecimiento de salud  de Otro Distrito';
-                $base[9]->criterio = 'Registros sin Nombres Completo de la Madre ';
+                $base = Mes::select('id')->get();
+                $base[0]->criterio = 'Registro sin Número de Documento(DNI, CNV, CUI)';
+                $base[1]->criterio = 'Registro Duplicados del Número de Documento';
+                $base[2]->criterio = 'Registro sin Nombre Completos';
+                $base[3]->criterio = 'Registro sin Seguro de Salud';
+                $base[4]->criterio = 'Registro sin Visitas Domiciliarias';
+                $base[5]->criterio = 'Registro de Niños y Niñas Visitados y no Encontrados';
+                $base[6]->criterio = 'Registro sin Establecimiento de Atención';
+                $base[7]->criterio = 'Registro de Establecimiento de Atención de Otra Región';
+                $base[8]->criterio = 'Registro de Establecimiento de salud  de Otro Distrito';
+                $base[9]->criterio = 'Registro sin Nombres Completo de la Madre ';
+                $base[10]->criterio = 'Registro sin Grado de Instrucción de la Madre ';
+                $base[11]->criterio = 'Registro sin Lengua Habitual de la Madre ';
                 return response()->json(compact('base'));
             default:
                 # code...

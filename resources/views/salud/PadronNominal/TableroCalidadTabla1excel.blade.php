@@ -16,9 +16,10 @@
         </tr>
     </thead>
     <tbody>
-        @foreach ($base as $item)
+        @foreach ($base as $key => $item)
             <tr class="text-center">
-                <td class="text-left">{{ $item->ugel }}</td>
+                <td>{{ $key + 1 }}</td>
+                <td class="text-left">{{ $item->criterio }}</td>
                 <td>{{ number_format($item->t1, 0) }}</td>
                 <td>{{ number_format($item->t2, 0) }}</td>
                 <td class="table-warning text-center">{!! avance($item->t3) !!}</td>

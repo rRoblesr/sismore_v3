@@ -109,7 +109,7 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card1"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Total Registros</p>
+                            <p class="mb-0 mt-1 text-truncate">Total Niños y Niñas</p>
                         </div>
                     </div>
                 </div>
@@ -132,7 +132,7 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card2"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Niños y Niñas con DNI </p>
+                            <p class="mb-0 mt-1 text-truncate">Tienen DNI </p>
                         </div>
                     </div>
                 </div>
@@ -156,7 +156,7 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card3"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Niños y Niñas con CNV</p>
+                            <p class="mb-0 mt-1 text-truncate">Tienen Seguro</p>
                         </div>
                     </div>
                 </div>
@@ -179,7 +179,7 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card4"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Niños y Niñas con CUI</p>
+                            <p class="mb-0 mt-1 text-truncate">Tienen EESS</p>
                         </div>
                     </div>
                 </div>
@@ -372,16 +372,16 @@
                             break;
                         case 'anal1':
                             console.log(data.avance);
-                            GaugeSeries('anal1', data.avance, 'Niños y Niñas con DNI');
+                            GaugeSeries('anal1', data.avance, 'Porcentaje de Visitados');
                             break;
                         case 'anal2':
-                            GaugeSeries('anal2', data.avance, 'Niños y Niñas Visitados');
+                            GaugeSeries('anal2', data.avance, 'Porcentaje con DNI');
                             break;
                         case 'anal3':
-                            GaugeSeries('anal3', data.avance, 'Niños y Niñas con EESS');
+                            GaugeSeries('anal3', data.avance, 'Porcentaje con Seguro Salud');
                             break;
                         case 'anal4':
-                            GaugeSeries('anal4', data.avance, 'Niños y Niñas con Seguro');
+                            GaugeSeries('anal4', data.avance, 'Porcentaje con EESS de atención');
                             break;
                         case 'tabla1':
                             // $('#ctabla1').html(data.excel);
