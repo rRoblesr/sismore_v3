@@ -14,7 +14,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class PadronNominal extends Controller
+class PadronNominalController extends Controller
 {
     public function __construct()
     {

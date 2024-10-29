@@ -83,6 +83,7 @@ use App\Http\Controllers\Salud\ImporPadronPvicaController;
 use App\Http\Controllers\Salud\ImporReportePN05Controller;
 use App\Http\Controllers\Salud\IndicadoresController;
 use App\Http\Controllers\Salud\PadronNominal;
+use App\Http\Controllers\Salud\PadronNominalController;
 use App\Http\Controllers\Salud\SaludNino;
 use App\Http\Controllers\Salud\SaludPadronExportar;
 use App\Http\Controllers\Salud\SaludPadronNominal;
@@ -1235,7 +1236,7 @@ Route::get('/ImporReportePN05/Listar/ImportarDT', [ImporReportePN05Controller::c
 Route::post('/ImporReportePN05/ListaImportada', [ImporReportePN05Controller::class, 'ListaImportada'])->name('imporreportepn05.listarimportados');
 Route::get('/ImporReportePN05/eliminar/{id}', [ImporReportePN05Controller::class, 'eliminar'])->name('imporreportepn05.eliminar');
 
-Route::get('/Salud/PadronNominal/Seguimientosx', [PadronNominal::class, 'seguimiento_ninio'])->name('salud.padronnominal.seguimiento');
+Route::get('/Salud/PadronNominal/Seguimientosx', [PadronNominalController::class, 'seguimiento_ninio'])->name('salud.padronnominal.seguimiento');
 
 Route::get('/Salud/Nino', [SaludNino::class, 'PadronNominal'])->name('salud.nino.padron');
 Route::get('/Salud/Calidad', [SaludNino::class, 'ControlCalidad'])->name('salud.nino.calidad');
@@ -1256,11 +1257,11 @@ Route::get('/Salud/PadronNominal/Calidad/Descargar/{codigoCalidad}', [SaludPadro
 Route::get('/Salud/PadronNominal/Calidad/{tipo}', [SaludPadronNominalCalidad::class, 'listadoTipo'])->name('salud.padron.calidad.listadotipo');
 Route::get('/Salud/PadronNominal/Calidad/{codigoCalidad}/{codigoPadron}', [SaludPadronNominalCalidad::class, 'mostrarDatos'])->name('salud.padron.calidad.mostrardato');
 
-Route::get('/Salud/PadronNominal/TableroCalidad', [PadronNominal::class, 'tablero_calidad'])->name('salud.padronnominal.tablerocalidad');
-Route::get('/Salud/PadronNominal/TableroCalidad/reportes', [PadronNominal::class, 'tablero_calidad_reporte'])->name('salud.padronnominal.tablerocalidad.reporte');
-Route::get('/Salud/PadronNominal/TableroCalidad/Listado', [PadronNominal::class, 'calidadListado'])->name('salud.padronnominal.tablerocalidad.listado');
+Route::get('/Salud/PadronNominal/TableroCalidad', [PadronNominalController::class, 'tablero_calidad'])->name('salud.padronnominal.tablerocalidad');
+Route::get('/Salud/PadronNominal/TableroCalidad/reportes', [PadronNominalController::class, 'tablero_calidad_reporte'])->name('salud.padronnominal.tablerocalidad.reporte');
+Route::get('/Salud/PadronNominal/TableroCalidad/Listado', [PadronNominalController::class, 'calidadListado'])->name('salud.padronnominal.tablerocalidad.listado');
 
-Route::get('/Salud/PadronNominal/Mes/{anio}', [PadronNominal::class, 'meses'])->name('salud.padronnominal.mes');
+Route::get('/Salud/PadronNominal/Mes/{anio}', [PadronNominalController::class, 'meses'])->name('salud.padronnominal.mes');
 
 // Route::get('/Salud/PadronNominal/Importar', [SaludPadronNominalImportar::class, 'index'])->name('salud.padron.importar.index');
 // Route::get('/Salud/PadronNominal/Importar/Historial', [SaludPadronNominalImportar::class, 'listarHistorial'])->name('salud.padron.importar.historial');
