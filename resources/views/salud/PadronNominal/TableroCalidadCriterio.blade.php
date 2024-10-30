@@ -14,72 +14,51 @@
                 <div class="card-header bg-success-0">
                     <div class="card-widgets">
                         <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
-                            <i class="fa fa-redo"></i> Consultas</button>
+                            <i class="fa fa-redo"></i> Volver</button>
                         <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
                             <i class="fa fa-redo"></i> Actualizar</button>
                     </div>
-                    <h3 class="card-title text-white font-12">Control de Calidad del padrón nominal de niños y niñas menores
-                        de 6 años</h3>
+                    <h3 class="card-title text-white font-12">
+                        Registro sin Número de Documento(DNI, CNV, CUI)
+                    </h3>
                 </div>
                 <div class="card-body pb-0">
                     <div class="form-group row align-items-center vh-5">
-                        <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div class="col-lg-3 col-md-4 col-sm-4">
                             <h4 class="page-title font-12">{{ $actualizado }}</h4>
                         </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2">
+
+                        <div class="col-lg-3 col-md-2 col-sm-2">
                             <div class="custom-select-container">
-                                <label for="provincia">AÑO</label>
-                                <select id="anio" name="anio" class="form-control btn-xs font-11"
-                                    onchange="cargarCards();">
-                                    @foreach ($anios as $item)
-                                        <option value="{{ $item->anio }}"
-                                            {{ $item->anio == date('Y') ? 'selected' : '' }}>
-                                            {{ $item->anio }}</option>
+                                <label for="red">RED</label>
+                                <select id="red" name="red" class="form-control btn-xs font-11"
+                                    onchange="cargarMicrored();cargarCards();">
+                                    <option value="0">TODOS</option>
+                                    @foreach ($red as $item)
+                                        <option value="{{ $item->id }}">{{ $item->nombre }}</option>
                                     @endforeach
                                 </select>
                             </div>
 
 
                         </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2">
+                        <div class="col-lg-3 col-md-2 col-sm-2">
                             <div class="custom-select-container">
-                                <label for="provincia">MES</label>
-                                <select id="mes" name="mes" class="form-control btn-xs font-11"
+                                <label for="microred">MICRORED</label>
+                                <select id="microred" name="microred" class="form-control btn-xs font-11"
+                                    onchange="cargarEstablecimiento();cargarCards();">
+                                    <option value="0">TODOS</option>
+                                </select>
+                            </div>
+
+
+                        </div>
+                        <div class="col-lg-3 col-md-2 col-sm-2">
+                            <div class="custom-select-container">
+                                <label for="establecimiento">ESTABLECIMIENTO</label>
+                                <select id="establecimiento" name="establecimiento" class="form-control btn-xs font-11"
                                     onchange="cargarCards();">
                                     <option value="0">TODOS</option>
-                                    {{-- @foreach ($anios as $item)
-                                    <option value="{{ $item->id }}" {{ $item->anio == $maxAnio ? 'selected' : '' }}>
-                                        {{ $item->anio }}</option>
-                                @endforeach --}}
-                                </select>
-                            </div>
-
-
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2">
-                            <div class="custom-select-container">
-                                <label for="provincia">PROVINCIA</label>
-                                <select id="provincia" name="provincia" class="form-control btn-xs font-11"
-                                    onchange="cargarDistritos();cargarCards();">
-                                    <option value="0">TODOS</option>
-                                    @foreach ($provincias as $item)
-                                        <option value="{{ $item->id }}"> {{ $item->nombre }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2">
-                            <div class="custom-select-container">
-                                <label for="provincia">DISTRITO</label>
-                                <select id="distrito" name="distrito" class="form-control btn-xs font-11"
-                                    onchange="cargarCards();">
-                                    <option value="0">TODOS</option>
-                                    {{-- @foreach ($distritos as $item)
-                                        <option value="{{ $item->id }}">{{ $item->nombre }}
-                                        </option>
-                                    @endforeach --}}
                                 </select>
                             </div>
 
@@ -89,147 +68,6 @@
                 </div>
             </div>
         </div>
-    </div>
-
-
-    <div class="row">
-        <div class="col-lg-3 col-md-6 col-sm-6">
-            <div class="card-box border border-plomo-0">
-                <div class="media">
-                    {{-- <div class="text-center">
-                        <img src="{{ asset('/') }}public/img/icon/tableta32px.png" alt="" class=""
-                            width="100%" height="100%">
-                    </div> --}}
-                    <div class="avatar-md mr-2">
-                        <i class="ion ion-ios-people avatar-title font-40 text-dark"></i>
-
-                    </div>
-                    <div class="media-body align-self-center">
-                        <div class="text-right">
-                            <h4 class="font-20 my-0 font-weight-bold">
-                                <span data-plugin="counterup" id="card1"></span>
-                            </h4>
-                            <p class="mb-0 mt-1 text-truncate">Total Niños y Niñas</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6 col-sm-6">
-            <div class="card-box border border-plomo-0">
-                <div class="media">
-                    {{-- <div class="text-center">
-                        <img src="{{ asset('/') }}public/img/icon/tableta32px.png" alt="" class=""
-                            width="100%" height="100%">
-                    </div> --}}
-                    <div class="avatar-md mr-2">
-                        <i class="ion ion-ios-people avatar-title font-40 text-dark"></i>
-
-                    </div>
-                    <div class="media-body align-self-center">
-                        <div class="text-right">
-                            <h4 class="font-20 my-0 font-weight-bold">
-                                <span data-plugin="counterup" id="card2"></span>
-                            </h4>
-                            <p class="mb-0 mt-1 text-truncate">Tienen DNI </p>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6 col-sm-6">
-            <div class="card-box border border-plomo-0">
-                <div class="media">
-                    {{-- <div class="text-center">
-                        <img src="{{ asset('/') }}public/img/icon/cargador32px.png" alt="" class=""
-                            width="100%" height="100%">
-                    </div> --}}
-                    <div class="avatar-md mr-2">
-                        <i class="ion ion-ios-people avatar-title font-40 text-dark"></i>
-
-                    </div>
-                    <div class="media-body align-self-center">
-                        <div class="text-right">
-                            <h4 class="font-20 my-0 font-weight-bold">
-                                <span data-plugin="counterup" id="card3"></span>
-                            </h4>
-                            <p class="mb-0 mt-1 text-truncate">Tienen Seguro</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6 col-sm-6">
-            <div class="card-box border border-plomo-0">
-                <div class="media">
-                    {{-- <div class="text-center">
-                        <img src="{{ asset('/') }}public/img/icon/cargador32px.png" alt="" class=""
-                            width="100%" height="100%">
-                    </div> --}}
-                    <div class="avatar-md mr-2">
-                        <i class="ion ion-ios-people avatar-title font-40 text-dark"></i>
-
-                    </div>
-                    <div class="media-body align-self-center">
-                        <div class="text-right">
-                            <h4 class="font-20 my-0 font-weight-bold">
-                                <span data-plugin="counterup" id="card4"></span>
-                            </h4>
-                            <p class="mb-0 mt-1 text-truncate">Tienen EESS</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-3">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
-                    <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11"></h3>
-                </div>
-                <div class="card-body p-0">
-                    <div id="anal1"></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
-                    <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11"></h3>
-                </div>
-                <div class="card-body p-0">
-                    <div id="anal2"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-3">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
-                    <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11"></h3>
-                </div>
-                <div class="card-body p-0">
-                    <div id="anal3"></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
-                    <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11"></h3>
-                </div>
-                <div class="card-body p-0">
-                    <div id="anal4"></div>
-                </div>
-            </div>
-        </div>
-
     </div>
 
     <div class="row">
@@ -242,28 +80,25 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12">
-                            <div class="table-responsive" id="ctabla1">
+                            <div class="table-responsive">
+                                <table id="tabla1" class="table table-sm table-striped table-bordered font-11">
+                                    <thead>
+                                        <tr class="table-success-0 text-white">
+                                            <th class="text-center">N°</th>
+                                            <th class="text-center">Código Padrón</th>
+                                            <th class="text-center">Tipo Documento</th>
+                                            <th class="text-center">Apellidos y Nombre</th>
+                                            <th class="text-center">Fecha Nacimiento</th>
+                                            <th class="text-center">Distrito</th>
+                                            <th class="text-center">Centro Poblado</th>
+                                            <th class="text-center">Código EESS</th>
+                                            <th class="text-center">EESS de Atención</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
 
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Población de niños y niñas menos de 6 años por distrito, segun sexo y edades
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="table-responsive" id="ctabla2">
+                                    </tbody>
+                                </table>
 
                             </div>
 
@@ -280,35 +115,43 @@
         var paleta_colores = ['#5eb9aa', '#F9FFFE', '#f5bd22', '#058DC7', '#50B432', '#9D561B', '#DDDF00', '#24CBE5',
             '#64E572', '#9F9655', '#FFF263', '#6AF9C4'
         ];
+        var tableprincipal;
         $(document).ready(function() {
-            cargarMes();
-            cargarDistritos();
             cargarCards();
 
         });
 
         function cargarCards() {
-            panelGraficas('head');
-            panelGraficas('anal1');
-            panelGraficas('anal2');
-            panelGraficas('anal3');
-            panelGraficas('anal4');
-            panelGraficas('tabla1');
-            panelGraficas('tabla2');
+            tableprincipal = $('#tabla1').DataTable({
+                responsive: true,
+                autoWidth: false,
+                ordered: true,
+                language: table_language,
+                destroy: true,
+                // ajax: "{{ route('salud.padronnominal.tablerocalidad.criterio.listar') }}",
+                // type: "get",
+                ajax: {
+                    url: "{{ route('salud.padronnominal.tablerocalidad.criterio.listar') }}",
+                    type: "GET",
+                    data: function(d) {
+                        d.importacion = {{ $impMaxAnio }};
+                    }
+                },
+            });
         }
 
-        function cargarDistritos() {
+        function cargarMicrored() {
             $.ajax({
-                url: "{{ route('ubigeo.distrito.25', '') }}/" + $('#provincia').val(),
+                url: "{{ route('salud.padronnominal.tablerocalidad.criterio.microred', ['importacion' => $impMaxAnio, 'red' => 'xred', 'criterio' => $criterio]) }}"
+                    .replace('xred', $('#red').val()),
                 type: 'GET',
                 success: function(data) {
-                    $("#distrito option").remove();
+                    $("#microred option").remove();
                     var options = '<option value="0">TODOS</option>';
                     $.each(data, function(index, value) {
-                        options += "<option value='" + value.id + "'>" + value.nombre +
-                            "</option>"
+                        options += `<option value='${value.id}'>${value.nombre}</option>`;
                     });
-                    $("#distrito").append(options);
+                    $("#microred").append(options);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -316,27 +159,66 @@
             });
         }
 
-        function cargarMes() {
+        function cargarEstablecimiento() {
             $.ajax({
-                url: "{{ route('salud.padronnominal.mes', '') }}/" + $('#anio').val(),
+                url: "{{ route('salud.padronnominal.tablerocalidad.criterio.criterio1_establecimiento', ['importacion' => $impMaxAnio, 'red' => 'xred', 'microred' => 'xmicrored', 'criterio' => $criterio]) }}"
+                    .replace('xred', $('#red').val())
+                    .replace('xmicrored', $('#microred').val()),
                 type: 'GET',
                 success: function(data) {
-                    $("#mes option").remove();
+                    $("#establecimiento option").remove();
                     var options = '<option value="0">TODOS</option>';
-
-                    var mesmax = Math.max(...data.map(item => item.id));
-                    // console.log("Mes máximo:", mesmax);
-                    $.each(data, function(ii, vv) {
-                        ss = vv.id == mesmax ? 'selected' : '';
-                        options += `<option value='${vv.id}' ${ss}>${vv.mes}</option>`
+                    $.each(data, function(index, value) {
+                        options += `<option value='${value.id}'>${value.nombre}</option>`;
                     });
-                    $("#mes").append(options);
+                    $("#establecimiento").append(options);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
                 },
             });
         }
+
+        // function cargarDistritos() {
+        //     $.ajax({
+        //         url: "{{ route('ubigeo.distrito.25', '') }}/" + $('#provincia').val(),
+        //         type: 'GET',
+        //         success: function(data) {
+        //             $("#distrito option").remove();
+        //             var options = '<option value="0">TODOS</option>';
+        //             $.each(data, function(index, value) {
+        //                 options += "<option value='" + value.id + "'>" + value.nombre +
+        //                     "</option>"
+        //             });
+        //             $("#distrito").append(options);
+        //         },
+        //         error: function(jqXHR, textStatus, errorThrown) {
+        //             console.log(jqXHR);
+        //         },
+        //     });
+        // }
+
+        // function cargarMes() {
+        //     $.ajax({
+        //         url: "{{ route('salud.padronnominal.mes', '') }}/" + $('#anio').val(),
+        //         type: 'GET',
+        //         success: function(data) {
+        //             $("#mes option").remove();
+        //             var options = '<option value="0">TODOS</option>';
+
+        //             var mesmax = Math.max(...data.map(item => item.id));
+        //             // console.log("Mes máximo:", mesmax);
+        //             $.each(data, function(ii, vv) {
+        //                 ss = vv.id == mesmax ? 'selected' : '';
+        //                 options += `<option value='${vv.id}' ${ss}>${vv.mes}</option>`
+        //             });
+        //             $("#mes").append(options);
+        //         },
+        //         error: function(jqXHR, textStatus, errorThrown) {
+        //             console.log(jqXHR);
+        //         },
+        //     });
+        // }
 
         function panelGraficas(div) {
             $.ajax({

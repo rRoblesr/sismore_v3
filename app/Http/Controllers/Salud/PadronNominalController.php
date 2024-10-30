@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Salud;
 use App\Http\Controllers\Controller;
 use App\Models\Educacion\Importacion;
 use App\Models\Parametro\Mes;
+use App\Models\Parametro\Ubigeo;
+use App\Models\Salud\Establecimiento;
 use App\Models\Salud\ImporPadronNominal;
 use App\Models\Salud\PadronCalidad;
 use App\Repositories\Educacion\ImportacionRepositorio;
@@ -92,7 +94,7 @@ class PadronNominalController extends Controller
         return view('salud.PadronNominal.seguimiento', compact('actualizado'));
     }
 
-    public function tablero_calidad()
+    public function tablerocalidad()
     {
         $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronNominalController::$FUENTE); //nexus $imp3
         $mes = Mes::find($imp->mes);
@@ -103,7 +105,7 @@ class PadronNominalController extends Controller
         return view('salud.PadronNominal.TableroCalidad', compact('actualizado', 'anios', 'provincias'));
     }
 
-    public function tablero_calidad_reporte(Request $rq)
+    public function tablerocalidadreporte(Request $rq)
     {
         $fuente = ImporPadronNominalController::$FUENTE;
         switch ($rq->div) {
@@ -201,6 +203,81 @@ class PadronNominalController extends Controller
                 $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->where('cui_atencion', '>', 0)->count();
                 $avance = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
                 return response()->json(compact('avance', 'v1', 'v2'));
+
+
+            case 'tabla1x':
+                function obtenerCriterio($importacion_id, $filtros)
+                {
+                    return ImporPadronNominal::select(
+                        DB::raw('count(*) as pob'),
+                        DB::raw('sum(if(tipo_edad in("D","M"),1,0)) as pob0'),
+                        DB::raw('sum(if(edad=1 and tipo_edad="A",1,0)) as pob1'),
+                        DB::raw('sum(if(edad=2 and tipo_edad="A",1,0)) as pob2'),
+                        DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
+                        DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
+                        DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5')
+                    )->where('importacion_id', $importacion_id)
+                        ->where($filtros)
+                        ->first();
+                }
+
+                $sql1 = "SELECT * FROM par_importacion
+                        WHERE fuenteimportacion_id = ? AND estado = 'PR'
+                            AND DATE_FORMAT(fechaActualizacion, '%Y-%m') = (
+                                SELECT DATE_FORMAT(MAX(fechaActualizacion), '%Y-%m') FROM par_importacion 
+                                WHERE fuenteimportacion_id = ? AND estado = 'PR' AND YEAR(fechaActualizacion) = ?
+                            )
+                        ORDER BY fechaActualizacion DESC limit 1";
+                $query1 = DB::select($sql1, [$fuente, $fuente, $rq->anio]);
+                $impMaxAnio = $query1 ? $query1[0]->id : 0;
+                $filtrosCriterios = [
+                    ['tipo_doc' => 'padron'],  // Criterio 0
+                    ['repetido' => '2'],       // Criterio 1
+                    function ($q) {            // Criterio 2
+                        $q->where('apellido_paterno', '')->orWhere('apellido_materno', '')->orWhere('nombre', '')->orWhereNull('apellido_paterno')->orWhereNull('apellido_materno')->orWhereNull('nombre');
+                    },
+                    function ($q) {            // Criterio 3
+                        $q->whereRaw("seguro = '0' or seguro = '0,'")->orWhereNull('seguro');
+                    },
+                    ['visita', '!=', '1'],     // Criterio 4
+                    ['visita' => '1', 'menor_encontrado', '!=', '1'], // Criterio 5
+                    ['cui_atencion' => '0'],   // Criterio 6
+                    ['repetido' => '2'],       // Criterio 7 (puede ser redundante)
+                    function ($q) {            // Criterio 8
+                        $q->where('repetido', '2')->where('region', '!=', 'region_actual');
+                    },
+                    function ($q) {            // Criterio 9
+                        $q->where('apellido_paterno_madre', '')->orWhere('apellido_materno_madre', '')->orWhere('nombres_madre', '')->orWhereNull('apellido_paterno_madre')->orWhereNull('apellido_materno_madre')->orWhereNull('nombres_madre');
+                    }
+                ];
+
+                $base = Mes::select('id')->get();
+                $base[0]->criterio = 'Registro sin Número de Documento(DNI, CNV, CUI)';
+                $base[1]->criterio = 'Registro Duplicados del Número de Documento';
+                $base[2]->criterio = 'Registro sin Nombre Completos';
+                $base[3]->criterio = 'Registro sin Seguro de Salud';
+                $base[4]->criterio = 'Registro sin Visitas Domiciliarias';
+                $base[5]->criterio = 'Registro de Niños y Niñas Visitados y no Encontrados';
+                $base[6]->criterio = 'Registro sin Establecimiento de Atención';
+                $base[7]->criterio = 'Registro de Establecimiento de Atención de Otra Región';
+                $base[8]->criterio = 'Registro de Establecimiento de salud  de Otro Distrito';
+                $base[9]->criterio = 'Registro sin Nombres Completo de la Madre ';
+                $base[10]->criterio = 'Registro sin Grado de Instrucción de la Madre ';
+                $base[11]->criterio = 'Registro sin Lengua Habitual de la Madre ';
+                // Aplicando los criterios a cada elemento del arreglo $base
+                foreach ($filtrosCriterios as $index => $filtro) {
+                    $resultado = obtenerCriterio($impMaxAnio, $filtro);
+                    $base[$index]->total = $resultado->pob;
+                    $base[$index]->pob0 = $resultado->pob0;
+                    $base[$index]->pob1 = $resultado->pob1;
+                    $base[$index]->pob2 = $resultado->pob2;
+                    $base[$index]->pob3 = $resultado->pob3;
+                    $base[$index]->pob4 = $resultado->pob4;
+                    $base[$index]->pob5 = $resultado->pob5;
+                }
+                $excel = view('salud.PadronNominal.TableroCalidadTabla1excel', compact('base'))->render();
+                return response()->json(compact('excel'));
+
             case 'tabla1':
                 $sql1 = "SELECT * FROM par_importacion
                         WHERE fuenteimportacion_id = ? AND estado = 'PR'
@@ -226,40 +303,251 @@ class PadronNominalController extends Controller
                 $base[10]->criterio = 'Registro sin Grado de Instrucción de la Madre ';
                 $base[11]->criterio = 'Registro sin Lengua Habitual de la Madre ';
 
-                $cri1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('tipo_doc', 'padron')->count();
-                $base[0]->total = $cri1;
-                $cri2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '2')->count();
-                $base[1]->total = $cri2;
-                $cri3 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where(function ($q) {
+                $cri1 = ImporPadronNominal::select(
+                    DB::raw('count(*) as pob'),
+                    DB::raw('sum(if(tipo_edad in("D","M"),1,0)) as pob0'),
+                    DB::raw('sum(if(edad=1 and tipo_edad="A",1,0)) as pob1'),
+                    DB::raw('sum(if(edad=2 and tipo_edad="A",1,0)) as pob2'),
+                    DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
+                    DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
+                    DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
+                )->where('importacion_id', $impMaxAnio)->where('tipo_doc', 'padron')->first();
+                $base[0]->total = $cri1->pob;
+                $base[0]->pob0 = $cri1->pob0;
+                $base[0]->pob1 = $cri1->pob1;
+                $base[0]->pob2 = $cri1->pob2;
+                $base[0]->pob3 = $cri1->pob3;
+                $base[0]->pob4 = $cri1->pob4;
+                $base[0]->pob5 = $cri1->pob5;
+
+                // $cri2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '2')->count();
+                $cri2 = ImporPadronNominal::select(
+                    DB::raw('count(*) as pob'),
+                    DB::raw('sum(if(tipo_edad in("D","M"),1,0)) as pob0'),
+                    DB::raw('sum(if(edad=1 and tipo_edad="A",1,0)) as pob1'),
+                    DB::raw('sum(if(edad=2 and tipo_edad="A",1,0)) as pob2'),
+                    DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
+                    DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
+                    DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
+                )->where('importacion_id', $impMaxAnio)->where('repetido', '2')->first();
+                $base[1]->total = $cri2->pob;
+                $base[1]->pob0 = $cri2->pob0;
+                $base[1]->pob1 = $cri2->pob1;
+                $base[1]->pob2 = $cri2->pob2;
+                $base[1]->pob3 = $cri2->pob3;
+                $base[1]->pob4 = $cri2->pob4;
+                $base[1]->pob5 = $cri2->pob5;
+                // $cri3 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where(function ($q) {
+                //     $q->where('apellido_paterno', '')->orWhere('apellido_materno', '')->orWhere('nombre', '')->orWhereNull('apellido_paterno')->orWhereNull('apellido_materno')->orWhereNull('nombre');
+                // })->count();
+
+                $cri3 = ImporPadronNominal::select(
+                    DB::raw('count(*) as pob'),
+                    DB::raw('sum(if(tipo_edad in("D","M"),1,0)) as pob0'),
+                    DB::raw('sum(if(edad=1 and tipo_edad="A",1,0)) as pob1'),
+                    DB::raw('sum(if(edad=2 and tipo_edad="A",1,0)) as pob2'),
+                    DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
+                    DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
+                    DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
+                )->where('importacion_id', $impMaxAnio)->where(function ($q) {
                     $q->where('apellido_paterno', '')->orWhere('apellido_materno', '')->orWhere('nombre', '')->orWhereNull('apellido_paterno')->orWhereNull('apellido_materno')->orWhereNull('nombre');
-                })->count();
-                $base[2]->total = $cri3;
-                $cri4 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where(function ($q) {
+                })->first();
+
+                $base[2]->total = $cri3->pob;
+                $base[2]->pob0 = $cri3->pob0;
+                $base[2]->pob1 = $cri3->pob1;
+                $base[2]->pob2 = $cri3->pob2;
+                $base[2]->pob3 = $cri3->pob3;
+                $base[2]->pob4 = $cri3->pob4;
+                $base[2]->pob5 = $cri3->pob5;
+
+                // $cri4 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where(function ($q) {
+                //     $q->whereRaw("seguro = '0' or seguro = '0,'")->orWhereNull('seguro');
+                // })->count();
+
+                $cri4 = ImporPadronNominal::select(
+                    DB::raw('count(*) as pob'),
+                    DB::raw('sum(if(tipo_edad in("D","M"),1,0)) as pob0'),
+                    DB::raw('sum(if(edad=1 and tipo_edad="A",1,0)) as pob1'),
+                    DB::raw('sum(if(edad=2 and tipo_edad="A",1,0)) as pob2'),
+                    DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
+                    DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
+                    DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
+                )->where('importacion_id', $impMaxAnio)->where(function ($q) {
                     $q->whereRaw("seguro = '0' or seguro = '0,'")->orWhereNull('seguro');
-                })->count();
-                $base[3]->total = $cri4;
-                $cri5 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('visita', '!=', '1')->count();
-                $base[4]->total = $cri5;
-                $cri6 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('visita', '1')->where('menor_encontrado', '!=', '1')->count();
-                $base[5]->total = $cri6;
-                $cri7 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('cui_atencion', '0')->count();
-                $base[6]->total = $cri7;
-                $cri8 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '2')->count();
-                $base[7]->total = $cri8;
-                $cri9 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '2')->count();
-                $base[8]->total = $cri9;
-                $cri10 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where(function ($q) {
-                    $q->where('apellido_paterno_madre', '')->orWhere('apellido_materno_madre', '')->orWhere('nombres_madre', '')->orWhereNull('apellido_paterno_madre')->orWhereNull('apellido_materno_madre')->orWhereNull('nombres_madre');
-                })->count();
-                $base[9]->total = $cri10;
-                $cri11 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where(function ($q) {
-                    $q->where('grado_instruccion', '')->orWhereNull('grado_instruccion');
-                })->count();
-                $base[10]->total = $cri11;
-                $cri12 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where(function ($q) {
-                    $q->where('lengua_madre', '')->orWhereNull('lengua_madre');
-                })->count();
-                $base[11]->total = $cri12;
+                })->first();
+
+                $base[3]->total = $cri4->pob;
+                $base[3]->pob0 = $cri4->pob0;
+                $base[3]->pob1 = $cri4->pob1;
+                $base[3]->pob2 = $cri4->pob2;
+                $base[3]->pob3 = $cri4->pob3;
+                $base[3]->pob4 = $cri4->pob4;
+                $base[3]->pob5 = $cri4->pob5;
+
+                // $cri5 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('visita', '!=', '1')->count();
+                $cri5 = ImporPadronNominal::select(
+                    DB::raw('count(*) as pob'),
+                    DB::raw('sum(if(tipo_edad in("D","M"),1,0)) as pob0'),
+                    DB::raw('sum(if(edad=1 and tipo_edad="A",1,0)) as pob1'),
+                    DB::raw('sum(if(edad=2 and tipo_edad="A",1,0)) as pob2'),
+                    DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
+                    DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
+                    DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
+                )->where('importacion_id', $impMaxAnio)->where('visita', '!=', '1')->first();
+
+                $base[4]->total = $cri5->pob;
+                $base[4]->pob0 = $cri5->pob0;
+                $base[4]->pob1 = $cri5->pob1;
+                $base[4]->pob2 = $cri5->pob2;
+                $base[4]->pob3 = $cri5->pob3;
+                $base[4]->pob4 = $cri5->pob4;
+                $base[4]->pob5 = $cri5->pob5;
+
+                // $cri6 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('visita', '1')->where('menor_encontrado', '!=', '1')->count();
+                $cri6 = ImporPadronNominal::select(
+                    DB::raw('count(*) as pob'),
+                    DB::raw('sum(if(tipo_edad in("D","M"),1,0)) as pob0'),
+                    DB::raw('sum(if(edad=1 and tipo_edad="A",1,0)) as pob1'),
+                    DB::raw('sum(if(edad=2 and tipo_edad="A",1,0)) as pob2'),
+                    DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
+                    DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
+                    DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
+                )->where('importacion_id', $impMaxAnio)->where('visita', '1')->where('menor_encontrado', '!=', '1')->first();
+
+                $base[5]->total = $cri6->pob;
+                $base[5]->pob0 = $cri6->pob0;
+                $base[5]->pob1 = $cri6->pob1;
+                $base[5]->pob2 = $cri6->pob2;
+                $base[5]->pob3 = $cri6->pob3;
+                $base[5]->pob4 = $cri6->pob4;
+                $base[5]->pob5 = $cri6->pob5;
+
+                // $cri7 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('cui_atencion', '0')->count();
+                $cri7 = ImporPadronNominal::select(
+                    DB::raw('count(*) as pob'),
+                    DB::raw('sum(if(tipo_edad in("D","M"),1,0)) as pob0'),
+                    DB::raw('sum(if(edad=1 and tipo_edad="A",1,0)) as pob1'),
+                    DB::raw('sum(if(edad=2 and tipo_edad="A",1,0)) as pob2'),
+                    DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
+                    DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
+                    DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
+                )->where('importacion_id', $impMaxAnio)->where('cui_atencion', '0')->first();
+
+                $base[6]->total = $cri7->pob;
+                $base[6]->pob0 = $cri7->pob0;
+                $base[6]->pob1 = $cri7->pob1;
+                $base[6]->pob2 = $cri7->pob2;
+                $base[6]->pob3 = $cri7->pob3;
+                $base[6]->pob4 = $cri7->pob4;
+                $base[6]->pob5 = $cri7->pob5;
+
+                // $cri8 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '2')->count();
+                $cri8 = ImporPadronNominal::select(
+                    DB::raw('count(*) as pob'),
+                    DB::raw('sum(if(tipo_edad in("D","M"),1,0)) as pob0'),
+                    DB::raw('sum(if(edad=1 and tipo_edad="A",1,0)) as pob1'),
+                    DB::raw('sum(if(edad=2 and tipo_edad="A",1,0)) as pob2'),
+                    DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
+                    DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
+                    DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
+                )->where('importacion_id', $impMaxAnio)->where('repetido', '2')->first();
+                $base[7]->total = $cri8->pob;
+                $base[7]->pob0 = $cri8->pob0;
+                $base[7]->pob1 = $cri8->pob1;
+                $base[7]->pob2 = $cri8->pob2;
+                $base[7]->pob3 = $cri8->pob3;
+                $base[7]->pob4 = $cri8->pob4;
+                $base[7]->pob5 = $cri8->pob5;
+
+                // $cri9 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '2')->count();
+                $cri9 = ImporPadronNominal::select(
+                    DB::raw('count(*) as pob'),
+                    DB::raw('sum(if(tipo_edad in("D","M"),1,0)) as pob0'),
+                    DB::raw('sum(if(edad=1 and tipo_edad="A",1,0)) as pob1'),
+                    DB::raw('sum(if(edad=2 and tipo_edad="A",1,0)) as pob2'),
+                    DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
+                    DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
+                    DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
+                )->where('importacion_id', $impMaxAnio)->where('repetido', '2')->first();
+                $base[8]->total = $cri9->pob;
+                $base[8]->pob0 = $cri9->pob0;
+                $base[8]->pob1 = $cri9->pob1;
+                $base[8]->pob2 = $cri9->pob2;
+                $base[8]->pob3 = $cri9->pob3;
+                $base[8]->pob4 = $cri9->pob4;
+                $base[8]->pob5 = $cri9->pob5;
+
+                // $cri10 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where(function ($q) {
+                //     $q->where('apellido_paterno_madre', '')->orWhere('apellido_materno_madre', '')->orWhere('nombres_madre', '')->orWhereNull('apellido_paterno_madre')->orWhereNull('apellido_materno_madre')->orWhereNull('nombres_madre');
+                // })->count();
+                $cri10 = ImporPadronNominal::select(
+                    DB::raw('count(*) as pob'),
+                    DB::raw('sum(if(tipo_edad in("D","M"),1,0)) as pob0'),
+                    DB::raw('sum(if(edad=1 and tipo_edad="A",1,0)) as pob1'),
+                    DB::raw('sum(if(edad=2 and tipo_edad="A",1,0)) as pob2'),
+                    DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
+                    DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
+                    DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
+                )->where('importacion_id', $impMaxAnio)
+                    ->where(function ($q) {
+                        $q->where('apellido_paterno_madre', '')->orWhere('apellido_materno_madre', '')->orWhere('nombres_madre', '')->orWhereNull('apellido_paterno_madre')->orWhereNull('apellido_materno_madre')->orWhereNull('nombres_madre');
+                    })->first();
+                $base[9]->total = $cri10->pob;
+                $base[9]->pob0 = $cri10->pob0;
+                $base[9]->pob1 = $cri10->pob1;
+                $base[9]->pob2 = $cri10->pob2;
+                $base[9]->pob3 = $cri10->pob3;
+                $base[9]->pob4 = $cri10->pob4;
+                $base[9]->pob5 = $cri10->pob5;
+
+                // $cri11 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where(function ($q) {
+                //     $q->where('grado_instruccion', '')->orWhereNull('grado_instruccion');
+                // })->count();
+                $cri11 = ImporPadronNominal::select(
+                    DB::raw('count(*) as pob'),
+                    DB::raw('sum(if(tipo_edad in("D","M"),1,0)) as pob0'),
+                    DB::raw('sum(if(edad=1 and tipo_edad="A",1,0)) as pob1'),
+                    DB::raw('sum(if(edad=2 and tipo_edad="A",1,0)) as pob2'),
+                    DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
+                    DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
+                    DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
+                )->where('importacion_id', $impMaxAnio)
+                    ->where(function ($q) {
+                        $q->where('grado_instruccion', '')->orWhereNull('grado_instruccion');
+                    })
+                    ->first();
+                $base[10]->total = $cri11->pob;
+                $base[10]->pob0 = $cri11->pob0;
+                $base[10]->pob1 = $cri11->pob1;
+                $base[10]->pob2 = $cri11->pob2;
+                $base[10]->pob3 = $cri11->pob3;
+                $base[10]->pob4 = $cri11->pob4;
+                $base[10]->pob5 = $cri11->pob5;
+
+                // $cri12 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where(function ($q) {
+                //     $q->where('lengua_madre', '')->orWhereNull('lengua_madre');
+                // })->count();
+                $cri12 = ImporPadronNominal::select(
+                    DB::raw('count(*) as pob'),
+                    DB::raw('sum(if(tipo_edad in("D","M"),1,0)) as pob0'),
+                    DB::raw('sum(if(edad=1 and tipo_edad="A",1,0)) as pob1'),
+                    DB::raw('sum(if(edad=2 and tipo_edad="A",1,0)) as pob2'),
+                    DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
+                    DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
+                    DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
+                )->where('importacion_id', $impMaxAnio)
+                    ->where(function ($q) {
+                        $q->where('lengua_madre', '')->orWhereNull('lengua_madre');
+                    })
+                    ->first();
+                $base[11]->total = $cri12->pob;
+                $base[11]->pob0 = $cri12->pob0;
+                $base[11]->pob1 = $cri12->pob1;
+                $base[11]->pob2 = $cri12->pob2;
+                $base[11]->pob3 = $cri12->pob3;
+                $base[11]->pob4 = $cri12->pob4;
+                $base[11]->pob5 = $cri12->pob5;
 
                 // $foot = [];
                 // if ($base->count() > 0) {
@@ -342,5 +630,110 @@ class PadronNominalController extends Controller
                 # code...
                 return [];
         }
+    }
+
+
+    public function criterio1_red($importacion, $criterio)
+    {
+        switch ($criterio) {
+            case '1':
+                $sql = "SELECT distinct r.id, r.nombre from (select distinct cui_atencion as eess from sal_impor_padron_nominal where importacion_id=? and cui_atencion != 0 AND tipo_doc='Padron' order by eess asc) as aeess 
+                join sal_establecimiento as e on e.cod_unico = aeess.eess join sal_microred as m on m.id = e.microrred_id join sal_red as r on r.id=m.red_id order by e.cod_disa";
+                return DB::select($sql, [$importacion]);
+
+            default:
+                return [];
+        }
+    }
+
+    public function criterio1_microred($importacion, $red, $criterio)
+    {
+
+        switch ($criterio) {
+            case '1':
+                $sql = "SELECT distinct m.id, m.nombre from (select distinct cui_atencion as eess from sal_impor_padron_nominal where importacion_id=? and cui_atencion != 0 AND tipo_doc='Padron' order by eess asc) as aeess
+                join sal_establecimiento as e on e.cod_unico = aeess.eess join sal_microred as m on m.id = e.microrred_id join sal_red as r on r.id=m.red_id where r.id = ? order by m.cod_disa, red_id";
+                // return response()->json(DB::select($sql, [$importacion, $red]));
+                return DB::select($sql, [$importacion, $red]);
+
+            default:
+                return [];
+        }
+    }
+
+    public function criterio1_establecimiento($importacion_id, $red, $microred, $criterio)
+    {
+        switch ($criterio) {
+            case '1':
+                $sql = "SELECT distinct e.id, e.nombre_establecimiento as nombre from (select distinct cui_atencion as eess from sal_impor_padron_nominal where importacion_id=? and cui_atencion != 0 AND tipo_doc='Padron' order by eess asc) as aeess
+                join sal_establecimiento as e on e.cod_unico = aeess.eess join sal_microred as m on m.id = e.microrred_id join sal_red as r on r.id=m.red_id where r.id = ? and m.id = ? order by e.cod_disa, red_id, microrred_id ";
+                return DB::select($sql, [$importacion_id, $red, $microred]);
+
+            default:
+                return [];
+        }
+    }
+
+
+    public function tablerocalidadcriterio()
+    {
+        $fuente = ImporPadronNominalController::$FUENTE;
+        $anio = 2024;
+        $sql1 = "SELECT * FROM par_importacion
+        WHERE fuenteimportacion_id = ? AND estado = 'PR'
+            AND DATE_FORMAT(fechaActualizacion, '%Y-%m') = (
+                SELECT DATE_FORMAT(MAX(fechaActualizacion), '%Y-%m') FROM par_importacion 
+                WHERE fuenteimportacion_id = ? AND estado = 'PR' AND YEAR(fechaActualizacion) = ?
+            )
+        ORDER BY fechaActualizacion DESC limit 1";
+        $query1 = DB::select($sql1, [$fuente, $fuente, $anio]);
+        $impMaxAnio = $query1 ? $query1[0]->id : 0;
+
+        $criterio = 1;
+        $red = $this->criterio1_red($impMaxAnio, $criterio);
+        // return $this->criterio1_microred($impMaxAnio, 10, 1);
+        // return $this->criterio1_establecimiento($impMaxAnio, 10,41,1);
+
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronNominalController::$FUENTE); //nexus $imp3
+        $mes = Mes::find($imp->mes);
+        $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $mes->mes . ' del ' . $imp->anio;
+
+        return view('salud.PadronNominal.TableroCalidadCriterio', compact('impMaxAnio', 'criterio', 'actualizado', 'red'));
+    }
+
+    public function tablerocalidadcriteriolistar(Request $rq)
+    {
+        $draw = intval($rq->draw);
+        $start = intval($rq->start);
+        $length = intval($rq->length);
+        $query = ImporPadronNominal::where('importacion_id', $rq->importacion)->where('tipo_doc', 'padron')->get();
+        $data = [];
+        foreach ($query as $key => $value) {
+            $dis = Ubigeo::where('codigo', $value->ubigeo)->first();
+            $eess = Establecimiento::where('cod_unico', $value->cui_atencion)->first();
+            // $boton = '';
+            // if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || in_array(session('perfil_administrador_id'), [3, 8, 9, 10, 11])) {
+            //     $boton = '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>';
+            // }
+            // $boton2 = '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> </button>';
+            $data[] = array(
+                $key + 1,
+                '',
+                '',
+                $value->apellido_paterno . ' ' . $value->apellido_materno . ', ' . $value->nombre,
+                date('d/m/Y', strtotime($value->fecha_nacimiento)),
+                $dis->nombre, //$value->ubigeo,
+                $value->centro_poblado_nombre,
+                str_pad($value->cui_atencion, 8, '0', STR_PAD_LEFT),
+                $eess->nombre_establecimiento
+            );
+        }
+        $result = array(
+            "draw" => $draw,
+            "recordsTotal" => $start,
+            "recordsFiltered" => $length,
+            "data" => $data,
+        );
+        return response()->json($result);
     }
 }

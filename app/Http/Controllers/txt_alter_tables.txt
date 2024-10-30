@@ -2417,6 +2417,19 @@ CREATE TABLE `lotex` (
 //////////////////
 
 
+CREATE TABLE `productoxx` (
+    id int(11) auto_increment primary key,
+    productox varchar(100) NULL DEFAULT NULL,
+    categoriax varchar(100) NULL DEFAULT NULL,
+    cantidad int(11) DEFAULT NULL,
+    precio varchar(100) NULL DEFAULT NULL,
+    laboratoriox varchar(10) NULL DEFAULT NULL,
+    lotex varchar(100) NULL DEFAULT NULL,
+    vencimiento varchar(3) NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+
+////////////////////////////////
+
 
 update `edu_sfl` set zona_registral='ZONA N° VI - OFICINA REGISTRAL DE PUCALLPA';
 

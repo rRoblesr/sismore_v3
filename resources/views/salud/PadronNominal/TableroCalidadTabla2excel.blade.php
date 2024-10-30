@@ -27,7 +27,7 @@
             <tr class="text-right">
                 <td class="text-center">{{ $key + 1 }}</td>
                 <td class="text-left">{{ $item->distrito }}</td>
-                <td class="text-center">{{ number_format($item->pob, 0) }}</td>
+                <td class="text-center table-warning">{{ number_format($item->pob, 0) }}</td>
                 <td class="text-center">{{ number_format($item->pobm, 0) }}</td>
                 <td class="text-center">{{ number_format($item->pobf, 0) }}</td>
                 <td class="text-center">{{ number_format($item->pob0, 0) }}</td>
