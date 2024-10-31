@@ -350,6 +350,14 @@ class ImportacionRepositorio
         return  $query;
     }
 
+    public static function anios_porfuente_select($fuente)
+    {
+        $query = Importacion::distinct()->select(DB::raw('year(fechaActualizacion) as anio'))
+            ->where('fuenteimportacion_id', $fuente)->where('estado', 'PR')
+            ->get();
+        return  $query;
+    }
+
     public static function aniosMax_porfuente($fuente)
     {
         $query = Importacion::select('id', DB::raw('year(fechaActualizacion) as anio'))

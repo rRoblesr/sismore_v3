@@ -98,7 +98,7 @@ class PadronNominalController extends Controller
     {
         $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronNominalController::$FUENTE); //nexus $imp3
         $mes = Mes::find($imp->mes);
-        $anios = ImportacionRepositorio::anios_porfuente(ImporPadronNominalController::$FUENTE);
+        $anios = ImportacionRepositorio::anios_porfuente_select(ImporPadronNominalController::$FUENTE);
         $provincias = UbigeoRepositorio::provincia_select('25');
         // compact('imp', 'mes');
         $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $mes->mes . ' del ' . $imp->anio;
@@ -817,5 +817,10 @@ class PadronNominalController extends Controller
             "data" => $data,
         );
         return response()->json($result);
+    }
+
+    public function tablerocalidadcriteriofind($importacion, $padron)
+    {
+        return  $data = ImporPadronNominal::where('importacion_id', $importacion)->where('padron', $padron)->first();
     }
 }

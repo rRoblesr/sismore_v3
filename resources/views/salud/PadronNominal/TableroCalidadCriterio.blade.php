@@ -141,58 +141,58 @@
                                     </thead> --}}
                                     <tbody>
                                         <tr>
-                                            <td>CÓDIGO PADRÓN</td>
+                                            <td class="text-right table-secondary">CÓDIGO PADRÓN</td>
                                             <td id="padron"></td>
-                                            <td>TIPO DOCUMENTO</td>
+                                            <td class="text-right table-secondary">TIPO DOCUMENTO</td>
                                             <td id="tipodoc"></td>
-                                            <td>DOCUMENTO</td>
+                                            <td class="text-right table-secondary">DOCUMENTO</td>
                                             <td id="doc"></td>
                                         </tr>
                                         <tr>
-                                            <td>APELLIDO PATERNO</td>
+                                            <td class="text-right table-secondary">APELLIDO PATERNO</td>
                                             <td id="apepat"></td>
-                                            <td>APELLIDO MATERNO</td>
+                                            <td class="text-right table-secondary">APELLIDO MATERNO</td>
                                             <td id="apemat"></td>
-                                            <td>NOMBRES</td>
+                                            <td class="text-right table-secondary">NOMBRES</td>
                                             <td id="nom"></td>
                                         </tr>
                                         <tr>
-                                            <td>SEXO</td>
+                                            <td class="text-right table-secondary">SEXO</td>
                                             <td id="sexo"></td>
-                                            <td>FECHA DE NACIMIENTO</td>
+                                            <td class="text-right table-secondary">FECHA DE NACIMIENTO</td>
                                             <td id="nacimiento"></td>
-                                            <td>EDAD</td>
+                                            <td class="text-right table-secondary">EDAD</td>
                                             <td id="edad"></td>
                                         </tr>
                                         <tr>
-                                            <td>DEPARTAMENTO</td>
+                                            <td class="text-right table-secondary">DEPARTAMENTO</td>
                                             <td id="dep"></td>
-                                            <td>PROVINCIA</td>
+                                            <td class="text-right table-secondary">PROVINCIA</td>
                                             <td id="pro"></td>
-                                            <td>DISTRITO</td>
+                                            <td class="text-right table-secondary">DISTRITO</td>
                                             <td id="dis"></td>
                                         </tr>
                                         <tr>
-                                            <td>CENTRO POBLADO</td>
+                                            <td class="text-right table-secondary">CENTRO POBLADO</td>
                                             <td id="cp"></td>
-                                            <td>DIRECCIÓN</td>
+                                            <td class="text-right table-secondary">DIRECCIÓN</td>
                                             <td id="dir" colspan="3"></td>
                                         </tr>
                                         <tr>
-                                            <td>EESS NACIMIENTO</td>
+                                            <td class="text-right table-secondary">EESS NACIMIENTO</td>
                                             <td id="esn"></td>
-                                            <td>ULTIMO EESS ATENCIÓN</td>
+                                            <td class="text-right table-secondary">ULTIMO EESS ATENCIÓN</td>
                                             <td id="esa"></td>
-                                            <td>VISITA DOMICILIARIA</td>
+                                            <td class="text-right table-secondary">VISITA DOMICILIARIA</td>
                                             <td id="visita"></td>
                                         </tr>
                                         <tr>
-                                            <td>ENCONTRADO</td>
+                                            <td class="text-right table-secondary">ENCONTRADO</td>
                                             <td id="encontrado"></td>
-                                            <td>TIPO DE SEGURO</td>
+                                            <td class="text-right table-secondary">TIPO DE SEGURO</td>
                                             <td id="seguro"></td>
-                                            <td>PROGRAMA SOCIAL</td>
-                                            <td id="programa"></td>
+                                            <td class="text-right table-secondary">PROGRAMA SOCIAL</td>
+                                            <td id="programa" class="text-right"></td>
                                         </tr>
                                         {{-- <tr>
                                             <td>INSTITUTCIÓN EDUCATIVA</td>
@@ -203,27 +203,27 @@
                                             <td></td>
                                         </tr> --}}
                                         <tr>
-                                            <td>APODERADO</td>
+                                            <td class="text-right table-secondary">APODERADO</td>
                                             <td id="mapoderado"></td>
-                                            <td>TIPO DOCUMENTO</td>
+                                            <td class="text-right table-secondary">TIPO DOCUMENTO</td>
                                             <td id="mtipodoc"></td>
-                                            <td>DOCUMENTO</td>
+                                            <td class="text-right table-secondary">DOCUMENTO</td>
                                             <td id="mdoc"></td>
                                         </tr>
                                         <tr>
-                                            <td>APELLIDO PATERNO</td>
+                                            <td class="text-right table-secondary">APELLIDO PATERNO</td>
                                             <td id="mapepat"></td>
-                                            <td>APELLIDO MATERNO</td>
+                                            <td class="text-right table-secondary">APELLIDO MATERNO</td>
                                             <td id="mapemat"></td>
-                                            <td>NOMBRES</td>
+                                            <td class="text-right">NOMBRES</td>
                                             <td id="mnom"></td>
                                         </tr>
                                         <tr>
-                                            <td>CELULAR</td>
+                                            <td class="text-right">CELULAR</td>
                                             <td id="mcel"></td>
-                                            <td>GRADO DE INSTRUCCIÓN</td>
+                                            <td class="text-right">GRADO DE INSTRUCCIÓN</td>
                                             <td id="mgrado"></td>
-                                            <td>LENGUA HABITUAL</td>
+                                            <td class="text-right">LENGUA HABITUAL</td>
                                             <td id="mlengua"></td>
                                         </tr>
                                     </tbody>
@@ -251,7 +251,7 @@
         var tableprincipal;
         $(document).ready(function() {
             cargarCards();
-            
+
         });
 
         function cargarCards() {
@@ -286,22 +286,47 @@
 
         function abrirmodalpadron(padron) {
             $('#modal-nino').modal('show');
-            // $.ajax({
-            //     url: "{{ route('salud.padronnominal.tablerocalidad.criterio.find1', ['padron' => xpadron]) }}"
-            //         .replace('xpadron', padron),
-            //     type: 'GET',
-            //     success: function(data) {
-            //         $("#microred option").remove();
-            //         var options = '<option value="0">TODOS</option>';
-            //         $.each(data, function(index, value) {
-            //             options += `<option value='${value.id}'>${value.nombre}</option>`;
-            //         });
-            //         $("#microred").append(options);
-            //     },
-            //     error: function(jqXHR, textStatus, errorThrown) {
-            //         console.log(jqXHR);
-            //     },
-            // });
+            $.ajax({
+                url: "{{ route('salud.padronnominal.tablerocalidad.criterio.find1', ['importacion' => $importacion, 'padron' => 'padron']) }}"
+                    .replace('padron', padron),
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    console.log(data);
+                    $('#padron').html(data.padron);
+                    $('#tipodoc').html(data.tipo_doc);
+                    $('#doc').html(data.num_doc);
+                    $('#apepat').html(data.apellido_paterno);
+                    $('#apemat').html(data.apellido_materno);
+                    $('#nom').html(data.nombre);
+                    $('#sexo').html(data.genero);
+                    $('#nacimiento').html(data.fecha_nacimiento);
+                    $('#edad').html(data.edad + data.tipo_edad);
+                    $('#dep').html(data.padron);
+                    $('#pro').html(data.padron);
+                    $('#dis').html(data.padron);
+                    $('#cp').html(data.centro_poblado_nombre);
+                    $('#dir').html(data.direccion);
+                    $('#esn').html(data.cui_nacimiento);
+                    $('#esa').html(data.cui_atencion);
+                    $('#visita').html(data.visita);
+                    $('#encontrado').html(data.menor_encontrado);
+                    $('#seguro').html(data.seguro);
+                    $('#programa').html(data.programa_social);
+                    $('#mapoderado').html(data.apoderado);
+                    $('#mtipodoc').html(data.tipo_doc_madre);
+                    $('#mdoc').html(data.num_doc_madre);
+                    $('#mapepat').html(data.apellido_paterno_madre);
+                    $('#mapemat').html(data.apellido_materno_madre);
+                    $('#mnom').html(data.nombres_madre);
+                    $('#mcel').html(data.celular_madre);
+                    $('#mgrado').html(data.padron);
+                    $('#mlengua').html(data.padron);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
         }
 
         function cargarMicrored() {
