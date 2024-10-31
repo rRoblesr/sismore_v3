@@ -13,13 +13,14 @@
             <div class="card">
                 <div class="card-header bg-success-0">
                     <div class="card-widgets">
-                        <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
-                            <i class="fa fa-redo"></i> Volver</button>
+                        <button type="button" class="btn btn-orange-0 btn-xs" onclick="history.back()" title='ACTUALIZAR'><i
+                                class="fas fa-arrow-left"></i> Volver</button>
                         <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
                             <i class="fa fa-redo"></i> Actualizar</button>
                     </div>
                     <h3 class="card-title text-white font-12">
-                        Registro sin Número de Documento(DNI, CNV, CUI)
+                        {{-- Registros sin Número de Documento (DNI, CNV, CUI) del Menor --}}
+                        {{ $title[$criterio - 1] }}
                     </h3>
                 </div>
                 <div class="card-body pb-0">
@@ -81,17 +82,18 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="table-responsive">
-                                <table id="tabla1" class="table table-sm table-striped table-bordered font-11">
+                                <table id="tabla1" class="table table-sm table-striped table-bordered font-10">
                                     <thead>
                                         <tr class="table-success-0 text-white">
                                             <th class="text-center">N°</th>
-                                            <th class="text-center">Código Padrón</th>
-                                            <th class="text-center">Tipo Documento</th>
+                                            <th class="text-center">Cód. Padrón</th>
+                                            <th class="text-center">Tipo Doc.</th>
+                                            <th class="text-center">Documento</th>
                                             <th class="text-center">Apellidos y Nombre</th>
                                             <th class="text-center">Fecha Nacimiento</th>
                                             <th class="text-center">Distrito</th>
                                             <th class="text-center">Centro Poblado</th>
-                                            <th class="text-center">Código EESS</th>
+                                            <th class="text-center">Cod. EESS</th>
                                             <th class="text-center">EESS de Atención</th>
                                         </tr>
                                     </thead>
@@ -108,6 +110,137 @@
             </div>
         </div>
     </div>
+
+    <!--  Modal content for the above example -->
+    <div class="modal fade" id="modal-nino" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+        aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myLargeModalLabel">Importar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table id="xx" class="table table-sm table-striped table-bordered font-12">
+                                    {{-- <thead>
+                                        <tr class="table-success-0 text-white">
+                                            <th class="text-center">N°</th>
+                                            <th class="text-center">Cód. Padrón</th>
+                                            <th class="text-center">Tipo Doc.</th>
+                                            <th class="text-center">Documento</th>
+                                            <th class="text-center">Apellidos y Nombre</th>
+                                            <th class="text-center">Fecha Nacimiento</th>
+                                            <th class="text-center">Distrito</th>
+                                            <th class="text-center">Centro Poblado</th>
+                                            <th class="text-center">Cod. EESS</th>
+                                            <th class="text-center">EESS de Atención</th>
+                                        </tr>
+                                    </thead> --}}
+                                    <tbody>
+                                        <tr>
+                                            <td>CÓDIGO PADRÓN</td>
+                                            <td id="padron"></td>
+                                            <td>TIPO DOCUMENTO</td>
+                                            <td id="tipodoc"></td>
+                                            <td>DOCUMENTO</td>
+                                            <td id="doc"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>APELLIDO PATERNO</td>
+                                            <td id="apepat"></td>
+                                            <td>APELLIDO MATERNO</td>
+                                            <td id="apemat"></td>
+                                            <td>NOMBRES</td>
+                                            <td id="nom"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>SEXO</td>
+                                            <td id="sexo"></td>
+                                            <td>FECHA DE NACIMIENTO</td>
+                                            <td id="nacimiento"></td>
+                                            <td>EDAD</td>
+                                            <td id="edad"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>DEPARTAMENTO</td>
+                                            <td id="dep"></td>
+                                            <td>PROVINCIA</td>
+                                            <td id="pro"></td>
+                                            <td>DISTRITO</td>
+                                            <td id="dis"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>CENTRO POBLADO</td>
+                                            <td id="cp"></td>
+                                            <td>DIRECCIÓN</td>
+                                            <td id="dir" colspan="3"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>EESS NACIMIENTO</td>
+                                            <td id="esn"></td>
+                                            <td>ULTIMO EESS ATENCIÓN</td>
+                                            <td id="esa"></td>
+                                            <td>VISITA DOMICILIARIA</td>
+                                            <td id="visita"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>ENCONTRADO</td>
+                                            <td id="encontrado"></td>
+                                            <td>TIPO DE SEGURO</td>
+                                            <td id="seguro"></td>
+                                            <td>PROGRAMA SOCIAL</td>
+                                            <td id="programa"></td>
+                                        </tr>
+                                        {{-- <tr>
+                                            <td>INSTITUTCIÓN EDUCATIVA</td>
+                                            <td></td>
+                                            <td>NIVEL EDUCATIVO</td>
+                                            <td></td>
+                                            <td>GRADO Y SECCIÓN</td>
+                                            <td></td>
+                                        </tr> --}}
+                                        <tr>
+                                            <td>APODERADO</td>
+                                            <td id="mapoderado"></td>
+                                            <td>TIPO DOCUMENTO</td>
+                                            <td id="mtipodoc"></td>
+                                            <td>DOCUMENTO</td>
+                                            <td id="mdoc"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>APELLIDO PATERNO</td>
+                                            <td id="mapepat"></td>
+                                            <td>APELLIDO MATERNO</td>
+                                            <td id="mapemat"></td>
+                                            <td>NOMBRES</td>
+                                            <td id="mnom"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>CELULAR</td>
+                                            <td id="mcel"></td>
+                                            <td>GRADO DE INSTRUCCIÓN</td>
+                                            <td id="mgrado"></td>
+                                            <td>LENGUA HABITUAL</td>
+                                            <td id="mlengua"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+        </div>
+    </div><!-- /.modal -->
 @endsection
 
 @section('js')
@@ -118,7 +251,7 @@
         var tableprincipal;
         $(document).ready(function() {
             cargarCards();
-
+            
         });
 
         function cargarCards() {
@@ -134,15 +267,46 @@
                     url: "{{ route('salud.padronnominal.tablerocalidad.criterio.listar') }}",
                     type: "GET",
                     data: function(d) {
-                        d.importacion = {{ $impMaxAnio }};
+                        d.importacion = {{ $importacion }};
+                        d.criterio = {{ $criterio }};
                     }
                 },
+                columnDefs: [{
+                    className: 'text-center',
+                    targets: [0, 1, 2, 3, 5, 6, 8]
+                }, {
+                    targets: 1,
+                    render: function(data, type, row) {
+                        // return '<a href="/ruta/detalle/' + row + '">' + data + '</a>';
+                        return `<a href="#" onclick="abrirmodalpadron(${data})">${data}</a>`;
+                    }
+                }]
             });
+        }
+
+        function abrirmodalpadron(padron) {
+            $('#modal-nino').modal('show');
+            // $.ajax({
+            //     url: "{{ route('salud.padronnominal.tablerocalidad.criterio.find1', ['padron' => xpadron]) }}"
+            //         .replace('xpadron', padron),
+            //     type: 'GET',
+            //     success: function(data) {
+            //         $("#microred option").remove();
+            //         var options = '<option value="0">TODOS</option>';
+            //         $.each(data, function(index, value) {
+            //             options += `<option value='${value.id}'>${value.nombre}</option>`;
+            //         });
+            //         $("#microred").append(options);
+            //     },
+            //     error: function(jqXHR, textStatus, errorThrown) {
+            //         console.log(jqXHR);
+            //     },
+            // });
         }
 
         function cargarMicrored() {
             $.ajax({
-                url: "{{ route('salud.padronnominal.tablerocalidad.criterio.microred', ['importacion' => $impMaxAnio, 'red' => 'xred', 'criterio' => $criterio]) }}"
+                url: "{{ route('salud.padronnominal.tablerocalidad.criterio.microred', ['importacion' => $importacion, 'red' => 'xred', 'criterio' => $criterio]) }}"
                     .replace('xred', $('#red').val()),
                 type: 'GET',
                 success: function(data) {
@@ -161,7 +325,7 @@
 
         function cargarEstablecimiento() {
             $.ajax({
-                url: "{{ route('salud.padronnominal.tablerocalidad.criterio.criterio1_establecimiento', ['importacion' => $impMaxAnio, 'red' => 'xred', 'microred' => 'xmicrored', 'criterio' => $criterio]) }}"
+                url: "{{ route('salud.padronnominal.tablerocalidad.criterio.criterio1_establecimiento', ['importacion' => $importacion, 'red' => 'xred', 'microred' => 'xmicrored', 'criterio' => $criterio]) }}"
                     .replace('xred', $('#red').val())
                     .replace('xmicrored', $('#microred').val()),
                 type: 'GET',

@@ -255,8 +255,14 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <div class="card">
-                <div class="card-header">
+            {{-- <div class="card">
+                <div class="card-header"> --}}
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                    <div class="card-widgets">
+                        <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel()">
+                            <i class="fa fa-file-excel"></i> Descargar</button>
+                    </div>
                     <h3 class="card-title">Población de niños y niñas menos de 6 años por distrito, segun sexo y edades
                     </h3>
                 </div>

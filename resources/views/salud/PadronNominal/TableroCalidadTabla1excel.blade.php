@@ -19,7 +19,12 @@
         @foreach ($base as $key => $item)
             <tr class="text-center">
                 <td>{{ $key + 1 }}</td>
-                <td class="text-left"><a href="#">{{ $item->criterio }}</a></td>
+                <td class="text-left">
+                    <a
+                        href="{{ route('salud.padronnominal.tablerocalidad.criterio', ['importacion' => $impMaxAnio, 'criterio' => $key + 1]) }}">
+                        {{ $item->criterio }}
+                    </a>
+                </td>
                 <td class="table-warning">{{ number_format($item->total, 0) }}</td>
                 <td>{{ number_format($item->pob0, 0) }}</td>
                 <td>{{ number_format($item->pob1, 0) }}</td>
