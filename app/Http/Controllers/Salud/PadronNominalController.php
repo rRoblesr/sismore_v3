@@ -11,6 +11,7 @@ use App\Models\Salud\ImporPadronNominal;
 use App\Models\Salud\PadronCalidad;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Parametro\UbigeoRepositorio;
+use App\Repositories\Salud\PadronNominalRepositorio;
 use App\Repositories\Salud\PadronNominalRepositorioSalud;
 use Exception;
 use Illuminate\Http\Request;
@@ -110,19 +111,18 @@ class PadronNominalController extends Controller
         $fuente = ImporPadronNominalController::$FUENTE;
         switch ($rq->div) {
             case 'head':
-                $sql1 = "SELECT * FROM par_importacion
-                        WHERE fuenteimportacion_id = ? AND estado = 'PR'
-                            AND DATE_FORMAT(fechaActualizacion, '%Y-%m') = (
-                                SELECT DATE_FORMAT(MAX(fechaActualizacion), '%Y-%m') FROM par_importacion 
-                                WHERE fuenteimportacion_id = ? AND estado = 'PR' AND YEAR(fechaActualizacion) = ?
-                            )
-                        ORDER BY fechaActualizacion DESC limit 1";
-                // $impMaxAnio = DB::table(DB::raw("($sql1) as tb"))->setBindings([$fuente, $fuente, $rq->anio])->first();
-                $query1 = DB::select($sql1, [$fuente, $fuente, $rq->anio]);
-                $impMaxAnio = $query1 ? $query1[0]->id : 0;
+                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio);
 
-                $card1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->count();
-                $card2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->where('tipo_doc', 'DNI')->count();
+                $card1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1');
+                if ($rq->provincia > 0) $card1 = $card1->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $card1 = $card1->where('distrito_id', $rq->distrito);
+                $card1 = $card1->count();
+
+                $card2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->where('tipo_doc', 'DNI');
+                if ($rq->provincia > 0) $card2 = $card2->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $card2 = $card2->where('distrito_id', $rq->distrito);
+                $card2 = $card2->count();
+
                 $card3 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')
                     ->where(function ($query) {
                         $query->whereRaw("FIND_IN_SET('1',seguro) > 0")
@@ -130,8 +130,15 @@ class PadronNominalController extends Controller
                             ->orWhereRaw("FIND_IN_SET('3',seguro) > 0")
                             ->orWhereRaw("FIND_IN_SET('4',seguro) > 0")
                             ->orWhereNotNull('seguro');
-                    })->count();
-                $card4 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->where('cui_atencion', '>', 0)->count();
+                    });
+                if ($rq->provincia > 0) $card3 = $card3->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $card3 = $card3->where('distrito_id', $rq->distrito);
+                $card3 = $card3->count();
+
+                $card4 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->where('cui_atencion', '>', 0);
+                if ($rq->provincia > 0) $card4 = $card4->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $card4 = $card4->where('distrito_id', $rq->distrito);
+                $card4 = $card4->count();
 
                 $card1 = number_format($card1, 0);
                 $card2 = number_format($card2, 0);
@@ -139,46 +146,43 @@ class PadronNominalController extends Controller
                 $card4 = number_format($card4, 0);
                 return response()->json(compact('card1', 'card2', 'card3', 'card4'));
             case 'anal1':
-                $sql1 = "SELECT * FROM par_importacion
-                        WHERE fuenteimportacion_id = ? AND estado = 'PR'
-                            AND DATE_FORMAT(fechaActualizacion, '%Y-%m') = (
-                                SELECT DATE_FORMAT(MAX(fechaActualizacion), '%Y-%m') FROM par_importacion 
-                                WHERE fuenteimportacion_id = ? AND estado = 'PR' AND YEAR(fechaActualizacion) = ?
-                            )
-                        ORDER BY fechaActualizacion DESC limit 1";
-                // $impMaxAnio = DB::table(DB::raw("($sql1) as tb"))->setBindings([$fuente, $fuente, $rq->anio])->first();
-                $query1 = DB::select($sql1, [$fuente, $fuente, $rq->anio]);
-                $impMaxAnio = $query1 ? $query1[0]->id : 0;
-                $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->count();
-                $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->where('visita', '1')->count();
+                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio);
+
+                $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1');
+                if ($rq->provincia > 0) $v2 = $v2->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $v2 = $v2->where('distrito_id', $rq->distrito);
+                $v2 = $v2->count();
+
+                $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->where('visita', '1');
+                if ($rq->provincia > 0) $v1 = $v1->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $v1 = $v1->where('distrito_id', $rq->distrito);
+                $v1 = $v1->count();
+
                 $avance = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
                 return response()->json(compact('avance'));
             case 'anal2':
-                $sql1 = "SELECT * FROM par_importacion
-                        WHERE fuenteimportacion_id = ? AND estado = 'PR'
-                            AND DATE_FORMAT(fechaActualizacion, '%Y-%m') = (
-                                SELECT DATE_FORMAT(MAX(fechaActualizacion), '%Y-%m') FROM par_importacion 
-                                WHERE fuenteimportacion_id = ? AND estado = 'PR' AND YEAR(fechaActualizacion) = ?
-                            )
-                        ORDER BY fechaActualizacion DESC limit 1";
-                // $impMaxAnio = DB::table(DB::raw("($sql1) as tb"))->setBindings([$fuente, $fuente, $rq->anio])->first();
-                $query1 = DB::select($sql1, [$fuente, $fuente, $rq->anio]);
-                $impMaxAnio = $query1 ? $query1[0]->id : 0;
-                $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->count();
-                $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->where('tipo_doc', 'DNI')->count();
+                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio);
+
+                $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1');
+                if ($rq->provincia > 0) $v2 = $v2->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $v2 = $v2->where('distrito_id', $rq->distrito);
+                $v2 = $v2->count();
+
+                $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->where('tipo_doc', 'DNI');
+                if ($rq->provincia > 0) $v1 = $v1->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $v1 = $v1->where('distrito_id', $rq->distrito);
+                $v1 = $v1->count();
+
                 $avance = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
                 return response()->json(compact('avance'));
             case 'anal3':
-                $sql1 = "SELECT * FROM par_importacion
-                        WHERE fuenteimportacion_id = ? AND estado = 'PR'
-                            AND DATE_FORMAT(fechaActualizacion, '%Y-%m') = (
-                                SELECT DATE_FORMAT(MAX(fechaActualizacion), '%Y-%m') FROM par_importacion 
-                                WHERE fuenteimportacion_id = ? AND estado = 'PR' AND YEAR(fechaActualizacion) = ?
-                            )
-                        ORDER BY fechaActualizacion DESC limit 1";
-                $query1 = DB::select($sql1, [$fuente, $fuente, $rq->anio]);
-                $impMaxAnio = $query1 ? $query1[0]->id : 0;
-                $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->count();
+                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio);
+
+                $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1');
+                if ($rq->provincia > 0) $v2 = $v2->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $v2 = $v2->where('distrito_id', $rq->distrito);
+                $v2 = $v2->count();
+
                 $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')
                     ->where(function ($query) {
                         $query->whereRaw("FIND_IN_SET('1',seguro) > 0")
@@ -186,21 +190,26 @@ class PadronNominalController extends Controller
                             ->orWhereRaw("FIND_IN_SET('3',seguro) > 0")
                             ->orWhereRaw("FIND_IN_SET('4',seguro) > 0")
                             ->orWhereNotNull('seguro');
-                    })->count();
+                    });
+                if ($rq->provincia > 0) $v1 = $v1->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $v1 = $v1->where('distrito_id', $rq->distrito);
+                $v1 = $v1->count();
+
                 $avance = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
                 return response()->json(compact('avance'));
             case 'anal4':
-                $sql1 = "SELECT * FROM par_importacion
-                        WHERE fuenteimportacion_id = ? AND estado = 'PR'
-                            AND DATE_FORMAT(fechaActualizacion, '%Y-%m') = (
-                                SELECT DATE_FORMAT(MAX(fechaActualizacion), '%Y-%m') FROM par_importacion 
-                                WHERE fuenteimportacion_id = ? AND estado = 'PR' AND YEAR(fechaActualizacion) = ?
-                            )
-                        ORDER BY fechaActualizacion DESC limit 1";
-                $query1 = DB::select($sql1, [$fuente, $fuente, $rq->anio]);
-                $impMaxAnio = $query1 ? $query1[0]->id : 0;
-                $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->count();
-                $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->where('cui_atencion', '>', 0)->count();
+                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio);
+
+                $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1');
+                if ($rq->provincia > 0) $v2 = $v2->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $v2 = $v2->where('distrito_id', $rq->distrito);
+                $v2 = $v2->count();
+
+                $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->where('cui_atencion', '>', 0);
+                if ($rq->provincia > 0) $v1 = $v1->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $v1 = $v1->where('distrito_id', $rq->distrito);
+                $v1 = $v1->count();
+
                 $avance = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
                 return response()->json(compact('avance', 'v1', 'v2'));
 
@@ -279,15 +288,7 @@ class PadronNominalController extends Controller
                 return response()->json(compact('excel'));
 
             case 'tabla1':
-                $sql1 = "SELECT * FROM par_importacion
-                        WHERE fuenteimportacion_id = ? AND estado = 'PR'
-                            AND DATE_FORMAT(fechaActualizacion, '%Y-%m') = (
-                                SELECT DATE_FORMAT(MAX(fechaActualizacion), '%Y-%m') FROM par_importacion 
-                                WHERE fuenteimportacion_id = ? AND estado = 'PR' AND YEAR(fechaActualizacion) = ?
-                            )
-                        ORDER BY fechaActualizacion DESC limit 1";
-                $query1 = DB::select($sql1, [$fuente, $fuente, $rq->anio]);
-                $impMaxAnio = $query1 ? $query1[0]->id : 0;
+                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio);
 
                 $base = Mes::select('id')->get();
                 $base[0]->criterio = 'Registro sin Número de Documento(DNI, CNV, CUI)';
@@ -311,7 +312,11 @@ class PadronNominalController extends Controller
                     DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
                     DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
                     DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
-                )->where('importacion_id', $impMaxAnio)->where('tipo_doc', 'padron')->first();
+                )->where('importacion_id', $impMaxAnio)->where('tipo_doc', 'padron');
+                if ($rq->provincia > 0) $cri1 = $cri1->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $cri1 = $cri1->where('distrito_id', $rq->distrito);
+                $cri1 = $cri1->first();
+
                 $base[0]->total = $cri1->pob;
                 $base[0]->pob0 = $cri1->pob0;
                 $base[0]->pob1 = $cri1->pob1;
@@ -329,7 +334,10 @@ class PadronNominalController extends Controller
                     DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
                     DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
                     DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
-                )->where('importacion_id', $impMaxAnio)->where('repetido', '2')->first();
+                )->where('importacion_id', $impMaxAnio)->where('repetido', '2');
+                if ($rq->provincia > 0) $cri2 = $cri2->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $cri2 = $cri2->where('distrito_id', $rq->distrito);
+                $cri2 = $cri2->first();
                 $base[1]->total = $cri2->pob;
                 $base[1]->pob0 = $cri2->pob0;
                 $base[1]->pob1 = $cri2->pob1;
@@ -351,7 +359,10 @@ class PadronNominalController extends Controller
                     DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
                 )->where('importacion_id', $impMaxAnio)->where(function ($q) {
                     $q->where('apellido_paterno', '')->orWhere('apellido_materno', '')->orWhere('nombre', '')->orWhereNull('apellido_paterno')->orWhereNull('apellido_materno')->orWhereNull('nombre');
-                })->first();
+                });
+                if ($rq->provincia > 0) $cri3 = $cri3->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $cri3 = $cri3->where('distrito_id', $rq->distrito);
+                $cri3 = $cri3->first();
 
                 $base[2]->total = $cri3->pob;
                 $base[2]->pob0 = $cri3->pob0;
@@ -375,7 +386,10 @@ class PadronNominalController extends Controller
                     DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
                 )->where('importacion_id', $impMaxAnio)->where(function ($q) {
                     $q->whereRaw("seguro = '0' or seguro = '0,'")->orWhereNull('seguro');
-                })->first();
+                });
+                if ($rq->provincia > 0) $cri4 = $cri4->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $cri4 = $cri4->where('distrito_id', $rq->distrito);
+                $cri4 = $cri4->first();
 
                 $base[3]->total = $cri4->pob;
                 $base[3]->pob0 = $cri4->pob0;
@@ -394,7 +408,10 @@ class PadronNominalController extends Controller
                     DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
                     DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
                     DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
-                )->where('importacion_id', $impMaxAnio)->where('visita', '!=', '1')->first();
+                )->where('importacion_id', $impMaxAnio)->where('visita', '!=', '1');
+                if ($rq->provincia > 0) $cri5 = $cri5->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $cri5 = $cri5->where('distrito_id', $rq->distrito);
+                $cri5 = $cri5->first();
 
                 $base[4]->total = $cri5->pob;
                 $base[4]->pob0 = $cri5->pob0;
@@ -413,7 +430,10 @@ class PadronNominalController extends Controller
                     DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
                     DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
                     DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
-                )->where('importacion_id', $impMaxAnio)->where('visita', '1')->where('menor_encontrado', '!=', '1')->first();
+                )->where('importacion_id', $impMaxAnio)->where('visita', '1')->where('menor_encontrado', '!=', '1');
+                if ($rq->provincia > 0) $cri6 = $cri6->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $cri6 = $cri6->where('distrito_id', $rq->distrito);
+                $cri6 = $cri6->first();
 
                 $base[5]->total = $cri6->pob;
                 $base[5]->pob0 = $cri6->pob0;
@@ -432,7 +452,10 @@ class PadronNominalController extends Controller
                     DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
                     DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
                     DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
-                )->where('importacion_id', $impMaxAnio)->where('cui_atencion', '0')->first();
+                )->where('importacion_id', $impMaxAnio)->where('cui_atencion', '0');
+                if ($rq->provincia > 0) $cri7 = $cri7->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $cri7 = $cri7->where('distrito_id', $rq->distrito);
+                $cri7 = $cri7->first();
 
                 $base[6]->total = $cri7->pob;
                 $base[6]->pob0 = $cri7->pob0;
@@ -451,7 +474,10 @@ class PadronNominalController extends Controller
                     DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
                     DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
                     DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
-                )->where('importacion_id', $impMaxAnio)->where('repetido', '2')->first();
+                )->where('importacion_id', $impMaxAnio)->where('repetido', '2');
+                if ($rq->provincia > 0) $cri8 = $cri8->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $cri8 = $cri8->where('distrito_id', $rq->distrito);
+                $cri8 = $cri8->first();
                 $base[7]->total = $cri8->pob;
                 $base[7]->pob0 = $cri8->pob0;
                 $base[7]->pob1 = $cri8->pob1;
@@ -469,7 +495,10 @@ class PadronNominalController extends Controller
                     DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
                     DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
                     DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
-                )->where('importacion_id', $impMaxAnio)->where('repetido', '2')->first();
+                )->where('importacion_id', $impMaxAnio)->where('repetido', '2');
+                if ($rq->provincia > 0) $cri9 = $cri9->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $cri9 = $cri9->where('distrito_id', $rq->distrito);
+                $cri9 = $cri9->first();
                 $base[8]->total = $cri9->pob;
                 $base[8]->pob0 = $cri9->pob0;
                 $base[8]->pob1 = $cri9->pob1;
@@ -492,8 +521,10 @@ class PadronNominalController extends Controller
                 )->where('importacion_id', $impMaxAnio)
                     ->where(function ($q) {
                         $q->where('apellido_paterno_madre', '')->orWhere('apellido_materno_madre', '')->orWhere('nombres_madre', '')->orWhereNull('apellido_paterno_madre')->orWhereNull('apellido_materno_madre')->orWhereNull('nombres_madre');
-                    })
-                    ->first();
+                    });
+                if ($rq->provincia > 0) $cri10 = $cri10->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $cri10 = $cri10->where('distrito_id', $rq->distrito);
+                $cri10 = $cri10->first();
                 $base[9]->total = $cri10->pob;
                 $base[9]->pob0 = $cri10->pob0;
                 $base[9]->pob1 = $cri10->pob1;
@@ -516,8 +547,10 @@ class PadronNominalController extends Controller
                 )->where('importacion_id', $impMaxAnio)
                     ->where(function ($q) {
                         $q->where('grado_instruccion', '')->orWhereNull('grado_instruccion');
-                    })
-                    ->first();
+                    });
+                if ($rq->provincia > 0) $cri11 = $cri11->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $cri11 = $cri11->where('distrito_id', $rq->distrito);
+                $cri11 = $cri11->first();
                 $base[10]->total = $cri11->pob;
                 $base[10]->pob0 = $cri11->pob0;
                 $base[10]->pob1 = $cri11->pob1;
@@ -540,8 +573,10 @@ class PadronNominalController extends Controller
                 )->where('importacion_id', $impMaxAnio)
                     ->where(function ($q) {
                         $q->where('lengua_madre', '')->orWhereNull('lengua_madre');
-                    })
-                    ->first();
+                    });
+                if ($rq->provincia > 0) $cri12 = $cri12->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $cri12 = $cri12->where('distrito_id', $rq->distrito);
+                $cri12 = $cri12->first();
                 $base[11]->total = $cri12->pob;
                 $base[11]->pob0 = $cri12->pob0;
                 $base[11]->pob1 = $cri12->pob1;
@@ -558,15 +593,7 @@ class PadronNominalController extends Controller
                 return response()->json(compact('excel'));
 
             case 'tabla2':
-                $sql1 = "SELECT * FROM par_importacion
-                            WHERE fuenteimportacion_id = ? AND estado = 'PR'
-                                AND DATE_FORMAT(fechaActualizacion, '%Y-%m') = (
-                                    SELECT DATE_FORMAT(MAX(fechaActualizacion), '%Y-%m') FROM par_importacion 
-                                    WHERE fuenteimportacion_id = ? AND estado = 'PR' AND YEAR(fechaActualizacion) = ?
-                                )
-                            ORDER BY fechaActualizacion DESC limit 1";
-                $query1 = DB::select($sql1, [$fuente, $fuente, $rq->anio]);
-                $impMaxAnio = $query1 ? $query1[0]->id : 0;
+                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio);
 
                 $base = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')
                     ->select(
@@ -583,7 +610,10 @@ class PadronNominalController extends Controller
                         DB::raw('sum(if(tipo_doc="DNI",1,0)) as dni'),
                         DB::raw('sum(if(tipo_doc="CNV",1,0)) as seguro'),
                         DB::raw('sum(if(tipo_doc="CUI",1,0)) as programa')
-                    )->groupBy('nseguro')->orderByRaw('field(nseguro,"SIS","ESSALUD","SANIDAD","PRIVADO","NINGUNO")')->get();
+                    );
+                if ($rq->provincia > 0) $base = $base->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $base = $base->where('distrito_id', $rq->distrito);
+                $base = $base->groupBy('nseguro')->orderByRaw('field(nseguro,"SIS","ESSALUD","SANIDAD","PRIVADO","NINGUNO")')->get();
 
                 $foot = [];
                 if ($base->count() > 0) {
@@ -620,17 +650,9 @@ class PadronNominalController extends Controller
                 return response()->json(compact('excel', 'base', 'foot'));
 
             case 'tabla3':
-                $sql1 = "SELECT * FROM par_importacion
-                                WHERE fuenteimportacion_id = ? AND estado = 'PR'
-                                    AND DATE_FORMAT(fechaActualizacion, '%Y-%m') = (
-                                        SELECT DATE_FORMAT(MAX(fechaActualizacion), '%Y-%m') FROM par_importacion 
-                                        WHERE fuenteimportacion_id = ? AND estado = 'PR' AND YEAR(fechaActualizacion) = ?
-                                    )
-                                ORDER BY fechaActualizacion DESC limit 1";
-                $query1 = DB::select($sql1, [$fuente, $fuente, $rq->anio]);
-                $impMaxAnio = $query1 ? $query1[0]->id : 0;
+                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio);
 
-                $base = ImporPadronNominal::join('par_ubigeo as u', 'u.codigo', '=', 'sal_impor_padron_nominal.ubigeo')
+                $base = ImporPadronNominal::join('par_ubigeo as u', 'u.id', '=', 'sal_impor_padron_nominal.distrito_id')
                     ->where('importacion_id', $impMaxAnio)->where('repetido', '1')
                     ->select(
                         'u.nombre as distrito',

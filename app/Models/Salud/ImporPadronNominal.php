@@ -32,6 +32,8 @@ class ImporPadronNominal extends Model
         'fecha_nacimiento',
         'direccion',
         'ubigeo',
+        'provincia_id',
+        'distrito_id',
         'centro_poblado',
         'centro_poblado_nombre',
         'area_ccpp',
