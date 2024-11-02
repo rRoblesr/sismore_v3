@@ -128,8 +128,8 @@ class PadronNominalController extends Controller
                         $query->whereRaw("FIND_IN_SET('1',seguro) > 0")
                             ->orWhereRaw("FIND_IN_SET('2',seguro) > 0")
                             ->orWhereRaw("FIND_IN_SET('3',seguro) > 0")
-                            ->orWhereRaw("FIND_IN_SET('4',seguro) > 0")
-                            ->orWhereNotNull('seguro');
+                            ->orWhereRaw("FIND_IN_SET('4',seguro) > 0");
+                            // ->orWhereNotNull('seguro');
                     });
                 if ($rq->provincia > 0) $card3 = $card3->where('provincia_id', $rq->provincia);
                 if ($rq->distrito > 0) $card3 = $card3->where('distrito_id', $rq->distrito);
@@ -671,12 +671,12 @@ class PadronNominalController extends Controller
                               when FIND_IN_SET("3", seguro) > 0 then 1 
                               when FIND_IN_SET("4", seguro) > 0 then 1 
                               else 0 end) as seguro'),
-                        DB::raw('sum(case when FIND_IN_SET("1", seguro) > 0 then 1 
-                              when FIND_IN_SET("2", seguro) > 0 then 1 
-                              when FIND_IN_SET("5", seguro) > 0 then 1 
-                              when FIND_IN_SET("5", seguro) > 0 then 1 
-                              when FIND_IN_SET("7", seguro) > 0 then 1 
-                              when FIND_IN_SET("8", seguro) > 0 then 1 
+                        DB::raw('sum(case when FIND_IN_SET("1", programa_social) > 0 then 1 
+                              when FIND_IN_SET("2", programa_social) > 0 then 1 
+                              when FIND_IN_SET("5", programa_social) > 0 then 1 
+                              when FIND_IN_SET("5", programa_social) > 0 then 1 
+                              when FIND_IN_SET("7", programa_social) > 0 then 1 
+                              when FIND_IN_SET("8", programa_social) > 0 then 1 
                               else 0 end) as programa')
                     )->groupBy('distrito')->orderBy('ubigeo')->get();
 
