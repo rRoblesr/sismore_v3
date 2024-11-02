@@ -263,13 +263,41 @@
                         <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel()">
                             <i class="fa fa-file-excel"></i> Descargar</button>
                     </div>
-                    <h3 class="card-title">Población de niños y niñas menos de 6 años por distrito, segun sexo y edades
+                    <h3 class="card-title">Población del Padrón Nominal de niños y niñas menores de 6 años por Seguro De
+                        Salud, Según Sexo y Edades
                     </h3>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12">
                             <div class="table-responsive" id="ctabla2">
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            {{-- <div class="card">
+                <div class="card-header"> --}}
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                    <div class="card-widgets">
+                        <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel()">
+                            <i class="fa fa-file-excel"></i> Descargar</button>
+                    </div>
+                    <h3 class="card-title">Población de niños y niñas menos de 6 años por distrito, segun sexo y edades
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive" id="ctabla3">
 
                             </div>
 
@@ -301,6 +329,7 @@
             panelGraficas('anal4');
             panelGraficas('tabla1');
             panelGraficas('tabla2');
+            panelGraficas('tabla3');
         }
 
         function cargarDistritos() {
@@ -356,6 +385,41 @@
                 },
                 type: "GET",
                 dataType: "JSON",
+                beforeSend: function() {
+                    switch (div) {
+                        case 'head':
+                            $('#card1').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                            $('#card2').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                            $('#card3').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                            $('#card4').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                            break;
+                        case 'anal1':
+                            $('#anal1').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                            break;
+                        case 'anal2':
+                            $('#anal2').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                            break;
+                        case 'anal3':
+                            $('#anal3').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                            break;
+                        case 'anal4':
+                            $('#anal4').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                            break;
+                        case 'tabla1':
+                            $('#ctabla1').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                            break;
+                        case 'tabla2':
+                            $('#ctabla2').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                            break;
+                        case 'tabla3':
+                            $('#ctabla3').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+
+                            break;
+
+                        default:
+                            break;
+                    }
+                },
                 success: function(data) {
                     switch (div) {
                         case 'head':
@@ -401,6 +465,15 @@
                             //     language: table_language,
                             // });
                             break;
+                        case 'tabla3':
+                            $('#ctabla3').html(data.excel);
+                            // $('#tabla2').DataTable({
+                            //     responsive: true,
+                            //     autoWidth: false,
+                            //     ordered: true,
+                            //     language: table_language,
+                            // });
+                            break;
 
                         default:
                             break;
@@ -414,7 +487,182 @@
             });
         }
 
+        function GaugeSeriesbbbbb(div, data, title) {
+            Highcharts.chart(div, {
+                chart: {
+                    height: 200,
+                    type: 'solidgauge',
+                    margin: [10, 10, 10, 10],
+                    spacing: [10, 10, 10, 10],
+                    events: {
+                        load: function() {
+                            var chart = this,
+                                point = chart.series[0].points[0],
+                                startValue = 0,
+                                endValue = data,
+                                duration = 1000, // Duración en milisegundos
+                                increment = endValue / (duration / 20); // Aumento cada 20ms
+
+                            function animateValue() {
+                                startValue += increment;
+                                if (startValue >= endValue) {
+                                    startValue = endValue; // Detiene la animación en el valor final
+                                } else {
+                                    setTimeout(animateValue, 20); // Continúa la animación cada 20ms
+                                }
+                                point.update(Math.round(startValue,
+                                    1)); // Actualiza tanto el relleno como el valor
+                            }
+
+                            animateValue(); // Inicia la animación
+                        }
+                    }
+                },
+                title: {
+                    text: title,
+                    verticalAlign: 'top',
+                    style: {
+                        fontSize: '12px',
+                        fontWeight: 'normal'
+                    }
+                },
+                pane: {
+                    startAngle: 0,
+                    endAngle: 360,
+                    background: [{ // Fondo del anillo
+                        outerRadius: '100%',
+                        innerRadius: '80%',
+                        backgroundColor: Highcharts.color('#E0E0E0').setOpacity(0.3).get(),
+                        borderWidth: 0
+                    }]
+                },
+                yAxis: {
+                    min: 0,
+                    max: 100,
+                    lineWidth: 0,
+                    tickPositions: []
+                },
+                plotOptions: {
+                    solidgauge: {
+                        dataLabels: {
+                            format: '<div style="text-align:center"><span style="font-size:24px">{y}%</span><br/>' +
+                                '<span style="font-size:12px;opacity:0.6">Avance</span></div>',
+                            y: -25,
+                            borderWidth: 0,
+                            useHTML: true
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Avance',
+                    data: [{
+                        y: 0, // Empieza en 0 y se incrementará hasta `data`
+                        color: data >= 95 ? '#5eb9aa' : (data >= 75 ? '#f5bd22' : '#ef5350')
+                    }],
+                    innerRadius: '80%',
+                    radius: '100%',
+                }],
+                tooltip: {
+                    enabled: false
+                },
+                credits: {
+                    enabled: false
+                },
+                exporting: {
+                    enabled: false
+                }
+            });
+        }
+
         function GaugeSeries(div, data, title) {
+            Highcharts.chart(div, {
+                chart: {
+                    height: 200,
+                    type: 'solidgauge',
+                    margin: [10, 10, 10, 10],
+                    spacing: [10, 10, 10, 10],
+                    events: {
+                        load: function() {
+                            var chart = this,
+                                point = chart.series[0].points[0],
+                                startValue = 0.0,
+                                endValue = data,
+                                duration = 1000, // Duración en milisegundos
+                                increment = endValue / (duration / 20); // Aumentar cada 20ms
+
+                            function animateValue() {
+                                startValue += increment;
+                                if (startValue >= endValue) {
+                                    startValue = endValue; // Detiene la animación en el valor final
+                                } else {
+                                    setTimeout(animateValue, 20); // Continúa la animación cada 20ms
+                                }
+                                // point.update(startValue);
+                                point.update(Math.round(startValue, 2));
+                                // point.update(Highcharts.numberFormat(startValue, 1));
+                            }
+
+                            animateValue(); // Inicia la animación
+                        }
+                    }
+                },
+                title: {
+                    text: title,
+                    verticalAlign: 'top',
+                    style: {
+                        fontSize: '12px',
+                        fontWeight: 'normal'
+                    }
+                },
+                pane: {
+                    startAngle: 0,
+                    endAngle: 360,
+                    background: [{ // Fondo del anillo
+                        outerRadius: '100%',
+                        innerRadius: '80%',
+                        backgroundColor: Highcharts.color('#E0E0E0').setOpacity(0.3).get(),
+                        borderWidth: 0
+                    }]
+                },
+                yAxis: {
+                    min: 0,
+                    max: 100,
+                    lineWidth: 0,
+                    tickPositions: []
+                },
+                plotOptions: {
+                    solidgauge: {
+                        dataLabels: {
+                            format: '<div style="text-align:center"><span style="font-size:24px">{y}%</span><br/>' +
+                                '<span style="font-size:12px;opacity:0.6">Avance</span></div>',
+                            y: -25,
+                            borderWidth: 0,
+                            useHTML: true
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Avance',
+                    data: [{
+                        y: 0, // Empieza en 0 y se incrementará a `data`
+                        color: data >= 95 ? '#5eb9aa' : (data >= 75 ? '#f5bd22' : '#ef5350')
+                    }],
+                    innerRadius: '80%',
+                    radius: '100%',
+                }],
+                tooltip: {
+                    enabled: false
+                },
+                credits: {
+                    enabled: false
+                },
+                exporting: {
+                    enabled: false
+                }
+            });
+        }
+
+        function GaugeSeriesxxxx(div, data, title) {
             Highcharts.chart(div, {
                 chart: {
                     height: 200,

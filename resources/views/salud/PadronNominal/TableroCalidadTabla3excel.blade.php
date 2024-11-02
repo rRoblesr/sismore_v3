@@ -1,4 +1,4 @@
-<table id="tabla2" class="table table-sm table-striped table-bordered font-11">
+<table id="tabla3" class="table table-sm table-striped table-bordered font-11">
     <thead>
         <tr class="table-success-0 text-white">
             <th rowspan="2" class="text-center">N°</th>
@@ -18,15 +18,15 @@
             <th class="text-center">4 A</th>
             <th class="text-center">5 A</th>
             <th class="text-center">DNI</th>
-            <th class="text-center">CNV</th>
-            <th class="text-center">CUI</th>
+            <th class="text-center">Seguro</th>
+            <th class="text-center">Programa</th>
         </tr>
     </thead>
     <tbody>
         @foreach ($base as $key => $item)
             <tr class="text-right">
                 <td class="text-center">{{ $key + 1 }}</td>
-                <td class="text-left">{{ $item->nseguro }}</td>
+                <td class="text-left">{{ $item->distrito }}</td>
                 <td class="text-center table-warning">{{ number_format($item->pob, 0) }}</td>
                 <td class="text-center">{{ number_format($item->pobm, 0) }}</td>
                 <td class="text-center">{{ number_format($item->pobf, 0) }}</td>

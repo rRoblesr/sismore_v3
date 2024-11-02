@@ -568,10 +568,9 @@ class PadronNominalController extends Controller
                 $query1 = DB::select($sql1, [$fuente, $fuente, $rq->anio]);
                 $impMaxAnio = $query1 ? $query1[0]->id : 0;
 
-                $base = ImporPadronNominal::join('par_ubigeo as u', 'u.codigo', '=', 'sal_impor_padron_nominal.ubigeo')
-                    ->where('importacion_id', $impMaxAnio)->where('repetido', '1')
+                $base = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')
                     ->select(
-                        'u.nombre as distrito',
+                        DB::raw('case when seguro_id=1 then "SIS" when seguro_id=2 then "ESSALUD" when seguro_id=3 then "SANIDAD" when seguro_id=4 then "PRIVADO" else "NINGUNO" end as nseguro'),
                         DB::raw('count(*) as pob'),
                         DB::raw('sum(if(genero="M",1,0)) as pobm'),
                         DB::raw('sum(if(genero="F",1,0)) as pobf'),
@@ -582,19 +581,9 @@ class PadronNominalController extends Controller
                         DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
                         DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
                         DB::raw('sum(if(tipo_doc="DNI",1,0)) as dni'),
-                        DB::raw('sum(case when FIND_IN_SET("1", seguro) > 0 then 1 
-                          when FIND_IN_SET("2", seguro) > 0 then 1 
-                          when FIND_IN_SET("3", seguro) > 0 then 1 
-                          when FIND_IN_SET("4", seguro) > 0 then 1 
-                          else 0 end) as seguro'),
-                        DB::raw('sum(case when FIND_IN_SET("1", seguro) > 0 then 1 
-                          when FIND_IN_SET("2", seguro) > 0 then 1 
-                          when FIND_IN_SET("5", seguro) > 0 then 1 
-                          when FIND_IN_SET("5", seguro) > 0 then 1 
-                          when FIND_IN_SET("7", seguro) > 0 then 1 
-                          when FIND_IN_SET("8", seguro) > 0 then 1 
-                          else 0 end) as programa')
-                    )->groupBy('distrito')->orderBy('ubigeo')->get();
+                        DB::raw('sum(if(tipo_doc="CNV",1,0)) as seguro'),
+                        DB::raw('sum(if(tipo_doc="CUI",1,0)) as programa')
+                    )->groupBy('nseguro')->orderByRaw('field(nseguro,"SIS","ESSALUD","SANIDAD","PRIVADO","NINGUNO")')->get();
 
                 $foot = [];
                 if ($base->count() > 0) {
@@ -629,6 +618,80 @@ class PadronNominalController extends Controller
 
                 $excel = view('salud.PadronNominal.TableroCalidadTabla2excel', compact('base', 'foot'))->render();
                 return response()->json(compact('excel', 'base', 'foot'));
+
+            case 'tabla3':
+                $sql1 = "SELECT * FROM par_importacion
+                                WHERE fuenteimportacion_id = ? AND estado = 'PR'
+                                    AND DATE_FORMAT(fechaActualizacion, '%Y-%m') = (
+                                        SELECT DATE_FORMAT(MAX(fechaActualizacion), '%Y-%m') FROM par_importacion 
+                                        WHERE fuenteimportacion_id = ? AND estado = 'PR' AND YEAR(fechaActualizacion) = ?
+                                    )
+                                ORDER BY fechaActualizacion DESC limit 1";
+                $query1 = DB::select($sql1, [$fuente, $fuente, $rq->anio]);
+                $impMaxAnio = $query1 ? $query1[0]->id : 0;
+
+                $base = ImporPadronNominal::join('par_ubigeo as u', 'u.codigo', '=', 'sal_impor_padron_nominal.ubigeo')
+                    ->where('importacion_id', $impMaxAnio)->where('repetido', '1')
+                    ->select(
+                        'u.nombre as distrito',
+                        DB::raw('count(*) as pob'),
+                        DB::raw('sum(if(genero="M",1,0)) as pobm'),
+                        DB::raw('sum(if(genero="F",1,0)) as pobf'),
+                        DB::raw('sum(if(tipo_edad in("D","M"),1,0)) as pob0'),
+                        DB::raw('sum(if(edad=1 and tipo_edad="A",1,0)) as pob1'),
+                        DB::raw('sum(if(edad=2 and tipo_edad="A",1,0)) as pob2'),
+                        DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
+                        DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
+                        DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
+                        DB::raw('sum(if(tipo_doc="DNI",1,0)) as dni'),
+                        DB::raw('sum(case when FIND_IN_SET("1", seguro) > 0 then 1 
+                              when FIND_IN_SET("2", seguro) > 0 then 1 
+                              when FIND_IN_SET("3", seguro) > 0 then 1 
+                              when FIND_IN_SET("4", seguro) > 0 then 1 
+                              else 0 end) as seguro'),
+                        DB::raw('sum(case when FIND_IN_SET("1", seguro) > 0 then 1 
+                              when FIND_IN_SET("2", seguro) > 0 then 1 
+                              when FIND_IN_SET("5", seguro) > 0 then 1 
+                              when FIND_IN_SET("5", seguro) > 0 then 1 
+                              when FIND_IN_SET("7", seguro) > 0 then 1 
+                              when FIND_IN_SET("8", seguro) > 0 then 1 
+                              else 0 end) as programa')
+                    )->groupBy('distrito')->orderBy('ubigeo')->get();
+
+                $foot = [];
+                if ($base->count() > 0) {
+                    $foot = clone $base[0];
+                    $foot->pob = 0;
+                    $foot->pobm = 0;
+                    $foot->pobf = 0;
+                    $foot->pob0 = 0;
+                    $foot->pob1 = 0;
+                    $foot->pob2 = 0;
+                    $foot->pob3 = 0;
+                    $foot->pob4 = 0;
+                    $foot->pob5 = 0;
+                    $foot->dni = 0;
+                    $foot->seguro = 0;
+                    $foot->programa = 0;
+                    foreach ($base as $key => $value) {
+                        $foot->pob += $value->pob;
+                        $foot->pobm += $value->pobm;
+                        $foot->pobf += $value->pobf;
+                        $foot->pob0 += $value->pob0;
+                        $foot->pob1 += $value->pob1;
+                        $foot->pob2 += $value->pob2;
+                        $foot->pob3 += $value->pob3;
+                        $foot->pob4 += $value->pob4;
+                        $foot->pob5 += $value->pob5;
+                        $foot->dni += $value->dni;
+                        $foot->seguro += $value->seguro;
+                        $foot->programa += $value->programa;
+                    }
+                }
+
+                $excel = view('salud.PadronNominal.TableroCalidadTabla3excel', compact('base', 'foot'))->render();
+                return response()->json(compact('excel', 'base', 'foot'));
+
             default:
                 # code...
                 return [];
