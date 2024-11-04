@@ -124,7 +124,7 @@
                             width="100%" height="100%">
                     </div> --}}
                     <div class="avatar-md mr-2">
-                        <i class="ion ion-ios-people avatar-title font-40 text-dark"></i>
+                        <i class="far fa-address-card avatar-title font-40 text-dark"></i>
 
                     </div>
                     <div class="media-body align-self-center">
@@ -148,7 +148,7 @@
                             width="100%" height="100%">
                     </div> --}}
                     <div class="avatar-md mr-2">
-                        <i class="ion ion-ios-people avatar-title font-40 text-dark"></i>
+                        <i class="mdi mdi-shield-check avatar-title font-40 text-dark"></i>
 
                     </div>
                     <div class="media-body align-self-center">
@@ -171,7 +171,7 @@
                             width="100%" height="100%">
                     </div> --}}
                     <div class="avatar-md mr-2">
-                        <i class="ion ion-ios-people avatar-title font-40 text-dark"></i>
+                        <i class="far fa-hospital avatar-title font-40 text-dark"></i>
 
                     </div>
                     <div class="media-body align-self-center">
@@ -607,6 +607,9 @@
                         case 'tabla3':
                             $('#ctabla3').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
                             break;
+                        case 'tabla3_1':
+                            $('#ctabla3_1').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                            break;
 
                         default:
                             break;
@@ -678,6 +681,16 @@
 
                         case 'tabla3_1':
                             $('#ctabla3_1').html(data.excel);
+                            $('#tabla3_1').DataTable({
+                                responsive: true,
+                                autoWidth: false,
+                                ordered: true,
+                                destroy: true,
+                                language: table_language,
+                                // searching: false,
+                                // paging: false,
+                                // info: false,
+                            });
                             break;
 
                         default:
@@ -696,15 +709,7 @@
             ubigeo_select = ubigeo;
             // console.log(ubigeo_select)]
             panelGraficas('tabla3_1');
-            $('#tabla3_1').DataTable({
-                responsive: true,
-                autoWidth: false,
-                ordered: true,
-                language: table_language,
-                // searching: false,
-                // paging: false,
-                // info: false,
-            });
+
             $('#modal-centropoblado').modal('show');
 
         }
@@ -718,8 +723,9 @@
             var doc = $('#numerodocumento').val();
             var ape = $('#apellidosnombres').val();
             $.ajax({
-                url:'',{{-- "{{ route('salud.padronnominal.tablerocalidad.criterio.find1', ['importacion' => $importacion, 'tipo' => 'tipo', 'documento' => 'documento', 'apellido' => 'apellido']) }}"
-                    .replace('tipo', tip).replace('documento', doc).replace('apellido', ape), --}} 
+                url: '',
+                {{-- "{{ route('salud.padronnominal.tablerocalidad.criterio.find1', ['importacion' => $importacion, 'tipo' => 'tipo', 'documento' => 'documento', 'apellido' => 'apellido']) }}"
+                    .replace('tipo', tip).replace('documento', doc).replace('apellido', ape), --}}
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {

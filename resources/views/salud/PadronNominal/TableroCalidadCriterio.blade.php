@@ -127,58 +127,61 @@
                                 <table id="xx" class="table table-striped table-bordered font-12 text-dark">
                                     <tbody>
                                         <tr>
-                                            <td class="text-right table-secondary">CÓDIGO PADRÓN</td>
+                                            <td class="text-right table-success-0">CÓDIGO PADRÓN</td>
                                             <td id="padron"></td>
-                                            <td class="text-right table-secondary">TIPO DOCUMENTO</td>
+                                            <td class="text-right table-success-0">TIPO DOCUMENTO</td>
                                             <td id="tipodoc"></td>
-                                            <td class="text-right table-secondary">DOCUMENTO</td>
+                                            <td class="text-right table-success-0">DOCUMENTO</td>
                                             <td id="doc"></td>
                                         </tr>
                                         <tr>
-                                            <td class="text-right table-secondary">APELLIDO PATERNO</td>
+                                            <td class="text-right table-success-0">APELLIDO PATERNO</td>
                                             <td id="apepat"></td>
-                                            <td class="text-right table-secondary">APELLIDO MATERNO</td>
+                                            <td class="text-right table-success-0">APELLIDO MATERNO</td>
                                             <td id="apemat"></td>
-                                            <td class="text-right table-secondary">NOMBRES</td>
+                                            <td class="text-right table-success-0">NOMBRES</td>
                                             <td id="nom"></td>
                                         </tr>
                                         <tr>
-                                            <td class="text-right table-secondary">SEXO</td>
+                                            <td class="text-right table-success-0">SEXO</td>
                                             <td id="sexo"></td>
-                                            <td class="text-right table-secondary">FECHA DE NACIMIENTO</td>
+                                            <td class="text-right table-success-0">FECHA DE NACIMIENTO</td>
                                             <td id="nacimiento"></td>
-                                            <td class="text-right table-secondary">EDAD</td>
+                                            <td class="text-right table-success-0">EDAD</td>
                                             <td id="edad"></td>
                                         </tr>
                                         <tr>
-                                            <td class="text-right table-secondary">DEPARTAMENTO</td>
+                                            <td class="text-right table-success-0">DEPARTAMENTO</td>
                                             <td id="dep"></td>
-                                            <td class="text-right table-secondary">PROVINCIA</td>
+                                            <td class="text-right table-success-0">PROVINCIA</td>
                                             <td id="pro"></td>
-                                            <td class="text-right table-secondary">DISTRITO</td>
+                                            <td class="text-right table-success-0">DISTRITO</td>
                                             <td id="dis"></td>
                                         </tr>
                                         <tr>
-                                            <td class="text-right table-secondary">CENTRO POBLADO</td>
+                                            <td class="text-right table-success-0">CENTRO POBLADO</td>
                                             <td id="cp"></td>
-                                            <td class="text-right table-secondary">DIRECCIÓN</td>
+                                            <td class="text-right table-success-0">DIRECCIÓN</td>
                                             <td id="dir" colspan="3"></td>
                                         </tr>
                                         <tr>
-                                            <td class="text-right table-secondary">EESS NACIMIENTO</td>
+                                            <td class="text-right table-success-0">EESS NACIMIENTO</td>
                                             <td id="esn"></td>
-                                            <td class="text-right table-secondary">ULTIMO EESS ATENCIÓN</td>
+                                            <td class="text-right table-success-0">ULTIMO EESS ATENCIÓN</td>
                                             <td id="esa"></td>
-                                            <td class="text-right table-secondary">VISITA DOMICILIARIA</td>
+                                            <td class="text-right table-success-0">VISITA DOMICILIARIA</td>
                                             <td id="visita"></td>
                                         </tr>
                                         <tr>
-                                            <td class="text-right table-secondary">ENCONTRADO</td>
+                                            <td class="text-right table-success-0">ENCONTRADO</td>
                                             <td id="encontrado"></td>
-                                            <td class="text-right table-secondary">TIPO DE SEGURO</td>
+                                            <td class="text-right table-success-0">TIPO DE SEGURO</td>
                                             <td id="seguro"></td>
-                                            <td class="text-right table-secondary">PROGRAMA SOCIAL</td>
+                                            <td class="text-right table-success-0">PROGRAMA SOCIAL</td>
                                             <td id="programa"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="" colspan="6"></td>
                                         </tr>
                                         {{-- <tr>
                                             <td>INSTITUTCIÓN EDUCATIVA</td>
@@ -189,27 +192,27 @@
                                             <td></td>
                                         </tr> --}}
                                         <tr>
-                                            <td class="text-right table-secondary">APODERADO</td>
+                                            <td class="text-right table-success-0">APODERADO</td>
                                             <td id="mapoderado"></td>
-                                            <td class="text-right table-secondary">TIPO DOCUMENTO</td>
+                                            <td class="text-right table-success-0">TIPO DOCUMENTO</td>
                                             <td id="mtipodoc"></td>
-                                            <td class="text-right table-secondary">DOCUMENTO</td>
+                                            <td class="text-right table-success-0">DOCUMENTO</td>
                                             <td id="mdoc"></td>
                                         </tr>
                                         <tr>
-                                            <td class="text-right table-secondary">APELLIDO PATERNO</td>
+                                            <td class="text-right table-success-0">APELLIDO PATERNO MADRE</td>
                                             <td id="mapepat"></td>
-                                            <td class="text-right table-secondary">APELLIDO MATERNO</td>
+                                            <td class="text-right table-success-0">APELLIDO MATERNO MADRE</td>
                                             <td id="mapemat"></td>
-                                            <td class="text-right table-secondary">NOMBRES</td>
+                                            <td class="text-right table-success-0">NOMBRES MADRE</td>
                                             <td id="mnom"></td>
                                         </tr>
                                         <tr>
-                                            <td class="text-right table-secondary">CELULAR</td>
+                                            <td class="text-right table-success-0">CELULAR</td>
                                             <td id="mcel"></td>
-                                            <td class="text-right table-secondary">GRADO DE INSTRUCCIÓN</td>
+                                            <td class="text-right table-success-0">GRADO DE INSTRUCCIÓN</td>
                                             <td id="mgrado"></td>
-                                            <td class="text-right table-secondary">LENGUA HABITUAL</td>
+                                            <td class="text-right table-success-0">LENGUA HABITUAL</td>
                                             <td id="mlengua"></td>
                                         </tr>
                                     </tbody>
@@ -244,25 +247,25 @@
                                 <table id="xx2" class="table table-striped table-bordered font-12 text-dark">
                                     <tbody>
                                         <tr>
-                                            <td class="text-right table-secondary">CÓDIGO UNICO</td>
+                                            <td class="text-right table-success-0">CÓDIGO ÚNICO</td>
                                             <td id="eesscui"></td>
-                                            <td class="text-right table-secondary">ESTABLECIMIENTO</td>
+                                            <td class="text-right table-success-0">NOMBRE DEL ESTABLECIMIENTO</td>
                                             <td id="eessnombre" colspan="3"></td>
                                         </tr>
                                         <tr>
-                                            <td class="text-right table-secondary">DISA</td>
+                                            <td class="text-right table-success-0">DISA</td>
                                             <td id="eessdisa"></td>
-                                            <td class="text-right table-secondary">RED</td>
+                                            <td class="text-right table-success-0">RED</td>
                                             <td id="eessred"></td>
-                                            <td class="text-right table-secondary">MICRORED</td>
+                                            <td class="text-right table-success-0">MICRORED</td>
                                             <td id="eessmicro"></td>
                                         </tr>
                                         <tr>
-                                            <td class="text-right table-secondary">DEPARTAMENTO</td>
+                                            <td class="text-right table-success-0">DEPARTAMENTO</td>
                                             <td id="eessdep"></td>
-                                            <td class="text-right table-secondary">PROVINCIA</td>
+                                            <td class="text-right table-success-0">PROVINCIA</td>
                                             <td id="eesspro"></td>
-                                            <td class="text-right table-secondary">DISTRITO</td>
+                                            <td class="text-right table-success-0">DISTRITO</td>
                                             <td id="eessdis"></td>
                                         </tr>
                                     </tbody>
@@ -328,7 +331,9 @@
                     render: function(data, type, row) {
                         // return '<a href="/ruta/detalle/' + row + '">' + data + '</a>';
                         // console.log(parseInt(data, 10));
-                        return data ? `<a href="#" onclick="abrirmodaleess(${parseInt(data, 10)})">${data}</a>` : '';
+                        return data ?
+                            `<a href="#" onclick="abrirmodaleess(${parseInt(data, 10)})">${data}</a>` :
+                            '';
                     }
                 }]
             });
@@ -349,9 +354,10 @@
                     $('#apepat').html(data.apellido_paterno);
                     $('#apemat').html(data.apellido_materno);
                     $('#nom').html(data.nombre);
-                    $('#sexo').html(data.genero);
+                    $('#sexo').html(data.genero == 'M' ? 'MASCULINO' : 'FEMENINO');
                     $('#nacimiento').html(data.fecha_nacimiento);
-                    $('#edad').html(data.edad + data.tipo_edad);
+                    $('#edad').html(data.edad + ' ' + (data.tipo_edad == 'D' ? 'DIAS' : (data.tipo_edad == 'M' ?
+                        'MESES' : 'AÑOS')));
                     $('#dep').html(data.departamento);
                     $('#pro').html(data.provincia);
                     $('#dis').html(data.distrito);

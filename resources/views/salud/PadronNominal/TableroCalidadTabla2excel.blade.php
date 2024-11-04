@@ -2,7 +2,7 @@
     <thead>
         <tr class="table-success-0 text-white">
             <th rowspan="2" class="text-center">N°</th>
-            <th rowspan="2" class="text-center">Distritos</th>
+            <th rowspan="2" class="text-center">Seguro de Salud</th>
             <th colspan="3" class="text-center">Población</th>
             <th colspan="6" class="text-center">Edades de Niños y Niñas menores de 6 años</th>
             <th colspan="3" class="text-center">Niños y Niñas tienen</th>
