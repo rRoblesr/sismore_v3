@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Educacion\Importacion;
 use App\Models\Parametro\Mes;
 use App\Models\Parametro\Ubigeo;
+use App\Models\Salud\CalidadCriterio;
 use App\Models\Salud\Establecimiento;
 use App\Models\Salud\ImporPadronNominal;
 use App\Models\Salud\PadronCalidad;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Parametro\UbigeoRepositorio;
+use App\Repositories\Salud\EstablecimientoRepositorio;
 use App\Repositories\Salud\PadronNominalRepositorio;
 use App\Repositories\Salud\PadronNominalRepositorioSalud;
 use Exception;
@@ -129,7 +131,7 @@ class PadronNominalController extends Controller
                             ->orWhereRaw("FIND_IN_SET('2',seguro) > 0")
                             ->orWhereRaw("FIND_IN_SET('3',seguro) > 0")
                             ->orWhereRaw("FIND_IN_SET('4',seguro) > 0");
-                            // ->orWhereNotNull('seguro');
+                        // ->orWhereNotNull('seguro');
                     });
                 if ($rq->provincia > 0) $card3 = $card3->where('provincia_id', $rq->provincia);
                 if ($rq->distrito > 0) $card3 = $card3->where('distrito_id', $rq->distrito);
@@ -287,7 +289,7 @@ class PadronNominalController extends Controller
                 $excel = view('salud.PadronNominal.TableroCalidadTabla1excel', compact('base'))->render();
                 return response()->json(compact('excel'));
 
-            case 'tabla1':
+            case 'tabla1y':
                 $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio);
 
                 $base = Mes::select('id')->get();
@@ -592,6 +594,45 @@ class PadronNominalController extends Controller
                 $excel = view('salud.PadronNominal.TableroCalidadTabla1excel', compact('base', 'impMaxAnio'))->render();
                 return response()->json(compact('excel'));
 
+            case 'tabla1':
+                $cri[0] = 'Registro sin Número de Documento(DNI, CNV, CUI)';
+                $cri[1] = 'Registro Duplicados del Número de Documento';
+                $cri[2] = 'Registro sin Nombre Completos';
+                $cri[3] = 'Registro sin Seguro de Salud';
+                $cri[4] = 'Registro sin Visitas Domiciliarias';
+                $cri[5] = 'Registro de Niños y Niñas Visitados y no Encontrados';
+                $cri[6] = 'Registro sin Establecimiento de Atención';
+                $cri[7] = 'Registro de Establecimiento de Atención de Otra Región';
+                $cri[8] = 'Registro de Establecimiento de salud  de Otro Distrito';
+                $cri[9] = 'Registro sin Nombres Completo de la Madre ';
+                $cri[10] = 'Registro sin Grado de Instrucción de la Madre ';
+                $cri[11] = 'Registro sin Lengua Habitual de la Madre ';
+                $cri[12] = 'Registro sin Celular de la Madre ';
+
+                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio);
+
+                $base = CalidadCriterio::where('importacion_id', $impMaxAnio)
+                    ->select(
+                        'criterio',
+                        DB::raw('count(*) as total'),
+                        DB::raw('sum(if(tipo_edad in("D","M"),1,0)) as pob0'),
+                        DB::raw('sum(if(edad=1 and tipo_edad="A",1,0)) as pob1'),
+                        DB::raw('sum(if(edad=2 and tipo_edad="A",1,0)) as pob2'),
+                        DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
+                        DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
+                        DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
+                    );
+                if ($rq->provincia > 0) $base = $base->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $base = $base->where('distrito_id', $rq->distrito);
+                $base = $base->groupBy('criterio')->get();
+
+                foreach ($base as $key => $value) {
+                    $value->criterio = $cri[$value->criterio - 1] ?? '';
+                }
+
+                $excel = view('salud.PadronNominal.TableroCalidadTabla1excel', compact('base', 'impMaxAnio'))->render();
+                return response()->json(compact('base', 'excel'));
+
             case 'tabla2':
                 $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio);
 
@@ -762,22 +803,39 @@ class PadronNominalController extends Controller
         }
     }
 
+    public function criterio_red($importacion, $criterio)
+    {
+        $query = CalidadCriterio::distinct()->select('red_id as id')->where('importacion_id', $importacion)->where('criterio', $criterio)->whereNotNull('red_id')->get();
+        foreach ($query as $key => $value) {
+            $value->nombre = DB::table('sal_red')->where('id', $value->id)->first()->nombre;
+        }
+        return $query;
+    }
+
+    public function criterio_microred($importacion, $red, $criterio)
+    {
+        $query = CalidadCriterio::distinct()->select('microred_id as id')->where('importacion_id', $importacion)->where('criterio', $criterio)->where('red_id', $red)->whereNotNull('microred_id')->get();
+        foreach ($query as $key => $value) {
+            $value->nombre = DB::table('sal_microred')->where('id', $value->id)->first()->nombre;
+        }
+        return $query;
+    }
+
+    public function criterio_establecimiento($importacion, $red, $microred, $criterio)
+    {
+        $query = CalidadCriterio::distinct()->select('establecimiento_id as id')->where('importacion_id', $importacion)->where('criterio', $criterio)
+            ->where('red_id', $red)->where('microred_id', $microred)->whereNotNull('establecimiento_id')->get();
+        foreach ($query as $key => $value) {
+            $value->nombre = DB::table('sal_establecimiento')->where('id', $value->id)->first()->nombre_establecimiento;
+        }
+        return $query;
+    }
+
 
     public function tablerocalidadcriterio($importacion, $criterio)
     {
         $fuente = ImporPadronNominalController::$FUENTE;
         $anio = 2024;
-        // $sql1 = "SELECT * FROM par_importacion
-        // WHERE fuenteimportacion_id = ? AND estado = 'PR'
-        //     AND DATE_FORMAT(fechaActualizacion, '%Y-%m') = (
-        //         SELECT DATE_FORMAT(MAX(fechaActualizacion), '%Y-%m') FROM par_importacion 
-        //         WHERE fuenteimportacion_id = ? AND estado = 'PR' AND YEAR(fechaActualizacion) = ?
-        //     )
-        // ORDER BY fechaActualizacion DESC limit 1";
-        // $query1 = DB::select($sql1, [$fuente, $fuente, $anio]);
-        // $impMaxAnio = $query1 ? $query1[0]->id : 0;
-
-        // $criterio = 1;
         $title[0] = 'Registros sin Número de Documento (DNI, CNV, CUI) del Menor';
         $title[1] = 'Registro Duplicados del Número de Documento';
         $title[2] = 'Registro sin Nombre Completos';
@@ -790,10 +848,11 @@ class PadronNominalController extends Controller
         $title[9] = 'Registro sin Nombres Completo de la Madre ';
         $title[10] = 'Registro sin Grado de Instrucción de la Madre ';
         $title[11] = 'Registro sin Lengua Habitual de la Madre ';
+        $title[12] = 'Registro sin Celular de la Madre ';
 
-        $red = $this->criterio1_red($importacion, $criterio);
-        // return $this->criterio1_microred($impMaxAnio, 10, 1);
-        // return $this->criterio1_establecimiento($impMaxAnio, 10,41,1);
+        $red = $this->criterio_red($importacion, $criterio);
+        // return $this->criterio1_microred($importacion, 10, 1);
+        // return $this->criterio1_establecimiento($importacion, 10,41,1);
 
         $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronNominalController::$FUENTE); //nexus $imp3
         $mes = Mes::find($imp->mes);
@@ -807,71 +866,60 @@ class PadronNominalController extends Controller
         $draw = intval($rq->draw);
         $start = intval($rq->start);
         $length = intval($rq->length);
-        switch ($rq->criterio) {
+        switch (0) {
             case '1':
-                $query = ImporPadronNominal::where('importacion_id', $rq->importacion)->where('tipo_doc', 'padron')->get();
+                $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio);
+                if ($rq->establecimiento > 0) $query = $query->where('establecimiento_id', $rq->establecimiento);
+                if ($rq->microred > 0) $query = $query->where('microred_id', $rq->microred);
+                if ($rq->red > 0) $query = $query->where('red_id', $rq->red);
+                $query = $query->get();
                 break;
             case '2':
-                // $query = ImporPadronNominal::where('importacion_id', $rq->importacion)->whereIn('repetido', [1, 2, 3])->groupBy('num_doc')->havingRaw('count(distinct repetido) = 3')->get();
-                $repetido2 = ImporPadronNominal::where('importacion_id', $rq->importacion)->where('repetido', 2)->pluck('num_doc');
-                $query = ImporPadronNominal::where('importacion_id', $rq->importacion)
-                    ->whereIn('num_doc', $repetido2)
-                    ->orderBy('num_doc')->get();
+                $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)->get();
                 break;
             case '3':
-                $query = ImporPadronNominal::where('importacion_id', $rq->importacion)
-                    ->where('importacion_id', $rq->importacion)->where(function ($q) {
-                        $q->where('apellido_paterno', '')->orWhere('apellido_materno', '')->orWhere('nombre', '')->orWhereNull('apellido_paterno')->orWhereNull('apellido_materno')->orWhereNull('nombre');
-                    })
-                    ->get();
+                $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)->get();
                 break;
             case '4':
-                $query = ImporPadronNominal::where('importacion_id', $rq->importacion)
-                    ->where(function ($q) {
-                        $q->whereRaw("seguro = '0' or seguro = '0,'")->orWhereNull('seguro');
-                    })
-                    ->get();
+                $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)->get();
                 break;
             case '5':
-                $query = ImporPadronNominal::where('importacion_id', $rq->importacion)->where('visita', '!=', '1')->get();
+                $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)->get();
                 break;
             case '6':
-                $query = ImporPadronNominal::where('importacion_id', $rq->importacion)->where('visita', '1')->where('menor_encontrado', '!=', '1')->get();
+                $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)->get();
                 break;
             case '7':
-                $query = ImporPadronNominal::where('importacion_id', $rq->importacion)->where('cui_atencion', '0')->get();
+                $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)->get();
                 break;
             case '8':
-                $query = ImporPadronNominal::where('importacion_id', $rq->importacion)->where('tipo_doc', 'padron')->get();
+                $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)->get();
                 break;
             case '9':
-                $query = ImporPadronNominal::where('importacion_id', $rq->importacion)->where('tipo_doc', 'padron')->get();
+                $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)->get();
                 break;
             case '10':
-                $query = ImporPadronNominal::where('importacion_id', $rq->importacion)
-                    ->where(function ($q) {
-                        $q->where('apellido_paterno_madre', '')->orWhere('apellido_materno_madre', '')->orWhere('nombres_madre', '')->orWhereNull('apellido_paterno_madre')->orWhereNull('apellido_materno_madre')->orWhereNull('nombres_madre');
-                    })
-                    ->get();
+                $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)->get();
                 break;
             case '11':
-                $query = ImporPadronNominal::where('importacion_id', $rq->importacion)
-                    ->where(function ($q) {
-                        $q->where('grado_instruccion', '')->orWhereNull('grado_instruccion');
-                    })
-                    ->get();
+                $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)->get();
                 break;
             case '12':
-                $query = ImporPadronNominal::where('importacion_id', $rq->importacion)
-                    ->where(function ($q) {
-                        $q->where('lengua_madre', '')->orWhereNull('lengua_madre');
-                    })
-                    ->get();
+                $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)->get();
+                break;
+            case '13':
+                $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)->get();
                 break;
             default:
                 $query = [];
                 break;
         }
+
+        $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio);
+        if ($rq->establecimiento > 0) $query = $query->where('establecimiento_id', $rq->establecimiento);
+        if ($rq->microred > 0) $query = $query->where('microred_id', $rq->microred);
+        if ($rq->red > 0) $query = $query->where('red_id', $rq->red);
+        $query = $query->get();
 
         $data = [];
         foreach ($query as $key => $value) {
@@ -904,8 +952,46 @@ class PadronNominalController extends Controller
         return response()->json($result);
     }
 
-    public function tablerocalidadcriteriofind($importacion, $padron)
+    public function tablerocalidadcriteriofind1($importacion, $padron)
     {
-        return  $data = ImporPadronNominal::where('importacion_id', $importacion)->where('padron', $padron)->first();
+        $seguro = [0 => 'NINGUNO', 1 => 'SIS', 2 => 'ESSALUD', 3 => 'SANIDAD', 4 => 'PRIVADO'];
+        $programa = [0 => 'NINGUNO', 1 => 'PIN', 2 => 'PVL', 4 => 'JUNTOS', 5 => 'QALIWARMA', 7 => 'CUNA+ SCD', 8 => 'CUNA+ SAF'];
+        $data = CalidadCriterio::where('importacion_id', $importacion)->where('padron', $padron)->first();
+        $data->centro_poblado_nombre = !empty($data->centro_poblado_nombre) ? explode(', ', $data->centro_poblado_nombre)[0] : null;
+        $data->seguro = $seguro[$data->seguro_id] ?? 'NINGUNO';
+        $programaaux = null;
+        if (!empty($data->programa_social)) {
+            $programaIds = explode(',', trim($data->programa_social, ','));
+            $programaaux = array_map(function ($id) use ($programa) {
+                return isset($programa[$id]) ? $programa[$id] : null;
+            }, $programaIds);
+
+            $programaaux = implode(', ', array_filter($programaaux));
+        } else {
+            $programaaux = 'NINGUNO'; // Asignar null si programax está vacío
+        }
+        $data->programa_social = $programaaux;
+        $data->fecha_nacimiento = date('d/m/Y', strtotime($data->fecha_nacimiento));
+        $data->visita = $data->visita == 1 ? 'SI' : 'NO';
+        $data->menor_encontrado = $data->menor_encontrado == 1 ? 'SI' : 'NO';
+        $data->cui_atencion = $data->establecimiento_id > 0 ? Establecimiento::find($data->establecimiento_id)->nombre_establecimiento : 'NINGUNO';
+        $data->distrito = $data->distrito_id > 0 ? Ubigeo::find($data->distrito_id)->nombre : '';
+        $data->provincia = $data->provincia_id > 0 ? Ubigeo::find($data->provincia_id)->nombre : '';
+        $data->departamento = 'UCAYALI';
+        return  $data;
+    }
+
+    public function tablerocalidadcriteriofind2($importacion, $cui)
+    {
+        $data = Establecimiento::where('cod_unico', $cui)->first();
+        $ubica = UbigeoRepositorio::ubicacion($data->ubigeo_id);
+        $data->distrito = $ubica->disn;
+        $data->provincia = $ubica->pron;
+        $data->departamento = $ubica->depn;
+        $diresa = EstablecimientoRepositorio::ubicacion($data->id);
+        $data->micro = $diresa->min;
+        $data->red = $diresa->ren;
+        $data->disa = $diresa->dsn;
+        return  $data;
     }
 }

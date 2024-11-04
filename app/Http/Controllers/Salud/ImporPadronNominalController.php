@@ -10,6 +10,7 @@ use App\Models\Educacion\Importacion;
 use App\Models\Parametro\Anio;
 use App\Models\Parametro\ImporPoblacion;
 use App\Models\Parametro\PoblacionDetalle;
+use App\Models\Salud\CalidadCriterio;
 use App\Models\Salud\Establecimiento;
 use App\Models\Salud\ImporPadronEstablecimiento;
 use App\Models\Salud\ImporPadronNominal;
@@ -355,7 +356,18 @@ class ImporPadronNominalController extends Controller
             $importacion->estado = 'PE';
             $importacion->save();
 
-            $mensaje = "Error al procesar la normalizacion de datos. " . $e->getMessage();
+            $mensaje = "Error al procesar la normalizacion de datos sal_pa_procesarControlCalidadColumnas. " . $e->getMessage();
+            return $this->json_output(400, $mensaje);
+        }
+
+        try {
+            DB::select('call sal_pa_procesarCalidadReporte(?)', [$importacion->id]);
+        } catch (Exception $e) {
+            // Si ocurre un error, actualizar el estado a 'PE' (pendiente) si es necesario
+            $importacion->estado = 'PE';
+            $importacion->save();
+
+            $mensaje = "Error al procesar la normalizacion de datos sal_pa_procesarCalidadReporte. " . $e->getMessage();
             return $this->json_output(400, $mensaje);
         }
 
@@ -643,6 +655,7 @@ class ImporPadronNominalController extends Controller
         // $poblacion->delete();
         ImporPadronNominal::where('importacion_id', $id)->delete();
         PadronNominal::where('importacion_id', $id)->delete();
+        CalidadCriterio::where('importacion_id', $id)->delete();
         Importacion::find($id)->delete();
         return response()->json(array('status' => true));
     }

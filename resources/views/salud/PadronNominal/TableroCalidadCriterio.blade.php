@@ -117,28 +117,14 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="myLargeModalLabel">Importar</h5>
+                    <h5 class="modal-title" id="myLargeModalLabel">Niño(a) con datos observados</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-12">
                             <div class="table-responsive">
-                                <table id="xx" class="table table-sm table-striped table-bordered font-12">
-                                    {{-- <thead>
-                                        <tr class="table-success-0 text-white">
-                                            <th class="text-center">N°</th>
-                                            <th class="text-center">Cód. Padrón</th>
-                                            <th class="text-center">Tipo Doc.</th>
-                                            <th class="text-center">Documento</th>
-                                            <th class="text-center">Apellidos y Nombre</th>
-                                            <th class="text-center">Fecha Nacimiento</th>
-                                            <th class="text-center">Distrito</th>
-                                            <th class="text-center">Centro Poblado</th>
-                                            <th class="text-center">Cod. EESS</th>
-                                            <th class="text-center">EESS de Atención</th>
-                                        </tr>
-                                    </thead> --}}
+                                <table id="xx" class="table table-striped table-bordered font-12 text-dark">
                                     <tbody>
                                         <tr>
                                             <td class="text-right table-secondary">CÓDIGO PADRÓN</td>
@@ -192,7 +178,7 @@
                                             <td class="text-right table-secondary">TIPO DE SEGURO</td>
                                             <td id="seguro"></td>
                                             <td class="text-right table-secondary">PROGRAMA SOCIAL</td>
-                                            <td id="programa" class="text-right"></td>
+                                            <td id="programa"></td>
                                         </tr>
                                         {{-- <tr>
                                             <td>INSTITUTCIÓN EDUCATIVA</td>
@@ -215,16 +201,69 @@
                                             <td id="mapepat"></td>
                                             <td class="text-right table-secondary">APELLIDO MATERNO</td>
                                             <td id="mapemat"></td>
-                                            <td class="text-right">NOMBRES</td>
+                                            <td class="text-right table-secondary">NOMBRES</td>
                                             <td id="mnom"></td>
                                         </tr>
                                         <tr>
-                                            <td class="text-right">CELULAR</td>
+                                            <td class="text-right table-secondary">CELULAR</td>
                                             <td id="mcel"></td>
-                                            <td class="text-right">GRADO DE INSTRUCCIÓN</td>
+                                            <td class="text-right table-secondary">GRADO DE INSTRUCCIÓN</td>
                                             <td id="mgrado"></td>
-                                            <td class="text-right">LENGUA HABITUAL</td>
+                                            <td class="text-right table-secondary">LENGUA HABITUAL</td>
                                             <td id="mlengua"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+        </div>
+    </div><!-- /.modal -->
+
+    <!--  Modal content for the above example -->
+    <div class="modal fade" id="modal-eess" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+        aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myLargeModalLabel">Datos del Establecimiento de Salud</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table id="xx2" class="table table-striped table-bordered font-12 text-dark">
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-right table-secondary">CÓDIGO UNICO</td>
+                                            <td id="eesscui"></td>
+                                            <td class="text-right table-secondary">ESTABLECIMIENTO</td>
+                                            <td id="eessnombre" colspan="3"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right table-secondary">DISA</td>
+                                            <td id="eessdisa"></td>
+                                            <td class="text-right table-secondary">RED</td>
+                                            <td id="eessred"></td>
+                                            <td class="text-right table-secondary">MICRORED</td>
+                                            <td id="eessmicro"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right table-secondary">DEPARTAMENTO</td>
+                                            <td id="eessdep"></td>
+                                            <td class="text-right table-secondary">PROVINCIA</td>
+                                            <td id="eesspro"></td>
+                                            <td class="text-right table-secondary">DISTRITO</td>
+                                            <td id="eessdis"></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -269,6 +308,10 @@
                     data: function(d) {
                         d.importacion = {{ $importacion }};
                         d.criterio = {{ $criterio }};
+                        d.establecimiento = $('#establecimiento').val();
+                        d.microred = $('#microred').val();
+                        d.red = $('#red').val();
+                        d.desa = 0;
                     }
                 },
                 columnDefs: [{
@@ -279,6 +322,13 @@
                     render: function(data, type, row) {
                         // return '<a href="/ruta/detalle/' + row + '">' + data + '</a>';
                         return `<a href="#" onclick="abrirmodalpadron(${data})">${data}</a>`;
+                    }
+                }, {
+                    targets: 8,
+                    render: function(data, type, row) {
+                        // return '<a href="/ruta/detalle/' + row + '">' + data + '</a>';
+                        // console.log(parseInt(data, 10));
+                        return data ? `<a href="#" onclick="abrirmodaleess(${parseInt(data, 10)})">${data}</a>` : '';
                     }
                 }]
             });
@@ -292,19 +342,19 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
-                    console.log(data);
+                    // console.log(data);
                     $('#padron').html(data.padron);
-                    $('#tipodoc').html(data.tipo_doc);
-                    $('#doc').html(data.num_doc);
+                    $('#tipodoc').html(data.tipo_doc == 'Padron' ? '' : data.tipo_doc);
+                    $('#doc').html(data.tipo_doc == 'Padron' ? '' : data.num_doc);
                     $('#apepat').html(data.apellido_paterno);
                     $('#apemat').html(data.apellido_materno);
                     $('#nom').html(data.nombre);
                     $('#sexo').html(data.genero);
                     $('#nacimiento').html(data.fecha_nacimiento);
                     $('#edad').html(data.edad + data.tipo_edad);
-                    $('#dep').html(data.padron);
-                    $('#pro').html(data.padron);
-                    $('#dis').html(data.padron);
+                    $('#dep').html(data.departamento);
+                    $('#pro').html(data.provincia);
+                    $('#dis').html(data.distrito);
                     $('#cp').html(data.centro_poblado_nombre);
                     $('#dir').html(data.direccion);
                     $('#esn').html(data.cui_nacimiento);
@@ -320,8 +370,32 @@
                     $('#mapemat').html(data.apellido_materno_madre);
                     $('#mnom').html(data.nombres_madre);
                     $('#mcel').html(data.celular_madre);
-                    $('#mgrado').html(data.padron);
-                    $('#mlengua').html(data.padron);
+                    $('#mgrado').html(data.grado_instruccion);
+                    $('#mlengua').html(data.lengua_madre);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function abrirmodaleess(cui) {
+            $('#modal-eess').modal('show');
+            $.ajax({
+                url: "{{ route('salud.padronnominal.tablerocalidad.criterio.find2', ['importacion' => $importacion, 'cui' => 'cui']) }}"
+                    .replace('cui', cui),
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    console.log(data);
+                    $('#eesscui').html(data.codigo_unico);
+                    $('#eessnombre').html(data.nombre_establecimiento);
+                    $('#eessdisa').html(data.disa);
+                    $('#eessred').html(data.red);
+                    $('#eessmicro').html(data.micro);
+                    $('#eessdep').html(data.departamento);
+                    $('#eesspro').html(data.provincia);
+                    $('#eessdis').html(data.distrito);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -442,7 +516,7 @@
                             });
                             break;
                         case 'anal1':
-                            console.log(data.avance);
+                            // console.log(data.avance);
                             GaugeSeries('anal1', data.avance, 'Porcentaje de Visitados');
                             break;
                         case 'anal2':

@@ -54,7 +54,7 @@ class UbigeoRepositorio
 
     public static function distrito_select($codigo, $provincia)
     {
-        $query = Ubigeo::select('v3.id','v3.codigo','v3.nombre')
+        $query = Ubigeo::select('v3.id', 'v3.codigo', 'v3.nombre')
             ->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')
             ->join('par_ubigeo as v3', 'v3.dependencia', '=', 'v2.id')
             ->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', $codigo);
@@ -66,6 +66,13 @@ class UbigeoRepositorio
     public static function buscar_PorNombre($nombre)
     {
         $query = Ubigeo::where('nombre', $nombre)->get();
+        return $query;
+    }
+
+    public static function ubicacion($distrito)
+    {
+        $query = Ubigeo::from('par_ubigeo as dis')->select('dis.id as disi', 'dis.nombre as disn', 'pro.id as proi', 'pro.nombre as pron', 'dep.id as depi', 'dep.nombre as depn')
+            ->join('par_ubigeo as pro', 'pro.id', '=', 'dis.dependencia')->join('par_ubigeo as dep', 'dep.id', '=', 'pro.dependencia')->where('dis.id', $distrito)->first();
         return $query;
     }
 }

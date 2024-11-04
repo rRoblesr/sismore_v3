@@ -252,4 +252,11 @@ class EstablecimientoRepositorio
                 </tfoot></table>';
         return $tabla;
     }
+
+    public static function ubicacion($establecimiento)
+    {
+        $query = Establecimiento::from('sal_establecimiento as es')->select('mi.id as mii', 'mi.nombre as min', 're.id as rei', 're.nombre as ren', 'es.cod_disa as dsi', 'es.disa as dsn')
+            ->join('sal_microred as mi', 'mi.id', '=', 'es.microrred_id')->join('sal_red as re', 're.id', '=', 'mi.red_id')->where('es.id', $establecimiento)->first();
+        return $query;
+    }
 }

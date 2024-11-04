@@ -263,7 +263,8 @@ INSERT INTO `par_indicador_general_meta` (`indicadorgeneral`, `distrito`, `anio_
 ################################################################################
 
 
-
+http://192.168.18.10/pucallsystem/comanda_ticketera.php?print_data={"mesa_name":"M06","usuario_name":"caja",
+"print_select":"","CAJA":[{"nombre":"INKACOLA","cantidad":"1","opcion":""}],"COCINA":[]}
 
 
 
