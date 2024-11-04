@@ -1,8 +1,8 @@
-<table id="tabla3" class="table table-sm table-striped table-bordered font-11">
+<table id="tabla3_1" class="table table-sm table-striped table-bordered font-11">
     <thead>
         <tr class="table-success-0 text-white">
             <th rowspan="2" class="text-center">N°</th>
-            <th rowspan="2" class="text-center">Distritos</th>
+            <th rowspan="2" class="text-center">Centro Poblado</th>
             <th colspan="3" class="text-center">Población</th>
             <th colspan="6" class="text-center">Edades de Niños y Niñas menores de 6 años</th>
             <th colspan="3" class="text-center">Niños y Niñas tienen</th>
@@ -26,8 +26,7 @@
         @foreach ($base as $key => $item)
             <tr class="text-right">
                 <td class="text-center">{{ $key + 1 }}</td>
-                <td class="text-left"><a href="javascript:void(0)"
-                        onclick="abrirmodalcentropoblado('{{ $item->ubigeo }}')">{{ $item->distrito }}</a></td>
+                <td class="text-left">{{ $item->centro_poblado_nombre }}</td>
                 <td class="text-center table-warning">{{ number_format($item->pob, 0) }}</td>
                 <td class="text-center">{{ number_format($item->pobm, 0) }}</td>
                 <td class="text-center">{{ number_format($item->pobf, 0) }}</td>

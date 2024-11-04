@@ -13,8 +13,8 @@
             <div class="card">
                 <div class="card-header bg-success-0">
                     <div class="card-widgets">
-                        <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
-                            <i class="fa fa-redo"></i> Consultas</button>
+                        <button type="button" class="btn btn-danger btn-xs" onclick="abrirmodalconsultas()">
+                            <i class="fas fa-search"></i> Consultas</button>
                         <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
                             <i class="fa fa-redo"></i> Actualizar</button>
                     </div>
@@ -307,6 +307,197 @@
             </div>
         </div>
     </div>
+
+    <!--  Modal content for the above example -->
+    <div class="modal fade" id="modal-centropoblado" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+        aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myLargeModalLabel">Población de niños y niñas menos de 6 años por Centro
+                        Poblado, segun sexo y edades</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive" id="ctabla3_1">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.modal -->
+
+    <!--  Modal content for the above example -->
+    <div class="modal fade" id="modal-consulta" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+        aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content p-0 b-0">
+                <div class="card card-color mb-0">
+                    <div class="card-header bg-success-0">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h3 class="card-title text-white mt-1 mb-0">Busqueda de Niños y Niñas Menores de 6 años del Padron
+                            Nominal</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12">
+                                <div class="card">
+                                    <div class="card-body p-0">
+                                        <div class="form-group row align-items-center vh-5">
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <div class="custom-select-container">
+                                                    <label for="tipodocumento">Tipo de Documento</label>
+                                                    <select id="tipodocumento" name="tipodocumento" class="form-control "
+                                                        onchange="">
+                                                        <option value="1">DNI</option>
+                                                        <option value="2">CNV</option>
+                                                        <option value="3">CUI</option>
+                                                        <option value="4">CÓDIGO PADRÓN</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <div class="custom-select-container">
+                                                    <label for="numerodocumento">Documento</label>
+                                                    <input type="number" id="numerodocumento" name="numerodocumento"
+                                                        class="form-control">
+                                                </div>
+
+
+                                            </div>
+                                            <div class="col-lg-4 col-md-2 col-sm-2">
+                                                <div class="custom-select-container">
+                                                    <label for="apellidosnombres">Apellidos y Nombres</label>
+                                                    <input type="text" id="apellidosnombres" name="apellidosnombres"
+                                                        class="form-control">
+                                                </div>
+
+
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2 text-center">
+                                                <button type="button" class="btn btn-success" onclick="consultahacer()">
+                                                    {{-- <i class="fa fa-redo"></i> --}} Consultar</button>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2 text-center">
+                                                <button type="button" class="btn btn-warning"
+                                                    onclick="consultalimpiar()">
+                                                    {{-- <i class="fa fa-redo"></i> --}} Limpiar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table id="sdsds" class="table table-striped table-bordered font-12 text-dark">
+                                        <tbody>
+                                            <tr>
+                                                <td class="text-right table-secondary">CÓDIGO PADRÓN</td>
+                                                <td id="padron"></td>
+                                                <td class="text-right table-secondary">TIPO DOCUMENTO</td>
+                                                <td id="tipodoc"></td>
+                                                <td class="text-right table-secondary">DOCUMENTO</td>
+                                                <td id="doc"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right table-secondary">APELLIDO PATERNO</td>
+                                                <td id="apepat"></td>
+                                                <td class="text-right table-secondary">APELLIDO MATERNO</td>
+                                                <td id="apemat"></td>
+                                                <td class="text-right table-secondary">NOMBRES</td>
+                                                <td id="nom"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right table-secondary">SEXO</td>
+                                                <td id="sexo"></td>
+                                                <td class="text-right table-secondary">FECHA DE NACIMIENTO</td>
+                                                <td id="nacimiento"></td>
+                                                <td class="text-right table-secondary">EDAD</td>
+                                                <td id="edad"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right table-secondary">DEPARTAMENTO</td>
+                                                <td id="dep"></td>
+                                                <td class="text-right table-secondary">PROVINCIA</td>
+                                                <td id="pro"></td>
+                                                <td class="text-right table-secondary">DISTRITO</td>
+                                                <td id="dis"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right table-secondary">CENTRO POBLADO</td>
+                                                <td id="cp"></td>
+                                                <td class="text-right table-secondary">DIRECCIÓN</td>
+                                                <td id="dir" colspan="3"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right table-secondary">EESS NACIMIENTO</td>
+                                                <td id="esn"></td>
+                                                <td class="text-right table-secondary">ULTIMO EESS ATENCIÓN</td>
+                                                <td id="esa"></td>
+                                                <td class="text-right table-secondary">VISITA DOMICILIARIA</td>
+                                                <td id="visita"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right table-secondary">ENCONTRADO</td>
+                                                <td id="encontrado"></td>
+                                                <td class="text-right table-secondary">TIPO DE SEGURO</td>
+                                                <td id="seguro"></td>
+                                                <td class="text-right table-secondary">PROGRAMA SOCIAL</td>
+                                                <td id="programa"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right table-secondary">INSTITUTCIÓN EDUCATIVA</td>
+                                                <td></td>
+                                                <td class="text-right table-secondary">NIVEL EDUCATIVO</td>
+                                                <td></td>
+                                                <td class="text-right table-secondary">GRADO Y SECCIÓN</td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right table-secondary">APODERADO</td>
+                                                <td id="mapoderado"></td>
+                                                <td class="text-right table-secondary">TIPO DOCUMENTO</td>
+                                                <td id="mtipodoc"></td>
+                                                <td class="text-right table-secondary">DOCUMENTO</td>
+                                                <td id="mdoc"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right table-secondary">APELLIDO PATERNO</td>
+                                                <td id="mapepat"></td>
+                                                <td class="text-right table-secondary">APELLIDO MATERNO</td>
+                                                <td id="mapemat"></td>
+                                                <td class="text-right table-secondary">NOMBRES</td>
+                                                <td id="mnom"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right table-secondary">CELULAR</td>
+                                                <td id="mcel"></td>
+                                                <td class="text-right table-secondary">GRADO DE INSTRUCCIÓN</td>
+                                                <td id="mgrado"></td>
+                                                <td class="text-right table-secondary">LENGUA HABITUAL</td>
+                                                <td id="mlengua"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div><!-- /.modal -->
 @endsection
 
 @section('js')
@@ -314,6 +505,7 @@
         var paleta_colores = ['#5eb9aa', '#F9FFFE', '#f5bd22', '#058DC7', '#50B432', '#9D561B', '#DDDF00', '#24CBE5',
             '#64E572', '#9F9655', '#FFF263', '#6AF9C4'
         ];
+        var ubigeo_select = '';
         $(document).ready(function() {
             cargarMes();
             cargarDistritos();
@@ -382,6 +574,7 @@
                     "mes": $('#mes').val(),
                     "provincia": $('#provincia').val(),
                     "distrito": $('#distrito').val(),
+                    "ubigeo": ubigeo_select,
                 },
                 type: "GET",
                 dataType: "JSON",
@@ -413,7 +606,6 @@
                             break;
                         case 'tabla3':
                             $('#ctabla3').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-
                             break;
 
                         default:
@@ -467,12 +659,25 @@
                             break;
                         case 'tabla3':
                             $('#ctabla3').html(data.excel);
-                            // $('#tabla2').DataTable({
-                            //     responsive: true,
-                            //     autoWidth: false,
-                            //     ordered: true,
-                            //     language: table_language,
-                            // });
+                            $('#tabla3').DataTable({
+                                responsive: true,
+                                autoWidth: false,
+                                ordered: true,
+                                language: table_language,
+                                searching: false,
+                                paging: false,
+                                info: false,
+                                // columnDefs: [{
+                                //     targets: 1,
+                                //     render: function(data, type, row) {
+                                //         return `<a href="#" onclick="abrirmodalcentropoblado(${data})">${data}</a>`;
+                                //     }
+                                // }]
+                            });
+                            break;
+
+                        case 'tabla3_1':
+                            $('#ctabla3_1').html(data.excel);
                             break;
 
                         default:
@@ -482,6 +687,74 @@
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function abrirmodalcentropoblado(ubigeo) {
+            ubigeo_select = ubigeo;
+            // console.log(ubigeo_select)]
+            panelGraficas('tabla3_1');
+            $('#tabla3_1').DataTable({
+                responsive: true,
+                autoWidth: false,
+                ordered: true,
+                language: table_language,
+                // searching: false,
+                // paging: false,
+                // info: false,
+            });
+            $('#modal-centropoblado').modal('show');
+
+        }
+
+        function abrirmodalconsultas() {
+            $('#modal-consulta').modal('show');
+        }
+
+        function consultahacer() {
+            var tip = $('#tipodocumento').val();
+            var doc = $('#numerodocumento').val();
+            var ape = $('#apellidosnombres').val();
+            $.ajax({
+                url:'',{{-- "{{ route('salud.padronnominal.tablerocalidad.criterio.find1', ['importacion' => $importacion, 'tipo' => 'tipo', 'documento' => 'documento', 'apellido' => 'apellido']) }}"
+                    .replace('tipo', tip).replace('documento', doc).replace('apellido', ape), --}} 
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    // console.log(data);
+                    $('#padron').html(data.padron);
+                    $('#tipodoc').html(data.tipo_doc == 'Padron' ? '' : data.tipo_doc);
+                    $('#doc').html(data.tipo_doc == 'Padron' ? '' : data.num_doc);
+                    $('#apepat').html(data.apellido_paterno);
+                    $('#apemat').html(data.apellido_materno);
+                    $('#nom').html(data.nombre);
+                    $('#sexo').html(data.genero);
+                    $('#nacimiento').html(data.fecha_nacimiento);
+                    $('#edad').html(data.edad + data.tipo_edad);
+                    $('#dep').html(data.departamento);
+                    $('#pro').html(data.provincia);
+                    $('#dis').html(data.distrito);
+                    $('#cp').html(data.centro_poblado_nombre);
+                    $('#dir').html(data.direccion);
+                    $('#esn').html(data.cui_nacimiento);
+                    $('#esa').html(data.cui_atencion);
+                    $('#visita').html(data.visita);
+                    $('#encontrado').html(data.menor_encontrado);
+                    $('#seguro').html(data.seguro);
+                    $('#programa').html(data.programa_social);
+                    $('#mapoderado').html(data.apoderado);
+                    $('#mtipodoc').html(data.tipo_doc_madre);
+                    $('#mdoc').html(data.num_doc_madre);
+                    $('#mapepat').html(data.apellido_paterno_madre);
+                    $('#mapemat').html(data.apellido_materno_madre);
+                    $('#mnom').html(data.nombres_madre);
+                    $('#mcel').html(data.celular_madre);
+                    $('#mgrado').html(data.grado_instruccion);
+                    $('#mlengua').html(data.lengua_madre);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
                 },
             });
