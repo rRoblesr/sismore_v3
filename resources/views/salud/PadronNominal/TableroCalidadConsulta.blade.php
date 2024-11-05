@@ -10,7 +10,7 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12 col-md-12">
-            <div class="card">
+            <div class="card m-0">
                 <div class="card-header bg-success-0">
                     <div class="card-widgets">
                         <button type="button" class="btn btn-orange-0 btn-xs" onclick="history.back()" title='ACTUALIZAR'><i
@@ -19,61 +19,55 @@
                             <i class="fa fa-redo"></i> Actualizar</button>
                     </div>
                     <h3 class="card-title text-white font-12">
-                        {{-- Registros sin Número de Documento (DNI, CNV, CUI) del Menor --}}
-                        {{ $title[$criterio - 1] }}
+                        Busqueda de Niños y Niñas Menores de 6 años del Padron
+                        Nominal
                     </h3>
                 </div>
                 <div class="card-body pb-0">
                     <div class="form-group row align-items-center vh-5">
-                        <div class="col-lg-3 col-md-4 col-sm-4">
-                            <h4 class="page-title font-12">{{ $actualizado }}</h4>
-                        </div>
-
                         <div class="col-lg-3 col-md-2 col-sm-2">
                             <div class="custom-select-container">
-                                <label for="red">RED</label>
-                                <select id="red" name="red" class="form-control btn-xs font-11"
-                                    onchange="cargarMicrored();cargarCards();">
-                                    <option value="0">TODOS</option>
-                                    @foreach ($red as $item)
-                                        <option value="{{ $item->id }}">{{ $item->nombre }}</option>
-                                    @endforeach
+                                <label for="tipodocumento">Tipo de Documento</label>
+                                <select id="tipodocumento" name="tipodocumento" class="form-control " onchange="">
+                                    <option value="DNI">DNI</option>
+                                    <option value="CNV">CNV</option>
+                                    <option value="CUI">CUI</option>
+                                    <option value="Padron">CÓDIGO PADRÓN</option>
                                 </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-2 col-sm-2">
+                            <div class="custom-select-container">
+                                <label for="numerodocumento">Documento</label>
+                                <input type="number" id="numerodocumento" name="numerodocumento" class="form-control">
                             </div>
 
 
                         </div>
-                        <div class="col-lg-3 col-md-2 col-sm-2">
+                        <div class="col-lg-4 col-md-2 col-sm-2">
                             <div class="custom-select-container">
-                                <label for="microred">MICRORED</label>
-                                <select id="microred" name="microred" class="form-control btn-xs font-11"
-                                    onchange="cargarEstablecimiento();cargarCards();">
-                                    <option value="0">TODOS</option>
-                                </select>
+                                <label for="apellidosnombres">Apellidos y Nombres</label>
+                                <input type="text" id="apellidosnombres" name="apellidosnombres" class="form-control">
                             </div>
 
 
                         </div>
-                        <div class="col-lg-3 col-md-2 col-sm-2">
-                            <div class="custom-select-container">
-                                <label for="establecimiento">ESTABLECIMIENTO</label>
-                                <select id="establecimiento" name="establecimiento" class="form-control btn-xs font-11"
-                                    onchange="cargarCards();">
-                                    <option value="0">TODOS</option>
-                                </select>
-                            </div>
-
-
+                        <div class="col-lg-1 col-md-2 col-sm-2 text-center">
+                            <button type="button" class="btn btn-success-0" onclick="consultahacer()">
+                                {{-- <i class="fa fa-redo"></i> --}} Consultar</button>
+                        </div>
+                        <div class="col-lg-1 col-md-2 col-sm-2 text-center">
+                            <button type="button" class="btn btn-orange-0" onclick="consultalimpiar()">
+                                {{-- <i class="fa fa-redo"></i> --}} Limpiar</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="row">
+    <div class="row d-none">
         <div class="col-lg-12">
-            <div class="card">
+            <div class="card m-0">
                 {{-- <div class="card-header">
                     <h3 class="card-title">Población de niños y niñas menos de 6 años por distrito, segun sexo y edades
                     </h3>
@@ -111,21 +105,23 @@
         </div>
     </div>
 
-    <!--  Modal content for the above example -->
-    <div class="modal fade" id="modal-nino" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-        aria-hidden="true" style="display: none;">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="myLargeModalLabel">Niño(a) con datos observados</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                </div>
-                <div class="modal-body">
+    <div class="row" id="formulario" style="display: none">
+        <div class="col-lg-12">
+            <div class="card">
+                {{-- <div class="card-header">
+                    <h3 class="card-title">Población de niños y niñas menos de 6 años por distrito, segun sexo y edades
+                    </h3>
+                </div> --}}
+                <div class="card-body p-0">
                     <div class="row">
                         <div class="col-12">
                             <div class="table-responsive">
-                                <table id="xx" class="table table-striped table-bordered font-12 text-dark">
+                                <table id="sdsds" class="table table-striped table-bordered font-12 text-dark">
                                     <tbody>
+                                        <tr>
+                                            <td class="text-left table-success-0 text-white" colspan="6">DATOS DEL MENOR
+                                            </td>
+                                        </tr>
                                         <tr>
                                             <td class="text-right" style="background-color: #D4F2F0">CÓDIGO PADRÓN</td>
                                             <td id="padron"></td>
@@ -145,7 +141,8 @@
                                         <tr>
                                             <td class="text-right" style="background-color: #D4F2F0">SEXO</td>
                                             <td id="sexo"></td>
-                                            <td class="text-right" style="background-color: #D4F2F0">FECHA DE NACIMIENTO</td>
+                                            <td class="text-right" style="background-color: #D4F2F0">FECHA DE NACIMIENTO
+                                            </td>
                                             <td id="nacimiento"></td>
                                             <td class="text-right" style="background-color: #D4F2F0">EDAD</td>
                                             <td id="edad"></td>
@@ -167,9 +164,11 @@
                                         <tr>
                                             <td class="text-right" style="background-color: #D4F2F0">EESS NACIMIENTO</td>
                                             <td id="esn"></td>
-                                            <td class="text-right" style="background-color: #D4F2F0">ULTIMO EESS ATENCIÓN</td>
+                                            <td class="text-right" style="background-color: #D4F2F0">ULTIMO EESS ATENCIÓN
+                                            </td>
                                             <td id="esa"></td>
-                                            <td class="text-right" style="background-color: #D4F2F0">VISITA DOMICILIARIA</td>
+                                            <td class="text-right" style="background-color: #D4F2F0">VISITA DOMICILIARIA
+                                            </td>
                                             <td id="visita"></td>
                                         </tr>
                                         <tr>
@@ -181,16 +180,18 @@
                                             <td id="programa"></td>
                                         </tr>
                                         <tr>
-                                            <td class="" colspan="6"></td>
+                                            <td class="text-right" style="background-color: #D4F2F0">INSTITUTCIÓN
+                                                EDUCATIVA</td>
+                                            <td></td>
+                                            <td class="text-right" style="background-color: #D4F2F0">NIVEL EDUCATIVO</td>
+                                            <td></td>
+                                            <td class="text-right" style="background-color: #D4F2F0">GRADO Y SECCIÓN</td>
+                                            <td></td>
                                         </tr>
-                                        {{-- <tr>
-                                            <td>INSTITUTCIÓN EDUCATIVA</td>
-                                            <td></td>
-                                            <td>NIVEL EDUCATIVO</td>
-                                            <td></td>
-                                            <td>GRADO Y SECCIÓN</td>
-                                            <td></td>
-                                        </tr> --}}
+                                        <tr>
+                                            <td class="text-left table-success-0 text-white" colspan="6">DATOS DE LA
+                                                MADRE</td>
+                                        </tr>
                                         <tr>
                                             <td class="text-right" style="background-color: #D4F2F0">APODERADO</td>
                                             <td id="mapoderado"></td>
@@ -200,17 +201,18 @@
                                             <td id="mdoc"></td>
                                         </tr>
                                         <tr>
-                                            <td class="text-right" style="background-color: #D4F2F0">APELLIDO PATERNO MADRE</td>
+                                            <td class="text-right" style="background-color: #D4F2F0">APELLIDO PATERNO</td>
                                             <td id="mapepat"></td>
-                                            <td class="text-right" style="background-color: #D4F2F0">APELLIDO MATERNO MADRE</td>
+                                            <td class="text-right" style="background-color: #D4F2F0">APELLIDO MATERNO</td>
                                             <td id="mapemat"></td>
-                                            <td class="text-right" style="background-color: #D4F2F0">NOMBRES MADRE</td>
+                                            <td class="text-right" style="background-color: #D4F2F0">NOMBRES</td>
                                             <td id="mnom"></td>
                                         </tr>
                                         <tr>
                                             <td class="text-right" style="background-color: #D4F2F0">CELULAR</td>
                                             <td id="mcel"></td>
-                                            <td class="text-right" style="background-color: #D4F2F0">GRADO DE INSTRUCCIÓN</td>
+                                            <td class="text-right" style="background-color: #D4F2F0">GRADO DE INSTRUCCIÓN
+                                            </td>
                                             <td id="mgrado"></td>
                                             <td class="text-right" style="background-color: #D4F2F0">LENGUA HABITUAL</td>
                                             <td id="mlengua"></td>
@@ -222,67 +224,10 @@
 
                         </div>
                     </div>
-
                 </div>
             </div>
-
-
-
         </div>
-    </div><!-- /.modal -->
-
-    <!--  Modal content for the above example -->
-    <div class="modal fade" id="modal-eess" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-        aria-hidden="true" style="display: none;">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="myLargeModalLabel">Datos del Establecimiento de Salud</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="table-responsive">
-                                <table id="xx2" class="table table-striped table-bordered font-12 text-dark">
-                                    <tbody>
-                                        <tr>
-                                            <td class="text-right" style="background-color: #D4F2F0">CÓDIGO ÚNICO</td>
-                                            <td id="eesscui"></td>
-                                            <td class="text-right" style="background-color: #D4F2F0">NOMBRE DEL ESTABLECIMIENTO</td>
-                                            <td id="eessnombre" colspan="3"></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-right" style="background-color: #D4F2F0">DISA</td>
-                                            <td id="eessdisa"></td>
-                                            <td class="text-right" style="background-color: #D4F2F0">RED</td>
-                                            <td id="eessred"></td>
-                                            <td class="text-right" style="background-color: #D4F2F0">MICRORED</td>
-                                            <td id="eessmicro"></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-right" style="background-color: #D4F2F0">DEPARTAMENTO</td>
-                                            <td id="eessdep"></td>
-                                            <td class="text-right" style="background-color: #D4F2F0">PROVINCIA</td>
-                                            <td id="eesspro"></td>
-                                            <td class="text-right" style="background-color: #D4F2F0">DISTRITO</td>
-                                            <td id="eessdis"></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-
-
-        </div>
-    </div><!-- /.modal -->
+    </div>
 @endsection
 
 @section('js')
@@ -292,9 +237,69 @@
         ];
         var tableprincipal;
         $(document).ready(function() {
-            cargarCards();
 
         });
+
+        function consultahacer() {
+
+            var tip = $('#tipodocumento').val();
+            var doc = $('#numerodocumento').val();
+            var ape = $('#apellidosnombres').val();
+            if ( doc != '' || ape != '') {
+                $.ajax({
+                    url: "{{ route('salud.padronnominal.tablerocalidad.consulta.find1', ['importacion' => $importacion, 'tipo' => 'tipo', 'documento' => 'documento', 'apellido' => 'apellido']) }}"
+                        .replace('tipo', tip).replace('documento', doc).replace('apellido', ape),
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(data);
+                        $('#padron').html(data.padron);
+                        $('#tipodoc').html(data.tipo_doc == 'Padron' ? '' : data.tipo_doc);
+                        $('#doc').html(data.tipo_doc == 'Padron' ? '' : data.num_doc);
+                        $('#apepat').html(data.apellido_paterno);
+                        $('#apemat').html(data.apellido_materno);
+                        $('#nom').html(data.nombre);
+                        $('#sexo').html(data.genero);
+                        $('#nacimiento').html(data.fecha_nacimiento);
+                        $('#edad').html(data.edad + data.tipo_edad);
+                        $('#dep').html(data.departamento);
+                        $('#pro').html(data.provincia);
+                        $('#dis').html(data.distrito);
+                        $('#cp').html(data.centro_poblado_nombre);
+                        $('#dir').html(data.direccion);
+                        $('#esn').html(data.cui_nacimiento);
+                        $('#esa').html(data.cui_atencion);
+                        $('#visita').html(data.visita);
+                        $('#encontrado').html(data.menor_encontrado);
+                        $('#seguro').html(data.seguro);
+                        $('#programa').html(data.programa_social);
+                        $('#mapoderado').html(data.apoderado);
+                        $('#mtipodoc').html(data.tipo_doc_madre);
+                        $('#mdoc').html(data.num_doc_madre);
+                        $('#mapepat').html(data.apellido_paterno_madre);
+                        $('#mapemat').html(data.apellido_materno_madre);
+                        $('#mnom').html(data.nombres_madre);
+                        $('#mcel').html(data.celular_madre);
+                        $('#mgrado').html(data.grado_instruccion);
+                        $('#mlengua').html(data.lengua_madre);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR);
+                    },
+                });
+                $('#formulario').show();
+            } else {
+                toastr.error('CAMPOS VACIOS', 'Mensaje');
+            }
+
+        }
+
+        function consultalimpiar() {
+            $('#formulario').hide();
+            $('#numerodocumento').val('');
+            $('#apellidosnombres').val('');
+        }
+
 
         function cargarCards() {
             tableprincipal = $('#tabla1').DataTable({
@@ -310,7 +315,6 @@
                     type: "GET",
                     data: function(d) {
                         d.importacion = {{ $importacion }};
-                        d.criterio = {{ $criterio }};
                         d.establecimiento = $('#establecimiento').val();
                         d.microred = $('#microred').val();
                         d.red = $('#red').val();
@@ -409,85 +413,6 @@
             });
         }
 
-        function cargarMicrored() {
-            $.ajax({
-                url: "{{ route('salud.padronnominal.tablerocalidad.criterio.microred', ['importacion' => $importacion, 'red' => 'xred', 'criterio' => $criterio]) }}"
-                    .replace('xred', $('#red').val()),
-                type: 'GET',
-                success: function(data) {
-                    $("#microred option").remove();
-                    var options = '<option value="0">TODOS</option>';
-                    $.each(data, function(index, value) {
-                        options += `<option value='${value.id}'>${value.nombre}</option>`;
-                    });
-                    $("#microred").append(options);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
-        }
-
-        function cargarEstablecimiento() {
-            $.ajax({
-                url: "{{ route('salud.padronnominal.tablerocalidad.criterio.criterio1_establecimiento', ['importacion' => $importacion, 'red' => 'xred', 'microred' => 'xmicrored', 'criterio' => $criterio]) }}"
-                    .replace('xred', $('#red').val())
-                    .replace('xmicrored', $('#microred').val()),
-                type: 'GET',
-                success: function(data) {
-                    $("#establecimiento option").remove();
-                    var options = '<option value="0">TODOS</option>';
-                    $.each(data, function(index, value) {
-                        options += `<option value='${value.id}'>${value.nombre}</option>`;
-                    });
-                    $("#establecimiento").append(options);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
-        }
-
-        // function cargarDistritos() {
-        //     $.ajax({
-        //         url: "{{ route('ubigeo.distrito.25', '') }}/" + $('#provincia').val(),
-        //         type: 'GET',
-        //         success: function(data) {
-        //             $("#distrito option").remove();
-        //             var options = '<option value="0">TODOS</option>';
-        //             $.each(data, function(index, value) {
-        //                 options += "<option value='" + value.id + "'>" + value.nombre +
-        //                     "</option>"
-        //             });
-        //             $("#distrito").append(options);
-        //         },
-        //         error: function(jqXHR, textStatus, errorThrown) {
-        //             console.log(jqXHR);
-        //         },
-        //     });
-        // }
-
-        // function cargarMes() {
-        //     $.ajax({
-        //         url: "{{ route('salud.padronnominal.mes', '') }}/" + $('#anio').val(),
-        //         type: 'GET',
-        //         success: function(data) {
-        //             $("#mes option").remove();
-        //             var options = '<option value="0">TODOS</option>';
-
-        //             var mesmax = Math.max(...data.map(item => item.id));
-        //             // console.log("Mes máximo:", mesmax);
-        //             $.each(data, function(ii, vv) {
-        //                 ss = vv.id == mesmax ? 'selected' : '';
-        //                 options += `<option value='${vv.id}' ${ss}>${vv.mes}</option>`
-        //             });
-        //             $("#mes").append(options);
-        //         },
-        //         error: function(jqXHR, textStatus, errorThrown) {
-        //             console.log(jqXHR);
-        //         },
-        //     });
-        // }
 
         function panelGraficas(div) {
             $.ajax({

@@ -1261,15 +1261,16 @@ Route::get('/Salud/PadronNominal/TableroCalidad', [PadronNominalController::clas
 Route::get('/Salud/PadronNominal/TableroCalidad/reportes', [PadronNominalController::class, 'tablerocalidadreporte'])->name('salud.padronnominal.tablerocalidad.reporte');
 Route::get('/Salud/PadronNominal/TableroCalidad/Listado', [PadronNominalController::class, 'calidadListado'])->name('salud.padronnominal.tablerocalidad.listado');
 
-Route::get('/Salud/PadronNominal/TableroCalidad/Consulta/{importacion}', [PadronNominalController::class, 'tablerocalidadconsulta'])->name('salud.padronnominal.tablerocalidad.consulta');
-
 Route::get('/Salud/PadronNominal/TableroCalidad/Criterio/find1/{importacion}/{padron}', [PadronNominalController::class, 'tablerocalidadcriteriofind1'])->name('salud.padronnominal.tablerocalidad.criterio.find1');
 Route::get('/Salud/PadronNominal/TableroCalidad/Criterio/find2/{importacion}/{cui}', [PadronNominalController::class, 'tablerocalidadcriteriofind2'])->name('salud.padronnominal.tablerocalidad.criterio.find2');
-Route::get('/Salud/PadronNominal/TableroCalidad/Criterio/find1/{importacion}/{tipo}/{documento}/{apellido}', [PadronNominalController::class, 'tablerocalidadcriteriofind3'])->name('salud.padronnominal.tablerocalidad.criterio.find3');
+
 Route::get('/Salud/PadronNominal/TableroCalidad/Criterio/{importacion}/{criterio}', [PadronNominalController::class, 'tablerocalidadcriterio'])->name('salud.padronnominal.tablerocalidad.criterio');
 Route::get('/Salud/PadronNominal/TableroCalidad/Criterio/{importacion}/{red}/{criterio}', [PadronNominalController::class, 'criterio_microred'])->name('salud.padronnominal.tablerocalidad.criterio.microred');
 Route::get('/Salud/PadronNominal/TableroCalidad/Criterio/{importacion}/{red}/{microred}/{criterio}', [PadronNominalController::class, 'criterio_establecimiento'])->name('salud.padronnominal.tablerocalidad.criterio.criterio1_establecimiento');
 Route::get('/Salud/PadronNominal/TableroCalidad/Criterio/listar', [PadronNominalController::class, 'tablerocalidadcriteriolistar'])->name('salud.padronnominal.tablerocalidad.criterio.listar');
+
+Route::get('/Salud/PadronNominal/TableroCalidad/Consulta', [PadronNominalController::class, 'tablerocalidadconsulta'])->name('salud.padronnominal.tablerocalidad.consulta');
+Route::get('/Salud/PadronNominal/TableroCalidad/Consulta/find1/{importacion}/{tipo}/{documento}/{apellido?}', [PadronNominalController::class, 'tablerocalidadconsultafind1'])->name('salud.padronnominal.tablerocalidad.consulta.find1');
 
 
 

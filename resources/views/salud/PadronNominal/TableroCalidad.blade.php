@@ -14,7 +14,7 @@
                 <div class="card-header bg-success-0">
                     <div class="card-widgets">
                         <button type="button" class="btn btn-danger btn-xs"
-                            onclick="{{ route('salud.padronnominal.tablerocalidad.consulta', ['importacion' => $importacion]) }}">
+                            onclick="window.location.href=`{{ route('salud.padronnominal.tablerocalidad.consulta') }}`">
                             <i class="fas fa-search"></i> Consultas</button>
                         <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
                             <i class="fa fa-redo"></i> Actualizar</button>
@@ -719,54 +719,7 @@
             $('#modal-consulta').modal('show');
         }
 
-        function consultahacer() {
-            var tip = $('#tipodocumento').val();
-            var doc = $('#numerodocumento').val();
-            var ape = $('#apellidosnombres').val();
-            $.ajax({
-                url: '',
-                {{-- "{{ route('salud.padronnominal.tablerocalidad.criterio.find1', ['importacion' => $importacion, 'tipo' => 'tipo', 'documento' => 'documento', 'apellido' => 'apellido']) }}"
-                    .replace('tipo', tip).replace('documento', doc).replace('apellido', ape), --}}
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    // console.log(data);
-                    $('#padron').html(data.padron);
-                    $('#tipodoc').html(data.tipo_doc == 'Padron' ? '' : data.tipo_doc);
-                    $('#doc').html(data.tipo_doc == 'Padron' ? '' : data.num_doc);
-                    $('#apepat').html(data.apellido_paterno);
-                    $('#apemat').html(data.apellido_materno);
-                    $('#nom').html(data.nombre);
-                    $('#sexo').html(data.genero);
-                    $('#nacimiento').html(data.fecha_nacimiento);
-                    $('#edad').html(data.edad + data.tipo_edad);
-                    $('#dep').html(data.departamento);
-                    $('#pro').html(data.provincia);
-                    $('#dis').html(data.distrito);
-                    $('#cp').html(data.centro_poblado_nombre);
-                    $('#dir').html(data.direccion);
-                    $('#esn').html(data.cui_nacimiento);
-                    $('#esa').html(data.cui_atencion);
-                    $('#visita').html(data.visita);
-                    $('#encontrado').html(data.menor_encontrado);
-                    $('#seguro').html(data.seguro);
-                    $('#programa').html(data.programa_social);
-                    $('#mapoderado').html(data.apoderado);
-                    $('#mtipodoc').html(data.tipo_doc_madre);
-                    $('#mdoc').html(data.num_doc_madre);
-                    $('#mapepat').html(data.apellido_paterno_madre);
-                    $('#mapemat').html(data.apellido_materno_madre);
-                    $('#mnom').html(data.nombres_madre);
-                    $('#mcel').html(data.celular_madre);
-                    $('#mgrado').html(data.grado_instruccion);
-                    $('#mlengua').html(data.lengua_madre);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
-        }
-
+       
         function GaugeSeriesbbbbb(div, data, title) {
             Highcharts.chart(div, {
                 chart: {

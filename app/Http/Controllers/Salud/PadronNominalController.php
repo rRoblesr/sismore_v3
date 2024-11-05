@@ -103,7 +103,6 @@ class PadronNominalController extends Controller
         $mes = Mes::find($imp->mes);
         $anios = ImportacionRepositorio::anios_porfuente_select(ImporPadronNominalController::$FUENTE);
         $provincias = UbigeoRepositorio::provincia_select('25');
-        // compact('imp', 'mes');
         $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $mes->mes . ' del ' . $imp->anio;
         return view('salud.PadronNominal.TableroCalidad', compact('actualizado', 'anios', 'provincias'));
     }
@@ -1062,41 +1061,53 @@ class PadronNominalController extends Controller
         return  $data;
     }
 
-    public function tablerocalidadcriteriofind3($importacion, $tipo, $documento, $apellido)
+    public function tablerocalidadconsultafind1($importacion, $tipo, $documento = '', $apellido = '')
     {
         $seguro = [0 => 'NINGUNO', 1 => 'SIS', 2 => 'ESSALUD', 3 => 'SANIDAD', 4 => 'PRIVADO'];
         $programa = [0 => 'NINGUNO', 1 => 'PIN', 2 => 'PVL', 4 => 'JUNTOS', 5 => 'QALIWARMA', 7 => 'CUNA+ SCD', 8 => 'CUNA+ SAF'];
-        $data = CalidadCriterio::where('importacion_id', $importacion)->where('padron', $tipo)->first();
-        $data->centro_poblado_nombre = !empty($data->centro_poblado_nombre) ? explode(', ', $data->centro_poblado_nombre)[0] : null;
-        $data->seguro = $seguro[$data->seguro_id] ?? 'NINGUNO';
-        $programaaux = null;
-        if (!empty($data->programa_social)) {
-            $programaIds = explode(',', trim($data->programa_social, ','));
-            $programaaux = array_map(function ($id) use ($programa) {
-                return isset($programa[$id]) ? $programa[$id] : null;
-            }, $programaIds);
+        $data = CalidadCriterio::where('importacion_id', $importacion)
+            ->where('tipo_doc', $tipo);
+        if ($documento != '')
+            $data = $data->where('num_doc', $documento);
+        if ($apellido != '')
+            $data = $data->where(function ($query) use ($apellido) {
+                $query->where('apellido_paterno', 'like', "%{$apellido}%")
+                    ->orWhere('apellido_materno', 'like', "%{$apellido}%")
+                    ->orWhere('nombre', 'like', "%{$apellido}%");
+            });
+        $data = $data->first();
+        if ($data) {
+            $data->centro_poblado_nombre = !empty($data->centro_poblado_nombre) ? explode(', ', $data->centro_poblado_nombre)[0] : null;
+            $data->seguro = $seguro[$data->seguro_id] ?? 'NINGUNO';
+            $programaaux = null;
+            if (!empty($data->programa_social)) {
+                $programaIds = explode(',', trim($data->programa_social, ','));
+                $programaaux = array_map(function ($id) use ($programa) {
+                    return isset($programa[$id]) ? $programa[$id] : null;
+                }, $programaIds);
 
-            $programaaux = implode(', ', array_filter($programaaux));
-        } else {
-            $programaaux = 'NINGUNO'; // Asignar null si programax está vacío
+                $programaaux = implode(', ', array_filter($programaaux));
+            } else {
+                $programaaux = 'NINGUNO'; // Asignar null si programax está vacío
+            }
+            $data->programa_social = $programaaux;
+            $data->fecha_nacimiento = date('d/m/Y', strtotime($data->fecha_nacimiento));
+            $data->visita = $data->visita == 1 ? 'SI' : 'NO';
+            $data->menor_encontrado = $data->menor_encontrado == 1 ? 'SI' : 'NO';
+            $data->cui_atencion = $data->establecimiento_id > 0 ? Establecimiento::find($data->establecimiento_id)->nombre_establecimiento : 'NINGUNO';
+            $data->distrito = $data->distrito_id > 0 ? Ubigeo::find($data->distrito_id)->nombre : '';
+            $data->provincia = $data->provincia_id > 0 ? Ubigeo::find($data->provincia_id)->nombre : '';
+            $data->departamento = 'UCAYALI';
         }
-        $data->programa_social = $programaaux;
-        $data->fecha_nacimiento = date('d/m/Y', strtotime($data->fecha_nacimiento));
-        $data->visita = $data->visita == 1 ? 'SI' : 'NO';
-        $data->menor_encontrado = $data->menor_encontrado == 1 ? 'SI' : 'NO';
-        $data->cui_atencion = $data->establecimiento_id > 0 ? Establecimiento::find($data->establecimiento_id)->nombre_establecimiento : 'NINGUNO';
-        $data->distrito = $data->distrito_id > 0 ? Ubigeo::find($data->distrito_id)->nombre : '';
-        $data->provincia = $data->provincia_id > 0 ? Ubigeo::find($data->provincia_id)->nombre : '';
-        $data->departamento = 'UCAYALI';
-        return  $data;
+        return  response()->json($data);
     }
 
 
-    public function tablerocalidadconsulta($importacion)
+    public function tablerocalidadconsulta()
     {
         $fuente = ImporPadronNominalController::$FUENTE;
         $anio = 2024;
-        
+        $importacion = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio);
         return view('salud.PadronNominal.TableroCalidadConsulta', compact('importacion'));
     }
 }
