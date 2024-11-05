@@ -13,7 +13,8 @@
             <div class="card">
                 <div class="card-header bg-success-0">
                     <div class="card-widgets">
-                        <button type="button" class="btn btn-danger btn-xs" onclick="abrirmodalconsultas()">
+                        <button type="button" class="btn btn-danger btn-xs"
+                            onclick="{{ route('salud.padronnominal.tablerocalidad.consulta', ['importacion' => $importacion]) }}">
                             <i class="fas fa-search"></i> Consultas</button>
                         <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
                             <i class="fa fa-redo"></i> Actualizar</button>
@@ -101,7 +102,7 @@
                             width="100%" height="100%">
                     </div> --}}
                     <div class="avatar-md mr-2">
-                        <i class="ion ion-ios-people avatar-title font-40 text-dark"></i>
+                        <i class="ion ion-ios-people avatar-title font-30 text-dark"></i>
 
                     </div>
                     <div class="media-body align-self-center">
@@ -124,7 +125,7 @@
                             width="100%" height="100%">
                     </div> --}}
                     <div class="avatar-md mr-2">
-                        <i class="far fa-address-card avatar-title font-40 text-dark"></i>
+                        <i class="far fa-address-card avatar-title font-30 text-dark"></i>
 
                     </div>
                     <div class="media-body align-self-center">
@@ -132,7 +133,7 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card2"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Tienen DNI </p>
+                            <p class="mb-0 mt-1 text-truncate">Niños y Niñas con DNI </p>
                         </div>
                     </div>
                 </div>
@@ -148,7 +149,7 @@
                             width="100%" height="100%">
                     </div> --}}
                     <div class="avatar-md mr-2">
-                        <i class="mdi mdi-shield-check avatar-title font-40 text-dark"></i>
+                        <i class="mdi mdi-shield-check avatar-title font-30 text-dark"></i>
 
                     </div>
                     <div class="media-body align-self-center">
@@ -156,7 +157,7 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card3"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Tienen Seguro</p>
+                            <p class="mb-0 mt-1 text-truncate">Niños y Niñas con Seguro</p>
                         </div>
                     </div>
                 </div>
@@ -171,7 +172,7 @@
                             width="100%" height="100%">
                     </div> --}}
                     <div class="avatar-md mr-2">
-                        <i class="far fa-hospital avatar-title font-40 text-dark"></i>
+                        <i class="far fa-hospital avatar-title font-30 text-dark"></i>
 
                     </div>
                     <div class="media-body align-self-center">
@@ -179,7 +180,7 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card4"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Tienen EESS</p>
+                            <p class="mb-0 mt-1 text-truncate">Niños y Niñas con EESS</p>
                         </div>
                     </div>
                 </div>

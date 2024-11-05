@@ -263,18 +263,18 @@ class PadronNominalController extends Controller
                 ];
 
                 $base = Mes::select('id')->get();
-                $base[0]->criterio = 'Registro sin Número de Documento(DNI, CNV, CUI)';
-                $base[1]->criterio = 'Registro Duplicados del Número de Documento';
-                $base[2]->criterio = 'Registro sin Nombre Completos';
-                $base[3]->criterio = 'Registro sin Seguro de Salud';
-                $base[4]->criterio = 'Registro sin Visitas Domiciliarias';
+                $base[0]->criterio = 'Registro de Niños y Niñas sin Número de Documento(DNI, CNV, CUI)';
+                $base[1]->criterio = 'Registro de Niños y Niñas Duplicados del Número de Documento';
+                $base[2]->criterio = 'Registro de Niños y Niñas sin Nombre Completos';
+                $base[3]->criterio = 'Registro de Niños y Niñas sin Seguro de Salud';
+                $base[4]->criterio = 'Registro de Niños y Niñas sin Visitas Domiciliarias';
                 $base[5]->criterio = 'Registro de Niños y Niñas Visitados y no Encontrados';
-                $base[6]->criterio = 'Registro sin Establecimiento de Atención';
-                $base[7]->criterio = 'Registro de Establecimiento de Atención de Otra Región';
-                $base[8]->criterio = 'Registro de Establecimiento de salud  de Otro Distrito';
-                $base[9]->criterio = 'Registro sin Nombres Completo de la Madre ';
-                $base[10]->criterio = 'Registro sin Grado de Instrucción de la Madre ';
-                $base[11]->criterio = 'Registro sin Lengua Habitual de la Madre ';
+                $base[6]->criterio = 'Registro de Niños y Niñas sin Establecimiento de Atención';
+                $base[7]->criterio = 'Registro de Niños y Niñas con Establecimiento de Atención de Otra Región';
+                $base[8]->criterio = 'Registro de Niños y Niñas con Establecimiento de salud  de Otro Distrito';
+                $base[9]->criterio = 'Registro de Niños y Niñas sin Nombres Completo de la Madre ';
+                $base[10]->criterio = 'Registro de Niños y Niñas sin Grado de Instrucción de la Madre ';
+                $base[11]->criterio = 'Registro de Niños y Niñas sin Lengua Habitual de la Madre ';
                 // Aplicando los criterios a cada elemento del arreglo $base
                 foreach ($filtrosCriterios as $index => $filtro) {
                     $resultado = obtenerCriterio($impMaxAnio, $filtro);
@@ -595,19 +595,19 @@ class PadronNominalController extends Controller
                 return response()->json(compact('excel'));
 
             case 'tabla1':
-                $cri[0] = 'Registro sin Número de Documento(DNI, CNV, CUI)';
-                $cri[1] = 'Registro Duplicados del Número de Documento';
-                $cri[2] = 'Registro sin Nombre Completos';
-                $cri[3] = 'Registro sin Seguro de Salud';
-                $cri[4] = 'Registro sin Visitas Domiciliarias';
-                $cri[5] = 'Registro de Niños y Niñas Visitados y no Encontrados';
-                $cri[6] = 'Registro sin Establecimiento de Atención';
-                $cri[7] = 'Registro de Establecimiento de Atención de Otra Región';
-                $cri[8] = 'Registro de Establecimiento de salud  de Otro Distrito';
-                $cri[9] = 'Registro sin Nombres Completo de la Madre ';
-                $cri[10] = 'Registro sin Grado de Instrucción de la Madre ';
-                $cri[11] = 'Registro sin Lengua Habitual de la Madre ';
-                $cri[12] = 'Registro sin Celular de la Madre ';
+                $cri[0] = strtoupper('Registro de Niños y Niñas sin Número de Documento(DNI, CNV, CUI)');
+                $cri[1] = strtoupper('Registro de Niños y Niñas Duplicados del Número de Documento');
+                $cri[2] = strtoupper('Registro de Niños y Niñas sin Nombre Completos');
+                $cri[3] = strtoupper('Registro de Niños y Niñas sin Seguro de Salud');
+                $cri[4] = strtoupper('Registro de Niños y Niñas sin Visitas Domiciliarias');
+                $cri[5] = strtoupper('Registro de Niños y Niñas Visitados y no Encontrados');
+                $cri[6] = strtoupper('Registro de Niños y Niñas sin Establecimiento de Atención');
+                $cri[7] = strtoupper('Registro de Niños y Niñas con Establecimiento de Atención de Otra Región');
+                $cri[8] = strtoupper('Registro de Niños y Niñas con Establecimiento de salud  de Otro Distrito');
+                $cri[9] = strtoupper('Registro de Niños y Niñas sin Nombres Completo de la Madre ');
+                $cri[10] = strtoupper('Registro de Niños y Niñas sin Grado de Instrucción de la Madre ');
+                $cri[11] = strtoupper('Registro de Niños y Niñas sin Lengua Habitual de la Madre ');
+                $cri[12] = strtoupper('Registro de Niños y Niñas sin Celular de la Madre ');
 
                 $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio);
 
@@ -1089,5 +1089,14 @@ class PadronNominalController extends Controller
         $data->provincia = $data->provincia_id > 0 ? Ubigeo::find($data->provincia_id)->nombre : '';
         $data->departamento = 'UCAYALI';
         return  $data;
+    }
+
+
+    public function tablerocalidadconsulta($importacion)
+    {
+        $fuente = ImporPadronNominalController::$FUENTE;
+        $anio = 2024;
+        
+        return view('salud.PadronNominal.TableroCalidadConsulta', compact('importacion'));
     }
 }
