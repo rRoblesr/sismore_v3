@@ -981,6 +981,9 @@ class PadronNominalController extends Controller
                 break;
         }
 
+        $seguro = [0 => 'NINGUNO', 1 => 'SIS', 2 => 'ESSALUD', 3 => 'SANIDAD', 4 => 'PRIVADO'];
+        $programa = [0 => 'NINGUNO', 1 => 'PIN', 2 => 'PVL', 4 => 'JUNTOS', 5 => 'QALIWARMA', 7 => 'CUNA+ SCD', 8 => 'CUNA+ SAF'];
+
         $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio);
         if ($rq->establecimiento > 0) $query = $query->where('establecimiento_id', $rq->establecimiento);
         if ($rq->microred > 0) $query = $query->where('microred_id', $rq->microred);
@@ -988,26 +991,56 @@ class PadronNominalController extends Controller
         $query = $query->get();
 
         $data = [];
-        foreach ($query as $key => $value) {
-            $dis = Ubigeo::where('codigo', $value->ubigeo)->first();
-            $eess = Establecimiento::where('cod_unico', $value->cui_atencion)->first();
-            // $boton = '';
-            // if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || in_array(session('perfil_administrador_id'), [3, 8, 9, 10, 11])) {
-            //     $boton = '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>';
-            // }
-            // $boton2 = '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> </button>';
-            $data[] = array(
-                $key + 1,
-                $value->padron,
-                $value->tipo_doc != 'Padron' ? $value->tipo_doc : '',
-                $value->tipo_doc != 'Padron' ? $value->num_doc : '',
-                $value->apellido_paterno . ' ' . $value->apellido_materno . ', ' . $value->nombre,
-                date('d/m/Y', strtotime($value->fecha_nacimiento)),
-                $dis->nombre, //$value->ubigeo,
-                $value->centro_poblado_nombre,
-                $eess ? str_pad($value->cui_atencion, 8, '0', STR_PAD_LEFT) : '',
-                $eess ? $eess->nombre_establecimiento : ''
-            );
+        if (
+            $rq->criterio == 1 ||
+            $rq->criterio == 2 ||
+            $rq->criterio == 3 ||
+            $rq->criterio == 4 ||
+            $rq->criterio == 5 ||
+            $rq->criterio == 6 ||
+            $rq->criterio == 7 ||
+            $rq->criterio == 8 ||
+            $rq->criterio == 9
+        ) {
+            foreach ($query as $key => $value) {
+                $dis = Ubigeo::where('codigo', $value->ubigeo)->first();
+                $eess = Establecimiento::where('cod_unico', $value->cui_atencion)->first();
+
+                $data[] = array(
+                    $key + 1,
+                    $value->padron,
+                    $value->tipo_doc != 'Padron' ? $value->tipo_doc : '',
+                    $value->tipo_doc != 'Padron' ? $value->num_doc : '',
+                    $value->apellido_paterno . ' ' . $value->apellido_materno . ', ' . $value->nombre,
+                    date('d/m/Y', strtotime($value->fecha_nacimiento)),
+                    $dis->nombre, //$value->ubigeo,
+                    $value->centro_poblado_nombre,
+                    $eess ? str_pad($value->cui_atencion, 8, '0', STR_PAD_LEFT) : '',
+                    $eess ? $eess->nombre_establecimiento : '',
+                    $seguro[$value->seguro_id] ?? '',
+                    $value->visita == 1 ? 'SI' : 'NO',
+                    $value->encontrado == 1 ? 'SI' : 'NO',
+                );
+            }
+        } else {
+            foreach ($query as $key => $value) {
+                $dis = Ubigeo::where('codigo', $value->ubigeo)->first();
+                $eess = Establecimiento::where('cod_unico', $value->cui_atencion)->first();
+
+                $data[] = array(
+                    $key + 1,
+                    $value->padron,
+                    $value->tipo_doc != 'Padron' ? $value->num_doc : '',
+                    $value->apellido_paterno . ' ' . $value->apellido_materno . ', ' . $value->nombre,
+                    $dis->nombre, //$value->ubigeo,
+                    $value->tipo_doc_madre,
+                    $value->num_doc_madre,
+                    $value->apellido_paterno_madre . ' ' . $value->apellido_materno_madre . ', ' . $value->nombres_madre,
+                    $value->celular_madre,
+                    $value->grado_instruccion,
+                    $value->lengua_madre,
+                );
+            }
         }
         $result = array(
             "draw" => $draw,

@@ -73,34 +73,78 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <div class="card">
-                {{-- <div class="card-header">
-                    <h3 class="card-title">Población de niños y niñas menos de 6 años por distrito, segun sexo y edades
-                    </h3>
-                </div> --}}
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                    <div class="card-widgets">
+                        <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel()">
+                            <i class="fa fa-file-excel"></i> Descargar</button>
+                    </div>
+                    <h3 class="card-title"></h3>
+                </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12">
                             <div class="table-responsive">
-                                <table id="tabla1" class="table table-sm table-striped table-bordered font-10">
-                                    <thead>
-                                        <tr class="table-success-0 text-white">
-                                            <th class="text-center">N°</th>
-                                            <th class="text-center">Cód. Padrón</th>
-                                            <th class="text-center">Tipo Doc.</th>
-                                            <th class="text-center">Documento</th>
-                                            <th class="text-center">Apellidos y Nombre</th>
-                                            <th class="text-center">Fecha Nacimiento</th>
-                                            <th class="text-center">Distrito</th>
-                                            <th class="text-center">Centro Poblado</th>
-                                            <th class="text-center">Cod. EESS</th>
-                                            <th class="text-center">EESS de Atención</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                                @if (
+                                    $criterio == 1 ||
+                                        $criterio == 2 ||
+                                        $criterio == 3 ||
+                                        $criterio == 4 ||
+                                        $criterio == 5 ||
+                                        $criterio == 6 ||
+                                        $criterio == 7 ||
+                                        $criterio == 8 ||
+                                        $criterio == 9)
+                                    <table id="tabla1" class="table table-sm table-striped table-bordered font-10">
+                                        <thead>
+                                            <tr class="table-success-0 text-white">
+                                                <th class="text-center">N°</th>
+                                                <th class="text-center">Cód. Padrón</th>
+                                                <th class="text-center">Tipo Doc.</th>
+                                                <th class="text-center">Documento</th>
+                                                <th class="text-center">Apellidos y Nombre</th>
+                                                <th class="text-center">Fecha Nacimiento</th>
+                                                <th class="text-center">Distrito</th>
+                                                <th class="text-center">Centro Poblado</th>
+                                                <th class="text-center">Cod. EESS</th>
+                                                <th class="text-center">EESS de Atención</th>
+                                                <th class="text-center">Seguro</th>
+                                                <th class="text-center">Visitado</th>
+                                                <th class="text-center">Encontrado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                @else
+                                    <table id="tabla1" class="table table-sm table-striped table-bordered font-10">
+                                        <thead>
+                                            <tr class="table-success-0 text-white">
+                                                <th class="text-center" rowspan="2">N°</th>
+                                                <th class="text-center" colspan="4">Datos del Menor</th>
+                                                <th class="text-center" colspan="6">Datos de la Madre</th>
+                                            </tr>
+                                            <tr class="table-success-0 text-white">
+                                                {{-- <th class="text-center">N°</th> --}}
+                                                <th class="text-center">Cód. Padrón</th>
+                                                <th class="text-center">Documento</th>
+                                                <th class="text-center">Apellidos y Nombre</th>
+                                                <th class="text-center">Distrito</th>
+                                                <th class="text-center">Tipo Doc.</th>
+                                                <th class="text-center">Documento</th>
+                                                <th class="text-center">Apellidos y Nombre</th>
+                                                <th class="text-center">Celular</th>
+                                                <th class="text-center">Grado instrucción</th>
+                                                <th class="text-center">Lengua Habitual</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                @endif
+
 
                             </div>
 
@@ -145,7 +189,8 @@
                                         <tr>
                                             <td class="text-right" style="background-color: #D4F2F0">SEXO</td>
                                             <td id="sexo"></td>
-                                            <td class="text-right" style="background-color: #D4F2F0">FECHA DE NACIMIENTO</td>
+                                            <td class="text-right" style="background-color: #D4F2F0">FECHA DE NACIMIENTO
+                                            </td>
                                             <td id="nacimiento"></td>
                                             <td class="text-right" style="background-color: #D4F2F0">EDAD</td>
                                             <td id="edad"></td>
@@ -167,9 +212,11 @@
                                         <tr>
                                             <td class="text-right" style="background-color: #D4F2F0">EESS NACIMIENTO</td>
                                             <td id="esn"></td>
-                                            <td class="text-right" style="background-color: #D4F2F0">ULTIMO EESS ATENCIÓN</td>
+                                            <td class="text-right" style="background-color: #D4F2F0">ULTIMO EESS ATENCIÓN
+                                            </td>
                                             <td id="esa"></td>
-                                            <td class="text-right" style="background-color: #D4F2F0">VISITA DOMICILIARIA</td>
+                                            <td class="text-right" style="background-color: #D4F2F0">VISITA DOMICILIARIA
+                                            </td>
                                             <td id="visita"></td>
                                         </tr>
                                         <tr>
@@ -200,9 +247,11 @@
                                             <td id="mdoc"></td>
                                         </tr>
                                         <tr>
-                                            <td class="text-right" style="background-color: #D4F2F0">APELLIDO PATERNO MADRE</td>
+                                            <td class="text-right" style="background-color: #D4F2F0">APELLIDO PATERNO
+                                                MADRE</td>
                                             <td id="mapepat"></td>
-                                            <td class="text-right" style="background-color: #D4F2F0">APELLIDO MATERNO MADRE</td>
+                                            <td class="text-right" style="background-color: #D4F2F0">APELLIDO MATERNO
+                                                MADRE</td>
                                             <td id="mapemat"></td>
                                             <td class="text-right" style="background-color: #D4F2F0">NOMBRES MADRE</td>
                                             <td id="mnom"></td>
@@ -210,7 +259,8 @@
                                         <tr>
                                             <td class="text-right" style="background-color: #D4F2F0">CELULAR</td>
                                             <td id="mcel"></td>
-                                            <td class="text-right" style="background-color: #D4F2F0">GRADO DE INSTRUCCIÓN</td>
+                                            <td class="text-right" style="background-color: #D4F2F0">GRADO DE INSTRUCCIÓN
+                                            </td>
                                             <td id="mgrado"></td>
                                             <td class="text-right" style="background-color: #D4F2F0">LENGUA HABITUAL</td>
                                             <td id="mlengua"></td>
@@ -249,7 +299,8 @@
                                         <tr>
                                             <td class="text-right" style="background-color: #D4F2F0">CÓDIGO ÚNICO</td>
                                             <td id="eesscui"></td>
-                                            <td class="text-right" style="background-color: #D4F2F0">NOMBRE DEL ESTABLECIMIENTO</td>
+                                            <td class="text-right" style="background-color: #D4F2F0">NOMBRE DEL
+                                                ESTABLECIMIENTO</td>
                                             <td id="eessnombre" colspan="3"></td>
                                         </tr>
                                         <tr>
