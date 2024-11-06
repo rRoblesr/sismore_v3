@@ -932,54 +932,78 @@ class PadronNominalController extends Controller
         $draw = intval($rq->draw);
         $start = intval($rq->start);
         $length = intval($rq->length);
-        switch (0) {
-            case '1':
-                $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio);
-                if ($rq->establecimiento > 0) $query = $query->where('establecimiento_id', $rq->establecimiento);
-                if ($rq->microred > 0) $query = $query->where('microred_id', $rq->microred);
-                if ($rq->red > 0) $query = $query->where('red_id', $rq->red);
-                $query = $query->get();
-                break;
-            case '2':
-                $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)->get();
-                break;
-            case '3':
-                $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)->get();
-                break;
-            case '4':
-                $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)->get();
-                break;
-            case '5':
-                $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)->get();
-                break;
-            case '6':
-                $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)->get();
-                break;
-            case '7':
-                $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)->get();
-                break;
-            case '8':
-                $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)->get();
-                break;
-            case '9':
-                $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)->get();
-                break;
-            case '10':
-                $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)->get();
-                break;
-            case '11':
-                $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)->get();
-                break;
-            case '12':
-                $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)->get();
-                break;
-            case '13':
-                $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)->get();
-                break;
-            default:
-                $query = [];
-                break;
+
+        $seguro = [0 => 'NINGUNO', 1 => 'SIS', 2 => 'ESSALUD', 3 => 'SANIDAD', 4 => 'PRIVADO'];
+        $programa = [0 => 'NINGUNO', 1 => 'PIN', 2 => 'PVL', 4 => 'JUNTOS', 5 => 'QALIWARMA', 7 => 'CUNA+ SCD', 8 => 'CUNA+ SAF'];
+
+        $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio);
+        if ($rq->establecimiento > 0) $query = $query->where('establecimiento_id', $rq->establecimiento);
+        if ($rq->microred > 0) $query = $query->where('microred_id', $rq->microred);
+        if ($rq->red > 0) $query = $query->where('red_id', $rq->red);
+
+        $recordsTotal = $query->count();
+        $recordsFiltered = $recordsTotal;
+
+        $query = $query->skip($start)->take($length)->get();
+
+        $ubigeos = Ubigeo::whereIn('codigo', $query->pluck('ubigeo')->toArray())->get()->keyBy('codigo');
+        $establecimientos = Establecimiento::whereIn('cod_unico', $query->pluck('cui_atencion')->toArray())->get()->keyBy('cod_unico');
+
+        $sim = ['D' => 'DÍAS', 'M' => 'MESES', 'A' => 'AÑOS'];
+        $data = [];
+
+        foreach ($query as $key => $value) {
+            $dis = $ubigeos[$value->ubigeo] ?? null;
+            $eess = $establecimientos[$value->cui_atencion] ?? null;
+
+            if (in_array($rq->criterio, range(1, 9))) {
+                $data[] = [
+                    $key + 1,
+                    $value->padron,
+                    $value->tipo_doc != 'Padron' ? $value->tipo_doc : '',
+                    $value->tipo_doc != 'Padron' ? $value->num_doc : '',
+                    $value->apellido_paterno . ' ' . $value->apellido_materno . ', ' . $value->nombre,
+                    $value->edad . ' ' . ($sim[$value->tipo_edad] ?? ''),
+                    $dis ? $dis->nombre : '',
+                    $value->centro_poblado_nombre,
+                    $eess ? str_pad($value->cui_atencion, 8, '0', STR_PAD_LEFT) : '',
+                    $eess ? $eess->nombre_establecimiento : '',
+                    $seguro[$value->seguro_id] ?? '',
+                    $value->visita == 1 ? 'SI' : 'NO',
+                    $value->encontrado == 1 ? 'SI' : 'NO',
+                ];
+            } else {
+                $data[] = [
+                    $key + 1,
+                    $value->padron,
+                    $value->tipo_doc != 'Padron' ? $value->num_doc : '',
+                    $value->apellido_paterno . ' ' . $value->apellido_materno . ', ' . $value->nombre,
+                    $dis ? $dis->nombre : '',
+                    $value->tipo_doc_madre,
+                    $value->num_doc_madre,
+                    $value->apellido_paterno_madre . ' ' . $value->apellido_materno_madre . ', ' . $value->nombres_madre,
+                    $value->celular_madre,
+                    $value->grado_instruccion,
+                    $value->lengua_madre,
+                ];
+            }
         }
+
+        $result = [
+            "draw" => $draw,
+            "recordsTotal" => $recordsTotal,
+            "recordsFiltered" => $recordsFiltered,
+            "data" => $data,
+        ];
+
+        return response()->json($result);
+    }
+
+    public function tablerocalidadcriteriolistar_xx(Request $rq)
+    {
+        $draw = intval($rq->draw);
+        $start = intval($rq->start);
+        $length = intval($rq->length);
 
         $seguro = [0 => 'NINGUNO', 1 => 'SIS', 2 => 'ESSALUD', 3 => 'SANIDAD', 4 => 'PRIVADO'];
         $programa = [0 => 'NINGUNO', 1 => 'PIN', 2 => 'PVL', 4 => 'JUNTOS', 5 => 'QALIWARMA', 7 => 'CUNA+ SCD', 8 => 'CUNA+ SAF'];

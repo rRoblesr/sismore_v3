@@ -2444,13 +2444,17 @@ SELECT num_doc, COUNT(*) AS cantidad_repetidos FROM sal_impor_padron_nominal whe
 
 
 
-
-
-
-
-
-
-
-
-
+$cri[0] = strtoupper('Registro de Niños y Niñas sin Número de Documento(DNI, CNV, CUI)');
+                $cri[1] = strtoupper('Registro de Niños y Niñas Duplicados del Número de Documento');
+                $cri[2] = strtoupper('Registro de Niños y Niñas sin Nombre Completos');
+                $cri[3] = strtoupper('Registro de Niños y Niñas sin Seguro de Salud');
+                $cri[4] = strtoupper('Registro de Niños y Niñas sin Visitas Domiciliarias');
+                $cri[5] = strtoupper('Registro de Niños y Niñas Visitados y no Encontrados');
+                $cri[6] = strtoupper('Registro de Niños y Niñas sin Establecimiento de Atención');
+                $cri[7] = strtoupper('Registro de Niños y Niñas con Establecimiento de Atención de Otra Región');
+                $cri[8] = strtoupper('Registro de Niños y Niñas con Establecimiento de salud  de Otro Distrito');
+                $cri[9] = strtoupper('Registro de Niños y Niñas sin Nombres Completo de la Madre ');
+                $cri[10] = strtoupper('Registro de Niños y Niñas sin Grado de Instrucción de la Madre ');
+                $cri[11] = strtoupper('Registro de Niños y Niñas sin Lengua Habitual de la Madre ');
+                $cri[12] = strtoupper('Registro de Niños y Niñas sin Celular de la Madre ');
 

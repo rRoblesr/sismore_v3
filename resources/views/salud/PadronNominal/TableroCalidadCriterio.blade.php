@@ -121,11 +121,6 @@
                                     <table id="tabla1" class="table table-sm table-striped table-bordered font-10">
                                         <thead>
                                             <tr class="table-success-0 text-white">
-                                                <th class="text-center" rowspan="2">N°</th>
-                                                <th class="text-center" colspan="4">Datos del Menor</th>
-                                                <th class="text-center" colspan="6">Datos de la Madre</th>
-                                            </tr>
-                                            <tr class="table-success-0 text-white">
                                                 {{-- <th class="text-center">N°</th> --}}
                                                 <th class="text-center">Cód. Padrón</th>
                                                 <th class="text-center">Documento</th>
@@ -348,6 +343,49 @@
         });
 
         function cargarCards() {
+            tableprincipal = $('#tabla1').DataTable({
+                responsive: true,
+                autoWidth: false,
+                processing: true, // Indica que los datos se procesan en el servidor
+                serverSide: true, // Habilita la paginación en el servidor
+                ordered: true,
+                language: table_language,
+                destroy: true,
+                ajax: {
+                    url: "{{ route('salud.padronnominal.tablerocalidad.criterio.listar') }}",
+                    type: "GET",
+                    data: function(d) {
+                        d.importacion = {{ $importacion }};
+                        d.criterio = {{ $criterio }};
+                        d.establecimiento = $('#establecimiento').val();
+                        d.microred = $('#microred').val();
+                        d.red = $('#red').val();
+                        d.desa = 0;
+                    }
+                },
+                columnDefs: [{
+                        className: 'text-center',
+                        targets: [0, 1, 2, 3, 5, 6, 8]
+                    },
+                    {
+                        targets: 1,
+                        render: function(data, type, row) {
+                            return `<a href="#" onclick="abrirmodalpadron(${data})">${data}</a>`;
+                        }
+                    },
+                    {
+                        targets: 8,
+                        render: function(data, type, row) {
+                            return data ?
+                                `<a href="#" onclick="abrirmodaleess(${parseInt(data, 10)})">${data}</a>` :
+                                '';
+                        }
+                    }
+                ]
+            });
+        }
+
+        function cargarCards_xxx() {
             tableprincipal = $('#tabla1').DataTable({
                 responsive: true,
                 autoWidth: false,
