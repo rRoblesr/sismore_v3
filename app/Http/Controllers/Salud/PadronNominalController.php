@@ -1005,14 +1005,14 @@ class PadronNominalController extends Controller
             foreach ($query as $key => $value) {
                 $dis = Ubigeo::where('codigo', $value->ubigeo)->first();
                 $eess = Establecimiento::where('cod_unico', $value->cui_atencion)->first();
-
+                $sim = ['D' => 'DÍAS', 'M' => 'MESES', 'A' => 'AÑOS'];
                 $data[] = array(
                     $key + 1,
                     $value->padron,
                     $value->tipo_doc != 'Padron' ? $value->tipo_doc : '',
                     $value->tipo_doc != 'Padron' ? $value->num_doc : '',
                     $value->apellido_paterno . ' ' . $value->apellido_materno . ', ' . $value->nombre,
-                    date('d/m/Y', strtotime($value->fecha_nacimiento)),
+                    $value->edad . ' ' . $sim[$value->tipo_edad] ?? '', //date('d/m/Y', strtotime($value->fecha_nacimiento)),
                     $dis->nombre, //$value->ubigeo,
                     $value->centro_poblado_nombre,
                     $eess ? str_pad($value->cui_atencion, 8, '0', STR_PAD_LEFT) : '',

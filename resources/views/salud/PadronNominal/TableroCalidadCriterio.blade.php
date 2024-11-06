@@ -103,7 +103,7 @@
                                                 <th class="text-center">Tipo Doc.</th>
                                                 <th class="text-center">Documento</th>
                                                 <th class="text-center">Apellidos y Nombre</th>
-                                                <th class="text-center">Fecha Nacimiento</th>
+                                                <th class="text-center">Edad</th>
                                                 <th class="text-center">Distrito</th>
                                                 <th class="text-center">Centro Poblado</th>
                                                 <th class="text-center">Cod. EESS</th>
