@@ -18,6 +18,7 @@ use App\Repositories\Salud\PadronNominalRepositorioSalud;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PadronNominalController extends Controller
 {
@@ -948,7 +949,6 @@ class PadronNominalController extends Controller
         return $query;
     }
 
-
     public function tablerocalidadcriterio($importacion, $criterio)
     {
         $fuente = ImporPadronNominalController::$FUENTE;
@@ -1162,6 +1162,20 @@ class PadronNominalController extends Controller
         return  $data;
     }
 
+    public function tablerocalidadcriteriodownload($div, $indicador, $anio, $mes, $provincia, $distrito)
+    {
+        $name = 'sin nombre.xlsx';
+        return Excel::download(new pactoregionalSal1Export($div, $indicador, $anio, $mes, $provincia, $distrito), $name);
+    }
+
+    public function tablerocalidadconsulta()
+    {
+        $fuente = ImporPadronNominalController::$FUENTE;
+        $anio = 2024;
+        $importacion = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio);
+        return view('salud.PadronNominal.TableroCalidadConsulta', compact('importacion'));
+    }
+
     public function tablerocalidadconsultafind1($importacion, $tipo, $documento = '', $apellido = '')
     {
         $seguro = [0 => 'NINGUNO', 1 => 'SIS', 2 => 'ESSALUD', 3 => 'SANIDAD', 4 => 'PRIVADO'];
@@ -1201,14 +1215,5 @@ class PadronNominalController extends Controller
             $data->departamento = 'UCAYALI';
         }
         return  response()->json($data);
-    }
-
-
-    public function tablerocalidadconsulta()
-    {
-        $fuente = ImporPadronNominalController::$FUENTE;
-        $anio = 2024;
-        $importacion = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio);
-        return view('salud.PadronNominal.TableroCalidadConsulta', compact('importacion'));
     }
 }
