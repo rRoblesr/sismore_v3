@@ -594,25 +594,26 @@ class PadronNominalController extends Controller
                 return response()->json(compact('excel'));
 
             case 'tabla1':
-                $cri[0] = strtoupper('Registro de Niños y Niñas sin Número de Documento(DNI, CNV, CUI)');
-                $cri[1] = strtoupper('Registro de Niños y Niñas Duplicados del Número de Documento');
-                $cri[2] = strtoupper('Registro de Niños y Niñas sin Nombre Completos');
-                $cri[3] = strtoupper('Registro de Niños y Niñas sin Seguro de Salud');
-                $cri[4] = strtoupper('Registro de Niños y Niñas sin Visitas Domiciliarias');
-                $cri[5] = strtoupper('Registro de Niños y Niñas Visitados y no Encontrados');
-                $cri[6] = strtoupper('Registro de Niños y Niñas sin Establecimiento de Atención');
-                $cri[7] = strtoupper('Registro de Niños y Niñas con Establecimiento de Atención de Otra Región');
-                $cri[8] = strtoupper('Registro de Niños y Niñas con Establecimiento de salud  de Otro Distrito');
-                $cri[9] = strtoupper('Registro de Niños y Niñas sin Nombres Completo de la Madre ');
-                $cri[10] = strtoupper('Registro de Niños y Niñas sin Grado de Instrucción de la Madre ');
-                $cri[11] = strtoupper('Registro de Niños y Niñas sin Lengua Habitual de la Madre ');
-                $cri[12] = strtoupper('Registro de Niños y Niñas sin Celular de la Madre ');
+                // $cri[0] = strtoupper('Registro de Niños y Niñas sin Número de Documento(DNI, CNV, CUI)');
+                // $cri[1] = strtoupper('Registro de Niños y Niñas Duplicados del Número de Documento');
+                // $cri[2] = strtoupper('Registro de Niños y Niñas sin Nombre Completos');
+                // $cri[3] = strtoupper('Registro de Niños y Niñas sin Seguro de Salud');
+                // $cri[4] = strtoupper('Registro de Niños y Niñas sin Visitas Domiciliarias');
+                // $cri[5] = strtoupper('Registro de Niños y Niñas Visitados y no Encontrados');
+                // $cri[6] = strtoupper('Registro de Niños y Niñas sin Establecimiento de Atención');
+                // $cri[7] = strtoupper('Registro de Niños y Niñas con Establecimiento de Atención de Otra Región');
+                // $cri[8] = strtoupper('Registro de Niños y Niñas con Establecimiento de salud  de Otro Distrito');
+                // $cri[9] = strtoupper('Registro de Niños y Niñas sin Nombres Completo de la Madre ');
+                // $cri[10] = strtoupper('Registro de Niños y Niñas sin Grado de Instrucción de la Madre ');
+                // $cri[11] = strtoupper('Registro de Niños y Niñas sin Lengua Habitual de la Madre ');
+                // $cri[12] = strtoupper('Registro de Niños y Niñas sin Celular de la Madre ');
 
                 $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio);
 
                 $base = CalidadCriterio::where('importacion_id', $impMaxAnio)
+                    ->join('sal_calidad_criterio_nombres as c', 'c.id', '=', 'sal_calidad_criterio.criterio')
                     ->select(
-                        'criterio',
+                        'c.nombre as criterio',
                         DB::raw('count(*) as total'),
                         DB::raw('sum(if(tipo_edad in("D","M"),1,0)) as pob0'),
                         DB::raw('sum(if(edad=1 and tipo_edad="A",1,0)) as pob1'),
@@ -623,11 +624,11 @@ class PadronNominalController extends Controller
                     );
                 if ($rq->provincia > 0) $base = $base->where('provincia_id', $rq->provincia);
                 if ($rq->distrito > 0) $base = $base->where('distrito_id', $rq->distrito);
-                $base = $base->groupBy('criterio')->get();
+                $base = $base->groupBy('criterio', 'c.nombre')->get();
 
-                foreach ($base as $key => $value) {
-                    $value->criterio = $cri[$value->criterio - 1] ?? '';
-                }
+                // foreach ($base as $key => $value) {
+                //     $value->criterio = $cri[$value->criterio - 1] ?? '';
+                // }
 
                 $excel = view('salud.PadronNominal.TableroCalidadTabla1excel', compact('base', 'impMaxAnio'))->render();
                 return response()->json(compact('base', 'excel'));
@@ -897,34 +898,72 @@ class PadronNominalController extends Controller
         return $query;
     }
 
+    public function criterio_edades($importacion, $criterio)
+    {
+        $query = CalidadCriterio::select(
+            DB::raw('case when tipo_edad in("D","M") then 1 else edad+1 end as edades_id'),
+            DB::raw('case when tipo_edad in("D","M") then "MENOR DE 1 AÑO" when tipo_edad="A" AND edad=1 then "1 AÑO" else concat(edad," AÑOS") end as edades')
+        )
+            ->where('importacion_id', $importacion)->where('criterio', $criterio)
+            ->groupBy('edades_id', 'edades')->get();
+        return $query;
+    }
+
+    public function criterio_provincia($importacion, $criterio, $edad)
+    {
+        $query = CalidadCriterio::select('provincia_id')
+            ->where('importacion_id', $importacion)->where('criterio', $criterio);
+        if ($edad > 0) {
+            if ($edad == 1) {
+                $query = $query->where('tipo_edad', '!=', 'A');
+            } else {
+                $query = $query->where('tipo_edad', 'A')->where('edad', $edad - 1);
+            }
+        }
+        $query = $query->groupBy('provincia_id')->get();
+        foreach ($query as $key => $value) {
+            $value->provincia = Ubigeo::find($value->provincia_id)->nombre;
+        }
+        return $query;
+    }
+
+    public function criterio_distrito($importacion, $criterio, $edad, $provincia)
+    {
+        $query = CalidadCriterio::select('distrito_id')
+            ->where('importacion_id', $importacion)->where('criterio', $criterio);
+        if ($edad > 0) {
+            if ($edad == 1) {
+                $query = $query->where('tipo_edad', '!=', 'A');
+            } else {
+                $query = $query->where('tipo_edad', 'A')->where('edad', $edad - 1);
+            }
+        }
+        if ($provincia) {
+            $query = $query->where('provincia_id', $provincia);
+        }
+        $query = $query->groupBy('distrito_id')->get();
+        foreach ($query as $key => $value) {
+            $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+        }
+        return $query;
+    }
+
 
     public function tablerocalidadcriterio($importacion, $criterio)
     {
         $fuente = ImporPadronNominalController::$FUENTE;
         $anio = 2024;
-        $title[0] = 'Registros sin Número de Documento (DNI, CNV, CUI) del Menor';
-        $title[1] = 'Registro Duplicados del Número de Documento';
-        $title[2] = 'Registro sin Nombre Completos';
-        $title[3] = 'Registro sin Seguro de Salud';
-        $title[4] = 'Registro sin Visitas Domiciliarias';
-        $title[5] = 'Registro de Niños y Niñas Visitados y no Encontrados';
-        $title[6] = 'Registro sin Establecimiento de Atención';
-        $title[7] = 'Registro de Establecimiento de Atención de Otra Región';
-        $title[8] = 'Registro de Establecimiento de salud  de Otro Distrito';
-        $title[9] = 'Registro sin Nombres Completo de la Madre ';
-        $title[10] = 'Registro sin Grado de Instrucción de la Madre ';
-        $title[11] = 'Registro sin Lengua Habitual de la Madre ';
-        $title[12] = 'Registro sin Celular de la Madre ';
+        $title = DB::table('sal_calidad_criterio_nombres')->find($criterio)->nombre;
 
-        $red = $this->criterio_red($importacion, $criterio);
-        // return $this->criterio1_microred($importacion, 10, 1);
-        // return $this->criterio1_establecimiento($importacion, 10,41,1);
+        $edades = $this->criterio_edades($importacion, $criterio);
+        // return $this->criterio_provincia($importacion, $criterio, 6);
+        // return $this->criterio_distrito($importacion,  $criterio, 1, 35);
 
         $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronNominalController::$FUENTE); //nexus $imp3
         $mes = Mes::find($imp->mes);
         $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $mes->mes . ' del ' . $imp->anio;
 
-        return view('salud.PadronNominal.TableroCalidadCriterio', compact('importacion', 'criterio', 'actualizado', 'red', 'title'));
+        return view('salud.PadronNominal.TableroCalidadCriterio', compact('importacion', 'criterio', 'actualizado', 'edades', 'title'));
     }
 
     public function tablerocalidadcriteriolistar(Request $rq)
@@ -937,9 +976,15 @@ class PadronNominalController extends Controller
         $programa = [0 => 'NINGUNO', 1 => 'PIN', 2 => 'PVL', 4 => 'JUNTOS', 5 => 'QALIWARMA', 7 => 'CUNA+ SCD', 8 => 'CUNA+ SAF'];
 
         $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio);
-        if ($rq->establecimiento > 0) $query = $query->where('establecimiento_id', $rq->establecimiento);
-        if ($rq->microred > 0) $query = $query->where('microred_id', $rq->microred);
-        if ($rq->red > 0) $query = $query->where('red_id', $rq->red);
+        if ($rq->edades > 0) {
+            if ($rq->edades == 1) {
+                $query = $query->whereIn('tipo_edad', ['D', 'M']);
+            } else {
+                $query = $query->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+            }
+        }
+        if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
+        if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
 
         $recordsTotal = $query->count();
         $recordsFiltered = $recordsTotal;
@@ -964,27 +1009,26 @@ class PadronNominalController extends Controller
                     $value->tipo_doc != 'Padron' ? $value->num_doc : '',
                     $value->apellido_paterno . ' ' . $value->apellido_materno . ', ' . $value->nombre,
                     $value->edad . ' ' . ($sim[$value->tipo_edad] ?? ''),
-                    $dis ? $dis->nombre : '',
-                    $value->centro_poblado_nombre,
-                    $eess ? str_pad($value->cui_atencion, 8, '0', STR_PAD_LEFT) : '',
-                    $eess ? $eess->nombre_establecimiento : '',
                     $seguro[$value->seguro_id] ?? '',
                     $value->visita == 1 ? 'SI' : 'NO',
                     $value->encontrado == 1 ? 'SI' : 'NO',
+                    $dis ? $dis->nombre : '',
+                    $eess ? str_pad($value->cui_atencion, 8, '0', STR_PAD_LEFT) : '',
+                    $eess ? $eess->nombre_establecimiento : '',
                 ];
             } else {
                 $data[] = [
                     $key + 1,
                     $value->padron,
-                    $value->tipo_doc != 'Padron' ? $value->num_doc : '',
-                    $value->apellido_paterno . ' ' . $value->apellido_materno . ', ' . $value->nombre,
-                    $dis ? $dis->nombre : '',
                     $value->tipo_doc_madre,
                     $value->num_doc_madre,
                     $value->apellido_paterno_madre . ' ' . $value->apellido_materno_madre . ', ' . $value->nombres_madre,
                     $value->celular_madre,
                     $value->grado_instruccion,
                     $value->lengua_madre,
+                    $dis ? $dis->nombre : '',
+                    $eess ? str_pad($value->cui_atencion, 8, '0', STR_PAD_LEFT) : '',
+                    $eess ? $eess->nombre_establecimiento : '',
                 ];
             }
         }

@@ -20,11 +20,62 @@
                     </div>
                     <h3 class="card-title text-white font-12">
                         {{-- Registros sin Número de Documento (DNI, CNV, CUI) del Menor --}}
-                        {{ $title[$criterio - 1] }}
+                        {{ $title }}
                     </h3>
                 </div>
+
                 <div class="card-body pb-0">
                     <div class="form-group row align-items-center vh-5">
+
+                        <div class="col-lg-3 col-md-4 col-sm-4">
+                            <h4 class="page-title font-12">{{ $actualizado }}</h4>
+                        </div>
+
+                        <div class="col-lg-3 col-md-2 col-sm-2">
+                            <div class="custom-select-container">
+                                <label for="edades">Edades</label>
+                                <select id="edades" name="edades" class="form-control btn-xs font-11"
+                                    onchange="cargarProvincia();cargarCards();">
+                                    <option value="0">TODOS</option>
+                                    @foreach ($edades as $item)
+                                        <option value="{{ $item->edades_id }}">{{ $item->edades }}</option>
+                                    @endforeach
+                                    {{-- <option value="1">MENORES A 1 AÑO</option>
+                                    <option value="2">1 AÑO</option>
+                                    <option value="3">2 AÑOS</option>
+                                    <option value="4">3 AÑOS</option>
+                                    <option value="5">4 AÑOS</option>
+                                    <option value="6">5 AÑOS</option> --}}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-2 col-sm-2">
+                            <div class="custom-select-container">
+                                <label for="provincia">Provincia</label>
+                                <select id="provincia" name="provincia" class="form-control btn-xs font-11"
+                                    onchange="cargarDistrito();cargarCards();">
+                                    <option value="0">TODOS</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-2 col-sm-2">
+                            <div class="custom-select-container">
+                                <label for="distrito">Distrito</label>
+                                <select id="distrito" name="distrito" class="form-control btn-xs font-11"
+                                    onchange="cargarCards();">
+                                    <option value="0">TODOS</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                {{-- <div class="card-body pb-0">
+                    <div class="form-group row align-items-center vh-5">
+
                         <div class="col-lg-3 col-md-4 col-sm-4">
                             <h4 class="page-title font-12">{{ $actualizado }}</h4>
                         </div>
@@ -40,9 +91,8 @@
                                     @endforeach
                                 </select>
                             </div>
-
-
                         </div>
+
                         <div class="col-lg-3 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="microred">MICRORED</label>
@@ -51,9 +101,8 @@
                                     <option value="0">TODOS</option>
                                 </select>
                             </div>
-
-
                         </div>
+
                         <div class="col-lg-3 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="establecimiento">ESTABLECIMIENTO</label>
@@ -62,11 +111,10 @@
                                     <option value="0">TODOS</option>
                                 </select>
                             </div>
-
-
                         </div>
+
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
@@ -85,16 +133,7 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="table-responsive">
-                                @if (
-                                    $criterio == 1 ||
-                                        $criterio == 2 ||
-                                        $criterio == 3 ||
-                                        $criterio == 4 ||
-                                        $criterio == 5 ||
-                                        $criterio == 6 ||
-                                        $criterio == 7 ||
-                                        $criterio == 8 ||
-                                        $criterio == 9)
+                                @if (in_array($criterio, range(1, 9)))
                                     <table id="tabla1" class="table table-sm table-striped table-bordered font-10">
                                         <thead>
                                             <tr class="table-success-0 text-white">
@@ -104,13 +143,12 @@
                                                 <th class="text-center">Documento</th>
                                                 <th class="text-center">Apellidos y Nombre</th>
                                                 <th class="text-center">Edad</th>
-                                                <th class="text-center">Distrito</th>
-                                                <th class="text-center">Centro Poblado</th>
-                                                <th class="text-center">Cod. EESS</th>
-                                                <th class="text-center">EESS de Atención</th>
                                                 <th class="text-center">Seguro</th>
                                                 <th class="text-center">Visitado</th>
                                                 <th class="text-center">Encontrado</th>
+                                                <th class="text-center">Distrito</th>
+                                                <th class="text-center">Cod. EESS</th>
+                                                <th class="text-center">EESS de Atención</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -121,17 +159,17 @@
                                     <table id="tabla1" class="table table-sm table-striped table-bordered font-10">
                                         <thead>
                                             <tr class="table-success-0 text-white">
-                                                {{-- <th class="text-center">N°</th> --}}
+                                                <th class="text-center">N°</th>
                                                 <th class="text-center">Cód. Padrón</th>
-                                                <th class="text-center">Documento</th>
-                                                <th class="text-center">Apellidos y Nombre</th>
-                                                <th class="text-center">Distrito</th>
                                                 <th class="text-center">Tipo Doc.</th>
                                                 <th class="text-center">Documento</th>
                                                 <th class="text-center">Apellidos y Nombre</th>
                                                 <th class="text-center">Celular</th>
                                                 <th class="text-center">Grado instrucción</th>
                                                 <th class="text-center">Lengua Habitual</th>
+                                                <th class="text-center">Distrito</th>
+                                                <th class="text-center">Cod. EESS</th>
+                                                <th class="text-center">EESS de Atención</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -337,7 +375,10 @@
             '#64E572', '#9F9655', '#FFF263', '#6AF9C4'
         ];
         var tableprincipal;
+        var criterio = {{ $criterio }};
         $(document).ready(function() {
+            cargarProvincia();
+            cargarDistrito();
             cargarCards();
 
         });
@@ -357,9 +398,9 @@
                     data: function(d) {
                         d.importacion = {{ $importacion }};
                         d.criterio = {{ $criterio }};
-                        d.establecimiento = $('#establecimiento').val();
-                        d.microred = $('#microred').val();
-                        d.red = $('#red').val();
+                        d.edades = $('#edades').val();
+                        d.provincia = $('#provincia').val();
+                        d.distrito = $('#distrito').val();
                         d.desa = 0;
                     }
                 },
@@ -374,7 +415,21 @@
                         }
                     },
                     {
-                        targets: 8,
+                        targets: 9,
+                        render: function(data, type, row) {
+
+                            if (criterio == 10 || criterio == 11 || criterio == 12 || criterio == 13) {
+                                return data ?
+                                    `<a href="#" onclick="abrirmodaleess(${parseInt(data, 10)})">${data}</a>` :
+                                    '';
+                            } else {
+                                return data;
+                            }
+
+                        }
+                    },
+                    {
+                        targets: 10,
                         render: function(data, type, row) {
                             return data ?
                                 `<a href="#" onclick="abrirmodaleess(${parseInt(data, 10)})">${data}</a>` :
@@ -498,18 +553,20 @@
             });
         }
 
-        function cargarMicrored() {
+
+
+        function cargarProvincia() {
             $.ajax({
-                url: "{{ route('salud.padronnominal.tablerocalidad.criterio.microred', ['importacion' => $importacion, 'red' => 'xred', 'criterio' => $criterio]) }}"
-                    .replace('xred', $('#red').val()),
+                url: "{{ route('salud.padronnominal.tablerocalidad.criterio.provincia', ['importacion' => $importacion, 'criterio' => $criterio, 'edad' => 'edad']) }}"
+                    .replace('edad', $('#edades').val()),
                 type: 'GET',
                 success: function(data) {
-                    $("#microred option").remove();
+                    $("#provincia option").remove();
                     var options = '<option value="0">TODOS</option>';
                     $.each(data, function(index, value) {
-                        options += `<option value='${value.id}'>${value.nombre}</option>`;
+                        options += `<option value='${value.provincia_id}'>${value.provincia}</option>`;
                     });
-                    $("#microred").append(options);
+                    $("#provincia").append(options);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -517,19 +574,19 @@
             });
         }
 
-        function cargarEstablecimiento() {
+        function cargarDistrito() {
             $.ajax({
-                url: "{{ route('salud.padronnominal.tablerocalidad.criterio.criterio1_establecimiento', ['importacion' => $importacion, 'red' => 'xred', 'microred' => 'xmicrored', 'criterio' => $criterio]) }}"
-                    .replace('xred', $('#red').val())
-                    .replace('xmicrored', $('#microred').val()),
+                url: "{{ route('salud.padronnominal.tablerocalidad.criterio.distrito', ['importacion' => $importacion, 'criterio' => $criterio, 'edad' => 'edad', 'provincia' => 'provincia']) }}"
+                    .replace('edad', $('#edades').val())
+                    .replace('provincia', $('#provincia').val()),
                 type: 'GET',
                 success: function(data) {
-                    $("#establecimiento option").remove();
+                    $("#distrito option").remove();
                     var options = '<option value="0">TODOS</option>';
                     $.each(data, function(index, value) {
-                        options += `<option value='${value.id}'>${value.nombre}</option>`;
+                        options += `<option value='${value.distrito_id}'>${value.distrito}</option>`;
                     });
-                    $("#establecimiento").append(options);
+                    $("#distrito").append(options);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -537,46 +594,6 @@
             });
         }
 
-        // function cargarDistritos() {
-        //     $.ajax({
-        //         url: "{{ route('ubigeo.distrito.25', '') }}/" + $('#provincia').val(),
-        //         type: 'GET',
-        //         success: function(data) {
-        //             $("#distrito option").remove();
-        //             var options = '<option value="0">TODOS</option>';
-        //             $.each(data, function(index, value) {
-        //                 options += "<option value='" + value.id + "'>" + value.nombre +
-        //                     "</option>"
-        //             });
-        //             $("#distrito").append(options);
-        //         },
-        //         error: function(jqXHR, textStatus, errorThrown) {
-        //             console.log(jqXHR);
-        //         },
-        //     });
-        // }
-
-        // function cargarMes() {
-        //     $.ajax({
-        //         url: "{{ route('salud.padronnominal.mes', '') }}/" + $('#anio').val(),
-        //         type: 'GET',
-        //         success: function(data) {
-        //             $("#mes option").remove();
-        //             var options = '<option value="0">TODOS</option>';
-
-        //             var mesmax = Math.max(...data.map(item => item.id));
-        //             // console.log("Mes máximo:", mesmax);
-        //             $.each(data, function(ii, vv) {
-        //                 ss = vv.id == mesmax ? 'selected' : '';
-        //                 options += `<option value='${vv.id}' ${ss}>${vv.mes}</option>`
-        //             });
-        //             $("#mes").append(options);
-        //         },
-        //         error: function(jqXHR, textStatus, errorThrown) {
-        //             console.log(jqXHR);
-        //         },
-        //     });
-        // }
 
         function panelGraficas(div) {
             $.ajax({
