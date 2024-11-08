@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Salud;
 
+use App\Exports\TableroCalidadCriterioExport;
+use App\Exports\TableroCalidadExport;
 use App\Http\Controllers\Controller;
 use App\Models\Educacion\Importacion;
 use App\Models\Parametro\Mes;
@@ -595,19 +597,6 @@ class PadronNominalController extends Controller
                 return response()->json(compact('excel'));
 
             case 'tabla1':
-                // $cri[0] = strtoupper('Registro de Niños y Niñas sin Número de Documento(DNI, CNV, CUI)');
-                // $cri[1] = strtoupper('Registro de Niños y Niñas Duplicados del Número de Documento');
-                // $cri[2] = strtoupper('Registro de Niños y Niñas sin Nombre Completos');
-                // $cri[3] = strtoupper('Registro de Niños y Niñas sin Seguro de Salud');
-                // $cri[4] = strtoupper('Registro de Niños y Niñas sin Visitas Domiciliarias');
-                // $cri[5] = strtoupper('Registro de Niños y Niñas Visitados y no Encontrados');
-                // $cri[6] = strtoupper('Registro de Niños y Niñas sin Establecimiento de Atención');
-                // $cri[7] = strtoupper('Registro de Niños y Niñas con Establecimiento de Atención de Otra Región');
-                // $cri[8] = strtoupper('Registro de Niños y Niñas con Establecimiento de salud  de Otro Distrito');
-                // $cri[9] = strtoupper('Registro de Niños y Niñas sin Nombres Completo de la Madre ');
-                // $cri[10] = strtoupper('Registro de Niños y Niñas sin Grado de Instrucción de la Madre ');
-                // $cri[11] = strtoupper('Registro de Niños y Niñas sin Lengua Habitual de la Madre ');
-                // $cri[12] = strtoupper('Registro de Niños y Niñas sin Celular de la Madre ');
 
                 $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio);
 
@@ -631,7 +620,7 @@ class PadronNominalController extends Controller
                 //     $value->criterio = $cri[$value->criterio - 1] ?? '';
                 // }
 
-                $excel = view('salud.PadronNominal.TableroCalidadTabla1excel', compact('base', 'impMaxAnio'))->render();
+                $excel = view('salud.PadronNominal.TableroCalidadTabla1', compact('base', 'impMaxAnio'))->render();
                 return response()->json(compact('base', 'excel'));
 
             case 'tabla2':
@@ -688,7 +677,7 @@ class PadronNominalController extends Controller
                     }
                 }
 
-                $excel = view('salud.PadronNominal.TableroCalidadTabla2excel', compact('base', 'foot'))->render();
+                $excel = view('salud.PadronNominal.TableroCalidadTabla2', compact('base', 'foot'))->render();
                 return response()->json(compact('excel', 'base', 'foot'));
 
             case 'tabla3':
@@ -754,7 +743,7 @@ class PadronNominalController extends Controller
                     }
                 }
 
-                $excel = view('salud.PadronNominal.TableroCalidadTabla3excel', compact('base', 'foot'))->render();
+                $excel = view('salud.PadronNominal.TableroCalidadTabla3', compact('base', 'foot'))->render();
                 return response()->json(compact('excel'));
 
             case 'tabla3_1':
@@ -820,13 +809,159 @@ class PadronNominalController extends Controller
                     }
                 }
 
-                $excel = view('salud.PadronNominal.TableroCalidadTabla3_1excel', compact('base', 'foot'))->render();
+                $excel = view('salud.PadronNominal.TableroCalidadTabla3_1', compact('base', 'foot'))->render();
                 return response()->json(compact('excel'));
 
             default:
                 # code...
                 return [];
         }
+    }
+
+    public function tablerocalidadreporteexport($div, $importacion, $anio, $mes, $provincia, $distrito)
+    {
+        $fuente = ImporPadronNominalController::$FUENTE;
+        switch ($div) {
+            case 'tabla2':
+                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio);
+                $base = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')
+                    ->select(
+                        DB::raw('case when seguro_id=1 then "SIS" when seguro_id=2 then "ESSALUD" when seguro_id=3 then "SANIDAD" when seguro_id=4 then "PRIVADO" else "NINGUNO" end as nseguro'),
+                        DB::raw('count(*) as pob'),
+                        DB::raw('sum(if(genero="M",1,0)) as pobm'),
+                        DB::raw('sum(if(genero="F",1,0)) as pobf'),
+                        DB::raw('sum(if(tipo_edad in("D","M"),1,0)) as pob0'),
+                        DB::raw('sum(if(edad=1 and tipo_edad="A",1,0)) as pob1'),
+                        DB::raw('sum(if(edad=2 and tipo_edad="A",1,0)) as pob2'),
+                        DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
+                        DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
+                        DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
+                        DB::raw('sum(if(tipo_doc="DNI",1,0)) as dni'),
+                        DB::raw('sum(if(tipo_doc="CNV",1,0)) as seguro'),
+                        DB::raw('sum(if(tipo_doc="CUI",1,0)) as programa')
+                    );
+                if ($provincia > 0) $base = $base->where('provincia_id', $provincia);
+                if ($distrito > 0) $base = $base->where('distrito_id', $distrito);
+                $base = $base->groupBy('nseguro')->orderByRaw('field(nseguro,"SIS","ESSALUD","SANIDAD","PRIVADO","NINGUNO")')->get();
+
+                $foot = [];
+                if ($base->count() > 0) {
+                    $foot = clone $base[0];
+                    $foot->pob = 0;
+                    $foot->pobm = 0;
+                    $foot->pobf = 0;
+                    $foot->pob0 = 0;
+                    $foot->pob1 = 0;
+                    $foot->pob2 = 0;
+                    $foot->pob3 = 0;
+                    $foot->pob4 = 0;
+                    $foot->pob5 = 0;
+                    $foot->dni = 0;
+                    $foot->seguro = 0;
+                    $foot->programa = 0;
+                    foreach ($base as $key => $value) {
+                        $foot->pob += $value->pob;
+                        $foot->pobm += $value->pobm;
+                        $foot->pobf += $value->pobf;
+                        $foot->pob0 += $value->pob0;
+                        $foot->pob1 += $value->pob1;
+                        $foot->pob2 += $value->pob2;
+                        $foot->pob3 += $value->pob3;
+                        $foot->pob4 += $value->pob4;
+                        $foot->pob5 += $value->pob5;
+                        $foot->dni += $value->dni;
+                        $foot->seguro += $value->seguro;
+                        $foot->programa += $value->programa;
+                    }
+                }
+
+                return response()->json(compact('base', 'foot'));
+
+            case 'tabla3':
+                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio);
+
+                $base = ImporPadronNominal::join('par_ubigeo as u', 'u.id', '=', 'sal_impor_padron_nominal.distrito_id')
+                    ->where('importacion_id', $impMaxAnio)->where('repetido', '1')
+                    ->select(
+                        'sal_impor_padron_nominal.ubigeo',
+                        'u.nombre as distrito',
+                        DB::raw('count(*) as pob'),
+                        DB::raw('sum(if(genero="M",1,0)) as pobm'),
+                        DB::raw('sum(if(genero="F",1,0)) as pobf'),
+                        DB::raw('sum(if(tipo_edad in("D","M"),1,0)) as pob0'),
+                        DB::raw('sum(if(edad=1 and tipo_edad="A",1,0)) as pob1'),
+                        DB::raw('sum(if(edad=2 and tipo_edad="A",1,0)) as pob2'),
+                        DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
+                        DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
+                        DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
+                        DB::raw('sum(if(tipo_doc="DNI",1,0)) as dni'),
+                        DB::raw('sum(case when FIND_IN_SET("1", seguro) > 0 then 1 
+                              when FIND_IN_SET("2", seguro) > 0 then 1 
+                              when FIND_IN_SET("3", seguro) > 0 then 1 
+                              when FIND_IN_SET("4", seguro) > 0 then 1 
+                              else 0 end) as seguro'),
+                        DB::raw('sum(case when FIND_IN_SET("1", programa_social) > 0 then 1 
+                              when FIND_IN_SET("2", programa_social) > 0 then 1 
+                              when FIND_IN_SET("5", programa_social) > 0 then 1 
+                              when FIND_IN_SET("5", programa_social) > 0 then 1 
+                              when FIND_IN_SET("7", programa_social) > 0 then 1 
+                              when FIND_IN_SET("8", programa_social) > 0 then 1 
+                              else 0 end) as programa')
+                    )->groupBy('ubigeo', 'distrito')->orderBy('ubigeo')->get();
+
+                $foot = [];
+                if ($base->count() > 0) {
+                    $foot = clone $base[0];
+                    $foot->pob = 0;
+                    $foot->pobm = 0;
+                    $foot->pobf = 0;
+                    $foot->pob0 = 0;
+                    $foot->pob1 = 0;
+                    $foot->pob2 = 0;
+                    $foot->pob3 = 0;
+                    $foot->pob4 = 0;
+                    $foot->pob5 = 0;
+                    $foot->dni = 0;
+                    $foot->seguro = 0;
+                    $foot->programa = 0;
+                    foreach ($base as $key => $value) {
+                        $foot->pob += $value->pob;
+                        $foot->pobm += $value->pobm;
+                        $foot->pobf += $value->pobf;
+                        $foot->pob0 += $value->pob0;
+                        $foot->pob1 += $value->pob1;
+                        $foot->pob2 += $value->pob2;
+                        $foot->pob3 += $value->pob3;
+                        $foot->pob4 += $value->pob4;
+                        $foot->pob5 += $value->pob5;
+                        $foot->dni += $value->dni;
+                        $foot->seguro += $value->seguro;
+                        $foot->programa += $value->programa;
+                    }
+                }
+
+                return response()->json(compact('base', 'foot'));
+
+            default:
+                # code...
+                return [];
+        }
+    }
+
+    public function tablerocalidaddownload($div, $importacion, $anio, $mes, $provincia, $distrito)
+    {
+        switch ($div) {
+            case 'tabla2':
+                $name = 'Población del Padrón Nominal de niños y niñas menores de 6 años por Seguro De Salud, Según Sexo y Edades.xlsx';
+                break;
+            case 'tabla3':
+                $name = 'Población de niños y niñas menos de 6 años por distrito, segun sexo y edades.xlsx';
+                break;
+            default:
+                $name = '';
+                break;
+        }
+        return Excel::download(new TableroCalidadExport($div, $importacion, $anio, $mes, $provincia, $distrito), $name);
     }
 
 
@@ -1162,10 +1297,10 @@ class PadronNominalController extends Controller
         return  $data;
     }
 
-    public function tablerocalidadcriteriodownload($div, $indicador, $anio, $mes, $provincia, $distrito)
+    public function tablerocalidadcriteriodownload($div, $importacion, $criterio, $edades, $provincia, $distrito)
     {
-        $name = 'sin nombre.xlsx';
-        return Excel::download(new pactoregionalSal1Export($div, $indicador, $anio, $mes, $provincia, $distrito), $name);
+        $name = DB::table('sal_calidad_criterio_nombres')->where('id', $criterio)->first()->nombre . '.xlsx';
+        return Excel::download(new TableroCalidadCriterioExport($div, $importacion, $criterio, $edades, $provincia, $distrito), $name);
     }
 
     public function tablerocalidadconsulta()

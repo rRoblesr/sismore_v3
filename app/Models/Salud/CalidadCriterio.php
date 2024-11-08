@@ -2,6 +2,7 @@
 
 namespace App\Models\Salud;
 
+use App\Models\Parametro\Ubigeo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -57,4 +58,5 @@ class CalidadCriterio extends Model
         'lengua_madre',
         'repetido'
     ];
+
 }

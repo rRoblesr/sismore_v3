@@ -47,7 +47,7 @@
                                 <label for="provincia">MES</label>
                                 <select id="mes" name="mes" class="form-control btn-xs font-11"
                                     onchange="cargarCards();">
-                                    <option value="0">TODOS</option>
+                                    {{-- <option value="0">TODOS</option> --}}
                                     {{-- @foreach ($anios as $item)
                                     <option value="{{ $item->id }}" {{ $item->anio == $maxAnio ? 'selected' : '' }}>
                                         {{ $item->anio }}</option>
@@ -261,7 +261,7 @@
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
                     <div class="card-widgets">
-                        <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel()">
+                        <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla2')">
                             <i class="fa fa-file-excel"></i> Descargar</button>
                     </div>
                     <h3 class="card-title">Población del Padrón Nominal de niños y niñas menores de 6 años por Seguro De
@@ -289,7 +289,7 @@
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
                     <div class="card-widgets">
-                        <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel()">
+                        <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla3')">
                             <i class="fa fa-file-excel"></i> Descargar</button>
                     </div>
                     <h3 class="card-title">Población de niños y niñas menos de 6 años por distrito, segun sexo y edades
@@ -550,7 +550,7 @@
                 type: 'GET',
                 success: function(data) {
                     $("#mes option").remove();
-                    var options = '<option value="0">TODOS</option>';
+                    var options = ''; // '<option value="0">TODOS</option>';
 
                     var mesmax = Math.max(...data.map(item => item.id));
                     // console.log("Mes máximo:", mesmax);
@@ -719,7 +719,27 @@
             $('#modal-consulta').modal('show');
         }
 
-       
+        function descargarExcel(div) {
+            window.open(
+                "{{ route('salud.padronnominal.tablerocalidad.exportar.excel', ['div' => 'div', 'importacion' => 0, 'anio' => 'anio', 'mes' => 'mes', 'provincia' => 'provincia', 'distrito' => 'distrito']) }}"
+                .replace('div', div)
+                .replace('anio', $('#anio').val())
+                .replace('mes', $('#mes').val())
+                .replace('provincia', $('#provincia').val())
+                .replace('distrito', $('#distrito').val())
+            );
+        }
+
+        // function descargarExcel3() {
+        //     window.open(
+        //         "{{ route('salud.padronnominal.tablerocalidad.exportar.excel', ['div' => 'div', 'importacion' => 0, 'anio' => 'anio', 'mes' => 'mes', 'provincia' => 'provincia', 'distrito' => 'distrito']) }}"
+        //         .replace('anio', $('#anio').val())
+        //         .replace('mes', $('#mes').val())
+        //         .replace('provincia', $('#provincia').val())
+        //         .replace('distrito', $('#distrito').val())
+        //     );
+        // }
+
         function GaugeSeriesbbbbb(div, data, title) {
             Highcharts.chart(div, {
                 chart: {

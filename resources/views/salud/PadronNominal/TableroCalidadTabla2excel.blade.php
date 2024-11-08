@@ -1,4 +1,4 @@
-<table id="tabla2" class="table table-sm table-striped table-bordered font-11">
+<table id="tabla1" class="table table-sm table-striped table-bordered font-12">
     <thead>
         <tr class="table-success-0 text-white">
             <th rowspan="2" class="text-center">N°</th>
@@ -25,38 +25,37 @@
     <tbody>
         @foreach ($base as $key => $item)
             <tr class="text-right">
-                <td class="text-center">{{ $key + 1 }}</td>
-                <td class="text-left">{{ $item->nseguro }}</td>
-                <td class="text-center table-warning">{{ number_format($item->pob, 0) }}</td>
-                <td class="text-center">{{ number_format($item->pobm, 0) }}</td>
-                <td class="text-center">{{ number_format($item->pobf, 0) }}</td>
-                <td class="text-center">{{ number_format($item->pob0, 0) }}</td>
-                <td class="text-center">{{ number_format($item->pob1, 0) }}</td>
-                <td class="text-center">{{ number_format($item->pob2, 0) }}</td>
-                <td class="text-center">{{ number_format($item->pob3, 0) }}</td>
-                <td class="text-center">{{ number_format($item->pob4, 0) }}</td>
-                <td class="text-center">{{ number_format($item->pob5, 0) }}</td>
-                <td class="text-center">{{ number_format($item->dni, 0) }}</td>
-                <td class="text-center">{{ number_format($item->seguro, 0) }}</td>
-                <td class="text-center">{{ number_format($item->programa, 0) }}</td>
+                <td class="text-left">{{ $item->nseguro ?? 0 }}</td>
+                <td class="text-center table-warning">{{ number_format($item->pob ?? 0, 0) }}</td>
+                <td class="text-center">{{ number_format($item->pobm ?? 0, 0) }}</td>
+                <td class="text-center">{{ number_format($item->pobf ?? 0, 0) }}</td>
+                <td class="text-center">{{ number_format($item->pob0 ?? 0, 0) }}</td>
+                <td class="text-center">{{ number_format($item->pob1 ?? 0, 0) }}</td>
+                <td class="text-center">{{ number_format($item->pob2 ?? 0, 0) }}</td>
+                <td class="text-center">{{ number_format($item->pob3 ?? 0, 0) }}</td>
+                <td class="text-center">{{ number_format($item->pob4 ?? 0, 0) }}</td>
+                <td class="text-center">{{ number_format($item->pob5 ?? 0, 0) }}</td>
+                <td class="text-center">{{ number_format($item->dni ?? 0, 0) }}</td>
+                <td class="text-center">{{ number_format($item->seguro ?? 0, 0) }}</td>
+                <td class="text-center">{{ number_format($item->programa ?? 0, 0) }}</td>
             </tr>
         @endforeach
     </tbody>
     <tfoot>
         <tr class="table-success-0 text-white text-right">
             <th class="text-left" colspan="2">TOTAL</th>
-            <th class="text-center">{{ number_format($foot->pob, 0) }}</th>
-            <th class="text-center">{{ number_format($foot->pobm, 0) }}</th>
-            <th class="text-center">{{ number_format($foot->pobf, 0) }}</th>
-            <th class="text-center">{{ number_format($foot->pob0, 0) }}</th>
-            <th class="text-center">{{ number_format($foot->pob1, 0) }}</th>
-            <th class="text-center">{{ number_format($foot->pob2, 0) }}</th>
-            <th class="text-center">{{ number_format($foot->pob3, 0) }}</th>
-            <th class="text-center">{{ number_format($foot->pob4, 0) }}</th>
-            <th class="text-center">{{ number_format($foot->pob5, 0) }}</th>
-            <th class="text-center">{{ number_format($foot->dni, 0) }}</th>
-            <th class="text-center">{{ number_format($foot->seguro, 0) }}</th>
-            <th class="text-center">{{ number_format($foot->programa, 0) }}</th>
+            <th class="text-center">{{ number_format($foot->pob ?? 0, 0) }}</th>
+            <th class="text-center">{{ number_format($foot->pobm ?? 0, 0) }}</th>
+            <th class="text-center">{{ number_format($foot->pobf ?? 0, 0) }}</th>
+            <th class="text-center">{{ number_format($foot->pob0 ?? 0, 0) }}</th>
+            <th class="text-center">{{ number_format($foot->pob1 ?? 0, 0) }}</th>
+            <th class="text-center">{{ number_format($foot->pob2 ?? 0, 0) }}</th>
+            <th class="text-center">{{ number_format($foot->pob3 ?? 0, 0) }}</th>
+            <th class="text-center">{{ number_format($foot->pob4 ?? 0, 0) }}</th>
+            <th class="text-center">{{ number_format($foot->pob5 ?? 0, 0) }}</th>
+            <th class="text-center">{{ number_format($foot->dni ?? 0, 0) }}</th>
+            <th class="text-center">{{ number_format($foot->seguro ?? 0, 0) }}</th>
+            <th class="text-center">{{ number_format($foot->programa ?? 0, 0) }}</th>
         </tr>
     </tfoot>
 </table>

@@ -406,7 +406,7 @@
                 },
                 columnDefs: [{
                         className: 'text-center',
-                        targets: [0, 1, 2, 3, 5, 6, 8]
+                        targets: [0, 1, 2, 3, 5, 6, 7, 8]
                     },
                     {
                         targets: 1,
@@ -431,9 +431,14 @@
                     {
                         targets: 10,
                         render: function(data, type, row) {
-                            return data ?
-                                `<a href="#" onclick="abrirmodaleess(${parseInt(data, 10)})">${data}</a>` :
-                                '';
+                            if (criterio == 10 || criterio == 11 || criterio == 12 || criterio == 13) {
+                                return data;
+                            } else {
+                                return data ?
+                                    `<a href="#" onclick="abrirmodaleess(${parseInt(data, 10)})">${data}</a>` :
+                                    '';
+
+                            }
                         }
                     }
                 ]
@@ -553,8 +558,6 @@
             });
         }
 
-
-
         function cargarProvincia() {
             $.ajax({
                 url: "{{ route('salud.padronnominal.tablerocalidad.criterio.provincia', ['importacion' => $importacion, 'criterio' => $criterio, 'edad' => 'edad']) }}"
@@ -593,7 +596,6 @@
                 },
             });
         }
-
 
         function panelGraficas(div) {
             $.ajax({
@@ -663,6 +665,15 @@
                     console.log(jqXHR);
                 },
             });
+        }
+
+        function descargarExcel() {
+            window.open(
+                "{{ route('salud.padronnominal.tablerocalidad.criterio.exportar.excel', ['div' => 'div', 'importacion' => $importacion, 'criterio' => $criterio, 'edades' => 'edades', 'provincia' => 'provincia', 'distrito' => 'distrito']) }}"
+                .replace('edades', $('#edades').val())
+                .replace('provincia', $('#provincia').val())
+                .replace('distrito', $('#distrito').val())
+            );
         }
 
         function GaugeSeries(div, data, title) {

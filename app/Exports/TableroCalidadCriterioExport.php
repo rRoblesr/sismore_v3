@@ -4,7 +4,10 @@ namespace App\Exports;
 
 use App\Http\Controllers\Educacion\IndicadorController;
 use App\Http\Controllers\Salud\IndicadoresController;
+use App\Models\Parametro\Ubigeo;
 use App\Models\Salud\CalidadCriterio;
+use App\Models\Salud\Establecimiento;
+use App\Repositories\Salud\EstablecimientoRepositorio;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromView;
@@ -31,6 +34,7 @@ class TableroCalidadCriterioExport implements FromView, ShouldAutoSize
 
     public function view(): View
     {
+        ini_set('memory_limit', '1024M');
         $query = CalidadCriterio::where('importacion_id', $this->importacion)->where('criterio', $this->criterio);
         if ($this->edades > 0) {
             if ($this->edades == 1) {
@@ -44,21 +48,35 @@ class TableroCalidadCriterioExport implements FromView, ShouldAutoSize
 
         $query = $query->get();
 
-        if ($this->div == 'tabla1') {
-            $mgs = (new IndicadoresController())->PactoRegionalSalPacto1Export($this->div, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
-            return view('salud.Indicadores.PactoRegionalSalPacto1tabla1Export', $mgs);
-        } else if ($this->div == 'tabla2') {
-            $mgs = (new IndicadoresController())->PactoRegionalSalPacto1Export($this->div, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
-            return view('salud.Indicadores.PactoRegionalSalPacto1tabla2Export', $mgs);
-        } else if ($this->div == 'tabla3') {
-            $mgs = (new IndicadoresController())->PactoRegionalSalPacto1Export($this->div, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
-            return view('salud.Indicadores.PactoRegionalSalPacto1tabla3Export', $mgs);
-        } else if ($this->div == 'tabla4') {
-            $mgs = (new IndicadoresController())->PactoRegionalSalPacto1Export($this->div, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
-            return view('salud.Indicadores.PactoRegionalSalPacto1tabla4Export', $mgs);
-        } else {
-            $mgs = (new IndicadoresController())->PactoRegionalSalPacto1Export($this->div, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
-            return view('salud.Indicadores.PactoRegionalSalPacto1tabla5Export', $mgs);
+        $sim = ['D' => 'DÍAS', 'M' => 'MESES', 'A' => 'AÑOS'];
+        $seguro = [0 => 'NINGUNO', 1 => 'SIS', 2 => 'ESSALUD', 3 => 'SANIDAD', 4 => 'PRIVADO'];
+        $programa = [0 => 'NINGUNO', 1 => 'PIN', 2 => 'PVL', 4 => 'JUNTOS', 5 => 'QALIWARMA', 7 => 'CUNA+ SCD', 8 => 'CUNA+ SAF'];
+
+        $ubigeos = Ubigeo::whereIn('codigo', $query->pluck('ubigeo')->toArray())->get()->keyBy('codigo');
+        $establecimientos = Establecimiento::whereIn('cod_unico', $query->pluck('cui_atencion')->toArray())->get()->keyBy('cod_unico');
+
+        foreach ($query as $key => $value) {
+            $dis = $ubigeos[$value->ubigeo] ?? null;
+            $eess = $establecimientos[$value->cui_atencion] ?? null;
+
+            $value->edadx = $value->edad . ' ' . ($sim[$value->tipo_edad] ?? '');
+            $value->segurox = $seguro[$value->seguro_id] ?? '';
+
+            $value->distritox = $dis ? $dis->nombre : '';
+            $value->cuix = $eess ? str_pad($value->cui_atencion, 8, '0', STR_PAD_LEFT) : '';
+            $value->eessx = $eess ? $eess->nombre_establecimiento : '';
+
+            $value->disax = '';
+            $value->redx = '';
+            $value->microx = '';
+            if ($value->establecimiento_id > 0) {
+                $ubica1 = EstablecimientoRepositorio::ubicacion($value->establecimiento_id);
+                $value->disax = $ubica1->dsn;
+                $value->redx = $ubica1->ren;
+                $value->microx = $ubica1->min;
+            }
         }
+
+        return view('salud.PadronNominal.TableroCalidadCriterioTabla1excel', ['base' => $query]);
     }
 }

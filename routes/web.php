@@ -1260,15 +1260,16 @@ Route::get('/Salud/PadronNominal/Calidad/{codigoCalidad}/{codigoPadron}', [Salud
 Route::get('/Salud/PadronNominal/TableroCalidad', [PadronNominalController::class, 'tablerocalidad'])->name('salud.padronnominal.tablerocalidad');
 Route::get('/Salud/PadronNominal/TableroCalidad/reportes', [PadronNominalController::class, 'tablerocalidadreporte'])->name('salud.padronnominal.tablerocalidad.reporte');
 Route::get('/Salud/PadronNominal/TableroCalidad/Listado', [PadronNominalController::class, 'calidadListado'])->name('salud.padronnominal.tablerocalidad.listado');
+Route::get('/Salud/PadronNominal/TableroCalidad/Exportar/{div}/{importacion}/{anio}/{mes}/{provincia}/{distrito}', [PadronNominalController::class, 'tablerocalidaddownload'])->name('salud.padronnominal.tablerocalidad.exportar.excel');
 
-Route::get('/Salud/PadronNominal/TableroCalidad/Criterio/find1/{importacion}/{padron}', [PadronNominalController::class, 'tablerocalidadcriteriofind1'])->name('salud.padronnominal.tablerocalidad.criterio.find1');
-Route::get('/Salud/PadronNominal/TableroCalidad/Criterio/find2/{importacion}/{cui}', [PadronNominalController::class, 'tablerocalidadcriteriofind2'])->name('salud.padronnominal.tablerocalidad.criterio.find2');
+// Route::get('/Salud/PadronNominal/TableroCalidad/Criterio/find1/{importacion}/{padron}', [PadronNominalController::class, 'tablerocalidadcriteriofind1'])->name('salud.padronnominal.tablerocalidad.criterio.find1');
+// Route::get('/Salud/PadronNominal/TableroCalidad/Criterio/find2/{importacion}/{cui}', [PadronNominalController::class, 'tablerocalidadcriteriofind2'])->name('salud.padronnominal.tablerocalidad.criterio.find2');
 
 Route::get('/Salud/PadronNominal/TableroCalidad/Criterio/{importacion}/{criterio}', [PadronNominalController::class, 'tablerocalidadcriterio'])->name('salud.padronnominal.tablerocalidad.criterio');
 Route::get('/Salud/PadronNominal/TableroCalidad/Criterio/{importacion}/{criterio}/{edad}', [PadronNominalController::class, 'criterio_provincia'])->name('salud.padronnominal.tablerocalidad.criterio.provincia');
 Route::get('/Salud/PadronNominal/TableroCalidad/Criterio/{importacion}/{criterio}/{edad}/{provincia}', [PadronNominalController::class, 'criterio_distrito'])->name('salud.padronnominal.tablerocalidad.criterio.distrito');
 Route::get('/Salud/PadronNominal/TableroCalidad/Criterio/listar', [PadronNominalController::class, 'tablerocalidadcriteriolistar'])->name('salud.padronnominal.tablerocalidad.criterio.listar');
-Route::get('/Salud/PadronNominal/TableroCalidad/Criterio/Exportar/{id}', [PadronNominalController::class, 'tablerocalidadcriteriodownload'])->name('salud.padronnominal.tablerocalidad.criterio.exportar.pdf');
+Route::get('/Salud/PadronNominal/TableroCalidad/Criterio/Exportar/{div}/{importacion}/{criterio}/{edades}/{provincia}/{distrito}', [PadronNominalController::class, 'tablerocalidadcriteriodownload'])->name('salud.padronnominal.tablerocalidad.criterio.exportar.excel');
 
 Route::get('/Salud/PadronNominal/TableroCalidad/Consulta', [PadronNominalController::class, 'tablerocalidadconsulta'])->name('salud.padronnominal.tablerocalidad.consulta');
 Route::get('/Salud/PadronNominal/TableroCalidad/Consulta/find1/{importacion}/{tipo}/{documento}/{apellido?}', [PadronNominalController::class, 'tablerocalidadconsultafind1'])->name('salud.padronnominal.tablerocalidad.consulta.find1');
