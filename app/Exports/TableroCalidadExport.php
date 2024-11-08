@@ -22,8 +22,9 @@ class TableroCalidadExport implements FromView, ShouldAutoSize
     public $mes;
     public $provincia;
     public $distrito;
+    public $ubigeo;
 
-    public function __construct($div, $importacion, $anio, $mes, $provincia, $distrito)
+    public function __construct($div, $importacion, $anio, $mes, $provincia, $distrito, $ubigeo)
     {
         $this->div = $div;
         $this->importacion = $importacion;
@@ -31,20 +32,21 @@ class TableroCalidadExport implements FromView, ShouldAutoSize
         $this->mes = $mes;
         $this->provincia = $provincia;
         $this->distrito = $distrito;
+        $this->ubigeo = $ubigeo;
     }
 
     public function view(): View
     {
         ini_set('memory_limit', '1024M');
         if ($this->div == 'tabla2') {
-            $mgs = (new PadronNominalController())->tablerocalidadreporteexport($this->div, $this->importacion, $this->mes, $this->anio, $this->provincia, $this->distrito);
-            return view('salud.PadronNominal.TableroCalidadTabla2excel', ['base' => $mgs]);
+            $mgs = (new PadronNominalController())->tablerocalidadreporteexport($this->div, $this->importacion,  $this->anio, $this->mes, $this->provincia, $this->distrito, $this->ubigeo);
+            return view('salud.PadronNominal.TableroCalidadTabla2excel', $mgs);
         } else if ($this->div == 'tabla3') {
-            $mgs = (new PadronNominalController())->tablerocalidadreporteexport($this->div, $this->importacion, $this->mes, $this->anio, $this->provincia, $this->distrito);
-            return view('salud.PadronNominal.TableroCalidadTabla3excel', ['base' => $mgs]);
+            $mgs = (new PadronNominalController())->tablerocalidadreporteexport($this->div, $this->importacion,  $this->anio, $this->mes, $this->provincia, $this->distrito, $this->ubigeo);
+            return view('salud.PadronNominal.TableroCalidadTabla3excel', $mgs);
         } else {
-            $mgs = (new PadronNominalController())->tablerocalidadreporteexport($this->div, $this->importacion, $this->mes, $this->anio, $this->provincia, $this->distrito);
-            return view('salud.PadronNominal.TableroCalidadTabla3excel', ['base' => $mgs]);
+            $mgs = (new PadronNominalController())->tablerocalidadreporteexport($this->div, $this->importacion,  $this->anio, $this->mes, $this->provincia, $this->distrito, $this->ubigeo);
+            return view('salud.PadronNominal.TableroCalidadTabla3excel', $mgs);
         }
     }
 }

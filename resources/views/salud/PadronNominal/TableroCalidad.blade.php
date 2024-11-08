@@ -19,7 +19,7 @@
                         <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
                             <i class="fa fa-redo"></i> Actualizar</button>
                     </div>
-                    <h3 class="card-title text-white font-12">Control de Calidad del padrón nominal de niños y niñas menores
+                    <h3 class="card-title text-white font-14">Control de Calidad del padrón nominal de niños y niñas menores
                         de 6 años</h3>
                 </div>
                 <div class="card-body pb-0">
@@ -315,8 +315,13 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
+
                     <h5 class="modal-title" id="myLargeModalLabel">Población de niños y niñas menos de 6 años por Centro
                         Poblado, segun sexo y edades</h5>
+                    <div class="card-widgets">
+                        <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla3_1')">
+                            <i class="fa fa-file-excel"></i> Descargar</button>
+                    </div>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <div class="modal-body">
@@ -721,24 +726,15 @@
 
         function descargarExcel(div) {
             window.open(
-                "{{ route('salud.padronnominal.tablerocalidad.exportar.excel', ['div' => 'div', 'importacion' => 0, 'anio' => 'anio', 'mes' => 'mes', 'provincia' => 'provincia', 'distrito' => 'distrito']) }}"
+                "{{ route('salud.padronnominal.tablerocalidad.exportar.excel', ['div' => 'div', 'importacion' => 0, 'anio' => 'anio', 'mes' => 'mes', 'provincia' => 'provincia', 'distrito' => 'distrito', 'ubigeo' => 'ubigeo']) }}"
                 .replace('div', div)
                 .replace('anio', $('#anio').val())
                 .replace('mes', $('#mes').val())
                 .replace('provincia', $('#provincia').val())
                 .replace('distrito', $('#distrito').val())
+                .replace('ubigeo', ubigeo_select)
             );
         }
-
-        // function descargarExcel3() {
-        //     window.open(
-        //         "{{ route('salud.padronnominal.tablerocalidad.exportar.excel', ['div' => 'div', 'importacion' => 0, 'anio' => 'anio', 'mes' => 'mes', 'provincia' => 'provincia', 'distrito' => 'distrito']) }}"
-        //         .replace('anio', $('#anio').val())
-        //         .replace('mes', $('#mes').val())
-        //         .replace('provincia', $('#provincia').val())
-        //         .replace('distrito', $('#distrito').val())
-        //     );
-        // }
 
         function GaugeSeriesbbbbb(div, data, title) {
             Highcharts.chart(div, {

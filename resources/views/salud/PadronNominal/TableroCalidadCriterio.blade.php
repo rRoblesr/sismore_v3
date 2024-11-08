@@ -33,7 +33,7 @@
 
                         <div class="col-lg-3 col-md-2 col-sm-2">
                             <div class="custom-select-container">
-                                <label for="edades">Edades</label>
+                                <label for="edades">Edad del Menor</label>
                                 <select id="edades" name="edades" class="form-control btn-xs font-11"
                                     onchange="cargarProvincia();cargarCards();">
                                     <option value="0">TODOS</option>
@@ -127,7 +127,7 @@
                         <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel()">
                             <i class="fa fa-file-excel"></i> Descargar</button>
                     </div>
-                    <h3 class="card-title"></h3>
+                    <h3 class="card-title">LISTA DE REGISTROS OBSERVADOS DEL MENOR</h3>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -141,7 +141,7 @@
                                                 <th class="text-center">Cód. Padrón</th>
                                                 <th class="text-center">Tipo Doc.</th>
                                                 <th class="text-center">Documento</th>
-                                                <th class="text-center">Apellidos y Nombre</th>
+                                                <th class="text-center">Nombres del Menor</th>
                                                 <th class="text-center">Edad</th>
                                                 <th class="text-center">Seguro</th>
                                                 <th class="text-center">Visitado</th>
@@ -163,7 +163,7 @@
                                                 <th class="text-center">Cód. Padrón</th>
                                                 <th class="text-center">Tipo Doc.</th>
                                                 <th class="text-center">Documento</th>
-                                                <th class="text-center">Apellidos y Nombre</th>
+                                                <th class="text-center">Nombres de la Madre</th>
                                                 <th class="text-center">Celular</th>
                                                 <th class="text-center">Grado instrucción</th>
                                                 <th class="text-center">Lengua Habitual</th>
@@ -489,7 +489,7 @@
         }
 
         function abrirmodalpadron(padron) {
-            $('#modal-nino').modal('show');
+
             $.ajax({
                 url: "{{ route('salud.padronnominal.tablerocalidad.criterio.find1', ['importacion' => $importacion, 'padron' => 'padron']) }}"
                     .replace('padron', padron),
@@ -527,6 +527,8 @@
                     $('#mcel').html(data.celular_madre);
                     $('#mgrado').html(data.grado_instruccion);
                     $('#mlengua').html(data.lengua_madre);
+
+                    $('#modal-nino').modal('show');
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -535,7 +537,7 @@
         }
 
         function abrirmodaleess(cui) {
-            $('#modal-eess').modal('show');
+
             $.ajax({
                 url: "{{ route('salud.padronnominal.tablerocalidad.criterio.find2', ['importacion' => $importacion, 'cui' => 'cui']) }}"
                     .replace('cui', cui),
@@ -551,6 +553,7 @@
                     $('#eessdep').html(data.departamento);
                     $('#eesspro').html(data.provincia);
                     $('#eessdis').html(data.distrito);
+                    $('#modal-eess').modal('show');
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);

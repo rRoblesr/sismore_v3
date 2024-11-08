@@ -245,49 +245,57 @@
             var tip = $('#tipodocumento').val();
             var doc = $('#numerodocumento').val();
             var ape = $('#apellidosnombres').val();
-            if ( doc != '' || ape != '') {
+            if (doc != '' || ape != '') {
                 $.ajax({
                     url: "{{ route('salud.padronnominal.tablerocalidad.consulta.find1', ['importacion' => $importacion, 'tipo' => 'tipo', 'documento' => 'documento', 'apellido' => 'apellido']) }}"
-                        .replace('tipo', tip).replace('documento', doc).replace('apellido', ape),
+                        .replace('tipo', tip).replace('documento', doc == '' ? documento : doc)
+                        .replace('apellido', ape == '' ? 'apellido' : ape),
                     type: 'GET',
                     dataType: 'json',
                     success: function(data) {
                         console.log(data);
-                        $('#padron').html(data.padron);
-                        $('#tipodoc').html(data.tipo_doc == 'Padron' ? '' : data.tipo_doc);
-                        $('#doc').html(data.tipo_doc == 'Padron' ? '' : data.num_doc);
-                        $('#apepat').html(data.apellido_paterno);
-                        $('#apemat').html(data.apellido_materno);
-                        $('#nom').html(data.nombre);
-                        $('#sexo').html(data.genero);
-                        $('#nacimiento').html(data.fecha_nacimiento);
-                        $('#edad').html(data.edad + data.tipo_edad);
-                        $('#dep').html(data.departamento);
-                        $('#pro').html(data.provincia);
-                        $('#dis').html(data.distrito);
-                        $('#cp').html(data.centro_poblado_nombre);
-                        $('#dir').html(data.direccion);
-                        $('#esn').html(data.cui_nacimiento);
-                        $('#esa').html(data.cui_atencion);
-                        $('#visita').html(data.visita);
-                        $('#encontrado').html(data.menor_encontrado);
-                        $('#seguro').html(data.seguro);
-                        $('#programa').html(data.programa_social);
-                        $('#mapoderado').html(data.apoderado);
-                        $('#mtipodoc').html(data.tipo_doc_madre);
-                        $('#mdoc').html(data.num_doc_madre);
-                        $('#mapepat').html(data.apellido_paterno_madre);
-                        $('#mapemat').html(data.apellido_materno_madre);
-                        $('#mnom').html(data.nombres_madre);
-                        $('#mcel').html(data.celular_madre);
-                        $('#mgrado').html(data.grado_instruccion);
-                        $('#mlengua').html(data.lengua_madre);
+                        if (Object.keys(data).length > 0) {s
+                            $('#padron').html(data.padron);
+                            $('#tipodoc').html(data.tipo_doc == 'Padron' ? '' : data.tipo_doc);
+                            $('#doc').html(data.tipo_doc == 'Padron' ? '' : data.num_doc);
+                            $('#apepat').html(data.apellido_paterno);
+                            $('#apemat').html(data.apellido_materno);
+                            $('#nom').html(data.nombre);
+                            $('#sexo').html(data.genero == 'M' ? 'MASCULINO' : 'FEMENINO');
+                            $('#nacimiento').html(data.fecha_nacimiento);
+                            $('#edad').html(data.edad + ' ' +
+                                (data.tipo_edad == 'D' ? 'DIAS' : (data.tipo_edad == 'M' ? 'MESES' :
+                                    'AÑOS')));
+                            $('#dep').html(data.departamento);
+                            $('#pro').html(data.provincia);
+                            $('#dis').html(data.distrito);
+                            $('#cp').html(data.centro_poblado_nombre);
+                            $('#dir').html(data.direccion);
+                            $('#esn').html(data.cui_nacimiento);
+                            $('#esa').html(data.cui_atencion);
+                            $('#visita').html(data.visita);
+                            $('#encontrado').html(data.menor_encontrado);
+                            $('#seguro').html(data.seguro);
+                            $('#programa').html(data.programa_social);
+                            $('#mapoderado').html(data.apoderado);
+                            $('#mtipodoc').html(data.tipo_doc_madre);
+                            $('#mdoc').html(data.num_doc_madre);
+                            $('#mapepat').html(data.apellido_paterno_madre);
+                            $('#mapemat').html(data.apellido_materno_madre);
+                            $('#mnom').html(data.nombres_madre);
+                            $('#mcel').html(data.celular_madre);
+                            $('#mgrado').html(data.grado_instruccion);
+                            $('#mlengua').html(data.lengua_madre);
+
+                            $('#formulario').show();
+                        }
+
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         console.log(jqXHR);
                     },
                 });
-                $('#formulario').show();
+
             } else {
                 toastr.error('CAMPOS VACIOS', 'Mensaje');
             }

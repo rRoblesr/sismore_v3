@@ -818,7 +818,7 @@ class PadronNominalController extends Controller
         }
     }
 
-    public function tablerocalidadreporteexport($div, $importacion, $anio, $mes, $provincia, $distrito)
+    public function tablerocalidadreporteexport($div, $importacion, $anio, $mes, $provincia, $distrito, $ubigeo)
     {
         $fuente = ImporPadronNominalController::$FUENTE;
         switch ($div) {
@@ -875,7 +875,7 @@ class PadronNominalController extends Controller
                     }
                 }
 
-                return response()->json(compact('base', 'foot'));
+                return compact('base', 'foot');
 
             case 'tabla3':
                 $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio);
@@ -908,6 +908,70 @@ class PadronNominalController extends Controller
                               when FIND_IN_SET("8", programa_social) > 0 then 1 
                               else 0 end) as programa')
                     )->groupBy('ubigeo', 'distrito')->orderBy('ubigeo')->get();
+                $foot = [];
+                if ($base->count() > 0) {
+                    $foot = clone $base[0];
+                    $foot->pob = 0;
+                    $foot->pobm = 0;
+                    $foot->pobf = 0;
+                    $foot->pob0 = 0;
+                    $foot->pob1 = 0;
+                    $foot->pob2 = 0;
+                    $foot->pob3 = 0;
+                    $foot->pob4 = 0;
+                    $foot->pob5 = 0;
+                    $foot->dni = 0;
+                    $foot->seguro = 0;
+                    $foot->programa = 0;
+                    foreach ($base as $key => $value) {
+                        $foot->pob += $value->pob;
+                        $foot->pobm += $value->pobm;
+                        $foot->pobf += $value->pobf;
+                        $foot->pob0 += $value->pob0;
+                        $foot->pob1 += $value->pob1;
+                        $foot->pob2 += $value->pob2;
+                        $foot->pob3 += $value->pob3;
+                        $foot->pob4 += $value->pob4;
+                        $foot->pob5 += $value->pob5;
+                        $foot->dni += $value->dni;
+                        $foot->seguro += $value->seguro;
+                        $foot->programa += $value->programa;
+                    }
+                }
+
+                return compact('base', 'foot');
+
+            case 'tabla3_1':
+                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio);
+
+                $base = ImporPadronNominal::join('par_ubigeo as u', 'u.id', '=', 'sal_impor_padron_nominal.distrito_id')
+                    ->where('importacion_id', $impMaxAnio)->where('repetido', '1')->where('ubigeo', $ubigeo)
+                    ->select(
+                        'centro_poblado',
+                        'centro_poblado_nombre',
+                        DB::raw('count(*) as pob'),
+                        DB::raw('sum(if(genero="M",1,0)) as pobm'),
+                        DB::raw('sum(if(genero="F",1,0)) as pobf'),
+                        DB::raw('sum(if(tipo_edad in("D","M"),1,0)) as pob0'),
+                        DB::raw('sum(if(edad=1 and tipo_edad="A",1,0)) as pob1'),
+                        DB::raw('sum(if(edad=2 and tipo_edad="A",1,0)) as pob2'),
+                        DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
+                        DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
+                        DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
+                        DB::raw('sum(if(tipo_doc="DNI",1,0)) as dni'),
+                        DB::raw('sum(case when FIND_IN_SET("1", seguro) > 0 then 1 
+                                      when FIND_IN_SET("2", seguro) > 0 then 1 
+                                      when FIND_IN_SET("3", seguro) > 0 then 1 
+                                      when FIND_IN_SET("4", seguro) > 0 then 1 
+                                      else 0 end) as seguro'),
+                        DB::raw('sum(case when FIND_IN_SET("1", programa_social) > 0 then 1 
+                                      when FIND_IN_SET("2", programa_social) > 0 then 1 
+                                      when FIND_IN_SET("5", programa_social) > 0 then 1 
+                                      when FIND_IN_SET("5", programa_social) > 0 then 1 
+                                      when FIND_IN_SET("7", programa_social) > 0 then 1 
+                                      when FIND_IN_SET("8", programa_social) > 0 then 1 
+                                      else 0 end) as programa')
+                    )->groupBy('centro_poblado', 'centro_poblado_nombre')->orderBy('centro_poblado_nombre')->get();
 
                 $foot = [];
                 if ($base->count() > 0) {
@@ -940,15 +1004,14 @@ class PadronNominalController extends Controller
                     }
                 }
 
-                return response()->json(compact('base', 'foot'));
-
+                return compact('base', 'foot');
             default:
                 # code...
                 return [];
         }
     }
 
-    public function tablerocalidaddownload($div, $importacion, $anio, $mes, $provincia, $distrito)
+    public function tablerocalidaddownload($div, $importacion, $anio, $mes, $provincia, $distrito, $ubigeo)
     {
         switch ($div) {
             case 'tabla2':
@@ -961,7 +1024,7 @@ class PadronNominalController extends Controller
                 $name = '';
                 break;
         }
-        return Excel::download(new TableroCalidadExport($div, $importacion, $anio, $mes, $provincia, $distrito), $name);
+        return Excel::download(new TableroCalidadExport($div, $importacion, $anio, $mes, $provincia, $distrito, $ubigeo), $name);
     }
 
 
@@ -1317,9 +1380,9 @@ class PadronNominalController extends Controller
         $programa = [0 => 'NINGUNO', 1 => 'PIN', 2 => 'PVL', 4 => 'JUNTOS', 5 => 'QALIWARMA', 7 => 'CUNA+ SCD', 8 => 'CUNA+ SAF'];
         $data = CalidadCriterio::where('importacion_id', $importacion)
             ->where('tipo_doc', $tipo);
-        if ($documento != '')
+        if ($documento != 'documento')
             $data = $data->where('num_doc', $documento);
-        if ($apellido != '')
+        if ($apellido != 'apellido')
             $data = $data->where(function ($query) use ($apellido) {
                 $query->where('apellido_paterno', 'like', "%{$apellido}%")
                     ->orWhere('apellido_materno', 'like', "%{$apellido}%")
