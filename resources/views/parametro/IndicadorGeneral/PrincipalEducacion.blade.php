@@ -1264,14 +1264,10 @@
                 data: $('#form_meta_dit').serialize(),
                 dataType: "JSON",
                 success: function(data) {
-                    // console.log('savemeta_dit ' + url);
-                    // console.log(data)
                     if (data.status) {
-                        // var anio = $('#aniobase_dit').val();                        // var valor = $('#valorbase_dit').val();
                         table_meta.ajax.reload(null, false);
                         $('#form_meta_dit')[0].reset();
                         save_method_dit = 'add';
-                        // $('#aniobase_dit').val(anio);                        // $('#valorbase_dit').val(valor);                        //toastr.success(msgsuccess, 'Mensaje');
                         delemeta_dit();
                     } else {
                         for (var i = 0; i < data.inputerror.length; i++) {
@@ -1289,6 +1285,16 @@
                 }
             });
         };
+
+        function delemeta_dit() {
+            $('#btnSaveMeta_dit').html('<i class="fa fa-plus"></i> Agregar');
+            save_method_dit = 'add';
+            $("#idmeta_dit").val('');
+            $("#provincia_dit").val('0');
+            $("#distrito_dit").val('0');
+            $("#anioesperado_dit").val('');
+            $("#valoresperado_dit").val('');
+        }
 
         function editmeta_dit(id) {
             save_method_dit = 'update';
@@ -1327,15 +1333,7 @@
             });
         };
 
-        function delemeta_dit() {
-            $('#btnSaveMeta_dit').html('<i class="fa fa-plus"></i> Agregar');
-            save_method_dit = 'add';
-            $("#idmeta_dit").val('');
-            $("#provincia_dit").val('0');
-            $("#distrito_dit").val('0');
-            $("#anioesperado_dit").val('');
-            $("#valoresperado_dit").val('');
-        }
+
 
         function delemeta_pdrc() {
             $('#btnSaveMeta_pdrc').html('<i class="fa fa-plus"></i> Agregar');

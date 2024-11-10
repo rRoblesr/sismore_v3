@@ -46,7 +46,7 @@ class TableroCalidadExport implements FromView, ShouldAutoSize
             return view('salud.PadronNominal.TableroCalidadTabla3excel', $mgs);
         } else {
             $mgs = (new PadronNominalController())->tablerocalidadreporteexport($this->div, $this->importacion,  $this->anio, $this->mes, $this->provincia, $this->distrito, $this->ubigeo);
-            return view('salud.PadronNominal.TableroCalidadTabla3excel', $mgs);
+            return view('salud.PadronNominal.TableroCalidadTabla3_1excel', $mgs);
         }
     }
 }

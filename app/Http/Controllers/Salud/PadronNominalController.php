@@ -1020,6 +1020,9 @@ class PadronNominalController extends Controller
             case 'tabla3':
                 $name = 'Población de niños y niñas menos de 6 años por distrito, segun sexo y edades.xlsx';
                 break;
+            case 'tabla3_1':
+                $name = 'Población de niños y niñas menos de 6 años por Centro Poblado, segun sexo y edades.xlsx';
+                break;
             default:
                 $name = '';
                 break;

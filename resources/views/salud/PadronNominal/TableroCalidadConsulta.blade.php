@@ -13,10 +13,10 @@
             <div class="card m-0">
                 <div class="card-header bg-success-0">
                     <div class="card-widgets">
-                        <button type="button" class="btn btn-orange-0 btn-xs" onclick="history.back()" title='ACTUALIZAR'><i
+                        <button type="button" class="btn btn-orange-0 btn-xs" onclick="history.back()" title='Volver'><i
                                 class="fas fa-arrow-left"></i> Volver</button>
                         <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
-                            <i class="fa fa-redo"></i> Actualizar</button>
+                            <i class="fa fa-redo"></i> Imprimir</button>
                     </div>
                     <h3 class="card-title text-white font-12">
                         Busqueda de Niños y Niñas Menores de 6 años del Padron
