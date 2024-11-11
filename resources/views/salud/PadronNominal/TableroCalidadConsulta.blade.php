@@ -15,8 +15,8 @@
                     <div class="card-widgets">
                         <button type="button" class="btn btn-orange-0 btn-xs" onclick="history.back()" title='Volver'><i
                                 class="fas fa-arrow-left"></i> Volver</button>
-                        <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
-                            <i class="fa fa-redo"></i> Imprimir</button>
+                        {{-- <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
+                            <i class="mdi mdi-printer"></i> Imprimir</button> --}}
                     </div>
                     <h3 class="card-title text-white font-12">
                         Busqueda de Niños y Niñas Menores de 6 años del Padron
@@ -39,7 +39,8 @@
                         <div class="col-lg-3 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="numerodocumento">Documento</label>
-                                <input type="number" id="numerodocumento" name="numerodocumento" class="form-control">
+                                <input type="number" id="numerodocumento" name="numerodocumento" class="form-control"
+                                    value="94019444">
                             </div>
 
 
@@ -53,11 +54,12 @@
 
                         </div>
                         <div class="col-lg-1 col-md-2 col-sm-2 text-center">
-                            <button type="button" class="btn btn-success-0" onclick="consultahacer()">
+                            <button type="button" class="btn btn-success-0" onclick="cargarCards();">
                                 {{-- <i class="fa fa-redo"></i> --}} Consultar</button>
                         </div>
                         <div class="col-lg-1 col-md-2 col-sm-2 text-center">
-                            <button type="button" class="btn btn-orange-0" onclick="consultalimpiar()">
+                            <button type="button" class="btn btn-orange-0"
+                                onclick="location.reload()">{{-- onclick="consultalimpiar()" --}}
                                 {{-- <i class="fa fa-redo"></i> --}} Limpiar</button>
                         </div>
                     </div>
@@ -65,7 +67,7 @@
             </div>
         </div>
     </div>
-    <div class="row d-none">
+    <div class="row">
         <div class="col-lg-12">
             <div class="card m-0">
                 {{-- <div class="card-header">
@@ -84,7 +86,7 @@
                                             <th class="text-center">Tipo Doc.</th>
                                             <th class="text-center">Documento</th>
                                             <th class="text-center">Apellidos y Nombre</th>
-                                            <th class="text-center">Fecha Nacimiento</th>
+                                            <th class="text-center">Edad</th>
                                             <th class="text-center">Distrito</th>
                                             <th class="text-center">Centro Poblado</th>
                                             <th class="text-center">Cod. EESS</th>
@@ -105,13 +107,13 @@
         </div>
     </div>
 
-    <div class="row" id="formulario" style="display: none">
+    {{-- <div class="row" id="formulario" >
         <div class="col-lg-12">
             <div class="card">
-                {{-- <div class="card-header">
+                <div class="card-header">
                     <h3 class="card-title">Población de niños y niñas menos de 6 años por distrito, segun sexo y edades
                     </h3>
-                </div> --}}
+                </div>
                 <div class="card-body p-0">
                     <div class="row">
                         <div class="col-12">
@@ -227,7 +229,140 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
+
+    <!--  Modal content for the above example -->
+    <div class="modal fade" id="modal-nino" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+        aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                {{-- <div class="modal-header">
+                    <h5 class="modal-title" id="myLargeModalLabel">Niño(a) con datos observados</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div> --}}
+                <div class="modal-body p-0">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table id="xx" class="table table-striped table-bordered font-12 text-dark">
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-left table-success-0 text-white" colspan="6">DATOS DEL MENOR
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right" style="background-color: #D4F2F0">CÓDIGO PADRÓN</td>
+                                            <td id="padron"></td>
+                                            <td class="text-right" style="background-color: #D4F2F0">TIPO DOCUMENTO</td>
+                                            <td id="tipodoc"></td>
+                                            <td class="text-right" style="background-color: #D4F2F0">DOCUMENTO</td>
+                                            <td id="doc"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right" style="background-color: #D4F2F0">APELLIDO PATERNO</td>
+                                            <td id="apepat"></td>
+                                            <td class="text-right" style="background-color: #D4F2F0">APELLIDO MATERNO</td>
+                                            <td id="apemat"></td>
+                                            <td class="text-right" style="background-color: #D4F2F0">NOMBRES</td>
+                                            <td id="nom"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right" style="background-color: #D4F2F0">SEXO</td>
+                                            <td id="sexo"></td>
+                                            <td class="text-right" style="background-color: #D4F2F0">FECHA DE NACIMIENTO
+                                            </td>
+                                            <td id="nacimiento"></td>
+                                            <td class="text-right" style="background-color: #D4F2F0">EDAD</td>
+                                            <td id="edad"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right" style="background-color: #D4F2F0">DEPARTAMENTO</td>
+                                            <td id="dep"></td>
+                                            <td class="text-right" style="background-color: #D4F2F0">PROVINCIA</td>
+                                            <td id="pro"></td>
+                                            <td class="text-right" style="background-color: #D4F2F0">DISTRITO</td>
+                                            <td id="dis"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right" style="background-color: #D4F2F0">CENTRO POBLADO</td>
+                                            <td id="cp"></td>
+                                            <td class="text-right" style="background-color: #D4F2F0">DIRECCIÓN</td>
+                                            <td id="dir" colspan="3"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right" style="background-color: #D4F2F0">EESS NACIMIENTO</td>
+                                            <td id="esn"></td>
+                                            <td class="text-right" style="background-color: #D4F2F0">ULTIMO EESS ATENCIÓN
+                                            </td>
+                                            <td id="esa"></td>
+                                            <td class="text-right" style="background-color: #D4F2F0">VISITA DOMICILIARIA
+                                            </td>
+                                            <td id="visita"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right" style="background-color: #D4F2F0">ENCONTRADO</td>
+                                            <td id="encontrado"></td>
+                                            <td class="text-right" style="background-color: #D4F2F0">TIPO DE SEGURO</td>
+                                            <td id="seguro"></td>
+                                            <td class="text-right" style="background-color: #D4F2F0">PROGRAMA SOCIAL</td>
+                                            <td id="programa"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right" style="background-color: #D4F2F0">INSTITUTCIÓN EDUCATIVA</td>
+                                            <td></td>
+                                            <td class="text-right" style="background-color: #D4F2F0">NIVEL EDUCATIVO</td>
+                                            <td></td>
+                                            <td class="text-right" style="background-color: #D4F2F0">GRADO Y SECCIÓN</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left table-success-0 text-white" colspan="6">DATOS DE LA
+                                                MADRE</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right" style="background-color: #D4F2F0">APODERADO</td>
+                                            <td id="mapoderado"></td>
+                                            <td class="text-right" style="background-color: #D4F2F0">TIPO DOCUMENTO</td>
+                                            <td id="mtipodoc"></td>
+                                            <td class="text-right" style="background-color: #D4F2F0">DOCUMENTO</td>
+                                            <td id="mdoc"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right" style="background-color: #D4F2F0">APELLIDO PATERNO
+                                                MADRE</td>
+                                            <td id="mapepat"></td>
+                                            <td class="text-right" style="background-color: #D4F2F0">APELLIDO MATERNO
+                                                MADRE</td>
+                                            <td id="mapemat"></td>
+                                            <td class="text-right" style="background-color: #D4F2F0">NOMBRES MADRE</td>
+                                            <td id="mnom"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right" style="background-color: #D4F2F0">CELULAR</td>
+                                            <td id="mcel"></td>
+                                            <td class="text-right" style="background-color: #D4F2F0">GRADO DE INSTRUCCIÓN
+                                            </td>
+                                            <td id="mgrado"></td>
+                                            <td class="text-right" style="background-color: #D4F2F0">LENGUA HABITUAL</td>
+                                            <td id="mlengua"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+
+
+
+        </div>
+    </div><!-- /.modal -->
 @endsection
 
 @section('js')
@@ -237,8 +372,89 @@
         ];
         var tableprincipal;
         $(document).ready(function() {
-
+            cargarCards();
         });
+
+        function cargarCards() {
+            tableprincipal = $('#tabla1').DataTable({
+                responsive: true,
+                autoWidth: false,
+                processing: true, // Indica que los datos se procesan en el servidor
+                serverSide: true, // Habilita la paginación en el servidor
+                ordered: true,
+                language: table_language,
+                destroy: true,
+                ajax: {
+                    url: "{{ route('salud.padronnominal.tablerocalidad.consulta.listar') }}",
+                    type: "GET",
+                    data: function(d) {
+                        d.importacion = {{ $importacion }};
+                        d.tip = $('#tipodocumento').val();
+                        d.doc = $('#numerodocumento').val();
+                        d.nom = $('#apellidosnombres').val();
+                    }
+                },
+                columnDefs: [{
+                        className: 'text-center',
+                        targets: [0, 1, 2, 3, 5, 6, 7, 8]
+                    },
+                    {
+                        targets: 1,
+                        render: function(data, type, row) {
+                            return `<a href="#" onclick="abrirmodalpadron(${data})">${data}</a>`;
+                        }
+                    }
+                ]
+            });
+        }
+
+        function abrirmodalpadron(padron) {
+
+            $.ajax({
+                url: "{{ route('salud.padronnominal.tablerocalidad.criterio.find1', ['importacion' => $importacion, 'padron' => 'padron']) }}"
+                    .replace('padron', padron),
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    // console.log(data);
+                    $('#padron').html(data.padron);
+                    $('#tipodoc').html(data.tipo_doc == 'Padron' ? '' : data.tipo_doc);
+                    $('#doc').html(data.tipo_doc == 'Padron' ? '' : data.num_doc);
+                    $('#apepat').html(data.apellido_paterno);
+                    $('#apemat').html(data.apellido_materno);
+                    $('#nom').html(data.nombre);
+                    $('#sexo').html(data.genero == 'M' ? 'MASCULINO' : 'FEMENINO');
+                    $('#nacimiento').html(data.fecha_nacimiento);
+                    $('#edad').html(data.edad + ' ' + (data.tipo_edad == 'D' ? 'DIAS' : (data.tipo_edad == 'M' ?
+                        'MESES' : 'AÑOS')));
+                    $('#dep').html(data.departamento);
+                    $('#pro').html(data.provincia);
+                    $('#dis').html(data.distrito);
+                    $('#cp').html(data.centro_poblado_nombre);
+                    $('#dir').html(data.direccion);
+                    $('#esn').html(data.cui_nacimiento);
+                    $('#esa').html(data.cui_atencion);
+                    $('#visita').html(data.visita);
+                    $('#encontrado').html(data.menor_encontrado);
+                    $('#seguro').html(data.seguro);
+                    $('#programa').html(data.programa_social);
+                    $('#mapoderado').html(data.apoderado);
+                    $('#mtipodoc').html(data.tipo_doc_madre);
+                    $('#mdoc').html(data.num_doc_madre);
+                    $('#mapepat').html(data.apellido_paterno_madre);
+                    $('#mapemat').html(data.apellido_materno_madre);
+                    $('#mnom').html(data.nombres_madre);
+                    $('#mcel').html(data.celular_madre);
+                    $('#mgrado').html(data.grado_instruccion);
+                    $('#mlengua').html(data.lengua_madre);
+
+                    $('#modal-nino').modal('show');
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
 
         function consultahacer() {
 
@@ -254,7 +470,7 @@
                     dataType: 'json',
                     success: function(data) {
                         console.log(data);
-                        if (Object.keys(data).length > 0) {s
+                        if (Object.keys(data).length > 0) {
                             $('#padron').html(data.padron);
                             $('#tipodoc').html(data.tipo_doc == 'Padron' ? '' : data.tipo_doc);
                             $('#doc').html(data.tipo_doc == 'Padron' ? '' : data.num_doc);
@@ -309,7 +525,7 @@
         }
 
 
-        function cargarCards() {
+        function cargarsdsdfCards() {
             tableprincipal = $('#tabla1').DataTable({
                 responsive: true,
                 autoWidth: false,

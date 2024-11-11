@@ -188,6 +188,31 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-lg-6 col-md-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
+                    <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
+                </div>
+                <div class="card-body p-0">
+                    <div id="anal1"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
+                    <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
+                </div>
+                <div class="card-body p-0">
+                    <div id="anal2"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
     <!--  Modal content for the above example -->
     <div class="modal fade" id="modal-nino" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
         aria-hidden="true" style="display: none;">
@@ -376,6 +401,8 @@
         ];
         var tableprincipal;
         var criterio = {{ $criterio }};
+        var anal1;
+        var anal2;
         $(document).ready(function() {
             cargarProvincia();
             cargarDistrito();
@@ -443,6 +470,57 @@
                     }
                 ]
             });
+            panelGraficas('anal1');
+            panelGraficas('anal2');
+        }
+
+        function panelGraficas(div) {
+            $.ajax({
+                url: "{{ route('salud.padronnominal.tablerocalidad.criterio.reporte') }}",
+                data: {
+                    div: div,
+                    importacion: {{ $importacion }},
+                    criterio: {{ $criterio }},
+                    edades: $('#edades').val(),
+                    provincia: $('#provincia').val(),
+                    distrito: $('#distrito').val(),
+                    desa: 0,
+                },
+                type: "GET",
+                dataType: "JSON",
+                beforeSend: function() {
+                    if (div == "anal1" || div == "anal2") {
+                        $('#' + div).html(`
+                                            <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+                                                <span class="spinner">
+                                                    <i class="fa fa-spinner fa-spin"></i>
+                                                </span>
+                                            </div>
+                                        `);
+                    }
+                },
+                success: function(data) {
+                    if (div == "anal1") {
+                        var cflx = cfl('{{ $title }}');
+                        anal1 = gColumn(div, data.info, '',
+                            cflx + ', según edades',
+                            'Edad')
+                    } else if (div == "anal2") {
+                        var cflx = cfl('{{ $title }}');
+                        anal2 = gColumn(div, data.info, '',
+                            cflx + ', según provincia',
+                            'Provincia')
+                    }
+                },
+                erro: function(jqXHR, textStatus, errorThrown) {
+                    console.log("ERROR GRAFICA 1");
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cfl(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
         }
 
         function cargarCards_xxx() {
@@ -600,7 +678,7 @@
             });
         }
 
-        function panelGraficas(div) {
+        function panelGraficasadasd(div) {
             $.ajax({
                 url: "{{ route('salud.padronnominal.tablerocalidad.reporte') }}",
                 data: {
@@ -677,6 +755,97 @@
                 .replace('provincia', $('#provincia').val())
                 .replace('distrito', $('#distrito').val())
             );
+        }
+
+        function gColumn(div, data, titulo, subtitulo, tooltip) {
+            return Highcharts.chart(div, {
+                chart: {
+                    type: 'column'
+                },
+                colors: ['#5eb9a0', '#ef5350', '#f5bd22', '#ef5350'],
+                title: {
+                    text: titulo
+                },
+                subtitle: {
+                    text: subtitulo //null // Si no necesitas un subtítulo, puedes dejarlo como null
+                },
+                xAxis: {
+                    categories: data.categoria, //
+                    crosshair: true,
+                    labels: {
+                        style: {
+                            fontSize: '11px' // Ajusta el tamaño de la fuente
+                        }
+                    },
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: null // Puedes agregar un título si lo necesitas
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '11px' // Ajusta el tamaño de la fuente
+                        }
+                    },
+                },
+                tooltip: {
+                    shared: true, // Muestra los valores de todas las series en el mismo tooltip
+                    formatter: function() {
+                        let tooltipText = '<b>' + tooltip + ': ' + this.x +
+                            '</b><br/>'; // Muestra la categoría (año)
+                        this.points.forEach(function(point) {
+                            tooltipText += point.series.name + ': ' + Highcharts.numberFormat(Math.abs(
+                                point.y), 0) + '<br/>';
+                        });
+                        return tooltipText;
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        stacking: data.serie.length > 1 ? 'normal' : null, // Apila las columnas
+                        dataLabels: {
+                            enabled: true,
+                            formatter: function() {
+                                return Highcharts.numberFormat(Math.abs(this.y),
+                                    0); // Formatea los números con separadores de miles
+                            },
+                            style: {
+                                color: data.serie.length > 1 ? 'white' : 'black',
+                                textOutline: 'none',
+                                fontSize: '10px'
+                            }
+                        }
+                    }
+                },
+                series: data.serie,
+                legend: {
+                    enabled: data.serie.length > 1,
+                    itemStyle: {
+                        //color: "#333333",
+                        // cursor: "pointer",
+                        fontSize: "11px",
+                        // fontWeight: "normal",
+                        // textOverflow: "ellipsis"
+                    },
+                },
+                credits: {
+                    enabled: false,
+                    // text: 'Fuente: RENIEC - PADRÓN NOMINAL | Actualizado: JULIO 2024',
+                    // href: null,
+                    // position: {
+                    //     align: 'center',
+                    //     verticalAlign: 'bottom',
+                    //     x: 0,
+                    //     y: -5
+                    // },
+                    // style: {
+                    //     color: '#666',
+                    //     fontSize: '10px',
+                    //     textAlign: 'center'
+                    // }
+                }
+            });
         }
 
         function GaugeSeries(div, data, title) {
@@ -918,11 +1087,13 @@
 
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
+
     <script src="https://code.highcharts.com/highcharts-more.js"></script>
     <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
     <!-- optional -->
     <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 

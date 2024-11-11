@@ -1244,6 +1244,57 @@ class PadronNominalController extends Controller
         return response()->json($result);
     }
 
+    public function tablerocalidadcriterioreporte(Request $rq)
+    {
+        $fuente = ImporPadronNominalController::$FUENTE;
+        switch ($rq->div) {
+            case 'anal1':
+                $data = CalidadCriterio::select(
+                    DB::raw('case when tipo_edad in("D","M") then 1 else edad+1 end as edades_id'),
+                    DB::raw('case when tipo_edad in("D","M") then "< 1 AÑO" when tipo_edad="A" AND edad=1 then "1 AÑO" else concat(edad," AÑOS") end as edades'),
+                    DB::raw('count(*) as total'),
+                )
+                    ->where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)
+                    ->groupBy('edades_id', 'edades')->get();
+
+                $info['categoria'] = [];
+                $info['serie'] = [];
+                $info['serie'][0]['name'] = 'Cantidad';
+                foreach ($data as $key => $value) {
+                    $info['categoria'][] = '' . $value->edades;
+                    $info['serie'][0]['data'][] = (int)$value->total;
+                }
+                return response()->json(compact('info'));
+            case 'anal2':
+                $data = CalidadCriterio::from('sal_calidad_criterio as cc')->join('par_ubigeo as pro', 'pro.id', '=', 'cc.provincia_id')->select(
+                    DB::raw('pro.nombre as provincia'),
+                    DB::raw('count(*) as total'),
+                )
+                    ->where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio);
+                if ($rq->edades > 0) {
+                    if ($rq->edades == 1) {
+                        $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                    } else {
+                        $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                    }
+                }
+                $data = $data->groupBy('provincia')->get();
+
+                $info['categoria'] = [];
+                $info['serie'] = [];
+                $info['serie'][0]['name'] = 'Cantidad';
+                foreach ($data as $key => $value) {
+                    $info['categoria'][] = '' . $value->provincia;
+                    $info['serie'][0]['data'][] = (int)$value->total;
+                }
+                return response()->json(compact('info'));
+
+            default:
+                # code...
+                return [];
+        }
+    }
+
     public function tablerocalidadcriteriolistar_xx(Request $rq)
     {
         $draw = intval($rq->draw);
@@ -1375,6 +1426,76 @@ class PadronNominalController extends Controller
         $anio = 2024;
         $importacion = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio);
         return view('salud.PadronNominal.TableroCalidadConsulta', compact('importacion'));
+    }
+
+    public function tablerocalidadconsultalistar(Request $rq)
+    {
+        $draw = intval($rq->draw);
+        $start = intval($rq->start);
+        $length = intval($rq->length);
+
+        $seguro = [0 => 'NINGUNO', 1 => 'SIS', 2 => 'ESSALUD', 3 => 'SANIDAD', 4 => 'PRIVADO'];
+        $programa = [0 => 'NINGUNO', 1 => 'PIN', 2 => 'PVL', 4 => 'JUNTOS', 5 => 'QALIWARMA', 7 => 'CUNA+ SCD', 8 => 'CUNA+ SAF'];
+
+        $query = ImporPadronNominal::where('importacion_id', $rq->importacion)
+        ->when($rq->doc, function ($q) use ($rq) {
+            return $q->where('tipo_doc', $rq->tip)->where('num_doc', $rq->doc);
+        })
+        ->when($rq->nom, function ($q) use ($rq) {
+            return $q->where(function ($subQuery) use ($rq) {
+                $subQuery->where('apellido_paterno', $rq->nom)
+                         ->orWhere('apellido_materno', $rq->nom)
+                         ->orWhere('nombre', $rq->nom);
+            });
+        });
+        // if ($rq->doc != '') {
+        //     $query = $query->where('tipo_doc', $rq->tip);
+        // }
+
+        // if ($rq->nom != '') {
+        //     $query = $query->where('apellido_paterno', 'like', '%' . $rq->nom . '%')->where('apellido_materno', 'like', '%' . $rq->nom . '%')->where('nombre', 'like', '%' . $rq->nom . '%');
+        // }
+
+
+        $recordsTotal = $query->count();
+        $recordsFiltered = $recordsTotal;
+
+        $query = $query->skip($start)->take($length)->get();
+
+        $ubigeos = Ubigeo::whereIn('codigo', $query->pluck('ubigeo')->toArray())->get()->keyBy('codigo');
+        $establecimientos = Establecimiento::whereIn('cod_unico', $query->pluck('cui_atencion')->toArray())->get()->keyBy('cod_unico');
+
+        $sim = ['D' => 'DÍAS', 'M' => 'MESES', 'A' => 'AÑOS'];
+        $data = [];
+
+        foreach ($query as $key => $value) {
+            $dis = $ubigeos[$value->ubigeo] ?? null;
+            $eess = $establecimientos[$value->cui_atencion] ?? null;
+
+            $data[] = [
+                $key + 1,
+                $value->padron,
+                $value->tipo_doc != 'Padron' ? $value->tipo_doc : '',
+                $value->tipo_doc != 'Padron' ? $value->num_doc : '',
+                $value->apellido_paterno . ' ' . $value->apellido_materno . ', ' . $value->nombre,
+                $value->edad . ' ' . ($sim[$value->tipo_edad] ?? ''),
+                $seguro[$value->seguro_id] ?? '',
+                $value->visita == 1 ? 'SI' : 'NO',
+                $value->encontrado == 1 ? 'SI' : 'NO',
+                $dis ? $dis->nombre : '',
+                $eess ? str_pad($value->cui_atencion, 8, '0', STR_PAD_LEFT) : '',
+                $eess ? $eess->nombre_establecimiento : '',
+            ];
+        }
+
+        $result = [
+            "draw" => $draw,
+            "recordsTotal" => $recordsTotal,
+            "recordsFiltered" => $recordsFiltered,
+            "data" => $data,
+        ];
+
+        return response()->json($result);
     }
 
     public function tablerocalidadconsultafind1($importacion, $tipo, $documento = '', $apellido = '')
