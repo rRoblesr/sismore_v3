@@ -21,6 +21,8 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+// use Yajra\DataTables\DataTables;
+use Yajra\DataTables\Facades\DataTables;
 
 class PadronNominalController extends Controller
 {
@@ -1243,6 +1245,23 @@ class PadronNominalController extends Controller
 
         return response()->json($result);
     }
+    public function ListaImportada(Request $rq)
+    {
+        $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio);
+        // if ($rq->edades > 0) {
+        //     if ($rq->edades == 1) {
+        //         $query = $query->whereIn('tipo_edad', ['D', 'M']);
+        //     } else {
+        //         $query = $query->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+        //     }
+        // }
+        // if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
+        // if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
+
+        $query = $query->get();
+
+        return DataTables::of($query)->make(true);
+    }
 
     public function tablerocalidadcriterioreporte(Request $rq)
     {
@@ -1254,8 +1273,10 @@ class PadronNominalController extends Controller
                     DB::raw('case when tipo_edad in("D","M") then "< 1 AÑO" when tipo_edad="A" AND edad=1 then "1 AÑO" else concat(edad," AÑOS") end as edades'),
                     DB::raw('count(*) as total'),
                 )
-                    ->where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)
-                    ->groupBy('edades_id', 'edades')->get();
+                    ->where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio);
+                if ($rq->provincia > 0) $data = $data->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $data = $data->where('distrito_id', $rq->distrito);
+                $data = $data->groupBy('edades_id', 'edades')->get();
 
                 $info['categoria'] = [];
                 $info['serie'] = [];
@@ -1438,16 +1459,16 @@ class PadronNominalController extends Controller
         $programa = [0 => 'NINGUNO', 1 => 'PIN', 2 => 'PVL', 4 => 'JUNTOS', 5 => 'QALIWARMA', 7 => 'CUNA+ SCD', 8 => 'CUNA+ SAF'];
 
         $query = ImporPadronNominal::where('importacion_id', $rq->importacion)
-        ->when($rq->doc, function ($q) use ($rq) {
-            return $q->where('tipo_doc', $rq->tip)->where('num_doc', $rq->doc);
-        })
-        ->when($rq->nom, function ($q) use ($rq) {
-            return $q->where(function ($subQuery) use ($rq) {
-                $subQuery->where('apellido_paterno', $rq->nom)
-                         ->orWhere('apellido_materno', $rq->nom)
-                         ->orWhere('nombre', $rq->nom);
+            ->when($rq->doc, function ($q) use ($rq) {
+                return $q->where('tipo_doc', $rq->tip)->where('num_doc', $rq->doc);
+            })
+            ->when($rq->nom, function ($q) use ($rq) {
+                return $q->where(function ($subQuery) use ($rq) {
+                    $subQuery->where('apellido_paterno', $rq->nom)
+                        ->orWhere('apellido_materno', $rq->nom)
+                        ->orWhere('nombre', $rq->nom);
+                });
             });
-        });
         // if ($rq->doc != '') {
         //     $query = $query->where('tipo_doc', $rq->tip);
         // }

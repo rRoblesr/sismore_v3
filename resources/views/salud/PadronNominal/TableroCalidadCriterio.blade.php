@@ -1,6 +1,8 @@
 @extends('layouts.main', ['activePage' => 'importacion', 'titlePage' => ''])
 
 @section('css')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
     <style>
 
@@ -127,7 +129,8 @@
                         <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel()">
                             <i class="fa fa-file-excel"></i> Descargar</button>
                     </div>
-                    <h3 class="card-title">LISTA DE REGISTROS OBSERVADOS DEL MENOR</h3>
+                    <h3 class="card-title">LISTA DE REGISTROS OBSERVADOS {{ $criterio < 10 ? 'DEL MENOR' : 'DE LA MADRE' }}
+                    </h3>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -195,7 +198,7 @@
                     <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
                 </div>
                 <div class="card-body p-0">
-                    <div id="anal1"></div>
+                    <div id="anal1" style="height: 20rem"></div>
                 </div>
             </div>
         </div>
@@ -206,7 +209,7 @@
                     <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
                 </div>
                 <div class="card-body p-0">
-                    <div id="anal2"></div>
+                    <div id="anal2" style="height: 20rem"></div>
                 </div>
             </div>
         </div>
@@ -468,6 +471,144 @@
                             }
                         }
                     }
+                ]
+            });
+
+            tableprincipalx = $('#tabla1x').DataTable({
+                processing: true,
+                serverSide: true,
+                responsive: false,
+                autoWidth: false,
+                ordered: true,
+                destroy: true, // Este permite reconfigurar la tabla si ya existe
+                language: table_language,
+                ajax: {
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "{{ route('salud.padronnominal.tablerocalidad.criterio.listar2') }}",
+                    type: "POST",
+                    data: function(d) {
+                        d.importacion = {{ $importacion }};
+                        d.criterio = {{ $criterio }};
+                        d.edades = $('#edades').val();
+                        d.provincia = $('#provincia').val();
+                        d.distrito = $('#distrito').val();
+                        d.desa = 0;
+                    }
+                },
+                columns: [{
+                        data: 'padron',
+                        name: 'padron'
+                    },
+                    {
+                        data: 'num_doc',
+                        name: 'num_doc'
+                    },
+                    {
+                        data: 'tipo_doc',
+                        name: 'tipo_doc'
+                    },
+                    // {
+                    //     data: 'apellido_paterno',
+                    //     name: 'apellido_paterno'
+                    // },
+                    // {
+                    //     data: 'apellido_materno',
+                    //     name: 'apellido_materno'
+                    // },
+                    {
+                        data: 'nombre',
+                        name: 'nombre'
+                    },
+                    {
+                        data: 'edad',
+                        name: 'edad'
+                    },
+                    {
+                        data: 'seguro_id',
+                        name: 'seguro_id'
+                    },
+                    {
+                        data: 'visita',
+                        name: 'visita'
+                    },
+                    {
+                        data: 'menor_encontrado',
+                        name: 'menor_encontrado'
+                    },
+                    {
+                        data: 'distrito_id',
+                        name: 'distrito_id'
+                    },
+                    {
+                        data: 'establecimiento_id',
+                        name: 'establecimiento_id'
+                    },
+                    {
+                        data: 'cui_atencion',
+                        name: 'cui_atencion'
+                    },
+                    // {
+                    //     data: 'cui_atencion',
+                    //     name: 'cui_atencion'
+                    // },
+                    // {
+                    //     data: 'seguro',
+                    //     name: 'seguro'
+                    // },
+                    // {
+                    //     data: 'programa_social',
+                    //     name: 'programa_social'
+                    // },
+                    // {
+                    //     data: 'visita',
+                    //     name: 'visita'
+                    // },
+                    // {
+                    //     data: 'menor_encontrado',
+                    //     name: 'menor_encontrado'
+                    // },
+                    // {
+                    //     data: 'codigo_ie',
+                    //     name: 'codigo_ie'
+                    // },
+                    // {
+                    //     data: 'nombre_ie',
+                    //     name: 'nombre_ie'
+                    // },
+                    // {
+                    //     data: 'tipo_doc_madre',
+                    //     name: 'tipo_doc_madre'
+                    // },
+                    // {
+                    //     data: 'num_doc_madre',
+                    //     name: 'num_doc_madre'
+                    // },
+                    // {
+                    //     data: 'apellido_paterno_madre',
+                    //     name: 'apellido_paterno_madre'
+                    // },
+                    // {
+                    //     data: 'apellido_materno_madre',
+                    //     name: 'apellido_materno_madre'
+                    // },
+                    // {
+                    //     data: 'nombres_madre',
+                    //     name: 'nombres_madre'
+                    // },
+                    {
+                        data: 'celular_madre',
+                        name: 'celular_madre'
+                    },
+                    // {
+                    //     data: 'grado_instruccion',
+                    //     name: 'grado_instruccion'
+                    // },
+                    // {
+                    //     data: 'lengua_madre',
+                    //     name: 'lengua_madre'
+                    // }
                 ]
             });
             panelGraficas('anal1');
