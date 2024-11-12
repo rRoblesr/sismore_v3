@@ -96,10 +96,13 @@ class IndicadorGeneralController extends Controller
             $instrumento = DB::table('par_instrumento')->where('id', $value->instrumento_id)->first();
 
             $btn1 = '<a href="#" class="btn btn-info btn-xs" onclick="edit(' . $value->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
-            if ($value->estado == 0) {
-                $btn2 = '&nbsp;<a class="btn btn-sm btn-dark btn-xs" href="javascript:void(0)" title="Desactivar" onclick="estado(' . $value->id . ',' . $value->estado . ')"><i class="fa fa-power-off"></i></a> ';
-            } else {
-                $btn2 = '&nbsp;<a class="btn btn-sm btn-default btn-xs"  title="Activar" onclick="estado(' . $value->id . ',' . $value->estado . ')"><i class="fa fa-check"></i></a> ';
+            $btn2 = '';
+            if (auth()->user()->id == 49) {
+                if ($value->estado == 0) {
+                    $btn2 = '&nbsp;<a class="btn btn-sm btn-dark btn-xs" href="javascript:void(0)" title="Desactivar" onclick="estado(' . $value->id . ',' . $value->estado . ')"><i class="fa fa-power-off"></i></a> ';
+                } else {
+                    $btn2 = '&nbsp;<a class="btn btn-sm btn-default btn-xs"  title="Activar" onclick="estado(' . $value->id . ',' . $value->estado . ')"><i class="fa fa-check"></i></a> ';
+                }
             }
             $btn3 = '&nbsp;<a href="#" class="btn btn-danger btn-xs" onclick="borrar(' . $value->id . ')"  title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
             $btn4 = '&nbsp;<button type="button" onclick="verpdf(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fas fa-file"></i> </button>';
@@ -122,7 +125,7 @@ class IndicadorGeneralController extends Controller
                 '<div style="text-align:center">' . $tipo->nombre . '</div>',
                 '<div style="text-align:center" title="' . $instrumento->nombre . '">' . $instrumento->abreviado . '</div>',
                 '<div style="text-align:center">' . ($value->anio_base != 0 ? $value->anio_base : '----') . '</div>',
-                "<center><div class='btn-group'>" . $btn1 .  $btn4  . ($instrumento->meta == 'SI' ? $btn5 : '')  . $btn3 . "</div></center>",
+                "<center><div class='btn-group'>" . $btn1 . $btn2 .  $btn4  . ($instrumento->meta == 'SI' ? $btn5 : '')  . $btn3 . "</div></center>",
             );
         }
         $result = array(
@@ -446,10 +449,10 @@ class IndicadorGeneralController extends Controller
 
     public function ajax_estado($id)
     {
-        /* $rer = Lengua::find($id);
-        $rer->estado = $rer->estado == 1 ? 0 : 1;
-        $rer->save();
-        return response()->json(array('status' => true, 'estado' => $rer->estado)); */
+        $ig = IndicadorGeneral::find($id);
+        $ig->estado = $ig->estado == 1 ? 0 : 1;
+        $ig->save();
+        return response()->json(array('status' => true, 'estado' => $ig->estado));
     }
 
     public function exportarPDF($id)

@@ -650,6 +650,7 @@ Route::get('/Mantenimiento/Indicador/Delete/{id}', [IndicadorGeneralController::
 Route::get('/Mantenimiento/Indicador/Exportar/{id}', [IndicadorGeneralController::class, 'exportarPDF'])->name('mantenimiento.indicadorgeneral.exportar.pdf');
 Route::get('/Mantenimiento/Indicador/Buscar/{id}', [IndicadorGeneralController::class, 'buscar'])->name('mantenimiento.indicadorgeneral.buscar.1');
 Route::get('/Mantenimiento/Indicador/Codigo', [IndicadorGeneralController::class, 'generarCodigo'])->name('mantenimiento.indicadorgeneral.codigo');
+Route::get('/Mantenimiento/Indicador/ajax_estado/{id}', [IndicadorGeneralController::class, 'ajax_estado'])->name('mantenimiento.indicadorgeneral.editar.estado');
 
 Route::get('/Mantenimiento/Indicador/Meta/Listar', [IndicadorGeneralController::class, 'ListarDTMeta'])->name('mantenimiento.indicadorgeneralmeta.listar');
 Route::post('/Mantenimiento/Indicador/Meta/Add', [IndicadorGeneralController::class, 'ajax_add_meta'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.guardar');

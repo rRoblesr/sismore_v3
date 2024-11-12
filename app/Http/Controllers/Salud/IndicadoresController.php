@@ -111,12 +111,12 @@ class IndicadoresController extends Controller
         $sector = 14;
         $instrumento = 8;
         $indsal = IndicadorGeneralRepositorio::find_pactoregional($sector, $instrumento);
-        $sector = 4;
-        $instrumento = 8;
-        $indedu = IndicadorGeneralRepositorio::find_pactoregional($sector, $instrumento);
-        $sector = 18;
-        $instrumento = 8;
-        $indviv = IndicadorGeneralRepositorio::find_pactoregional($sector, $instrumento);
+        // $sector = 4;
+        // $instrumento = 8;
+        // $indedu = IndicadorGeneralRepositorio::find_pactoregional($sector, $instrumento);
+        // $sector = 18;
+        // $instrumento = 8;
+        // $indviv = IndicadorGeneralRepositorio::find_pactoregional($sector, $instrumento);
 
         $ind = IndicadorGeneralRepositorio::findNoFichatecnicaCodigo('DIT-SAL-01');
         $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios($ind->id);
@@ -126,7 +126,7 @@ class IndicadoresController extends Controller
         // // return response()->json(compact('imp'));
         $aniomax = $imp->anio;
 
-        return view('salud.Indicadores.PactoRegionalSal', compact('indsal', 'indedu', 'indviv', 'anio', 'provincia', 'aniomax'));
+        return view('salud.Indicadores.PactoRegionalSal', compact('indsal', 'anio', 'provincia', 'aniomax'));
     }
 
     public function PactoRegionalActualizar2(Request $rq)
@@ -192,23 +192,37 @@ class IndicadoresController extends Controller
                 $den = $gl;
                 $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
                 break;
-            case 'DIT-SAL-03':
-                $gls = 0;
-                $gl = 0;
+                // case 'DIT-SAL-03':
+                //     $gls = 10;
+                //     $gl = 19;
+                //     $num = $gls;
+                //     $den = $gl;
+                //     $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
+                //     break;
+                // case 'DIT-SAL-04':
+                //     $gls = 0;
+                //     $gl = 0;
+                //     $num = $gls;
+                //     $den = $gl;
+                //     $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
+                //     break;
+                // case 'DIT-SAL-05':
+                //     $gls = 0;
+                //     $gl = 0;
+                //     $num = $gls;
+                //     $den = $gl;
+                //     $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
+                //     break;
+            case 'DIT-SAL-06':
+                $gls = 10;
+                $gl = 19;
                 $num = $gls;
                 $den = $gl;
                 $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
                 break;
-            case 'DIT-SAL-04':
-                $gls = 0;
-                $gl = 0;
-                $num = $gls;
-                $den = $gl;
-                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
-                break;
-            case 'DIT-SAL-05':
-                $gls = 0;
-                $gl = 0;
+            case 'DIT-SAL-07':
+                $gls = 60;
+                $gl = 100;
                 $num = $gls;
                 $den = $gl;
                 $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
@@ -394,7 +408,26 @@ class IndicadoresController extends Controller
                 $provincia = UbigeoRepositorio::provincia('25');
                 $aniomax = $imp->anio;
                 return view('salud.Indicadores.PactoRegionalSalPacto5', compact('actualizado', 'anio', 'mes', 'provincia', 'aniomax', 'ind'));
-                // return '';
+
+            case 'DIT-SAL-06':
+                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_1']);
+                // return response()->json([$imp]);
+                $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
+                $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios($indicador_id); // Anio::orderBy('anio')->get();
+                $mes = Mes::all();
+                $provincia = UbigeoRepositorio::provincia('25');
+                $aniomax = $imp->anio;
+                return view('salud.Indicadores.PactoRegionalSalPacto6', compact('actualizado', 'anio', 'mes', 'provincia', 'aniomax', 'ind'));
+
+            case 'DIT-SAL-07':
+                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_1']);
+                // return response()->json([$imp]);
+                $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
+                $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios($indicador_id); // Anio::orderBy('anio')->get();
+                $mes = Mes::all();
+                $provincia = UbigeoRepositorio::provincia('25');
+                $aniomax = $imp->anio;
+                return view('salud.Indicadores.PactoRegionalSalPacto7', compact('actualizado', 'anio', 'mes', 'provincia', 'aniomax', 'ind'));
 
             case 'DIT-EDU-01':
                 $actualizado = 'Actualizado al ';
@@ -1266,13 +1299,13 @@ class IndicadoresController extends Controller
                 $den = $gl;
                 $actualizado =   'Actualizado: 31/12/2023';
                 break;
-                case 'PDRC-EDU-05':
-                    $gls = 139;
-                    $gl = 1449;
-                    $num = $gls;
-                    $den = $gl;
-                    $actualizado =   'Actualizado: 31/12/2023';
-                    break;
+            case 'PDRC-EDU-05':
+                $gls = 139;
+                $gl = 1449;
+                $num = $gls;
+                $den = $gl;
+                $actualizado =   'Actualizado: 31/12/2023';
+                break;
             default:
                 break;
         }
@@ -1302,8 +1335,8 @@ class IndicadoresController extends Controller
 
             case 'PDRC-EDU-04':
                 return redirect()->route('panelcontrol.educacion.indicador.nuevos.04');
-                case 'PDRC-EDU-05':
-                    return redirect()->route('serviciosbasicos.principal');
+            case 'PDRC-EDU-05':
+                return redirect()->route('serviciosbasicos.principal');
 
             default:
                 return 'ERROR, PAGINA NO ENCONTRADA';

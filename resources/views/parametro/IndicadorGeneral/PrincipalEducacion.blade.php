@@ -1059,13 +1059,14 @@
             table_principal.ajax.reload(null, false);
         }
 
-        /* function estado(id, x) {
+        function estado(id, x) {
             bootbox.confirm("Seguro desea " + (x == 1 ? "desactivar" : "activar") + " este registro?", function(
                 result) {
                 if (result === true) {
                     $.ajax({
-                        url: "" + id,
-                        type: "POST",
+                        url: "{{ route('mantenimiento.indicadorgeneral.editar.estado', ['id' => 'id']) }}"
+                            .replace('id', id),
+                        type: "get",
                         dataType: "JSON",
                         success: function(data) {
                             console.log(data);
@@ -1085,7 +1086,7 @@
                     });
                 }
             });
-        }; */
+        };
 
         function ver(id) {
             $('#form_ver')[0].reset();
