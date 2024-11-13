@@ -14,7 +14,7 @@
                 <div class="card-header bg-success-0">
                     <div class="card-widgets">
                         <button type="button" class="btn btn-danger btn-xs"
-                            onclick="window.location.href=`{{ route('salud.padronnominal.tablerocalidad.consulta') }}`">
+                            onclick="window.location.href=`{{ route('salud.padronnominal.tablerocalidad.consulta', ['anio' => 'anio', 'mes' => 'mes']) }}`.replace('anio',$('#anio').val()).replace('mes',$('#mes').val())">
                             <i class="fas fa-search"></i> Consultas</button>
                         <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
                             <i class="fa fa-redo"></i> Actualizar</button>
@@ -25,13 +25,13 @@
                 <div class="card-body pb-0">
                     <div class="form-group row align-items-center vh-5">
                         <div class="col-lg-4 col-md-4 col-sm-4">
-                            <h4 class="page-title font-12">{{ $actualizado }}</h4>
+                            <h4 class="page-title font-12">Fuente: Padron Nominal, {{ $actualizado }}</h4>
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
-                                <label for="provincia">AÑO</label>
+                                <label for="anio">AÑO</label>
                                 <select id="anio" name="anio" class="form-control btn-xs font-11"
-                                    onchange="cargarCards();">
+                                    onchange="cargarMes();">
                                     @foreach ($anios as $item)
                                         <option value="{{ $item->anio }}"
                                             {{ $item->anio == date('Y') ? 'selected' : '' }}>
@@ -44,14 +44,9 @@
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
-                                <label for="provincia">MES</label>
+                                <label for="mes">MES</label>
                                 <select id="mes" name="mes" class="form-control btn-xs font-11"
                                     onchange="cargarCards();">
-                                    {{-- <option value="0">TODOS</option> --}}
-                                    {{-- @foreach ($anios as $item)
-                                    <option value="{{ $item->id }}" {{ $item->anio == $maxAnio ? 'selected' : '' }}>
-                                        {{ $item->anio }}</option>
-                                @endforeach --}}
                                 </select>
                             </div>
 
@@ -73,14 +68,10 @@
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
-                                <label for="provincia">DISTRITO</label>
+                                <label for="distrito">DISTRITO</label>
                                 <select id="distrito" name="distrito" class="form-control btn-xs font-11"
                                     onchange="cargarCards();">
                                     <option value="0">TODOS</option>
-                                    {{-- @foreach ($distritos as $item)
-                                        <option value="{{ $item->id }}">{{ $item->nombre }}
-                                        </option>
-                                    @endforeach --}}
                                 </select>
                             </div>
 
@@ -515,7 +506,7 @@
         $(document).ready(function() {
             cargarMes();
             cargarDistritos();
-            cargarCards();
+            // cargarCards();
 
         });
 
@@ -564,6 +555,7 @@
                         options += `<option value='${vv.id}' ${ss}>${vv.mes}</option>`
                     });
                     $("#mes").append(options);
+                    cargarCards();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);

@@ -117,7 +117,7 @@ class PadronNominalController extends Controller
         $fuente = ImporPadronNominalController::$FUENTE;
         switch ($rq->div) {
             case 'head':
-                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio);
+                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio, $rq->mes);
 
                 $card1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1');
                 if ($rq->provincia > 0) $card1 = $card1->where('provincia_id', $rq->provincia);
@@ -152,7 +152,7 @@ class PadronNominalController extends Controller
                 $card4 = number_format($card4, 0);
                 return response()->json(compact('card1', 'card2', 'card3', 'card4'));
             case 'anal1':
-                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio);
+                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio, $rq->mes);
 
                 $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1');
                 if ($rq->provincia > 0) $v2 = $v2->where('provincia_id', $rq->provincia);
@@ -167,7 +167,7 @@ class PadronNominalController extends Controller
                 $avance = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
                 return response()->json(compact('avance'));
             case 'anal2':
-                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio);
+                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio, $rq->mes);
 
                 $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1');
                 if ($rq->provincia > 0) $v2 = $v2->where('provincia_id', $rq->provincia);
@@ -182,7 +182,7 @@ class PadronNominalController extends Controller
                 $avance = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
                 return response()->json(compact('avance'));
             case 'anal3':
-                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio);
+                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio, $rq->mes);
 
                 $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1');
                 if ($rq->provincia > 0) $v2 = $v2->where('provincia_id', $rq->provincia);
@@ -204,7 +204,7 @@ class PadronNominalController extends Controller
                 $avance = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
                 return response()->json(compact('avance'));
             case 'anal4':
-                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio);
+                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio, $rq->mes);
 
                 $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1');
                 if ($rq->provincia > 0) $v2 = $v2->where('provincia_id', $rq->provincia);
@@ -294,7 +294,7 @@ class PadronNominalController extends Controller
                 return response()->json(compact('excel'));
 
             case 'tabla1y':
-                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio);
+                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio, $rq->mes);
 
                 $base = Mes::select('id')->get();
                 $base[0]->criterio = 'Registro sin Número de Documento(DNI, CNV, CUI)';
@@ -600,7 +600,7 @@ class PadronNominalController extends Controller
 
             case 'tabla1':
 
-                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio);
+                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio, $rq->mes);
 
                 $base = CalidadCriterio::where('importacion_id', $impMaxAnio)
                     ->join('sal_calidad_criterio_nombres as c', 'c.id', '=', 'sal_calidad_criterio.criterio')
@@ -626,7 +626,7 @@ class PadronNominalController extends Controller
                 return response()->json(compact('base', 'excel'));
 
             case 'tabla2':
-                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio);
+                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio, $rq->mes);
 
                 $base = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')
                     ->select(
@@ -683,7 +683,7 @@ class PadronNominalController extends Controller
                 return response()->json(compact('excel', 'base', 'foot'));
 
             case 'tabla3':
-                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio);
+                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio, $rq->mes);
 
                 $base = ImporPadronNominal::join('par_ubigeo as u', 'u.id', '=', 'sal_impor_padron_nominal.distrito_id')
                     ->where('importacion_id', $impMaxAnio)->where('repetido', '1')
@@ -749,7 +749,7 @@ class PadronNominalController extends Controller
                 return response()->json(compact('excel'));
 
             case 'tabla3_1':
-                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio);
+                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio, $rq->mes);
 
                 $base = ImporPadronNominal::join('par_ubigeo as u', 'u.id', '=', 'sal_impor_padron_nominal.distrito_id')
                     ->where('importacion_id', $impMaxAnio)->where('repetido', '1')->where('ubigeo', $rq->ubigeo)
@@ -825,7 +825,7 @@ class PadronNominalController extends Controller
         $fuente = ImporPadronNominalController::$FUENTE;
         switch ($div) {
             case 'tabla2':
-                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio);
+                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio, $mes);
                 $base = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')
                     ->select(
                         DB::raw('case when seguro_id=1 then "SIS" when seguro_id=2 then "ESSALUD" when seguro_id=3 then "SANIDAD" when seguro_id=4 then "PRIVADO" else "NINGUNO" end as nseguro'),
@@ -880,7 +880,7 @@ class PadronNominalController extends Controller
                 return compact('base', 'foot');
 
             case 'tabla3':
-                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio);
+                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio, $mes);
 
                 $base = ImporPadronNominal::join('par_ubigeo as u', 'u.id', '=', 'sal_impor_padron_nominal.distrito_id')
                     ->where('importacion_id', $impMaxAnio)->where('repetido', '1')
@@ -944,7 +944,7 @@ class PadronNominalController extends Controller
                 return compact('base', 'foot');
 
             case 'tabla3_1':
-                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio);
+                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio, $mes);
 
                 $base = ImporPadronNominal::join('par_ubigeo as u', 'u.id', '=', 'sal_impor_padron_nominal.distrito_id')
                     ->where('importacion_id', $impMaxAnio)->where('repetido', '1')->where('ubigeo', $ubigeo)
@@ -1245,6 +1245,7 @@ class PadronNominalController extends Controller
 
         return response()->json($result);
     }
+
     public function ListaImportada(Request $rq)
     {
         $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio);
@@ -1441,11 +1442,10 @@ class PadronNominalController extends Controller
         return Excel::download(new TableroCalidadCriterioExport($div, $importacion, $criterio, $edades, $provincia, $distrito), $name);
     }
 
-    public function tablerocalidadconsulta()
+    public function tablerocalidadconsulta($anio, $mes)
     {
         $fuente = ImporPadronNominalController::$FUENTE;
-        $anio = 2024;
-        $importacion = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio);
+        $importacion = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio, $mes);
         return view('salud.PadronNominal.TableroCalidadConsulta', compact('importacion'));
     }
 

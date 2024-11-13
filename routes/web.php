@@ -1274,9 +1274,10 @@ Route::post('/Salud/PadronNominal/TableroCalidad/Criterio/listar2', [PadronNomin
 Route::get('/Salud/PadronNominal/TableroCalidad/Criterio/reportes', [PadronNominalController::class, 'tablerocalidadcriterioreporte'])->name('salud.padronnominal.tablerocalidad.criterio.reporte');
 Route::get('/Salud/PadronNominal/TableroCalidad/Criterio/Exportar/{div}/{importacion}/{criterio}/{edades}/{provincia}/{distrito}', [PadronNominalController::class, 'tablerocalidadcriteriodownload'])->name('salud.padronnominal.tablerocalidad.criterio.exportar.excel');
 
-Route::get('/Salud/PadronNominal/TableroCalidad/Consulta', [PadronNominalController::class, 'tablerocalidadconsulta'])->name('salud.padronnominal.tablerocalidad.consulta');
+
 Route::get('/Salud/PadronNominal/TableroCalidad/Consulta/listar', [PadronNominalController::class, 'tablerocalidadconsultalistar'])->name('salud.padronnominal.tablerocalidad.consulta.listar');
 Route::get('/Salud/PadronNominal/TableroCalidad/Consulta/find1/{importacion}/{tipo}/{documento}/{apellido?}', [PadronNominalController::class, 'tablerocalidadconsultafind1'])->name('salud.padronnominal.tablerocalidad.consulta.find1');
+Route::get('/Salud/PadronNominal/TableroCalidad/Consulta/{anio}/{mes}', [PadronNominalController::class, 'tablerocalidadconsulta'])->name('salud.padronnominal.tablerocalidad.consulta');
 
 Route::get('/Salud/PadronNominal/Mes/{anio}', [PadronNominalController::class, 'meses'])->name('salud.padronnominal.mes');
 

@@ -22,7 +22,8 @@ class EstablecimientoRepositorio
                 $join->on('te.id', '=', 'en.tipoentidad_id')
                     ->where('te.sector_id', '=', $sector);
             })
-            ->where('es.estado', 'ACTIVO')->where('re.codigo', '!=', '00')->whereNotIn('cod_unico', [28683, 30785, 27062, 29247]);
+            // ->where('es.estado', 'ACTIVO')->where('re.codigo', '!=', '00')->whereNotIn('cod_unico', [28683, 30785, 27062, 29247]);
+            ->where('es.estado', 'ACTIVO')->whereIn('es.institucion', ['GOBIERNO REGIONAL', 'MINSA'])->whereIn('es.categoria', ['I-1', 'I-2', 'I-3', 'I-4'])->whereNotIn('cod_unico', [28683, 30785, 27062, 29247]);
         if ($municipio > 0) $query = $query->where('ub.id', $municipio);
         // if ($red > 0) $query = $query->where('re.id', $red);
         // if ($microred > 0) $query = $query->where('mi.id', $microred);
@@ -46,7 +47,8 @@ class EstablecimientoRepositorio
                 $join->on('te.id', '=', 'en.tipoentidad_id')
                     ->where('te.sector_id', '=', $sector);
             })
-            ->where('es.estado', 'ACTIVO')->where('re.codigo', '!=', '00')->whereNotIn('cod_unico', [28683, 30785, 27062, 29247]);
+            // ->where('es.estado', 'ACTIVO')->where('re.codigo', '!=', '00')->whereNotIn('cod_unico', [28683, 30785, 27062, 29247]);
+            ->where('es.estado', 'ACTIVO')->whereIn('es.institucion', ['GOBIERNO REGIONAL', 'MINSA'])->whereIn('es.categoria', ['I-1', 'I-2', 'I-3', 'I-4'])->whereNotIn('cod_unico', [28683, 30785, 27062, 29247]);
 
         switch (session('usuario_nivel')) {
             case '1':
@@ -157,7 +159,8 @@ class EstablecimientoRepositorio
                     ->where('te.sector_id', '=', $sector);
             })
             ->leftJoin('sal_padron_actas as pa', 'pa.establecimiento_id', '=', 'es.id')
-            ->where('es.estado', 'ACTIVO')->where('re.codigo', '!=', '00')->whereNotIn('cod_unico', [28683, 30785, 27062, 29247]);
+            // ->where('es.estado', 'ACTIVO')->where('re.codigo', '!=', '00')->whereNotIn('cod_unico', [28683, 30785, 27062, 29247]);
+            ->where('es.estado', 'ACTIVO')->whereIn('es.institucion', ['GOBIERNO REGIONAL', 'MINSA'])->whereIn('es.categoria', ['I-1', 'I-2', 'I-3', 'I-4'])->whereNotIn('cod_unico', [28683, 30785, 27062, 29247]);
         if ($municipio > 0 && $registrador > 0) $query = $query->where('ub.id', $municipio);
         if ($red > 0 && $microred > 0) $query = $query->where('mi.id', $microred);
         else if ($red > 0 && !$microred > 0) $query = $query->where('re.id', $red);

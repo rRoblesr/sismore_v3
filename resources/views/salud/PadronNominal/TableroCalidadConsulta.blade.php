@@ -40,7 +40,7 @@
                             <div class="custom-select-container">
                                 <label for="numerodocumento">Documento</label>
                                 <input type="number" id="numerodocumento" name="numerodocumento" class="form-control"
-                                    value="94019444">
+                                    value="">
                             </div>
 
 
@@ -308,7 +308,8 @@
                                             <td id="programa"></td>
                                         </tr>
                                         <tr>
-                                            <td class="text-right" style="background-color: #D4F2F0">INSTITUTCIÓN EDUCATIVA</td>
+                                            <td class="text-right" style="background-color: #D4F2F0">INSTITUTCIÓN
+                                                EDUCATIVA</td>
                                             <td></td>
                                             <td class="text-right" style="background-color: #D4F2F0">NIVEL EDUCATIVO</td>
                                             <td></td>
@@ -357,607 +358,615 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                </div>
+
+
+
             </div>
+        </div><!-- /.modal -->
+    @endsection
 
-
-
-        </div>
-    </div><!-- /.modal -->
-@endsection
-
-@section('js')
-    <script type="text/javascript">
-        var paleta_colores = ['#5eb9aa', '#F9FFFE', '#f5bd22', '#058DC7', '#50B432', '#9D561B', '#DDDF00', '#24CBE5',
-            '#64E572', '#9F9655', '#FFF263', '#6AF9C4'
-        ];
-        var tableprincipal;
-        $(document).ready(function() {
-            cargarCards();
-        });
-
-        function cargarCards() {
-            tableprincipal = $('#tabla1').DataTable({
-                responsive: true,
-                autoWidth: false,
-                processing: true, // Indica que los datos se procesan en el servidor
-                serverSide: true, // Habilita la paginación en el servidor
-                ordered: true,
-                language: table_language,
-                destroy: true,
-                ajax: {
-                    url: "{{ route('salud.padronnominal.tablerocalidad.consulta.listar') }}",
-                    type: "GET",
-                    data: function(d) {
-                        d.importacion = {{ $importacion }};
-                        d.tip = $('#tipodocumento').val();
-                        d.doc = $('#numerodocumento').val();
-                        d.nom = $('#apellidosnombres').val();
-                    }
-                },
-                columnDefs: [{
-                        className: 'text-center',
-                        targets: [0, 1, 2, 3, 5, 6, 7, 8]
-                    },
-                    {
-                        targets: 1,
-                        render: function(data, type, row) {
-                            return `<a href="#" onclick="abrirmodalpadron(${data})">${data}</a>`;
-                        }
-                    }
-                ]
+    @section('js')
+        <script type="text/javascript">
+            var paleta_colores = ['#5eb9aa', '#F9FFFE', '#f5bd22', '#058DC7', '#50B432', '#9D561B', '#DDDF00', '#24CBE5',
+                '#64E572', '#9F9655', '#FFF263', '#6AF9C4'
+            ];
+            var tableprincipal;
+            $(document).ready(function() {
+                // cargarCards();
             });
-        }
 
-        function abrirmodalpadron(padron) {
+            function cargarCards() {
+                var tip = $('#tipodocumento').val();
+                var doc = $('#numerodocumento').val();
+                var ape = $('#apellidosnombres').val();
+                if (doc != '' || ape != '') {
+                    tableprincipal = $('#tabla1').DataTable({
+                        responsive: true,
+                        autoWidth: false,
+                        processing: true, // Indica que los datos se procesan en el servidor
+                        serverSide: true, // Habilita la paginación en el servidor
+                        ordered: true,
+                        language: table_language,
+                        destroy: true,
+                        ajax: {
+                            url: "{{ route('salud.padronnominal.tablerocalidad.consulta.listar') }}",
+                            type: "GET",
+                            data: function(d) {
+                                d.importacion = {{ $importacion }};
+                                d.tip = $('#tipodocumento').val();
+                                d.doc = $('#numerodocumento').val();
+                                d.nom = $('#apellidosnombres').val();
+                            }
+                        },
+                        columnDefs: [{
+                                className: 'text-center',
+                                targets: [0, 1, 2, 3, 5, 6, 7, 8]
+                            },
+                            {
+                                targets: 1,
+                                render: function(data, type, row) {
+                                    return `<a href="#" onclick="abrirmodalpadron(${data})">${data}</a>`;
+                                }
+                            }
+                        ]
+                    });
+                } else {
+                    toastr.error('CAMPOS VACIOS', 'Mensaje');
+                }
 
-            $.ajax({
-                url: "{{ route('salud.padronnominal.tablerocalidad.criterio.find1', ['importacion' => $importacion, 'padron' => 'padron']) }}"
-                    .replace('padron', padron),
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    // console.log(data);
-                    $('#padron').html(data.padron);
-                    $('#tipodoc').html(data.tipo_doc == 'Padron' ? '' : data.tipo_doc);
-                    $('#doc').html(data.tipo_doc == 'Padron' ? '' : data.num_doc);
-                    $('#apepat').html(data.apellido_paterno);
-                    $('#apemat').html(data.apellido_materno);
-                    $('#nom').html(data.nombre);
-                    $('#sexo').html(data.genero == 'M' ? 'MASCULINO' : 'FEMENINO');
-                    $('#nacimiento').html(data.fecha_nacimiento);
-                    $('#edad').html(data.edad + ' ' + (data.tipo_edad == 'D' ? 'DIAS' : (data.tipo_edad == 'M' ?
-                        'MESES' : 'AÑOS')));
-                    $('#dep').html(data.departamento);
-                    $('#pro').html(data.provincia);
-                    $('#dis').html(data.distrito);
-                    $('#cp').html(data.centro_poblado_nombre);
-                    $('#dir').html(data.direccion);
-                    $('#esn').html(data.cui_nacimiento);
-                    $('#esa').html(data.cui_atencion);
-                    $('#visita').html(data.visita);
-                    $('#encontrado').html(data.menor_encontrado);
-                    $('#seguro').html(data.seguro);
-                    $('#programa').html(data.programa_social);
-                    $('#mapoderado').html(data.apoderado);
-                    $('#mtipodoc').html(data.tipo_doc_madre);
-                    $('#mdoc').html(data.num_doc_madre);
-                    $('#mapepat').html(data.apellido_paterno_madre);
-                    $('#mapemat').html(data.apellido_materno_madre);
-                    $('#mnom').html(data.nombres_madre);
-                    $('#mcel').html(data.celular_madre);
-                    $('#mgrado').html(data.grado_instruccion);
-                    $('#mlengua').html(data.lengua_madre);
+            }
 
-                    $('#modal-nino').modal('show');
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
-        }
+            function abrirmodalpadron(padron) {
 
-        function consultahacer() {
-
-            var tip = $('#tipodocumento').val();
-            var doc = $('#numerodocumento').val();
-            var ape = $('#apellidosnombres').val();
-            if (doc != '' || ape != '') {
                 $.ajax({
-                    url: "{{ route('salud.padronnominal.tablerocalidad.consulta.find1', ['importacion' => $importacion, 'tipo' => 'tipo', 'documento' => 'documento', 'apellido' => 'apellido']) }}"
-                        .replace('tipo', tip).replace('documento', doc == '' ? documento : doc)
-                        .replace('apellido', ape == '' ? 'apellido' : ape),
+                    url: "{{ route('salud.padronnominal.tablerocalidad.criterio.find1', ['importacion' => $importacion, 'padron' => 'padron']) }}"
+                        .replace('padron', padron),
                     type: 'GET',
                     dataType: 'json',
                     success: function(data) {
-                        console.log(data);
-                        if (Object.keys(data).length > 0) {
-                            $('#padron').html(data.padron);
-                            $('#tipodoc').html(data.tipo_doc == 'Padron' ? '' : data.tipo_doc);
-                            $('#doc').html(data.tipo_doc == 'Padron' ? '' : data.num_doc);
-                            $('#apepat').html(data.apellido_paterno);
-                            $('#apemat').html(data.apellido_materno);
-                            $('#nom').html(data.nombre);
-                            $('#sexo').html(data.genero == 'M' ? 'MASCULINO' : 'FEMENINO');
-                            $('#nacimiento').html(data.fecha_nacimiento);
-                            $('#edad').html(data.edad + ' ' +
-                                (data.tipo_edad == 'D' ? 'DIAS' : (data.tipo_edad == 'M' ? 'MESES' :
-                                    'AÑOS')));
-                            $('#dep').html(data.departamento);
-                            $('#pro').html(data.provincia);
-                            $('#dis').html(data.distrito);
-                            $('#cp').html(data.centro_poblado_nombre);
-                            $('#dir').html(data.direccion);
-                            $('#esn').html(data.cui_nacimiento);
-                            $('#esa').html(data.cui_atencion);
-                            $('#visita').html(data.visita);
-                            $('#encontrado').html(data.menor_encontrado);
-                            $('#seguro').html(data.seguro);
-                            $('#programa').html(data.programa_social);
-                            $('#mapoderado').html(data.apoderado);
-                            $('#mtipodoc').html(data.tipo_doc_madre);
-                            $('#mdoc').html(data.num_doc_madre);
-                            $('#mapepat').html(data.apellido_paterno_madre);
-                            $('#mapemat').html(data.apellido_materno_madre);
-                            $('#mnom').html(data.nombres_madre);
-                            $('#mcel').html(data.celular_madre);
-                            $('#mgrado').html(data.grado_instruccion);
-                            $('#mlengua').html(data.lengua_madre);
+                        // console.log(data);
+                        $('#padron').html(data.padron);
+                        $('#tipodoc').html(data.tipo_doc == 'Padron' ? '' : data.tipo_doc);
+                        $('#doc').html(data.tipo_doc == 'Padron' ? '' : data.num_doc);
+                        $('#apepat').html(data.apellido_paterno);
+                        $('#apemat').html(data.apellido_materno);
+                        $('#nom').html(data.nombre);
+                        $('#sexo').html(data.genero == 'M' ? 'MASCULINO' : 'FEMENINO');
+                        $('#nacimiento').html(data.fecha_nacimiento);
+                        $('#edad').html(data.edad + ' ' + (data.tipo_edad == 'D' ? 'DIAS' : (data.tipo_edad == 'M' ?
+                            'MESES' : 'AÑOS')));
+                        $('#dep').html(data.departamento);
+                        $('#pro').html(data.provincia);
+                        $('#dis').html(data.distrito);
+                        $('#cp').html(data.centro_poblado_nombre);
+                        $('#dir').html(data.direccion);
+                        $('#esn').html(data.cui_nacimiento);
+                        $('#esa').html(data.cui_atencion);
+                        $('#visita').html(data.visita);
+                        $('#encontrado').html(data.menor_encontrado);
+                        $('#seguro').html(data.seguro);
+                        $('#programa').html(data.programa_social);
+                        $('#mapoderado').html(data.apoderado);
+                        $('#mtipodoc').html(data.tipo_doc_madre);
+                        $('#mdoc').html(data.num_doc_madre);
+                        $('#mapepat').html(data.apellido_paterno_madre);
+                        $('#mapemat').html(data.apellido_materno_madre);
+                        $('#mnom').html(data.nombres_madre);
+                        $('#mcel').html(data.celular_madre);
+                        $('#mgrado').html(data.grado_instruccion);
+                        $('#mlengua').html(data.lengua_madre);
 
-                            $('#formulario').show();
-                        }
-
+                        $('#modal-nino').modal('show');
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         console.log(jqXHR);
                     },
                 });
-
-            } else {
-                toastr.error('CAMPOS VACIOS', 'Mensaje');
             }
 
-        }
+            function consultahacer() {
 
-        function consultalimpiar() {
-            $('#formulario').hide();
-            $('#numerodocumento').val('');
-            $('#apellidosnombres').val('');
-        }
+                var tip = $('#tipodocumento').val();
+                var doc = $('#numerodocumento').val();
+                var ape = $('#apellidosnombres').val();
+                if (doc != '' || ape != '') {
+                    $.ajax({
+                        url: "{{ route('salud.padronnominal.tablerocalidad.consulta.find1', ['importacion' => $importacion, 'tipo' => 'tipo', 'documento' => 'documento', 'apellido' => 'apellido']) }}"
+                            .replace('tipo', tip).replace('documento', doc == '' ? documento : doc)
+                            .replace('apellido', ape == '' ? 'apellido' : ape),
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            console.log(data);
+                            if (Object.keys(data).length > 0) {
+                                $('#padron').html(data.padron);
+                                $('#tipodoc').html(data.tipo_doc == 'Padron' ? '' : data.tipo_doc);
+                                $('#doc').html(data.tipo_doc == 'Padron' ? '' : data.num_doc);
+                                $('#apepat').html(data.apellido_paterno);
+                                $('#apemat').html(data.apellido_materno);
+                                $('#nom').html(data.nombre);
+                                $('#sexo').html(data.genero == 'M' ? 'MASCULINO' : 'FEMENINO');
+                                $('#nacimiento').html(data.fecha_nacimiento);
+                                $('#edad').html(data.edad + ' ' +
+                                    (data.tipo_edad == 'D' ? 'DIAS' : (data.tipo_edad == 'M' ? 'MESES' :
+                                        'AÑOS')));
+                                $('#dep').html(data.departamento);
+                                $('#pro').html(data.provincia);
+                                $('#dis').html(data.distrito);
+                                $('#cp').html(data.centro_poblado_nombre);
+                                $('#dir').html(data.direccion);
+                                $('#esn').html(data.cui_nacimiento);
+                                $('#esa').html(data.cui_atencion);
+                                $('#visita').html(data.visita);
+                                $('#encontrado').html(data.menor_encontrado);
+                                $('#seguro').html(data.seguro);
+                                $('#programa').html(data.programa_social);
+                                $('#mapoderado').html(data.apoderado);
+                                $('#mtipodoc').html(data.tipo_doc_madre);
+                                $('#mdoc').html(data.num_doc_madre);
+                                $('#mapepat').html(data.apellido_paterno_madre);
+                                $('#mapemat').html(data.apellido_materno_madre);
+                                $('#mnom').html(data.nombres_madre);
+                                $('#mcel').html(data.celular_madre);
+                                $('#mgrado').html(data.grado_instruccion);
+                                $('#mlengua').html(data.lengua_madre);
+
+                                $('#formulario').show();
+                            }
+
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.log(jqXHR);
+                        },
+                    });
+
+                } else {
+                    toastr.error('CAMPOS VACIOS', 'Mensaje');
+                }
+
+            }
+
+            function consultalimpiar() {
+                $('#formulario').hide();
+                $('#numerodocumento').val('');
+                $('#apellidosnombres').val('');
+            }
 
 
-        function cargarsdsdfCards() {
-            tableprincipal = $('#tabla1').DataTable({
-                responsive: true,
-                autoWidth: false,
-                ordered: true,
-                language: table_language,
-                destroy: true,
-                // ajax: "{{ route('salud.padronnominal.tablerocalidad.criterio.listar') }}",
-                // type: "get",
-                ajax: {
-                    url: "{{ route('salud.padronnominal.tablerocalidad.criterio.listar') }}",
+            function cargarsdsdfCards() {
+                tableprincipal = $('#tabla1').DataTable({
+                    responsive: true,
+                    autoWidth: false,
+                    ordered: true,
+                    language: table_language,
+                    destroy: true,
+                    // ajax: "{{ route('salud.padronnominal.tablerocalidad.criterio.listar') }}",
+                    // type: "get",
+                    ajax: {
+                        url: "{{ route('salud.padronnominal.tablerocalidad.criterio.listar') }}",
+                        type: "GET",
+                        data: function(d) {
+                            d.importacion = {{ $importacion }};
+                            d.establecimiento = $('#establecimiento').val();
+                            d.microred = $('#microred').val();
+                            d.red = $('#red').val();
+                            d.desa = 0;
+                        }
+                    },
+                    columnDefs: [{
+                        className: 'text-center',
+                        targets: [0, 1, 2, 3, 5, 6, 8]
+                    }, {
+                        targets: 1,
+                        render: function(data, type, row) {
+                            // return '<a href="/ruta/detalle/' + row + '">' + data + '</a>';
+                            return `<a href="#" onclick="abrirmodalpadron(${data})">${data}</a>`;
+                        }
+                    }, {
+                        targets: 8,
+                        render: function(data, type, row) {
+                            // return '<a href="/ruta/detalle/' + row + '">' + data + '</a>';
+                            // console.log(parseInt(data, 10));
+                            return data ?
+                                `<a href="#" onclick="abrirmodaleess(${parseInt(data, 10)})">${data}</a>` :
+                                '';
+                        }
+                    }]
+                });
+            }
+
+            function abrirmodalpadron(padron) {
+                $('#modal-nino').modal('show');
+                $.ajax({
+                    url: "{{ route('salud.padronnominal.tablerocalidad.criterio.find1', ['importacion' => $importacion, 'padron' => 'padron']) }}"
+                        .replace('padron', padron),
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        // console.log(data);
+                        $('#padron').html(data.padron);
+                        $('#tipodoc').html(data.tipo_doc == 'Padron' ? '' : data.tipo_doc);
+                        $('#doc').html(data.tipo_doc == 'Padron' ? '' : data.num_doc);
+                        $('#apepat').html(data.apellido_paterno);
+                        $('#apemat').html(data.apellido_materno);
+                        $('#nom').html(data.nombre);
+                        $('#sexo').html(data.genero == 'M' ? 'MASCULINO' : 'FEMENINO');
+                        $('#nacimiento').html(data.fecha_nacimiento);
+                        $('#edad').html(data.edad + ' ' + (data.tipo_edad == 'D' ? 'DIAS' : (data.tipo_edad == 'M' ?
+                            'MESES' : 'AÑOS')));
+                        $('#dep').html(data.departamento);
+                        $('#pro').html(data.provincia);
+                        $('#dis').html(data.distrito);
+                        $('#cp').html(data.centro_poblado_nombre);
+                        $('#dir').html(data.direccion);
+                        $('#esn').html(data.cui_nacimiento);
+                        $('#esa').html(data.cui_atencion);
+                        $('#visita').html(data.visita);
+                        $('#encontrado').html(data.menor_encontrado);
+                        $('#seguro').html(data.seguro);
+                        $('#programa').html(data.programa_social);
+                        $('#mapoderado').html(data.apoderado);
+                        $('#mtipodoc').html(data.tipo_doc_madre);
+                        $('#mdoc').html(data.num_doc_madre);
+                        $('#mapepat').html(data.apellido_paterno_madre);
+                        $('#mapemat').html(data.apellido_materno_madre);
+                        $('#mnom').html(data.nombres_madre);
+                        $('#mcel').html(data.celular_madre);
+                        $('#mgrado').html(data.grado_instruccion);
+                        $('#mlengua').html(data.lengua_madre);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR);
+                    },
+                });
+            }
+
+            function abrirmodaleess(cui) {
+                $('#modal-eess').modal('show');
+                $.ajax({
+                    url: "{{ route('salud.padronnominal.tablerocalidad.criterio.find2', ['importacion' => $importacion, 'cui' => 'cui']) }}"
+                        .replace('cui', cui),
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(data);
+                        $('#eesscui').html(data.codigo_unico);
+                        $('#eessnombre').html(data.nombre_establecimiento);
+                        $('#eessdisa').html(data.disa);
+                        $('#eessred').html(data.red);
+                        $('#eessmicro').html(data.micro);
+                        $('#eessdep').html(data.departamento);
+                        $('#eesspro').html(data.provincia);
+                        $('#eessdis').html(data.distrito);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR);
+                    },
+                });
+            }
+
+
+            function panelGraficas(div) {
+                $.ajax({
+                    url: "{{ route('salud.padronnominal.tablerocalidad.reporte') }}",
+                    data: {
+                        'div': div,
+                        "anio": $('#anio').val(),
+                        "mes": $('#mes').val(),
+                        "provincia": $('#provincia').val(),
+                        "distrito": $('#distrito').val(),
+                    },
                     type: "GET",
-                    data: function(d) {
-                        d.importacion = {{ $importacion }};
-                        d.establecimiento = $('#establecimiento').val();
-                        d.microred = $('#microred').val();
-                        d.red = $('#red').val();
-                        d.desa = 0;
-                    }
-                },
-                columnDefs: [{
-                    className: 'text-center',
-                    targets: [0, 1, 2, 3, 5, 6, 8]
-                }, {
-                    targets: 1,
-                    render: function(data, type, row) {
-                        // return '<a href="/ruta/detalle/' + row + '">' + data + '</a>';
-                        return `<a href="#" onclick="abrirmodalpadron(${data})">${data}</a>`;
-                    }
-                }, {
-                    targets: 8,
-                    render: function(data, type, row) {
-                        // return '<a href="/ruta/detalle/' + row + '">' + data + '</a>';
-                        // console.log(parseInt(data, 10));
-                        return data ?
-                            `<a href="#" onclick="abrirmodaleess(${parseInt(data, 10)})">${data}</a>` :
-                            '';
-                    }
-                }]
-            });
-        }
+                    dataType: "JSON",
+                    success: function(data) {
+                        switch (div) {
+                            case 'head':
+                                $('#card1').text(data.card1).counterUp({
+                                    delay: 10,
+                                    time: 1000
+                                });
+                                $('#card2').text(data.card2).counterUp({
+                                    delay: 10,
+                                    time: 1000
+                                });
+                                $('#card3').text(data.card3).counterUp({
+                                    delay: 10,
+                                    time: 1000
+                                });
+                                $('#card4').text(data.card4).counterUp({
+                                    delay: 10,
+                                    time: 1000
+                                });
+                                break;
+                            case 'anal1':
+                                // console.log(data.avance);
+                                GaugeSeries('anal1', data.avance, 'Porcentaje de Visitados');
+                                break;
+                            case 'anal2':
+                                GaugeSeries('anal2', data.avance, 'Porcentaje con DNI');
+                                break;
+                            case 'anal3':
+                                GaugeSeries('anal3', data.avance, 'Porcentaje con Seguro Salud');
+                                break;
+                            case 'anal4':
+                                GaugeSeries('anal4', data.avance, 'Porcentaje con EESS de atención');
+                                break;
+                            case 'tabla1':
+                                $('#ctabla1').html(data.excel);
+                                break;
+                            case 'tabla2':
+                                $('#ctabla2').html(data.excel);
+                                // $('#tabla2').DataTable({
+                                //     responsive: true,
+                                //     autoWidth: false,
+                                //     ordered: true,
+                                //     language: table_language,
+                                // });
+                                break;
 
-        function abrirmodalpadron(padron) {
-            $('#modal-nino').modal('show');
-            $.ajax({
-                url: "{{ route('salud.padronnominal.tablerocalidad.criterio.find1', ['importacion' => $importacion, 'padron' => 'padron']) }}"
-                    .replace('padron', padron),
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    // console.log(data);
-                    $('#padron').html(data.padron);
-                    $('#tipodoc').html(data.tipo_doc == 'Padron' ? '' : data.tipo_doc);
-                    $('#doc').html(data.tipo_doc == 'Padron' ? '' : data.num_doc);
-                    $('#apepat').html(data.apellido_paterno);
-                    $('#apemat').html(data.apellido_materno);
-                    $('#nom').html(data.nombre);
-                    $('#sexo').html(data.genero == 'M' ? 'MASCULINO' : 'FEMENINO');
-                    $('#nacimiento').html(data.fecha_nacimiento);
-                    $('#edad').html(data.edad + ' ' + (data.tipo_edad == 'D' ? 'DIAS' : (data.tipo_edad == 'M' ?
-                        'MESES' : 'AÑOS')));
-                    $('#dep').html(data.departamento);
-                    $('#pro').html(data.provincia);
-                    $('#dis').html(data.distrito);
-                    $('#cp').html(data.centro_poblado_nombre);
-                    $('#dir').html(data.direccion);
-                    $('#esn').html(data.cui_nacimiento);
-                    $('#esa').html(data.cui_atencion);
-                    $('#visita').html(data.visita);
-                    $('#encontrado').html(data.menor_encontrado);
-                    $('#seguro').html(data.seguro);
-                    $('#programa').html(data.programa_social);
-                    $('#mapoderado').html(data.apoderado);
-                    $('#mtipodoc').html(data.tipo_doc_madre);
-                    $('#mdoc').html(data.num_doc_madre);
-                    $('#mapepat').html(data.apellido_paterno_madre);
-                    $('#mapemat').html(data.apellido_materno_madre);
-                    $('#mnom').html(data.nombres_madre);
-                    $('#mcel').html(data.celular_madre);
-                    $('#mgrado').html(data.grado_instruccion);
-                    $('#mlengua').html(data.lengua_madre);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
-        }
-
-        function abrirmodaleess(cui) {
-            $('#modal-eess').modal('show');
-            $.ajax({
-                url: "{{ route('salud.padronnominal.tablerocalidad.criterio.find2', ['importacion' => $importacion, 'cui' => 'cui']) }}"
-                    .replace('cui', cui),
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    console.log(data);
-                    $('#eesscui').html(data.codigo_unico);
-                    $('#eessnombre').html(data.nombre_establecimiento);
-                    $('#eessdisa').html(data.disa);
-                    $('#eessred').html(data.red);
-                    $('#eessmicro').html(data.micro);
-                    $('#eessdep').html(data.departamento);
-                    $('#eesspro').html(data.provincia);
-                    $('#eessdis').html(data.distrito);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
-        }
-
-
-        function panelGraficas(div) {
-            $.ajax({
-                url: "{{ route('salud.padronnominal.tablerocalidad.reporte') }}",
-                data: {
-                    'div': div,
-                    "anio": $('#anio').val(),
-                    "mes": $('#mes').val(),
-                    "provincia": $('#provincia').val(),
-                    "distrito": $('#distrito').val(),
-                },
-                type: "GET",
-                dataType: "JSON",
-                success: function(data) {
-                    switch (div) {
-                        case 'head':
-                            $('#card1').text(data.card1).counterUp({
-                                delay: 10,
-                                time: 1000
-                            });
-                            $('#card2').text(data.card2).counterUp({
-                                delay: 10,
-                                time: 1000
-                            });
-                            $('#card3').text(data.card3).counterUp({
-                                delay: 10,
-                                time: 1000
-                            });
-                            $('#card4').text(data.card4).counterUp({
-                                delay: 10,
-                                time: 1000
-                            });
-                            break;
-                        case 'anal1':
-                            // console.log(data.avance);
-                            GaugeSeries('anal1', data.avance, 'Porcentaje de Visitados');
-                            break;
-                        case 'anal2':
-                            GaugeSeries('anal2', data.avance, 'Porcentaje con DNI');
-                            break;
-                        case 'anal3':
-                            GaugeSeries('anal3', data.avance, 'Porcentaje con Seguro Salud');
-                            break;
-                        case 'anal4':
-                            GaugeSeries('anal4', data.avance, 'Porcentaje con EESS de atención');
-                            break;
-                        case 'tabla1':
-                            $('#ctabla1').html(data.excel);
-                            break;
-                        case 'tabla2':
-                            $('#ctabla2').html(data.excel);
-                            // $('#tabla2').DataTable({
-                            //     responsive: true,
-                            //     autoWidth: false,
-                            //     ordered: true,
-                            //     language: table_language,
-                            // });
-                            break;
-
-                        default:
-                            break;
-                    }
-
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 1");
-                    console.log(jqXHR);
-                },
-            });
-        }
-
-        function GaugeSeries(div, data, title) {
-            Highcharts.chart(div, {
-                chart: {
-                    height: 200,
-                    type: 'solidgauge',
-                    margin: [10, 10, 10, 10],
-                    spacing: [10, 10, 10, 10]
-                },
-                title: {
-                    text: title,
-                    verticalAlign: 'top',
-                    style: {
-                        fontSize: '12px',
-                        fontWeight: 'normal'
-                    }
-                },
-                pane: {
-                    startAngle: 0,
-                    endAngle: 360,
-                    background: [{ // Fondo del anillo
-                        outerRadius: '100%',
-                        innerRadius: '80%',
-                        backgroundColor: Highcharts.color('#E0E0E0').setOpacity(0.3).get(),
-                        borderWidth: 0
-                    }]
-                },
-                yAxis: {
-                    min: 0,
-                    max: 100,
-                    lineWidth: 0,
-                    tickPositions: []
-                },
-                plotOptions: {
-                    solidgauge: {
-                        dataLabels: {
-                            format: '<div style="text-align:center"><span style="font-size:24px">{y}%</span><br/>' +
-                                '<span style="font-size:12px;opacity:0.6">Avance</span></div>',
-                            y: -25,
-                            borderWidth: 0,
-                            useHTML: true
-                        },
-                        // linecap: 'round',
-                        // rounded: true
-                    }
-                },
-                series: [{
-                    name: 'Avance',
-                    data: [{
-                        y: data,
-                        color: data >= 95 ? '#5eb9aa' : (data >= 75 ? '#f5bd22' :
-                            '#ef5350')
-                    }],
-                    innerRadius: '80%',
-                    radius: '100%',
-                }],
-                tooltip: {
-                    enabled: false
-                },
-                credits: {
-                    enabled: false
-                },
-                exporting: {
-                    enabled: false
-                }
-            });
-        }
-
-        function GaugeSeriesyyy(div, data) {
-            Highcharts.chart(div, {
-                chart: {
-                    height: 165,
-                    margin: [0, 0, 0, 0],
-                    spacing: [0, 0, 0, 0],
-                    type: 'solidgauge'
-                },
-                yAxis: {
-                    min: 0,
-                    max: 150,
-                    dataClasses: [{
-                            from: 0,
-                            to: 50,
-                            color: '#ef5350'
-                        },
-                        {
-                            from: 51,
-                            to: 99,
-                            color: '#f5bd22'
-                        },
-                        {
-                            from: 100,
-                            to: 150,
-                            color: '#5eb9aa'
+                            default:
+                                break;
                         }
-                    ],
-                    labels: {
+
+                    },
+                    erro: function(jqXHR, textStatus, errorThrown) {
+                        console.log("ERROR GRAFICA 1");
+                        console.log(jqXHR);
+                    },
+                });
+            }
+
+            function GaugeSeries(div, data, title) {
+                Highcharts.chart(div, {
+                    chart: {
+                        height: 200,
+                        type: 'solidgauge',
+                        margin: [10, 10, 10, 10],
+                        spacing: [10, 10, 10, 10]
+                    },
+                    title: {
+                        text: title,
+                        verticalAlign: 'top',
+                        style: {
+                            fontSize: '12px',
+                            fontWeight: 'normal'
+                        }
+                    },
+                    pane: {
+                        startAngle: 0,
+                        endAngle: 360,
+                        background: [{ // Fondo del anillo
+                            outerRadius: '100%',
+                            innerRadius: '80%',
+                            backgroundColor: Highcharts.color('#E0E0E0').setOpacity(0.3).get(),
+                            borderWidth: 0
+                        }]
+                    },
+                    yAxis: {
+                        min: 0,
+                        max: 100,
+                        lineWidth: 0,
+                        tickPositions: []
+                    },
+                    plotOptions: {
+                        solidgauge: {
+                            dataLabels: {
+                                format: '<div style="text-align:center"><span style="font-size:24px">{y}%</span><br/>' +
+                                    '<span style="font-size:12px;opacity:0.6">Avance</span></div>',
+                                y: -25,
+                                borderWidth: 0,
+                                useHTML: true
+                            },
+                            // linecap: 'round',
+                            // rounded: true
+                        }
+                    },
+                    series: [{
+                        name: 'Avance',
+                        data: [{
+                            y: data,
+                            color: data >= 95 ? '#5eb9aa' : (data >= 75 ? '#f5bd22' :
+                                '#ef5350')
+                        }],
+                        innerRadius: '80%',
+                        radius: '100%',
+                    }],
+                    tooltip: {
                         enabled: false
                     },
-                    tickLength: 0,
-                    lineWidth: 0, // Remueve la línea del borde del gauge
-                    gridLineWidth: 0 // Elimina las líneas de división
-                },
-                pane: {
-                    background: [{
-                        // Sin borde, remueve el efecto de seccionado
-                        outerRadius: '100%',
-                        innerRadius: '80%',
-                        borderWidth: 0
-                    }]
-                },
-                credits: {
-                    enabled: false
-                },
-                exporting: {
-                    enabled: false
-                },
-                title: {
-                    text: ''
-                },
-                plotOptions: {
-                    solidgauge: {
-                        dataLabels: {
-                            format: '<div style="text-align:center; margin-top: -20px">' +
-                                '<div style="font-size:2.5em;">{y}%</div>' +
-                                '<div style="font-size:12px; opacity:0.4;">Avance</div>' +
-                                '</div>',
-                            useHTML: true,
-                            borderWidth: 0,
-                        }
-                    }
-                },
-                series: [{
-                    name: 'Avance',
-                    innerRadius: '80%',
-                    data: [{
-                        y: data,
-                        color: data >= 100 ? '#5eb9aa' : (data >= 51 ? '#f5bd22' :
-                            '#ef5350')
-                    }],
-                    radius: '100%',
-                }],
-                tooltip: {
-                    valueSuffix: '%',
-                    backgroundColor: '#FFFFFF',
-                    borderColor: 'gray',
-                    shadow: true,
-                    style: {
-                        fontSize: '12px'
-                    }
-                }
-            });
-        }
-
-        function GaugeSeriesxx(div, data) {
-            Highcharts.chart(div, {
-                chart: {
-                    height: 165,
-                    margin: [0, 0, 0, 0],
-                    spacing: [0, 0, 0, 0],
-                    type: 'solidgauge'
-                },
-                yAxis: {
-                    min: 0,
-                    max: 150, // Ajustado al máximo de dataClasses
-                    dataClasses: [{
-                            from: 0,
-                            to: 50,
-                            color: '#ef5350'
-                        },
-                        {
-                            from: 51,
-                            to: 99,
-                            color: '#f5bd22'
-                        },
-                        {
-                            from: 100,
-                            to: 150,
-                            color: '#5eb9aa'
-                        }
-                    ],
-                    labels: {
+                    credits: {
                         enabled: false
                     },
-                    tickLength: 0,
-                    lineColor: 'transparent',
-                    gridLineWidth: 0
-                },
-                pane: {
-                    background: {
-                        innerRadius: '80%',
-                        outerRadius: '100%'
+                    exporting: {
+                        enabled: false
                     }
-                },
-                credits: {
-                    enabled: false
-                },
-                exporting: {
-                    enabled: false
-                },
-                title: {
-                    text: ''
-                },
-                plotOptions: {
-                    solidgauge: {
-                        dataLabels: {
-                            format: '<div style="text-align:center; margin-top: -20px">' +
-                                '<div style="font-size:2.5em;">{y}%</div>' +
-                                '<div style="font-size:12px; opacity:0.4;">Avance</div>' +
-                                '</div>',
-                            useHTML: true,
-                            borderWidth: 0,
+                });
+            }
+
+            function GaugeSeriesyyy(div, data) {
+                Highcharts.chart(div, {
+                    chart: {
+                        height: 165,
+                        margin: [0, 0, 0, 0],
+                        spacing: [0, 0, 0, 0],
+                        type: 'solidgauge'
+                    },
+                    yAxis: {
+                        min: 0,
+                        max: 150,
+                        dataClasses: [{
+                                from: 0,
+                                to: 50,
+                                color: '#ef5350'
+                            },
+                            {
+                                from: 51,
+                                to: 99,
+                                color: '#f5bd22'
+                            },
+                            {
+                                from: 100,
+                                to: 150,
+                                color: '#5eb9aa'
+                            }
+                        ],
+                        labels: {
+                            enabled: false
+                        },
+                        tickLength: 0,
+                        lineWidth: 0, // Remueve la línea del borde del gauge
+                        gridLineWidth: 0 // Elimina las líneas de división
+                    },
+                    pane: {
+                        background: [{
+                            // Sin borde, remueve el efecto de seccionado
+                            outerRadius: '100%',
+                            innerRadius: '80%',
+                            borderWidth: 0
+                        }]
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    exporting: {
+                        enabled: false
+                    },
+                    title: {
+                        text: ''
+                    },
+                    plotOptions: {
+                        solidgauge: {
+                            dataLabels: {
+                                format: '<div style="text-align:center; margin-top: -20px">' +
+                                    '<div style="font-size:2.5em;">{y}%</div>' +
+                                    '<div style="font-size:12px; opacity:0.4;">Avance</div>' +
+                                    '</div>',
+                                useHTML: true,
+                                borderWidth: 0,
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'Avance',
+                        innerRadius: '80%',
+                        data: [{
+                            y: data,
+                            color: data >= 100 ? '#5eb9aa' : (data >= 51 ? '#f5bd22' :
+                                '#ef5350')
+                        }],
+                        radius: '100%',
+                    }],
+                    tooltip: {
+                        valueSuffix: '%',
+                        backgroundColor: '#FFFFFF',
+                        borderColor: 'gray',
+                        shadow: true,
+                        style: {
+                            fontSize: '12px'
                         }
                     }
-                },
-                series: [{
-                    name: 'Avance',
-                    innerRadius: '80%',
-                    data: [{
-                        y: data,
-                        color: data >= 100 ? '#5eb9aa' : (data >= 51 ? '#f5bd22' :
-                            '#ef5350') // Ajuste de color por valor
+                });
+            }
+
+            function GaugeSeriesxx(div, data) {
+                Highcharts.chart(div, {
+                    chart: {
+                        height: 165,
+                        margin: [0, 0, 0, 0],
+                        spacing: [0, 0, 0, 0],
+                        type: 'solidgauge'
+                    },
+                    yAxis: {
+                        min: 0,
+                        max: 150, // Ajustado al máximo de dataClasses
+                        dataClasses: [{
+                                from: 0,
+                                to: 50,
+                                color: '#ef5350'
+                            },
+                            {
+                                from: 51,
+                                to: 99,
+                                color: '#f5bd22'
+                            },
+                            {
+                                from: 100,
+                                to: 150,
+                                color: '#5eb9aa'
+                            }
+                        ],
+                        labels: {
+                            enabled: false
+                        },
+                        tickLength: 0,
+                        lineColor: 'transparent',
+                        gridLineWidth: 0
+                    },
+                    pane: {
+                        background: {
+                            innerRadius: '80%',
+                            outerRadius: '100%'
+                        }
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    exporting: {
+                        enabled: false
+                    },
+                    title: {
+                        text: ''
+                    },
+                    plotOptions: {
+                        solidgauge: {
+                            dataLabels: {
+                                format: '<div style="text-align:center; margin-top: -20px">' +
+                                    '<div style="font-size:2.5em;">{y}%</div>' +
+                                    '<div style="font-size:12px; opacity:0.4;">Avance</div>' +
+                                    '</div>',
+                                useHTML: true,
+                                borderWidth: 0,
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'Avance',
+                        innerRadius: '80%',
+                        data: [{
+                            y: data,
+                            color: data >= 100 ? '#5eb9aa' : (data >= 51 ? '#f5bd22' :
+                                '#ef5350') // Ajuste de color por valor
+                        }],
+                        radius: '100%',
                     }],
-                    radius: '100%',
-                }],
-                tooltip: {
-                    valueSuffix: '%',
-                    backgroundColor: '#FFFFFF',
-                    borderColor: 'gray',
-                    shadow: true,
-                    style: {
-                        fontSize: '12px'
+                    tooltip: {
+                        valueSuffix: '%',
+                        backgroundColor: '#FFFFFF',
+                        borderColor: 'gray',
+                        shadow: true,
+                        style: {
+                            fontSize: '12px'
+                        }
                     }
-                }
-            });
-        }
-    </script>
+                });
+            }
+        </script>
 
 
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/highcharts-more.js"></script>
-    <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
-    <!-- optional -->
-    <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/modules/exporting.js"></script>
+        <script src="https://code.highcharts.com/highcharts-more.js"></script>
+        <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
+        <!-- optional -->
+        <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
+        <script src="https://code.highcharts.com/modules/export-data.js"></script>
 
-    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 
-    {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
+        {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts-more.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script> --}}
-@endsection
+    @endsection
