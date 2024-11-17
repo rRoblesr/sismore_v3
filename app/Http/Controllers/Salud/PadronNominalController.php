@@ -12,6 +12,7 @@ use App\Models\Salud\CalidadCriterio;
 use App\Models\Salud\Establecimiento;
 use App\Models\Salud\ImporPadronNominal;
 use App\Models\Salud\PadronCalidad;
+use App\Models\Salud\PadronNominal;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Parametro\UbigeoRepositorio;
 use App\Repositories\Salud\EstablecimientoRepositorio;
@@ -1412,9 +1413,6 @@ class PadronNominalController extends Controller
                 ->addColumn('avisita', function ($value) {
                     return $value->lengua_madre;
                 })
-                ->addColumn('aencontrado', function ($value) {
-                    return $value->encontrado == 1 ? 'SI' : 'NO';
-                })
                 ->addColumn('adistrito', function ($value) use ($ubi) {
                     $dis = $ubi[$value->ubigeo] ?? null;
                     return $dis ? $dis->nombre : '';
@@ -1427,7 +1425,7 @@ class PadronNominalController extends Controller
                     return $eess ? $eess->nombre_establecimiento : '';
                 })
                 // ->addColumn('actions', function ($row) {return '<a href="/detalle/' . $row->id . '" class="btn btn-sm btn-primary">Ver</a>';})
-                ->rawColumns(['atipodoc', 'adoc', 'anonbre', 'aedad', 'aseguro', 'avisita', 'aencontrado', 'adistrito', 'acui', 'aeesss'])
+                ->rawColumns(['atipodoc', 'adoc', 'anonbre', 'aedad', 'aseguro', 'avisita', 'adistrito', 'acui', 'aeesss'])
                 ->make(true);
         }
     }
@@ -1610,11 +1608,18 @@ class PadronNominalController extends Controller
         return Excel::download(new TableroCalidadCriterioExport($div, $importacion, $criterio, $edades, $provincia, $distrito), $name);
     }
 
-    public function tablerocalidadconsulta($anio, $mes)
+    public function tablerocalidadconsulta()
     {
-        $fuente = ImporPadronNominalController::$FUENTE;
-        $importacion = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio, $mes);
-        return view('salud.PadronNominal.TableroCalidadConsulta', compact('importacion'));
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronNominalController::$FUENTE);
+        $mes = Mes::find($imp->mes);
+        // $anios = ImportacionRepositorio::anios_porfuente_select(ImporPadronNominalController::$FUENTE);
+        // $provincias = UbigeoRepositorio::provincia_select('25');
+        $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $mes->mes . ' del ' . $imp->anio;
+        return view('salud.PadronNominal.TableroCalidadConsulta', compact('actualizado', 'imp'));
+
+        // $fuente = ImporPadronNominalController::$FUENTE;
+        // $importacion = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio, $mes);
+        // return view('salud.PadronNominal.TableroCalidadConsulta', compact('importacion'));
     }
 
     public function tablerocalidadconsultalistar(Request $rq)
@@ -1691,17 +1696,21 @@ class PadronNominalController extends Controller
     {
         $seguro = [0 => 'NINGUNO', 1 => 'SIS', 2 => 'ESSALUD', 3 => 'SANIDAD', 4 => 'PRIVADO'];
         $programa = [0 => 'NINGUNO', 1 => 'PIN', 2 => 'PVL', 4 => 'JUNTOS', 5 => 'QALIWARMA', 7 => 'CUNA+ SCD', 8 => 'CUNA+ SAF'];
-        $data = CalidadCriterio::where('importacion_id', $importacion)
+        $data = ImporPadronNominal::where('importacion_id', $importacion)
             ->where('tipo_doc', $tipo);
         if ($documento != 'documento')
             $data = $data->where('num_doc', $documento);
         if ($apellido != 'apellido')
             $data = $data->where(function ($query) use ($apellido) {
-                $query->where('apellido_paterno', 'like', "%{$apellido}%")
-                    ->orWhere('apellido_materno', 'like', "%{$apellido}%")
-                    ->orWhere('nombre', 'like', "%{$apellido}%");
+                $query->whereRaw('concat(apellido_paterno, " ", apellido_materno, " ", nombre) like ?', ["%{$apellido}%"]);
             });
+        // $data = $data->where(function ($query) use ($apellido) {
+        //     $query->where('apellido_paterno', 'like', "%{$apellido}%")
+        //         ->orWhere('apellido_materno', 'like', "%{$apellido}%")
+        //         ->orWhere('nombre', 'like', "%{$apellido}%");
+        // });
         $data = $data->first();
+        // dd($data->toSql());
         if ($data) {
             $data->centro_poblado_nombre = !empty($data->centro_poblado_nombre) ? explode(', ', $data->centro_poblado_nombre)[0] : null;
             $data->seguro = $seguro[$data->seguro_id] ?? 'NINGUNO';
@@ -1720,11 +1729,26 @@ class PadronNominalController extends Controller
             $data->fecha_nacimiento = date('d/m/Y', strtotime($data->fecha_nacimiento));
             $data->visita = $data->visita == 1 ? 'SI' : 'NO';
             $data->menor_encontrado = $data->menor_encontrado == 1 ? 'SI' : 'NO';
+            $data->cui_nacimiento = $data->cui_nacimiento > 0 ? Establecimiento::where('cod_unico', $data->cui_nacimiento)->first()->nombre_establecimiento : 'NINGUNO';
             $data->cui_atencion = $data->establecimiento_id > 0 ? Establecimiento::find($data->establecimiento_id)->nombre_establecimiento : 'NINGUNO';
             $data->distrito = $data->distrito_id > 0 ? Ubigeo::find($data->distrito_id)->nombre : '';
             $data->provincia = $data->provincia_id > 0 ? Ubigeo::find($data->provincia_id)->nombre : '';
             $data->departamento = 'UCAYALI';
         }
         return  response()->json($data);
+    }
+
+    public function tablerocalidadindicador()
+    {
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronNominalController::$FUENTE);
+        $mes = Mes::find($imp->mes);
+        // $anios = ImportacionRepositorio::anios_porfuente_select(ImporPadronNominalController::$FUENTE);
+        // $provincias = UbigeoRepositorio::provincia_select('25');
+        $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $mes->mes . ' del ' . $imp->anio;
+        return view('salud.PadronNominal.TableroCalidadIndicador', compact('actualizado', 'imp'));
+
+        // $fuente = ImporPadronNominalController::$FUENTE;
+        // $importacion = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio, $mes);
+        // return view('salud.PadronNominal.TableroCalidadConsulta', compact('importacion'));
     }
 }

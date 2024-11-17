@@ -42,12 +42,6 @@
                                     @foreach ($edades as $item)
                                         <option value="{{ $item->edades_id }}">{{ $item->edades }}</option>
                                     @endforeach
-                                    {{-- <option value="1">MENORES A 1 AÑO</option>
-                                    <option value="2">1 AÑO</option>
-                                    <option value="3">2 AÑOS</option>
-                                    <option value="4">3 AÑOS</option>
-                                    <option value="5">4 AÑOS</option>
-                                    <option value="6">5 AÑOS</option> --}}
                                 </select>
                             </div>
                         </div>
@@ -406,6 +400,102 @@
         var criterio = {{ $criterio }};
         var anal1;
         var anal2;
+        var column;
+        if (criterio < 10) {
+            column = [{
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex'
+                }, {
+                    data: 'padron',
+                    name: 'padron'
+                },
+                {
+                    data: 'atipodoc',
+                    name: 'atipodoc'
+                },
+                {
+                    data: 'adoc',
+                    name: 'adoc'
+                },
+                {
+                    data: 'anombre',
+                    name: 'anombre'
+                },
+                {
+                    data: 'aedad',
+                    name: 'aedad'
+                },
+                {
+                    data: 'aseguro',
+                    name: 'aseguro'
+                },
+                {
+                    data: 'avisita',
+                    name: 'avisita'
+                },
+                {
+                    data: 'aencontrado',
+                    name: 'aencontrado'
+                },
+                {
+                    data: 'adistrito',
+                    name: 'adistrito'
+                },
+                {
+                    data: 'acui',
+                    name: 'acui'
+                },
+                {
+                    data: 'aeesss',
+                    name: 'aeesss'
+                }
+            ]
+        } else {
+            column = [{
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex'
+                }, {
+                    data: 'padron',
+                    name: 'padron'
+                },
+                {
+                    data: 'atipodoc',
+                    name: 'atipodoc'
+                },
+                {
+                    data: 'adoc',
+                    name: 'adoc'
+                },
+                {
+                    data: 'anombre',
+                    name: 'anombre'
+                },
+                {
+                    data: 'aedad',
+                    name: 'aedad'
+                },
+                {
+                    data: 'aseguro',
+                    name: 'aseguro'
+                },
+                {
+                    data: 'avisita',
+                    name: 'avisita'
+                },
+                {
+                    data: 'adistrito',
+                    name: 'adistrito'
+                },
+                {
+                    data: 'acui',
+                    name: 'acui'
+                },
+                {
+                    data: 'aeesss',
+                    name: 'aeesss'
+                }
+            ]
+        };
         $(document).ready(function() {
             cargarProvincia();
             cargarDistrito();
@@ -437,54 +527,8 @@
                         d.desa = 0;
                     }
                 },
-                columns: [{
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex'
-                    }, {
-                        data: 'padron',
-                        name: 'padron'
-                    },
-                    {
-                        data: 'atipodoc',
-                        name: 'atipodoc'
-                    },
-                    {
-                        data: 'adoc',
-                        name: 'adoc'
-                    },
-                    {
-                        data: 'anombre',
-                        name: 'anombre'
-                    },
-                    {
-                        data: 'aedad',
-                        name: 'aedad'
-                    },
-                    {
-                        data: 'aseguro',
-                        name: 'aseguro'
-                    },
-                    {
-                        data: 'avisita',
-                        name: 'avisita'
-                    },
-                    {
-                        data: 'aencontrado',
-                        name: 'aencontrado'
-                    },
-                    {
-                        data: 'adistrito',
-                        name: 'adistrito'
-                    },
-                    {
-                        data: 'acui',
-                        name: 'acui'
-                    },
-                    {
-                        data: 'aeesss',
-                        name: 'aeesss'
-                    }
-                ],
+                columns: column,
+
                 columnDefs: [{
                         className: 'text-center',
                         targets: [0, 1, 2, 3, 5, 6, 7, 8]
@@ -516,7 +560,7 @@
                                 return data;
                             } else {
                                 return data ?
-                                    `<a href="#" onclick="abrirmodaleess(${parseInt(data, 10)})">${data}</a>` :
+                                    `<a href="javascript:void(0)" onclick="abrirmodaleess(${parseInt(data, 10)})">${data}</a>` :
                                     '';
 
                             }

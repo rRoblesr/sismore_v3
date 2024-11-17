@@ -15,52 +15,62 @@
                     <div class="card-widgets">
                         {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="history.back()" title='Volver'><i
                                 class="fas fa-arrow-left"></i> Volver</button> --}}
-                        {{-- <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
-                            <i class="mdi mdi-printer"></i> Imprimir</button> --}}
+                        <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
+                            <i class="fa fa-redo"></i> Actualizar</button>
                     </div>
                     <h3 class="card-title text-white font-12">
-                        Busqueda de Niños y Niñas Menores de 6 años del Padron Nominal - {{ $actualizado }}
+                        Reportes del Padrón Nominal - {{ $actualizado }}
                     </h3>
                 </div>
                 <div class="card-body pb-0">
-                    <div class="form-group row align-items-center vh-5">
-                        <div class="col-lg-3 col-md-2 col-sm-2">
+                    <div class="form-group row align-items-center vh-5">                        
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
-                                <label for="tipodocumento">Tipo de Documento</label>
-                                <select id="tipodocumento" name="tipodocumento" class="form-control " onchange="">
-                                    <option value="DNI">DNI</option>
-                                    <option value="CNV">CNV</option>
-                                    <option value="CUI">CUI</option>
-                                    <option value="Padron">CÓDIGO PADRÓN</option>
+                                <label for="provincia">Año</label>
+                                <select id="provincia" name="provincia" class="form-control btn-xs font-11"
+                                    onchange="cargarDistrito();cargarCards();">
+                                    <option value="0">TODOS</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="col-lg-3 col-md-2 col-sm-2">
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
-                                <label for="numerodocumento">Documento</label>
-                                <input type="number" id="numerodocumento" name="numerodocumento" class="form-control"
-                                    value="">
+                                <label for="distrito">Mes</label>
+                                <select id="distrito" name="distrito" class="form-control btn-xs font-11"
+                                    onchange="cargarCards();">
+                                    <option value="0">TODOS</option>
+                                </select>
                             </div>
-
-
                         </div>
-                        <div class="col-lg-4 col-md-2 col-sm-2">
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
-                                <label for="apellidosnombres">Apellidos y Nombres</label>
-                                <input type="text" id="apellidosnombres" name="apellidosnombres" class="form-control">
+                                <label for="edades">Edad del Menor</label>
+                                <select id="edades" name="edades" class="form-control btn-xs font-11"
+                                    onchange="cargarProvincia();cargarCards();">
+                                    <option value="0">TODOS</option>
+                                   {{--  @foreach ($edades as $item)
+                                        <option value="{{ $item->edades_id }}">{{ $item->edades }}</option>
+                                    @endforeach --}}
+                                </select>
                             </div>
+                        </div>
 
+                        <div class="col-lg-6 col-md-2 col-sm-2">
+                            <div class="custom-select-container">
+                                <label for="edades">Indicador</label>
+                                <select id="edades" name="edades" class="form-control btn-xs font-11"
+                                    onchange="cargarProvincia();cargarCards();">
+                                    <option value="0">TODOS</option>
+                                   {{--  @foreach ($edades as $item)
+                                        <option value="{{ $item->edades_id }}">{{ $item->edades }}</option>
+                                    @endforeach --}}
+                                </select>
+                            </div>
+                        </div>
 
-                        </div>
-                        <div class="col-lg-1 col-md-2 col-sm-2 text-center">
-                            <button type="button" class="btn btn-success-0" onclick="consultahacer();">
-                                {{-- <i class="fa fa-redo"></i> --}} Consultar</button>
-                        </div>
-                        <div class="col-lg-1 col-md-2 col-sm-2 text-center">
-                            <button type="button" class="btn btn-orange-0"
-                                onclick="location.reload()">
-                                {{-- <i class="fa fa-redo"></i> --}} Limpiar</button>
-                        </div>
                     </div>
                 </div>
             </div>
