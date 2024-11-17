@@ -1194,6 +1194,68 @@ class PadronNominalController extends Controller
 
         $query = $query->skip($start)->take($length)->get();
 
+        $query = $query->map(function ($item, $key) use ($start) {
+            $item->item = $start + $key + 1; // Esto agrega un campo 'item' con el número de ítem
+            return $item;
+        });
+
+        $ubigeos = Ubigeo::whereIn('codigo', $query->pluck('ubigeo')->toArray())->get()->keyBy('codigo');
+        $establecimientos = Establecimiento::whereIn('cod_unico', $query->pluck('cui_atencion')->toArray())->get()->keyBy('cod_unico');
+        $sim = ['D' => 'DÍAS', 'M' => 'MESES', 'A' => 'AÑOS'];
+
+        $query->transform(function ($value) use ($ubigeos, $establecimientos, $sim) {
+            $dis = $ubigeos[$value->ubigeo] ?? null;
+            $eess = $establecimientos[$value->cui_atencion] ?? null;
+            $value->num_doc = ($value->tipo_doc != 'Padron') ? $value->num_doc : '';
+            $value->tipo_doc = ($value->tipo_doc != 'Padron') ? $value->tipo_doc : '';
+            $value->nombrecompleto = $value->apellido_paterno . ' ' . $value->apellido_materno . ', ' . $value->nombre;
+            $value->nedad = $value->edad . ' ' . ($sim[$value->tipo_edad] ?? '');
+            $value->nseguro = $seguro[$value->seguro_id] ?? '';
+            $value->nvisita = $value->visita == 1 ? 'SI' : 'NO';
+            $value->nencontrado = $value->encontrado == 1 ? 'SI' : 'NO';
+            $value->ndistrito = $dis ? $dis->nombre : '';
+            $value->ncui_atencion = $eess ? str_pad($value->cui_atencion, 8, '0', STR_PAD_LEFT) : '';
+            $value->nestablecimiento = $eess ? $eess->nombre_establecimiento : '';
+            return $value;
+        });
+
+        $result = [
+            "draw" => $draw,
+            "recordsTotal" => $recordsTotal,
+            "recordsFiltered" => $recordsFiltered,
+            "data" => $query,
+            "input" => $rq->all(), // Incluir los parámetros recibidos en la solicitud
+            "queries" => $query->toArray(),
+        ];
+
+        return response()->json($result);
+    }
+
+    public function tablerocalidadcriteriolistar_ejemplo(Request $rq)
+    {
+        $draw = intval($rq->draw);
+        $start = intval($rq->start);
+        $length = intval($rq->length);
+
+        $seguro = [0 => 'NINGUNO', 1 => 'SIS', 2 => 'ESSALUD', 3 => 'SANIDAD', 4 => 'PRIVADO'];
+        $programa = [0 => 'NINGUNO', 1 => 'PIN', 2 => 'PVL', 4 => 'JUNTOS', 5 => 'QALIWARMA', 7 => 'CUNA+ SCD', 8 => 'CUNA+ SAF'];
+
+        $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio);
+        if ($rq->edades > 0) {
+            if ($rq->edades == 1) {
+                $query = $query->whereIn('tipo_edad', ['D', 'M']);
+            } else {
+                $query = $query->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+            }
+        }
+        if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
+        if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
+
+        $recordsTotal = $query->count();
+        $recordsFiltered = $recordsTotal;
+
+        $query = $query->skip($start)->take($length)->get();
+
         $ubigeos = Ubigeo::whereIn('codigo', $query->pluck('ubigeo')->toArray())->get()->keyBy('codigo');
         $establecimientos = Establecimiento::whereIn('cod_unico', $query->pluck('cui_atencion')->toArray())->get()->keyBy('cod_unico');
 
@@ -1248,20 +1310,126 @@ class PadronNominalController extends Controller
 
     public function ListaImportada(Request $rq)
     {
-        $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio);
-        // if ($rq->edades > 0) {
-        //     if ($rq->edades == 1) {
-        //         $query = $query->whereIn('tipo_edad', ['D', 'M']);
-        //     } else {
-        //         $query = $query->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
-        //     }
-        // }
-        // if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
-        // if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
+        $draw = intval($rq->draw);
+        $start = intval($rq->start);
+        $length = intval($rq->length);
 
-        $query = $query->get();
+        $query = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio);
+        if ($rq->edades > 0) {
+            if ($rq->edades == 1) {
+                $query = $query->whereIn('tipo_edad', ['D', 'M']);
+            } else {
+                $query = $query->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+            }
+        }
+        if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
+        if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
+
+        $recordsTotal = $query->count();
+        $recordsFiltered = $recordsTotal;
+
+        $query = $query->skip($start)->take($length)->get();
 
         return DataTables::of($query)->make(true);
+        // return DataTables::eloquent($query)->make(true);
+    }
+
+    public function Listar3(Request $rq)
+    {
+        ini_set('memory_limit', '1G'); // Incrementa el límite de memoria a 1GB
+        $data = CalidadCriterio::where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio);
+        if ($rq->edades > 0) {
+            if ($rq->edades == 1) {
+                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+            } else {
+                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+            }
+        }
+        if ($rq->provincia > 0) $data = $data->where('provincia_id', $rq->provincia);
+        if ($rq->distrito > 0) $data = $data->where('distrito_id', $rq->distrito);
+        $data = $data->get();
+
+        $ubi = Ubigeo::whereIn('codigo', $data->pluck('ubigeo')->toArray())->get()->keyBy('codigo');
+        $est = Establecimiento::whereIn('cod_unico', $data->whereNotNull('cui_atencion')->unique('cui_atencion')->where('cui_atencion', '>', '0')->pluck('cui_atencion')->toArray())->get()->keyBy('cod_unico');
+        $sim = ['D' => 'DÍAS', 'M' => 'MESES', 'A' => 'AÑOS'];
+
+        if ($rq->criterio < 10) {
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('atipodoc', function ($value) {
+                    return $value->tipo_doc != 'Padron' ? $value->tipo_doc : '';
+                })
+                ->addColumn('adoc', function ($value) {
+                    return $value->tipo_doc != 'Padron' ? $value->num_doc : '';
+                })
+                ->addColumn('anombre', function ($value) {
+                    return $value->apellido_paterno . ' ' . $value->apellido_materno . ', ' . $value->nombre;
+                })
+                ->addColumn('aedad', function ($value) use ($sim) {
+                    return $value->edad . '.' . ($sim[$value->tipo_edad] ?? '');
+                })
+                ->addColumn('aseguro', function ($value) {
+                    return  $seguro[$value->seguro_id] ?? '';
+                })
+                ->addColumn('avisita', function ($value) {
+                    return $value->visita == 1 ? 'SI' : 'NO';
+                })
+                ->addColumn('aencontrado', function ($value) {
+                    return $value->encontrado == 1 ? 'SI' : 'NO';
+                })
+                ->addColumn('adistrito', function ($value) use ($ubi) {
+                    $dis = $ubi[$value->ubigeo] ?? null;
+                    return $dis ? $dis->nombre : '';
+                })
+                ->addColumn('acui', function ($value) {
+                    return $value->cui_atencion > 0 ? str_pad($value->cui_atencion, 8, '0', STR_PAD_LEFT) : '';
+                })
+                ->addColumn('aeesss', function ($value) use ($est) {
+                    $eess = $est[$value->cui_atencion] ?? null;
+                    return $eess ? $eess->nombre_establecimiento : '';
+                })
+                // ->addColumn('actions', function ($row) {return '<a href="/detalle/' . $row->id . '" class="btn btn-sm btn-primary">Ver</a>';})
+                ->rawColumns(['atipodoc', 'adoc', 'anonbre', 'aedad', 'aseguro', 'avisita', 'aencontrado', 'adistrito', 'acui', 'aeesss'])
+                ->make(true);
+        } else {
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('atipodoc', function ($value) {
+                    return $value->tipo_doc_madre != 'Padron' ? $value->tipo_doc_madre : '';
+                })
+                ->addColumn('adoc', function ($value) {
+                    return $value->tipo_doc_madre != 'Padron' ? $value->num_doc_madre : '';
+                })
+                ->addColumn('anombre', function ($value) {
+                    return $value->apellido_paterno_madre . ' ' . $value->apellido_materno_madre . ', ' . $value->nombres_madre;
+                })
+                ->addColumn('aedad', function ($value) use ($sim) {
+                    return $value->celular_madre;
+                })
+                ->addColumn('aseguro', function ($value) {
+                    return  $value->grado_instruccion;
+                })
+                ->addColumn('avisita', function ($value) {
+                    return $value->lengua_madre;
+                })
+                ->addColumn('aencontrado', function ($value) {
+                    return $value->encontrado == 1 ? 'SI' : 'NO';
+                })
+                ->addColumn('adistrito', function ($value) use ($ubi) {
+                    $dis = $ubi[$value->ubigeo] ?? null;
+                    return $dis ? $dis->nombre : '';
+                })
+                ->addColumn('acui', function ($value) {
+                    return $value->cui_atencion > 0 ? str_pad($value->cui_atencion, 8, '0', STR_PAD_LEFT) : '';
+                })
+                ->addColumn('aeesss', function ($value) use ($est) {
+                    $eess = $est[$value->cui_atencion] ?? null;
+                    return $eess ? $eess->nombre_establecimiento : '';
+                })
+                // ->addColumn('actions', function ($row) {return '<a href="/detalle/' . $row->id . '" class="btn btn-sm btn-primary">Ver</a>';})
+                ->rawColumns(['atipodoc', 'adoc', 'anonbre', 'aedad', 'aseguro', 'avisita', 'aencontrado', 'adistrito', 'acui', 'aeesss'])
+                ->make(true);
+        }
     }
 
     public function tablerocalidadcriterioreporte(Request $rq)

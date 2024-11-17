@@ -69,6 +69,137 @@ class ImporMatriculaGeneralController extends Controller
         ini_set('memory_limit', '-1');
         set_time_limit(0);
 
+        if (ImportacionRepositorio::Importacion_PE($request->fechaActualizacion, $this->fuente) !== null) {
+            return $this->json_output(400, "Error, ya existe un archivo pendiente de aprobación para la fecha ingresada");
+        }
+
+        if (ImportacionRepositorio::Importacion_PR($request->fechaActualizacion, $this->fuente) !== null) {
+            return $this->json_output(400, "Error, ya existe un archivo procesado para la fecha ingresada");
+        }
+
+        $this->validate($request, ['file' => 'required|mimes:xls,xlsx']);
+        $archivo = $request->file('file');
+        $array = (new tablaXImport)->toArray($archivo);
+
+        $encabezadosEsperados = [
+            'id_anio',
+            'cod_mod',
+            'id_mod',
+            'id_nivel',
+            'id_gestion',
+            'id_sexo',
+            'fecha_nacimiento',
+            'pais_nacimiento',
+            'lengua_materna',
+            'segunda_lengua',
+            'id_discapacidad',
+            'discapacidad',
+            'situacion_matricula',
+            'estado_matricula',
+            'fecha_matricula',
+            'id_grado',
+            'grado',
+            'id_seccion',
+            'seccion',
+            'fecha_registro',
+            'fecha_retiro',
+            'motivo_retiro',
+            'sf_regular',
+            'sf_recuperacion'
+        ];
+
+        $encabezadosArchivo = array_keys($array[0][0]);
+
+        $faltantes = array_diff($encabezadosEsperados, $encabezadosArchivo);
+        if (!empty($faltantes)) {
+            return $this->json_output(400, 'Error: Los encabezados del archivo no coinciden con el formato esperado. Faltan columnas esperadas.', $faltantes);
+        }
+
+        try {
+            DB::beginTransaction(); // Iniciar transacción
+
+            $importacion = Importacion::Create([
+                'fuenteImportacion_id' => $this->fuente,
+                'usuarioId_Crea' => auth()->user()->id,
+                'fechaActualizacion' => $request->fechaActualizacion,
+                'estado' => 'PR'
+            ]);
+            $anio = Anio::where('anio', date('Y', strtotime($request->fechaActualizacion)))->first();
+
+            $matricula = MatriculaGeneral::Create([
+                'importacion_id' => $importacion->id,
+                'anio_id' => $anio->id
+            ]);
+
+            $batchSize = 500;
+            $dataBatch = [];
+
+            foreach ($array[0] as $row) {
+                $dataBatch[] = [
+                    'importacion_id' => $importacion->id,
+                    'id_anio' => $row['id_anio'],
+                    'cod_mod' => $row['cod_mod'],
+                    'id_mod' => $row['id_mod'],
+                    'id_nivel' => $row['id_nivel'],
+                    'id_gestion' => $row['id_gestion'],
+                    'id_sexo' => $row['id_sexo'],
+                    'fecha_nacimiento' => $row['fecha_nacimiento'],
+                    'pais_nacimiento' => $row['pais_nacimiento'],
+                    'lengua_materna' => $row['lengua_materna'],
+                    'segunda_lengua' => $row['segunda_lengua'],
+                    'id_discapacidad' => $row['id_discapacidad'],
+                    'discapacidad' => $row['discapacidad'],
+                    'situacion_matricula' => $row['situacion_matricula'],
+                    'estado_matricula' => $row['estado_matricula'],
+                    'fecha_matricula' => $row['fecha_matricula'],
+                    'id_grado' => $row['id_grado'],
+                    'grado' => $row['grado'],
+                    'id_seccion' => $row['id_seccion'],
+                    'seccion' => $row['seccion'],
+                    'fecha_registro' => $row['fecha_registro'],
+                    'fecha_retiro' => $row['fecha_retiro'],
+                    'motivo_retiro' => $row['motivo_retiro'],
+                    'sf_regular' => $row['sf_regular'],
+                    'sf_recuperacion' => $row['sf_recuperacion']
+                ];
+
+                if (count($dataBatch) >= $batchSize) {
+                    ImporMatriculaGeneral::insert($dataBatch);
+                    $dataBatch = []; // Limpiar el lote después de la inserción
+                }
+            }
+
+            if (!empty($dataBatch)) {
+                ImporMatriculaGeneral::insert($dataBatch);
+            }
+
+            DB::commit(); // Confirmar la transacción
+        } catch (Exception $e) {
+            DB::rollBack(); // Revertir en caso de error
+            $importacion->estado = 'PE';
+            $importacion->save();
+
+            return $this->json_output(400, "Error en la carga de datos: " . $e->getMessage());
+        }
+
+        try {
+            DB::select('call edu_pa_procesarImporMatriculaGeneral(?,?,?)', [$importacion->id, $matricula->id, date('Y-m-d', strtotime($importacion->fechaActualizacion))]);
+        } catch (Exception $e) {
+            $importacion->estado = 'PE';
+            $importacion->save();
+
+            $mensaje = "Error al procesar la normalizacion de datos sal_pa_procesarControlCalidadColumnas. " . $e->getMessage();
+            return $this->json_output(400, $mensaje);
+        }
+
+        return $this->json_output(200, "Archivo Excel subido y procesado correctamente.");
+    }
+
+    public function guardar_antiguo(Request $request)
+    {
+        ini_set('memory_limit', '-1');
+        set_time_limit(0);
+
         $existeMismaFecha = ImportacionRepositorio::Importacion_PE($request->fechaActualizacion, $this->fuente);
         if ($existeMismaFecha != null) {
             $mensaje = "Error, Ya existe archivos prendientes de aprobar para la fecha de versión ingresada";

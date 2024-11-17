@@ -2465,3 +2465,16 @@ CREATE TABLE `sal_calidad_criterio_nombres` (
                (13,'REGISTRO DE NIÑOS Y NIÑAS SIN CELULAR DE LA MADRE ','0' ),
 
 
+/////////////////////////
+cambios sismore 
+ALTER TABLE `adm_usuario` ADD `creado` INT NULL DEFAULT NULL AFTER `codigo_institucion`;
+
+
+
+
+
+
+
+
+
+

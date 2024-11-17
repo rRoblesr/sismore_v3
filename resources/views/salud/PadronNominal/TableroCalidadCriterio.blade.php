@@ -423,6 +423,225 @@
                 language: table_language,
                 destroy: true,
                 ajax: {
+                    url: "{{ route('salud.padronnominal.tablerocalidad.criterio.listar3') }}",
+                    type: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Agrega el token CSRF
+                    },
+                    data: function(d) {
+                        d.importacion = {{ $importacion }};
+                        d.criterio = {{ $criterio }};
+                        d.edades = $('#edades').val();
+                        d.provincia = $('#provincia').val();
+                        d.distrito = $('#distrito').val();
+                        d.desa = 0;
+                    }
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex'
+                    }, {
+                        data: 'padron',
+                        name: 'padron'
+                    },
+                    {
+                        data: 'atipodoc',
+                        name: 'atipodoc'
+                    },
+                    {
+                        data: 'adoc',
+                        name: 'adoc'
+                    },
+                    {
+                        data: 'anombre',
+                        name: 'anombre'
+                    },
+                    {
+                        data: 'aedad',
+                        name: 'aedad'
+                    },
+                    {
+                        data: 'aseguro',
+                        name: 'aseguro'
+                    },
+                    {
+                        data: 'avisita',
+                        name: 'avisita'
+                    },
+                    {
+                        data: 'aencontrado',
+                        name: 'aencontrado'
+                    },
+                    {
+                        data: 'adistrito',
+                        name: 'adistrito'
+                    },
+                    {
+                        data: 'acui',
+                        name: 'acui'
+                    },
+                    {
+                        data: 'aeesss',
+                        name: 'aeesss'
+                    }
+                ],
+                columnDefs: [{
+                        className: 'text-center',
+                        targets: [0, 1, 2, 3, 5, 6, 7, 8]
+                    },
+                    {
+                        targets: 1,
+                        render: function(data, type, row) {
+                            return `<a href="javascript:void(0)" onclick="abrirmodalpadron(${data})">${data}</a>`;
+                        }
+                    },
+                    {
+                        targets: 9,
+                        render: function(data, type, row) {
+
+                            if (criterio == 10 || criterio == 11 || criterio == 12 || criterio == 13) {
+                                return data ?
+                                    `<a href="javascript:void(0)" onclick="abrirmodaleess(${parseInt(data, 10)})">${data}</a>` :
+                                    '';
+                            } else {
+                                return data;
+                            }
+
+                        }
+                    },
+                    {
+                        targets: 10,
+                        render: function(data, type, row) {
+                            if (criterio == 10 || criterio == 11 || criterio == 12 || criterio == 13) {
+                                return data;
+                            } else {
+                                return data ?
+                                    `<a href="#" onclick="abrirmodaleess(${parseInt(data, 10)})">${data}</a>` :
+                                    '';
+
+                            }
+                        }
+                    }
+                ]
+            });
+
+            tableprincipalxxx = $('#tabla1xxx').DataTable({
+                responsive: true,
+                autoWidth: false,
+                processing: true, // Indica que los datos se procesan en el servidor
+                serverSide: true, // Habilita la paginación en el servidor
+                ordered: true,
+                language: table_language,
+                destroy: true,
+                ajax: {
+                    url: "{{ route('salud.padronnominal.tablerocalidad.criterio.listar') }}",
+                    type: "GET",
+                    data: function(d) {
+                        d.importacion = {{ $importacion }};
+                        d.criterio = {{ $criterio }};
+                        d.edades = $('#edades').val();
+                        d.provincia = $('#provincia').val();
+                        d.distrito = $('#distrito').val();
+                        d.desa = 0;
+                    }
+                },
+                columns: [{
+                        data: 'item',
+                        name: 'item'
+                    }, {
+                        data: 'padron',
+                        name: 'padron'
+                    },
+                    {
+                        data: 'tipo_doc',
+                        name: 'tipo_doc'
+                    },
+                    {
+                        data: 'num_doc',
+                        name: 'num_doc'
+                    },
+                    {
+                        data: 'nombrecompleto',
+                        name: 'nombrecompleto'
+                    },
+                    {
+                        data: 'nedad',
+                        name: 'nedad'
+                    },
+                    {
+                        data: 'nseguro',
+                        name: 'nseguro'
+                    },
+                    {
+                        data: 'nvisita',
+                        name: 'nvisita'
+                    },
+                    {
+                        data: 'nencontrado',
+                        name: 'nencontrado'
+                    },
+                    {
+                        data: 'ndistrito',
+                        name: 'ndistrito'
+                    },
+                    {
+                        data: 'ncui_atencion',
+                        name: 'ncui_atencion'
+                    },
+                    {
+                        data: 'nestablecimiento',
+                        name: 'nestablecimiento'
+                    }
+                ]
+                // columnDefs: [{
+                //         className: 'text-center',
+                //         targets: [0, 1, 2, 3, 5, 6, 7, 8]
+                //     },
+                //     {
+                //         targets: 1,
+                //         render: function(data, type, row) {
+                //             return `<a href="#" onclick="abrirmodalpadron(${data})">${data}</a>`;
+                //         }
+                //     },
+                //     {
+                //         targets: 9,
+                //         render: function(data, type, row) {
+
+                //             if (criterio == 10 || criterio == 11 || criterio == 12 || criterio == 13) {
+                //                 return data ?
+                //                     `<a href="#" onclick="abrirmodaleess(${parseInt(data, 10)})">${data}</a>` :
+                //                     '';
+                //             } else {
+                //                 return data;
+                //             }
+
+                //         }
+                //     },
+                //     {
+                //         targets: 10,
+                //         render: function(data, type, row) {
+                //             if (criterio == 10 || criterio == 11 || criterio == 12 || criterio == 13) {
+                //                 return data;
+                //             } else {
+                //                 return data ?
+                //                     `<a href="#" onclick="abrirmodaleess(${parseInt(data, 10)})">${data}</a>` :
+                //                     '';
+
+                //             }
+                //         }
+                //     }
+                // ]
+            });
+
+            tableprincipalx = $('#tabla1x').DataTable({
+                responsive: true,
+                autoWidth: false,
+                processing: true, // Indica que los datos se procesan en el servidor
+                serverSide: true, // Habilita la paginación en el servidor
+                ordered: true,
+                language: table_language,
+                destroy: true,
+                ajax: {
                     url: "{{ route('salud.padronnominal.tablerocalidad.criterio.listar') }}",
                     type: "GET",
                     data: function(d) {
@@ -474,7 +693,7 @@
                 ]
             });
 
-            tableprincipalx = $('#tabla1x').DataTable({
+            tableprincipalxx = $('#tabla1xx').DataTable({
                 processing: true,
                 serverSide: true,
                 responsive: false,
@@ -483,11 +702,9 @@
                 destroy: true, // Este permite reconfigurar la tabla si ya existe
                 language: table_language,
                 ajax: {
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
+
                     url: "{{ route('salud.padronnominal.tablerocalidad.criterio.listar2') }}",
-                    type: "POST",
+                    type: "GET",
                     data: function(d) {
                         d.importacion = {{ $importacion }};
                         d.criterio = {{ $criterio }};
@@ -508,107 +725,40 @@
                     {
                         data: 'tipo_doc',
                         name: 'tipo_doc'
-                    },
-                    // {
-                    //     data: 'apellido_paterno',
-                    //     name: 'apellido_paterno'
-                    // },
-                    // {
-                    //     data: 'apellido_materno',
-                    //     name: 'apellido_materno'
-                    // },
-                    {
-                        data: 'nombre',
-                        name: 'nombre'
+                    }, {
+                        data: 'padron',
+                        name: 'padron'
                     },
                     {
-                        data: 'edad',
-                        name: 'edad'
+                        data: 'num_doc',
+                        name: 'num_doc'
                     },
                     {
-                        data: 'seguro_id',
-                        name: 'seguro_id'
+                        data: 'tipo_doc',
+                        name: 'tipo_doc'
+                    }, {
+                        data: 'padron',
+                        name: 'padron'
                     },
                     {
-                        data: 'visita',
-                        name: 'visita'
+                        data: 'num_doc',
+                        name: 'num_doc'
                     },
                     {
-                        data: 'menor_encontrado',
-                        name: 'menor_encontrado'
+                        data: 'tipo_doc',
+                        name: 'tipo_doc'
+                    }, {
+                        data: 'padron',
+                        name: 'padron'
                     },
                     {
-                        data: 'distrito_id',
-                        name: 'distrito_id'
+                        data: 'num_doc',
+                        name: 'num_doc'
                     },
                     {
-                        data: 'establecimiento_id',
-                        name: 'establecimiento_id'
+                        data: 'tipo_doc',
+                        name: 'tipo_doc'
                     },
-                    {
-                        data: 'cui_atencion',
-                        name: 'cui_atencion'
-                    },
-                    // {
-                    //     data: 'cui_atencion',
-                    //     name: 'cui_atencion'
-                    // },
-                    // {
-                    //     data: 'seguro',
-                    //     name: 'seguro'
-                    // },
-                    // {
-                    //     data: 'programa_social',
-                    //     name: 'programa_social'
-                    // },
-                    // {
-                    //     data: 'visita',
-                    //     name: 'visita'
-                    // },
-                    // {
-                    //     data: 'menor_encontrado',
-                    //     name: 'menor_encontrado'
-                    // },
-                    // {
-                    //     data: 'codigo_ie',
-                    //     name: 'codigo_ie'
-                    // },
-                    // {
-                    //     data: 'nombre_ie',
-                    //     name: 'nombre_ie'
-                    // },
-                    // {
-                    //     data: 'tipo_doc_madre',
-                    //     name: 'tipo_doc_madre'
-                    // },
-                    // {
-                    //     data: 'num_doc_madre',
-                    //     name: 'num_doc_madre'
-                    // },
-                    // {
-                    //     data: 'apellido_paterno_madre',
-                    //     name: 'apellido_paterno_madre'
-                    // },
-                    // {
-                    //     data: 'apellido_materno_madre',
-                    //     name: 'apellido_materno_madre'
-                    // },
-                    // {
-                    //     data: 'nombres_madre',
-                    //     name: 'nombres_madre'
-                    // },
-                    {
-                        data: 'celular_madre',
-                        name: 'celular_madre'
-                    },
-                    // {
-                    //     data: 'grado_instruccion',
-                    //     name: 'grado_instruccion'
-                    // },
-                    // {
-                    //     data: 'lengua_madre',
-                    //     name: 'lengua_madre'
-                    // }
                 ]
             });
             panelGraficas('anal1');
