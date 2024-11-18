@@ -43,6 +43,21 @@ class PadronNominalController extends Controller
         return response()->json($mes);
     }
 
+    public function edades($anio, $mes)
+    {
+        $query = Importacion::select('id')
+            ->where(DB::raw('year(fechaActualizacion)'), $anio)->where(DB::raw('month(fechaActualizacion)'), $mes)->where('estado', 'PR')->where('fuenteImportacion_id', ImporPadronNominalController::$FUENTE)
+            ->orderBy('fechaActualizacion', 'desc')->first();
+        $importacion = $query ? $query->id : null;
+        $query = ImporPadronNominal::select(
+            DB::raw('case when tipo_edad in("D","M") then 1 else edad+1 end as edades_id'),
+            DB::raw('case when tipo_edad in("D","M") then "MENOR DE 1 AÑO" when tipo_edad="A" AND edad=1 then "1 AÑO" else concat(edad," AÑOS") end as edades')
+        )
+            ->where('importacion_id', $importacion)
+            ->groupBy('edades_id', 'edades')->get();
+        return $query;
+    }
+
     public function index()
     {
         return view('salud.padron.principal');
@@ -1740,15 +1755,947 @@ class PadronNominalController extends Controller
 
     public function tablerocalidadindicador()
     {
+        // return $this->edades(2024,11);
         $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronNominalController::$FUENTE);
         $mes = Mes::find($imp->mes);
-        // $anios = ImportacionRepositorio::anios_porfuente_select(ImporPadronNominalController::$FUENTE);
+        $anios = ImportacionRepositorio::anios_porfuente_select(ImporPadronNominalController::$FUENTE);
         // $provincias = UbigeoRepositorio::provincia_select('25');
         $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $mes->mes . ' del ' . $imp->anio;
-        return view('salud.PadronNominal.TableroCalidadIndicador', compact('actualizado', 'imp'));
+        return view('salud.PadronNominal.TableroCalidadIndicador', compact('actualizado', 'imp', 'anios'));
 
         // $fuente = ImporPadronNominalController::$FUENTE;
         // $importacion = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio, $mes);
         // return view('salud.PadronNominal.TableroCalidadConsulta', compact('importacion'));
+    }
+
+    public function tablerocalidadindicadorreporte(Request $rq)
+    {
+        $fuente = ImporPadronNominalController::$FUENTE;
+        $query = Importacion::select('id')
+            ->where(DB::raw('year(fechaActualizacion)'), $rq->anio)->where(DB::raw('month(fechaActualizacion)'), $rq->mes)->where('estado', 'PR')->where('fuenteImportacion_id', $fuente)
+            ->orderBy('fechaActualizacion', 'desc')->first();
+        $importacion = $query ? $query->id : null;
+
+        switch ($rq->div) {
+            case 'anal1':
+                switch ($rq->indicador) {
+                    case 1:
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('round(100*sum(case when tipo_doc="DNI" then 1 else 0 end)/count(*),2) as ii'),
+                        )
+                            ->where('importacion_id', $importacion);
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ii', 'desc')->groupBy('distrito_id')->get();
+
+                        $info['categoria'] = [];
+                        $info['serie'] = [];
+                        foreach ($data as $key => $value) {
+                            // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                            $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
+                            $info['serie'][] = round($value->ii, 1);
+                        }
+
+                        return response()->json(compact('info', 'data'));
+
+                    case 2:
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('round(100*sum(case when tipo_doc="DNI" then 1 else 0 end)/count(*),2) as ii'),
+                        )
+                            ->where('importacion_id', $importacion)->where('tipo_edad', 'D')->where('edad', '<=', 30);
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ii', 'desc')->groupBy('distrito_id')->get();
+
+                        $info['categoria'] = [];
+                        $info['serie'] = [];
+                        foreach ($data as $key => $value) {
+                            // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                            $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
+                            $info['serie'][] = round($value->ii, 1);
+                        }
+
+                        return response()->json(compact('info', 'data'));
+
+                    case 3:
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('round(100*sum(case when tipo_doc="DNI" then 1 else 0 end)/count(*),2) as ii'),
+                        )
+                            ->where('importacion_id', $importacion)
+                            ->where(function ($query) {
+                                $query->where(function ($subQuery) {
+                                    $subQuery->where('tipo_edad', 'D')->where('edad', '<=', 31);
+                                })
+                                    ->orWhere(function ($subQuery) {
+                                        $subQuery->where('tipo_edad', 'M')->where('edad', '<=', 2);
+                                    });
+                            });
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ii', 'desc')->groupBy('distrito_id')->get();
+
+                        $info['categoria'] = [];
+                        $info['serie'] = [];
+                        foreach ($data as $key => $value) {
+                            // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                            $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
+                            $info['serie'][] = round($value->ii, 1);
+                        }
+
+                        return response()->json(compact('info', 'data'));
+
+                    case 4:
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),2) as ii'),
+                        )
+                            ->where('importacion_id', $importacion);
+
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ii', 'desc')->groupBy('distrito_id')->get();
+
+                        $info['categoria'] = [];
+                        $info['serie'] = [];
+                        foreach ($data as $key => $value) {
+                            // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                            $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
+                            $info['serie'][] = round($value->ii, 1);
+                        }
+
+                        return response()->json(compact('info', 'data'));
+
+                    case 5:
+                        // ->whereNot(function($query) { $query->where('programa_social', '0,')->orWhereNull('programa_social');})
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('round(100*sum(case when !(programa_social = "0," or programa_social is null) then 1 else 0 end)/count(*),2) as ii'),
+                        )
+                            ->where('importacion_id', $importacion);
+
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ii', 'desc')->groupBy('distrito_id')->get();
+
+                        $info['categoria'] = [];
+                        $info['serie'] = [];
+                        foreach ($data as $key => $value) {
+                            // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                            $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
+                            $info['serie'][] = round($value->ii, 1);
+                        }
+
+                        return response()->json(compact('info', 'data'));
+
+                    case 6:
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('round(100*sum(case when (cui_atencion > 0 and cui_atencion is not null) then 1 else 0 end)/count(*),2) as ii'),
+                        )
+                            ->where('importacion_id', $importacion);
+
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ii', 'desc')->groupBy('distrito_id')->get();
+
+                        $info['categoria'] = [];
+                        $info['serie'] = [];
+                        foreach ($data as $key => $value) {
+                            // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                            $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
+                            $info['serie'][] = round($value->ii, 1);
+                        }
+
+                        return response()->json(compact('info', 'data'));
+
+                    case 7:
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii'),
+                        )
+                            ->where('importacion_id', $importacion);
+
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ii', 'desc')->groupBy('distrito_id')->get();
+
+                        $info['categoria'] = [];
+                        $info['serie'] = [];
+                        foreach ($data as $key => $value) {
+                            // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                            $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
+                            $info['serie'][] = round($value->ii, 1);
+                        }
+
+                        return response()->json(compact('info', 'data'));
+
+                    case 8:
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('round(100*sum(case when visita != 1 then 1 else 0 end)/count(*),2) as ii'),
+                        )
+                            ->where('importacion_id', $importacion);
+
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ii', 'desc')->groupBy('distrito_id')->get();
+
+                        $info['categoria'] = [];
+                        $info['serie'] = [];
+                        foreach ($data as $key => $value) {
+                            // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                            $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
+                            $info['serie'][] = round($value->ii, 1);
+                        }
+
+                        return response()->json(compact('info', 'data'));
+
+                    case 9:
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('round(100*sum(case when (visita = 1 and menor_encontrado = 1) then 1 else 0 end)/count(*),2) as ii'),
+                        )
+                            ->where('importacion_id', $importacion);
+
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ii', 'desc')->groupBy('distrito_id')->get();
+
+                        $info['categoria'] = [];
+                        $info['serie'] = [];
+                        foreach ($data as $key => $value) {
+                            // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                            $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
+                            $info['serie'][] = round($value->ii, 1);
+                        }
+
+                        return response()->json(compact('info', 'data'));
+
+                    case 10:
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('round(100*sum(case when codigo_ie !="" then 1 else 0 end)/count(*),2) as ii'),
+                        )
+                            ->where('importacion_id', $importacion);
+
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ii', 'desc')->groupBy('distrito_id')->get();
+
+                        $info['categoria'] = [];
+                        $info['serie'] = [];
+                        foreach ($data as $key => $value) {
+                            // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                            $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
+                            $info['serie'][] = round($value->ii, 1);
+                        }
+
+                        return response()->json(compact('info', 'data'));
+
+                    default:
+                        return response()->json([]);
+                }
+
+            case 'tabla1':
+                switch ($rq->indicador) {
+                    case 1:
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc="DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('sum(case when tipo_doc!="DNI" then 1 else 0 end) as sdni'),
+                            DB::raw('round(100*sum(case when tipo_doc="DNI" then 1 else 0 end)/count(*),2) as ii'),
+                        )
+                            ->where('importacion_id', $importacion);
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ii', 'desc')->groupBy('distrito_id')->get();
+                        foreach ($data as $key => $value) {
+                            $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                        }
+
+                        $base = $data;
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base'))->render();
+                        return response()->json(compact('excel'));
+                        // return response()->json(compact('data'));
+
+                    case 2:
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc="DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('sum(case when tipo_doc!="DNI" then 1 else 0 end) as sdni'),
+                            DB::raw('round(100*sum(case when tipo_doc="DNI" then 1 else 0 end)/count(*),2) as ii'),
+                        )
+                            ->where('importacion_id', $importacion)->where('tipo_edad', 'D')->where('edad', '<=', 30);
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ii', 'desc')->groupBy('distrito_id')->get();
+                        foreach ($data as $key => $value) {
+                            $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                        }
+
+                        $base = $data;
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base'))->render();
+                        return response()->json(compact('excel'));
+                        // return response()->json(compact('data'));
+
+                    case 3:
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc="DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('sum(case when tipo_doc!="DNI" then 1 else 0 end) as sdni'),
+                            DB::raw('round(100*sum(case when tipo_doc="DNI" then 1 else 0 end)/count(*),2) as ii'),
+                        )
+                            ->where('importacion_id', $importacion)
+                            ->where(function ($query) {
+                                $query->where(function ($subQuery) {
+                                    $subQuery->where('tipo_edad', 'D')->where('edad', '<=', 31);
+                                })
+                                    ->orWhere(function ($subQuery) {
+                                        $subQuery->where('tipo_edad', 'M')->where('edad', '<=', 2);
+                                    });
+                            });
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ii', 'desc')->groupBy('distrito_id')->get();
+                        foreach ($data as $key => $value) {
+                            $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                        }
+
+                        $base = $data;
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base'))->render();
+                        return response()->json(compact('excel'));
+                        // return response()->json(compact('data'));
+
+                    case 4:
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when seguro_id=1 then 1 else 0 end) as cdni'),
+                            DB::raw('sum(case when seguro_id!=1 or seguro_id is null then 1 else 0 end) as sdni'),
+                            DB::raw('round(100*sum(case when seguro_id=1 then 1 else 0 end)/count(*),2) as ii'),
+                        )
+                            ->where('importacion_id', $importacion);
+
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ii', 'desc')->groupBy('distrito_id')->get();
+                        foreach ($data as $key => $value) {
+                            $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                        }
+
+                        $base = $data;
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base'))->render();
+                        return response()->json(compact('excel'));
+                        // return response()->json(compact('data'));
+
+                    case 5:
+                        // ->whereNot(function($query) { $query->where('programa_social', '0,')->orWhereNull('programa_social');})
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when !(programa_social = "0," or programa_social is null) then 1 else 0 end) as cdni'),
+                            DB::raw('sum(case when (programa_social = "0," or programa_social is null) then 1 else 0 end) as sdni'),
+                            DB::raw('round(100*sum(case when !(programa_social = "0," or programa_social is null) then 1 else 0 end)/count(*),2) as ii'),
+                        )
+                            ->where('importacion_id', $importacion);
+
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ii', 'desc')->groupBy('distrito_id')->get();
+                        foreach ($data as $key => $value) {
+                            $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                        }
+
+                        $base = $data;
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base'))->render();
+                        return response()->json(compact('excel'));
+                        // return response()->json(compact('data'));
+
+                    case 6:
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when (cui_atencion > 0 and cui_atencion is not null) then 1 else 0 end) as cdni'),
+                            DB::raw('sum(case when !(cui_atencion > 0 and cui_atencion is not null) then 1 else 0 end) as sdni'),
+                            DB::raw('round(100*sum(case when (cui_atencion > 0 and cui_atencion is not null) then 1 else 0 end)/count(*),2) as ii'),
+                        )
+                            ->where('importacion_id', $importacion);
+
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ii', 'desc')->groupBy('distrito_id')->get();
+                        foreach ($data as $key => $value) {
+                            $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                        }
+
+                        $base = $data;
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base'))->render();
+                        return response()->json(compact('excel'));
+                        // return response()->json(compact('data'));
+
+                    case 7:
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cdni'),
+                            DB::raw('sum(case when visita != 1 then 1 else 0 end) as sdni'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii'),
+                        )
+                            ->where('importacion_id', $importacion);
+
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ii', 'desc')->groupBy('distrito_id')->get();
+                        foreach ($data as $key => $value) {
+                            $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                        }
+
+                        $base = $data;
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base'))->render();
+                        return response()->json(compact('excel'));
+                        // return response()->json(compact('data'));
+
+                    case 8:
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when (visita = 1 and menor_encontrado = 1) then 1 else 0 end) as cdni'),
+                            DB::raw('sum(case when !(visita = 1 and menor_encontrado = 1) then 1 else 0 end) as sdni'),
+                            // DB::raw('round(100*sum(case when (visita = 1 and menor_encontrado = 1) then 1 else 0 end)/count(*),2) as ii'),
+                            DB::raw('round(100*sum(case when visita != 1 then 1 else 0 end)/count(*),2) as ii'),
+                        )
+                            ->where('importacion_id', $importacion);
+
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ii', 'desc')->groupBy('distrito_id')->get();
+                        foreach ($data as $key => $value) {
+                            $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                        }
+
+                        $base = $data;
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base'))->render();
+                        return response()->json(compact('excel'));
+                        // return response()->json(compact('data'));
+
+                    case 9:
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when (visita = 1 and menor_encontrado = 1) then 1 else 0 end) as cdni'),
+                            DB::raw('sum(case when !(visita = 1 and menor_encontrado = 1) then 1 else 0 end) as sdni'),
+                            DB::raw('round(100*sum(case when (visita = 1 and menor_encontrado = 1) then 1 else 0 end)/count(*),2) as ii'),
+                        )
+                            ->where('importacion_id', $importacion);
+
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ii', 'desc')->groupBy('distrito_id')->get();
+                        foreach ($data as $key => $value) {
+                            $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                        }
+
+                        $base = $data;
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base'))->render();
+                        return response()->json(compact('excel'));
+                        // return response()->json(compact('data'));
+
+                    case 10:
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when codigo_ie !="" then 1 else 0 end) as cdni'),
+                            DB::raw('sum(case when codigo_ie ="" then 1 else 0 end) as sdni'),
+                            DB::raw('round(100*sum(case when codigo_ie !="" then 1 else 0 end)/count(*),2) as ii'),
+                        )
+                            ->where('importacion_id', $importacion);
+
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ii', 'desc')->groupBy('distrito_id')->get();
+                        foreach ($data as $key => $value) {
+                            $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                        }
+
+                        $base = $data;
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base'))->render();
+                        return response()->json(compact('excel'));
+                        // return response()->json(compact('data'));
+
+                    default:
+                        return response()->json([]);
+                }
+            case 'tabla2':
+                switch ($rq->indicador) {
+                    case 1:
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),2) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),2) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),2) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
+                        )
+                            ->where('importacion_id', $importacion);
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ubigeo')->groupBy('distrito_id')->get();
+                        foreach ($data as $key => $value) {
+                            $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                        }
+
+                        $base = $data;
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla2', compact('base'))->render();
+                        return response()->json(compact('excel'));
+                        // return response()->json(compact('data'));
+
+                    case 2:
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),2) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),2) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),2) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
+                        )
+                            ->where('importacion_id', $importacion)->where('tipo_edad', 'D')->where('edad', '<=', 30);
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ubigeo')->groupBy('distrito_id')->get();
+                        foreach ($data as $key => $value) {
+                            $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                        }
+
+                        $base = $data;
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla2', compact('base'))->render();
+                        return response()->json(compact('excel'));
+                        // return response()->json(compact('data'));
+
+                    case 3:
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),2) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),2) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),2) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
+                        )
+                            ->where('importacion_id', $importacion)
+                            ->where(function ($query) {
+                                $query->where(function ($subQuery) {
+                                    $subQuery->where('tipo_edad', 'D')->where('edad', '<=', 31);
+                                })
+                                    ->orWhere(function ($subQuery) {
+                                        $subQuery->where('tipo_edad', 'M')->where('edad', '<=', 2);
+                                    });
+                            });
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ubigeo')->groupBy('distrito_id')->get();
+                        foreach ($data as $key => $value) {
+                            $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                        }
+
+                        $base = $data;
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla2', compact('base'))->render();
+                        return response()->json(compact('excel'));
+                        // return response()->json(compact('data'));
+
+                    case 4:
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),2) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),2) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),2) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
+                        )
+                            ->where('importacion_id', $importacion);
+
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ubigeo')->groupBy('distrito_id')->get();
+                        foreach ($data as $key => $value) {
+                            $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                        }
+
+                        $base = $data;
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla2', compact('base'))->render();
+                        return response()->json(compact('excel'));
+                        // return response()->json(compact('data'));
+
+                    case 5:
+                        // ->whereNot(function($query) { $query->where('programa_social', '0,')->orWhereNull('programa_social');})
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),2) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),2) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),2) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
+                        )
+                            ->where('importacion_id', $importacion);
+
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ubigeo')->groupBy('distrito_id')->get();
+                        foreach ($data as $key => $value) {
+                            $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                        }
+
+                        $base = $data;
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla2', compact('base'))->render();
+                        return response()->json(compact('excel'));
+                        // return response()->json(compact('data'));
+
+                    case 6:
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),2) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),2) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),2) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
+                        )
+                            ->where('importacion_id', $importacion);
+
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ubigeo')->groupBy('distrito_id')->get();
+                        foreach ($data as $key => $value) {
+                            $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                        }
+
+                        $base = $data;
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla2', compact('base'))->render();
+                        return response()->json(compact('excel'));
+                        // return response()->json(compact('data'));
+
+                    case 7:
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),2) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),2) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),2) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
+                        )
+                            ->where('importacion_id', $importacion);
+
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ubigeo')->groupBy('distrito_id')->get();
+                        foreach ($data as $key => $value) {
+                            $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                        }
+
+                        $base = $data;
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla2', compact('base'))->render();
+                        return response()->json(compact('excel'));
+                        // return response()->json(compact('data'));
+
+                    case 8:
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),2) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),2) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),2) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
+                        )
+                            ->where('importacion_id', $importacion);
+
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ubigeo')->groupBy('distrito_id')->get();
+                        foreach ($data as $key => $value) {
+                            $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                        }
+
+                        $base = $data;
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla2', compact('base'))->render();
+                        return response()->json(compact('excel'));
+                        // return response()->json(compact('data'));
+
+                    case 9:
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),2) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),2) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),2) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
+                        )
+                            ->where('importacion_id', $importacion);
+
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ubigeo')->groupBy('distrito_id')->get();
+                        foreach ($data as $key => $value) {
+                            $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                        }
+
+                        $base = $data;
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla2', compact('base'))->render();
+                        return response()->json(compact('excel'));
+                        // return response()->json(compact('data'));
+
+                    case 10:
+                        $data = ImporPadronNominal::select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),2) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),2) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),2) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
+                        )
+                            ->where('importacion_id', $importacion);
+
+                        if ($rq->edades > 0) {
+                            if ($rq->edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                            }
+                        }
+                        $data = $data->orderBy('ubigeo')->groupBy('distrito_id')->get();
+                        foreach ($data as $key => $value) {
+                            $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
+                        }
+
+                        $base = $data;
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla2', compact('base'))->render();
+                        return response()->json(compact('excel'));
+                        // return response()->json(compact('data'));
+
+                    default:
+                        return response()->json([]);
+                }
+
+            default:
+                # code...
+                return [];
+        }
     }
 }
