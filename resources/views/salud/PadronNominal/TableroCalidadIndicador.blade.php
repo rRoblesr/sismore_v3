@@ -10,7 +10,7 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12 col-md-12">
-            <div class="card m-0">
+            <div class="card">
                 <div class="card-header bg-success-0">
                     <div class="card-widgets">
                         {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="history.back()" title='Volver'><i
@@ -93,7 +93,7 @@
                     <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
                 </div>
                 <div class="card-body p-0">
-                    <div class="row">
+                    <div class="row" style="height: 36rem">
                         <div class="col-12">
                             <div class="table-responsive" id="ctabla1">
 
@@ -111,7 +111,7 @@
                     <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
                 </div>
                 <div class="card-body p-0">
-                    <div id="anal1" style="height: 35rem"></div>
+                    <div id="anal1" style="height: 36rem"></div>
                 </div>
             </div>
         </div>
@@ -126,7 +126,7 @@
                         <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel()">
                             <i class="fa fa-file-excel"></i> Descargar</button>
                     </div>
-                    <h3 class="card-title">LISTA DE REGISTROS OBSERVADOS
+                    <h3 class="card-title">resumen de cumplimiento por distrito
                     </h3>
                 </div>
                 <div class="card-body">
@@ -191,8 +191,6 @@
                 },
                 success: function(data) {
                     if (div == "anal1") {
-                        console.log(data.info.categoria);
-                        console.log(data.info.serie[0]);
                         gbar('anal1', data.info.categoria,
                             data.info.serie,
                             '',
@@ -233,7 +231,6 @@
                     var options = ''; // '<option value="0">TODOS</option>';
 
                     var mesmax = Math.max(...data.map(item => item.id));
-                    // console.log("Mes máximo:", mesmax);
                     $.each(data, function(ii, vv) {
                         ss = vv.id == mesmax ? 'selected' : '';
                         options += `<option value='${vv.id}' ${ss}>${vv.mes}</option>`
@@ -257,7 +254,6 @@
                     $("#edades option").remove();
                     var options = '<option value="0">TODOS</option>';
                     // var mesmax = Math.max(...data.map(item => item.id));
-                    // console.log("Mes máximo:", mesmax);
                     $.each(data, function(ii, vv) {
                         ss = ''; // vv.id == mesmax ? 'selected' : '';
                         options += `<option value='${vv.edades_id}' ${ss}>${vv.edades}</option>`
@@ -293,9 +289,9 @@
                     labels: {
                         style: {
                             fontSize: '10px',
-                        }
+                        },
+                        // enabled: false,
                     },
-                    enabled: false,
                 },
                 yAxis: {
                     //min: 0,
@@ -307,8 +303,9 @@
                         style: {
                             fontSize: '10px',
                         },
-                        overflow: 'justify'
-                    }
+                        overflow: 'justify',
+                        enabled: false,
+                    },
                 },
                 tooltip: {
                     valueSuffix: ' %'
@@ -340,7 +337,7 @@
                         enabled: false
                     },
                     data: series,
-                    color: '#43beac'
+                    // color: '#43beac'
                 }],
                 credits: {
                     enabled: false

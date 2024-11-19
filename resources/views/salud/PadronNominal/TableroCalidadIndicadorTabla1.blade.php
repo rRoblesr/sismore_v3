@@ -21,16 +21,25 @@
             </tr>
         @endforeach
     </tbody>
+    <tfoot>
+        <tr class="text-center table-success-0 text-white">
+            <th class="text-left" colspan="2">Total</th>
+            <th>{{ number_format($foot->total, 0) }}</th>
+            <th>{{ number_format($foot->cdni, 0) }}</th>
+            <th>{{ number_format($foot->sdni, 0) }}</th>
+            <th>{!! avance($foot->ii) !!}</th>
+        </tr>
+    </tfoot>
 </table>
 
 @php
     function avance($monto)
     {
-        if ($monto < 51) {
+        if ($monto < 75) {
             return '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px;">' .
                 round($monto, 1) .
                 '%</span>';
-        } elseif ($monto < 76) {
+        } elseif ($monto < 95) {
             return '<span class="badge badge-pill badge-warning" style="font-size:90%; width:50px;background-color:#eb960d;">' .
                 round($monto, 1) .
                 '%</span>';

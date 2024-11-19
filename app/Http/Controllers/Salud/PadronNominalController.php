@@ -1799,7 +1799,7 @@ class PadronNominalController extends Controller
                         foreach ($data as $key => $value) {
                             // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
                             $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
-                            $info['serie'][] = round($value->ii, 1);
+                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 75 ? '#eb960d' : '#ef5350'))];
                         }
 
                         return response()->json(compact('info', 'data'));
@@ -1824,7 +1824,7 @@ class PadronNominalController extends Controller
                         foreach ($data as $key => $value) {
                             // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
                             $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
-                            $info['serie'][] = round($value->ii, 1);
+                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 75 ? '#eb960d' : '#ef5350'))];
                         }
 
                         return response()->json(compact('info', 'data'));
@@ -1857,7 +1857,7 @@ class PadronNominalController extends Controller
                         foreach ($data as $key => $value) {
                             // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
                             $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
-                            $info['serie'][] = round($value->ii, 1);
+                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 75 ? '#eb960d' : '#ef5350'))];
                         }
 
                         return response()->json(compact('info', 'data'));
@@ -1883,7 +1883,7 @@ class PadronNominalController extends Controller
                         foreach ($data as $key => $value) {
                             // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
                             $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
-                            $info['serie'][] = round($value->ii, 1);
+                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 75 ? '#eb960d' : '#ef5350'))];
                         }
 
                         return response()->json(compact('info', 'data'));
@@ -1910,7 +1910,7 @@ class PadronNominalController extends Controller
                         foreach ($data as $key => $value) {
                             // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
                             $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
-                            $info['serie'][] = round($value->ii, 1);
+                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 75 ? '#eb960d' : '#ef5350'))];
                         }
 
                         return response()->json(compact('info', 'data'));
@@ -1936,7 +1936,7 @@ class PadronNominalController extends Controller
                         foreach ($data as $key => $value) {
                             // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
                             $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
-                            $info['serie'][] = round($value->ii, 1);
+                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 75 ? '#eb960d' : '#ef5350'))];
                         }
 
                         return response()->json(compact('info', 'data'));
@@ -1962,7 +1962,7 @@ class PadronNominalController extends Controller
                         foreach ($data as $key => $value) {
                             // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
                             $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
-                            $info['serie'][] = round($value->ii, 1);
+                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 75 ? '#eb960d' : '#ef5350'))];
                         }
 
                         return response()->json(compact('info', 'data'));
@@ -1988,7 +1988,7 @@ class PadronNominalController extends Controller
                         foreach ($data as $key => $value) {
                             // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
                             $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
-                            $info['serie'][] = round($value->ii, 1);
+                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 75 ? '#eb960d' : '#ef5350'))];
                         }
 
                         return response()->json(compact('info', 'data'));
@@ -2014,7 +2014,7 @@ class PadronNominalController extends Controller
                         foreach ($data as $key => $value) {
                             // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
                             $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
-                            $info['serie'][] = round($value->ii, 1);
+                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 75 ? '#eb960d' : '#ef5350'))];
                         }
 
                         return response()->json(compact('info', 'data'));
@@ -2040,7 +2040,7 @@ class PadronNominalController extends Controller
                         foreach ($data as $key => $value) {
                             // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
                             $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
-                            $info['serie'][] = round($value->ii, 1);
+                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 75 ? '#eb960d' : '#ef5350'))];
                         }
 
                         return response()->json(compact('info', 'data'));
@@ -2073,7 +2073,22 @@ class PadronNominalController extends Controller
                         }
 
                         $base = $data;
-                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base'))->render();
+
+                        $foot = [];
+                        if ($base->count() > 0) {
+                            $foot = clone $base[0];
+                            $foot->total = 0;
+                            $foot->cdni = 0;
+                            $foot->sdni = 0;
+                            $foot->ii = 0;
+                            foreach ($base as $key => $value) {
+                                $foot->total += $value->total;
+                                $foot->cdni += $value->cdni;
+                                $foot->sdni += $value->sdni;
+                            }
+                            $foot->ii = round(100 * $foot->cdni / $foot->total, 2);
+                        }
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base', 'foot'))->render();
                         return response()->json(compact('excel'));
                         // return response()->json(compact('data'));
 
@@ -2099,7 +2114,21 @@ class PadronNominalController extends Controller
                         }
 
                         $base = $data;
-                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base'))->render();
+                        $foot = [];
+                        if ($base->count() > 0) {
+                            $foot = clone $base[0];
+                            $foot->total = 0;
+                            $foot->cdni = 0;
+                            $foot->sdni = 0;
+                            $foot->ii = 0;
+                            foreach ($base as $key => $value) {
+                                $foot->total += $value->total;
+                                $foot->cdni += $value->cdni;
+                                $foot->sdni += $value->sdni;
+                            }
+                            $foot->ii = round(100 * $foot->cdni / $foot->total, 2);
+                        }
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base', 'foot'))->render();
                         return response()->json(compact('excel'));
                         // return response()->json(compact('data'));
 
@@ -2133,7 +2162,21 @@ class PadronNominalController extends Controller
                         }
 
                         $base = $data;
-                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base'))->render();
+                        $foot = [];
+                        if ($base->count() > 0) {
+                            $foot = clone $base[0];
+                            $foot->total = 0;
+                            $foot->cdni = 0;
+                            $foot->sdni = 0;
+                            $foot->ii = 0;
+                            foreach ($base as $key => $value) {
+                                $foot->total += $value->total;
+                                $foot->cdni += $value->cdni;
+                                $foot->sdni += $value->sdni;
+                            }
+                            $foot->ii = round(100 * $foot->cdni / $foot->total, 2);
+                        }
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base', 'foot'))->render();
                         return response()->json(compact('excel'));
                         // return response()->json(compact('data'));
 
@@ -2160,7 +2203,21 @@ class PadronNominalController extends Controller
                         }
 
                         $base = $data;
-                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base'))->render();
+                        $foot = [];
+                        if ($base->count() > 0) {
+                            $foot = clone $base[0];
+                            $foot->total = 0;
+                            $foot->cdni = 0;
+                            $foot->sdni = 0;
+                            $foot->ii = 0;
+                            foreach ($base as $key => $value) {
+                                $foot->total += $value->total;
+                                $foot->cdni += $value->cdni;
+                                $foot->sdni += $value->sdni;
+                            }
+                            $foot->ii = round(100 * $foot->cdni / $foot->total, 2);
+                        }
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base', 'foot'))->render();
                         return response()->json(compact('excel'));
                         // return response()->json(compact('data'));
 
@@ -2188,7 +2245,21 @@ class PadronNominalController extends Controller
                         }
 
                         $base = $data;
-                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base'))->render();
+                        $foot = [];
+                        if ($base->count() > 0) {
+                            $foot = clone $base[0];
+                            $foot->total = 0;
+                            $foot->cdni = 0;
+                            $foot->sdni = 0;
+                            $foot->ii = 0;
+                            foreach ($base as $key => $value) {
+                                $foot->total += $value->total;
+                                $foot->cdni += $value->cdni;
+                                $foot->sdni += $value->sdni;
+                            }
+                            $foot->ii = round(100 * $foot->cdni / $foot->total, 2);
+                        }
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base', 'foot'))->render();
                         return response()->json(compact('excel'));
                         // return response()->json(compact('data'));
 
@@ -2215,7 +2286,21 @@ class PadronNominalController extends Controller
                         }
 
                         $base = $data;
-                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base'))->render();
+                        $foot = [];
+                        if ($base->count() > 0) {
+                            $foot = clone $base[0];
+                            $foot->total = 0;
+                            $foot->cdni = 0;
+                            $foot->sdni = 0;
+                            $foot->ii = 0;
+                            foreach ($base as $key => $value) {
+                                $foot->total += $value->total;
+                                $foot->cdni += $value->cdni;
+                                $foot->sdni += $value->sdni;
+                            }
+                            $foot->ii = round(100 * $foot->cdni / $foot->total, 2);
+                        }
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base', 'foot'))->render();
                         return response()->json(compact('excel'));
                         // return response()->json(compact('data'));
 
@@ -2242,7 +2327,21 @@ class PadronNominalController extends Controller
                         }
 
                         $base = $data;
-                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base'))->render();
+                        $foot = [];
+                        if ($base->count() > 0) {
+                            $foot = clone $base[0];
+                            $foot->total = 0;
+                            $foot->cdni = 0;
+                            $foot->sdni = 0;
+                            $foot->ii = 0;
+                            foreach ($base as $key => $value) {
+                                $foot->total += $value->total;
+                                $foot->cdni += $value->cdni;
+                                $foot->sdni += $value->sdni;
+                            }
+                            $foot->ii = round(100 * $foot->cdni / $foot->total, 2);
+                        }
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base', 'foot'))->render();
                         return response()->json(compact('excel'));
                         // return response()->json(compact('data'));
 
@@ -2270,7 +2369,21 @@ class PadronNominalController extends Controller
                         }
 
                         $base = $data;
-                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base'))->render();
+                        $foot = [];
+                        if ($base->count() > 0) {
+                            $foot = clone $base[0];
+                            $foot->total = 0;
+                            $foot->cdni = 0;
+                            $foot->sdni = 0;
+                            $foot->ii = 0;
+                            foreach ($base as $key => $value) {
+                                $foot->total += $value->total;
+                                $foot->cdni += $value->cdni;
+                                $foot->sdni += $value->sdni;
+                            }
+                            $foot->ii = round(100 * $foot->cdni / $foot->total, 2);
+                        }
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base', 'foot'))->render();
                         return response()->json(compact('excel'));
                         // return response()->json(compact('data'));
 
@@ -2297,7 +2410,21 @@ class PadronNominalController extends Controller
                         }
 
                         $base = $data;
-                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base'))->render();
+                        $foot = [];
+                        if ($base->count() > 0) {
+                            $foot = clone $base[0];
+                            $foot->total = 0;
+                            $foot->cdni = 0;
+                            $foot->sdni = 0;
+                            $foot->ii = 0;
+                            foreach ($base as $key => $value) {
+                                $foot->total += $value->total;
+                                $foot->cdni += $value->cdni;
+                                $foot->sdni += $value->sdni;
+                            }
+                            $foot->ii = round(100 * $foot->cdni / $foot->total, 2);
+                        }
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base', 'foot'))->render();
                         return response()->json(compact('excel'));
                         // return response()->json(compact('data'));
 
@@ -2324,7 +2451,21 @@ class PadronNominalController extends Controller
                         }
 
                         $base = $data;
-                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base'))->render();
+                        $foot = [];
+                        if ($base->count() > 0) {
+                            $foot = clone $base[0];
+                            $foot->total = 0;
+                            $foot->cdni = 0;
+                            $foot->sdni = 0;
+                            $foot->ii = 0;
+                            foreach ($base as $key => $value) {
+                                $foot->total += $value->total;
+                                $foot->cdni += $value->cdni;
+                                $foot->sdni += $value->sdni;
+                            }
+                            $foot->ii = round(100 * $foot->cdni / $foot->total, 2);
+                        }
+                        $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base', 'foot'))->render();
                         return response()->json(compact('excel'));
                         // return response()->json(compact('data'));
 
