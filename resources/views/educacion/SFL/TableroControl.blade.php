@@ -227,7 +227,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12">
-                            <div class="table-responsive" id="ctabla2">
+                            <div class="table-responsive" id="ctabla1">
 
                             </div>
 
@@ -238,7 +238,7 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row d-none">
         <div class="col-lg-12">
             {{-- <div class="card">
                 <div class="card-header"> --}}
@@ -255,7 +255,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12">
-                            <div class="table-responsive" id="ctabla3">
+                            <div class="table-responsive" id="ctabla2">
 
                             </div>
 
@@ -512,23 +512,11 @@
                         case 'anal2':
                             $('#anal2').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
                             break;
-                        case 'anal3':
-                            $('#anal3').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                            break;
-                        case 'anal4':
-                            $('#anal4').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                            break;
                         case 'tabla1':
                             $('#ctabla1').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
                             break;
                         case 'tabla2':
                             $('#ctabla2').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                            break;
-                        case 'tabla3':
-                            $('#ctabla3').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                            break;
-                        case 'tabla3_1':
-                            $('#ctabla3_1').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
                             break;
 
                         default:
@@ -567,7 +555,7 @@
                             break;
 
                         case 'tabla1':
-                            // $('#ctabla1').html(data.excel);
+                            $('#ctabla1').html(data.excel);
                             break;
                         case 'tabla2':
                             $('#ctabla2').html(data.excel);
@@ -578,39 +566,6 @@
                             //     language: table_language,
                             // });
                             break;
-                        case 'tabla3':
-                            $('#ctabla3').html(data.excel);
-                            $('#tabla3').DataTable({
-                                responsive: true,
-                                autoWidth: false,
-                                ordered: true,
-                                language: table_language,
-                                searching: false,
-                                paging: false,
-                                info: false,
-                                // columnDefs: [{
-                                //     targets: 1,
-                                //     render: function(data, type, row) {
-                                //         return `<a href="#" onclick="abrirmodalcentropoblado(${data})">${data}</a>`;
-                                //     }
-                                // }]
-                            });
-                            break;
-
-                        case 'tabla3_1':
-                            $('#ctabla3_1').html(data.excel);
-                            $('#tabla3_1').DataTable({
-                                responsive: true,
-                                autoWidth: false,
-                                ordered: true,
-                                destroy: true,
-                                language: table_language,
-                                // searching: false,
-                                // paging: false,
-                                // info: false,
-                            });
-                            break;
-
                         default:
                             break;
                     }
@@ -695,7 +650,7 @@
             Highcharts.chart(div, {
                 chart: {
                     zoomType: 'xy',
-                    type: 'column' 
+                    type: 'column'
                 },
                 title: {
                     text: titulo,

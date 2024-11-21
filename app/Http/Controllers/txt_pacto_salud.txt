@@ -270,6 +270,8 @@ http://192.168.18.10/pucallsystem/comanda_ticketera.php?print_data={"mesa_name":
 
 
 
+update `par_poblacion_padron_nominal` pn set ubigeo_id=(select id from par_ubigeo where codigo=pn.ubigeo);
+update `par_poblacion_padron_nominal` pn set sexo_id=sexo, mes_id=mes;
 
 
 

@@ -228,8 +228,8 @@ class IndicadoresController extends Controller
                 $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
                 break;
             case 'DIT-EDU-01':
-                $gl = (int)PoblacionPNRepositorio::conteo3a5_acumulado($rq->anio, 5, $rq->provincia, $rq->distrito, 0);
-                $gls = CuboPacto1Repositorio::pacto1_matriculados($rq->anio, 5, $rq->provincia, $rq->distrito);
+                $gl = (int)PoblacionPNRepositorio::conteo3a5_acumulado($rq->anio, 9, $rq->provincia, $rq->distrito, 0);
+                $gls = CuboPacto1Repositorio::pacto1_matriculados($rq->anio, 9, $rq->provincia, $rq->distrito);
                 $num = number_format($gls, 0);
                 $den = number_format($gl, 0);
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
