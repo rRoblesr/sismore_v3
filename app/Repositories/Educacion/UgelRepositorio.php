@@ -15,7 +15,7 @@ class UgelRepositorio
     }
     public static function listar_opt()
     {
-        $query = Ugel::select('id','codigo','nombre')->orderBy('nombre','asc')->get();
+        $query = Ugel::select('id','codigo','nombre')->where('estado','AC')->orderBy('nombre','asc')->get();
         return $query;
     }
 }

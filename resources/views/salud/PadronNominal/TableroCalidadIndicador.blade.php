@@ -140,6 +140,33 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modal-centropoblado" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+        aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h5 class="modal-title" id="myLargeModalLabel">resumen de cumplimiento por centro poblado
+                    </h5>
+                    <div class="card-widgets">
+                        <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla3_1')">
+                            <i class="fa fa-file-excel"></i> Descargar</button>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive" id="ctabla0201">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.modal -->
 @endsection
 
 @section('js')
@@ -148,6 +175,7 @@
             '#64E572', '#9F9655', '#FFF263', '#6AF9C4'
         ];
         var tableprincipal;
+        var ubigeo_select;
         $(document).ready(function() {
             cargarMes();
         });
@@ -167,6 +195,7 @@
                     mes: $('#mes').val(),
                     edades: $('#edades').val(),
                     indicador: $('#indicador').val(),
+                    "ubigeo": ubigeo_select,
                 },
                 type: "GET",
                 dataType: "JSON",
@@ -212,6 +241,14 @@
                         //     ordered: true,
                         //     language: table_language,
                         // });
+                    } else if (div == "tabla0201") {
+                        $('#ctabla0201').html(data.excel);
+                        $('#tabla0201').DataTable({
+                            responsive: true,
+                            autoWidth: false,
+                            ordered: true,
+                            language: table_language,
+                        });
                     }
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
@@ -219,6 +256,15 @@
                     console.log(jqXHR);
                 },
             });
+        }
+
+        function abrirmodalcentropoblado2(ubigeo) {
+            ubigeo_select = ubigeo;
+            // console.log(ubigeo_select)]
+            panelGraficas('tabla0201');
+
+            $('#modal-centropoblado').modal('show');
+
         }
 
         function cargarMes() {

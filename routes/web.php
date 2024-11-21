@@ -696,6 +696,8 @@ Route::get('/Man/SFL/Download/plantilla', [SFLController::class, 'download_plant
 Route::post('/Man/SFL/Download/plantilla/visualizar', [SFLController::class, 'cargar_plantilla'])->name('mantenimiento.sfl.exportar.plantilla.cargar');
 Route::post('/Man/SFL/Download/plantilla/guardar', [SFLController::class, 'plantilla_guardar'])->name('mantenimiento.sfl.exportar.plantilla.guardar');
 
+Route::get('/educación/SFL/TableroControl', [SFLController::class, 'tablerocontrol'])->name('educacion.sfl.tablerocontrol');
+Route::get('/educación/SFL/TableroControl/reprote', [SFLController::class, 'tablerocontrolreporte'])->name('educacion.sfl.tablerocontrol.reporte');
 // Route::get('/xx/descargar-excel', function () {
 //     $filePath = base_path('plantillas_excels/plantilla_sfl.xlsx');  // Ruta absoluta al archivo en la raíz del proyecto
 //     return response()->download($filePath);

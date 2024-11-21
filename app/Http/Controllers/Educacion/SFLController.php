@@ -8,11 +8,14 @@ use App\Imports\tablaXImport;
 use App\Models\Administracion\Entidad;
 use App\Models\Educacion\Area;
 use App\Models\Educacion\InstitucionEducativa;
+use App\Models\Educacion\PadronWeb;
 use App\Models\Educacion\SFL;
 use App\Models\Educacion\Ugel;
 use App\Models\Parametro\IndicadorGeneral;
 use App\Models\Parametro\IndicadorGeneralMeta;
 use App\Models\Presupuesto\Sector;
+use App\Repositories\Educacion\ImportacionRepositorio;
+use App\Repositories\Educacion\UgelRepositorio;
 use App\Repositories\Parametro\IndicadorGeneralRepositorio;
 use App\Repositories\Parametro\UbigeoRepositorio;
 use DateTime;
@@ -1336,5 +1339,208 @@ class SFLController extends Controller
         }
 
         return null;
+    }
+
+    public function tablerocontrol()
+    {
+        $ugel = UgelRepositorio::listar_opt();
+        $provincia = UbigeoRepositorio::provincia_select('25');
+        $area = Area::all();
+        return view('educacion.SFL.TableroControl', compact('ugel', 'provincia', 'area'));
+    }
+
+    public function tablerocontrolreporte(Request $rq)
+    {
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronWebController::$FUENTE); //nexus $imp3
+        switch ($rq->div) {
+            case 'head':
+                $query = DB::table(DB::raw("(
+                    select iiee.id, iiee.CentroPoblado_id, iiee.codLocal, iiee.Area_id, iiee.Ugel_id
+                    from edu_institucionEducativa as iiee
+                    inner join edu_padronweb pw on pw.institucioneducativa_id=iiee.id and pw.importacion_id=" . $imp->id . "
+                    where iiee.TipoGestion_id in(4, 5, 7, 8) and iiee.NivelModalidad_id not in(14, 15) and pw.estadoinsedu_id = 3
+                ) as iiee"))
+                    ->join('edu_centropoblado as cp', 'cp.id', '=', 'iiee.CentroPoblado_id')
+                    ->join('edu_area as aa', 'aa.id', '=', 'iiee.Area_id')
+                    ->join('edu_ugel as uu', 'uu.id', '=', 'iiee.Ugel_id')
+                    ->join('par_ubigeo as dt', 'dt.id', '=', 'cp.Ubigeo_id')
+                    ->join('par_ubigeo as pv', 'pv.id', '=', 'dt.dependencia');
+
+                if ($rq->ugel > 0) $query = $query->where('uu.id', $rq->ugel);
+                if ($rq->provincia > 0) $query = $query->where('dt.dependencia', $rq->provincia);
+                if ($rq->distrito > 0) $query = $query->where('dt.id', $rq->distrito);
+                if ($rq->area > 0) $query = $query->where('aa.id', $rq->area);
+                $card1 = $query = $query->count();
+
+                $query = DB::table(DB::raw("(
+                    select iiee.id, iiee.CentroPoblado_id, iiee.codLocal, iiee.Area_id, iiee.Ugel_id
+                    from edu_institucionEducativa as iiee
+                    inner join edu_padronweb pw on pw.institucioneducativa_id=iiee.id and pw.importacion_id=" . $imp->id . "
+                    where iiee.TipoGestion_id in(4, 5, 7, 8) and iiee.NivelModalidad_id not in(14, 15) and pw.estadoinsedu_id = 3
+                ) as iiee"))
+                    ->join('edu_centropoblado as cp', 'cp.id', '=', 'iiee.CentroPoblado_id')
+                    ->join('edu_area as aa', 'aa.id', '=', 'iiee.Area_id')
+                    ->join('edu_ugel as uu', 'uu.id', '=', 'iiee.Ugel_id')
+                    ->join('par_ubigeo as dt', 'dt.id', '=', 'cp.Ubigeo_id')
+                    ->join('par_ubigeo as pv', 'pv.id', '=', 'dt.dependencia')
+                    ->select('iiee.codLocal');
+
+                if ($rq->ugel > 0) $query = $query->where('uu.id', $rq->ugel);
+                if ($rq->provincia > 0) $query = $query->where('dt.dependencia', $rq->provincia);
+                if ($rq->distrito > 0) $query = $query->where('dt.id', $rq->distrito);
+                if ($rq->area > 0) $query = $query->where('aa.id', $rq->area);
+                $card2 = $query->groupBy('iiee.codLocal')->get()->count();
+
+
+
+                $query = DB::table("edu_cubo_pacto02_local")->where('estado', 1);
+
+                if ($rq->ugel > 0) $query = $query->where('ugel_id', $rq->ugel);
+                if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
+                if ($rq->area > 0) $query = $query->where('area_id', $rq->area);
+                $card3 = $query->count();
+
+                $query = DB::table("edu_cubo_pacto02_local")->where('estado', '!=', 1);
+
+                if ($rq->ugel > 0) $query = $query->where('ugel_id', $rq->ugel);
+                if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
+                if ($rq->area > 0) $query = $query->where('area_id', $rq->area);
+                $card4 = $query->count();
+
+                $card1 = number_format($card1, 0);
+                $card2 = number_format($card2, 0);
+                $card3 = number_format($card3, 0);
+                $card4 = number_format($card4, 0);
+                return response()->json(compact('card1', 'card2', 'card3', 'card4'));
+            case 'anal1':
+                $query = DB::table("edu_cubo_pacto02_local")->join('par_ubigeo as p', 'p.id', '=', 'edu_cubo_pacto02_local.provincia_id')
+                    ->select('p.nombre as provincia', DB::raw("sum(if(estado=1,1,0)) as saneado"), DB::raw("sum(if(estado!=1,1,0)) as nosaneado"));
+
+                if ($rq->ugel > 0) $query = $query->where('ugel_id', $rq->ugel);
+                if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
+                if ($rq->area > 0) $query = $query->where('area_id', $rq->area);
+                $data = $query->groupBy('p.nombre')->get();
+
+                $info['series'][0]['name'] = 'SANEADO';
+                $info['series'][1]['name'] = 'NO SANEADO';
+                $info['series'][0]['color'] = '#5eb9aa';
+                $info['series'][1]['color'] = '#e65310';
+                foreach ($data as $key => $value) {
+                    $info['categoria'][] = $value->provincia;
+                    $info['series'][0]['data'][] = (int)$value->saneado;
+                    $info['series'][1]['data'][] = (int)$value->nosaneado;
+                }
+
+                return response()->json(compact('info', 'data'));
+
+            case 'anal2':
+                $query = DB::table("edu_cubo_pacto02_local")
+                    ->select(DB::raw("sum(if(estado=1,1,0)) as saneado"), DB::raw("sum(if(estado!=1,1,0)) as nosaneado"));
+
+                if ($rq->ugel > 0) $query = $query->where('ugel_id', $rq->ugel);
+                if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
+                if ($rq->area > 0) $query = $query->where('area_id', $rq->area);
+                $data = $query->get()->first();
+                $info = [['name' => 'SANEADO', 'y' => (int)$data->saneado], ['name' => 'NO SANEADO', 'y' => (int)$data->nosaneado]];
+
+                return response()->json(compact('info'));
+                break;
+
+            case 'tabla1':
+                $query = DB::table("edu_cubo_pacto02_local as c")->join('edu_ugel as u', 'u.id', '=', 'c.ugel_id')
+                    ->select(
+                        'u.nombre as ugel',
+                        DB::raw("count(*) as total"),
+                        DB::raw("count(*)/count(*) as promedio"),
+                        DB::raw("sum(if(c.estado=1,1,0)) as e1"),
+                        DB::raw("sum(if(c.estado=1,1,0))/count(*) as e1p"),
+                        DB::raw("sum(if(c.estado=2,1,0)) as e2"),
+                        DB::raw("sum(if(c.estado=2,1,0))/count(*) as e2p"),
+                        DB::raw("sum(if(c.estado=3,1,0)) as e3"),
+                        DB::raw("sum(if(c.estado=3,1,0))/count(*) as e3p"),
+                        DB::raw("sum(if(c.estado=4,1,0)) as e4"),
+                        DB::raw("sum(if(c.estado=4,1,0))/count(*) as e4p"),
+                        DB::raw("count(*) as total"),
+                        DB::raw("count(*) as total"),
+                    );
+
+                if ($rq->ugel > 0) $query = $query->where('ugel_id', $rq->ugel);
+                if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
+                if ($rq->area > 0) $query = $query->where('area_id', $rq->area);
+               return  $data = $query->groupBy('u.nombre')->get();
+                // $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio, $rq->mes);
+
+                // $base = ImporPadronNominal::join('par_ubigeo as u', 'u.id', '=', 'sal_impor_padron_nominal.distrito_id')
+                //     ->where('importacion_id', $impMaxAnio)->where('repetido', '1')
+                //     ->select(
+                //         'sal_impor_padron_nominal.ubigeo',
+                //         'u.nombre as distrito',
+                //         DB::raw('count(*) as pob'),
+                //         DB::raw('sum(if(genero="M",1,0)) as pobm'),
+                //         DB::raw('sum(if(genero="F",1,0)) as pobf'),
+                //         DB::raw('sum(if(tipo_edad in("D","M"),1,0)) as pob0'),
+                //         DB::raw('sum(if(edad=1 and tipo_edad="A",1,0)) as pob1'),
+                //         DB::raw('sum(if(edad=2 and tipo_edad="A",1,0)) as pob2'),
+                //         DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
+                //         DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
+                //         DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
+                //         DB::raw('sum(if(tipo_doc="DNI",1,0)) as dni'),
+                //         DB::raw('sum(case when FIND_IN_SET("1", seguro) > 0 then 1 
+                //               when FIND_IN_SET("2", seguro) > 0 then 1 
+                //               when FIND_IN_SET("3", seguro) > 0 then 1 
+                //               when FIND_IN_SET("4", seguro) > 0 then 1 
+                //               else 0 end) as seguro'),
+                //         DB::raw('sum(case when FIND_IN_SET("1", programa_social) > 0 then 1 
+                //               when FIND_IN_SET("2", programa_social) > 0 then 1 
+                //               when FIND_IN_SET("5", programa_social) > 0 then 1 
+                //               when FIND_IN_SET("5", programa_social) > 0 then 1 
+                //               when FIND_IN_SET("7", programa_social) > 0 then 1 
+                //               when FIND_IN_SET("8", programa_social) > 0 then 1 
+                //               else 0 end) as programa')
+                //     )->groupBy('ubigeo', 'distrito')->orderBy('ubigeo')->get();
+
+                // $foot = [];
+                // if ($base->count() > 0) {
+                //     $foot = clone $base[0];
+                //     $foot->pob = 0;
+                //     $foot->pobm = 0;
+                //     $foot->pobf = 0;
+                //     $foot->pob0 = 0;
+                //     $foot->pob1 = 0;
+                //     $foot->pob2 = 0;
+                //     $foot->pob3 = 0;
+                //     $foot->pob4 = 0;
+                //     $foot->pob5 = 0;
+                //     $foot->dni = 0;
+                //     $foot->seguro = 0;
+                //     $foot->programa = 0;
+                //     foreach ($base as $key => $value) {
+                //         $foot->pob += $value->pob;
+                //         $foot->pobm += $value->pobm;
+                //         $foot->pobf += $value->pobf;
+                //         $foot->pob0 += $value->pob0;
+                //         $foot->pob1 += $value->pob1;
+                //         $foot->pob2 += $value->pob2;
+                //         $foot->pob3 += $value->pob3;
+                //         $foot->pob4 += $value->pob4;
+                //         $foot->pob5 += $value->pob5;
+                //         $foot->dni += $value->dni;
+                //         $foot->seguro += $value->seguro;
+                //         $foot->programa += $value->programa;
+                //     }
+                // }
+
+                // $excel = view('salud.PadronNominal.TableroCalidadTabla3', compact('base', 'foot'))->render();
+                return response()->json(compact('excel'));
+                break;
+            default:
+                # code...
+                return [];
+        }
     }
 }

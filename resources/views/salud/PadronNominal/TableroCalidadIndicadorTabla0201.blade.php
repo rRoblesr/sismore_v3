@@ -1,8 +1,8 @@
-<table id="tabla1" class="table table-sm table-striped table-bordered font-11">
+<table id="tabla0201" class="table table-sm table-striped table-bordered font-11">
     <thead>
         <tr class="table-success-0 text-white">
             <th class="text-center" rowspan="2">N°</th>
-            <th class="text-center" rowspan="2">Distrito</th>
+            <th class="text-center" rowspan="2">Centro poblado</th>
             <th class="text-center" colspan="3">Menores con DNI</th>
             <th class="text-center" colspan="3">Menores con Seguro</th>
             <th class="text-center" colspan="3">Menores con EESS</th>
@@ -27,7 +27,7 @@
         @foreach ($base as $key => $item)
             <tr class="text-center">
                 <td>{{ $key + 1 }}</td>
-                <td class="text-left"><a href="javascript:void(0)" onclick="abrirmodalcentropoblado2({{ $item->distrito_id }})">{{ $item->distrito }}</a></td>
+                <td class="text-left">{{ $item->centro_poblado_nombre }}</td>
                 <td>{{ number_format($item->cdni, 0) }}</td>
                 <td>{{ number_format($item->total, 0) }}</td>
                 <td>{!! avance($item->ii1) !!}</td>
