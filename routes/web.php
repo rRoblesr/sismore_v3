@@ -188,7 +188,8 @@ Route::get('/INDICADOR/Home/06/Excel/tabla2/{anio}/{provincia}/{distrito}/{gesti
 Route::get('/Ubigeo/Provincia', [UbigeoController::class, 'cargarprovincia25'])->name('ubigeo.provincia.25');
 Route::get('/Ubigeo/Distrito/{provincia}', [UbigeoController::class, 'cargardistrito25'])->name('ubigeo.distrito.25');
 
-Route::get('/NivelModalidad/Buscar/{tipo}', [NivelModalidadController::class, 'buscarnivelmodalidad']);
+Route::get('/NivelModalidad/Buscar/{tipo}', [NivelModalidadController::class, 'buscarnivelmodalidad'])->name('nivelmodalidad.buscar.tipo');
+
 
 Route::get('/InstitucionEducativa/Buscar/{local}', [InstEducativaController::class, 'buscar_codmodular'])->name('iiee.codmodular.buscar');
 Route::get('/InstitucionEducativa/Distrito/{provincia}', [InstEducativaController::class, 'cargar_distrito'])->name('iiee.cargar.distrito');
@@ -696,8 +697,11 @@ Route::get('/Man/SFL/Download/plantilla', [SFLController::class, 'download_plant
 Route::post('/Man/SFL/Download/plantilla/visualizar', [SFLController::class, 'cargar_plantilla'])->name('mantenimiento.sfl.exportar.plantilla.cargar');
 Route::post('/Man/SFL/Download/plantilla/guardar', [SFLController::class, 'plantilla_guardar'])->name('mantenimiento.sfl.exportar.plantilla.guardar');
 
-Route::get('/educación/SFL/TableroControl', [SFLController::class, 'tablerocontrol'])->name('educacion.sfl.tablerocontrol');
-Route::get('/educación/SFL/TableroControl/reprote', [SFLController::class, 'tablerocontrolreporte'])->name('educacion.sfl.tablerocontrol.reporte');
+Route::get('/educación/SFL/TableroControl', [SFLController::class, 'tablerocontrol2'])->name('educacion.sfl.tablerocontrol');
+Route::get('/educación/SFL/TableroControl/reprote', [SFLController::class, 'tablerocontrol2reporte'])->name('educacion.sfl.tablerocontrol.reporte');
+
+Route::get('/educación/SFL/TableroControl2', [SFLController::class, 'tablerocontrol'])->name('educacion.sfl.tablerocontrolx');
+Route::get('/educación/SFL/TableroControl2/reprote', [SFLController::class, 'tablerocontrolreporte'])->name('educacion.sfl.tablerocontrol.reportex');
 // Route::get('/xx/descargar-excel', function () {
 //     $filePath = base_path('plantillas_excels/plantilla_sfl.xlsx');  // Ruta absoluta al archivo en la raíz del proyecto
 //     return response()->download($filePath);
