@@ -3,14 +3,14 @@
         <tr class="table-success-0 text-white">
             <th class="text-center">N°</th>
             <th class="text-center">UGEL</th>
-            <th class="text-center">DISTRITO</th>
-            <th class="text-center">CENTRO POBLADO</th>
-            <th class="text-center">AMBITO</th>
-            <th class="text-center">CÓDIGO LOCAL</th>
-            <th class="text-center">CÓDIGO MODULAR</th>
-            <th class="text-center">INSTITUCIÓN EDUCATIVA</th>
-            <th class="text-center">NIVEL</th>
-            <th class="text-center">ESTADO SFL</th>
+            <th class="text-center">Distrito</th>
+            <th class="text-center">Centro Poblado</th>
+            <th class="text-center">Ambito</th>
+            <th class="text-center">Cód.Local</th>
+            <th class="text-center">Cód.Modular</th>
+            <th class="text-center">Institución Educativa</th>
+            <th class="text-center">Nivel</th>
+            <th class="text-center">Estado SFL</th>
         </tr>
     </thead>
     <tbody>
@@ -19,12 +19,12 @@
                 <td>{{ $key + 1 }}</td>
                 <td class="text-left">{{ $item->ugel }}</td>
                 <td class="text-left">{{ $item->distrito }}</td>
-                <td>{{ $item->cpoblado }}</td>
+                <td class="text-left">{{ $item->cpoblado }}</td>
                 <td>{{ $item->area }}</td>
                 <td>{{ $item->clocal }}</td>
                 <td>{{ $item->cmodular }}</td>
                 <td class="text-left">{{ $item->nombre }}</td>
-                <td>{{ $item->nivel }}</td>
+                <td class="text-left">{{ $item->nivel }}</td>
                 <td>{!! estado($item->estado) !!}</td>
             </tr>
         @endforeach
@@ -57,7 +57,7 @@
             return '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px;">' .
                 number_format($monto, 1) .
                 '%</span>';
-        } elseif ($monto < 75) {
+        } elseif ($monto < 95) {
             return '<span class="badge badge-pill badge-warning" style="font-size:90%; width:50px;background-color:#eb960d;">' .
                 number_format($monto, 1) .
                 '%</span>';
@@ -69,19 +69,20 @@
     }
 
     function estado($estado)
-    {//<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px;">0.0%</span>
+    {
+        //<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px;">0.0%</span>
         switch ($estado) {
             case '1':
-                return '<span class="badge badge-success" style="font-size:90%; width:100px;">SANEADO</span>';
+                return '<span class="badge badge-success" style="font-size:90%;">SANEADO</span>';
                 break;
             case '2':
-                return '<span class="badge badge-danger" style="font-size:90%; width:100px;">NO SANEADO</span>';
+                return '<span class="badge badge-danger" style="font-size:90%;">NO SANEADO</span>';
                 break;
             case '3':
-                return '<span class="badge badge-secondary" style="font-size:90%; width:100px;">NO REGISTRADO</span>';
+                return '<span class="badge badge-secondary" style="font-size:90%;">NO REGISTRADO</span>';
                 break;
             case '4':
-                return '<span class="badge badge-warning" style="font-size:90%; width:100px;">EN PROCESO</span>';
+                return '<span class="badge badge-warning" style="font-size:90%;">EN PROCESO</span>';
                 break;
 
             default:

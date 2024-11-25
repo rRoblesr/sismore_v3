@@ -2,27 +2,27 @@
     <thead>
         <tr class="table-success-0 text-white">
             <th class="text-center" rowspan="2">UGEL</th>
-            <th class="text-center" colspan="3">INSTITUCIONES EDUCATIVAS</th>
-            <th class="text-center" colspan="3">LOCALES ESCOLARES</th>
-            <th class="text-center" colspan="2">L.E SANEADOS</th>
-            <th class="text-center" colspan="2">L.E NO SANEADOS</th>
-            <th class="text-center" colspan="2">L.E EN PROCESO</th>
-            <th class="text-center" colspan="2">L.E NO REGISTRADO</th>
+            <th class="text-center" colspan="3">instituciones Educativas</th>
+            <th class="text-center" colspan="3">Locales Escolares</th>
+            <th class="text-center" colspan="2">L.E Saneado</th>
+            <th class="text-center" colspan="2">L.E no Saneado</th>
+            <th class="text-center" colspan="2">L.E en Proceso</th>
+            <th class="text-center" colspan="2">L.E no Registrado</th>
         </tr>
         <tr class="table-success-0 text-white">
-            <th class="text-center">TOTAL</th>
-            <th class="text-center">RURAL</th>
-            <th class="text-center">URBANO</th>
-            <th class="text-center">TOTAL</th>
-            <th class="text-center">RURAL</th>
-            <th class="text-center">URBANO</th>
-            <th class="text-center">TOTAL</th>
+            <th class="text-center">Total</th>
+            <th class="text-center">Rural</th>
+            <th class="text-center">Urbano</th>
+            <th class="text-center">Total</th>
+            <th class="text-center">Rural</th>
+            <th class="text-center">Urbano</th>
+            <th class="text-center">Total</th>
             <th class="text-center">%</th>
-            <th class="text-center">TOTAL</th>
+            <th class="text-center">Total</th>
             <th class="text-center">%</th>
-            <th class="text-center">TOTAL</th>
+            <th class="text-center">Total</th>
             <th class="text-center">%</th>
-            <th class="text-center">TOTAL</th>
+            <th class="text-center">Total</th>
             <th class="text-center">%</th>
         </tr>
     </thead>
@@ -75,7 +75,7 @@
             return '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px;">' .
                 number_format($monto, 1) .
                 '%</span>';
-        } elseif ($monto < 75) {
+        } elseif ($monto < 95) {
             return '<span class="badge badge-pill badge-warning" style="font-size:90%; width:50px;background-color:#eb960d;">' .
                 number_format($monto, 1) .
                 '%</span>';

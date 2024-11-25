@@ -19,8 +19,8 @@
                         <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
                             <i class="fa fa-redo"></i> Actualizar</button>
                     </div>
-                    <h3 class="card-title text-white font-14">Control de Calidad del padrón nominal de niños y niñas menores
-                        de 6 años</h3>
+                    <h3 class="card-title text-white font-14">Tablero de control del saneamiento físico legal de locales
+                        escolares públicos</h3>
                 </div>
                 <div class="card-body pb-0">
                     <div class="form-group row align-items-center vh-5">
@@ -47,7 +47,7 @@
                                 <select id="modalidad" name="modalidad" class="form-control btn-xs font-11"
                                     onchange="cargarNivel();cargarCards();">
                                     <option value="0">TODOS</option>
-                                    @foreach ($modadlidad as $item)
+                                    @foreach ($modalidad as $item)
                                         <option value="{{ $item->tipo }}"> {{ $item->ntipo }}</option>
                                     @endforeach
                                 </select>
@@ -645,12 +645,15 @@
                             break;
                         case 'tabla2':
                             $('#ctabla2').html(data.excel);
-                            // $('#tabla2').DataTable({
-                            //     responsive: true,
-                            //     autoWidth: false,
-                            //     ordered: true,
-                            //     language: table_language,
-                            // });
+                            $('#tabla2').DataTable({
+                                responsive: true,
+                                autoWidth: false,
+                                ordered: true,
+                                paging: false,
+                                searching: false,
+                                info: false,
+                                language: table_language,
+                            });
                             break;
                         case 'tabla3':
                             $('#ctabla3').html(data.excel);
@@ -890,7 +893,7 @@
         }
 
         function gPie(div, datos, titulo, subtitulo, tituloserie) {
-            const colors = ["#5eb9aa", "#f5bd22", "#e65310"];
+            const colors = ["#5eb9aa", "#e65310", "#f5bd22"];
             Highcharts.chart(div, {
                 chart: {
                     plotBackgroundColor: null,

@@ -69,7 +69,7 @@
                             <div class="custom-select-container">
                                 <label for="provincia">PROVINCIA</label>
                                 <select id="provincia" name="provincia" class="form-control btn-xs font-11"
-                                    onchange="cargarDistritos();">
+                                    onchange="cargarDistritos();cargarcuadros();">
                                     <option value="0">TODOS</option>
                                     @foreach ($provincia as $item)
                                         <option value="{{ $item->id }}">

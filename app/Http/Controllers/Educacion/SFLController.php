@@ -1597,11 +1597,14 @@ class SFLController extends Controller
         $ugel = UgelRepositorio::listar_opt();
         $provincia = UbigeoRepositorio::provincia_select('25');
         $area = Area::all();
-        $modadlidad = NivelModalidad::distinct()->select(
-            'tipo',
-            DB::raw('case when tipo="EBA" then "Educación Básica Alternativa" when tipo="EBE" then "Educación Básica Especial" when tipo="EBR" then "Educación Básica Regular" when tipo="ETP" then "Educación Técnico Productiva" when tipo="SNU" then "Superior No Universitaria"  end as ntipo')
-        )->where('id', '!=', 15)->orderBy('tipo')->get();
-        return view('educacion.SFL.TableroControl2', compact('ugel', 'provincia', 'area', 'modadlidad'));
+        // $modadlidad = NivelModalidad::distinct()->select(
+        //     'tipo',
+        //     DB::raw('case when tipo="EBA" then "Educación Básica Alternativa" when tipo="EBE" then "Educación Básica Especial" when tipo="EBR" then "Educación Básica Regular" when tipo="ETP" then "Educación Técnico Productiva" when tipo="SNU" then "Superior No Universitaria"  end as ntipo')
+        // )->where('id', '!=', 15)->orderBy('tipo')->get();
+
+        $modalidad = DB::table(DB::raw('(select distinct nivel_id from edu_cubo_pacto02_local) as nx'))
+            ->join('edu_nivelmodalidad as n', 'n.id', '=', 'nx.nivel_id')->distinct()->select('n.tipo', DB::raw('case when tipo="EBA" then "Educación Básica Alternativa" when tipo="EBE" then "Educación Básica Especial" when tipo="EBR" then "Educación Básica Regular" when tipo="ETP" then "Educación Técnico Productiva" when tipo="SNU" then "Superior No Universitaria"  end as ntipo'))->get();
+        return view('educacion.SFL.TableroControl2', compact('ugel', 'provincia', 'area', 'modalidad'));
     }
 
     public function tablerocontrol2reporte(Request $rq)
@@ -1610,25 +1613,7 @@ class SFLController extends Controller
         switch ($rq->div) {
             case 'head':
                 $query = DB::table(DB::raw("(
-                    select iiee.id, iiee.CentroPoblado_id, iiee.codLocal, iiee.Area_id, iiee.Ugel_id
-                    from edu_institucionEducativa as iiee
-                    inner join edu_padronweb pw on pw.institucioneducativa_id=iiee.id and pw.importacion_id=" . $imp->id . "
-                    where iiee.TipoGestion_id in(4, 5, 7, 8) and iiee.NivelModalidad_id not in(14, 15) and pw.estadoinsedu_id = 3
-                ) as iiee"))
-                    ->join('edu_centropoblado as cp', 'cp.id', '=', 'iiee.CentroPoblado_id')
-                    ->join('edu_area as aa', 'aa.id', '=', 'iiee.Area_id')
-                    ->join('edu_ugel as uu', 'uu.id', '=', 'iiee.Ugel_id')
-                    ->join('par_ubigeo as dt', 'dt.id', '=', 'cp.Ubigeo_id')
-                    ->join('par_ubigeo as pv', 'pv.id', '=', 'dt.dependencia');
-
-                if ($rq->ugel > 0) $query = $query->where('uu.id', $rq->ugel);
-                if ($rq->provincia > 0) $query = $query->where('dt.dependencia', $rq->provincia);
-                if ($rq->distrito > 0) $query = $query->where('dt.id', $rq->distrito);
-                if ($rq->area > 0) $query = $query->where('aa.id', $rq->area);
-                $card1 = $query = $query->count();
-
-                $query = DB::table(DB::raw("(
-                    select iiee.id, iiee.CentroPoblado_id, iiee.codLocal, iiee.Area_id, iiee.Ugel_id
+                    select iiee.id, iiee.CentroPoblado_id, iiee.codLocal, iiee.Area_id, iiee.Ugel_id, iiee.NivelModalidad_id
                     from edu_institucionEducativa as iiee
                     inner join edu_padronweb pw on pw.institucioneducativa_id=iiee.id and pw.importacion_id=" . $imp->id . "
                     where iiee.TipoGestion_id in(4, 5, 7, 8) and iiee.NivelModalidad_id not in(14, 15) and pw.estadoinsedu_id = 3
@@ -1638,12 +1623,30 @@ class SFLController extends Controller
                     ->join('edu_ugel as uu', 'uu.id', '=', 'iiee.Ugel_id')
                     ->join('par_ubigeo as dt', 'dt.id', '=', 'cp.Ubigeo_id')
                     ->join('par_ubigeo as pv', 'pv.id', '=', 'dt.dependencia')
+                    ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'iiee.NivelModalidad_id');
+
+                if ($rq->ugel > 0) $query = $query->where('uu.id', $rq->ugel);
+                if ($rq->modalidad != '0') $query = $query->where('nm.tipo', $rq->modalidad);
+                if ($rq->nivel > 0) $query = $query->where('nm.id', $rq->nivel);
+                $card1 = $query = $query->count();
+
+                $query = DB::table(DB::raw("(
+                    select iiee.id, iiee.CentroPoblado_id, iiee.codLocal, iiee.Area_id, iiee.Ugel_id, iiee.NivelModalidad_id
+                    from edu_institucionEducativa as iiee
+                    inner join edu_padronweb pw on pw.institucioneducativa_id=iiee.id and pw.importacion_id=" . $imp->id . "
+                    where iiee.TipoGestion_id in(4, 5, 7, 8) and iiee.NivelModalidad_id not in(14, 15) and pw.estadoinsedu_id = 3
+                ) as iiee"))
+                    ->join('edu_centropoblado as cp', 'cp.id', '=', 'iiee.CentroPoblado_id')
+                    ->join('edu_area as aa', 'aa.id', '=', 'iiee.Area_id')
+                    ->join('edu_ugel as uu', 'uu.id', '=', 'iiee.Ugel_id')
+                    ->join('par_ubigeo as dt', 'dt.id', '=', 'cp.Ubigeo_id')
+                    ->join('par_ubigeo as pv', 'pv.id', '=', 'dt.dependencia')
+                    ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'iiee.NivelModalidad_id')
                     ->select('iiee.codLocal');
 
                 if ($rq->ugel > 0) $query = $query->where('uu.id', $rq->ugel);
-                if ($rq->provincia > 0) $query = $query->where('dt.dependencia', $rq->provincia);
-                if ($rq->distrito > 0) $query = $query->where('dt.id', $rq->distrito);
-                if ($rq->area > 0) $query = $query->where('aa.id', $rq->area);
+                if ($rq->modalidad != '0') $query = $query->where('nm.tipo', $rq->modalidad);
+                if ($rq->nivel > 0) $query = $query->where('nm.id', $rq->nivel);
                 $card2 = $query->groupBy('iiee.codLocal')->get()->count();
 
 
@@ -1651,17 +1654,15 @@ class SFLController extends Controller
                 $query = DB::table("edu_cubo_pacto02_local")->where('estado', 1);
 
                 if ($rq->ugel > 0) $query = $query->where('ugel_id', $rq->ugel);
-                if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
-                if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
-                if ($rq->area > 0) $query = $query->where('area_id', $rq->area);
+                if ($rq->modalidad != '0') $query = $query->where('modalidad', $rq->modalidad);
+                if ($rq->nivel > 0) $query = $query->where('nivel_id', $rq->nivel);
                 $card3 = $query->count();
 
                 $query = DB::table("edu_cubo_pacto02_local")->where('estado', '!=', 1);
 
                 if ($rq->ugel > 0) $query = $query->where('ugel_id', $rq->ugel);
-                if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
-                if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
-                if ($rq->area > 0) $query = $query->where('area_id', $rq->area);
+                if ($rq->modalidad != '0') $query = $query->where('modalidad', $rq->modalidad);
+                if ($rq->nivel > 0) $query = $query->where('nivel_id', $rq->nivel);
                 $card4 = $query->count();
 
                 $card1 = number_format($card1, 0);
@@ -1674,10 +1675,11 @@ class SFLController extends Controller
                     ->select('p.nombre as provincia', DB::raw("sum(if(estado=1,1,0)) as saneado"), DB::raw("sum(if(estado!=1,1,0)) as nosaneado"));
 
                 if ($rq->ugel > 0) $query = $query->where('ugel_id', $rq->ugel);
-                if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
-                if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
-                if ($rq->area > 0) $query = $query->where('area_id', $rq->area);
+                if ($rq->modalidad > 0) $query = $query->where('modalidad', $rq->modalidad);
+                if ($rq->nivel > 0) $query = $query->where('nivel_id', $rq->nivel);
                 $data = $query->groupBy('p.nombre')->get();
+
+                $nroLocal = $data->sum('saneado') + $data->sum('nosaneado');
 
                 $info['series'][0]['name'] = 'SANEADO';
                 $info['series'][1]['name'] = 'NO SANEADO';
@@ -1689,16 +1691,15 @@ class SFLController extends Controller
                     $info['series'][1]['data'][] = (int)$value->nosaneado;
                 }
 
-                return response()->json(compact('info', 'data'));
+                return response()->json(compact('info', 'data', 'nroLocal'));
 
             case 'anal2':
                 $query = DB::table("edu_cubo_pacto02_local")
                     ->select(DB::raw("sum(if(estado=1,1,0)) as saneado"), DB::raw("sum(if(estado!=1,1,0)) as nosaneado"));
 
                 if ($rq->ugel > 0) $query = $query->where('ugel_id', $rq->ugel);
-                if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
-                if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
-                if ($rq->area > 0) $query = $query->where('area_id', $rq->area);
+                if ($rq->modalidad != '0') $query = $query->where('modalidad', $rq->modalidad);
+                if ($rq->nivel > 0) $query = $query->where('nivel_id', $rq->nivel);
                 $data = $query->get()->first();
                 $info = [['name' => 'SANEADO', 'y' => (int)$data->saneado], ['name' => 'NO SANEADO', 'y' => (int)$data->nosaneado]];
 
@@ -1715,9 +1716,8 @@ class SFLController extends Controller
                     ->select('p.codigo', 'p.nombre as provincia', DB::raw("sum(if(estado=1,1,0)) as saneado"), DB::raw("round(100*sum(if(estado=1,1,0))/count(*),2) as indicador"));
 
                 if ($rq->ugel > 0) $query = $query->where('ugel_id', $rq->ugel);
-                if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
-                if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
-                if ($rq->area > 0) $query = $query->where('area_id', $rq->area);
+                if ($rq->modalidad != '0') $query = $query->where('modalidad', $rq->modalidad);
+                if ($rq->nivel > 0) $query = $query->where('nivel_id', $rq->nivel);
                 $data = $query->groupBy('p.codigo', 'p.nombre')->get();
 
                 $info = [];
@@ -1732,9 +1732,8 @@ class SFLController extends Controller
                     ->select('a.nombre as provincia', DB::raw("sum(if(c.estado=1,1,0)) as saneado"), DB::raw("sum(if(c.estado!=1,1,0)) as nosaneado"));
 
                 if ($rq->ugel > 0) $query = $query->where('c.ugel_id', $rq->ugel);
-                if ($rq->provincia > 0) $query = $query->where('c.provincia_id', $rq->provincia);
-                if ($rq->distrito > 0) $query = $query->where('c.distrito_id', $rq->distrito);
-                if ($rq->area > 0) $query = $query->where('c.area_id', $rq->area);
+                if ($rq->modalidad != '0') $query = $query->where('modalidad', $rq->modalidad);
+                if ($rq->nivel > 0) $query = $query->where('nivel_id', $rq->nivel);
                 $data = $query->groupBy('a.nombre')->get();
 
                 $info['series'][0]['name'] = 'SANEADO';
@@ -1751,7 +1750,7 @@ class SFLController extends Controller
 
             case 'tabla1':
                 $query = DB::table(DB::raw("(
-                    select iiee.id, iiee.CentroPoblado_id, iiee.codLocal, iiee.Area_id, iiee.Ugel_id
+                    select iiee.id, iiee.CentroPoblado_id, iiee.codLocal, iiee.Area_id, iiee.Ugel_id, iiee.NivelModalidad_id
                     from edu_institucionEducativa as iiee
                     inner join edu_padronweb pw on pw.institucioneducativa_id=iiee.id and pw.importacion_id=" . $imp->id . "
                     where iiee.TipoGestion_id in(4, 5, 7, 8) and iiee.NivelModalidad_id not in(14, 15) and pw.estadoinsedu_id = 3
@@ -1761,12 +1760,12 @@ class SFLController extends Controller
                     ->join('edu_ugel as uu', 'uu.id', '=', 'iiee.Ugel_id')
                     ->join('par_ubigeo as dt', 'dt.id', '=', 'cp.Ubigeo_id')
                     ->join('par_ubigeo as pv', 'pv.id', '=', 'dt.dependencia')
+                    ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'iiee.NivelModalidad_id')
                     ->select('uu.nombre as ugel', DB::raw("count(*) as total"), DB::raw("sum(if(aa.id=1,1,0)) as r"), DB::raw("sum(if(aa.id=2,1,0)) as u"),);
 
                 if ($rq->ugel > 0) $query = $query->where('uu.id', $rq->ugel);
-                if ($rq->provincia > 0) $query = $query->where('dt.dependencia', $rq->provincia);
-                if ($rq->distrito > 0) $query = $query->where('dt.id', $rq->distrito);
-                if ($rq->area > 0) $query = $query->where('aa.id', $rq->area);
+                if ($rq->modalidad != '0') $query = $query->where('nm.tipo', $rq->modalidad);
+                if ($rq->nivel > 0) $query = $query->where('nm.id', $rq->nivel);
                 $iiee = $query->groupBy('uu.nombre')->get();
 
                 // $sum = $iiee->sum('total');
@@ -1789,9 +1788,8 @@ class SFLController extends Controller
                     );
 
                 if ($rq->ugel > 0) $query = $query->where('ugel_id', $rq->ugel);
-                if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
-                if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
-                if ($rq->area > 0) $query = $query->where('area_id', $rq->area);
+                if ($rq->modalidad != '0') $query = $query->where('modalidad', $rq->modalidad);
+                if ($rq->nivel > 0) $query = $query->where('nivel_id', $rq->nivel);
                 $data = $query->groupBy('u.nombre')->get();
 
                 foreach ($data as $key => $value) {
@@ -1825,7 +1823,7 @@ class SFLController extends Controller
 
             case 'tabla2':
                 $query = DB::table(DB::raw("(
-                    select iiee.id, iiee.CentroPoblado_id, iiee.codLocal, iiee.Area_id, iiee.Ugel_id
+                    select iiee.id, iiee.CentroPoblado_id, iiee.codLocal, iiee.Area_id, iiee.Ugel_id, iiee.NivelModalidad_id
                     from edu_institucionEducativa as iiee
                     inner join edu_padronweb pw on pw.institucioneducativa_id=iiee.id and pw.importacion_id=" . $imp->id . "
                     where iiee.TipoGestion_id in(4, 5, 7, 8) and iiee.NivelModalidad_id not in(14, 15) and pw.estadoinsedu_id = 3
@@ -1835,12 +1833,12 @@ class SFLController extends Controller
                     ->join('edu_ugel as uu', 'uu.id', '=', 'iiee.Ugel_id')
                     ->join('par_ubigeo as dt', 'dt.id', '=', 'cp.Ubigeo_id')
                     ->join('par_ubigeo as pv', 'pv.id', '=', 'dt.dependencia')
+                    ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'iiee.NivelModalidad_id')
                     ->select('dt.nombre as distrito', DB::raw("count(*) as total"), DB::raw("sum(if(aa.id=1,1,0)) as r"), DB::raw("sum(if(aa.id=2,1,0)) as u"),);
 
                 if ($rq->ugel > 0) $query = $query->where('uu.id', $rq->ugel);
-                if ($rq->provincia > 0) $query = $query->where('dt.dependencia', $rq->provincia);
-                if ($rq->distrito > 0) $query = $query->where('dt.id', $rq->distrito);
-                if ($rq->area > 0) $query = $query->where('aa.id', $rq->area);
+                if ($rq->modalidad != '0') $query = $query->where('nm.tipo', $rq->modalidad);
+                if ($rq->nivel > 0) $query = $query->where('nm.id', $rq->nivel);
                 $iiee = $query->groupBy('dt.nombre')->get();
 
                 // $sum = $iiee->sum('total');
@@ -1863,9 +1861,8 @@ class SFLController extends Controller
                     );
 
                 if ($rq->ugel > 0) $query = $query->where('ugel_id', $rq->ugel);
-                if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
-                if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
-                if ($rq->area > 0) $query = $query->where('area_id', $rq->area);
+                if ($rq->modalidad != '0') $query = $query->where('modalidad', $rq->modalidad);
+                if ($rq->nivel > 0) $query = $query->where('nivel_id', $rq->nivel);
                 $data = $query->groupBy('u.nombre')->get();
 
                 foreach ($data as $key => $value) {
@@ -1925,7 +1922,7 @@ class SFLController extends Controller
                     );
 
                 if ($rq->ugel > 0) $query = $query->where('uu.id', $rq->ugel);
-                if ($rq->modalidad > 0) $query = $query->where('nm.tipo', $rq->modalidad);
+                if ($rq->modalidad != '0') $query = $query->where('nm.tipo', $rq->modalidad);
                 if ($rq->nivel > 0) $query = $query->where('nm.id', $rq->nivel);
                 $iiee = $query->get();
 
