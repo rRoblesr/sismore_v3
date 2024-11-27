@@ -13,9 +13,9 @@
             <div class="card">
                 <div class="card-header bg-success-0">
                     <div class="card-widgets">
-                        <button type="button" class="btn btn-danger btn-xs"
+                        {{-- <button type="button" class="btn btn-danger btn-xs"
                             onclick="window.location.href=`{{ route('salud.padronnominal.tablerocalidad.consulta', ['anio' => 'anio', 'mes' => 'mes']) }}`.replace('anio',$('#anio').val()).replace('mes',$('#mes').val())">
-                            <i class="fas fa-search"></i> Consultas</button>
+                            <i class="fas fa-search"></i> Consultas</button> --}}
                         <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
                             <i class="fa fa-redo"></i> Actualizar</button>
                     </div>
@@ -83,7 +83,6 @@
         </div>
     </div>
 
-
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6">
             <div class="card-box border border-plomo-0">
@@ -102,6 +101,15 @@
                                 <span data-plugin="counterup" id="card1"></span>
                             </h4>
                             <p class="mb-0 mt-1 text-truncate">Total Niños y Niñas</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4" id="pcard1">
+                    <h6 class="text-uppercase">Registros Completos <span class="float-right">0%</span></h6>
+                    <div class="progress progress-sm m-0">
+                        <div class="progress-bar bg-info" role="progressbar" aria-valuenow="0" aria-valuemin="0"
+                            aria-valuemax="100" style="width: 0%">
+                            <span class="sr-only">0% Complete</span>
                         </div>
                     </div>
                 </div>
@@ -128,7 +136,15 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="mt-4" id="pcard2">
+                    <h6 class="text-uppercase">Porcentaje con DNI <span class="float-right">0%</span></h6>
+                    <div class="progress progress-sm m-0">
+                        <div class="progress-bar bg-info" role="progressbar" aria-valuenow="0" aria-valuemin="0"
+                            aria-valuemax="100" style="width: 0%">
+                            <span class="sr-only">0% Complete</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -152,6 +168,15 @@
                         </div>
                     </div>
                 </div>
+                <div class="mt-4" id="pcard3">
+                    <h6 class="text-uppercase">Porcentaje con Seguro <span class="float-right">0%</span></h6>
+                    <div class="progress progress-sm m-0">
+                        <div class="progress-bar bg-info" role="progressbar" aria-valuenow="0" aria-valuemin="0"
+                            aria-valuemax="100" style="width: 0%">
+                            <span class="sr-only">0% Complete</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -172,6 +197,15 @@
                                 <span data-plugin="counterup" id="card4"></span>
                             </h4>
                             <p class="mb-0 mt-1 text-truncate">Niños y Niñas con EESS</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4" id="pcard4">
+                    <h6 class="text-uppercase">Porcentaje con EESS <span class="float-right">0%</span></h6>
+                    <div class="progress progress-sm m-0">
+                        <div class="progress-bar bg-info" role="progressbar" aria-valuenow="0" aria-valuemin="0"
+                            aria-valuemax="100" style="width: 0%">
+                            <span class="sr-only">0% Complete</span>
                         </div>
                     </div>
                 </div>
@@ -503,6 +537,22 @@
             '#64E572', '#9F9655', '#FFF263', '#6AF9C4'
         ];
         var ubigeo_select = '';
+        const spinners = {
+            head: ['#card1', '#card2', '#card3', '#card4'],
+            head1: ['#card1'],
+            head2: ['#card2'],
+            head3: ['#card3'],
+            head4: ['#card4'],
+            anal1: ['#anal1'],
+            anal2: ['#anal2'],
+            anal3: ['#anal3'],
+            anal4: ['#anal4'],
+            tabla1: ['#ctabla1'],
+            tabla2: ['#ctabla2'],
+            tabla3: ['#ctabla3'],
+            tabla3_1: ['#ctabla3_1']
+        };
+
         $(document).ready(function() {
             cargarMes();
             cargarDistritos();
@@ -511,7 +561,10 @@
         });
 
         function cargarCards() {
-            panelGraficas('head');
+            panelGraficas('head1');
+            panelGraficas('head2');
+            panelGraficas('head3');
+            panelGraficas('head4');
             panelGraficas('anal1');
             panelGraficas('anal2');
             panelGraficas('anal3');
@@ -577,40 +630,10 @@
                 type: "GET",
                 dataType: "JSON",
                 beforeSend: function() {
-                    switch (div) {
-                        case 'head':
-                            $('#card1').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                            $('#card2').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                            $('#card3').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                            $('#card4').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                            break;
-                        case 'anal1':
-                            $('#anal1').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                            break;
-                        case 'anal2':
-                            $('#anal2').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                            break;
-                        case 'anal3':
-                            $('#anal3').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                            break;
-                        case 'anal4':
-                            $('#anal4').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                            break;
-                        case 'tabla1':
-                            $('#ctabla1').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                            break;
-                        case 'tabla2':
-                            $('#ctabla2').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                            break;
-                        case 'tabla3':
-                            $('#ctabla3').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                            break;
-                        case 'tabla3_1':
-                            $('#ctabla3_1').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                            break;
-
-                        default:
-                            break;
+                    if (spinners[div]) {
+                        spinners[div].forEach(selector => {
+                            $(selector).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                        });
                     }
                 },
                 success: function(data) {
@@ -632,19 +655,110 @@
                                 delay: 10,
                                 time: 1000
                             });
+                            $('#pcard1 h6 span').text(`${data.pcard1}%`);
+                            $('#pcard1 .progress-bar')
+                                .removeClass('bg-info bg-success bg-warning bg-danger')
+                                .addClass(data.pcard1 > 95 ? 'bg-success' : (data.pcard1 > 50 ? 'bg-warning' :
+                                    'bg-danger'))
+                                .css('width', `${data.pcard1}%`)
+                                .attr('aria-valuenow', data.pcard1);
+
+                            $('#pcard2 h6 span').text(`${data.pcard2}%`);
+                            $('#pcard2 .progress-bar')
+                                .removeClass('bg-info bg-success bg-warning bg-danger')
+                                .addClass(data.pcard2 > 95 ? 'bg-success' : (data.pcard2 > 50 ? 'bg-warning' :
+                                    'bg-danger'))
+                                .css('width', `${data.pcard2}%`)
+                                .attr('aria-valuenow', data.pcard2);
+
+                            $('#pcard3 h6 span').text(`${data.pcard3}%`);
+                            $('#pcard3 .progress-bar')
+                                .removeClass('bg-info bg-success bg-warning bg-danger')
+                                .addClass(data.pcard3 > 95 ? 'bg-success' : (data.pcard3 > 50 ? 'bg-warning' :
+                                    'bg-danger'))
+                                .css('width', `${data.pcard3}%`)
+                                .attr('aria-valuenow', data.pcard3);
+
+                            $('#pcard4 h6 span').text(`${data.pcard4}%`);
+                            $('#pcard4 .progress-bar')
+                                .removeClass('bg-info bg-success bg-warning bg-danger')
+                                .addClass(data.pcard4 > 95 ? 'bg-success' : (data.pcard4 > 50 ? 'bg-warning' :
+                                    'bg-danger'))
+                                .css('width', `${data.pcard4}%`)
+                                .attr('aria-valuenow', data.pcard4);
+
                             break;
+                        case 'head1':
+                            $('#card1').text(data.card1).counterUp({
+                                delay: 10,
+                                time: 1000
+                            });
+
+                            $('#pcard1 h6 span').text(`${data.pcard1}%`);
+                            $('#pcard1 .progress-bar')
+                                .removeClass('bg-info bg-success bg-warning bg-danger')
+                                .addClass(data.pcard1 > 95 ? 'bg-success' : (data.pcard1 > 50 ? 'bg-warning' :
+                                    'bg-danger'))
+                                .css('width', `${data.pcard1}%`)
+                                .attr('aria-valuenow', data.pcard1);
+
+                            break;
+                        case 'head2':
+                            $('#card2').text(data.card2).counterUp({
+                                delay: 10,
+                                time: 1000
+                            });
+
+                            $('#pcard2 h6 span').text(`${data.pcard2}%`);
+                            $('#pcard2 .progress-bar')
+                                .removeClass('bg-info bg-success bg-warning bg-danger')
+                                .addClass(data.pcard2 > 95 ? 'bg-success' : (data.pcard2 > 50 ? 'bg-warning' :
+                                    'bg-danger'))
+                                .css('width', `${data.pcard2}%`)
+                                .attr('aria-valuenow', data.pcard2);
+                            break;
+                        case 'head3':
+                            $('#card3').text(data.card3).counterUp({
+                                delay: 10,
+                                time: 1000
+                            });
+
+                            $('#pcard3 h6 span').text(`${data.pcard3}%`);
+                            $('#pcard3 .progress-bar')
+                                .removeClass('bg-info bg-success bg-warning bg-danger')
+                                .addClass(data.pcard3 > 95 ? 'bg-success' : (data.pcard3 > 50 ? 'bg-warning' :
+                                    'bg-danger'))
+                                .css('width', `${data.pcard3}%`)
+                                .attr('aria-valuenow', data.pcard3);
+                            break;
+                        case 'head4':
+                            $('#card4').text(data.card4).counterUp({
+                                delay: 10,
+                                time: 1000
+                            });
+
+                            $('#pcard4 h6 span').text(`${data.pcard4}%`);
+                            $('#pcard4 .progress-bar')
+                                .removeClass('bg-info bg-success bg-warning bg-danger')
+                                .addClass(data.pcard4 > 95 ? 'bg-success' : (data.pcard4 > 50 ? 'bg-warning' :
+                                    'bg-danger'))
+                                .css('width', `${data.pcard4}%`)
+                                .attr('aria-valuenow', data.pcard4);
+
+                            break;
+
                         case 'anal1':
                             console.log(data.avance);
-                            GaugeSeries('anal1', data.avance, 'Porcentaje de Visitados');
+                            GaugeSeries('anal1', data.avance, 'Menores de 1 año Visitados');
                             break;
                         case 'anal2':
-                            GaugeSeries('anal2', data.avance, 'Porcentaje con DNI');
+                            GaugeSeries('anal2', data.avance, 'Menores de 1 año con DNI');
                             break;
                         case 'anal3':
-                            GaugeSeries('anal3', data.avance, 'Porcentaje con Seguro Salud');
+                            GaugeSeries('anal3', data.avance, 'Menores de 1 año con Seguro Salud');
                             break;
                         case 'anal4':
-                            GaugeSeries('anal4', data.avance, 'Porcentaje con EESS de atención');
+                            GaugeSeries('anal4', data.avance, 'Menores de 1 año con EESS');
                             break;
                         case 'tabla1':
                             $('#ctabla1').html(data.excel);

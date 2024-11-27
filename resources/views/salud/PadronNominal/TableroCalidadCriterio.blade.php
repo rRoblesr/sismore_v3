@@ -139,7 +139,7 @@
                                                 <th class="text-center">Tipo Doc.</th>
                                                 <th class="text-center">Documento</th>
                                                 <th class="text-center">Nombres del Menor</th>
-                                                <th class="text-center">Edad</th>
+                                                <th class="text-center">Fecha Nacimiento</th>
                                                 <th class="text-center">Seguro</th>
                                                 <th class="text-center">Visitado</th>
                                                 <th class="text-center">Encontrado</th>

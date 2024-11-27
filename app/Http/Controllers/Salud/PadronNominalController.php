@@ -124,17 +124,17 @@ class PadronNominalController extends Controller
         $mes = Mes::find($imp->mes);
         $anios = ImportacionRepositorio::anios_porfuente_select(ImporPadronNominalController::$FUENTE);
         $provincias = UbigeoRepositorio::provincia_select('25');
-        $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $mes->mes . ' del ' . $imp->anio;
+        // $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $mes->mes . ' del ' . $imp->anio;
+        $actualizado = 'Actualizado al ' . $imp->dia . '/' . $imp->mes . '/' . $imp->anio;
         return view('salud.PadronNominal.TableroCalidad', compact('actualizado', 'anios', 'provincias'));
     }
 
     public function tablerocalidadreporte(Request $rq)
     {
         $fuente = ImporPadronNominalController::$FUENTE;
+        $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio, $rq->mes);
         switch ($rq->div) {
             case 'head':
-                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio, $rq->mes);
-
                 $card1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1');
                 if ($rq->provincia > 0) $card1 = $card1->where('provincia_id', $rq->provincia);
                 if ($rq->distrito > 0) $card1 = $card1->where('distrito_id', $rq->distrito);
@@ -162,43 +162,172 @@ class PadronNominalController extends Controller
                 if ($rq->distrito > 0) $card4 = $card4->where('distrito_id', $rq->distrito);
                 $card4 = $card4->count();
 
+                $v2 = (int)$card1;
+
                 $card1 = number_format($card1, 0);
                 $card2 = number_format($card2, 0);
                 $card3 = number_format($card3, 0);
                 $card4 = number_format($card4, 0);
-                return response()->json(compact('card1', 'card2', 'card3', 'card4'));
-            case 'anal1':
-                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio, $rq->mes);
 
-                $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1');
-                if ($rq->provincia > 0) $v2 = $v2->where('provincia_id', $rq->provincia);
-                if ($rq->distrito > 0) $v2 = $v2->where('distrito_id', $rq->distrito);
-                $v2 = $v2->count();
+
+                // $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1');
+                // if ($rq->provincia > 0) $v2 = $v2->where('provincia_id', $rq->provincia);
+                // if ($rq->distrito > 0) $v2 = $v2->where('distrito_id', $rq->distrito);
+                // $v2 = $v2->count();
 
                 $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->where('visita', '1');
                 if ($rq->provincia > 0) $v1 = $v1->where('provincia_id', $rq->provincia);
                 if ($rq->distrito > 0) $v1 = $v1->where('distrito_id', $rq->distrito);
                 $v1 = $v1->count();
 
-                $avance = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
-                return response()->json(compact('avance'));
-            case 'anal2':
-                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio, $rq->mes);
+                $pcard1 = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
 
-                $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1');
-                if ($rq->provincia > 0) $v2 = $v2->where('provincia_id', $rq->provincia);
-                if ($rq->distrito > 0) $v2 = $v2->where('distrito_id', $rq->distrito);
-                $v2 = $v2->count();
+                // $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1');
+                // if ($rq->provincia > 0) $v2 = $v2->where('provincia_id', $rq->provincia);
+                // if ($rq->distrito > 0) $v2 = $v2->where('distrito_id', $rq->distrito);
+                // $v2 = $v2->count();
 
                 $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->where('tipo_doc', 'DNI');
                 if ($rq->provincia > 0) $v1 = $v1->where('provincia_id', $rq->provincia);
                 if ($rq->distrito > 0) $v1 = $v1->where('distrito_id', $rq->distrito);
                 $v1 = $v1->count();
 
-                $avance = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
-                return response()->json(compact('avance'));
-            case 'anal3':
-                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio, $rq->mes);
+                $pcard2 = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
+
+                // $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1');
+                // if ($rq->provincia > 0) $v2 = $v2->where('provincia_id', $rq->provincia);
+                // if ($rq->distrito > 0) $v2 = $v2->where('distrito_id', $rq->distrito);
+                // $v2 = $v2->count();
+
+                $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')
+                    ->where(function ($query) {
+                        $query->whereRaw("FIND_IN_SET('1',seguro) > 0")
+                            ->orWhereRaw("FIND_IN_SET('2',seguro) > 0")
+                            ->orWhereRaw("FIND_IN_SET('3',seguro) > 0")
+                            ->orWhereRaw("FIND_IN_SET('4',seguro) > 0")
+                            ->orWhereNotNull('seguro');
+                    });
+                if ($rq->provincia > 0) $v1 = $v1->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $v1 = $v1->where('distrito_id', $rq->distrito);
+                $v1 = $v1->count();
+
+                $pcard3 = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
+
+                // $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1');
+                // if ($rq->provincia > 0) $v2 = $v2->where('provincia_id', $rq->provincia);
+                // if ($rq->distrito > 0) $v2 = $v2->where('distrito_id', $rq->distrito);
+                // $v2 = $v2->count();
+
+                $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->where('cui_atencion', '>', 0);
+                if ($rq->provincia > 0) $v1 = $v1->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $v1 = $v1->where('distrito_id', $rq->distrito);
+                $v1 = $v1->count();
+
+                $pcard4 = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
+                return response()->json(compact('card1', 'card2', 'card3', 'card4', 'pcard1', 'pcard2', 'pcard3', 'pcard4'));
+            case 'head1':
+                $card1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1');
+                if ($rq->provincia > 0) $card1 = $card1->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $card1 = $card1->where('distrito_id', $rq->distrito);
+                $card1 = $card1->count();
+
+                $v2 = (int)$card1;
+
+                $card1 = number_format($card1, 0);
+
+
+                // $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->where('visita', '1');
+                // if ($rq->provincia > 0) $v1 = $v1->where('provincia_id', $rq->provincia);
+                // if ($rq->distrito > 0) $v1 = $v1->where('distrito_id', $rq->distrito);
+                // $v1 = $v1->count();
+
+                $v1 = DB::table('sal_impor_padron_nominal as ipm')
+                    ->leftJoinSub(
+                        DB::table('sal_establecimiento')
+                            ->select('id')
+                            ->where('cod_disa', '34'),
+                        'est',
+                        'est.id',
+                        '=',
+                        'ipm.establecimiento_id'
+                    )
+                    ->where('importacion_id', 2736)
+                    ->whereIn('tipo_doc', ['DNI', 'CNV', 'CUI'])
+                    ->whereNotNull('apellido_paterno')
+                    ->whereNotNull('apellido_materno')
+                    ->whereNotNull('nombre')
+                    ->where('apellido_paterno', '!=', '')
+                    ->where('apellido_materno', '!=', '')
+                    ->where('nombre', '!=', '')
+                    ->whereNotIn('apellido_paterno', ['R N', 'N N', 'XXX', 'NN', 'SD', 'SN', 'SR', 'XX', 'RN', 'R'])
+                    ->whereNotIn('apellido_materno', ['R N', 'N N', 'XXX', 'NN', 'SD', 'SN', 'SR', 'XX', 'RN', 'R'])
+                    ->whereNotIn('nombre', ['R N', 'N N', 'XXX', 'NN', 'SD', 'SN', 'SR', 'XX', 'RN', 'R'])
+                    ->where('seguro_id', '>', 0)
+                    ->where('visita', '1')
+                    ->whereNotNull('direccion')
+                    ->where('direccion', '!=', '')
+                    ->whereNotNull('centro_poblado')
+                    ->where('centro_poblado', '!=', '')
+                    ->whereNotNull('est.id')
+                    ->whereNotNull('num_doc_madre')
+                    ->where('num_doc_madre', '!=', '')
+                    ->whereNotNull('apellido_paterno_madre')
+                    ->whereNotNull('apellido_materno_madre')
+                    ->whereNotNull('nombres_madre')
+                    ->where('apellido_paterno_madre', '!=', '')
+                    ->where('apellido_materno_madre', '!=', '')
+                    ->where('nombres_madre', '!=', '')
+                    ->whereNotIn('apellido_paterno_madre', ['R N', 'N N', 'XXX', 'NN', 'SD', 'SN', 'SR', 'XX', 'RN', 'R'])
+                    ->whereNotIn('apellido_materno_madre', ['R N', 'N N', 'XXX', 'NN', 'SD', 'SN', 'SR', 'XX', 'RN', 'R'])
+                    ->whereNotIn('nombres_madre', ['R N', 'N N', 'XXX', 'NN', 'SD', 'SN', 'SR', 'XX', 'RN', 'R'])
+                    ->whereNotNull('grado_instruccion')
+                    ->where('grado_instruccion', '!=', '')
+                    ->whereNotNull('lengua_madre')
+                    ->where('lengua_madre', '!=', '');
+                if ($rq->provincia > 0) $v1 = $v1->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $v1 = $v1->where('distrito_id', $rq->distrito);
+                $v1 = $v1->count();
+
+                $pcard1 = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
+
+                return response()->json(compact('card1', 'pcard1', 'v1', 'v2'));
+            case 'head2':
+                $card2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->where('tipo_doc', 'DNI');
+                if ($rq->provincia > 0) $card2 = $card2->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $card2 = $card2->where('distrito_id', $rq->distrito);
+                $card2 = $card2->count();
+
+                $card2 = number_format($card2, 0);
+
+                $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1');
+                if ($rq->provincia > 0) $v2 = $v2->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $v2 = $v2->where('distrito_id', $rq->distrito);
+                $v2 = $v2->count();
+
+
+                $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->where('tipo_doc', 'DNI');
+                if ($rq->provincia > 0) $v1 = $v1->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $v1 = $v1->where('distrito_id', $rq->distrito);
+                $v1 = $v1->count();
+
+                $pcard2 = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
+
+                return response()->json(compact('card2', 'pcard2'));
+
+            case 'head3':
+                $card3 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')
+                    ->where(function ($query) {
+                        $query->whereRaw("FIND_IN_SET('1',seguro) > 0")
+                            ->orWhereRaw("FIND_IN_SET('2',seguro) > 0")
+                            ->orWhereRaw("FIND_IN_SET('3',seguro) > 0")
+                            ->orWhereRaw("FIND_IN_SET('4',seguro) > 0");
+                        // ->orWhereNotNull('seguro');
+                    });
+                if ($rq->provincia > 0) $card3 = $card3->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $card3 = $card3->where('distrito_id', $rq->distrito);
+                $card3 = $card3->count();
+
+                $card3 = number_format($card3, 0);
 
                 $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1');
                 if ($rq->provincia > 0) $v2 = $v2->where('provincia_id', $rq->provincia);
@@ -217,10 +346,17 @@ class PadronNominalController extends Controller
                 if ($rq->distrito > 0) $v1 = $v1->where('distrito_id', $rq->distrito);
                 $v1 = $v1->count();
 
-                $avance = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
-                return response()->json(compact('avance'));
-            case 'anal4':
-                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio, $rq->mes);
+                $pcard3 = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
+
+                return response()->json(compact('card3', 'pcard3'));
+
+            case 'head4':
+                $card4 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->where('cui_atencion', '>', 0);
+                if ($rq->provincia > 0) $card4 = $card4->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $card4 = $card4->where('distrito_id', $rq->distrito);
+                $card4 = $card4->count();
+
+                $card4 = number_format($card4, 0);
 
                 $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1');
                 if ($rq->provincia > 0) $v2 = $v2->where('provincia_id', $rq->provincia);
@@ -228,6 +364,73 @@ class PadronNominalController extends Controller
                 $v2 = $v2->count();
 
                 $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->where('cui_atencion', '>', 0);
+                if ($rq->provincia > 0) $v1 = $v1->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $v1 = $v1->where('distrito_id', $rq->distrito);
+                $v1 = $v1->count();
+
+                $pcard4 = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
+                return response()->json(compact('card4', 'pcard4'));
+
+            case 'anal1':
+                // $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio, $rq->mes);
+                $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->whereIn('tipo_edad', ['D', 'M']);
+                if ($rq->provincia > 0) $v2 = $v2->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $v2 = $v2->where('distrito_id', $rq->distrito);
+                $v2 = $v2->count();
+
+                $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->whereIn('tipo_edad', ['D', 'M'])->where('visita', '1');
+                if ($rq->provincia > 0) $v1 = $v1->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $v1 = $v1->where('distrito_id', $rq->distrito);
+                $v1 = $v1->count();
+
+                $avance = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
+                return response()->json(compact('avance'));
+            case 'anal2':
+                // $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio, $rq->mes);
+
+                $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->whereIn('tipo_edad', ['D', 'M']);
+                if ($rq->provincia > 0) $v2 = $v2->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $v2 = $v2->where('distrito_id', $rq->distrito);
+                $v2 = $v2->count();
+
+                $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->whereIn('tipo_edad', ['D', 'M'])->where('tipo_doc', 'DNI');
+                if ($rq->provincia > 0) $v1 = $v1->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $v1 = $v1->where('distrito_id', $rq->distrito);
+                $v1 = $v1->count();
+
+                $avance = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
+                return response()->json(compact('avance'));
+            case 'anal3':
+                // $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio, $rq->mes);
+
+                $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->whereIn('tipo_edad', ['D', 'M']);
+                if ($rq->provincia > 0) $v2 = $v2->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $v2 = $v2->where('distrito_id', $rq->distrito);
+                $v2 = $v2->count();
+
+                $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->whereIn('tipo_edad', ['D', 'M'])
+                    ->where(function ($query) {
+                        $query->whereRaw("FIND_IN_SET('1',seguro) > 0")
+                            ->orWhereRaw("FIND_IN_SET('2',seguro) > 0")
+                            ->orWhereRaw("FIND_IN_SET('3',seguro) > 0")
+                            ->orWhereRaw("FIND_IN_SET('4',seguro) > 0")
+                            ->orWhereNotNull('seguro');
+                    });
+                if ($rq->provincia > 0) $v1 = $v1->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $v1 = $v1->where('distrito_id', $rq->distrito);
+                $v1 = $v1->count();
+
+                $avance = round($v2 > 0 ? 100 * $v1 / $v2 : 0, 1);
+                return response()->json(compact('avance'));
+            case 'anal4':
+                // $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio, $rq->mes);
+
+                $v2 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->whereIn('tipo_edad', ['D', 'M']);
+                if ($rq->provincia > 0) $v2 = $v2->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $v2 = $v2->where('distrito_id', $rq->distrito);
+                $v2 = $v2->count();
+
+                $v1 = ImporPadronNominal::where('importacion_id', $impMaxAnio)->where('repetido', '1')->whereIn('tipo_edad', ['D', 'M'])->where('cui_atencion', '>', 0);
                 if ($rq->provincia > 0) $v1 = $v1->where('provincia_id', $rq->provincia);
                 if ($rq->distrito > 0) $v1 = $v1->where('distrito_id', $rq->distrito);
                 $v1 = $v1->count();
@@ -1382,7 +1585,8 @@ class PadronNominalController extends Controller
                     return $value->apellido_paterno . ' ' . $value->apellido_materno . ', ' . $value->nombre;
                 })
                 ->addColumn('aedad', function ($value) use ($sim) {
-                    return $value->edad . '.' . ($sim[$value->tipo_edad] ?? '');
+                    // return $value->edad . '.' . ($sim[$value->tipo_edad] ?? '');
+                    return date('d/m/Y', strtotime($value->fecha_nacimiento));
                 })
                 ->addColumn('aseguro', function ($value) {
                     return  $seguro[$value->seguro_id] ?? '';
@@ -2861,7 +3065,7 @@ class PadronNominalController extends Controller
                             }
                         }
                         $data = $data->orderBy('centro_poblado')->groupBy('centro_poblado', 'centro_poblado_nombre')->get();
-                        
+
                         $base = $data;
                         $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla0201', compact('base'))->render();
                         return response()->json(compact('excel', 'base'));

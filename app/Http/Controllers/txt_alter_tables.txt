@@ -2471,6 +2471,8 @@ ALTER TABLE `adm_usuario` ADD `creado` INT NULL DEFAULT NULL AFTER `codigo_insti
 
 
 
+ALTER TABLE `sal_calidad_criterio_nombres` ADD `pos` INT NULL DEFAULT NULL AFTER `nombre`;
+update `sal_calidad_criterio_nombres` set pos=id+1;
 
 
 
