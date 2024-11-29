@@ -1021,76 +1021,19 @@
                             textShadow: '0px 0px 3px #000000' // Aplica sombra negra para simular el borde
                         }
                     },
-                    point: {
-                        events: {
-                            mouseOver: function() {
-                                if (!originalColors[this.properties['hc-key']]) {
-                                    originalColors[this.properties['hc-key']] = this
-                                        .color; // Almacena el color original
-                                }
-                            },
-                            click: function() {
-                                let point = this;
-                                let code = point.properties['hc-key'];
-                                if (selectedCode) {
-                                    this.series.chart.series[0].points.forEach(function(p) {
-                                        if (p.properties['hc-key'] === selectedCode) {
-                                            p.update({
-                                                color: originalColors[selectedCode] ||
-                                                    Highcharts.getOptions().colors[
-                                                        0] // Color original
-                                            });
-                                        }
-                                    });
-                                }
 
-                                point.update({
-                                    color: '#bada55' // Color de selección
-                                });
-                                selectedCode = code;
-                                var codigo = this.properties['fips'].substring(2);
-                                // $('#vprovincia').val(codigo);
-                                // cargar_distritos();
-                                // cargarCards();
-                            },
-                            dblclick: function() {
-                                alert("asda");
-                            }
-                        }
-                    }
                 }],
-
-                tooltip: {
-                    formatter: function() {
-                        return '<b>' + this.point.name + '</b><br>' +
-                            'Población: ' + Highcharts.numberFormat(this.point.value, 0);
-                    }
-                },
-
-                // tooltip: {
-                //     backgroundColor: 'none',
-                //     borderWidth: 0,
-                //     shadow: false,
-                //     useHTML: true,
-                //     padding: 0,
-                //     pointFormat: '<span class="f32"><span class="flag ' +
-                //         '{point.properties.hc-key}">' +
-                //         '</span></span> {point.name}<br>' +
-                //         '<span style="font-size:30px">{point.value}/km²</span>',
-                //     positioner: function() {
-                //         return {
-                //             x: 0,
-                //             y: 250
-                //         };
-                //     }
-                // },
                 legend: {
-                    enabled: false // Oculta completamente la leyenda
+                    enabled: false
                 },
                 credits: {
                     enabled: false
                 },
             });
+        }
+
+        function indicadorx(provincia) {
+            return ['numerador' => 50, 'denominador' => 100];
         }
     </script>
 

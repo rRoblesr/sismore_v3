@@ -123,14 +123,14 @@
                         <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel()">
                             <i class="fa fa-file-excel"></i> Descargar</button>
                     </div>
-                    <h3 class="card-title">LISTA DE REGISTROS OBSERVADOS {{ $criterio < 10 ? 'DEL MENOR' : 'DE LA MADRE' }}
+                    <h3 class="card-title">LISTA DE REGISTROS OBSERVADOS {{ $pos < 10 ? 'DEL MENOR' : 'DE LA MADRE' }}
                     </h3>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12">
                             <div class="table-responsive">
-                                @if (in_array($criterio, range(1, 9)))
+                                @if ($pos<11)
                                     <table id="tabla1" class="table table-sm table-striped table-bordered font-10">
                                         <thead>
                                             <tr class="table-success-0 text-white">
@@ -398,10 +398,11 @@
         ];
         var tableprincipal;
         var criterio = {{ $criterio }};
+        var pos = {{ $pos }};
         var anal1;
         var anal2;
         var column;
-        if (criterio < 10) {
+        if (pos < 11) {
             column = [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex'
@@ -521,6 +522,7 @@
                     data: function(d) {
                         d.importacion = {{ $importacion }};
                         d.criterio = {{ $criterio }};
+                        d.pos = {{ $pos }};
                         d.edades = $('#edades').val();
                         d.provincia = $('#provincia').val();
                         d.distrito = $('#distrito').val();
@@ -543,7 +545,7 @@
                         targets: 9,
                         render: function(data, type, row) {
 
-                            if (criterio == 10 || criterio == 11 || criterio == 12 || criterio == 13) {
+                            if (pos > 10) {
                                 return data ?
                                     `<a href="javascript:void(0)" onclick="abrirmodaleess(${parseInt(data, 10)})">${data}</a>` :
                                     '';
@@ -556,7 +558,7 @@
                     {
                         targets: 10,
                         render: function(data, type, row) {
-                            if (criterio == 10 || criterio == 11 || criterio == 12 || criterio == 13) {
+                            if (pos > 10) {
                                 return data;
                             } else {
                                 return data ?

@@ -824,6 +824,7 @@ class PadronNominalController extends Controller
                 $base = CalidadCriterio::where('importacion_id', $impMaxAnio)
                     ->join('sal_calidad_criterio_nombres as c', 'c.id', '=', 'sal_calidad_criterio.criterio')
                     ->select(
+                        'c.id as criterio_id',
                         'c.nombre as criterio',
                         DB::raw('count(*) as total'),
                         DB::raw('sum(if(tipo_edad in("D","M"),1,0)) as pob0'),
@@ -835,7 +836,7 @@ class PadronNominalController extends Controller
                     );
                 if ($rq->provincia > 0) $base = $base->where('provincia_id', $rq->provincia);
                 if ($rq->distrito > 0) $base = $base->where('distrito_id', $rq->distrito);
-                $base = $base->groupBy('criterio', 'c.nombre')->get();
+                $base = $base->groupBy('criterio_id', 'criterio', 'c.nombre')->orderBy('pos')->get();
 
                 // foreach ($base as $key => $value) {
                 //     $value->criterio = $cri[$value->criterio - 1] ?? '';
@@ -861,7 +862,8 @@ class PadronNominalController extends Controller
                         DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
                         DB::raw('sum(if(tipo_doc="DNI",1,0)) as dni'),
                         DB::raw('sum(if(tipo_doc="CNV",1,0)) as seguro'),
-                        DB::raw('sum(if(tipo_doc="CUI",1,0)) as programa')
+                        DB::raw('sum(if(tipo_doc="CUI",1,0)) as programa'),
+                        DB::raw('sum(if(tipo_doc="Padron",1,0)) as padron'),
                     );
                 if ($rq->provincia > 0) $base = $base->where('provincia_id', $rq->provincia);
                 if ($rq->distrito > 0) $base = $base->where('distrito_id', $rq->distrito);
@@ -881,7 +883,7 @@ class PadronNominalController extends Controller
                     $foot->pob5 = 0;
                     $foot->dni = 0;
                     $foot->seguro = 0;
-                    $foot->programa = 0;
+                    $foot->padron = 0;
                     foreach ($base as $key => $value) {
                         $foot->pob += $value->pob;
                         $foot->pobm += $value->pobm;
@@ -895,6 +897,7 @@ class PadronNominalController extends Controller
                         $foot->dni += $value->dni;
                         $foot->seguro += $value->seguro;
                         $foot->programa += $value->programa;
+                        $foot->padron += $value->padron;
                     }
                 }
 
@@ -1376,6 +1379,7 @@ class PadronNominalController extends Controller
         $fuente = ImporPadronNominalController::$FUENTE;
         $anio = 2024;
         $title = DB::table('sal_calidad_criterio_nombres')->find($criterio)->nombre;
+        $pos = DB::table('sal_calidad_criterio_nombres')->find($criterio)->pos;
 
         $edades = $this->criterio_edades($importacion, $criterio);
         // return $this->criterio_provincia($importacion, $criterio, 6);
@@ -1385,7 +1389,7 @@ class PadronNominalController extends Controller
         $mes = Mes::find($imp->mes);
         $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $mes->mes . ' del ' . $imp->anio;
 
-        return view('salud.PadronNominal.TableroCalidadCriterio', compact('importacion', 'criterio', 'actualizado', 'edades', 'title'));
+        return view('salud.PadronNominal.TableroCalidadCriterio', compact('importacion', 'criterio', 'pos', 'actualizado', 'edades', 'title'));
     }
 
     public function tablerocalidadcriteriolistar(Request $rq)
@@ -1571,8 +1575,9 @@ class PadronNominalController extends Controller
         $ubi = Ubigeo::whereIn('codigo', $data->pluck('ubigeo')->toArray())->get()->keyBy('codigo');
         $est = Establecimiento::whereIn('cod_unico', $data->whereNotNull('cui_atencion')->unique('cui_atencion')->where('cui_atencion', '>', '0')->pluck('cui_atencion')->toArray())->get()->keyBy('cod_unico');
         $sim = ['D' => 'DÍAS', 'M' => 'MESES', 'A' => 'AÑOS'];
+        // $pos = DB::table('sal_calidad_criterio_nombres')->find($rq->criterio)->pos;
 
-        if ($rq->criterio < 10) {
+        if ($rq->pos < 11) {
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('atipodoc', function ($value) {

@@ -5,7 +5,7 @@
             <th rowspan="2" class="text-center">Seguro de Salud</th>
             <th colspan="3" class="text-center">Población</th>
             <th colspan="6" class="text-center">Edades de Niños y Niñas menores de 6 años</th>
-            <th colspan="3" class="text-center">Niños y Niñas tienen</th>
+            <th colspan="4" class="text-center">Niños y Niñas tienen</th>
         </tr>
         <tr class="table-success-0 text-white">
             <th class="text-center">Total</th>
@@ -20,6 +20,7 @@
             <th class="text-center">DNI</th>
             <th class="text-center">CNV</th>
             <th class="text-center">CUI</th>
+            <th class="text-center">PADRON</th>
         </tr>
     </thead>
     <tbody>
@@ -39,6 +40,7 @@
                 <td class="text-center">{{ number_format($item->dni, 0) }}</td>
                 <td class="text-center">{{ number_format($item->seguro, 0) }}</td>
                 <td class="text-center">{{ number_format($item->programa, 0) }}</td>
+                <td class="text-center">{{ number_format($item->padron, 0) }}</td>
             </tr>
         @endforeach
     </tbody>
@@ -57,6 +59,7 @@
             <th class="text-center">{{ number_format($foot->dni, 0) }}</th>
             <th class="text-center">{{ number_format($foot->seguro, 0) }}</th>
             <th class="text-center">{{ number_format($foot->programa, 0) }}</th>
+            <th class="text-center">{{ number_format($foot->padron, 0) }}</th>
         </tr>
     </tfoot>
 </table>

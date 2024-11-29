@@ -1910,7 +1910,7 @@ class SFLController extends Controller
                     ->join('edu_sfl as sfl', 'sfl.institucioneducativa_id', '=', 'iiee.id')
                     ->select(
                         'uu.nombre as ugel',
-                        'dt.nombre as distrito',
+                        'pv.nombre as distrito',
                         'cp.nombre as cpoblado',
                         'aa.nombre as area',
                         'iiee.codLocal as clocal',

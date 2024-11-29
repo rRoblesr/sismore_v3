@@ -21,7 +21,7 @@
                 <td>{{ $key + 1 }}</td>
                 <td class="text-left">
                     <a
-                        href="{{ route('salud.padronnominal.tablerocalidad.criterio', ['importacion' => $impMaxAnio, 'criterio' => $key + 1]) }}">
+                        href="{{ route('salud.padronnominal.tablerocalidad.criterio', ['importacion' => $impMaxAnio, 'criterio' => $item->criterio_id]) }}">
                         {{ $item->criterio }}
                     </a>
                 </td>

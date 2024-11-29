@@ -934,6 +934,7 @@
                 chart: {
                     height: 200,
                     type: 'solidgauge',
+                    marginTop: 20,  
                     margin: [10, 10, 10, 10],
                     spacing: [10, 10, 10, 10],
                     events: {
@@ -964,6 +965,7 @@
                 title: {
                     text: title,
                     verticalAlign: 'top',
+                    // y: 20,
                     style: {
                         fontSize: '12px',
                         fontWeight: 'normal'

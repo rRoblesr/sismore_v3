@@ -2949,7 +2949,7 @@ class MatriculaGeneralRepositorio
                     inner join edu_ugel as uu on uu.id = ie.Ugel_id $ugels
                     inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id $gestions
                     inner join edu_area as aa on aa.id = ie.Area_id $areas
-                    inner join edu_nivelmodalidad as nm on nm.id = ie.NivelModalidad_id AND nm.tipo='EBR'
+                    inner join edu_nivelmodalidad as nm on nm.id = ie.NivelModalidad_id AND nm.tipo='EBA'
                     inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id
                     inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id
                     inner join par_ubigeo as pp on pp.id = dd.dependencia ";
@@ -2993,7 +2993,7 @@ class MatriculaGeneralRepositorio
                     inner join edu_ugel as uu on uu.id = ie.Ugel_id $ugels
                     inner join edu_tipogestion as tg on tg.id = ie.TipoGestion_id $gestions
                     inner join edu_area as aa on aa.id = ie.Area_id $areas
-                    inner join edu_nivelmodalidad as nm on nm.id = ie.NivelModalidad_id AND nm.tipo='EBR'
+                    inner join edu_nivelmodalidad as nm on nm.id = ie.NivelModalidad_id AND nm.tipo='EBA'
                     inner join edu_centropoblado as cp on cp.id = ie.CentroPoblado_id
                     inner join par_ubigeo as dd on dd.id = cp.Ubigeo_id
                     inner join par_ubigeo as pp on pp.id = dd.dependencia ";

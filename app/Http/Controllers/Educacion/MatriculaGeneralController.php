@@ -775,7 +775,7 @@ class MatriculaGeneralController extends Controller
                 //$info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'Matriculados', 'data' => $dx2];
                 $info['series'][] = ['type' => 'spline', 'yAxis' => 1, 'name' => '%Avance', 'tooltip' => ['valueSuffix' => ' %'], 'data' => $dx4];
                 $info['maxbar'] = $alto;
-                
+
                 $reg['periodo'] = "período $anioi - $aniof";
                 $reg['fuente'] = 'Siagie - MINEDU';
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
@@ -2872,7 +2872,7 @@ class MatriculaGeneralController extends Controller
                 $reg['fuente'] = 'Siagie - MINEDU';
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
-                return response()->json(compact('excel', 'reg'));
+                return response()->json(compact('excel', 'reg', 'meta', 'base'));
             case 'tabla2':
                 $aniox = Anio::find($rq->anio);
                 $anioy = Anio::where('anio', $aniox->anio - 1)->first();
