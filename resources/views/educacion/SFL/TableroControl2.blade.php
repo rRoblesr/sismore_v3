@@ -530,6 +530,7 @@
         ];
         var ubigeo_select = '';
         var anal3;
+        var anal3valores = [];
         $(document).ready(function() {
             mapData = otros;
             mapData.features.forEach((element, key) => {
@@ -634,7 +635,9 @@
                             //         3603
                             //     ]
                             // ]
-                            anal3 = maps01(div, data.info, '', '');
+                            anal3valores = data.valores;
+                            anal3 = maps01(div, data.info, '',
+                                'Avance de saneamiento físico legal, según provincia');
                             break;
                         case 'anal4':
                             gAnidadaColumn(div, data.info.categoria, data.info.series, '',
@@ -976,7 +979,7 @@
                 subtitle: {
                     text: subtitulo, //'Un descripción de reportes'
                     style: {
-                        fontSize: '11px'
+                        // fontSize: '11px'
                     }
                 },
 
@@ -997,7 +1000,7 @@
 
                 series: [{
                     data: data,
-                    name: 'Población',
+                    name: 'SFL',
                     states: {
                         hover: {
                             color: '#ef5350' // '#BADA55'
@@ -1023,6 +1026,33 @@
                     },
 
                 }],
+                tooltip: {
+                    useHTML: true,
+                    formatter: function() {
+                        // Obtener los datos desde anal3valores
+                        const provinciaData = anal3valores[this.point.properties['hc-key']];
+                        if (!provinciaData) {
+                            return `<strong>${this.point.name}</strong><br>Datos no disponibles`;
+                        }
+
+                        return `<div style="text-align:left;">
+                                    <strong>${this.point.name}</strong><br>
+                                    Numerador: ${provinciaData.num} Locales<br>
+                                    Denominador: ${provinciaData.dem} Locales<br>
+                                    Avance: ${Highcharts.numberFormat(provinciaData.ind, 2)}%
+                                </div>`;
+                    },
+                    backgroundColor: '#fff', // Fondo blanco translúcido
+                    borderColor: '#cccccc', // Borde suave
+                    borderRadius: 10, // Bordes redondeados
+                    shadow: true, // Sombra para darle un efecto "suave"
+                    style: {
+                        fontSize: '12px',
+                        fontWeight: 'normal',
+                        color: '#333333',
+                        padding: '10px'
+                    }
+                },
                 legend: {
                     enabled: false
                 },
@@ -1032,8 +1062,8 @@
             });
         }
 
-        function indicadorx(provincia) {
-            return ['numerador' => 50, 'denominador' => 100];
+        function anal3valores(provincia) {
+            return anal3valores[provincia] || null;
         }
     </script>
 

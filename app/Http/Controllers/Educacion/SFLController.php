@@ -1713,7 +1713,13 @@ class SFLController extends Controller
                     '2504' => 'pe-uc-pr',
                 ];
                 $query = DB::table("edu_cubo_pacto02_local")->join('par_ubigeo as p', 'p.id', '=', 'edu_cubo_pacto02_local.provincia_id')
-                    ->select('p.codigo', 'p.nombre as provincia', DB::raw("sum(if(estado=1,1,0)) as saneado"), DB::raw("round(100*sum(if(estado=1,1,0))/count(*),2) as indicador"));
+                    ->select(
+                        'p.codigo',
+                        'p.nombre as provincia',
+                        DB::raw("sum(if(estado=1,1,0)) as saneado"),
+                        DB::raw("count(*) as nosaneado"),
+                        DB::raw("round(100*sum(if(estado=1,1,0))/count(*),2) as indicador")
+                    );
 
                 if ($rq->ugel > 0) $query = $query->where('ugel_id', $rq->ugel);
                 if ($rq->modalidad != '0') $query = $query->where('modalidad', $rq->modalidad);
@@ -1721,11 +1727,13 @@ class SFLController extends Controller
                 $data = $query->groupBy('p.codigo', 'p.nombre')->get();
 
                 $info = [];
+                $valores = [];
                 foreach ($data as $key => $value) {
-                    $info[] = [$pe_pv[$value->codigo], (int)$value->indicador];
+                    $info[] = [$pe_pv[$value->codigo], (float)$value->indicador];
+                    $valores[$pe_pv[$value->codigo]] = ['num' => (float)$value->saneado, 'dem' => (float)$value->nosaneado, 'ind' => (float)$value->indicador];
                 }
 
-                return response()->json(compact('info', 'data'));
+                return response()->json(compact('info', 'valores'));
 
             case 'anal4':
                 $query = DB::table("edu_cubo_pacto02_local as c")->join('edu_area as a', 'a.id', '=', 'c.area_id')
