@@ -4,8 +4,7 @@
             <th rowspan="1" class="text-center">Nº</th>
             <th rowspan="1" class="text-center">Distrito</th>
             <th colspan="1" class="text-center">Meta</th>
-            <th rowspan="1" class="text-center">Numerador</th>
-            <th rowspan="1" class="text-center">Denominador</th>
+            <th rowspan="1" class="text-center">Avance</th>
             <th colspan="1" class="text-center">Indicador</th>
             <th colspan="1" class="text-center">Cumple</th>
         </tr>
@@ -17,10 +16,9 @@
                 <tr class="text-center {{ $item->distrito == $ndis ? 'table-warning' : '' }}">
                     <td>{{ $key + 1 }}</td>
                     <td class="text-left">{{ $item->distrito }}</td>
-                    <td>{{ $item->meta }}</td>
-                    <td>{{ number_format($item->numerador, 0) }}</td>
-                    <td>{{ number_format($item->denominador, 0) }}</td>
-                    <td>{!! avance($item->indicador) !!}</td>
+                    <td>{{ $item->valor }}</td>
+                    <td>{{ $item->avance }}</td>
+                    <td>{!! avance($item->porcentaje) !!}</td>
                     <td>
                         @if ($item->cumple == 1)
                             <i class="mdi mdi-thumb-up" style="font-size:13px;color:#43beac" title="CUMPLE"></i>
@@ -58,8 +56,8 @@
             return '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px">' .
                 round($monto, 1) .
                 '%</span>';
-        } elseif ($monto < 95) {
-            return '<span class="badge badge-pill badge-orange-x" style="font-size:90%; width:50px">' .
+        } elseif ($monto < 100) {
+            return '<span class="badge badge-pill badge-warning" style="font-size:90%; width:50px">' .
                 round($monto, 1) .
                 '%</span>';
         } else {

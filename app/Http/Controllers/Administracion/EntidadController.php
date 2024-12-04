@@ -167,7 +167,7 @@ class EntidadController extends Controller
         return response()->json(compact('entidades'));
     }
 
-    public function autocompletarEntidad(Request $rq)
+    public function autocompletarEntidad_ant(Request $rq)
     {
         $term = $rq->term;
         if ($rq->dependencia > 0)
@@ -199,6 +199,44 @@ class EntidadController extends Controller
             ];
         }
         return $data;
+    }
+
+    public function autocompletarEntidad(Request $rq)
+    {
+        // $rq->validate([
+        //     'term' => 'nullable|string|max:255',
+        //     'dependencia' => 'nullable|integer',
+        //     'tipoentidad' => 'required|integer',
+        // ]);
+
+        $term = $rq->term;
+
+        $query = Entidad::where('estado', '0');
+
+        if ($rq->tipoentidad > 0) {
+            $query->where('tipoentidad_id', $rq->tipoentidad);
+        }  
+
+        if ($rq->dependencia > 0) {
+            $query->where('dependencia', $rq->dependencia);
+        } else {
+            $query->whereNull('dependencia');
+        }
+
+        $query->where(function ($q) use ($term) {
+            $q->where('nombre', 'like', '%' . $term . '%')->orWhere('abreviado', 'like', '%' . $term . '%')->orWhere('codigo', 'like', '%' . $term . '%');
+        });
+
+        $entidades = $query->get();
+
+        $data = $entidades->count() > 0
+            ? $entidades->map(fn($value) => [
+                'label' => $value->codigo . ' ' . $value->nombre,
+                'id' => $value->id,
+            ])->toArray()
+            : [['label' => 'SIN REGISTROS', 'id' => 0]];
+
+        return response()->json($data);
     }
 
     public function cargarGerencia($entidad_id)

@@ -48,7 +48,7 @@
 @php
     function avance($monto)
     {
-        if ($monto < 75) {
+        if ($monto < 50) {
             return '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px;">' .
                 round($monto, 1) .
                 '%</span>';

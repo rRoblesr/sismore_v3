@@ -825,6 +825,7 @@
                         url: "{{ route('entidad.autocomplete') }}",
                         data: {
                             term: request.term,
+                            tipoentidad: 0,
                             dependencia: 0
                         },
                         dataType: "JSON",
@@ -862,6 +863,14 @@
                 var fileName = $(this).val().split("\\").pop();
                 $('#fichatecnica_nombre').val(fileName);
 
+            });
+
+            //convierte texto a mayuscula en proceso
+            document.getElementById('nombre').addEventListener('input', function(e) {
+                const start = this.selectionStart;
+                const end = this.selectionEnd;
+                this.value = this.value.toUpperCase();
+                this.setSelectionRange(start, end);
             });
 
             table_principal = $('#tbprincipal').DataTable({

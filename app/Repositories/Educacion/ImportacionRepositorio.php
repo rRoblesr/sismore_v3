@@ -358,6 +358,20 @@ class ImportacionRepositorio
         return  $query;
     }
 
+    public static function meses_porfuente_select($fuente, $anio)
+    {
+        $query = Importacion::query()
+            ->selectRaw('MONTH(fechaActualizacion) as mes_id')->distinct()
+            ->where('fuenteimportacion_id', $fuente)->where('estado', 'PR')->whereYear('fechaActualizacion', $anio)
+            ->orderBy('mes_id')->get();
+        $meses = Mes::whereIn('id', $query->pluck('mes_id'))->get()->keyBy('id');
+        foreach ($query as $key => $value) {
+            $value->mes = $meses[$value->mes_id]->mes ?? 'error';
+        }
+
+        return $query;
+    }
+
     public static function aniosMax_porfuente($fuente)
     {
         $query = Importacion::select('id', DB::raw('year(fechaActualizacion) as anio'))

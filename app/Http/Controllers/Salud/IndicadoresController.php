@@ -20,6 +20,7 @@ use App\Models\Parametro\Mes;
 use App\Models\Parametro\PoblacionPN;
 use App\Models\Parametro\Ubigeo;
 use App\Models\Salud\ImporPadronActas;
+use App\Models\Salud\ImporPadronNominal;
 use App\Models\Salud\ImporPadronPvica;
 use App\Repositories\Educacion\CuboPacto1Repositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
@@ -29,6 +30,7 @@ use App\Repositories\Parametro\IndicadorGeneralMetaRepositorio;
 use App\Repositories\Parametro\IndicadorGeneralRepositorio;
 use App\Repositories\Parametro\PoblacionPNRepositorio;
 use App\Repositories\Parametro\UbigeoRepositorio;
+use App\Repositories\Salud\PadronNominalRepositorio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -176,10 +178,12 @@ class IndicadoresController extends Controller
         $gl = 0;
         switch ($rq->codigo) {
             case 'DIT-SAL-01':
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_1']);
-                $ind = IndicadorGeneralRepositorio::findNoFichatecnicaCodigo($rq->codigo);
-                $gls = IndicadorGeneralMetaRepositorio::getPacto1GLS($ind->id, $rq->anio);
-                $gl = IndicadorGeneralMetaRepositorio::getPacto1GL($ind->id, $rq->anio);
+                $fuente = ImporPadronNominalController::$FUENTE;
+                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio, 0);
+                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronNominalController::$FUENTE);
+
+                $gls = PadronNominalRepositorio::cumplen01($impMaxAnio, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $gl = imporPadronNominal::where('importacion_id', $impMaxAnio)->count();
                 $num = $gls;
                 $den = $gl;
                 $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
@@ -344,13 +348,9 @@ class IndicadoresController extends Controller
             default:
                 break;
         }
-
         $avance =  round(100 * ($gl > 0 ? $gls / $gl : 0), 1);
-
         $meta = '100%';
-
         $cumple = $gls >= $gl;
-
         return response()->json(compact('avance', 'actualizado', 'meta', 'cumple', 'num', 'den'));
     }
 
@@ -359,14 +359,14 @@ class IndicadoresController extends Controller
         $ind = IndicadorGeneralRepositorio::findNoFichatecnica($indicador_id);
         switch ($ind->codigo) {
             case 'DIT-SAL-01':
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_1']);
-                // return response()->json([$imp]);
+                $fuente = ImporPadronNominalController::$FUENTE;
+                $anio = ImportacionRepositorio::anios_porfuente_select(ImporPadronNominalController::$FUENTE);
+                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronNominalController::$FUENTE);
                 $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
-                $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios($indicador_id); // Anio::orderBy('anio')->get();
-                $mes = Mes::all();
+
                 $provincia = UbigeoRepositorio::provincia('25');
                 $aniomax = $imp->anio;
-                return view('salud.Indicadores.PactoRegionalSalPacto1', compact('actualizado', 'anio', 'mes', 'provincia', 'aniomax', 'ind'));
+                return view('salud.Indicadores.PactoRegionalSalPacto1', compact('actualizado', 'fuente', 'anio', 'provincia', 'aniomax', 'ind'));
             case 'DIT-SAL-02':
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_2']);
                 // return response()->json([$imp]);
@@ -481,15 +481,34 @@ class IndicadoresController extends Controller
     {
         if ($rq->distrito > 0) $ndis = Ubigeo::find($rq->distrito)->nombre;
         else $ndis = '';
+        $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($rq->fuente, $rq->anio, $rq->mes);
         switch ($rq->div) {
             case 'head':
-                $gls = IndicadorGeneralMetaRepositorio::getPacto1GLS($rq->indicador, $rq->anio);
-                $gl = IndicadorGeneralMetaRepositorio::getPacto1GL($rq->indicador, $rq->anio);
+                $gls = PadronNominalRepositorio::cumplen01($impMaxAnio, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $gl = imporPadronNominal::where('importacion_id', $impMaxAnio)->count();
+
+                // $gls = IndicadorGeneralMetaRepositorio::getPacto1GLS($rq->indicador, $rq->anio);
+                // $gl = IndicadorGeneralMetaRepositorio::getPacto1GL($rq->indicador, $rq->anio);
                 $gln = $gl - $gls;
-                $ri = number_format(100 * ($gl > 0 ? $gls / $gl : 0));
+
+                $ri = number_format(100 * ($gl > 0 ? $gls / $gl : 1));
+                $gls = number_format($gls, 0);
+                $gln = number_format($gln, 0);
+                $gl = number_format($gl, 0);
                 return response()->json(['aa' => $rq->all(), 'ri' => $ri, 'gl' => $gl, 'gls' => $gls, 'gln' => $gln]);
 
             case 'anal1':
+                $base =  PadronNominalRepositorio::cumplenDistrito02($impMaxAnio, $rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $info = [];
+                foreach ($base as $key => $value) {
+                    $info['categoria'][] = $value->distrito;
+                    // $info['series'][] = $value->indicador;
+                    $info['serie'][] = ['y' => round($value->indicador, 1), 'color' => (round($value->indicador, 1) > 95 ? '#43beac' : (round($value->indicador, 1) > 50 ? '#eb960d' : '#ef5350'))];
+                }
+                return response()->json(compact('info', 'base'));
+
+            case 'anal2':
+
                 $base = IndicadorGeneralMetaRepositorio::getPacto1Mensual($rq->anio, $rq->distrito);
                 $mes = Mes::select('codigo', 'abreviado as mes')->get();
                 $mesmax = $base->max('name');
@@ -522,7 +541,7 @@ class IndicadoresController extends Controller
                     $info['dat'][] = $value->y;
                 }
                 return response()->json(compact('info', 'mes', 'base', 'mesmax'));
-            case 'anal2': //lineas
+            case 'anal3': //lineas
                 $base1 = IndicadorGeneralMetaRepositorio::getPacto1Mensual($rq->anio, $rq->distrito);
                 $base2 = IndicadorGeneralMetaRepositorio::getPacto1Mensual2($rq->anio, $rq->distrito);
                 $info = [];
@@ -606,7 +625,7 @@ class IndicadoresController extends Controller
                 // return response()->json(compact('info', 'base1', 'base2', 'mes'));
                 return response()->json(compact('info'));
             case 'tabla1':
-                $base = IndicadorGeneralMetaRepositorio::getPacto1tabla1($rq->indicador, $rq->anio, $rq->mes);
+                $base =  PadronNominalRepositorio::cumplenDistrito01($impMaxAnio, $rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
 
                 $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla1', compact('base', 'ndis'))->render();
                 return response()->json(compact('excel', 'base'));

@@ -533,6 +533,8 @@ Route::get('/Importacion/Eliminar/{id}', [ImportacionController::class, 'elimina
 Route::get('/Importacion/GetEliminar/{id}', [ImportacionController::class, 'setEliminar']);
 Route::post('/Importacion/Importados/', [ImportacionController::class, 'ListarDTImportFuenteTodos'])->name('importacion.listar.importados');
 
+Route::get('/Importacion/Listar/Mes/{fuente}/{anio}', [ImportacionController::class, 'meses_porfuente_select'])->name('importacion.listar.mes');
+
 Route::get('/ECE/Importar', [EceController::class, 'importar'])->name('ece.importar');
 Route::get('/ECE/Importar/Aprobar/{importacion_id}', [EceController::class, 'importarAprobar'])->name('ece.importar.aprobar');
 Route::get('/ECE/Importar/Aprobar/Guardar/{importacion}', [EceController::class, 'importarAprobarGuardar'])->name('ece.importar.aprobar.guardar');

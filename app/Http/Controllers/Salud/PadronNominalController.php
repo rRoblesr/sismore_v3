@@ -241,6 +241,7 @@ class PadronNominalController extends Controller
                 // if ($rq->distrito > 0) $v1 = $v1->where('distrito_id', $rq->distrito);
                 // $v1 = $v1->count();
 
+                $excluidos = ['R N', 'N N', 'XXX', 'NN', 'SD', 'SN', 'SR', 'XX', 'RN', 'R'];
                 $v1 = DB::table('sal_impor_padron_nominal as ipm')
                     ->leftJoinSub(
                         DB::table('sal_establecimiento')
@@ -251,39 +252,33 @@ class PadronNominalController extends Controller
                         '=',
                         'ipm.establecimiento_id'
                     )
-                    ->where('importacion_id', 2736)
+                    ->where('importacion_id', $impMaxAnio)
+                    //criterio 1
                     ->whereIn('tipo_doc', ['DNI', 'CNV', 'CUI'])
-                    ->whereNotNull('apellido_paterno')
-                    ->whereNotNull('apellido_materno')
-                    ->whereNotNull('nombre')
-                    ->where('apellido_paterno', '!=', '')
-                    ->where('apellido_materno', '!=', '')
-                    ->where('nombre', '!=', '')
-                    ->whereNotIn('apellido_paterno', ['R N', 'N N', 'XXX', 'NN', 'SD', 'SN', 'SR', 'XX', 'RN', 'R'])
-                    ->whereNotIn('apellido_materno', ['R N', 'N N', 'XXX', 'NN', 'SD', 'SN', 'SR', 'XX', 'RN', 'R'])
-                    ->whereNotIn('nombre', ['R N', 'N N', 'XXX', 'NN', 'SD', 'SN', 'SR', 'XX', 'RN', 'R'])
+                    //criterio 2
+                    ->whereNotNull('apellido_paterno')->whereNotNull('apellido_materno')->whereNotNull('nombre')
+                    ->where('apellido_paterno', '!=', '')->where('apellido_materno', '!=', '')->where('nombre', '!=', '')
+                    ->whereNotIn('apellido_paterno', $excluidos)->whereNotIn('apellido_materno', $excluidos)->whereNotIn('nombre', $excluidos)
+                    //criterio 3
                     ->where('seguro_id', '>', 0)
-                    ->where('visita', '1')
-                    ->whereNotNull('direccion')
-                    ->where('direccion', '!=', '')
-                    ->whereNotNull('centro_poblado')
-                    ->where('centro_poblado', '!=', '')
+                    //criterio 4
+                    ->whereNotNull('direccion')->where('direccion', '!=', '')
+                    //crirerio 5
+                    ->whereNotNull('centro_poblado')->where('centro_poblado', '!=', '')
+                    //crirerio 6
                     ->whereNotNull('est.id')
+                    //crirerio 7
                     ->whereNotNull('num_doc_madre')
                     ->where('num_doc_madre', '!=', '')
-                    ->whereNotNull('apellido_paterno_madre')
-                    ->whereNotNull('apellido_materno_madre')
-                    ->whereNotNull('nombres_madre')
-                    ->where('apellido_paterno_madre', '!=', '')
-                    ->where('apellido_materno_madre', '!=', '')
-                    ->where('nombres_madre', '!=', '')
-                    ->whereNotIn('apellido_paterno_madre', ['R N', 'N N', 'XXX', 'NN', 'SD', 'SN', 'SR', 'XX', 'RN', 'R'])
-                    ->whereNotIn('apellido_materno_madre', ['R N', 'N N', 'XXX', 'NN', 'SD', 'SN', 'SR', 'XX', 'RN', 'R'])
-                    ->whereNotIn('nombres_madre', ['R N', 'N N', 'XXX', 'NN', 'SD', 'SN', 'SR', 'XX', 'RN', 'R'])
-                    ->whereNotNull('grado_instruccion')
-                    ->where('grado_instruccion', '!=', '')
-                    ->whereNotNull('lengua_madre')
-                    ->where('lengua_madre', '!=', '');
+                    //crirerio 8
+                    ->whereNotNull('apellido_paterno_madre')->whereNotNull('apellido_materno_madre')->whereNotNull('nombres_madre')
+                    ->where('apellido_paterno_madre', '!=', '')->where('apellido_materno_madre', '!=', '')->where('nombres_madre', '!=', '')
+                    ->whereNotIn('apellido_paterno_madre', $excluidos)->whereNotIn('apellido_materno_madre', $excluidos)->whereNotIn('nombres_madre', $excluidos)
+                    //crirerio 9
+                    ->whereNotNull('grado_instruccion')->where('grado_instruccion', '!=', '')
+                    //crirerio 10
+                    ->whereNotNull('lengua_madre')->where('lengua_madre', '!=', '');
+
                 if ($rq->provincia > 0) $v1 = $v1->where('provincia_id', $rq->provincia);
                 if ($rq->distrito > 0) $v1 = $v1->where('distrito_id', $rq->distrito);
                 $v1 = $v1->count();
@@ -2008,7 +2003,7 @@ class PadronNominalController extends Controller
                         foreach ($data as $key => $value) {
                             // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
                             $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
-                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 75 ? '#eb960d' : '#ef5350'))];
+                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 50 ? '#eb960d' : '#ef5350'))];
                         }
 
                         return response()->json(compact('info', 'data'));
@@ -2033,7 +2028,7 @@ class PadronNominalController extends Controller
                         foreach ($data as $key => $value) {
                             // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
                             $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
-                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 75 ? '#eb960d' : '#ef5350'))];
+                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 50 ? '#eb960d' : '#ef5350'))];
                         }
 
                         return response()->json(compact('info', 'data'));
@@ -2066,7 +2061,7 @@ class PadronNominalController extends Controller
                         foreach ($data as $key => $value) {
                             // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
                             $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
-                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 75 ? '#eb960d' : '#ef5350'))];
+                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 50 ? '#eb960d' : '#ef5350'))];
                         }
 
                         return response()->json(compact('info', 'data'));
@@ -2092,7 +2087,7 @@ class PadronNominalController extends Controller
                         foreach ($data as $key => $value) {
                             // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
                             $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
-                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 75 ? '#eb960d' : '#ef5350'))];
+                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 50 ? '#eb960d' : '#ef5350'))];
                         }
 
                         return response()->json(compact('info', 'data'));
@@ -2119,7 +2114,7 @@ class PadronNominalController extends Controller
                         foreach ($data as $key => $value) {
                             // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
                             $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
-                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 75 ? '#eb960d' : '#ef5350'))];
+                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 50 ? '#eb960d' : '#ef5350'))];
                         }
 
                         return response()->json(compact('info', 'data'));
@@ -2145,7 +2140,7 @@ class PadronNominalController extends Controller
                         foreach ($data as $key => $value) {
                             // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
                             $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
-                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 75 ? '#eb960d' : '#ef5350'))];
+                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 50 ? '#eb960d' : '#ef5350'))];
                         }
 
                         return response()->json(compact('info', 'data'));
@@ -2171,7 +2166,7 @@ class PadronNominalController extends Controller
                         foreach ($data as $key => $value) {
                             // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
                             $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
-                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 75 ? '#eb960d' : '#ef5350'))];
+                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 50 ? '#eb960d' : '#ef5350'))];
                         }
 
                         return response()->json(compact('info', 'data'));
@@ -2197,7 +2192,7 @@ class PadronNominalController extends Controller
                         foreach ($data as $key => $value) {
                             // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
                             $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
-                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 75 ? '#eb960d' : '#ef5350'))];
+                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 50 ? '#eb960d' : '#ef5350'))];
                         }
 
                         return response()->json(compact('info', 'data'));
@@ -2223,7 +2218,7 @@ class PadronNominalController extends Controller
                         foreach ($data as $key => $value) {
                             // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
                             $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
-                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 75 ? '#eb960d' : '#ef5350'))];
+                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 50 ? '#eb960d' : '#ef5350'))];
                         }
 
                         return response()->json(compact('info', 'data'));
@@ -2249,7 +2244,7 @@ class PadronNominalController extends Controller
                         foreach ($data as $key => $value) {
                             // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
                             $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
-                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 75 ? '#eb960d' : '#ef5350'))];
+                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 50 ? '#eb960d' : '#ef5350'))];
                         }
 
                         return response()->json(compact('info', 'data'));

@@ -181,4 +181,8 @@ class ImportacionController extends Controller
             ->rawColumns(['fechaActualizacion', 'estado', 'accion'])
             ->toJson();
     }
+    public function meses_porfuente_select($fuente, $anio)
+    {
+        return ImportacionRepositorio::meses_porfuente_select($fuente, $anio);
+    }
 }
