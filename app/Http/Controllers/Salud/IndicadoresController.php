@@ -491,7 +491,7 @@ class IndicadoresController extends Controller
                 // $gl = IndicadorGeneralMetaRepositorio::getPacto1GL($rq->indicador, $rq->anio);
                 $gln = $gl - $gls;
 
-                $ri = number_format(100 * ($gl > 0 ? $gls / $gl : 1));
+                $ri = number_format($gl > 0 ? 100 * $gls / $gl : 1,1);
                 $gls = number_format($gls, 0);
                 $gln = number_format($gln, 0);
                 $gl = number_format($gl, 0);
@@ -502,7 +502,6 @@ class IndicadoresController extends Controller
                 $info = [];
                 foreach ($base as $key => $value) {
                     $info['categoria'][] = $value->distrito;
-                    // $info['series'][] = $value->indicador;
                     $info['serie'][] = ['y' => round($value->indicador, 1), 'color' => (round($value->indicador, 1) > 95 ? '#43beac' : (round($value->indicador, 1) > 50 ? '#eb960d' : '#ef5350'))];
                 }
                 return response()->json(compact('info', 'base'));

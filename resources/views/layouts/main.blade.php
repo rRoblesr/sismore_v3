@@ -62,7 +62,7 @@
         }
 
         .badge-orange-x{
-            background-color: #f15a39;
+            background-color: #eb960d;
         }
 
         .btn-success-0 {

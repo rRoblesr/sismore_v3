@@ -52,21 +52,23 @@
 
 
 @php
+
     function avance($monto)
     {
+        $roundedMonto = round($monto, 1); // Redondear una sola vez
+        $badgeClass = '';
         if ($monto < 51) {
-            return '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px">' .
-                round($monto, 1) .
-                '%</span>';
+            $badgeClass = 'badge-danger';
         } elseif ($monto < 95) {
-            return '<span class="badge badge-pill badge-orange-x" style="font-size:90%; width:50px">' .
-                round($monto, 1) .
-                '%</span>';
+            $badgeClass = 'badge-orange-x';
         } else {
-            return '<span class="badge badge-pill badge-success" style="font-size:90%; width:50px">' .
-                round($monto, 1) .
-                '%</span>';
+            $badgeClass = 'badge-success';
         }
+        return '<span class="badge badge-pill ' .
+            $badgeClass .
+            '" style="font-size:90%; width:50px;">' .
+            $roundedMonto .
+            '%</span>';
     }
     function bajas($monto)
     {
