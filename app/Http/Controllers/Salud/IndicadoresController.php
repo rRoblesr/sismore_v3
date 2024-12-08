@@ -491,7 +491,7 @@ class IndicadoresController extends Controller
                 // $gl = IndicadorGeneralMetaRepositorio::getPacto1GL($rq->indicador, $rq->anio);
                 $gln = $gl - $gls;
 
-                $ri = number_format($gl > 0 ? 100 * $gls / $gl : 1,1);
+                $ri = number_format($gl > 0 ? 100 * $gls / $gl : 1, 1);
                 $gls = number_format($gls, 0);
                 $gln = number_format($gln, 0);
                 $gl = number_format($gl, 0);
@@ -504,78 +504,37 @@ class IndicadoresController extends Controller
                     $info['categoria'][] = $value->distrito;
                     $info['serie'][] = ['y' => round($value->indicador, 1), 'color' => (round($value->indicador, 1) > 95 ? '#43beac' : (round($value->indicador, 1) > 50 ? '#eb960d' : '#ef5350'))];
                 }
-                return response()->json(compact('info', 'base'));
+                return response()->json(compact('info'));
 
             case 'anal2':
+                $base = PadronNominalRepositorio::pacto1anal2($rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $base1 = collect($base['query'] ?? []);
+                $base1 = $base1->pluck('conteo', 'mes');
+                $base2 = collect($base['query2'] ?? []);
+                $base2 = $base2->pluck('conteo', 'mes');
+                $mes = Mes::select('id', 'abreviado')->get();
 
-                $base = IndicadorGeneralMetaRepositorio::getPacto1Mensual($rq->anio, $rq->distrito);
-                $mes = Mes::select('codigo', 'abreviado as mes')->get();
-                $mesmax = $base->max('name');
-                $limit = $rq->anio == 2023 ? IndicadoresController::$pacto1_mes : 0;
-                foreach ($mes as $mm) {
-                    if ($mm->codigo >= $limit && $mm->codigo <= $mesmax) {
-                        $mm->y = 0;
-                        foreach ($base as $bb) {
-                            if ($bb->name == $mm->codigo) {
-                                $mm->y = (int)$bb->y;
-                                break;
-                            }
-                        }
-                    } else {
-                        $mm->y = null;
-                    }
-                }
                 $info = [];
                 foreach ($mes as $key => $value) {
-                    $info['cat'][] = $value->mes;
-                    $value->y = $value->y;
-                    if ($key == 0)
-                        $vv = $value->y;
-                    if ($key > 0) {
-                        if ($value->y) {
-                            $value->y += $vv;
-                            $vv = $value->y;
-                        }
-                    }
-                    $info['dat'][] = $value->y;
+                    $info['cat'][] = $value->abreviado;
+                    $den = $base1[$value->id] ?? 0; // Aseguramos que tenga un valor por defecto
+                    $num = $base2[$value->id] ?? 0; // Aseguramos que tenga un valor por defecto
+
+                    // Verificamos si el valor de base1 es mayor que 0 antes de hacer la división
+                    $info['dat'][] = $den > 0 ? round(100 * $num / $den, 1) : null;
                 }
-                return response()->json(compact('info', 'mes', 'base', 'mesmax'));
+                return response()->json(compact('info', 'base', 'base1', 'base2'));
+
             case 'anal3': //lineas
-                $base1 = IndicadorGeneralMetaRepositorio::getPacto1Mensual($rq->anio, $rq->distrito);
-                $base2 = IndicadorGeneralMetaRepositorio::getPacto1Mensual2($rq->anio, $rq->distrito);
-                $info = [];
-                $mes = Mes::select('codigo', 'abreviado as mes')->get();
-                $mesmax1 = $base1->max('name');
-                $mesmax2 = $base2->max('mes');
-                $limit = $rq->anio == 2023 ? IndicadoresController::$pacto1_mes : 0;
-                foreach ($mes as $mm) {
-
-                    if ($mm->codigo >= $limit && $mm->codigo <= $mesmax1) {
-                        $mm->y1 = 0;
-                        foreach ($base1 as $bb1) {
-                            if ($bb1->name == $mm->codigo) {
-                                $mm->y1 = (int)$bb1->y;
-                                break;
-                            }
-                        }
-                    } else {
-                        $mm->y1 = null;
-                    }
-
-                    if ($mm->codigo >= $limit && $mm->codigo <= $mesmax2) {
-                        $mm->y2 = 0;
-                        foreach ($base2 as $bb2) {
-                            if ($bb2->mes == $mm->codigo) {
-                                $mm->y2 = (int)$bb2->y;
-                                break;
-                            }
-                        }
-                    } else {
-                        $mm->y2 = null;
-                    }
-                    $info['cat'][] = $mm->mes;
-                    $info['dat'][] = $mm->y1;
-                    $info['dat2'][] = $mm->y2;
+                $base = PadronNominalRepositorio::pacto1anal3($impMaxAnio, $rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $info['serie'] = [];
+                $info['serie'][0]['name'] = 'Hombre';
+                $info['serie'][1]['name'] = 'Mujer';
+                foreach ($base as $key => $value) {
+                    $info['categoria'][] = $value->edades;
+                    // $info['serie'][$key]['data'] = [$value->si, $value->no];
+                    $info['serie'][0]['data'][] = $value->si;
+                    $info['serie'][1]['data'][] = $value->no;
                 }
                 return response()->json(compact('info'));
             case 'anal2-b': //barras

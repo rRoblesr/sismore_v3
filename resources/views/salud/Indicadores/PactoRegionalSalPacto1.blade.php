@@ -246,6 +246,7 @@
 @section('js')
     <script type="text/javascript">
         var ugel_select = 0;
+        var anal1, anal2, anal3;
         $(document).ready(function() {
             Highcharts.setOptions({
                 lang: {
@@ -305,12 +306,11 @@
                         );
                     } else if (div == "anal2") {
                         gLineaBasica(div, data.info, '',
-                            'Acumulado mensual del registro de actas de homologacion en el sistema de padrón nominal',
+                            'Porcentaje Mensual de la Evaluación',
                             '');
                     } else if (div == "anal3") {
-                        gLineaBasica2(div, data.info, '',
-                            'Numero de actas de homolagación registradas en el sistema de padrón nominal por mes',
-                            '');
+                        anal3 = gColumnx(div, data.info, '',
+                            'Población de niños y niñas menores de 6 años, según sexo', 'Etapa Vida')
                     } else if (div == "tabla1") {
                         $('#vtabla1').html(data.excel);
                         // $('#tabla1').DataTable({
@@ -429,6 +429,98 @@
         function verpdf(id) {
             window.open("{{ route('salud.indicador.pactoregional.exportar.pdf', '') }}/" + id);
         };
+
+        function gColumnx(div, data, titulo, subtitulo, tooltip) {
+            return Highcharts.chart(div, {
+                chart: {
+                    type: 'column'
+                },
+                colors: ['#5eb9a0', '#ef5350', '#f5bd22', '#ef5350'],
+                title: {
+                    text: titulo
+                },
+                subtitle: {
+                    text: subtitulo //null // Si no necesitas un subtítulo, puedes dejarlo como null
+                },
+                xAxis: {
+                    categories: data.categoria, //
+                    crosshair: true,
+                    labels: {
+                        style: {
+                            fontSize: '11px' // Ajusta el tamaño de la fuente
+                        }
+                    },
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: null // Puedes agregar un título si lo necesitas
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '11px' // Ajusta el tamaño de la fuente
+                        }
+                    },
+                },
+                tooltip: {
+                    shared: true, // Muestra los valores de todas las series en el mismo tooltip
+                    formatter: function() {
+                        let tooltipText = '<b>' + tooltip + ': ' + this.x +
+                            '</b><br/>'; // Muestra la categoría (año)
+                        this.points.forEach(function(point) {
+                            tooltipText += point.series.name + ': ' + Highcharts.numberFormat(Math.abs(
+                                point.y), 0) + '<br/>';
+                        });
+                        return tooltipText;
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        stacking: data.serie.length > 1 ? 'normal' : null, // Apila las columnas
+                        dataLabels: {
+                            enabled: true,
+                            formatter: function() {
+                                return Highcharts.numberFormat(Math.abs(this.y),
+                                    0); // Formatea los números con separadores de miles
+                            },
+                            style: {
+                                color: data.serie.length > 1 ? 'white' : 'black',
+                                textOutline: 'none',
+                                fontSize: '10px'
+                            }
+                        }
+                    }
+                },
+                series: data.serie,
+                legend: {
+                    enabled: data.serie.length > 1,
+                    itemStyle: {
+                        //color: "#333333",
+                        // cursor: "pointer",
+                        fontSize: "11px",
+                        // fontWeight: "normal",
+                        // textOverflow: "ellipsis"
+                    },
+                },
+                credits: {
+                    enabled: false,
+                    text: 'Fuente: RENIEC - PADRÓN NOMINAL | Actualizado: JULIO 2024',
+                    href: null,
+                    position: {
+                        align: 'center',
+                        verticalAlign: 'bottom',
+                        x: 0,
+                        y: -5
+                    },
+                    style: {
+                        color: '#666',
+                        fontSize: '10px',
+                        textAlign: 'center'
+                    }
+                }
+            });
+        }
+
 
         function gbar(div, categoria, series, titulo, subtitulo) {
             Highcharts.chart(div, {
@@ -928,6 +1020,9 @@
                             style: {
                                 fontSize: '10px',
                                 fontWeight: 'normal',
+                            },
+                            formatter: function() {
+                                return this.y + '%';
                             }
                         },
                         /* label: {
@@ -936,8 +1031,12 @@
                         pointStart: 2010 */
                     }
                 },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.y}%</b>',
+                    shared: true
+                },
                 series: [{
-                    name: 'Actas Enviadas',
+                    name: 'Cumplen',
                     showInLegend: false,
                     data: data.dat
                 }],
