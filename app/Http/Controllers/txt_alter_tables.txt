@@ -2476,6 +2476,40 @@ update `sal_calidad_criterio_nombres` set pos=id+1;
 
 
 
+CREATE TABLE `sal_cubo_pacto1_padron_nominal` (
+    id int(11) auto_increment primary key,
+    importacion int(11) NULL DEFAULT NULL,
+anio int(11) NULL DEFAULT NULL,
+mes int(11) NULL DEFAULT NULL,
+tipo_doc varchar(10) NULL DEFAULT NULL,
+num_doc varchar(20) NULL DEFAULT NULL,
+nombre_completo varchar(200) NULL DEFAULT NULL,
+fecha_nacimiento date NULL DEFAULT NULL,
+edad int(11) NULL DEFAULT NULL,
+tipo_edad varchar(2) NULL DEFAULT NULL,
+direccion varchar(200) NULL DEFAULT NULL,
+distrito_id int(11) NULL DEFAULT NULL,
+provincia_id int(11) NULL DEFAULT NULL,
+seguro varchar(50) NULL DEFAULT NULL,
+cui_atencion int(11) NULL DEFAULT NULL,
+nombre_establecimiento varchar(200) NULL DEFAULT NULL,
+num_doc_madre varchar(20) NULL DEFAULT NULL,
+nombre_completo_madre varchar(200) NULL DEFAULT NULL,
+critero01 int(11) NULL DEFAULT NULL,
+critero02 int(11) NULL DEFAULT NULL,
+critero03 int(11) NULL DEFAULT NULL,
+critero04 int(11) NULL DEFAULT NULL,
+critero05 int(11) NULL DEFAULT NULL,
+critero06 int(11) NULL DEFAULT NULL,
+critero07 int(11) NULL DEFAULT NULL,
+critero08 int(11) NULL DEFAULT NULL,
+critero09 int(11) NULL DEFAULT NULL,
+critero10 int(11) NULL DEFAULT NULL,
+num int(11) NULL DEFAULT NULL,
+den int(11) NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+ALTER TABLE `sal_cubo_pacto1_padron_nominal` ADD `distrito` VARCHAR(50) NULL DEFAULT NULL AFTER `provincia_id`;
+ALTER TABLE `sal_cubo_pacto1_padron_nominal` ADD `lengua_madre` VARCHAR(100) NULL DEFAULT NULL AFTER `nombre_completo_madre`;
 
 
 

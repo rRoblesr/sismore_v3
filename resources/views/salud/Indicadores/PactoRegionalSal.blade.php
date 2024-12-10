@@ -43,62 +43,79 @@
 @section('content')
     <div class="content">
 
-        <div class="form-group row align-items-center vh-5">
-            <div class="col-lg-6 col-md-6 col-sm-6">
-                <h4 class="page-title font-16">PACTO REGIONAL</h4>
-            </div>
-            <div class="col-lg-1 col-md-1 col-sm-1">
-                <div class="custom-select-container">
-                    <label for="anio">AÑO</label>
-                    <select id="anio" name="anio" class="form-control btn-xs font-11 p-0" onchange="cargarpacto1();">
-                        @foreach ($anio as $item)
-                            <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
-                                {{ $item->anio }}</option>
-                        @endforeach
-                    </select>
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <div class="card card-border border border-plomo-0">
+                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                        <h3 class="card-title text-white"></h3>
+                    </div>
+                    <div class="card-body pb-2 pt-2">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                <h4 class="page-title font-16">PACTO REGIONAL</h4>
+                            </div>
+                            <div class="col-lg-2 col-md-1 col-sm-1">
+                                <div class="custom-select-container">
+                                    <label for="anio">AÑO</label>
+                                    <select id="anio" name="anio" class="form-control btn-xs font-11 p-0"
+                                        onchange="cargarpacto1();">
+                                        @foreach ($anio as $item)
+                                            <option value="{{ $item->anio }}"
+                                                {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                                {{ $item->anio }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                <div class="custom-select-container">
+                                    <label for="provincia">PROVINCIA</label>
+                                    <select id="provincia" name="provincia" class="form-control btn-xs font-11"
+                                        onchange="cargarDistritos();">
+                                        <option value="0">TODOS</option>
+                                        @foreach ($provincia as $item)
+                                            <option value="{{ $item->id }}">
+                                                {{ $item->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                <div class="custom-select-container">
+                                    <label for="distrito">DISTRITO</label>
+                                    <select id="distrito" name="distrito" class="form-control btn-xs font-11"
+                                        onchange="cargarpacto1();">
+                                        <option value="0">TODOS</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-2 col-md-1 col-sm-1 text-center">
+                                <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
+                                    title='ACTUALIZAR'>
+                                    <span class="d-block d-lg-none">
+                                        <i class=" fas fa-history"></i></span>
+                                    <span class="d-none d-lg-block text-center">
+                                        <i class=" fas fa-history"></i> Actualizar</span>
+
+                                    {{-- <a class="" data-toggle="tab" role="tab" aria-selected="true">
+                                        <span class="d-block d-sm-none">
+                                            <i class="mdi mdi-shield-plus font-18"></i>
+                                        </span>
+                                        <span class="d-none d-sm-block text-center">
+                                            <i class="mdi mdi-shield-plus"></i> SALUD</span>
+                                    </a> --}}
+                                </button>
+                            </div>
+
+
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-2 col-md-2 col-sm-2">
-                <div class="custom-select-container">
-                    <label for="provincia">PROVINCIA</label>
-                    <select id="provincia" name="provincia" class="form-control btn-xs font-11"
-                        onchange="cargarDistritos();">
-                        <option value="0">TODOS</option>
-                        @foreach ($provincia as $item)
-                            <option value="{{ $item->id }}">
-                                {{ $item->nombre }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-2">
-                <div class="custom-select-container">
-                    <label for="distrito">DISTRITO</label>
-                    <select id="distrito" name="distrito" class="form-control btn-xs font-11" onchange="cargarpacto1();">
-                        <option value="0">TODOS</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="col-lg-1 col-md-1 col-sm-1 text-center">
-                <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()" title='ACTUALIZAR'>
-                    <span class="d-block d-lg-none">
-                        <i class=" fas fa-history"></i></span>
-                    <span class="d-none d-lg-block text-center">
-                        <i class=" fas fa-history"></i> Actualizar</span>
-
-                    {{-- <a class="" data-toggle="tab" role="tab" aria-selected="true">
-                        <span class="d-block d-sm-none">
-                            <i class="mdi mdi-shield-plus font-18"></i>
-                        </span>
-                        <span class="d-none d-sm-block text-center">
-                            <i class="mdi mdi-shield-plus"></i> SALUD</span>
-                    </a> --}}
-                </button>
-            </div>
-
-
         </div>
+
+
         <div class="row">
             @foreach ($indsal as $key => $item)
                 <div class="col-md-6 col-xl-3">
@@ -112,8 +129,8 @@
                                 {{-- <a href="" title='' class=""><i class="mdi mdi-alert-circle"
                                         style="color:#FFF;font-size: 20px"></i></a> --}}
                             </div>
-                            <h5 class="text-white font-14 font-weight-normal mt-1 mb-1"><i
-                                    class="mdi mdi-shield-plus" style="font-size: 20px"></i>
+                            <h5 class="text-white font-14 font-weight-normal mt-1 mb-1"><i class="mdi mdi-shield-plus"
+                                    style="font-size: 20px"></i>
                                 Indicador {{ $key + 1 }}</h5>
                             {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
                             {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
@@ -131,8 +148,7 @@
                                     </figure>
                                 </li>
                                 </li>
-                                <li class="mt-0 pt-0 font-10"
-                                    id="actualizado{{ $item->codigo }}"></li>
+                                <li class="mt-0 pt-0 font-10" id="actualizado{{ $item->codigo }}"></li>
                                 {{-- <li class="mt-0 pt-0 font-18 font-weight-bold"
                                     id="meta{{ $item->codigo }}"></li>
                                 <li class="mt-0 pt-0" id="cumple{{ $item->codigo }}">
@@ -140,26 +156,22 @@
                                 <li class="mt-1 pt-1">
                                     <div class="row">
                                         <div class="col-6 p-0">
-                                            <span class="text-green-0 font-weight-bold font-13"
-                                                style="font-size: 100%">
+                                            <span class="text-green-0 font-weight-bold font-13" style="font-size: 100%">
                                                 <i class="mdi mdi-arrow-up-bold"></i>
                                                 Numerador
                                                 {{-- <i class="mdi mdi-rotate-180 mdi-alert-circle"
                                                     onclick="#"></i> --}}
                                             </span>
-                                            <div class="font-weight-bold"
-                                                id="num{{ $item->codigo }}">100</div>
+                                            <div class="font-weight-bold" id="num{{ $item->codigo }}">100</div>
                                         </div>
                                         <div class="col-6 p-0">
-                                            <span class="text-green-0 font-weight-bold font-13"
-                                                style="font-size: 100%">
+                                            <span class="text-green-0 font-weight-bold font-13" style="font-size: 100%">
                                                 <i class="mdi mdi-arrow-down-bold"></i>
                                                 Denominador
                                                 {{-- <i class="mdi mdi-rotate-180 mdi-alert-circle"
                                                     onclick="#"></i> --}}
                                             </span>
-                                            <div class="font-weight-bold"
-                                                id="den{{ $item->codigo }}">100</div>
+                                            <div class="font-weight-bold" id="den{{ $item->codigo }}">100</div>
                                         </div>
                                     </div>
                                 </li>
@@ -181,9 +193,7 @@
                 </div>
             @endforeach
 
-        </div> 
-
-
+        </div>
         <!-- end row -->
 
         <div id="modal_datosindicador" class="modal fade font-10" tabindex="-1" role="dialog"

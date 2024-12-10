@@ -26,21 +26,28 @@
                             <h5 class="page-title font-12">Fuente: Padrón Nominal, <br>{{ $actualizado }}</h5>
                         </div>
                         <div class="col-lg-2 col-md-1 col-sm-1  ">
-                            <select id="anio" name="anio" class="form-control btn-xs font-11"
-                                onchange="cargarcuadros();">
-                                @foreach ($anio as $item)
+                            
+                            <div class="custom-select-container">
+                                <label for="anio">AÑO</label>
+                                <select id="anio" name="anio" class="form-control form-control-sm font-11"
+                                    onchange="cargarcuadros();">
+                                    @foreach ($anio as $item)
                                     <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
                                         {{ $item->anio }}</option>
                                 @endforeach
-                            </select>
+                                </select>
+                            </div>
                         </div>
                         <div class="col-lg-2 col-md-1 col-sm-1  ">
-                            <select id="mes" name="mes" class="form-control btn-xs font-11 p-0"
-                                onchange="cargarcuadros();">
-                                <option value="0">MES</option>
-                            </select>
+                            <div class="custom-select-container">
+                                <label for="mes">MES</label>
+                                <select id="mes" name="mes" class="form-control form-control-sm font-11"
+                                    onchange="cargarcuadros();">
+                                </select>
+                            </div>
                         </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2">
+
+                        {{-- <div class="col-lg-2 col-md-2 col-sm-2">
                             <select id="provincia" name="provincia" class="form-control btn-xs font-11"
                                 onchange="cargarDistritos();">
                                 <option value="0">PROVINCIA</option>
@@ -55,6 +62,31 @@
                                 onchange="cargarcuadros();">
                                 <option value="0">DISTRITO</option>
                             </select>
+                        </div> --}}
+
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="custom-select-container">
+                                <label for="provincia">Provincia</label>
+                                <select id="provincia" name="provincia" class="form-control form-control-sm font-11"
+                                    onchange="cargarDistrito();cargarcuadros();">
+                                    <option value="0">TODOS</option>
+                                    @foreach ($provincia as $item)
+                                        <option value="{{ $item->id }}">
+                                            {{ $item->nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="custom-select-container">
+                                <label for="distrito">Distrito</label>
+                                <select id="distrito" name="distrito" class="form-control form-control-sm font-11"
+                                    onchange="cargarcuadros();">
+                                    <option value="0">TODOS</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -96,10 +128,10 @@
                     <div class="media-body align-self-center">
                         <div class="text-right">
                             <h4 class="font-20 my-0 font-weight-bold">
-                                <span data-plugin="counterup" id="gls"></span>
+                                <span data-plugin="counterup" id="gl"></span>
                             </h4>
                             <p class="mb-0 mt-1 text-truncate">
-                                Numerador
+                                Total Niños y Niñas
                             </p>
                         </div>
                     </div>
@@ -119,10 +151,10 @@
                     <div class="media-body align-self-center">
                         <div class="text-right">
                             <h4 class="font-20 my-0 font-weight-bold">
-                                <span data-plugin="counterup" id="gl"></span>
+                                <span data-plugin="counterup" id="gls"></span>
                             </h4>
                             <p class="mb-0 mt-1 text-truncate">
-                                Denominador
+                                Cumple
                             </p>
                         </div>
                     </div>
@@ -145,7 +177,7 @@
                                 <span data-plugin="counterup" id="gln"></span>
                             </h4>
                             <p class="mb-0 mt-1 text-truncate">
-                                Brecha
+                                No Cumple
                             </p>
                         </div>
                     </div>
@@ -192,6 +224,7 @@
         </div>
 
     </div>
+
     <div class="row">
         <div class="col-lg-6">
             <div class="card card-border border border-plomo-0">
@@ -226,14 +259,32 @@
                         <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
                                 class="fa fa-file-excel"></i> Descargar</button>
                     </div>
-                    <h3 class="text-black font-14 mb-0">Evaluación de cumplimiento de los logros esperados por
-                        distrito
+                    <h3 class="text-black font-14 mb-0">Evaluación de cumplimiento de los registros de niños y niñas
+                        menores de 6 años del padrón nominal
                     </h3>
                 </div>
-                <div class="card-body p-0">
+                <div class="card-body">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="table-responsive" id="vtabla2">
+                            <div class="table-responsive">
+                                <table id="padronTable" class="table table-sm table-striped table-bordered font-11">
+                                    <thead>
+                                        <tr class="table-success-0 text-white">
+                                            <th class="text-center">Nº</th>
+                                            <th class="text-center">Tipo Doc.</th>
+                                            <th class="text-center">Documento</th>
+                                            <th class="text-center">Nombre</th>
+                                            <th class="text-center">Fecha Nac.</th>
+                                            <th class="text-center">Distrito</th>
+                                            <th class="text-center">Seguro</th>
+                                            <th class="text-center">Cód.EESS</th>
+                                            <th class="text-center">EESS de Atención</th>
+                                            <th class="text-center">Doc.Madre</th>
+                                            <th class="text-center">Nombre Madre</th>
+                                            <th class="text-center">Estado</th>
+                                        </tr>
+                                    </thead>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -264,7 +315,8 @@
             panelGraficas('anal2');
             panelGraficas('anal3');
             panelGraficas('tabla1');
-            panelGraficas('tabla2');
+            // panelGraficas('tabla2');
+            tabla2('tabla2');
         }
 
         function panelGraficas(div) {
@@ -325,9 +377,7 @@
                         //     info: false,
                         //     searching: false,
                         // });
-                    } else if (div == "tabla2") {
-                        $('#vtabla2').html(data.excel);
-                    }
+                    } else if (div == "tabla2") {}
 
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
@@ -335,6 +385,93 @@
                     console.log(jqXHR);
                 },
             });
+        }
+
+        function tabla2(div) {
+
+            $('#padronTable').DataTable({
+                responsive: true,
+                autoWidth: false,
+                processing: true,
+                serverSide: true,
+                ordered: true,
+                language: table_language,
+                destroy: true,
+                ajax: {
+                    url: "{{ route('salud.indicador.pactoregional.detalle.reports') }}",
+                    type: 'GET',
+                    data: function(d) {
+                        d.div = div;
+                        d.anio = $('#anio').val();
+                        d.mes = $('#mes').val();
+                        d.provincia = $('#provincia').val();
+                        d.distrito = $('#distrito').val();
+                        d.fuente = {{ $fuente }};
+                        d.indicador = '{{ $ind->id }}';
+                        d.codigo = '{{ $ind->codigo }}';
+                    }
+                },
+                columns: [{
+                        data: 'item',
+                        name: 'item'
+                    },
+                    {
+                        data: 'tipo_doc',
+                        name: 'tipo_doc'
+                    },
+                    {
+                        data: 'num_doc',
+                        name: 'num_doc'
+                    },
+                    {
+                        data: 'nombre_completo',
+                        name: 'nombre_completo'
+                    },
+                    {
+                        data: 'nacimiento',
+                        name: 'nacimiento'
+                    },
+                    {
+                        data: 'distrito',
+                        name: 'distrito'
+                    },
+                    {
+                        data: 'seguro',
+                        name: 'seguro'
+                    },
+                    {
+                        data: 'ipress',
+                        name: 'ipress'
+                    },
+                    {
+                        data: 'nombre_establecimiento',
+                        name: 'nombre_establecimiento'
+                    },
+                    {
+                        data: 'num_doc_madre',
+                        name: 'num_doc_madre'
+                    },
+                    {
+                        data: 'nombre_completo_madre',
+                        name: 'nombre_completo_madre'
+                    },
+                    {
+                        data: 'estado',
+                        name: 'estado'
+                    }
+                ],
+                columnDefs: [{
+                        className: 'text-center',
+                        targets: [0, 1, 2, 4, 6, 7, 9, 11]
+                    },
+
+                ],
+                // "order": [
+                //     [0, 'desc']
+                // ],
+                // "pageLength": 10,
+            });
+
         }
 
         function cargarTablaNivel(div, ugel) {
