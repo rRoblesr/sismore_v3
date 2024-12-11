@@ -549,20 +549,23 @@ class IndicadoresController extends Controller
                 $length = intval($rq->length);
 
                 $query = CuboPacto1PadronNominal::where('importacion', $impMaxAnio);
+
                 $query = $query->whereIn('tipo_doc', ['DNI', 'CNV']);
+
                 if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
                 if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
+
                 $recordsTotal = $query->count();
                 $recordsFiltered = $recordsTotal;
 
-                $data = $query->skip($start)->take($length)->get();
+                $query = $query->skip($start)->take($length)->get();
 
-                $data = $data->map(function ($item, $key) use ($start) {
+                $query = $query->map(function ($item, $key) use ($start) {
                     $item->item = $start + $key + 1;
                     return $item;
                 });
 
-                $data->transform(function ($value) {
+                $query->transform(function ($value) {
                     $value->nacimiento = date('d/m/Y', strtotime($value->fecha_nacimiento));
                     $value->ipress = str_pad($value->cui_atencion, 8, '0', STR_PAD_LEFT);
                     $value->estado = $value->num == 1
@@ -575,9 +578,9 @@ class IndicadoresController extends Controller
                     "draw" => $draw,
                     "recordsTotal" => $recordsTotal,
                     "recordsFiltered" => $recordsFiltered,
-                    "data" => $data,
+                    "data" => $query,
                     "input" => $rq->all(),
-                    "queries" => $data->toArray(),
+                    "queries" => $query->toArray(),
                 ];
 
                 return response()->json($result);
@@ -585,6 +588,53 @@ class IndicadoresController extends Controller
             default:
                 return [];
         }
+    }
+
+    public function PactoRegionalSalPacto1Reports2(Request $rq)
+    {
+        $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($rq->fuente, $rq->anio, $rq->mes);
+
+        $draw = intval($rq->draw);
+        $start = intval($rq->start);
+        $length = intval($rq->length);
+
+        $query = CuboPacto1PadronNominal::where('importacion', $impMaxAnio);
+
+        $query = $query->whereIn('tipo_doc', ['DNI', 'CNV']);
+
+        if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
+        if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
+
+        $recordsTotal = $query->count();
+        $recordsFiltered = $recordsTotal;
+
+        $query = $query->skip($start)->take($length)->get();
+
+        $query = $query->map(function ($item, $key) use ($start) {
+            $item->item = $start + $key + 1;
+            return $item;
+        });
+
+        $query->transform(function ($value) {
+            $value->nacimiento = $value->fecha_nacimiento ? date('d/m/Y', strtotime($value->fecha_nacimiento)) : null;
+            $value->ipress = str_pad($value->cui_atencion, 8, '0', STR_PAD_LEFT);
+            $value->estado = $value->num == 1
+                ? '<span class="badge badge-pill badge-success" style="font-size:90%;">CUMPLEN</span>'
+                :  '<span class="badge badge-pill badge-danger" style="font-size:90%;">NO CUMPLEN</span>';
+            return $value;
+        });
+
+        $result = [
+            "draw" => $draw,
+            "recordsTotal" => $recordsTotal,
+            "recordsFiltered" => $recordsFiltered,
+            "data" => $query,
+            "input" => $rq->all(),
+            "queries" => $query->toArray(),
+            'importacion' => $impMaxAnio
+        ];
+
+        return response()->json($result);
     }
 
     public function PactoRegionalSalPacto1Export($div, $indicador, $anio, $mes, $provincia, $distrito)

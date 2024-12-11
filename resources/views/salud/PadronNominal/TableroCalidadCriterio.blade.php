@@ -4,8 +4,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
-    <style>
 
+    <style>
     </style>
 @endsection
 
@@ -130,7 +130,7 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="table-responsive">
-                                @if ($pos<11)
+                                @if ($pos < 11)
                                     <table id="tabla1" class="table table-sm table-striped table-bordered font-10">
                                         <thead>
                                             <tr class="table-success-0 text-white">
@@ -517,7 +517,7 @@
                     url: "{{ route('salud.padronnominal.tablerocalidad.criterio.listar3') }}",
                     type: "POST",
                     headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Agrega el token CSRF
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') 
                     },
                     data: function(d) {
                         d.importacion = {{ $importacion }};

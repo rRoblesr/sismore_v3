@@ -1,5 +1,7 @@
 @extends('layouts.main', ['titlePage' => ''])
 @section('css')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
 @endsection
 
@@ -76,7 +78,6 @@
         </div>
     </div>
 
-    <!--Widget-4 -->
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6">
             <div class="card-box border border-plomo-0">
@@ -168,8 +169,6 @@
         </div>
     </div>
 
-    {{-- portles --}}
-
     <div class="row">
 
         <div class="col-lg-6">
@@ -259,13 +258,16 @@
                                             <th class="text-center">Fecha Nac.</th>
                                             <th class="text-center">Distrito</th>
                                             <th class="text-center">Seguro</th>
-                                            <th class="text-center">Cód.EESS</th>
+                                            <th class="text-center">Cód. EESS</th>
                                             <th class="text-center">EESS de Atención</th>
-                                            <th class="text-center">Doc.Madre</th>
+                                            <th class="text-center">Doc. Madre</th>
                                             <th class="text-center">Nombre Madre</th>
                                             <th class="text-center">Estado</th>
                                         </tr>
                                     </thead>
+                                    <tbody>
+
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -280,12 +282,13 @@
     <script type="text/javascript">
         var ugel_select = 0;
         var anal1, anal2, anal3;
+        var tablepadron;
         $(document).ready(function() {
-            Highcharts.setOptions({
-                lang: {
-                    thousandsSep: ","
-                }
-            });
+            // Highcharts.setOptions({
+            //     lang: {
+            //         thousandsSep: ","
+            //     }
+            // });
             cargarMes();
             cargarDistritos();
             cargarcuadros();
@@ -326,7 +329,6 @@
                     }
                 },
                 success: function(data) {
-                    console.log(data);
                     if (div == "head") {
                         $('#ri').text(data.ri + '%');
                         $('#gl').text(data.gl);
@@ -370,8 +372,7 @@
         }
 
         function tabla2(div) {
-
-            $('#padronTable').DataTable({
+            tablepadron = $('#padronTable').DataTable({
                 responsive: true,
                 autoWidth: false,
                 processing: true,
@@ -380,8 +381,11 @@
                 language: table_language,
                 destroy: true,
                 ajax: {
-                    url: "{{ route('salud.indicador.pactoregional.detalle.reports') }}",
-                    type: 'GET',
+                    url: "{{ route('salud.indicador.pactoregional.detalle.reports.2') }}",
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
                     data: function(d) {
                         d.div = div;
                         d.anio = $('#anio').val();
@@ -395,63 +399,57 @@
                 },
                 columns: [{
                         data: 'item',
-                        name: 'item'
+                        name: 'item',
                     },
                     {
                         data: 'tipo_doc',
-                        name: 'tipo_doc'
+                        name: 'tipo_doc',
                     },
                     {
                         data: 'num_doc',
-                        name: 'num_doc'
+                        name: 'num_doc',
                     },
                     {
                         data: 'nombre_completo',
-                        name: 'nombre_completo'
+                        name: 'nombre_completo',
                     },
                     {
                         data: 'nacimiento',
-                        name: 'nacimiento'
+                        name: 'nacimiento',
                     },
                     {
                         data: 'distrito',
-                        name: 'distrito'
+                        name: 'distrito',
                     },
                     {
                         data: 'seguro',
-                        name: 'seguro'
+                        name: 'seguro',
                     },
                     {
                         data: 'ipress',
-                        name: 'ipress'
+                        name: 'ipress',
                     },
                     {
                         data: 'nombre_establecimiento',
-                        name: 'nombre_establecimiento'
+                        name: 'nombre_establecimiento',
                     },
                     {
                         data: 'num_doc_madre',
-                        name: 'num_doc_madre'
+                        name: 'num_doc_madre',
                     },
                     {
                         data: 'nombre_completo_madre',
-                        name: 'nombre_completo_madre'
+                        name: 'nombre_completo_madre',
                     },
                     {
                         data: 'estado',
-                        name: 'estado'
+                        name: 'estado',
                     }
                 ],
                 columnDefs: [{
-                        className: 'text-center',
-                        targets: [0, 1, 2, 4, 6, 7, 9, 11]
-                    },
-
-                ],
-                // "order": [
-                //     [0, 'desc']
-                // ],
-                // "pageLength": 10,
+                    className: 'text-center',
+                    targets: [0, 1, 2, 4, 6, 7, 9, 11]
+                }],
             });
 
         }
