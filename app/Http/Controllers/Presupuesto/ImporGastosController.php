@@ -331,6 +331,8 @@ class ImporGastosController extends Controller
 
     public function eliminar($id)
     {
+        ini_set('memory_limit', '-1');
+        set_time_limit(0);
         /*  $imp = Importacion::find($id);
         $imp->estado = 'EL';
         $imp->save(); */

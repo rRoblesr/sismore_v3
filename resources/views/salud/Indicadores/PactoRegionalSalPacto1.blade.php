@@ -26,44 +26,26 @@
                             <h5 class="page-title font-12">Fuente: Padrón Nominal, <br>{{ $actualizado }}</h5>
                         </div>
                         <div class="col-lg-2 col-md-1 col-sm-1  ">
-                            
+
                             <div class="custom-select-container">
-                                <label for="anio">AÑO</label>
+                                <label for="anio">Año</label>
                                 <select id="anio" name="anio" class="form-control form-control-sm font-11"
                                     onchange="cargarcuadros();">
                                     @foreach ($anio as $item)
-                                    <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
-                                        {{ $item->anio }}</option>
-                                @endforeach
+                                        <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                            {{ $item->anio }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-1 col-sm-1  ">
                             <div class="custom-select-container">
-                                <label for="mes">MES</label>
+                                <label for="mes">Mes</label>
                                 <select id="mes" name="mes" class="form-control form-control-sm font-11"
                                     onchange="cargarcuadros();">
                                 </select>
                             </div>
                         </div>
-
-                        {{-- <div class="col-lg-2 col-md-2 col-sm-2">
-                            <select id="provincia" name="provincia" class="form-control btn-xs font-11"
-                                onchange="cargarDistritos();">
-                                <option value="0">PROVINCIA</option>
-                                @foreach ($provincia as $item)
-                                    <option value="{{ $item->id }}">
-                                        {{ $item->nombre }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2">
-                            <select id="distrito" name="distrito" class="form-control btn-xs font-11"
-                                onchange="cargarcuadros();">
-                                <option value="0">DISTRITO</option>
-                            </select>
-                        </div> --}}
-
 
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
@@ -154,7 +136,7 @@
                                 <span data-plugin="counterup" id="gls"></span>
                             </h4>
                             <p class="mb-0 mt-1 text-truncate">
-                                Cumple
+                                Cumplen
                             </p>
                         </div>
                     </div>
@@ -177,7 +159,7 @@
                                 <span data-plugin="counterup" id="gln"></span>
                             </h4>
                             <p class="mb-0 mt-1 text-truncate">
-                                No Cumple
+                                No Cumplen
                             </p>
                         </div>
                     </div>
@@ -359,7 +341,7 @@
                     } else if (div == "anal2") {
                         gLineaBasica(div, data.info, '',
                             'Porcentaje Mensual de la Evaluación',
-                            '');
+                            '', 'CALLERIA');
                     } else if (div == "anal3") {
                         anal3 = gColumnx(div, data.info, '',
                             'Población de niños y niñas menores de 6 años, según sexo', 'Etapa Vida')
@@ -538,7 +520,7 @@
                 type: 'GET',
                 success: function(data) {
                     $("#distrito option").remove();
-                    var options = '<option value="0">DISTRITO</option>';
+                    var options = '<option value="0">TODOS</option>';
                     $.each(data, function(index, value) {
                         //ss = (id == value.id ? "selected" : "");
                         options += "<option value='" + value.id + "'>" + value.nombre +
@@ -1114,7 +1096,7 @@
             });
         }
 
-        function gLineaBasica(div, data, titulo, subtitulo, titulovetical) {
+        function gLineaBasica(div, data, titulo, subtitulo, titulovetical, categoriaSeleccionada) {
             const colors = ["#5eb9aa", "#f5bd22", "#e65310"];
             Highcharts.chart(div, {
                 title: {

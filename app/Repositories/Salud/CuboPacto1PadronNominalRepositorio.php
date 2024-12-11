@@ -26,8 +26,8 @@ class CuboPacto1PadronNominalRepositorio
     {
         $query = CuboPacto1PadronNominal::select('distrito', DB::raw('100*sum(num)/sum(den) as indicador'))->where('importacion', $importacion);
         $query = $query->whereIn('tipo_doc', ['DNI', 'CNV']);
-        if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
-        if ($distrito > 0) $query = $query->where('distrito_id', $distrito);
+        // if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
+        // if ($distrito > 0) $query = $query->where('distrito_id', $distrito);
         $query = $query->groupBy('distrito')->orderBy('indicador', 'desc')->get();
         return $query;
     }
@@ -41,7 +41,7 @@ class CuboPacto1PadronNominalRepositorio
 
         $query = "SELECT
                 sub.mes,
-                round(100*sum(sipn.num)/sum(sipn.den),2) indicador
+                round(100*sum(sipn.num)/sum(sipn.den),1) indicador
             from
                 (
                 select

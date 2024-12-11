@@ -33,6 +33,7 @@ use App\Repositories\Parametro\PoblacionPNRepositorio;
 use App\Repositories\Parametro\UbigeoRepositorio;
 use App\Repositories\Salud\CuboPacto1PadronNominalRepositorio;
 use App\Repositories\Salud\PadronNominalRepositorio;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -124,7 +125,8 @@ class IndicadoresController extends Controller
         // $indviv = IndicadorGeneralRepositorio::find_pactoregional($sector, $instrumento);
 
         $ind = IndicadorGeneralRepositorio::findNoFichatecnicaCodigo('DIT-SAL-01');
-        $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios($ind->id);
+        $anio = collect(range(2023, Carbon::now()->year));
+        // $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios($ind->id);
         $provincia = UbigeoRepositorio::provincia('25');
 
         $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_1']);
@@ -526,8 +528,8 @@ class IndicadoresController extends Controller
             case 'anal3': //lineas
                 $base = CuboPacto1PadronNominalRepositorio::pacto01Anal03($impMaxAnio, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
                 $info['serie'] = [];
-                $info['serie'][0]['name'] = 'Hombre';
-                $info['serie'][1]['name'] = 'Mujer';
+                $info['serie'][0]['name'] = 'Cumplen';
+                $info['serie'][1]['name'] = 'No Cumplen';
                 foreach ($base as $key => $value) {
                     $info['categoria'][] = $value->edades;
                     // $info['serie'][$key]['data'] = [$value->si, $value->no];
@@ -564,8 +566,8 @@ class IndicadoresController extends Controller
                     $value->nacimiento = date('d/m/Y', strtotime($value->fecha_nacimiento));
                     $value->ipress = str_pad($value->cui_atencion, 8, '0', STR_PAD_LEFT);
                     $value->estado = $value->num == 1
-                        ? '<span class="badge badge-pill badge-success" style="font-size:90%;">Cumple</span>'
-                        :  '<span class="badge badge-pill badge-danger" style="font-size:90%;">No Cumple</span>';
+                        ? '<span class="badge badge-pill badge-success" style="font-size:90%;">CUMPLEN</span>'
+                        :  '<span class="badge badge-pill badge-danger" style="font-size:90%;">NO CUMPLEN</span>';
                     return $value;
                 });
 
