@@ -21,6 +21,7 @@ use App\Models\Parametro\PoblacionPN;
 use App\Models\Parametro\Ubigeo;
 use App\Models\Salud\CuboPacto1PadronNominal;
 use App\Models\Salud\ImporPadronActas;
+use App\Models\Salud\ImporPadronAnemia;
 use App\Models\Salud\ImporPadronNominal;
 use App\Models\Salud\ImporPadronPvica;
 use App\Repositories\Educacion\CuboPacto1Repositorio;
@@ -197,9 +198,14 @@ class IndicadoresController extends Controller
                 $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
                 break;
             case 'DIT-SAL-02':
-                $ind = IndicadorGeneralRepositorio::findNoFichatecnicaCodigo($rq->codigo);
-                $gls = IndicadorGeneralMetaRepositorio::getSalPacto2GLS($ind->id, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
-                $gl = IndicadorGeneralMetaRepositorio::getSalPacto2GL($ind->id, $rq->anio, 0, $rq->provincia, $rq->distrito);
+                // $ind = IndicadorGeneralRepositorio::findNoFichatecnicaCodigo($rq->codigo);
+                // $gls = IndicadorGeneralMetaRepositorio::getSalPacto2GLS($ind->id, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                // $gl = IndicadorGeneralMetaRepositorio::getSalPacto2GL($ind->id, $rq->anio, 0, $rq->provincia, $rq->distrito);
+                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_2']);
+                $base = IndicadorGeneralMetaRepositorio::getSalPacto2GLS2(0, $rq->anio, $imp->mes, $rq->provincia, $rq->distrito);
+                $gls = $base->si; // IndicadorGeneralMetaRepositorio::getSalPacto2GLS($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $gl = $base->conteo; // IndicadorGeneralMetaRepositorio::getSalPacto2GL($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+
                 $num = number_format($gls, 0);
                 $den = number_format($gl, 0);
                 $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
@@ -379,11 +385,12 @@ class IndicadoresController extends Controller
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_2']);
                 // return response()->json([$imp]);
                 $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
-                $anio = IndicadorGeneralMetaRepositorio::getPacto2Anios($indicador_id);
-                $mes = Mes::all();
+                $anio = ImporPadronAnemia::distinct()->select('anio')->get();
+                // return $this->PactoRegionalSalPacto2FindMes(2024);
+                // return $anio = IndicadorGeneralMetaRepositorio::getPacto2Anios($indicador_id);
                 $provincia = UbigeoRepositorio::provincia('25');
                 $aniomax = $imp->anio;
-                return view('salud.Indicadores.PactoRegionalSalPacto2', compact('actualizado', 'anio', 'mes', 'provincia', 'aniomax', 'ind'));
+                return view('salud.Indicadores.PactoRegionalSalPacto2', compact('actualizado', 'anio', 'provincia', 'aniomax', 'ind'));
             case 'DIT-SAL-03':
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_1']);
                 // return response()->json([$imp]);
@@ -683,11 +690,13 @@ class IndicadoresController extends Controller
         $ndis = $rq->distrito > 0 ? Ubigeo::find($rq->distrito)->nombre : '';
         switch ($rq->div) {
             case 'head':
-                $gls = IndicadorGeneralMetaRepositorio::getSalPacto2GLS($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
-                $gl = IndicadorGeneralMetaRepositorio::getSalPacto2GL($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $base = IndicadorGeneralMetaRepositorio::getSalPacto2GLS2($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $gls = $base->si; // IndicadorGeneralMetaRepositorio::getSalPacto2GLS($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $gl = $base->conteo; // IndicadorGeneralMetaRepositorio::getSalPacto2GL($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+
                 $gln = intval($gl) - intval($gls);
                 $ri = number_format(100 * ($gl > 0 ? $gls / $gl : 0), 1);
-                return response()->json(['aa' => $rq->all(), 'ri' => $ri, 'gl' => $gl, 'gls' => $gls, 'gln' => $gln]);
+                return response()->json(['aa' => $rq->all(), 'ri' => $ri, 'gl' => $gl, 'gls' => $gls, 'gln' => $gln, 'base' => $base]);
 
             case 'anal1':
                 $base = IndicadorGeneralMetaRepositorio::getSalPacto2Mensual($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
@@ -697,7 +706,7 @@ class IndicadoresController extends Controller
                 $limit = $rq->anio == 2023 ? IndicadoresController::$pacto1_mes : 0;
                 foreach ($mes as $mm) {
                     if ($mm->codigo >= $limit && $mm->codigo <= $mesmax) {
-                        $mm->y = 0;
+                        $mm->y = null;
                         foreach ($base as $bb) {
                             if ($bb->name == $mm->codigo) {
                                 $mm->y = (float)$bb->y;
@@ -816,6 +825,15 @@ class IndicadoresController extends Controller
             default:
                 return [];
         }
+    }
+
+    public function PactoRegionalSalPacto2FindMes($anio)
+    {
+        $impMax = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_2']);
+        $query = ImporPadronAnemia::from('sal_impor_padron_anemia as ipa')->join('par_mes as m', 'm.id', '=', 'ipa.mes')->distinct()->select('m.id', 'm.mes')->where('ipa.anio', $anio);
+        if ($anio == date('Y')) $query = $query->where('ipa.mes', '<=', $impMax->mes);
+        $query = $query->orderBy('ipa.mes')->get();
+        return $query;
     }
 
     public function PactoRegionalSalPacto2Export($div, $indicador, $anio, $mes, $provincia, $distrito)

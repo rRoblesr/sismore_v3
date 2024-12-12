@@ -204,16 +204,29 @@ class IndicadorGeneralMetaRepositorio
         return $query = $query->get()->first()->conteo;
     }
 
-    public static function getSalPacto2GLS($indicador_id, $anio, $mes, $provincia, $distrito)
+    // public static function getSalPacto2GLS($indicador_id, $anio, $mes, $provincia, $distrito)
+    // {
+    //     $query =  ImporPadronAnemia::where('anio', $anio)->select(DB::raw('sum(num) as conteo'));
+    //     $query = $query->join('par_ubigeo as dd', 'dd.id', '=', 'ubigeo');
+    //     $query = $query->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia');
+    //     if (IndicadoresController::$pacto1_anio == $anio) $query = $query->where('mes', '>=', IndicadoresController::$pacto1_mes);
+    //     if ($mes > 0) $query = $query->where('mes', '<=',  $mes);
+    //     if ($distrito > 0) $query = $query->where('ubigeo',  $distrito);
+    //     if ($provincia > 0) $query = $query->where('pp.id',  $provincia);
+    //     return $query = $query->get()->first()->conteo;
+    // }
+
+
+    public static function getSalPacto2GLS2($indicador_id, $anio, $mes, $provincia, $distrito)
     {
-        $query =  ImporPadronAnemia::where('anio', $anio)->select(DB::raw('sum(num) as conteo'));
+        $query =  ImporPadronAnemia::where('anio', $anio)->select(DB::raw('sum(num) as si,sum(den) as conteo,sum(den)-sum(num) as no,round(100*sum(num)/sum(den),1) as indicador'));
         $query = $query->join('par_ubigeo as dd', 'dd.id', '=', 'ubigeo');
         $query = $query->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia');
         if (IndicadoresController::$pacto1_anio == $anio) $query = $query->where('mes', '>=', IndicadoresController::$pacto1_mes);
-        if ($mes > 0) $query = $query->where('mes',  $mes);
+        if ($mes > 0) $query = $query->where('mes', '<=',  $mes);
         if ($distrito > 0) $query = $query->where('ubigeo',  $distrito);
         if ($provincia > 0) $query = $query->where('pp.id',  $provincia);
-        return $query = $query->get()->first()->conteo;
+        return $query = $query->get()->first();
     }
 
     public static function getSalPacto2Mensual($indicador_id, $anio, $mes, $provincia, $distrito)
@@ -222,7 +235,7 @@ class IndicadorGeneralMetaRepositorio
         $query = $query->join('par_ubigeo as dd', 'dd.id', '=', 'ubigeo');
         $query = $query->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia');
         if (IndicadoresController::$pacto1_anio == $anio) $query = $query->where('mes', '>=', IndicadoresController::$pacto1_mes);
-        // if ($mes > 0) $query = $query->where('mes', $mes);
+        if ($mes > 0) $query = $query->where('mes','<=', $mes);
         if ($distrito > 0) $query = $query->where('ubigeo',  $distrito);
         if ($provincia > 0) $query = $query->where('pp.id',  $provincia);
         $query = $query->groupBy('name')->orderBy('name')->get();
@@ -942,7 +955,7 @@ class IndicadorGeneralMetaRepositorio
             DB::raw('max(if(anio=2025,valor,0)) as v2025'),
             DB::raw('max(if(anio=2026,valor,0)) as v2026'),
         )->where('indicadorgeneral', $indicador_id)
-            ->join('par_ubigeo as d', 'd.id', '=', 'par_indicador_general_meta.distrito')->groupBy('dis_id','dis', 'anio_base', 'valor_base')->get();
+            ->join('par_ubigeo as d', 'd.id', '=', 'par_indicador_general_meta.distrito')->groupBy('dis_id', 'dis', 'anio_base', 'valor_base')->get();
 
 
         foreach ($query as $key => $value) {
@@ -964,7 +977,7 @@ class IndicadorGeneralMetaRepositorio
             // $cubo = CuboPacto1Repositorio::pacto1_matriculados_mes_a($anioxx, $mes, 0, $value->dis_id);
             $cubo1 = CuboPacto2Repositorio::getEduPacto2tabla1x($anioxx, 0, 0, $value->dis_id, 0);
             $cubo = CuboPacto2Repositorio::getEduPacto2tabla1($anioxx, $mes, 0, $value->dis_id, 0);
-            $den =1;//$cubo1->first() ? $cubo1->first()->conteo : 0;
+            $den = 1; //$cubo1->first() ? $cubo1->first()->conteo : 0;
             $num = $cubo->first() ? $cubo->first()->conteo : 0;
             $value->r2024 = round($den > 0 ? $num / $den : 0, 1);
             if ($anioxx == $anio) {

@@ -4,313 +4,379 @@
 @endsection
 
 @section('content')
-    <div class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12 col-md-12">
-                    <div class="card">
-                        <div class="card-header bg-success-0">
-                            <div class="card-widgets">
-                                <button type="button" class="btn btn-orange-0 btn-xs" onclick="history.back()"
-                                    title="ACTUALIZAR"><i class="fas fa-arrow-left"></i> Volver</button>
-                                <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf({{ $ind->id }})"
-                                    title='FICHA TÉCNICA'><i class="fas fa-file"></i> Ficha Técnica</button>
-                                <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
-                                    title='ACTUALIZAR'><i class=" fas fa-history"></i>
-                                    Actualizar</button>
-                            </div>
-                            <h3 class="card-title text-white">{{ $ind->nombre }}
-                            </h3>
+    {{-- <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-header bg-success-0">
+                    <div class="card-widgets">
+                        <button type="button" class="btn btn-orange-0 btn-xs" onclick="history.back()" title="ACTUALIZAR"><i
+                                class="fas fa-arrow-left"></i> Volver</button>
+                        <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf({{ $ind->id }})"
+                            title='FICHA TÉCNICA'><i class="fas fa-file"></i> Ficha Técnica</button>
+                        <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
+                            title='ACTUALIZAR'><i class=" fas fa-history"></i>
+                            Actualizar</button>
+                    </div>
+                    <h3 class="card-title text-white">{{ $ind->nombre }}
+                    </h3>
+                </div>
+                <div class="card-body p-2">
+                    <div class="form-group row align-items-center vh-5 m-0">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <h5 class="page-title font-12">Fuente: Padrón Nominal, <br>{{ $actualizado }}</h5>
                         </div>
-                        <div class="card-body p-2">
-                            <div class="form-group row align-items-center vh-5 m-0">
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <h5 class="page-title font-12">Fuente: Padrón Nominal, <br>{{ $actualizado }}</h5>
-                                </div>
-                                <div class="col-lg-1 col-md-1 col-sm-1  ">
-                                    <select id="anio" name="anio" class="form-control btn-xs font-11 p-0"
-                                        onchange="cargarcuadros();">
-                                        @foreach ($anio as $item)
-                                            <option value="{{ $item->anio }}"
-                                                {{ $item->anio == $aniomax ? 'selected' : '' }}>
-                                                {{ $item->anio }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-lg-1 col-md-1 col-sm-1  ">
-                                    <select id="mes" name="mes" class="form-control btn-xs font-11 p-0"
-                                        onchange="cargarcuadros();">
-                                        <option value="0">MES</option>
-                                        @foreach ($mes as $item)
-                                            <option value="{{ $item->id }}">
-                                                {{ $item->mes }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-lg-2 col-md-2 col-sm-2">
-                                    <select id="provincia" name="provincia" class="form-control btn-xs font-11"
-                                        onchange="cargarDistritos();cargarcuadros();">
-                                        <option value="0">PROVINCIA</option>
-                                        @foreach ($provincia as $item)
-                                            <option value="{{ $item->id }}">
-                                                {{ $item->nombre }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-lg-2 col-md-2 col-sm-2">
-                                    <select id="distrito" name="distrito" class="form-control btn-xs font-11"
-                                        onchange="cargarcuadros();">
-                                        <option value="0">DISTRITO</option>
-                                    </select>
-                                </div>
+                        <div class="col-lg-1 col-md-1 col-sm-1  ">
+                            <select id="anio" name="anio" class="form-control btn-xs font-11 p-0"
+                                onchange="cargarcuadros();">
+                                @foreach ($anio as $item)
+                                    <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                        {{ $item->anio }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-lg-1 col-md-1 col-sm-1  ">
+                            <select id="mes" name="mes" class="form-control btn-xs font-11 p-0"
+                                onchange="cargarcuadros();">
+                                <option value="0">MES</option>
+                                @foreach ($mes as $item)
+                                    <option value="{{ $item->id }}">
+                                        {{ $item->mes }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <select id="provincia" name="provincia" class="form-control btn-xs font-11"
+                                onchange="cargar-Distritos();cargarcuadros();">
+                                <option value="0">PROVINCIA</option>
+                                @foreach ($provincia as $item)
+                                    <option value="{{ $item->id }}">
+                                        {{ $item->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <select id="distrito" name="distrito" class="form-control btn-xs font-11"
+                                onchange="cargarcuadros();">
+                                <option value="0">DISTRITO</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> --}}
+
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-header bg-success-0">
+                    <div class="card-widgets">
+                        <button type="button" class="btn btn-orange-0 btn-xs" onclick="history.back()" title="ACTUALIZAR"><i
+                                class="fas fa-arrow-left"></i> Volver</button>
+                        <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf({{ $ind->id }})"
+                            title='FICHA TÉCNICA'><i class="fas fa-file"></i> Ficha Técnica</button>
+                        <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
+                            title='ACTUALIZAR'><i class=" fas fa-history"></i>
+                            Actualizar</button>
+                    </div>
+                    <h3 class="card-title text-white">{{ $ind->nombre }}
+                    </h3>
+                </div>
+                <div class="card-body p-2">
+                    <div class="form-group row align-items-center vh-5 m-0">
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+                            <h5 class="page-title font-12">Fuente: Padrón Nominal, <br>{{ $actualizado }}</h5>
+                        </div>
+                        <div class="col-lg-2 col-md-1 col-sm-1  ">
+
+                            <div class="custom-select-container">
+                                <label for="anio">Año</label>
+                                <select id="anio" name="anio" class="form-control form-control-sm font-11"
+                                    onchange="cargarMes();cargarcuadros();">
+                                    @foreach ($anio as $item)
+                                        <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                            {{ $item->anio }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-1 col-sm-1  ">
+                            <div class="custom-select-container">
+                                <label for="mes">Mes</label>
+                                <select id="mes" name="mes" class="form-control form-control-sm font-11"
+                                    onchange="cargarcuadros();">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="custom-select-container">
+                                <label for="provincia">Provincia</label>
+                                <select id="provincia" name="provincia" class="form-control form-control-sm font-11"
+                                    onchange="cargarDistritos();cargarcuadros();">
+                                    <option value="0">TODOS</option>
+                                    @foreach ($provincia as $item)
+                                        <option value="{{ $item->id }}">
+                                            {{ $item->nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="custom-select-container">
+                                <label for="distrito">Distrito</label>
+                                <select id="distrito" name="distrito" class="form-control form-control-sm font-11"
+                                    onchange="cargarcuadros();">
+                                    <option value="0">TODOS</option>
+                                </select>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!--Widget-4 -->
-            <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card-box border border-plomo-0">
-                        <div class="media">
-                            <div class="text-center">
-                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+    <!--Widget-4 -->
+    <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card-box border border-plomo-0">
+                <div class="media">
+                    <div class="text-center">
+                        {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
                                     width="70%" height="70%"> --}}
-                                <i class="mdi mdi-finance font-35 text-green-0"></i>
-                            </div>
-                            <div class="media-body align-self-center">
-                                <div class="text-right">
-                                    <h4 class="font-20 my-0 font-weight-bold">
-                                        <span data-plugin="counterup" id="ri"></span>
-                                    </h4>
-                                    <p class="mb-0 mt-1 text-truncate">Resultado Indicador</p>
-                                </div>
-                            </div>
-                        </div>
+                        <i class="mdi mdi-finance font-35 text-green-0"></i>
                     </div>
-                    <!-- end card-box-->
-                </div>
-
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card-box border border-plomo-0">
-                        <div class="media">
-                            <div class="text-center">
-                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
-                                    width="70%" height="70%"> --}}
-                                <i class=" mdi mdi-city font-35 text-green-0"></i>
-                            </div>
-                            <div class="media-body align-self-center">
-                                <div class="text-right">
-                                    <h4 class="font-20 my-0 font-weight-bold">
-                                        <span data-plugin="counterup" id="gl"></span>
-                                    </h4>
-                                    <p class="mb-0 mt-1 text-truncate">
-                                        Total Niños(as)
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end card-box-->
-                </div>
-
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card-box border border-plomo-0">
-                        <div class="media">
-                            <div class="text-center">
-                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
-                                    width="70%" height="70%"> --}}
-                                <i class="mdi mdi-thumb-up font-35 text-green-0"></i>
-                            </div>
-                            <div class="media-body align-self-center">
-                                <div class="text-right">
-                                    <h4 class="font-20 my-0 font-weight-bold">
-                                        <span data-plugin="counterup" id="gls"></span>
-                                    </h4>
-                                    <p class="mb-0 mt-1 text-truncate">
-                                        GL Cumplen
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end card-box-->
-                </div>
-
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card-box border border-plomo-0">
-                        <div class="media">
-                            <div class="text-center">
-                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
-                                    width="70%" height="70%"> --}}
-                                <i class="mdi mdi-thumb-down font-35 text-green-0"></i>
-                            </div>
-                            <div class="media-body align-self-center">
-                                <div class="text-right">
-                                    <h4 class="font-20 my-0 font-weight-bold">
-                                        <span data-plugin="counterup" id="gln"></span>
-                                    </h4>
-                                    <p class="mb-0 mt-1 text-truncate">
-                                        GL No Cumplen
-                                    </p>
-                                </div>
-                            </div>
+                    <div class="media-body align-self-center">
+                        <div class="text-right">
+                            <h4 class="font-20 my-0 font-weight-bold">
+                                <span data-plugin="counterup" id="ri"></span>
+                            </h4>
+                            <p class="mb-0 mt-1 text-truncate">Resultado Indicador</p>
                         </div>
                     </div>
                 </div>
             </div>
+            <!-- end card-box-->
+        </div>
 
-            {{-- portles --}}
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card-box border border-plomo-0">
+                <div class="media">
+                    <div class="text-center">
+                        {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                                    width="70%" height="70%"> --}}
+                        <i class=" mdi mdi-city font-35 text-green-0"></i>
+                    </div>
+                    <div class="media-body align-self-center">
+                        <div class="text-right">
+                            <h4 class="font-20 my-0 font-weight-bold">
+                                <span data-plugin="counterup" id="gl"></span>
+                            </h4>
+                            <p class="mb-0 mt-1 text-truncate">
+                                Total Niños(as)
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end card-box-->
+        </div>
 
-            <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card-box border border-plomo-0">
+                <div class="media">
+                    <div class="text-center">
+                        {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                                    width="70%" height="70%"> --}}
+                        <i class="mdi mdi-thumb-up font-35 text-green-0"></i>
+                    </div>
+                    <div class="media-body align-self-center">
+                        <div class="text-right">
+                            <h4 class="font-20 my-0 font-weight-bold">
+                                <span data-plugin="counterup" id="gls"></span>
+                            </h4>
+                            <p class="mb-0 mt-1 text-truncate">
+                                GL Cumplen
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end card-box-->
+        </div>
 
-                <div class="col-lg-6">
-                    <div class="card card-border border border-plomo-0">
-                        <div class="card-header border-success-0 bg-transparent p-0">
-                            {{-- <div class="card-widgets">
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card-box border border-plomo-0">
+                <div class="media">
+                    <div class="text-center">
+                        {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                                    width="70%" height="70%"> --}}
+                        <i class="mdi mdi-thumb-down font-35 text-green-0"></i>
+                    </div>
+                    <div class="media-body align-self-center">
+                        <div class="text-right">
+                            <h4 class="font-20 my-0 font-weight-bold">
+                                <span data-plugin="counterup" id="gln"></span>
+                            </h4>
+                            <p class="mb-0 mt-1 text-truncate">
+                                GL No Cumplen
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- portles --}}
+
+    <div class="row">
+
+        <div class="col-lg-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent p-0">
+                    {{-- <div class="card-widgets">
                                 <button type="button" class="btn btn-success btn-xs"><i
                                         class="fa fa-file-excel"></i> Descargar</button>
                             </div> --}}
-                            <h3 class="text-black font-14 mb-0">
-                                Avance acumulado de la evaluación de Cumplimiento por Distrito
-                            </h3>
-                        </div>
-                        <div class="card-body p-0">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="table-responsive" style="height: 40rem" id="vtabla1">
-                                    </div>
-                                </div>
+                    <h3 class="text-black font-14 mb-0">
+                        Avance acumulado de la evaluación de Cumplimiento por Distrito
+                    </h3>
+                </div>
+                <div class="card-body p-0">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive" style="height: 40rem" id="vtabla1">
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="col-lg-6">
-                    <div class="card card-border border border-plomo-0">
-                        <div class="card-header border-success-0 bg-transparent p-0">
-                            {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
-                        </div>
-                        <div class="card-body p-0">
-                            <figure class="highcharts-figure p-0 m-0">
-                                <div id="anal1" style="height: 20rem"></div>
-                            </figure>
-                        </div>
-                    </div>
+        <div class="col-lg-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent p-0">
+                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
+                </div>
+                <div class="card-body p-0">
+                    <figure class="highcharts-figure p-0 m-0">
+                        <div id="anal1" style="height: 20rem"></div>
+                    </figure>
+                </div>
+            </div>
 
-                    <div class="card card-border border border-plomo-0">
-                        <div class="card-header border-success-0 bg-transparent p-0">
-                            {{-- <div class="card-widgets">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent p-0">
+                    {{-- <div class="card-widgets">
                                 <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
                                         class="fa fa-file-excel"></i>
                                     Descargar</button>
                             </div> --}}
-                            <h3 class="text-black font-14 mb-0">
-                                Avance acumulado de la evaluación de Cumplimiento por Red
-                            </h3>
-                        </div>
-                        <div class="card-body p-0">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="table-responsive" style="height: 18rem" id="vtabla2">
-                                    </div>
-                                </div>
+                    <h3 class="text-black font-14 mb-0">
+                        Avance acumulado de la evaluación de Cumplimiento por Red
+                    </h3>
+                </div>
+                <div class="card-body p-0">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive" style="height: 18rem" id="vtabla2">
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
+        </div>
 
-            <div class="row">
-                <div class="col-lg-12">
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent p-0">
+                    <div class="card-widgets">
+                        <button type="button" class="btn btn-success btn-xs" onclick="descargar3()"><i
+                                class="fa fa-file-excel"></i> Descargar</button>
+                    </div>
+                    <h3 class="text-black font-14 mb-0">
+                        Listado de establecimientos de salud que fueron evaluados
+                    </h3>
+                </div>
+                <div class="card-body p-0">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive" id="vtabla3">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent p-0">
+                    <div class="card-widgets">
+                        <button type="button" class="btn btn-success btn-xs" onclick="descargar4()"><i
+                                class="fa fa-file-excel"></i> Descargar</button>
+                    </div>
+                    <h3 class="text-black font-14 mb-0">
+                        Evaluación de cumplimiento de los logros esperados por Distrito
+                    </h3>
+                </div>
+                <div class="card-body p-0">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive" id="vtabla4">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal_microred" class="modal fade font-10" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title font-16">Microrred</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+
+                    {{-- <div class="row"> --}}
+                    {{-- <div class="col-lg-6"> --}}
                     <div class="card card-border border border-plomo-0">
                         <div class="card-header border-success-0 bg-transparent p-0">
-                            <div class="card-widgets">
-                                <button type="button" class="btn btn-success btn-xs" onclick="descargar3()"><i
-                                        class="fa fa-file-excel"></i> Descargar</button>
-                            </div>
                             <h3 class="text-black font-14 mb-0">
-                                Listado de establecimientos de salud que fueron evaluados
+                                Avance acumulado de la evaluación de Cumplimiento por Microrred
                             </h3>
+                            <input type="hidden" name="mred" id="mred" value="">
                         </div>
                         <div class="card-body p-0">
                             <div class="row">
-                                <div class="col-12">
-                                    <div class="table-responsive" id="vtabla3">
+                                <div class="col-12">{{-- style="height: 40rem"  --}}
+                                    <div class="table-responsive" id="vtabla2tabla1">
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    {{-- </div> --}}
+                    {{-- </div> --}}
+
+                </div>
+                <div class="modal-footer">
+                    {{-- <button type="button" class="btn btn-xs btn-danger waves-effect" data-dismiss="modal">Cerrar</button> --}}
+                    {{-- <button type="button" class="btn btn-primary btn-xs waves-effect waves-light" onclick="verpdf(8)">Ficha Tecnica</button> --}}
                 </div>
             </div>
-
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card card-border border border-plomo-0">
-                        <div class="card-header border-success-0 bg-transparent p-0">
-                            <div class="card-widgets">
-                                <button type="button" class="btn btn-success btn-xs" onclick="descargar4()"><i
-                                        class="fa fa-file-excel"></i> Descargar</button>
-                            </div>
-                            <h3 class="text-black font-14 mb-0">
-                                Evaluación de cumplimiento de los logros esperados por Distrito
-                            </h3>
-                        </div>
-                        <div class="card-body p-0">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="table-responsive" id="vtabla4">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="modal_microred" class="modal fade font-10" tabindex="-1" role="dialog"
-                aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title font-16">Microrred</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        </div>
-                        <div class="modal-body">
-
-                            {{-- <div class="row"> --}}
-                            {{-- <div class="col-lg-6"> --}}
-                            <div class="card card-border border border-plomo-0">
-                                <div class="card-header border-success-0 bg-transparent p-0">
-                                    <h3 class="text-black font-14 mb-0">
-                                        Avance acumulado de la evaluación de Cumplimiento por Microrred
-                                    </h3>
-                                    <input type="hidden" name="mred" id="mred" value="">
-                                </div>
-                                <div class="card-body p-0">
-                                    <div class="row">
-                                        <div class="col-12">{{-- style="height: 40rem"  --}}
-                                            <div class="table-responsive" id="vtabla2tabla1">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {{-- </div> --}}
-                            {{-- </div> --}}
-
-                        </div>
-                        <div class="modal-footer">
-                            {{-- <button type="button" class="btn btn-xs btn-danger waves-effect" data-dismiss="modal">Cerrar</button> --}}
-                            {{-- <button type="button" class="btn btn-primary btn-xs waves-effect waves-light" onclick="verpdf(8)">Ficha Tecnica</button> --}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </div>
 @endsection
@@ -324,8 +390,9 @@
                     thousandsSep: ","
                 }
             });
+            cargarMes();
             cargarDistritos();
-            cargarcuadros();
+            
         });
 
         function cargarcuadros() {
@@ -421,13 +488,35 @@
                 type: 'GET',
                 success: function(data) {
                     $("#distrito option").remove();
-                    var options = '<option value="0">DISTRITO</option>';
+                    var options = data.length > 1 ? '<option value="0">TODOS</option>' : '';
                     $.each(data, function(index, value) {
                         //ss = (id == value.id ? "selected" : "");
                         options += "<option value='" + value.id + "'>" + value.nombre +
                             "</option>"
                     });
                     $("#distrito").append(options);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cargarMes() {
+            $.ajax({
+                url: "{{ route('salud.indicador.pactoregional.sal.pacto2.find.mes', ['anio' => 'anio']) }}"
+                    .replace('anio', $('#anio').val()),
+                type: 'GET',
+                success: function(data) {
+                    $("#mes option").remove();
+                    var options = ''; // '<option value="0"></option>';
+                    var ultimovalor = data.length > 0 ? data[data.length - 1].mes_id : null;
+                    $.each(data, function(index, value) {
+                        ss = (value.mes_id === ultimovalor ? "selected" : "");
+                        options += `<option value='${value.id}' ${ss}>${value.mes}</option>`;
+                    });
+                    $("#mes").append(options);
+                    cargarcuadros();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);

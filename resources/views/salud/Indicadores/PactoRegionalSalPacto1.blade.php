@@ -53,7 +53,7 @@
                             <div class="custom-select-container">
                                 <label for="provincia">Provincia</label>
                                 <select id="provincia" name="provincia" class="form-control form-control-sm font-11"
-                                    onchange="cargarDistrito();cargarcuadros();">
+                                    onchange="cargarDistritos();cargarcuadros();">
                                     <option value="0">TODOS</option>
                                     @foreach ($provincia as $item)
                                         <option value="{{ $item->id }}">
@@ -518,7 +518,7 @@
                 type: 'GET',
                 success: function(data) {
                     $("#distrito option").remove();
-                    var options = '<option value="0">TODOS</option>';
+                    var options = data.length > 1 ? '<option value="0">TODOS</option>' : '';
                     $.each(data, function(index, value) {
                         //ss = (id == value.id ? "selected" : "");
                         options += "<option value='" + value.id + "'>" + value.nombre +

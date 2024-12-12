@@ -1176,6 +1176,7 @@ Route::post('/salud/pactoregional/Sal/Reports1/2', [IndicadoresController::class
 Route::get('/salud/pactoregional/Sal/Reports1/Exportar/{div}/{indicador}/{anio}/{mes}/{provincia}/{distrito}', [IndicadoresController::class, 'PactoRegionalSalPacto1download'])->name('salud.indicador.pactoregional.sal.pacto1.excel');
 
 Route::get('/salud/pactoregional/Sal/Reports2', [IndicadoresController::class, 'PactoRegionalSalPacto2Reports'])->name('salud.indicador.pactoregional.sal.pacto2.reports');
+Route::get('/salud/pactoregional/Sal/Reports2/find/mes/{anio}', [IndicadoresController::class, 'PactoRegionalSalPacto2FindMes'])->name('salud.indicador.pactoregional.sal.pacto2.find.mes');
 Route::get('/salud/pactoregional/Sal/Reports2/Exportar/{div}/{indicador}/{anio}/{mes}/{provincia}/{distrito}', [IndicadoresController::class, 'PactoRegionalSalPacto2download'])->name('salud.indicador.pactoregional.sal.pacto2.excel');
 
 Route::get('/salud/pactoregional/Sal/Reports3', [IndicadoresController::class, 'PactoRegionalSalPacto3Reports'])->name('salud.indicador.pactoregional.sal.pacto3.reports');
