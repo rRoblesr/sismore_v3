@@ -2,37 +2,29 @@
 
 namespace App\Http\Controllers\Salud;
 
-use App\Exports\pactoregional1Export;
-use App\Exports\pactoregional2Export;
 use App\Exports\pactoregionalSal1Export;
 use App\Exports\pactoregionalSal2Export;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Educacion\ImporMatriculaGeneralController;
-use App\Http\Controllers\Educacion\MatriculaGeneralController;
-use App\Models\Educacion\Area;
 use App\Models\Educacion\Importacion;
-use App\Models\Educacion\MatriculaGeneralDetalle;
 use App\Models\Educacion\SFL;
-use App\Models\Parametro\Anio;
 use App\Models\Parametro\IndicadorGeneral;
 use App\Models\Parametro\IndicadorGeneralMeta;
 use App\Models\Parametro\Mes;
 use App\Models\Parametro\PoblacionPN;
 use App\Models\Parametro\Ubigeo;
 use App\Models\Salud\CuboPacto1PadronNominal;
-use App\Models\Salud\ImporPadronActas;
+use App\Models\Salud\CuboPacto3PadronMaterno;
 use App\Models\Salud\ImporPadronAnemia;
-use App\Models\Salud\ImporPadronNominal;
-use App\Models\Salud\ImporPadronPvica;
 use App\Repositories\Educacion\CuboPacto1Repositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
-use App\Repositories\Educacion\MatriculaGeneralRepositorio;
 use App\Repositories\Educacion\SFLRepositorio;
 use App\Repositories\Parametro\IndicadorGeneralMetaRepositorio;
 use App\Repositories\Parametro\IndicadorGeneralRepositorio;
 use App\Repositories\Parametro\PoblacionPNRepositorio;
 use App\Repositories\Parametro\UbigeoRepositorio;
 use App\Repositories\Salud\CuboPacto1PadronNominalRepositorio;
+use App\Repositories\Salud\CuboPacto3Repositorio;
 use App\Repositories\Salud\PadronNominalRepositorio;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -137,46 +129,6 @@ class IndicadoresController extends Controller
         return view('salud.Indicadores.PactoRegionalSal', compact('indsal', 'anio', 'provincia', 'aniomax'));
     }
 
-    public function PactoRegionalActualizar2(Request $rq)
-    {
-        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_1']);
-        $ind = IndicadorGeneralRepositorio::findNoFichatecnicaCodigo('DITSALUD01');
-        $gls = IndicadorGeneralMetaRepositorio::getPacto1GLS($ind->id, $rq->anio);
-        $gl = IndicadorGeneralMetaRepositorio::getPacto1GL($ind->id, $rq->anio);
-
-        $pacto['DIT-SAL-01'] = [];
-        $pacto['DIT-SAL-01']['avance'] =  round(100 * ($gl > 0 ? $gls / $gl : 0));
-        $pacto['DIT-SAL-01']['actualizado'] = 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion));
-        $pacto['DIT-SAL-01']['meta'] = '100%';
-        $pacto['DIT-SAL-01']['cumple'] = $gls == $gl;
-
-        $pacto['DIT-SAL-02'] = [];
-        $pacto['DIT-SAL-02']['avance'] = rand(0, 100); //100 * ($gl > 0 ? $gls / $gl : 0);
-        $pacto['DIT-SAL-02']['actualizado'] = 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion));
-        $pacto['DIT-SAL-02']['meta'] = rand(0, 100);
-        $pacto['DIT-SAL-02']['cumple'] = rand(0, 1);
-
-        $pacto['DIT-SAL-03'] = [];
-        $pacto['DIT-SAL-03']['avance'] = rand(0, 100); //100 * ($gl > 0 ? $gls / $gl : 0);
-        $pacto['DIT-SAL-03']['actualizado'] = 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion));
-        $pacto['DIT-SAL-03']['meta'] = rand(0, 100);
-        $pacto['DIT-SAL-03']['cumple'] = rand(0, 1);
-
-        $pacto['DIT-SAL-04'] = [];
-        $pacto['DIT-SAL-04']['avance'] = rand(0, 100); //100 * ($gl > 0 ? $gls / $gl : 0);
-        $pacto['DIT-SAL-04']['actualizado'] = 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion));
-        $pacto['DIT-SAL-04']['meta'] = rand(0, 100);
-        $pacto['DIT-SAL-04']['cumple'] = rand(0, 1);
-
-        $pacto['DIT-SAL-05'] = [];
-        $pacto['DIT-SAL-05']['avance'] = rand(0, 100); //100 * ($gl > 0 ? $gls / $gl : 0);
-        $pacto['DIT-SAL-05']['actualizado'] = 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion));
-        $pacto['DIT-SAL-05']['meta'] = rand(0, 100);
-        $pacto['DIT-SAL-05']['cumple'] = rand(0, 1);
-
-        return response()->json(compact('pacto'));
-    }
-
     public function PactoRegionalActualizar(Request $rq)
     {
         $imp = null;
@@ -198,32 +150,32 @@ class IndicadoresController extends Controller
                 $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
                 break;
             case 'DIT-SAL-02':
-                // $ind = IndicadorGeneralRepositorio::findNoFichatecnicaCodigo($rq->codigo);
-                // $gls = IndicadorGeneralMetaRepositorio::getSalPacto2GLS($ind->id, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
-                // $gl = IndicadorGeneralMetaRepositorio::getSalPacto2GL($ind->id, $rq->anio, 0, $rq->provincia, $rq->distrito);
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_2']);
                 $base = IndicadorGeneralMetaRepositorio::getSalPacto2GLS2(0, $rq->anio, $imp->mes, $rq->provincia, $rq->distrito);
-                $gls = $base->si; // IndicadorGeneralMetaRepositorio::getSalPacto2GLS($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
-                $gl = $base->conteo; // IndicadorGeneralMetaRepositorio::getSalPacto2GL($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $gls = $base->si;
+                $gl = $base->conteo;
 
                 $num = number_format($gls, 0);
                 $den = number_format($gl, 0);
                 $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
                 break;
-                // case 'DIT-SAL-03':
-                //     $gls = 10;
-                //     $gl = 19;
-                //     $num = $gls;
-                //     $den = $gl;
-                //     $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
-                //     break;
-                // case 'DIT-SAL-04':
-                //     $gls = 0;
-                //     $gl = 0;
-                //     $num = $gls;
-                //     $den = $gl;
-                //     $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
-                //     break;
+            case 'DIT-SAL-03':
+                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_3']);
+                $base = CuboPacto3Repositorio::head($rq->anio, $imp->mes, $rq->provincia, $rq->distrito);
+                $gls = $base->si;
+                $gl = $base->conteo;
+
+                $num = $gls;
+                $den = $gl;
+                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
+                break;
+            case 'DIT-SAL-04':
+                $gls = 10;
+                $gl = 19;
+                $num = $gls;
+                $den = $gl;
+                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
+                break;
                 // case 'DIT-SAL-05':
                 //     $gls = 0;
                 //     $gl = 0;
@@ -231,20 +183,20 @@ class IndicadoresController extends Controller
                 //     $den = $gl;
                 //     $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
                 //     break;
-            case 'DIT-SAL-06':
-                $gls = 10;
-                $gl = 19;
-                $num = $gls;
-                $den = $gl;
-                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
-                break;
-            case 'DIT-SAL-07':
-                $gls = 60;
-                $gl = 100;
-                $num = $gls;
-                $den = $gl;
-                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
-                break;
+                // case 'DIT-SAL-06':
+                //     $gls = 10;
+                //     $gl = 19;
+                //     $num = $gls;
+                //     $den = $gl;
+                //     $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
+                //     break;
+                // case 'DIT-SAL-07':
+                //     $gls = 60;
+                //     $gl = 100;
+                //     $num = $gls;
+                //     $den = $gl;
+                //     $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
+                //     break;
             case 'DIT-EDU-01':
                 $gl = (int)PoblacionPNRepositorio::conteo3a5_acumulado($rq->anio, 9, $rq->provincia, $rq->distrito, 0);
                 $gls = CuboPacto1Repositorio::pacto1_matriculados($rq->anio, 9, $rq->provincia, $rq->distrito);
@@ -392,14 +344,13 @@ class IndicadoresController extends Controller
                 $aniomax = $imp->anio;
                 return view('salud.Indicadores.PactoRegionalSalPacto2', compact('actualizado', 'anio', 'provincia', 'aniomax', 'ind'));
             case 'DIT-SAL-03':
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_1']);
+                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_3']);
                 // return response()->json([$imp]);
                 $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
-                $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios($indicador_id); // Anio::orderBy('anio')->get();
-                $mes = Mes::all();
+                $anio = CuboPacto3PadronMaterno::distinct()->select('anio')->get();
                 $provincia = UbigeoRepositorio::provincia('25');
                 $aniomax = $imp->anio;
-                return view('salud.Indicadores.PactoRegionalSalPacto3', compact('actualizado', 'anio', 'mes', 'provincia', 'aniomax', 'ind'));
+                return view('salud.Indicadores.PactoRegionalSalPacto3', compact('actualizado', 'anio',  'provincia', 'aniomax', 'ind'));
                 // return '';
             case 'DIT-SAL-04':
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronPvicaController::$FUENTE);
@@ -876,6 +827,111 @@ class IndicadoresController extends Controller
     // ############ salud pacto 3 #################
 
     public function PactoRegionalSalPacto3Reports(Request $rq)
+    {
+        if ($rq->distrito > 0) $ndis = Ubigeo::find($rq->distrito)->nombre;
+        else $ndis = '';
+        $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($rq->fuente, $rq->anio, $rq->mes);
+        switch ($rq->div) {
+            case 'head':
+                $base = CuboPacto3Repositorio::head($rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $gln = $base->gl - $base->gls;
+
+                $ri = number_format($base->indicador, 1);
+                $gls = number_format($base->gls, 0);
+                $gln = number_format($base->gln, 0);
+                $gl = number_format($base->gl, 0);
+                return response()->json(['aa' => $rq->all(), 'ri' => $ri, 'gl' => $gl, 'gls' => $gls, 'gln' => $gln, 'base' => $base]);
+
+            case 'anal1':
+                $base = CuboPacto1PadronNominalRepositorio::pacto01Anal01($impMaxAnio, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $info = [];
+                foreach ($base as $key => $value) {
+                    $info['categoria'][] = $value->distrito;
+                    $info['serie'][] = ['y' => round($value->indicador, 1), 'color' => (round($value->indicador, 1) > 95 ? '#43beac' : (round($value->indicador, 1) > 50 ? '#eb960d' : '#ef5350'))];
+                }
+                return response()->json(compact('info'));
+
+            case 'anal2':
+                $base = CuboPacto1PadronNominalRepositorio::pacto01Anal02($impMaxAnio, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $base1 = collect($base['query'] ?? []);
+                $base1 = $base1->pluck('indicador', 'mes');
+                $mes = Mes::select('id', 'abreviado')->get();
+
+                $info = [];
+                foreach ($mes as $key => $value) {
+                    $info['cat'][] = $value->abreviado;
+                    $info['dat'][$key] = $base1[$value->id] ?? null;
+                    if ($info['dat'][$key] > 0) $info['dat'][$key] = (float)$info['dat'][$key];
+                }
+
+                return response()->json(compact('info', 'base1'));
+
+            case 'anal3': //lineas
+                $base = CuboPacto1PadronNominalRepositorio::pacto01Anal03($impMaxAnio, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $info['serie'] = [];
+                $info['serie'][0]['name'] = 'Cumplen';
+                $info['serie'][1]['name'] = 'No Cumplen';
+                foreach ($base as $key => $value) {
+                    $info['categoria'][] = $value->edades;
+                    // $info['serie'][$key]['data'] = [$value->si, $value->no];
+                    $info['serie'][0]['data'][] = (int)$value->si;
+                    $info['serie'][1]['data'][] = (int)$value->no;
+                }
+                return response()->json(compact('info', 'base'));
+
+            case 'tabla1':
+                $base = CuboPacto1PadronNominalRepositorio::pacto01Tabla01($impMaxAnio, $rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla1', compact('base', 'ndis'))->render();
+                return response()->json(compact('excel', 'base'));
+
+            case 'tabla2':
+                $draw = intval($rq->draw);
+                $start = intval($rq->start);
+                $length = intval($rq->length);
+
+                $query = CuboPacto1PadronNominal::where('importacion', $impMaxAnio);
+
+                $query = $query->whereIn('tipo_doc', ['DNI', 'CNV']);
+
+                if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
+
+                $recordsTotal = $query->count();
+                $recordsFiltered = $recordsTotal;
+
+                $query = $query->skip($start)->take($length)->get();
+
+                $query = $query->map(function ($item, $key) use ($start) {
+                    $item->item = $start + $key + 1;
+                    return $item;
+                });
+
+                $query->transform(function ($value) {
+                    $value->nacimiento = date('d/m/Y', strtotime($value->fecha_nacimiento));
+                    $value->ipress = str_pad($value->cui_atencion, 8, '0', STR_PAD_LEFT);
+                    $value->estado = $value->num == 1
+                        ? '<span class="badge badge-pill badge-success" style="font-size:90%;">CUMPLEN</span>'
+                        :  '<span class="badge badge-pill badge-danger" style="font-size:90%;">NO CUMPLEN</span>';
+                    return $value;
+                });
+
+                $result = [
+                    "draw" => $draw,
+                    "recordsTotal" => $recordsTotal,
+                    "recordsFiltered" => $recordsFiltered,
+                    "data" => $query,
+                    "input" => $rq->all(),
+                    "queries" => $query->toArray(),
+                ];
+
+                return response()->json($result);
+
+            default:
+                return [];
+        }
+    }
+
+    public function PactoRegionalSalPacto3Reports_anterior(Request $rq)
     {
         if ($rq->distrito > 0) $ndis = Ubigeo::find($rq->distrito)->nombre;
         else $ndis = '';

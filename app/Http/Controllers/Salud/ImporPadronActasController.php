@@ -12,6 +12,7 @@ use App\Models\Educacion\Importacion;
 use App\Models\Parametro\FuenteImportacion;
 use App\Models\Parametro\Mes;
 use App\Models\Parametro\Ubigeo;
+use App\Models\Salud\CuboPacto3PadronMaterno;
 use App\Models\Salud\DataPacto1;
 use App\Models\Salud\DataPacto3;
 use App\Models\Salud\ImporPadronActas;
@@ -270,7 +271,7 @@ class ImporPadronActasController extends Controller
 
                 break;
 
-            case ImporPadronActasController::$FUENTE['pacto_3']:
+            case 3333:
                 $existeMismaFecha = ImportacionRepositorio::Importacion_PE($rq->fechaActualizacion, $rq->fuente);
                 if ($existeMismaFecha != null) {
                     $mensaje = "Error, Ya existe archivos prendientes de aprobar para la fecha de versión ingresada";
@@ -296,10 +297,40 @@ class ImporPadronActasController extends Controller
                         foreach ($value as $celda => $row) {
                             if ($celda > 0) break;
                             $cadena =
-                                $row['cant'] .
-                                $row['distrito'] .
+                                $row['anio'] .
                                 $row['mes'] .
-                                $row['anio'];
+                                $row['num_doc'] .
+                                $row['fecha_parto'] .
+                                $row['semana_nac'] .
+                                $row['gest_37sem'] .
+                                $row['codigo_unico'] .
+                                $row['red'] .
+                                $row['microred'] .
+                                $row['eess_parto'] .
+                                $row['provincia'] .
+                                $row['ubigeo_distrito'] .
+                                $row['distrito'] .
+                                $row['denominador'] .
+                                $row['numerador'] .
+                                $row['num_exam_hb'] .
+                                $row['num_exam_sifilis'] .
+                                $row['num_exam_vih'] .
+                                $row['num_exam_bacteriuria'] .
+                                $row['num_perfil_obstetrico'] .
+                                $row['num_exam_aux'] .
+                                $row['num_apn1_1trim'] .
+                                $row['num_apn1_2trim'] .
+                                $row['num_apn2_2trim'] .
+                                $row['num_apn1_3trim'] .
+                                $row['num_apn2_3trim'] .
+                                $row['num_apn3_3trim'] .
+                                $row['num_apn'] .
+                                $row['num_entrega1_sfaf'] .
+                                $row['num_entrega2_sfaf'] .
+                                $row['num_entrega3_sfaf'] .
+                                $row['num_entrega4_sfaf'] .
+                                $row['num_entrega5_sfaf'] .
+                                $row['num_entrega_sfaf'];
                         }
                     }
                 } catch (Exception $e) {
@@ -317,12 +348,42 @@ class ImporPadronActasController extends Controller
 
                     foreach ($array as $key => $value) {
                         foreach ($value as $row) {
-                            DataPacto3::Create([
+                            CuboPacto3PadronMaterno::Create([
                                 'importacion_id' => $importacion->id,
-                                'cantidad' => $row['cant'],
-                                'distrito' => $row['distrito'],
-                                'mes' => $row['mes'],
                                 'anio' => $row['anio'],
+                                'mes' => $row['mes'],
+                                'num_doc' => $row['num_doc'],
+                                'fecha_parto' => $row['fecha_parto'],
+                                'semana_nac' => $row['semana_nac'],
+                                'gest_37sem' => $row['gest_37sem'],
+                                'codigo_unico' => $row['codigo_unico'],
+                                'red' => $row['red'],
+                                'microred' => $row['microred'],
+                                'eess_parto' => $row['eess_parto'],
+                                'provincia' => $row['provincia'],
+                                'ubigeo_distrito' => $row['ubigeo_distrito'],
+                                'distrito' => $row['distrito'],
+                                'denominador' => $row['denominador'],
+                                'numerador' => $row['numerador'],
+                                'num_exam_hb' => $row['num_exam_hb'],
+                                'num_exam_sifilis' => $row['num_exam_sifilis'],
+                                'num_exam_vih' => $row['num_exam_vih'],
+                                'num_exam_bacteriuria' => $row['num_exam_bacteriuria'],
+                                'num_perfil_obstetrico' => $row['num_perfil_obstetrico'],
+                                'num_exam_aux' => $row['num_exam_aux'],
+                                'num_apn1_1trim' => $row['num_apn1_1trim'],
+                                'num_apn1_2trim' => $row['num_apn1_2trim'],
+                                'num_apn2_2trim' => $row['num_apn2_2trim'],
+                                'num_apn1_3trim' => $row['num_apn1_3trim'],
+                                'num_apn2_3trim' => $row['num_apn2_3trim'],
+                                'num_apn3_3trim' => $row['num_apn3_3trim'],
+                                'num_apn' => $row['num_apn'],
+                                'num_entrega1_sfaf' => $row['num_entrega1_sfaf'],
+                                'num_entrega2_sfaf' => $row['num_entrega2_sfaf'],
+                                'num_entrega3_sfaf' => $row['num_entrega3_sfaf'],
+                                'num_entrega4_sfaf' => $row['num_entrega4_sfaf'],
+                                'num_entrega5_sfaf' => $row['num_entrega5_sfaf'],
+                                'num_entrega_sfaf' => $row['num_entrega_sfaf']
                             ]);
                         }
                     }
@@ -346,6 +407,159 @@ class ImporPadronActasController extends Controller
 
                 break;
 
+            case ImporPadronActasController::$FUENTE['pacto_3']:
+
+                if (ImportacionRepositorio::Importacion_PE($rq->fechaActualizacion, ImporPadronActasController::$FUENTE['pacto_3']) !== null) {
+                    return $this->json_output(400, "Error, ya existe un archivo pendiente de aprobación para la fecha ingresada");
+                }
+
+                if (ImportacionRepositorio::Importacion_PR($rq->fechaActualizacion, ImporPadronActasController::$FUENTE['pacto_3']) !== null) {
+                    return $this->json_output(400, "Error, ya existe un archivo procesado para la fecha ingresada");
+                }
+
+                $this->validate($rq, ['file' => 'required|mimes:xls,xlsx']);
+                $archivo = $rq->file('file');
+                $array = (new tablaXImport)->toArray($archivo);
+
+                $encabezadosEsperados = [
+                    'anio',
+                    'mes',
+                    'num_doc',
+                    'fecha_parto',
+                    'semana_nac',
+                    'gest_37sem',
+                    'codigo_unico',
+                    'red',
+                    'microred',
+                    'eess_parto',
+                    'provincia',
+                    'ubigeo_distrito',
+                    'distrito',
+                    'denominador',
+                    'numerador',
+                    'num_exam_hb',
+                    'num_exam_sifilis',
+                    'num_exam_vih',
+                    'num_exam_bacteriuria',
+                    'num_perfil_obstetrico',
+                    'num_exam_aux',
+                    'num_apn1_1trim',
+                    'num_apn1_2trim',
+                    'num_apn2_2trim',
+                    'num_apn1_3trim',
+                    'num_apn2_3trim',
+                    'num_apn3_3trim',
+                    'num_apn',
+                    'num_entrega1_sfaf',
+                    'num_entrega2_sfaf',
+                    'num_entrega3_sfaf',
+                    'num_entrega4_sfaf',
+                    'num_entrega5_sfaf',
+                    'num_entrega_sfaf'
+                ];
+
+                $encabezadosArchivo = array_keys($array[0][0]);
+
+                $faltantes = array_diff($encabezadosEsperados, $encabezadosArchivo);
+                if (!empty($faltantes)) {
+                    return $this->json_output(400, 'Error: Los encabezados del archivo no coinciden con el formato esperado. Faltan columnas esperadas.', $faltantes);
+                }
+
+                try {
+                    DB::beginTransaction(); 
+
+                    $importacion = Importacion::create([
+                        'fuenteImportacion_id' => ImporPadronActasController::$FUENTE['pacto_3'],
+                        'usuarioId_Crea' => auth()->user()->id,
+                        'fechaActualizacion' => $rq->fechaActualizacion,
+                        'estado' => 'PR'
+                    ]);
+
+                    $batchSize = 500; 
+                    $dataBatch = [];
+
+                    foreach ($array[0] as $row) {
+                        $dataBatch[] = [
+                            'importacion_id' => $importacion->id,
+                            'anio' => $row['anio'],
+                            'mes' => $row['mes'],
+                            'num_doc' => $row['num_doc'],
+                            'fecha_parto' => $row['fecha_parto'],
+                            'semana_nac' => $row['semana_nac'],
+                            'gest_37sem' => $row['gest_37sem'],
+                            'codigo_unico' => $row['codigo_unico'],
+                            'red' => $row['red'],
+                            'microred' => $row['microred'],
+                            'eess_parto' => $row['eess_parto'],
+                            'provincia' => $row['provincia'],
+                            'ubigeo_distrito' => $row['ubigeo_distrito'],
+                            'distrito' => $row['distrito'],
+                            'denominador' => $row['denominador'],
+                            'numerador' => $row['numerador'],
+                            'num_exam_hb' => $row['num_exam_hb'],
+                            'num_exam_sifilis' => $row['num_exam_sifilis'],
+                            'num_exam_vih' => $row['num_exam_vih'],
+                            'num_exam_bacteriuria' => $row['num_exam_bacteriuria'],
+                            'num_perfil_obstetrico' => $row['num_perfil_obstetrico'],
+                            'num_exam_aux' => $row['num_exam_aux'],
+                            'num_apn1_1trim' => $row['num_apn1_1trim'],
+                            'num_apn1_2trim' => $row['num_apn1_2trim'],
+                            'num_apn2_2trim' => $row['num_apn2_2trim'],
+                            'num_apn1_3trim' => $row['num_apn1_3trim'],
+                            'num_apn2_3trim' => $row['num_apn2_3trim'],
+                            'num_apn3_3trim' => $row['num_apn3_3trim'],
+                            'num_apn' => $row['num_apn'],
+                            'num_entrega1_sfaf' => $row['num_entrega1_sfaf'],
+                            'num_entrega2_sfaf' => $row['num_entrega2_sfaf'],
+                            'num_entrega3_sfaf' => $row['num_entrega3_sfaf'],
+                            'num_entrega4_sfaf' => $row['num_entrega4_sfaf'],
+                            'num_entrega5_sfaf' => $row['num_entrega5_sfaf'],
+                            'num_entrega_sfaf' => $row['num_entrega_sfaf']
+                        ];
+
+                        if (count($dataBatch) >= $batchSize) {
+                            CuboPacto3PadronMaterno::insert($dataBatch);
+                            $dataBatch = [];
+                        }
+                    }
+
+                    if (!empty($dataBatch)) {
+                        CuboPacto3PadronMaterno::insert($dataBatch);
+                    }
+
+                    DB::commit();
+                } catch (Exception $e) {
+                    DB::rollBack();
+                    $importacion->estado = 'PE';
+                    $importacion->save();
+
+                    return $this->json_output(400, "Error en la carga de datos: " . $e->getMessage());
+                }
+
+                // try {
+                //     DB::select('call sal_pa_procesarControlCalidadColumnas(?)', [$importacion->id]);
+                // } catch (Exception $e) {
+                //     // Si ocurre un error, actualizar el estado a 'PE' (pendiente) si es necesario
+                //     $importacion->estado = 'PE';
+                //     $importacion->save();
+
+                //     $mensaje = "Error al procesar la normalizacion de datos sal_pa_procesarControlCalidadColumnas. " . $e->getMessage();
+                //     return $this->json_output(400, $mensaje);
+                // }
+
+                // try {
+                //     DB::select('call sal_pa_procesarCalidadReporte(?)', [$importacion->id]);
+                // } catch (Exception $e) {
+                //     // Si ocurre un error, actualizar el estado a 'PE' (pendiente) si es necesario
+                //     $importacion->estado = 'PE';
+                //     $importacion->save();
+
+                //     $mensaje = "Error al procesar la normalizacion de datos sal_pa_procesarCalidadReporte. " . $e->getMessage();
+                //     return $this->json_output(400, $mensaje);
+                // }
+
+                $this->json_output(200, "Archivo Excel subido y procesado correctamente.");
+                break;
             default:
                 break;
         }

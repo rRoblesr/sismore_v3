@@ -6,87 +6,150 @@
     {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"> --}}
 @endsection
 @section('content')
-    <div class="content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">FILTRO</h3>
+                </div>
+                <div class="card-body">
+                    <form class="form-horizontal" id="form-filtro">
+                        {{-- @csrf --}}
 
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">FILTRO</h3>
-                    </div>
-                    <div class="card-body">
-                        <form class="form-horizontal" id="form-filtro">
-                            {{-- @csrf --}}
-
-                            <div class="form">
-                                <div class="form-group row">
-                                    <div class="col-md-6">
-                                        <label class=" col-form-label">SISTEMA</label>
-                                        <div class="">
-                                            <select class="form-control" name="sistema" id="sistema"
-                                                onchange="cargarfuenteimportacion()">
-                                                <option value="1">EDUCACION</option>
-                                                <option value="2">VIVIENDA</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="col-form-label">FUENTE DE IMPORTACION</label>
-                                        <div class="">
-                                            <select class="form-control" name="fuenteimportacion" id="fuenteimportacion"
-                                                onchange="listarimportados()"></select>
-                                        </div>
+                        <div class="form">
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <label class=" col-form-label">SISTEMA</label>
+                                    <div class="">
+                                        <select class="form-control" name="sistema" id="sistema"
+                                            onchange="cargarfuenteimportacion()">
+                                            <option value="1">EDUCACION</option>
+                                            <option value="2">VIVIENDA</option>
+                                        </select>
                                     </div>
                                 </div>
-                            </div>
-                        </form>
-                    </div>
-                    <!-- card-body -->
-                </div>
-                <!-- card -->
-            </div>
-            <!-- col -->
-        </div>
-        <!-- End row -->
-
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">HISTORIAL DE IMPORTACION </h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="table-responsive">
-                                    <table id="datatable" class="table table-striped table-bordered dt-responsive nowrap">
-                                        <thead class="text-primary">
-                                            <tr>
-                                                <th>N°</th>
-                                                <th>Fecha Version</th>
-                                                <th>Fuente</th>
-                                                <th>Usuario</th>
-                                                <th>Registro</th>
-                                                <th>Comentario</th>
-                                                <th>Estado</th>
-                                                <th>Accion</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
+                                <div class="col-md-6">
+                                    <label class="col-form-label">FUENTE DE IMPORTACION</label>
+                                    <div class="">
+                                        <select class="form-control" name="fuenteimportacion" id="fuenteimportacion"
+                                            onchange="listarimportados()"></select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </form>
+                </div>
+                <!-- card-body -->
+            </div>
+            <!-- card -->
+        </div>
+        <!-- col -->
+    </div>
+    <!-- End row -->
 
-
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">HISTORIAL DE IMPORTACION </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table id="datatable" class="table table-striped table-bordered dt-responsive nowrap">
+                                    <thead class="text-primary">
+                                        <tr>
+                                            <th>N°</th>
+                                            <th>Fecha Version</th>
+                                            <th>Fuente</th>
+                                            <th>Usuario</th>
+                                            <th>Registro</th>
+                                            <th>Comentario</th>
+                                            <th>Estado</th>
+                                            <th>Accion</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                    <!-- card-body -->
+
 
                 </div>
+                <!-- card-body -->
 
-            </div> <!-- End col -->
-        </div> <!-- End row -->
+            </div>
 
-    </div>
+        </div> <!-- End col -->
+    </div> <!-- End row -->
+    @if (auth()->user()->id == 49)
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">List Groups</h3>
+                    </div>
+                    <div class="card-body">
+                        {{-- <div class="row">
+                        <div class="col-lg-6">
+                            <div>
+                                <h6 class="mt-0">Simple List Group</h6>
+                                <ul class="list-group">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Cras justo odio
+                                        <span class="badge badge-primary badge-pill">14</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Dapibus ac facilisis in
+                                        <span class="badge badge-danger badge-pill">25</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Morbi leo risus
+                                        <span class="badge badge-warning badge-pill">5</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Morbi leo risus
+                                        <span class="badge badge-dark badge-pill">9</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Morbi leo risus
+                                        <span class="badge badge-success badge-pill">10</span>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div> --}}
+
+                        <div class="col-lg-12">
+                            <div class="mt-4 mt-lg-0">
+                                <h6 class="mt-0">List Group with Links</h6>
+                                <div class="list-group">
+                                    <a href="{{ route('mantenimiento.fuenteimportacion.principal') }}"
+                                        class="list-group-item list-group-item-action active">
+                                        Mantenimiento de fuente de importacion
+                                    </a>
+
+                                    <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis
+                                        in</a>
+                                    <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
+                                    <a href="#" class="list-group-item list-group-item-action disabled">Porta ac
+                                        consectetur ac</a>
+                                    <a href="#" class="list-group-item list-group-item-action">Vestibulum at eros</a>
+
+                                </div>
+                                <!-- list-group -->
+                            </div>
+                        </div>
+                        <!-- col -->
+                    </div>
+                    <!-- end row -->
+                </div>
+                <!-- card-body -->
+            </div>
+            <!-- card -->
+        </div>
+    @endif
 @endsection
 
 @section('js')

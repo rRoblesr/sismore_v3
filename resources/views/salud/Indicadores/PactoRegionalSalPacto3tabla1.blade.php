@@ -17,10 +17,10 @@
                 <tr class="text-center {{ $item->distrito == $ndis ? 'table-warning' : '' }}">
                     <td>{{ $key + 1 }}</td>
                     <td class="text-left">{{ $item->distrito }}</td>
-                    <td>{{ $item->valor }}%</td>
-                    <td>{{ $item->avance }}</td>
-                    <td>{{ $item->meta }}</td>
-                    <td>{!! avance($item->ind) !!}</td>
+                    <td class="table-warning">{{ $item->meta }} %</td>
+                    <td>{{ number_format($item->numerador, 0) }}</td>
+                    <td>{{ number_format($item->denominador, 0) }}</td>
+                    <td>{!! avance($item->indicador) !!}</td>
                     <td>
                         @if ($item->cumple == 1)
                             <i class="mdi mdi-thumb-up" style="font-size:13px;color:#43beac" title="CUMPLE"></i>
@@ -52,21 +52,23 @@
 
 
 @php
+
     function avance($monto)
     {
+        $roundedMonto = round($monto, 1); // Redondear una sola vez
+        $badgeClass = '';
         if ($monto < 51) {
-            return '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px">' .
-                round($monto, 1) .
-                '%</span>';
-        } elseif ($monto < 100) {
-            return '<span class="badge badge-pill badge-warning" style="font-size:90%; width:50px">' .
-                round($monto, 1) .
-                '%</span>';
+            $badgeClass = 'badge-danger';
+        } elseif ($monto < 95) {
+            $badgeClass = 'badge-orange-x';
         } else {
-            return '<span class="badge badge-pill badge-success" style="font-size:90%; width:50px">' .
-                round($monto, 1) .
-                '%</span>';
+            $badgeClass = 'badge-success';
         }
+        return '<span class="badge badge-pill ' .
+            $badgeClass .
+            '" style="font-size:90%; width:50px;">' .
+            $roundedMonto .
+            '%</span>';
     }
     function bajas($monto)
     {

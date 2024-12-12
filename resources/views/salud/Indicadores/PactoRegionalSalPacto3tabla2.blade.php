@@ -33,22 +33,21 @@
                     <td class="text-left">{{ $item->dis }}</td>
                     <td>{{ $item->anio_base }}</td>
                     <td>{{ $item->valor_base }}</td>
-                    <td>{{ $item->v2023 }}%</td>
-                    <td>{{ $item->v2024 }}%</td>
-                    <td>{{ esperado($item->v2025, 2025) }}</td>
-                    <td>{{ esperado($item->v2026, 2026) }}</td>
-                    <td>{{ obtenido($item->r2023, 2023) }}</td>
-                    <td>{{ obtenido($item->r2024, 2024) }}</td>
-                    <td>{{ obtenido($item->r2025, 2025) }}</td>
-                    <td>{{ obtenido($item->r2026, 2026) }}</td>
+                    <td>{{ $item->v2023 }}</td>
+                    <td>{{ $item->v2024 }}</td>
+                    <td>{{ $item->v2025 }}</td>
+                    <td>{{ $item->v2026 }}</td>
+                    <td>{{ $item->r2023 }}</td>
+                    <td>{{ $item->r2024 }}</td>
+                    <td>{{ $item->r2025 }}</td>
+                    <td>{{ $item->r2026 }}</td>
                     <td>{!! avance($item->avance) !!}</td>{{--  --}}
                     <td>
                         @if ($item->cumple == 1)
                             <button type="button"
                                 class="btn btn-xs btn-success-0 p-1 font-11 text-nowrap">&nbsp;&nbsp;&nbsp;Cumple&nbsp;&nbsp;&nbsp;</button>
                         @else
-                            <button type="button" class="btn btn-xs btn-danger p-1 font-11 text-nowrap">No
-                                Cumple</button>
+                            <button type="button" class="btn btn-xs btn-danger p-1 font-11 text-nowrap">No Cumple</button>
                         @endif
                     </td>
                 </tr>
@@ -79,15 +78,15 @@
     {
         if ($monto < 51) {
             return '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px">' .
-                round($monto, 0) .
+                round($monto, 1) .
                 '%</span>';
         } elseif ($monto < 100) {
             return '<span class="badge badge-pill badge-warning" style="font-size:90%; width:50px">' .
-                round($monto, 0) .
+                round($monto, 1) .
                 '%</span>';
         } else {
             return '<span class="badge badge-pill badge-success" style="font-size:90%; width:50px">' .
-                round($monto, 0) .
+                round($monto, 1) .
                 '%</span>';
         }
     }
@@ -97,23 +96,6 @@
             return '<span class="badge badge-pill badge-danger" style="font-size:85%;">' . round($monto, 0) . '</span>';
         } else {
             return number_format($monto);
-        }
-    }
-    function esperado($monto, $anio)
-    {
-        if ($anio <= date('Y')) {
-            return number_format($monto, 0).'%';
-        } else {
-            return '-';
-        }
-    }
-
-    function obtenido($monto, $anio)
-    {
-        if ($anio <= date('Y')) {
-            return number_format($monto, 0).'%';
-        } else {
-            return '-';
         }
     }
 @endphp

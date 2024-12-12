@@ -354,11 +354,11 @@
         function cargarpacto1() {
             cargarActualizar('DIT-SAL-01');
             cargarActualizar('DIT-SAL-02');
-            // cargarActualizar('DIT-SAL-03');
-            // cargarActualizar('DIT-SAL-04');
+            cargarActualizar('DIT-SAL-03');
+            cargarActualizar('DIT-SAL-04');
             // cargarActualizar('DIT-SAL-05');
-            cargarActualizar('DIT-SAL-06');
-            cargarActualizar('DIT-SAL-07');
+            // cargarActualizar('DIT-SAL-06');
+            // cargarActualizar('DIT-SAL-07');
 
             // cargarActualizar('DIT-EDU-01');
             // cargarActualizar('DIT-EDU-02');

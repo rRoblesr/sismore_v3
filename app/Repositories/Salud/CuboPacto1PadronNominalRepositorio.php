@@ -84,9 +84,9 @@ class CuboPacto1PadronNominalRepositorio
     {
         $query = CuboPacto1PadronNominal::select(
             DB::raw('case when tipo_edad in("D","M") then 1 when tipo_edad="A" AND edad=1 then 2 else edad+1 end as xid'),
-            DB::raw('case when tipo_edad in("D","M") then "MENOR DE 1 AÑO" when tipo_edad="A" AND edad=1 then "1 AÑO" else concat(edad," AÑOS") end as edades'),
+            DB::raw('case when tipo_edad in("D","M") then "< 1 AÑO" when tipo_edad="A" AND edad=1 then "1 AÑO" else concat(edad," AÑOS") end as edades'),
             DB::raw('sum(num) as si'),
-            DB::raw('sum(den) as no')
+            DB::raw('sum(den)-sum(num) as no')
         )->where('importacion', $importacion);
         $query = $query->whereIn('tipo_doc', ['DNI', 'CNV']);
         if ($provincia > 0) $query = $query->where('provincia_id', $provincia);

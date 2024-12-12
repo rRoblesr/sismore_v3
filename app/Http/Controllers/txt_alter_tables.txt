@@ -2512,5 +2512,70 @@ ALTER TABLE `sal_cubo_pacto1_padron_nominal` ADD `distrito` VARCHAR(50) NULL DEF
 ALTER TABLE `sal_cubo_pacto1_padron_nominal` ADD `lengua_madre` VARCHAR(100) NULL DEFAULT NULL AFTER `nombre_completo_madre`;
 
 
+CREATE TABLE `sal_cubo_pacto3_padron_materno` (
+    id int(11) auto_increment primary key,
+    importacion_id int(11) NULL DEFAULT NULL,
+				anio int(11) NULL DEFAULT NULL,
+				mes int(11) NULL DEFAULT NULL,
+				num_doc varchar(10) NULL DEFAULT NULL,
+				fecha_parto varchar(10) NULL DEFAULT NULL,
+				semana_nac int(11) NULL DEFAULT NULL,
+				gest_37sem int(11) NULL DEFAULT NULL,
+				codigo_unico int(11) NULL DEFAULT NULL,
+				red varchar(100) NULL DEFAULT NULL,
+				microred varchar(100) NULL DEFAULT NULL,
+				eess_parto varchar(100) NULL DEFAULT NULL,
+				provincia varchar(100) NULL DEFAULT NULL,
+				ubigeo_distrito varchar(6) NULL DEFAULT NULL,
+				distrito varchar(100) NULL DEFAULT NULL,
+				denominador int(11) NULL DEFAULT NULL,
+				numerador int(11) NULL DEFAULT NULL,
+				num_exam_hb int(11) NULL DEFAULT NULL,
+				num_exam_sifilis int(11) NULL DEFAULT NULL,
+				num_exam_vih int(11) NULL DEFAULT NULL,
+				num_exam_bacteriuria int(11) NULL DEFAULT NULL,
+				num_perfil_obstetrico int(11) NULL DEFAULT NULL,
+				num_exam_aux int(11) NULL DEFAULT NULL,
+				num_apn1_1trim int(11) NULL DEFAULT NULL,
+				num_apn1_2trim int(11) NULL DEFAULT NULL,
+				num_apn2_2trim int(11) NULL DEFAULT NULL,
+				num_apn1_3trim int(11) NULL DEFAULT NULL,
+				num_apn2_3trim int(11) NULL DEFAULT NULL,
+				num_apn3_3trim int(11) NULL DEFAULT NULL,
+				num_apn int(11) NULL DEFAULT NULL,
+				num_entrega1_sfaf int(11) NULL DEFAULT NULL,
+				num_entrega2_sfaf int(11) NULL DEFAULT NULL,
+				num_entrega3_sfaf int(11) NULL DEFAULT NULL,
+				num_entrega4_sfaf int(11) NULL DEFAULT NULL,
+				num_entrega5_sfaf int(11) NULL DEFAULT NULL,
+				num_entrega_sfaf int(11) NULL DEFAULT NULL,
+				foreign key(importacion_id) references par_importacion(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+
+INSERT INTO `par_indicador_general_meta` (`indicadorgeneral`, `periodo`, `distrito`, `anio_base`, `valor_base`, `anio`, `valor`, `created_at`, `updated_at`) VALUES
+( 37, '', 36, 2022, '0', 2024, '87.7', '2024-11-12 16:31:31', '2024-11-12 16:31:31'),
+( 37, '', 37, 2022, '0', 2024, '92.7', '2024-11-12 16:31:31', '2024-11-12 16:31:31'),
+( 37, '', 38, 2022, '0', 2024, '96.3', '2024-11-12 16:31:31', '2024-11-12 16:31:31'),
+( 37, '', 39, 2022, '0', 2024, '89.7', '2024-11-12 16:31:31', '2024-11-12 16:31:31'),
+( 37, '', 40, 2022, '0', 2024, '62.4', '2024-11-12 16:31:31', '2024-11-12 16:31:31'),
+( 37, '', 41, 2022, '0', 2024, '78.6', '2024-11-12 16:31:31', '2024-11-12 16:31:31'),
+( 37, '', 42, 2022, '0', 2024, '84.1', '2024-11-12 16:31:31', '2024-11-12 16:31:31'),
+( 37, '', 44, 2022, '0', 2024, '86.0', '2024-11-12 16:31:31', '2024-11-12 16:31:31'),
+( 37, '', 45, 2022, '0', 2024, '74.6', '2024-11-12 16:31:31', '2024-11-12 16:31:31'),
+( 37, '', 46, 2022, '0', 2024, '85.3', '2024-11-12 16:31:31', '2024-11-12 16:31:31'),
+( 37, '', 47, 2022, '0', 2024, '38.6', '2024-11-12 16:31:31', '2024-11-12 16:31:31'),
+( 37, '', 49, 2022, '0', 2024, '82.4', '2024-11-12 16:31:31', '2024-11-12 16:31:31'),
+( 37, '', 50, 2022, '0', 2024, '78.7', '2024-11-12 16:31:31', '2024-11-12 16:31:31'),
+( 37, '', 51, 2022, '0', 2024, '78.2', '2024-11-12 16:31:31', '2024-11-12 16:31:31'),
+( 37, '', 52, 2022, '0', 2024, '44.5', '2024-11-12 16:31:31', '2024-11-12 16:31:31'),
+( 37, '', 53, 2022, '0', 2024, '63.6', '2024-11-12 16:31:31', '2024-11-12 16:31:31'),
+( 37, '', 56, 2022, '0', 2024, '94.0', '2024-11-12 16:31:31', '2024-11-12 16:31:31'),
+( 37, '', 57, 2022, '0', 2024, '93.3', '2024-11-12 16:31:31', '2024-11-12 16:31:31'),
+( 37, '', 55, 2022, '0', 2024, '84.0', '2024-11-12 16:31:31', '2024-11-12 16:31:31');
+
+
+
+
+
 
 
