@@ -2552,6 +2552,9 @@ CREATE TABLE `sal_cubo_pacto3_padron_materno` (
 				foreign key(importacion_id) references par_importacion(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 
+ALTER TABLE `sal_cubo_pacto3_padron_materno` ADD `didstrito_id` INT NULL DEFAULT NULL AFTER `distrito`, ADD `provincia_id` INT NULL DEFAULT NULL AFTER `didstrito_id`;
+
+
 INSERT INTO `par_indicador_general_meta` (`indicadorgeneral`, `periodo`, `distrito`, `anio_base`, `valor_base`, `anio`, `valor`, `created_at`, `updated_at`) VALUES
 ( 37, '', 36, 2022, '0', 2024, '87.7', '2024-11-12 16:31:31', '2024-11-12 16:31:31'),
 ( 37, '', 37, 2022, '0', 2024, '92.7', '2024-11-12 16:31:31', '2024-11-12 16:31:31'),

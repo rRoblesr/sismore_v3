@@ -1821,6 +1821,37 @@ class PadronNominalController extends Controller
         return  $data;
     }
 
+    public function tablerocalidadcriteriofind3($fuente, $anio, $mes, $documento)
+    {
+        $importacion = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio, $mes);
+        $seguro = [0 => 'NINGUNO', 1 => 'SIS', 2 => 'ESSALUD', 3 => 'SANIDAD', 4 => 'PRIVADO'];
+        $programa = [0 => 'NINGUNO', 1 => 'PIN', 2 => 'PVL', 4 => 'JUNTOS', 5 => 'QALIWARMA', 7 => 'CUNA+ SCD', 8 => 'CUNA+ SAF'];
+        $data = CalidadCriterio::where('importacion_id', $importacion)->where('num_doc', $documento)->first();
+        // dd($importacion, $documento);
+        $data->centro_poblado_nombre = !empty($data->centro_poblado_nombre) ? explode(', ', $data->centro_poblado_nombre)[0] : null;
+        $data->seguro = $seguro[$data->seguro_id] ?? 'NINGUNO';
+        $programaaux = null;
+        if (!empty($data->programa_social)) {
+            $programaIds = explode(',', trim($data->programa_social, ','));
+            $programaaux = array_map(function ($id) use ($programa) {
+                return isset($programa[$id]) ? $programa[$id] : null;
+            }, $programaIds);
+
+            $programaaux = implode(', ', array_filter($programaaux));
+        } else {
+            $programaaux = 'NINGUNO'; // Asignar null si programax está vacío
+        }
+        $data->programa_social = $programaaux;
+        $data->fecha_nacimiento = date('d/m/Y', strtotime($data->fecha_nacimiento));
+        $data->visita = $data->visita == 1 ? 'SI' : 'NO';
+        $data->menor_encontrado = $data->menor_encontrado == 1 ? 'SI' : 'NO';
+        $data->cui_atencion = $data->establecimiento_id > 0 ? Establecimiento::find($data->establecimiento_id)->nombre_establecimiento : 'NINGUNO';
+        $data->distrito = $data->distrito_id > 0 ? Ubigeo::find($data->distrito_id)->nombre : '';
+        $data->provincia = $data->provincia_id > 0 ? Ubigeo::find($data->provincia_id)->nombre : '';
+        $data->departamento = 'UCAYALI';
+        return  $data;
+    }
+
     public function tablerocalidadcriteriodownload($div, $importacion, $criterio, $edades, $provincia, $distrito)
     {
         $name = DB::table('sal_calidad_criterio_nombres')->where('id', $criterio)->first()->nombre . '.xlsx';

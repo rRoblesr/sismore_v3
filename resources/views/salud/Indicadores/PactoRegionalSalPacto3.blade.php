@@ -301,12 +301,12 @@
             panelGraficas('anal3');
             panelGraficas('tabla1');
             // panelGraficas('tabla2');
-            tabla2('tabla2');
+            // tabla2('tabla2');
         }
 
         function panelGraficas(div) {
             $.ajax({
-                url: "{{ route('salud.indicador.pactoregional.detalle.reports') }}",
+                url: "{{ route('salud.indicador.pactoregional.sal.pacto3.reports') }}",
                 data: {
                     'div': div,
                     "anio": $('#anio').val(),
@@ -380,7 +380,7 @@
                 language: table_language,
                 destroy: true,
                 ajax: {
-                    url: "{{ route('salud.indicador.pactoregional.detalle.reports.2') }}",
+                    url: "{{ route('salud.indicador.pactoregional.sal.pacto3.reports') }}",
                     type: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -490,7 +490,7 @@
 
         function cargarMes() {
             $.ajax({
-                url: "{{ route('importacion.listar.mes', ['fuente' => 'fuente', 'anio' => 'anio']) }}"
+                url: "{{ route('salud.indicador.pactoregional.sal.pacto3.find.mes', ['anio' => 'anio']) }}"
                     .replace('anio', $('#anio').val()),
                 type: 'GET',
                 success: function(data) {
@@ -499,9 +499,10 @@
                     var ultimovalor = data.length > 0 ? data[data.length - 1].mes_id : null;
                     $.each(data, function(index, value) {
                         ss = (value.mes_id === ultimovalor ? "selected" : "");
-                        options += `<option value='${value.mes_id}' ${ss}>${value.mes}</option>`;
+                        options += `<option value='${value.id}' ${ss}>${value.mes}</option>`;
                     });
                     $("#mes").append(options);
+                    cargarcuadros();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);

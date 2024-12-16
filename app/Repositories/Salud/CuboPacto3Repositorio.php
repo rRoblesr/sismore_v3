@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Salud;
 
+use App\Models\Parametro\IndicadorGeneralMeta;
 use App\Models\Salud\CuboPacto3PadronMaterno;
 use Illuminate\Support\Facades\DB;
 
@@ -24,47 +25,59 @@ class CuboPacto3Repositorio
         return $query;
     }
 
-    public static function getEduPacto2anal1($anio, $mes, $provincia, $distrito, $estado)
+    public static function Tabla01($importacion, $indicador, $anio, $mes, $provincia, $distrito)
     {
-        $query = DB::table('edu_cubo_pacto02_local')->select(
-            'provincia',
-            DB::raw('count(local) as conteo'),
-            DB::raw('sum(if(estado=1,1,0)) as si'),
-            DB::raw('sum(if(estado!=1,1,0)) as no'),
-        ); //->where(DB::raw('year(fecha_inscripcion)'), $anio);
+        $v1 = CuboPacto3PadronMaterno::select(
+            'distrito_id',
+            'distrito',
+            DB::raw('sum(numerador) as numerador'),
+            DB::raw('sum(denominador) as denominador'),
+            DB::raw('100*sum(numerador)/sum(denominador) as indicador')
+        )->where('anio', $anio)->where('mes', '<=', $mes);
+        $v1 = $v1->groupBy('distrito_id', 'distrito')->orderBy('indicador', 'desc')->get();
+        $v3 = IndicadorGeneralMeta::where('indicadorgeneral', $indicador)->where('anio', $anio)->pluck('valor', 'distrito');
 
-        if ($mes > 0) $query = $query->where(DB::raw('month(fecha_inscripcion)'), $mes);
-        if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
-        if ($distrito > 0) $query = $query->where('distrito_id', $distrito);
-        if ($estado > 0) $query = $query->where('estado', $estado);
+        foreach ($v1 as $key => $value) {
+            $value->meta = $v3[$value->distrito_id] ?? 0;
+            $value->cumple = $value->indicador >= $value->meta ? 1 : 0;
+        }
+        return $v1;
+    }
 
-        $query = $query->groupBy('provincia')->get();
+    public static function Anal01($importacion, $anio, $mes, $provincia, $distrito)
+    {
+        $query = CuboPacto3PadronMaterno::select('distrito', DB::raw('100*sum(numerador)/sum(denominador) as indicador'))->where('anio', $anio)->where('mes', '<=', $mes);
+        // if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
+        // if ($distrito > 0) $query = $query->where('distrito_id', $distrito);
+        $query = $query->groupBy('distrito')->orderBy('indicador', 'desc')->get();
         return $query;
     }
 
-    public static function getEduPacto2tabla1($anio, $mes, $provincia, $distrito, $estado)
+
+    public static function Anal02($importacion, $anio, $mes, $provincia, $distrito)
     {
-        $query = DB::table('edu_cubo_pacto02_local')->select('distrito', DB::raw('count(local) as conteo'))->where(DB::raw('year(fecha_inscripcion)'), $anio);
-
-        if ($mes > 0) $query = $query->where(DB::raw('month(fecha_inscripcion)'), '<=', $mes);
-        if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
-        if ($distrito > 0) $query = $query->where('distrito_id', $distrito);
-        if ($estado > 0) $query = $query->where('estado', $estado);
-
-        $query = $query->groupBy('distrito')->get();
+        $query = CuboPacto3PadronMaterno::select(
+            'mes',
+            DB::raw('round(100*sum(numerador)/sum(denominador),1) as indicador')
+        )->where('anio', $anio)->where('mes', '<=', $mes);
+        // if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
+        // if ($distrito > 0) $query = $query->where('distrito_id', $distrito);
+        $query = $query->groupBy('mes')->orderBy('mes')->get();
         return $query;
     }
 
-    public static function getEduPacto2tabla1x($anio, $mes, $provincia, $distrito, $estado)
+    public static function Anal03($importacion, $anio, $mes, $provincia, $distrito)
     {
-        $query = DB::table('edu_cubo_pacto02_local')->select('distrito', DB::raw('count(local) as conteo'));
-
-        // if ($mes > 0) $query = $query->where(DB::raw('month(fecha_inscripcion)'), '<=', $mes);
-        if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
-        if ($distrito > 0) $query = $query->where('distrito_id', $distrito);
-        if ($estado > 0) $query = $query->where('estado', $estado);
-
-        $query = $query->groupBy('distrito')->get();
+        $query = CuboPacto3PadronMaterno::select(
+            'provincia_id as xid',
+            'provincia as edades',
+            DB::raw('sum(numerador) as si'),
+            DB::raw('sum(denominador)-sum(numerador) as no')
+        )->where('anio', $anio)->where('mes', '<=', $mes);
+        // if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
+        // if ($distrito > 0) $query = $query->where('distrito_id', $distrito);
+        $query = $query->groupBy('xid', 'edades')->orderBy('xid')->get();
         return $query;
     }
+ 
 }

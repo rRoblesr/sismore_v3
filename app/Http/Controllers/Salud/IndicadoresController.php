@@ -834,16 +834,16 @@ class IndicadoresController extends Controller
         switch ($rq->div) {
             case 'head':
                 $base = CuboPacto3Repositorio::head($rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
-                $gln = $base->gl - $base->gls;
+                $gln = $base->no ;
 
                 $ri = number_format($base->indicador, 1);
-                $gls = number_format($base->gls, 0);
-                $gln = number_format($base->gln, 0);
-                $gl = number_format($base->gl, 0);
+                $gls = number_format($base->si, 0);
+                $gln = number_format($base->no, 0);
+                $gl = number_format($base->conteo, 0);
                 return response()->json(['aa' => $rq->all(), 'ri' => $ri, 'gl' => $gl, 'gls' => $gls, 'gln' => $gln, 'base' => $base]);
 
             case 'anal1':
-                $base = CuboPacto1PadronNominalRepositorio::pacto01Anal01($impMaxAnio, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $base = CuboPacto3Repositorio::Anal01($impMaxAnio, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
                 $info = [];
                 foreach ($base as $key => $value) {
                     $info['categoria'][] = $value->distrito;
@@ -852,8 +852,8 @@ class IndicadoresController extends Controller
                 return response()->json(compact('info'));
 
             case 'anal2':
-                $base = CuboPacto1PadronNominalRepositorio::pacto01Anal02($impMaxAnio, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
-                $base1 = collect($base['query'] ?? []);
+                $base = CuboPacto3Repositorio::Anal02($impMaxAnio, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $base1 = collect($base ?? []);
                 $base1 = $base1->pluck('indicador', 'mes');
                 $mes = Mes::select('id', 'abreviado')->get();
 
@@ -867,7 +867,7 @@ class IndicadoresController extends Controller
                 return response()->json(compact('info', 'base1'));
 
             case 'anal3': //lineas
-                $base = CuboPacto1PadronNominalRepositorio::pacto01Anal03($impMaxAnio, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $base = CuboPacto3Repositorio::Anal03($impMaxAnio, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
                 $info['serie'] = [];
                 $info['serie'][0]['name'] = 'Cumplen';
                 $info['serie'][1]['name'] = 'No Cumplen';
@@ -880,7 +880,7 @@ class IndicadoresController extends Controller
                 return response()->json(compact('info', 'base'));
 
             case 'tabla1':
-                $base = CuboPacto1PadronNominalRepositorio::pacto01Tabla01($impMaxAnio, $rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $base = CuboPacto3Repositorio::Tabla01($impMaxAnio, $rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
                 $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla1', compact('base', 'ndis'))->render();
                 return response()->json(compact('excel', 'base'));
 
@@ -929,6 +929,15 @@ class IndicadoresController extends Controller
             default:
                 return [];
         }
+    }
+
+    public function PactoRegionalSalPacto3FindMes($anio)
+    {
+        $impMax = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_3']);
+        $query = CuboPacto3PadronMaterno::from('sal_cubo_pacto3_padron_materno as ipa')->join('par_mes as m', 'm.id', '=', 'ipa.mes')->distinct()->select('m.id', 'm.mes')->where('ipa.anio', $anio);
+        if ($anio == date('Y')) $query = $query->where('ipa.mes', '<=', $impMax->mes);
+        $query = $query->orderBy('ipa.mes')->get();
+        return $query;
     }
 
     public function PactoRegionalSalPacto3Reports_anterior(Request $rq)

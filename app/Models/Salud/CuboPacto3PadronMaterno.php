@@ -32,6 +32,8 @@ class CuboPacto3PadronMaterno extends Model
         'provincia',
         'ubigeo_distrito',
         'distrito',
+        'distrito_id',
+        'provincia_id',
         'denominador',
         'numerador',
         'num_exam_hb',

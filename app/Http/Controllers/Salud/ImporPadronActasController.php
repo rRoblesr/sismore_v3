@@ -52,6 +52,9 @@ class ImporPadronActasController extends Controller
         // $date = DateTime::createFromFormat('d/m/Y', "3/12/1987");
         // echo $date->format('Y-m-d');
 
+        // $query= Ubigeo::where('codigo','like','25%')->whereRaw('length(codigo)=6')->pluck('id','codigo');
+        // $query= Ubigeo::where('codigo','like','25%')->whereRaw('length(codigo)=4')->pluck('id','codigo');
+        // return $query;
         $fuentes = FuenteImportacion::whereIn('id', [36, 37, 38, 39, 40])->get();
         return view('salud.ImporPadronActas.Importar', compact('fuentes'));
     }
@@ -466,7 +469,7 @@ class ImporPadronActasController extends Controller
                 }
 
                 try {
-                    DB::beginTransaction(); 
+                    DB::beginTransaction();
 
                     $importacion = Importacion::create([
                         'fuenteImportacion_id' => ImporPadronActasController::$FUENTE['pacto_3'],
@@ -475,7 +478,10 @@ class ImporPadronActasController extends Controller
                         'estado' => 'PR'
                     ]);
 
-                    $batchSize = 500; 
+                    $distritos = Ubigeo::where('codigo', 'like', '25%')->whereRaw('length(codigo)=6')->pluck('id', 'codigo');
+                    $provincias = Ubigeo::where('codigo', 'like', '25%')->whereRaw('length(codigo)=4')->pluck('id', 'codigo');
+
+                    $batchSize = 500;
                     $dataBatch = [];
 
                     foreach ($array[0] as $row) {
@@ -494,6 +500,8 @@ class ImporPadronActasController extends Controller
                             'provincia' => $row['provincia'],
                             'ubigeo_distrito' => $row['ubigeo_distrito'],
                             'distrito' => $row['distrito'],
+                            'distrito_id' => $distritos[$row['ubigeo_distrito']] ?? null,
+                            'provincia_id' => $provincias[substr($row['ubigeo_distrito'], 0, 4)] ?? null,
                             'denominador' => $row['denominador'],
                             'numerador' => $row['numerador'],
                             'num_exam_hb' => $row['num_exam_hb'],
@@ -655,7 +663,7 @@ class ImporPadronActasController extends Controller
                 Importacion::find($id)->delete();
                 break;
             case 38:
-                DataPacto3::where('importacion_id', $id)->truncate();
+                CuboPacto3PadronMaterno::where('importacion_id', $id)->truncate();
                 Importacion::find($id)->delete();
                 break;
             case 39:
