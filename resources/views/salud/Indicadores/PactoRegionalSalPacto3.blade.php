@@ -247,28 +247,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="table-responsive">
-                                <table id="padronTable" class="table table-sm table-striped table-bordered font-11">
-                                    <thead>
-                                        <tr class="table-success-0 text-white">
-                                            <th class="text-center">Nº</th>
-                                            <th class="text-center">Tipo Doc.</th>
-                                            <th class="text-center">Documento</th>
-                                            <th class="text-center">Nombre</th>
-                                            <th class="text-center">Fecha Nac.</th>
-                                            <th class="text-center">Distrito</th>
-                                            <th class="text-center">Seguro</th>
-                                            <th class="text-center">Cód. EESS</th>
-                                            <th class="text-center">EESS de Atención</th>
-                                            <th class="text-center">Doc. Madre</th>
-                                            <th class="text-center">Nombre Madre</th>
-                                            <th class="text-center">Estado</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    </tbody>
-                                </table>
+                            <div class="table-responsive" id="vtabla2">
                             </div>
                         </div>
                     </div>
@@ -300,7 +279,7 @@
             panelGraficas('anal2');
             panelGraficas('anal3');
             panelGraficas('tabla1');
-            // panelGraficas('tabla2');
+            panelGraficas('tabla2');
             // tabla2('tabla2');
         }
 
@@ -342,10 +321,13 @@
                     } else if (div == "anal2") {
                         gLineaBasica(div, data.info, '',
                             'Porcentaje Mensual de la Evaluación',
-                            '', 'CALLERIA');
+                            '', '%');
                     } else if (div == "anal3") {
-                        anal3 = gColumnx(div, data.info, '',
-                            'Población de niños y niñas menores de 6 años, según sexo', 'Etapa Vida')
+                        // anal3 = gColumnx(div, data.info, '',
+                        //     'Población de niños y niñas menores de 6 años, según sexo', 'Etapa Vida')
+                        gLineaBasica(div, data.info, '',
+                            'Porcentaje Mensual de la Evaluación',
+                            '', '');
                     } else if (div == "tabla1") {
                         $('#vtabla1').html(data.excel);
                         // $('#tabla1').DataTable({
@@ -360,14 +342,29 @@
                         //     info: false,
                         //     searching: false,
                         // });
-                    } else if (div == "tabla2") {}
+                    } else if (div == "tabla2") {
+                        $('#vtabla2').html(data.excel);
+                        $('#tabla2').DataTable({
+                            responsive: false,
+                            autoWidth: false,
+                            ordered: true,
+                            // searching: false,
+                            // bPaginate: false,
+                            // info: false,
+                            language: table_language,
+                            // paging: false,
+                            // info: false,
+                            // searching: false,
+                        });
 
+                    }
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");
                     console.log(jqXHR);
-                },
-            });
+                }
+
+            })
         }
 
         function tabla2(div) {
@@ -537,7 +534,8 @@
         }
 
         function descargar2() {
-            window.open("{{ url('/') }}/INDICADOR/Home/01/Excel/tabla2/" + $('#anio').val() + "/" + $('#provincia')
+            window.open("{{ url('/') }}/INDICADOR/Home/01/Excel/tabla2/" + $('#anio').val() + "/" + $(
+                    '#provincia')
                 .val() + "/" + $('#distrito').val() + "/" + $('#gestion').val() + "/" + ugel_select);
         }
 
@@ -583,8 +581,9 @@
                         let tooltipText = '<b>' + tooltip + ': ' + this.x +
                             '</b><br/>'; // Muestra la categoría (año)
                         this.points.forEach(function(point) {
-                            tooltipText += point.series.name + ': ' + Highcharts.numberFormat(Math.abs(
-                                point.y), 0) + '<br/>';
+                            tooltipText += point.series.name + ': ' + Highcharts.numberFormat(Math
+                                .abs(
+                                    point.y), 0) + '<br/>';
                         });
                         return tooltipText;
                     }
@@ -1092,7 +1091,7 @@
             });
         }
 
-        function gLineaBasica(div, data, titulo, subtitulo, titulovetical, categoriaSeleccionada) {
+        function gLineaBasica(div, data, titulo, subtitulo, titulovetical, porcentaje) {
             const colors = ["#5eb9aa", "#f5bd22", "#e65310"];
             Highcharts.chart(div, {
                 title: {
@@ -1137,7 +1136,7 @@
                                 fontWeight: 'normal',
                             },
                             formatter: function() {
-                                return this.y + '%';
+                                return this.y + porcentaje;
                             }
                         },
                         /* label: {
@@ -1147,7 +1146,7 @@
                     }
                 },
                 tooltip: {
-                    pointFormat: '{series.name}: <b>{point.y}%</b>',
+                    pointFormat: '{series.name}: <b>{point.y}' + porcentaje + '</b>',
                     shared: true
                 },
                 series: [{

@@ -834,7 +834,7 @@ class IndicadoresController extends Controller
         switch ($rq->div) {
             case 'head':
                 $base = CuboPacto3Repositorio::head($rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
-                $gln = $base->no ;
+                $gln = $base->no;
 
                 $ri = number_format($base->indicador, 1);
                 $gls = number_format($base->si, 0);
@@ -864,9 +864,9 @@ class IndicadoresController extends Controller
                     if ($info['dat'][$key] > 0) $info['dat'][$key] = (float)$info['dat'][$key];
                 }
 
-                return response()->json(compact('info', 'base1'));
+                return response()->json(compact('info', 'base'));
 
-            case 'anal3': //lineas
+            case 'anal3_': //lineas
                 $base = CuboPacto3Repositorio::Anal03($impMaxAnio, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
                 $info['serie'] = [];
                 $info['serie'][0]['name'] = 'Cumplen';
@@ -879,52 +879,30 @@ class IndicadoresController extends Controller
                 }
                 return response()->json(compact('info', 'base'));
 
+            case 'anal3': //lineas
+                $base = CuboPacto3Repositorio::Anal03($impMaxAnio, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $base1 = collect($base ?? []);
+                $base1 = $base1->pluck('si', 'mes');
+                $mes = Mes::select('id', 'abreviado')->get();
+
+                $info = [];
+                foreach ($mes as $key => $value) {
+                    $info['cat'][] = $value->abreviado;
+                    $info['dat'][$key] = $base1[$value->id] ?? null;
+                    if ($info['dat'][$key] > 0) $info['dat'][$key] = (float)$info['dat'][$key];
+                }
+
+                return response()->json(compact('info', 'base', 'base1'));
+
             case 'tabla1':
                 $base = CuboPacto3Repositorio::Tabla01($impMaxAnio, $rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
                 $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla1', compact('base', 'ndis'))->render();
                 return response()->json(compact('excel', 'base'));
 
             case 'tabla2':
-                $draw = intval($rq->draw);
-                $start = intval($rq->start);
-                $length = intval($rq->length);
-
-                $query = CuboPacto1PadronNominal::where('importacion', $impMaxAnio);
-
-                $query = $query->whereIn('tipo_doc', ['DNI', 'CNV']);
-
-                if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
-                if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
-
-                $recordsTotal = $query->count();
-                $recordsFiltered = $recordsTotal;
-
-                $query = $query->skip($start)->take($length)->get();
-
-                $query = $query->map(function ($item, $key) use ($start) {
-                    $item->item = $start + $key + 1;
-                    return $item;
-                });
-
-                $query->transform(function ($value) {
-                    $value->nacimiento = date('d/m/Y', strtotime($value->fecha_nacimiento));
-                    $value->ipress = str_pad($value->cui_atencion, 8, '0', STR_PAD_LEFT);
-                    $value->estado = $value->num == 1
-                        ? '<span class="badge badge-pill badge-success" style="font-size:90%;">CUMPLEN</span>'
-                        :  '<span class="badge badge-pill badge-danger" style="font-size:90%;">NO CUMPLEN</span>';
-                    return $value;
-                });
-
-                $result = [
-                    "draw" => $draw,
-                    "recordsTotal" => $recordsTotal,
-                    "recordsFiltered" => $recordsFiltered,
-                    "data" => $query,
-                    "input" => $rq->all(),
-                    "queries" => $query->toArray(),
-                ];
-
-                return response()->json($result);
+                $base = CuboPacto3Repositorio::Tabla02($impMaxAnio, $rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $excel = view('salud.Indicadores.PactoRegionalSalPacto3tabla2', compact('base', 'ndis'))->render();
+                return response()->json(compact('excel', 'base'));
 
             default:
                 return [];
