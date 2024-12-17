@@ -652,6 +652,14 @@ class IndicadoresController extends Controller
                 return response()->json(['aa' => $rq->all(), 'ri' => $ri, 'gl' => $gl, 'gls' => $gls, 'gln' => $gln, 'base' => $base]);
 
             case 'anal1':
+                $base = IndicadorGeneralMetaRepositorio::getSalPacto2anal1(0, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $info = [];
+                foreach ($base as $key => $value) {
+                    $info['categoria'][] = $value->distrito;
+                    $info['serie'][] = ['y' => round($value->indicador, 1), 'color' => (round($value->indicador, 1) > 95 ? '#43beac' : (round($value->indicador, 1) > 50 ? '#eb960d' : '#ef5350'))];
+                }
+                return response()->json(compact('info', 'base'));
+            case 'anal2':
                 $base = IndicadorGeneralMetaRepositorio::getSalPacto2Mensual($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
                 // return response()->json(compact('base'));
                 $mes = Mes::select('codigo', 'abreviado as mes')->get();
@@ -685,45 +693,6 @@ class IndicadoresController extends Controller
                     $info['dat'][] = $value->y;
                 }
                 return response()->json(compact('info', 'mes', 'base', 'mesmax'));
-            case 'anal2':
-                // $base1 = IndicadorGeneralMetaRepositorio::getPacto1Mensual($rq->anio, $rq->distrito);
-                // $base2 = IndicadorGeneralMetaRepositorio::getPacto1Mensual2($rq->anio, $rq->distrito);
-                // $info = [];
-                // $mes = Mes::select('codigo', 'abreviado as mes')->get();
-                // $mesmax1 = $base1->max('name');
-                // $mesmax2 = $base2->max('mes');
-                // $limit = $rq->anio == 2023 ? IndicadoresController::$pacto1_mes : 0;
-                // foreach ($mes as $mm) {
-
-                //     if ($mm->codigo >= $limit && $mm->codigo <= $mesmax1) {
-                //         $mm->y1 = 0;
-                //         foreach ($base1 as $bb1) {
-                //             if ($bb1->name == $mm->codigo) {
-                //                 $mm->y1 = (int)$bb1->y;
-                //                 break;
-                //             }
-                //         }
-                //     } else {
-                //         $mm->y1 = null;
-                //     }
-
-                //     if ($mm->codigo >= $limit && $mm->codigo <= $mesmax2) {
-                //         $mm->y2 = 0;
-                //         foreach ($base2 as $bb2) {
-                //             if ($bb2->mes == $mm->codigo) {
-                //                 $mm->y2 = (int)$bb2->y;
-                //                 break;
-                //             }
-                //         }
-                //     } else {
-                //         $mm->y2 = null;
-                //     }
-                //     $info['cat'][] = $mm->mes;
-                //     $info['dat'][] = $mm->y1;
-                //     $info['dat2'][] = $mm->y2;
-                // }
-                // return response()->json(compact('info', 'base1', 'base2', 'mes'));
-                return response()->json([]);
             case 'tabla1':
                 $base = IndicadorGeneralMetaRepositorio::getSalPacto2tabla1($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
                 $foot = clone $base[0];

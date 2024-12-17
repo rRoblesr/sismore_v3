@@ -229,13 +229,48 @@ class IndicadorGeneralMetaRepositorio
         return $query = $query->get()->first();
     }
 
+    public static function getSalPacto2anal1($indicador_id, $anio, $mes, $provincia, $distrito)
+    {
+        // $query = IndicadorGeneralMeta::select('par_Indicador_general_meta.*', 'd.codigo', 'd.id as distrito_id', 'd.nombre as distrito')->where('indicadorgeneral', $indicador_id)->where('anio', $anio)
+        //     ->join('par_ubigeo as d', 'd.id', '=', 'par_Indicador_general_meta.distrito')->get();
+        // foreach ($query as $key => $value) {
+        //     $queryx = ImporPadronAnemia::select(DB::raw('sum(den) as den'), DB::raw('sum(num) as num'), DB::raw('round(100*sum(num)/sum(den),1) as ind'))
+        //         ->where('anio', $value->anio)->where('ubigeo', $value->distrito_id);
+        //     if ($mes > 0)
+        //         $queryx = $queryx->where('mes', '<=', $mes);
+        //     if (IndicadoresController::$pacto1_anio == $anio)
+        //         $queryx = $queryx->where('mes', '>=', IndicadoresController::$pacto1_mes);
+        //     $queryx = $queryx->get()->first();
+
+        //     $value->num = $queryx->num;
+        //     $value->den = $queryx->den;
+        //     $value->ind = $queryx->ind;
+        //     $value->cumple = floatval($value->ind) >= floatval($value->valor) ? 1 : 0;
+        // }
+        $dis_ = Ubigeo::whereRaw('length(codigo) = 6')->where('codigo', 'like', '25%')->get()->pluck('nombre', 'id');
+        $query = ImporPadronAnemia::select(
+            'ubigeo',
+            DB::raw('round(100*sum(num)/sum(den),1) as indicador'),
+        )->where('anio', $anio)->where('mes', '<=', $mes);
+
+        // if ($provincia > 0) $query = $query->where('provincia', $pro_[$provincia] ?? "");
+        // if ($distrito > 0) $query = $query->where('distrito', $dis_[$distrito] ?? "");
+
+        $query = $query->groupBy('ubigeo')->orderBy('indicador', 'desc')->get();
+
+        foreach ($query as $key => $value) {
+            $value->distrito = $dis_[$value->ubigeo] ?? "";
+        }
+        return $query;
+    }
+
     public static function getSalPacto2Mensual($indicador_id, $anio, $mes, $provincia, $distrito)
     {
         $query = ImporPadronAnemia::select(DB::raw('mes as name'), DB::raw('round(100*sum(num)/sum(den),1) as y'))->where('anio', $anio);
         $query = $query->join('par_ubigeo as dd', 'dd.id', '=', 'ubigeo');
         $query = $query->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia');
         if (IndicadoresController::$pacto1_anio == $anio) $query = $query->where('mes', '>=', IndicadoresController::$pacto1_mes);
-        if ($mes > 0) $query = $query->where('mes','<=', $mes);
+        if ($mes > 0) $query = $query->where('mes', '<=', $mes);
         if ($distrito > 0) $query = $query->where('ubigeo',  $distrito);
         if ($provincia > 0) $query = $query->where('pp.id',  $provincia);
         $query = $query->groupBy('name')->orderBy('name')->get();
@@ -244,23 +279,42 @@ class IndicadorGeneralMetaRepositorio
 
     public static function getSalPacto2tabla1($indicador_id, $anio, $mes, $provincia, $distrito)
     {
-        $query = IndicadorGeneralMeta::select('par_Indicador_general_meta.*', 'd.codigo', 'd.id as distrito_id', 'd.nombre as distrito')->where('indicadorgeneral', $indicador_id)->where('anio', $anio)
-            ->join('par_ubigeo as d', 'd.id', '=', 'par_Indicador_general_meta.distrito')->get();
-        foreach ($query as $key => $value) {
-            $queryx = ImporPadronAnemia::select(DB::raw('sum(den) as den'), DB::raw('sum(num) as num'), DB::raw('round(100*sum(num)/sum(den),1) as ind'))
-                ->where('anio', $value->anio)->where('ubigeo', $value->distrito_id);
-            if ($mes > 0)
-                $queryx = $queryx->where('mes', '<=', $mes);
-            if (IndicadoresController::$pacto1_anio == $anio)
-                $queryx = $queryx->where('mes', '>=', IndicadoresController::$pacto1_mes);
-            $queryx = $queryx->get()->first();
+        // $query = IndicadorGeneralMeta::select('par_Indicador_general_meta.*', 'd.codigo', 'd.id as distrito_id', 'd.nombre as distrito')->where('indicadorgeneral', $indicador_id)->where('anio', $anio)
+        //     ->join('par_ubigeo as d', 'd.id', '=', 'par_Indicador_general_meta.distrito')->get();
+        // foreach ($query as $key => $value) {
+        //     $queryx = ImporPadronAnemia::select(DB::raw('sum(den) as den'), DB::raw('sum(num) as num'), DB::raw('round(100*sum(num)/sum(den),1) as ind'))
+        //         ->where('anio', $value->anio)->where('ubigeo', $value->distrito_id);
+        //     if ($mes > 0)
+        //         $queryx = $queryx->where('mes', '<=', $mes);
+        //     if (IndicadoresController::$pacto1_anio == $anio)
+        //         $queryx = $queryx->where('mes', '>=', IndicadoresController::$pacto1_mes);
+        //     $queryx = $queryx->get()->first();
 
-            $value->num = $queryx->num;
-            $value->den = $queryx->den;
-            $value->ind = $queryx->ind;
-            $value->cumple = floatval($value->ind) >= floatval($value->valor) ? 1 : 0;
+        //     $value->num = $queryx->num;
+        //     $value->den = $queryx->den;
+        //     $value->ind = $queryx->ind;
+        //     $value->cumple = floatval($value->ind) >= floatval($value->valor) ? 1 : 0;
+        // }
+        // return $query;
+        // $dis_ = Ubigeo::whereRaw('length(codigo) = 6')->where('codigo', 'like', '25%')->get()->pluck('nombre', 'id');
+        $v1 = ImporPadronAnemia::select(
+            'ubigeo as distrito_id',
+            DB::raw('sum(num) as num'),
+            DB::raw('sum(den) as den'),
+            DB::raw('100*sum(num)/sum(den) as ind')
+        )->where('anio', $anio)->where('mes', '<=', $mes);
+
+
+        $v1 = $v1->groupBy('distrito_id')->orderBy('ind', 'desc')->get();
+        $v2 = Ubigeo::whereRaw('length(codigo) = 6')->where('codigo', 'like', '25%')->get()->pluck('nombre', 'id');
+        $v3 = IndicadorGeneralMeta::where('indicadorgeneral', $indicador_id)->where('anio', $anio)->pluck('valor', 'distrito');
+
+        foreach ($v1 as $key => $value) {
+            $value->distrito = $v2[$value->distrito_id] ?? "";
+            $value->valor = $v3[$value->distrito_id] ?? 0;
+            $value->cumple = $value->ind >= $value->valor ? 1 : 0;
         }
-        return $query;
+        return $v1;
     }
 
     public static function getSalPacto2tabla2($indicador_id, $anio, $mes, $provincia, $distrito)

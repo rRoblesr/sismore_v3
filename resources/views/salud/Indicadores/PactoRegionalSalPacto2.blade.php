@@ -4,68 +4,6 @@
 @endsection
 
 @section('content')
-    {{-- <div class="row">
-        <div class="col-lg-12 col-md-12">
-            <div class="card">
-                <div class="card-header bg-success-0">
-                    <div class="card-widgets">
-                        <button type="button" class="btn btn-orange-0 btn-xs" onclick="history.back()" title="ACTUALIZAR"><i
-                                class="fas fa-arrow-left"></i> Volver</button>
-                        <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf({{ $ind->id }})"
-                            title='FICHA TÉCNICA'><i class="fas fa-file"></i> Ficha Técnica</button>
-                        <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
-                            title='ACTUALIZAR'><i class=" fas fa-history"></i>
-                            Actualizar</button>
-                    </div>
-                    <h3 class="card-title text-white">{{ $ind->nombre }}
-                    </h3>
-                </div>
-                <div class="card-body p-2">
-                    <div class="form-group row align-items-center vh-5 m-0">
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <h5 class="page-title font-12">Fuente: Padrón Nominal, <br>{{ $actualizado }}</h5>
-                        </div>
-                        <div class="col-lg-1 col-md-1 col-sm-1  ">
-                            <select id="anio" name="anio" class="form-control btn-xs font-11 p-0"
-                                onchange="cargarcuadros();">
-                                @foreach ($anio as $item)
-                                    <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
-                                        {{ $item->anio }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-lg-1 col-md-1 col-sm-1  ">
-                            <select id="mes" name="mes" class="form-control btn-xs font-11 p-0"
-                                onchange="cargarcuadros();">
-                                <option value="0">MES</option>
-                                @foreach ($mes as $item)
-                                    <option value="{{ $item->id }}">
-                                        {{ $item->mes }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2">
-                            <select id="provincia" name="provincia" class="form-control btn-xs font-11"
-                                onchange="cargar-Distritos();cargarcuadros();">
-                                <option value="0">PROVINCIA</option>
-                                @foreach ($provincia as $item)
-                                    <option value="{{ $item->id }}">
-                                        {{ $item->nombre }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2">
-                            <select id="distrito" name="distrito" class="form-control btn-xs font-11"
-                                onchange="cargarcuadros();">
-                                <option value="0">DISTRITO</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
     <div class="row">
         <div class="col-lg-12 col-md-12">
             <div class="card">
@@ -262,12 +200,26 @@
                     {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
                 </div>
                 <div class="card-body p-0">
+                    <div id="anal1" style="height: 42rem"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent p-0">
+                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
+                </div>
+                <div class="card-body p-0">
                     <figure class="highcharts-figure p-0 m-0">
-                        <div id="anal1" style="height: 20rem"></div>
+                        <div id="anal2" style="height: 20rem"></div>
                     </figure>
                 </div>
             </div>
-
+        </div>
+        <div class="col-lg-6">
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent p-0">
                     {{-- <div class="card-widgets">
@@ -316,7 +268,7 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" style="display: none">
         <div class="col-lg-12">
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent p-0">
@@ -392,17 +344,17 @@
             });
             cargarMes();
             cargarDistritos();
-            
+
         });
 
         function cargarcuadros() {
             panelGraficas('head');
             panelGraficas('anal1');
-            // panelGraficas('anal2');
+            panelGraficas('anal2');
             panelGraficas('tabla1');
             panelGraficas('tabla2');
             panelGraficas('tabla3');
-            panelGraficas('tabla4');
+            // panelGraficas('tabla4');
         }
 
         function panelGraficas(div) {
@@ -436,13 +388,14 @@
                         $('#gls').text(data.gls);
                         $('#gln').text(data.gln);
                     } else if (div == "anal1") {
+                        gbar('anal1', data.info.categoria,
+                            data.info.serie,
+                            '',
+                            'Porcentaje de Cumplimiento por Distrito',
+                        );
+                    } else if (div == "anal2") {
                         gLineaBasica(div, data.info, '',
                             'Avance mensual de la Evaluación del cumplimiento',
-                            '');
-                    } else if (div == "anal2") {
-                        console.log(data.info);
-                        gLineaBasica2(div, data.info, '',
-                            'Numero de actas de homolagación registradas en el sistema de padrón nominal por mes',
                             '');
                     } else if (div == "tabla1") {
                         $('#vtabla1').html(data.excel);
@@ -545,6 +498,84 @@
             $('#modal_microred').modal('show');
             panelGraficas('tabla2tabla1');
 
+        }
+
+        function gbar(div, categoria, series, titulo, subtitulo) {
+            Highcharts.chart(div, {
+                chart: {
+                    type: 'bar'
+                },
+                title: {
+                    text: titulo,
+                },
+                subtitle: {
+                    text: subtitulo,
+                    style: {
+                        // fontSize: '11px'
+                    }
+                },
+                xAxis: {
+                    categories: categoria,
+                    title: {
+                        text: '',
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        },
+                        // enabled: false,
+                    },
+                },
+                yAxis: {
+                    //min: 0,
+                    title: {
+                        text: '',
+                        align: 'high'
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        },
+                        overflow: 'justify',
+                        enabled: false,
+                    },
+                },
+                tooltip: {
+                    valueSuffix: ' %'
+                },
+                plotOptions: {
+                    bar: {
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.y} %'
+                        }
+                    }
+                },
+                legend: {
+                    enabled: false, //
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'top',
+                    x: -40,
+                    y: 80,
+                    floating: true,
+                    borderWidth: 1,
+                    backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+                    shadow: true
+                },
+                series: [{
+                    name: 'Cumplimiento',
+                    showInLegend: false,
+                    label: {
+                        enabled: false
+                    },
+                    data: series,
+                    // color: '#43beac'
+                }],
+                credits: {
+                    enabled: false
+                },
+            });
         }
 
         function gSimpleColumn(div, datax, titulo, subtitulo, tituloserie) {

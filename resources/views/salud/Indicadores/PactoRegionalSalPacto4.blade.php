@@ -240,8 +240,7 @@
                         <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
                                 class="fa fa-file-excel"></i> Descargar</button>
                     </div>
-                    <h3 class="text-black font-14 mb-0">Evaluación de cumplimiento de los registros de niños y niñas
-                        menores de 6 años del padrón nominal
+                    <h3 class="text-black font-14 mb-0">Evaluación del Cumplimiento del Paquete de Servicios en Niñas y Niños Menores de 12 Meses
                     </h3>
                 </div>
                 <div class="card-body">
@@ -325,7 +324,7 @@
                         // anal3 = gColumnx(div, data.info, '',
                         //     'Población de niños y niñas menores de 6 años, según sexo', 'Etapa Vida')
                         gLineaBasica(div, data.info, '',
-                            'Porcentaje Mensual de la Evaluación',
+                            'Cantidad Mensual de Niñas y Niños Evaluados con Paquete de Servicios',
                             '', '');
                     } else if (div == "tabla1") {
                         $('#vtabla1').html(data.excel);

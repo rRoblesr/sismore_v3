@@ -6,7 +6,7 @@
             <th rowspan="1" class="text-center">Denominador</th>
             <th rowspan="1" class="text-center">Numerador</th>
             <th colspan="1" class="text-center">Indicador</th>
-            <th colspan="1" class="text-center">Condición</th>
+            {{-- <th colspan="1" class="text-center">Condición</th> --}}
         </tr>
 
     </thead>
@@ -22,14 +22,14 @@
                     <td>{{ $item->den }}</td>
                     <td>{{ $item->num }}</td>
                     <td>{!! avance($item->ind) !!}</td>
-                    <td>
+                    {{-- <td>
                         @if ($item->cumple == 1)
                             <button type="button"
                                 class="btn btn-xs btn-success-0 p-1 font-11 text-nowrap">&nbsp;&nbsp;&nbsp;Cumple&nbsp;&nbsp;&nbsp;</button>
                         @else
                             <button type="button" class="btn btn-xs btn-danger p-1 font-11 text-nowrap">No Cumple</button>
                         @endif
-                    </td>
+                    </td> --}}
                 </tr>
             @endforeach
         </tbody>
@@ -39,16 +39,14 @@
                 <th class="text-center">{{ number_format($foot->den, 0) }}</th>
                 <th class="text-center">{{ number_format($foot->num, 0) }}</th>
                 <td>{!! avance($foot->ind) !!}</td>
-                <td>
+                {{-- <td>
                     @if ($foot->cumple == 1)
-                        {{-- <span class="badge badge-success" style="font-size:80%; width:80px">CUMPLE</span> --}}
                         <button type="button"
                             class="btn btn-xs btn-success-0 p-1 font-11 text-nowrap">&nbsp;&nbsp;&nbsp;Cumple&nbsp;&nbsp;&nbsp;</button>
                     @else
-                        {{-- <span class="badge  badge-danger" style="font-size:80%; width:80px">NO CUMPLE</span> --}}
                         <button type="button" class="btn btn-xs btn-danger p-1 font-11 text-nowrap">No Cumple</button>
                     @endif
-                </td>
+                </td> --}}
             </tr>
         </tfoot>
     @else
@@ -69,7 +67,7 @@
             return '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px">' .
                 round($monto, 1) .
                 '%</span>';
-        } elseif ($monto < 100) {
+        } elseif ($monto < 95) {
             return '<span class="badge badge-pill badge-warning" style="font-size:90%; width:50px">' .
                 round($monto, 1) .
                 '%</span>';
