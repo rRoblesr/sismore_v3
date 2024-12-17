@@ -1,243 +1,258 @@
 @extends('layouts.main', ['titlePage' => ''])
 @section('css')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
 @endsection
 
 @section('content')
-    <div class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12 col-md-12">
-                    <div class="card">
-                        <div class="card-header bg-success-0">
-                            <div class="card-widgets">
-                                <button type="button" class="btn btn-orange-0 btn-xs" onclick="history.back()"
-                                    title="ACTUALIZAR"><i class="fas fa-arrow-left"></i> Volver</button>
-                                <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf({{ $ind->id }})"
-                                    title='FICHA TÉCNICA'><i class="fas fa-file"></i> Ficha Técnica</button>
-                                <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
-                                    title='ACTUALIZAR'><i class=" fas fa-history"></i>
-                                    Actualizar</button>
-                            </div>
-                            <h3 class="card-title text-white">{{ $ind->nombre }}
-                            </h3>
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-header bg-success-0">
+                    <div class="card-widgets">
+                        <button type="button" class="btn btn-orange-0 btn-xs" onclick="history.back()" title="ACTUALIZAR"><i
+                                class="fas fa-arrow-left"></i> Volver</button>
+                        <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf({{ $ind->id }})"
+                            title='FICHA TÉCNICA'><i class="fas fa-file"></i> Ficha Técnica</button>
+                        <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
+                            title='ACTUALIZAR'><i class=" fas fa-history"></i>
+                            Actualizar</button>
+                    </div>
+                    <h3 class="card-title text-white">{{ $ind->nombre }}
+                    </h3>
+                </div>
+                <div class="card-body p-2">
+                    <div class="form-group row align-items-center vh-5 m-0">
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+                            <h5 class="page-title font-12">Fuente: Padrón Nominal, <br>{{ $actualizado }}</h5>
                         </div>
-                        <div class="card-body p-2">
-                            <div class="form-group row align-items-center vh-5 m-0">
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <h5 class="page-title font-12">Fuente: Padrón PVICA, Padrón Nominal
-                                        <br>{{ $actualizado }}
-                                    </h5>
-                                </div>
-                                <div class="col-lg-1 col-md-1 col-sm-1  ">
-                                    <select id="anio" name="anio" class="form-control btn-xs font-11"
-                                        onchange="cargarcuadros();">
-                                        @foreach ($anio as $item)
-                                            <option value="{{ $item->anio }}"
-                                                {{ $item->anio == $aniomax ? 'selected' : '' }}>
-                                                {{ $item->anio }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-lg-1 col-md-1 col-sm-1  ">
-                                    <select id="mes" name="mes" class="form-control btn-xs font-11 p-0"
-                                        onchange="cargarcuadros();">
-                                        <option value="0">MES</option>
-                                        @foreach ($mes as $item)
-                                            <option value="{{ $item->id }}">
-                                                {{ $item->mes }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-lg-2 col-md-2 col-sm-2">
-                                    <select id="provincia" name="provincia" class="form-control btn-xs font-11"
-                                        onchange="cargarDistritos();">
-                                        <option value="0">PROVINCIA</option>
-                                        @foreach ($provincia as $item)
-                                            <option value="{{ $item->id }}">
-                                                {{ $item->nombre }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-lg-2 col-md-2 col-sm-2">
-                                    <select id="distrito" name="distrito" class="form-control btn-xs font-11"
-                                        onchange="cargarcuadros();">
-                                        <option value="0">DISTRITO</option>
-                                    </select>
-                                </div>
+                        <div class="col-lg-2 col-md-1 col-sm-1  ">
+
+                            <div class="custom-select-container">
+                                <label for="anio">Año</label>
+                                <select id="anio" name="anio" class="form-control form-control-sm font-11"
+                                    onchange="cargarcuadros();">
+                                    @foreach ($anio as $item)
+                                        <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                            {{ $item->anio }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-1 col-sm-1  ">
+                            <div class="custom-select-container">
+                                <label for="mes">Mes</label>
+                                <select id="mes" name="mes" class="form-control form-control-sm font-11"
+                                    onchange="cargarcuadros();">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="custom-select-container">
+                                <label for="provincia">Provincia</label>
+                                <select id="provincia" name="provincia" class="form-control form-control-sm font-11"
+                                    onchange="cargarDistritos();cargarcuadros();">
+                                    <option value="0">TODOS</option>
+                                    @foreach ($provincia as $item)
+                                        <option value="{{ $item->id }}">
+                                            {{ $item->nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="custom-select-container">
+                                <label for="distrito">Distrito</label>
+                                <select id="distrito" name="distrito" class="form-control form-control-sm font-11"
+                                    onchange="cargarcuadros();">
+                                    <option value="0">TODOS</option>
+                                </select>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!--Widget-4 -->
-            <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card-box border border-plomo-0">
-                        <div class="media">
-                            <div class="text-center">
-                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
-                                    width="70%" height="70%"> --}}
-                                <i class="mdi mdi-finance font-35 text-green-0"></i>
-                            </div>
-                            <div class="media-body align-self-center">
-                                <div class="text-right">
-                                    <h4 class="font-20 my-0 font-weight-bold">
-                                        <span data-plugin="counterup" id="ri"></span>
-                                    </h4>
-                                    <p class="mb-0 mt-1 text-truncate">Resultado Indicador</p>
-                                </div>
-                            </div>
+    <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card-box border border-plomo-0">
+                <div class="media">
+                    <div class="text-center">
+                        {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                        width="70%" height="70%"> --}}
+                        <i class="mdi mdi-finance font-35 text-green-0"></i>
+                    </div>
+                    <div class="media-body align-self-center">
+                        <div class="text-right">
+                            <h4 class="font-20 my-0 font-weight-bold">
+                                <span data-plugin="counterup" id="ri"></span>
+                            </h4>
+                            <p class="mb-0 mt-1 text-truncate">Resultado Indicador</p>
                         </div>
                     </div>
-                    <!-- end card-box-->
                 </div>
+            </div>
+            <!-- end card-box-->
+        </div>
 
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card-box border border-plomo-0">
-                        <div class="media">
-                            <div class="text-center">
-                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
-                                    width="70%" height="70%"> --}}
-                                <i class=" mdi mdi-city font-35 text-green-0"></i>
-                            </div>
-                            <div class="media-body align-self-center">
-                                <div class="text-right">
-                                    <h4 class="font-20 my-0 font-weight-bold">
-                                        <span data-plugin="counterup" id="gl"></span>
-                                    </h4>
-                                    <p class="mb-0 mt-1 text-truncate">
-                                        Gobiernos Locales
-                                    </p>
-                                </div>
-                            </div>
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card-box border border-plomo-0">
+                <div class="media">
+                    <div class="text-center">
+                        {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                        width="70%" height="70%"> --}}
+                        <i class=" mdi mdi-city font-35 text-green-0"></i>
+                    </div>
+                    <div class="media-body align-self-center">
+                        <div class="text-right">
+                            <h4 class="font-20 my-0 font-weight-bold">
+                                <span data-plugin="counterup" id="gl"></span>
+                            </h4>
+                            <p class="mb-0 mt-1 text-truncate">
+                                Total Niños y Niñas
+                            </p>
                         </div>
                     </div>
-                    <!-- end card-box-->
                 </div>
+            </div>
+            <!-- end card-box-->
+        </div>
 
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card-box border border-plomo-0">
-                        <div class="media">
-                            <div class="text-center">
-                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
-                                    width="70%" height="70%"> --}}
-                                <i class="mdi mdi-thumb-up font-35 text-green-0"></i>
-                            </div>
-                            <div class="media-body align-self-center">
-                                <div class="text-right">
-                                    <h4 class="font-20 my-0 font-weight-bold">
-                                        <span data-plugin="counterup" id="gls"></span>
-                                    </h4>
-                                    <p class="mb-0 mt-1 text-truncate">
-                                        GL Cumplen
-                                    </p>
-                                </div>
-                            </div>
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card-box border border-plomo-0">
+                <div class="media">
+                    <div class="text-center">
+                        {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                        width="70%" height="70%"> --}}
+                        <i class="mdi mdi-thumb-up font-35 text-green-0"></i>
+                    </div>
+                    <div class="media-body align-self-center">
+                        <div class="text-right">
+                            <h4 class="font-20 my-0 font-weight-bold">
+                                <span data-plugin="counterup" id="gls"></span>
+                            </h4>
+                            <p class="mb-0 mt-1 text-truncate">
+                                Cumplen
+                            </p>
                         </div>
                     </div>
-                    <!-- end card-box-->
                 </div>
+            </div>
+            <!-- end card-box-->
+        </div>
 
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card-box border border-plomo-0">
-                        <div class="media">
-                            <div class="text-center">
-                                {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
-                                    width="70%" height="70%"> --}}
-                                <i class="mdi mdi-thumb-down font-35 text-green-0"></i>
-                            </div>
-                            <div class="media-body align-self-center">
-                                <div class="text-right">
-                                    <h4 class="font-20 my-0 font-weight-bold">
-                                        <span data-plugin="counterup" id="gln"></span>
-                                    </h4>
-                                    <p class="mb-0 mt-1 text-truncate">
-                                        GL No Cumplen
-                                    </p>
-                                </div>
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card-box border border-plomo-0">
+                <div class="media">
+                    <div class="text-center">
+                        {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                        width="70%" height="70%"> --}}
+                        <i class="mdi mdi-thumb-down font-35 text-green-0"></i>
+                    </div>
+                    <div class="media-body align-self-center">
+                        <div class="text-right">
+                            <h4 class="font-20 my-0 font-weight-bold">
+                                <span data-plugin="counterup" id="gln"></span>
+                            </h4>
+                            <p class="mb-0 mt-1 text-truncate">
+                                No Cumplen
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent p-0">
+                    {{-- <div class="card-widgets">
+                    <button type="button" class="btn btn-success btn-xs"><i
+                            class="fa fa-file-excel"></i> Descargar</button>
+                </div> --}}
+                    <h3 class="text-black font-14 mb-0">Avance acumulado de la evaluación de Cumplimiento por
+                        Distrito
+                    </h3>
+                </div>
+                <div class="card-body p-0">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive" style="height: 40rem" id="vtabla1">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            {{-- portles --}}
-
-            <div class="row">
-
-                <div class="col-lg-6">
-                    <div class="card card-border border border-plomo-0">
-                        <div class="card-header border-success-0 bg-transparent p-0">
-                            {{-- <div class="card-widgets">
-                                <button type="button" class="btn btn-success btn-xs"><i
-                                        class="fa fa-file-excel"></i> Descargar</button>
-                            </div> --}}
-                            <h3 class="text-black font-14 mb-0">Avance acumulado de la evaluación de Cumplimiento por
-                                Distrito
-                            </h3>
-                        </div>
-                        <div class="card-body p-0">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="table-responsive" style="height: 40rem" id="vtabla1">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <div class="col-lg-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent p-0">
+                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
                 </div>
-
-                <div class="col-lg-6">
-                    <div class="card card-border border border-plomo-0">
-                        <div class="card-header border-success-0 bg-transparent p-0">
-                            {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
-                        </div>
-                        <div class="card-body p-0">
-                            <div id="anal1" style="height: 20rem"></div>
-                        </div>
-                    </div>
-
-                    <div class="card card-border border border-plomo-0">
-                        <div class="card-header border-success-0 bg-transparent p-0">
-                            {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
-                        </div>
-                        <div class="card-body p-0">
-                            <div id="anal2" style="height: 20rem"></div>
-                        </div>
-                    </div>
+                <div class="card-body p-0">
+                    <div id="anal1" style="height: 42rem"></div>
                 </div>
+            </div>
+        </div>
 
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent p-0">
+                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
+                </div>
+                <div class="card-body p-0">
+                    <div id="anal2" style="height: 20rem"></div>
+                </div>
             </div>
 
+        </div>
 
+        <div class="col-lg-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent p-0">
+                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
+                </div>
+                <div class="card-body p-0">
+                    <div id="anal3" style="height: 20rem"></div>
+                </div>
+            </div>
 
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card card-border border border-plomo-0">
-                        <div class="card-header border-success-0 bg-transparent p-0">
-                            {{-- <div class="card-widgets">
-                                <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
-                                        class="fa fa-file-excel"></i> Descargar</button>
-                            </div> --}}
-                            <h3 class="text-black font-14 mb-0">Evaluación de cumplimiento de los logros esperados por
-                                distrito
-                            </h3>
-                        </div>
-                        <div class="card-body p-0">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="table-responsive" id="vtabla2">
-                                    </div>
-                                </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent p-0">
+                    <div class="card-widgets">
+                        <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
+                                class="fa fa-file-excel"></i> Descargar</button>
+                    </div>
+                    <h3 class="text-black font-14 mb-0">Evaluación de cumplimiento de los registros de niños y niñas
+                        menores de 6 años del padrón nominal
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="table-responsive" id="vtabla2">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-
         </div>
     </div>
 @endsection
@@ -245,12 +260,14 @@
 @section('js')
     <script type="text/javascript">
         var ugel_select = 0;
+        var anal1, anal2, anal3;
+        var tablepadron;
         $(document).ready(function() {
-            Highcharts.setOptions({
-                lang: {
-                    thousandsSep: ","
-                }
-            });
+            // Highcharts.setOptions({
+            //     lang: {
+            //         thousandsSep: ","
+            //     }
+            // });
             cargarMes();
             cargarDistritos();
             cargarcuadros();
@@ -260,6 +277,7 @@
             panelGraficas('head');
             panelGraficas('anal1');
             panelGraficas('anal2');
+            panelGraficas('anal3');
             panelGraficas('tabla1');
             panelGraficas('tabla2');
         }
@@ -288,22 +306,27 @@
                     }
                 },
                 success: function(data) {
-                    console.log(data);
                     if (div == "head") {
                         $('#ri').text(data.ri + '%');
                         $('#gl').text(data.gl);
                         $('#gls').text(data.gls);
                         $('#gln').text(data.gln);
                     } else if (div == "anal1") {
-
-                        gLineaBasica(div, data.info, '',
-                            'Acumulado mensual del registro de actas de homologacion en el sistema de padrón nominal',
-                            '');
+                        gbar('anal1', data.info.categoria,
+                            data.info.serie,
+                            '',
+                            'Porcentaje de Cumplimiento por Distrito',
+                        );
                     } else if (div == "anal2") {
-                        console.log(data.info);
-                        gLineaBasica2(div, data.info, '',
-                            'Numero de actas de homolagación registradas en el sistema de padrón nominal por mes',
-                            '');
+                        gLineaBasica(div, data.info, '',
+                            'Porcentaje Mensual de la Evaluación',
+                            '', '%');
+                    } else if (div == "anal3") {
+                        // anal3 = gColumnx(div, data.info, '',
+                        //     'Población de niños y niñas menores de 6 años, según sexo', 'Etapa Vida')
+                        gLineaBasica(div, data.info, '',
+                            'Porcentaje Mensual de la Evaluación',
+                            '', '');
                     } else if (div == "tabla1") {
                         $('#vtabla1').html(data.excel);
                         // $('#tabla1').DataTable({
@@ -320,47 +343,46 @@
                         // });
                     } else if (div == "tabla2") {
                         $('#vtabla2').html(data.excel);
-                    }
+                        $('#tabla2').DataTable({
+                            responsive: false,
+                            autoWidth: false,
+                            ordered: true,
+                            // searching: false,
+                            // bPaginate: false,
+                            // info: false,
+                            language: table_language,
+                            // paging: false,
+                            // info: false,
+                            // searching: false,
+                        });
 
+                    }
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");
                     console.log(jqXHR);
-                },
-            });
+                }
+
+            })
         }
 
-        function cargarTablaNivel(div, ugel) {
+        function cargarMes() {
             $.ajax({
-                url: "{{ route('indicador.nuevos.01.tabla') }}",
-                data: {
-                    'div': div,
-                    "anio": $('#anio').val(),
-                    "mes": $('#mes').val(),
-                    "provincia": $('#provincia').val(),
-                    "distrito": $('#distrito').val(),
-                    "gestion": $('#gestion').val(),
-                    "ugel": ugel
-                },
-                type: "GET",
-                dataType: "JSON",
-                beforeSend: function() {
-                    ugel_select = ugel;
-                    if (div == "tabla1") {
-                        $('#v' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    } else if (div == "tabla2") {
-                        $('#v' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    } else {
-                        $('#' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    }
-                },
+                url: "{{ route('salud.indicador.pactoregional.sal.pacto3.find.mes', ['anio' => 'anio']) }}"
+                    .replace('anio', $('#anio').val()),
+                type: 'GET',
                 success: function(data) {
-                    if (div == "tabla2") {
-                        $('#vtabla2').html(data.excel);
-                    }
+                    $("#mes option").remove();
+                    var options = ''; // '<option value="0"></option>';
+                    var ultimovalor = data.length > 0 ? data[data.length - 1].mes_id : null;
+                    $.each(data, function(index, value) {
+                        ss = (value.mes_id === ultimovalor ? "selected" : "");
+                        options += `<option value='${value.id}' ${ss}>${value.mes}</option>`;
+                    });
+                    $("#mes").append(options);
+                    cargarcuadros();
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 1");
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
                 },
             });
@@ -372,7 +394,7 @@
                 type: 'GET',
                 success: function(data) {
                     $("#distrito option").remove();
-                    var options = '<option value="0">DISTRITO</option>';
+                    var options = data.length > 1 ? '<option value="0">TODOS</option>' : '';
                     $.each(data, function(index, value) {
                         //ss = (id == value.id ? "selected" : "");
                         options += "<option value='" + value.id + "'>" + value.nombre +
@@ -386,36 +408,192 @@
             });
         }
 
-        function cargarMes() {
-            $.ajax({
-                url: "{{ route('salud.indicador.pactoregional.sal.pacto4.cargarmes', '') }}/" + $('#anio').val(),
-                type: 'GET',
-                success: function(data) {
-                    $('#mes').empty();
-                    $('#mes').append('<option value="0">Mes</option>');
-                    for (const value of data) {
-                        $('#mes').append(`<option value="${value.id}">${value.mes}</option>`);
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
-        }
-
         function descargar1() {
-            window.open("{{ url('/') }}/INDICADOR/Home/01/Excel/tabla1/" + $('#anio').val() + "/" + $('#provincia')
-                .val() + "/" + $('#distrito').val() + "/" + $('#gestion').val() + "/0");
+            window.open(
+                "{{ route('salud.indicador.pactoregional.sal.pacto1.excel', ['', '', '', '', '', '']) }}/tabla2/{{ $ind->id }}/" +
+                $('#anio').val() + "/" + $('#mes').val() + "/" + $('#provincia').val() + "/" + $('#distrito').val());
         }
 
         function descargar2() {
-            window.open("{{ url('/') }}/INDICADOR/Home/01/Excel/tabla2/" + $('#anio').val() + "/" + $('#provincia')
+            window.open("{{ url('/') }}/INDICADOR/Home/01/Excel/tabla2/" + $('#anio').val() + "/" + $(
+                    '#provincia')
                 .val() + "/" + $('#distrito').val() + "/" + $('#gestion').val() + "/" + ugel_select);
         }
 
         function verpdf(id) {
             window.open("{{ route('salud.indicador.pactoregional.exportar.pdf', '') }}/" + id);
         };
+
+        function gColumnx(div, data, titulo, subtitulo, tooltip) {
+            return Highcharts.chart(div, {
+                chart: {
+                    type: 'column'
+                },
+                colors: ['#5eb9a0', '#ef5350', '#f5bd22', '#ef5350'],
+                title: {
+                    text: titulo
+                },
+                subtitle: {
+                    text: subtitulo //null // Si no necesitas un subtítulo, puedes dejarlo como null
+                },
+                xAxis: {
+                    categories: data.categoria, //
+                    crosshair: true,
+                    labels: {
+                        style: {
+                            fontSize: '11px' // Ajusta el tamaño de la fuente
+                        }
+                    },
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: null // Puedes agregar un título si lo necesitas
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '11px' // Ajusta el tamaño de la fuente
+                        }
+                    },
+                },
+                tooltip: {
+                    shared: true, // Muestra los valores de todas las series en el mismo tooltip
+                    formatter: function() {
+                        let tooltipText = '<b>' + tooltip + ': ' + this.x +
+                            '</b><br/>'; // Muestra la categoría (año)
+                        this.points.forEach(function(point) {
+                            tooltipText += point.series.name + ': ' + Highcharts.numberFormat(Math
+                                .abs(
+                                    point.y), 0) + '<br/>';
+                        });
+                        return tooltipText;
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        stacking: data.serie.length > 1 ? 'normal' : null, // Apila las columnas
+                        dataLabels: {
+                            enabled: true,
+                            formatter: function() {
+                                return Highcharts.numberFormat(Math.abs(this.y),
+                                    0); // Formatea los números con separadores de miles
+                            },
+                            style: {
+                                color: data.serie.length > 1 ? 'white' : 'black',
+                                textOutline: 'none',
+                                fontSize: '10px'
+                            }
+                        }
+                    }
+                },
+                series: data.serie,
+                legend: {
+                    enabled: data.serie.length > 1,
+                    itemStyle: {
+                        //color: "#333333",
+                        // cursor: "pointer",
+                        fontSize: "11px",
+                        // fontWeight: "normal",
+                        // textOverflow: "ellipsis"
+                    },
+                },
+                credits: {
+                    enabled: false,
+                    text: 'Fuente: RENIEC - PADRÓN NOMINAL | Actualizado: JULIO 2024',
+                    href: null,
+                    position: {
+                        align: 'center',
+                        verticalAlign: 'bottom',
+                        x: 0,
+                        y: -5
+                    },
+                    style: {
+                        color: '#666',
+                        fontSize: '10px',
+                        textAlign: 'center'
+                    }
+                }
+            });
+        }
+
+
+        function gbar(div, categoria, series, titulo, subtitulo) {
+            Highcharts.chart(div, {
+                chart: {
+                    type: 'bar'
+                },
+                title: {
+                    text: titulo,
+                },
+                subtitle: {
+                    text: subtitulo,
+                    style: {
+                        // fontSize: '11px'
+                    }
+                },
+                xAxis: {
+                    categories: categoria,
+                    title: {
+                        text: '',
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        },
+                        // enabled: false,
+                    },
+                },
+                yAxis: {
+                    //min: 0,
+                    title: {
+                        text: '',
+                        align: 'high'
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        },
+                        overflow: 'justify',
+                        enabled: false,
+                    },
+                },
+                tooltip: {
+                    valueSuffix: ' %'
+                },
+                plotOptions: {
+                    bar: {
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.y} %'
+                        }
+                    }
+                },
+                legend: {
+                    enabled: false, //
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'top',
+                    x: -40,
+                    y: 80,
+                    floating: true,
+                    borderWidth: 1,
+                    backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+                    shadow: true
+                },
+                series: [{
+                    name: 'Cumplimiento',
+                    showInLegend: false,
+                    label: {
+                        enabled: false
+                    },
+                    data: series,
+                    // color: '#43beac'
+                }],
+                credits: {
+                    enabled: false
+                },
+            });
+        }
 
         function gSimpleColumn(div, datax, titulo, subtitulo, tituloserie) {
 
@@ -608,6 +786,80 @@
             });
         }
 
+        function gColumn(div, categorias, datos, titulo, subtitulo) {
+            Highcharts.chart(div, {
+                chart: {
+                    type: 'column' // Cambia el tipo de 'line' a 'column'
+                },
+                title: {
+                    text: titulo, // 'Número de actas de homologación registradas en el sistema de padrón nominal por mes'
+                },
+                subtitle: {
+                    text: subtitulo // 'Número de actas de homologación registradas en el sistema de padrón nominal por mes'
+                },
+                xAxis: {
+                    categories: categorias, // ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SET', 'OCT', 'NOV', 'DIC']
+                    labels: {
+                        style: {
+                            fontSize: '10px'
+                        }
+                    },
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        enabled: false,
+                        // text: 'Número de actas'
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '10px'
+                        }
+                    }
+                },
+                plotOptions: {
+                    // column: {
+                    //     dataLabels: {
+                    //         enabled: true,
+                    //         format: '{y}'
+                    //     }
+                    // },
+                    series: {
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontSize: '10px',
+                                fontWeight: 'normal',
+                            }
+                        },
+                    }
+                },
+                tooltip: {
+                    shared: true,
+                    headerFormat: '<b>{point.key}</b><br/>',
+                    pointFormat: '{series.name}: {point.y}<br/>'
+                },
+                legend: {
+                    itemStyle: {
+                        //"color": "#333333",
+                        "cursor": "pointer",
+                        "fontSize": "10px",
+                        "fontWeight": "normal",
+                        "textOverflow": "ellipsis"
+                    },
+                },
+                series: datos,
+                /* [{
+                                   name: 'Actas Enviadas',
+                                   data: [76, 28, 53, 46, 100, 10, 0, 0, 0, 0, 0, 0]
+                               }, {
+                                   name: 'Actas Aprobadas',
+                                   data: [10, 8, 9, 9, 14, 10, 0, 0, 0, 0, 0, 0]
+                               }] */
+                credits: false,
+            });
+        }
+
         function gBasicColumn(div, categorias, datos, titulo, subtitulo) {
             Highcharts.chart(div, {
                 chart: {
@@ -720,7 +972,7 @@
             });
         }
 
-        function gLineaBasica(div, data, titulo, subtitulo, titulovetical) {
+        function gLineaBasica(div, data, titulo, subtitulo, titulovetical, porcentaje) {
             const colors = ["#5eb9aa", "#f5bd22", "#e65310"];
             Highcharts.chart(div, {
                 title: {
@@ -763,6 +1015,9 @@
                             style: {
                                 fontSize: '10px',
                                 fontWeight: 'normal',
+                            },
+                            formatter: function() {
+                                return this.y + porcentaje;
                             }
                         },
                         /* label: {
@@ -771,8 +1026,12 @@
                         pointStart: 2010 */
                     }
                 },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.y}' + porcentaje + '</b>',
+                    shared: true
+                },
                 series: [{
-                    name: 'Actas Enviadas',
+                    name: 'Cumplen',
                     showInLegend: false,
                     data: data.dat
                 }],

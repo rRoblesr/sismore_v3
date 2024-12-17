@@ -2576,7 +2576,52 @@ INSERT INTO `par_indicador_general_meta` (`indicadorgeneral`, `periodo`, `distri
 ( 37, '', 57, 2022, '0', 2024, '93.3', '2024-11-12 16:31:31', '2024-11-12 16:31:31'),
 ( 37, '', 55, 2022, '0', 2024, '84.0', '2024-11-12 16:31:31', '2024-11-12 16:31:31');
 
-
+CREATE TABLE `sal_cubo_pacto4_padron_12meses` (
+    id int(11) auto_increment primary key,
+    importacion_id int(11) NULL DEFAULT NULL,
+				anio int(11) NULL DEFAULT NULL,
+				mes int(11) NULL DEFAULT NULL,
+				codigo_disa int(11) NULL DEFAULT NULL,
+				codigo_red int(11) NULL DEFAULT NULL,
+				codigo_unico int(11) NULL DEFAULT NULL,
+				tipo_documento varchar(20) NULL DEFAULT NULL,
+				numero_documento_identidad varchar(20) NULL DEFAULT NULL,
+				nombre_nino varchar(200) NULL DEFAULT NULL,
+				tipo_seguro varchar(50) NULL DEFAULT NULL,
+				fecha_nacimiento date NULL DEFAULT NULL,
+				edad_mes int(11) NULL DEFAULT NULL,
+				edad_dias int(11) NULL DEFAULT NULL,
+				fecha_inicio date NULL DEFAULT NULL,
+				fecha_final date NULL DEFAULT NULL,
+				num_dni30d int(11) NULL DEFAULT NULL,
+				num_dni60d int(11) NULL DEFAULT NULL,
+				num_cred_rn int(11) NULL DEFAULT NULL,
+				num_cred_mensual int(11) NULL DEFAULT NULL,
+				cumple_cred int(11) NULL DEFAULT NULL,
+				num_neumo int(11) NULL DEFAULT NULL,
+				num_rota int(11) NULL DEFAULT NULL,
+				num_polio int(11) NULL DEFAULT NULL,
+				num_penta int(11) NULL DEFAULT NULL,
+				cumple_vacuna int(11) NULL DEFAULT NULL,
+				cumple_esq_4m int(11) NULL DEFAULT NULL,
+				cumple_esq_6m int(11) NULL DEFAULT NULL,
+				cumple_suplemento int(11) NULL DEFAULT NULL,
+				cumple_dosaje_hb int(11) NULL DEFAULT NULL,
+				cumple_dni_enitido_30d int(11) NULL DEFAULT NULL,
+				cumple_dni_enitido_60d int(11) NULL DEFAULT NULL,
+				den int(11) NULL DEFAULT NULL,
+				num int(11) NULL DEFAULT NULL,
+				numero_documento_madre varchar(20) NULL DEFAULT NULL,
+				nombre_madre varchar(200) NULL DEFAULT NULL,
+				nrocel_madre varchar(20) NULL DEFAULT NULL,
+				ubigeo varchar(6) NULL DEFAULT NULL,
+				provincia varchar(200) NULL DEFAULT NULL,
+				distrito varchar(200) NULL DEFAULT NULL,
+				red varchar(200) NULL DEFAULT NULL,
+				microred varchar(200) NULL DEFAULT NULL,
+				eess varchar(200) NULL DEFAULT NULL,
+				foreign key(importacion_id) references par_importacion(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 
 
 

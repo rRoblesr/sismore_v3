@@ -1,55 +1,32 @@
-<table id="tabla1" class="table table-sm table-striped table-bordered font-12 m-0">
+<table id="tabla2" class="table table-sm table-striped table-bordered font-12 m-0">
     <thead>
         <tr class="bg-success-0 text-white text-center">
-            <th rowspan="2" class="text-center">Nº</th>
-            <th rowspan="2" class="text-center">Distrito</th>
-            <th rowspan="1" colspan="2" class="text-center">Linea Base</th>
-            <th rowspan="1" colspan="4" class="text-center">Logro Esperados</th>
-            <th rowspan="1" colspan="4" class="text-center">Valores Obtenidos</th>
-            <th rowspan="2" class="text-center">Avance<br>{{ $aniob }}</th>
-            <th rowspan="2" class="text-center">Condición</th>
+            <th class="text-center">Nº</th>
+            <th class="text-center">Red</th>
+            <th class="text-center">Microred</th>
+            <th class="text-center">Establecimiento de Salud</th>
+            <th class="text-center"> {{ 'Niños < ' }}12 meses</th>
+            <th class="text-center">CRED</th>
+            <th class="text-center">Vacuna</th>
+            <th class="text-center">Suplemento</th>
+            <th class="text-center">Paquete Completo</th>
+            <th class="text-center">Indicador</th>
         </tr>
-        <tr class="bg-success-0 text-white text-center">
-            <th class="text-center">Año</th>
-            <th class="text-center">Valor</th>
-
-            <th class="text-center">2023</th>
-            <th class="text-center">2024</th>
-            <th class="text-center">2025</th>
-            <th class="text-center">2026</th>
-
-            <th class="text-center">2023</th>
-            <th class="text-center">2024</th>
-            <th class="text-center">2025</th>
-            <th class="text-center">2026</th>
-        </tr>
-
     </thead>
     @if ($base->count() > 0)
         <tbody>
             @foreach ($base as $key => $item)
-                <tr class="text-center {{ $item->dis == $ndis ? 'table-warning' : '' }}">
+                <tr class="text-center">
                     <td>{{ $key + 1 }}</td>
-                    <td class="text-left">{{ $item->dis }}</td>
-                    <td>{{ $item->anio_base }}</td>
-                    <td>{{ $item->valor_base }}</td>
-                    <td>{{ $item->v2023 }}</td>
-                    <td>{{ $item->v2024 }}</td>
-                    <td>{{ $item->v2025 }}</td>
-                    <td>{{ $item->v2026 }}</td>
-                    <td>{{ $item->r2023 }}</td>
-                    <td>{{ $item->r2024 }}</td>
-                    <td>{{ $item->r2025 }}</td>
-                    <td>{{ $item->r2026 }}</td>
-                    <td>{!! avance($item->avance) !!}</td>{{--  --}}
-                    <td>
-                        @if ($item->cumple == 1)
-                            <button type="button"
-                                class="btn btn-xs btn-success-0 p-1 font-11 text-nowrap">&nbsp;&nbsp;&nbsp;Cumple&nbsp;&nbsp;&nbsp;</button>
-                        @else
-                            <button type="button" class="btn btn-xs btn-danger p-1 font-11 text-nowrap">No Cumple</button>
-                        @endif
-                    </td>
+                    <td class="text-left">{{ $item->red }}</td>
+                    <td class="text-left">{{ $item->microred }}</td>
+                    <td class="text-left">{{ $item->eess_parto }}</td>
+                    <td>{{ $item->denominador }}</td>
+                    <td>{{ $item->condicion1 }}</td>
+                    <td>{{ $item->condicion2 }}</td>
+                    <td>{{ $item->condicion3 }}</td>
+                    <td>{{ $item->numerador }}</td>
+                    <td>{!! avance($item->indicador) !!}</td>
                 </tr>
             @endforeach
         </tbody>
@@ -65,7 +42,7 @@
     @else
         <tbody>
             <tr class="text-center">
-                <td class="text-center" colspan="11"><a href="#" class="">Sin información</a></td>
+                <td class="text-center" colspan="10"><a href="#" class="">Sin información</a></td>
             </tr>
         </tbody>
     @endif

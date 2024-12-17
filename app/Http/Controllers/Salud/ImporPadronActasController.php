@@ -13,6 +13,7 @@ use App\Models\Parametro\FuenteImportacion;
 use App\Models\Parametro\Mes;
 use App\Models\Parametro\Ubigeo;
 use App\Models\Salud\CuboPacto3PadronMaterno;
+use App\Models\Salud\CuboPacto4Padron12Meses;
 use App\Models\Salud\DataPacto1;
 use App\Models\Salud\DataPacto3;
 use App\Models\Salud\ImporPadronActas;
@@ -533,6 +534,176 @@ class ImporPadronActasController extends Controller
 
                     if (!empty($dataBatch)) {
                         CuboPacto3PadronMaterno::insert($dataBatch);
+                    }
+
+                    DB::commit();
+                } catch (Exception $e) {
+                    DB::rollBack();
+                    $importacion->estado = 'PE';
+                    $importacion->save();
+
+                    return $this->json_output(400, "Error en la carga de datos: " . $e->getMessage());
+                }
+
+                // try {
+                //     DB::select('call sal_pa_procesarControlCalidadColumnas(?)', [$importacion->id]);
+                // } catch (Exception $e) {
+                //     // Si ocurre un error, actualizar el estado a 'PE' (pendiente) si es necesario
+                //     $importacion->estado = 'PE';
+                //     $importacion->save();
+
+                //     $mensaje = "Error al procesar la normalizacion de datos sal_pa_procesarControlCalidadColumnas. " . $e->getMessage();
+                //     return $this->json_output(400, $mensaje);
+                // }
+
+                // try {
+                //     DB::select('call sal_pa_procesarCalidadReporte(?)', [$importacion->id]);
+                // } catch (Exception $e) {
+                //     // Si ocurre un error, actualizar el estado a 'PE' (pendiente) si es necesario
+                //     $importacion->estado = 'PE';
+                //     $importacion->save();
+
+                //     $mensaje = "Error al procesar la normalizacion de datos sal_pa_procesarCalidadReporte. " . $e->getMessage();
+                //     return $this->json_output(400, $mensaje);
+                // }
+
+                $this->json_output(200, "Archivo Excel subido y procesado correctamente.");
+                break;
+            case ImporPadronActasController::$FUENTE['pacto_4']:
+
+                if (ImportacionRepositorio::Importacion_PE($rq->fechaActualizacion, ImporPadronActasController::$FUENTE['pacto_4']) !== null) {
+                    return $this->json_output(400, "Error, ya existe un archivo pendiente de aprobación para la fecha ingresada");
+                }
+
+                if (ImportacionRepositorio::Importacion_PR($rq->fechaActualizacion, ImporPadronActasController::$FUENTE['pacto_4']) !== null) {
+                    return $this->json_output(400, "Error, ya existe un archivo procesado para la fecha ingresada");
+                }
+
+                $this->validate($rq, ['file' => 'required|mimes:xls,xlsx']);
+                $archivo = $rq->file('file');
+                $array = (new tablaXImport)->toArray($archivo);
+
+                $encabezadosEsperados = [
+                    'anio',
+                    'mes',
+                    'codigo_disa',
+                    'codigo_red',
+                    'codigo_unico',
+                    'tipo_documento',
+                    'numero_documento_identidad',
+                    'nombre_nino',
+                    'tipo_seguro',
+                    'fecha_nacimiento',
+                    'edad_mes',
+                    'edad_dias',
+                    'fecha_inicio',
+                    'fecha_final',
+                    'num_dni30d',
+                    'num_dni60d',
+                    'num_cred_rn',
+                    'num_cred_mensual',
+                    'cumple_cred',
+                    'num_neumo',
+                    'num_rota',
+                    'num_polio',
+                    'num_penta',
+                    'cumple_vacuna',
+                    'cumple_esq_4m',
+                    'cumple_esq_6m',
+                    'cumple_suplemento',
+                    'cumple_dosaje_hb',
+                    'cumple_dni_enitido_30d',
+                    'cumple_dni_enitido_60d',
+                    'den',
+                    'num',
+                    'numero_documento_madre',
+                    'nombre_madre',
+                    'nrocel_madre',
+                    'ubigeo',
+                    'provincia',
+                    'distrito',
+                    'red',
+                    'microred',
+                    'eess',
+                ];
+
+                $encabezadosArchivo = array_keys($array[0][0]);
+
+                $faltantes = array_diff($encabezadosEsperados, $encabezadosArchivo);
+                if (!empty($faltantes)) {
+                    return $this->json_output(400, 'Error: Los encabezados del archivo no coinciden con el formato esperado. Faltan columnas esperadas.', $faltantes);
+                }
+
+                try {
+                    DB::beginTransaction();
+
+                    $importacion = Importacion::create([
+                        'fuenteImportacion_id' => ImporPadronActasController::$FUENTE['pacto_4'],
+                        'usuarioId_Crea' => auth()->user()->id,
+                        'fechaActualizacion' => $rq->fechaActualizacion,
+                        'estado' => 'PR'
+                    ]);
+
+                    $distritos = Ubigeo::where('codigo', 'like', '25%')->whereRaw('length(codigo)=6')->pluck('id', 'codigo');
+                    $provincias = Ubigeo::where('codigo', 'like', '25%')->whereRaw('length(codigo)=4')->pluck('id', 'codigo');
+
+                    $batchSize = 500;
+                    $dataBatch = [];
+
+                    foreach ($array[0] as $row) {
+                        $dataBatch[] = [
+                            'importacion_id' => $importacion->id,
+                            'anio' => $row['anio'],
+                            'mes' => $row['mes'],
+                            'codigo_disa' => $row['codigo_disa'] == 'NULL' ? null : $row['codigo_disa'],
+                            'codigo_red' => $row['codigo_red'] == 'NULL' ? null : $row['codigo_red'],
+                            'codigo_unico' => $row['codigo_unico'] == 'NULL' ? null : $row['codigo_unico'],
+                            'tipo_documento' => $row['tipo_documento'],
+                            'numero_documento_identidad' => $row['numero_documento_identidad'],
+                            'nombre_nino' => $row['nombre_nino'],
+                            'tipo_seguro' => $row['tipo_seguro'],
+                            'fecha_nacimiento' => null, // $row['fecha_nacimiento'] == 'NULL' ? null : $row['fecha_nacimiento'],
+                            'edad_mes' => $row['edad_mes'],
+                            'edad_dias' => $row['edad_dias'],
+                            'fecha_inicio' => null, //$row['fecha_inicio'] == 'NULL' ? null : $row['fecha_inicio'],
+                            'fecha_final' => null, //$row['fecha_final'] == 'NULL' ? null : $row['fecha_final'],
+                            'num_dni30d' => $row['num_dni30d'],
+                            'num_dni60d' => $row['num_dni60d'],
+                            'num_cred_rn' => $row['num_cred_rn'],
+                            'num_cred_mensual' => $row['num_cred_mensual'],
+                            'cumple_cred' => $row['cumple_cred'],
+                            'num_neumo' => $row['num_neumo'],
+                            'num_rota' => $row['num_rota'],
+                            'num_polio' => $row['num_polio'],
+                            'num_penta' => $row['num_penta'],
+                            'cumple_vacuna' => $row['cumple_vacuna'],
+                            'cumple_esq_4m' => $row['cumple_esq_4m'],
+                            'cumple_esq_6m' => $row['cumple_esq_6m'],
+                            'cumple_suplemento' => $row['cumple_suplemento'],
+                            'cumple_dosaje_hb' => $row['cumple_dosaje_hb'],
+                            'cumple_dni_enitido_30d' => $row['cumple_dni_enitido_30d'],
+                            'cumple_dni_enitido_60d' => $row['cumple_dni_enitido_60d'],
+                            'den' => $row['den'],
+                            'num' => $row['num'],
+                            'numero_documento_madre' => $row['numero_documento_madre'] == 'NULL' ? null : $row['numero_documento_madre'],
+                            'nombre_madre' => $row['nombre_madre'] == 'NULL' ? null : $row['nombre_madre'],
+                            'nrocel_madre' => $row['nrocel_madre'] == 'NULL' ? null : $row['nrocel_madre'],
+                            'ubigeo' => $row['ubigeo'] == 'NULL' ? null : $row['ubigeo'],
+                            'provincia' => $row['provincia'] == 'NULL' ? null : $row['provincia'],
+                            'distrito' => $row['distrito'] == 'NULL' ? null : $row['distrito'],
+                            'red' => $row['red'] == 'NULL' ? null : $row['red'],
+                            'microred' => $row['microred'] == 'NULL' ? null : $row['microred'],
+                            'eess' => $row['eess'] == 'NULL' ? null : $row['eess'],
+                        ];
+
+                        if (count($dataBatch) >= $batchSize) {
+                            CuboPacto4Padron12Meses::insert($dataBatch);
+                            $dataBatch = [];
+                        }
+                    }
+
+                    if (!empty($dataBatch)) {
+                        CuboPacto4Padron12Meses::insert($dataBatch);
                     }
 
                     DB::commit();
