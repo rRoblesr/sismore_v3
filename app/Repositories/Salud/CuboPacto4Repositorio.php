@@ -13,6 +13,8 @@ class CuboPacto4Repositorio
 
     public static function head($anio, $mes, $provincia, $distrito)
     {
+        $dis_ = Ubigeo::select(DB::raw('CASE WHEN nombre = "ALEXANDER VON HUMBOLDT" THEN "ALEXANDER VON HUMBO" ELSE nombre END AS nombre'), 'id')->whereRaw('length(codigo) = 6')->where('codigo', 'like', '25%')->get()->pluck('nombre', 'id');
+        $pro_ = Ubigeo::whereRaw('length(codigo) = 4')->where('codigo', 'like', '25%')->get()->pluck('nombre', 'id');
         $query = CuboPacto4Padron12Meses::select(
             DB::raw('sum(num) si'),
             DB::raw('sum(den)-sum(num) no'),
@@ -21,8 +23,8 @@ class CuboPacto4Repositorio
         )->where('anio', $anio)->where('mes', $mes);
         $query = $query->where('codigo_disa', 34)->whereIn('codigo_red', [0, 1, 2, 3, 4]);
 
-        // if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
-        // if ($distrito > 0) $query = $query->where('distrito_id', $distrito);
+        if ($provincia > 0) $query = $query->where('provincia', $pro_[$provincia] ?? "");
+        if ($distrito > 0) $query = $query->where('distrito', $dis_[$distrito] ?? "");
 
         $query = $query->get()->first();
         return $query;
@@ -30,6 +32,9 @@ class CuboPacto4Repositorio
 
     public static function Tabla01($importacion, $indicador, $anio, $mes, $provincia, $distrito)
     {
+        $dis_ = Ubigeo::select(DB::raw('CASE WHEN nombre = "ALEXANDER VON HUMBOLDT" THEN "ALEXANDER VON HUMBO" ELSE nombre END AS nombre'), 'id')->whereRaw('length(codigo) = 6')->where('codigo', 'like', '25%')->get()->pluck('nombre', 'id');
+        $pro_ = Ubigeo::whereRaw('length(codigo) = 4')->where('codigo', 'like', '25%')->get()->pluck('nombre', 'id');
+
         $v1 = CuboPacto4Padron12Meses::select(
             // 'distrito_id',
             'distrito',
@@ -55,6 +60,9 @@ class CuboPacto4Repositorio
 
     public static function Tabla02($importacion, $indicador, $anio, $mes, $provincia, $distrito)
     {
+        $dis_ = Ubigeo::select(DB::raw('CASE WHEN nombre = "ALEXANDER VON HUMBOLDT" THEN "ALEXANDER VON HUMBO" ELSE nombre END AS nombre'), 'id')->whereRaw('length(codigo) = 6')->where('codigo', 'like', '25%')->get()->pluck('nombre', 'id');
+        $pro_ = Ubigeo::whereRaw('length(codigo) = 4')->where('codigo', 'like', '25%')->get()->pluck('nombre', 'id');
+
         $v1 = CuboPacto4Padron12Meses::select(
             'red',
             'microred',
@@ -69,12 +77,18 @@ class CuboPacto4Repositorio
 
         $v1 = $v1->where('codigo_disa', 34)->whereIn('codigo_red', [0, 1, 2, 3, 4]);
 
+        if ($provincia > 0) $v1 = $v1->where('provincia', $pro_[$provincia] ?? "");
+        if ($distrito > 0) $v1 = $v1->where('distrito', $dis_[$distrito] ?? "");
+
         $v1 = $v1->groupBy('red', 'microred', 'eess_parto',)->orderBy('indicador', 'desc')->get();
         return $v1;
     }
 
     public static function Anal01($importacion, $anio, $mes, $provincia, $distrito)
     {
+        $dis_ = Ubigeo::select(DB::raw('CASE WHEN nombre = "ALEXANDER VON HUMBOLDT" THEN "ALEXANDER VON HUMBO" ELSE nombre END AS nombre'), 'id')->whereRaw('length(codigo) = 6')->where('codigo', 'like', '25%')->get()->pluck('nombre', 'id');
+        $pro_ = Ubigeo::whereRaw('length(codigo) = 4')->where('codigo', 'like', '25%')->get()->pluck('nombre', 'id');
+
         $query = CuboPacto4Padron12Meses::select(
             'distrito',
             DB::raw('100*sum(num)/sum(den) as indicador'),
@@ -84,8 +98,9 @@ class CuboPacto4Repositorio
 
         $query = $query->where('codigo_disa', 34)->whereIn('codigo_red', [0, 1, 2, 3, 4]);
 
-        // if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
-        // if ($distrito > 0) $query = $query->where('distrito_id', $distrito);
+        // if ($provincia > 0) $query = $query->where('provincia', $pro_[$provincia] ?? "");
+        // if ($distrito > 0) $query = $query->where('distrito', $dis_[$distrito] ?? "");
+
         $query = $query->groupBy('distrito')->orderBy('indicador', 'desc')->get();
         return $query;
     }
@@ -93,6 +108,9 @@ class CuboPacto4Repositorio
 
     public static function Anal02($importacion, $anio, $mes, $provincia, $distrito)
     {
+        $dis_ = Ubigeo::select(DB::raw('CASE WHEN nombre = "ALEXANDER VON HUMBOLDT" THEN "ALEXANDER VON HUMBO" ELSE nombre END AS nombre'), 'id')->whereRaw('length(codigo) = 6')->where('codigo', 'like', '25%')->get()->pluck('nombre', 'id');
+        $pro_ = Ubigeo::whereRaw('length(codigo) = 4')->where('codigo', 'like', '25%')->get()->pluck('nombre', 'id');
+
         $query = CuboPacto4Padron12Meses::select(
             'mes',
             DB::raw('sum(num) as si'),
@@ -101,14 +119,18 @@ class CuboPacto4Repositorio
 
         $query = $query->where('codigo_disa', 34)->whereIn('codigo_red', [0, 1, 2, 3, 4]);
 
-        // if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
-        // if ($distrito > 0) $query = $query->where('distrito_id', $distrito);
+        if ($provincia > 0) $query = $query->where('provincia', $pro_[$provincia] ?? "");
+        if ($distrito > 0) $query = $query->where('distrito', $dis_[$distrito] ?? "");
+
         $query = $query->groupBy('mes')->orderBy('mes')->get();
         return $query;
     }
- 
+
     public static function Anal03($importacion, $anio, $mes, $provincia, $distrito)
     {
+        $dis_ = Ubigeo::select(DB::raw('CASE WHEN nombre = "ALEXANDER VON HUMBOLDT" THEN "ALEXANDER VON HUMBO" ELSE nombre END AS nombre'), 'id')->whereRaw('length(codigo) = 6')->where('codigo', 'like', '25%')->get()->pluck('nombre', 'id');
+        $pro_ = Ubigeo::whereRaw('length(codigo) = 4')->where('codigo', 'like', '25%')->get()->pluck('nombre', 'id');
+
         $query = CuboPacto4Padron12Meses::select(
             'mes',
             DB::raw('sum(num) as si'),
@@ -117,8 +139,9 @@ class CuboPacto4Repositorio
 
         $query = $query->where('codigo_disa', 34)->whereIn('codigo_red', [0, 1, 2, 3, 4]);
 
-        // if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
-        // if ($distrito > 0) $query = $query->where('distrito_id', $distrito);
+        if ($provincia > 0) $query = $query->where('provincia', $pro_[$provincia] ?? "");
+        if ($distrito > 0) $query = $query->where('distrito', $dis_[$distrito] ?? "");
+
         $query = $query->groupBy('mes')->orderBy('mes')->get();
         return $query;
     }

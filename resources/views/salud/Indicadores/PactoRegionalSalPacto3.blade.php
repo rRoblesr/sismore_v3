@@ -114,7 +114,7 @@
                                 <span data-plugin="counterup" id="gl"></span>
                             </h4>
                             <p class="mb-0 mt-1 text-truncate">
-                                Total Niños y Niñas
+                                Total Mujeres con Partos
                             </p>
                         </div>
                     </div>
