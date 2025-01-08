@@ -277,6 +277,31 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent p-0">
+                    <div class="card-widgets">
+                        <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
+                                class="fa fa-file-excel"></i> Descargar</button>
+                    </div>
+                    <h3 class="text-black font-14 mb-0">Evaluación de cumplimiento de los registros de niños y niñas
+                        menores de 6 años del padrón nominal
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="table-responsive" id="vtable3">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!--  Modal content for the above example -->
     <div class="modal fade" id="modal-nino" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
         aria-hidden="true" style="display: none;">
@@ -482,6 +507,7 @@
             panelGraficas('tabla1');
             // panelGraficas('tabla2');
             tabla2('tabla2');
+            panelGraficas('tabla3');
         }
 
         function panelGraficas(div) {
