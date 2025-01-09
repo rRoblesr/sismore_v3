@@ -389,6 +389,44 @@
 
         </div>
     </div><!-- /.modal -->
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                    <div class="card-widgets">
+                        <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel2()">
+                            <i class="fa fa-file-excel"></i> Descargar</button>
+                    </div>
+                    <h3 class="card-title">Número de registros observados por centro poblado
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive" id="ctabla2">
+                                {{-- <table id="tabla2" class="table table-sm table-striped table-bordered font-10">
+                                    <thead>
+                                        <tr class="table-success-0 text-white">
+                                            <th class="text-center">N°</th>
+                                            <th class="text-center">Provincia</th>
+                                            <th class="text-center">Distrito</th>
+                                            <th class="text-center">Centro Poblado</th>
+                                            <th class="text-center">Cantidad</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table> --}}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('js')
@@ -397,6 +435,7 @@
             '#64E572', '#9F9655', '#FFF263', '#6AF9C4'
         ];
         var tableprincipal;
+        var tableresumen;
         var criterio = {{ $criterio }};
         var pos = {{ $pos }};
         var anal1;
@@ -517,7 +556,7 @@
                     url: "{{ route('salud.padronnominal.tablerocalidad.criterio.listar3') }}",
                     type: "POST",
                     headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') 
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     data: function(d) {
                         d.importacion = {{ $importacion }};
@@ -807,8 +846,62 @@
                     },
                 ]
             });
+
+            // tableresumen = $('#tabla2').DataTable({
+            //     responsive: true,
+            //     autoWidth: false,
+            //     processing: true, // Indica que los datos se procesan en el servidor
+            //     serverSide: true, // Habilita la paginación en el servidor
+            //     ordered: true,
+            //     language: table_language,
+            //     destroy: true,
+            //     ajax: {
+            //         url: "{{ route('salud.padronnominal.tablerocalidad.criterio.listar4') }}",
+            //         type: "POST",
+            //         headers: {
+            //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            //         },
+            //         data: function(d) {
+            //             d.importacion = {{ $importacion }};
+            //             d.criterio = {{ $criterio }};
+            //             d.pos = {{ $pos }};
+            //             d.edades = $('#edades').val();
+            //             d.provincia = $('#provincia').val();
+            //             d.distrito = $('#distrito').val();
+            //             d.desa = 0;
+            //         }
+            //     },
+            //     columns: [{
+            //             data: 'item',
+            //             name: 'item'
+            //         }, {
+            //             data: 'provincia',
+            //             name: 'provincia'
+            //         },
+            //         {
+            //             data: 'distrito',
+            //             name: 'distrito'
+            //         },
+            //         {
+            //             data: 'centro_poblado',
+            //             name: 'centro_poblado'
+            //         },
+            //         {
+            //             data: 'conteo',
+            //             name: 'conteo'
+            //         },
+            //     ],
+
+            //     columnDefs: [{
+            //         className: 'text-left',
+            //         targets: [1, 2, 3],
+            //         className: 'text-center',
+            //         targets: [0, 4]
+            //     }, ]
+            // });
             panelGraficas('anal1');
             panelGraficas('anal2');
+            panelGraficas('tabla2');
         }
 
         function panelGraficas(div) {
@@ -844,9 +937,17 @@
                             'Edad')
                     } else if (div == "anal2") {
                         var cflx = cfl('{{ $title }}');
-                        anal2 = gColumn(div, data.info, '',
+                        anal2 = gColumnDrilldown(div, data.info, '',
                             cflx + ', según provincia',
                             'Provincia')
+                    } else if (div == "tabla2") {
+                        $('#ctabla2').html(data.excel);
+                        $('#tabla2').DataTable({
+                            responsive: true,
+                            autoWidth: false,
+                            ordered: true,
+                            language: table_language,
+                        });
                     }
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
@@ -1015,79 +1116,19 @@
             });
         }
 
-        function panelGraficasadasd(div) {
-            $.ajax({
-                url: "{{ route('salud.padronnominal.tablerocalidad.reporte') }}",
-                data: {
-                    'div': div,
-                    "anio": $('#anio').val(),
-                    "mes": $('#mes').val(),
-                    "provincia": $('#provincia').val(),
-                    "distrito": $('#distrito').val(),
-                },
-                type: "GET",
-                dataType: "JSON",
-                success: function(data) {
-                    switch (div) {
-                        case 'head':
-                            $('#card1').text(data.card1).counterUp({
-                                delay: 10,
-                                time: 1000
-                            });
-                            $('#card2').text(data.card2).counterUp({
-                                delay: 10,
-                                time: 1000
-                            });
-                            $('#card3').text(data.card3).counterUp({
-                                delay: 10,
-                                time: 1000
-                            });
-                            $('#card4').text(data.card4).counterUp({
-                                delay: 10,
-                                time: 1000
-                            });
-                            break;
-                        case 'anal1':
-                            // console.log(data.avance);
-                            GaugeSeries('anal1', data.avance, 'Porcentaje de Visitados');
-                            break;
-                        case 'anal2':
-                            GaugeSeries('anal2', data.avance, 'Porcentaje con DNI');
-                            break;
-                        case 'anal3':
-                            GaugeSeries('anal3', data.avance, 'Porcentaje con Seguro Salud');
-                            break;
-                        case 'anal4':
-                            GaugeSeries('anal4', data.avance, 'Porcentaje con EESS de atención');
-                            break;
-                        case 'tabla1':
-                            $('#ctabla1').html(data.excel);
-                            break;
-                        case 'tabla2':
-                            $('#ctabla2').html(data.excel);
-                            // $('#tabla2').DataTable({
-                            //     responsive: true,
-                            //     autoWidth: false,
-                            //     ordered: true,
-                            //     language: table_language,
-                            // });
-                            break;
-
-                        default:
-                            break;
-                    }
-
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 1");
-                    console.log(jqXHR);
-                },
-            });
-        }
-
+       
         function descargarExcel() {
             window.open(
                 "{{ route('salud.padronnominal.tablerocalidad.criterio.exportar.excel', ['div' => 'div', 'importacion' => $importacion, 'criterio' => $criterio, 'edades' => 'edades', 'provincia' => 'provincia', 'distrito' => 'distrito']) }}"
+                .replace('edades', $('#edades').val())
+                .replace('provincia', $('#provincia').val())
+                .replace('distrito', $('#distrito').val())
+            );
+        }
+
+        function descargarExcel2() {
+            window.open(
+                "{{ route('salud.padronnominal.tablerocalidad.criterio.exportar.excel2', ['div' => 'div', 'importacion' => $importacion, 'criterio' => $criterio, 'edades' => 'edades', 'provincia' => 'provincia', 'distrito' => 'distrito']) }}"
                 .replace('edades', $('#edades').val())
                 .replace('provincia', $('#provincia').val())
                 .replace('distrito', $('#distrito').val())
@@ -1104,33 +1145,36 @@
                     text: titulo
                 },
                 subtitle: {
-                    text: subtitulo //null // Si no necesitas un subtítulo, puedes dejarlo como null
+                    text: subtitulo
                 },
                 xAxis: {
-                    categories: data.categoria, //
+                    categories: data.categoria,
                     crosshair: true,
                     labels: {
                         style: {
-                            fontSize: '11px' // Ajusta el tamaño de la fuente
+                            fontSize: '11px'
                         }
                     },
                 },
                 yAxis: {
                     min: 0,
                     title: {
-                        text: null // Puedes agregar un título si lo necesitas
+                        text: null
                     },
                     labels: {
                         style: {
-                            fontSize: '11px' // Ajusta el tamaño de la fuente
+                            fontSize: '11px'
                         }
                     },
                 },
                 tooltip: {
-                    shared: true, // Muestra los valores de todas las series en el mismo tooltip
+                    shared: true,
                     formatter: function() {
-                        let tooltipText = '<b>' + tooltip + ': ' + this.x +
-                            '</b><br/>'; // Muestra la categoría (año)
+                        let categoryName = this.points[0].series.chart.xAxis[0].categories[this.points[0].point
+                            .index];
+
+                        let tooltipText = '<b>' + tooltip + ': ' + categoryName +
+                            '</b><br/>';
                         this.points.forEach(function(point) {
                             tooltipText += point.series.name + ': ' + Highcharts.numberFormat(Math.abs(
                                 point.y), 0) + '<br/>';
@@ -1140,12 +1184,12 @@
                 },
                 plotOptions: {
                     column: {
-                        stacking: data.serie.length > 1 ? 'normal' : null, // Apila las columnas
+                        stacking: data.serie.length > 1 ? 'normal' : null,
                         dataLabels: {
                             enabled: true,
                             formatter: function() {
                                 return Highcharts.numberFormat(Math.abs(this.y),
-                                    0); // Formatea los números con separadores de miles
+                                    0);
                             },
                             style: {
                                 color: data.serie.length > 1 ? 'white' : 'black',
@@ -1168,19 +1212,163 @@
                 },
                 credits: {
                     enabled: false,
-                    // text: 'Fuente: RENIEC - PADRÓN NOMINAL | Actualizado: JULIO 2024',
-                    // href: null,
-                    // position: {
-                    //     align: 'center',
-                    //     verticalAlign: 'bottom',
-                    //     x: 0,
-                    //     y: -5
-                    // },
-                    // style: {
-                    //     color: '#666',
-                    //     fontSize: '10px',
-                    //     textAlign: 'center'
-                    // }
+                }
+            });
+        }
+
+        function gColumnDrilldownxx(div, data, titulo, subtitulo, tooltip) {
+            return Highcharts.chart(div, {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: titulo
+                },
+                subtitle: {
+                    text: subtitulo
+                },
+                xAxis: {
+                    type: 'category',
+                    labels: {
+                        style: {
+                            fontSize: '11px'
+                        }
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: null
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '11px'
+                        }
+                    }
+                },
+                tooltip: {
+                    shared: true,
+                    formatter: function() {
+                        let tooltipText = '<b>' + this.key + '</b><br/>';
+                        this.points?.forEach(function(point) {
+                            tooltipText += point.series.name + ': ' +
+                                Highcharts.numberFormat(Math.abs(point.y), 0) + '<br/>';
+                        });
+                        return tooltipText;
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        stacking: data.serie.length > 1 ? 'normal' : null,
+                        dataLabels: {
+                            enabled: true,
+                            formatter: function() {
+                                return Highcharts.numberFormat(Math.abs(this.y), 0);
+                            },
+                            style: {
+                                color: data.serie.length > 1 ? 'white' : 'black',
+                                textOutline: 'none',
+                                fontSize: '10px'
+                            }
+                        }
+                    }
+                },
+                series: data.serie,
+                drilldown: {
+                    series: data.drilldown
+                },
+                legend: {
+                    enabled: data.serie.length > 1,
+                    itemStyle: {
+                        fontSize: "11px"
+                    }
+                },
+                credits: {
+                    enabled: false
+                }
+            });
+        }
+
+        function gColumnDrilldown(div, data, titulo, subtitulo, tooltip) {
+            return Highcharts.chart(div, {
+                chart: {
+                    type: 'column'
+                },
+                colors: ['#5eb9a0', '#ef5350', '#f5bd22', '#ef5350'],
+                title: {
+                    text: titulo
+                },
+                subtitle: {
+                    text: subtitulo
+                },
+                xAxis: {
+                    type: 'category',
+                    labels: {
+                        style: {
+                            fontSize: '11px'
+                        }
+                    },
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: null
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '11px'
+                        }
+                    },
+                },
+                tooltip: {
+                    enabled: false,
+                    shared: true,
+                    formatter: function() {
+
+                        let tooltipText = '<b>' + tooltip + ': ' + this.name +
+                            '</b><br/>';
+                        this.points.forEach(function(point) {
+                            // tooltipText += point.series.name + ': ' +
+                            //     Highcharts.numberFormat(Math.abs(point.y), 0) + '<br/>';
+                            tooltipText += 'Conteo : ' +
+                                Highcharts.numberFormat(Math.abs(point.y), 0) + '<br/>';
+                        });
+                        return tooltipText;
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        stacking: data.serie.length > 1 ? 'normal' : null,
+                        dataLabels: {
+                            enabled: true,
+                            formatter: function() {
+                                return Highcharts.numberFormat(Math.abs(this.y),
+                                    0);
+                            },
+                            style: {
+                                color: data.serie.length > 1 ? 'white' : 'black',
+                                textOutline: 'none',
+                                fontSize: '10px'
+                            }
+                        }
+                    }
+                },
+                series: data.serie,
+                drilldown: {
+                    series: data.drilldown,
+                },
+                legend: {
+                    enabled: data.serie.length > 1,
+                    itemStyle: {
+                        //color: "#333333",
+                        // cursor: "pointer",
+                        fontSize: "11px",
+                        // fontWeight: "normal",
+                        // textOverflow: "ellipsis"
+                    },
+                },
+                credits: {
+                    enabled: false,
                 }
             });
         }
@@ -1424,6 +1612,7 @@
 
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/drilldown.js"></script>
 
     <script src="https://code.highcharts.com/highcharts-more.js"></script>
     <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>

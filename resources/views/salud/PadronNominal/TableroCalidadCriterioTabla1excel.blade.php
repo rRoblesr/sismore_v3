@@ -8,11 +8,15 @@
             <th class="text-center">Apellido paterno</th>
             <th class="text-center">Apellido materno</th>
             <th class="text-center">Nombre</th>
+            <th class="text-center">Fecha Nacimiento</th>
             <th class="text-center">Edad</th>
             <th class="text-center">Seguro</th>
             <th class="text-center">Visitado</th>
             <th class="text-center">Encontrado</th>
+            <th class="text-center">Ubigeo</th>
             <th class="text-center">Distrito</th>
+            <th class="text-center">Ubigeo CP</th>
+            <th class="text-center">Centro Poblado</th>
             <th class="text-center">Disa de Atención</th>
             <th class="text-center">Red de Atención</th>
             <th class="text-center">Microred de Atención</th>
@@ -37,11 +41,15 @@
                 <td>{{ $item->apellido_paterno }}</td>
                 <td>{{ $item->apellido_materno }}</td>
                 <td>{{ $item->nombre }}</td>
+                <td>{{ $item->fecha_nacimiento }}</td>
                 <td>{{ $item->edadx }}</td>
                 <td>{{ $item->segurox }}</td>
                 <td>{{ $item->visita == 1 ? 'SI' : 'NO' }}</td>
                 <td>{{ $item->encontrado == 1 ? 'SI' : 'NO' }}</td>
+                <td>{{ $item->ubigeo }}</td>
                 <td>{{ $item->distritox }}</td>
+                <td>{{ $item->centro_poblado }}</td>
+                <td>{{ $item->centro_poblado_nombre }}</td>
                 <td>{{ $item->disax }}</td>
                 <td>{{ $item->redx }}</td>
                 <td>{{ $item->microx }}</td>

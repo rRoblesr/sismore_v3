@@ -71,7 +71,7 @@
                                         <label class="col-form-label">Fuente de datos</label>
                                         <div class="">
                                             <input type="text" class="form-control btn-xs" readonly="readonly"
-                                                value="ESTABLECIMIENTOS">
+                                                value="PADRÓN NOMINAL">
                                         </div>
                                     </div>
                                 </div>

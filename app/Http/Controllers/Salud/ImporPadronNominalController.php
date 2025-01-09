@@ -371,6 +371,17 @@ class ImporPadronNominalController extends Controller
             return $this->json_output(400, $mensaje);
         }
 
+        try {
+            DB::select('call sal_pa_procesarPacto01Homologados(?)', [$importacion->id]);
+        } catch (Exception $e) {
+            // Si ocurre un error, actualizar el estado a 'PE' (pendiente) si es necesario
+            $importacion->estado = 'PE';
+            $importacion->save();
+
+            $mensaje = "Error al procesar la normalizacion de datos sal_pa_procesarCalidadReporte. " . $e->getMessage();
+            return $this->json_output(400, $mensaje);
+        }
+
         return $this->json_output(200, "Archivo Excel subido y procesado correctamente.");
     }
 

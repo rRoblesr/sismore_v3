@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Salud;
 
+use App\Exports\TableroCalidadCriterio2Export;
 use App\Exports\TableroCalidadCriterioExport;
 use App\Exports\TableroCalidadExport;
 use App\Http\Controllers\Controller;
@@ -1449,6 +1450,49 @@ class PadronNominalController extends Controller
         return response()->json($result);
     }
 
+    public function Listar4(Request $rq)
+    {
+        $draw = intval($rq->draw);
+        $start = intval($rq->start);
+        $length = intval($rq->length);
+
+        $query = CalidadCriterio::from('sal_calidad_criterio as cc')
+            ->select('p.nombre as provincia', 'd.nombre as distrito', 'cc.centro_poblado_nombre as centro_poblado', DB::raw('count(cc.id) as conteo'))
+            ->join('par_ubigeo as d', 'd.id', '=', 'cc.distrito_id')
+            ->join('par_ubigeo as p', 'p.id', '=', 'd.dependencia')
+            ->where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio);
+        if ($rq->edades > 0) {
+            if ($rq->edades == 1) {
+                $query = $query->whereIn('tipo_edad', ['D', 'M']);
+            } else {
+                $query = $query->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+            }
+        }
+        if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
+        if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
+
+        $recordsTotal = $query->count();
+        $recordsFiltered = $recordsTotal;
+
+        $query = $query->skip($start)->take($length)->groupBy('provincia', 'distrito', 'cc.centro_poblado_nombre', 'centro_poblado')->get();
+
+        $query = $query->map(function ($item, $key) use ($start) {
+            $item->item = $start + $key + 1;
+            return $item;
+        });
+
+        $result = [
+            "draw" => $draw,
+            "recordsTotal" => $recordsTotal,
+            "recordsFiltered" => $recordsFiltered,
+            "data" => $query,
+            "input" => $rq->all(),
+            "queries" => $query->toArray(),
+        ];
+
+        return response()->json($result);
+    }
+
     public function tablerocalidadcriteriolistar_ejemplo(Request $rq)
     {
         $draw = intval($rq->draw);
@@ -1672,7 +1716,7 @@ class PadronNominalController extends Controller
                     $info['serie'][0]['data'][] = (int)$value->total;
                 }
                 return response()->json(compact('info'));
-            case 'anal2':
+            case 'anal2xx':
                 $data = CalidadCriterio::from('sal_calidad_criterio as cc')->join('par_ubigeo as pro', 'pro.id', '=', 'cc.provincia_id')->select(
                     DB::raw('pro.nombre as provincia'),
                     DB::raw('count(*) as total'),
@@ -1696,6 +1740,82 @@ class PadronNominalController extends Controller
                 }
                 return response()->json(compact('info'));
 
+            case 'anal2':
+                $data = CalidadCriterio::from('sal_calidad_criterio as cc')->join('par_ubigeo as pro', 'pro.id', '=', 'cc.provincia_id')->select(
+                    DB::raw('pro.id as provincia_id'),
+                    DB::raw('pro.nombre as provincia'),
+                    DB::raw('count(*) as total'),
+                )
+                    ->where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio);
+                if ($rq->edades > 0) {
+                    if ($rq->edades == 1) {
+                        $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                    } else {
+                        $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                    }
+                }
+                $data = $data->groupBy('pro.id', 'provincia_id', 'provincia')->orderBy('total', 'desc')->get();
+
+                //#################################################################
+
+                $data2 = CalidadCriterio::from('sal_calidad_criterio as cc')->join('par_ubigeo as dis', 'dis.id', '=', 'cc.distrito_id')->select(
+                    DB::raw('dis.dependencia as provincia'),
+                    DB::raw('dis.nombre as distrito'),
+                    DB::raw('count(*) as total'),
+                )
+                    ->where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio);
+                if ($rq->edades > 0) {
+                    if ($rq->edades == 1) {
+                        $data2 = $data2->whereIn('tipo_edad', ['D', 'M']);
+                    } else {
+                        $data2 = $data2->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                    }
+                }
+                $data2 = $data2->groupBy('provincia', 'distrito')->orderBy('total', 'desc')->get();
+
+                //#################################################################
+
+                $info['serie'] = [];
+                $info['serie'][0]['name'] = 'Provincia';
+                $info['serie'][0]['colorByPoint'] = true;
+
+                $info['drilldown'] = [];
+                $kdd = 0;
+                foreach ($data as $key => $value) {
+                    $info['serie'][0]['data'][] = ['name' => $value->provincia, 'y' => (int)$value->total, 'drilldown' => $value->provincia];
+                    $info['drilldown'][$kdd]['name'] = 'Conteo';
+                    $info['drilldown'][$kdd]['id'] = $value->provincia;
+                    foreach ($data2 as $key2 => $value2) {
+                        if ($value2->provincia == $value->provincia_id) {
+                            $info['drilldown'][$kdd]['data'][] = [$value2->distrito, $value2->total];
+                        }
+                    }
+                    $kdd++;
+                }
+
+                return response()->json(compact('info'));
+            case 'tabla2':
+
+                $base = CalidadCriterio::from('sal_calidad_criterio as cc')
+                    ->select('p.nombre as provincia', 'd.nombre as distrito', 'cc.centro_poblado_nombre as centro_poblado', DB::raw('count(cc.id) as conteo'))
+                    ->join('par_ubigeo as d', 'd.id', '=', 'cc.distrito_id')
+                    ->join('par_ubigeo as p', 'p.id', '=', 'd.dependencia')
+                    ->where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio);
+                if ($rq->edades > 0) {
+                    if ($rq->edades == 1) {
+                        $base = $base->whereIn('tipo_edad', ['D', 'M']);
+                    } else {
+                        $base = $base->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                    }
+                }
+                if ($rq->provincia > 0) $base = $base->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $base = $base->where('distrito_id', $rq->distrito);
+
+
+                $base = $base->groupBy('provincia', 'distrito', 'cc.centro_poblado_nombre', 'centro_poblado')->get();
+
+                $excel = view('salud.PadronNominal.TableroCalidadCriterioTabla2', compact('base'))->render();
+                return response()->json(compact('base', 'excel'));
             default:
                 # code...
                 return [];
@@ -1856,6 +1976,12 @@ class PadronNominalController extends Controller
     {
         $name = DB::table('sal_calidad_criterio_nombres')->where('id', $criterio)->first()->nombre . '.xlsx';
         return Excel::download(new TableroCalidadCriterioExport($div, $importacion, $criterio, $edades, $provincia, $distrito), $name);
+    }
+
+    public function tablerocalidadcriteriodownload2($div, $importacion, $criterio, $edades, $provincia, $distrito)
+    {
+        $name = DB::table('sal_calidad_criterio_nombres')->where('id', $criterio)->first()->nombre . '.xlsx';
+        return Excel::download(new TableroCalidadCriterio2Export($div, $importacion, $criterio, $edades, $provincia, $distrito), $name);
     }
 
     public function tablerocalidadconsulta()
