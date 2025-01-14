@@ -17,6 +17,7 @@ use App\Models\Salud\CuboPacto1PadronNominal;
 use App\Models\Salud\CuboPacto3PadronMaterno;
 use App\Models\Salud\CuboPacto4Padron12Meses;
 use App\Models\Salud\ImporPadronAnemia;
+use App\Models\Salud\ImporPadronNominal;
 use App\Repositories\Educacion\CuboPacto1Repositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\SFLRepositorio;
@@ -124,7 +125,7 @@ class IndicadoresController extends Controller
         // $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios($ind->id);
         $provincia = UbigeoRepositorio::provincia('25');
 
-        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_1']);
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronNominalController::$FUENTE);
         // // return response()->json(compact('imp'));
         $aniomax = $imp->anio;
 
@@ -578,6 +579,64 @@ class IndicadoresController extends Controller
         $query->transform(function ($value) {
             $value->nacimiento = $value->fecha_nacimiento ? date('d/m/Y', strtotime($value->fecha_nacimiento)) : null;
             $value->ipress = str_pad($value->cui_atencion, 8, '0', STR_PAD_LEFT);
+            $value->estado = $value->num == 1
+                ? '<span class="badge badge-pill badge-success" style="font-size:90%;">CUMPLEN</span>'
+                :  '<span class="badge badge-pill badge-danger" style="font-size:90%;">NO CUMPLEN</span>';
+            return $value;
+        });
+
+        $result = [
+            "draw" => $draw,
+            "recordsTotal" => $recordsTotal,
+            "recordsFiltered" => $recordsFiltered,
+            "data" => $query,
+            "input" => $rq->all(),
+            "queries" => $query->toArray(),
+            'importacion' => $impMaxAnio
+        ];
+
+        return response()->json($result);
+    }
+
+    public function PactoRegionalSalPacto1Reports3(Request $rq)
+    {
+        $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($rq->fuente, $rq->anio, $rq->mes);
+
+        $draw = intval($rq->draw);
+        $start = intval($rq->start);
+        $length = intval($rq->length);
+
+        $query = CuboPacto1PadronNominal::where('importacion', $impMaxAnio);
+
+        $query = $query->whereIn('tipo_doc', ['DNI', 'CNV']);
+
+        if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
+        if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
+
+        $recordsTotal = $query->count();
+        $recordsFiltered = $recordsTotal;
+
+        $query = $query->skip($start)->take($length)->get();
+
+        $query = $query->map(function ($item, $key) use ($start) {
+            $item->item = $start + $key + 1;
+            return $item;
+        });
+
+        $estado = ['<i class="mdi mdi-thumb-down" style="font-size:12px;color:red" title="NO CUMPLE"></i>', '<i class="mdi mdi-thumb-up" style="font-size:12px;color:#43beac" title="CUMPLE"></i>'];
+        $query->transform(function ($value) use ($estado) {
+            $value->nacimiento = $value->fecha_nacimiento ? date('d/m/Y', strtotime($value->fecha_nacimiento)) : null;
+            $value->c01 = $estado[$value->critero01];
+            $value->c02 = $estado[$value->critero02];
+            $value->c03 = $estado[$value->critero04];
+            $value->c04 = $estado[$value->critero05];
+            $value->c05 = $estado[$value->critero03];
+            $value->c06 = $estado[$value->critero06];
+            $value->c07 = $estado[$value->critero07];
+            $value->c08 = $estado[$value->critero08];
+            $value->c09 = $estado[$value->critero09];
+            $value->c10 = $estado[$value->critero10];
+
             $value->estado = $value->num == 1
                 ? '<span class="badge badge-pill badge-success" style="font-size:90%;">CUMPLEN</span>'
                 :  '<span class="badge badge-pill badge-danger" style="font-size:90%;">NO CUMPLEN</span>';

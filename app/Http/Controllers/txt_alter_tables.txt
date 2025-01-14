@@ -2627,3 +2627,22 @@ CREATE TABLE `sal_cubo_pacto4_padron_12meses` (
 
 
 
+CREATE TABLE `sal_directorio_pn` (
+    id int(11) auto_increment primary key,
+				dni varchar(20) NULL DEFAULT NULL,
+				nombres varchar(100) NULL DEFAULT NULL,
+				apellido_paterno varchar(100) NULL DEFAULT NULL,
+				apellido_materno varchar(100) NULL DEFAULT NULL,
+				profesion varchar(100) NULL DEFAULT NULL,
+				cargo varchar(100) NULL DEFAULT NULL,
+				condicion_laboral varchar(100) NULL DEFAULT NULL,
+				red_id int NULL DEFAULT NULL,
+				microred_id int NULL DEFAULT NULL,
+				establecimiento_id int NULL DEFAULT NULL,
+				celular varchar(100) NULL DEFAULT NULL,
+				email varchar(100) NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+
+
+
+

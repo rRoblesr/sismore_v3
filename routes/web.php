@@ -75,6 +75,7 @@ use App\Http\Controllers\Presupuesto\SubGenericaController;
 use App\Http\Controllers\Presupuesto\SubGenericaDetalleController;
 use App\Http\Controllers\Presupuesto\UnidadEjecutoraController;
 use App\Http\Controllers\Presupuesto\UnidadOrganicaController;
+use App\Http\Controllers\Salud\DirectorioPNController;
 use App\Http\Controllers\Salud\EstablecimientoController;
 use App\Http\Controllers\Salud\ImporPadronActasController;
 use App\Http\Controllers\Salud\ImporPadronEstablecimientoController;
@@ -623,6 +624,14 @@ Route::get('/Mantenimiento/RER/ajax_delete/{id}', [RERController::class, 'ajax_d
 
 Route::get('/RER/ajax_cargar', [RERController::class, 'ajax_cargar'])->name('rer.cargar');
 
+Route::get('/salud/Mantenimiento/Directorio', [DirectorioPNController::class, 'principal'])->middleware('auth')->name('mantenimiento.directorio.principal');
+Route::post('/Mantenimiento/Directorio/Importados/', [DirectorioPNController::class, 'ListarDTImportFuenteTodos'])->name('mantenimiento.directorio.listar.importados');
+Route::get('/Mantenimiento/Directorio/ajax_edit/{id}', [DirectorioPNController::class, 'ajax_edit'])->name('mantenimiento.directorio.find.1');
+Route::post('/Mantenimiento/Directorio/ajax_add/', [DirectorioPNController::class, 'ajax_add'])->name('mantenimiento.directorio.add');
+Route::post('/Mantenimiento/Directorio/ajax_update/', [DirectorioPNController::class, 'ajax_update'])->name('mantenimiento.directorio.update');
+Route::get('/Mantenimiento/Directorio/ajax_estado/{id}', [DirectorioPNController::class, 'ajax_estado'])->name('mantenimiento.directorio.estado');
+Route::get('/Mantenimiento/Directorio/ajax_delete/{id}', [DirectorioPNController::class, 'ajax_delete'])->name('mantenimiento.directorio.delete');
+
 Route::get('/educación/Mantenimiento/PadronRER', [PadronRERController::class, 'principal'])->middleware('auth')->name('mantenimiento.padronrer.principal');
 Route::post('/Mantenimiento/PadronRER/Importados/', [PadronRERController::class, 'ListarDTImportFuenteTodos'])->name('mantenimiento.padronrer.listar.importados');
 Route::get('/Mantenimiento/PadronRER/ajax_edit/{id}', [PadronRERController::class, 'ajax_edit']);
@@ -1167,11 +1176,12 @@ Route::get('/salud/PowerBi/{id}', [PowerBiController::class, 'saludMenu'])->name
 Route::get('/indicador/pactoregional/meta', [IndicadoresController::class, 'PactoRegionalMeta'])->name('indicador.pactoregional.meta');
 
 Route::get('/salud/pactoregional', [IndicadoresController::class, 'PactoRegional'])->name('salud.indicador.pactoregional');
-Route::get('/educacion/pactoregional', [IndicadoresController::class, 'PactoRegionalEdu'])->name('salud.indicador.pactoregional.edu');
+
 Route::get('/salud/pactoregional/sal', [IndicadoresController::class, 'PactoRegionalSal'])->name('salud.indicador.pactoregional.sal');
 Route::get('/salud/pactoregional/Actualizarx', [IndicadoresController::class, 'PactoRegionalActualizar'])->name('salud.indicador.pactoregional.actualizar');
 Route::get('/salud/pactoregional/Sal/Reports1', [IndicadoresController::class, 'PactoRegionalSalPacto1Reports'])->name('salud.indicador.pactoregional.detalle.reports');
 Route::post('/salud/pactoregional/Sal/Reports1/2', [IndicadoresController::class, 'PactoRegionalSalPacto1Reports2'])->name('salud.indicador.pactoregional.detalle.reports.2');
+Route::post('/salud/pactoregional/Sal/Reports1/3', [IndicadoresController::class, 'PactoRegionalSalPacto1Reports3'])->name('salud.indicador.pactoregional.detalle.reports.3');
 Route::get('/salud/pactoregional/Sal/Reports1/Exportar/{div}/{indicador}/{anio}/{mes}/{provincia}/{distrito}', [IndicadoresController::class, 'PactoRegionalSalPacto1download'])->name('salud.indicador.pactoregional.sal.pacto1.excel');
 
 Route::get('/salud/pactoregional/Sal/Reports2', [IndicadoresController::class, 'PactoRegionalSalPacto2Reports'])->name('salud.indicador.pactoregional.sal.pacto2.reports');
@@ -1186,6 +1196,7 @@ Route::get('/salud/pactoregional/Sal/Reports4', [IndicadoresController::class, '
 Route::get('/salud/pactoregional/Sal/Reports4/Exportar/{div}/{indicador}/{anio}/{mes}/{provincia}/{distrito}', [IndicadoresController::class, 'PactoRegionalSalPacto4download'])->name('salud.indicador.pactoregional.sal.pacto4.excel');
 Route::get('/salud/pactoregional/Sal/Reports4/mes/{anio}', [IndicadoresController::class, 'cargarMesPvica'])->name('salud.indicador.pactoregional.sal.pacto4.cargarmes');
 
+Route::get('/educacion/pactoregional', [IndicadoresController::class, 'PactoRegionalEdu'])->name('salud.indicador.pactoregional.edu');
 Route::get('/educacion/pactoregional/Reports1', [IndicadoresController::class, 'PactoRegionalEduPacto1Reports'])->name('salud.indicador.pactoregional.edu.pacto1.reports');
 
 Route::get('/educacion/pactoregional/Reports2', [IndicadoresController::class, 'PactoRegionalEduPacto2Reports'])->name('salud.indicador.pactoregional.edu.pacto2.reports');
@@ -1294,6 +1305,8 @@ Route::get('/Salud/PadronNominal/TableroCalidad/Consulta/find1/{importacion}/{ti
 
 Route::get('/Salud/PadronNominal/TableroCalidad/Indicador', [PadronNominalController::class, 'tablerocalidadindicador'])->name('salud.padronnominal.tablerocalidad.indicador');
 Route::get('/Salud/PadronNominal/TableroCalidad/Indicador/reportes', [PadronNominalController::class, 'tablerocalidadindicadorreporte'])->name('salud.padronnominal.tablerocalidad.indicador.reporte');
+Route::get('/Salud/PadronNominal/TableroCalidad/Indicador/Exportar/{div}/{anio}/{mes}/{edades}/{indicador}/{ubigeo}', [PadronNominalController::class, 'tablerocalidadindicadordownload'])->name('salud.padronnominal.tablerocalidad.indicador.exportar.excel');
+Route::get('/Salud/PadronNominal/TableroCalidad/Indicador/Exportar2/{div}/{anio}/{mes}/{edades}/{indicador}/{ubigeo}', [PadronNominalController::class, 'tablerocalidadindicadordownload2'])->name('salud.padronnominal.tablerocalidad.indicador.exportar.excel2');
 
 
 Route::get('/Salud/PadronNominal/Mes/{anio}', [PadronNominalController::class, 'meses'])->name('salud.padronnominal.mes');

@@ -150,7 +150,7 @@
                     <h5 class="modal-title" id="myLargeModalLabel">resumen de cumplimiento por centro poblado
                     </h5>
                     <div class="card-widgets">
-                        <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla3_1')">
+                        <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel2()">
                             <i class="fa fa-file-excel"></i> Descargar</button>
                     </div>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -311,6 +311,28 @@
                     console.log(jqXHR);
                 },
             });
+        }
+
+        function descargarExcel() {
+            window.open(
+                "{{ route('salud.padronnominal.tablerocalidad.indicador.exportar.excel', ['div' => 'tabla2', 'anio' => 'anio', 'mes' => 'mes', 'edades' => 'edades', 'indicador' => 'indicador', 'ubigeo' => 'ubigeo']) }}"
+                .replace('anio', $('#anio').val())
+                .replace('mes', $('#mes').val())
+                .replace('edades', $('#edades').val())
+                .replace('indicador', $('#indicador').val())
+                .replace('ubigeo', '0')
+            );
+        }
+
+        function descargarExcel2() {
+            window.open(
+                "{{ route('salud.padronnominal.tablerocalidad.indicador.exportar.excel2', ['div' => 'tabla0201', 'anio' => 'anio', 'mes' => 'mes', 'edades' => 'edades', 'indicador' => 'indicador', 'ubigeo' => 'ubigeo']) }}"
+                .replace('anio', $('#anio').val())
+                .replace('mes', $('#mes').val())
+                .replace('edades', $('#edades').val())
+                .replace('indicador', $('#indicador').val())
+                .replace('ubigeo', ubigeo_select)
+            );
         }
 
         function gbar(div, categoria, series, titulo, subtitulo) {
