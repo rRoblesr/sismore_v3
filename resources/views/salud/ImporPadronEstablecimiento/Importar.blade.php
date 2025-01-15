@@ -91,7 +91,7 @@
                                         <div class="">
                                             <label class="col-form-label">Archivo</label>
                                             <div class="">
-                                                <input type="file" name="file" class="form-control btn-xs" required>
+                                                <input type="file" name="file" class="form-control btn-xs" accept=".xls,.xlsx" required>
                                             </div>
                                         </div>
                                     </div>

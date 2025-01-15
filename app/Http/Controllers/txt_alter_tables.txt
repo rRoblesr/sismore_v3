@@ -2645,4 +2645,69 @@ CREATE TABLE `sal_directorio_pn` (
 
 
 
+ALTER TABLE `sal_impor_padron_establecimiento` 
+CHANGE `telefono` `ruc` VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
+CHANGE `horario` `ubigeo` VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
+CHANGE `doc_categorizacion` `telefono` VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
+CHANGE `numero_documento` `horario` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
+CHANGE `cod_disa` `sec_ejec` VARCHAR(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
+CHANGE `disa` `cod_disa` VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
+CHANGE `cod_red` `disa` VARCHAR(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
+CHANGE `red` `cod_red` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
+CHANGE `cod_microrred` `red` VARCHAR(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
+CHANGE `microrred` `cod_microrred` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
+CHANGE `sec_ejec` `microrred` INT(11) NULL DEFAULT NULL, 
+CHANGE `ubigeo` `latitud` VARCHAR(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
+CHANGE `norte` `longitud` DOUBLE NULL DEFAULT NULL;
+
+
+
+ALTER TABLE `sal_impor_padron_establecimiento` 
+CHANGE `ruc` `ruc` VARCHAR(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
+CHANGE `ubigeo` `ubigeo` VARCHAR(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
+CHANGE `telefono` `telefono` VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
+CHANGE `inicio_actividad` `inicio_actividad` DATE NULL DEFAULT NULL, 
+CHANGE `categoria` `categoria` VARCHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
+CHANGE `sec_ejec` `sec_ejec` INT NULL DEFAULT NULL, 
+CHANGE `cod_disa` `cod_disa` INT NULL DEFAULT NULL, 
+CHANGE `disa` `disa` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
+CHANGE `cod_red` `cod_red` VARCHAR(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
+CHANGE `red` `red` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
+CHANGE `cod_microrred` `cod_microrred` VARCHAR(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
+CHANGE `microrred` `microrred` VARCHAR(100) NULL DEFAULT NULL, 
+CHANGE `latitud` `latitud` DOUBLE NULL DEFAULT NULL;
+
+
+ALTER TABLE `sal_impor_padron_establecimiento` 
+CHANGE `telefono` `telefono` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
+
+ALTER TABLE `sal_impor_padron_establecimiento` 
+CHANGE `clasificacion_eess` `clasificacion_eess` VARCHAR(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
+
+ALTER TABLE `sal_impor_padron_establecimiento` 
+CHANGE `responsable` `responsable` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
+
+ALTER TABLE `sal_impor_padron_establecimiento` 
+CHANGE `cod_unico` `cod_unico` INT NULL DEFAULT NULL;
+
+//*//*/*/*/*/*/*/*/*/
+
+ALTER TABLE `sal_establecimiento` ADD `ruc` VARCHAR(11) NULL DEFAULT NULL AFTER `direccion`;
+
+ALTER TABLE `sal_establecimiento`
+  DROP `cota`,
+  DROP `camas`;
+
+ALTER TABLE `sal_establecimiento` CHANGE `norte` `latitud` DOUBLE NULL DEFAULT NULL, CHANGE `este` `longitud` DOUBLE NULL DEFAULT NULL;
+
+ALTER TABLE `sal_establecimiento`
+  DROP `doc_categorizacion`,
+  DROP `numero_documento`;
+
+ALTER TABLE `sal_establecimiento` CHANGE `clasificacion_eess` `clasificacion_eess` VARCHAR(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL, CHANGE `disa` `disa` INT NOT NULL;
+ALTER TABLE `sal_establecimiento` ADD `sec_ejec` INT NOT NULL AFTER `tipo_eess`;
+
+ALTER TABLE `sal_establecimiento` CHANGE `responsable` `responsable` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+
+
 

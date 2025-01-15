@@ -47,7 +47,145 @@ class ImporPadronEstablecimientoController extends Controller
     }
 
     /*  metodo que carga el excel y ejecuta un procedimiento almacenado*/
-    public function guardar(Request $request)
+    public function guardar(Request $rq)
+    {
+        ini_set('memory_limit', '-1');
+        set_time_limit(0);
+
+        if (ImportacionRepositorio::Importacion_PE($rq->fechaActualizacion, ImporPadronActasController::$FUENTE['pacto_4']) !== null) {
+            return $this->json_output(400, "Error, ya existe un archivo pendiente de aprobación para la fecha ingresada");
+        }
+
+        if (ImportacionRepositorio::Importacion_PR($rq->fechaActualizacion, ImporPadronActasController::$FUENTE['pacto_4']) !== null) {
+            return $this->json_output(400, "Error, ya existe un archivo procesado para la fecha ingresada");
+        }
+
+        $this->validate($rq, ['file' => 'required|mimes:xls,xlsx']);
+        $archivo = $rq->file('file');
+        $array = (new tablaXImport)->toArray($archivo);
+
+        $encabezadosEsperados = [
+            'cod_unico',
+            'nombre_establecimiento',
+            'responsable',
+            'direccion',
+            'ruc',
+            'ubigeo',
+            'telefono',
+            'horario',
+            'inicio_actividad',
+            'categoria',
+            'estado',
+            'institucion',
+            'clasificacion_eess',
+            'tipo_eess',
+            'sec_ejec',
+            'cod_disa',
+            'disa',
+            'cod_red',
+            'red',
+            'cod_microrred',
+            'microrred',
+            'latitud',
+            'longitud',
+        ];
+
+        $encabezadosArchivo = array_keys($array[0][0]);
+
+        $faltantes = array_diff($encabezadosEsperados, $encabezadosArchivo);
+        if (!empty($faltantes)) {
+            return $this->json_output(400, 'Error: Los encabezados del archivo no coinciden con el formato esperado. Faltan columnas esperadas.', $faltantes);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $importacion = Importacion::create([
+                'fuenteImportacion_id' => $this->fuente,
+                'usuarioId_Crea' => auth()->user()->id,
+                'fechaActualizacion' => $rq->fechaActualizacion,
+                'estado' => 'PE'
+            ]);
+
+            // $distritos = Ubigeo::where('codigo', 'like', '25%')->whereRaw('length(codigo)=6')->pluck('id', 'codigo');
+            // $provincias = Ubigeo::where('codigo', 'like', '25%')->whereRaw('length(codigo)=4')->pluck('id', 'codigo');
+
+            $batchSize = 500;
+            $dataBatch = [];
+
+            foreach ($array[0] as $row) {
+                $dataBatch[] = [
+                    'importacion_id' => $importacion->id,
+                    'cod_unico' => $row['cod_unico'],
+                    'nombre_establecimiento' => $row['nombre_establecimiento'],
+                    'responsable' => $row['responsable'],
+                    'direccion' => $row['direccion'],
+                    'ruc' => $row['ruc'],
+                    'ubigeo' => $row['ubigeo'],
+                    'telefono' => $row['telefono'],
+                    'horario' => $row['horario'],
+                    'inicio_actividad' => $row['inicio_actividad'],
+                    'categoria' => $row['categoria'],
+                    'estado' => $row['estado'],
+                    'institucion' => $row['institucion'],
+                    'clasificacion_eess' => $row['clasificacion_eess'],
+                    'tipo_eess' => $row['tipo_eess'],
+                    'sec_ejec' => $row['sec_ejec'],
+                    'cod_disa' => $row['cod_disa'],
+                    'disa' => $row['disa'],
+                    'cod_red' => $row['cod_red'],
+                    'red' => $row['red'],
+                    'cod_microrred' => $row['cod_microrred'],
+                    'microrred' => $row['microrred'],
+                    'latitud' => $row['latitud'],
+                    'longitud' => $row['longitud'],
+                ];
+
+                if (count($dataBatch) >= $batchSize) {
+                    ImporPadronEstablecimiento::insert($dataBatch);
+                    $dataBatch = [];
+                }
+            }
+
+            if (!empty($dataBatch)) {
+                ImporPadronEstablecimiento::insert($dataBatch);
+            }
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            $importacion->estado = 'PE';
+            $importacion->save();
+
+            return $this->json_output(400, "Error en la carga de datos: " . $e->getMessage());
+        }
+
+        // try {
+        //     DB::select('call sal_pa_procesarControlCalidadColumnas(?)', [$importacion->id]);
+        // } catch (Exception $e) {
+        //     // Si ocurre un error, actualizar el estado a 'PE' (pendiente) si es necesario
+        //     $importacion->estado = 'PE';
+        //     $importacion->save();
+
+        //     $mensaje = "Error al procesar la normalizacion de datos sal_pa_procesarControlCalidadColumnas. " . $e->getMessage();
+        //     return $this->json_output(400, $mensaje);
+        // }
+
+        // try {
+        //     DB::select('call sal_pa_procesarCalidadReporte(?)', [$importacion->id]);
+        // } catch (Exception $e) {
+        //     // Si ocurre un error, actualizar el estado a 'PE' (pendiente) si es necesario
+        //     $importacion->estado = 'PE';
+        //     $importacion->save();
+
+        //     $mensaje = "Error al procesar la normalizacion de datos sal_pa_procesarCalidadReporte. " . $e->getMessage();
+        //     return $this->json_output(400, $mensaje);
+        // }
+
+        $this->json_output(200, "Archivo Excel subido y procesado correctamente.");
+    }
+
+    public function guardar2(Request $request)
     {
         ini_set('memory_limit', '-1');
         set_time_limit(0);
@@ -82,28 +220,25 @@ class ImporPadronEstablecimientoController extends Controller
                         $row['nombre_establecimiento'] .
                         $row['responsable'] .
                         $row['direccion'] .
+                        $row['ruc'] .
+                        $row['ubigeo'] .
                         $row['telefono'] .
                         $row['horario'] .
-                        $row['doc_categorizacion'] .
-                        $row['numero_documento'] .
                         $row['inicio_actividad'] .
                         $row['categoria'] .
                         $row['estado'] .
                         $row['institucion'] .
                         $row['clasificacion_eess'] .
                         $row['tipo_eess'] .
+                        $row['sec_ejec'] .
                         $row['cod_disa'] .
                         $row['disa'] .
                         $row['cod_red'] .
                         $row['red'] .
                         $row['cod_microrred'] .
                         $row['microrred'] .
-                        $row['sec_ejec'] .
-                        $row['ubigeo'] .
-                        $row['norte'] .
-                        $row['este'] .
-                        $row['cota'] .
-                        $row['camas'];
+                        $row['latitud'] .
+                        $row['longitud'];
                 }
             }
         } catch (Exception $e) {
@@ -135,28 +270,25 @@ class ImporPadronEstablecimientoController extends Controller
                         'nombre_establecimiento' => $row['nombre_establecimiento'],
                         'responsable' => $row['responsable'],
                         'direccion' => $row['direccion'],
+                        'ruc' => $row['ruc'],
+                        'ubigeo' => $row['ubigeo'],
                         'telefono' => $row['telefono'],
                         'horario' => $row['horario'],
-                        'doc_categorizacion' => $row['doc_categorizacion'],
-                        'numero_documento' => $row['numero_documento'],
                         'inicio_actividad' => $row['inicio_actividad'],
                         'categoria' => $row['categoria'],
                         'estado' => $row['estado'],
                         'institucion' => $row['institucion'],
                         'clasificacion_eess' => $row['clasificacion_eess'],
                         'tipo_eess' => $row['tipo_eess'],
+                        'sec_ejec' => $row['sec_ejec'],
                         'cod_disa' => $row['cod_disa'],
                         'disa' => $row['disa'],
                         'cod_red' => $row['cod_red'],
                         'red' => $row['red'],
                         'cod_microrred' => $row['cod_microrred'],
                         'microrred' => $row['microrred'],
-                        'sec_ejec' => $row['sec_ejec'],
-                        'ubigeo' => $row['ubigeo'],
-                        'norte' => $row['norte'],
-                        'este' => $row['este'],
-                        'cota' => $row['cota'],
-                        'camas' => $row['camas']
+                        'latitud' => $row['latitud'],
+                        'longitud' => $row['longitud'],
                     ]);
                 }
             }
