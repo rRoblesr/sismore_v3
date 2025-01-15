@@ -53,7 +53,7 @@ class TableroCalidadCriterioExport implements FromView, ShouldAutoSize
         $programa = [0 => 'NINGUNO', 1 => 'PIN', 2 => 'PVL', 4 => 'JUNTOS', 5 => 'QALIWARMA', 7 => 'CUNA+ SCD', 8 => 'CUNA+ SAF'];
 
         $ubigeos = Ubigeo::whereIn('codigo', $query->pluck('ubigeo')->toArray())->get()->keyBy('codigo');
-        $establecimientos = Establecimiento::whereIn('cod_unico', $query->pluck('cui_atencion')->toArray())->get()->keyBy('cod_unico');
+        $establecimientos = Establecimiento::whereIn('cod_unico', $query->pluck('cui_atencion')->unique()->toArray())->get()->keyBy('cod_unico');
 
         foreach ($query as $key => $value) {
             $dis = $ubigeos[$value->ubigeo] ?? null;

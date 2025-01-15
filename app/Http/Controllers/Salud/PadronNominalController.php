@@ -3246,7 +3246,7 @@ class PadronNominalController extends Controller
                             DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
                             DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
                         )
-                            ->where('importacion_id', $importacion)->where('tipo_edad', 'D')->where('edad', '<=', 30);
+                            ->where('importacion_id', $importacion)->where('tipo_edad', 'D')->where('edad', '<=', 30)->where('distrito_id', $rq->ubigeo);
                         if ($rq->edades > 0) {
                             if ($rq->edades == 1) {
                                 $data = $data->whereIn('tipo_edad', ['D', 'M']);
@@ -3281,7 +3281,7 @@ class PadronNominalController extends Controller
                             DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
                             DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
                         )
-                            ->where('importacion_id', $importacion)
+                            ->where('importacion_id', $importacion)->where('distrito_id', $rq->ubigeo)
                             ->where(function ($query) {
                                 $query->where(function ($subQuery) {
                                     $subQuery->where('tipo_edad', 'D')->where('edad', '<=', 31);
@@ -3324,7 +3324,7 @@ class PadronNominalController extends Controller
                             DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
                             DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
                         )
-                            ->where('importacion_id', $importacion);
+                            ->where('importacion_id', $importacion)->where('distrito_id', $rq->ubigeo);
 
                         if ($rq->edades > 0) {
                             if ($rq->edades == 1) {
@@ -3361,7 +3361,7 @@ class PadronNominalController extends Controller
                             DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
                             DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
                         )
-                            ->where('importacion_id', $importacion);
+                            ->where('importacion_id', $importacion)->where('distrito_id', $rq->ubigeo);
 
                         if ($rq->edades > 0) {
                             if ($rq->edades == 1) {
@@ -3397,7 +3397,7 @@ class PadronNominalController extends Controller
                             DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
                             DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
                         )
-                            ->where('importacion_id', $importacion);
+                            ->where('importacion_id', $importacion)->where('distrito_id', $rq->ubigeo);
 
                         if ($rq->edades > 0) {
                             if ($rq->edades == 1) {
@@ -3433,7 +3433,7 @@ class PadronNominalController extends Controller
                             DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
                             DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
                         )
-                            ->where('importacion_id', $importacion);
+                            ->where('importacion_id', $importacion)->where('distrito_id', $rq->ubigeo);
 
                         if ($rq->edades > 0) {
                             if ($rq->edades == 1) {
@@ -3469,7 +3469,7 @@ class PadronNominalController extends Controller
                             DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
                             DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
                         )
-                            ->where('importacion_id', $importacion);
+                            ->where('importacion_id', $importacion)->where('distrito_id', $rq->ubigeo);
 
                         if ($rq->edades > 0) {
                             if ($rq->edades == 1) {
@@ -3505,7 +3505,7 @@ class PadronNominalController extends Controller
                             DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
                             DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
                         )
-                            ->where('importacion_id', $importacion);
+                            ->where('importacion_id', $importacion)->where('distrito_id', $rq->ubigeo);
 
                         if ($rq->edades > 0) {
                             if ($rq->edades == 1) {
@@ -3541,7 +3541,7 @@ class PadronNominalController extends Controller
                             DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
                             DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
                         )
-                            ->where('importacion_id', $importacion);
+                            ->where('importacion_id', $importacion)->where('distrito_id', $rq->ubigeo);
 
                         if ($rq->edades > 0) {
                             if ($rq->edades == 1) {
@@ -3969,7 +3969,7 @@ class PadronNominalController extends Controller
                             DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
                             DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
                         )
-                            ->where('importacion_id', $importacion)->where('tipo_edad', 'D')->where('edad', '<=', 30);
+                            ->where('importacion_id', $importacion)->where('tipo_edad', 'D')->where('edad', '<=', 30)->where('distrito_id', $ubigeo);
                         if ($edades > 0) {
                             if ($edades == 1) {
                                 $data = $data->whereIn('tipo_edad', ['D', 'M']);
@@ -4002,7 +4002,7 @@ class PadronNominalController extends Controller
                             DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
                             DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
                         )
-                            ->where('importacion_id', $importacion)
+                            ->where('importacion_id', $importacion)->where('distrito_id', $ubigeo)
                             ->where(function ($query) {
                                 $query->where(function ($subQuery) {
                                     $subQuery->where('tipo_edad', 'D')->where('edad', '<=', 31);
@@ -4043,7 +4043,7 @@ class PadronNominalController extends Controller
                             DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
                             DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
                         )
-                            ->where('importacion_id', $importacion);
+                            ->where('importacion_id', $importacion)->where('distrito_id', $ubigeo);
 
                         if ($edades > 0) {
                             if ($edades == 1) {
@@ -4078,7 +4078,7 @@ class PadronNominalController extends Controller
                             DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
                             DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
                         )
-                            ->where('importacion_id', $importacion);
+                            ->where('importacion_id', $importacion)->where('distrito_id', $ubigeo);
 
                         if ($edades > 0) {
                             if ($edades == 1) {
@@ -4112,7 +4112,7 @@ class PadronNominalController extends Controller
                             DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
                             DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
                         )
-                            ->where('importacion_id', $importacion);
+                            ->where('importacion_id', $importacion)->where('distrito_id', $ubigeo);
 
                         if ($edades > 0) {
                             if ($edades == 1) {
@@ -4146,7 +4146,7 @@ class PadronNominalController extends Controller
                             DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
                             DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
                         )
-                            ->where('importacion_id', $importacion);
+                            ->where('importacion_id', $importacion)->where('distrito_id', $ubigeo);
 
                         if ($edades > 0) {
                             if ($edades == 1) {
@@ -4180,7 +4180,7 @@ class PadronNominalController extends Controller
                             DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
                             DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
                         )
-                            ->where('importacion_id', $importacion);
+                            ->where('importacion_id', $importacion)->where('distrito_id', $ubigeo);
 
                         if ($edades > 0) {
                             if ($edades == 1) {
@@ -4214,7 +4214,7 @@ class PadronNominalController extends Controller
                             DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
                             DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
                         )
-                            ->where('importacion_id', $importacion);
+                            ->where('importacion_id', $importacion)->where('distrito_id', $ubigeo);
 
                         if ($edades > 0) {
                             if ($edades == 1) {
@@ -4248,7 +4248,7 @@ class PadronNominalController extends Controller
                             DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
                             DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
                         )
-                            ->where('importacion_id', $importacion);
+                            ->where('importacion_id', $importacion)->where('distrito_id', $ubigeo);
 
                         if ($edades > 0) {
                             if ($edades == 1) {

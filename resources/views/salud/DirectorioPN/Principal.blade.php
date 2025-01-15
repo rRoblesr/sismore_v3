@@ -13,7 +13,6 @@
     <link href="{{ asset('/') }}public/assets/libs/datatables/scroller.bootstrap4.min.css" rel="stylesheet"
         type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-
     <style>
         .tablex thead th {
             padding: 6px;
@@ -48,20 +47,69 @@
 @endsection
 
 @section('content')
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            {{-- <div class="card card-border">
+                <div class="card-header border-success-0 bg-transparent pb-0 pt-0"> --}}
+            <div class="card">
+                <div class="card-header bg-success-0">
+                    <div class="card-widgets">
+                        <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i
+                                class="fa fa-redo"></i> Actualizar</button>
+                        <button type="button" class="btn btn-primary btn-xs" onclick="add()"><i class="fa fa-plus"></i>
+                            Nuevo</button>
+                    </div>
+                    <h3 class="card-title text-white">Directorio del Padron Nominal</h3>
+                </div>
+                <div class="card-body pb-2">
+                    <div class="row">
+                        <div class="col-lg-7 col-md-6 col-sm-6">
+                            {{-- <h3 class="card-title">Directorio del Padron Nominal </h3> --}}
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="custom-select-container">
+                                <label for="nivelx">Tipo Entidad</label>
+                                <select id="nivelx" name="nivelx" class="form-control form-control-sm font-11"
+                                    onchange="cargarentidad();">
+                                    <option value="0">TODOS</option>
+                                    <option value="2">RED</option>
+                                    <option value="3">MICRORED</option>
+                                    <option value="4">EE.SS</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-2 col-sm-2">
+                            <div class="custom-select-container">
+                                <label for="codigox">Entidad</label>
+                                <select id="codigox" name="codigox" class="form-control form-control-sm font-11"
+                                    onchange="cargartableprincipal();" data-toggle="codigox">
+                                    <option value="0">TODOS</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <form class="cmxform form-horizontal tasi-form upload_file">
         @csrf
 
         <div class="row">
             <div class="col-md-12">
                 <div class="card card-border">
-                    <div class="card-header border-success-0 bg-transparent pb-0">
-                        <div class="card-widgets">
+                    <div class="card-header border-success-0 bg-transparent p-0">
+                        {{-- <div class="card-widgets">
                             <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i
                                     class="fa fa-redo"></i> Actualizar</button>
                             <button type="button" class="btn btn-primary btn-xs" onclick="add()"><i class="fa fa-plus"></i>
                                 Nuevo</button>
-                        </div>
-                        <h3 class="card-title">Directorio del Padron Nominal </h3>
+                        </div> --}}
+                        {{-- <h3 class="card-title"></h3> --}}
                     </div>
 
                     <div class="card-body">
@@ -71,12 +119,11 @@
                                 <thead class="cabecera-dataTable">
                                     <tr class="bg-success-0 text-white">
                                         <th>Nº</th>
-                                        <th>DNI</th>
-                                        <th>Nombre Completo</th>
-                                        <th>Profesión</th>
+                                        <th>Tipo Entidad</th>
+                                        <th>Entidad</th>
+                                        <th>Responsable</th>
                                         <th>Cargo</th>
                                         <th>Condición Laboral</th>
-                                        <th>Celular</th>
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
@@ -110,14 +157,23 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label>DNI<span class="required">*</span></label>
-                                        <input id="dni" name="dni" class="form-control" type="number"
-                                            maxlength="8">
-                                        <span class="help-block"></span>
+                                        <div class="input-group">
+                                            <input type="number" id="dni" name="dni" class="form-control"
+                                                placeholder="Numero de Documento" maxlength="8">
+                                            <span class="help-block"></span>
+                                            <span class="input-group-append">
+                                                <button type="button" class="btn waves-effect waves-light btn-primary"
+                                                    onclick="buscardni();" id="btnbuscardni">
+                                                    <i class="fas fa-search"></i>
+                                                </button>
+                                            </span>
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <label>Nombre<span class="required">*</span></label>
+                                        <label>Nombres<span class="required">*</span></label>
                                         <input id="nombres" name="nombres" class="form-control" type="text"
-                                            onkeyup="this.value=this.value.toUpperCase()" maxlength="150">
+                                            oninput="convertToUppercase(this)" maxlength="150"
+                                            placeholder="Ingrese Nombres">
                                         <span class="help-block"></span>
                                     </div>
                                 </div>
@@ -127,13 +183,15 @@
                                     <div class="col-md-6">
                                         <label>Apellido Paterno</label>
                                         <input id="apellido_paterno" name="apellido_paterno" class="form-control"
-                                            type="text" onkeyup="this.value=this.value.toUpperCase()" maxlength="100">
+                                            type="text" oninput="convertToUppercase(this)" maxlength="100"
+                                            placeholder="Imgrese Apellido Paterno">
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
                                         <label>Apellido Materno</label>
                                         <input id="apellido_materno" name="apellido_materno" class="form-control"
-                                            type="text" onkeyup="this.value=this.value.toUpperCase()" maxlength="100">
+                                            type="text" oninput="convertToUppercase(this)" maxlength="100"
+                                            placeholder="Ingrese apellido Materno">
                                         <span class="help-block"></span>
                                     </div>
 
@@ -141,53 +199,63 @@
                             </div>
                             <div class="form-group">
                                 <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Sexo</label>
+                                        <select id="sexo" name="sexo" class="form-control">
+                                            <option value="1">MASCULINO</option>
+                                            <option value="2">FEMENINO</option>
+                                        </select>
+                                        <span class="help-block"></span>
+                                    </div>
                                     <div class="col-md-6">
                                         <label>profesión</label>
-                                        <input id="profesion" name="profesion" class="form-control" type="text">
+                                        <input id="profesion" name="profesion" class="form-control" type="text"
+                                            oninput="convertToUppercase(this)" placeholder="Ingrese Profesión">
                                         <span class="help-block"></span>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label>Cargo</label>
-                                        <input id="cargo" name="cargo" class="form-control" type="text">
-                                        <span class="help-block"></span>
-                                    </div>
+
 
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Cargo</label>
+                                        <input id="cargo" name="cargo" class="form-control" type="text"
+                                            oninput="convertToUppercase(this)" placeholder="Ingrese Cargo">
+                                        <span class="help-block"></span>
+                                    </div>
                                     <div class="col-md-6">
                                         <label>Condición Laboral</label>
                                         <input id="condicion_laboral" name="condicion_laboral" class="form-control"
-                                            type="text">
+                                            type="text" oninput="convertToUppercase(this)"
+                                            placeholder="Ingrese Condición Laboral">
                                         <span class="help-block"></span>
                                     </div>
+
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
                                     <div class="col-md-6">
                                         <label>Tipo Entidad</label>
                                         <select id="nivel" name="nivel" class="form-control">
                                             <option value="0">SELECCIONAR</option>
                                             <option value="2">RED</option>
                                             <option value="3">MICRORED</option>
-                                            <option value="4">ESTABLECIMIENTO</option>
+                                            <option value="4">EE.SS</option>
                                         </select>
                                         <span class="help-block"></span>
                                     </div>
-
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
                                     <div class="col-md-6">
                                         <label>Entidad</label>
                                         <input id="entidad" name="entidad" class="form-control" type="hidden">
-                                        <input id="entidadn" name="entidadn" class="form-control" type="text">
+                                        <input id="entidadn" name="entidadn" class="form-control" type="text"
+                                            oninput="convertToUppercase(this)" placeholder="Ingrese Entidad">
                                         <span class="help-block"></span>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label>Celular</label>
-                                        <input id="celular" name="celular" class="form-control" type="number">
-                                        <span class="help-block"></span>
-                                    </div>
+
 
                                 </div>
                             </div>
@@ -195,12 +263,17 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>Correo Electronico</label>
-                                        <input id="email" name="email" class="form-control" type="email">
+                                        <label>Celular</label>
+                                        <input id="celular" name="celular" class="form-control" type="number"
+                                            placeholder="Ingrese Celular">
                                         <span class="help-block"></span>
                                     </div>
-
-
+                                    <div class="col-md-6">
+                                        <label>Correo Electronico</label>
+                                        <input id="email" name="email" class="form-control" type="email"
+                                            placeholder="Ingrese Correo Electronico">
+                                        <span class="help-block"></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -233,15 +306,24 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>Codigo Sede<span class="required">*</span></label>
-                                        <input id="vcodigo_rer" name="vcodigo_rer" class="form-control" type="text"
-                                            maxlength="8" readonly>
-                                        <span class="help-block"></span>
+                                        <label>DNI<span class="required">*</span></label>
+                                        <div class="input-group">
+                                            <input type="number" id="vdni" name="vdni" class="form-control"
+                                                placeholder="Numero de Documento" maxlength="12" readonly>
+                                            <span class="help-block"></span>
+                                            <span class="input-group-append">
+                                                <button type="button" class="btn waves-effect waves-light btn-primary"
+                                                    id="btnbuscardni">
+                                                    <i class="fas fa-search"></i>
+                                                </button>
+                                            </span>
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <label>Nombre<span class="required">*</span></label>
-                                        <input id="vnombre" name="vnombre" class="form-control" type="text"
-                                            maxlength="150" readonly>
+                                        <label>Nombres<span class="required">*</span></label>
+                                        <input id="vnombres" name="vnombres" class="form-control" type="text"
+                                            oninput="convertToUppercase(this)" maxlength="150"
+                                            placeholder="Ingrese Nombres" readonly>
                                         <span class="help-block"></span>
                                     </div>
                                 </div>
@@ -249,54 +331,99 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>Ambito</label>
-                                        <select id="vambito" name="vambito" class="form-control" readonly>
-                                            <option value="Rural">Rural</option>
-                                            <option value="Rural/Urbana">Rural/Urbana</option>
+                                        <label>Apellido Paterno</label>
+                                        <input id="vapellido_paterno" name="vapellido_paterno" class="form-control"
+                                            type="text" oninput="convertToUppercase(this)" maxlength="100"
+                                            placeholder="Imgrese Apellido Paterno" readonly>
+                                        <span class="help-block"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Apellido Materno</label>
+                                        <input id="vapellido_materno" name="vapellido_materno" class="form-control"
+                                            type="text" oninput="convertToUppercase(this)" maxlength="100"
+                                            placeholder="Ingrese apellido Materno" readonly>
+                                        <span class="help-block"></span>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Sexo</label>
+                                        <select id="vsexo" name="vsexo" class="form-control" disabled>
+                                            <option value="1">MASCULINO</option>
+                                            <option value="2">FEMENINO</option>
                                         </select>
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
-                                        <label>Año Creación</label>
-                                        <input id="vanio_creacion" name="vanio_creacion" class="form-control"
-                                            type="number" readonly>
+                                        <label>profesión</label>
+                                        <input id="vprofesion" name="vprofesion" class="form-control" type="text"
+                                            oninput="convertToUppercase(this)" placeholder="Ingrese Profesión" readonly>
                                         <span class="help-block"></span>
                                     </div>
+
 
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>Año Implementación </label>
-                                        <input id="vanio_implementacion" name="vanio_implementacion" class="form-control"
-                                            type="number" readonly>
+                                        <label>Cargo</label>
+                                        <input id="vcargo" name="vcargo" class="form-control" type="text"
+                                            oninput="convertToUppercase(this)" placeholder="Ingrese Cargo" readonly>
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
-                                        <label>Fecha Resolución </label>
-                                        <input id="vfecha_resolucion" name="vfecha_resolucion" class="form-control"
-                                            type="date" readonly>
+                                        <label>Condición Laboral</label>
+                                        <input id="vcondicion_laboral" name="vcondicion_laboral" class="form-control"
+                                            type="text" oninput="convertToUppercase(this)"
+                                            placeholder="Ingrese Condición Laboral" readonly>
                                         <span class="help-block"></span>
                                     </div>
+
 
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>Numero Resolución </label>
-                                        <input id="vnumero_resolucion" name="vnumero_resolucion" class="form-control"
-                                            type="text" readonly>
+                                        <label>Tipo Entidad</label>
+                                        <select id="vnivel" name="vnivel" class="form-control" disabled>
+                                            <option value="0">SELECCIONAR</option>
+                                            <option value="2">RED</option>
+                                            <option value="3">MICRORED</option>
+                                            <option value="4">ESTABLECIMIENTO</option>
+                                        </select>
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
-                                        <label>Presupuesto</label>
-                                        <input id="vpresupuesto" name="vpresupuesto" class="form-control" type="number"
-                                            readonly>
+                                        <label>Entidad</label>
+                                        <input id="entidad" name="entidad" class="form-control" type="hidden">
+                                        <input id="ventidadn" name="ventidadn" class="form-control" type="text"
+                                            oninput="convertToUppercase(this)" placeholder="Ingrese Entidad" readonly>
                                         <span class="help-block"></span>
                                     </div>
 
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Celular</label>
+                                        <input id="vcelular" name="vcelular" class="form-control" type="number"
+                                            placeholder="Ingrese Celular" readonly>
+                                        <span class="help-block"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Correo Electronico</label>
+                                        <input id="vemail" name="vemail" class="form-control" type="email"
+                                            placeholder="Ingrese Correo Electronico" readonly>
+                                        <span class="help-block"></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -335,6 +462,7 @@
     <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.fixedHeader.min.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.keyTable.min.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.scroller.min.js"></script>
+
     <script>
         var save_method = '';
         var table_principal;
@@ -352,11 +480,13 @@
                 $(this).next().empty();
             });
 
+
+
             $('#entidadn').autocomplete({
                 minLength: 2,
                 source: function(request, response) {
                     $.ajax({
-                        url: "{{ route('entidad.autocomplete') }}",
+                        url: "{{ route('eess.autocomplete') }}",
                         data: {
                             term: request.term,
                             dependencia: 0,
@@ -373,44 +503,132 @@
                 }
             });
 
+            $('#profesion').autocomplete({
+                minLength: 2,
+                source: function(request, response) {
+                    $.ajax({
+                        url: "{{ route('mantenimiento.directorio.autocomplete.profesion') }}",
+                        data: {
+                            term: request.term,
+                        },
+                        dataType: "JSON",
+                        success: function(data) {
+                            response(data);
+                        }
+                    })
+                },
+                select: function(event, ui) {
+                    // $('#profesion').val(ui.item.id);
+                }
+            });
 
+            $('#cargo').autocomplete({
+                minLength: 2,
+                source: function(request, response) {
+                    $.ajax({
+                        url: "{{ route('mantenimiento.directorio.autocomplete.cargo') }}",
+                        data: {
+                            term: request.term,
+                        },
+                        dataType: "JSON",
+                        success: function(data) {
+                            response(data);
+                        }
+                    })
+                },
+                select: function(event, ui) {
+                    // $('#profesion').val(ui.item.id);
+                }
+            });
+
+            $('#condicion_laboral').autocomplete({
+                minLength: 2,
+                source: function(request, response) {
+                    $.ajax({
+                        url: "{{ route('mantenimiento.directorio.autocomplete.condicion') }}",
+                        data: {
+                            term: request.term,
+                        },
+                        dataType: "JSON",
+                        success: function(data) {
+                            response(data);
+                        }
+                    })
+                },
+                select: function(event, ui) {
+                    // $('#profesion').val(ui.item.id);
+                }
+            });
+
+            cargartableprincipal();
+
+        });
+
+        function cargartableprincipal() {
             table_principal = $('#tbprincipal').DataTable({
                 responsive: true,
                 autoWidth: false,
                 ordered: true,
                 language: table_language,
-                // dom: 'Bfrtip',
-                // buttons: [{
-                //     extend: "excel",
-                //     title: null,
-                //     className: "btn-sm",
-                //     text: '<i class="fa fa-file-excel"></i> Excel',
-                //     titleAttr: 'Excel',
-                //     exportOptions: {
-                //         columns: [0, 1, 2, 3, 4, 5, 6],
-                //     },
-                // }, {
-                //     extend: "pdf",
-                //     className: "btn-sm",
-                //     title: "REDES EDUCATIVAS",
-                //     exportOptions: {
-                //         columns: [0, 1, 2, 3, 4, 5, 6],
-                //     },
-                //     //orientation: 'landscape',
-                //     text: '<i class="fa fa-file-pdf"></i> PDF',
-                //     titleAttr: 'PDF',
-                // }, ],
+                destroy: true,
                 ajax: {
                     "headers": {
                         'X-CSRF-TOKEN': $('input[name=_token]').val()
                     },
                     "url": "{{ route('mantenimiento.directorio.listar.importados') }}",
                     "type": "POST",
+                    "data": {
+                        nivel: $('#nivelx').val(),
+                        codigo: $('#codigox').val()
+                    },
                     //"dataType": 'JSON',
                 },
 
             });
-        });
+        }
+
+        function convertToUppercase(input) {
+            const start = input.selectionStart;
+            const end = input.selectionEnd;
+            input.value = input.value.toUpperCase();
+            input.setSelectionRange(start, end);
+        }
+
+        function buscardni() {
+            if ($('#dni').val().length == 8) {
+                $('#btnbuscardni').html("<i class='fa fa-spinner fa-spin'></i>");
+                $.ajax({
+                    url: "https://apiperu.dev/api/dni/" + $('#dni').val() +
+                        "?api_token={{ TOKEN_APIPERU }}",
+                    type: 'GET',
+                    beforeSend: function() {
+                        $('[name="nombres"]').val("");
+                        $('[name="apellido_paterno"]').val("");
+                        $('[name="apellido_materno"]').val("");
+                    },
+                    success: function(data) {
+                        if (data.success) {
+                            $("#nombres").val(data.data.nombres);
+                            $("#apellido_paterno").val(data.data.apellido_paterno);
+                            $("#apellido_materno").val(data.data.apellido_materno);
+                            //toastr.success("El registro fue creado exitosamente.", 'Mensaje');
+                        } else {
+                            alert('El DNI no existe');
+                            toastr.error('El DNI no existe', 'Mensaje');
+                        }
+                        $('#btnbuscardni').html('<i class="fa fa-search"></i>');
+                    },
+                    error: function(data) {
+                        $('#btnbuscardni').html('<i class="fa fa-search"></i>');
+                        toastr.error('Error en la busqueda, Contacte al Administrador del Sistema', 'Mensaje');
+                    }
+                });
+            } else {
+                alert('INGRESE UN DNI DE 8 DIGITOS');
+                toastr.error('INGRESE UN DNI DE 8 DIGITOS', 'Mensaje');
+            }
+
+        }
 
         function add() {
             save_method = 'add';
@@ -478,6 +696,7 @@
                     $('[name="nombres"]').val(data.dpn.nombres);
                     $('[name="apellido_paterno"]').val(data.dpn.apellido_paterno);
                     $('[name="apellido_materno"]').val(data.dpn.apellido_materno);
+                    $('[name="sexo"]').val(data.dpn.sexo);
                     $('[name="profesion"]').val(data.dpn.profesion);
                     $('[name="cargo"]').val(data.dpn.cargo);
                     $('[name="condicion_laboral"]').val(data.dpn.condicion_laboral);
@@ -499,7 +718,7 @@
             bootbox.confirm("Seguro desea Eliminar este registro?", function(result) {
                 if (result === true) {
                     $.ajax({
-                        url: "{{ url('/') }}/Mantenimiento/RER/ajax_delete/" + id,
+                        url: "{{ url('/') }}/Mantenimiento/Directorio/ajax_delete/" + id,
                         type: "GET",
                         dataType: "JSON",
                         success: function(data) {
@@ -523,11 +742,11 @@
         }
 
         function estado(id, x) {
-            bootbox.confirm("Seguro desea " + (x == 1 ? "desactivar" : "activar") + " este registro?", function(
+            bootbox.confirm("Seguro desea " + (x == '0' ? "desactivar" : "activar") + " este registro?", function(
                 result) {
                 if (result === true) {
                     $.ajax({
-                        url: "{{ url('/') }}/Mantenimiento/RER/ajax_estado/" + id,
+                        url: "{{ url('/') }}/Mantenimiento/Directorio/ajax_estado/" + id,
                         /* type: "POST", */
                         dataType: "JSON",
                         success: function(data) {
@@ -555,17 +774,23 @@
             $('.form-group').removeClass('has-error');
             $('.help-block').empty();
             $.ajax({
-                url: "{{ url('/') }}/Mantenimiento/RER/ajax_edit/" + id,
+                url: "{{ url('/') }}/Mantenimiento/Directorio/ajax_edit/" + id,
                 type: "GET",
                 dataType: "JSON",
                 success: function(data) {
-                    $('[name="vcodigo_rer"]').val(data.rer.codigo_rer);
-                    $('[name="vnombre"]').val(data.rer.nombre);
-                    $('[name="vanio_creacion"]').val(data.rer.anio_creacion);
-                    $('[name="vanio_implementacion"]').val(data.rer.anio_implementacion);
-                    $('[name="vfecha_resolucion"]').val(data.rer.fecha_resolucion);
-                    $('[name="vnumero_resolucion"]').val(data.rer.numero_resolucion);
-                    $('[name="vambito"]').val(data.rer.ambito);
+                    $('[name="vdni"]').val(data.dpn.dni);
+                    $('[name="vnombres"]').val(data.dpn.nombres);
+                    $('[name="vapellido_paterno"]').val(data.dpn.apellido_paterno);
+                    $('[name="vapellido_materno"]').val(data.dpn.apellido_materno);
+                    $('[name="vsexo"]').val(data.dpn.sexo);
+                    $('[name="vprofesion"]').val(data.dpn.profesion);
+                    $('[name="vcargo"]').val(data.dpn.cargo);
+                    $('[name="vcondicion_laboral"]').val(data.dpn.condicion_laboral);
+                    $('[name="vnivel"]').val(data.dpn.nivel);
+                    $('[name="ventidad"]').val(data.dpn.codigo);
+                    $('[name="ventidadn"]').val(data.dpn.entidadn);
+                    $('[name="vcelular"]').val(data.dpn.celular);
+                    $('[name="vemail"]').val(data.dpn.email);
                     $('#modal_ver').modal('show');
                     $('.modal-title').text('Vista General');
                 },
@@ -574,5 +799,27 @@
                 }
             });
         };
+
+        function cargarentidad() {
+            // $('#vmicrored option' ).remove();
+            $.ajax({
+                url: "{{ route('mantenimiento.directorio.cargar.entidad', ['nivel' => 'nivel']) }}"
+                    .replace('nivel', $('#nivelx').val()),
+                type: 'GET',
+                success: function(data) {
+                    $("#codigox option").remove();
+                    var options = data.length > 1 ? '<option value="0">TODOS</option>' : '';
+                    $.each(data, function(index, value) {
+                        //ss = (id == value.id ? "selected" : "");
+                        options += `<option value='${value.id}'>${value.nombrex}</option>`;
+                    });
+                    $("#codigox").append(options);
+                    cargartableprincipal();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
     </script>
 @endsection

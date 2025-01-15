@@ -31,10 +31,10 @@ class TableroCalidadIndicadorExport implements FromView, ShouldAutoSize
         ini_set('memory_limit', '1024M');
         if ($this->div == 'tabla2') {
             $mgs = (new PadronNominalController())->tablerocalidadindicadorreporteExport($this->div,  $this->anio, $this->mes, $this->edades, $this->indicador, $this->ubigeo);
-            return view('salud.PadronNominal.TableroCalidadIndicadorTabla2', $mgs);
+            return view('salud.PadronNominal.TableroCalidadIndicadorTabla2excel', $mgs);
         } else if ($this->div == 'tabla0201') {
             $mgs = (new PadronNominalController())->tablerocalidadindicadorreporteExport($this->div,  $this->anio, $this->mes, $this->edades, $this->indicador, $this->ubigeo);
-            return view('salud.PadronNominal.TableroCalidadIndicadorTabla0201', $mgs);
+            return view('salud.PadronNominal.TableroCalidadIndicadorTabla0201excel', $mgs);
         } else {
             $mgs = (new PadronNominalController())->tablerocalidadindicadorreporteExport($this->div,  $this->anio, $this->mes, $this->edades, $this->indicador, $this->ubigeo);
             return view('salud.PadronNominal.TableroCalidadTabla3_1excel', $mgs);

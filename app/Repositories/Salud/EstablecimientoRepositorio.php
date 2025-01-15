@@ -262,4 +262,26 @@ class EstablecimientoRepositorio
             ->join('sal_microred as mi', 'mi.id', '=', 'es.microrred_id')->join('sal_red as re', 're.id', '=', 'mi.red_id')->where('es.id', $establecimiento)->first();
         return $query;
     }
+
+    public static function queAtiendenAutocompletar($term)
+    {
+        $query = Establecimiento::from('sal_establecimiento as es')//->join('sal_microred as m', 'm.id', '=', 'es.microrred_id')->join('sal_red as r', 'r.id', '=', 'm.red_id')
+            ->select('es.id', 'es.cod_unico', 'es.nombre_establecimiento')
+            ->where('es.cod_disa', '34')->where('es.estado', 'ACTIVO')->whereIn('es.institucion', ['GOBIERNO REGIONAL', 'MINSA'])
+            ->whereIn('es.categoria', ['I-1', 'I-2', 'I-3', 'I-4'])
+            ->where(function ($q) use ($term) {
+                $q->where('es.nombre_establecimiento', 'like', '%' . $term . '%')->orWhere('es.cod_unico', 'like', '%' . $term . '%');
+            })->get();
+        return $query;
+    }
+
+    public static function queAtiendenCargar()
+    {
+        $query = Establecimiento::from('sal_establecimiento as es')//->join('sal_microred as m', 'm.id', '=', 'es.microrred_id')->join('sal_red as r', 'r.id', '=', 'm.red_id')
+            ->select('es.id', DB::raw('concat(LPAD(es.cod_unico, 8, "0")," | ",es.nombre_establecimiento) as nombrex'))
+            ->where('es.cod_disa', '34')->where('es.estado', 'ACTIVO')->whereIn('es.institucion', ['GOBIERNO REGIONAL', 'MINSA'])
+            ->whereIn('es.categoria', ['I-1', 'I-2', 'I-3', 'I-4'])
+            ->get();
+        return $query;
+    }
 }

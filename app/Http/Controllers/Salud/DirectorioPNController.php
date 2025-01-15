@@ -3,14 +3,12 @@
 namespace App\Http\Controllers\Salud;
 
 use App\Http\Controllers\Controller;
-use App\Models\Administracion\Entidad;
-use App\Models\Educacion\RER;
-use App\Models\Educacion\PadronRER;
 use App\Models\Salud\DirectorioPN;
+use App\Models\Salud\Establecimiento;
+use App\Repositories\Salud\EstablecimientoRepositorio;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Yajra\DataTables\DataTables;
 
 use function PHPUnit\Framework\isNull;
 
@@ -32,28 +30,35 @@ class DirectorioPNController extends Controller
         $draw = intval($rq->draw);
         $start = intval($rq->start);
         $length = intval($rq->length);
+        $nivel = ['1' => 'DIRESA', '2' => 'RED', '3' => 'MICRORED', '4' => 'EE.SS'];
 
-        $query = DirectorioPN::orderBy('id', 'desc')->get();
+        $query = DirectorioPN::orderBy('id', 'desc');
+        if ($rq->nivel > 0) {
+            $query = $query->where('nivel', $rq->nivel);
+            if ($rq->codigo > 0) {
+                $query = $query->where('codigo', $rq->codigo);
+            }
+        }
+        $query = $query->get();
         $data = [];
         foreach ($query as $key => $value) {
-            $btn1 = '<a href="#" class="btn btn-info btn-xs" onclick="edit(' . $value->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
+            $btn = '<a href="#" class="btn btn-info btn-xs" onclick="edit(' . $value->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
             if ($value->estado == 0) {
-                $btn2 = '&nbsp;<a class="btn btn-sm btn-dark btn-xs" href="javascript:void(0)" title="Desactivar" onclick="estado(' . $value->id . ',' . $value->estado . ')"><i class="fa fa-power-off"></i></a> ';
+                $btn .= '&nbsp;<a class="btn btn-sm btn-dark btn-xs" href="javascript:void(0)" title="Desactivar" onclick="estado(' . $value->id . ',' . $value->estado . ')"><i class="fa fa-power-off"></i></a> ';
             } else {
-                $btn2 = '&nbsp;<a class="btn btn-sm btn-default btn-xs"  title="Activar" onclick="estado(' . $value->id . ',' . $value->estado . ')"><i class="fa fa-check"></i></a> ';
+                $btn .= '&nbsp;<a class="btn btn-sm btn-default btn-xs"  title="Activar" onclick="estado(' . $value->id . ',' . $value->estado . ')"><i class="fa fa-check"></i></a> ';
             }
-            $btn3 = '&nbsp;<a href="#" class="btn btn-danger btn-xs" onclick="borrar(' . $value->id . ')"  title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
-            // $btn4 = '&nbsp;<button type="button" onclick="ver(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> </button>';
+            $btn .= '&nbsp;<a href="#" class="btn btn-danger btn-xs" onclick="borrar(' . $value->id . ')"  title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
+            $btn .= '&nbsp;<button type="button" onclick="ver(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> </button>';
 
             $data[] = array(
                 $key + 1,
-                $value->dni,
+                $nivel[$value->nivel] ?? '',
+                $this->getentidad($value->nivel, $value->codigo),
                 $value->nombres . ' ' . $value->apellido_paterno . ' ' . $value->apellido_materno,
-                $value->profesion,
                 $value->cargo,
                 $value->condicion_laboral,
-                $value->celular,
-                "<center>" . $btn1 . $btn2  . $btn3 . "</center>",
+                "<center>" . $btn  . "</center>",
             );
         }
         $result = array(
@@ -61,6 +66,7 @@ class DirectorioPNController extends Controller
             "recordsTotal" => $start,
             "recordsFiltered" => $length,
             "data" => $data,
+            "rq" => $rq->all(),
         );
         return response()->json($result);
     }
@@ -162,6 +168,7 @@ class DirectorioPNController extends Controller
             'nombres' => $request->nombres,
             'apellido_paterno' => $request->apellido_paterno,
             'apellido_materno' => $request->apellido_materno,
+            'sexo' => $request->sexo,
             'profesion' => $request->profesion,
             'cargo' => $request->cargo,
             'condicion_laboral' => $request->condicion_laboral,
@@ -180,68 +187,128 @@ class DirectorioPNController extends Controller
         $rer->nombres = $request->nombres;
         $rer->apellido_paterno = $request->apellido_paterno;
         $rer->apellido_materno = $request->apellido_materno;
+        $rer->sexo = $request->sexo;
         $rer->profesion = $request->profesion;
         $rer->cargo = $request->cargo;
         $rer->condicion_laboral = $request->condicion_laboral;
         $rer->nivel = $request->nivel;
-        $rer->codigo = $request->codigo;
+        $rer->codigo = $request->entidad;
         $rer->celular = $request->celular;
         $rer->email = $request->email;
         $rer->save();
 
-        return response()->json(array('status' => true));
+        return response()->json(['status' => true, 'data' => $request->all(), 'obj' => $rer]);
     }
     public function ajax_edit($id)
     {
         $dpn = DirectorioPN::find($id);
-        $ent = Entidad::find($dpn->codigo);
-        if($ent){
-            $dpn->entidadn=$ent->codigo . ' ' . $ent->nombre;
-        }
+        $dpn->entidadn = $this->getentidad($dpn->nivel, $dpn->codigo);
         return response()->json(compact('dpn'));
     }
+
+    public function getentidad($nivel, $codigo)
+    {
+        switch ($nivel) {
+            case '2':
+                $query = DB::table('sal_red')->where('id', $codigo)->first();
+                if ($query) {
+                    return $query->codigo . ' ' . $query->nombre;
+                }
+                break;
+
+            case '3':
+                $query = DB::table('sal_microred')->where('id', $codigo)->first();
+                if ($query) {
+                    return $query->codigo . ' ' . $query->nombre;
+                }
+                break;
+
+            case '4':
+                $query = Establecimiento::find($codigo);
+                if ($query) {
+                    return str_pad($query->cod_unico, 8, '0', STR_PAD_LEFT) . ' | ' . $query->nombre_establecimiento;
+                }
+                break;
+
+            default:
+                return '';
+                break;
+        }
+    }
+
     public function ajax_delete($id) //elimina deverdad *o*
     {
-        $rer = RER::find($id);
+        $rer = DirectorioPN::find($id);
         $rer->delete();
         return response()->json(array('status' => true, 'rer' => $rer));
     }
     public function ajax_estado($id)
     {
         $rer = DirectorioPN::find($id);
-        $rer->estado = $rer->estado == 1 ? 0 : 1;
+        $rer->estado = $rer->estado == '0' ? '1' : '0';
         $rer->save();
         return response()->json(array('status' => true, 'estado' => $rer->estado));
     }
 
-    public function completarred(Request $rq)
+    public function autocompletarProfesion(Request $rq)
     {
-        $term = $rq->get('term');
-        $query = RER::where(DB::raw("concat(' ',codigo_rer,nombre)"), 'like', "%$term%")->where('estado', 0)->orderBy('nombre', 'asc')->get();
-        $data = [];
-        foreach ($query as $key => $value) {
-            $data[] = [
-                "label" => $value->codigo_rer . ' | ' . $value->nombre,
-                "id" => $value->id
-            ];
-        }
-        return $data; //response()->json('data');
+        $term = $rq->term;
+        $query = DirectorioPN::distinct()->select('profesion')
+            ->where(function ($q) use ($term) {
+                $q->where('profesion', 'like', '%' . $term . '%'); //->orWhere('codigo', 'like', '%' . $term . '%');
+            })->get();
+
+        $data = $query->count() > 0
+            ? $query->map(fn($value) => ['label' => $value->profesion, 'id' => 0])->toArray()
+            : [['label' => 'SIN REGISTROS', 'id' => 0]];
+
+        return response()->json($data);
     }
 
-    public function ajax_cargar(Request $rq)
+    public function autocompletarCondicion(Request $rq)
     {
-        $nivel = $rq->get('nivel');
-        $ugel = $rq->get('ugel');
-        $rer = RER::select('edu_rer.id', 'edu_rer.nombre')
-            ->join('edu_padron_rer as v2', 'v2.rer_id', '=', 'edu_rer.id')
-            ->join('edu_institucioneducativa as v3', 'v3.id', '=', 'v2.institucioneducativa_id');
-        if ($nivel != 0)
-            $rer = $rer->where('v3.NivelModalidad_id', $nivel);
-        if ($ugel != 0)
-            $rer = $rer->where('v3.Ugel_id', $ugel);
-        $rer = $rer->distinct();
-        $rer = $rer->orderBy('nombre', 'asc');
-        $rer = $rer->get();
-        return response()->json(compact('rer'));
+        $term = $rq->term;
+        $query = DirectorioPN::distinct()->select('condicion_laboral')
+            ->where(function ($q) use ($term) {
+                $q->where('condicion_laboral', 'like', '%' . $term . '%'); //->orWhere('codigo', 'like', '%' . $term . '%');
+            })->get();
+
+        $data = $query->count() > 0
+            ? $query->map(fn($value) => ['label' => $value->condicion_laboral, 'id' => 0])->toArray()
+            : [['label' => 'SIN REGISTROS', 'id' => 0]];
+
+        return response()->json($data);
+    }
+
+    public function autocompletarCargo(Request $rq)
+    {
+        $term = $rq->term;
+        $query = DirectorioPN::distinct()->select('cargo')
+            ->where(function ($q) use ($term) {
+                $q->where('cargo', 'like', '%' . $term . '%'); //->orWhere('codigo', 'like', '%' . $term . '%');
+            })->get();
+
+        $data = $query->count() > 0
+            ? $query->map(fn($value) => ['label' => $value->cargo, 'id' => 0])->toArray()
+            : [['label' => 'SIN REGISTROS', 'id' => 0]];
+
+        return response()->json($data);
+    }
+
+    public function cargarEntidad($nivel)
+    {
+        switch ($nivel) {
+            case '2':
+                return DB::table('sal_red')->select('id', DB::raw('concat(codigo," ",nombre) as nombrex'))->where('cod_disa', '34')->get();
+            case '3':
+                return DB::table('sal_microred as m')->join('sal_red as r', 'r.id', '=', 'm.red_id')
+                    ->select('m.id', DB::raw('concat(m.codigo," ",m.nombre," | ",r.nombre) as nombrex'))->where('m.cod_disa', '34')->get();
+            case '4':
+                return EstablecimientoRepositorio::queAtiendenCargar();
+            default:
+                return [];
+        }
+
+        return response()->json($data);
     }
 }

@@ -189,4 +189,44 @@ class EstablecimientoController extends Controller
                 </tfoot></table>';
         return response()->json(['query' => $query, 'tabla' => $tabla, 'rq' => $rq->all()]);
     }
+
+    public function autocompletarEntidad(Request $rq)
+    {
+        $term = $rq->term;
+        switch ($rq->tipoentidad) {
+            case '2':
+                $query = DB::table('sal_red')
+                    ->where('cod_disa', '34')->where(function ($q) use ($term) {
+                        $q->where('nombre', 'like', '%' . $term . '%')->orWhere('codigo', 'like', '%' . $term . '%');
+                    })->get();
+
+                $data = $query->count() > 0
+                    ? $query->map(fn($value) => ['label' => $value->codigo . ' ' . $value->nombre, 'id' => $value->id])->toArray()
+                    : [['label' => 'SIN REGISTROS', 'id' => 0]];
+                break;
+            case '3':
+                $query = DB::table('sal_microred as m')->join('sal_red as r', 'r.id', '=', 'm.red_id')->select('m.id', 'm.codigo', 'm.nombre', 'r.nombre as red')
+                    ->where('r.cod_disa', '34')->where(function ($q) use ($term) {
+                        $q->where('m.nombre', 'like', '%' . $term . '%')->orWhere('m.codigo', 'like', '%' . $term . '%');
+                    })->get();
+
+                $data = $query->count() > 0
+                    ? $query->map(fn($value) => ['label' => $value->codigo . ' ' . $value->nombre . ' | ' . $value->red, 'id' => $value->id])->toArray()
+                    : [['label' => 'SIN REGISTROS', 'id' => 0]];
+                break;
+            case '4':
+                $query =EstablecimientoRepositorio::queAtiendenAutocompletar($term);
+                $data = $query->count() > 0
+                    ? $query->map(fn($value) => ['label' => str_pad($value->cod_unico, 8, '0', STR_PAD_LEFT) . ' | ' . $value->nombre_establecimiento, 'id' => $value->id])->toArray()
+                    : [['label' => 'SIN REGISTROS', 'id' => 0]];
+                break;
+
+            default:
+                # code...
+                break;
+        }
+
+
+        return response()->json($data);
+    }
 }

@@ -632,6 +632,11 @@ Route::post('/Mantenimiento/Directorio/ajax_update/', [DirectorioPNController::c
 Route::get('/Mantenimiento/Directorio/ajax_estado/{id}', [DirectorioPNController::class, 'ajax_estado'])->name('mantenimiento.directorio.estado');
 Route::get('/Mantenimiento/Directorio/ajax_delete/{id}', [DirectorioPNController::class, 'ajax_delete'])->name('mantenimiento.directorio.delete');
 
+Route::get('/Mantenimiento/Directorio/Find/AUTOCOMPLETE/profesion', [DirectorioPNController::class, 'autocompletarProfesion'])->name('mantenimiento.directorio.autocomplete.profesion');
+Route::get('/Mantenimiento/Directorio/Find/AUTOCOMPLETE/cargo', [DirectorioPNController::class, 'autocompletarCargo'])->name('mantenimiento.directorio.autocomplete.cargo');
+Route::get('/Mantenimiento/Directorio/Find/AUTOCOMPLETE/condicion', [DirectorioPNController::class, 'autocompletarCondicion'])->name('mantenimiento.directorio.autocomplete.condicion');
+Route::get('/Mantenimiento/Directorio/Cargar/Entidad/{nivel}', [DirectorioPNController::class, 'cargarEntidad'])->name('mantenimiento.directorio.cargar.entidad');
+
 Route::get('/educación/Mantenimiento/PadronRER', [PadronRERController::class, 'principal'])->middleware('auth')->name('mantenimiento.padronrer.principal');
 Route::post('/Mantenimiento/PadronRER/Importados/', [PadronRERController::class, 'ListarDTImportFuenteTodos'])->name('mantenimiento.padronrer.listar.importados');
 Route::get('/Mantenimiento/PadronRER/ajax_edit/{id}', [PadronRERController::class, 'ajax_edit']);
@@ -1321,7 +1326,11 @@ Route::get('/EESS/List/Registro/reg2', [EstablecimientoController::class, 'regis
 Route::get('/EESS/CargarRed', [EstablecimientoController::class, 'cargarRed'])->name('eess.cargarred');
 Route::get('/EESS/CargarMicrored', [EstablecimientoController::class, 'cargarMicrored'])->name('eess.cargarmicrored');
 Route::get('/EESS/Cargareess', [EstablecimientoController::class, 'cargarEESS'])->name('eess.cargareess');
+Route::get('/EESS/Find/AUTOCOMPLETE', [EstablecimientoController::class, 'autocompletarEntidad'])->name('eess.autocomplete');
 Route::get('/EESS/Find/{id}', [EstablecimientoController::class, 'ajax_edit'])->name('eess.find');
+
+
+
 
 Route::get('/Salud/PadronNominal/Importar', [ImporPadronNominalController::class, 'importar'])->name('salud.padron.importar.index'); //->name('salud.padronnominal.importar');
 Route::post('/Salud/PadronNominal/Importar', [ImporPadronNominalController::class, 'guardar'])->name('imporpadronnominal.guardar');
