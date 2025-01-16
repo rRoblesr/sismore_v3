@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Administracion\Entidad;
 use App\Models\Administracion\Perfil;
 use App\Models\Administracion\Usuario;
+use App\Models\Administracion\UsuarioAuditoria;
 use App\Models\Administracion\UsuarioPerfil;
 use App\Models\Presupuesto\Sector;
 use App\Repositories\Administracion\SistemaRepositorio;
@@ -302,15 +303,16 @@ class UsuarioController extends Controller
                 } */
             }
         }
-        return $data;
+        if ($data['status'] === FALSE) {
+            echo json_encode($data);
+            exit();
+        }
     }
 
     public function ajax_add(Request $request)
     {
-        $val = $this->_validate($request);
-        if ($val['status'] === FALSE) {
-            return response()->json($val);
-        }
+        $this->_validate($request);
+
         $usuario = Usuario::Create([
             'usuario' => $request->usuario,
             'email' => $request->email,
@@ -326,15 +328,24 @@ class UsuarioController extends Controller
             'entidad' => $request->entidadgerencia,
             'estado' => '1',
         ]);
-        return response()->json(array('status' => true));
+
+        $auditoria = UsuarioAuditoria::Create([
+            'usuario_id' => $usuario->id,
+            'accion' => 'CREADO',
+            'datos_anteriores' => null,
+            'datos_nuevos' => $usuario,
+            'usuario_responsable' => auth()->user()->id,
+        ]);
+
+        return response()->json(array('status' => true, 'auditoria' => $auditoria));
     }
+
     public function ajax_update(Request $request)
     {
-        $val = $this->_validate($request);
-        if ($val['status'] === FALSE) {
-            return response()->json($val);
-        }
+        $this->_validate($request);
+
         $usuario = Usuario::find($request->id);
+        $usuairo_anterior = $usuario->getOriginal();
         $usuario->usuario = $request->usuario;
         $usuario->email = $request->email;
         $usuario->dni = $request->dni;
@@ -348,6 +359,14 @@ class UsuarioController extends Controller
         if ($request->password != '')
             $usuario->password = Hash::make($request->password);
         $usuario->save();
+
+        $auditoria = UsuarioAuditoria::Create([
+            'usuario_id' => $usuario->id,
+            'accion' => 'MODIFICADO',
+            'datos_anteriores' => $usuairo_anterior,
+            'datos_nuevos' => $usuario,
+            'usuario_responsable' => auth()->user()->id,
+        ]);
 
         return response()->json(array('status' => true));
     }
@@ -545,7 +564,16 @@ class UsuarioController extends Controller
     {
         UsuarioPerfil::where('usuario_id', $usuario_id)->delete();
         $usuario = Usuario::find($usuario_id);
+        $usuairo_anterior = $usuario->getOriginal();
         $usuario->delete();
+
+        $auditoria = UsuarioAuditoria::Create([
+            'usuario_id' => $usuairo_anterior['id'],
+            'accion' => 'ELIMINADO',
+            'datos_anteriores' => $usuairo_anterior,
+            'datos_nuevos' => null,
+            'usuario_responsable' => auth()->user()->id,
+        ]);
         return response()->json(array('status' => true, 'usuario' => $usuario));
     }
 

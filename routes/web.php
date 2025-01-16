@@ -6,6 +6,7 @@ use App\Http\Controllers\Administracion\MenuController;
 use App\Http\Controllers\Administracion\PerfilController;
 use App\Http\Controllers\Administracion\SistemaController;
 use App\Http\Controllers\Administracion\TipoEntidadController;
+use App\Http\Controllers\Administracion\UsuarioAuditoriaController;
 use App\Http\Controllers\Administracion\UsuarioController;
 use App\Http\Controllers\Educacion\CensoController;
 use App\Http\Controllers\Educacion\CensoDocenteController;
@@ -100,6 +101,7 @@ use App\Http\Controllers\Vivienda\DatassController;
 use App\Http\Controllers\Vivienda\EmapacopsaController;
 use App\Http\Controllers\Vivienda\PadronEmapacopsaController;
 use App\Mail\MsnCorreo;
+use App\Models\Administracion\UsuarioAuditoria;
 use App\Models\Educacion\ImporDocentesBilingues;
 use App\Models\Educacion\ImporServiciosBasicos;
 use App\Models\Parametro\Icono;
@@ -903,6 +905,9 @@ Route::get('/Importado/resumen', [ImportacionController::class, 'resumenimportad
 
 Route::get('/administrador/LoginRecords/Reporte', [LoginRecordsController::class, 'reporte'])->name('loginrecords.reporte');
 Route::get('/administrador/LoginRecords/Reporte/listar', [LoginRecordsController::class, 'listarDT'])->name('loginrecords.reporte.listar');
+
+Route::get('/administrador/Auditoria/Reporte', [UsuarioAuditoriaController::class, 'reporte'])->name('usuarioauditoria.reporte');
+Route::get('/administrador/Auditoria/Reporte/find/recuperados/{id}', [UsuarioAuditoriaController::class, 'ajax_edit'])->name('usuarioauditoria.reporte.find.recuperados');
 /**************************************** FIN ADMINISTRADOR ************************************************/
 
 /**************************************** PRESUPUESTO ************************************************/

@@ -16,7 +16,6 @@ class Usuario extends Model
         'password',
         'remember_token',
         'tipo',
-        'cargo',
         'layouts',
         'dni',
         'nombre',
@@ -25,6 +24,10 @@ class Usuario extends Model
         'sexo',
         'celular',
         'entidad',
-        'estado',
+        'cargo',
+        'sector', //-> esta para eliminar
+        'nivel', //-> esta para eliminar
+        'codigo_institucion', //-> esta para eliminar
+        'estado'
     ];
 }
