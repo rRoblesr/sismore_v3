@@ -105,6 +105,7 @@ use App\Models\Administracion\UsuarioAuditoria;
 use App\Models\Educacion\ImporDocentesBilingues;
 use App\Models\Educacion\ImporServiciosBasicos;
 use App\Models\Parametro\Icono;
+use App\Models\Parametro\Ubigeo;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -1322,10 +1323,6 @@ Route::get('/Salud/PadronNominal/TableroCalidad/Indicador/Exportar2/{div}/{anio}
 Route::get('/Salud/PadronNominal/Mes/{anio}', [PadronNominalController::class, 'meses'])->name('salud.padronnominal.mes');
 Route::get('/Salud/PadronNominal/Edades/{anio}/{mes}', [PadronNominalController::class, 'edades'])->name('salud.padronnominal.edades');
 
-// Route::get('/Salud/PadronNominal/Importar', [SaludPadronNominalImportar::class, 'index'])->name('salud.padron.importar.index');
-// Route::get('/Salud/PadronNominal/Importar/Historial', [SaludPadronNominalImportar::class, 'listarHistorial'])->name('salud.padron.importar.historial');
-// Route::post('/Salud/PadronNominal/Importar/Cargar', [SaludPadronNominalImportar::class, 'cargarPadron'])->name('salud.padron.importar.cargar');
-
 Route::get('/EESS/List/Registro', [EstablecimientoController::class, 'registro_listarDT'])->name('eess.listar.registro');
 Route::get('/EESS/List/Registro/reg2', [EstablecimientoController::class, 'registro_listarDT2'])->name('eess.listar.registro.2');
 Route::get('/EESS/CargarRed', [EstablecimientoController::class, 'cargarRed'])->name('eess.cargarred');
@@ -1335,14 +1332,13 @@ Route::get('/EESS/Find/AUTOCOMPLETE', [EstablecimientoController::class, 'autoco
 Route::get('/EESS/Find/{id}', [EstablecimientoController::class, 'ajax_edit'])->name('eess.find');
 
 
-
-
 Route::get('/Salud/PadronNominal/Importar', [ImporPadronNominalController::class, 'importar'])->name('salud.padron.importar.index'); //->name('salud.padronnominal.importar');
 Route::post('/Salud/PadronNominal/Importar', [ImporPadronNominalController::class, 'guardar'])->name('imporpadronnominal.guardar');
 Route::get('/Salud/PadronNominal/Listar/ImportarDT', [ImporPadronNominalController::class, 'ListarDTImportFuenteTodos'])->name('imporpadronnominal.listar.importados');
 Route::post('/Salud/PadronNominal/ListaImportada', [ImporPadronNominalController::class, 'ListaImportada'])->name('imporpadronnominal.listarimportados');
 Route::get('/Salud/PadronNominal/eliminar/{id}', [ImporPadronNominalController::class, 'eliminar'])->name('imporpadronnominal.eliminar');
 
+Route::post('/Salud/PadronNominal/{importacion}', [ImporPadronNominalController::class, 'ejecutarProceso3'])->name('imporpadronnominal.procesar.3');
 
 /******************************************** FIN SALUD ***************************************************/
 
@@ -1433,6 +1429,7 @@ Route::get('/recursos/highcharts', function () {
 });
 
 Route::get('/recursos/pruebas', function () {
+    return $distritos = Ubigeo::where('codigo', 'like', '25%')->whereRaw('length(codigo)=6')->pluck('id', 'codigo');
     return view('prueba/prueba12');
 });
 

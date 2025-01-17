@@ -4,15 +4,10 @@ namespace App\Http\Controllers\Salud;
 
 use App\Http\Controllers\Controller;
 use App\Imports\tablaXImport;
-use App\Imports\tablaYImport;
 use App\Models\Administracion\Entidad;
 use App\Models\Educacion\Importacion;
 use App\Models\Parametro\Anio;
-use App\Models\Parametro\ImporPoblacion;
-use App\Models\Parametro\PoblacionDetalle;
 use App\Models\Salud\CalidadCriterio;
-use App\Models\Salud\Establecimiento;
-use App\Models\Salud\ImporPadronEstablecimiento;
 use App\Models\Salud\ImporPadronNominal;
 use App\Models\Salud\PadronNominal;
 use App\Repositories\Educacion\ImportacionRepositorio;
@@ -628,9 +623,22 @@ class ImporPadronNominalController extends Controller
             }
             $boton = '';
             if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || in_array(session('perfil_administrador_id'), [3, 8, 9, 10, 11])) {
-                $boton = '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>';
+                $boton .= '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>&nbsp;';
             }
-            $boton2 = '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> </button>';
+            $boton .= '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> </button>&nbsp;';
+            if (auth()->user()->id == 49) {
+                $boton .= ' <div class="btn-group">
+                                <button type="button" class="btn btn-secondary dropdown-toggle waves-effect waves-light btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-procedures"></i>
+                                        <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" class="dropdown-item">Procesar Completar Columnas</a></li>
+                                    <li><a href="#" class="dropdown-item">Procesar Reporte Calidad</a></li>
+                                    <li><a href="javascript:void(0)" onclick="abrirModalProceso(' . $value->id . ')" class="dropdown-item">Procesar Cubo Pacto 1</a></li>
+                                </ul>
+                            </div>';
+            }
             $data[] = array(
                 $key + 1,
                 date("d/m/Y", strtotime($value->fechaActualizacion)),
@@ -639,7 +647,7 @@ class ImporPadronNominalController extends Controller
                 $ent ? $ent->abreviado : '',
                 date("d/m/Y", strtotime($value->created_at)),
                 $value->estado == "PR" ? "PROCESADO" : "PENDIENTE",
-                $boton . '&nbsp;' . $boton2,
+                $boton
             );
         }
         $result = array(
@@ -661,13 +669,22 @@ class ImporPadronNominalController extends Controller
     /* metodo para eliminar una importacion */
     public function eliminar($id)
     {
-        // $poblacion = Poblacion::where('importacion_id', $id)->first();
-        // PoblacionDetalle::where('poblacion_id', $poblacion->id)->delete();
-        // $poblacion->delete();
         ImporPadronNominal::where('importacion_id', $id)->delete();
         PadronNominal::where('importacion_id', $id)->delete();
         CalidadCriterio::where('importacion_id', $id)->delete();
         Importacion::find($id)->delete();
         return response()->json(array('status' => true));
+    }
+
+    public function ejecutarProceso3($importacion)
+    {
+        ini_set('memory_limit', '-1');
+        set_time_limit(0);
+        try {
+            DB::select('call sal_pa_procesarPacto01Homologados(?)', [$importacion]);
+            return response()->json(['status' => 'success', 'message' => 'Proceso completado correctamente']);
+        } catch (Exception $e) {
+            return response()->json(['status' => 'error', 'message' => 'Error en la ejecución del proceso', 'error' => $e->getMessage()], 500);
+        }
     }
 }

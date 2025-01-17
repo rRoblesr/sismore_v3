@@ -38,7 +38,7 @@
                             <div class="custom-select-container">
                                 <label for="anio">Año</label>
                                 <select id="anio" name="anio" class="form-control form-control-sm font-11"
-                                    onchange="cargarMes();cargarcuadros();">
+                                    onchange="cargarMes();">
                                     @foreach ($anio as $item)
                                         <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
                                             {{ $item->anio }}</option>
@@ -283,7 +283,7 @@
         </div>
     </div>
 
-    <div class="row">
+    {{-- <div class="row">
         <div class="col-lg-12">
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent p-0">
@@ -301,25 +301,6 @@
                             <div class="table-responsive">
                                 <table id="table3" class="table table-sm table-striped table-bordered font-11">
                                     <thead>
-                                        {{-- <tr class="table-success-0 text-white">
-                                            <th class="text-center">Nº</th>
-                                            <th class="text-center">Tipo Doc.</th>
-                                            <th class="text-center">Documento</th>
-                                            <th class="text-center">Nombre del Menor</th>
-                                            <th class="text-center">Fecha Nac.</th>
-                                            <th class="text-center">Nro Doc.</th>
-                                            <th class="text-center">Nombres</th>
-                                            <th class="text-center">Dirección</th>
-                                            <th class="text-center">CCPP</th>
-                                            <th class="text-center">Seguro</th>
-                                            <th class="text-center">EESS</th>
-                                            <th class="text-center">Doc. Madre</th>
-                                            <th class="text-center">Nombre Madre</th>
-                                            <th class="text-center">Grado Madre</th>
-                                            <th class="text-center" >Lengua Madre</th>
-                                            <th class="text-center">Estado</th>
-                                        </tr> --}}
-
                                         <tr class="table-success-0 text-white">
                                             <th class="text-center">Nº</th>
                                             <th class="text-center">Tipo Doc.</th>
@@ -340,7 +321,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
                                     </tbody>
                                 </table>
                             </div>
@@ -349,7 +329,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <!--  Modal content for the above example -->
     <div class="modal fade" id="modal-nino" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
@@ -556,7 +536,7 @@
             panelGraficas('tabla1');
             // panelGraficas('tabla2');
             tabla2('tabla2');
-            tabla3('tabla3');
+            // tabla3('tabla3');
             // panelGraficas('tabla3');
         }
 
@@ -725,121 +705,116 @@
 
         }
 
-        function tabla3(div) {
-            tablepadron = $('#table3').DataTable({
-                responsive: true,
-                autoWidth: false,
-                processing: true,
-                serverSide: true,
-                ordered: true,
-                language: table_language,
-                destroy: true,
-                ajax: {
-                    url: "{{ route('salud.indicador.pactoregional.detalle.reports.3') }}",
-                    type: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    data: function(d) {
-                        d.div = div;
-                        d.anio = $('#anio').val();
-                        d.mes = $('#mes').val();
-                        d.provincia = $('#provincia').val();
-                        d.distrito = $('#distrito').val();
-                        d.fuente = {{ $fuente }};
-                        d.indicador = '{{ $ind->id }}';
-                        d.codigo = '{{ $ind->codigo }}';
-                    }
-                },
-                columns: [{
-                        data: 'item',
-                        name: 'item',
-                    },
-                    {
-                        data: 'tipo_doc',
-                        name: 'tipo_doc',
-                    },
-                    {
-                        data: 'num_doc',
-                        name: 'num_doc',
-                    },
-                    {
-                        data: 'nombre_completo',
-                        name: 'nombre_completo',
-                    },
-                    {
-                        data: 'nacimiento',
-                        name: 'nacimiento',
-                    },
-                    {
-                        data: 'c01',
-                        name: 'c01',
-                    },
-                    {
-                        data: 'c02',
-                        name: 'c02',
-                    },
-                    {
-                        data: 'c03',
-                        name: 'c03',
-                    },
-                    {
-                        data: 'c04',
-                        name: 'c04',
-                    },
-                    {
-                        data: 'c05',
-                        name: 'c05',
-                    },
-                    {
-                        data: 'c06',
-                        name: 'c06',
-                    },
-                    {
-                        data: 'c07',
-                        name: 'c07',
-                    },
-                    {
-                        data: 'c08',
-                        name: 'c08',
-                    },
-                    {
-                        data: 'c09',
-                        name: 'c09',
-                    },
-                    {
-                        data: 'c10',
-                        name: 'c10',
-                    },
-                    {
-                        data: 'estado',
-                        name: 'estado',
-                    }
-                ],
-                columnDefs: [
-                    // {
-                    //     className: 'text-center',
-                    //     targets: [0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-                    // },
-                    {
-                        targets: 2,
-                        render: function(data, type, row) {
-                            // return '<a href="/ruta/detalle/' + row + '">' + data + '</a>';
-                            return `<a href="javascript:void(0)" onclick="abrirmodalpadron('${data}')">${data}</a>`;
-                        }
-                    }
-                ],
-                createdRow: function(row, data, dataIndex) {
-                    // Agregar clases solo a las celdas del tbody
-                    $(row).find('td').each(function(index) {
-                        if ([0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(index)) {
-                            $(this).addClass('text-center');
-                        }
-                    });
-                },
-            });
+        // function tabla3(div) {
+        //     tablepadron = $('#table3').DataTable({
+        //         responsive: true,
+        //         autoWidth: false,
+        //         processing: true,
+        //         serverSide: true,
+        //         ordered: true,
+        //         language: table_language,
+        //         destroy: true,
+        //         ajax: {
+        //             url: "{{ route('salud.indicador.pactoregional.detalle.reports.3') }}",
+        //             type: 'POST',
+        //             headers: {
+        //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //             },
+        //             data: function(d) {
+        //                 d.div = div;
+        //                 d.anio = $('#anio').val();
+        //                 d.mes = $('#mes').val();
+        //                 d.provincia = $('#provincia').val();
+        //                 d.distrito = $('#distrito').val();
+        //                 d.fuente = {{ $fuente }};
+        //                 d.indicador = '{{ $ind->id }}';
+        //                 d.codigo = '{{ $ind->codigo }}';
+        //             }
+        //         },
+        //         columns: [{
+        //                 data: 'item',
+        //                 name: 'item',
+        //             },
+        //             {
+        //                 data: 'tipo_doc',
+        //                 name: 'tipo_doc',
+        //             },
+        //             {
+        //                 data: 'num_doc',
+        //                 name: 'num_doc',
+        //             },
+        //             {
+        //                 data: 'nombre_completo',
+        //                 name: 'nombre_completo',
+        //             },
+        //             {
+        //                 data: 'nacimiento',
+        //                 name: 'nacimiento',
+        //             },
+        //             {
+        //                 data: 'c01',
+        //                 name: 'c01',
+        //             },
+        //             {
+        //                 data: 'c02',
+        //                 name: 'c02',
+        //             },
+        //             {
+        //                 data: 'c03',
+        //                 name: 'c03',
+        //             },
+        //             {
+        //                 data: 'c04',
+        //                 name: 'c04',
+        //             },
+        //             {
+        //                 data: 'c05',
+        //                 name: 'c05',
+        //             },
+        //             {
+        //                 data: 'c06',
+        //                 name: 'c06',
+        //             },
+        //             {
+        //                 data: 'c07',
+        //                 name: 'c07',
+        //             },
+        //             {
+        //                 data: 'c08',
+        //                 name: 'c08',
+        //             },
+        //             {
+        //                 data: 'c09',
+        //                 name: 'c09',
+        //             },
+        //             {
+        //                 data: 'c10',
+        //                 name: 'c10',
+        //             },
+        //             {
+        //                 data: 'estado',
+        //                 name: 'estado',
+        //             }
+        //         ],
+        //         columnDefs: [
+                   
+        //             {
+        //                 targets: 2,
+        //                 render: function(data, type, row) {
+        //                     return `<a href="javascript:void(0)" onclick="abrirmodalpadron('${data}')">${data}</a>`;
+        //                 }
+        //             }
+        //         ],
+        //         createdRow: function(row, data, dataIndex) {
+        //             $(row).find('td').each(function(index) {
+        //                 if ([0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(index)) {
+        //                     $(this).addClass('text-center');
+        //                 }
+        //             });
+        //         },
+        //     });
 
-        }
+        // }
 
         function cargarTablaNivel(div, ugel) {
             $.ajax({
@@ -892,6 +867,7 @@
                         options += `<option value='${value.mes_id}' ${ss}>${value.mes}</option>`;
                     });
                     $("#mes").append(options);
+                    cargarcuadros();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);

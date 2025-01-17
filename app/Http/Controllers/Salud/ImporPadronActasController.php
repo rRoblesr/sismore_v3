@@ -170,7 +170,7 @@ class ImporPadronActasController extends Controller
 
                 break;
 
-            case ImporPadronActasController::$FUENTE['pacto_2']:
+            case 54545:
                 $existeMismaFecha = ImportacionRepositorio::Importacion_PE($rq->fechaActualizacion, $rq->fuente);
                 if ($existeMismaFecha != null) {
                     $mensaje = "Error, Ya existe archivos prendientes de aprobar para la fecha de versión ingresada";
@@ -274,7 +274,109 @@ class ImporPadronActasController extends Controller
                 $this->json_output(200, $mensaje, '');
 
                 break;
+            case ImporPadronActasController::$FUENTE['pacto_2']:
 
+                if (ImportacionRepositorio::Importacion_PE($rq->fechaActualizacion, ImporPadronActasController::$FUENTE['pacto_2']) !== null) {
+                    return $this->json_output(400, "Error, ya existe un archivo pendiente de aprobación para la fecha ingresada");
+                }
+
+                if (ImportacionRepositorio::Importacion_PR($rq->fechaActualizacion, ImporPadronActasController::$FUENTE['pacto_2']) !== null) {
+                    return $this->json_output(400, "Error, ya existe un archivo procesado para la fecha ingresada");
+                }
+
+                $this->validate($rq, ['file' => 'required|mimes:xls,xlsx']);
+                $archivo = $rq->file('file');
+                $array = (new tablaXImport)->toArray($archivo);
+
+                $encabezadosEsperados = [
+                    'anio',
+                    'mes',
+                    'ubigeo',
+                    'cod_unico',
+                    'num_doc',
+                    'fecha_nac',
+                    'seguro',
+                    'fecha_dx',
+                    'fecha_supt1',
+                    'num_supt1',
+                    'fecha_supt3',
+                    'num_supt3',
+                    'fecha_recup',
+                    'num_recup',
+                    'fecha_dosaje',
+                    'num_dosaje',
+                    'den',
+                    'num',
+
+                ];
+
+                $encabezadosArchivo = array_keys($array[0][0]);
+
+                $faltantes = array_diff($encabezadosEsperados, $encabezadosArchivo);
+                if (!empty($faltantes)) {
+                    return $this->json_output(400, 'Error: Los encabezados del archivo no coinciden con el formato esperado. Faltan columnas esperadas.', $faltantes);
+                }
+
+                try {
+                    DB::beginTransaction();
+
+                    $importacion = Importacion::create([
+                        'fuenteImportacion_id' => ImporPadronActasController::$FUENTE['pacto_2'],
+                        'usuarioId_Crea' => auth()->user()->id,
+                        'fechaActualizacion' => $rq->fechaActualizacion,
+                        'estado' => 'PR'
+                    ]);
+
+                    $distritos = Ubigeo::where('codigo', 'like', '25%')->whereRaw('length(codigo)=6')->pluck('id', 'codigo');
+
+                    $batchSize = 500;
+                    $dataBatch = [];
+
+                    foreach ($array[0] as $row) {
+
+                        $dataBatch[] = [
+                            'importacion_id' => $importacion->id,
+                            'anio' => $row['anio'],
+                            'mes' => $row['mes'],
+                            'ubigeo' => $distritos[$row['ubigeo']] ?? null, // Ubigeo::where('codigo', $row['ubigeo'])->first()->id,
+                            'cod_unico' => $row['cod_unico'],
+                            'num_doc' => $row['num_doc'],
+                            'fecha_nac' =>  $this->fechaExcel($row['fecha_nac']),
+                            'seguro' => $row['seguro'],
+                            'fecha_dx' =>  $this->fechaExcel($row['fecha_dx']),
+                            'fecha_supt1' => $this->fechaExcel($row['fecha_supt1']),
+                            'num_supt1' => $row['num_supt1'],
+                            'fecha_supt3' => $this->fechaExcel($row['fecha_supt3']),
+                            'num_supt3' => $row['num_supt3'],
+                            'fecha_recup' => $this->fechaExcel($row['fecha_recup']),
+                            'num_recup' => $row['num_recup'],
+                            'fecha_dosaje' => $this->fechaExcel($row['fecha_dosaje']),
+                            'num_dosaje' => $row['num_dosaje'],
+                            'den' => $row['den'],
+                            'num' => $row['num']
+                        ];
+
+                        if (count($dataBatch) >= $batchSize) {
+                            ImporPadronAnemia::insert($dataBatch);
+                            $dataBatch = [];
+                        }
+                    }
+
+                    if (!empty($dataBatch)) {
+                        ImporPadronAnemia::insert($dataBatch);
+                    }
+
+                    DB::commit();
+                } catch (Exception $e) {
+                    DB::rollBack();
+                    $importacion->estado = 'PE';
+                    $importacion->save();
+
+                    return $this->json_output(400, "Error en la carga de datos: " . $e->getMessage());
+                }
+
+                $this->json_output(200, "Archivo Excel subido y procesado correctamente.");
+                break;
             case 3333:
                 $existeMismaFecha = ImportacionRepositorio::Importacion_PE($rq->fechaActualizacion, $rq->fuente);
                 if ($existeMismaFecha != null) {

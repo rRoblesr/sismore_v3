@@ -1,5 +1,6 @@
 @extends('layouts.main', ['titlePage' => 'IMPORTAR DATOS - PADRON NOMINAL'])
 @section('css')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Table datatable css -->
     <link href="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.css" rel="stylesheet"
         type="text/css" />
@@ -180,6 +181,39 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
     <!-- End Bootstrap modal -->
+
+    <!-- Modal -->
+    <div id="modalProceso" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalProcesoLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalProcesoLabel">Proceso en Ejecución</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Presiona el botón para iniciar el proceso.</p>
+
+                    <!-- Barra de Progreso -->
+                    <div class="progress">
+                        <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                            role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0"
+                            aria-valuemax="100">
+                        </div>
+                    </div>
+
+                    <p class="mt-2 text-center"><strong id="progressText">0%</strong></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnIniciar" class="btn btn-primary" onclick="iniciarProceso() ">Iniciar
+                        Proceso</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('js')
@@ -435,7 +469,75 @@
             $('#modal-siagie-matricula').modal('show');
             $('#modal-siagie-matricula .modal-title').text('Importado');
         }
-        
+
+        // function abrirModalProceso(importacion) {
+        //     $('#progressBar').css('width', '0%').attr('aria-valuenow', 0).removeClass('bg-success').addClass(
+        //         'progress-bar-animated');
+        //     $('#progressText').text("0%");
+        //     $('#modalProceso').modal('show');
+        // }
+
+        // function iniciarProceso() {
+        //     let progress = 0;
+        //     let interval = setInterval(function() {
+        //         if (progress >= 100) {
+        //             clearInterval(interval);
+        //             $('#progressText').text("¡Proceso Completado!");
+        //             $('#progressBar').removeClass('progress-bar-animated').addClass('bg-success');
+        //         } else {
+        //             progress += 10; // Incremento del progreso
+        //             $('#progressBar').css('width', progress + '%').attr('aria-valuenow', progress);
+        //             $('#progressText').text(progress + '%');
+        //         }
+        //     }, 500); // Se ejecuta cada 500ms
+        // }
+
+        ////
+        function abrirModalProceso(importacion) {
+            // Reiniciar barra de progreso
+            $('#progressBar').css('width', '0%').attr('aria-valuenow', 0).removeClass('bg-success').addClass(
+                'progress-bar-animated');
+            $('#progressText').text("0%");
+
+            // Mostrar modal
+            $('#modalProceso').modal('show');
+
+            // Llamar AJAX para ejecutar proceso en el backend
+            $.ajax({
+                url: "{{ route('imporpadronnominal.procesar.3', ['importacion' => ':importacion']) }}"
+                    .replace(':importacion', importacion),
+                type: "POST",
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                }, // CSRF Token
+                beforeSend: function() {
+                    iniciarBarraProgreso();
+                },
+                success: function(response) {
+                    console.log(response);
+                    $('#progressText').text("¡Proceso Completado!");
+                    $('#progressBar').removeClass('progress-bar-animated').addClass('bg-success');
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log("Error: " + textStatus, errorThrown);
+                    $('#progressText').text("Error en el proceso.");
+                    $('#progressBar').removeClass('progress-bar-animated').addClass('bg-danger');
+                }
+            });
+        }
+
+        function iniciarBarraProgreso() {
+            let progress = 0;
+            let interval = setInterval(function() {
+                if (progress >= 100) {
+                    clearInterval(interval);
+                } else {
+                    progress += 10; // Incremento del progreso
+                    $('#progressBar').css('width', progress + '%').attr('aria-valuenow', progress);
+                    $('#progressText').text(progress + '%');
+                }
+            }, 500); // Se ejecuta cada 500ms
+        }
     </script>
     <script src="{{ asset('/') }}public/assets/libs/jquery-validation/jquery.validate.min.js"></script>
     <!-- Validation init js-->
