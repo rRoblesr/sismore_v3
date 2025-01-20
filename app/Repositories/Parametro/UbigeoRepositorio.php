@@ -75,4 +75,26 @@ class UbigeoRepositorio
             ->join('par_ubigeo as pro', 'pro.id', '=', 'dis.dependencia')->join('par_ubigeo as dep', 'dep.id', '=', 'pro.dependencia')->where('dis.id', $distrito)->first();
         return $query;
     }
+
+    public static function arrayDistritoIdCodigo()
+    {
+        $query = Ubigeo::select('id', 'codigo')->whereRaw('length(codigo) = 6')->where('codigo', 'like', '25%')->get()->pluck('id', 'codigo');
+        return $query;
+    }
+    public static function arrayProvinciaIdCodigo()
+    {
+        $query = Ubigeo::select('id', 'codigo')->whereRaw('length(codigo) = 4')->where('codigo', 'like', '25%')->get()->pluck('id', 'codigo');
+        return $query;
+    }
+
+    public static function arrayDistritoIdNombre()
+    {
+        $query = Ubigeo::select('id', 'nombre')->whereRaw('length(codigo) = 6')->where('codigo', 'like', '25%')->get()->pluck('nombre', 'id');
+        return $query;
+    }
+    public static function arrayProvinciaIdNombre()
+    {
+        $query = Ubigeo::select('id', 'nombre')->whereRaw('length(codigo) = 4')->where('codigo', 'like', '25%')->get()->pluck('nombre', 'id');
+        return $query;
+    }
 }

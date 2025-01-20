@@ -41,11 +41,11 @@
             </tr>
         </tfoot> --}}
     @else
-        <tbody>
+        {{-- <tbody>
             <tr class="text-center">
                 <td class="text-center" colspan="11"><a href="#" class="">Sin información</a></td>
             </tr>
-        </tbody>
+        </tbody> --}}
     @endif
 </table>
 

@@ -2,13 +2,16 @@
     <thead>
         <tr class="bg-success-0 text-white text-center">
             <th class="text-center">Nº</th>
-            <th class="text-center">Red</th>
-            <th class="text-center">Microred</th>
+            <th class="text-center">Departamento</th>
+            <th class="text-center">Provincia</th>
+            <th class="text-center">Distrito</th>
             <th class="text-center">Establecimiento de Salud</th>
             <th class="text-center"> {{ 'Niños < ' }}12 meses</th>
             <th class="text-center">CRED</th>
             <th class="text-center">Vacuna</th>
             <th class="text-center">Suplemento</th>
+            <th class="text-center">HB</th>
+            <th class="text-center">DNI</th>
             <th class="text-center">Paquete Completo</th>
             <th class="text-center">Indicador</th>
         </tr>
@@ -18,13 +21,16 @@
             @foreach ($base as $key => $item)
                 <tr class="text-center">
                     <td>{{ $key + 1 }}</td>
-                    <td class="text-left">{{ $item->red }}</td>
-                    <td class="text-left">{{ $item->microred }}</td>
-                    <td class="text-left">{{ $item->eess_parto }}</td>
+                    <td class="text-left">{{ $item->departamento }}</td>
+                    <td class="text-left">{{ $item->provincia }}</td>
+                    <td class="text-left">{{ $item->distrito }}</td>
+                    <td class="text-left">{{ $item->eess }}</td>
                     <td>{{ $item->denominador }}</td>
                     <td>{{ $item->condicion1 }}</td>
                     <td>{{ $item->condicion2 }}</td>
                     <td>{{ $item->condicion3 }}</td>
+                    <td>{{ $item->condicion4 }}</td>
+                    <td>{{ $item->condicion5 }}</td>
                     <td>{{ $item->numerador }}</td>
                     <td>{!! avance($item->indicador) !!}</td>
                 </tr>
@@ -40,11 +46,11 @@
             </tr>
         </tfoot> --}}
     @else
-        <tbody>
+        {{-- <tbody>
             <tr class="text-center">
-                <td class="text-center" colspan="10"><a href="#" class="">Sin información</a></td>
+                <td class="text-center" colspan="13"><a href="#" class="">Sin información</a></td>
             </tr>
-        </tbody>
+        </tbody> --}}
     @endif
 </table>
 

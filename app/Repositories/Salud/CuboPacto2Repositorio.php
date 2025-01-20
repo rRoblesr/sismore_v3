@@ -3,23 +3,21 @@
 namespace App\Repositories\Salud;
 
 use App\Models\Parametro\IndicadorGeneralMeta;
-use App\Models\Parametro\Ubigeo;
-use App\Models\Salud\CuboPacto3PadronMaterno;
-use App\Models\Salud\CuboPacto4Padron12Meses;
+use App\Models\Salud\ImporPadronAnemia;
 use App\Repositories\Parametro\UbigeoRepositorio;
 use Illuminate\Support\Facades\DB;
 
-class CuboPacto4Repositorio
+class CuboPacto2Repositorio
 {
 
     public static function actualizado($anio)
     {
-        $maxMes = CuboPacto4Padron12Meses::where('anio', $anio)->max('mes');
+        $maxMes = ImporPadronAnemia::where('anio', $anio)->max('mes');
 
         if (!$maxMes) {
             return null;
         }
-        $query = CuboPacto4Padron12Meses::from('sal_cubo_pacto4_padron_12meses as m')
+        $query = ImporPadronAnemia::from('sal_cubo_pacto4_padron_12meses as m')
             ->join('par_mes as p', 'p.id', '=', 'm.mes')
             ->where('m.anio', $anio)
             ->where('m.mes', $maxMes)
@@ -35,15 +33,18 @@ class CuboPacto4Repositorio
 
     public static function head($anio, $mes, $provincia, $distrito)
     {
-        $query = CuboPacto4Padron12Meses::select(
-            DB::raw('sum(numerador) si'),
-            DB::raw('sum(denominador)-sum(numerador) no'),
-            DB::raw('sum(denominador) conteo'),
-            DB::raw('round(100*sum(numerador)/sum(denominador),1) indicador')
-        )->where('anio', $anio)->where('mes', $mes);
+        $query = ImporPadronAnemia::select(
+            DB::raw('sum(num) si'),
+            DB::raw('sum(den)-sum(num) no'),
+            DB::raw('sum(den) conteo'),
+            DB::raw('round(100*sum(num)/sum(den),1) indicador')
+        )->where('anio', $anio)->where('mes', '<=', $mes);
 
-        if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
-        if ($distrito > 0) $query = $query->where('distrito_id', $distrito);
+        $query = $query->join('par_ubigeo as dd', 'dd.id', '=', 'ubigeo');
+        $query = $query->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia');
+
+        if ($distrito > 0) $query = $query->where('ubigeo',  $distrito);
+        if ($provincia > 0) $query = $query->where('pp.id',  $provincia);
 
         $query = $query->get()->first();
         return $query;
@@ -53,7 +54,7 @@ class CuboPacto4Repositorio
     {
         $distritos = UbigeoRepositorio::arrayDistritoIdNombre();
 
-        $v1 = CuboPacto4Padron12Meses::select(
+        $v1 = ImporPadronAnemia::select(
             'distrito_id',
             DB::raw('sum(numerador) as numerador'),
             DB::raw('sum(denominador) as denominador'),
@@ -79,7 +80,7 @@ class CuboPacto4Repositorio
 
     public static function Tabla02($importacion, $indicador, $anio, $mes, $provincia, $distrito)
     {
-        $v1 = CuboPacto4Padron12Meses::from('sal_cubo_pacto4_padron_12meses as c4')->select(
+        $v1 = ImporPadronAnemia::from('sal_cubo_pacto4_padron_12meses as c4')->select(
             'departamento',
             'provincia',
             'distrito',
@@ -107,7 +108,7 @@ class CuboPacto4Repositorio
     public static function Anal01($importacion, $anio, $mes, $provincia, $distrito)
     {
         $distritos = UbigeoRepositorio::arrayDistritoIdNombre();
-        $query = CuboPacto4Padron12Meses::select(
+        $query = ImporPadronAnemia::select(
             'distrito_id',
             DB::raw('100*sum(numerador)/sum(denominador) as indicador'),
             DB::raw('sum(numerador) as nnn'),
@@ -127,7 +128,7 @@ class CuboPacto4Repositorio
 
     public static function Anal02($importacion, $anio, $mes, $provincia, $distrito)
     {
-        $query = CuboPacto4Padron12Meses::select(
+        $query = ImporPadronAnemia::select(
             'mes',
             DB::raw('sum(numerador) as si'),
             DB::raw('round(100*sum(numerador)/sum(denominador),1) as indicador')
@@ -142,7 +143,7 @@ class CuboPacto4Repositorio
 
     public static function Anal03($importacion, $anio, $mes, $provincia, $distrito)
     {
-        $query = CuboPacto4Padron12Meses::select(
+        $query = ImporPadronAnemia::select(
             'mes',
             DB::raw('sum(numerador) as si'),
             DB::raw('sum(denominador) as no'),

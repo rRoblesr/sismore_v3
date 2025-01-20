@@ -106,6 +106,7 @@ use App\Models\Educacion\ImporDocentesBilingues;
 use App\Models\Educacion\ImporServiciosBasicos;
 use App\Models\Parametro\Icono;
 use App\Models\Parametro\Ubigeo;
+use App\Repositories\Parametro\UbigeoRepositorio;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -1204,6 +1205,7 @@ Route::get('/salud/pactoregional/Sal/Reports3/find/mes/{anio}', [IndicadoresCont
 Route::get('/salud/pactoregional/Sal/Reports3/Exportar/{div}/{indicador}/{anio}/{mes}/{provincia}/{distrito}', [IndicadoresController::class, 'PactoRegionalSalPacto3download'])->name('salud.indicador.pactoregional.sal.pacto3.excel');
 
 Route::get('/salud/pactoregional/Sal/Reports4', [IndicadoresController::class, 'PactoRegionalSalPacto4Reports'])->name('salud.indicador.pactoregional.sal.pacto4.reports');
+Route::get('/salud/pactoregional/Sal/Reports4/find/mes/{anio}', [IndicadoresController::class, 'PactoRegionalSalPacto4FindMes'])->name('salud.indicador.pactoregional.sal.pacto4.find.mes');
 Route::get('/salud/pactoregional/Sal/Reports4/Exportar/{div}/{indicador}/{anio}/{mes}/{provincia}/{distrito}', [IndicadoresController::class, 'PactoRegionalSalPacto4download'])->name('salud.indicador.pactoregional.sal.pacto4.excel');
 Route::get('/salud/pactoregional/Sal/Reports4/mes/{anio}', [IndicadoresController::class, 'cargarMesPvica'])->name('salud.indicador.pactoregional.sal.pacto4.cargarmes');
 
@@ -1225,7 +1227,9 @@ Route::get('/salud/pei', [IndicadoresController::class, 'PEI'])->name('salud.ind
 
 
 Route::get('/salud/pruebas', function () {
-    return view('pruebas3');
+    return UbigeoRepositorio::arrayDistritoIdNombre();
+
+    //return view('pruebas3');
 });
 
 Route::get('/ImporPadronActas/Importar', [ImporPadronActasController::class, 'importar'])->name('imporpadronactas.importar');

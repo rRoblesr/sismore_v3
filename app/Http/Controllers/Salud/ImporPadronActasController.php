@@ -671,7 +671,7 @@ class ImporPadronActasController extends Controller
 
                 $this->json_output(200, "Archivo Excel subido y procesado correctamente.");
                 break;
-            case ImporPadronActasController::$FUENTE['pacto_4']:
+            case 44444:
 
                 if (ImportacionRepositorio::Importacion_PE($rq->fechaActualizacion, ImporPadronActasController::$FUENTE['pacto_4']) !== null) {
                     return $this->json_output(400, "Error, ya existe un archivo pendiente de aprobación para la fecha ingresada");
@@ -688,8 +688,8 @@ class ImporPadronActasController extends Controller
                 $encabezadosEsperados = [
                     'anio',
                     'mes',
-                    'codigo_disa',
-                    'codigo_red',
+                    //'codigo_disa',
+                    //'/codigo_red',
                     'codigo_unico',
                     'tipo_documento',
                     'numero_documento_identidad',
@@ -841,6 +841,255 @@ class ImporPadronActasController extends Controller
 
                 $this->json_output(200, "Archivo Excel subido y procesado correctamente.");
                 break;
+
+            case ImporPadronActasController::$FUENTE['pacto_4']:
+
+                if (ImportacionRepositorio::Importacion_PE($rq->fechaActualizacion, ImporPadronActasController::$FUENTE['pacto_4']) !== null) {
+                    return $this->json_output(400, "Error, ya existe un archivo pendiente de aprobación para la fecha ingresada");
+                }
+
+                if (ImportacionRepositorio::Importacion_PR($rq->fechaActualizacion, ImporPadronActasController::$FUENTE['pacto_4']) !== null) {
+                    return $this->json_output(400, "Error, ya existe un archivo procesado para la fecha ingresada");
+                }
+
+                $this->validate($rq, ['file' => 'required|mimes:xls,xlsx']);
+                $archivo = $rq->file('file');
+                $array = (new tablaXImport)->toArray($archivo);
+
+                $encabezadosEsperados = [
+                    'anio',
+                    'mes',
+                    'mesl',
+                    'tipo_doc',
+                    'num_doc',
+                    'fecha_nac',
+                    'sexo',
+                    'ubigeo',
+                    'seguro',
+                    'edad_dias',
+                    'edad_mes',
+                    'peso_cnv',
+                    'semana_gest_cnv',
+                    'denominador',
+                    'numerador',
+                    'numerador_sindni',
+                    'num_cred',
+                    'num_cred_rn',
+                    'fecha_cred_rn1',
+                    'fecha_cred_rn2',
+                    'fecha_cred_rn3',
+                    'fecha_cred_rn4',
+                    'num_cred_mensual',
+                    'fecha_cred_mes1',
+                    'fecha_cred_mes2',
+                    'fecha_cred_mes3',
+                    'fecha_cred_mes4',
+                    'fecha_cred_mes5',
+                    'fecha_cred_mes6',
+                    'fecha_cred_mes7',
+                    'fecha_cred_mes8',
+                    'fecha_cred_mes9',
+                    'fecha_cred_mes10',
+                    'fecha_cred_mes11',
+                    'num_vac',
+                    'num_vac_antineumococica',
+                    'fecha_vac_antineumococica1',
+                    'fecha_vac_antineumococica2',
+                    'num_vac_antipolio',
+                    'fecha_vac_antipolio1',
+                    'fecha_vac_antipolio2',
+                    'fecha_vac_antipolio3',
+                    'num_vac_pentavalente',
+                    'fecha_vac_pentavalente1',
+                    'fecha_vac_pentavalente2',
+                    'fecha_vac_pentavalente3',
+                    'num_vac_rotavirus',
+                    'fecha_vac_rotavirus1',
+                    'fecha_vac_rotavirus2',
+                    'num_esq',
+                    'num_esq4m',
+                    'fecha_esq4m_sup_e1',
+                    'num_esq6m',
+                    'num_esq6m_sup',
+                    'fecha_esq6m_sup_e1',
+                    'fecha_esq6m_sup_e2',
+                    'num_esq6m_trat',
+                    'fecha_esq6m_trat_e1',
+                    'fecha_esq6m_trat_e2',
+                    'fecha_esq6m_trat_e3',
+                    'num_esq6m_multi',
+                    'fecha_esq6m_multi_e1',
+                    'fecha_esq6m_multi_e2',
+                    'fecha_esq6m_multi_e3',
+                    'fecha_esq6m_multi_e4',
+                    'fecha_esq6m_multi_e5',
+                    'fecha_esq6m_multi_e6',
+                    'num_hb',
+                    'fecha_hb',
+                    'num_dniemision',
+                    'fecha_dniemision',
+                    'num_dniemision_30d',
+                    'num_dniemision_60d',
+                    'cod_unico',
+                    'eess',
+                    'departamento',
+                    'provincia',
+                    'distrito',
+                ];
+
+                $encabezadosArchivo = array_keys($array[0][0]);
+
+                $faltantes = array_diff($encabezadosEsperados, $encabezadosArchivo);
+                if (!empty($faltantes)) {
+                    return $this->json_output(400, 'Error: Los encabezados del archivo no coinciden con el formato esperado. Faltan columnas esperadas.', $faltantes);
+                }
+
+                try {
+                    DB::beginTransaction();
+
+                    $importacion = Importacion::create([
+                        'fuenteImportacion_id' => ImporPadronActasController::$FUENTE['pacto_4'],
+                        'usuarioId_Crea' => auth()->user()->id,
+                        'fechaActualizacion' => $rq->fechaActualizacion,
+                        'estado' => 'PR'
+                    ]);
+
+                    $distritos = Ubigeo::where('codigo', 'like', '25%')->whereRaw('length(codigo)=6')->pluck('id', 'codigo');
+                    $provincias = Ubigeo::where('codigo', 'like', '25%')->whereRaw('length(codigo)=4')->pluck('id', 'codigo');
+                    $eess = EstablecimientoRepositorio::arrayIdCodunico()->pluck('id', 'cod_unico');
+
+                    $batchSize = 500;
+                    $dataBatch = [];
+
+                    foreach ($array[0] as $row) {
+                        $dataBatch[] = [
+                            'importacion_id' => $importacion->id,
+                            'anio' => $row['anio'],
+                            'mes' => $row['mes'],
+                            'mesl' => $row['mesl'],
+                            'tipo_doc' => $row['tipo_doc'],
+                            'num_doc' => $row['num_doc'],
+                            'fecha_nac' => $this->fechaExcel($row['fecha_nac']), //$row['fecha_nac'],
+                            'sexo' => $row['sexo'],
+                            'ubigeo' => $row['ubigeo'],
+                            'seguro' => $row['seguro'],
+                            'edad_dias' => $row['edad_dias'],
+                            'edad_mes' => $row['edad_mes'],
+                            'peso_cnv' => $row['peso_cnv'],
+                            'semana_gest_cnv' => $row['semana_gest_cnv'],
+                            'denominador' => $row['denominador'],
+                            'numerador' => $row['numerador'],
+                            'numerador_sindni' => $row['numerador_sindni'],
+                            'num_cred' => $row['num_cred'],
+                            'num_cred_rn' => $row['num_cred_rn'],
+                            'fecha_cred_rn1' => $this->fechaExcel($row['fecha_cred_rn1']), //$row['fecha_cred_rn1'],
+                            'fecha_cred_rn2' => $this->fechaExcel($row['fecha_cred_rn2']), //$row['fecha_cred_rn2'],
+                            'fecha_cred_rn3' => $this->fechaExcel($row['fecha_cred_rn3']), // $row['fecha_cred_rn3'],
+                            'fecha_cred_rn4' => $this->fechaExcel($row['fecha_cred_rn4']), //$row['fecha_cred_rn4'],
+                            'num_cred_mensual' => $row['num_cred_mensual'],
+                            'fecha_cred_mes1' => $this->fechaExcel($row['fecha_cred_mes1']), // $row['fecha_cred_mes1'],
+                            'fecha_cred_mes2' => $this->fechaExcel($row['fecha_cred_mes2']), // $row['fecha_cred_mes2'],
+                            'fecha_cred_mes3' => $this->fechaExcel($row['fecha_cred_mes3']), // $row['fecha_cred_mes3'],
+                            'fecha_cred_mes4' => $this->fechaExcel($row['fecha_cred_mes4']), //$row['fecha_cred_mes4'],
+                            'fecha_cred_mes5' => $this->fechaExcel($row['fecha_cred_mes5']), //$row['fecha_cred_mes5'],
+                            'fecha_cred_mes6' => $this->fechaExcel($row['fecha_cred_mes6']), // $row['fecha_cred_mes6'],
+                            'fecha_cred_mes7' => $this->fechaExcel($row['fecha_cred_mes7']), // $row['fecha_cred_mes7'],
+                            'fecha_cred_mes8' => $this->fechaExcel($row['fecha_cred_mes8']), //$row['fecha_cred_mes8'],
+                            'fecha_cred_mes9' => $this->fechaExcel($row['fecha_cred_mes9']), // $row['fecha_cred_mes9'],
+                            'fecha_cred_mes10' => $this->fechaExcel($row['fecha_cred_mes10']), // $row['fecha_cred_mes10'],
+                            'fecha_cred_mes11' => $this->fechaExcel($row['fecha_cred_mes11']), //$row['fecha_cred_mes11'],
+                            'num_vac' => $row['num_vac'],
+                            'num_vac_antineumococica' => $row['num_vac_antineumococica'],
+                            'fecha_vac_antineumococica1' => $this->fechaExcel($row['fecha_vac_antineumococica1']), //$row['fecha_vac_antineumococica1'],
+                            'fecha_vac_antineumococica2' => $this->fechaExcel($row['fecha_vac_antineumococica2']), // $row['fecha_vac_antineumococica2'],
+                            'num_vac_antipolio' => $row['num_vac_antipolio'],
+                            'fecha_vac_antipolio1' => $this->fechaExcel($row['fecha_vac_antipolio1']), //$row['fecha_vac_antipolio1'],
+                            'fecha_vac_antipolio2' => $this->fechaExcel($row['fecha_vac_antipolio2']), // $row['fecha_vac_antipolio2'],
+                            'fecha_vac_antipolio3' => $this->fechaExcel($row['fecha_vac_antipolio3']), //$row['fecha_vac_antipolio3'],
+                            'num_vac_pentavalente' => $row['num_vac_pentavalente'],
+                            'fecha_vac_pentavalente1' => $this->fechaExcel($row['fecha_vac_pentavalente1']), // $row['fecha_vac_pentavalente1'],
+                            'fecha_vac_pentavalente2' => $this->fechaExcel($row['fecha_vac_pentavalente2']), //$row['fecha_vac_pentavalente2'],
+                            'fecha_vac_pentavalente3' => $this->fechaExcel($row['fecha_vac_pentavalente3']), //$row['fecha_vac_pentavalente3'],
+                            'num_vac_rotavirus' => $row['num_vac_rotavirus'],
+                            'fecha_vac_rotavirus1' => $this->fechaExcel($row['fecha_vac_rotavirus1']), // $row['fecha_vac_rotavirus1'],
+                            'fecha_vac_rotavirus2' => $this->fechaExcel($row['fecha_vac_rotavirus2']), // $row['fecha_vac_rotavirus2'],
+                            'num_esq' => $row['num_esq'],
+                            'num_esq4m' => $row['num_esq4m'],
+                            'fecha_esq4m_sup_e1' => $this->fechaExcel($row['fecha_esq4m_sup_e1']), // $row['fecha_esq4m_sup_e1'],
+                            'num_esq6m' => $row['num_esq6m'],
+                            'num_esq6m_sup' => $row['num_esq6m_sup'],
+                            'fecha_esq6m_sup_e1' => $this->fechaExcel($row['fecha_esq6m_sup_e1']), // $row['fecha_esq6m_sup_e1'],
+                            'fecha_esq6m_sup_e2' => $this->fechaExcel($row['fecha_esq6m_sup_e2']), // $row['fecha_esq6m_sup_e2'],
+                            'num_esq6m_trat' => $row['num_esq6m_trat'],
+                            'fecha_esq6m_trat_e1' => $this->fechaExcel($row['fecha_esq6m_trat_e1']), //$row['fecha_esq6m_trat_e1'],
+                            'fecha_esq6m_trat_e2' => $this->fechaExcel($row['fecha_esq6m_trat_e2']), // $row['fecha_esq6m_trat_e2'],
+                            'fecha_esq6m_trat_e3' => $this->fechaExcel($row['fecha_esq6m_trat_e3']), //$row['fecha_esq6m_trat_e3'],
+                            'num_esq6m_multi' => $row['num_esq6m_multi'],
+                            'fecha_esq6m_multi_e1' => $this->fechaExcel($row['fecha_esq6m_multi_e1']), //$row['fecha_esq6m_multi_e1'],
+                            'fecha_esq6m_multi_e2' => $this->fechaExcel($row['fecha_esq6m_multi_e2']), //$row['fecha_esq6m_multi_e2'],
+                            'fecha_esq6m_multi_e3' => $this->fechaExcel($row['fecha_esq6m_multi_e3']), //$row['fecha_esq6m_multi_e3'],
+                            'fecha_esq6m_multi_e4' => $this->fechaExcel($row['fecha_esq6m_multi_e4']), //$row['fecha_esq6m_multi_e4'],
+                            'fecha_esq6m_multi_e5' => $this->fechaExcel($row['fecha_esq6m_multi_e5']), // $row['fecha_esq6m_multi_e5'],
+                            'fecha_esq6m_multi_e6' => $this->fechaExcel($row['fecha_esq6m_multi_e6']), // $row['fecha_esq6m_multi_e6'],
+                            'num_hb' => $row['num_hb'],
+                            'fecha_hb' => $this->fechaExcel($row['fecha_hb']), //$row['fecha_hb'],
+                            'num_dniemision' => $row['num_dniemision'],
+                            'fecha_dniemision' => $this->fechaExcel($row['fecha_dniemision']), // $row['fecha_dniemision'],
+                            'num_dniemision_30d' => $row['num_dniemision_30d'],
+                            'num_dniemision_60d' => $row['num_dniemision_60d'],
+                            'cod_unico' => $row['cod_unico'] == 'NULL' ? null : $row['cod_unico'],
+                            'eess' => $row['eess'] == 'NULL' ? null : $row['eess'],
+                            'departamento' => $row['departamento'] == 'NULL' ? null : $row['departamento'],
+                            'provincia' => $row['provincia'] == 'NULL' ? null : $row['provincia'],
+                            'distrito' => $row['distrito'] == 'NULL' ? null : $row['distrito'],
+                            'establecimiento_id' =>  $eess[$row['cod_unico']] ?? null,
+                            'provincia_id' => $provincias[substr($row['ubigeo'], 0, 4)] ?? null,
+                            'distrito_id' =>  $distritos[$row['ubigeo']] ?? null,
+                        ];
+
+                        if (count($dataBatch) >= $batchSize) {
+                            CuboPacto4Padron12Meses::insert($dataBatch);
+                            $dataBatch = [];
+                        }
+                    }
+
+                    if (!empty($dataBatch)) {
+                        CuboPacto4Padron12Meses::insert($dataBatch);
+                    }
+
+                    DB::commit();
+                } catch (Exception $e) {
+                    DB::rollBack();
+                    $importacion->estado = 'PE';
+                    $importacion->save();
+
+                    return $this->json_output(400, "Error en la carga de datos: " . $e->getMessage());
+                }
+
+                // try {
+                //     DB::select('call sal_pa_procesarControlCalidadColumnas(?)', [$importacion->id]);
+                // } catch (Exception $e) {
+                //     // Si ocurre un error, actualizar el estado a 'PE' (pendiente) si es necesario
+                //     $importacion->estado = 'PE';
+                //     $importacion->save();
+
+                //     $mensaje = "Error al procesar la normalizacion de datos sal_pa_procesarControlCalidadColumnas. " . $e->getMessage();
+                //     return $this->json_output(400, $mensaje);
+                // }
+
+                // try {
+                //     DB::select('call sal_pa_procesarCalidadReporte(?)', [$importacion->id]);
+                // } catch (Exception $e) {
+                //     // Si ocurre un error, actualizar el estado a 'PE' (pendiente) si es necesario
+                //     $importacion->estado = 'PE';
+                //     $importacion->save();
+
+                //     $mensaje = "Error al procesar la normalizacion de datos sal_pa_procesarCalidadReporte. " . $e->getMessage();
+                //     return $this->json_output(400, $mensaje);
+                // }
+
+                $this->json_output(200, "Archivo Excel subido y procesado correctamente.");
+                break;
             default:
                 break;
         }
@@ -940,6 +1189,8 @@ class ImporPadronActasController extends Controller
                 Importacion::find($id)->delete();
                 break;
             case 39:
+                CuboPacto4Padron12Meses::where('importacion_id', $id)->truncate();
+                Importacion::find($id)->delete();
                 break;
             case 40:
                 break;

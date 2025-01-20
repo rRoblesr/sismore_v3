@@ -17,15 +17,13 @@ use App\Models\Salud\CuboPacto1PadronNominal;
 use App\Models\Salud\CuboPacto3PadronMaterno;
 use App\Models\Salud\CuboPacto4Padron12Meses;
 use App\Models\Salud\ImporPadronAnemia;
-use App\Models\Salud\ImporPadronNominal;
-use App\Repositories\Educacion\CuboPacto1Repositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
-use App\Repositories\Educacion\SFLRepositorio;
 use App\Repositories\Parametro\IndicadorGeneralMetaRepositorio;
 use App\Repositories\Parametro\IndicadorGeneralRepositorio;
 use App\Repositories\Parametro\PoblacionPNRepositorio;
 use App\Repositories\Parametro\UbigeoRepositorio;
 use App\Repositories\Salud\CuboPacto1PadronNominalRepositorio;
+use App\Repositories\Salud\CuboPacto2Repositorio;
 use App\Repositories\Salud\CuboPacto3Repositorio;
 use App\Repositories\Salud\CuboPacto4Repositorio;
 use App\Repositories\Salud\PadronNominalRepositorio;
@@ -153,36 +151,60 @@ class IndicadoresController extends Controller
                 $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
                 break;
             case 'DIT-SAL-02':
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_2']);
-                $base = IndicadorGeneralMetaRepositorio::getSalPacto2GLS2(0, $rq->anio, $imp->mes, $rq->provincia, $rq->distrito);
-                $gls = $base->si;
-                $gl = $base->conteo;
+                $info = CuboPacto2Repositorio::actualizado($rq->anio);
+                $actualizado =  'Actualizado: SIN RESULTADOS';
+
+                $gls = 0;
+                $gl = 0;
+                if ($info) {
+                    // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_2']);                
+                    // $base = IndicadorGeneralMetaRepositorio::getSalPacto2GLS2(0, $rq->anio, $imp->mes, $rq->provincia, $rq->distrito);
+                    $base = CuboPacto2Repositorio::head($rq->anio, $info->mes, $rq->provincia, $rq->distrito);
+
+                    $gls = $base->si;
+                    $gl = $base->conteo;
+                    // $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
+                    $actualizado =  'Actualizado: ' . $info->fecha;
+                }
 
                 $num = number_format($gls, 0);
                 $den = number_format($gl, 0);
                 $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
                 break;
             case 'DIT-SAL-03':
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_3']);
-                $base = CuboPacto3Repositorio::head($rq->anio, $imp->mes, $rq->provincia, $rq->distrito);
-                $gls = $base->si;
-                $gl = $base->conteo;
+                $info = CuboPacto3Repositorio::actualizado($rq->anio);
+                $actualizado =  'Actualizado: SIN RESULTADOS';
 
+                $gls = 0;
+                $gl = 0;
+                if ($info) {
+                    // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_3']);
+                    $base = CuboPacto3Repositorio::head($rq->anio, $info->mes, $rq->provincia, $rq->distrito);
+
+                    $gls = $base->si;
+                    $gl = $base->conteo;
+                    // $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
+                    $actualizado =  'Actualizado: ' . $info->fecha;
+                }
                 $num = $gls;
                 $den = $gl;
-                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
+
                 break;
             case 'DIT-SAL-04':
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_4']);
-                $base = CuboPacto4Repositorio::head($rq->anio, $imp->mes, $rq->provincia, $rq->distrito);
-                $gls = $base->si;
-                $gl = $base->conteo;
-
-                // $gls = 10;
-                // $gl = 19;
+                $info = CuboPacto4Repositorio::actualizado($rq->anio);
+                $actualizado =  'Actualizado: SIN RESULTADOS';
+                $gls = 0;
+                $gl = 0;
+                if ($info) {
+                    // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_4']);
+                    $base = CuboPacto4Repositorio::head($rq->anio, $info->mes, $rq->provincia, $rq->distrito);
+                    $gls = $base->si;
+                    $gl = $base->conteo;
+                    $actualizado =  'Actualizado: ' . $info->fecha;
+                }
                 $num = $gls;
                 $den = $gl;
-                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
+
                 break;
                 // case 'DIT-SAL-05':
                 //     $gls = 0;
@@ -362,8 +384,16 @@ class IndicadoresController extends Controller
                 // return '';
             case 'DIT-SAL-04':
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_4']);
+                $info = CuboPacto4Repositorio::actualizado($imp->anio);
+                $actualizado =  'Actualizado: SIN RESULTADOS';
+                if ($info) {
+                    // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_4']);
+                    // $base = CuboPacto4Repositorio::head($imp->anio, $info->mes, 0, 0);
+                    $actualizado =  'Actualizado: ' . $info->fecha;
+                }
+
                 // return response()->json([$imp]);
-                $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
+                // $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
                 $anio = CuboPacto4Padron12Meses::distinct()->select('anio')->get();
                 $provincia = UbigeoRepositorio::provincia('25');
                 $aniomax = $imp->anio;
@@ -1121,6 +1151,17 @@ class IndicadoresController extends Controller
                 return [];
         }
     }
+
+
+    public function PactoRegionalSalPacto4FindMes($anio)
+    {
+        $impMax = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_4']);
+        $query = CuboPacto3PadronMaterno::from('sal_cubo_pacto4_padron_12meses as ipa')->join('par_mes as m', 'm.id', '=', 'ipa.mes')->distinct()->select('m.id', 'm.mes')->where('ipa.anio', $anio);
+        if ($anio == date('Y')) $query = $query->where('ipa.mes', '<=', $impMax->mes);
+        $query = $query->orderBy('ipa.mes')->get();
+        return $query;
+    }
+
 
     public function cargarMesPvica($anio)
     {

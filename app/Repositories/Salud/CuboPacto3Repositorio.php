@@ -9,6 +9,27 @@ use Illuminate\Support\Facades\DB;
 class CuboPacto3Repositorio
 {
 
+    public static function actualizado($anio)
+    {
+        $maxMes = CuboPacto3PadronMaterno::where('anio', $anio)->max('mes');
+
+        if (!$maxMes) {
+            return null;
+        }
+        $query = CuboPacto3PadronMaterno::from('sal_cubo_pacto3_padron_materno as m')
+            ->join('par_mes as p', 'p.id', '=', 'm.mes')
+            ->where('m.anio', $anio)
+            ->where('m.mes', $maxMes)
+            ->selectRaw('m.mes, CONCAT(p.mes, " ", m.anio) AS fecha')
+            ->first();
+
+        if (!$query) {
+            return null; // O devolver un mensaje de error
+        }
+
+        return $query;
+    }
+
     public static function head($anio, $mes, $provincia, $distrito)
     {
         $query = CuboPacto3PadronMaterno::select(

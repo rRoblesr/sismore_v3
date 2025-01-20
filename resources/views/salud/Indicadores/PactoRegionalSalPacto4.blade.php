@@ -32,7 +32,7 @@
                             <div class="custom-select-container">
                                 <label for="anio">Año</label>
                                 <select id="anio" name="anio" class="form-control form-control-sm font-11"
-                                    onchange="cargarcuadros();">
+                                    onchange="cargarMes();">
                                     @foreach ($anio as $item)
                                         <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
                                             {{ $item->anio }}</option>
@@ -343,8 +343,8 @@
                     } else if (div == "tabla2") {
                         $('#vtabla2').html(data.excel);
                         $('#tabla2').DataTable({
-                            responsive: false,
-                            autoWidth: false,
+                            // responsive: false,
+                            // autoWidth: false,
                             ordered: true,
                             // searching: false,
                             // bPaginate: false,
@@ -367,7 +367,7 @@
 
         function cargarMes() {
             $.ajax({
-                url: "{{ route('salud.indicador.pactoregional.sal.pacto3.find.mes', ['anio' => 'anio']) }}"
+                url: "{{ route('salud.indicador.pactoregional.sal.pacto4.find.mes', ['anio' => 'anio']) }}"
                     .replace('anio', $('#anio').val()),
                 type: 'GET',
                 success: function(data) {
