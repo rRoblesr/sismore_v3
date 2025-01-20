@@ -42,11 +42,14 @@
                             <div class="custom-select-container">
                                 <label for="anio">AÑO</label>
                                 <select id="anio" name="anio" class="form-control btn-xs font-11 p-0"
-                                    onchange="cargarcuadros();">
+                                    onchange="cargarMes()">
                                     @foreach ($anio as $item)
                                         <option value="{{ $item->anio }}"
-                                            {{ $item->anio == date('Y') ? 'selected' : '' }}>
+                                            {{ $item->anio == $aniomax ? 'selected' : '' }}>
                                             {{ $item->anio }}</option>
+
+                                        {{-- <option value="{{ $item }}" {{ $item == $aniomax ? 'selected' : '' }}>
+                                            {{ $item }}</option> --}}
                                     @endforeach
                                 </select>
                             </div>
@@ -57,7 +60,7 @@
                                 <select id="mes" name="mes" class="form-control btn-xs font-11"
                                     onchange="cargarcuadros();">
                                     @foreach ($mes as $item)
-                                        <option value="{{ $item->id }}"{{ $item->id == $aniomin ? ' selected ' : '' }}>
+                                        <option value="{{ $item->id }}"{{ $item->id == $mesmin ? ' selected ' : '' }}>
                                             {{ $item->mes }}</option>
                                     @endforeach
                                 </select>
@@ -474,17 +477,19 @@
 
         function cargarMes() {
             $.ajax({
-                url: "{{ route('ubigeo.distrito.25', '') }}/" + $('#provincia').val(),
+                url: "{{ route('salud.indicador.pactoregional.edu.pacto1.find.mes', ['anio' => 'anio']) }}"
+                    .replace('anio', $('#anio').val()),
                 type: 'GET',
                 success: function(data) {
-                    $("#distrito option").remove();
-                    var options = '<option value="0">TODOS</option>';
+                    $("#mes option").remove();
+                    var options = ''; // '<option value="0"></option>';
+                    var ultimovalor = data.length > 0 ? data[data.length - 1].mes_id : null;
                     $.each(data, function(index, value) {
-                        //ss = (id == value.id ? "selected" : "");
-                        options += "<option value='" + value.id + "'>" + value.nombre +
-                            "</option>"
+                        ss = (value.mes_id === ultimovalor ? "selected" : "");
+                        options += `<option value='${value.id}' ${ss}>${value.mes}</option>`;
                     });
-                    $("#distrito").append(options);
+                    $("#mes").append(options);
+                    cargarcuadros();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);

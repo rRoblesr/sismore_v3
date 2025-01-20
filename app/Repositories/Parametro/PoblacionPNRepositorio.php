@@ -10,6 +10,24 @@ use Illuminate\Support\Facades\DB;
 
 class PoblacionPNRepositorio
 {
+    public static function actualizado()
+    {
+        $maxAno = PoblacionPN::max('anio');
+        $maxMes = PoblacionPN::where('anio', $maxAno)->max('mes');
+
+        $query = PoblacionPN::from('par_poblacion_padron_nominal as m')
+            ->join('par_mes as p', 'p.id', '=', 'm.mes')
+            ->where('m.anio', $maxAno)
+            ->where('m.mes', $maxMes)
+            ->selectRaw('m.anio,m.mes, CONCAT(p.mes, " ", m.anio) AS fecha')
+            ->first();
+
+        if (!$query) {
+            return null;
+        }
+
+        return $query;
+    }
 
     public static function conteo($anio, $mes, $departamento, $provincia, $distrito, $sexo)
     {

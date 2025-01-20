@@ -52,8 +52,8 @@
                     <label for="anio">AÑO</label>
                     <select id="anio" name="anio" class="form-control btn-xs font-11 p-0" onchange="cargarpacto1();">
                         @foreach ($anio as $item)
-                            <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
-                                {{ $item->anio }}</option>
+                            <option value="{{ $item }}" {{ $item == $aniomax ? 'selected' : '' }}>
+                                {{ $item }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -322,7 +322,7 @@
                 type: 'GET',
                 success: function(data) {
                     $("#distrito option").remove();
-                    var options = '<option value="0">DISTRITO</option>';
+                    var options = '<option value="0">TODOS</option>';
                     $.each(data, function(index, value) {
                         //ss = (id == value.id ? "selected" : "");
                         options += "<option value='" + value.id + "'>" + value.nombre +

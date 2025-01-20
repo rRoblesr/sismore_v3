@@ -136,7 +136,7 @@
                                 <span data-plugin="counterup" id="gls"></span>
                             </h4>
                             <p class="mb-0 mt-1 text-truncate">
-                                GL Cumplen
+                                Cumplen
                             </p>
                         </div>
                     </div>
@@ -159,7 +159,7 @@
                                 <span data-plugin="counterup" id="gln"></span>
                             </h4>
                             <p class="mb-0 mt-1 text-truncate">
-                                GL No Cumplen
+                                No Cumplen
                             </p>
                         </div>
                     </div>

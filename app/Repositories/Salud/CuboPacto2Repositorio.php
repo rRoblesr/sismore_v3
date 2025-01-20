@@ -17,7 +17,7 @@ class CuboPacto2Repositorio
         if (!$maxMes) {
             return null;
         }
-        $query = ImporPadronAnemia::from('sal_cubo_pacto4_padron_12meses as m')
+        $query = ImporPadronAnemia::from('sal_impor_padron_anemia as m')
             ->join('par_mes as p', 'p.id', '=', 'm.mes')
             ->where('m.anio', $anio)
             ->where('m.mes', $maxMes)
@@ -80,7 +80,7 @@ class CuboPacto2Repositorio
 
     public static function Tabla02($importacion, $indicador, $anio, $mes, $provincia, $distrito)
     {
-        $v1 = ImporPadronAnemia::from('sal_cubo_pacto4_padron_12meses as c4')->select(
+        $v1 = ImporPadronAnemia::from('sal_impor_padron_anemia as c4')->select(
             'departamento',
             'provincia',
             'distrito',

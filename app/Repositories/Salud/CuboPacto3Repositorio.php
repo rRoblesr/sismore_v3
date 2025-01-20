@@ -39,8 +39,8 @@ class CuboPacto3Repositorio
             DB::raw('round(100*sum(numerador)/sum(denominador),1) indicador')
         )->where('anio', $anio)->where('mes', '<=', $mes);
 
-        // if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
-        // if ($distrito > 0) $query = $query->where('distrito_id', $distrito);
+        if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
+        if ($distrito > 0) $query = $query->where('distrito_id', $distrito);
 
         $query = $query->get()->first();
         return $query;

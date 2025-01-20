@@ -1211,8 +1211,10 @@ Route::get('/salud/pactoregional/Sal/Reports4/mes/{anio}', [IndicadoresControlle
 
 Route::get('/educacion/pactoregional', [IndicadoresController::class, 'PactoRegionalEdu'])->name('salud.indicador.pactoregional.edu');
 Route::get('/educacion/pactoregional/Reports1', [IndicadoresController::class, 'PactoRegionalEduPacto1Reports'])->name('salud.indicador.pactoregional.edu.pacto1.reports');
+Route::get('/educacion/pactoregional/Edu/Reports1/find/mes/{anio}', [IndicadoresController::class, 'PactoRegionalEduPacto1FindMes'])->name('salud.indicador.pactoregional.edu.pacto1.find.mes');
 
 Route::get('/educacion/pactoregional/Reports2', [IndicadoresController::class, 'PactoRegionalEduPacto2Reports'])->name('salud.indicador.pactoregional.edu.pacto2.reports');
+Route::get('/educacion/pactoregional/Edu/Reports2/find/mes/{anio}', [IndicadoresController::class, 'PactoRegionalEduPacto2FindMes'])->name('salud.indicador.pactoregional.edu.pacto2.find.mes');
 
 Route::get('/salud/pactoregional/{indicador_id}', [IndicadoresController::class, 'PactoRegionalDetalle'])->name('salud.indicador.pactoregional.detalle');
 Route::get('/salud/pactoregional/Exportar/{id}', [IndicadoresController::class, 'exportarPDF'])->name('salud.indicador.pactoregional.exportar.pdf');

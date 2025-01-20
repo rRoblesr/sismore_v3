@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Salud;
 use App\Exports\pactoregionalSal1Export;
 use App\Exports\pactoregionalSal2Export;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Educacion\ImporMatriculaController;
 use App\Http\Controllers\Educacion\ImporMatriculaGeneralController;
+use App\Models\Educacion\CuboPacto1;
 use App\Models\Educacion\Importacion;
 use App\Models\Educacion\SFL;
 use App\Models\Parametro\IndicadorGeneral;
@@ -17,7 +19,9 @@ use App\Models\Salud\CuboPacto1PadronNominal;
 use App\Models\Salud\CuboPacto3PadronMaterno;
 use App\Models\Salud\CuboPacto4Padron12Meses;
 use App\Models\Salud\ImporPadronAnemia;
+use App\Repositories\Educacion\CuboPacto1Repositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
+use App\Repositories\Educacion\SFLRepositorio;
 use App\Repositories\Parametro\IndicadorGeneralMetaRepositorio;
 use App\Repositories\Parametro\IndicadorGeneralRepositorio;
 use App\Repositories\Parametro\PoblacionPNRepositorio;
@@ -96,12 +100,19 @@ class IndicadoresController extends Controller
         $indedu = IndicadorGeneralRepositorio::find_pactoregional($sector, $instrumento);
 
         $ind = IndicadorGeneralRepositorio::findNoFichatecnicaCodigo('DIT-EDU-01');
-        $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios($ind->id);
+        // $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios($ind->id);
+        // $anio = collect(range(2023, Carbon::now()->year));
+        $updateMin1 = PoblacionPNRepositorio::actualizado();
+        $updateMin2 = CuboPacto1Repositorio::actualizado();
+        $updateMin3 = CuboPacto1Repositorio::actualizado();
+        $anios = [$updateMin1->anio, $updateMin2->anio, $updateMin3->anio];
+        $anio = array_unique($anios);
+
         $provincia = UbigeoRepositorio::provincia('25');
 
-        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_1']);
+        // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_1']);
         // // return response()->json(compact('imp'));
-        $aniomax = $imp->anio;
+        $aniomax = date('Y');
 
         return view('salud.Indicadores.PactoRegionalEdu', compact('indedu', 'anio', 'provincia', 'aniomax'));
     }
@@ -169,7 +180,6 @@ class IndicadoresController extends Controller
 
                 $num = number_format($gls, 0);
                 $den = number_format($gl, 0);
-                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
                 break;
             case 'DIT-SAL-03':
                 $info = CuboPacto3Repositorio::actualizado($rq->anio);
@@ -228,12 +238,17 @@ class IndicadoresController extends Controller
                 //     $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
                 //     break;
             case 'DIT-EDU-01':
-                $gl = (int)PoblacionPNRepositorio::conteo3a5_acumulado($rq->anio, 9, $rq->provincia, $rq->distrito, 0);
-                $gls = CuboPacto1Repositorio::pacto1_matriculados($rq->anio, 9, $rq->provincia, $rq->distrito);
-                $num = number_format($gls, 0);
-                $den = number_format($gl, 0);
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
                 $actualizado =  'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion));
+                $updateMin1 = PoblacionPNRepositorio::actualizado();
+                $updateMin2 = CuboPacto1Repositorio::actualizado();
+                $mes = min($updateMin1->mes, $updateMin2->mes);
+
+                $gl = (int)PoblacionPNRepositorio::conteo3a5_acumulado($rq->anio, $mes, $rq->provincia, $rq->distrito, 0);
+                $gls = CuboPacto1Repositorio::pacto1_matriculados($rq->anio, $mes, $rq->provincia, $rq->distrito);
+                $num = number_format($gls, 0);
+                $den = number_format($gl, 0);
+
                 break;
             case 'DIT-EDU-02':
                 $gl = SFLRepositorio::get_localsx($rq->anio, 0, $rq->provincia, $rq->distrito, 0);
@@ -359,41 +374,30 @@ class IndicadoresController extends Controller
                 $anio = ImportacionRepositorio::anios_porfuente_select(ImporPadronNominalController::$FUENTE);
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronNominalController::$FUENTE);
                 $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
-
                 $provincia = UbigeoRepositorio::provincia('25');
                 $aniomax = $imp->anio;
                 return view('salud.Indicadores.PactoRegionalSalPacto1', compact('actualizado', 'fuente', 'anio', 'provincia', 'aniomax', 'ind'));
+
             case 'DIT-SAL-02':
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_2']);
-                // return response()->json([$imp]);
                 $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
                 $anio = ImporPadronAnemia::distinct()->select('anio')->get();
-                // return $this->PactoRegionalSalPacto2FindMes(2024);
-                // return $anio = IndicadorGeneralMetaRepositorio::getPacto2Anios($indicador_id);
                 $provincia = UbigeoRepositorio::provincia('25');
                 $aniomax = $imp->anio;
                 return view('salud.Indicadores.PactoRegionalSalPacto2', compact('actualizado', 'anio', 'provincia', 'aniomax', 'ind'));
+
             case 'DIT-SAL-03':
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_3']);
-                // return response()->json([$imp]);
                 $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
                 $anio = CuboPacto3PadronMaterno::distinct()->select('anio')->get();
                 $provincia = UbigeoRepositorio::provincia('25');
                 $aniomax = $imp->anio;
                 return view('salud.Indicadores.PactoRegionalSalPacto3', compact('actualizado', 'anio',  'provincia', 'aniomax', 'ind'));
                 // return '';
+
             case 'DIT-SAL-04':
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_4']);
-                $info = CuboPacto4Repositorio::actualizado($imp->anio);
-                $actualizado =  'Actualizado: SIN RESULTADOS';
-                if ($info) {
-                    // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_4']);
-                    // $base = CuboPacto4Repositorio::head($imp->anio, $info->mes, 0, 0);
-                    $actualizado =  'Actualizado: ' . $info->fecha;
-                }
-
-                // return response()->json([$imp]);
-                // $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
+                $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
                 $anio = CuboPacto4Padron12Meses::distinct()->select('anio')->get();
                 $provincia = UbigeoRepositorio::provincia('25');
                 $aniomax = $imp->anio;
@@ -429,36 +433,34 @@ class IndicadoresController extends Controller
                 return view('salud.Indicadores.PactoRegionalSalPacto7', compact('actualizado', 'anio', 'mes', 'provincia', 'aniomax', 'ind'));
 
             case 'DIT-EDU-01':
-                $actualizado = 'Actualizado al ';
-                $anio = IndicadorGeneralMeta::distinct()->select('anio')->where('indicadorgeneral', $indicador_id)->get();
-                // return $aniosmat = DB::table('par_mes as m')->select('m.id', 'm.mes', DB::raw('CASE
-                //                             WHEN m.id > 1 AND SUM(c.total) IS NULL THEN NULL
-                //                             ELSE SUM(c.total)
-                //                         END as conteo'))
-                //     ->leftJoin('edu_cubo_pacto1_matriculados as c', function ($join) use ($anio) {
-                //         $join->on('c.mes_id', '=', 'm.id')->whereIn('c.nivelmodalidad_codigo', ['A2', 'A3', 'A5'])->where('c.anio', $anio->max('anio'));
-                //     })
-                //     ->groupBy('m.id', 'm.mes')->orderBy('m.id')->get();
+                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
+                $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
+                // $actualizado = 'Actualizado al ';
+                // $anio = IndicadorGeneralMeta::distinct()->select('anio')->where('indicadorgeneral', $indicador_id)->get();
+                $anio = CuboPacto1::distinct()->select('anio')->get();
+                $aniomax = $anio->max('anio');
 
                 $am = DB::table('edu_cubo_pacto01_matriculados')->whereIn('nivelmodalidad_codigo', ['A2', 'A3', 'A5'])->where('anio', $anio->where('anio', '<=', date('Y'))->max('anio'))->max('mes_id');
                 $ap = PoblacionPN::where('anio', $anio->where('anio', '<=', date('Y'))->max('anio'))->max('mes_id');
-                $aniomax = 0;
-                if ($aniomax < $am) $aniomax = $am;
-                if ($aniomax < $ap) $aniomax = $ap;
-                $aniomin = 20;
-                if ($aniomin > $am) $aniomin = $am;
-                if ($aniomin > $ap) $aniomin = $ap;
+                $mesmax = 0;
+                if ($mesmax < $am) $mesmax = $am;
+                if ($mesmax < $ap) $mesmax = $ap;
+                $mesmin = 20;
+                if ($mesmin > $am) $mesmin = $am;
+                if ($mesmin > $ap) $mesmin = $ap;
                 // $mes = Mes::select('id', 'mes')->where('codigo', '<=', ($aniomax < date('Y') ? 12 : $aniomax))->get();
-                $mes = Mes::select('id', 'mes')->where('codigo', '<=', $aniomax)->get();
+                $mes = Mes::select('id', 'mes')->where('codigo', '<=', $mesmax)->get();
                 $provincia = UbigeoRepositorio::provincia('25');
                 // return response()->json(['anio' => $anio, 'am' => $am, 'ap' => $ap, 'aniomax' => $aniomax, 'aniomin' => $aniomin, 'mes' => $mes, 'provincia' => $provincia]);
-                return view('salud.Indicadores.PactoRegionalEduPacto1', compact('actualizado', 'anio', 'mes', 'aniomin', 'provincia',  'ind'));
+                return view('salud.Indicadores.PactoRegionalEduPacto1', compact('actualizado', 'anio', 'mes', 'mesmin', 'aniomax', 'provincia',  'ind'));
 
             case 'DIT-EDU-02':
                 $ff = SFL::select(DB::raw('max(fecha_inscripcion) as ff'))->first();
                 $actualizado = 'Actualizado al ' . date('d', strtotime($ff->ff)) . ' de ' . $this->mesname[date('m', strtotime($ff->ff)) - 1] . ' del ' . date('Y', strtotime($ff->ff));
                 // $anio = SFL::distinct()->select(DB::raw('year(fecha_inscripcion) as anio'))->orderBy('anio')->get();
-                $anio = IndicadorGeneralMeta::distinct()->select('anio')->where('indicadorgeneral', $indicador_id)->get();
+                //  $anio = IndicadorGeneralMeta::distinct()->select('anio')->where('indicadorgeneral', $indicador_id)->get();
+                $anio= SFL::selectRaw('DISTINCT YEAR(fecha_inscripcion) as anio')->whereNotNull('fecha_inscripcion')->get(); //pluck('anio');
+
                 $provincia = UbigeoRepositorio::provincia('25');
                 //SFL::from('edu_sfl as sfl')->distinct()->select(DB::raw('month(sfl.fecha_inscripcion) as mes')
                 $mes = DB::table(DB::raw('(select distinct month(fecha_inscripcion) as mes from edu_sfl)as sfl'))
@@ -1276,6 +1278,16 @@ class IndicadoresController extends Controller
         }
     }
 
+    public function PactoRegionalEduPacto1FindMes($anio)
+    {
+        $impMax = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaController::$FUENTE);
+        $query = CuboPacto1::from('edu_cubo_pacto01_matriculados as ipa')->join('par_mes as m', 'm.id', '=', 'ipa.mes_id')->distinct()->select('m.id', 'm.mes')->where('ipa.anio', $anio);
+        if ($anio == date('Y')) $query = $query->where('ipa.mes', '<=', $impMax->mes);
+        $query = $query->orderBy('m.id')->get();
+        return $query;
+    }
+
+
     // ############ educacion pacto 2 #################
 
     public function PactoRegionalEduPacto2Reports(Request $rq)
@@ -1352,6 +1364,16 @@ class IndicadoresController extends Controller
                 return [];
         }
     }
+
+    public function PactoRegionalEduPacto2FindMes($anio)
+    {
+        $impMax = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaController::$FUENTE);
+        $query = CuboPacto1::from('edu_cubo_pacto01_matriculados as ipa')->join('par_mes as m', 'm.id', '=', 'ipa.mes_id')->distinct()->select('m.id', 'm.mes')->where('ipa.anio', $anio);
+        if ($anio == date('Y')) $query = $query->where('ipa.mes', '<=', $impMax->mes);
+        $query = $query->orderBy('m.id')->get();
+        return $query;
+    }
+
 
     public function exportarPDF($id)
     {

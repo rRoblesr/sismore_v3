@@ -60,8 +60,8 @@ class CuboPacto4Repositorio
             DB::raw('100*sum(numerador)/sum(denominador) as indicador')
         )->where('anio', $anio)->where('mes', '<=', $mes);
 
-        if ($provincia > 0) $v1 = $v1->where('provincia_id', $provincia);
-        if ($distrito > 0) $v1 = $v1->where('distrito_id', $distrito);
+        // if ($provincia > 0) $v1 = $v1->where('provincia_id', $provincia);
+        // if ($distrito > 0) $v1 = $v1->where('distrito_id', $distrito);
 
         $v1 = $v1->groupBy('distrito_id')->orderBy('indicador', 'desc')->get();
 
