@@ -112,7 +112,8 @@
                     <div class="text-center">
                         {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
                         width="70%" height="70%"> --}}
-                        <i class=" mdi mdi-city font-35 text-green-0"></i>
+                        {{-- <i class=" mdi mdi-city font-35 text-green-0"></i> --}}
+                        <i class="fas fa-child font-35 text-green-0"></i>
                     </div>
                     <div class="media-body align-self-center">
                         <div class="text-right">
@@ -120,7 +121,10 @@
                                 <span data-plugin="counterup" id="gl"></span>
                             </h4>
                             <p class="mb-0 mt-1 text-truncate">
-                                Total Niños y Niñas
+                                <span onclick="" data-toggle="modal" data-target="#info_denominador">
+                                    <i class="mdi mdi-rotate-180 mdi-alert-circle" style="color:#43beac;"></i>
+                                </span>
+                                Denominador
                             </p>
                         </div>
                     </div>
@@ -143,7 +147,10 @@
                                 <span data-plugin="counterup" id="gls"></span>
                             </h4>
                             <p class="mb-0 mt-1 text-truncate">
-                                Cumplen
+                                <span onclick="" data-toggle="modal" data-target="#info_numerador">
+                                    <i class="mdi mdi-rotate-180 mdi-alert-circle" style="color:#43beac;"></i>
+                                </span>
+                                Numerador
                             </p>
                         </div>
                     </div>
@@ -797,7 +804,7 @@
         //             }
         //         ],
         //         columnDefs: [
-                   
+
         //             {
         //                 targets: 2,
         //                 render: function(data, type, row) {

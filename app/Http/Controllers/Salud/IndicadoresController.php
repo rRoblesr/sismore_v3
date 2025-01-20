@@ -459,7 +459,7 @@ class IndicadoresController extends Controller
                 $actualizado = 'Actualizado al ' . date('d', strtotime($ff->ff)) . ' de ' . $this->mesname[date('m', strtotime($ff->ff)) - 1] . ' del ' . date('Y', strtotime($ff->ff));
                 // $anio = SFL::distinct()->select(DB::raw('year(fecha_inscripcion) as anio'))->orderBy('anio')->get();
                 //  $anio = IndicadorGeneralMeta::distinct()->select('anio')->where('indicadorgeneral', $indicador_id)->get();
-                $anio= SFL::selectRaw('DISTINCT YEAR(fecha_inscripcion) as anio')->whereNotNull('fecha_inscripcion')->get(); //pluck('anio');
+                $anio = SFL::selectRaw('DISTINCT YEAR(fecha_inscripcion) as anio')->whereNotNull('fecha_inscripcion')->get(); //pluck('anio');
 
                 $provincia = UbigeoRepositorio::provincia('25');
                 //SFL::from('edu_sfl as sfl')->distinct()->select(DB::raw('month(sfl.fecha_inscripcion) as mes')
@@ -1375,11 +1375,12 @@ class IndicadoresController extends Controller
     }
 
 
-    public function exportarPDF($id)
+    public function exportarPDFx($id)
     {
         $ind = IndicadorGeneral::select('codigo', 'ficha_tecnica')->where('id', $id)->first();
         if ($ind->ficha_tecnica) {
             header('Content-Type: application/pdf');
+            header('Content-Disposition: inline; filename="xxxxx"'); // Forzar el nombre del archivo
             echo base64_decode($ind->ficha_tecnica);
 
             // $b64d = base64_decode($ind->ficha_tecnica);
@@ -1392,6 +1393,44 @@ class IndicadoresController extends Controller
             echo 'archivo PDF no encontrado';
         }
     }
+
+    public function exportarPDFxx($id)
+    {
+        $ind = IndicadorGeneral::select('codigo', 'ficha_tecnica')->where('id', $id)->first();
+
+        if (!$ind || !$ind->ficha_tecnica) {
+            return response()->json(['error' => 'Archivo PDF no encontrado'], 404);
+        }
+
+        $nombreArchivo = 'Ficha_Tecnica_' . $ind->codigo . '.pdf'; // Nombre personalizado
+
+        $pdfContenido = base64_decode($ind->ficha_tecnica);
+
+        return response()->streamDownload(function () use ($pdfContenido) {
+            echo $pdfContenido;
+        }, $nombreArchivo, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="' . $nombreArchivo . '"'
+        ]);
+    }
+
+    public function exportarPDF($id)
+{
+    $ind = IndicadorGeneral::select('codigo', 'ficha_tecnica')->where('id', $id)->first();
+
+    if (!$ind || !$ind->ficha_tecnica) {
+        return response()->json(['error' => 'Archivo PDF no encontrado'], 404);
+    }
+
+    $nombreArchivo = 'Ficha_Tecnica_' . $ind->codigo . '.pdf'; // Nombre personalizado
+    $pdfContenido = base64_decode($ind->ficha_tecnica);
+
+    return response($pdfContenido)
+        ->header('Content-Type', 'application/pdf')
+        ->header('Content-Disposition', 'inline; filename="' . $nombreArchivo . '"');
+}
+
+
 
 
     public function ConvenioFED()
