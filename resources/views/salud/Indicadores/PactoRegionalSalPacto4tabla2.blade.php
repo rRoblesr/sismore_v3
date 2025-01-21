@@ -2,10 +2,12 @@
     <thead>
         <tr class="bg-success-0 text-white text-center">
             <th class="text-center">Nº</th>
+            <th class="text-center">Código</th>
+            <th class="text-center">Establecimiento de Salud</th>
             <th class="text-center">Departamento</th>
             <th class="text-center">Provincia</th>
             <th class="text-center">Distrito</th>
-            <th class="text-center">Establecimiento de Salud</th>
+            
             <th class="text-center"> {{ 'Niños < ' }}12 meses</th>
             <th class="text-center">CRED</th>
             <th class="text-center">Vacuna</th>
@@ -21,10 +23,12 @@
             @foreach ($base as $key => $item)
                 <tr class="text-center">
                     <td>{{ $key + 1 }}</td>
+                    <td class="text-left">{{ str_pad($item->cod_unico,8,'0',STR_PAD_LEFT) }}</td>
+                    <td class="text-left">{{ $item->eess }}</td>
                     <td class="text-left">{{ $item->departamento }}</td>
                     <td class="text-left">{{ $item->provincia }}</td>
                     <td class="text-left">{{ $item->distrito }}</td>
-                    <td class="text-left">{{ $item->eess }}</td>
+                    
                     <td>{{ $item->denominador }}</td>
                     <td>{{ $item->condicion1 }}</td>
                     <td>{{ $item->condicion2 }}</td>

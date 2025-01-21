@@ -3,6 +3,7 @@
 namespace App\Repositories\Salud;
 
 use App\Models\Parametro\IndicadorGeneralMeta;
+use App\Models\Parametro\Ubigeo;
 use App\Models\Salud\CuboPacto3PadronMaterno;
 use Illuminate\Support\Facades\DB;
 
@@ -50,12 +51,25 @@ class CuboPacto3Repositorio
     {
         $v1 = CuboPacto3PadronMaterno::select(
             'distrito_id',
-            'distrito',
             DB::raw('sum(numerador) as numerador'),
             DB::raw('sum(denominador) as denominador'),
             DB::raw('100*sum(numerador)/sum(denominador) as indicador')
         )->where('anio', $anio)->where('mes', '<=', $mes);
-        $v1 = $v1->groupBy('distrito_id', 'distrito')->orderBy('indicador', 'desc')->get();
+        $v1 = $v1->groupBy('distrito_id');
+
+        $v1 = Ubigeo::from('par_ubigeo as u')
+            ->leftJoinSub($v1, 'anemia', function ($join) {
+                $join->on('anemia.distrito_id', '=', 'u.id');
+            })
+            ->select(
+                'u.nombre as distrito',
+                DB::raw('COALESCE(anemia.numerador, 0) as numerador'),
+                DB::raw('COALESCE(anemia.denominador, 0) as denominador'),
+                DB::raw('COALESCE(anemia.indicador, 0) as indicador')
+            )
+            ->whereRaw('LENGTH(u.codigo) = 6')->where('u.codigo', 'like', '25%')->orderBy('indicador', 'desc')->get();
+
+
         $v3 = IndicadorGeneralMeta::where('indicadorgeneral', $indicador)->where('anio', $anio)->pluck('valor', 'distrito');
 
         foreach ($v1 as $key => $value) {
@@ -70,6 +84,7 @@ class CuboPacto3Repositorio
         $v1 = CuboPacto3PadronMaterno::select(
             'red',
             'microred',
+            'codigo_unico',
             'eess_parto',
             DB::raw('sum(denominador) as denominador'),
             DB::raw('sum(numerador) as numerador'),
@@ -78,16 +93,26 @@ class CuboPacto3Repositorio
             DB::raw('sum(num_entrega_sfaf) as condicion3'),
             DB::raw('100*sum(numerador)/sum(denominador) as indicador')
         )->where('anio', $anio)->where('mes', '<=', $mes);
-        $v1 = $v1->groupBy('red', 'microred', 'eess_parto',)->orderBy('indicador', 'desc')->get();
+        $v1 = $v1->groupBy('red', 'microred', 'codigo_unico', 'eess_parto',)->orderBy('indicador', 'desc')->get();
         return $v1;
     }
 
     public static function Anal01($importacion, $anio, $mes, $provincia, $distrito)
     {
-        $query = CuboPacto3PadronMaterno::select('distrito', DB::raw('100*sum(numerador)/sum(denominador) as indicador'))->where('anio', $anio)->where('mes', '<=', $mes);
+        $query = CuboPacto3PadronMaterno::select('distrito_id', DB::raw('100*sum(numerador)/sum(denominador) as indicador'))->where('anio', $anio)->where('mes', '<=', $mes);
         // if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
         // if ($distrito > 0) $query = $query->where('distrito_id', $distrito);
-        $query = $query->groupBy('distrito')->orderBy('indicador', 'desc')->get();
+        $query = $query->groupBy('distrito_id');
+
+        $query = Ubigeo::from('par_ubigeo as u')
+            ->leftJoinSub($query, 'anemia', function ($join) {
+                $join->on('anemia.distrito_id', '=', 'u.id');
+            })
+            ->select(
+                'u.nombre as distrito',
+                DB::raw('COALESCE(anemia.indicador, 0) as indicador')
+            )
+            ->whereRaw('LENGTH(u.codigo) = 6')->where('u.codigo', 'like', '25%')->orderBy('indicador', 'desc')->get();
         return $query;
     }
 

@@ -31,7 +31,7 @@
                 </tr>
             @endforeach
         </tbody>
-        <tfoot>
+        {{-- <tfoot>
             <tr class="text-center bg-success-0 text-white">
                 <th colspan="2" class="text-right">TOTAL</th>
                 <th class="text-center">-</th>
@@ -41,7 +41,7 @@
                 <td>-
                 </td>
             </tr>
-        </tfoot>
+        </tfoot> --}}
     @else
         {{-- <tbody>
             <tr class="text-center">

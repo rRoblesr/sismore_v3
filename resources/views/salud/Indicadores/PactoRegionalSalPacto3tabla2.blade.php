@@ -1,10 +1,12 @@
 <table id="tabla2" class="table table-sm table-striped table-bordered font-12 m-0">
     <thead>
         <tr class="bg-success-0 text-white text-center">
+
             <th class="text-center">Nº</th>
+            <th class="text-center">Código</th>
+            <th class="text-center">Establecimiento de Salud</th>
             <th class="text-center">Red</th>
             <th class="text-center">Microred</th>
-            <th class="text-center">Establecimiento de Salud</th>
             <th class="text-center">Total Partos</th>
             <th class="text-center">Examen Auxiliar</th>
             <th class="text-center">Atencion Prenatal</th>
@@ -18,9 +20,10 @@
             @foreach ($base as $key => $item)
                 <tr class="text-center">
                     <td>{{ $key + 1 }}</td>
+                    <td class="text-left">{{ str_pad($item->codigo_unico, 8, '0', STR_PAD_LEFT) }}</td>
+                    <td class="text-left">{{ $item->eess_parto }}</td>
                     <td class="text-left">{{ $item->red }}</td>
                     <td class="text-left">{{ $item->microred }}</td>
-                    <td class="text-left">{{ $item->eess_parto }}</td>
                     <td>{{ $item->denominador }}</td>
                     <td>{{ $item->condicion1 }}</td>
                     <td>{{ $item->condicion2 }}</td>

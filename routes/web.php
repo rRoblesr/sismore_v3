@@ -1188,6 +1188,8 @@ Route::get('/salud/PowerBi/{id}', [PowerBiController::class, 'saludMenu'])->name
 Route::get('/indicador/pactoregional/meta', [IndicadoresController::class, 'PactoRegionalMeta'])->name('indicador.pactoregional.meta');
 
 Route::get('/salud/pactoregional', [IndicadoresController::class, 'PactoRegional'])->name('salud.indicador.pactoregional');
+Route::get('/salud/pactoregional/find/{codigo}', [IndicadoresController::class, 'findCodigo'])->name('salud.indicador.pactoregional.find.codigo');
+
 
 Route::get('/salud/pactoregional/sal', [IndicadoresController::class, 'PactoRegionalSal'])->name('salud.indicador.pactoregional.sal');
 Route::get('/salud/pactoregional/Actualizarx', [IndicadoresController::class, 'PactoRegionalActualizar'])->name('salud.indicador.pactoregional.actualizar');

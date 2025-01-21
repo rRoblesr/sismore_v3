@@ -121,7 +121,7 @@
                                 <span data-plugin="counterup" id="gl"></span>
                             </h4>
                             <p class="mb-0 mt-1 text-truncate">
-                                <span onclick="" data-toggle="modal" data-target="#info_denominador">
+                                <span onclick="verinformacion(0)" data-toggle="modal" data-target="#info_denominador">
                                     <i class="mdi mdi-rotate-180 mdi-alert-circle" style="color:#43beac;"></i>
                                 </span>
                                 Denominador
@@ -147,7 +147,7 @@
                                 <span data-plugin="counterup" id="gls"></span>
                             </h4>
                             <p class="mb-0 mt-1 text-truncate">
-                                <span onclick="" data-toggle="modal" data-target="#info_numerador">
+                                <span onclick="verinformacion(1)" data-toggle="modal" data-target="#info_numerador">
                                     <i class="mdi mdi-rotate-180 mdi-alert-circle" style="color:#43beac;"></i>
                                 </span>
                                 Numerador
@@ -516,6 +516,36 @@
 
 
         </div>
+    </div><!-- /.modal -->
+
+    
+    <div id="modal_informacion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Modal Heading</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    {{-- <h5 class="font-16">Text in a modal</h5> --}}
+                    {{-- <p></p> --}}
+                    {{-- <h5 class="font-16">Text in a modal</h5>
+                    <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula.</p>
+                    <hr>
+                    <h5 class="font-16">Overflowing text to show scroll behavior</h5>
+                    <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas
+                        eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+                    <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue
+                        laoreet rutrum faucibus dolor auctor.</p>
+                        consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p> --}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Cerrar</button>
+                    {{-- <button type="button" class="btn btn-primary waves-effect waves-light">Save changes</button> --}}
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 @endsection
 
@@ -993,12 +1023,29 @@
             window.open("{{ route('salud.indicador.pactoregional.exportar.pdf', '') }}/" + id);
         };
 
+        function verinformacion(opcion) {
+            $('#modal_informacion .modal-title').text(opcion == 0 ? 'Denominador' : 'Numerador');
+
+            $.ajax({
+                url: "{{ route('salud.indicador.pactoregional.find.codigo', '') }}/{{ $ind->codigo }}",
+                type: 'GET',
+                success: function(data) {
+                    $('#modal_informacion .modal-body').text(opcion == 0 ? data.denominador : data.numerador);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+
+            $('#modal_informacion').modal('show');
+        }
+
         function gColumnx(div, data, titulo, subtitulo, tooltip) {
             return Highcharts.chart(div, {
                 chart: {
                     type: 'column'
                 },
-                colors: ['#5eb9a0', '#ef5350', '#f5bd22', '#ef5350'],
+                colors: ['#ef5350', '#5eb9a0', '#f5bd22', '#ef5350'],
                 title: {
                     text: titulo
                 },

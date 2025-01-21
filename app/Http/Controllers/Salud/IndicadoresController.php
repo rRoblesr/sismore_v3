@@ -9,6 +9,7 @@ use App\Http\Controllers\Educacion\ImporMatriculaController;
 use App\Http\Controllers\Educacion\ImporMatriculaGeneralController;
 use App\Models\Educacion\CuboPacto1;
 use App\Models\Educacion\Importacion;
+use App\Models\Educacion\Indicador;
 use App\Models\Educacion\SFL;
 use App\Models\Parametro\IndicadorGeneral;
 use App\Models\Parametro\IndicadorGeneralMeta;
@@ -47,6 +48,12 @@ class IndicadoresController extends Controller
     public function __construct()
     {
         // $this->middleware('auth');
+    }
+
+    public function findCodigo($codigo)
+    {
+        $data = IndicadorGeneral::select('codigo', 'nombre', 'descripcion', 'numerador', 'denominador')->where('codigo', $codigo)->first();
+        return response()->json($data);
     }
 
     public function PactoRegionalMeta()
@@ -521,13 +528,13 @@ class IndicadoresController extends Controller
             case 'anal3': //lineas
                 $base = CuboPacto1PadronNominalRepositorio::pacto01Anal03($impMaxAnio, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
                 $info['serie'] = [];
-                $info['serie'][0]['name'] = 'Cumplen';
-                $info['serie'][1]['name'] = 'No Cumplen';
+                $info['serie'][0]['name'] = 'No Cumplen';
+                $info['serie'][1]['name'] = 'Cumplen';
                 foreach ($base as $key => $value) {
                     $info['categoria'][] = $value->edades;
                     // $info['serie'][$key]['data'] = [$value->si, $value->no];
-                    $info['serie'][0]['data'][] = (int)$value->si;
-                    $info['serie'][1]['data'][] = (int)$value->no;
+                    $info['serie'][0]['data'][] = (int)$value->no;
+                    $info['serie'][1]['data'][] = (int)$value->si;
                 }
                 return response()->json(compact('info', 'base'));
 
@@ -612,8 +619,8 @@ class IndicadoresController extends Controller
             $value->nacimiento = $value->fecha_nacimiento ? date('d/m/Y', strtotime($value->fecha_nacimiento)) : null;
             $value->ipress = str_pad($value->cui_atencion, 8, '0', STR_PAD_LEFT);
             $value->estado = $value->num == 1
-                ? '<span class="badge badge-pill badge-success" style="font-size:90%;">CUMPLEN</span>'
-                :  '<span class="badge badge-pill badge-danger" style="font-size:90%;">NO CUMPLEN</span>';
+                ? '<span class="badge badge-pill badge-success" style="font-size:90%;">CUMPLE</span>'
+                :  '<span class="badge badge-pill badge-danger" style="font-size:90%;">NO CUMPLE</span>';
             return $value;
         });
 
@@ -786,19 +793,19 @@ class IndicadoresController extends Controller
                 return response()->json(compact('info', 'mes', 'base', 'mesmax'));
             case 'tabla1':
                 $base = IndicadorGeneralMetaRepositorio::getSalPacto2tabla1($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
-                $foot = clone $base[0];
-                $foot->valor = 0;
-                $foot->num = 0;
-                $foot->den = 0;
-                foreach ($base as $key => $value) {
-                    $foot->valor += $value->valor;
-                    $foot->num += $value->num;
-                    $foot->den += $value->den;
-                }
-                $foot->valor = round($foot->valor / 19, 1);
-                $foot->ind = round(100 * $foot->num / $foot->den, 1);
-                $foot->cumple = $foot->ind >= $foot->valor ? 1 : 0;
-                $excel = view('salud.Indicadores.PactoRegionalSalPacto2tabla1', compact('base', 'foot', 'ndis'))->render();
+                // $foot = clone $base[0];
+                // $foot->valor = 0;
+                // $foot->num = 0;
+                // $foot->den = 0;
+                // foreach ($base as $key => $value) {
+                //     $foot->valor += $value->valor;
+                //     $foot->num += $value->num;
+                //     $foot->den += $value->den;
+                // }
+                // $foot->valor = round($foot->valor / 19, 1);
+                // $foot->ind = round(100 * $foot->num / $foot->den, 1);
+                // $foot->cumple = $foot->ind >= $foot->valor ? 1 : 0;
+                $excel = view('salud.Indicadores.PactoRegionalSalPacto2tabla1', compact('base', 'ndis'))->render();
                 return response()->json(compact('excel', 'base'));
 
             case 'tabla2':
@@ -1415,20 +1422,20 @@ class IndicadoresController extends Controller
     }
 
     public function exportarPDF($id)
-{
-    $ind = IndicadorGeneral::select('codigo', 'ficha_tecnica')->where('id', $id)->first();
+    {
+        $ind = IndicadorGeneral::select('codigo', 'ficha_tecnica')->where('id', $id)->first();
 
-    if (!$ind || !$ind->ficha_tecnica) {
-        return response()->json(['error' => 'Archivo PDF no encontrado'], 404);
+        if (!$ind || !$ind->ficha_tecnica) {
+            return response()->json(['error' => 'Archivo PDF no encontrado'], 404);
+        }
+
+        $nombreArchivo = 'Ficha_Tecnica_' . $ind->codigo . '.pdf'; // Nombre personalizado
+        $pdfContenido = base64_decode($ind->ficha_tecnica);
+
+        return response($pdfContenido)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'inline; filename="' . $nombreArchivo . '"');
     }
-
-    $nombreArchivo = 'Ficha_Tecnica_' . $ind->codigo . '.pdf'; // Nombre personalizado
-    $pdfContenido = base64_decode($ind->ficha_tecnica);
-
-    return response($pdfContenido)
-        ->header('Content-Type', 'application/pdf')
-        ->header('Content-Disposition', 'inline; filename="' . $nombreArchivo . '"');
-}
 
 
 

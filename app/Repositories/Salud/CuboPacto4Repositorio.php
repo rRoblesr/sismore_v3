@@ -63,11 +63,23 @@ class CuboPacto4Repositorio
         // if ($provincia > 0) $v1 = $v1->where('provincia_id', $provincia);
         // if ($distrito > 0) $v1 = $v1->where('distrito_id', $distrito);
 
-        $v1 = $v1->groupBy('distrito_id')->orderBy('indicador', 'desc')->get();
+        $v1 = $v1->groupBy('distrito_id');
 
-        foreach ($v1 as $key => $value) {
-            $value->distrito = $distritos[$value->distrito_id] ?? '';
-        }
+        $v1 = Ubigeo::from('par_ubigeo as u')
+            ->leftJoinSub($v1, 'anemia', function ($join) {
+                $join->on('anemia.distrito_id', '=', 'u.id');
+            })
+            ->select(
+                'u.nombre as distrito',
+                DB::raw('COALESCE(anemia.numerador, 0) as numerador'),
+                DB::raw('COALESCE(anemia.denominador, 0) as denominador'),
+                DB::raw('COALESCE(anemia.indicador, 0) as indicador')
+            )
+            ->whereRaw('LENGTH(u.codigo) = 6')->where('u.codigo', 'like', '25%')->orderBy('indicador', 'desc')->get();
+
+        // foreach ($v1 as $key => $value) {
+        //     $value->distrito = $distritos[$value->distrito_id] ?? '';
+        // }
         $v3 = IndicadorGeneralMeta::where('indicadorgeneral', $indicador)->where('anio', $anio)->pluck('valor', 'distrito');
 
         foreach ($v1 as $key => $value) {
@@ -83,6 +95,7 @@ class CuboPacto4Repositorio
             'departamento',
             'provincia',
             'distrito',
+            'cod_unico',
             'eess',
             DB::raw('sum(c4.denominador) as denominador'),
             DB::raw('sum(c4.numerador) as numerador'),
@@ -100,7 +113,7 @@ class CuboPacto4Repositorio
         // if ($provincia > 0) $query = $v1->where('c4.provincia_id', $provincia);
         // if ($distrito > 0) $query = $v1->where('c4.distrito_id', $distrito);
 
-        $v1 = $v1->groupBy('departamento', 'provincia', 'distrito', 'eess')->orderBy('indicador', 'desc')->get();
+        $v1 = $v1->groupBy('departamento', 'provincia', 'distrito', 'cod_unico', 'eess')->orderBy('indicador', 'desc')->get();
         return $v1;
     }
 
@@ -117,10 +130,23 @@ class CuboPacto4Repositorio
         // if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
         // if ($distrito > 0) $query = $query->where('distrito_id', $distrito);
 
-        $query = $query->groupBy('distrito_id')->orderBy('indicador', 'desc')->get();
-        foreach ($query as $key => $value) {
-            $value->distrito = $distritos[$value->distrito_id] ?? '';
-        }
+        $query = $query->groupBy('distrito_id');
+
+        $query = Ubigeo::from('par_ubigeo as u')
+            ->leftJoinSub($query, 'anemia', function ($join) {
+                $join->on('anemia.distrito_id', '=', 'u.id');
+            })
+            ->select(
+                'u.nombre as distrito',
+                DB::raw('COALESCE(anemia.nnn, 0) as nnn'),
+                DB::raw('COALESCE(anemia.ddd, 0) as ddd'),
+                DB::raw('COALESCE(anemia.indicador, 0) as indicador')
+            )
+            ->whereRaw('LENGTH(u.codigo) = 6')->where('u.codigo', 'like', '25%')->orderBy('indicador', 'desc')->get();
+
+        // foreach ($query as $key => $value) {
+        //     $value->distrito = $distritos[$value->distrito_id] ?? '';
+        // }
         return $query;
     }
 
