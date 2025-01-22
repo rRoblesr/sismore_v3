@@ -713,6 +713,26 @@
                     </form>
                 </div>
                 <div class="modal-body pt-0" style="text-align:center">
+                    @if (auth()->user()->id == 49)
+                        <button type="button" class="btn btn-xs btn-success" id=""
+                            onclick="descargarMetaExcel()" title="DESCARGAR"><i class="fas fa-download"></i> </button>
+                        <form id="importForm" action="{{ route('mantenimiento.indicadorgeneralmeta.importar') }}"
+                            method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="indicador" id="indicador">
+                            <input type="file" name="archivo" id="archivo" class="d-none"
+                                onchange="procesarArchivo()" accept=".xlsx">
+
+                            <button type="button" class="btn btn-xs btn-success"
+                                onclick="document.getElementById('archivo').click()" title="IMPORTAR">
+                                <i class="fas fa-upload"></i>
+                            </button>
+
+                            <span id="nombreArchivo" class="text-muted"></span>
+                        </form>
+                        {{-- <button type="button" class="btn btn-xs btn-success" id="" onclick="ajustarMetas()" title="CARGAR"><i class="fas fa-upload"></i> </button> --}}
+                    @endif
+
                     <button type="button" class="btn btn-xs btn-primary" id="btnSaveMeta_dit"
                         onclick="savemeta_dit()"><i class="fa fa-plus"></i> Agregar</button>
                     <button type="button" class="btn btn-xs btn-danger" id="btnSaveMlleta_dit"
@@ -1343,8 +1363,6 @@
             });
         };
 
-
-
         function delemeta_pdrc() {
             $('#btnSaveMeta_pdrc').html('<i class="fa fa-plus"></i> Agregar');
             save_method_meta_pdrc = 'add';
@@ -1438,6 +1456,24 @@
             $('#modal_form_entidad .modal-title').text('Nueva Oficina');
             $('#modal_form_entidad').modal('show');
             form_entidad = 1;
+        }
+
+        function descargarMetaExcel() {
+            window.location.href =
+                "{{ route('mantenimiento.indicadorgeneralmeta.exportar', ['indicador' => ':indicador']) }}".replace(
+                    ':indicador', $('#indicadorgeneral_dit').val());
+        }
+
+        function procesarArchivo() {
+            let input = document.getElementById('archivo');
+            let nombreArchivo = document.getElementById('nombreArchivo');
+            let form = document.getElementById('importForm');
+            $('#indicador').val($('#indicadorgeneral_dit').val());
+
+            if (input.files.length > 0) {
+                nombreArchivo.textContent = "Procesando: " + input.files[0].name;
+                form.submit(); // Envía el formulario automáticamente
+            }
         }
     </script>
 @endsection

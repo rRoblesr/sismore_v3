@@ -298,6 +298,7 @@ class IndicadorGeneralMetaRepositorio
                 $join->on('anemia.distrito_id', '=', 'u.id');
             })
             ->select(
+                'u.id as distrito_id',
                 'u.nombre as distrito',
                 DB::raw('COALESCE(anemia.num, 0) as num'),
                 DB::raw('COALESCE(anemia.den, 0) as den'),
@@ -307,7 +308,6 @@ class IndicadorGeneralMetaRepositorio
             ->orderBy('ind', 'desc')->get();
 
         $v3 = IndicadorGeneralMeta::where('indicadorgeneral', $indicador_id)->where('anio', $anio)->pluck('valor', 'distrito');
-
         foreach ($v1 as $key => $value) {
             $value->valor = $v3[$value->distrito_id] ?? 0;
             $value->cumple = $value->ind >= $value->valor ? 1 : 0;

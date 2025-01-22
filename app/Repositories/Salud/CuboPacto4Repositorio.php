@@ -70,6 +70,7 @@ class CuboPacto4Repositorio
                 $join->on('anemia.distrito_id', '=', 'u.id');
             })
             ->select(
+                'u.id as distrito_id',
                 'u.nombre as distrito',
                 DB::raw('COALESCE(anemia.numerador, 0) as numerador'),
                 DB::raw('COALESCE(anemia.denominador, 0) as denominador'),

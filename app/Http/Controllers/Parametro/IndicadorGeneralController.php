@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Parametro;
 
+use App\Exports\Salud\AgregarMetasExport;
 use App\Http\Controllers\Controller;
+use App\Imports\Salud\AgregarMetasImport;
 use App\Models\Administracion\Entidad;
 use App\Models\Parametro\IndicadorGeneral;
 use App\Models\Parametro\IndicadorGeneralMeta;
@@ -11,6 +13,7 @@ use App\Models\Presupuesto\Sector;
 use App\Repositories\Parametro\IndicadorGeneralRepositorio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class IndicadorGeneralController extends Controller
 {
@@ -483,6 +486,7 @@ class IndicadorGeneralController extends Controller
         $data = [];
         foreach ($query as $key => $value) {
             $ig = IndicadorGeneral::select('id', 'unidad_id')->where('id', $rq->indicadorgeneral)->first();
+
             $btn = '&nbsp;<a href="#" class="btn btn-primary btn-xs" onclick="editmeta(' . $value->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
             $btn .= '&nbsp;<a href="#" class="btn btn-danger btn-xs" onclick="borrarmeta(' . $value->id . ')"  title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
 
@@ -590,7 +594,7 @@ class IndicadorGeneralController extends Controller
             $dis = Ubigeo::find($value->distrito);
             // $pro = Ubigeo::find($dis->dependencia);
 
-            $btn = '&nbsp;<a href="#" class="btn btn-primary btn-xs" onclick="editmeta_dit(' . $value->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
+            $btn = '&nbsp;<a href="#" class="btn btn-primary btn-xs" onclick="editmeta_dit(' . $value->id . ')"  title="MODIFICARxxx"> <i class="fa fa-pen"></i> </a>';
             $btn .= '&nbsp;<a href="#" class="btn btn-danger btn-xs" onclick="borrarmeta(' . $value->id . ')"  title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
 
             $data[] = array(
@@ -708,5 +712,25 @@ class IndicadorGeneralController extends Controller
         $meta->valor = $request->valoresperado_dit;
         $meta->save();
         return response()->json(['status' => true, 'meta' => $meta]);
+    }
+
+    public function descargarExcel($indicador)
+    {
+        $codigo = IndicadorGeneral::select('codigo')->where('id', $indicador)->first()->codigo;
+
+        return Excel::download(new AgregarMetasExport($indicador), 'Metas ' . $codigo . ' ' . date('YmdHis') . ' .xlsx');
+    }
+
+    public function cargarExcel(Request $rq)
+    {
+        $rq->validate([
+            'archivo' => 'required|mimes:xlsx,csv'
+        ]);
+
+        IndicadorGeneralMeta::where('indicadorgeneral', $rq->indicador)->delete();
+
+        Excel::import(new AgregarMetasImport, $rq->file('archivo'));
+
+        return redirect()->back()->with('success', 'Archivo importado correctamente.');
     }
 }

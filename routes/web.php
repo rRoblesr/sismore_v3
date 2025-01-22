@@ -1,5 +1,6 @@
 <?php
 
+use App\Exports\Salud\AgregarMetasExport;
 use App\Http\Controllers\Administracion\EntidadController;
 use App\Http\Controllers\Administracion\LoginRecordsController;
 use App\Http\Controllers\Administracion\MenuController;
@@ -111,6 +112,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
 
 /*
 |--------------------------------------------------------------------------
@@ -683,6 +685,10 @@ Route::post('/Mantenimiento/Indicador/Meta/DIT/Add', [IndicadorGeneralController
 Route::post('/Mantenimiento/Indicador/Meta/DIT/Update', [IndicadorGeneralController::class, 'ajax_update_meta_dit'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.editar.dit');
 Route::get('/Mantenimiento/Indicador/Meta/DIT/Find/{id}', [IndicadorGeneralController::class, 'ajax_find_meta_dit'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.find.dit');
 Route::get('/Mantenimiento/Indicador/Meta/Delete/{id}', [IndicadorGeneralController::class, 'ajax_delete_meta'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.eliminar');
+
+
+Route::get('/Mantenimiento/Indicador/Meta/exportar/{indicador}',  [IndicadorGeneralController::class, 'descargarExcel'])->name('mantenimiento.indicadorgeneralmeta.exportar');
+Route::post('Mantenimiento/Indicador/Meta/importar', [IndicadorGeneralController::class, 'cargarExcel'])->name('mantenimiento.indicadorgeneralmeta.importar');
 
 Route::get('/educación/Mantenimiento/PadronEIB', [PadronEIBController::class, 'principal'])->middleware('auth')->name('padroneib.principal');
 Route::post('/PadronEIB/ajax_add_opt1/', [PadronEIBController::class, 'ajax_add_opt1'])->name('padroneib.ajax.add.opt1');
