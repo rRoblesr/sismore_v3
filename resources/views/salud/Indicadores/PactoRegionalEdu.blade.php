@@ -43,62 +43,68 @@
 @section('content')
     <div class="content">
 
-        <div class="form-group row align-items-center vh-5">
-            <div class="col-lg-6 col-md-6 col-sm-6">
-                <h4 class="page-title font-16">PACTO REGIONAL</h4>
-            </div>
-            <div class="col-lg-1 col-md-1 col-sm-1">
-                <div class="custom-select-container">
-                    <label for="anio">AÑO</label>
-                    <select id="anio" name="anio" class="form-control btn-xs font-11 p-0" onchange="cargarpacto1();">
-                        @foreach ($anio as $item)
-                            <option value="{{ $item }}" {{ $item == $aniomax ? 'selected' : '' }}>
-                                {{ $item }}</option>
-                        @endforeach
-                    </select>
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <div class="card card-border border border-plomo-0">
+                    <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
+                        <h3 class="card-title text-white"></h3>
+                    </div>
+                    <div class="card-body pb-0 pt-3">
+                        <div class="form-group row">
+                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                <h4 class="page-title font-16">PACTO REGIONAL</h4>
+                            </div>
+                            <div class="col-lg-1 col-md-6 col-sm-6">
+                                <div class="custom-select-container">
+                                    <label for="anio">AÑO</label>
+                                    <select id="anio" name="anio" class="form-control btn-xs font-11 p-0"
+                                        onchange="cargarpacto1();">
+                                        @foreach ($anio as $item)
+                                            <option value="{{ $item }}" {{ $item == $aniomax ? 'selected' : '' }}>
+                                                {{ $item }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-6 col-sm-6">
+                                <div class="custom-select-container">
+                                    <label for="provincia">PROVINCIA</label>
+                                    <select id="provincia" name="provincia" class="form-control btn-xs font-11"
+                                        onchange="cargarDistritos();">
+                                        <option value="0">TODOS</option>
+                                        @foreach ($provincia as $item)
+                                            <option value="{{ $item->id }}">
+                                                {{ $item->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-6 col-sm-6">
+                                <div class="custom-select-container">
+                                    <label for="distrito">DISTRITO</label>
+                                    <select id="distrito" name="distrito" class="form-control btn-xs font-11"
+                                        onchange="cargarpacto1();">
+                                        <option value="0">TODOS</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-1 col-md-6 col-sm-6 text-center">
+                                <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
+                                    title='ACTUALIZAR'>
+                                    <i class="fas fa-history"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-2 col-md-2 col-sm-2">
-                <div class="custom-select-container">
-                    <label for="provincia">PROVINCIA</label>
-                    <select id="provincia" name="provincia" class="form-control btn-xs font-11"
-                        onchange="cargarDistritos();">
-                        <option value="0">TODOS</option>
-                        @foreach ($provincia as $item)
-                            <option value="{{ $item->id }}">
-                                {{ $item->nombre }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-2">
-                <div class="custom-select-container">
-                    <label for="distrito">DISTRITO</label>
-                    <select id="distrito" name="distrito" class="form-control btn-xs font-11" onchange="cargarpacto1();">
-                        <option value="0">TODOS</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="col-lg-1 col-md-1 col-sm-1 text-center">
-                <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()" title='ACTUALIZAR'>
-                    <span class="d-block d-lg-none">
-                        <i class=" fas fa-history"></i></span>
-                    <span class="d-none d-lg-block text-center">
-                        <i class=" fas fa-history"></i> Actualizar</span>
-
-                    {{-- <a class="" data-toggle="tab" role="tab" aria-selected="true">
-                        <span class="d-block d-sm-none">
-                            <i class="mdi mdi-shield-plus font-18"></i>
-                        </span>
-                        <span class="d-none d-sm-block text-center">
-                            <i class="mdi mdi-shield-plus"></i> SALUD</span>
-                    </a> --}}
-                </button>
-            </div>
-
-
         </div>
+
+
+
+
+
+
         <div class="row">
 
             @foreach ($indedu as $key => $item)
