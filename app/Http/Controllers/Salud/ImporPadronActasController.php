@@ -56,7 +56,7 @@ class ImporPadronActasController extends Controller
         // $query= Ubigeo::where('codigo','like','25%')->whereRaw('length(codigo)=6')->pluck('id','codigo');
         // $query= Ubigeo::where('codigo','like','25%')->whereRaw('length(codigo)=4')->pluck('id','codigo');
         // return $query;
-        $fuentes = FuenteImportacion::whereIn('id', [36, 37, 38, 39, 40])->get();
+        $fuentes = FuenteImportacion::whereIn('id', [37, 38, 39])->get();
         return view('salud.ImporPadronActas.Importar', compact('fuentes'));
     }
 
