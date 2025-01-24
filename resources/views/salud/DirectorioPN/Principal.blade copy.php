@@ -44,9 +44,180 @@
             z-index: 215000000 !important;
         }
     </style>
+
+    <style>
+        .card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .card-body {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .btn-ver-mas {
+            margin-top: auto;
+            /* Empuja el botón hacia abajo */
+        }
+
+        /* Estilos del panel lateral */
+        .offcanvas {
+            position: fixed;
+            top: 0;
+            right: -350px;
+            /* Panel oculto inicialmente */
+            width: 350px;
+            height: 100%;
+            background-color: white;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+            overflow-y: auto;
+            transition: right 0.3s ease-in-out;
+            z-index: 1050;
+            padding: 20px;
+        }
+
+        .offcanvas.show {
+            right: 0;
+            /* Muestra el panel */
+        }
+
+        .offcanvas-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        .offcanvas-body {
+            padding-top: 10px;
+        }
+
+        .offcanvas a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+            border-bottom: 1px solid #eee;
+        }
+
+        .offcanvas a:hover {
+            background-color: #f8f9fa;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    </style>
 @endsection
 
 @section('content')
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Tarjeta 1 -->
+            <div class="col-12 col-md-6 col-lg-3 mb-4">
+                <div class="card w-100">
+                    <img src="https://www.innobing.com/wp-content/uploads/2024/03/una-imagen-400x250.jpg"
+                        class="card-img-top" alt="Imagen 1">
+                    <div class="card-body text-center">
+                        <p class="text-muted">
+                            <span class="badge badge-primary">#Salud</span>
+                            <span class="badge badge-secondary">#Prevención</span>
+                        </p>
+                        <h5 class="card-title">Prevención y manejo de condiciones secundarias de salud en personas con
+                            discapacidad.</h5>
+                        <a href="#" class="btn btn-primary btn-block btn-ver-mas">Ver más</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta 2 -->
+            <div class="col-12 col-md-6 col-lg-3 mb-4">
+                <div class="card w-100">
+                    <img src="https://www.innobing.com/wp-content/uploads/2024/03/una-imagen-400x250.jpg"
+                        class="card-img-top" alt="Imagen 2">
+                    <div class="card-body text-center">
+                        <p class="text-muted">
+                            <span class="badge badge-success">#Materno</span>
+                            <span class="badge badge-warning">#Neonatal</span>
+                        </p>
+                        <h5 class="card-title">Salud Materno Neonatal.</h5>
+                        <a href="#" class="btn btn-primary btn-block btn-ver-mas">Ver más</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta 3 -->
+            <div class="col-12 col-md-6 col-lg-3 mb-4">
+                <div class="card w-100">
+                    <img src="https://www.innobing.com/wp-content/uploads/2024/03/una-imagen-400x250.jpg"
+                        class="card-img-top" alt="Imagen 3">
+                    <div class="card-body text-center">
+                        <p class="text-muted">
+                            <span class="badge badge-info">#Gestión</span>
+                            <span class="badge badge-danger">#Control</span>
+                        </p>
+                        <h5 class="card-title">Tablero de Control</h5>
+                        <a href="#" class="btn btn-primary btn-block btn-ver-mas">Ver más</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta 4 -->
+            <div class="col-12 col-md-6 col-lg-3 mb-4">
+                <div class="card w-100">
+                    <img src="https://www.innobing.com/wp-content/uploads/2024/03/una-imagen-400x250.jpg"
+                        class="card-img-top" alt="Imagen 4">
+                    <div class="card-body text-center">
+                        <p class="text-muted">
+                            <span class="badge badge-dark">#AdultoMayor</span>
+                            <span class="badge badge-light">#Salud</span>
+                        </p>
+                        <h5 class="card-title">Etapa de vida de Adulto Mayor</h5>
+                        <a href="#" class="btn btn-primary btn-block btn-ver-mas"  onclick="openPanel()">Ver más</a>
+                        {{-- <button class="btn btn-primary btn-block" onclick="openPanel()">Ver más</button> --}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="offcanvas" id="offcanvasPanel">
+        <div class="offcanvas-header">
+            <h5>Más Información</h5>
+            <button class="close-btn" onclick="closePanel()">&times;</button>
+        </div>
+        <div class="offcanvas-body">
+            <a href="#">Monitoreo Vacunas Trazadoras</a>
+            <a href="#">Seguimiento de Indicadores</a>
+            <a href="#">Evaluación de Programas de Salud</a>
+            <a href="#">Control y Vigilancia Epidemiológica</a>
+            <a href="#">Gestión de Riesgos en Salud Pública</a>
+            <a href="#">Estrategias para la Promoción de la Salud</a>
+            <a href="#">Atención Primaria en Comunidades Rurales</a>
+            <a href="#">Desarrollo de Políticas Sanitarias</a>
+            <a href="#">Iniciativas para el Bienestar Infantil</a>
+            <a href="#">Capacitaciones en Salud Preventiva</a>
+            <a href="#">Optimización de Recursos en Hospitales</a>
+            <a href="#">Monitoreo de Enfermedades Transmisibles</a>
+            <a href="#">Planificación Familiar y Salud Reproductiva</a>
+            <a href="#">Atención Integral al Paciente Crónico</a>
+            <a href="#">Salud Ocupacional y Prevención de Riesgos</a>
+            <a href="#">Investigación en Salud Pública</a>
+            <a href="#">Desarrollo de Programas de Nutrición</a>
+            <a href="#">Seguridad del Paciente en Centros de Salud</a>
+            <a href="#">Optimización del Sistema de Referencias Médicas</a>
+            <a href="#">Prevención y Manejo de Enfermedades No Transmisibles</a>
+            <a href="#">Fortalecimiento de Redes de Salud</a>
+        </div>
+    </div>
+
+
     <div class="row">
         <div class="col-lg-12 col-md-12">
             {{-- <div class="card card-border">
@@ -71,7 +242,7 @@
                             <div class="custom-select-container">
                                 <label for="red">Red</label>
                                 <select id="red" name="red" class="form-control form-control-sm font-11"
-                                    onchange="cargarMicrored('micro');">
+                                    onchange="cargarMicrored();">
                                     <option value="0">TODOS</option>
                                     @foreach ($red as $item)
                                         <option value="{{ $item->id }}">{{ $item->codigo }} {{ $item->nombre }}
@@ -141,8 +312,8 @@
     </form>
 
     <!-- Bootstrap modal -->
-    <div id="modal_form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
-        style="display: none;">
+    <div id="modal_form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true" style="display: none;">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -181,33 +352,6 @@
                                     </div>
                                 </div>
                             </div>
-                            {{-- <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label for="dni">DNI <span class="required">*</span></label>
-                                        <div class="input-group">
-                                            <input type="number" id="dni" name="dni" class="form-control"
-                                                placeholder="Número de Documento" min="10000000" max="99999999"
-                                                oninput="limitarDNI(this)" aria-label="Número de Documento">
-                                            <div class="input-group-append">
-                                                <button type="button" class="btn btn-primary" onclick="buscardni();"
-                                                    id="btnbuscardni" aria-label="Buscar DNI">
-                                                    <i class="fas fa-search"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <span class="help-block"></span>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="nombres">Nombres <span class="required">*</span></label>
-                                        <input id="nombres" name="nombres" class="form-control" type="text"
-                                            oninput="convertToUppercase(this)" maxlength="150"
-                                            placeholder="Ingrese Nombres" aria-label="Ingrese Nombres">
-                                        <span class="help-block"></span>
-                                    </div>
-                                </div>
-                            </div> --}}
-
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
@@ -270,21 +414,17 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label>Red</label>
-                                        <select id="fred" name="fred" class="form-control"
-                                            onchange="cargarMicrored('fmicrored')">
+                                        <select id="fred" name="fred" class="form-control">
                                             <option value="0">SELECCIONAR</option>
-                                            @foreach ($red as $item)
-                                                <option value="{{ $item->id }}">{{ $item->codigo }}
-                                                    {{ $item->nombre }}
-                                                </option>
-                                            @endforeach
+                                            <option value="2">RED</option>
+                                            <option value="3">MICRORED</option>
+                                            <option value="4">EE.SS</option>
                                         </select>
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
                                         <label>Microred</label>
-                                        <select id="fmicrored" name="fmicrored" class="form-control"
-                                            onchange="cargarEESS()">
+                                        <select id="fmicrored" name="fmicrored" class="form-control">
                                             <option value="0">SELECCIONAR</option>
                                         </select>
                                         <span class="help-block"></span>
@@ -298,9 +438,9 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <label>Establecimiento de salud</label>
-                                        <select id="feess" name="feess" class="form-control">
-                                            <option value="0">SELECCIONAR</option>
-                                        </select>
+                                        <input id="eess" name="eess" class="form-control" type="hidden">
+                                        <input id="eess" name="eess" class="form-control" type="text"
+                                            oninput="convertToUppercase(this)" placeholder="Ingrese Entidad">
                                         <span class="help-block"></span>
                                     </div>
 
@@ -612,12 +752,6 @@
 
         });
 
-        function limitarDNI(input) {
-            if (input.value.length > 8) {
-                input.value = input.value.slice(0, 8); // Limita a 8 dígitos
-            }
-        }
-
         function cargartableprincipal() {
             table_principal = $('#tbprincipal').DataTable({
                 responsive: true,
@@ -639,6 +773,14 @@
                 },
 
             });
+        }
+
+        function openPanel() {
+            document.getElementById("offcanvasPanel").classList.add("show");
+        }
+
+        function closePanel() {
+            document.getElementById("offcanvasPanel").classList.remove("show");
         }
 
         function convertToUppercase(input) {
@@ -854,44 +996,21 @@
             });
         };
 
-        function cargarMicrored(select) {
-            red = select == 'micro' ? $('#red').val() : ('fmicrored' ? $('#fred').val() : 0);
+        function cargarMicrored() {
             $.ajax({
                 url: "{{ route('microred.cargar.find', ['red' => ':red']) }}"
-                    .replace(':red', red),
+                    .replace(':red', $('#red').val()),
                 type: 'GET',
                 success: function(data) {
-                    $(`#${select} option`).remove();
+                    $("#micro option").remove();
                     var options = data.length > 1 ? '<option value="0">TODOS</option>' : '';
                     $.each(data, function(index, value) {
                         //ss = (id == value.id ? "selected" : "");
                         options +=
                             `<option value='${value.id}'>${value.codigo} ${value.nombre}</option>`;
                     });
-                    $(`#${select}`).append(options);
-                    if (select == 'micro') cargartableprincipal();
-                    if (select == 'fmicrored') cargarEESS();
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
-        }
-
-        function cargarEESS() {
-            $.ajax({
-                url: "{{ route('eess.cargareess.select', ['microred' => ':microred']) }}"
-                    .replace(':microred', $('#fmicrored').val()),
-                type: 'GET',
-                success: function(data) {
-                    $(`#feess option`).remove();
-                    var options = data.length > 1 ? '<option value="0">TODOS</option>' : '';
-                    $.each(data, function(index, value) {
-                        //ss = (id == value.id ? "selected" : "");
-                        options +=
-                            `<option value='${value.id}'>${value.codigo_unico} | ${value.nombre_establecimiento}</option>`;
-                    });
-                    $(`#feess`).append(options);
+                    $("#micro").append(options);
+                    cargartableprincipal();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);

@@ -1342,8 +1342,11 @@ Route::get('/EESS/List/Registro/reg2', [EstablecimientoController::class, 'regis
 Route::get('/EESS/CargarRed', [EstablecimientoController::class, 'cargarRed'])->name('eess.cargarred');
 Route::get('/EESS/CargarMicrored', [EstablecimientoController::class, 'cargarMicrored'])->name('eess.cargarmicrored');
 Route::get('/EESS/Cargareess', [EstablecimientoController::class, 'cargarEESS'])->name('eess.cargareess');
+Route::get('/EESS/Cargareess/Select/{microred}', [EstablecimientoController::class, 'cargarEESSSelect'])->name('eess.cargareess.select');
 Route::get('/EESS/Find/AUTOCOMPLETE', [EstablecimientoController::class, 'autocompletarEntidad'])->name('eess.autocomplete');
 Route::get('/EESS/Find/{id}', [EstablecimientoController::class, 'ajax_edit'])->name('eess.find');
+
+Route::get('/Microred/Find/cargarMicrored/{red}', [EstablecimientoController::class, 'cargarMicroredSelect'])->name('microred.cargar.find');
 
 
 Route::get('/Salud/PadronNominal/Importar', [ImporPadronNominalController::class, 'importar'])->name('salud.padron.importar.index'); //->name('salud.padronnominal.importar');

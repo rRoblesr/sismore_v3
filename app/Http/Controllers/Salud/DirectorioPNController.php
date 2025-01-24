@@ -21,8 +21,10 @@ class DirectorioPNController extends Controller
 
     public function principal()
     {
+        // $red = DB::table('sal_red')->where('cod_disa', '34')->get();
+        $red = DB::select("SELECT * from sal_red where id in( SELECT DISTINCT red_id from sal_microred where id in( SELECT DISTINCT microrred_id FROM `sal_establecimiento` where cod_disa=34 and categoria in ('I-1','I-2','I-3','I-4') and institucion in ('GOBIERNO REGIONAL','MINSA') and estado='ACTIVO'))");
         $mensaje = "";
-        return view('salud.DirectorioPN.Principal', compact('mensaje'));
+        return view('salud.DirectorioPN.Principal', compact('mensaje', 'red'));
     }
 
     public function ListarDTImportFuenteTodos(Request $rq)
@@ -30,7 +32,6 @@ class DirectorioPNController extends Controller
         $draw = intval($rq->draw);
         $start = intval($rq->start);
         $length = intval($rq->length);
-        $nivel = ['1' => 'DIRESA', '2' => 'RED', '3' => 'MICRORED', '4' => 'EE.SS'];
 
         $query = DirectorioPN::orderBy('id', 'desc');
         if ($rq->nivel > 0) {
@@ -53,8 +54,10 @@ class DirectorioPNController extends Controller
 
             $data[] = array(
                 $key + 1,
-                $nivel[$value->nivel] ?? '',
-                $this->getentidad($value->nivel, $value->codigo),
+                '',
+                '',
+                '',
+                '',
                 $value->nombres . ' ' . $value->apellido_paterno . ' ' . $value->apellido_materno,
                 $value->cargo,
                 $value->condicion_laboral,
@@ -132,14 +135,8 @@ class DirectorioPNController extends Controller
             $data['status'] = FALSE;
         }
 
-        if ($request->nivel == '0') {
-            $data['inputerror'][] = 'nivel';
-            $data['error_string'][] = 'Este campo es obligatorio.';
-            $data['status'] = FALSE;
-        }
-
-        if ($request->entidadn == 0) {
-            $data['inputerror'][] = 'entidadn';
+        if ($request->feess == '') {
+            $data['inputerror'][] = 'feess';
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
         }
@@ -172,8 +169,9 @@ class DirectorioPNController extends Controller
             'profesion' => $request->profesion,
             'cargo' => $request->cargo,
             'condicion_laboral' => $request->condicion_laboral,
-            'nivel' => $request->nivel,
-            'codigo' => $request->entidad,
+            'red_id' => $request->fred,
+            'microred_id' => $request->fmicrored,
+            'establecimiento_id' => $request->feess,
             'celular' => $request->celular,
             'email' => $request->email,
         ]);

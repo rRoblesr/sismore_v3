@@ -50,6 +50,19 @@ class EstablecimientoController extends Controller
         return response()->json(compact('micro'));
     }
 
+    public function cargarMicroredSelect($red)
+    {
+        // $micro = DB::table('sal_microred')->where('red_id', $red)->get();
+        $micro = DB::select("SELECT * from sal_microred where id in( SELECT DISTINCT microrred_id FROM `sal_establecimiento` where red_id=$red and cod_disa=34 and categoria in ('I-1','I-2','I-3','I-4') and institucion in ('GOBIERNO REGIONAL','MINSA') and estado='ACTIVO')");
+        return  response()->json($micro);
+    }
+
+    public function cargarEESSSelect($microred)
+    {
+        $micro = DB::select("SELECT * FROM `sal_establecimiento` where microrred_id=$microred and cod_disa=34 and categoria in ('I-1','I-2','I-3','I-4') and institucion in ('GOBIERNO REGIONAL','MINSA') and estado='ACTIVO' order by nombre_establecimiento");
+        return  response()->json($micro);
+    }
+
     public function cargarEESS(Request $rq)
     {
         $eess = EstablecimientoRepositorio::listEESS($rq->sector, $rq->municipio, $rq->red, $rq->microred);
@@ -215,7 +228,7 @@ class EstablecimientoController extends Controller
                     : [['label' => 'SIN REGISTROS', 'id' => 0]];
                 break;
             case '4':
-                $query =EstablecimientoRepositorio::queAtiendenAutocompletar($term);
+                $query = EstablecimientoRepositorio::queAtiendenAutocompletar($term);
                 $data = $query->count() > 0
                     ? $query->map(fn($value) => ['label' => str_pad($value->cod_unico, 8, '0', STR_PAD_LEFT) . ' | ' . $value->nombre_establecimiento, 'id' => $value->id])->toArray()
                     : [['label' => 'SIN REGISTROS', 'id' => 0]];

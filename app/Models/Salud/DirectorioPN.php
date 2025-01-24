@@ -10,7 +10,7 @@ class DirectorioPN extends Model
   use HasFactory;
 
   protected $table = "sal_directorio_pn";
-  //public $timestamps = false;
+  // public $timestamps = false;
   /**
    * The attributes that are mass assignable.
    *
@@ -25,10 +25,11 @@ class DirectorioPN extends Model
     'profesion',
     'cargo',
     'condicion_laboral',
-    'nivel',
-    'codigo',
+    'red_id',
+    'microred_id',
+    'establecimiento_id',
     'celular',
-    'email',
+    'email'
     //        'created_at',
     //      'updated_at',
   ];
