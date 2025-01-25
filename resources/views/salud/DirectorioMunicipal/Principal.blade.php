@@ -47,205 +47,13 @@
 @endsection
 
 @section('content')
-
-    {{-- <div class="container mt-3">
-        <div class="card">
-            <div
-                class="card-header bg-primary text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center">
-                <h6 class="mb-2 mb-md-0 text-center text-md-left text-wrap">
-                    <i class="fas fa-chart-bar"></i> PORCENTAJE DE NIÑAS Y NIÑOS MENORES DE 6 AÑOS DEL PADRÓN NOMINAL CON
-                    INFORMACIÓN HOMOLOGADA Y ACTUALIZADA
-                </h6>
-                <div class="d-flex align-items-center">
-                    <select id="filtrooEdad" class="form-control form-control-sm mr-2">
-                        <option value="">📅 Filtrar por Edad</option>
-                        <option value="18">18 años</option>
-                        <option value="25">25 años</option>
-                        <option value="30">30 años</option>
-                        <option value="35">35 años</option>
-                    </select>
-                    <button class="btn btn-success btn-sm mr-1" onclick="nuevoRegistro()">
-                        <i class="fas fa-plus"></i> Nuevo
-                    </button>
-                    <button class="btn btn-light btn-sm" onclick="refrescarTabla()">
-                        <i class="fas fa-sync-alt"></i> Actualizar
-                    </button>
-                </div>
-            </div>
-
-            <!-- 📊 Tabla con DataTables -->
-            <div class="card-body p-2">
-                <div class="table-responsive">
-                    <table id="tablaDatos" class="table table-sm table-striped table-bordered text-center">
-                        <thead class="bg-secondary text-white">
-                            <tr>
-                                <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Edad</th>
-                                <th>Email</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Juan Pérez</td>
-                                <td>28</td>
-                                <td>juan@example.com</td>
-                                <td>
-                                    <button class="btn btn-success btn-sm"><i class="fas fa-edit"></i></button>
-                                    <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Maria López</td>
-                                <td>35</td>
-                                <td>maria@example.com</td>
-                                <td>
-                                    <button class="btn btn-success btn-sm"><i class="fas fa-edit"></i></button>
-                                    <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
-    {{-- <div class="container mt-3">
-        <div class="card">
-            <div
-                class="card-header bg-primary text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center">
-                <h6 class="mb-2 mb-md-0 text-center text-md-left text-wrap">
-                    <i class="fas fa-chart-bar"></i> PORCENTAJE DE NIÑAS Y NIÑOS MENORES DE 6 AÑOS DEL PADRÓN NOMINAL CON
-                    INFORMACIÓN HOMOLOGADA Y ACTUALIZADA
-                </h6>
-                <div class="text-center text-md-right">
-                    <button class="btn btn-success btn-sm" onclick="nuevoRegistro()">
-                        <i class="fas fa-plus"></i> Nuevo
-                    </button>
-                    <button class="btn btn-light btn-sm" onclick="refrescarTabla()">
-                        <i class="fas fa-sync-alt"></i> Actualizar
-                    </button>
-                </div>
-            </div>
-
-            <!-- 🔍 Filtros en una barra flotante -->
-            <div class="card-body p-2">
-                <div class="row mb-3">
-                    <div class="col-md-5">
-                        <input type="text" id="filtroNombre" class="form-control form-control-sm"
-                            placeholder="🔍 Buscar por Nombre">
-                    </div>
-                    <div class="col-md-4">
-                        <select id="filtroEdad" class="form-control form-control-sm">
-                            <option value="">📅 Filtrar por Edad</option>
-                            <option value="18">18 años</option>
-                            <option value="25">25 años</option>
-                            <option value="30">30 años</option>
-                            <option value="35">35 años</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3 text-right">
-                        <button class="btn btn-secondary btn-sm" onclick="limpiarFiltros()">
-                            <i class="fas fa-eraser"></i> Limpiar Filtros
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 📊 Tabla con DataTables -->
-                <div class="table-responsive">
-                    <table id="tablaDatos" class="table table-sm table-striped table-bordered text-center">
-                        <thead class="bg-secondary text-white">
-                            <tr>
-                                <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Edad</th>
-                                <th>Email</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Juan Pérez</td>
-                                <td>28</td>
-                                <td>juan@example.com</td>
-                                <td>
-                                    <button class="btn btn-success btn-sm"><i class="fas fa-edit"></i></button>
-                                    <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Maria López</td>
-                                <td>35</td>
-                                <td>maria@example.com</td>
-                                <td>
-                                    <button class="btn btn-success btn-sm"><i class="fas fa-edit"></i></button>
-                                    <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
-    {{-- <div class="card">
-        <div class="card-header bg-success-0">
-            <div class="card-widgets">
-                <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i class="fa fa-redo"></i>
-                    Actualizar</button>
-                <button type="button" class="btn btn-primary btn-xs" onclick="add()"><i class="fa fa-plus"></i>
-                    Nuevo</button>
-            </div>
-            <h3 class="card-title text-white">Directorio del Padron Nominal</h3>
-        </div>
-        <div class="card-body pb-2">
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                    <h3 class="card-title">Directorio del Padron Nominal </h3>
-                </div>
-
-                <div class="col-lg-3 col-md-2 col-sm-2">
-                    <div class="custom-select-container">
-                        <label for="red">Red</label>
-                        <select id="red" name="red" class="form-control form-control-sm font-11"
-                            onchange="cargarMicrored('micro');">
-                            <option value="0">TODOS</option>
-                            @foreach ($red as $item)
-                                <option value="{{ $item->id }}">{{ $item->codigo }} {{ $item->nombre }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-2 col-sm-2">
-                    <div class="custom-select-container">
-                        <label for="micro">Microred</label>
-                        <select id="micro" name="micro" class="form-control form-control-sm font-11"
-                            onchange="cargartableprincipal();" data-toggle="codigox">
-                            <option value="0">TODOS</option>
-                        </select>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div> --}}
-
     <div class="card">
         <!--div class="card card-border"><div class="card-header border-success-0 bg-transparent p-0"-->
         <div
             class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center">
             <!--h3 class="card-title"></h3-->
             <h6 class="card-title mb-2 mb-md-0 text-center text-white text-md-left text-wrap">
-                <!--i class="fas fa-chart-bar"></i--> Directorio de Establecimientos de salud del Padron Nominal
+                <!--i class="fas fa-chart-bar"></i--> Directorio de municipalidades del Padron Nominal
             </h6>
             <div class="text-center text-md-right">
                 <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
@@ -258,11 +66,10 @@
 
         <div class="card-body p-2">
             <div class="row mb-3">
-                {{-- <div class="col-4"></div> --}}
                 <div class="col-6">
                     <div class="custom-select-container">
-                        <label for="red">Red</label>
-                        <select id="red" name="red" class="form-control form-control-sm font-11"
+                        <label for="provincia">Provincia</label>
+                        <select id="provincia" name="provincia" class="form-control form-control-sm font-11"
                             onchange="cargarMicrored('micro');">
                             <option value="0">TODOS</option>
                             @foreach ($red as $item)
@@ -275,8 +82,8 @@
 
                 <div class="col-6">
                     <div class="custom-select-container">
-                        <label for="micro">Microred</label>
-                        <select id="micro" name="micro" class="form-control form-control-sm font-11"
+                        <label for="distrito">Distrito</label>
+                        <select id="distrito" name="distrito" class="form-control form-control-sm font-11"
                             onchange="cargartableprincipal();" data-toggle="codigox">
                             <option value="0">TODOS</option>
                         </select>
@@ -288,10 +95,9 @@
                     <thead class="cabecera-dataTable">
                         <tr class="bg-success-0 text-white">
                             <th>Nº</th>
-                            <th>Red</th>
-                            <th>Microred</th>
-                            <th>Código</th>
-                            <th>Establecimiento de salud</th>
+                            <th>Provincia</th>
+                            <th>Distrito</th>
+                            <th>Establecimiento</th>
                             <th>Responsable</th>
                             <th>Cargo</th>
                             <th>Condición Laboral</th>
@@ -340,8 +146,7 @@
                                     <div class="col-md-6">
                                         <label>Nombres<span class="required">*</span></label>
                                         <input id="nombres" name="nombres" class="form-control" type="text"
-                                            oninput="convertToUppercase(this)" maxlength="150"
-                                            placeholder="Nombres">
+                                            oninput="convertToUppercase(this)" maxlength="150" placeholder="Nombres">
                                         <span class="help-block"></span>
                                     </div>
                                 </div>
@@ -434,9 +239,9 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>Red</label>
-                                        <select id="fred" name="fred" class="form-control"
-                                            onchange="cargarMicrored('fmicrored')">
+                                        <label>Provincia</label>
+                                        <select id="fprovincia" name="fprovincia" class="form-control"
+                                            onchange="cargarDistrito()">
                                             <option value="0">SELECCIONAR</option>
                                             @foreach ($red as $item)
                                                 <option value="{{ $item->id }}">{{ $item->codigo }}
@@ -447,23 +252,8 @@
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
-                                        <label>Microred</label>
-                                        <select id="fmicrored" name="fmicrored" class="form-control"
-                                            onchange="cargarEESS()">
-                                            <option value="0">SELECCIONAR</option>
-                                        </select>
-                                        <span class="help-block"></span>
-                                    </div>
-
-
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <label>Establecimiento de salud</label>
-                                        <select id="feess" name="feess" class="form-control">
+                                        <label>Distrito</label>
+                                        <select id="fdistrito" name="fdistrito" class="form-control">
                                             <option value="0">SELECCIONAR</option>
                                         </select>
                                         <span class="help-block"></span>
@@ -602,7 +392,7 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>Red</label>
+                                        <label>Provincia</label>
                                         <select id="vred" name="vred" class="form-control" disabled>
                                             <option value="0">SELECCIONAR</option>
                                             @foreach ($red as $item)
@@ -614,7 +404,7 @@
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
-                                        <label>Microred</label>
+                                        <label>Distrito</label>
                                         <select id="vmicrored" name="vmicrored" class="form-control" disabled>
                                             <option value="0">SELECCIONAR</option>
                                         </select>
@@ -886,11 +676,11 @@
             $('#btnSave').attr('disabled', true);
             var url;
             if (save_method == 'add') {
-                url = "{{ url('/') }}/Mantenimiento/Directorio/ajax_add";
+                url = "{{ url('/') }}/Mantenimiento/Directorio/Municipal/ajax_add";
                 msgsuccess = "El registro fue creado exitosamente.";
                 msgerror = "El registro no se pudo crear verifique las validaciones.";
             } else {
-                url = "{{ url('/') }}/Mantenimiento/Directorio/ajax_update";
+                url = "{{ url('/') }}/Mantenimiento/Directorio/Municipal/ajax_update";
                 msgsuccess = "El registro fue actualizado exitosamente.";
                 msgerror = "El registro no se pudo actualizar. Verifique la operación";
             }
@@ -928,7 +718,7 @@
             $('.form-group').removeClass('has-error');
             $('.help-block').empty();
             $.ajax({
-                url: "{{ url('/') }}/Mantenimiento/Directorio/ajax_edit/" + id,
+                url: "{{ url('/') }}/Mantenimiento/Directorio/Municipal/ajax_edit/" + id,
                 type: "GET",
                 dataType: "JSON",
                 success: function(data) {
@@ -959,7 +749,7 @@
             bootbox.confirm("Seguro desea Eliminar este registro?", function(result) {
                 if (result === true) {
                     $.ajax({
-                        url: "{{ url('/') }}/Mantenimiento/Directorio/ajax_delete/" + id,
+                        url: "{{ url('/') }}/Mantenimiento/Directorio/Municipal/ajax_delete/" + id,
                         type: "GET",
                         dataType: "JSON",
                         success: function(data) {
@@ -987,7 +777,7 @@
                 result) {
                 if (result === true) {
                     $.ajax({
-                        url: "{{ url('/') }}/Mantenimiento/Directorio/ajax_estado/" + id,
+                        url: "{{ url('/') }}/Mantenimiento/Directorio/Municipal/ajax_estado/" + id,
                         /* type: "POST", */
                         dataType: "JSON",
                         success: function(data) {
@@ -1015,7 +805,7 @@
             $('.form-group').removeClass('has-error');
             $('.help-block').empty();
             $.ajax({
-                url: "{{ url('/') }}/Mantenimiento/Directorio/ajax_edit/" + id,
+                url: "{{ url('/') }}/Mantenimiento/Directorio/Municipal/ajax_edit/" + id,
                 type: "GET",
                 dataType: "JSON",
                 success: function(data) {
@@ -1042,8 +832,8 @@
             });
         };
 
-        function cargarMicrored(select) {
-            red = select == 'micro' ? $('#red').val() : ('fmicrored' ? $('#fred').val() : 0);
+        function cargarDistrito(select) {
+            red = select == 'provincia' ? $('#provincia').val() : ('fprovincia' ? $('#fprovincia').val() : 0);
             $.ajax({
                 url: "{{ route('microred.cargar.find', ['red' => ':red']) }}"
                     .replace(':red', red),

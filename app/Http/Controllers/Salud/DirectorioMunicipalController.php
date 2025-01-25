@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Salud;
 
 use App\Http\Controllers\Controller;
-use App\Models\Salud\DirectorioPN;
-use App\Models\Salud\Establecimiento;
+use App\Models\Parametro\Ubigeo;
+use App\Models\Salud\DirectorioMunicipal;
+use App\Repositories\Parametro\UbigeoRepositorio;
+use App\Repositories\Salud\DirectorioMunicipalRepositorio;
 use App\Repositories\Salud\EstablecimientoRepositorio;
 use Exception;
 use Illuminate\Http\Request;
@@ -12,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 
 use function PHPUnit\Framework\isNull;
 
-class DirectorioPNController extends Controller
+class DirectorioMunicipalController extends Controller
 {
     public function __construct()
     {
@@ -21,10 +23,9 @@ class DirectorioPNController extends Controller
 
     public function principal()
     {
-        // $red = DB::table('sal_red')->where('cod_disa', '34')->get();
-        $red = DB::select("SELECT * from sal_red where id in( SELECT DISTINCT red_id from sal_microred where id in( SELECT DISTINCT microrred_id FROM `sal_establecimiento` where cod_disa=34 and categoria in ('I-1','I-2','I-3','I-4') and institucion in ('GOBIERNO REGIONAL','MINSA') and estado='ACTIVO'))");
+        $red = Ubigeo::select('id', 'codigo', 'nombre')->whereRaw('length(codigo) = 4')->where('codigo', 'like', '25%')->get();
         $mensaje = "";
-        return view('salud.DirectorioPN.Principal', compact('mensaje', 'red'));
+        return view('salud.DirectorioMunicipal.Principal', compact('mensaje', 'red'));
     }
 
     public function ListarDTImportFuenteTodos(Request $rq)
@@ -33,7 +34,7 @@ class DirectorioPNController extends Controller
         $start = intval($rq->start);
         $length = intval($rq->length);
 
-        $query = DirectorioPN::orderBy('id', 'desc');
+        $query = DirectorioMunicipal::orderBy('id', 'desc');
         if ($rq->red > 0) {
             $query = $query->where('red_id', $rq->red);
         }
@@ -90,7 +91,7 @@ class DirectorioPNController extends Controller
         $data['inputerror'] = array();
         $data['status'] = TRUE;
 
-        $usuarioxx = DirectorioPN::where('dni', $request->dni)->first();
+        $usuarioxx = DirectorioMunicipal::where('dni', $request->dni)->first();
 
         if ($request->dni == '') {
             $data['inputerror'][] = 'dni';
@@ -142,7 +143,7 @@ class DirectorioPNController extends Controller
             $data['status'] = FALSE;
         }
 
-        if ($request->feess == '') {
+        if ($request->fdistrito == '') {
             $data['inputerror'][] = 'feess';
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
@@ -167,7 +168,7 @@ class DirectorioPNController extends Controller
     public function ajax_add(Request $request)
     {
         $this->_validate($request);
-        $rer = DirectorioPN::Create([
+        $rer = DirectorioMunicipal::Create([
             'dni' => $request->dni,
             'nombres' => $request->nombres,
             'apellido_paterno' => $request->apellido_paterno,
@@ -187,7 +188,7 @@ class DirectorioPNController extends Controller
     public function ajax_update(Request $request)
     {
         $this->_validate($request);
-        $rer = DirectorioPN::find($request->id);
+        $rer = DirectorioMunicipal::find($request->id);
         $rer->dni = $request->dni;
         $rer->nombres = $request->nombres;
         $rer->apellido_paterno = $request->apellido_paterno;
@@ -207,50 +208,21 @@ class DirectorioPNController extends Controller
     }
     public function ajax_edit($id)
     {
-        $dpn = DirectorioPN::find($id);
+        $dpn = DirectorioMunicipal::find($id);
         // $dpn->entidadn = $this->getentidad($dpn->nivel, $dpn->codigo);
         return response()->json(compact('dpn'));
     }
 
-    public function getentidad($nivel, $codigo)
-    {
-        switch ($nivel) {
-            case '2':
-                $query = DB::table('sal_red')->where('id', $codigo)->first();
-                if ($query) {
-                    return $query->codigo . ' ' . $query->nombre;
-                }
-                break;
-
-            case '3':
-                $query = DB::table('sal_microred')->where('id', $codigo)->first();
-                if ($query) {
-                    return $query->codigo . ' ' . $query->nombre;
-                }
-                break;
-
-            case '4':
-                $query = Establecimiento::find($codigo);
-                if ($query) {
-                    return str_pad($query->cod_unico, 8, '0', STR_PAD_LEFT) . ' | ' . $query->nombre_establecimiento;
-                }
-                break;
-
-            default:
-                return '';
-                break;
-        }
-    }
 
     public function ajax_delete($id) //elimina deverdad *o*
     {
-        $rer = DirectorioPN::find($id);
+        $rer = DirectorioMunicipal::find($id);
         $rer->delete();
         return response()->json(array('status' => true, 'rer' => $rer));
     }
     public function ajax_estado($id)
     {
-        $rer = DirectorioPN::find($id);
+        $rer = DirectorioMunicipal::find($id);
         $rer->estado = $rer->estado == '0' ? '1' : '0';
         $rer->save();
         return response()->json(array('status' => true, 'estado' => $rer->estado));
@@ -259,7 +231,7 @@ class DirectorioPNController extends Controller
     public function autocompletarProfesion(Request $rq)
     {
         $term = $rq->term;
-        $query = DirectorioPN::distinct()->select('profesion')
+        $query = DirectorioMunicipal::distinct()->select('profesion')
             ->where(function ($q) use ($term) {
                 $q->where('profesion', 'like', '%' . $term . '%'); //->orWhere('codigo', 'like', '%' . $term . '%');
             })->get();
@@ -274,7 +246,7 @@ class DirectorioPNController extends Controller
     public function autocompletarCondicion(Request $rq)
     {
         $term = $rq->term;
-        $query = DirectorioPN::distinct()->select('condicion_laboral')
+        $query = DirectorioMunicipal::distinct()->select('condicion_laboral')
             ->where(function ($q) use ($term) {
                 $q->where('condicion_laboral', 'like', '%' . $term . '%'); //->orWhere('codigo', 'like', '%' . $term . '%');
             })->get();
@@ -289,7 +261,7 @@ class DirectorioPNController extends Controller
     public function autocompletarCargo(Request $rq)
     {
         $term = $rq->term;
-        $query = DirectorioPN::distinct()->select('cargo')
+        $query = DirectorioMunicipal::distinct()->select('cargo')
             ->where(function ($q) use ($term) {
                 $q->where('cargo', 'like', '%' . $term . '%'); //->orWhere('codigo', 'like', '%' . $term . '%');
             })->get();
@@ -297,23 +269,6 @@ class DirectorioPNController extends Controller
         $data = $query->count() > 0
             ? $query->map(fn($value) => ['label' => $value->cargo, 'id' => 0])->toArray()
             : [['label' => 'SIN REGISTROS', 'id' => 0]];
-
-        return response()->json($data);
-    }
-
-    public function cargarEntidad($nivel)
-    {
-        switch ($nivel) {
-            case '2':
-                return DB::table('sal_red')->select('id', DB::raw('concat(codigo," ",nombre) as nombrex'))->where('cod_disa', '34')->get();
-            case '3':
-                return DB::table('sal_microred as m')->join('sal_red as r', 'r.id', '=', 'm.red_id')
-                    ->select('m.id', DB::raw('concat(m.codigo," ",m.nombre," | ",r.nombre) as nombrex'))->where('m.cod_disa', '34')->get();
-            case '4':
-                return EstablecimientoRepositorio::queAtiendenCargar();
-            default:
-                return [];
-        }
 
         return response()->json($data);
     }

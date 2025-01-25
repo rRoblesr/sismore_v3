@@ -77,6 +77,7 @@ use App\Http\Controllers\Presupuesto\SubGenericaController;
 use App\Http\Controllers\Presupuesto\SubGenericaDetalleController;
 use App\Http\Controllers\Presupuesto\UnidadEjecutoraController;
 use App\Http\Controllers\Presupuesto\UnidadOrganicaController;
+use App\Http\Controllers\Salud\DirectorioMunicipalController;
 use App\Http\Controllers\Salud\DirectorioPNController;
 use App\Http\Controllers\Salud\EstablecimientoController;
 use App\Http\Controllers\Salud\ImporPadronActasController;
@@ -642,6 +643,14 @@ Route::get('/Mantenimiento/Directorio/Find/AUTOCOMPLETE/profesion', [DirectorioP
 Route::get('/Mantenimiento/Directorio/Find/AUTOCOMPLETE/cargo', [DirectorioPNController::class, 'autocompletarCargo'])->name('mantenimiento.directorio.autocomplete.cargo');
 Route::get('/Mantenimiento/Directorio/Find/AUTOCOMPLETE/condicion', [DirectorioPNController::class, 'autocompletarCondicion'])->name('mantenimiento.directorio.autocomplete.condicion');
 Route::get('/Mantenimiento/Directorio/Cargar/Entidad/{nivel}', [DirectorioPNController::class, 'cargarEntidad'])->name('mantenimiento.directorio.cargar.entidad');
+
+Route::get('/salud/Mantenimiento/Directorio/Municipal', [DirectorioMunicipalController::class, 'principal'])->middleware('auth')->name('mantenimiento.directorio.municipal.principal');
+Route::post('/Mantenimiento/Directorio/Municipal/Importados/', [DirectorioMunicipalController::class, 'ListarDTImportFuenteTodos'])->name('mantenimiento.directorio.municipal.listar.importados');
+Route::get('/Mantenimiento/Directorio/Municipal/ajax_edit/{id}', [DirectorioMunicipalController::class, 'ajax_edit'])->name('mantenimiento.directorio.municipal.find.1');
+Route::post('/Mantenimiento/Directorio/Municipal/ajax_add/', [DirectorioMunicipalController::class, 'ajax_add'])->name('mantenimiento.directorio.municipal.add');
+Route::post('/Mantenimiento/Directorio/Municipal/ajax_update/', [DirectorioMunicipalController::class, 'ajax_update'])->name('mantenimiento.directorio.municipal.update');
+Route::get('/Mantenimiento/Directorio/Municipal/ajax_estado/{id}', [DirectorioMunicipalController::class, 'ajax_estado'])->name('mantenimiento.directorio.municipal.estado');
+Route::get('/Mantenimiento/Directorio/Municipal/ajax_delete/{id}', [DirectorioMunicipalController::class, 'ajax_delete'])->name('mantenimiento.directorio.municipal.delete');
 
 Route::get('/educación/Mantenimiento/PadronRER', [PadronRERController::class, 'principal'])->middleware('auth')->name('mantenimiento.padronrer.principal');
 Route::post('/Mantenimiento/PadronRER/Importados/', [PadronRERController::class, 'ListarDTImportFuenteTodos'])->name('mantenimiento.padronrer.listar.importados');

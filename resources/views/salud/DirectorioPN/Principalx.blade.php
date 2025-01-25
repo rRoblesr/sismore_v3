@@ -47,155 +47,7 @@
 @endsection
 
 @section('content')
-
-    {{-- <div class="container mt-3">
-        <div class="card">
-            <div
-                class="card-header bg-primary text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center">
-                <h6 class="mb-2 mb-md-0 text-center text-md-left text-wrap">
-                    <i class="fas fa-chart-bar"></i> PORCENTAJE DE NIÑAS Y NIÑOS MENORES DE 6 AÑOS DEL PADRÓN NOMINAL CON
-                    INFORMACIÓN HOMOLOGADA Y ACTUALIZADA
-                </h6>
-                <div class="d-flex align-items-center">
-                    <select id="filtrooEdad" class="form-control form-control-sm mr-2">
-                        <option value="">📅 Filtrar por Edad</option>
-                        <option value="18">18 años</option>
-                        <option value="25">25 años</option>
-                        <option value="30">30 años</option>
-                        <option value="35">35 años</option>
-                    </select>
-                    <button class="btn btn-success btn-sm mr-1" onclick="nuevoRegistro()">
-                        <i class="fas fa-plus"></i> Nuevo
-                    </button>
-                    <button class="btn btn-light btn-sm" onclick="refrescarTabla()">
-                        <i class="fas fa-sync-alt"></i> Actualizar
-                    </button>
-                </div>
-            </div>
-
-            <!-- 📊 Tabla con DataTables -->
-            <div class="card-body p-2">
-                <div class="table-responsive">
-                    <table id="tablaDatos" class="table table-sm table-striped table-bordered text-center">
-                        <thead class="bg-secondary text-white">
-                            <tr>
-                                <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Edad</th>
-                                <th>Email</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Juan Pérez</td>
-                                <td>28</td>
-                                <td>juan@example.com</td>
-                                <td>
-                                    <button class="btn btn-success btn-sm"><i class="fas fa-edit"></i></button>
-                                    <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Maria López</td>
-                                <td>35</td>
-                                <td>maria@example.com</td>
-                                <td>
-                                    <button class="btn btn-success btn-sm"><i class="fas fa-edit"></i></button>
-                                    <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
-    {{-- <div class="container mt-3">
-        <div class="card">
-            <div
-                class="card-header bg-primary text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center">
-                <h6 class="mb-2 mb-md-0 text-center text-md-left text-wrap">
-                    <i class="fas fa-chart-bar"></i> PORCENTAJE DE NIÑAS Y NIÑOS MENORES DE 6 AÑOS DEL PADRÓN NOMINAL CON
-                    INFORMACIÓN HOMOLOGADA Y ACTUALIZADA
-                </h6>
-                <div class="text-center text-md-right">
-                    <button class="btn btn-success btn-sm" onclick="nuevoRegistro()">
-                        <i class="fas fa-plus"></i> Nuevo
-                    </button>
-                    <button class="btn btn-light btn-sm" onclick="refrescarTabla()">
-                        <i class="fas fa-sync-alt"></i> Actualizar
-                    </button>
-                </div>
-            </div>
-
-            <!-- 🔍 Filtros en una barra flotante -->
-            <div class="card-body p-2">
-                <div class="row mb-3">
-                    <div class="col-md-5">
-                        <input type="text" id="filtroNombre" class="form-control form-control-sm"
-                            placeholder="🔍 Buscar por Nombre">
-                    </div>
-                    <div class="col-md-4">
-                        <select id="filtroEdad" class="form-control form-control-sm">
-                            <option value="">📅 Filtrar por Edad</option>
-                            <option value="18">18 años</option>
-                            <option value="25">25 años</option>
-                            <option value="30">30 años</option>
-                            <option value="35">35 años</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3 text-right">
-                        <button class="btn btn-secondary btn-sm" onclick="limpiarFiltros()">
-                            <i class="fas fa-eraser"></i> Limpiar Filtros
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 📊 Tabla con DataTables -->
-                <div class="table-responsive">
-                    <table id="tablaDatos" class="table table-sm table-striped table-bordered text-center">
-                        <thead class="bg-secondary text-white">
-                            <tr>
-                                <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Edad</th>
-                                <th>Email</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Juan Pérez</td>
-                                <td>28</td>
-                                <td>juan@example.com</td>
-                                <td>
-                                    <button class="btn btn-success btn-sm"><i class="fas fa-edit"></i></button>
-                                    <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Maria López</td>
-                                <td>35</td>
-                                <td>maria@example.com</td>
-                                <td>
-                                    <button class="btn btn-success btn-sm"><i class="fas fa-edit"></i></button>
-                                    <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
-    {{-- <div class="card">
+    <div class="card">
         <div class="card-header bg-success-0">
             <div class="card-widgets">
                 <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i class="fa fa-redo"></i>
@@ -237,52 +89,15 @@
 
             </div>
         </div>
-    </div> --}}
+    </div>
 
-    <div class="card">
-        <!--div class="card card-border"><div class="card-header border-success-0 bg-transparent p-0"-->
-        <div
-            class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center">
-            <!--h3 class="card-title"></h3-->
-            <h6 class="card-title mb-2 mb-md-0 text-center text-white text-md-left text-wrap">
-                <!--i class="fas fa-chart-bar"></i--> Directorio de Establecimientos de salud del Padron Nominal
-            </h6>
-            <div class="text-center text-md-right">
-                <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
-                    <i class="fa fa-redo"></i> Actualizar</button>
-                <button type="button" class="btn btn-primary btn-xs" onclick="add()">
-                    <i class="fa fa-plus"></i> Nuevo</button>
-            </div>
-
+    <!--div class="card card-border"><div class="card-header border-success-0 bg-transparent p-0"-->
+    <div class="card card-border">
+        <div class="card-header border-success-0 bg-transparent p-0">
+            <h3 class="card-title"></h3>
         </div>
 
         <div class="card-body p-2">
-            <div class="row mb-3">
-                {{-- <div class="col-4"></div> --}}
-                <div class="col-6">
-                    <div class="custom-select-container">
-                        <label for="red">Red</label>
-                        <select id="red" name="red" class="form-control form-control-sm font-11"
-                            onchange="cargarMicrored('micro');">
-                            <option value="0">TODOS</option>
-                            @foreach ($red as $item)
-                                <option value="{{ $item->id }}">{{ $item->codigo }} {{ $item->nombre }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-6">
-                    <div class="custom-select-container">
-                        <label for="micro">Microred</label>
-                        <select id="micro" name="micro" class="form-control form-control-sm font-11"
-                            onchange="cargartableprincipal();" data-toggle="codigox">
-                            <option value="0">TODOS</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
             <div class="table-responsive">
                 <table id="tbprincipal" class="table table-striped table-bordered tablex" style="font-size: 12px">
                     <thead class="cabecera-dataTable">
@@ -341,7 +156,7 @@
                                         <label>Nombres<span class="required">*</span></label>
                                         <input id="nombres" name="nombres" class="form-control" type="text"
                                             oninput="convertToUppercase(this)" maxlength="150"
-                                            placeholder="Nombres">
+                                            placeholder="Ingrese Nombres">
                                         <span class="help-block"></span>
                                     </div>
                                 </div>
@@ -379,14 +194,14 @@
                                         <label>Apellido Paterno</label>
                                         <input id="apellido_paterno" name="apellido_paterno" class="form-control"
                                             type="text" oninput="convertToUppercase(this)" maxlength="100"
-                                            placeholder="Apellido Paterno">
+                                            placeholder="Imgrese Apellido Paterno">
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
                                         <label>Apellido Materno</label>
                                         <input id="apellido_materno" name="apellido_materno" class="form-control"
                                             type="text" oninput="convertToUppercase(this)" maxlength="100"
-                                            placeholder="Apellido Materno">
+                                            placeholder="Ingrese apellido Materno">
                                         <span class="help-block"></span>
                                     </div>
 
@@ -405,7 +220,7 @@
                                     <div class="col-md-6">
                                         <label>profesión</label>
                                         <input id="profesion" name="profesion" class="form-control" type="text"
-                                            oninput="convertToUppercase(this)" placeholder="Profesión">
+                                            oninput="convertToUppercase(this)" placeholder="Ingrese Profesión">
                                         <span class="help-block"></span>
                                     </div>
 
@@ -417,14 +232,14 @@
                                     <div class="col-md-6">
                                         <label>Cargo</label>
                                         <input id="cargo" name="cargo" class="form-control" type="text"
-                                            oninput="convertToUppercase(this)" placeholder="Cargo">
+                                            oninput="convertToUppercase(this)" placeholder="Ingrese Cargo">
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
                                         <label>Condición Laboral</label>
                                         <input id="condicion_laboral" name="condicion_laboral" class="form-control"
                                             type="text" oninput="convertToUppercase(this)"
-                                            placeholder="Condición Laboral">
+                                            placeholder="Ingrese Condición Laboral">
                                         <span class="help-block"></span>
                                     </div>
 
@@ -478,13 +293,13 @@
                                     <div class="col-md-6">
                                         <label>Celular</label>
                                         <input id="celular" name="celular" class="form-control" type="number"
-                                            placeholder="Celular">
+                                            placeholder="Ingrese Celular">
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
                                         <label>Correo Electronico</label>
                                         <input id="email" name="email" class="form-control" type="email"
-                                            placeholder="Correo Electronico">
+                                            placeholder="Ingrese Correo Electronico">
                                         <span class="help-block"></span>
                                     </div>
                                 </div>

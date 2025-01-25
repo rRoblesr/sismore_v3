@@ -300,4 +300,25 @@ class EstablecimientoRepositorio
         $query = Establecimiento::from('sal_establecimiento as es')->select('es.id', 'es.cod_unico')->get();
         return $query;
     }
+
+    public static function arrayIdRed()
+    {
+        $query = DB::select("SELECT * FROM sal_red where id in(SELECT DISTINCT red_id from sal_microred where id in( SELECT DISTINCT microrred_id FROM `sal_establecimiento` where cod_disa=34 and categoria in ('I-1','I-2','I-3','I-4') and institucion in ('GOBIERNO REGIONAL','MINSA') and estado='ACTIVO'))");
+        // return collect($query)->map(function ($item) {
+        //     return ['id' => $item->id, 'codigo' => $item->codigo, 'nombre' => $item->nombre];
+        // });
+        return collect($query)->pluck('nombre', 'id');
+    }
+
+    public static function arrayIdmicrored()
+    {
+        $query = DB::select("SELECT * from sal_microred where id in( SELECT DISTINCT microrred_id FROM `sal_establecimiento` where cod_disa=34 and categoria in ('I-1','I-2','I-3','I-4') and institucion in ('GOBIERNO REGIONAL','MINSA') and estado='ACTIVO')");
+        return collect($query)->pluck('nombre', 'id');
+    }
+
+    public static function arrayIdEESS()
+    {
+        $query = DB::select("SELECT id,codigo_unico,nombre_establecimiento FROM `sal_establecimiento` where cod_disa=34 and categoria in ('I-1','I-2','I-3','I-4') and institucion in ('GOBIERNO REGIONAL','MINSA') and estado='ACTIVO' order by nombre_establecimiento");
+        return collect($query);
+    }
 }
