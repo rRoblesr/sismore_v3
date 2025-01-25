@@ -70,7 +70,7 @@
                     <div class="custom-select-container">
                         <label for="provincia">Provincia</label>
                         <select id="provincia" name="provincia" class="form-control form-control-sm font-11"
-                            onchange="cargarMicrored('micro');">
+                            onchange="cargarDistrito('distrito');">
                             <option value="0">TODOS</option>
                             @foreach ($red as $item)
                                 <option value="{{ $item->id }}">{{ $item->codigo }} {{ $item->nombre }}
@@ -97,7 +97,7 @@
                             <th>Nº</th>
                             <th>Provincia</th>
                             <th>Distrito</th>
-                            <th>Establecimiento</th>
+                            <th>Municipalidad</th>
                             <th>Responsable</th>
                             <th>Cargo</th>
                             <th>Condición Laboral</th>
@@ -151,32 +151,6 @@
                                     </div>
                                 </div>
                             </div>
-                            {{-- <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label for="dni">DNI <span class="required">*</span></label>
-                                        <div class="input-group">
-                                            <input type="number" id="dni" name="dni" class="form-control"
-                                                placeholder="Número de Documento" min="10000000" max="99999999"
-                                                oninput="limitarDNI(this)" aria-label="Número de Documento">
-                                            <div class="input-group-append">
-                                                <button type="button" class="btn btn-primary" onclick="buscardni();"
-                                                    id="btnbuscardni" aria-label="Buscar DNI">
-                                                    <i class="fas fa-search"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <span class="help-block"></span>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="nombres">Nombres <span class="required">*</span></label>
-                                        <input id="nombres" name="nombres" class="form-control" type="text"
-                                            oninput="convertToUppercase(this)" maxlength="150"
-                                            placeholder="Ingrese Nombres" aria-label="Ingrese Nombres">
-                                        <span class="help-block"></span>
-                                    </div>
-                                </div>
-                            </div> --}}
 
                             <div class="form-group">
                                 <div class="row">
@@ -241,7 +215,7 @@
                                     <div class="col-md-6">
                                         <label>Provincia</label>
                                         <select id="fprovincia" name="fprovincia" class="form-control"
-                                            onchange="cargarDistrito()">
+                                            onchange="cargarDistrito('fdistrito')">
                                             <option value="0">SELECCIONAR</option>
                                             @foreach ($red as $item)
                                                 <option value="{{ $item->id }}">{{ $item->codigo }}
@@ -532,7 +506,7 @@
                 minLength: 2,
                 source: function(request, response) {
                     $.ajax({
-                        url: "{{ route('mantenimiento.directorio.autocomplete.profesion') }}",
+                        url: "{{ route('mantenimiento.directorio.municipal.autocomplete.profesion') }}",
                         data: {
                             term: request.term,
                         },
@@ -551,7 +525,7 @@
                 minLength: 2,
                 source: function(request, response) {
                     $.ajax({
-                        url: "{{ route('mantenimiento.directorio.autocomplete.cargo') }}",
+                        url: "{{ route('mantenimiento.directorio.municipal.autocomplete.cargo') }}",
                         data: {
                             term: request.term,
                         },
@@ -570,7 +544,7 @@
                 minLength: 2,
                 source: function(request, response) {
                     $.ajax({
-                        url: "{{ route('mantenimiento.directorio.autocomplete.condicion') }}",
+                        url: "{{ route('mantenimiento.directorio.municipal.autocomplete.condicion') }}",
                         data: {
                             term: request.term,
                         },
@@ -606,11 +580,10 @@
                     "headers": {
                         'X-CSRF-TOKEN': $('input[name=_token]').val()
                     },
-                    "url": "{{ route('mantenimiento.directorio.listar.importados') }}",
+                    "url": "{{ route('mantenimiento.directorio.municipal.listar.importados') }}",
                     "type": "POST",
                     "data": {
-                        red: $('#red').val(),
-                        micro: $('#micro').val()
+                        distrito: $('#distrito').val(),
                     },
                     //"dataType": 'JSON',
                 },
@@ -731,13 +704,13 @@
                     $('[name="profesion"]').val(data.dpn.profesion);
                     $('[name="cargo"]').val(data.dpn.cargo);
                     $('[name="condicion_laboral"]').val(data.dpn.condicion_laboral);
-                    $('[name="fred"]').val(data.dpn.red_id);
+                    $('[name="fprovincia"]').val(data.dpn.provincia_id);
                     $('[name="celular"]').val(data.dpn.celular);
                     $('[name="email"]').val(data.dpn.email);
                     $('#modal_form').modal('show');
                     $('.modal-title').text('Modificar Directorio');
 
-                    cargarSelectEESS(data.dpn.red_id, data.dpn.microred_id, data.dpn.establecimiento_id);
+                    cargarSelectDistrito(data.dpn.provincia_id, data.dpn.distrito_id);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     alert('Error get data from ajax');
@@ -833,10 +806,10 @@
         };
 
         function cargarDistrito(select) {
-            red = select == 'provincia' ? $('#provincia').val() : ('fprovincia' ? $('#fprovincia').val() : 0);
+            provincia = select == 'distrito' ? $('#provincia').val() : ('fdistrito' ? $('#fprovincia').val() : 0);
             $.ajax({
-                url: "{{ route('microred.cargar.find', ['red' => ':red']) }}"
-                    .replace(':red', red),
+                url: "{{ route('ubigeo.distrito.25.select', ['provincia' => ':provincia']) }}"
+                    .replace(':provincia', provincia),
                 type: 'GET',
                 success: function(data) {
                     $(`#${select} option`).remove();
@@ -847,8 +820,7 @@
                             `<option value='${value.id}'>${value.codigo} ${value.nombre}</option>`;
                     });
                     $(`#${select}`).append(options);
-                    if (select == 'micro') cargartableprincipal();
-                    if (select == 'fmicrored') cargarEESS();
+                    if (select == 'provincia') cargartableprincipal();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -856,61 +828,21 @@
             });
         }
 
-        function cargarEESS() {
+        function cargarSelectDistrito(provincia, distrito) {
             $.ajax({
-                url: "{{ route('eess.cargareess.select', ['microred' => ':microred']) }}"
-                    .replace(':microred', $('#fmicrored').val()),
+                url: "{{ route('ubigeo.distrito.25.select', ['provincia' => ':provincia']) }}"
+                .replace(':provincia', provincia),
                 type: 'GET',
                 success: function(data) {
-                    $(`#feess option`).remove();
+                    $(`#fdistrito option`).remove();
                     var options = data.length > 1 ? '<option value="0">TODOS</option>' : '';
                     $.each(data, function(index, value) {
-                        //ss = (id == value.id ? "selected" : "");
-                        options +=
-                            `<option value='${value.id}'>${value.codigo_unico} | ${value.nombre_establecimiento}</option>`;
-                    });
-                    $(`#feess`).append(options);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
-        }
-
-        function cargarSelectEESS(red, micro, eess) {
-            $.ajax({
-                url: "{{ route('microred.cargar.find', ['red' => ':red']) }}"
-                    .replace(':red', red),
-                type: 'GET',
-                success: function(data) {
-                    $(`#fmicrored option`).remove();
-                    var options = data.length > 1 ? '<option value="0">TODOS</option>' : '';
-                    $.each(data, function(index, value) {
-                        ss = (micro == value.id ? "selected" : "");
+                        ss = (distrito == value.id ? "selected" : "");
                         options +=
                             `<option value='${value.id}' ${ss}>${value.codigo} ${value.nombre}</option>`;
                     });
-                    $(`#fmicrored`).append(options);
-                    /////////////////////////////////////////////
-                    $.ajax({
-                        url: "{{ route('eess.cargareess.select', ['microred' => ':microred']) }}"
-                            .replace(':microred', micro),
-                        type: 'GET',
-                        success: function(data) {
-                            $(`#feess option`).remove();
-                            var options = data.length > 1 ? '<option value="0">TODOS</option>' : '';
-                            $.each(data, function(index, value) {
-                                ss = (eess == value.id ? "selected" : "");
-                                options +=
-                                    `<option value='${value.id}' ${ss}>${value.codigo_unico} | ${value.nombre_establecimiento}</option>`;
-                            });
-                            $(`#feess`).append(options);
-                        },
-                        error: function(jqXHR, textStatus, errorThrown) {
-                            console.log(jqXHR);
-                        },
-                    });
-                    ////////////////////////////////////////////////
+                    $(`#fdistrito`).append(options);
+                    
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);

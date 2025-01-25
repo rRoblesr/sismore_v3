@@ -35,18 +35,14 @@ class DirectorioMunicipalController extends Controller
         $length = intval($rq->length);
 
         $query = DirectorioMunicipal::orderBy('id', 'desc');
-        if ($rq->red > 0) {
-            $query = $query->where('red_id', $rq->red);
-        }
-        if ($rq->micro > 0) {
-            $query = $query->where('microred_id', $rq->micro);
+        if ($rq->distrito > 0) {
+            $query = $query->where('distrito_id', $rq->distrito);
         }
         $query = $query->get();
 
-        $red = EstablecimientoRepositorio::arrayIdRed();
-        $micro = EstablecimientoRepositorio::arrayIdmicrored();
-        $unico = EstablecimientoRepositorio::arrayIdEESS()->pluck('codigo_unico', 'id');
-        $eess = EstablecimientoRepositorio::arrayIdEESS()->pluck('nombre_establecimiento', 'id');
+        $provincia = UbigeoRepositorio::arrayProvinciaIdNombre();
+        $distrito = UbigeoRepositorio::arrayDistritoIdNombre();
+        $muni = DirectorioMunicipalRepositorio::listarMunicipalidadesIdMunicipalidad();
 
         $data = [];
         foreach ($query as $key => $value) {
@@ -61,10 +57,9 @@ class DirectorioMunicipalController extends Controller
 
             $data[] = array(
                 $key + 1,
-                $red[$value->red_id] ?? '-',
-                $micro[$value->microred_id] ?? '-',
-                $unico[$value->establecimiento_id] ?? '-',
-                $eess[$value->establecimiento_id] ?? '-',
+                $provincia[$value->provincia_id] ?? '-',
+                $distrito[$value->distrito_id] ?? '-',
+                $muni[$value->distrito_id] ?? '-',
                 $value->nombres . ' ' . $value->apellido_paterno . ' ' . $value->apellido_materno,
                 $value->cargo,
                 $value->condicion_laboral,
@@ -76,8 +71,7 @@ class DirectorioMunicipalController extends Controller
             "recordsTotal" => $start,
             "recordsFiltered" => $length,
             "data" => $data,
-            "rq" => $rq->all(),
-            'red' => $unico
+            // "rq" => $rq->all(),
         );
         return response()->json($result);
     }
@@ -144,7 +138,7 @@ class DirectorioMunicipalController extends Controller
         }
 
         if ($request->fdistrito == '') {
-            $data['inputerror'][] = 'feess';
+            $data['inputerror'][] = 'distrito_id';
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
         }
@@ -168,7 +162,7 @@ class DirectorioMunicipalController extends Controller
     public function ajax_add(Request $request)
     {
         $this->_validate($request);
-        $rer = DirectorioMunicipal::Create([
+        DirectorioMunicipal::Create([
             'dni' => $request->dni,
             'nombres' => $request->nombres,
             'apellido_paterno' => $request->apellido_paterno,
@@ -177,9 +171,8 @@ class DirectorioMunicipalController extends Controller
             'profesion' => $request->profesion,
             'cargo' => $request->cargo,
             'condicion_laboral' => $request->condicion_laboral,
-            'red_id' => $request->fred,
-            'microred_id' => $request->fmicrored,
-            'establecimiento_id' => $request->feess,
+            'provincia_id' => $request->fprovincia,
+            'distrito_id' => $request->fdistrito,
             'celular' => $request->celular,
             'email' => $request->email,
         ]);
@@ -197,19 +190,18 @@ class DirectorioMunicipalController extends Controller
         $rer->profesion = $request->profesion;
         $rer->cargo = $request->cargo;
         $rer->condicion_laboral = $request->condicion_laboral;
-        $rer->red_id = $request->fred;
-        $rer->microred_id = $request->fmicrored;
-        $rer->establecimiento_id = $request->feess;
+        $rer->provincia_id = $request->fprovincia;
+        $rer->distrito_id = $request->fdistrito;
         $rer->celular = $request->celular;
         $rer->email = $request->email;
         $rer->save();
 
+        // return response()->json(['status' => true, 'data' => $request->all(), 'obj' => $rer]);
         return response()->json(['status' => true, 'data' => $request->all(), 'obj' => $rer]);
     }
     public function ajax_edit($id)
     {
         $dpn = DirectorioMunicipal::find($id);
-        // $dpn->entidadn = $this->getentidad($dpn->nivel, $dpn->codigo);
         return response()->json(compact('dpn'));
     }
 
@@ -218,14 +210,14 @@ class DirectorioMunicipalController extends Controller
     {
         $rer = DirectorioMunicipal::find($id);
         $rer->delete();
-        return response()->json(array('status' => true, 'rer' => $rer));
+        return response()->json(array('status' => true));
     }
     public function ajax_estado($id)
     {
         $rer = DirectorioMunicipal::find($id);
         $rer->estado = $rer->estado == '0' ? '1' : '0';
         $rer->save();
-        return response()->json(array('status' => true, 'estado' => $rer->estado));
+        return response()->json(array('status' => true));
     }
 
     public function autocompletarProfesion(Request $rq)

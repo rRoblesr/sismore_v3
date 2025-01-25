@@ -253,7 +253,7 @@ class DirectorioPNController extends Controller
         $rer = DirectorioPN::find($id);
         $rer->estado = $rer->estado == '0' ? '1' : '0';
         $rer->save();
-        return response()->json(array('status' => true, 'estado' => $rer->estado));
+        return response()->json(array('status' => true));
     }
 
     public function autocompletarProfesion(Request $rq)
@@ -301,20 +301,20 @@ class DirectorioPNController extends Controller
         return response()->json($data);
     }
 
-    public function cargarEntidad($nivel)
-    {
-        switch ($nivel) {
-            case '2':
-                return DB::table('sal_red')->select('id', DB::raw('concat(codigo," ",nombre) as nombrex'))->where('cod_disa', '34')->get();
-            case '3':
-                return DB::table('sal_microred as m')->join('sal_red as r', 'r.id', '=', 'm.red_id')
-                    ->select('m.id', DB::raw('concat(m.codigo," ",m.nombre," | ",r.nombre) as nombrex'))->where('m.cod_disa', '34')->get();
-            case '4':
-                return EstablecimientoRepositorio::queAtiendenCargar();
-            default:
-                return [];
-        }
+    // public function cargarEntidad($nivel)
+    // {
+    //     switch ($nivel) {
+    //         case '2':
+    //             return DB::table('sal_red')->select('id', DB::raw('concat(codigo," ",nombre) as nombrex'))->where('cod_disa', '34')->get();
+    //         case '3':
+    //             return DB::table('sal_microred as m')->join('sal_red as r', 'r.id', '=', 'm.red_id')
+    //                 ->select('m.id', DB::raw('concat(m.codigo," ",m.nombre," | ",r.nombre) as nombrex'))->where('m.cod_disa', '34')->get();
+    //         case '4':
+    //             return EstablecimientoRepositorio::queAtiendenCargar();
+    //         default:
+    //             return [];
+    //     }
 
-        return response()->json($data);
-    }
+    //     return response()->json($data);
+    // }
 }

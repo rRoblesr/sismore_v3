@@ -25,6 +25,7 @@ class DirectorioMunicipal extends Model
     'profesion',
     'cargo',
     'condicion_laboral',
+    'provincia_id',
     'distrito_id',
     'celular',
     'email'
