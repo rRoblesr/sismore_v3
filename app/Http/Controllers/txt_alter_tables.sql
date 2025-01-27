@@ -2760,52 +2760,64 @@ CREATE TABLE adm_usuario_auditoria (
 );
 
 
-ALTER TABLE sal_impor_padron_establecimiento 
-CHANGE telefono ruc VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
-CHANGE horario ubigeo VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
-CHANGE doc_categorizacion telefono VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
-CHANGE numero_documento horario VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
-CHANGE cod_disa sec_ejec VARCHAR(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
-CHANGE disa cod_disa VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
-CHANGE cod_red disa VARCHAR(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
-CHANGE red cod_red VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
-CHANGE cod_microrred red VARCHAR(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
-CHANGE microrred cod_microrred VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
-CHANGE sec_ejec microrred INT(11) NULL DEFAULT NULL, 
-CHANGE ubigeo latitud VARCHAR(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
-CHANGE norte longitud DOUBLE NULL DEFAULT NULL;
+/* modificar sal_impor_padron_establecimiento */
+
+CREATE TABLE sal_impor_padron_establecimiento (
+  id int AUTO_INCREMENT PRIMARY KEY,
+  importacion_id int(11) DEFAULT NULL,
+		cod_unico int(11) DEFAULT NULL,
+		nombre_establecimiento varchar(120) DEFAULT NULL,
+		responsable varchar(100) DEFAULT NULL,
+		direccion varchar(300) DEFAULT NULL,
+		ruc varchar(11) DEFAULT NULL,
+		ubigeo varchar(6) DEFAULT NULL,
+		telefono varchar(60) DEFAULT NULL,
+		horario varchar(60) DEFAULT NULL,
+		inicio_actividad date DEFAULT NULL,
+		categoria varchar(7) DEFAULT NULL,
+		estado varchar(6) DEFAULT NULL,
+		institucion varchar(100) DEFAULT NULL,
+		clasificacion_eess varchar(300) DEFAULT NULL,
+		tipo_eess varchar(100) DEFAULT NULL,
+		sec_ejec int(11) DEFAULT NULL,
+		cod_disa int(11) DEFAULT NULL,
+		disa varchar(15) DEFAULT NULL,
+		cod_red varchar(2) DEFAULT NULL,
+		red varchar(100) DEFAULT NULL,
+		cod_microrred varchar(2) DEFAULT NULL,
+		microrred varchar(100) DEFAULT NULL,
+		latitud double DEFAULT NULL,
+		longitud double DEFAULT NULL,
+		foreign key (importacion_id) references par_importacion(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `sal_establecimiento` 
+ADD `red_id` INT NULL DEFAULT NULL AFTER `disa`;
+
+ALTER TABLE `sal_establecimiento` 
+ADD `cod_red` VARCHAR(2) NULL DEFAULT NULL AFTER `disa`, 
+ADD `red` VARCHAR(100) NULL DEFAULT NULL AFTER `cod_red`, 
+ADD `cod_microrred` VARCHAR(2) NULL DEFAULT NULL AFTER `red`, 
+ADD `microrred` VARCHAR(100) NULL DEFAULT NULL AFTER `cod_microrred`;
+
+ALTER TABLE `sal_establecimiento` 
+ADD `ruc` VARCHAR(11) NULL DEFAULT NULL AFTER `direccion`;
+
+
+ALTER TABLE `sal_establecimiento` 
+CHANGE `cod_disa` `cod_disa` INT NULL DEFAULT NULL;
+
+ALTER TABLE `sal_establecimiento` 
+CHANGE `norte` `latitud` DOUBLE NULL DEFAULT NULL, 
+CHANGE `este` `longitud` DOUBLE NULL DEFAULT NULL;
 
 
 
-ALTER TABLE sal_impor_padron_establecimiento 
-CHANGE ruc ruc VARCHAR(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
-CHANGE ubigeo ubigeo VARCHAR(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
-CHANGE telefono telefono VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
-CHANGE inicio_actividad inicio_actividad DATE NULL DEFAULT NULL, 
-CHANGE categoria categoria VARCHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
-CHANGE sec_ejec sec_ejec INT NULL DEFAULT NULL, 
-CHANGE cod_disa cod_disa INT NULL DEFAULT NULL, 
-CHANGE disa disa VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
-CHANGE cod_red cod_red VARCHAR(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
-CHANGE red red VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
-CHANGE cod_microrred cod_microrred VARCHAR(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
-CHANGE microrred microrred VARCHAR(100) NULL DEFAULT NULL, 
-CHANGE latitud latitud DOUBLE NULL DEFAULT NULL;
 
 
-ALTER TABLE sal_impor_padron_establecimiento 
-CHANGE telefono telefono VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
+/*  sal_establecimiento */
 
-ALTER TABLE sal_impor_padron_establecimiento 
-CHANGE clasificacion_eess clasificacion_eess VARCHAR(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
 
-ALTER TABLE sal_impor_padron_establecimiento 
-CHANGE responsable responsable VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
-
-ALTER TABLE sal_impor_padron_establecimiento 
-CHANGE cod_unico cod_unico INT NULL DEFAULT NULL;
-
-//*//*/*/*/*/*/*/*/*/
 
 ALTER TABLE sal_establecimiento ADD ruc VARCHAR(11) NULL DEFAULT NULL AFTER direccion;
 

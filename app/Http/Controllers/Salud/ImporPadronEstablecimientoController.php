@@ -52,11 +52,11 @@ class ImporPadronEstablecimientoController extends Controller
         ini_set('memory_limit', '-1');
         set_time_limit(0);
 
-        if (ImportacionRepositorio::Importacion_PE($rq->fechaActualizacion, ImporPadronActasController::$FUENTE['pacto_4']) !== null) {
+        if (ImportacionRepositorio::Importacion_PE($rq->fechaActualizacion, $this->fuente) !== null) {
             return $this->json_output(400, "Error, ya existe un archivo pendiente de aprobación para la fecha ingresada");
         }
 
-        if (ImportacionRepositorio::Importacion_PR($rq->fechaActualizacion, ImporPadronActasController::$FUENTE['pacto_4']) !== null) {
+        if (ImportacionRepositorio::Importacion_PR($rq->fechaActualizacion, $this->fuente) !== null) {
             return $this->json_output(400, "Error, ya existe un archivo procesado para la fecha ingresada");
         }
 
@@ -88,6 +88,7 @@ class ImporPadronEstablecimientoController extends Controller
             'microrred',
             'latitud',
             'longitud',
+
         ];
 
         $encabezadosArchivo = array_keys($array[0][0]);
@@ -364,9 +365,6 @@ class ImporPadronEstablecimientoController extends Controller
     /* metodo para eliminar una importacion */
     public function eliminar($id)
     {
-        // $poblacion = Poblacion::where('importacion_id', $id)->first();
-        // PoblacionDetalle::where('poblacion_id', $poblacion->id)->delete();
-        // $poblacion->delete();
         ImporPadronEstablecimiento::where('importacion_id', $id)->delete();
         Establecimiento::where('importacion_id', $id)->delete();
         Importacion::find($id)->delete();

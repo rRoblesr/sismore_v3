@@ -17,5 +17,36 @@ class Establecimiento extends Model
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        //'id',
+        'importacion_id',
+        'cod_unico',
+        'codigo_unico',
+        'nombre_establecimiento',
+        'responsable',
+        'direccion',
+        'ruc',
+        'telefono',
+        'horario',
+        'inicio_actividad',
+        'categoria',
+        'estado',
+        'institucion',
+        'clasificacion_eess',
+        'tipo_eess',
+        'cod_disa',
+        'disa',
+        'cod_red',
+        'red',
+        'cod_microrred',
+        'microrred',
+        'red_id',
+        'microrred_id',
+        'ue_id',
+        'ubigeo_id',
+        'latitud',
+        'longitud',
+        //'created_at',
+        //'updated_at'
+    ];
 }
