@@ -1319,6 +1319,9 @@ Route::get('/Salud/PadronNominal/Calidad/Descargar/{codigoCalidad}', [SaludPadro
 Route::get('/Salud/PadronNominal/Calidad/{tipo}', [SaludPadronNominalCalidad::class, 'listadoTipo'])->name('salud.padron.calidad.listadotipo');
 Route::get('/Salud/PadronNominal/Calidad/{codigoCalidad}/{codigoPadron}', [SaludPadronNominalCalidad::class, 'mostrarDatos'])->name('salud.padron.calidad.mostrardato');
 
+Route::get('/Salud/IPRESS/TableroControl', [EstablecimientoController::class, 'dashboard'])->name('salud.ipress.dashboard');
+Route::get('/Salud/IPRESS/TableroControl/Contenido', [EstablecimientoController::class, 'dashboardContenido'])->name('salud.ipress.dashboard.contenido');
+
 Route::get('/Salud/PadronNominal/TableroCalidad', [PadronNominalController::class, 'tablerocalidad'])->name('salud.padronnominal.tablerocalidad');
 Route::get('/Salud/PadronNominal/TableroCalidad/reportes', [PadronNominalController::class, 'tablerocalidadreporte'])->name('salud.padronnominal.tablerocalidad.reporte');
 Route::get('/Salud/PadronNominal/TableroCalidad/Listado', [PadronNominalController::class, 'calidadListado'])->name('salud.padronnominal.tablerocalidad.listado');
@@ -1362,6 +1365,7 @@ Route::get('/EESS/Find/AUTOCOMPLETE', [EstablecimientoController::class, 'autoco
 Route::get('/EESS/Find/{id}', [EstablecimientoController::class, 'ajax_edit'])->name('eess.find');
 
 Route::get('/Microred/Find/cargarMicrored/{red}', [EstablecimientoController::class, 'cargarMicroredSelect'])->name('microred.cargar.find');
+Route::get('/Microred/Find/cargarMicroredUcayali/{red}', [EstablecimientoController::class, 'cargarMicroredUcayaliSelect'])->name('microred.cargar.find.2');
 
 
 Route::get('/Salud/PadronNominal/Importar', [ImporPadronNominalController::class, 'importar'])->name('salud.padron.importar.index'); //->name('salud.padronnominal.importar');
@@ -1416,6 +1420,9 @@ Route::get('/Poblacion/Peru/ucayali/PN/distrito', [PoblacionController::class, '
 
 /*********************************************** EJEMPLOS Y PRUEBAS ************************************************/
 Route::get('/pruebas/prueba', [PruebaController::class, 'prueba2']);
+Route::get('/pruebas/mapas', function () {
+    return view('salud.Establecimiento.map');
+});
 
 Route::get('/recursos/login1', function () {
     $data = ImporDocentesBilingues::where(DB::raw('length(dni)'), '!=', 8)->get();

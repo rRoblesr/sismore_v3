@@ -321,4 +321,166 @@ class EstablecimientoRepositorio
         $query = DB::select("SELECT id,codigo_unico,nombre_establecimiento FROM `sal_establecimiento` where cod_disa=34 and categoria in ('I-1','I-2','I-3','I-4') and institucion in ('GOBIERNO REGIONAL','MINSA') and estado='ACTIVO' order by nombre_establecimiento");
         return collect($query);
     }
+
+    public static function listRedUcayali_select()
+    {
+        $query = Establecimiento::from('sal_establecimiento as es')->distinct()->select('r.id', 'r.codigo', 'r.nombre')
+            ->join('sal_red as r', 'r.id', '=', 'es.red_id')
+            ->where('es.estado', 'ACTIVO')->where('es.cod_disa', '34');
+        // $query->whereIn('es.institucion', ['GOBIERNO REGIONAL', 'MINSA'])->whereIn('es.categoria', ['I-1', 'I-2', 'I-3', 'I-4']);
+        return $query->get();
+    }
+
+    public static function listMicrorredUcayali_select($red)
+    {
+        $query = Establecimiento::from('sal_establecimiento as es')->distinct()->select('m.id', 'm.codigo', 'm.nombre');
+        $query->join('sal_microred as m', 'm.id', '=', 'es.microrred_id');
+        $query->where('es.estado', 'ACTIVO')->where('es.cod_disa', '34')->where('es.red_id', $red);
+        // $query->whereIn('es.institucion', ['GOBIERNO REGIONAL', 'MINSA'])->whereIn('es.categoria', ['I-1', 'I-2', 'I-3', 'I-4']);
+        return $query->get();
+    }
+
+    public static function dashboardContenidoHead($div, $provincia, $distrito, $red, $microrred)
+    {
+        $queryx = [];
+
+        $filtros = function ($query) use ($provincia, $distrito, $red, $microrred) {
+            if ($provincia > 0) $query->where('u.dependencia', $provincia);
+            if ($distrito > 0) $query->where('ubigeo_id', $distrito);
+            if ($red > 0) $query->where('red_id', $red);
+            if ($microrred > 0) $query->where('microrred_id', $microrred);
+        };
+
+        $queryx['card1'] = Establecimiento::where('cod_disa', '34')
+            ->join('par_ubigeo as u', 'u.id', '=', 'ubigeo_id')
+            ->where('estado', 'ACTIVO')
+            ->whereIn('institucion', ['GOBIERNO REGIONAL', 'MINSA'])
+            ->whereIn('categoria', ['I-1', 'I-2', 'I-3', 'I-4'])
+            ->tap($filtros)
+            ->count();
+
+        $queryx['card2'] = Establecimiento::where('cod_disa', '34')
+            ->join('par_ubigeo as u', 'u.id', '=', 'ubigeo_id')
+            ->where('estado', 'ACTIVO')
+            ->whereIn('institucion', ['GOBIERNO REGIONAL', 'MINSA'])
+            ->whereIn('categoria', ['II-1', 'II-2', 'II-E', 'III-1'])
+            ->tap($filtros)
+            ->count();
+
+        $queryx['card3'] = Establecimiento::where('cod_disa', '34')
+            ->join('par_ubigeo as u', 'u.id', '=', 'ubigeo_id')
+            ->where('estado', 'ACTIVO')
+            ->whereIn('institucion', ['GOBIERNO REGIONAL', 'MINSA'])
+            ->whereIn('categoria', ['I-3', 'I-4'])
+            ->tap($filtros)
+            ->count();
+
+        $queryx['card4'] = Establecimiento::where('cod_disa', '34')
+            ->join('par_ubigeo as u', 'u.id', '=', 'ubigeo_id')
+            ->where('estado', 'ACTIVO')
+            ->whereIn('institucion', ['GOBIERNO REGIONAL', 'MINSA'])
+            ->whereIn('categoria', ['I-1', 'I-2'])
+            ->tap($filtros)
+            ->count();
+
+        return $queryx;
+    }
+
+    public static function dashboardContenidoTabla1($div, $provincia, $distrito, $red, $microrred)
+    {
+        $filtros = function ($query) use ($provincia, $distrito, $red, $microrred) {
+            if ($provincia > 0) $query->where('u.dependencia', $provincia);
+            if ($distrito > 0) $query->where('e.ubigeo_id', $distrito);
+            if ($red > 0) $query->where('e.red_id', $red);
+            if ($microrred > 0) $query->where('e.microrred_id', $microrred);
+        };
+
+        $query = Establecimiento::from('sal_establecimiento as e')
+            ->select(
+                'e.institucion',
+                DB::raw('count(*) as conteo'),
+                DB::raw('sum(if(categoria="I-1",1,0)) as ci1'),
+                DB::raw('sum(if(categoria="I-2",1,0)) as ci2'),
+                DB::raw('sum(if(categoria="I-3",1,0)) as ci3'),
+                DB::raw('sum(if(categoria="I-4",1,0)) as ci4'),
+                DB::raw('sum(if(categoria="II-1",1,0)) as cii1'),
+                DB::raw('sum(if(categoria="II-2",1,0)) as cii2'),
+                DB::raw('sum(if(categoria="II-E",1,0)) as ciie'),
+                DB::raw('sum(if(categoria="III-1",1,0)) as ciii1'),
+                DB::raw('sum(if(categoria="III-2",1,0)) as ciii2'),
+                DB::raw('sum(if(categoria="III-E",1,0)) as ciiie'),
+                DB::raw('sum(if(categoria="SIN CATEGORÍA",1,0)) as csc'),
+            )
+            ->join('par_ubigeo as u', 'u.id', '=', 'e.ubigeo_id')
+            ->where('e.cod_disa', '34')->where('e.estado', 'ACTIVO')
+            //->whereIn('e.institucion', ['GOBIERNO REGIONAL', 'MINSA']); //->whereIn('e.categoria', ['I-1', 'I-2', 'I-3', 'I-4']);
+            ->tap($filtros)
+            ->groupBy('e.institucion')->get();
+
+        return $query;
+    }
+
+    public static function dashboardContenidoTabla2($div, $provincia, $distrito, $red, $microrred)
+    {
+        $filtros = function ($query) use ($provincia, $distrito, $red, $microrred) {
+            if ($provincia > 0) $query->where('u.dependencia', $provincia);
+            if ($distrito > 0) $query->where('e.ubigeo_id', $distrito);
+            if ($red > 0) $query->where('e.red_id', $red);
+            if ($microrred > 0) $query->where('e.microrred_id', $microrred);
+        };
+
+        $query = Establecimiento::from('sal_establecimiento as e')
+            ->select(
+                'u.nombre as distrito',
+                DB::raw('count(*) as conteo'),
+                DB::raw('sum(if(categoria="I-1",1,0)) as ci1'),
+                DB::raw('sum(if(categoria="I-2",1,0)) as ci2'),
+                DB::raw('sum(if(categoria="I-3",1,0)) as ci3'),
+                DB::raw('sum(if(categoria="I-4",1,0)) as ci4'),
+                DB::raw('sum(if(categoria="II-1",1,0)) as cii1'),
+                DB::raw('sum(if(categoria="II-2",1,0)) as cii2'),
+                DB::raw('sum(if(categoria="II-E",1,0)) as ciie'),
+                DB::raw('sum(if(categoria="III-1",1,0)) as ciii1'),
+                DB::raw('sum(if(categoria="III-2",1,0)) as ciii2'),
+                DB::raw('sum(if(categoria="III-E",1,0)) as ciiie'),
+                DB::raw('sum(if(categoria="SIN CATEGORÍA",1,0)) as csc'),
+            )
+            ->join('par_ubigeo as u', 'u.id', '=', 'e.ubigeo_id')
+            ->where('e.cod_disa', '34')->where('e.estado', 'ACTIVO') //->whereIn('e.institucion', ['GOBIERNO REGIONAL', 'MINSA']); //->whereIn('e.categoria', ['I-1', 'I-2', 'I-3', 'I-4']);
+            ->tap($filtros)
+            ->groupBy('distrito')->get();
+
+        return $query;
+    }
+
+    public static function dashboardContenidoTabla3($div, $provincia, $distrito, $red, $microrred)
+    {
+        $filtros = function ($query) use ($provincia, $distrito, $red, $microrred) {
+            if ($provincia > 0) $query->where('d.dependencia', $provincia);
+            if ($distrito > 0) $query->where('e.ubigeo_id', $distrito);
+            if ($red > 0) $query->where('e.red_id', $red);
+            if ($microrred > 0) $query->where('e.microrred_id', $microrred);
+        };
+
+        $query = Establecimiento::from('sal_establecimiento as e')
+            ->select(
+                'e.codigo_unico as codigo',
+                'e.nombre_establecimiento as ipress',
+                'e.red',
+                'e.microrred',
+                'p.nombre as provincia',
+                'd.nombre as distrito',
+                'e.institucion',
+                'e.categoria',
+                'e.latitud',
+                'e.longitud',
+            )
+            ->join('par_ubigeo as d', 'd.id', '=', 'e.ubigeo_id')
+            ->join('par_ubigeo as p', 'p.id', '=', 'd.dependencia')
+            ->where('e.cod_disa', '34')->where('e.estado', 'ACTIVO') //->whereIn('e.institucion', ['GOBIERNO REGIONAL', 'MINSA']); //->whereIn('e.categoria', ['I-1', 'I-2', 'I-3', 'I-4']);
+            ->tap($filtros)
+            ->get();
+
+        return $query;
+    }
 }

@@ -13,6 +13,8 @@ use App\Models\Parametro\Mes;
 use App\Models\Parametro\Ubigeo;
 use App\Models\Salud\Establecimiento;
 use App\Models\Salud\ImporPadronActas;
+use App\Models\Salud\ImporPadronEstablecimiento;
+use App\Models\Salud\ImporPadronNominal;
 use App\Models\Salud\PadronActas;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\SFLRepositorio;
@@ -20,6 +22,7 @@ use App\Repositories\Parametro\IndicadorGeneralMetaRepositorio;
 use App\Repositories\Parametro\IndicadorGeneralRepositorio;
 use App\Repositories\Parametro\UbigeoRepositorio;
 use App\Repositories\Salud\EstablecimientoRepositorio;
+use App\Repositories\Salud\PadronNominalRepositorio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -52,26 +55,38 @@ class EstablecimientoController extends Controller
 
     public function cargarRedSelect($red)
     {
-        $micro = DB::select("SELECT * FROM sal_red where id in(SELECT DISTINCT red_id from sal_microred where id in( SELECT DISTINCT microrred_id FROM `sal_establecimiento` where red_id=$red and cod_disa=34 and categoria in ('I-1','I-2','I-3','I-4') and institucion in ('GOBIERNO REGIONAL','MINSA') and estado='ACTIVO'))");
+        $micro = DB::select("SELECT * FROM sal_red where id in(
+        SELECT DISTINCT red_id from sal_microred where id in( 
+        SELECT DISTINCT microrred_id FROM `sal_establecimiento` 
+        where red_id=$red and cod_disa=34 and categoria in ('I-1','I-2','I-3','I-4') and institucion in ('GOBIERNO REGIONAL','MINSA') and estado='ACTIVO'))");
         return  response()->json($micro);
     }
 
     public function cargarMicroredSelect($red)
     {
-        $micro = DB::select("SELECT * from sal_microred where id in( SELECT DISTINCT microrred_id FROM `sal_establecimiento` where red_id=$red and cod_disa=34 and categoria in ('I-1','I-2','I-3','I-4') and institucion in ('GOBIERNO REGIONAL','MINSA') and estado='ACTIVO')");
+        $micro = DB::select("SELECT * from sal_microred where id in( 
+        SELECT DISTINCT microrred_id FROM `sal_establecimiento` 
+        where red_id=$red and cod_disa=34 and categoria in ('I-1','I-2','I-3','I-4') and institucion in ('GOBIERNO REGIONAL','MINSA') and estado='ACTIVO')");
         return  response()->json($micro);
     }
 
     public function cargarEESSSelect($microred)
     {
-        $micro = DB::select("SELECT * FROM `sal_establecimiento` where microrred_id=$microred and cod_disa=34 and categoria in ('I-1','I-2','I-3','I-4') and institucion in ('GOBIERNO REGIONAL','MINSA') and estado='ACTIVO' order by nombre_establecimiento");
+        $micro = DB::select("SELECT * FROM `sal_establecimiento` 
+        where microrred_id=$microred and cod_disa=34 and categoria in ('I-1','I-2','I-3','I-4') and institucion in ('GOBIERNO REGIONAL','MINSA') and estado='ACTIVO' 
+        order by nombre_establecimiento");
+        return  response()->json($micro);
+    }
+
+    public function cargarMicroredUcayaliSelect($red)
+    {
+        $micro = EstablecimientoRepositorio::listMicrorredUcayali_select($red);
         return  response()->json($micro);
     }
 
     public function cargarEESS(Request $rq)
     {
         $eess = EstablecimientoRepositorio::listEESS($rq->sector, $rq->municipio, $rq->red, $rq->microred);
-
         return response()->json(compact('eess'));
     }
 
@@ -246,5 +261,103 @@ class EstablecimientoController extends Controller
 
 
         return response()->json($data);
+    }
+
+
+    /* DASHBOARD */
+
+    public function dashboard()
+    {
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronEstablecimientoController::$FUENTE);
+        $provincias = UbigeoRepositorio::provincia_select('25');
+        $red = EstablecimientoRepositorio::listRedUcayali_select(); // $red = DB::table('sal_red')->select('id', 'codigo', 'nombre')->where('cod_disa', '34')->get();
+        $actualizado = 'Actualizado al ' . $imp->dia . '/' . $imp->mes . '/' . $imp->anio;
+        return view('salud.Establecimiento.dashboard', compact('actualizado', 'provincias', 'red'));
+    }
+
+    public function dashboardContenido(Request $rq)
+    {
+        switch ($rq->div) {
+            case 'head':
+                $data = EstablecimientoRepositorio::dashboardContenidoHead($rq->div, $rq->provincia, $rq->distrito, $rq->red, $rq->microrred);
+                $card1 = number_format($data['card1'], 0);
+                $card2 = number_format($data['card2'], 0);
+                $card3 = number_format($data['card3'], 0);
+                $card4 = number_format($data['card4'], 0);
+
+                return response()->json(compact('card1', 'card2', 'card3', 'card4'));
+
+
+            case 'tabla1':
+                $base = EstablecimientoRepositorio::dashboardContenidoTabla1($rq->div, $rq->provincia, $rq->distrito, $rq->red, $rq->microrred);
+                // return response()->json(compact('base'));
+                $excel = view('salud.Establecimiento.dashboardTabla1', compact('base'))->render();
+                return response()->json(compact('base', 'excel'));
+
+            case 'tabla2':
+                $base = EstablecimientoRepositorio::dashboardContenidoTabla2($rq->div, $rq->provincia, $rq->distrito, $rq->red, $rq->microrred);
+                // return response()->json(compact('base'));
+                $excel = view('salud.Establecimiento.dashboardTabla2', compact('base'))->render();
+                return response()->json(compact('base', 'excel'));
+
+
+            case 'tabla3':
+                $base = EstablecimientoRepositorio::dashboardContenidoTabla3($rq->div, $rq->provincia, $rq->distrito, $rq->red, $rq->microrred);
+                // $base = Establecimiento::from('sal_establecimiento as e')
+                //     ->select(
+                //         'e.codigo_unico as codigo',
+                //         'e.nombre_establecimiento as ipress',
+                //         'e.red',
+                //         'e.microrred',
+                //         'p.nombre as provincia',
+                //         'd.nombre as distrito',
+                //         'e.institucion',
+                //         'e.categoria',
+                //         'e.latitud',
+                //         'e.longitud',
+                //     )
+                //     ->join('par_ubigeo as d', 'd.id', '=', 'e.ubigeo_id')
+                //     ->join('par_ubigeo as p', 'p.id', '=', 'd.dependencia');
+                // $base->where('e.cod_disa', '34')->where('e.estado', 'ACTIVO'); //->whereIn('e.institucion', ['GOBIERNO REGIONAL', 'MINSA']); //->whereIn('e.categoria', ['I-1', 'I-2', 'I-3', 'I-4']);
+                // $base = $base->get();
+
+                $foot = [];
+                // if ($base->count() > 0) {
+                //     $foot = clone $base[0];
+                //     $foot->pob = 0;
+                //     $foot->pobm = 0;
+                //     $foot->pobf = 0;
+                //     $foot->pob0 = 0;
+                //     $foot->pob1 = 0;
+                //     $foot->pob2 = 0;
+                //     $foot->pob3 = 0;
+                //     $foot->pob4 = 0;
+                //     $foot->pob5 = 0;
+                //     $foot->dni = 0;
+                //     $foot->seguro = 0;
+                //     $foot->programa = 0;
+                //     foreach ($base as $key => $value) {
+                //         $foot->pob += $value->pob;
+                //         $foot->pobm += $value->pobm;
+                //         $foot->pobf += $value->pobf;
+                //         $foot->pob0 += $value->pob0;
+                //         $foot->pob1 += $value->pob1;
+                //         $foot->pob2 += $value->pob2;
+                //         $foot->pob3 += $value->pob3;
+                //         $foot->pob4 += $value->pob4;
+                //         $foot->pob5 += $value->pob5;
+                //         $foot->dni += $value->dni;
+                //         $foot->seguro += $value->seguro;
+                //         $foot->programa += $value->programa;
+                //     }
+                // }
+                // return response()->json(compact('base'));
+                $excel = view('salud.Establecimiento.dashboardTabla3', compact('base'))->render();
+                return response()->json(compact('excel'));
+
+            default:
+                # code...
+                return [];
+        }
     }
 }
