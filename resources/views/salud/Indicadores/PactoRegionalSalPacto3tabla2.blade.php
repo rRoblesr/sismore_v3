@@ -6,12 +6,14 @@
             <th class="text-center">Código</th>
             <th class="text-center">Establecimiento de Salud</th>
             <th class="text-center">Red</th>
-            <th class="text-center">Microred</th>
-            <th class="text-center">Total Partos</th>
-            <th class="text-center">Examen Auxiliar</th>
+            <th class="text-center">Microrred</th>
+            <th class="text-center">Provincia</th>
+            <th class="text-center">Distrito</th>
+            <th class="text-center">Denominador</th>
+            {{-- <th class="text-center">Examen Auxiliar</th>
             <th class="text-center">Atencion Prenatal</th>
-            <th class="text-center">Suplemento Hierro y AF</th>
-            <th class="text-center">Paquete Completo</th>
+            <th class="text-center">Suplemento Hierro y AF</th> --}}
+            <th class="text-center">Numerador</th>
             <th class="text-center">Indicador</th>
         </tr>
     </thead>
@@ -24,20 +26,14 @@
                     <td class="text-left">{{ $item->eess_parto }}</td>
                     <td class="text-left">{{ $item->red }}</td>
                     <td class="text-left">{{ $item->microred }}</td>
+                    <td class="text-left">{{ $item->provincia }}</td>
+                    <td class="text-left">{{ $item->distrito }}</td>
                     <td>{{ $item->denominador }}</td>
-                    <td>{{ $item->condicion1 }}</td>
-                    <td>{{ $item->condicion2 }}</td>
-                    <td>{{ $item->condicion3 }}</td>
+                    {{-- <td>{{ $item->condicion1 }}</td> --}}
+                    {{-- <td>{{ $item->condicion2 }}</td> --}}
+                    {{-- <td>{{ $item->condicion3 }}</td> --}}
                     <td>{{ $item->numerador }}</td>
                     <td>{!! avance($item->indicador) !!}</td>
-                    {{-- <td>
-                        @if ($item->cumple == 1)
-                            <button type="button"
-                                class="btn btn-xs btn-success-0 p-1 font-11 text-nowrap">&nbsp;&nbsp;&nbsp;Cumple&nbsp;&nbsp;&nbsp;</button>
-                        @else
-                            <button type="button" class="btn btn-xs btn-danger p-1 font-11 text-nowrap">No Cumple</button>
-                        @endif
-                    </td> --}}
                 </tr>
             @endforeach
         </tbody>

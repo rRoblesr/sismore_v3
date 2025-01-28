@@ -82,20 +82,25 @@ class CuboPacto3Repositorio
 
     public static function Tabla02($importacion, $indicador, $anio, $mes, $provincia, $distrito)
     {
-        $v1 = CuboPacto3PadronMaterno::select(
-            'red',
-            'microred',
+        $query = CuboPacto3PadronMaterno::select(
             'codigo_unico',
             'eess_parto',
+            'p.nombre as provincia',
+            'd.nombre as distrito',
+            'red',
+            'microred',
             DB::raw('sum(denominador) as denominador'),
             DB::raw('sum(numerador) as numerador'),
-            DB::raw('sum(num_exam_aux) as condicion1'),
-            DB::raw('sum(num_apn) as condicion2'),
-            DB::raw('sum(num_entrega_sfaf) as condicion3'),
+            // DB::raw('sum(num_exam_aux) as condicion1'),
+            // DB::raw('sum(num_apn) as condicion2'),
+            // DB::raw('sum(num_entrega_sfaf) as condicion3'),
             DB::raw('100*sum(numerador)/sum(denominador) as indicador')
-        )->where('anio', $anio)->where('mes', '<=', $mes);
-        $v1 = $v1->groupBy('red', 'microred', 'codigo_unico', 'eess_parto',)->orderBy('indicador', 'desc')->get();
-        return $v1;
+        )
+            ->join('par_ubigeo as d', 'd.id', '=', 'distrito_id')
+            ->join('par_ubigeo as p', 'p.id', '=', 'provincia_id')
+            ->where('anio', $anio)->where('mes', '<=', $mes);
+        $query = $query->groupBy('codigo_unico', 'eess_parto', 'p.nombre', 'd.nombre', 'red', 'microred')->orderBy('indicador', 'desc')->get();
+        return $query;
     }
 
     public static function Anal01($importacion, $anio, $mes, $provincia, $distrito)

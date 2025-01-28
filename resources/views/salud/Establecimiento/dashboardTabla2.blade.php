@@ -43,6 +43,23 @@
             </tr>
         @endforeach
     </tbody>
+    <tfoot>
+        <tr class="table-success-0 text-white">
+            <th colspan="2">TOTAL</th>
+            <th class="text-center" id="tt"></th>
+            <th class="text-center" id="ci1"></th>
+            <th class="text-center" id="ci2"></th>
+            <th class="text-center" id="ci3"></th>
+            <th class="text-center" id="ci4"></th>
+            <th class="text-center" id="cii1"></th>
+            <th class="text-center" id="cii2"></th>
+            <th class="text-center" id="ciie"></th>
+            <th class="text-center" id="ciii1"></th>
+            <th class="text-center" id="ciii2"></th>
+            <th class="text-center" id="ciiie"></th>
+            <th class="text-center" id="csc"></th>
+        </tr>
+    </tfoot>
 </table>
 
 

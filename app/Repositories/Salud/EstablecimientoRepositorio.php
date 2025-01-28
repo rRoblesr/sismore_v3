@@ -355,7 +355,7 @@ class EstablecimientoRepositorio
             ->join('par_ubigeo as u', 'u.id', '=', 'ubigeo_id')
             ->where('estado', 'ACTIVO')
             ->whereIn('institucion', ['GOBIERNO REGIONAL', 'MINSA'])
-            ->whereIn('categoria', ['I-1', 'I-2', 'I-3', 'I-4'])
+            ->whereIn('categoria', ['I-1', 'I-2', 'I-3', 'I-4','II-1','II-2','sin categoria'])
             ->tap($filtros)
             ->count();
 

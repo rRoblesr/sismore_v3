@@ -261,6 +261,33 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="table-responsive">
+                                <table id="vtabla2" class="table table-sm table-striped table-bordered font-11">
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row d-none">
+        <div class="col-lg-12">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent p-0">
+                    <div class="card-widgets">
+                        <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
+                                class="fa fa-file-excel"></i> Descargar</button>
+                    </div>
+                    <h3 class="text-black font-14 mb-0">Evaluación de cumplimiento de los registros de niños y niñas
+                        menores de 6 años del padrón nominal
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="table-responsive">
                                 <table id="padronTable" class="table table-sm table-striped table-bordered font-11">
                                     <thead>
                                         <tr class="table-success-0 text-white">
@@ -279,7 +306,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
                                     </tbody>
                                 </table>
                             </div>
@@ -518,7 +544,7 @@
         </div>
     </div><!-- /.modal -->
 
-    
+
     <div id="modal_informacion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
@@ -554,6 +580,7 @@
         var ugel_select = 0;
         var anal1, anal2, anal3;
         var tablepadron;
+        var table02; // = $('#table2').DataTable();
         $(document).ready(function() {
             // Highcharts.setOptions({
             //     lang: {
@@ -571,8 +598,8 @@
             panelGraficas('anal2');
             panelGraficas('anal3');
             panelGraficas('tabla1');
-            // panelGraficas('tabla2');
-            tabla2('tabla2');
+            panelGraficas('tabla2');
+            // tabla2('tabla2');
             // tabla3('tabla3');
             // panelGraficas('tabla3');
         }
@@ -634,7 +661,24 @@
                         //     info: false,
                         //     searching: false,
                         // });
-                    } else if (div == "tabla2") {}
+                    } else if (div == "tabla2") {
+                        $('#vtabla2').html(data.excel);
+                        $('#vtabla2').html(data.excel);
+                        $('#vtabla2').html(data.excel);
+                        $('#vtabla2').html(data.excel);
+                        $('#tabla2').DataTable({
+                            responsive: true,
+                            autoWidth: false,
+                            ordered: true,
+                            // searching: false,
+                            // bPaginate: false,
+                            // info: false,
+                            language: table_language,
+                        });
+
+                        // table02.clear().draw();
+                        // table02.rows.add($(data.excel).find('tr')).draw();
+                    }
 
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
@@ -644,103 +688,103 @@
             });
         }
 
-        function tabla2(div) {
-            tablepadron = $('#padronTable').DataTable({
-                responsive: true,
-                autoWidth: false,
-                processing: true,
-                serverSide: true,
-                ordered: true,
-                language: table_language,
-                destroy: true,
-                ajax: {
-                    url: "{{ route('salud.indicador.pactoregional.detalle.reports.2') }}",
-                    type: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    data: function(d) {
-                        d.div = div;
-                        d.anio = $('#anio').val();
-                        d.mes = $('#mes').val();
-                        d.provincia = $('#provincia').val();
-                        d.distrito = $('#distrito').val();
-                        d.fuente = {{ $fuente }};
-                        d.indicador = '{{ $ind->id }}';
-                        d.codigo = '{{ $ind->codigo }}';
-                    }
-                },
-                columns: [{
-                        data: 'item',
-                        name: 'item',
-                    },
-                    {
-                        data: 'tipo_doc',
-                        name: 'tipo_doc',
-                    },
-                    {
-                        data: 'num_doc',
-                        name: 'num_doc',
-                    },
-                    {
-                        data: 'nombre_completo',
-                        name: 'nombre_completo',
-                    },
-                    {
-                        data: 'nacimiento',
-                        name: 'nacimiento',
-                    },
-                    {
-                        data: 'distrito',
-                        name: 'distrito',
-                    },
-                    {
-                        data: 'seguro',
-                        name: 'seguro',
-                    },
-                    {
-                        data: 'ipress',
-                        name: 'ipress',
-                    },
-                    {
-                        data: 'nombre_establecimiento',
-                        name: 'nombre_establecimiento',
-                    },
-                    {
-                        data: 'num_doc_madre',
-                        name: 'num_doc_madre',
-                    },
-                    {
-                        data: 'nombre_completo_madre',
-                        name: 'nombre_completo_madre',
-                    },
-                    {
-                        data: 'estado',
-                        name: 'estado',
-                    }
-                ],
-                columnDefs: [{
-                    className: 'text-center',
-                    targets: [0, 1, 2, 4, 6, 7, 9, 11]
-                }, {
-                    targets: 2,
-                    render: function(data, type, row) {
-                        // return '<a href="/ruta/detalle/' + row + '">' + data + '</a>';
-                        return `<a href="javascript:void(0)" onclick="abrirmodalpadron('${data}')">${data}</a>`;
-                    }
-                }, {
-                    targets: 7,
-                    render: function(data, type, row) {
-                        // return '<a href="/ruta/detalle/' + row + '">' + data + '</a>';
-                        // console.log(parseInt(data, 10));
-                        return data ?
-                            `<a href="javascript:void(0)" onclick="abrirmodaleess(${parseInt(data, 10)})">${data}</a>` :
-                            '';
-                    }
-                }],
-            });
+        // function tabla2(div) {
+        //     tablepadron = $('#padronTable').DataTable({
+        //         responsive: true,
+        //         autoWidth: false,
+        //         processing: true,
+        //         serverSide: true,
+        //         ordered: true,
+        //         language: table_language,
+        //         destroy: true,
+        //         ajax: {
+        //             url: "{{ route('salud.indicador.pactoregional.detalle.reports.2') }}",
+        //             type: 'POST',
+        //             headers: {
+        //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //             },
+        //             data: function(d) {
+        //                 d.div = div;
+        //                 d.anio = $('#anio').val();
+        //                 d.mes = $('#mes').val();
+        //                 d.provincia = $('#provincia').val();
+        //                 d.distrito = $('#distrito').val();
+        //                 d.fuente = {{ $fuente }};
+        //                 d.indicador = '{{ $ind->id }}';
+        //                 d.codigo = '{{ $ind->codigo }}';
+        //             }
+        //         },
+        //         columns: [{
+        //                 data: 'item',
+        //                 name: 'item',
+        //             },
+        //             {
+        //                 data: 'tipo_doc',
+        //                 name: 'tipo_doc',
+        //             },
+        //             {
+        //                 data: 'num_doc',
+        //                 name: 'num_doc',
+        //             },
+        //             {
+        //                 data: 'nombre_completo',
+        //                 name: 'nombre_completo',
+        //             },
+        //             {
+        //                 data: 'nacimiento',
+        //                 name: 'nacimiento',
+        //             },
+        //             {
+        //                 data: 'distrito',
+        //                 name: 'distrito',
+        //             },
+        //             {
+        //                 data: 'seguro',
+        //                 name: 'seguro',
+        //             },
+        //             {
+        //                 data: 'ipress',
+        //                 name: 'ipress',
+        //             },
+        //             {
+        //                 data: 'nombre_establecimiento',
+        //                 name: 'nombre_establecimiento',
+        //             },
+        //             {
+        //                 data: 'num_doc_madre',
+        //                 name: 'num_doc_madre',
+        //             },
+        //             {
+        //                 data: 'nombre_completo_madre',
+        //                 name: 'nombre_completo_madre',
+        //             },
+        //             {
+        //                 data: 'estado',
+        //                 name: 'estado',
+        //             }
+        //         ],
+        //         columnDefs: [{
+        //             className: 'text-center',
+        //             targets: [0, 1, 2, 4, 6, 7, 9, 11]
+        //         }, {
+        //             targets: 2,
+        //             render: function(data, type, row) {
+        //                 // return '<a href="/ruta/detalle/' + row + '">' + data + '</a>';
+        //                 return `<a href="javascript:void(0)" onclick="abrirmodalpadron('${data}')">${data}</a>`;
+        //             }
+        //         }, {
+        //             targets: 7,
+        //             render: function(data, type, row) {
+        //                 // return '<a href="/ruta/detalle/' + row + '">' + data + '</a>';
+        //                 // console.log(parseInt(data, 10));
+        //                 return data ?
+        //                     `<a href="javascript:void(0)" onclick="abrirmodaleess(${parseInt(data, 10)})">${data}</a>` :
+        //                     '';
+        //             }
+        //         }],
+        //     });
 
-        }
+        // }
 
         // function tabla3(div) {
         //     tablepadron = $('#table3').DataTable({
@@ -853,41 +897,41 @@
 
         // }
 
-        function cargarTablaNivel(div, ugel) {
-            $.ajax({
-                url: "{{ route('indicador.nuevos.01.tabla') }}",
-                data: {
-                    'div': div,
-                    "anio": $('#anio').val(),
-                    "mes": $('#mes').val(),
-                    "provincia": $('#provincia').val(),
-                    "distrito": $('#distrito').val(),
-                    "gestion": $('#gestion').val(),
-                    "ugel": ugel
-                },
-                type: "GET",
-                dataType: "JSON",
-                beforeSend: function() {
-                    ugel_select = ugel;
-                    if (div == "tabla1") {
-                        $('#v' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    } else if (div == "tabla2") {
-                        $('#v' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    } else {
-                        $('#' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    }
-                },
-                success: function(data) {
-                    if (div == "tabla2") {
-                        $('#vtabla2').html(data.excel);
-                    }
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 1");
-                    console.log(jqXHR);
-                },
-            });
-        }
+        // function cargarTablaNivel(div, ugel) {
+        //     $.ajax({
+        //         url: "{{ route('indicador.nuevos.01.tabla') }}",
+        //         data: {
+        //             'div': div,
+        //             "anio": $('#anio').val(),
+        //             "mes": $('#mes').val(),
+        //             "provincia": $('#provincia').val(),
+        //             "distrito": $('#distrito').val(),
+        //             "gestion": $('#gestion').val(),
+        //             "ugel": ugel
+        //         },
+        //         type: "GET",
+        //         dataType: "JSON",
+        //         beforeSend: function() {
+        //             ugel_select = ugel;
+        //             if (div == "tabla1") {
+        //                 $('#v' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+        //             } else if (div == "tabla2") {
+        //                 $('#v' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+        //             } else {
+        //                 $('#' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+        //             }
+        //         },
+        //         success: function(data) {
+        //             if (div == "tabla2") {
+        //                 $('#vtabla2').html(data.excel);
+        //             }
+        //         },
+        //         erro: function(jqXHR, textStatus, errorThrown) {
+        //             console.log("ERROR GRAFICA 1");
+        //             console.log(jqXHR);
+        //         },
+        //     });
+        // }
 
         function cargarMes() {
             $.ajax({

@@ -543,15 +543,109 @@
                             break;
                         case 'tabla1':
                             $('#ctabla1').html(data.excel);
+                            $('#tabla1').DataTable({
+                                responsive: true,
+                                autoWidth: false,
+                                ordered: true,
+                                language: table_language,
+                                searching: false,
+                                paging: false,
+                                info: false,
+                                // columnDefs: [{
+                                //     targets: 1,
+                                //     render: function(data, type, row) {
+                                //         return `<a href="#" onclick="abrirmodalcentropoblado(${data})">${data}</a>`;
+                                //     }
+                                // }],
+                                footerCallback: function(row, data, start, end, display) {
+                                    var api = this.api();
+
+                                    var intVal = function(i) {
+                                        return typeof i === 'string' ? i.replace(/[\$,]/g, '') *
+                                            1 :
+                                            typeof i === 'number' ? i : 0;
+                                    };
+
+                                    var c02 = api.column(2, { page: 'current' }) .data().reduce(function(a, b) { return intVal(a) + intVal(b); }, 0);
+                                    var c03 = api.column(3, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
+                                    var c04 = api.column(4, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
+                                    var c05 = api.column(5, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
+                                    var c06 = api.column(6, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
+                                    var c07 = api.column(7, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
+                                    var c08 = api.column(8, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
+                                    var c09 = api.column(9, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
+                                    var c10 = api.column(10, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
+                                    var c11 = api.column(11, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
+                                    var c12 = api.column(12, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
+                                    var c13 = api.column(13, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
+
+                                    $(api.column(2).footer()).html(c02);
+                                    $(api.column(3).footer()).html(c03);
+                                    $(api.column(4).footer()).html(c04);
+                                    $(api.column(5).footer()).html(c05);
+                                    $(api.column(6).footer()).html(c06);
+                                    $(api.column(7).footer()).html(c07);
+                                    $(api.column(8).footer()).html(c08);
+                                    $(api.column(9).footer()).html(c09);
+                                    $(api.column(10).footer()).html(c10);
+                                    $(api.column(11).footer()).html(c11);
+                                    $(api.column(12).footer()).html(c12);
+                                    $(api.column(13).footer()).html(c13);
+                                }
+                            });
                             break;
                         case 'tabla2':
                             $('#ctabla2').html(data.excel);
-                            // $('#tabla2').DataTable({
-                            //     responsive: true,
-                            //     autoWidth: false,
-                            //     ordered: true,
-                            //     language: table_language,
-                            // });
+                            $('#tabla2').DataTable({
+                                responsive: true,
+                                autoWidth: false,
+                                ordered: true,
+                                language: table_language,
+                                searching: false,
+                                paging: false,
+                                info: false,
+                                // columnDefs: [{
+                                //     targets: 1,
+                                //     render: function(data, type, row) {
+                                //         return `<a href="#" onclick="abrirmodalcentropoblado(${data})">${data}</a>`;
+                                //     }
+                                // }],
+                                footerCallback: function(row, data, start, end, display) {
+                                    var api = this.api();
+
+                                    var intVal = function(i) {
+                                        return typeof i === 'string' ? i.replace(/[\$,]/g, '') *
+                                            1 :
+                                            typeof i === 'number' ? i : 0;
+                                    };
+
+                                    var c02 = api.column(2, { page: 'current' }) .data().reduce(function(a, b) { return intVal(a) + intVal(b); }, 0);
+                                    var c03 = api.column(3, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
+                                    var c04 = api.column(4, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
+                                    var c05 = api.column(5, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
+                                    var c06 = api.column(6, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
+                                    var c07 = api.column(7, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
+                                    var c08 = api.column(8, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
+                                    var c09 = api.column(9, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
+                                    var c10 = api.column(10, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
+                                    var c11 = api.column(11, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
+                                    var c12 = api.column(12, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
+                                    var c13 = api.column(13, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
+
+                                    $(api.column(2).footer()).html(c02);
+                                    $(api.column(3).footer()).html(c03);
+                                    $(api.column(4).footer()).html(c04);
+                                    $(api.column(5).footer()).html(c05);
+                                    $(api.column(6).footer()).html(c06);
+                                    $(api.column(7).footer()).html(c07);
+                                    $(api.column(8).footer()).html(c08);
+                                    $(api.column(9).footer()).html(c09);
+                                    $(api.column(10).footer()).html(c10);
+                                    $(api.column(11).footer()).html(c11);
+                                    $(api.column(12).footer()).html(c12);
+                                    $(api.column(13).footer()).html(c13);
+                                }
+                            });
                             break;
                         case 'tabla3':
                             $('#ctabla3').html(data.excel);
@@ -666,6 +760,11 @@
             let query = encodeURIComponent(ipress);
             window.open(`https://www.google.com/maps?q=${la},${lo} (${query})`, '_blank');
         }
+
+        function abrirPagina(idipress) {
+        // window.location.href = 'http://app20.susalud.gob.pe:8080/registro-renipress-webapp/ipress.htm?action=mostrarVer&idipress=' + idipress + '#no-back-button';
+        window.open('http://app20.susalud.gob.pe:8080/registro-renipress-webapp/ipress.htm?action=mostrarVer&idipress=' + idipress + '#no-back-button', '_blank');
+    }
     </script>
 
 

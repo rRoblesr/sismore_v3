@@ -541,9 +541,15 @@ class IndicadoresController extends Controller
             case 'tabla1':
                 $base = CuboPacto1PadronNominalRepositorio::pacto01Tabla01($impMaxAnio, $rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
                 $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla1', compact('base', 'ndis'))->render();
-                return response()->json(compact('excel', 'base'));
+                return response()->json(compact('excel'));
 
             case 'tabla2':
+                $base = CuboPacto1PadronNominalRepositorio::pacto01Tabla02($impMaxAnio, $rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla2', compact('base', 'ndis'))->render();
+                return response()->json(compact('excel'));
+                // return response()->json(compact( 'base'));
+
+            case 'tabla2x':
                 $draw = intval($rq->draw);
                 $start = intval($rq->start);
                 $length = intval($rq->length);

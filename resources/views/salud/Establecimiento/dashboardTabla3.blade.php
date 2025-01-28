@@ -27,18 +27,18 @@
                 <td class="text-left"> {{ $item->categoria }}</td>
                 <td>
 
+                    {{-- 
                     @if ($item->latitud != null || $item->latitud != 0)
-                        <button class="btn btn-xs btn-primary"
-                            onclick="abrirMapa({{ $item->latitud }},{{ $item->longitud }},'{{ $item->ipress }}')">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </button>
+                        <button class="btn btn-xs btn-primary"onclick="abrirMapa({{ $item->latitud }},{{ $item->longitud }},'{{ $item->ipress }}')"><i class="fas fa-map-marker-alt"></i></button>
                     @else
-                        <button class="btn btn-xs btn-danger"
-                            {{-- onclick="abrirMapa({{ $item->latitud }},{{ $item->longitud }},'{{ $item->ipress }}')" --}}
-                            >
-                            <i class="mdi mdi-cancel"></i>
-                        </button>
-                    @endif
+                        <button class="btn btn-xs btn-danger"><i class="mdi mdi-cancel"></i></button>
+                    @endif 
+                    --}}
+
+                    <button class="btn btn-xs btn-primary"
+                        onclick="abrirPagina('{{ $item->codigo }}')">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </button>
 
                 </td>
             </tr>

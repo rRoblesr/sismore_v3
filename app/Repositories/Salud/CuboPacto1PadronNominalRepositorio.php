@@ -10,14 +10,17 @@ class CuboPacto1PadronNominalRepositorio
 {
     public static function pacto01Head($importacion, $anio, $mes, $provincia, $distrito)
     {
+        $filtro = function ($query) use ($provincia, $distrito) {
+            if ($provincia > 0) $query->where('provincia_id', $provincia);
+            if ($distrito > 0) $query->where('distrito_id', $distrito);
+        };
         $query = CuboPacto1PadronNominal::selectRaw('SUM(den) as gl')
             ->selectRaw('SUM(num) as gls')
             ->selectRaw('SUM(den) - SUM(num) as gln')
             ->selectRaw('ROUND(100 * SUM(num) / SUM(den), 2) as indicador')
-            ->where('importacion', $importacion);
-        $query = $query->whereIn('tipo_doc', ['DNI', 'CNV']);
-        if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
-        if ($distrito > 0) $query = $query->where('distrito_id', $distrito);
+            ->where('importacion', $importacion)
+            ->whereIn('tipo_doc', ['DNI', 'CNV'])
+            ->tap($filtro);
         $query = $query->first();
         return $query;
     }
@@ -88,7 +91,7 @@ class CuboPacto1PadronNominalRepositorio
             DB::raw('sum(num) as si'),
             DB::raw('sum(den)-sum(num) as no')
         )->where('importacion', $importacion);
-        $query = $query->whereIn('tipo_doc', ['DNI', 'CNV']);
+        $query = $query->whereIn('tipo_doc', ['DNI', 'CNV'])->where('tipo_edad', 'A')->where('edad', '<', '6');
         if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
         if ($distrito > 0) $query = $query->where('distrito_id', $distrito);
         $query = $query->groupBy('xid', 'edades')->orderBy('xid')->get();
@@ -113,5 +116,24 @@ class CuboPacto1PadronNominalRepositorio
             $value->cumple = $value->indicador >= $value->meta ? 1 : 0;
         }
         return $v1;
+    }
+
+    public static function pacto01Tabla02($importacion, $indicador, $anio, $mes, $provincia, $distrito)
+    {
+        $query = CuboPacto1PadronNominal::select(
+            DB::raw('lpad(cui_atencion,8,"0") as codigo'),
+            'nombre_establecimiento as ipress',
+            'p.nombre as provincia',
+            'distrito',
+            DB::raw('sum(num) as numerador'),
+            DB::raw('sum(den) as denominador'),
+            DB::raw('round(100*sum(num)/sum(den),1) as indicador')
+        )
+            ->join('par_ubigeo as p', 'p.id', '=', 'provincia_id')
+            ->where('importacion', $importacion)->whereIn('tipo_doc', ['DNI', 'CNV'])
+
+            ->groupBy('cui_atencion', 'codigo', 'ipress', 'provincia', 'distrito')->orderBy('indicador', 'desc')->get();
+
+        return $query;
     }
 }

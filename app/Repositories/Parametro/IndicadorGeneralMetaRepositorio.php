@@ -328,7 +328,7 @@ class IndicadorGeneralMetaRepositorio
         if ($mes > 0) $query = $query->where('mes', '<=',  $mes);
         if ($distrito > 0) $query = $query->where('ubigeo',  $distrito);
         if ($provincia > 0) $query = $query->where('pp.id',  $provincia);
-        $query = $query->groupBy('idred', 'red')->get();
+        $query = $query->groupBy('idred', 'rr.nombre', 'red')->get();
 
         return $query;
     }
@@ -376,7 +376,7 @@ class IndicadorGeneralMetaRepositorio
         if ($distrito > 0) $query = $query->where('ubigeo',  $distrito);
         if ($provincia > 0) $query = $query->where('pp.id',  $provincia);
 
-        $query = $query->groupBy('unico', 'eess', 'red', 'micro', 'pro', 'dis')->get();
+        $query = $query->groupBy('unico', 'eess', 'rr.nombre', 'red', 'micro', 'pro', 'dis')->get();
 
         return $query;
     }
