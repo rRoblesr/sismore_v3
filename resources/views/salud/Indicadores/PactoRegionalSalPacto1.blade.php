@@ -261,7 +261,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="table-responsive">
-                                <table id="tabla2" class="table table-sm table-striped table-bordered font-12 m-0">
+                                <table id="tabla2" class="table table-sm table-striped table-bordered font-11 m-0">
                                     <thead>
                                         <tr class="bg-success-0 text-white text-center">
                                             <th>N°</th>
@@ -610,8 +610,6 @@
                                         <th class="text-center">Fecha Nac.</th>
                                         <th class="text-center">Distrito</th>
                                         <th class="text-center">Seguro</th>
-                                        <th class="text-center">Cód. EESS</th>
-                                        <th class="text-center">EESS de Atención</th>
                                         <th class="text-center">Doc. Madre</th>
                                         <th class="text-center">Nombre Madre</th>
                                         <th class="text-center">Estado</th>
@@ -911,7 +909,7 @@
                     },
                 },
                 columnDefs: [{
-                    targets: 11, // Índice de la columna (empieza desde 0, por lo que la columna 2 es índice 1)
+                    targets: 9, // Índice de la columna (empieza desde 0, por lo que la columna 2 es índice 1)
                     render: function(data, type, row) {
                         // Puedes personalizar la URL del enlace aquí
 

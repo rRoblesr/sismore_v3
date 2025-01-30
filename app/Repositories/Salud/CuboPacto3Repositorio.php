@@ -180,7 +180,7 @@ class CuboPacto3Repositorio
         )
             ->join('par_ubigeo as d', 'd.id', '=', 'distrito_id')
             ->join('par_ubigeo as p', 'p.id', '=', 'provincia_id')
-            ->where('anio', $anio)->where('mes', '<=', $mes)->where('codigo_unico', $cod_unico);
+            ->where('anio', $anio)->where('mes', '=', $mes)->where('codigo_unico', $cod_unico);
         $query = $query->orderBy('numerador', 'desc')->get();
         return $query;
     }

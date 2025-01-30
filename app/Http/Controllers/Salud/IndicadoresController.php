@@ -603,8 +603,6 @@ class IndicadoresController extends Controller
                         $value->fecha_nacimiento,
                         $value->distrito,
                         $value->seguro,
-                        $value->cui_atencion,
-                        $value->nombre_establecimiento,
                         $value->num_doc_madre,
                         $value->nombre_completo_madre,
                         $value->num,
