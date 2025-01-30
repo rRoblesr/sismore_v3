@@ -12,13 +12,108 @@
 @endsection
 
 @section('content')
-    <div class="row">
+
+{{-- <div class="card">
+    <div
+        class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center p-2">
+        <h6 class="mb-2 mb-md-0 text-center text-md-left text-wrap text-white">
+            <i class="fas fa-chart-bar d-none"></i> {{ $ind->nombre }}
+        </h6>
+        <div class="text-center text-md-right">
+            <button type="button" class="btn btn-orange-0 btn-xs my-1" onclick="history.back()" title="VOLVER">
+                <i class="fas fa-arrow-left"></i> Volver</button>
+            <button type="button" class="btn btn-orange-0 btn-xs my-1" onclick="verpdf({{ $ind->id }})"
+                title='FICHA TÉCNICA'><i class="fas fa-file"></i> Ficha Técnica</button>
+            <button type="button" class="btn btn-orange-0 btn-xs my-1" onclick="location.reload()" title='ACTUALIZAR'>
+                <i class=" fas fa-history"></i> Actualizar</button>
+        </div>
+    </div>
+    <div class="card-body p-2">
+     
+    </div>
+</div> --}}
+
+
+    <div class="card">
+        <div
+            class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center p-2">
+            <h6 class="mb-2 mb-md-0 text-center text-md-left text-wrap text-white">
+                <i class="fas fa-chart-bar d-none"></i> {{ $ind->nombre }}
+            </h6>
+            <div class="text-center text-md-right">
+                <button type="button" class="btn btn-orange-0 btn-xs my-1" onclick="history.back()" title="VOLVER">
+                    <i class="fas fa-arrow-left"></i> Volver</button>
+                <button type="button" class="btn btn-orange-0 btn-xs my-1" onclick="verpdf({{ $ind->id }})"
+                    title='FICHA TÉCNICA'><i class="fas fa-file"></i> Ficha Técnica</button>
+                <button type="button" class="btn btn-orange-0 btn-xs my-1" onclick="location.reload()" title='ACTUALIZAR'>
+                    <i class=" fas fa-history"></i> Actualizar</button>
+            </div>
+        </div>
+        <div class="card-body p-2">
+            <div class="row">
+
+                <div class="col-md-4 col-12">
+                    <h5 class="page-title font-12 my-1">Fuente: Padrón Nominal, <br>{{ $actualizado }}</h5>
+                </div>
+
+                <div class="col-md-2 col-6">
+                    <div class="custom-select-container my-2">
+                        <label for="anio">Año</label>
+                        <select id="anio" name="anio" class="form-control form-control-sm font-11"
+                            onchange="cargarMes();">
+                            @foreach ($anio as $item)
+                                <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                    {{ $item->anio }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-2 col-6">
+                    <div class="custom-select-container my-1">
+                        <label for="mes">Mes</label>
+                        <select id="mes" name="mes" class="form-control form-control-sm font-11"
+                            onchange="cargarcuadros();">
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-2 col-6">
+                    <div class="custom-select-container my-1">
+                        <label for="provincia">Provincia</label>
+                        <select id="provincia" name="provincia" class="form-control form-control-sm font-11"
+                            onchange="cargarDistritos();cargarcuadros();">
+                            <option value="0">TODOS</option>
+                            @foreach ($provincia as $item)
+                                <option value="{{ $item->id }}">
+                                    {{ $item->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-2 col-6">
+                    <div class="custom-select-container my-1">
+                        <label for="distrito">Distrito</label>
+                        <select id="distrito" name="distrito" class="form-control form-control-sm font-11"
+                            onchange="cargarcuadros();">
+                            <option value="0">TODOS</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    {{-- <div class="row">
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-header bg-success-0">
                     <div class="card-widgets">
-                        <button type="button" class="btn btn-orange-0 btn-xs" onclick="history.back()" title="ACTUALIZAR"><i
-                                class="fas fa-arrow-left"></i> Volver</button>
+                        <button type="button" class="btn btn-orange-0 btn-xs" onclick="history.back()"
+                            title="ACTUALIZAR"><i class="fas fa-arrow-left"></i> Volver</button>
                         <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf({{ $ind->id }})"
                             title='FICHA TÉCNICA'><i class="fas fa-file"></i> Ficha Técnica</button>
                         <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
@@ -34,13 +129,13 @@
                             <h5 class="page-title font-12">Fuente: Padrón Nominal, <br>{{ $actualizado }}</h5>
                         </div>
                         <div class="col-lg-2 col-md-1 col-sm-1  ">
-
                             <div class="custom-select-container">
                                 <label for="anio">Año</label>
                                 <select id="anio" name="anio" class="form-control form-control-sm font-11"
                                     onchange="cargarMes();">
                                     @foreach ($anio as $item)
-                                        <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                        <option value="{{ $item->anio }}"
+                                            {{ $item->anio == $aniomax ? 'selected' : '' }}>
                                             {{ $item->anio }}</option>
                                     @endforeach
                                 </select>
@@ -54,7 +149,6 @@
                                 </select>
                             </div>
                         </div>
-
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="provincia">Provincia</label>
@@ -68,7 +162,6 @@
                                 </select>
                             </div>
                         </div>
-
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="distrito">Distrito</label>
@@ -82,10 +175,10 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <div class="row">
-        <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="col-md-3">
             <div class="card-box border border-plomo-0">
                 <div class="media">
                     <div class="text-center">
@@ -106,7 +199,7 @@
             <!-- end card-box-->
         </div>
 
-        <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="col-md-3">
             <div class="card-box border border-plomo-0">
                 <div class="media">
                     <div class="text-center">
@@ -133,7 +226,7 @@
             <!-- end card-box-->
         </div>
 
-        <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="col-md-3">
             <div class="card-box border border-plomo-0">
                 <div class="media">
                     <div class="text-center">
@@ -159,7 +252,7 @@
             <!-- end card-box-->
         </div>
 
-        <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="col-md-3">
             <div class="card-box border border-plomo-0">
                 <div class="media">
                     <div class="text-center">
@@ -245,7 +338,47 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="card border border-plomo-0">
+        <div
+            class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center p-2 ">
+            <h6 class="mb-2 mb-md-0 text-center text-md-left text-wrap text-white">
+                <i class="fas fa-chart-bar d-none"></i> Evaluación de cumplimiento de los registros de niños y niñas
+                menores de 6 años del padrón nominal
+            </h6>
+            <div class="text-center text-md-right">
+                <button type="button" class="btn btn-success btn-xs" onclick="descargar1()">
+                    <i class="fa fa-file-excel"></i> Descargar</button>
+            </div>
+        </div>
+        <div class="card-body p-2">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+                        <table id="tabla2" class="table table-sm table-striped table-bordered font-11 m-0">
+                            <thead>
+                                <tr class="bg-success-0 text-white text-center">
+                                    <th>N°</th>
+                                    <th>Codigo</th>
+                                    <th>Establecimiento de Salud</th>
+                                    <th>Red</th>
+                                    <th>Microrred</th>
+                                    <th>Provincia</th>
+                                    <th>Distrito</th>
+                                    <th>Denominador</th>
+                                    <th>Numerador</th>
+                                    <th>Indicador</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- <div class="row">
         <div class="col-lg-12">
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent p-0">
@@ -258,36 +391,13 @@
                     </h3>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="table-responsive">
-                                <table id="tabla2" class="table table-sm table-striped table-bordered font-11 m-0">
-                                    <thead>
-                                        <tr class="bg-success-0 text-white text-center">
-                                            <th>N°</th>
-                                            <th>Codigo</th>
-                                            <th>Establecimiento de Salud</th>
-                                            <th>Red</th>
-                                            <th>Microrred</th>
-                                            <th>Provincia</th>
-                                            <th>Distrito</th>
-                                            <th>Denominador</th>
-                                            <th>Numerador</th>
-                                            <th>Indicador</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
-    <div class="row d-none">
+    {{-- <div class="row d-none">
         <div class="col-lg-12">
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent p-0">
@@ -329,7 +439,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     {{-- <div class="row">
         <div class="col-lg-12">
@@ -913,7 +1023,7 @@
                     render: function(data, type, row) {
                         // Puedes personalizar la URL del enlace aquí
 
-                        return data==1?
+                        return data == 1 ?
                             '<span class="badge badge-pill badge-success" style="font-size:100%;"><i class="mdi mdi-thumb-up"></i> Cumple</span>' :
                             '<span class="badge badge-pill badge-danger" style="font-size:100%;"><i class="mdi mdi-thumb-down"></i> No Cumple</span>';
                     }

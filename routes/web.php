@@ -1252,7 +1252,7 @@ Route::get('/salud/pei', [IndicadoresController::class, 'PEI'])->name('salud.ind
 
 
 Route::get('/salud/pruebas', function () {
-    return view('salud.Indicadores.pruebaxxx03');
+    return view('salud.Indicadores.pruebaxxx00');
    // return UbigeoRepositorio::arrayDistritoIdNombre();
 
     //return view('pruebas3');

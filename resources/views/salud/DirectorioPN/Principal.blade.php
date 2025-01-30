@@ -114,7 +114,7 @@
         </div>
     </div> --}}
 
-    {{-- <div class="container mt-3">
+    <div class="container mt-3">
         <div class="card">
             <div
                 class="card-header bg-primary text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center">
@@ -193,7 +193,7 @@
                 </div>
             </div>
         </div>
-    </div> --}}
+    </div>
 
     {{-- <div class="card">
         <div class="card-header bg-success-0">

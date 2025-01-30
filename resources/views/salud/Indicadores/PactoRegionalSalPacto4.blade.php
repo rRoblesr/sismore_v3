@@ -6,13 +6,86 @@
 @endsection
 
 @section('content')
-    <div class="row">
+    <div class="card">
+        <div
+            class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center p-2">
+            <h6 class="mb-2 mb-md-0 text-center text-md-left text-wrap text-white">
+                <i class="fas fa-chart-bar d-none"></i> {{ $ind->nombre }}
+            </h6>
+            <div class="text-center text-md-right">
+                <button type="button" class="btn btn-orange-0 btn-xs my-1" onclick="history.back()" title="VOLVER">
+                    <i class="fas fa-arrow-left"></i> Volver</button>
+                <button type="button" class="btn btn-orange-0 btn-xs my-1" onclick="verpdf({{ $ind->id }})"
+                    title='FICHA TÉCNICA'><i class="fas fa-file"></i> Ficha Técnica</button>
+                <button type="button" class="btn btn-orange-0 btn-xs my-1" onclick="location.reload()" title='ACTUALIZAR'>
+                    <i class=" fas fa-history"></i> Actualizar</button>
+            </div>
+        </div>
+        <div class="card-body p-2">
+            <div class="row">
+
+                <div class="col-md-4 col-12">
+                    <h5 class="page-title font-12 my-1">Fuente: Padrón Nominal, <br>{{ $actualizado }}</h5>
+                </div>
+
+                <div class="col-md-2 col-6">
+                    <div class="custom-select-container my-2">
+                        <label for="anio">Año</label>
+                        <select id="anio" name="anio" class="form-control form-control-sm font-11"
+                            onchange="cargarMes();">
+                            @foreach ($anio as $item)
+                                <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                    {{ $item->anio }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-2 col-6">
+                    <div class="custom-select-container my-1">
+                        <label for="mes">Mes</label>
+                        <select id="mes" name="mes" class="form-control form-control-sm font-11"
+                            onchange="cargarcuadros();">
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-2 col-6">
+                    <div class="custom-select-container my-1">
+                        <label for="provincia">Provincia</label>
+                        <select id="provincia" name="provincia" class="form-control form-control-sm font-11"
+                            onchange="cargarDistritos();cargarcuadros();">
+                            <option value="0">TODOS</option>
+                            @foreach ($provincia as $item)
+                                <option value="{{ $item->id }}">
+                                    {{ $item->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-2 col-6">
+                    <div class="custom-select-container my-1">
+                        <label for="distrito">Distrito</label>
+                        <select id="distrito" name="distrito" class="form-control form-control-sm font-11"
+                            onchange="cargarcuadros();">
+                            <option value="0">TODOS</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    {{-- <div class="row">
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-header bg-success-0">
                     <div class="card-widgets">
-                        <button type="button" class="btn btn-orange-0 btn-xs" onclick="history.back()" title="ACTUALIZAR"><i
-                                class="fas fa-arrow-left"></i> Volver</button>
+                        <button type="button" class="btn btn-orange-0 btn-xs" onclick="history.back()"
+                            title="ACTUALIZAR"><i class="fas fa-arrow-left"></i> Volver</button>
                         <button type="button" class="btn btn-orange-0 btn-xs" onclick="verpdf({{ $ind->id }})"
                             title='FICHA TÉCNICA'><i class="fas fa-file"></i> Ficha Técnica</button>
                         <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
@@ -34,7 +107,8 @@
                                 <select id="anio" name="anio" class="form-control form-control-sm font-11"
                                     onchange="cargarMes();">
                                     @foreach ($anio as $item)
-                                        <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                        <option value="{{ $item->anio }}"
+                                            {{ $item->anio == $aniomax ? 'selected' : '' }}>
                                             {{ $item->anio }}</option>
                                     @endforeach
                                 </select>
@@ -76,7 +150,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6">
@@ -239,7 +313,28 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="card border border-plomo-0">
+        <div
+            class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center p-2 ">
+            <h6 class="mb-2 mb-md-0 text-center text-md-left text-wrap text-white">
+                <i class="fas fa-chart-bar d-none"></i>EVALUACIÓN DEL CUMPLIMIENTO DEL PAQUETE DE SERVICIOS EN NIÑOS Y NIÑAS MENORES DE 12 MESES
+            </h6>
+            <div class="text-center text-md-right">
+                <button type="button" class="btn btn-success btn-xs" onclick="descargar1()">
+                    <i class="fa fa-file-excel"></i> Descargar</button>
+            </div>
+        </div>
+        <div class="card-body p-2">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive" id="vtabla2">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- <div class="row">
         <div class="col-lg-12">
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent p-0">
@@ -261,7 +356,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <div id="modal_informacion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true">
