@@ -82,24 +82,106 @@ class CuboPacto3Repositorio
 
     public static function Tabla02($importacion, $indicador, $anio, $mes, $provincia, $distrito)
     {
+        // $query = CuboPacto3PadronMaterno::select(
+        //     'codigo_unico',
+        //     'eess_parto',
+        //     'p.nombre as provincia',
+        //     'd.nombre as distrito',
+        //     'red',
+        //     'microred',
+        //     DB::raw('sum(denominador) as denominador'),
+        //     DB::raw('sum(numerador) as numerador'),
+        //     // DB::raw('sum(num_exam_aux) as condicion1'),
+        //     // DB::raw('sum(num_apn) as condicion2'),
+        //     // DB::raw('sum(num_entrega_sfaf) as condicion3'),
+        //     DB::raw('100*sum(numerador)/sum(denominador) as indicador')
+        // )
+        //     ->join('par_ubigeo as d', 'd.id', '=', 'distrito_id')
+        //     ->join('par_ubigeo as p', 'p.id', '=', 'provincia_id')
+        //     ->where('anio', $anio)->where('mes', '<=', $mes);
+        // $query = $query->groupBy('codigo_unico', 'eess_parto', 'p.nombre', 'd.nombre', 'red', 'microred')->orderBy('indicador', 'desc')->get();
+        // return $query;
+
+        // $query = "SELECT 
+        //             e.cod_unico as codigo_unico,
+        //             e.nombre_establecimiento as eess_parto,
+        //             c.num numerador,
+        //             c.den denominador,
+        //             d.nombre distrito, 
+        //             p.nombre provincia, 
+        //             r.nombre red, 
+        //             m.nombre microred, 
+        //             round(100*c.num/c.den,1) indicador
+        //             from (
+        //             select codigo_unico ,sum(numerador) num,sum(denominador) den from sal_cubo_pacto3_padron_materno where anio=:anio1 and mes=:mes1 group by codigo_unico
+        //             ) c
+        //             join (
+        //             select tmpe.cod_unico, tmpe.nombre_establecimiento, tmpe.ubigeo_id, tmpe.microrred_id from sal_establecimiento tmpe join (
+        //                 select cui_atencion from sal_cubo_pacto1_padron_nominal  where anio=:anio2 and mes=:mes2 group by cui_atencion
+        //                 ) as tmpc on tmpc.cui_atencion=tmpe.cod_unico
+        //             ) as e on e.cod_unico = c.codigo_unico 
+        //             join par_ubigeo d on d.id = e.ubigeo_id
+        //             join par_ubigeo p on p.id = d.dependencia
+        //             join sal_microred m on m.id = e.microrred_id
+        //             join sal_red r on r.id = m.red_id
+        //             order by indicador desc ;";
+
+
+
+        $query = "SELECT 
+                        e.cod_unico as codigo_unico,
+                        e.nombre_establecimiento as eess_parto,
+                        c.num numerador,
+                        c.den denominador,
+                        d.nombre AS distrito,
+                        p.nombre AS provincia,
+                        r.nombre AS red,
+                        m.nombre AS microred,
+                        ROUND(100 * c.num / c.den, 1) AS indicador
+                    FROM 
+                        (
+                            SELECT codigo_unico, SUM(numerador) AS num, SUM(denominador) AS den
+                            FROM sal_cubo_pacto3_padron_materno
+                            WHERE anio = :anio1 AND mes = :mes1
+                            GROUP BY codigo_unico
+                        ) AS c
+                    JOIN 
+                        (
+                            SELECT tmpe.cod_unico, tmpe.nombre_establecimiento, tmpe.ubigeo_id, tmpe.microrred_id
+                            FROM sal_establecimiento tmpe
+                            JOIN (
+                                SELECT cui_atencion 
+                                FROM sal_cubo_pacto1_padron_nominal 
+                                WHERE anio = :anio2 AND mes = :mes2
+                                GROUP BY cui_atencion
+                            ) AS tmpc ON tmpc.cui_atencion = tmpe.cod_unico
+                        ) AS e ON e.cod_unico = c.codigo_unico
+                    JOIN par_ubigeo d ON d.id = e.ubigeo_id
+                    JOIN par_ubigeo p ON p.id = d.dependencia
+                    JOIN sal_microred m ON m.id = e.microrred_id
+                    JOIN sal_red r ON r.id = m.red_id
+                    ORDER BY indicador DESC;";
+
+        $resultados = DB::select(DB::raw($query), ['anio1' => $anio, 'anio2' => $anio, 'mes1' => $mes, 'mes2' => $mes]);
+        // $resultados = DB::select(DB::raw($query));
+        return $resultados;
+    }
+
+    public static function Tabla0201($importacion, $indicador, $anio, $mes, $provincia, $distrito, $cod_unico)
+    {
         $query = CuboPacto3PadronMaterno::select(
-            'codigo_unico',
-            'eess_parto',
-            'p.nombre as provincia',
-            'd.nombre as distrito',
-            'red',
-            'microred',
-            DB::raw('sum(denominador) as denominador'),
-            DB::raw('sum(numerador) as numerador'),
-            // DB::raw('sum(num_exam_aux) as condicion1'),
-            // DB::raw('sum(num_apn) as condicion2'),
-            // DB::raw('sum(num_entrega_sfaf) as condicion3'),
-            DB::raw('100*sum(numerador)/sum(denominador) as indicador')
+            'num_doc',
+            'fecha_parto',
+            'distrito',
+            'num_exam_aux',
+            'num_apn',
+            'num_entrega_sfaf',
+            'numerador'
         )
             ->join('par_ubigeo as d', 'd.id', '=', 'distrito_id')
             ->join('par_ubigeo as p', 'p.id', '=', 'provincia_id')
-            ->where('anio', $anio)->where('mes', '<=', $mes);
-        $query = $query->groupBy('codigo_unico', 'eess_parto', 'p.nombre', 'd.nombre', 'red', 'microred')->orderBy('indicador', 'desc')->get();
+            ->where('anio', $anio)->where('mes', '<=', $mes)->where('codigo_unico', $cod_unico);
+        $query = $query->orderBy('numerador', 'desc')->get();
         return $query;
     }
 

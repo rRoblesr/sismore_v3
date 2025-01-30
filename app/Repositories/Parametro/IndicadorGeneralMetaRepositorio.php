@@ -354,29 +354,99 @@ class IndicadorGeneralMetaRepositorio
 
     public static function getSalPacto2tabla3($indicador_id, $anio, $mes, $provincia, $distrito)
     {
-        $query = ImporPadronAnemia::select(
-            'es.cod_unico as unico',
-            'es.nombre_establecimiento as eess',
-            'rr.nombre as red',
-            'mr.nombre as micro',
-            'pp.nombre as pro',
-            'dd.nombre as dis',
-            DB::raw('sum(den) as den'),
-            DB::raw('sum(num) as num'),
-            DB::raw('round(100*sum(num)/sum(den),1) as ind')
-        );
-        $query = $query->where('anio', $anio);
-        $query = $query->join('sal_establecimiento as es', 'es.cod_unico', '=', 'sal_impor_padron_anemia.cod_unico');
-        $query = $query->join('sal_microred as mr', 'mr.id', '=', 'es.microrred_id');
-        $query = $query->join('sal_red as rr', 'rr.id', '=', 'mr.red_id');
-        $query = $query->join('par_ubigeo as dd', 'dd.id', '=', 'es.ubigeo_id');
-        $query = $query->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia');
-        if (IndicadoresController::$pacto1_anio == $anio) $query = $query->where('mes', '>=', IndicadoresController::$pacto1_mes);
-        if ($mes > 0) $query = $query->where('mes',  $mes);
-        if ($distrito > 0) $query = $query->where('ubigeo',  $distrito);
-        if ($provincia > 0) $query = $query->where('pp.id',  $provincia);
+        // $query = ImporPadronAnemia::select(
+        //     'es.cod_unico as unico',
+        //     'es.nombre_establecimiento as eess',
+        //     'rr.nombre as red',
+        //     'mr.nombre as micro',
+        //     'pp.nombre as pro',
+        //     'dd.nombre as dis',
+        //     DB::raw('sum(den) as den'),
+        //     DB::raw('sum(num) as num'),
+        //     DB::raw('round(100*sum(num)/sum(den),1) as ind')
+        // );
+        // $query = $query->where('anio', $anio);
+        // $query = $query->join('sal_establecimiento as es', 'es.cod_unico', '=', 'sal_impor_padron_anemia.cod_unico');
+        // $query = $query->join('sal_microred as mr', 'mr.id', '=', 'es.microrred_id');
+        // $query = $query->join('sal_red as rr', 'rr.id', '=', 'mr.red_id');
+        // $query = $query->join('par_ubigeo as dd', 'dd.id', '=', 'es.ubigeo_id');
+        // $query = $query->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia');
+        // if (IndicadoresController::$pacto1_anio == $anio) $query = $query->where('mes', '>=', IndicadoresController::$pacto1_mes);
+        // if ($mes > 0) $query = $query->where('mes',  $mes);
+        // if ($distrito > 0) $query = $query->where('ubigeo',  $distrito);
+        // if ($provincia > 0) $query = $query->where('pp.id',  $provincia);
 
-        $query = $query->groupBy('unico', 'eess', 'rr.nombre', 'red', 'micro', 'pro', 'dis')->get();
+        // $query = $query->groupBy('unico', 'eess', 'rr.nombre', 'red', 'micro', 'pro', 'dis')->get();
+
+        // return $query;
+
+        // $anio = 2025;
+        // $mes = 1;
+
+        // Consulta SQL
+        $query = "SELECT 
+            LPAD(e.cod_unico, 8, '0') AS unico,
+            e.nombre_establecimiento AS eess,
+            a.num,
+            a.den,
+            d.nombre AS dis,
+            p.nombre AS pro,
+            r.nombre AS red,
+            m.nombre AS micro,
+            ROUND(100 * a.num / a.den, 1) AS ind
+        FROM 
+            (
+                SELECT cod_unico, SUM(num) AS num, SUM(den) AS den
+                FROM sal_impor_padron_anemia a
+                WHERE a.anio = :anio1 AND a.mes = :mes1
+                GROUP BY cod_unico
+            ) AS a
+        JOIN 
+            (
+                SELECT tmpe.cod_unico, tmpe.nombre_establecimiento, tmpe.ubigeo_id, tmpe.microrred_id
+                FROM sal_establecimiento tmpe
+                JOIN (
+                    SELECT DISTINCT cod_unico 
+                    FROM sal_impor_padron_anemia 
+                    WHERE anio = :anio2 AND mes = :mes2
+                ) AS tmpc ON tmpc.cod_unico = tmpe.cod_unico
+            ) AS e ON e.cod_unico = a.cod_unico
+        JOIN par_ubigeo d ON d.id = e.ubigeo_id
+        JOIN par_ubigeo p ON p.id = d.dependencia
+        JOIN sal_microred m ON m.id = e.microrred_id
+        JOIN sal_red r ON r.id = m.red_id
+        ORDER BY ind desc;";
+
+        $resultados = DB::select(DB::raw($query), ['anio1' => $anio, 'anio2' => $anio, 'mes1' => $mes, 'mes2' => $mes]);
+
+
+        // Retornar los resultados como JSON
+        // return response()->json($resultados);
+        return $resultados;
+    }
+
+    public static function getSalPacto2tabla0301($indicador_id, $anio, $mes, $provincia, $distrito, $cod_unico)
+    {
+        $query = ImporPadronAnemia::select(
+            'num_doc',
+            'dd.nombre as distrito',
+            'fecha_nac',
+            'seguro',
+            'num_supt1',
+            'num_supt3',
+            'num_recup',
+            'num_dosaje',
+            'num',
+        );
+        $query->where('anio', $anio)->where('cod_unico', $cod_unico);
+        $query->join('par_ubigeo as dd', 'dd.id', '=', 'ubigeo');
+        $query->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia');
+        // if (IndicadoresController::$pacto1_anio == $anio) $query = $query->where('mes', '>=', IndicadoresController::$pacto1_mes);
+        if ($mes > 0) $query->where('mes',  $mes);
+        if ($distrito > 0) $query->where('ubigeo',  $distrito);
+        if ($provincia > 0) $query->where('pp.id',  $provincia);
+
+        $query = $query->get();
 
         return $query;
     }

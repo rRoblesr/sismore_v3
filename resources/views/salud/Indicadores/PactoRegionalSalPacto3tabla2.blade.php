@@ -1,4 +1,4 @@
-<table id="tabla2" class="table table-sm table-striped table-bordered font-12 m-0">
+<table id="tabla2" class="table table-sm table-striped table-bordered font-11 m-0">
     <thead>
         <tr class="bg-success-0 text-white text-center">
 
@@ -17,7 +17,7 @@
             <th class="text-center">Indicador</th>
         </tr>
     </thead>
-    @if ($base->count() > 0)
+    {{-- @if ($base->count() > 0) --}}
         <tbody>
             @foreach ($base as $key => $item)
                 <tr class="text-center">
@@ -46,13 +46,13 @@
                 <th class="text-center">{!! avance($foot->indicador, 1) !!}</th>
             </tr>
         </tfoot> --}}
-    @else
+    {{-- @else --}}
         {{-- <tbody>
             <tr class="text-center">
                 <td class="text-center" colspan="11"><a href="#" class="">Sin información</a></td>
             </tr>
         </tbody> --}}
-    @endif
+    {{-- @endif --}}
 </table>
 
 

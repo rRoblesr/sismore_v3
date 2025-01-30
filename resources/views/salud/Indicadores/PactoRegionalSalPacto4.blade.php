@@ -291,6 +291,47 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+
+    <div id="modal_info_ipress" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Modal Heading</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-lg-12">
+                        <div class="table-responsive">
+                            <table id="tabla0201" class="table table-sm table-striped table-bordered font-11">
+                                <thead>
+                                    <tr class="table-success-0 text-white">
+                                        <th class="text-center">Nº</th>
+                                        <th class="text-center">DNI</th>
+                                        <th class="text-center">Fecha Nac.</th>
+                                        <th class="text-center">Distrito</th>
+                                        <th class="text-center">Seguro</th>
+                                        <th class="text-center">CRED</th>
+                                        <th class="text-center">Vacuna</th>
+                                        <th class="text-center">Suplemento</th>
+                                        <th class="text-center">HB</th>
+                                        <th class="text-center">DNI</th>
+                                        <th class="text-center">Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Cerrar</button>
+                    <!-- button type="button" class="btn btn-primary waves-effect waves-light">Save changes</button -->
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('js')
@@ -390,6 +431,15 @@
                             // paging: false,
                             // info: false,
                             // searching: false,
+                            columnDefs: [{
+                                targets: 1, // Índice de la columna (empieza desde 0, por lo que la columna 2 es índice 1)
+                                render: function(data, type, row) {
+                                    // Puedes personalizar la URL del enlace aquí
+                                    return '<a href="javascript:void(0)" onclick="abrirmodalinfoipress(`' +
+                                    data + '`)">' + data +
+                                        '</a>';
+                                }
+                            }],
                         });
 
                     }
@@ -475,6 +525,43 @@
             });
 
             $('#modal_informacion').modal('show');
+        }
+
+        function abrirmodalinfoipress(codigo_unico) {
+            $('#modal_info_ipress .modal-title').html('NIÑOS Y NIÑAS ATENDIDOS');
+            $('#modal_info_ipress').modal('show');
+            tablexx = $('#tabla0201').DataTable({
+                responsive: true,
+                autoWidth: false,
+                ordered: false,
+                language: table_language,
+                destroy: true,
+                ajax: {
+                    url: "{{ route('salud.indicador.pactoregional.sal.pacto4.reports') }}",
+                    "type": "GET",
+                    //"dataType": 'JSON',
+                    data: {
+                        'div': 'tabla0201',
+                        "anio": $('#anio').val(),
+                        "mes": $('#mes').val(),
+                        "provincia": $('#provincia').val(),
+                        "distrito": $('#distrito').val(),
+                        "indicador": '{{ $ind->id }}',
+                        "codigo": '{{ $ind->codigo }}',
+                        "cod_unico": parseInt(codigo_unico, 10),
+                    },
+                },
+                columnDefs: [{
+                    targets: 10, // Índice de la columna (empieza desde 0, por lo que la columna 2 es índice 1)
+                    render: function(data, type, row) {
+                        // Puedes personalizar la URL del enlace aquí
+
+                        return data ?
+                            '<span class="badge badge-pill badge-success" style="font-size:100%;"><i class="mdi mdi-thumb-up"></i> Cumple</span>' :
+                            '<span class="badge badge-pill badge-danger" style="font-size:100%;"><i class="mdi mdi-thumb-down"></i> No Cumple</span>';
+                    }
+                }],
+            });
         }
 
         function gColumnx(div, data, titulo, subtitulo, tooltip) {

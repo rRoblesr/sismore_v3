@@ -544,6 +544,82 @@ class IndicadoresController extends Controller
                 return response()->json(compact('excel'));
 
             case 'tabla2':
+                $draw = intval($rq->draw);
+                $start = intval($rq->start);
+                $length = intval($rq->length);
+
+                $query = CuboPacto1PadronNominalRepositorio::pacto01Tabla02($impMaxAnio, $rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+
+                $data = [];
+                foreach ($query as $key => $value) {
+                    $data[] = array(
+                        $key + 1,
+                        $value->codigo,
+                        $value->ipress,
+                        $value->red,
+                        $value->microrred,
+                        $value->provincia,
+                        $value->distrito,
+                        $value->denominador,
+                        $value->numerador,
+                        // $value->indicador
+                        $value->indicador < 51 ?
+                            '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px">' . number_format($value->indicador, 1) . '%</span>' : ($value->indicador < 100 ?
+                                '<span class="badge badge-pill badge-warning" style="font-size:90%; width:50px">' . number_format($value->indicador, 1) . '%</span>' :
+                                '<span class="badge badge-pill badge-success" style="font-size:90%; width:50px">' . number_format($value->indicador, 1) . '%</span>'
+                            )
+                    );
+                }
+                $result = array(
+                    "draw" => $draw,
+                    "recordsTotal" => $start,
+                    "recordsFiltered" => $length,
+                    "data" => $data,
+                    // "data2" => $rq->all(),
+                );
+                return response()->json($result);
+                break;
+
+            case 'tabla0201':
+                $draw = intval($rq->draw);
+                $start = intval($rq->start);
+                $length = intval($rq->length);
+
+                $query = CuboPacto1PadronNominal::where('importacion', $impMaxAnio)->where('cui_atencion', $rq->cod_unico);
+                $query = $query->whereIn('tipo_doc', ['DNI', 'CNV']);
+
+                // if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
+                // if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
+
+                $query = $query->get();
+
+                $data = [];
+                foreach ($query as $key => $value) {
+                    $data[] = array(
+                        $key + 1,
+                        $value->tipo_doc,
+                        $value->num_doc,
+                        $value->nombre_completo,
+                        $value->fecha_nacimiento,
+                        $value->distrito,
+                        $value->seguro,
+                        $value->cui_atencion,
+                        $value->nombre_establecimiento,
+                        $value->num_doc_madre,
+                        $value->nombre_completo_madre,
+                        $value->num,
+                    );
+                }
+                $result = array(
+                    "draw" => $draw,
+                    "recordsTotal" => $start,
+                    "recordsFiltered" => $length,
+                    "data" => $data,
+                    // "data2" => $rq->all(),
+                );
+                return response()->json($result);
+                break;
+            case 'tabla2y':
                 $base = CuboPacto1PadronNominalRepositorio::pacto01Tabla02($impMaxAnio, $rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
                 $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla2', compact('base', 'ndis'))->render();
                 return response()->json(compact('excel'));
@@ -831,12 +907,48 @@ class IndicadoresController extends Controller
 
             case 'tabla3':
                 $base = IndicadorGeneralMetaRepositorio::getSalPacto2tabla3($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
-                foreach ($base as $key => $value) {
-                    $value->unico = str_pad($value->unico, 8, '0', STR_PAD_LEFT);
-                }
+                // foreach ($base as $key => $value) {
+                //     $value->unico = str_pad($value->unico, 8, '0', STR_PAD_LEFT);
+                // }
+                // return response()->json(compact('base'));
                 $aniob = $rq->anio;
                 $excel = view('salud.Indicadores.PactoRegionalSalPacto2tabla3', compact('base', 'ndis', 'aniob'))->render();
-                return response()->json(compact('excel', 'base'));
+                return response()->json(compact('excel'));
+
+            case 'tabla0301':
+                // $base = IndicadorGeneralMetaRepositorio::getSalPacto2tabla0301($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito, $rq->cod_unico);
+                // $aniob = $rq->anio;
+                // $excel = view('salud.Indicadores.PactoRegionalSalPacto2tabla3', compact('base', 'ndis', 'aniob'))->render();
+                // return response()->json(compact('excel', 'base'));
+
+                $draw = intval($rq->draw);
+                $start = intval($rq->start);
+                $length = intval($rq->length);
+
+                $query = IndicadorGeneralMetaRepositorio::getSalPacto2tabla0301($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito, $rq->cod_unico);
+                $data = [];
+                foreach ($query as $key => $value) {
+                    $data[] = array(
+                        $key + 1,
+                        $value->num_doc,
+                        $value->fecha_nac,
+                        $value->distrito,
+                        $value->seguro,
+                        $value->num_supt1,
+                        $value->num_supt3,
+                        $value->num_recup,
+                        $value->num_dosaje,
+                        $value->num,
+                    );
+                }
+                $result = array(
+                    "draw" => $draw,
+                    "recordsTotal" => $start,
+                    "recordsFiltered" => $length,
+                    "data" => $data,
+                    // "data2" => $rq->all(),
+                );
+                return response()->json($result);
             case 'tabla4':
                 $base = IndicadorGeneralMetaRepositorio::getSalPacto2tabla4($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
                 $aniob = $rq->anio;
@@ -978,6 +1090,34 @@ class IndicadoresController extends Controller
                 $base = CuboPacto3Repositorio::Tabla02($impMaxAnio, $rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
                 $excel = view('salud.Indicadores.PactoRegionalSalPacto3tabla2', compact('base', 'ndis'))->render();
                 return response()->json(compact('excel', 'base'));
+
+            case 'tabla0201':
+                $draw = intval($rq->draw);
+                $start = intval($rq->start);
+                $length = intval($rq->length);
+
+                $query =  CuboPacto3Repositorio::Tabla0201($impMaxAnio, $rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito, $rq->cod_unico);
+                $data = [];
+                foreach ($query as $key => $value) {
+                    $data[] = array(
+                        $key + 1,
+                        $value->num_doc,
+                        $value->fecha_parto,
+                        $value->distrito,
+                        $value->num_exam_aux,
+                        $value->num_apn,
+                        $value->num_entrega_sfaf,
+                        $value->numerador,
+                    );
+                }
+                $result = array(
+                    "draw" => $draw,
+                    "recordsTotal" => $start,
+                    "recordsFiltered" => $length,
+                    "data" => $data,
+                    // "data2" => $rq->all(),
+                );
+                return response()->json($result);
 
             default:
                 return [];
@@ -1162,6 +1302,36 @@ class IndicadoresController extends Controller
                 $excel = view('salud.Indicadores.PactoRegionalSalPacto4tabla2', compact('base', 'ndis'))->render();
                 return response()->json(compact('excel', 'base'));
 
+            case 'tabla0201':
+                $draw = intval($rq->draw);
+                $start = intval($rq->start);
+                $length = intval($rq->length);
+
+                $query =  CuboPacto4Repositorio::Tabla0201($impMaxAnio, $rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito, $rq->cod_unico);
+                $data = [];
+                foreach ($query as $key => $value) {
+                    $data[] = array(
+                        $key + 1,
+                        $value->num_doc,
+                        $value->fecha_nac,
+                        $value->distrito,
+                        $value->seguro,
+                        $value->num_cred,
+                        $value->num_vac,
+                        $value->num_esq,
+                        $value->num_hb,
+                        $value->num_dniemision,
+                        $value->numerador,
+                    );
+                }
+                $result = array(
+                    "draw" => $draw,
+                    "recordsTotal" => $start,
+                    "recordsFiltered" => $length,
+                    "data" => $data,
+                    // "data2" => $rq->all(),
+                );
+                return response()->json($result);
             default:
                 return [];
         }

@@ -92,35 +92,101 @@ class CuboPacto4Repositorio
 
     public static function Tabla02($importacion, $indicador, $anio, $mes, $provincia, $distrito)
     {
+        // $filtro = function ($query) use ($provincia, $distrito) {
+        //     if ($provincia > 0) $query->where('c4.provincia_id', $provincia);
+        //     if ($distrito > 0) $query->where('c4.distrito_id', $distrito);
+        // };
+
+        // $query = CuboPacto4Padron12Meses::from('sal_cubo_pacto4_padron_12meses as c4')->select(            
+        //     'e.codigo_unico',
+        //     'eess',
+        //     'r.nombre as red',
+        //     'm.nombre as microrred',
+        //     // 'departamento',
+        //     'p.nombre as provincia',
+        //     'd.nombre as distrito',
+        //     DB::raw('sum(c4.denominador) as denominador'),
+        //     DB::raw('sum(c4.numerador) as numerador'),
+        //     // DB::raw('sum(num_cred) as condicion1'),
+        //     // DB::raw('sum(num_vac) as condicion2'),
+        //     // DB::raw('sum(num_esq) as condicion3'),
+        //     // DB::raw('sum(num_hb) as condicion4'),
+        //     // DB::raw('sum(num_dniemision) as condicion5'),
+        //     DB::raw('100*sum(c4.numerador)/sum(c4.denominador) as indicador')
+        // )
+        //     ->join('sal_establecimiento as e', 'e.id', '=', 'establecimiento_id')
+        //     ->join('sal_red as r', 'r.id', '=', 'e.red_id')
+        //     ->join('sal_microred as m', 'm.id', '=', 'e.microrred_id')
+        //     ->join('par_ubigeo as d', 'd.id', '=', 'c4.distrito_id')
+        //     ->join('par_ubigeo as p', 'p.id', '=', 'd.dependencia')
+        //     ->where('c4.anio', $anio)->where('c4.mes', '=', $mes)->tap($filtro)//->where('departamento', 'UCAYALI')
+        //     ->groupBy('codigo_unico', 'eess', 'r.nombre', 'm.nombre', 'p.nombre', 'd.nombre',)->orderBy('indicador', 'desc')->get();
+        // return $query;
+
+        $query = "SELECT 
+                    lpad(e.cod_unico,8,'0') codigo_unico,
+                    e.nombre_establecimiento eess,
+                    c.num numerador,
+                    c.den denominador,
+                    d.nombre AS distrito,
+                    p.nombre AS provincia,
+                    u.nombre AS departamento,
+                    r.nombre AS red,
+                    m.nombre AS microrred,
+                    ROUND(100 * c.num / c.den, 1) AS indicador
+                FROM 
+                    (
+                        SELECT cod_unico, SUM(numerador) AS num, SUM(denominador) AS den
+                        FROM sal_cubo_pacto4_padron_12meses
+                        WHERE anio = :anio1 AND mes = :mes1
+                        GROUP BY cod_unico
+                    ) AS c
+                JOIN 
+                    (
+                        SELECT tmpe.cod_unico, tmpe.nombre_establecimiento, tmpe.ubigeo_id, tmpe.microrred_id
+                        FROM sal_establecimiento tmpe
+                        JOIN (
+                            SELECT cod_unico 
+                            FROM sal_cubo_pacto4_padron_12meses 
+                            WHERE anio = :anio2 AND mes = :mes2
+                            GROUP BY cod_unico
+                        ) AS tmpc ON tmpc.cod_unico = tmpe.cod_unico
+                    ) AS e ON e.cod_unico = c.cod_unico
+                JOIN par_ubigeo d ON d.id = e.ubigeo_id
+                JOIN par_ubigeo p ON p.id = d.dependencia
+                JOIN par_ubigeo u ON u.id = p.dependencia
+                JOIN sal_microred m ON m.id = e.microrred_id
+                JOIN sal_red r ON r.id = m.red_id
+                ORDER BY indicador DESC;";
+
+        // Ejecutar la consulta
+        $resultados = DB::select(DB::raw($query), ['anio1' => $anio, 'anio2' => $anio, 'mes1' => $mes, 'mes2' => $mes]);
+
+        return $resultados;
+    }
+
+    public static function Tabla0201($importacion, $indicador, $anio, $mes, $provincia, $distrito, $cod_unico)
+    {
         $filtro = function ($query) use ($provincia, $distrito) {
             if ($provincia > 0) $query->where('c4.provincia_id', $provincia);
             if ($distrito > 0) $query->where('c4.distrito_id', $distrito);
         };
 
         $query = CuboPacto4Padron12Meses::from('sal_cubo_pacto4_padron_12meses as c4')->select(
-            // 'departamento',
-            'e.codigo_unico',
-            'eess',
-            'r.nombre as red',
-            'm.nombre as microrred',
-            'p.nombre as provincia',
+            'num_doc',
+            'fecha_nac',
             'd.nombre as distrito',
-            DB::raw('sum(c4.denominador) as denominador'),
-            DB::raw('sum(c4.numerador) as numerador'),
-            // DB::raw('sum(num_cred) as condicion1'),
-            // DB::raw('sum(num_vac) as condicion2'),
-            // DB::raw('sum(num_esq) as condicion3'),
-            // DB::raw('sum(num_hb) as condicion4'),
-            // DB::raw('sum(num_dniemision) as condicion5'),
-            DB::raw('100*sum(c4.numerador)/sum(c4.denominador) as indicador')
+            'seguro',
+            'num_cred',
+            'num_vac',
+            'num_esq',
+            'num_hb',
+            'num_dniemision',
+            'numerador',
         )
-            ->join('sal_establecimiento as e', 'e.id', '=', 'establecimiento_id')
-            ->join('sal_red as r', 'r.id', '=', 'e.red_id')
-            ->join('sal_microred as m', 'm.id', '=', 'e.microrred_id')
             ->join('par_ubigeo as d', 'd.id', '=', 'c4.distrito_id')
-            ->join('par_ubigeo as p', 'p.id', '=', 'd.dependencia')
-            ->where('c4.anio', $anio)->where('c4.mes', '=', $mes)->tap($filtro) //->where('departamento', 'UCAYALI')
-            ->groupBy('codigo_unico', 'eess', 'r.nombre', 'm.nombre', 'p.nombre', 'd.nombre',)->orderBy('indicador', 'desc')->get();
+            ->where('c4.anio', $anio)->where('c4.mes', '=', $mes)->where('cod_unico', $cod_unico)//->tap($filtro) //->where('departamento', 'UCAYALI')
+            ->orderBy('numerador', 'desc')->get();
         return $query;
     }
 

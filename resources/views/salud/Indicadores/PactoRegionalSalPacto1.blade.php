@@ -261,7 +261,22 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="table-responsive">
-                                <table id="vtabla2" class="table table-sm table-striped table-bordered font-11">
+                                <table id="tabla2" class="table table-sm table-striped table-bordered font-12 m-0">
+                                    <thead>
+                                        <tr class="bg-success-0 text-white text-center">
+                                            <th>N°</th>
+                                            <th>Codigo</th>
+                                            <th>Establecimiento de Salud</th>
+                                            <th>Red</th>
+                                            <th>Microrred</th>
+                                            <th>Provincia</th>
+                                            <th>Distrito</th>
+                                            <th>Denominador</th>
+                                            <th>Numerador</th>
+                                            <th>Indicador</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
 
                                 </table>
                             </div>
@@ -570,9 +585,51 @@
                     <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Cerrar</button>
                     {{-- <button type="button" class="btn btn-primary waves-effect waves-light">Save changes</button> --}}
                 </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+            </div>
+        </div>
+    </div>
+
+    <div id="modal_info_ipress" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Modal Heading</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-lg-12">
+                        <div class="table-responsive">
+                            <table id="tabla0201" class="table table-sm table-striped table-bordered font-11">
+                                <thead>
+                                    <tr class="table-success-0 text-white">
+                                        <th class="text-center">Nº</th>
+                                        <th class="text-center">Tipo Doc.</th>
+                                        <th class="text-center">Documento</th>
+                                        <th class="text-center">Nombre</th>
+                                        <th class="text-center">Fecha Nac.</th>
+                                        <th class="text-center">Distrito</th>
+                                        <th class="text-center">Seguro</th>
+                                        <th class="text-center">Cód. EESS</th>
+                                        <th class="text-center">EESS de Atención</th>
+                                        <th class="text-center">Doc. Madre</th>
+                                        <th class="text-center">Nombre Madre</th>
+                                        <th class="text-center">Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Cerrar</button>
+                    <!-- button type="button" class="btn btn-primary waves-effect waves-light">Save changes</button -->
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('js')
@@ -581,6 +638,8 @@
         var anal1, anal2, anal3;
         var tablepadron;
         var table02; // = $('#table2').DataTable();
+        var tablex;
+        var tablexx;
         $(document).ready(function() {
             // Highcharts.setOptions({
             //     lang: {
@@ -598,8 +657,8 @@
             panelGraficas('anal2');
             panelGraficas('anal3');
             panelGraficas('tabla1');
-            panelGraficas('tabla2');
-            // tabla2('tabla2');
+            // panelGraficas('tabla2');
+            tabla2('tabla2');
             // tabla3('tabla3');
             // panelGraficas('tabla3');
         }
@@ -662,22 +721,7 @@
                         //     searching: false,
                         // });
                     } else if (div == "tabla2") {
-                        $('#vtabla2').html(data.excel);
-                        $('#vtabla2').html(data.excel);
-                        $('#vtabla2').html(data.excel);
-                        $('#vtabla2').html(data.excel);
-                        $('#tabla2').DataTable({
-                            responsive: true,
-                            autoWidth: false,
-                            ordered: true,
-                            // searching: false,
-                            // bPaginate: false,
-                            // info: false,
-                            language: table_language,
-                        });
 
-                        // table02.clear().draw();
-                        // table02.rows.add($(data.excel).find('tr')).draw();
                     }
 
                 },
@@ -688,250 +732,39 @@
             });
         }
 
-        // function tabla2(div) {
-        //     tablepadron = $('#padronTable').DataTable({
-        //         responsive: true,
-        //         autoWidth: false,
-        //         processing: true,
-        //         serverSide: true,
-        //         ordered: true,
-        //         language: table_language,
-        //         destroy: true,
-        //         ajax: {
-        //             url: "{{ route('salud.indicador.pactoregional.detalle.reports.2') }}",
-        //             type: 'POST',
-        //             headers: {
-        //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //             },
-        //             data: function(d) {
-        //                 d.div = div;
-        //                 d.anio = $('#anio').val();
-        //                 d.mes = $('#mes').val();
-        //                 d.provincia = $('#provincia').val();
-        //                 d.distrito = $('#distrito').val();
-        //                 d.fuente = {{ $fuente }};
-        //                 d.indicador = '{{ $ind->id }}';
-        //                 d.codigo = '{{ $ind->codigo }}';
-        //             }
-        //         },
-        //         columns: [{
-        //                 data: 'item',
-        //                 name: 'item',
-        //             },
-        //             {
-        //                 data: 'tipo_doc',
-        //                 name: 'tipo_doc',
-        //             },
-        //             {
-        //                 data: 'num_doc',
-        //                 name: 'num_doc',
-        //             },
-        //             {
-        //                 data: 'nombre_completo',
-        //                 name: 'nombre_completo',
-        //             },
-        //             {
-        //                 data: 'nacimiento',
-        //                 name: 'nacimiento',
-        //             },
-        //             {
-        //                 data: 'distrito',
-        //                 name: 'distrito',
-        //             },
-        //             {
-        //                 data: 'seguro',
-        //                 name: 'seguro',
-        //             },
-        //             {
-        //                 data: 'ipress',
-        //                 name: 'ipress',
-        //             },
-        //             {
-        //                 data: 'nombre_establecimiento',
-        //                 name: 'nombre_establecimiento',
-        //             },
-        //             {
-        //                 data: 'num_doc_madre',
-        //                 name: 'num_doc_madre',
-        //             },
-        //             {
-        //                 data: 'nombre_completo_madre',
-        //                 name: 'nombre_completo_madre',
-        //             },
-        //             {
-        //                 data: 'estado',
-        //                 name: 'estado',
-        //             }
-        //         ],
-        //         columnDefs: [{
-        //             className: 'text-center',
-        //             targets: [0, 1, 2, 4, 6, 7, 9, 11]
-        //         }, {
-        //             targets: 2,
-        //             render: function(data, type, row) {
-        //                 // return '<a href="/ruta/detalle/' + row + '">' + data + '</a>';
-        //                 return `<a href="javascript:void(0)" onclick="abrirmodalpadron('${data}')">${data}</a>`;
-        //             }
-        //         }, {
-        //             targets: 7,
-        //             render: function(data, type, row) {
-        //                 // return '<a href="/ruta/detalle/' + row + '">' + data + '</a>';
-        //                 // console.log(parseInt(data, 10));
-        //                 return data ?
-        //                     `<a href="javascript:void(0)" onclick="abrirmodaleess(${parseInt(data, 10)})">${data}</a>` :
-        //                     '';
-        //             }
-        //         }],
-        //     });
-
-        // }
-
-        // function tabla3(div) {
-        //     tablepadron = $('#table3').DataTable({
-        //         responsive: true,
-        //         autoWidth: false,
-        //         processing: true,
-        //         serverSide: true,
-        //         ordered: true,
-        //         language: table_language,
-        //         destroy: true,
-        //         ajax: {
-        //             url: "{{ route('salud.indicador.pactoregional.detalle.reports.3') }}",
-        //             type: 'POST',
-        //             headers: {
-        //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //             },
-        //             data: function(d) {
-        //                 d.div = div;
-        //                 d.anio = $('#anio').val();
-        //                 d.mes = $('#mes').val();
-        //                 d.provincia = $('#provincia').val();
-        //                 d.distrito = $('#distrito').val();
-        //                 d.fuente = {{ $fuente }};
-        //                 d.indicador = '{{ $ind->id }}';
-        //                 d.codigo = '{{ $ind->codigo }}';
-        //             }
-        //         },
-        //         columns: [{
-        //                 data: 'item',
-        //                 name: 'item',
-        //             },
-        //             {
-        //                 data: 'tipo_doc',
-        //                 name: 'tipo_doc',
-        //             },
-        //             {
-        //                 data: 'num_doc',
-        //                 name: 'num_doc',
-        //             },
-        //             {
-        //                 data: 'nombre_completo',
-        //                 name: 'nombre_completo',
-        //             },
-        //             {
-        //                 data: 'nacimiento',
-        //                 name: 'nacimiento',
-        //             },
-        //             {
-        //                 data: 'c01',
-        //                 name: 'c01',
-        //             },
-        //             {
-        //                 data: 'c02',
-        //                 name: 'c02',
-        //             },
-        //             {
-        //                 data: 'c03',
-        //                 name: 'c03',
-        //             },
-        //             {
-        //                 data: 'c04',
-        //                 name: 'c04',
-        //             },
-        //             {
-        //                 data: 'c05',
-        //                 name: 'c05',
-        //             },
-        //             {
-        //                 data: 'c06',
-        //                 name: 'c06',
-        //             },
-        //             {
-        //                 data: 'c07',
-        //                 name: 'c07',
-        //             },
-        //             {
-        //                 data: 'c08',
-        //                 name: 'c08',
-        //             },
-        //             {
-        //                 data: 'c09',
-        //                 name: 'c09',
-        //             },
-        //             {
-        //                 data: 'c10',
-        //                 name: 'c10',
-        //             },
-        //             {
-        //                 data: 'estado',
-        //                 name: 'estado',
-        //             }
-        //         ],
-        //         columnDefs: [
-
-        //             {
-        //                 targets: 2,
-        //                 render: function(data, type, row) {
-        //                     return `<a href="javascript:void(0)" onclick="abrirmodalpadron('${data}')">${data}</a>`;
-        //                 }
-        //             }
-        //         ],
-        //         createdRow: function(row, data, dataIndex) {
-        //             $(row).find('td').each(function(index) {
-        //                 if ([0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(index)) {
-        //                     $(this).addClass('text-center');
-        //                 }
-        //             });
-        //         },
-        //     });
-
-        // }
-
-        // function cargarTablaNivel(div, ugel) {
-        //     $.ajax({
-        //         url: "{{ route('indicador.nuevos.01.tabla') }}",
-        //         data: {
-        //             'div': div,
-        //             "anio": $('#anio').val(),
-        //             "mes": $('#mes').val(),
-        //             "provincia": $('#provincia').val(),
-        //             "distrito": $('#distrito').val(),
-        //             "gestion": $('#gestion').val(),
-        //             "ugel": ugel
-        //         },
-        //         type: "GET",
-        //         dataType: "JSON",
-        //         beforeSend: function() {
-        //             ugel_select = ugel;
-        //             if (div == "tabla1") {
-        //                 $('#v' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-        //             } else if (div == "tabla2") {
-        //                 $('#v' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-        //             } else {
-        //                 $('#' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-        //             }
-        //         },
-        //         success: function(data) {
-        //             if (div == "tabla2") {
-        //                 $('#vtabla2').html(data.excel);
-        //             }
-        //         },
-        //         erro: function(jqXHR, textStatus, errorThrown) {
-        //             console.log("ERROR GRAFICA 1");
-        //             console.log(jqXHR);
-        //         },
-        //     });
-        // }
+        function tabla2(div) {
+            tablex = $('#tabla2').DataTable({
+                responsive: true,
+                autoWidth: false,
+                ordered: false,
+                language: table_language,
+                destroy: true,
+                ajax: {
+                    "url": "{{ route('salud.indicador.pactoregional.detalle.reports') }}",
+                    "type": "GET",
+                    //"dataType": 'JSON',
+                    data: {
+                        'div': div,
+                        "anio": $('#anio').val(),
+                        "mes": $('#mes').val(),
+                        "provincia": $('#provincia').val(),
+                        "distrito": $('#distrito').val(),
+                        "fuente": {{ $fuente }},
+                        "indicador": '{{ $ind->id }}',
+                        "codigo": '{{ $ind->codigo }}',
+                    },
+                },
+                columnDefs: [{
+                    targets: 1, // Índice de la columna (empieza desde 0, por lo que la columna 2 es índice 1)
+                    render: function(data, type, row) {
+                        // Puedes personalizar la URL del enlace aquí
+                        return '<a href="javascript:void(0)" onclick="abrirmodalinfoipress(`' + data +
+                        '`)">' + data +
+                            '</a>';
+                    }
+                }],
+            });
+        }
 
         function cargarMes() {
             $.ajax({
@@ -1049,6 +882,44 @@
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
                 },
+            });
+        }
+
+        function abrirmodalinfoipress(codigo_unico) {
+            $('#modal_info_ipress .modal-title').html('NIÑOS Y NIÑAS ATENDIDOS');
+            $('#modal_info_ipress').modal('show');
+            tablexx = $('#tabla0201').DataTable({
+                responsive: true,
+                autoWidth: false,
+                ordered: false,
+                language: table_language,
+                destroy: true,
+                ajax: {
+                    "url": "{{ route('salud.indicador.pactoregional.detalle.reports') }}",
+                    "type": "GET",
+                    //"dataType": 'JSON',
+                    data: {
+                        'div': 'tabla0201',
+                        "anio": $('#anio').val(),
+                        "mes": $('#mes').val(),
+                        "provincia": $('#provincia').val(),
+                        "distrito": $('#distrito').val(),
+                        "fuente": {{ $fuente }},
+                        "indicador": '{{ $ind->id }}',
+                        "codigo": '{{ $ind->codigo }}',
+                        "cod_unico": parseInt(codigo_unico, 10),
+                    },
+                },
+                columnDefs: [{
+                    targets: 11, // Índice de la columna (empieza desde 0, por lo que la columna 2 es índice 1)
+                    render: function(data, type, row) {
+                        // Puedes personalizar la URL del enlace aquí
+
+                        return data==1?
+                            '<span class="badge badge-pill badge-success" style="font-size:100%;"><i class="mdi mdi-thumb-up"></i> Cumple</span>' :
+                            '<span class="badge badge-pill badge-danger" style="font-size:100%;"><i class="mdi mdi-thumb-down"></i> No Cumple</span>';
+                    }
+                }]
             });
         }
 
@@ -1174,7 +1045,6 @@
                 }
             });
         }
-
 
         function gbar(div, categoria, series, titulo, subtitulo) {
             Highcharts.chart(div, {

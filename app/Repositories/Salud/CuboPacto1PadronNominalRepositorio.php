@@ -4,6 +4,7 @@ namespace App\Repositories\Salud;
 
 use App\Models\Parametro\IndicadorGeneralMeta;
 use App\Models\Salud\CuboPacto1PadronNominal;
+use App\Models\Salud\Establecimiento;
 use Illuminate\Support\Facades\DB;
 
 class CuboPacto1PadronNominalRepositorio
@@ -120,20 +121,56 @@ class CuboPacto1PadronNominalRepositorio
 
     public static function pacto01Tabla02($importacion, $indicador, $anio, $mes, $provincia, $distrito)
     {
-        $query = CuboPacto1PadronNominal::select(
-            DB::raw('lpad(cui_atencion,8,"0") as codigo'),
-            'nombre_establecimiento as ipress',
-            'p.nombre as provincia',
-            'distrito',
-            DB::raw('sum(num) as numerador'),
-            DB::raw('sum(den) as denominador'),
-            DB::raw('round(100*sum(num)/sum(den),1) as indicador')
-        )
-            ->join('par_ubigeo as p', 'p.id', '=', 'provincia_id')
-            ->where('importacion', $importacion)->whereIn('tipo_doc', ['DNI', 'CNV'])
+        // $query = CuboPacto1PadronNominal::select(
+        //     'cui_atencion',
+        //     DB::raw('lpad(cui_atencion,8,"0") as codigo'),
+        //     'nombre_establecimiento as ipress',
+        //     'p.nombre as provincia',
+        //     'distrito',
+        //     DB::raw('sum(num) as numerador'),
+        //     DB::raw('sum(den) as denominador'),
+        //     DB::raw('round(100*sum(num)/sum(den),1) as indicador')
+        // )
+        //     ->join('par_ubigeo as p', 'p.id', '=', 'provincia_id')
+        //     ->where('cui_atencion', '>', '0')
+        //     ->where('importacion', $importacion)->whereIn('tipo_doc', ['DNI', 'CNV'])
+        //     ->groupBy('cui_atencion', 'codigo', 'ipress', 'provincia', 'distrito')->orderBy('indicador', 'desc')->get();
+        // $eess = Establecimiento::select('cod_unico', 'nombre_establecimiento')->pluck('nombre_establecimiento', 'cod_unico');
+        // foreach ($query as $key => $value) {
+        //     $value->ipress = $eess[$value->cui_atencion] ?? '';
+        // }
 
-            ->groupBy('cui_atencion', 'codigo', 'ipress', 'provincia', 'distrito')->orderBy('indicador', 'desc')->get();
+        $query = "SELECT 
+            lpad(e.cod_unico,8,'0') as codigo,
+            e.nombre_establecimiento as ipress,
+            c.num as numerador,
+            c.den as denominador,
+            d.nombre AS distrito,
+            p.nombre AS provincia,
+            r.nombre AS red,
+            m.nombre AS microrred,
+            round(100*c.num/c.den,1) indicador
+        FROM 
+            (SELECT cui_atencion, SUM(num) AS num, SUM(den) AS den 
+            FROM sal_cubo_pacto1_padron_nominal 
+            WHERE importacion = $importacion
+            GROUP BY cui_atencion) AS c
 
-        return $query;
+        JOIN 
+            (SELECT tmpe.cod_unico, tmpe.nombre_establecimiento, tmpe.ubigeo_id, tmpe.microrred_id 
+            FROM sal_establecimiento tmpe
+            JOIN (SELECT DISTINCT cui_atencion 
+                FROM sal_cubo_pacto1_padron_nominal 
+                WHERE importacion = $importacion) AS tmpc
+            ON tmpc.cui_atencion = tmpe.cod_unico) AS e 
+        ON e.cod_unico = c.cui_atencion
+
+        JOIN par_ubigeo d ON d.id = e.ubigeo_id
+        JOIN par_ubigeo p ON p.id = d.dependencia
+        JOIN sal_microred m ON m.id = e.microrred_id
+        JOIN sal_red r ON r.id = m.red_id order by indicador desc;";
+
+        $resultados = DB::select(DB::raw($query));
+        return $resultados;
     }
 }
