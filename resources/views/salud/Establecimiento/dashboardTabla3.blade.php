@@ -4,12 +4,12 @@
             <th class="text-center">N°</th>
             <th class="text-center">Código</th>
             <th class="text-center">Establecimiento de Salud</th>
+            <th class="text-center">Categoria</th>
+            <th class="text-center">Sector</th>
             <th class="text-center">Red</th>
-            <th class="text-center">MIcrorred</th>
+            <th class="text-center">Microrred</th>
             <th class="text-center">Provincia</th>
             <th class="text-center">Distrito</th>
-            <th class="text-center">Institución</th>
-            <th class="text-center">Categoria</th>
             <th class="text-center">Ubicación</th>
         </tr>
     </thead>
@@ -19,12 +19,13 @@
                 <td>{{ $key + 1 }}</td>
                 <td class="text-left"> {{ $item->codigo }}</td>
                 <td class="text-left"> {{ $item->ipress }}</td>
+                <td class="text-left"> {{ $item->categoria }}</td>
+                <td class="text-left"> {{ $item->sector }}</td>
                 <td class="text-left"> {{ $item->red }}</td>
                 <td class="text-left"> {{ $item->microrred }}</td>
                 <td class="text-left"> {{ $item->provincia }}</td>
                 <td class="text-left"> {{ $item->distrito }}</td>
-                <td class="text-left"> {{ $item->institucion }}</td>
-                <td class="text-left"> {{ $item->categoria }}</td>
+                
                 <td>
 
                     {{-- 

@@ -271,7 +271,7 @@ class EstablecimientoController extends Controller
         $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronEstablecimientoController::$FUENTE);
         $provincias = UbigeoRepositorio::provincia_select('25');
         $red = EstablecimientoRepositorio::listRedUcayali_select(); // $red = DB::table('sal_red')->select('id', 'codigo', 'nombre')->where('cod_disa', '34')->get();
-        $actualizado = 'Actualizado al ' . $imp->dia . '/' . $imp->mes . '/' . $imp->anio;
+        $actualizado = 'Actualizado al ' . $imp->dia . '/' . str_pad($imp->mes, 2, '0', STR_PAD_LEFT) . '/' . $imp->anio;
         return view('salud.Establecimiento.dashboard', compact('actualizado', 'provincias', 'red'));
     }
 

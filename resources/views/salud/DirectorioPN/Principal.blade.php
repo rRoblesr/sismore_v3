@@ -47,7 +47,6 @@
 @endsection
 
 @section('content')
-
     {{-- <div class="container mt-3">
         <div class="card">
             <div
@@ -114,7 +113,7 @@
         </div>
     </div> --}}
 
-    <div class="container mt-3">
+    {{-- <div class="container mt-3">
         <div class="card">
             <div
                 class="card-header bg-primary text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center">
@@ -193,7 +192,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     {{-- <div class="card">
         <div class="card-header bg-success-0">
@@ -215,7 +214,7 @@
                     <div class="custom-select-container">
                         <label for="red">Red</label>
                         <select id="red" name="red" class="form-control form-control-sm font-11"
-                            onchange="cargarMicrored('micro');">
+                            onchange="cargarMic--rored('micro');">
                             <option value="0">TODOS</option>
                             @foreach ($red as $item)
                                 <option value="{{ $item->id }}">{{ $item->codigo }} {{ $item->nombre }}
@@ -242,7 +241,7 @@
     <div class="card">
         <!--div class="card card-border"><div class="card-header border-success-0 bg-transparent p-0"-->
         <div
-            class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+            class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center px-2 py-2">
             <!--h3 class="card-title"></h3-->
             <h6 class="card-title mb-2 mb-md-0 text-center text-white text-md-left text-wrap">
                 <!--i class="fas fa-chart-bar"></i--> Directorio de Establecimientos de salud del Padron Nominal
@@ -257,10 +256,10 @@
         </div>
 
         <div class="card-body p-2">
-            <div class="row mb-3">
+            <div class="row mb-0">
                 {{-- <div class="col-4"></div> --}}
-                <div class="col-6">
-                    <div class="custom-select-container">
+                <div class="col-md-4">
+                    <div class="custom-select-container my-1">
                         <label for="red">Red</label>
                         <select id="red" name="red" class="form-control form-control-sm font-11"
                             onchange="cargarMicrored('micro');">
@@ -273,28 +272,52 @@
                     </div>
                 </div>
 
-                <div class="col-6">
-                    <div class="custom-select-container">
+                <div class="col-md-4">
+                    <div class="custom-select-container my-1">
                         <label for="micro">Microred</label>
                         <select id="micro" name="micro" class="form-control form-control-sm font-11"
+                            onchange="cargarEESS('ipress')" data-toggle="codigox">
+                            <option value="0">TODOS</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="custom-select-container my-1">
+                        <label for="ipress">Establecimiento de salud</label>
+                        <select id="ipress" name="ipress" class="form-control form-control-sm font-11"
                             onchange="cargartableprincipal();" data-toggle="codigox">
                             <option value="0">TODOS</option>
                         </select>
                     </div>
                 </div>
+
             </div>
+
+        </div>
+    </div>
+
+    <div class="card card-border">
+        <div class="card-header border-success-0 bg-transparent p-0">
+
+            <h3 class="card-title"></h3>
+
+        </div>
+
+        <div class="card-body p-2">
             <div class="table-responsive">
                 <table id="tbprincipal" class="table table-striped table-bordered tablex" style="font-size: 12px">
                     <thead class="cabecera-dataTable">
                         <tr class="bg-success-0 text-white">
                             <th>Nº</th>
                             <th>Red</th>
-                            <th>Microred</th>
+                            <th>Microrred</th>
                             <th>Código</th>
                             <th>Establecimiento de salud</th>
                             <th>Responsable</th>
                             <th>Cargo</th>
-                            <th>Condición Laboral</th>
+                            <th>Celular</th>
+                            <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -324,10 +347,13 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>DNI<span class="required">*</span></label>
+                                        <label>DNI <span class="required">(*)</span></label>
                                         <div class="input-group">
-                                            <input type="number" id="dni" name="dni" class="form-control"
-                                                placeholder="Numero de Documento" maxlength="8">
+                                            {{-- <input type="number" id="dni" name="dni" class="form-control"
+                                                placeholder="Numero de Documento" maxlength="8" size="8"> --}}
+                                            <input type="text" id="dni" name="dni" class="form-control"
+                                                placeholder="Numero de Documento" maxlength="8" size="8"
+                                                oninput="this.value = this.value.replace(/\D/g, '').slice(0, 8)">
                                             <span class="help-block"></span>
                                             <span class="input-group-append">
                                                 <button type="button" class="btn waves-effect waves-light btn-primary"
@@ -338,52 +364,24 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <label>Nombres<span class="required">*</span></label>
+                                        <label>Nombres <span class="required">(*)</span></label>
                                         <input id="nombres" name="nombres" class="form-control" type="text"
-                                            oninput="convertToUppercase(this)" maxlength="150"
-                                            placeholder="Nombres">
+                                            oninput="convertToUppercase(this)" maxlength="150" placeholder="Nombres">
                                         <span class="help-block"></span>
                                     </div>
                                 </div>
                             </div>
-                            {{-- <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label for="dni">DNI <span class="required">*</span></label>
-                                        <div class="input-group">
-                                            <input type="number" id="dni" name="dni" class="form-control"
-                                                placeholder="Número de Documento" min="10000000" max="99999999"
-                                                oninput="limitarDNI(this)" aria-label="Número de Documento">
-                                            <div class="input-group-append">
-                                                <button type="button" class="btn btn-primary" onclick="buscardni();"
-                                                    id="btnbuscardni" aria-label="Buscar DNI">
-                                                    <i class="fas fa-search"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <span class="help-block"></span>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="nombres">Nombres <span class="required">*</span></label>
-                                        <input id="nombres" name="nombres" class="form-control" type="text"
-                                            oninput="convertToUppercase(this)" maxlength="150"
-                                            placeholder="Ingrese Nombres" aria-label="Ingrese Nombres">
-                                        <span class="help-block"></span>
-                                    </div>
-                                </div>
-                            </div> --}}
-
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>Apellido Paterno</label>
+                                        <label>Apellido Paterno <span class="required">(*)</span></label>
                                         <input id="apellido_paterno" name="apellido_paterno" class="form-control"
                                             type="text" oninput="convertToUppercase(this)" maxlength="100"
                                             placeholder="Apellido Paterno">
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
-                                        <label>Apellido Materno</label>
+                                        <label>Apellido Materno <span class="required">(*)</span></label>
                                         <input id="apellido_materno" name="apellido_materno" class="form-control"
                                             type="text" oninput="convertToUppercase(this)" maxlength="100"
                                             placeholder="Apellido Materno">
@@ -395,17 +393,18 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>Sexo</label>
+                                        <label>Sexo <span class="required">(*)</span></label>
                                         <select id="sexo" name="sexo" class="form-control">
+                                            <option value="0">SELECCIONAR</option>
                                             <option value="1">MASCULINO</option>
                                             <option value="2">FEMENINO</option>
                                         </select>
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
-                                        <label>profesión</label>
-                                        <input id="profesion" name="profesion" class="form-control" type="text"
-                                            oninput="convertToUppercase(this)" placeholder="Profesión">
+                                        <label>Cargo <span class="required">(*)</span></label>
+                                        <input id="cargo" name="cargo" class="form-control" type="text"
+                                            oninput="convertToUppercase(this)" placeholder="Cargo">
                                         <span class="help-block"></span>
                                     </div>
 
@@ -414,27 +413,16 @@
                             </div>
                             <div class="form-group">
                                 <div class="row">
+
                                     <div class="col-md-6">
-                                        <label>Cargo</label>
-                                        <input id="cargo" name="cargo" class="form-control" type="text"
-                                            oninput="convertToUppercase(this)" placeholder="Cargo">
-                                        <span class="help-block"></span>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Condición Laboral</label>
+                                        <label>Condición Laboral <span class="required">(*)</span></label>
                                         <input id="condicion_laboral" name="condicion_laboral" class="form-control"
                                             type="text" oninput="convertToUppercase(this)"
                                             placeholder="Condición Laboral">
                                         <span class="help-block"></span>
                                     </div>
-
-
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
                                     <div class="col-md-6">
-                                        <label>Red</label>
+                                        <label>Red <span class="required">(*)</span></label>
                                         <select id="fred" name="fred" class="form-control"
                                             onchange="cargarMicrored('fmicrored')">
                                             <option value="0">SELECCIONAR</option>
@@ -446,24 +434,24 @@
                                         </select>
                                         <span class="help-block"></span>
                                     </div>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+
                                     <div class="col-md-6">
-                                        <label>Microred</label>
+                                        <label>Microrred <span class="required">(*)</span></label>
                                         <select id="fmicrored" name="fmicrored" class="form-control"
-                                            onchange="cargarEESS()">
+                                            onchange="cargarEESS('feess')">
                                             <option value="0">SELECCIONAR</option>
                                         </select>
                                         <span class="help-block"></span>
                                     </div>
 
-
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <label>Establecimiento de salud</label>
-                                        <select id="feess" name="feess" class="form-control">
+                                    <div class="col-md-6">
+                                        <label>Establecimiento de salud <span class="required">(*)</span></label>
+                                        <select id="feess" name="" class="form-control">
                                             <option value="0">SELECCIONAR</option>
                                         </select>
                                         <span class="help-block"></span>
@@ -476,13 +464,13 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>Celular</label>
+                                        <label>Celular <span class="required">(*)</span></label>
                                         <input id="celular" name="celular" class="form-control" type="number"
                                             placeholder="Celular">
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
-                                        <label>Correo Electronico</label>
+                                        <label>Correo Electronico <span class="required">(*)</span></label>
                                         <input id="email" name="email" class="form-control" type="email"
                                             placeholder="Correo Electronico">
                                         <span class="help-block"></span>
@@ -571,23 +559,17 @@
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
-                                        <label>profesión</label>
-                                        <input id="vprofesion" name="vprofesion" class="form-control" type="text"
-                                            oninput="convertToUppercase(this)" placeholder="Ingrese Profesión" readonly>
-                                        <span class="help-block"></span>
-                                    </div>
-
-
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-6">
                                         <label>Cargo</label>
                                         <input id="vcargo" name="vcargo" class="form-control" type="text"
                                             oninput="convertToUppercase(this)" placeholder="Ingrese Cargo" readonly>
                                         <span class="help-block"></span>
                                     </div>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+
                                     <div class="col-md-6">
                                         <label>Condición Laboral</label>
                                         <input id="vcondicion_laboral" name="vcondicion_laboral" class="form-control"
@@ -595,12 +577,6 @@
                                             placeholder="Ingrese Condición Laboral" readonly>
                                         <span class="help-block"></span>
                                     </div>
-
-
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
                                     <div class="col-md-6">
                                         <label>Red</label>
                                         <select id="vred" name="vred" class="form-control" disabled>
@@ -613,6 +589,12 @@
                                         </select>
                                         <span class="help-block"></span>
                                     </div>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+
                                     <div class="col-md-6">
                                         <label>Microred</label>
                                         <select id="vmicrored" name="vmicrored" class="form-control" disabled>
@@ -620,17 +602,14 @@
                                         </select>
                                         <span class="help-block"></span>
                                     </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <label>Establecimiento de Salud</label>
-                                        <select id="veess" name="veess" class="form-control" disabled>
-                                            <option value="0">SELECCIONAR</option>
-                                        </select>
-                                        <span class="help-block"></span>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label>Establecimiento de Salud</label>
+                                            <select id="veess" name="veess" class="form-control" disabled>
+                                                <option value="0">SELECCIONAR</option>
+                                            </select>
+                                            <span class="help-block"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -799,11 +778,11 @@
 
         });
 
-        function limitarDNI(input) {
-            if (input.value.length > 8) {
-                input.value = input.value.slice(0, 8); // Limita a 8 dígitos
-            }
-        }
+        // function limitarDNI(input) {
+        //     if (input.value.length > 8) {
+        //         input.value = input.value.slice(0, 8); // Limita a 8 dígitos
+        //     }
+        // }
 
         function cargartableprincipal() {
             table_principal = $('#tbprincipal').DataTable({
@@ -824,6 +803,10 @@
                     },
                     //"dataType": 'JSON',
                 },
+                columnDefs: [{
+                    targets: [0, 3, 7, 8],
+                    className: 'text-center'
+                }],
 
             });
         }
@@ -877,7 +860,7 @@
             $('.form-group').removeClass('has-error');
             $('.help-block').empty();
             $('#modal_form').modal('show');
-            $('.modal-title').text('Crear Directorio ');
+            $('.modal-title').text('Crear Responsable');
             $('#id').val("");
         };
 
@@ -938,14 +921,14 @@
                     $('[name="apellido_paterno"]').val(data.dpn.apellido_paterno);
                     $('[name="apellido_materno"]').val(data.dpn.apellido_materno);
                     $('[name="sexo"]').val(data.dpn.sexo);
-                    $('[name="profesion"]').val(data.dpn.profesion);
+                    // $('[name="profesion"]').val(data.dpn.profesion);
                     $('[name="cargo"]').val(data.dpn.cargo);
                     $('[name="condicion_laboral"]').val(data.dpn.condicion_laboral);
                     $('[name="fred"]').val(data.dpn.red_id);
                     $('[name="celular"]').val(data.dpn.celular);
                     $('[name="email"]').val(data.dpn.email);
                     $('#modal_form').modal('show');
-                    $('.modal-title').text('Modificar Directorio');
+                    $('.modal-title').text('Modificar Responsable');
 
                     cargarSelectEESS(data.dpn.red_id, data.dpn.microred_id, data.dpn.establecimiento_id);
                 },
@@ -1025,7 +1008,7 @@
                     $('[name="vapellido_paterno"]').val(data.dpn.apellido_paterno);
                     $('[name="vapellido_materno"]').val(data.dpn.apellido_materno);
                     $('[name="vsexo"]').val(data.dpn.sexo);
-                    $('[name="vprofesion"]').val(data.dpn.profesion);
+                    // $('[name="vprofesion"]').val(data.dpn.profesion);
                     $('[name="vcargo"]').val(data.dpn.cargo);
                     $('[name="vcondicion_laboral"]').val(data.dpn.condicion_laboral);
                     $('[name="vred"]').val(data.dpn.red_id);
@@ -1057,8 +1040,11 @@
                             `<option value='${value.id}'>${value.codigo} ${value.nombre}</option>`;
                     });
                     $(`#${select}`).append(options);
-                    if (select == 'micro') cargartableprincipal();
-                    if (select == 'fmicrored') cargarEESS();
+                    if (select == 'micro') {
+                        cargarEESS('ipress');
+                        cargartableprincipal();
+                    }
+                    if (select == 'fmicrored') cargarEESS('feess');
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -1066,20 +1052,22 @@
             });
         }
 
-        function cargarEESS() {
+        function cargarEESS(select) {
+            microred = select == 'ipress' ? $('#micro').val() : ('feess' ? $('#fmicrored').val() : 0);
             $.ajax({
                 url: "{{ route('eess.cargareess.select', ['microred' => ':microred']) }}"
-                    .replace(':microred', $('#fmicrored').val()),
+                    .replace(':microred', microred),
                 type: 'GET',
                 success: function(data) {
-                    $(`#feess option`).remove();
+                    $(`#${select} option`).remove();
                     var options = data.length > 1 ? '<option value="0">TODOS</option>' : '';
                     $.each(data, function(index, value) {
                         //ss = (id == value.id ? "selected" : "");
                         options +=
                             `<option value='${value.id}'>${value.codigo_unico} | ${value.nombre_establecimiento}</option>`;
                     });
-                    $(`#feess`).append(options);
+                    $(`#${select}`).append(options);
+                    if (select == 'ipress') cargartableprincipal();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);

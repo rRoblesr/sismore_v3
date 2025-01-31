@@ -12,8 +12,24 @@
 @endsection
 
 @section('content')
+    {{-- <div class="card  card-border border border-plomo-0">
+    <div
+        class="card-header border-success-0 bg-transparent text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center px-2 py-2">
+        <h6 class="card-title mb-2 mb-md-0 text-center text-primary text-md-left text-wrap">
+            Directorio de establecimientos de salud de Ucayali
+        </h6>
+        <div class="text-center text-md-right">
+            <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
+                <i class="fa fa-redo"></i> Actualizar
+            </button>
+        </div>
+    </div>
+    <div class="card-body p-2">
+        <!-- Contenido de la tarjeta -->
+    </div>
+</div> --}}
 
-{{-- <div class="card">
+    {{-- <div class="card">
     <div
         class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center p-2">
         <h6 class="mb-2 mb-md-0 text-center text-md-left text-wrap text-white">
@@ -338,7 +354,47 @@
         </div>
     </div>
 
-    <div class="card border border-plomo-0">
+    <div class="card  card-border border border-plomo-0">
+        <div
+            class="card-header border-success-0 bg-transparent text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center px-2 py-2">
+            <h6 class="card-title mb-2 mb-md-0 text-center text-md-left text-wrap">
+                Evaluación de cumplimiento de los registros de niños y niñas
+                menores de 6 años del padrón nominal
+            </h6>
+            <div class="text-center text-md-right">
+                <button type="button" class="btn btn-success btn-xs" onclick="descargar1()">
+                    <i class="fa fa-file-excel"></i> Descargar</button>
+            </div>
+        </div>
+        <div class="card-body p-2">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+                        <table id="tabla2" class="table table-sm table-striped table-bordered font-11 m-0">
+                            <thead>
+                                <tr class="bg-success-0 text-white text-center">
+                                    <th>N°</th>
+                                    <th>Codigo</th>
+                                    <th>Establecimiento de Salud</th>
+                                    <th>Red</th>
+                                    <th>Microrred</th>
+                                    <th>Provincia</th>
+                                    <th>Distrito</th>
+                                    <th>Denominador</th>
+                                    <th>Numerador</th>
+                                    <th>Indicador</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- <div class="card border border-plomo-0">
         <div
             class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center p-2 ">
             <h6 class="mb-2 mb-md-0 text-center text-md-left text-wrap text-white">
@@ -376,7 +432,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     {{-- <div class="row">
         <div class="col-lg-12">
@@ -870,6 +926,9 @@
                         '`)">' + data +
                             '</a>';
                     }
+                }, {
+                    targets: [0, 1, 7, 8, 9], // Índices de las columnas que quieres centrar
+                    className: 'text-center' // Aplica la clase para centrar el contenido
                 }],
             });
         }

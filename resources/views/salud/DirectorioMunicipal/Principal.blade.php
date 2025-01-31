@@ -48,9 +48,8 @@
 
 @section('content')
     <div class="card">
-        <!--div class="card card-border"><div class="card-header border-success-0 bg-transparent p-0"-->
         <div
-            class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+            class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center p-2">
             <!--h3 class="card-title"></h3-->
             <h6 class="card-title mb-2 mb-md-0 text-center text-white text-md-left text-wrap">
                 <!--i class="fas fa-chart-bar"></i--> Directorio de municipalidades del Padron Nominal
@@ -61,26 +60,23 @@
                 <button type="button" class="btn btn-primary btn-xs" onclick="add()">
                     <i class="fa fa-plus"></i> Nuevo</button>
             </div>
-
         </div>
-
         <div class="card-body p-2">
-            <div class="row mb-3">
-                <div class="col-6">
+            <div class="row mb-0">
+                <div class="col-md-8"></div>
+                {{-- <div class="col-md-4 my-1">
                     <div class="custom-select-container">
                         <label for="provincia">Provincia</label>
                         <select id="provincia" name="provincia" class="form-control form-control-sm font-11"
                             onchange="cargarDistrito('distrito');">
                             <option value="0">TODOS</option>
                             @foreach ($red as $item)
-                                <option value="{{ $item->id }}">{{ $item->codigo }} {{ $item->nombre }}
-                                </option>
+                                <option value="{{ $item->id }}">{{ $item->codigo }} {{ $item->nombre }}</option>
                             @endforeach
                         </select>
                     </div>
-                </div>
-
-                <div class="col-6">
+                </div> --}}
+                {{-- <div class="col-md-4 my-1">
                     <div class="custom-select-container">
                         <label for="distrito">Distrito</label>
                         <select id="distrito" name="distrito" class="form-control form-control-sm font-11"
@@ -88,8 +84,39 @@
                             <option value="0">TODOS</option>
                         </select>
                     </div>
+                </div> --}}
+                <div class="col-md-4 my-1">
+                    <div class="custom-select-container">
+                        <label for="municipalidad">Municipalidad</label>
+                        <select id="municipalidad" name="municipalidad" class="form-control form-control-sm font-11" onchange="cargartableprincipal();">
+                            <option value="0">TODOS</option>
+                            @foreach ($municipalidad as $item)
+                                {{-- <option value="{{ $item->id }}">{{ $item->codigo }} {{ $item->nombre }}</option> --}}
+                                <option value="{{ $item->distrito_id }}">{{ $item->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
+
+                {{-- <div class="col-6">
+                    <div class="custom-select-container">
+                        <label for="distrito">Distrito</label>
+                        <select id="distrito" name="distrito" class="form-control form-control-sm font-11"
+                            onchange="cargartableprincipal();" data-toggle="codigox">
+                            <option value="0">TODOS</option>
+                        </select>
+                    </div>
+                </div> --}}
             </div>
+        </div>
+    </div>
+
+    <div class="card card-border">
+        <div class="card-header border-success-0 bg-transparent p-0">
+            <h3 class="card-title"></h3>
+        </div>
+
+        <div class="card-body p-2">
             <div class="table-responsive">
                 <table id="tbprincipal" class="table table-striped table-bordered tablex" style="font-size: 12px">
                     <thead class="cabecera-dataTable">
@@ -100,7 +127,8 @@
                             <th>Municipalidad</th>
                             <th>Responsable</th>
                             <th>Cargo</th>
-                            <th>Condición Laboral</th>
+                            <th>Celular</th>
+                            <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -132,8 +160,11 @@
                                     <div class="col-md-6">
                                         <label>DNI<span class="required">*</span></label>
                                         <div class="input-group">
-                                            <input type="number" id="dni" name="dni" class="form-control"
-                                                placeholder="Numero de Documento" maxlength="8">
+                                            {{-- <input type="number" id="dni" name="dni" class="form-control"
+                                                placeholder="Numero de Documento" maxlength="8"> --}}
+                                            <input type="text" id="dni" name="dni" class="form-control"
+                                                placeholder="Numero de Documento" maxlength="8" size="8"
+                                                oninput="this.value = this.value.replace(/\D/g, '').slice(0, 8)">
                                             <span class="help-block"></span>
                                             <span class="input-group-append">
                                                 <button type="button" class="btn waves-effect waves-light btn-primary"
@@ -176,60 +207,40 @@
                                     <div class="col-md-6">
                                         <label>Sexo</label>
                                         <select id="sexo" name="sexo" class="form-control">
+                                            <option value="0">SELECCIONAR</option>
                                             <option value="1">MASCULINO</option>
                                             <option value="2">FEMENINO</option>
                                         </select>
                                         <span class="help-block"></span>
                                     </div>
+
                                     <div class="col-md-6">
-                                        <label>profesión</label>
-                                        <input id="profesion" name="profesion" class="form-control" type="text"
-                                            oninput="convertToUppercase(this)" placeholder="Profesión">
+                                        <label>Municipalidad</label>
+                                        <select id="fmunicipalidad" name="fmunicipalidad" class="form-control">
+                                            <option value="0">SELECCIONAR</option>
+                                            @foreach ($municipalidad as $item)
+                                                <option value="{{ $item->distrito_id }}">{{ $item->nombre }}</option>
+                                            @endforeach
+                                        </select>
                                         <span class="help-block"></span>
                                     </div>
-
-
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="row">
+
                                     <div class="col-md-6">
                                         <label>Cargo</label>
                                         <input id="cargo" name="cargo" class="form-control" type="text"
                                             oninput="convertToUppercase(this)" placeholder="Cargo">
                                         <span class="help-block"></span>
                                     </div>
+
                                     <div class="col-md-6">
                                         <label>Condición Laboral</label>
                                         <input id="condicion_laboral" name="condicion_laboral" class="form-control"
                                             type="text" oninput="convertToUppercase(this)"
                                             placeholder="Condición Laboral">
-                                        <span class="help-block"></span>
-                                    </div>
-
-
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label>Provincia</label>
-                                        <select id="fprovincia" name="fprovincia" class="form-control"
-                                            onchange="cargarDistrito('fdistrito')">
-                                            <option value="0">SELECCIONAR</option>
-                                            @foreach ($red as $item)
-                                                <option value="{{ $item->id }}">{{ $item->codigo }}
-                                                    {{ $item->nombre }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        <span class="help-block"></span>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Distrito</label>
-                                        <select id="fdistrito" name="fdistrito" class="form-control">
-                                            <option value="0">SELECCIONAR</option>
-                                        </select>
                                         <span class="help-block"></span>
                                     </div>
 
@@ -335,23 +346,17 @@
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
-                                        <label>profesión</label>
-                                        <input id="vprofesion" name="vprofesion" class="form-control" type="text"
-                                            oninput="convertToUppercase(this)" placeholder="Ingrese Profesión" readonly>
-                                        <span class="help-block"></span>
-                                    </div>
-
-
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-6">
                                         <label>Cargo</label>
                                         <input id="vcargo" name="vcargo" class="form-control" type="text"
                                             oninput="convertToUppercase(this)" placeholder="Ingrese Cargo" readonly>
                                         <span class="help-block"></span>
                                     </div>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+
                                     <div class="col-md-6">
                                         <label>Condición Laboral</label>
                                         <input id="vcondicion_laboral" name="vcondicion_laboral" class="form-control"
@@ -360,23 +365,21 @@
                                         <span class="help-block"></span>
                                     </div>
 
-
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
                                     <div class="col-md-6">
-                                        <label>Provincia</label>
-                                        <select id="vred" name="vred" class="form-control" disabled>
+                                        <label>Municipalidad</label>
+                                        <select id="vmunicipalidad" name="vmunicipalidad" class="form-control" disabled>
                                             <option value="0">SELECCIONAR</option>
-                                            @foreach ($red as $item)
-                                                <option value="{{ $item->id }}">{{ $item->codigo }}
-                                                    {{ $item->nombre }}
-                                                </option>
+                                            @foreach ($municipalidad as $item)
+                                                <option value="{{ $item->distrito_id }}">{{ $item->nombre }}</option>
                                             @endforeach
                                         </select>
                                         <span class="help-block"></span>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+
                                     <div class="col-md-6">
                                         <label>Distrito</label>
                                         <select id="vmicrored" name="vmicrored" class="form-control" disabled>
@@ -583,11 +586,14 @@
                     "url": "{{ route('mantenimiento.directorio.municipal.listar.importados') }}",
                     "type": "POST",
                     "data": {
-                        distrito: $('#distrito').val(),
+                        distrito: $('#municipalidad').val(),
                     },
                     //"dataType": 'JSON',
                 },
-
+                columnDefs: [{
+                    targets: [0, 6, 7],
+                    className: 'text-center'
+                }],
             });
         }
 
@@ -640,7 +646,7 @@
             $('.form-group').removeClass('has-error');
             $('.help-block').empty();
             $('#modal_form').modal('show');
-            $('.modal-title').text('Crear Directorio ');
+            $('.modal-title').text('Crear Responsable ');
             $('#id').val("");
         };
 
@@ -701,16 +707,14 @@
                     $('[name="apellido_paterno"]').val(data.dpn.apellido_paterno);
                     $('[name="apellido_materno"]').val(data.dpn.apellido_materno);
                     $('[name="sexo"]').val(data.dpn.sexo);
-                    $('[name="profesion"]').val(data.dpn.profesion);
+                    // $('[name="profesion"]').val(data.dpn.profesion);
                     $('[name="cargo"]').val(data.dpn.cargo);
                     $('[name="condicion_laboral"]').val(data.dpn.condicion_laboral);
-                    $('[name="fprovincia"]').val(data.dpn.provincia_id);
+                    $('[name="fmunicipalidad"]').val(data.dpn.distrito_id);
                     $('[name="celular"]').val(data.dpn.celular);
                     $('[name="email"]').val(data.dpn.email);
                     $('#modal_form').modal('show');
-                    $('.modal-title').text('Modificar Directorio');
-
-                    cargarSelectDistrito(data.dpn.provincia_id, data.dpn.distrito_id);
+                    $('.modal-title').text('Modificar Responsable');
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     alert('Error get data from ajax');
@@ -788,16 +792,14 @@
                     $('[name="vapellido_paterno"]').val(data.dpn.apellido_paterno);
                     $('[name="vapellido_materno"]').val(data.dpn.apellido_materno);
                     $('[name="vsexo"]').val(data.dpn.sexo);
-                    $('[name="vprofesion"]').val(data.dpn.profesion);
+                    // $('[name="vprofesion"]').val(data.dpn.profesion);
                     $('[name="vcargo"]').val(data.dpn.cargo);
                     $('[name="vcondicion_laboral"]').val(data.dpn.condicion_laboral);
-                    $('[name="vred"]').val(data.dpn.red_id);
+                    $('[name="vmunicipalidad"]').val(data.dpn.distrito_id);
                     $('[name="vcelular"]').val(data.dpn.celular);
                     $('[name="vemail"]').val(data.dpn.email);
                     $('#modal_ver').modal('show');
                     $('.modal-title').text('Vista General');
-
-                    cargarSelectEESSVer(data.dpn.red_id, data.dpn.microred_id, data.dpn.establecimiento_id);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     alert('Error get data from ajax');
@@ -828,21 +830,22 @@
             });
         }
 
-        function cargarSelectDistrito(provincia, distrito) {
+        function cargarMunicipio(select) {
+            distrito = select == 'municipalidad' ? $('#distrito').val() : ('fmunicipalidad' ? $('#fdistrito').val() : 0);
             $.ajax({
                 url: "{{ route('ubigeo.distrito.25.select', ['provincia' => ':provincia']) }}"
-                .replace(':provincia', provincia),
+                    .replace(':provincia', distrito),
                 type: 'GET',
                 success: function(data) {
-                    $(`#fdistrito option`).remove();
+                    $(`#${select} option`).remove();
                     var options = data.length > 1 ? '<option value="0">TODOS</option>' : '';
                     $.each(data, function(index, value) {
-                        ss = (distrito == value.id ? "selected" : "");
+                        //ss = (id == value.id ? "selected" : "");
                         options +=
-                            `<option value='${value.id}' ${ss}>${value.codigo} ${value.nombre}</option>`;
+                            `<option value='${value.id}'>${value.codigo} ${value.nombre}</option>`;
                     });
-                    $(`#fdistrito`).append(options);
-                    
+                    $(`#${select}`).append(options);
+                    if (select == 'municipalidad') cargartableprincipal();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -850,45 +853,67 @@
             });
         }
 
-        function cargarSelectEESSVer(red, micro, eess) {
-            $.ajax({
-                url: "{{ route('microred.cargar.find', ['red' => ':red']) }}"
-                    .replace(':red', red),
-                type: 'GET',
-                success: function(data) {
-                    $(`#vmicrored option`).remove();
-                    var options = data.length > 1 ? '<option value="0">TODOS</option>' : '';
-                    $.each(data, function(index, value) {
-                        ss = (micro == value.id ? "selected" : "");
-                        options +=
-                            `<option value='${value.id}' ${ss}>${value.codigo} ${value.nombre}</option>`;
-                    });
-                    $(`#vmicrored`).append(options);
-                    /////////////////////////////////////////////
-                    $.ajax({
-                        url: "{{ route('eess.cargareess.select', ['microred' => ':microred']) }}"
-                            .replace(':microred', micro),
-                        type: 'GET',
-                        success: function(data) {
-                            $(`#veess option`).remove();
-                            var options = data.length > 1 ? '<option value="0">TODOS</option>' : '';
-                            $.each(data, function(index, value) {
-                                ss = (eess == value.id ? "selected" : "");
-                                options +=
-                                    `<option value='${value.id}' ${ss}>${value.codigo_unico} | ${value.nombre_establecimiento}</option>`;
-                            });
-                            $(`#veess`).append(options);
-                        },
-                        error: function(jqXHR, textStatus, errorThrown) {
-                            console.log(jqXHR);
-                        },
-                    });
-                    ////////////////////////////////////////////////
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
-        }
+        // function cargarSelectDis-trito(provincia, distrito) {
+        //     $.ajax({
+        //         url: "{{ route('ubigeo.distrito.25.select', ['provincia' => ':provincia']) }}"
+        //             .replace(':provincia', provincia),
+        //         type: 'GET',
+        //         success: function(data) {
+        //             $(`#fdistr-ito option`).remove();
+        //             var options = data.length > 1 ? '<option value="0">TODOS</option>' : '';
+        //             $.each(data, function(index, value) {
+        //                 ss = (distrito == value.id ? "selected" : "");
+        //                 options +=
+        //                     `<option value='${value.id}' ${ss}>${value.codigo} ${value.nombre}</option>`;
+        //             });
+        //             $(`#fdistr-ito`).append(options);
+
+        //         },
+        //         error: function(jqXHR, textStatus, errorThrown) {
+        //             console.log(jqXHR);
+        //         },
+        //     });
+        // }
+
+        // function cargarSelectEES-SVer(red, micro, eess) {
+        //     $.ajax({
+        //         url: "{{ route('microred.cargar.find', ['red' => ':red']) }}"
+        //             .replace(':red', red),
+        //         type: 'GET',
+        //         success: function(data) {
+        //             $(`#vmicrored option`).remove();
+        //             var options = data.length > 1 ? '<option value="0">TODOS</option>' : '';
+        //             $.each(data, function(index, value) {
+        //                 ss = (micro == value.id ? "selected" : "");
+        //                 options +=
+        //                     `<option value='${value.id}' ${ss}>${value.codigo} ${value.nombre}</option>`;
+        //             });
+        //             $(`#vmicrored`).append(options);
+        //             /////////////////////////////////////////////
+        //             $.ajax({
+        //                 url: "{{ route('eess.cargareess.select', ['microred' => ':microred']) }}"
+        //                     .replace(':microred', micro),
+        //                 type: 'GET',
+        //                 success: function(data) {
+        //                     $(`#veess option`).remove();
+        //                     var options = data.length > 1 ? '<option value="0">TODOS</option>' : '';
+        //                     $.each(data, function(index, value) {
+        //                         ss = (eess == value.id ? "selected" : "");
+        //                         options +=
+        //                             `<option value='${value.id}' ${ss}>${value.codigo_unico} | ${value.nombre_establecimiento}</option>`;
+        //                     });
+        //                     $(`#veess`).append(options);
+        //                 },
+        //                 error: function(jqXHR, textStatus, errorThrown) {
+        //                     console.log(jqXHR);
+        //                 },
+        //             });
+        //             ////////////////////////////////////////////////
+        //         },
+        //         error: function(jqXHR, textStatus, errorThrown) {
+        //             console.log(jqXHR);
+        //         },
+        //     });
+        // }
     </script>
 @endsection

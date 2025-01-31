@@ -657,6 +657,8 @@ Route::get('/Mantenimiento/Directorio/Municipal/ajax_delete/{id}', [DirectorioMu
 Route::get('/Mantenimiento/Directorio/Municipal/Find/AUTOCOMPLETE/profesion', [DirectorioMunicipalController::class, 'autocompletarProfesion'])->name('mantenimiento.directorio.municipal.autocomplete.profesion');
 Route::get('/Mantenimiento/Directorio/Municipal/Find/AUTOCOMPLETE/cargo', [DirectorioMunicipalController::class, 'autocompletarCargo'])->name('mantenimiento.directorio.municipal.autocomplete.cargo');
 Route::get('/Mantenimiento/Directorio/Municipal/Find/AUTOCOMPLETE/condicion', [DirectorioMunicipalController::class, 'autocompletarCondicion'])->name('mantenimiento.directorio.municipal.autocomplete.condicion');
+Route::get('/Mantenimiento/Directorio/Municipal/Find/Municipalidades/{distrito}', [DirectorioMunicipalController::class, 'autocompletarCondicion'])->name('mantenimiento.directorio.municipal.municipalidades');
+//
 
 Route::get('/educación/Mantenimiento/PadronRER', [PadronRERController::class, 'principal'])->middleware('auth')->name('mantenimiento.padronrer.principal');
 Route::post('/Mantenimiento/PadronRER/Importados/', [PadronRERController::class, 'ListarDTImportFuenteTodos'])->name('mantenimiento.padronrer.listar.importados');

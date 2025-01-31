@@ -8,14 +8,139 @@
 @endsection
 
 @section('content')
-    <div class="row">
+    {{-- <div class="card border" style="border-color: #88D1B7;">
+        <div
+            class="card-header  border-success-0 bg-transparent text-danger d-flex flex-column flex-md-row justify-content-between align-items-md-center px-2 py-2">
+            <h6 class="card-title mb-2 mb-md-0 text-center text-primary text-md-left text-wrap">
+                Directorio de establecimientos de salud de Ucayali
+            </h6>
+            <div class="text-center text-md-right">
+                <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
+                    <i class="fa fa-redo"></i> Actualizar
+                </button>
+            </div>
+        </div>
+        <div class="card-body p-2">
+            <!-- Contenido de la tarjeta -->
+        </div>
+    </div> --}}
+
+
+    {{-- <div class="card  card-border border border-plomo-0">
+        <div
+            class="card-header border-success-0 bg-transparent text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center px-2 py-2">
+            <h6 class="card-title mb-2 mb-md-0 text-center text-primary text-md-left text-wrap">
+                Directorio de establecimientos de salud de Ucayali
+            </h6>
+            <div class="text-center text-md-right">
+                <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
+                    <i class="fa fa-redo"></i> Actualizar
+                </button>
+            </div>
+        </div>
+        <div class="card-body p-2">
+            <!-- Contenido de la tarjeta -->
+        </div>
+    </div> --}}
+
+
+
+    <div class="card">
+        <div
+            class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center px-2 py-2">
+            <h6 class="card-title mb-2 mb-md-0 text-center text-white text-md-left text-wrap">
+                <!--i class="fas fa-chart-bar"></i--> Directorio de establecimientos de salud de ucayali
+            </h6>
+            <div class="text-center text-md-right">
+                <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
+                    <i class="fa fa-redo"></i> Actualizar</button>
+            </div>
+        </div>
+        <div class="card-body p-2">
+            <div class="row mb-0">
+                {{-- <div class="col-4"></div> --}}
+                <div class="col-md-4 my-1">
+                    <h4 class="page-title font-12">Fuente: RENIPRESS - MINSA, {{ $actualizado }}</h4>
+                </div>
+
+                <div class="col-md-2 my-1">
+                    <div class="custom-select-container">
+                        <label for="provincia">PROVINCIA</label>
+                        <select id="provincia" name="provincia" class="form-control btn-xs font-11"
+                            onchange="cargarDistritos();">
+                            <option value="0">TODOS</option>
+                            @foreach ($provincias as $item)
+                                <option value="{{ $item->id }}"> {{ $item->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-2 my-1">
+                    <div class="custom-select-container">
+                        <label for="distrito">DISTRITO</label>
+                        <select id="distrito" name="distrito" class="form-control btn-xs font-11"
+                            onchange="cargarCards();">
+                            <option value="0">TODOS</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-2 my-1">
+                    <div class="custom-select-container">
+                        <label for="red">RED</label>
+                        <select id="red" name="red" class="form-control btn-xs font-11"
+                            onchange="cargarMicrorred();cargarCards();">
+                            <option value="0">TODOS</option>
+                            @foreach ($red as $item)
+                                <option value="{{ $item->id }}"> {{ $item->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-2 my-1">
+                    <div class="custom-select-container">
+                        <label for="microrred">MICRORRED</label>
+                        <select id="microrred" name="microrred" class="form-control btn-xs font-11"
+                            onchange="cargarCards();">
+                            <option value="0">TODOS</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+    {{-- <div class="card">
+        <!--div class="card card-border"><div class="card-header border-success-0 bg-transparent p-0"-->
+        <div
+            class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center px-2 py-2">
+            <!--h3 class="card-title"></h3-->
+            <h6 class="card-title mb-2 mb-md-0 text-center text-white text-md-left text-wrap">
+                <!--i class="fas fa-chart-bar"></i--> Directorio de establecimientos de salud de ucayali
+            </h6>
+            <div class="text-center text-md-right">
+                <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
+                    <i class="fa fa-redo"></i> Actualizar</button>
+            </div>
+        </div>
+        <div class="card-body p-2">
+          
+        </div>
+    </div> --}}
+
+    {{-- <div class="row">
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-header bg-success-0">
                     <div class="card-widgets">
-                        {{-- <button type="button" class="btn btn-danger btn-xs"
+                        <button type="button" class="btn btn-danger btn-xs"
                             onclick="window.location.href=`{{ route('salud.padronnominal.tablerocalidad.consulta', ['anio' => 'anio', 'mes' => 'mes']) }}`.replace('anio',$('#anio').val()).replace('mes',$('#mes').val())">
-                            <i class="fas fa-search"></i> Consultas</button> --}}
+                            <i class="fas fa-search"></i> Consultas</button>
                         <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
                             <i class="fa fa-redo"></i> Actualizar</button>
                     </div>
@@ -23,10 +148,10 @@
                 </div>
                 <div class="card-body pb-0">
                     <div class="form-group row align-items-center vh-5">
-                        <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div class="col-lg-4 col-md-4 col-sm-4 my-1">
                             <h4 class="page-title font-12">Fuente: RENIPRESS - MINSA, {{ $actualizado }}</h4>
                         </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2">
+                        <div class="col-lg-2 col-md-2 col-sm-2 my-1">
                             <div class="custom-select-container">
                                 <label for="provincia">PROVINCIA</label>
                                 <select id="provincia" name="provincia" class="form-control btn-xs font-11"
@@ -38,7 +163,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2">
+                        <div class="col-lg-2 col-md-2 col-sm-2 my-1">
                             <div class="custom-select-container">
                                 <label for="distrito">DISTRITO</label>
                                 <select id="distrito" name="distrito" class="form-control btn-xs font-11"
@@ -47,7 +172,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2">
+                        <div class="col-lg-2 col-md-2 col-sm-2 my-1">
                             <div class="custom-select-container">
                                 <label for="red">RED</label>
                                 <select id="red" name="red" class="form-control btn-xs font-11"
@@ -59,7 +184,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2">
+                        <div class="col-lg-2 col-md-2 col-sm-2 my-1">
                             <div class="custom-select-container">
                                 <label for="microrred">MICRORRED</label>
                                 <select id="microrred" name="microrred" class="form-control btn-xs font-11"
@@ -72,7 +197,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6">
@@ -170,10 +295,35 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="card card-border border border-plomo-0">
+        <div
+            class="card-header border-success-0 bg-transparent text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center px-2 py-2">
+            <h6 class="card-title mb-2 mb-md-0 text-center text-md-left text-wrap">
+                Número de establecimientos de salud y centros de apoyo activos por institucion, según categoría a nivel
+                regional
+            </h6>
+            <div class="text-center text-md-right">
+                <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla2')">
+                    <i class="fa fa-file-excel"></i> Descargar</button>
+            </div>
+        </div>
+        <div class="card-body p-2">
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-responsive" id="ctabla1">
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {{-- <div class="row">
         <div class="col-lg-12">
-            {{-- <div class="card">
-                <div class="card-header"> --}}
+            <!--div class="card">
+                <div class="card-header"-->
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
                     <div class="card-widgets">
@@ -197,12 +347,36 @@
                 </div>
             </div>
         </div>
+    </div> --}}
+
+    <div class="card card-border border border-plomo-0">
+        <div
+            class="card-header border-success-0 bg-transparent text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center px-2 py-2">
+            <h6 class="card-title mb-2 mb-md-0 text-center text-md-left text-wrap">
+                Número de establecimientos de salud y centros de apoyo activos por distritos, según categoría a nivel
+                regional
+            </h6>
+            <div class="text-center text-md-right">
+                <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla3')">
+                    <i class="fa fa-file-excel"></i> Descargar</button>
+            </div>
+        </div>
+        <div class="card-body p-2">
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-responsive" id="ctabla2">
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="row">
+    {{-- <div class="row">
         <div class="col-lg-12">
-            {{-- <div class="card">
-                <div class="card-header"> --}}
+            <!--div class="card">
+                <div class="card-header"-->
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
                     <div class="card-widgets">
@@ -226,12 +400,35 @@
                 </div>
             </div>
         </div>
+    </div> --}}
+
+    <div class="card card-border border border-plomo-0">
+        <div
+            class="card-header border-success-0 bg-transparent text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center px-2 py-2">
+            <h6 class="card-title mb-2 mb-md-0 text-center text-md-left text-wrap">
+                Listado de establecimiento de salud de ucayali
+            </h6>
+            <div class="text-center text-md-right">
+                <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla3')">
+                    <i class="fa fa-file-excel"></i> Descargar</button>
+            </div>
+        </div>
+        <div class="card-body p-2">
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-responsive" id="ctabla3">
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="row">
+    {{-- <div class="row">
         <div class="col-lg-12">
-            {{-- <div class="card">
-                <div class="card-header"> --}}
+            <!--div class="card">
+                <div class="card-header"-->
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
                     <div class="card-widgets">
@@ -254,7 +451,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <!--  Modal content for the above example -->
     <div class="modal fade" id="modal-centropoblado" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
@@ -566,18 +763,66 @@
                                             typeof i === 'number' ? i : 0;
                                     };
 
-                                    var c02 = api.column(2, { page: 'current' }) .data().reduce(function(a, b) { return intVal(a) + intVal(b); }, 0);
-                                    var c03 = api.column(3, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
-                                    var c04 = api.column(4, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
-                                    var c05 = api.column(5, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
-                                    var c06 = api.column(6, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
-                                    var c07 = api.column(7, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
-                                    var c08 = api.column(8, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
-                                    var c09 = api.column(9, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
-                                    var c10 = api.column(10, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
-                                    var c11 = api.column(11, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
-                                    var c12 = api.column(12, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
-                                    var c13 = api.column(13, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
+                                    var c02 = api.column(2, {
+                                        page: 'current'
+                                    }).data().reduce(function(a, b) {
+                                        return intVal(a) + intVal(b);
+                                    }, 0);
+                                    var c03 = api.column(3, {
+                                        page: 'current'
+                                    }).data().reduce(function(a, b) {
+                                        return intVal(a) + intVal(b);
+                                    }, 0);
+                                    var c04 = api.column(4, {
+                                        page: 'current'
+                                    }).data().reduce(function(a, b) {
+                                        return intVal(a) + intVal(b);
+                                    }, 0);
+                                    var c05 = api.column(5, {
+                                        page: 'current'
+                                    }).data().reduce(function(a, b) {
+                                        return intVal(a) + intVal(b);
+                                    }, 0);
+                                    var c06 = api.column(6, {
+                                        page: 'current'
+                                    }).data().reduce(function(a, b) {
+                                        return intVal(a) + intVal(b);
+                                    }, 0);
+                                    var c07 = api.column(7, {
+                                        page: 'current'
+                                    }).data().reduce(function(a, b) {
+                                        return intVal(a) + intVal(b);
+                                    }, 0);
+                                    var c08 = api.column(8, {
+                                        page: 'current'
+                                    }).data().reduce(function(a, b) {
+                                        return intVal(a) + intVal(b);
+                                    }, 0);
+                                    var c09 = api.column(9, {
+                                        page: 'current'
+                                    }).data().reduce(function(a, b) {
+                                        return intVal(a) + intVal(b);
+                                    }, 0);
+                                    var c10 = api.column(10, {
+                                        page: 'current'
+                                    }).data().reduce(function(a, b) {
+                                        return intVal(a) + intVal(b);
+                                    }, 0);
+                                    var c11 = api.column(11, {
+                                        page: 'current'
+                                    }).data().reduce(function(a, b) {
+                                        return intVal(a) + intVal(b);
+                                    }, 0);
+                                    var c12 = api.column(12, {
+                                        page: 'current'
+                                    }).data().reduce(function(a, b) {
+                                        return intVal(a) + intVal(b);
+                                    }, 0);
+                                    var c13 = api.column(13, {
+                                        page: 'current'
+                                    }).data().reduce(function(a, b) {
+                                        return intVal(a) + intVal(b);
+                                    }, 0);
 
                                     $(api.column(2).footer()).html(c02);
                                     $(api.column(3).footer()).html(c03);
@@ -619,18 +864,66 @@
                                             typeof i === 'number' ? i : 0;
                                     };
 
-                                    var c02 = api.column(2, { page: 'current' }) .data().reduce(function(a, b) { return intVal(a) + intVal(b); }, 0);
-                                    var c03 = api.column(3, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
-                                    var c04 = api.column(4, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
-                                    var c05 = api.column(5, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
-                                    var c06 = api.column(6, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
-                                    var c07 = api.column(7, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
-                                    var c08 = api.column(8, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
-                                    var c09 = api.column(9, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
-                                    var c10 = api.column(10, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
-                                    var c11 = api.column(11, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
-                                    var c12 = api.column(12, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
-                                    var c13 = api.column(13, { page: 'current' }) .data() .reduce(function(a, b) { return intVal(a) + intVal(b);}, 0);
+                                    var c02 = api.column(2, {
+                                        page: 'current'
+                                    }).data().reduce(function(a, b) {
+                                        return intVal(a) + intVal(b);
+                                    }, 0);
+                                    var c03 = api.column(3, {
+                                        page: 'current'
+                                    }).data().reduce(function(a, b) {
+                                        return intVal(a) + intVal(b);
+                                    }, 0);
+                                    var c04 = api.column(4, {
+                                        page: 'current'
+                                    }).data().reduce(function(a, b) {
+                                        return intVal(a) + intVal(b);
+                                    }, 0);
+                                    var c05 = api.column(5, {
+                                        page: 'current'
+                                    }).data().reduce(function(a, b) {
+                                        return intVal(a) + intVal(b);
+                                    }, 0);
+                                    var c06 = api.column(6, {
+                                        page: 'current'
+                                    }).data().reduce(function(a, b) {
+                                        return intVal(a) + intVal(b);
+                                    }, 0);
+                                    var c07 = api.column(7, {
+                                        page: 'current'
+                                    }).data().reduce(function(a, b) {
+                                        return intVal(a) + intVal(b);
+                                    }, 0);
+                                    var c08 = api.column(8, {
+                                        page: 'current'
+                                    }).data().reduce(function(a, b) {
+                                        return intVal(a) + intVal(b);
+                                    }, 0);
+                                    var c09 = api.column(9, {
+                                        page: 'current'
+                                    }).data().reduce(function(a, b) {
+                                        return intVal(a) + intVal(b);
+                                    }, 0);
+                                    var c10 = api.column(10, {
+                                        page: 'current'
+                                    }).data().reduce(function(a, b) {
+                                        return intVal(a) + intVal(b);
+                                    }, 0);
+                                    var c11 = api.column(11, {
+                                        page: 'current'
+                                    }).data().reduce(function(a, b) {
+                                        return intVal(a) + intVal(b);
+                                    }, 0);
+                                    var c12 = api.column(12, {
+                                        page: 'current'
+                                    }).data().reduce(function(a, b) {
+                                        return intVal(a) + intVal(b);
+                                    }, 0);
+                                    var c13 = api.column(13, {
+                                        page: 'current'
+                                    }).data().reduce(function(a, b) {
+                                        return intVal(a) + intVal(b);
+                                    }, 0);
 
                                     $(api.column(2).footer()).html(c02);
                                     $(api.column(3).footer()).html(c03);
@@ -663,6 +956,10 @@
                                 //         return `<a href="#" onclick="abrirmodalcentropoblado(${data})">${data}</a>`;
                                 //     }
                                 // }]
+                                columnDefs: [{
+                                    targets: [0, 3, 4],
+                                    className: 'text-center'
+                                }],
                             });
                             break;
 
@@ -683,7 +980,6 @@
                         default:
                             break;
                     }
-
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");
@@ -762,9 +1058,11 @@
         }
 
         function abrirPagina(idipress) {
-        // window.location.href = 'http://app20.susalud.gob.pe:8080/registro-renipress-webapp/ipress.htm?action=mostrarVer&idipress=' + idipress + '#no-back-button';
-        window.open('http://app20.susalud.gob.pe:8080/registro-renipress-webapp/ipress.htm?action=mostrarVer&idipress=' + idipress + '#no-back-button', '_blank');
-    }
+            // window.location.href = 'http://app20.susalud.gob.pe:8080/registro-renipress-webapp/ipress.htm?action=mostrarVer&idipress=' + idipress + '#no-back-button';
+            window.open(
+                'http://app20.susalud.gob.pe:8080/registro-renipress-webapp/ipress.htm?action=mostrarVer&idipress=' +
+                idipress + '#no-back-button', '_blank');
+        }
     </script>
 
 

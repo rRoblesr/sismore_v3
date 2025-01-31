@@ -49,6 +49,8 @@ class DirectorioPNController extends Controller
 
         $data = [];
         foreach ($query as $key => $value) {
+            $estado = ['<span class="badge badge-success badge-lg">Activo</span>', '<span class="badge badge-danger badge-lg">Inactivo</span>'];
+
             $btn = '<a href="#" class="btn btn-info btn-xs" onclick="edit(' . $value->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
             if ($value->estado == 0) {
                 $btn .= '&nbsp;<a class="btn btn-sm btn-dark btn-xs" href="javascript:void(0)" title="Desactivar" onclick="estado(' . $value->id . ',' . $value->estado . ')"><i class="fa fa-power-off"></i></a> ';
@@ -66,7 +68,8 @@ class DirectorioPNController extends Controller
                 $eess[$value->establecimiento_id] ?? '-',
                 $value->nombres . ' ' . $value->apellido_paterno . ' ' . $value->apellido_materno,
                 $value->cargo,
-                $value->condicion_laboral,
+                $value->celular,
+                $estado[$value->estado] ?? '',
                 "<center>" . $btn  . "</center>",
             );
         }
@@ -124,14 +127,20 @@ class DirectorioPNController extends Controller
             $data['status'] = FALSE;
         }
 
-        if ($request->profesion == '') {
-            $data['inputerror'][] = 'profesion';
+        // if ($request->profesion == '') {
+        //     $data['inputerror'][] = 'profesion';
+        //     $data['error_string'][] = 'Este campo es obligatorio.';
+        //     $data['status'] = FALSE;
+        // }
+
+        if ($request->cargo == '') {
+            $data['inputerror'][] = 'cargo';
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
         }
 
-        if ($request->cargo == '') {
-            $data['inputerror'][] = 'cargo';
+        if ($request->sexo == '0') {
+            $data['inputerror'][] = 'sexo';
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
         }
@@ -142,7 +151,18 @@ class DirectorioPNController extends Controller
             $data['status'] = FALSE;
         }
 
-        if ($request->feess == '') {
+        if ($request->fred == '0') {
+            $data['inputerror'][] = 'fred';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+        if ($request->fmicrored == '0') {
+            $data['inputerror'][] = 'fmicrored';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+
+        if ($request->feess == '0') {
             $data['inputerror'][] = 'feess';
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
@@ -173,7 +193,7 @@ class DirectorioPNController extends Controller
             'apellido_paterno' => $request->apellido_paterno,
             'apellido_materno' => $request->apellido_materno,
             'sexo' => $request->sexo,
-            'profesion' => $request->profesion,
+            'profesion' => '', //$request->profesion,
             'cargo' => $request->cargo,
             'condicion_laboral' => $request->condicion_laboral,
             'red_id' => $request->fred,
@@ -193,7 +213,7 @@ class DirectorioPNController extends Controller
         $rer->apellido_paterno = $request->apellido_paterno;
         $rer->apellido_materno = $request->apellido_materno;
         $rer->sexo = $request->sexo;
-        $rer->profesion = $request->profesion;
+        // $rer->profesion = $request->profesion;
         $rer->cargo = $request->cargo;
         $rer->condicion_laboral = $request->condicion_laboral;
         $rer->red_id = $request->fred;

@@ -355,7 +355,7 @@ class EstablecimientoRepositorio
             ->join('par_ubigeo as u', 'u.id', '=', 'ubigeo_id')
             ->where('estado', 'ACTIVO')
             ->whereIn('institucion', ['GOBIERNO REGIONAL', 'MINSA'])
-            ->whereIn('categoria', ['I-1', 'I-2', 'I-3', 'I-4','II-1','II-2','sin categoria'])
+            ->whereIn('categoria', ['I-1', 'I-2', 'I-3', 'I-4', 'II-1', 'II-2', 'sin categoria'])
             ->tap($filtros)
             ->count();
 
@@ -462,6 +462,21 @@ class EstablecimientoRepositorio
             if ($microrred > 0) $query->where('e.microrred_id', $microrred);
         };
 
+        $ii = [
+            "ESSALUD" => "ESSALUD",
+            "GOBIERNO REGIONAL" => "MINSA",
+            "INPE" => "OTROS",
+            "MINSA" => "MINSA",
+            "MUNICIPALIDAD DISTRITAL" => "OTROS",
+            "MUNICIPALIDAD PROVINCIAL" => "OTROS",
+            "OTRO" => "OTROS",
+            "PRIVADO" => "PRIVADO",
+            "SANIDAD DE LA FUERZA AEREA DEL PERU" => "FFAA",
+            "SANIDAD DE LA MARINA DE GUERRA DEL PERU" => "FFAA",
+            "SANIDAD DE LA POLICIA NACIONAL DEL PERU" => "FFAA",
+            "SANIDAD DEL EJERCITO DEL PERU" => "FFAA"
+        ];
+
         $query = Establecimiento::from('sal_establecimiento as e')
             ->select(
                 'e.codigo_unico as codigo',
@@ -480,6 +495,10 @@ class EstablecimientoRepositorio
             ->where('e.cod_disa', '34')->where('e.estado', 'ACTIVO') //->whereIn('e.institucion', ['GOBIERNO REGIONAL', 'MINSA']); //->whereIn('e.categoria', ['I-1', 'I-2', 'I-3', 'I-4']);
             ->tap($filtros)
             ->get();
+
+        foreach ($query as $key => $value) {
+            $value->sector = $ii[$value->institucion] ?? '';
+        }
 
         return $query;
     }
