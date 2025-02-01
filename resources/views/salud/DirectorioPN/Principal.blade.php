@@ -451,7 +451,7 @@
 
                                     <div class="col-md-6">
                                         <label>Establecimiento de salud <span class="required">(*)</span></label>
-                                        <select id="feess" name="" class="form-control">
+                                        <select id="feess" name="feess" class="form-control">
                                             <option value="0">SELECCIONAR</option>
                                         </select>
                                         <span class="help-block"></span>

@@ -8,14 +8,83 @@
 @endsection
 
 @section('content')
-    <div class="row">
+    <div class="card">
+        <div
+            class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center p-2">
+            <h6 class="mb-2 mb-md-0 text-center text-md-left text-white">
+                <i class="fas fa-chart-bar d-none"></i>CONTROL DE CALIDAD DEL PADRÓN NOMINAL DE NIÑOS Y NIÑAS MENORES DE 6 AÑOS
+            </h6>
+            <div class="text-center text-md-right">
+                <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
+                    <i class="fa fa-redo"></i> Actualizar</button>
+            </div>
+        </div>
+        <div class="card-body p-2">
+            <div class="row">
+
+                <div class="col-md-4 col-12">
+                    <h4 class="page-title font-12">Fuente: Padron Nominal, {{ $actualizado }}</h4>
+                </div>
+
+                <div class="col-md-2 col-6 my-1">
+                    <div class="custom-select-container">
+                        <label for="anio">Año</label>
+                        <select id="anio" name="anio" class="form-control btn-xs font-11"
+                            onchange="cargarMes();">
+                            @foreach ($anios as $item)
+                                <option value="{{ $item->anio }}"
+                                    {{ $item->anio == date('Y') ? 'selected' : '' }}>
+                                    {{ $item->anio }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-2 col-6 my-1">
+                    <div class="custom-select-container">
+                        <label for="mes">Mes</label>
+                        <select id="mes" name="mes" class="form-control btn-xs font-11"
+                            onchange="cargarCards();">
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-2 col-6 my-1">
+                    <div class="custom-select-container">
+                        <label for="provincia">Provincia</label>
+                        <select id="provincia" name="provincia" class="form-control btn-xs font-11"
+                            onchange="cargarDistritos();cargarCards();">
+                            <option value="0">TODOS</option>
+                            @foreach ($provincias as $item)
+                                <option value="{{ $item->id }}"> {{ $item->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-2 col-6 my-1">
+                    <div class="custom-select-container">
+                        <label for="distrito">Distrito</label>
+                        <select id="distrito" name="distrito" class="form-control btn-xs font-11"
+                            onchange="cargarCards();">
+                            <option value="0">TODOS</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    {{-- <div class="row">
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-header bg-success-0">
                     <div class="card-widgets">
-                        {{-- <button type="button" class="btn btn-danger btn-xs"
+                        <!--button type="button" class="btn btn-danger btn-xs"
                             onclick="window.location.href=`{{ route('salud.padronnominal.tablerocalidad.consulta', ['anio' => 'anio', 'mes' => 'mes']) }}`.replace('anio',$('#anio').val()).replace('mes',$('#mes').val())">
-                            <i class="fas fa-search"></i> Consultas</button> --}}
+                            <i class="fas fa-search"></i> Consultas</button-->
                         <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
                             <i class="fa fa-redo"></i> Actualizar</button>
                     </div>
@@ -81,7 +150,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6">
@@ -105,7 +174,7 @@
                     </div>
                 </div>
                 <div class="mt-4" id="pcard1">
-                    <h6 class="text-uppercase">Registros Completos <span class="float-right">0%</span></h6>
+                    <h6 class="text-uppercase font-12">Registros Completos <span class="float-right">0%</span></h6>
                     <div class="progress progress-sm m-0">
                         <div class="progress-bar bg-info" role="progressbar" aria-valuenow="0" aria-valuemin="0"
                             aria-valuemax="100" style="width: 0%">
@@ -137,7 +206,7 @@
                     </div>
                 </div>
                 <div class="mt-4" id="pcard2">
-                    <h6 class="text-uppercase">Porcentaje con DNI <span class="float-right">0%</span></h6>
+                    <h6 class="text-uppercase font-12">Porcentaje con DNI <span class="float-right">0%</span></h6>
                     <div class="progress progress-sm m-0">
                         <div class="progress-bar bg-info" role="progressbar" aria-valuenow="0" aria-valuemin="0"
                             aria-valuemax="100" style="width: 0%">
@@ -169,7 +238,7 @@
                     </div>
                 </div>
                 <div class="mt-4" id="pcard3">
-                    <h6 class="text-uppercase">Porcentaje con Seguro <span class="float-right">0%</span></h6>
+                    <h6 class="text-uppercase font-12">Porcentaje con Seguro <span class="float-right">0%</span></h6>
                     <div class="progress progress-sm m-0">
                         <div class="progress-bar bg-info" role="progressbar" aria-valuenow="0" aria-valuemin="0"
                             aria-valuemax="100" style="width: 0%">
@@ -201,7 +270,7 @@
                     </div>
                 </div>
                 <div class="mt-4" id="pcard4">
-                    <h6 class="text-uppercase">Porcentaje con EESS <span class="float-right">0%</span></h6>
+                    <h6 class="text-uppercase font-12">Porcentaje con EESS <span class="float-right">0%</span></h6>
                     <div class="progress progress-sm m-0">
                         <div class="progress-bar bg-info" role="progressbar" aria-valuenow="0" aria-valuemin="0"
                             aria-valuemax="100" style="width: 0%">
@@ -934,7 +1003,7 @@
                 chart: {
                     height: 200,
                     type: 'solidgauge',
-                    marginTop: 20,  
+                    marginTop: 20,
                     margin: [10, 10, 10, 10],
                     spacing: [10, 10, 10, 10],
                     events: {

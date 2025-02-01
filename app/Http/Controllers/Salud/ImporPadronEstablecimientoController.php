@@ -105,7 +105,7 @@ class ImporPadronEstablecimientoController extends Controller
                 'fuenteImportacion_id' => $this->fuente,
                 'usuarioId_Crea' => auth()->user()->id,
                 'fechaActualizacion' => $rq->fechaActualizacion,
-                'estado' => 'PE'
+                'estado' => 'PR'
             ]);
 
             // $distritos = Ubigeo::where('codigo', 'like', '25%')->whereRaw('length(codigo)=6')->pluck('id', 'codigo');
@@ -172,16 +172,16 @@ class ImporPadronEstablecimientoController extends Controller
         //     return $this->json_output(400, $mensaje);
         // }
 
-        // try {
-        //     DB::select('call sal_pa_procesarCalidadReporte(?)', [$importacion->id]);
-        // } catch (Exception $e) {
-        //     // Si ocurre un error, actualizar el estado a 'PE' (pendiente) si es necesario
-        //     $importacion->estado = 'PE';
-        //     $importacion->save();
+        try {
+            DB::select('call sal_pa_procesarPadronEstablecimiento(?,?)', [$importacion->id, auth()->user()->id]);
+        } catch (Exception $e) {
+            // Si ocurre un error, actualizar el estado a 'PE' (pendiente) si es necesario
+            $importacion->estado = 'PE';
+            $importacion->save();
 
-        //     $mensaje = "Error al procesar la normalizacion de datos sal_pa_procesarCalidadReporte. " . $e->getMessage();
-        //     return $this->json_output(400, $mensaje);
-        // }
+            $mensaje = "Error al procesar la normalizacion de datos sal_pa_procesarCalidadReporte. " . $e->getMessage();
+            return $this->json_output(400, $mensaje);
+        }
 
         $this->json_output(200, "Archivo Excel subido y procesado correctamente.");
     }

@@ -1,4 +1,4 @@
-<table id="tabla2" class="table table-sm table-striped table-bordered font-12">
+<table id="tabla2" class="table table-sm table-striped table-bordered font-11">
     <thead>
         <tr class="table-success-0 text-white">
             <th class="text-center">N°</th>
