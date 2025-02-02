@@ -249,8 +249,11 @@
             <div class="text-center text-md-right">
                 <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
                     <i class="fa fa-redo"></i> Actualizar</button>
-                <button type="button" class="btn btn-primary btn-xs" onclick="add()">
-                    <i class="fa fa-plus"></i> Nuevo</button>
+                @if ($vista == 'M')
+                    <button type="button" class="btn btn-primary btn-xs" onclick="add()">
+                        <i class="fa fa-plus"></i> Nuevo</button>
+                @endif
+
             </div>
 
         </div>
@@ -306,20 +309,33 @@
 
         <div class="card-body p-2">
             <div class="table-responsive">
-                <table id="tbprincipal" class="table table-striped table-bordered tablex" style="font-size: 12px">
+                <table id="tbprincipal" class="table table-sm font-11 table-striped table-bordered">
                     <thead class="cabecera-dataTable">
-                        <tr class="bg-success-0 text-white">
-                            <th>Nº</th>
-                            <th>Red</th>
-                            <th>Microrred</th>
-                            <th>Código</th>
-                            <th>Establecimiento de salud</th>
-                            <th>Responsable</th>
-                            <th>Cargo</th>
-                            <th>Celular</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
-                        </tr>
+                        @if ($vista == 'M')
+                            <tr class="bg-success-0 text-white">
+                                <th>Nº</th>
+                                <th>Red</th>
+                                <th>Microrred</th>
+                                <th>Código</th>
+                                <th>Establecimiento de salud</th>
+                                <th>Responsable</th>
+                                <th>Celular</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        @else
+                            <tr class="bg-success-0 text-white">
+                                <th>Nº</th>
+                                <th>Red</th>
+                                <th>Microrred</th>
+                                <th>Código</th>
+                                <th>Establecimiento de salud</th>
+                                <th>Responsable</th>
+                                <th>Cargo</th>
+                                <th>Celular</th>
+                                <th>Ver</th>
+                            </tr>
+                        @endif
                     </thead>
                     <tbody></tbody>
                 </table>
@@ -507,21 +523,15 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>DNI<span class="required">*</span></label>
+                                        <label>DNI <span class="required">(*)</span></label>
                                         <div class="input-group">
                                             <input type="number" id="vdni" name="vdni" class="form-control"
                                                 placeholder="Numero de Documento" maxlength="12" readonly>
-                                            <span class="help-block"></span>
-                                            <span class="input-group-append">
-                                                <button type="button" class="btn waves-effect waves-light btn-primary"
-                                                    id="btnbuscardni">
-                                                    <i class="fas fa-search"></i>
-                                                </button>
-                                            </span>
+
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <label>Nombres<span class="required">*</span></label>
+                                        <label>Nombres <span class="required">(*)</span></label>
                                         <input id="vnombres" name="vnombres" class="form-control" type="text"
                                             oninput="convertToUppercase(this)" maxlength="150"
                                             placeholder="Ingrese Nombres" readonly>
@@ -532,14 +542,14 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>Apellido Paterno</label>
+                                        <label>Apellido Paterno <span class="required">(*)</span></label>
                                         <input id="vapellido_paterno" name="vapellido_paterno" class="form-control"
                                             type="text" oninput="convertToUppercase(this)" maxlength="100"
                                             placeholder="Imgrese Apellido Paterno" readonly>
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
-                                        <label>Apellido Materno</label>
+                                        <label>Apellido Materno <span class="required">(*)</span></label>
                                         <input id="vapellido_materno" name="vapellido_materno" class="form-control"
                                             type="text" oninput="convertToUppercase(this)" maxlength="100"
                                             placeholder="Ingrese apellido Materno" readonly>
@@ -551,7 +561,7 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>Sexo</label>
+                                        <label>Sexo <span class="required">(*)</span></label>
                                         <select id="vsexo" name="vsexo" class="form-control" disabled>
                                             <option value="1">MASCULINO</option>
                                             <option value="2">FEMENINO</option>
@@ -559,7 +569,7 @@
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
-                                        <label>Cargo</label>
+                                        <label>Cargo <span class="required">(*)</span></label>
                                         <input id="vcargo" name="vcargo" class="form-control" type="text"
                                             oninput="convertToUppercase(this)" placeholder="Ingrese Cargo" readonly>
                                         <span class="help-block"></span>
@@ -571,14 +581,14 @@
                                 <div class="row">
 
                                     <div class="col-md-6">
-                                        <label>Condición Laboral</label>
+                                        <label>Condición Laboral <span class="required">(*)</span></label>
                                         <input id="vcondicion_laboral" name="vcondicion_laboral" class="form-control"
                                             type="text" oninput="convertToUppercase(this)"
                                             placeholder="Ingrese Condición Laboral" readonly>
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
-                                        <label>Red</label>
+                                        <label>Red <span class="required">(*)</span></label>
                                         <select id="vred" name="vred" class="form-control" disabled>
                                             <option value="0">SELECCIONAR</option>
                                             @foreach ($red as $item)
@@ -596,20 +606,18 @@
                                 <div class="row">
 
                                     <div class="col-md-6">
-                                        <label>Microred</label>
+                                        <label>Microred <span class="required">(*)</span></label>
                                         <select id="vmicrored" name="vmicrored" class="form-control" disabled>
                                             <option value="0">SELECCIONAR</option>
                                         </select>
                                         <span class="help-block"></span>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <label>Establecimiento de Salud</label>
-                                            <select id="veess" name="veess" class="form-control" disabled>
-                                                <option value="0">SELECCIONAR</option>
-                                            </select>
-                                            <span class="help-block"></span>
-                                        </div>
+                                    <div class="col-md-6">
+                                        <label>Establecimiento de Salud <span class="required">(*)</span></label>
+                                        <select id="veess" name="veess" class="form-control" disabled>
+                                            <option value="0">SELECCIONAR</option>
+                                        </select>
+                                        <span class="help-block"></span>
                                     </div>
                                 </div>
                             </div>
@@ -617,13 +625,13 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>Celular</label>
+                                        <label>Celular <span class="required">(*)</span></label>
                                         <input id="vcelular" name="vcelular" class="form-control" type="number"
                                             placeholder="Ingrese Celular" readonly>
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
-                                        <label>Correo Electronico</label>
+                                        <label>Correo Electronico <span class="required">(*)</span></label>
                                         <input id="vemail" name="vemail" class="form-control" type="email"
                                             placeholder="Ingrese Correo Electronico" readonly>
                                         <span class="help-block"></span>
@@ -798,8 +806,10 @@
                     "url": "{{ route('mantenimiento.directorio.listar.importados') }}",
                     "type": "POST",
                     "data": {
+                        vista: '{{ $vista }}',
                         red: $('#red').val(),
-                        micro: $('#micro').val()
+                        micro: $('#micro').val(),
+                        ipress: $('#ipress').val()
                     },
                     //"dataType": 'JSON',
                 },
@@ -869,11 +879,11 @@
             $('#btnSave').attr('disabled', true);
             var url;
             if (save_method == 'add') {
-                url = "{{ url('/') }}/Mantenimiento/Directorio/ajax_add";
+                url = "{{ route('mantenimiento.directorio.pn.add') }}";
                 msgsuccess = "El registro fue creado exitosamente.";
                 msgerror = "El registro no se pudo crear verifique las validaciones.";
             } else {
-                url = "{{ url('/') }}/Mantenimiento/Directorio/ajax_update";
+                url = "{{ route('mantenimiento.directorio.pn.update') }}";
                 msgsuccess = "El registro fue actualizado exitosamente.";
                 msgerror = "El registro no se pudo actualizar. Verifique la operación";
             }
@@ -911,7 +921,7 @@
             $('.form-group').removeClass('has-error');
             $('.help-block').empty();
             $.ajax({
-                url: "{{ url('/') }}/Mantenimiento/Directorio/ajax_edit/" + id,
+                url: "{{ route('mantenimiento.directorio.pn.find.1', ['id' => ':id']) }}".replace(':id', id),
                 type: "GET",
                 dataType: "JSON",
                 success: function(data) {
@@ -942,7 +952,8 @@
             bootbox.confirm("Seguro desea Eliminar este registro?", function(result) {
                 if (result === true) {
                     $.ajax({
-                        url: "{{ url('/') }}/Mantenimiento/Directorio/ajax_delete/" + id,
+                        url: "{{ route('mantenimiento.directorio.pn.delete', ['id' => ':id']) }}"
+                            .replace(':id', id),
                         type: "GET",
                         dataType: "JSON",
                         success: function(data) {
@@ -970,7 +981,8 @@
                 result) {
                 if (result === true) {
                     $.ajax({
-                        url: "{{ url('/') }}/Mantenimiento/Directorio/ajax_estado/" + id,
+                        url: "{{ route('mantenimiento.directorio.pn.estado', ['id' => ':id']) }}"
+                            .replace(':id', id),
                         /* type: "POST", */
                         dataType: "JSON",
                         success: function(data) {
@@ -998,7 +1010,8 @@
             $('.form-group').removeClass('has-error');
             $('.help-block').empty();
             $.ajax({
-                url: "{{ url('/') }}/Mantenimiento/Directorio/ajax_edit/" + id,
+                url: "{{ route('mantenimiento.directorio.pn.find.1', ['id' => ':id']) }}"
+                    .replace(':id', id),
                 type: "GET",
                 dataType: "JSON",
                 success: function(data) {

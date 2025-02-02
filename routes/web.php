@@ -634,13 +634,15 @@ Route::get('/Mantenimiento/RER/ajax_delete/{id}', [RERController::class, 'ajax_d
 
 Route::get('/RER/ajax_cargar', [RERController::class, 'ajax_cargar'])->name('rer.cargar');
 
-Route::get('/salud/Mantenimiento/Directorio', [DirectorioPNController::class, 'principal'])->middleware('auth')->name('mantenimiento.directorio.principal');
-Route::post('/Mantenimiento/Directorio/Importados/', [DirectorioPNController::class, 'ListarDTImportFuenteTodos'])->name('mantenimiento.directorio.listar.importados');
-Route::get('/Mantenimiento/Directorio/ajax_edit/{id}', [DirectorioPNController::class, 'ajax_edit'])->name('mantenimiento.directorio.find.1');
-Route::post('/Mantenimiento/Directorio/ajax_add/', [DirectorioPNController::class, 'ajax_add'])->name('mantenimiento.directorio.add');
-Route::post('/Mantenimiento/Directorio/ajax_update/', [DirectorioPNController::class, 'ajax_update'])->name('mantenimiento.directorio.update');
-Route::get('/Mantenimiento/Directorio/ajax_estado/{id}', [DirectorioPNController::class, 'ajax_estado'])->name('mantenimiento.directorio.estado');
-Route::get('/Mantenimiento/Directorio/ajax_delete/{id}', [DirectorioPNController::class, 'ajax_delete'])->name('mantenimiento.directorio.delete');
+Route::get('/salud/Mantenimiento/Directorio/PN', [DirectorioPNController::class, 'principal'])->middleware('auth')->name('mantenimiento.directorio.principal');
+Route::post('/salud/Mantenimiento/Directorio/PN/Importados/', [DirectorioPNController::class, 'ListarDTImportFuenteTodos'])->name('mantenimiento.directorio.listar.importados');
+Route::get('/salud/Mantenimiento/Directorio/PN/ajax_edit/{id}', [DirectorioPNController::class, 'ajax_edit'])->name('mantenimiento.directorio.pn.find.1');
+Route::post('/salud/Mantenimiento/Directorio/PN/ajax_add/', [DirectorioPNController::class, 'ajax_add'])->name('mantenimiento.directorio.pn.add');
+Route::post('/salud/Mantenimiento/Directorio/PN/ajax_update/', [DirectorioPNController::class, 'ajax_update'])->name('mantenimiento.directorio.pn.update');
+Route::get('/salud/Mantenimiento/Directorio/PN/ajax_estado/{id}', [DirectorioPNController::class, 'ajax_estado'])->name('mantenimiento.directorio.pn.estado');
+Route::get('/salud/Mantenimiento/Directorio/PN/ajax_delete/{id}', [DirectorioPNController::class, 'ajax_delete'])->name('mantenimiento.directorio.pn.delete');
+
+Route::get('/salud/Directorio/PadrónNominal', [DirectorioPNController::class, 'dashboard'])->middleware('auth')->name('salud.directorio.pn.dashboard');
 
 Route::get('/Mantenimiento/Directorio/Find/AUTOCOMPLETE/profesion', [DirectorioPNController::class, 'autocompletarProfesion'])->name('mantenimiento.directorio.autocomplete.profesion');
 Route::get('/Mantenimiento/Directorio/Find/AUTOCOMPLETE/cargo', [DirectorioPNController::class, 'autocompletarCargo'])->name('mantenimiento.directorio.autocomplete.cargo');
@@ -658,7 +660,9 @@ Route::get('/Mantenimiento/Directorio/Municipal/Find/AUTOCOMPLETE/profesion', [D
 Route::get('/Mantenimiento/Directorio/Municipal/Find/AUTOCOMPLETE/cargo', [DirectorioMunicipalController::class, 'autocompletarCargo'])->name('mantenimiento.directorio.municipal.autocomplete.cargo');
 Route::get('/Mantenimiento/Directorio/Municipal/Find/AUTOCOMPLETE/condicion', [DirectorioMunicipalController::class, 'autocompletarCondicion'])->name('mantenimiento.directorio.municipal.autocomplete.condicion');
 Route::get('/Mantenimiento/Directorio/Municipal/Find/Municipalidades/{distrito}', [DirectorioMunicipalController::class, 'autocompletarCondicion'])->name('mantenimiento.directorio.municipal.municipalidades');
-//
+
+Route::get('/salud/Directorio/Municipal/select/{provincia}/{distrito}', [DirectorioMunicipalController::class, 'municipalidades_select'])->name('salud.directorio.municipal.select.1');
+Route::get('/salud/Directorio/Municipal', [DirectorioMunicipalController::class, 'dashboard'])->middleware('auth')->name('salud.directorio.municipal.dashboard');
 
 Route::get('/educación/Mantenimiento/PadronRER', [PadronRERController::class, 'principal'])->middleware('auth')->name('mantenimiento.padronrer.principal');
 Route::post('/Mantenimiento/PadronRER/Importados/', [PadronRERController::class, 'ListarDTImportFuenteTodos'])->name('mantenimiento.padronrer.listar.importados');
@@ -1255,7 +1259,7 @@ Route::get('/salud/pei', [IndicadoresController::class, 'PEI'])->name('salud.ind
 
 Route::get('/salud/pruebas', function () {
     return view('salud.Indicadores.pruebaxxx00');
-   // return UbigeoRepositorio::arrayDistritoIdNombre();
+    // return UbigeoRepositorio::arrayDistritoIdNombre();
 
     //return view('pruebas3');
 });

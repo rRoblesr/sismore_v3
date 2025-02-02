@@ -14,9 +14,20 @@ use function PHPUnit\Framework\isNull;
 
 class DirectorioPNController extends Controller
 {
+    public static $VISTA_DASHBOARD = 'D';
+    public static $VISTA_MANTENIMIENTO = 'm';
     public function __construct()
     {
         $this->middleware('auth');
+    }
+
+    public function dashboard()
+    {
+        // $red = DB::table('sal_red')->where('cod_disa', '34')->get();
+        $red = DB::select("SELECT * from sal_red where id in( SELECT DISTINCT red_id from sal_microred where id in( SELECT DISTINCT microrred_id FROM `sal_establecimiento` where cod_disa=34 and categoria in ('I-1','I-2','I-3','I-4') and institucion in ('GOBIERNO REGIONAL','MINSA') and estado='ACTIVO'))");
+        $mensaje = "";
+        $vista = 'D';
+        return view('salud.DirectorioPN.Principal', compact('vista', 'mensaje', 'red'));
     }
 
     public function principal()
@@ -24,7 +35,8 @@ class DirectorioPNController extends Controller
         // $red = DB::table('sal_red')->where('cod_disa', '34')->get();
         $red = DB::select("SELECT * from sal_red where id in( SELECT DISTINCT red_id from sal_microred where id in( SELECT DISTINCT microrred_id FROM `sal_establecimiento` where cod_disa=34 and categoria in ('I-1','I-2','I-3','I-4') and institucion in ('GOBIERNO REGIONAL','MINSA') and estado='ACTIVO'))");
         $mensaje = "";
-        return view('salud.DirectorioPN.Principal', compact('mensaje', 'red'));
+        $vista = 'M';
+        return view('salud.DirectorioPN.Principal', compact('vista', 'mensaje', 'red'));
     }
 
     public function ListarDTImportFuenteTodos(Request $rq)
@@ -34,12 +46,10 @@ class DirectorioPNController extends Controller
         $length = intval($rq->length);
 
         $query = DirectorioPN::orderBy('id', 'desc');
-        if ($rq->red > 0) {
-            $query = $query->where('red_id', $rq->red);
-        }
-        if ($rq->micro > 0) {
-            $query = $query->where('microred_id', $rq->micro);
-        }
+        if ($rq->vista == 'D') $query->where('estado', '0');
+        if ($rq->red > 0) $query->where('red_id', $rq->red);
+        if ($rq->micro > 0) $query->where('microred_id', $rq->micro);
+        if ($rq->ipress > 0) $query->where('establecimiento_id', $rq->ipress);
         $query = $query->get();
 
         $red = EstablecimientoRepositorio::arrayIdRed();
@@ -49,29 +59,50 @@ class DirectorioPNController extends Controller
 
         $data = [];
         foreach ($query as $key => $value) {
-            $estado = ['<span class="badge badge-success badge-lg">Activo</span>', '<span class="badge badge-danger badge-lg">Inactivo</span>'];
-
-            $btn = '<a href="#" class="btn btn-info btn-xs" onclick="edit(' . $value->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
-            if ($value->estado == 0) {
-                $btn .= '&nbsp;<a class="btn btn-sm btn-dark btn-xs" href="javascript:void(0)" title="Desactivar" onclick="estado(' . $value->id . ',' . $value->estado . ')"><i class="fa fa-power-off"></i></a> ';
+            $estado = [
+                '<span class="badge badge-success" style="font-size: 0.7rem;padding: 0.25em .4em;">Activo</span>',
+                '<span class="badge badge-danger"  style="font-size: 0.7rem;padding: 0.25em .4em;">Inactivo</span>'
+            ];
+            $btn = '';
+            if ($rq->vista == 'M') {
+                if ($value->estado == 0) {
+                    $btn .= '<a href="javascript:void(0)" class="btn btn-xs waves-effect waves-light btn-info"    title="MODIFICAR"  onclick="edit(' . $value->id . ')"                            > <i class="fa fa-pen"></i> </a>&nbsp;';
+                    $btn .= '<a href="javascript:void(0)" class="btn btn-xs waves-effect waves-light btn-dark"    title="Desactivar" onclick="estado(' . $value->id . ',' . $value->estado . ')"   ><i class="fa fa-power-off"></i></a>&nbsp;';
+                    $btn .= '<a href="javascript:void(0)" class="btn btn-xs waves-effect waves-light btn-danger"  title="ELIMINAR"   onclick="borrar(' . $value->id . ')"  > <i class="fa fa-trash"></i> </a>&nbsp;';
+                } else {
+                    $btn .= '<a href="javascript:void(0)" class="btn btn-xs waves-effect waves-light btn-warning" title="Activar"    onclick="estado(' . $value->id . ',' . $value->estado . ')"   ><i class="fa fa-check"></i></a> ';
+                }
             } else {
-                $btn .= '&nbsp;<a class="btn btn-sm btn-default btn-xs"  title="Activar" onclick="estado(' . $value->id . ',' . $value->estado . ')"><i class="fa fa-check"></i></a> ';
+                $btn .= '<button type="button" onclick="ver(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> </button>';
             }
-            $btn .= '&nbsp;<a href="#" class="btn btn-danger btn-xs" onclick="borrar(' . $value->id . ')"  title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
-            //$btn .= '&nbsp;<button type="button" onclick="ver(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> </button>';
 
-            $data[] = array(
-                $key + 1,
-                $red[$value->red_id] ?? '-',
-                $micro[$value->microred_id] ?? '-',
-                $unico[$value->establecimiento_id] ?? '-',
-                $eess[$value->establecimiento_id] ?? '-',
-                $value->nombres . ' ' . $value->apellido_paterno . ' ' . $value->apellido_materno,
-                $value->cargo,
-                $value->celular,
-                $estado[$value->estado] ?? '',
-                "<center>" . $btn  . "</center>",
-            );
+            //
+
+            if ($rq->vista == 'M') {
+                $data[] = array(
+                    $key + 1,
+                    $red[$value->red_id] ?? '-',
+                    $micro[$value->microred_id] ?? '-',
+                    $unico[$value->establecimiento_id] ?? '-',
+                    $eess[$value->establecimiento_id] ?? '-',
+                    $value->nombres . ' ' . $value->apellido_paterno . ' ' . $value->apellido_materno,
+                    $value->celular,
+                    $estado[$value->estado] ?? '',
+                    "<center>" . $btn  . "</center>",
+                );
+            } else {
+                $data[] = array(
+                    $key + 1,
+                    $red[$value->red_id] ?? '-',
+                    $micro[$value->microred_id] ?? '-',
+                    $unico[$value->establecimiento_id] ?? '-',
+                    $eess[$value->establecimiento_id] ?? '-',
+                    $value->nombres . ' ' . $value->apellido_paterno . ' ' . $value->apellido_materno,
+                    $value->cargo,
+                    $value->celular,
+                    "<center>" . $btn  . "</center>",
+                );
+            }
         }
         $result = array(
             "draw" => $draw,

@@ -57,38 +57,42 @@
             <div class="text-center text-md-right">
                 <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
                     <i class="fa fa-redo"></i> Actualizar</button>
-                <button type="button" class="btn btn-primary btn-xs" onclick="add()">
-                    <i class="fa fa-plus"></i> Nuevo</button>
+                @if ($vista == 'M')
+                    <button type="button" class="btn btn-primary btn-xs" onclick="add()">
+                        <i class="fa fa-plus"></i> Nuevo</button>
+                @endif
+
             </div>
         </div>
         <div class="card-body p-2">
             <div class="row mb-0">
-                <div class="col-md-8"></div>
-                {{-- <div class="col-md-4 my-1">
+                {{-- <div class="col-md-8"></div> --}}
+                <div class="col-md-4 my-1">
                     <div class="custom-select-container">
                         <label for="provincia">Provincia</label>
                         <select id="provincia" name="provincia" class="form-control form-control-sm font-11"
-                            onchange="cargarDistrito('distrito');">
+                            onchange="cargarDistrito('distrito');cargarMunicipio('municipalidad');">
                             <option value="0">TODOS</option>
                             @foreach ($red as $item)
                                 <option value="{{ $item->id }}">{{ $item->codigo }} {{ $item->nombre }}</option>
                             @endforeach
                         </select>
                     </div>
-                </div> --}}
-                {{-- <div class="col-md-4 my-1">
+                </div>
+                <div class="col-md-4 my-1">
                     <div class="custom-select-container">
                         <label for="distrito">Distrito</label>
                         <select id="distrito" name="distrito" class="form-control form-control-sm font-11"
-                            onchange="cargartableprincipal();" data-toggle="codigox">
+                            onchange="cargarMunicipio('municipalidad');cargartableprincipal();" data-toggle="codigox">
                             <option value="0">TODOS</option>
                         </select>
                     </div>
-                </div> --}}
+                </div>
                 <div class="col-md-4 my-1">
                     <div class="custom-select-container">
                         <label for="municipalidad">Municipalidad</label>
-                        <select id="municipalidad" name="municipalidad" class="form-control form-control-sm font-11" onchange="cargartableprincipal();">
+                        <select id="municipalidad" name="municipalidad" class="form-control form-control-sm font-11"
+                            onchange="cargartableprincipal();">
                             <option value="0">TODOS</option>
                             @foreach ($municipalidad as $item)
                                 {{-- <option value="{{ $item->id }}">{{ $item->codigo }} {{ $item->nombre }}</option> --}}
@@ -115,22 +119,34 @@
         <div class="card-header border-success-0 bg-transparent p-0">
             <h3 class="card-title"></h3>
         </div>
-
         <div class="card-body p-2">
             <div class="table-responsive">
-                <table id="tbprincipal" class="table table-striped table-bordered tablex" style="font-size: 12px">
+                <table id="tbprincipal" class="table table-sm font-11 table-striped table-bordered tablex">
                     <thead class="cabecera-dataTable">
-                        <tr class="bg-success-0 text-white">
-                            <th>Nº</th>
-                            <th>Provincia</th>
-                            <th>Distrito</th>
-                            <th>Municipalidad</th>
-                            <th>Responsable</th>
-                            <th>Cargo</th>
-                            <th>Celular</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
-                        </tr>
+                        @if ($vista == 'm')
+                            <tr class="bg-success-0 text-white">
+                                <th>Nº</th>
+                                <th>Provincia</th>
+                                <th>Distrito</th>
+                                <th>Municipalidad</th>
+                                <th>Responsable</th>
+                                <th>Celular</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        @else
+                            <tr class="bg-success-0 text-white">
+                                <th>Nº</th>
+                                <th>Provincia</th>
+                                <th>Distrito</th>
+                                <th>Municipalidad</th>
+                                <th>Responsable</th>
+                                <th>Cargo</th>
+                                <th>Celular</th>
+                                <th>Ver</th>
+                            </tr>
+                        @endif
+
                     </thead>
                     <tbody></tbody>
                 </table>
@@ -158,7 +174,7 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>DNI<span class="required">*</span></label>
+                                        <label>DNI <span class="required">(*)</span></label>
                                         <div class="input-group">
                                             {{-- <input type="number" id="dni" name="dni" class="form-control"
                                                 placeholder="Numero de Documento" maxlength="8"> --}}
@@ -175,7 +191,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <label>Nombres<span class="required">*</span></label>
+                                        <label>Nombres <span class="required">(*)</span></label>
                                         <input id="nombres" name="nombres" class="form-control" type="text"
                                             oninput="convertToUppercase(this)" maxlength="150" placeholder="Nombres">
                                         <span class="help-block"></span>
@@ -186,14 +202,14 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>Apellido Paterno</label>
+                                        <label>Apellido Paterno <span class="required">(*)</span></label>
                                         <input id="apellido_paterno" name="apellido_paterno" class="form-control"
                                             type="text" oninput="convertToUppercase(this)" maxlength="100"
                                             placeholder="Apellido Paterno">
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
-                                        <label>Apellido Materno</label>
+                                        <label>Apellido Materno <span class="required">(*)</span></label>
                                         <input id="apellido_materno" name="apellido_materno" class="form-control"
                                             type="text" oninput="convertToUppercase(this)" maxlength="100"
                                             placeholder="Apellido Materno">
@@ -205,7 +221,7 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>Sexo</label>
+                                        <label>Sexo <span class="required">(*)</span></label>
                                         <select id="sexo" name="sexo" class="form-control">
                                             <option value="0">SELECCIONAR</option>
                                             <option value="1">MASCULINO</option>
@@ -215,7 +231,7 @@
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label>Municipalidad</label>
+                                        <label>Municipalidad <span class="required">(*)</span></label>
                                         <select id="fmunicipalidad" name="fmunicipalidad" class="form-control">
                                             <option value="0">SELECCIONAR</option>
                                             @foreach ($municipalidad as $item)
@@ -230,14 +246,14 @@
                                 <div class="row">
 
                                     <div class="col-md-6">
-                                        <label>Cargo</label>
+                                        <label>Cargo <span class="required">(*)</span></label>
                                         <input id="cargo" name="cargo" class="form-control" type="text"
                                             oninput="convertToUppercase(this)" placeholder="Cargo">
                                         <span class="help-block"></span>
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label>Condición Laboral</label>
+                                        <label>Condición Laboral <span class="required">(*)</span></label>
                                         <input id="condicion_laboral" name="condicion_laboral" class="form-control"
                                             type="text" oninput="convertToUppercase(this)"
                                             placeholder="Condición Laboral">
@@ -251,13 +267,13 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>Celular</label>
+                                        <label>Celular <span class="required">(*)</span></label>
                                         <input id="celular" name="celular" class="form-control" type="number"
                                             placeholder="Celular">
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
-                                        <label>Correo Electronico</label>
+                                        <label>Correo Electronico <span class="required">(*)</span></label>
                                         <input id="email" name="email" class="form-control" type="email"
                                             placeholder="Correo Electronico">
                                         <span class="help-block"></span>
@@ -294,42 +310,40 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>DNI<span class="required">*</span></label>
+                                        <label>DNI <span class="required">(*)</span></label>
                                         <div class="input-group">
-                                            <input type="number" id="vdni" name="vdni" class="form-control"
-                                                placeholder="Numero de Documento" maxlength="12" readonly>
+                                            {{-- <input type="number" id="dni" name="dni" class="form-control"
+                                                placeholder="Numero de Documento" maxlength="8"> --}}
+                                            <input type="text" id="vdni" name="vdni" class="form-control"
+                                                placeholder="Numero de Documento" maxlength="8" size="8"
+                                                oninput="this.value = this.value.replace(/\D/g, '').slice(0, 8)" disabled>
                                             <span class="help-block"></span>
-                                            <span class="input-group-append">
-                                                <button type="button" class="btn waves-effect waves-light btn-primary"
-                                                    id="btnbuscardni">
-                                                    <i class="fas fa-search"></i>
-                                                </button>
-                                            </span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <label>Nombres<span class="required">*</span></label>
+                                        <label>Nombres <span class="required">(*)</span></label>
                                         <input id="vnombres" name="vnombres" class="form-control" type="text"
-                                            oninput="convertToUppercase(this)" maxlength="150"
-                                            placeholder="Ingrese Nombres" readonly>
+                                            oninput="convertToUppercase(this)" maxlength="150" placeholder="Nombres"
+                                            disabled>
                                         <span class="help-block"></span>
                                     </div>
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>Apellido Paterno</label>
+                                        <label>Apellido Paterno <span class="required">(*)</span></label>
                                         <input id="vapellido_paterno" name="vapellido_paterno" class="form-control"
                                             type="text" oninput="convertToUppercase(this)" maxlength="100"
-                                            placeholder="Imgrese Apellido Paterno" readonly>
+                                            placeholder="Apellido Paterno" disabled>
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
-                                        <label>Apellido Materno</label>
+                                        <label>Apellido Materno <span class="required">(*)</span></label>
                                         <input id="vapellido_materno" name="vapellido_materno" class="form-control"
                                             type="text" oninput="convertToUppercase(this)" maxlength="100"
-                                            placeholder="Ingrese apellido Materno" readonly>
+                                            placeholder="Apellido Materno" disabled>
                                         <span class="help-block"></span>
                                     </div>
 
@@ -338,35 +352,17 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>Sexo</label>
+                                        <label>Sexo <span class="required">(*)</span></label>
                                         <select id="vsexo" name="vsexo" class="form-control" disabled>
+                                            <option value="0">SELECCIONAR</option>
                                             <option value="1">MASCULINO</option>
                                             <option value="2">FEMENINO</option>
                                         </select>
                                         <span class="help-block"></span>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label>Cargo</label>
-                                        <input id="vcargo" name="vcargo" class="form-control" type="text"
-                                            oninput="convertToUppercase(this)" placeholder="Ingrese Cargo" readonly>
-                                        <span class="help-block"></span>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
 
                                     <div class="col-md-6">
-                                        <label>Condición Laboral</label>
-                                        <input id="vcondicion_laboral" name="vcondicion_laboral" class="form-control"
-                                            type="text" oninput="convertToUppercase(this)"
-                                            placeholder="Ingrese Condición Laboral" readonly>
-                                        <span class="help-block"></span>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <label>Municipalidad</label>
+                                        <label>Municipalidad <span class="required">(*)</span></label>
                                         <select id="vmunicipalidad" name="vmunicipalidad" class="form-control" disabled>
                                             <option value="0">SELECCIONAR</option>
                                             @foreach ($municipalidad as $item)
@@ -381,39 +377,36 @@
                                 <div class="row">
 
                                     <div class="col-md-6">
-                                        <label>Distrito</label>
-                                        <select id="vmicrored" name="vmicrored" class="form-control" disabled>
-                                            <option value="0">SELECCIONAR</option>
-                                        </select>
+                                        <label>Cargo <span class="required">(*)</span></label>
+                                        <input id="vcargo" name="vcargo" class="form-control" type="text"
+                                            oninput="convertToUppercase(this)" placeholder="Cargo" disabled>
                                         <span class="help-block"></span>
                                     </div>
-                                </div>
-                            </div>
 
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <label>Establecimiento de Salud</label>
-                                        <select id="veess" name="veess" class="form-control" disabled>
-                                            <option value="0">SELECCIONAR</option>
-                                        </select>
+                                    <div class="col-md-6">
+                                        <label>Condición Laboral <span class="required">(*)</span></label>
+                                        <input id="vcondicion_laboral" name="vcondicion_laboral" class="form-control"
+                                            type="text" oninput="convertToUppercase(this)"
+                                            placeholder="Condición Laboral" disabled>
                                         <span class="help-block"></span>
                                     </div>
+
+
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label>Celular</label>
+                                        <label>Celular <span class="required">(*)</span></label>
                                         <input id="vcelular" name="vcelular" class="form-control" type="number"
-                                            placeholder="Ingrese Celular" readonly>
+                                            placeholder="Celular" disabled>
                                         <span class="help-block"></span>
                                     </div>
                                     <div class="col-md-6">
-                                        <label>Correo Electronico</label>
+                                        <label>Correo Electronico <span class="required">(*)</span></label>
                                         <input id="vemail" name="vemail" class="form-control" type="email"
-                                            placeholder="Ingrese Correo Electronico" readonly>
+                                            placeholder="Correo Electronico" disabled>
                                         <span class="help-block"></span>
                                     </div>
                                 </div>
@@ -562,6 +555,9 @@
                 }
             });
 
+            cargarDistrito('distrito');
+            cargarMunicipio('municipalidad');
+
             cargartableprincipal();
 
         });
@@ -586,7 +582,10 @@
                     "url": "{{ route('mantenimiento.directorio.municipal.listar.importados') }}",
                     "type": "POST",
                     "data": {
-                        distrito: $('#municipalidad').val(),
+                        provincia: $('#provincia').val(),
+                        distrito: $('#distrito').val(),
+                        municipalidad: $('#municipalidad').val(),
+                        vista: '{{ $vista }}',
                     },
                     //"dataType": 'JSON',
                 },
@@ -831,10 +830,12 @@
         }
 
         function cargarMunicipio(select) {
-            distrito = select == 'municipalidad' ? $('#distrito').val() : ('fmunicipalidad' ? $('#fdistrito').val() : 0);
+            provincia = select == 'municipalidad' ? $('#provincia').val() : ('fmunicipalidad' ? $('#fprovincia').val() : 0);
+            distrito = $('#distrito').val();
             $.ajax({
-                url: "{{ route('ubigeo.distrito.25.select', ['provincia' => ':provincia']) }}"
-                    .replace(':provincia', distrito),
+                url: "{{ route('salud.directorio.municipal.select.1', ['provincia' => ':provincia', 'distrito' => ':distrito']) }}"
+                    .replace(':provincia', provincia)
+                    .replace(':distrito', distrito),
                 type: 'GET',
                 success: function(data) {
                     $(`#${select} option`).remove();
@@ -846,6 +847,7 @@
                     });
                     $(`#${select}`).append(options);
                     if (select == 'municipalidad') cargartableprincipal();
+                    if (distrito > 0) cargartableprincipal();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);

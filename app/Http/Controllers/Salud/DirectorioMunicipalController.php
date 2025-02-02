@@ -21,13 +21,29 @@ class DirectorioMunicipalController extends Controller
         $this->middleware('auth');
     }
 
+    public function municipalidades_select($provincia, $distrito)
+    {
+        return DirectorioMunicipalRepositorio::listarMunicipalidades($provincia, $distrito);
+    }
+
+    public function dashboard()
+    {
+        // return DirectorioMunicipalRepositorio::listarMunicipalidades(37);
+        $red = Ubigeo::select('id', 'codigo', 'nombre')->whereRaw('length(codigo) = 4')->where('codigo', 'like', '25%')->get();
+        $municipalidad = DirectorioMunicipalRepositorio::listarMunicipalidades();
+        $mensaje = "";
+        $vista = 'D';
+        return view('salud.DirectorioMunicipal.Principal', compact('vista', 'mensaje', 'red', 'municipalidad'));
+    }
+
     public function principal()
     {
         // return DirectorioMunicipalRepositorio::listarMunicipalidades(37);
         $red = Ubigeo::select('id', 'codigo', 'nombre')->whereRaw('length(codigo) = 4')->where('codigo', 'like', '25%')->get();
         $municipalidad = DirectorioMunicipalRepositorio::listarMunicipalidades();
         $mensaje = "";
-        return view('salud.DirectorioMunicipal.Principal', compact('mensaje','red', 'municipalidad'));
+        $vista = 'M';
+        return view('salud.DirectorioMunicipal.Principal', compact('vista', 'mensaje', 'red', 'municipalidad'));
     }
 
     public function ListarDTImportFuenteTodos(Request $rq)
@@ -36,10 +52,10 @@ class DirectorioMunicipalController extends Controller
         $start = intval($rq->start);
         $length = intval($rq->length);
 
-        $query = DirectorioMunicipal::orderBy('id', 'desc');
-        if ($rq->distrito > 0) {
-            $query = $query->where('distrito_id', $rq->distrito);
-        }
+        $query = DirectorioMunicipal::select('sal_directorio_municipal.*')->join('par_ubigeo as d','d.id','=','distrito_id')->orderBy('id', 'desc');
+        if ($rq->vista == 'D') $query->where('estado', '0');
+        if ($rq->provincia > 0) $query->where('d.dependencia', $rq->provincia);
+        if ($rq->distrito > 0) $query->where('distrito_id', $rq->distrito);
         $query = $query->get();
 
         $provincia = UbigeoRepositorio::arrayProvinciaNombreDistritoid();
@@ -48,28 +64,48 @@ class DirectorioMunicipalController extends Controller
 
         $data = [];
         foreach ($query as $key => $value) { //style="font-size: 1.1rem; padding: 8px 15px;"
-            $estado = ['<span class="badge badge-success badge-lg">Activo</span>', '<span class="badge badge-danger badge-lg">Inactivo</span>'];
-
-            $btn = '<a href="#" class="btn btn-info btn-xs" onclick="edit(' . $value->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
-            if ($value->estado == 0) {
-                $btn .= '&nbsp;<a class="btn btn-sm btn-dark btn-xs" href="javascript:void(0)" title="Desactivar" onclick="estado(' . $value->id . ',' . $value->estado . ')"><i class="fa fa-power-off"></i></a> ';
+            $estado = [
+                '<span class="badge badge-success" style="font-size: 0.7rem;padding: 0.25em .4em;">Activo</span>',
+                '<span class="badge badge-danger"  style="font-size: 0.7rem;padding: 0.25em .4em;">Inactivo</span>'
+            ];
+            $btn = '';
+            if ($rq->vista == 'M') {
+                if ($value->estado == 0) {
+                    $btn .= '<a href="javascript:void(0)" class="btn btn-xs btn-info"    title="MODIFICAR"  onclick="edit(' . $value->id . ')"                         > <i class="fa fa-pen"></i> </a>';
+                    $btn .= '&nbsp;';
+                    $btn .= '<a href="javascript:void(0)" class="btn btn-xs btn-dark"    title="DESACTIVAR" onclick="estado(' . $value->id . ',' . $value->estado . ')"> <i class="fa fa-power-off"></i></a>';
+                    $btn .= '&nbsp;';
+                    $btn .= '<a href="javascript:void(0)" class="btn btn-xs btn-danger"  title="ELIMINAR"   onclick="borrar(' . $value->id . ')"                       > <i class="fa fa-trash"></i> </a>';
+                } else {
+                    $btn .= '<a href="javascript:void(0)" class="btn btn-xs btn-warning" title="ACTIVAR"    onclick="estado(' . $value->id . ',' . $value->estado . ')"> <i class="fa fa-check"></i></a> ';
+                }
             } else {
-                $btn .= '&nbsp;<a class="btn btn-sm btn-default btn-xs"  title="Activar" onclick="estado(' . $value->id . ',' . $value->estado . ')"><i class="fa fa-check"></i></a> ';
+                $btn .= '<button type="button" onclick="ver(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> </button>';
             }
-            $btn .= '&nbsp;<a href="#" class="btn btn-danger btn-xs" onclick="borrar(' . $value->id . ')"  title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
-            //$btn .= '&nbsp;<button type="button" onclick="ver(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> </button>';
 
-            $data[] = array(
-                $key + 1,
-                $provincia[$value->distrito_id] ?? '-',
-                $distrito[$value->distrito_id] ?? '-',
-                $muni[$value->distrito_id] ?? '-',
-                $value->nombres . ' ' . $value->apellido_paterno . ' ' . $value->apellido_materno,
-                $value->cargo,
-                $value->celular,
-                $estado[$value->estado] ?? '',
-                "<center>" . $btn  . "</center>",
-            );
+            if ($rq->vista == 'M') {
+                $data[] = array(
+                    $key + 1,
+                    $provincia[$value->distrito_id] ?? '-',
+                    $distrito[$value->distrito_id] ?? '-',
+                    $muni[$value->distrito_id] ?? '-',
+                    $value->nombres . ' ' . $value->apellido_paterno . ' ' . $value->apellido_materno,
+                    $value->celular,
+                    $estado[$value->estado] ?? '',
+                    "<center>" . $btn  . "</center>",
+                );
+            } else {
+                $data[] = array(
+                    $key + 1,
+                    $provincia[$value->distrito_id] ?? '-',
+                    $distrito[$value->distrito_id] ?? '-',
+                    $muni[$value->distrito_id] ?? '-',
+                    $value->nombres . ' ' . $value->apellido_paterno . ' ' . $value->apellido_materno,
+                    $value->cargo,
+                    $value->celular,
+                    "<center>" . $btn  . "</center>",
+                );
+            }
         }
         $result = array(
             "draw" => $draw,

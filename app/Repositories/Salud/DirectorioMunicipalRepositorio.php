@@ -11,15 +11,38 @@ use Illuminate\Support\Facades\DB;
 
 class DirectorioMunicipalRepositorio
 {
-    public static function listarMunicipalidades($distrito = 0)
+    // public static function listarMunicipalidades($provincia = 0)
+    // {
+    //     $ubigeos = Ubigeo::select('codigo')->whereRaw('length(codigo) = 6')->where('codigo', 'like', '25%')->pluck('codigo');
+    //     $ubigeo = Ubigeo::select('id', 'codigo')->whereRaw('length(codigo) = 6')->where('codigo', 'like', '25%')->pluck('id', 'codigo');
+    //     $query = UnidadEjecutora::select('codigo_ue as codigo', DB::raw("TRIM(REPLACE(unidad_ejecutora, '\n', '')) as nombre"))->whereIn('codigo_ue', $ubigeos)->groupBy('codigo', 'nombre')->orderBy('codigo', 'asc')->get();
+    //     foreach ($query as $key => $value) {
+    //         $value->distrito_id = $ubigeo[$value->codigo] ?? null;
+    //         if ($value->distrito_id == 45) {
+    //             $value->nombre = 'MUNICIPALIDAD PROVINCIAL DE ATALAYA';
+    //         }
+    //         if ($value->distrito_id == 49) {
+    //             $value->nombre = 'MUNICIPALIDAD PROVINCIAL DE PADRE ABAD';
+    //         }
+    //     }
+    //     //if ($distrito > 0) return $query->where('distrito_id', $distrito);
+    //     return $query;
+    // }
+
+    public static function listarMunicipalidades($provincia = 0, $distrito = 0)
     {
-        $ubigeos = Ubigeo::select('codigo')->whereRaw('length(codigo) = 6')->where('codigo', 'like', '25%')->pluck('codigo');
+        $ubigeos = Ubigeo::select('codigo')->whereRaw('length(codigo) = 6')->where('codigo', 'like', '25%');
+        if ($provincia > 0) $ubigeos->where('dependencia', $provincia);
+        if ($distrito > 0) $ubigeos->where('id', $distrito);
+        $ubigeos = $ubigeos->pluck('codigo');
+
         $ubigeo = Ubigeo::select('id', 'codigo')->whereRaw('length(codigo) = 6')->where('codigo', 'like', '25%')->pluck('id', 'codigo');
-        $query = UnidadEjecutora::select('codigo_ue as codigo', DB::raw("TRIM(REPLACE(unidad_ejecutora, '\n', '')) as nombre"))->whereIn('codigo_ue', $ubigeos)->groupBy('codigo', 'nombre')->get();
+
+        $query = UnidadEjecutora::select('codigo_ue as codigo', DB::raw("TRIM(REPLACE(unidad_ejecutora, '\n', '')) as nombre"))->whereIn('codigo_ue', $ubigeos)->groupBy('codigo', 'nombre')->orderBy('codigo', 'asc')->get();
         foreach ($query as $key => $value) {
             $value->distrito_id = $ubigeo[$value->codigo] ?? null;
             if ($value->distrito_id == 45) {
-                $value->nombre = 'UNICIPALIDAD PROVINCIAL DE ATALAYA';
+                $value->nombre = 'MUNICIPALIDAD PROVINCIAL DE ATALAYA';
             }
             if ($value->distrito_id == 49) {
                 $value->nombre = 'MUNICIPALIDAD PROVINCIAL DE PADRE ABAD';
@@ -49,7 +72,7 @@ class DirectorioMunicipalRepositorio
         foreach ($query as $key => $value) {
             $value->distrito_id = $ubigeo[$value->codigo] ?? null;
             if ($value->distrito_id == 45) {
-                $value->nombre = 'UNICIPALIDAD PROVINCIAL DE ATALAYA';
+                $value->nombre = 'MUNICIPALIDAD PROVINCIAL DE ATALAYA';
             }
             if ($value->distrito_id == 49) {
                 $value->nombre = 'MUNICIPALIDAD PROVINCIAL DE PADRE ABAD';
@@ -69,7 +92,7 @@ class DirectorioMunicipalRepositorio
         foreach ($query as $key => $value) {
             $value->distrito_id = $ubigeo[$value->codigo] ?? null;
             if ($value->distrito_id == 45) {
-                $value->nombre = 'UNICIPALIDAD PROVINCIAL DE ATALAYA';
+                $value->nombre = 'MUNICIPALIDAD PROVINCIAL DE ATALAYA';
             }
             if ($value->distrito_id == 49) {
                 $value->nombre = 'MUNICIPALIDAD PROVINCIAL DE PADRE ABAD';
