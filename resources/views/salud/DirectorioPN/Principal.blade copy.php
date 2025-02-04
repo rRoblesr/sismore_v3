@@ -241,7 +241,7 @@
                         <div class="col-lg-3 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="red">Red</label>
-                                <select id="red" name="red" class="form-control form-control-sm font-11"
+                                <select id="red" name="red" class="form-control font-12"
                                     onchange="cargarMicrored();">
                                     <option value="0">TODOS</option>
                                     @foreach ($red as $item)
@@ -255,7 +255,7 @@
                         <div class="col-lg-3 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="micro">Microred</label>
-                                <select id="micro" name="micro" class="form-control form-control-sm font-11"
+                                <select id="micro" name="micro" class="form-control font-12"
                                     onchange="cargartableprincipal();" data-toggle="codigox">
                                     <option value="0">TODOS</option>
                                 </select>

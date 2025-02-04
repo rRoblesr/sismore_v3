@@ -30,7 +30,7 @@
 
                             <div class="custom-select-container">
                                 <label for="provincia">RED</label>
-                                <select class="form-control btn-xs" name="vred" id="vred"
+                                <select class="form-control" name="vred" id="vred"
                                     onchange="cargar_lista();">
                                     <option value="0">TODOS</option>
                                 </select>
@@ -42,7 +42,7 @@
 
                             <div class="custom-select-container">
                                 <label for="provincia">MICRORED</label>
-                                <select class="form-control btn-xs" name="vmicrored" id="vmicrored"
+                                <select class="form-control" name="vmicrored" id="vmicrored"
                                     onchange="cargar_lista();">
                                     <option value="0">TODOS</option>
                                 </select>
@@ -54,7 +54,7 @@
 
                             <div class="custom-select-container">
                                 <label for="provincia">EE.SS</label>
-                                <select class="form-control btn-xs" name="veess" id="veess"
+                                <select class="form-control" name="veess" id="veess"
                                     onchange="cargar_lista();">
                                     <option value="0">TODOS</option>
                                 </select>

@@ -30,7 +30,7 @@
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="ugel">UGEL</label>
-                                <select id="ugel" name="ugel" class="form-control btn-xs font-11"
+                                <select id="ugel" name="ugel" class="form-control font-11"
                                     onchange="cargarMes();">
                                     <option value="0">TODOS</option>
                                     @foreach ($ugel as $item)
@@ -46,7 +46,7 @@
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="provincia">PROVINCIA</label>
-                                <select id="provincia" name="provincia" class="form-control btn-xs font-11"
+                                <select id="provincia" name="provincia" class="form-control font-11"
                                     onchange="cargarDistritos();cargarCards();">
                                     <option value="0">TODOS</option>
                                     @foreach ($provincia as $item)
@@ -60,7 +60,7 @@
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="distrito">DISTRITO</label>
-                                <select id="distrito" name="distrito" class="form-control btn-xs font-11"
+                                <select id="distrito" name="distrito" class="form-control font-11"
                                     onchange="cargarCards();">
                                     <option value="0">TODOS</option>
                                 </select>
@@ -72,7 +72,7 @@
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="area">ÁREA GEOGRAFICA</label>
-                                <select id="area" name="area" class="form-control btn-xs font-11"
+                                <select id="area" name="area" class="form-control font-11"
                                     onchange="cargarCards();">
                                     <option value="0">TODOS</option>
                                     @foreach ($area as $item)

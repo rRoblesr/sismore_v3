@@ -74,7 +74,7 @@
             </div>
             <label class="col-lg-1 control-label text-right align-self-end">Año</label>
             <div class="col-lg-1">
-                <select id="anio" name="anio" class="form-control btn-xs font-10" onchange="cargartarjetas();">
+                <select id="anio" name="anio" class="form-control font-10" onchange="cargartarjetas();">
                     @foreach ($anios as $item)
                         <option value="{{ $item->anio }}" {{ $item->anio == $anio ? 'selected' : '' }}>
                             {{ $item->anio }}
@@ -83,7 +83,7 @@
                 </select>
             </div>
             <div class="col-lg-2">
-                <select id="articulo" name="articulo" class="form-control btn-xs font-10" onchange="cargartarjetas();">
+                <select id="articulo" name="articulo" class="form-control font-10" onchange="cargartarjetas();">
                     <option value="0">ACTIVIDADES Y PROYECTOS</option>
                     <option value="1">PROYECTOS</option>
                     <option value="2">ACTIVIDADES</option>

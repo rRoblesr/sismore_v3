@@ -31,7 +31,7 @@
                 <div class="col-md-2 col-6">
                     <div class="custom-select-container my-2">
                         <label for="anio">Año</label>
-                        <select id="anio" name="anio" class="form-control form-control-sm font-11"
+                        <select id="anio" name="anio" class="form-control font-12"
                             onchange="cargarMes();">
                             @foreach ($anio as $item)
                                 <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
@@ -44,7 +44,7 @@
                 <div class="col-md-2 col-6">
                     <div class="custom-select-container my-1">
                         <label for="mes">Mes</label>
-                        <select id="mes" name="mes" class="form-control form-control-sm font-11"
+                        <select id="mes" name="mes" class="form-control font-12"
                             onchange="cargarcuadros();">
                         </select>
                     </div>
@@ -53,7 +53,7 @@
                 <div class="col-md-2 col-6">
                     <div class="custom-select-container my-1">
                         <label for="provincia">Provincia</label>
-                        <select id="provincia" name="provincia" class="form-control form-control-sm font-11"
+                        <select id="provincia" name="provincia" class="form-control font-12"
                             onchange="cargarDistritos();cargarcuadros();">
                             <option value="0">TODOS</option>
                             @foreach ($provincia as $item)
@@ -67,7 +67,7 @@
                 <div class="col-md-2 col-6">
                     <div class="custom-select-container my-1">
                         <label for="distrito">Distrito</label>
-                        <select id="distrito" name="distrito" class="form-control form-control-sm font-11"
+                        <select id="distrito" name="distrito" class="form-control font-12"
                             onchange="cargarcuadros();">
                             <option value="0">TODOS</option>
                         </select>
@@ -105,7 +105,7 @@
 
                             <div class="custom-select-container">
                                 <label for="anio">Año</label>
-                                <select id="anio" name="anio" class="form-control form-control-sm font-11"
+                                <select id="anio" name="anio" class="form-control font-12"
                                     onchange="cargarcuadros();">
                                     @foreach ($anio as $item)
                                         <option value="{{ $item->anio }}"
@@ -118,7 +118,7 @@
                         <div class="col-lg-2 col-md-1 col-sm-1  ">
                             <div class="custom-select-container">
                                 <label for="mes">Mes</label>
-                                <select id="mes" name="mes" class="form-control form-control-sm font-11"
+                                <select id="mes" name="mes" class="form-control font-12"
                                     onchange="cargarcuadros();">
                                 </select>
                             </div>
@@ -127,7 +127,7 @@
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="provincia">Provincia</label>
-                                <select id="provincia" name="provincia" class="form-control form-control-sm font-11"
+                                <select id="provincia" name="provincia" class="form-control font-12"
                                     onchange="cargarDistritos();cargarcuadros();">
                                     <option value="0">TODOS</option>
                                     @foreach ($provincia as $item)
@@ -141,7 +141,7 @@
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="distrito">Distrito</label>
-                                <select id="distrito" name="distrito" class="form-control form-control-sm font-11"
+                                <select id="distrito" name="distrito" class="form-control font-12"
                                     onchange="cargarcuadros();">
                                     <option value="0">TODOS</option>
                                 </select>

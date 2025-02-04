@@ -1326,6 +1326,8 @@ Route::get('/Salud/PadronNominal/Calidad/Descargar/{codigoCalidad}', [SaludPadro
 Route::get('/Salud/PadronNominal/Calidad/{tipo}', [SaludPadronNominalCalidad::class, 'listadoTipo'])->name('salud.padron.calidad.listadotipo');
 Route::get('/Salud/PadronNominal/Calidad/{codigoCalidad}/{codigoPadron}', [SaludPadronNominalCalidad::class, 'mostrarDatos'])->name('salud.padron.calidad.mostrardato');
 
+Route::get('/Salud/PadronNominal/TableroSeguimiento', [PadronNominalController::class, 'tableroseguimiento'])->name('salud.padronnominal.seguimientonominal');
+
 Route::get('/Salud/IPRESS/TableroControl', [EstablecimientoController::class, 'dashboard'])->name('salud.ipress.dashboard');
 Route::get('/Salud/IPRESS/TableroControl/Contenido', [EstablecimientoController::class, 'dashboardContenido'])->name('salud.ipress.dashboard.contenido');
 

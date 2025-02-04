@@ -73,13 +73,13 @@
                         <div class="form-body">
                             <div class="form-group">
                                 <label>Nombre <span class="required">*</span></label>
-                                <input id="descripcion" name="descripcion" class="form-control btn-xs" type="text"
+                                <input id="descripcion" name="descripcion" class="form-control" type="text"
                                     onkeyup="this.value=this.value.toUpperCase()">
                                 <span class="help-block"></span>
                             </div>
                             <div class="form-group">
                                 <label>Abreviado <span class="required">*</span></label>
-                                <input id="abreviado" name="abreviado" class="form-control btn-xs" type="text"
+                                <input id="abreviado" name="abreviado" class="form-control" type="text"
                                     onkeyup="this.value=this.value.toUpperCase()" maxlength="10">
                                 <span class="help-block"></span>
                             </div>

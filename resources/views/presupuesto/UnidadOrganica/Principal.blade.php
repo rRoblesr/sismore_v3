@@ -98,7 +98,7 @@
                             <div class="col-md-2">
                                 {{-- <label class="col-form-label">Año</label> --}}
                                 <div class="">
-                                    <select class="form-control btn-xs font-11" name="fanio" id="fanio" onchange="listarDT();">
+                                    <select class="form-control font-11" name="fanio" id="fanio" onchange="listarDT();">
                                         @foreach ($anios as $item)
                                             <option value="{{ $item->anio }}"
                                                 {{ $item->anio == $anio ? 'selected' : '' }}>{{ $item->anio }}
@@ -110,7 +110,7 @@
                             <div class="col-md-2">
                                 {{-- <label class=" col-form-label">Gobiernos</label> --}}
                                 <div class="">
-                                    <select class="form-control btn-xs font-11" name="fgobierno" id="fgobierno"
+                                    <select class="form-control font-11" name="fgobierno" id="fgobierno"
                                         onchange="cargarue();listarDT();">
                                         {{-- <option value="0">TODOS</option> --}}
                                         @foreach ($gobs as $item)
@@ -123,7 +123,7 @@
                             <div class="col-md-3">
                                 {{-- <label class="col-form-label">Unidad Ejecutora</label> --}}
                                 <div class="">
-                                    <select class="form-control btn-xs font-11" name="fue" id="fue" onchange="listarDT();">
+                                    <select class="form-control font-11" name="fue" id="fue" onchange="listarDT();">
                                         <option value="UNIDAD EJECUTORA"></option>
                                     </select>
                                 </div>

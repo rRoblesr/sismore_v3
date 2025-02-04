@@ -71,7 +71,7 @@
                                     <div class="col-md-1">
                                         {{-- <label class=" col-form-label">Año</label> --}}
                                         <div class="">
-                                            <select class="form-control btn-xs font-11" name="fano" id="fano"
+                                            <select class="form-control font-11" name="fano" id="fano"
                                                 onchange="cargarmes();">
                                                 {{-- <option value="0">TODOS</option> --}}
                                                 @foreach ($opt1 as $item)
@@ -85,7 +85,7 @@
                                     <div class="col-md-1">
                                         {{-- <label class="col-form-label">Mes</label> --}}
                                         <div class="">
-                                            <select class="form-control btn-xs font-11 pl-0" name="fmes" id="fmes"
+                                            <select class="form-control font-11 pl-0" name="fmes" id="fmes"
                                                 onchange="cargarcuadros2();cargardispositivolegal();">
                                                 {{-- <option value="0">TODOS</option> --}}
                                             </select>
@@ -94,7 +94,7 @@
                                     <div class="col-md-2">
                                         {{-- <label class="col-form-label">Producto/Proyecto </label> --}}
                                         <div class="">
-                                            <select class="form-control btn-xs font-11" name="fproductoproyecto"
+                                            <select class="form-control font-11" name="fproductoproyecto"
                                                 id="fproductoproyecto" onchange="cargarcuadros2();">
                                                 <option value="0">PRODUCTO/PROYECTO</option>
                                                 {{-- @foreach ($opt3 as $item)
@@ -107,7 +107,7 @@
                                     <div class="col-md-3">
                                         {{-- <label class="col-form-label">Unidad Ejecutora </label> --}}
                                         <div class="">
-                                            <select class="form-control btn-xs font-11" name="fue" id="fue"
+                                            <select class="form-control font-11" name="fue" id="fue"
                                                 onchange="cargarcuadros2();">
                                                 <option value="0">UNIDAD EJECUTORA</option>
                                                 {{-- @foreach ($opt6 as $item)
@@ -120,7 +120,7 @@
                                     <div class="col-md-3">
                                         {{-- <label class="col-form-label">Tipos de Modificaciones </label> --}}
                                         <div class="">
-                                            <select class="form-control btn-xs font-11" name="ftipomodificacion"
+                                            <select class="form-control font-11" name="ftipomodificacion"
                                                 id="ftipomodificacion" onchange="cargarcuadros2();">
                                                 <option value="0">TIPO DE MODIFICACIONES</option>
                                                 {{-- @foreach ($opt4 as $item)
@@ -133,7 +133,7 @@
                                     <div class="col-md-2">
                                         {{-- <label class="col-form-label">Dispositivo Legal </label> --}}
                                         <div class="">
-                                            <select class="form-control btn-xs font-11" name="fdispositivolegal"
+                                            <select class="form-control font-11" name="fdispositivolegal"
                                                 id="fdispositivolegal" onchange="cargarcuadros2();">
                                                 <option value="todos">DISPOSITIVO LEGAL</option>
                                                {{--  @foreach ($opt5 as $item)

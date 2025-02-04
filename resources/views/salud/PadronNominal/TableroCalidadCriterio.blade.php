@@ -39,7 +39,7 @@
                 <div class="col-md-2 col-6">
                     <div class="custom-select-container my-1">
                         <label for="mes">Mes</label>
-                        <select id="mes" name="mes" class="form-control form-control-sm font-11"
+                        <select id="mes" name="mes" class="form-control font-12"
                             onchange="cargarcuadros();">
                         </select>
                     </div>
@@ -48,7 +48,7 @@
                 <div class="col-md-2 col-6">
                     <div class="custom-select-container my-1">
                         <label for="provincia">Provincia</label>
-                        <select id="provincia" name="provincia" class="form-control form-control-sm font-11"
+                        <select id="provincia" name="provincia" class="form-control font-12"
                             onchange="cargarDistritos();cargarcuadros();">
                             <option value="0">TODOS</option>
                             @foreach ($provincia as $item)
@@ -62,7 +62,7 @@
                 <div class="col-md-2 col-6">
                     <div class="custom-select-container my-1">
                         <label for="distrito">Distrito</label>
-                        <select id="distrito" name="distrito" class="form-control form-control-sm font-11"
+                        <select id="distrito" name="distrito" class="form-control font-12"
                             onchange="cargarcuadros();">
                             <option value="0">TODOS</option>
                         </select>
@@ -101,7 +101,7 @@
                         <div class="col-lg-3 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="edades">Edad del Menor</label>
-                                <select id="edades" name="edades" class="form-control btn-xs font-11"
+                                <select id="edades" name="edades" class="form-control font-11"
                                     onchange="cargarProvincia();cargarCards();">
                                     <option value="0">TODOS</option>
                                     @foreach ($edades as $item)
@@ -114,7 +114,7 @@
                         <div class="col-lg-3 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="provincia">Provincia</label>
-                                <select id="provincia" name="provincia" class="form-control btn-xs font-11"
+                                <select id="provincia" name="provincia" class="form-control font-11"
                                     onchange="cargarDistrito();cargarCards();">
                                     <option value="0">TODOS</option>
                                 </select>
@@ -124,7 +124,7 @@
                         <div class="col-lg-3 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="distrito">Distrito</label>
-                                <select id="distrito" name="distrito" class="form-control btn-xs font-11"
+                                <select id="distrito" name="distrito" class="form-control font-11"
                                     onchange="cargarCards();">
                                     <option value="0">TODOS</option>
                                 </select>
@@ -144,7 +144,7 @@
                         <div class="col-lg-3 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="red">RED</label>
-                                <select id="red" name="red" class="form-control btn-xs font-11"
+                                <select id="red" name="red" class="form-control font-11"
                                     onchange="cargarMicrored();cargarCards();">
                                     <option value="0">TODOS</option>
                                     @foreach ($red as $item)
@@ -157,7 +157,7 @@
                         <div class="col-lg-3 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="microred">MICRORED</label>
-                                <select id="microred" name="microred" class="form-control btn-xs font-11"
+                                <select id="microred" name="microred" class="form-control font-11"
                                     onchange="cargarEstablecimiento();cargarCards();">
                                     <option value="0">TODOS</option>
                                 </select>
@@ -167,7 +167,7 @@
                         <div class="col-lg-3 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="establecimiento">ESTABLECIMIENTO</label>
-                                <select id="establecimiento" name="establecimiento" class="form-control btn-xs font-11"
+                                <select id="establecimiento" name="establecimiento" class="form-control font-11"
                                     onchange="cargarCards();">
                                     <option value="0">TODOS</option>
                                 </select>

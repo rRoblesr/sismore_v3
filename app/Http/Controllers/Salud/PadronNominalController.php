@@ -120,6 +120,19 @@ class PadronNominalController extends Controller
         return view('salud.PadronNominal.seguimiento', compact('actualizado'));
     }
 
+    public function tableroseguimiento()
+    {
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronNominalController::$FUENTE); //nexus $imp3
+        $mes = Mes::find($imp->mes);
+        $anios = ImportacionRepositorio::anios_porfuente_select(ImporPadronNominalController::$FUENTE);
+        $provincias = UbigeoRepositorio::provincia_select('25');
+        // $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $mes->mes . ' del ' . $imp->anio;
+        $actualizado = 'Actualizado al ' . $imp->dia . '/' . $imp->mes . '/' . $imp->anio;
+        return view('salud.PadronNominal.tableroseguimiento', compact('actualizado', 'anios', 'provincias'));
+    }
+
+    
+
     public function tablerocalidad()
     {
         $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronNominalController::$FUENTE); //nexus $imp3

@@ -37,7 +37,7 @@
                     <h4 class="page-title font-16">EDUCACIÓN SUPERIOR DE FORMACIÓN ARTÍSTICO</h4>
                 </div>
                 <div class="col-lg-1 col-md-2 col-sm-2">
-                    <select id="anio" name="anio" class="form-control btn-xs font-11"
+                    <select id="anio" name="anio" class="form-control font-11"
                         onchange="cargarUgels();cargarAreas();cargarCards();">
                         <option value="0">AÑO</option>
                         @foreach ($anios as $item)
@@ -47,24 +47,24 @@
                     </select>
                 </div>
                 {{-- <div class="col-lg-2 col-md-2 col-sm-2">
-                    <select id="ugel" name="ugel" class="form-control btn-xs font-11" onchange="cargarCards();">
+                    <select id="ugel" name="ugel" class="form-control font-11" onchange="cargarCards();">
                         <option value="0">UGEL</option>
                     </select>
                 </div> --}}
                 <div class="col-lg-2 col-md-2 col-sm-2">
-                    <select id="gestion" name="gestion" class="form-control btn-xs font-11" onchange="cargarCards();">
+                    <select id="gestion" name="gestion" class="form-control font-11" onchange="cargarCards();">
                         <option value="0">TIPO DE GESTIÓN</option>
                         <option value="12">PUBLICO</option>
                         <option value="3">PRIVADO</option>
                     </select>
                 </div>
                 <div class="col-lg-2 col-md-2 col-sm-2">
-                    <select id="area" name="area" class="form-control btn-xs font-11" onchange="cargarCards();">
+                    <select id="area" name="area" class="form-control font-11" onchange="cargarCards();">
                         <option value="0">ÁREA GEOGRÁFICA</option>
                     </select>
                 </div>
                 <div class="col-lg-2 col-md-2 col-sm-2">
-                    <select id="iiee" name="iiee" class="form-control btn-xs font-11" onchange="cargarCards();">
+                    <select id="iiee" name="iiee" class="form-control font-11" onchange="cargarCards();">
                         <option value="0">INSTITUCIÓN EDUCATIVA</option>
                     </select>
                 </div>

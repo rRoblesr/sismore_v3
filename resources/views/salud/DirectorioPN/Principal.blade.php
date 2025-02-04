@@ -213,7 +213,7 @@
                 <div class="col-lg-3 col-md-2 col-sm-2">
                     <div class="custom-select-container">
                         <label for="red">Red</label>
-                        <select id="red" name="red" class="form-control form-control-sm font-11"
+                        <select id="red" name="red" class="form-control font-12"
                             onchange="cargarMic--rored('micro');">
                             <option value="0">TODOS</option>
                             @foreach ($red as $item)
@@ -227,7 +227,7 @@
                 <div class="col-lg-3 col-md-2 col-sm-2">
                     <div class="custom-select-container">
                         <label for="micro">Microred</label>
-                        <select id="micro" name="micro" class="form-control form-control-sm font-11"
+                        <select id="micro" name="micro" class="form-control font-12"
                             onchange="cargartableprincipal();" data-toggle="codigox">
                             <option value="0">TODOS</option>
                         </select>
@@ -264,7 +264,7 @@
                 <div class="col-md-4">
                     <div class="custom-select-container my-1">
                         <label for="red">Red</label>
-                        <select id="red" name="red" class="form-control form-control-sm font-11"
+                        <select id="red" name="red" class="form-control font-12"
                             onchange="cargarMicrored('micro');">
                             <option value="0">TODOS</option>
                             @foreach ($red as $item)
@@ -278,7 +278,7 @@
                 <div class="col-md-4">
                     <div class="custom-select-container my-1">
                         <label for="micro">Microred</label>
-                        <select id="micro" name="micro" class="form-control form-control-sm font-11"
+                        <select id="micro" name="micro" class="form-control font-12"
                             onchange="cargarEESS('ipress')" data-toggle="codigox">
                             <option value="0">TODOS</option>
                         </select>
@@ -288,7 +288,7 @@
                 <div class="col-md-4">
                     <div class="custom-select-container my-1">
                         <label for="ipress">Establecimiento de salud</label>
-                        <select id="ipress" name="ipress" class="form-control form-control-sm font-11"
+                        <select id="ipress" name="ipress" class="form-control font-12"
                             onchange="cargartableprincipal();" data-toggle="codigox">
                             <option value="0">TODOS</option>
                         </select>
@@ -309,7 +309,7 @@
 
         <div class="card-body p-2">
             <div class="table-responsive">
-                <table id="tbprincipal" class="table table-sm font-11 table-striped table-bordered">
+                <table id="tbprincipal" class="table table-sm font-12 table-striped table-bordered">
                     <thead class="cabecera-dataTable">
                         @if ($vista == 'M')
                             <tr class="bg-success-0 text-white">

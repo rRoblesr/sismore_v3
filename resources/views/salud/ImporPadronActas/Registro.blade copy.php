@@ -57,26 +57,26 @@
             <input type="hidden" id="vmunicipio" name="vmunicipio" value="{{ $muni->count() == 1 ? $muni[0]->id : 0 }}">
 
             <div class="col-lg-3 col-md-2 col-sm-2">
-                <select id="vred" name="vred" class="form-control btn-xs font-11"
+                <select id="vred" name="vred" class="form-control font-11"
                     onchange="cargarmicrored(),cargartabla2()">
                     <option value="0">RED</option>
                 </select>
             </div>
 
             <div class="col-lg-2 col-md-2 col-sm-2">
-                <select id="vmicrored" name="vmicrored" class="form-control btn-xs font-11"
+                <select id="vmicrored" name="vmicrored" class="form-control font-11"
                     onchange="vcargareess();cargartabla2()">
                     <option value="0">MICRORED</option>
                 </select>
             </div>
 
             <div class="col-lg-3 col-md-2 col-sm-2">
-                <select id="veess" name="veess" class="form-control btn-xs font-11" onchange="cargartabla2()">
+                <select id="veess" name="veess" class="form-control font-11" onchange="cargartabla2()">
                     <option value="0">ESTABLECIMIENTO</option>
                 </select>
             </div>
             {{-- <div class="col-lg-1 col-md-1 col-sm-1">
-                <input type="date" id="vfechaf" name="vfechaf" class="form-control btn-xs font-11"
+                <input type="date" id="vfechaf" name="vfechaf" class="form-control font-11"
                     value="{{ date('Y-m-d') }}"
                     onchange="cargartabla()">
             </div> --}}
@@ -85,7 +85,7 @@
                 <h4 class="page-title font-16">HOMOLOGACION DE ACTAS</h4>
             </div>
             <div class="col-lg-3 col-md-2 col-sm-2">
-                <select id="vmunicipio" name="vmunicipio" class="form-control btn-xs font-11"
+                <select id="vmunicipio" name="vmunicipio" class="form-control font-11"
                     onchange="limpiarfiltros();cargarred(),cargartabla()">
 
                     @if ($muni->count() > 1)
@@ -103,14 +103,14 @@
             </div>
 
             <div class="col-lg-3 col-md-2 col-sm-2">
-                <select id="vred" name="vred" class="form-control btn-xs font-11"
+                <select id="vred" name="vred" class="form-control font-11"
                     onchange="cargarmicrored(),cargartabla()">
                     <option value="0">RED</option>
                 </select>
             </div>
 
             <div class="col-lg-2 col-md-2 col-sm-2">
-                <select id="vmicrored" name="vmicrored" class="form-control btn-xs font-11" onchange="cargartabla()">
+                <select id="vmicrored" name="vmicrored" class="form-control font-11" onchange="cargartabla()">
                     <option value="0">MICRORED</option>
                 </select>
             </div>
@@ -127,11 +127,11 @@
                             @if ($registrador == 0)
                                 <label for="vfechai" class="small mb-0 mr-2">Fecha&nbsp;Inicial&nbsp;</label>
                                 <input type="date" id="vfechai" name="vfechai"
-                                    class="form-control form-control-sm font-11 mr-2" value="{{ date('Y-m-d') }}"
+                                    class="form-control font-12 mr-2" value="{{ date('Y-m-d') }}"
                                     onchange="cargartabla()">
                                 <label for="vfechaf" class="small mb-0 mr-2">Fecha&nbsp;Final&nbsp;</label>
                                 <input type="date" id="vfechaf" name="vfechaf"
-                                    class="form-control form-control-sm font-11 mr-2" value="{{ date('Y-m-d') }}"
+                                    class="form-control font-12 mr-2" value="{{ date('Y-m-d') }}"
                                     onchange="cargartabla()">
                             @else
                                 <button class="btn btn-xs btn-primary waves-effect waves-light" data-toggle="modal"

@@ -54,7 +54,7 @@
                                 <div class="col-md-4"></div>
                                 {{-- <label class="col-md-1 col-form-label"></label> --}}
                                 <div class="col-md-2">
-                                    <select id="ano" name="ano" class="form-control btn-xs p-0"
+                                    <select id="ano" name="ano" class="form-control p-0"
                                         onchange="cargartabla0()">
                                         <option value="0">Año</option>
                                         @foreach ($anios as $item)
@@ -65,7 +65,7 @@
                                 </div>
                                 {{-- <label class="col-md-1 col-form-label"></label> --}}
                                 <div class="col-md-2">
-                                    <select id="ugel" name="ugel" class="form-control btn-xs p-0"
+                                    <select id="ugel" name="ugel" class="form-control p-0"
                                         onchange="cargartabla0()">
                                         <option value="0">Ugel</option>
                                         @foreach ($ugels as $ugel)
@@ -75,7 +75,7 @@
                                 </div>
                                 {{-- <label class="col-md-1 col-form-label"></label> --}}
                                 <div class="col-md-2">
-                                    <select id="gestion" name="gestion" class="form-control btn-xs p-0"
+                                    <select id="gestion" name="gestion" class="form-control p-0"
                                         onchange="cargartabla0()">
                                         <option value="0">Gestión</option>
                                         @foreach ($gestions as $prov)
@@ -85,7 +85,7 @@
                                 </div>
                                 {{-- <label class="col-md-1 col-form-label"></label> --}}
                                 <div class="col-md-2">
-                                    <select id="area" name="area" class="form-control btn-xs p-0"
+                                    <select id="area" name="area" class="form-control p-0"
                                         onchange="cargartabla0()">
                                         <option value="0">Área</option>
                                         @foreach ($areas as $prov)

@@ -1,8 +1,8 @@
-<table id="tabla1" class="table table-sm table-striped table-bordered font-11">
+<table id="tabla1" class="table table-sm table-striped table-bordered font-12">
     <thead>
         <tr class="table-success-0 text-white">
             <th rowspan="2" class="text-center">N°</th>
-            <th rowspan="2" class="text-center">Distrito</th>
+            <th rowspan="2" class="text-center">Institución</th>
             <th rowspan="2" class="text-center">Total</th>
             <th colspan="2" class="text-center">Puestos de Salud</th>
             <th colspan="2" class="text-center">Centros de Salud</th>

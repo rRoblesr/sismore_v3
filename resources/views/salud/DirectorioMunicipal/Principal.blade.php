@@ -70,11 +70,11 @@
                 <div class="col-md-4 my-1">
                     <div class="custom-select-container">
                         <label for="provincia">Provincia</label>
-                        <select id="provincia" name="provincia" class="form-control form-control-sm font-11"
+                        <select id="provincia" name="provincia" class="form-control font-12"
                             onchange="cargarDistrito('distrito');cargarMunicipio('municipalidad');">
                             <option value="0">TODOS</option>
                             @foreach ($red as $item)
-                                <option value="{{ $item->id }}">{{ $item->codigo }} {{ $item->nombre }}</option>
+                                <option value="{{ $item->id }}">{{ $item->nombre }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -82,7 +82,7 @@
                 <div class="col-md-4 my-1">
                     <div class="custom-select-container">
                         <label for="distrito">Distrito</label>
-                        <select id="distrito" name="distrito" class="form-control form-control-sm font-11"
+                        <select id="distrito" name="distrito" class="form-control font-12"
                             onchange="cargarMunicipio('municipalidad');cargartableprincipal();" data-toggle="codigox">
                             <option value="0">TODOS</option>
                         </select>
@@ -91,7 +91,7 @@
                 <div class="col-md-4 my-1">
                     <div class="custom-select-container">
                         <label for="municipalidad">Municipalidad</label>
-                        <select id="municipalidad" name="municipalidad" class="form-control form-control-sm font-11"
+                        <select id="municipalidad" name="municipalidad" class="form-control font-12"
                             onchange="cargartableprincipal();">
                             <option value="0">TODOS</option>
                             @foreach ($municipalidad as $item)
@@ -105,7 +105,7 @@
                 {{-- <div class="col-6">
                     <div class="custom-select-container">
                         <label for="distrito">Distrito</label>
-                        <select id="distrito" name="distrito" class="form-control form-control-sm font-11"
+                        <select id="distrito" name="distrito" class="form-control font-12"
                             onchange="cargartableprincipal();" data-toggle="codigox">
                             <option value="0">TODOS</option>
                         </select>
@@ -123,7 +123,7 @@
             <div class="table-responsive">
                 <table id="tbprincipal" class="table table-sm font-11 table-striped table-bordered tablex">
                     <thead class="cabecera-dataTable">
-                        @if ($vista == 'm')
+                        @if ($vista == 'M')
                             <tr class="bg-success-0 text-white">
                                 <th>Nº</th>
                                 <th>Provincia</th>
@@ -818,7 +818,7 @@
                     $.each(data, function(index, value) {
                         //ss = (id == value.id ? "selected" : "");
                         options +=
-                            `<option value='${value.id}'>${value.codigo} ${value.nombre}</option>`;
+                            `<option value='${value.id}'>${value.nombre}</option>`;
                     });
                     $(`#${select}`).append(options);
                     if (select == 'provincia') cargartableprincipal();
@@ -843,7 +843,7 @@
                     $.each(data, function(index, value) {
                         //ss = (id == value.id ? "selected" : "");
                         options +=
-                            `<option value='${value.id}'>${value.codigo} ${value.nombre}</option>`;
+                            `<option value='${value.id}'>${value.nombre}</option>`;
                     });
                     $(`#${select}`).append(options);
                     if (select == 'municipalidad') cargartableprincipal();

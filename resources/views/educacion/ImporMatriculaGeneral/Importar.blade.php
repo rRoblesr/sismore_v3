@@ -47,21 +47,21 @@
                                 <div class="col-md-3">
                                     <label class="col-form-label">Fuente de datos</label>
                                     <div class="">
-                                        <input type="text" class="form-control btn-xs" readonly="readonly"
+                                        <input type="text" class="form-control" readonly="readonly"
                                             value="SIAGIE - MATRICULA">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <label class="col-form-label">Fecha Versión</label>
                                     <div class="">
-                                        <input type="date" class="form-control btn-xs" name="fechaActualizacion"
+                                        <input type="date" class="form-control" name="fechaActualizacion"
                                             placeholder="Ingrese fecha actualizacion" autofocus required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="col-form-label">Archivo</label>
                                     <div class="">
-                                        <input type="file" name="file" class="form-control btn-xs" required>
+                                        <input type="file" name="file" class="form-control" required>
                                     </div>
                                 </div>
                             </div>

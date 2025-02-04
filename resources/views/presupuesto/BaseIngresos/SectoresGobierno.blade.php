@@ -72,7 +72,7 @@
                                     <div class="col-md-1">
                                         {{-- <label class=" col-form-label">Año</label> --}}
                                         <div class="">
-                                            <select class="form-control btn-xs font-11" name="fano" id="fano"
+                                            <select class="form-control font-11" name="fano" id="fano"
                                                 onchange="cargarcuadros();">
                                                 {{-- <option value="0">TODOS</option> --}}
                                                 @foreach ($anos as $item)
@@ -84,7 +84,7 @@
                                     <div class="col-md-2">
                                         {{-- <label class="col-form-label">Nivel de Gobierno</label> --}}
                                         <div class="">
-                                            <select class="form-control btn-xs font-11" name="fgobierno" id="fgobierno"
+                                            <select class="form-control font-11" name="fgobierno" id="fgobierno"
                                                 onchange="cargarcuadros();">
                                                 <option value="0">NIVEL DE GOBIERNO</option>
                                                 @foreach ($gobiernos as $item)
@@ -96,7 +96,7 @@
                                     <div class="col-md-3">
                                         {{-- <label class="col-form-label">Fuente Financiamiento </label> --}}
                                         <div class="">
-                                            <select class="form-control btn-xs font-11" name="ffinanciamiento"
+                                            <select class="form-control font-11" name="ffinanciamiento"
                                                 id="ffinanciamiento" onchange="cargarcuadros();">
                                                 <option value="0">FUENTE DE FINANCIAMIENTO</option>
                                                 @foreach ($financiamientos as $item)

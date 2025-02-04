@@ -353,19 +353,19 @@
     <script type="text/javascript">
         $(document).ready(function() {
             Highcharts.setOptions({
-                colors: Highcharts.map(paleta_colores, function(color) {
-                    return {
-                        radialGradient: {
-                            cx: 0.5,
-                            cy: 0.3,
-                            r: 0.7
-                        },
-                        stops: [
-                            [0, color],
-                            [1, Highcharts.color(color).brighten(-0.3).get('rgb')] // darken
-                        ]
-                    };
-                }),
+                // colors: Highcharts.map(paleta_colores, function(color) {
+                //     return {
+                //         radialGradient: {
+                //             cx: 0.5,
+                //             cy: 0.3,
+                //             r: 0.7
+                //         },
+                //         stops: [
+                //             [0, color],
+                //             [1, Highcharts.color(color).brighten(-0.3).get('rgb')] // darken
+                //         ]
+                //     };
+                // }),
                 lang: {
                     thousandsSep: ","
                 }

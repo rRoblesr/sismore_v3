@@ -57,7 +57,7 @@
                             <div class="col-lg-1 col-md-6 col-sm-6">
                                 <div class="custom-select-container">
                                     <label for="anio">AÑO</label>
-                                    <select id="anio" name="anio" class="form-control btn-xs font-11 p-0"
+                                    <select id="anio" name="anio" class="form-control font-11 p-0"
                                         onchange="cargarpacto1();">
                                         @foreach ($anio as $item)
                                             <option value="{{ $item }}" {{ $item == $aniomax ? 'selected' : '' }}>
@@ -69,7 +69,7 @@
                             <div class="col-lg-2 col-md-6 col-sm-6">
                                 <div class="custom-select-container">
                                     <label for="provincia">PROVINCIA</label>
-                                    <select id="provincia" name="provincia" class="form-control btn-xs font-11"
+                                    <select id="provincia" name="provincia" class="form-control font-11"
                                         onchange="cargarDistritos();">
                                         <option value="0">TODOS</option>
                                         @foreach ($provincia as $item)
@@ -82,7 +82,7 @@
                             <div class="col-lg-2 col-md-6 col-sm-6">
                                 <div class="custom-select-container">
                                     <label for="distrito">DISTRITO</label>
-                                    <select id="distrito" name="distrito" class="form-control btn-xs font-11"
+                                    <select id="distrito" name="distrito" class="form-control font-11"
                                         onchange="cargarpacto1();">
                                         <option value="0">TODOS</option>
                                     </select>

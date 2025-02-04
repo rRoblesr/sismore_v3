@@ -37,7 +37,7 @@
                     <h4 class="page-title font-16">DISTRIBUCIÓN DE TABLETAS</h4>
                 </div>
                 <div class="col-lg-1 col-md-2 col-sm-2">
-                    <select id="anio" name="anio" class="form-control btn-xs font-11"
+                    <select id="anio" name="anio" class="form-control font-11"
                         onchange="cargarDistritos(),cargarCards();">
                         <option value="0">AÑO</option>
                         @foreach ($anios as $item)
@@ -47,7 +47,7 @@
                     </select>
                 </div>
                 <div class="col-lg-2 col-md-2 col-sm-2">
-                    <select id="provincia" name="provincia" class="form-control btn-xs font-11"
+                    <select id="provincia" name="provincia" class="form-control font-11"
                         onchange="cargarDistritos(),cargarCards();">
                         <option value="0">PROVINCIA</option>
                         @foreach ($provincias as $item)
@@ -56,7 +56,7 @@
                     </select>
                 </div>
                 <div class="col-lg-2 col-md-2 col-sm-2">
-                    <select id="distrito" name="distrito" class="form-control btn-xs font-11" onchange="cargarCards();">
+                    <select id="distrito" name="distrito" class="form-control font-11" onchange="cargarCards();">
                         <option value="0">DISTRITO</option>
                         @foreach ($distritos as $item)
                             <option value="{{ $item->id }}">{{ $item->nombre }}

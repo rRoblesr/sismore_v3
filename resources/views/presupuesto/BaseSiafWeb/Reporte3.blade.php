@@ -73,7 +73,7 @@
                                     <div class="col-md-1">
                                         {{-- <label class=" col-form-label">Año</label> --}}
                                         <div class="">
-                                            <select class="form-control btn-xs font-11" name="ganio" id="ganio"
+                                            <select class="form-control font-11" name="ganio" id="ganio"
                                                 onchange="cargarcuadros2();">
                                                 @foreach ($ano as $item)
                                                     <option value="{{ $item->anio }}"
@@ -86,7 +86,7 @@
                                     <div class="col-md-2">
                                         {{-- <label class="col-form-label">Producto/Proyecto</label> --}}
                                         <div class="">
-                                            <select class="form-control btn-xs font-11" name="garticulo" id="garticulo"
+                                            <select class="form-control font-11" name="garticulo" id="garticulo"
                                                 onchange="cargarcuadros2();">
                                                 <option value="0">PRODUCTO/PROYECTO</option>
                                                 @foreach ($articulo as $item)
@@ -98,7 +98,7 @@
                                     <div class="col-md-2">
                                         {{-- <label class="col-form-label">Unidad Ejecutora</label> --}}
                                         <div class="">
-                                            <select class="form-control btn-xs font-11" name="gue" id="gue"
+                                            <select class="form-control font-11" name="gue" id="gue"
                                                 onchange="cargarcuadros2();">
                                                 <option value="0">UNIDAD EJECUTORA</option>
                                                 @foreach ($ue as $item)
@@ -112,7 +112,7 @@
                                     <div class="col-md-2">
                                         {{-- <label class="col-form-label">Fuente Financiamiento</label> --}}
                                         <div class="">
-                                            <select class="form-control btn-xs font-11" name="gff" id="gff"
+                                            <select class="form-control font-11" name="gff" id="gff"
                                                 onchange="cargarcuadros2();">
                                                 <option value="0">FUENTE DE FINANCIAMIENTO</option>
                                                 @foreach ($ff as $item)

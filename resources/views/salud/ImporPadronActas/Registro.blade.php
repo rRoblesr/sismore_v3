@@ -113,7 +113,7 @@
                             <div class="col-lg-1 col-md-1 col-sm-1">
                                 <div class="custom-select-container">
                                     <label for="vanio">AÑO</label>
-                                    <select id="vanio" name="vanio" class="form-control form-control-sm font-11"
+                                    <select id="vanio" name="vanio" class="form-control font-12"
                                         onchange="cargarTablaMainMensualM()">
                                         @foreach ($anio as $item)
                                             <option value="{{ $item->anio }}"
@@ -127,7 +127,7 @@
                             <div class="col-lg-3 col-md-2 col-sm-2">
                                 <div class="custom-select-container">
                                     <label for="vred">RED</label>
-                                    <select id="vred" name="vred" class="form-control form-control-sm font-11"
+                                    <select id="vred" name="vred" class="form-control font-12"
                                         onchange="cargarmicrored(),cargarTablaMainMensualM()">
                                         <option value="0">TODOS</option>
                                     </select>
@@ -138,7 +138,7 @@
                             <div class="col-lg-2 col-md-2 col-sm-2">
                                 <div class="custom-select-container">
                                     <label for="vmicrored">MICRORED</label>
-                                    <select id="vmicrored" name="vmicrored" class="form-control form-control-sm font-11"
+                                    <select id="vmicrored" name="vmicrored" class="form-control font-12"
                                         onchange="cargarTablaMainMensualM()">{{-- vcargareess(); --}}
                                         <option value="0">TODOS</option>
                                     </select>
@@ -149,7 +149,7 @@
                             <div class="col-lg-3 col-md-2 col-sm-2">
                                 <div class="custom-select-container">
                                     <label for="veess">ESTABLECIMIENTO</label>
-                                    <select id="veess" name="veess" class="form-control form-control-sm font-11"
+                                    <select id="veess" name="veess" class="form-control font-12"
                                         onchange="cargarTablaMainMensualM()">
                                         <option value="0">TODOS</option>
                                     </select>
@@ -157,7 +157,7 @@
 
                             </div>
                             {{-- <div class="col-lg-1 col-md-1 col-sm-1">
-                                <input type="date" id="vfechaf" name="vfechaf" class="form-control btn-xs font-11"
+                                <input type="date" id="vfechaf" name="vfechaf" class="form-control font-11"
                                     value="{{ date('Y-m-d') }}"
                                     onchange="cargarTablaMainO()">
                             </div> --}}
@@ -170,7 +170,7 @@
                             <div class="col-lg-1 col-md-1 col-sm-1">
                                 <div class="custom-select-container">
                                     <label for="vanio">AÑO</label>
-                                    <select id="vanio" name="vanio" class="form-control form-control-sm font-11"
+                                    <select id="vanio" name="vanio" class="form-control font-12"
                                         onchange="">
                                         @foreach ($anio as $item)
                                             <option value="{{ $item->anio }}"
@@ -185,7 +185,7 @@
                             <div class="col-lg-3 col-md-2 col-sm-2">
                                 <div class="custom-select-container">
                                     <label for="vmunicipio">MUNICIPIOS</label>
-                                    <select id="vmunicipio" name="vmunicipio" class="form-control form-control-sm font-11"
+                                    <select id="vmunicipio" name="vmunicipio" class="form-control font-12"
                                         onchange="limpiarfiltros();cargarred();cargarTablaMainMensualM();">
     
                                         @if ($muni->count() > 1)
@@ -207,7 +207,7 @@
                             <div class="col-lg-3 col-md-2 col-sm-2">
                                 <div class="custom-select-container">
                                     <label for="vred">RED</label>
-                                    <select id="vred" name="vred" class="form-control form-control-sm font-11"
+                                    <select id="vred" name="vred" class="form-control font-12"
                                         onchange="cargarmicrored(),cargarTablaMainMensualM();">
                                         <option value="0">TODOS</option>
                                     </select>
@@ -218,7 +218,7 @@
                             <div class="col-lg-2 col-md-2 col-sm-2">
                                 <div class="custom-select-container">
                                     <label for="vmicrored">MICRORED</label>
-                                    <select id="vmicrored" name="vmicrored" class="form-control form-control-sm font-11"
+                                    <select id="vmicrored" name="vmicrored" class="form-control font-12"
                                         onchange="cargarTablaMainMensualM();">
                                         <option value="0">TODOS</option>
                                     </select>

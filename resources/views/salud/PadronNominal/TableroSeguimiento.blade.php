@@ -12,7 +12,7 @@
         <div
             class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center p-2">
             <h6 class="mb-2 mb-md-0 text-center text-md-left text-white">
-                <i class="fas fa-chart-bar d-none"></i>CONTROL DE CALIDAD DEL PADRÓN NOMINAL DE NIÑOS Y NIÑAS MENORES DE 6 AÑOS
+                <i class="fas fa-chart-bar d-none"></i>SEGUIMIENTO NOMINAL DE RECIEN NACIDOS
             </h6>
             <div class="text-center text-md-right">
                 <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
@@ -29,11 +29,9 @@
                 <div class="col-md-2 col-6 my-1">
                     <div class="custom-select-container">
                         <label for="anio">Año</label>
-                        <select id="anio" name="anio" class="form-control font-11"
-                            onchange="cargarMes();">
+                        <select id="anio" name="anio" class="form-control font-11" onchange="cargarMes();">
                             @foreach ($anios as $item)
-                                <option value="{{ $item->anio }}"
-                                    {{ $item->anio == date('Y') ? 'selected' : '' }}>
+                                <option value="{{ $item->anio }}" {{ $item->anio == date('Y') ? 'selected' : '' }}>
                                     {{ $item->anio }}</option>
                             @endforeach
                         </select>
@@ -43,8 +41,7 @@
                 <div class="col-md-2 col-6 my-1">
                     <div class="custom-select-container">
                         <label for="mes">Mes</label>
-                        <select id="mes" name="mes" class="form-control font-11"
-                            onchange="cargarCards();">
+                        <select id="mes" name="mes" class="form-control font-11" onchange="cargarCards();">
                         </select>
                     </div>
                 </div>
@@ -77,81 +74,6 @@
         </div>
     </div>
 
-    {{-- <div class="row">
-        <div class="col-lg-12 col-md-12">
-            <div class="card">
-                <div class="card-header bg-success-0">
-                    <div class="card-widgets">
-                        <!--button type="button" class="btn btn-danger btn-xs"
-                            onclick="window.location.href=`{{ route('salud.padronnominal.tablerocalidad.consulta', ['anio' => 'anio', 'mes' => 'mes']) }}`.replace('anio',$('#anio').val()).replace('mes',$('#mes').val())">
-                            <i class="fas fa-search"></i> Consultas</button-->
-                        <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
-                            <i class="fa fa-redo"></i> Actualizar</button>
-                    </div>
-                    <h3 class="card-title text-white font-14">Control de Calidad del padrón nominal de niños y niñas menores
-                        de 6 años</h3>
-                </div>
-                <div class="card-body pb-0">
-                    <div class="form-group row align-items-center vh-5">
-                        <div class="col-lg-4 col-md-4 col-sm-4">
-                            <h4 class="page-title font-12">Fuente: Padron Nominal, {{ $actualizado }}</h4>
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2">
-                            <div class="custom-select-container">
-                                <label for="anio">AÑO</label>
-                                <select id="anio" name="anio" class="form-control font-11"
-                                    onchange="cargarMes();">
-                                    @foreach ($anios as $item)
-                                        <option value="{{ $item->anio }}"
-                                            {{ $item->anio == date('Y') ? 'selected' : '' }}>
-                                            {{ $item->anio }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2">
-                            <div class="custom-select-container">
-                                <label for="mes">MES</label>
-                                <select id="mes" name="mes" class="form-control font-11"
-                                    onchange="cargarCards();">
-                                </select>
-                            </div>
-
-
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2">
-                            <div class="custom-select-container">
-                                <label for="provincia">PROVINCIA</label>
-                                <select id="provincia" name="provincia" class="form-control font-11"
-                                    onchange="cargarDistritos();cargarCards();">
-                                    <option value="0">TODOS</option>
-                                    @foreach ($provincias as $item)
-                                        <option value="{{ $item->id }}"> {{ $item->nombre }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2">
-                            <div class="custom-select-container">
-                                <label for="distrito">DISTRITO</label>
-                                <select id="distrito" name="distrito" class="form-control font-11"
-                                    onchange="cargarCards();">
-                                    <option value="0">TODOS</option>
-                                </select>
-                            </div>
-
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6">
             <div class="card-box border border-plomo-0">
@@ -169,22 +91,34 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card1"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Total Niños y Niñas</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-4" id="pcard1">
-                    <h6 class="text-uppercase font-12">Registros Completos <span class="float-right">0%</span></h6>
-                    <div class="progress progress-sm m-0">
-                        <div class="progress-bar bg-info" role="progressbar" aria-valuenow="0" aria-valuemin="0"
-                            aria-valuemax="100" style="width: 0%">
-                            <span class="sr-only">0% Complete</span>
+                            <p class="mb-0 mt-1 text-truncate">Total Niños</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card-box border border-plomo-0">
+                <div class="media">
+                    {{-- <div class="text-center">
+                        <img src="{{ asset('/') }}public/img/icon/cargador32px.png" alt="" class=""
+                            width="100%" height="100%">
+                    </div> --}}
+                    <div class="avatar-md mr-2">
+                        <i class="far fa-hospital avatar-title font-30 text-dark"></i>
 
+                    </div>
+                    <div class="media-body align-self-center">
+                        <div class="text-right">
+                            <h4 class="font-20 my-0 font-weight-bold">
+                                <span data-plugin="counterup" id="card4"></span>
+                            </h4>
+                            <p class="mb-0 mt-1 text-truncate">Total Niñas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="col-lg-3 col-md-6 col-sm-6">
             <div class="card-box border border-plomo-0">
                 <div class="media">
@@ -202,15 +136,6 @@
                                 <span data-plugin="counterup" id="card2"></span>
                             </h4>
                             <p class="mb-0 mt-1 text-truncate">Niños y Niñas con DNI </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-4" id="pcard2">
-                    <h6 class="text-uppercase font-12">Porcentaje con DNI <span class="float-right">0%</span></h6>
-                    <div class="progress progress-sm m-0">
-                        <div class="progress-bar bg-info" role="progressbar" aria-valuenow="0" aria-valuemin="0"
-                            aria-valuemax="100" style="width: 0%">
-                            <span class="sr-only">0% Complete</span>
                         </div>
                     </div>
                 </div>
@@ -233,119 +158,14 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card3"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Niños y Niñas con Seguro</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-4" id="pcard3">
-                    <h6 class="text-uppercase font-12">Porcentaje con Seguro <span class="float-right">0%</span></h6>
-                    <div class="progress progress-sm m-0">
-                        <div class="progress-bar bg-info" role="progressbar" aria-valuenow="0" aria-valuemin="0"
-                            aria-valuemax="100" style="width: 0%">
-                            <span class="sr-only">0% Complete</span>
+                            <p class="mb-0 mt-1 text-truncate">Niños y Niñas con CNV</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-lg-3 col-md-6 col-sm-6">
-            <div class="card-box border border-plomo-0">
-                <div class="media">
-                    {{-- <div class="text-center">
-                        <img src="{{ asset('/') }}public/img/icon/cargador32px.png" alt="" class=""
-                            width="100%" height="100%">
-                    </div> --}}
-                    <div class="avatar-md mr-2">
-                        <i class="far fa-hospital avatar-title font-30 text-dark"></i>
 
-                    </div>
-                    <div class="media-body align-self-center">
-                        <div class="text-right">
-                            <h4 class="font-20 my-0 font-weight-bold">
-                                <span data-plugin="counterup" id="card4"></span>
-                            </h4>
-                            <p class="mb-0 mt-1 text-truncate">Niños y Niñas con EESS</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-4" id="pcard4">
-                    <h6 class="text-uppercase font-12">Porcentaje con EESS <span class="float-right">0%</span></h6>
-                    <div class="progress progress-sm m-0">
-                        <div class="progress-bar bg-info" role="progressbar" aria-valuenow="0" aria-valuemin="0"
-                            aria-valuemax="100" style="width: 0%">
-                            <span class="sr-only">0% Complete</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-3">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
-                    <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11"></h3>
-                </div>
-                <div class="card-body p-0">
-                    <div id="anal1"></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
-                    <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11"></h3>
-                </div>
-                <div class="card-body p-0">
-                    <div id="anal2"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-3">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
-                    <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11"></h3>
-                </div>
-                <div class="card-body p-0">
-                    <div id="anal3"></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
-                    <h3 class="card-title text-black text-center text-capitalize font-weight-normal font-11"></h3>
-                </div>
-                <div class="card-body p-0">
-                    <div id="anal4"></div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card">
-                {{-- <div class="card-header">
-                    <h3 class="card-title">Población de niños y niñas menos de 6 años por distrito, segun sexo y edades
-                    </h3>
-                </div> --}}
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="table-responsive" id="ctabla1">
-
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <div class="row">
@@ -365,8 +185,40 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12">
-                            <div class="table-responsive" id="ctabla2">
+                            <div class="table-responsive">
+                                <table id="tabla1" class="table table-sm table-striped table-bordered font-11">
+                                    <thead>
+                                        <tr class="table-success-0 text-white">
+                                            <th rowspan="1" class="text-center">N°</th>
+                                            <th rowspan="1" class="text-center">Tipo</th>
+                                            <th colspan="1" class="text-center">Documento</th>
+                                            <th colspan="1" class="text-center">Nombre del Niño</th>
+                                            <th colspan="1" class="text-center">Fecha Nacimiento</th>
+                                            <th colspan="1" class="text-center">Sexo</th>
+                                            <th colspan="1" class="text-center">Vacunas</th>
+                                            <th colspan="1" class="text-center">Tamizaje</th>
+                                            <th colspan="1" class="text-center">Cred</th>
+                                            <th colspan="1" class="text-center">Visitas</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="text-right">
+                                            <td class="text-center">1</td>
+                                            <td class="text-left">DNI</td>
+                                            <td class="text-center table-warning">
+                                                <a href="javascript:void(0)" onclick="abrirdetalleninio(93670642)">93670642</a>
+                                            </td>
+                                            <td class="text-center">TORRES BRAVO, LIAM VALENTINO</td>
+                                            <td class="text-center">02/01/2024</td>
+                                            <td class="text-center">MASCULINA</td>
+                                            <td class="text-center">SI</td>
+                                            <td class="text-center">SI</td>
+                                            <td class="text-center">NO</td>
+                                            <td class="text-center">SI</td>
+                                        </tr>
+                                    </tbody>
 
+                                </table>
                             </div>
 
                         </div>
@@ -376,7 +228,7 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row d-none">
         <div class="col-lg-12">
             {{-- <div class="card">
                 <div class="card-header"> --}}
@@ -630,17 +482,21 @@
         });
 
         function cargarCards() {
-            panelGraficas('head1');
-            panelGraficas('head2');
-            panelGraficas('head3');
-            panelGraficas('head4');
-            panelGraficas('anal1');
-            panelGraficas('anal2');
-            panelGraficas('anal3');
-            panelGraficas('anal4');
-            panelGraficas('tabla1');
-            panelGraficas('tabla2');
-            panelGraficas('tabla3');
+            // panelGraficas('head1');
+            // panelGraficas('head2');
+            // panelGraficas('head3');
+            // panelGraficas('head4');
+            // panelGraficas('anal1');
+            // panelGraficas('anal2');
+            // panelGraficas('anal3');
+            // panelGraficas('anal4');
+            // panelGraficas('tabla1');
+            // panelGraficas('tabla2');
+            // panelGraficas('tabla3');
+        }
+
+        function abrirdetalleninio(dni) {
+
         }
 
         function cargarDistritos() {

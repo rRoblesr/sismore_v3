@@ -30,7 +30,7 @@
                                 <div class="col-md-6">
                                     <label class="col-form-label">Entidad</label>
                                     <div class="">
-                                        <select name="bentidad" id="bentidad" class="form-control btn-xs"
+                                        <select name="bentidad" id="bentidad" class="form-control"
                                             onchange="cargarGerencia();listarDT();">
                                             @foreach ($entidades as $item)
                                                 <option value="{{ $item->id }}">{{ $item->nombre }}</option>
@@ -41,7 +41,7 @@
                                 <div class="col-md-6">
                                     <label class="col-form-label">Gerencia</label>
                                     <div class="">
-                                        <select name="bgerencia" id="bgerencia" class="form-control btn-xs"
+                                        <select name="bgerencia" id="bgerencia" class="form-control"
                                             onchange="listarDT();">
                                         </select>
                                     </div>
@@ -105,7 +105,7 @@
                             @if ($formato == 1)
                                 <div class="form-group">
                                     <label>Entidad<span class="required">*</span></label>
-                                    <select name="dependencia" id="dependencia" class="form-control btn-xs">
+                                    <select name="dependencia" id="dependencia" class="form-control">
                                         @foreach ($entidades as $item)
                                             <option value="{{ $item->id }}">{{ $item->nombre }}</option>
                                         @endforeach
@@ -116,7 +116,7 @@
                             @if ($formato == 2)
                                 <div class="form-group">
                                     <label>Gerencia<span class="required">*</span></label>
-                                    <select name="gerencia" id="gerencia" class="form-control btn-xs">
+                                    <select name="gerencia" id="gerencia" class="form-control">
                                     </select>
                                     <span class="help-block"></span>
                                 </div>

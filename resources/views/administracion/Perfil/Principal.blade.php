@@ -25,7 +25,7 @@
                                         <div class="row form-group">
                                             <label class="col-md-4 col-form-label">SISTEMAS</label>
                                             <div class="col-md-8">
-                                                <select class="form-control btn-xs" name="sistema" id="sistema"
+                                                <select class="form-control" name="sistema" id="sistema"
                                                     onchange="listarDT();">
                                                     @foreach ($sistemas as $item)
                                                         <option value="{{ $item->id }}">{{ $item->nombre }}</option>

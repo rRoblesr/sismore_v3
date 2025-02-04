@@ -30,7 +30,7 @@
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="ugel">UGEL</label>
-                                <select id="ugel" name="ugel" class="form-control btn-xs font-11"
+                                <select id="ugel" name="ugel" class="form-control font-11"
                                     onchange="cargarMes();">
                                     <option value="0">TODOS</option>
                                     @foreach ($ugel as $item)
@@ -44,7 +44,7 @@
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="modalidad">MODALIDAD</label>
-                                <select id="modalidad" name="modalidad" class="form-control btn-xs font-11"
+                                <select id="modalidad" name="modalidad" class="form-control font-11"
                                     onchange="cargarNivel();cargarCards();">
                                     <option value="0">TODOS</option>
                                     @foreach ($modalidad as $item)
@@ -57,7 +57,7 @@
                         <div class="col-lg-3 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="nivel">NIVEL EDUCATIVO</label>
-                                <select id="nivel" name="nivel" class="form-control btn-xs font-11"
+                                <select id="nivel" name="nivel" class="form-control font-11"
                                     onchange="cargarCards();">
                                     <option value="0">TODOS</option>
                                 </select>

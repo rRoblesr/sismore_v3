@@ -32,7 +32,7 @@
                                 <h5 class="page-title font-11">CENSO EDUCATIVO-MINEDU, <br>{{ $actualizado }}</h5>
                             </div>
                             <div class="col-lg-1 col-md-1 col-sm-1  ">
-                                <select id="anio" name="anio" class="form-control btn-xs font-11"
+                                <select id="anio" name="anio" class="form-control font-11"
                                     onchange="cargarCards();">
                                     <option value="0">AÑO</option>
                                     @foreach ($anios as $item)
@@ -42,7 +42,7 @@
                                 </select>
                             </div>
                             <div class="col-lg-2 col-md-2 col-sm-2">
-                                <select id="provincia" name="provincia" class="form-control btn-xs font-11"
+                                <select id="provincia" name="provincia" class="form-control font-11"
                                     onchange="cargarDistritos();cargarCards();">
                                     <option value="0">PROVINCIA</option>
                                     @foreach ($provincia as $item)
@@ -51,13 +51,13 @@
                                 </select>
                             </div>
                             <div class="col-lg-2 col-md-2 col-sm-2">
-                                <select id="distrito" name="distrito" class="form-control btn-xs font-11"
+                                <select id="distrito" name="distrito" class="form-control font-11"
                                     onchange="cargarCards();">
                                     <option value="0">DISTRITO</option>
                                 </select>
                             </div>
                             <div class="col-lg-2 col-md-2 col-sm-2">
-                                <select id="area" name="area" class="form-control btn-xs font-11"
+                                <select id="area" name="area" class="form-control font-11"
                                     onchange="cargarCards();">
                                     <option value="0">ÁMBITO GEOGRÁFICO</option>
                                     @foreach ($area as $item)
@@ -69,7 +69,7 @@
                             <input type="hidden" id="servicio" name="servicio" value="1">
 
                             {{-- <div class="col-lg-2 col-md-2 col-sm-2">
-                                <select id="servicio" name="servicio" class="form-control btn-xs font-11"
+                                <select id="servicio" name="servicio" class="form-control font-11"
                                     onchange="cargarCards();">
                                     <option value="1">AGUA</option>
                                     <option value="2">DESAGUE</option>

@@ -101,7 +101,7 @@
                                 <div class="col-md-2">
                                     {{-- <label class=" col-form-label">Gobiernos</label> --}}
                                     <div class="">
-                                        <select class="form-control btn-xs font-11" name="gobierno" id="gobierno"
+                                        <select class="form-control font-11" name="gobierno" id="gobierno"
                                             onchange="cargarsector();listarDT();">
                                             {{-- <option value="0">TODOS</option> --}}
                                             @foreach ($gobs as $item)
@@ -114,7 +114,7 @@
                                 <div class="col-md-2">
                                     {{-- <label class="col-form-label">Sector</label> --}}
                                     <div class="">
-                                        <select class="form-control btn-xs font-11" name="sector" id="sector"
+                                        <select class="form-control font-11" name="sector" id="sector"
                                             onchange="cargarpliego();listarDT();">
                                         </select>
                                     </div>
@@ -122,7 +122,7 @@
                                 <div class="col-md-3">
                                     {{-- <label class="col-form-label">Pliego</label> --}}
                                     <div class="">
-                                        <select class="form-control btn-xs font-11" name="pliego" id="pliego"
+                                        <select class="form-control font-11" name="pliego" id="pliego"
                                             onchange="listarDT();">
                                             <option value="">PLIEGO</option>
                                         </select>

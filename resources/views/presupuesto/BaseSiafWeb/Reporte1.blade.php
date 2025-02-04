@@ -72,7 +72,7 @@
                                     <div class="col-md-1">
                                         {{-- <label class=" col-form-label">Año</label> --}}
                                         <div class="">
-                                            <select class="form-control btn-xs font-11" name="fanio" id="fanio"
+                                            <select class="form-control font-11" name="fanio" id="fanio"
                                                 onchange="cargarcuadros();">
                                                 @foreach ($ano as $item)
                                                     <option value="{{ $item->anio }}">{{ $item->anio }}</option>
@@ -83,7 +83,7 @@
                                     <div class="col-md-2">
                                         {{-- <label class="col-form-label">Producto/Proyecto</label> --}}
                                         <div class="">
-                                            <select class="form-control btn-xs font-11" name="farticulo" id="farticulo"
+                                            <select class="form-control font-11" name="farticulo" id="farticulo"
                                                 onchange="cargarcuadros();">
                                                 <option value="0">PRODUCTO/PROYECTO</option>
                                                 @foreach ($articulo as $item)
@@ -95,7 +95,7 @@
                                     <div class="col-md-2">
                                         {{-- <label class="col-form-label">Categoría de Gasto</label> --}}
                                         <div class="">
-                                            <select class="form-control btn-xs font-11" name="fcategoria" id="fcategoria"
+                                            <select class="form-control font-11" name="fcategoria" id="fcategoria"
                                                 onchange="cargarcuadros();">
                                                 <option value="0">CATEGORÍA DE GASTO</option>
                                                 @foreach ($categoria as $item)

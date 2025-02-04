@@ -179,7 +179,7 @@ class SaludPadronNominalSeguimiento extends Controller
             $suma_vacuna += (($value->f_vdpt1 == '-') ? 0 : 1) + (($value->f_vdpt2 == '-') ? 0 : 1);
 
             $boton2 = '<button type="button" onclick="mostrarDatosSeguimiento(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> </button>';
-            if ($sector != '14' or $nivel != '4') $boton2 = "";
+            // if ($sector != '14' or $nivel != '4') $boton2 = "";
             $documento = ($value->dni == "" or $value->dni == "-") ? ("CNV - " . $value->cnv) : ("DNI - " . $value->dni);
             // $documento = substr($documento, 0, -2) . "xx";
             $partesNombre = explode(" ", $value->nombre_nino);

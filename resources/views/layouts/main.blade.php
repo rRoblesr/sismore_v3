@@ -200,7 +200,7 @@
             left: 10px;
             background-color: white;
             padding: 0 5px;
-            font-size: 10px;
+            font-size: 11px;
             /*color: #0d6efd;*/
         }
 

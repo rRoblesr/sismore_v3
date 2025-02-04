@@ -13,7 +13,7 @@
             <div class="col-md-10">
             </div>
             <div class="col-md-2">
-                <select name="fuente2" id="fuente2" class="form-control btn-xs" onchange="cargarhistorial();">
+                <select name="fuente2" id="fuente2" class="form-control" onchange="cargarhistorial();">
                     @if ($fuentes->count() == 1)
                         <option value="{{ $fuentes[0]->id }}">{{ $fuentes[0]->nombre }}</option>
                     @else
@@ -89,7 +89,7 @@
                                         <label class="col-form-label">Fuente de datos<span class="requerid">*</span>
                                         </label>
                                         <div class="">
-                                            <select name="fuente" id="fuente" class="form-control btn-xs">
+                                            <select name="fuente" id="fuente" class="form-control">
                                                 @if ($fuentes->count() == 1)
                                                     <option value="{{ $fuentes[0]->id }}">{{ $fuentes[0]->nombre }}</option>
                                                 @else
@@ -104,7 +104,7 @@
                                     <div class="form-group">
                                         <label class="col-form-label">Fecha Versión<span class="requerid">*</span></label>
                                         <div class="">
-                                            <input type="date" class="form-control btn-xs" name="fechaActualizacion"
+                                            <input type="date" class="form-control" name="fechaActualizacion"
                                                 placeholder="Ingrese fecha actualizacion" autofocus required>
                                         </div>
                                     </div>
@@ -112,7 +112,7 @@
                                         <div class="">
                                             <label class="col-form-label">Archivo<span class="requerid">*</span></label>
                                             <div class="">
-                                                <input type="file" name="file" class="form-control btn-xs" required>
+                                                <input type="file" name="file" class="form-control" required>
                                             </div>
                                         </div>
                                     </div>

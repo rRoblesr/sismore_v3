@@ -72,7 +72,7 @@
                                     <div class="col-md-1">
                                         {{-- <label class=" col-form-label">Año</label> --}}
                                         <div class="">
-                                            <select class="form-control btn-xs font-11" name="fano" id="fano"
+                                            <select class="form-control font-11" name="fano" id="fano"
                                                 onchange="cargarmes();cargarcuadros();">
                                                 {{-- <option value="0">TODOS</option> --}}
                                                 @foreach ($anos as $item)
@@ -86,7 +86,7 @@
                                     <div class="col-md-1">
                                         {{-- <label class="col-form-label">Mes</label> --}}
                                         <div class="">
-                                            <select class="form-control btn-xs font-11" name="fmes" id="fmes"
+                                            <select class="form-control font-11" name="fmes" id="fmes"
                                                 onchange="cargarcuadros();">
                                                 {{-- <option value="0">TODOS</option> --}}
                                             </select>
@@ -95,7 +95,7 @@
                                     <div class="col-md-2">
                                         {{-- <label class="col-form-label">Tipo </label> --}}
                                         <div class="">
-                                            <select class="form-control btn-xs font-11" name="ftipo" id="ftipo"
+                                            <select class="form-control font-11" name="ftipo" id="ftipo"
                                                 onchange="cargarcuadros();">
                                                 <option value="1">Actividades/Proyectos</option>
                                                 <option value="2">Proyectos</option>

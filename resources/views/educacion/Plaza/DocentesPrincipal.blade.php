@@ -47,7 +47,7 @@
                                         <div class="col-md-4"></div>
                                         {{-- <label class="col-md-2 col-form-label">Año</label> --}}
                                         <div class="col-md-3">
-                                            <select id="anio" name="anio" class="form-control btn-xs"
+                                            <select id="anio" name="anio" class="form-control"
                                                 onchange="cargardatos();">
                                                 @foreach ($anios as $item)
                                                     <option value="{{ $item->anio }}"> {{ $item->anio }}</option>
@@ -56,7 +56,7 @@
                                         </div>
                                         {{-- <label class="col-md-2 col-form-label">Ugel</label> --}}
                                         <div class="col-md-5">
-                                            <select id="ugel" name="ugel" class="form-control btn-xs"
+                                            <select id="ugel" name="ugel" class="form-control"
                                                 onchange="cargardatos()">
                                                 <option value="0">UGEL</option>
                                                 @foreach ($ugels as $ugel)

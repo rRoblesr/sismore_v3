@@ -28,7 +28,7 @@
                             <div class="col-md-12">
                                 <label class=" col-form-label">Entidad</label>
                                 <div class="">
-                                    <select name="bentidad" id="bentidad" class="form-control btn-xs"
+                                    <select name="bentidad" id="bentidad" class="form-control"
                                         onchange="listarDT();">
                                         @foreach ($entidades as $item)
                                             <option value="{{ $item->id }}">{{ $item->nombre }}</option>
@@ -46,7 +46,7 @@
                             <div class="col-md-6">
                                 <label class=" col-form-label">Entidad</label>
                                 <div class="">
-                                    <select name="bentidad" id="bentidad" class="form-control btn-xs"
+                                    <select name="bentidad" id="bentidad" class="form-control"
                                         onchange="cargarGerencia();listarDT();">
                                         @foreach ($entidades as $item)
                                             <option value="{{ $item->id }}">{{ $item->nombre }}</option>
@@ -57,7 +57,7 @@
                             <div class="col-md-6">
                                 <label class="col-form-label">Gerencia</label>
                                 <div class="">
-                                    <select name="bgerencia" id="bgerencia" class="form-control btn-xs"
+                                    <select name="bgerencia" id="bgerencia" class="form-control"
                                         onchange="listarDT();">
                                     </select>
                                 </div>
@@ -133,7 +133,7 @@
                         <div class="form-body">
                             <div class="form-group">
                                 <label>Entidad<span class="required">*</span></label>
-                                <select name="entidad" id="entidad" class="form-control btn-xs"
+                                <select name="entidad" id="entidad" class="form-control"
                                     onchange="cargarGerencia2(0)">
                                     <option value="">SELECCIONAR</option>
                                     @foreach ($entidades as $item)
@@ -144,19 +144,19 @@
                             </div>
                             <div class="form-group">
                                 <label>Gerencia<span class="required">*</span></label>
-                                <select name="dependencia" id="dependencia" class="form-control btn-xs">
+                                <select name="dependencia" id="dependencia" class="form-control">
                                 </select>
                                 <span class="help-block"></span>
                             </div>
                             <div class="form-group">
                                 <label>Nombre <span class="required">*</span></label>
-                                <input id="descripcion" name="descripcion" class="form-control btn-xs" type="text"
+                                <input id="descripcion" name="descripcion" class="form-control" type="text"
                                     onkeyup="this.value=this.value.toUpperCase()">
                                 <span class="help-block"></span>
                             </div>
                             <div class="form-group">
                                 <label>Abreviado <span class="required">*</span></label>
-                                <input id="apodo" name="apodo" class="form-control btn-xs" type="text"
+                                <input id="apodo" name="apodo" class="form-control" type="text"
                                     onkeyup="this.value=this.value.toUpperCase()" maxlength="10">
                                 <span class="help-block"></span>
                             </div>

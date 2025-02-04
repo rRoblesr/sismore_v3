@@ -53,7 +53,7 @@
                                 <h5 class="page-title font-12">SIAGIE - MINEDU, {{ $actualizado }}</h5>
                             </div>
                             <div class="col-lg-1 col-md-1 col-sm-1  ">
-                                <select id="anio" name="anio" class="form-control btn-xs font-11"
+                                <select id="anio" name="anio" class="form-control font-11"
                                     onchange="cargarCards();">
                                     <option value="0">AÑO</option>
                                     @foreach ($anios as $item)
@@ -63,7 +63,7 @@
                                 </select>
                             </div>
                             <div class="col-lg-2 col-md-2 col-sm-2">
-                                <select id="ugel" name="ugel" class="form-control btn-xs font-11"
+                                <select id="ugel" name="ugel" class="form-control font-11"
                                     onchange="cargarCards();">
                                     <option value="0">UGEL</option>
                                     @foreach ($ugel as $item)
@@ -72,7 +72,7 @@
                                 </select>
                             </div>
                             <div class="col-lg-2 col-md-2 col-sm-2">
-                                <select id="gestion" name="gestion" class="form-control btn-xs font-11"
+                                <select id="gestion" name="gestion" class="form-control font-11"
                                     onchange="cargarCards();">
                                     <option value="0">TIPO DE GESTIÓN</option>
                                     <option value="12">PUBLICA</option>
@@ -80,7 +80,7 @@
                                 </select>
                             </div>
                             <div class="col-lg-2 col-md-2 col-sm-2">
-                                <select id="area" name="area" class="form-control btn-xs font-11"
+                                <select id="area" name="area" class="form-control font-11"
                                     onchange="cargarCards();">
                                     <option value="0">ÁMBITO GEOGRÁFICO</option>
                                     @foreach ($area as $item)

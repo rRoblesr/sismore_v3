@@ -68,7 +68,7 @@
         <div class="col-lg-2 col-md-2 col-sm-2">
             <div class="custom-select-container">
                 <label for="ugel">UGEL</label>
-                <select id="ugel" name="ugel" class="form-control btn-xs font-11" onchange="cargarCards();">
+                <select id="ugel" name="ugel" class="form-control font-11" onchange="cargarCards();">
                     <option value="0">TODOS</option>
                     @foreach ($ugel as $item)
                         <option value="{{ $item->id }}">{{ $item->nombre }}</option>
@@ -81,7 +81,7 @@
         <div class="col-lg-2 col-md-2 col-sm-2">
             <div class="custom-select-container">
                 <label for="provincia">PROVINCIA</label>
-                <select id="provincia" name="provincia" class="form-control btn-xs font-11"
+                <select id="provincia" name="provincia" class="form-control font-11"
                     onchange="cargar_distrito();cargarCards();">
                     <option value="0">TODOS</option>
                     @foreach ($provincia as $item)
@@ -95,7 +95,7 @@
         <div class="col-lg-2 col-md-2 col-sm-2">
             <div class="custom-select-container">
                 <label for="distrito">DISTRITO</label>
-                <select id="distrito" name="distrito" class="form-control btn-xs font-11" onchange="cargarCards();">
+                <select id="distrito" name="distrito" class="form-control font-11" onchange="cargarCards();">
                     <option value="0">TODOS</option>
                 </select>
             </div>
@@ -105,7 +105,7 @@
         <div class="col-lg-2 col-md-2 col-sm-2">
             <div class="custom-select-container">
                 <label for="estado">ESTADO</label>
-                <select id="estado" name="area" class="form-control btn-xs font-11" onchange="cargarCards();">
+                <select id="estado" name="area" class="form-control font-11" onchange="cargarCards();">
                     <option value="0">TODOS</option>
                     <option value="1">SANEADO</option>
                     <option value="2">NO SANEADO</option>

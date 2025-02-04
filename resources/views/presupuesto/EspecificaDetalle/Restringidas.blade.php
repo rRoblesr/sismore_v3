@@ -61,7 +61,7 @@
                                 <div class="col-md-1">
                                     {{-- <label class="col-form-label">Año</label> --}}
                                     <div class="">
-                                        <select class="form-control btn-xs font-11" name="anio" id="anio"
+                                        <select class="form-control font-11" name="anio" id="anio"
                                             onchange="listarDT();">
                                             @foreach ($anios as $item)
                                                 <option value="{{ $item->anio }}"
@@ -74,7 +74,7 @@
                                 <div class="col-md-2">
                                     {{-- <label class=" col-form-label">Genérica </label> --}}
                                     <div class="">
-                                        <select class="form-control btn-xs font-11" name="generica" id="generica"
+                                        <select class="form-control font-11" name="generica" id="generica"
                                             onchange="cargarsg();listarDT();">
                                             <option value="0">GENÉRICA</option>
                                             @foreach ($generica as $item)
@@ -88,7 +88,7 @@
                                 <div class="col-md-3">
                                     {{-- <label class="col-form-label">Sub Genérica </label> --}}
                                     <div class="">
-                                        <select class="form-control btn-xs font-11" name="sg" id="sg"
+                                        <select class="form-control font-11" name="sg" id="sg"
                                             onchange="listarDT();">
                                             <option value="0">SUB GENÉRICA</option>
                                         </select>

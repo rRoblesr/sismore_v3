@@ -44,20 +44,20 @@
                 <h4 class="page-title font-16">PACTO REGIONAL</h4>
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2">
-                <select id="provincia" name="provincia" class="form-control btn-xs font-11"
+                <select id="provincia" name="provincia" class="form-control font-11"
                     onchange="cargarDistritos(),cargarCards();">
                     <option value="0">AÑO</option>
                 </select>
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2">
-                <select id="provincia" name="provincia" class="form-control btn-xs font-11"
+                <select id="provincia" name="provincia" class="form-control font-11"
                     onchange="cargarDistritos(),cargarCards();">
                     <option value="0">PROVINCIA</option>
 
                 </select>
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2">
-                <select id="distrito" name="distrito" class="form-control btn-xs font-11" onchange="cargarCards();">
+                <select id="distrito" name="distrito" class="form-control font-11" onchange="cargarCards();">
                     <option value="0">DISTRITO</option>
 
                 </select>

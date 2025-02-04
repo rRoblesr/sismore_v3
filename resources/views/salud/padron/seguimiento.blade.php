@@ -27,7 +27,7 @@
                                 <h5 class="page-title font-12">PADRON NOMINAL - DIRESA, {{ $actualizado }}</h5>
                             </div>
                             <div class="col-lg-2 col-md-2 col-sm-2">
-                                <select class="form-control btn-xs" name="grupoEdad" id="grupoEdad"
+                                <select class="form-control" name="grupoEdad" id="grupoEdad"
                                     onchange="cargarListadoGrupoEdad();">
                                     <option value="0">GRUPO EDAD</option>
                                     @foreach ($grupo_edad as $item)
@@ -38,7 +38,7 @@
                                 </select>
                             </div>
                             <div class="col-lg-2 col-md-2 col-sm-2">
-                                <select class="form-control btn-xs" name="red" id="red"
+                                <select class="form-control" name="red" id="red"
                                     onchange="cargarListadoRed();">
                                     <option value="0">RED</option>
                                     @foreach ($grupo_red as $item)
@@ -49,7 +49,7 @@
                                 </select>
                             </div>
                             <div class="col-lg-2 col-md-2 col-sm-2">
-                                <select class="form-control btn-xs" name="microred" id="microred"
+                                <select class="form-control" name="microred" id="microred"
                                     onchange="cargarListadoMicrored();">
                                     <option value="0">MICRORRED</option>
                                     @foreach ($grupo_microred as $item)
@@ -60,7 +60,7 @@
                                 </select>
                             </div>
                             <div class="col-lg-2 col-md-2 col-sm-2">
-                                <select class="form-control btn-xs" name="ipress" id="ipress"
+                                <select class="form-control" name="ipress" id="ipress"
                                     onchange="cargarListadoGrupoIpress();">
                                     <option value="0">EE.SS</option>
                                     @foreach ($grupo_ipress as $item)
@@ -99,7 +99,7 @@
                                 <div class="row form-group">
                                     <label class="col-md-3 col-form-label">GRUPO EDAD</label>
                                     <div class="col-md-6">
-                                        <select class="form-control btn-xs" name="grupoEdad" id="grupoEdad"
+                                        <select class="form-control" name="grupoEdad" id="grupoEdad"
                                             onchange="cargarListadoGrupoEdad();">
                                             @foreach ($grupo_edad as $item)
                                                 <option {{ $id_grupo == $item['id'] ? 'selected' : '' }}
@@ -116,7 +116,7 @@
                                     <div class="row form-group">
                                         <label class="col-md-3 col-form-label">RED</label>
                                         <div class="col-md-8">
-                                            <select class="form-control btn-xs" name="red" id="red"
+                                            <select class="form-control" name="red" id="red"
                                                 onchange="cargarListadoRed();">
                                                 @foreach ($grupo_red as $item)
                                                     <option {{ $id_grupo == $item->cod_red ? 'selected' : '' }}
@@ -132,7 +132,7 @@
                                     <div class="row form-group">
                                         <label class="col-md-3 col-form-label">MICRORRED</label>
                                         <div class="col-md-8">
-                                            <select class="form-control btn-xs" name="microred" id="microred"
+                                            <select class="form-control" name="microred" id="microred"
                                                 onchange="cargarListadoMicrored();">
                                                 @foreach ($grupo_microred as $item)
                                                     <option {{ $id_grupo == $item->cod_mic ? 'selected' : '' }}
@@ -148,7 +148,7 @@
                                     <div class="row form-group">
                                         <label class="col-md-3 col-form-label">EE.SS</label>
                                         <div class="col-md-8">
-                                            <select class="form-control btn-xs" name="ipress" id="ipress"
+                                            <select class="form-control" name="ipress" id="ipress"
                                                 onchange="cargarListadoGrupoIpress();">
                                                 @foreach ($grupo_ipress as $item)
                                                     <option

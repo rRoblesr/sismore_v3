@@ -55,7 +55,7 @@
                                 <div class="col-lg-1 col-md-1 col-sm-1  ">
                                     <div class="custom-select-container">
                                         <label for="anio">AÑO</label>
-                                        <select id="anio" name="anio" class="form-control btn-xs font-11"
+                                        <select id="anio" name="anio" class="form-control font-11"
                                             onchange="cargarCards();">
                                             {{-- <option value="0">TODOS</option> --}}
                                             @foreach ($anios as $item)
@@ -71,7 +71,7 @@
                                 <div class="col-lg-2 col-md-2 col-sm-2">
                                     <div class="custom-select-container">
                                         <label for="provincia">PROVINCIA</label>
-                                        <select id="provincia" name="provincia" class="form-control btn-xs font-11"
+                                        <select id="provincia" name="provincia" class="form-control font-11"
                                             onchange="cargarDistritos();cargarCards();">
                                             <option value="0">TODOS</option>
                                             @foreach ($provincias as $item)
@@ -85,7 +85,7 @@
                                 <div class="col-lg-2 col-md-2 col-sm-2">
                                     <div class="custom-select-container">
                                         <label for="distrito">DISTRITO</label>
-                                        <select id="distrito" name="distrito" class="form-control btn-xs font-11"
+                                        <select id="distrito" name="distrito" class="form-control font-11"
                                             onchange="cargarCards();">
                                             <option value="0">TODOS</option>
                                             @foreach ($distritos as $item)
@@ -99,7 +99,7 @@
                                 <div class="col-lg-2 col-md-2 col-sm-2">
                                     <div class="custom-select-container">
                                         <label for="tipogestion">TIPO DE GESTIÓN</label>
-                                        <select id="tipogestion" name="tipogestion" class="form-control btn-xs font-11"
+                                        <select id="tipogestion" name="tipogestion" class="form-control font-11"
                                             onchange="cargarCards();">
                                             <option value="0">TODOS</option>
                                             <option value="12">PUBLICA</option>

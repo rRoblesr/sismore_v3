@@ -713,7 +713,7 @@
                                                 </div>
                                                 <div class="col-lg-1 col-md-1 col-sm-1  ">
                                                     <select id="anio" name="anio"
-                                                        class="form-control btn-xs font-11" onchange="cargarCards();">
+                                                        class="form-control font-11" onchange="cargarCards();">
                                                         <option value="0">AÑO</option>
                                                         <option value="3">
                                                             2018</option>
@@ -727,7 +727,7 @@
                                                 </div>
                                                 <div class="col-lg-2 col-md-2 col-sm-2">
                                                     <select id="provincia" name="provincia"
-                                                        class="form-control btn-xs font-11"
+                                                        class="form-control font-11"
                                                         onchange="cargarDistritos();cargarCards();">
                                                         <option value="0">PROVINCIA</option>
                                                         <option value="35">
@@ -742,13 +742,13 @@
                                                 </div>
                                                 <div class="col-lg-2 col-md-2 col-sm-2">
                                                     <select id="distrito" name="distrito"
-                                                        class="form-control btn-xs font-11" onchange="cargarCards();">
+                                                        class="form-control font-11" onchange="cargarCards();">
                                                         <option value="0">DISTRITO</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-lg-2 col-md-2 col-sm-2">
                                                     <select id="gestion" name="gestion"
-                                                        class="form-control btn-xs font-11" onchange="cargarCards();">
+                                                        class="form-control font-11" onchange="cargarCards();">
                                                         <option value="0">TIPO DE GESTIÓN</option>
                                                         <option value="12">PUBLICA</option>
                                                         <option value="3">PRIVADA</option>

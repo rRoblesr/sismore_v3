@@ -55,7 +55,7 @@
                                 <div class="row form-group">
                                     <label class="col-md-4 col-form-label">SISTEMAS</label>
                                     <div class="col-md-8">
-                                        <select class="form-control btn-xs" name="sistema" id="sistema"
+                                        <select class="form-control" name="sistema" id="sistema"
                                             onchange="listarDT();">
                                             @foreach ($sistemas as $item)
                                                 <option value="{{ $item->id }}">{{ $item->nombre }}</option>
@@ -240,7 +240,7 @@
 
                         </div>
                         <div class="col-md-6">
-                            <select class="form-control btn-xs" name="tipoicono" id="tipoicono"
+                            <select class="form-control" name="tipoicono" id="tipoicono"
                                 onchange="cargar_tabla_icon()">
                                 <option value="0">TIPO DE ICONOS</option>
                                 <option value="1">Iconos de diseño de materiales</option>
