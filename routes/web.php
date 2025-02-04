@@ -1,6 +1,7 @@
 <?php
 
 use App\Exports\Salud\AgregarMetasExport;
+use App\Http\Controllers\Administracion\DirectoriosAuditoriaController;
 use App\Http\Controllers\Administracion\EntidadController;
 use App\Http\Controllers\Administracion\LoginRecordsController;
 use App\Http\Controllers\Administracion\MenuController;
@@ -103,6 +104,7 @@ use App\Http\Controllers\Vivienda\DatassController;
 use App\Http\Controllers\Vivienda\EmapacopsaController;
 use App\Http\Controllers\Vivienda\PadronEmapacopsaController;
 use App\Mail\MsnCorreo;
+use App\Models\Administracion\DirectoriosAuditoria;
 use App\Models\Administracion\UsuarioAuditoria;
 use App\Models\Educacion\ImporDocentesBilingues;
 use App\Models\Educacion\ImporServiciosBasicos;
@@ -937,6 +939,10 @@ Route::get('/administrador/LoginRecords/Reporte/listar', [LoginRecordsController
 
 Route::get('/administrador/Auditoria/Reporte', [UsuarioAuditoriaController::class, 'reporte'])->name('usuarioauditoria.reporte');
 Route::get('/administrador/Auditoria/Reporte/find/recuperados/{id}', [UsuarioAuditoriaController::class, 'ajax_edit'])->name('usuarioauditoria.reporte.find.recuperados');
+
+Route::get('/administrador/Auditoria/Directorios/Municipios', [DirectoriosAuditoriaController::class, 'reportemunicipios'])->name('directoriosauditoria.reporte.municipios');
+Route::get('/administrador/Auditoria/Directorios/PN', [DirectoriosAuditoriaController::class, 'reportepadronnominal'])->name('directoriosauditoria.reporte.padronnominal');
+Route::get('/administrador/Auditoria/Directorios/Reporte/find/recuperados/{id}', [DirectoriosAuditoriaController::class, 'ajax_edit'])->name('directoriosauditoria.reporte.find.recuperados');
 /**************************************** FIN ADMINISTRADOR ************************************************/
 
 /**************************************** PRESUPUESTO ************************************************/

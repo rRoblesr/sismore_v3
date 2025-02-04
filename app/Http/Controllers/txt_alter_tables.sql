@@ -2838,3 +2838,25 @@ ALTER TABLE sal_establecimiento CHANGE responsable responsable VARCHAR(100) CHAR
 
 
 
+
+
+/*  */
+
+
+CREATE TABLE `adm_directorios_auditoria` (
+  `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `responsable_id` int(11) DEFAULT NULL,
+  `tipo` enum('PADRON_NOMINAL','MUNICIPIOS') NOT NULL,
+  `accion` enum('CREADO','MODIFICADO','ELIMINADO') NOT NULL,
+  `datos_anteriores` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`datos_anteriores`)),
+  `datos_nuevos` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`datos_nuevos`)),
+  `usuario_responsable` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
+
+
+

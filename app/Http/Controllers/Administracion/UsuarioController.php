@@ -358,13 +358,14 @@ class UsuarioController extends Controller
         $usuario->entidad = $request->entidadgerencia;
         if ($request->password != '')
             $usuario->password = Hash::make($request->password);
+        $usuario_modificado = $usuario->getDirty();
         $usuario->save();
 
         $auditoria = UsuarioAuditoria::Create([
             'usuario_id' => $usuario->id,
             'accion' => 'MODIFICADO',
             'datos_anteriores' => $usuairo_anterior,
-            'datos_nuevos' => $usuario,
+            'datos_nuevos' => $usuario_modificado,
             'usuario_responsable' => auth()->user()->id,
         ]);
 
@@ -580,8 +581,18 @@ class UsuarioController extends Controller
     public function ajax_estadoUsuario($usuario_id)
     {
         $usuario = Usuario::find($usuario_id);
+        $usuairo_anterior = $usuario->getOriginal();
         $usuario->estado = $usuario->estado == 1 ? 0 : 1;
+        $usuario_modificado = $usuario->getDirty();
         $usuario->save();
+
+        $auditoria = UsuarioAuditoria::Create([
+            'usuario_id' => $usuario->id,
+            'accion' => 'MODIFICADO',
+            'datos_anteriores' => $usuairo_anterior,
+            'datos_nuevos' => $usuario_modificado,
+            'usuario_responsable' => auth()->user()->id,
+        ]);
         return response()->json(array('status' => true, 'estado' => $usuario->estado));
     }
 

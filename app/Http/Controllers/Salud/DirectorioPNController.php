@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Salud;
 
 use App\Http\Controllers\Controller;
+use App\Models\Administracion\DirectoriosAuditoria;
 use App\Models\Salud\DirectorioPN;
 use App\Models\Salud\Establecimiento;
 use App\Repositories\Salud\EstablecimientoRepositorio;
@@ -218,7 +219,7 @@ class DirectorioPNController extends Controller
     public function ajax_add(Request $request)
     {
         $this->_validate($request);
-        $rer = DirectorioPN::Create([
+        $responsable = DirectorioPN::Create([
             'dni' => $request->dni,
             'nombres' => $request->nombres,
             'apellido_paterno' => $request->apellido_paterno,
@@ -233,28 +234,49 @@ class DirectorioPNController extends Controller
             'celular' => $request->celular,
             'email' => $request->email,
         ]);
+
+        $auditoria = DirectoriosAuditoria::Create([
+            'responsable_id' => $responsable->id,
+            'tipo' => 'PADRON_NOMINAL',
+            'accion' => 'CREADO',
+            'datos_anteriores' => null,
+            'datos_nuevos' => $responsable,
+            'usuario_responsable' => auth()->user()->id,
+        ]);
+
         return response()->json(array('status' => true));
     }
     public function ajax_update(Request $request)
     {
         $this->_validate($request);
-        $rer = DirectorioPN::find($request->id);
-        $rer->dni = $request->dni;
-        $rer->nombres = $request->nombres;
-        $rer->apellido_paterno = $request->apellido_paterno;
-        $rer->apellido_materno = $request->apellido_materno;
-        $rer->sexo = $request->sexo;
-        // $rer->profesion = $request->profesion;
-        $rer->cargo = $request->cargo;
-        $rer->condicion_laboral = $request->condicion_laboral;
-        $rer->red_id = $request->fred;
-        $rer->microred_id = $request->fmicrored;
-        $rer->establecimiento_id = $request->feess;
-        $rer->celular = $request->celular;
-        $rer->email = $request->email;
-        $rer->save();
+        $responsable = DirectorioPN::find($request->id);
+        $responsable_anterior = $responsable->getOriginal();
+        $responsable->dni = $request->dni;
+        $responsable->nombres = $request->nombres;
+        $responsable->apellido_paterno = $request->apellido_paterno;
+        $responsable->apellido_materno = $request->apellido_materno;
+        $responsable->sexo = $request->sexo;
+        // $responsable->profesion = $request->profesion;
+        $responsable->cargo = $request->cargo;
+        $responsable->condicion_laboral = $request->condicion_laboral;
+        $responsable->red_id = $request->fred;
+        $responsable->microred_id = $request->fmicrored;
+        $responsable->establecimiento_id = $request->feess;
+        $responsable->celular = $request->celular;
+        $responsable->email = $request->email;
+        $responsable_modificado = $responsable->getDirty();
+        $responsable->save();
 
-        return response()->json(['status' => true, 'data' => $request->all(), 'obj' => $rer]);
+        $auditoria = DirectoriosAuditoria::Create([
+            'responsable_id' => $responsable->id,
+            'tipo' => 'PADRON_NOMINAL',
+            'accion' => 'MODIFICADO',
+            'datos_anteriores' => $responsable_anterior,
+            'datos_nuevos' => $responsable_modificado,
+            'usuario_responsable' => auth()->user()->id,
+        ]);
+        // return response()->json(['status' => true, 'data' => $request->all(), 'obj' => $responsable]);
+        return response()->json(['status' => true]);
     }
     public function ajax_edit($id)
     {
@@ -295,15 +317,36 @@ class DirectorioPNController extends Controller
 
     public function ajax_delete($id) //elimina deverdad *o*
     {
-        $rer = DirectorioPN::find($id);
-        $rer->delete();
-        return response()->json(array('status' => true, 'rer' => $rer));
+        $responsable = DirectorioPN::find($id);
+        $responsable_anterior = $responsable->getOriginal();
+        $responsable->delete();
+
+        $auditoria = DirectoriosAuditoria::Create([
+            'responsable_id' => $responsable_anterior['id'],
+            'tipo' => 'PADRON_NOMINAL',
+            'accion' => 'ELIMINADO',
+            'datos_anteriores' => $responsable_anterior,
+            'datos_nuevos' => null,
+            'usuario_responsable' => auth()->user()->id,
+        ]);
+        return response()->json(array('status' => true));
     }
     public function ajax_estado($id)
     {
-        $rer = DirectorioPN::find($id);
-        $rer->estado = $rer->estado == '0' ? '1' : '0';
-        $rer->save();
+        $responsable = DirectorioPN::find($id);
+        $responsable_anterior = $responsable->getOriginal();
+        $responsable->estado = $responsable->estado == '0' ? '1' : '0';
+        $responsable_modificado = $responsable->getDirty();
+        $responsable->save();
+
+        $auditoria = DirectoriosAuditoria::Create([
+            'responsable_id' => $responsable->id,
+            'tipo' => 'PADRON_NOMINAL',
+            'accion' => 'MODIFICADO',
+            'datos_anteriores' => $responsable_anterior,
+            'datos_nuevos' => $responsable_modificado,
+            'usuario_responsable' => auth()->user()->id,
+        ]);
         return response()->json(array('status' => true));
     }
 

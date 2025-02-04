@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Salud;
 
 use App\Http\Controllers\Controller;
+use App\Models\Administracion\DirectoriosAuditoria;
 use App\Models\Parametro\Ubigeo;
 use App\Models\Salud\DirectorioMunicipal;
 use App\Repositories\Parametro\UbigeoRepositorio;
@@ -52,7 +53,7 @@ class DirectorioMunicipalController extends Controller
         $start = intval($rq->start);
         $length = intval($rq->length);
 
-        $query = DirectorioMunicipal::select('sal_directorio_municipal.*')->join('par_ubigeo as d','d.id','=','distrito_id')->orderBy('id', 'desc');
+        $query = DirectorioMunicipal::select('sal_directorio_municipal.*')->join('par_ubigeo as d', 'd.id', '=', 'distrito_id')->orderBy('id', 'desc');
         if ($rq->vista == 'D') $query->where('estado', '0');
         if ($rq->provincia > 0) $query->where('d.dependencia', $rq->provincia);
         if ($rq->distrito > 0) $query->where('distrito_id', $rq->distrito);
@@ -119,8 +120,6 @@ class DirectorioMunicipalController extends Controller
         );
         return response()->json($result);
     }
-
-
 
     private function _validate($request)
     {
@@ -207,7 +206,7 @@ class DirectorioMunicipalController extends Controller
     public function ajax_add(Request $request)
     {
         $this->_validate($request);
-        DirectorioMunicipal::Create([
+        $responsable = DirectorioMunicipal::Create([
             'dni' => $request->dni,
             'nombres' => $request->nombres,
             'apellido_paterno' => $request->apellido_paterno,
@@ -220,27 +219,47 @@ class DirectorioMunicipalController extends Controller
             'celular' => $request->celular,
             'email' => $request->email,
         ]);
+
+        $auditoria = DirectoriosAuditoria::Create([
+            'responsable_id' => $responsable->id,
+            'tipo' => 'MUNICIPIOS',
+            'accion' => 'CREADO',
+            'datos_anteriores' => null,
+            'datos_nuevos' => $responsable,
+            'usuario_responsable' => auth()->user()->id,
+        ]);
         return response()->json(array('status' => true));
     }
 
     public function ajax_update(Request $request)
     {
         $this->_validate($request);
-        $rer = DirectorioMunicipal::find($request->id);
-        $rer->dni = $request->dni;
-        $rer->nombres = $request->nombres;
-        $rer->apellido_paterno = $request->apellido_paterno;
-        $rer->apellido_materno = $request->apellido_materno;
-        $rer->sexo = $request->sexo;
-        $rer->cargo = $request->cargo;
-        $rer->condicion_laboral = $request->condicion_laboral;
-        $rer->distrito_id = $request->fmunicipalidad;
-        $rer->celular = $request->celular;
-        $rer->email = $request->email;
-        $rer->save();
+        $responsable = DirectorioMunicipal::find($request->id);
+        $responsable_anterior = $responsable->getOriginal();
+        $responsable->dni = $request->dni;
+        $responsable->nombres = $request->nombres;
+        $responsable->apellido_paterno = $request->apellido_paterno;
+        $responsable->apellido_materno = $request->apellido_materno;
+        $responsable->sexo = $request->sexo;
+        $responsable->cargo = $request->cargo;
+        $responsable->condicion_laboral = $request->condicion_laboral;
+        $responsable->distrito_id = $request->fmunicipalidad;
+        $responsable->celular = $request->celular;
+        $responsable->email = $request->email;
+        $responsable_modificado = $responsable->getDirty(); 
+        $responsable->save();
+
+        $auditoria = DirectoriosAuditoria::Create([
+            'responsable_id' => $responsable->id,
+            'tipo' => 'MUNICIPIOS',
+            'accion' => 'MODIFICADO',
+            'datos_anteriores' => $responsable_anterior,
+            'datos_nuevos' => $responsable_modificado,
+            'usuario_responsable' => auth()->user()->id,
+        ]);
 
         // return response()->json(['status' => true, 'data' => $request->all(), 'obj' => $rer]);
-        return response()->json(['status' => true, 'data' => $request->all(), 'obj' => $rer]);
+        return response()->json(['status' => true]);
     }
 
     public function ajax_edit($id)
@@ -251,16 +270,38 @@ class DirectorioMunicipalController extends Controller
 
     public function ajax_delete($id) //elimina deverdad *o*
     {
-        $rer = DirectorioMunicipal::find($id);
-        $rer->delete();
+        $responsable = DirectorioMunicipal::find($id);
+        $responsable_anterior = $responsable->getOriginal();
+        $responsable->delete();
+
+        $auditoria = DirectoriosAuditoria::Create([
+            'responsable_id' => $responsable_anterior['id'],
+            'tipo' => 'MUNICIPIOS',
+            'accion' => 'ELIMINADO',
+            'datos_anteriores' => $responsable_anterior,
+            'datos_nuevos' => null,
+            'usuario_responsable' => auth()->user()->id,
+        ]);
+
         return response()->json(array('status' => true));
     }
 
     public function ajax_estado($id)
     {
-        $rer = DirectorioMunicipal::find($id);
-        $rer->estado = $rer->estado == '0' ? '1' : '0';
-        $rer->save();
+        $responsable = DirectorioMunicipal::find($id);
+        $responsable_anterior = $responsable->getOriginal();
+        $responsable->estado = $responsable->estado == '0' ? '1' : '0';
+        $responsable_modificado = $responsable->getDirty(); 
+        $responsable->save();        
+
+        $auditoria = DirectoriosAuditoria::Create([
+            'responsable_id' => $responsable->id,
+            'tipo' => 'MUNICIPIOS',
+            'accion' => 'MODIFICADO',
+            'datos_anteriores' => $responsable_anterior,
+            'datos_nuevos' => $responsable_modificado,
+            'usuario_responsable' => auth()->user()->id,
+        ]);
         return response()->json(array('status' => true));
     }
 
