@@ -1255,6 +1255,7 @@ Route::get('/salud/pactoregional/{indicador_id}', [IndicadoresController::class,
 Route::get('/salud/pactoregional/Exportar/{id}', [IndicadoresController::class, 'exportarPDF'])->name('salud.indicador.pactoregional.exportar.pdf');
 
 Route::get('/salud/conveniofed', [IndicadoresController::class, 'ConvenioFED'])->name('salud.indicador.conveniofed');
+Route::get('/salud/conveniogestion', [IndicadoresController::class, 'ConvenioGestion'])->name('salud.indicador.conveniogestion');
 
 Route::get('/salud/pdrc/Actualizar', [IndicadoresController::class, 'PDRCActualizar'])->name('salud.indicador.pdrc.actualizar');
 Route::get('/salud/pdrc/edu', [IndicadoresController::class, 'PDRCEdu'])->name('salud.indicador.pdrc.edu');

@@ -106,20 +106,20 @@
 
     <div class="row">
         <div class="col-lg-12 col-md-12">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
+            <div class="card card-border border border-plomo-0">{{--  pb-0 pt-0 --}}
+                <div class="card-header border-success-0 bg-transparent py-0">
                     <h3 class="card-title text-white"></h3>
-                </div>
-                <div class="card-body pb-0 pt-3">
+                </div>{{--  pb-0 pt-3 --}}
+                <div class="card-body p-2">
                     <div class="row">
                         <div class="col-lg-5 col-md-6 col-sm-6">
                             <h4 class="page-title font-16">PACTO REGIONAL</h4>
                         </div>
 
-                        <div class="col-lg-2 col-md-1 col-sm-1">
+                        <div class="col-lg-2 col-md-6 my-1">
                             <div class="custom-select-container">
                                 <label for="anio">Año</label>
-                                <select id="anio" name="anio" class="form-control font-12 p-0"
+                                <select id="anio" name="anio" class="form-control font-12"
                                     onchange="cargarpacto1();">
                                     @foreach ($anio as $item)
                                         <option value="{{ $item }}" {{ $item == $aniomax ? 'selected' : '' }}>
@@ -129,7 +129,7 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-2 col-md-2 col-sm-2">
+                        <div class="col-lg-2 col-md-6 my-1">
                             <div class="custom-select-container">
                                 <label for="provincia">Provincia</label>
                                 <select id="provincia" name="provincia" class="form-control font-12"
@@ -142,7 +142,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2">
+                        <div class="col-lg-2 col-md-6 my-1">
                             <div class="custom-select-container">
                                 <label for="distrito">Distrito</label>
                                 <select id="distrito" name="distrito" class="form-control font-12"
@@ -152,11 +152,11 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-1 col-md-1 col-sm-1 text-center">
+                        <div class="col-lg-1 col-md-6 text-center my-1">
                             <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
                                 title='ACTUALIZAR'>
                                 <span class="d-block d-lg-none">
-                                    <i class=" fas fa-history"></i></span>
+                                    <i class=" fas fa-history"></i> Actualizar</span>
                                 <span class="d-none d-lg-block text-center">
                                     <i class=" fas fa-history"></i></span>
                             </button>
@@ -165,10 +165,13 @@
                         {{-- <input type="hidden" name="provincia" id="provincia" value="0"> --}}
                         {{-- <input type="hidden" name="distrito" id="distrito" value="0"> --}}
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
+
+
 
     <div class="row">
         @foreach ($indsal as $key => $item)

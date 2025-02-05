@@ -1619,6 +1619,37 @@ class IndicadoresController extends Controller
         return view('salud.Indicadores.ConvenioFED');
     }
 
+    public function ConvenioGestion()
+    {
+        $indicadores = [
+            "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=f949fcff58741d51b3e2",
+            "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=7593d8e8934e0b6b6698",
+            "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=f9c4ba0e40a6b06775a9",
+            "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=b125ff6d190047140b4b",
+            "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=1adb37f8ca70044b1a7d",
+            "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=d7bfd8272316342c078e",
+            "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=080bd5233819181188c6",
+            "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=77d56fe33099c476e2c1",
+            "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=4fc8c54ca23e78a03b7a",
+            "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=79d5ec590a7785c707e1",
+            "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=98547b064d0a859585bd",
+            "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=63942bbc036658348194",
+            "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=8f8262d7eb4e662e9d23",
+            "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=2d3189ecb4779a80839c",
+            "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=36230e6a93177cb6b128",
+            "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=48658675ee6044751996",
+            "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=ce0bc94526e00ad0c828",
+            "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=a144cf0c8ca3a1a3edb7",
+            "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=75a43930808d890664a5",
+            "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=3efbe9854a435ec4d53b",
+            "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=b552aae1e06e79a9d348",
+            "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=c2ed9308e99984006203",
+            "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=36adf0ac7e65a9c0b324",
+            "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=aff690b33e9647e21508"
+        ];
+        return view('salud.Indicadores.ConvenioGestion', compact('indicadores'));
+    }
+
     public function PDRCActualizar(Request $rq)
     {
         $imp = null;
