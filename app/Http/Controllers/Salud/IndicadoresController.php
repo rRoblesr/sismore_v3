@@ -567,7 +567,8 @@ class IndicadoresController extends Controller
                             '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px">' . number_format($value->indicador, 1) . '%</span>' : ($value->indicador < 100 ?
                                 '<span class="badge badge-pill badge-warning" style="font-size:90%; width:50px">' . number_format($value->indicador, 1) . '%</span>' :
                                 '<span class="badge badge-pill badge-success" style="font-size:90%; width:50px">' . number_format($value->indicador, 1) . '%</span>'
-                            )
+                            ),
+                        $value->indicador >= 90 ? 1 : 0
                     );
                 }
                 $result = array(
@@ -585,13 +586,7 @@ class IndicadoresController extends Controller
                 $start = intval($rq->start);
                 $length = intval($rq->length);
 
-                $query = CuboPacto1PadronNominal::where('importacion', $impMaxAnio)->where('cui_atencion', $rq->cod_unico);
-                $query = $query->whereIn('tipo_doc', ['DNI', 'CNV']);
-
-                // if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
-                // if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
-
-                $query = $query->get();
+                $query = CuboPacto1PadronNominal::where('importacion', $impMaxAnio)->where('cui_atencion', $rq->cod_unico)->whereIn('tipo_doc', ['DNI', 'CNV'])->get();
 
                 $data = [];
                 foreach ($query as $key => $value) {
@@ -613,56 +608,7 @@ class IndicadoresController extends Controller
                     "recordsTotal" => $start,
                     "recordsFiltered" => $length,
                     "data" => $data,
-                    // "data2" => $rq->all(),
                 );
-                return response()->json($result);
-                break;
-            case 'tabla2y':
-                $base = CuboPacto1PadronNominalRepositorio::pacto01Tabla02($impMaxAnio, $rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
-                $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla2', compact('base', 'ndis'))->render();
-                return response()->json(compact('excel'));
-                // return response()->json(compact( 'base'));
-
-            case 'tabla2x':
-                $draw = intval($rq->draw);
-                $start = intval($rq->start);
-                $length = intval($rq->length);
-
-                $query = CuboPacto1PadronNominal::where('importacion', $impMaxAnio);
-
-                $query = $query->whereIn('tipo_doc', ['DNI', 'CNV']);
-
-                if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
-                if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
-
-                $recordsTotal = $query->count();
-                $recordsFiltered = $recordsTotal;
-
-                $query = $query->skip($start)->take($length)->get();
-
-                $query = $query->map(function ($item, $key) use ($start) {
-                    $item->item = $start + $key + 1;
-                    return $item;
-                });
-
-                $query->transform(function ($value) {
-                    $value->nacimiento = date('d/m/Y', strtotime($value->fecha_nacimiento));
-                    $value->ipress = str_pad($value->cui_atencion, 8, '0', STR_PAD_LEFT);
-                    $value->estado = $value->num == 1
-                        ? '<span class="badge badge-pill badge-success" style="font-size:90%;">CUMPLEN</span>'
-                        :  '<span class="badge badge-pill badge-danger" style="font-size:90%;">NO CUMPLEN</span>';
-                    return $value;
-                });
-
-                $result = [
-                    "draw" => $draw,
-                    "recordsTotal" => $recordsTotal,
-                    "recordsFiltered" => $recordsFiltered,
-                    "data" => $query,
-                    "input" => $rq->all(),
-                    "queries" => $query->toArray(),
-                ];
-
                 return response()->json($result);
 
             default:
@@ -1646,6 +1592,214 @@ class IndicadoresController extends Controller
             "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=c2ed9308e99984006203",
             "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=36adf0ac7e65a9c0b324",
             "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=aff690b33e9647e21508"
+        ];
+
+        // $indicadores = [
+        //     [
+        //         "codigo" => "01",
+        //         "numerador" => 100,
+        //         "denominador" => 20,
+        //         "titulo" => "Porcentaje de niñas/niños de 12 a 18 meses, con diagnóstico de anemia entre los 6 y 11 meses, que se han recuperado",
+        //         "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=f949fcff58741d51b3e2"
+        //     ],
+        //     [
+        //         "codigo" => "02",
+        //         "numerador" => 100,
+        //         "denominador" => 40,
+        //         "titulo" => "Porcentaje de niñas/niños menores de 12 meses, que reciben un paquete integrado de servicios: CRED, vacunas, dosaje de hemoglobina para descarte de anemia y suplementación con hierro.",
+        //         "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=7593d8e8934e0b6b6698"
+        //     ],
+        //     [
+        //         "codigo" => "03",
+        //         "numerador" => 100, "denominador" => 30,  "titulo" => "Porcentaje de niños y niñas de 6 a 35 meses con diagnóstico de anemia del Total de los casos esperados de anemia.",
+        //         "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=f9c4ba0e40a6b06775a9"
+        //     ],
+        //     [
+        //         "codigo" => "04",
+        //         "numerador" => 100,
+        //         "denominador" => 10,
+        //         "titulo" => "Porcentaje de recién nacidos que reciben vacunas BCG, HvB, controles CRED y tamizaje neonatal metabólico",
+        //         "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=b125ff6d190047140b4b"
+        //     ],
+        //     [
+        //         "codigo" => "05",
+        //         "numerador" => 100,
+        //         "denominador" => 50,
+        //         "titulo" => "Niñas y niños menores de 2 años en condición de crecimiento inadecuado que luego de un periodo de seguimiento mejora sus condiciones nutricionales.",
+        //         "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=1adb37f8ca70044b1a7d"
+        //     ]
+        // ];
+
+
+        $indicadores = [
+            [
+                "codigo" => "01",
+                "numerador" =>   35,
+                "denominador" =>    211,
+                "titulo" => "Porcentaje de niñas/niños de 12 a 18 meses, con diagnóstico de anemia entre los 6 y 11 meses, que se han recuperado",
+                "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=f949fcff58741d51b3e2"
+            ],
+            [
+                "codigo" => "02",
+                "numerador" =>    0,
+                "denominador" =>      0,
+                "titulo" => "Porcentaje de niñas/niños menores de 12 meses, que reciben un paquete integrado de servicios: CRED, vacunas, dosaje de hemoglobina para descarte de anemia y suplementación con hierro.",
+                "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=7593d8e8934e0b6b6698"
+            ],
+            [
+                "codigo" => "03",
+                "numerador" =>  443,
+                "denominador" =>   2917,
+                "titulo" => "Porcentaje de niños y niñas de 6 a 35 meses con diagnóstico de anemia del Total de los casos esperados de anemia.",
+                "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=f9c4ba0e40a6b06775a9"
+            ],
+            [
+                "codigo" => "04",
+                "numerador" =>  189,
+                "denominador" =>    956,
+                "titulo" => "Porcentaje de recién nacidos que reciben vacunas BCG, HvB, controles CRED y tamizaje neonatal metabólico",
+                "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=b125ff6d190047140b4b"
+            ],
+            [
+                "codigo" => "05",
+                "numerador" =>   56,
+                "denominador" =>   1188,
+                "titulo" => "Niñas y niños menores de 2 años en condición de crecimiento inadecuado que luego de un periodo de seguimiento mejora sus condiciones nutricionales.",
+                "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=1adb37f8ca70044b1a7d"
+            ],
+            [
+                "codigo" => "06",
+                "numerador" =>   87,
+                "denominador" =>   3511,
+                "titulo" => "Niñas y niños de 1 año vacunados con dos dosis de vacuna sarampión, parotiditis y rubeola (SPR)",
+                "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=d7bfd8272316342c078e"
+            ],
+            [
+                "codigo" => "07",
+                "numerador" =>  298,
+                "denominador" =>    556,
+                "titulo" => "Recién nacidos de parto institucional, vacunados con BCG y Anti hepatitis B, dentro de las 24 horas después del nacimiento.",
+                "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=080bd5233819181188c6"
+            ],
+            [
+                "codigo" => "08",
+                "numerador" =>   16,
+                "denominador" =>     51,
+                "titulo" => "Tasa de éxito de tratamiento para TB Sensible",
+                "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=77d56fe33099c476e2c1"
+            ],
+            [
+                "codigo" => "09",
+                "numerador" =>    0,
+                "denominador" =>      2,
+                "titulo" => "Porcentaje de contactos menores de 5 años de edad que culminan Terapia Preventiva para TB ",
+                "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=4fc8c54ca23e78a03b7a"
+            ],
+            [
+                "codigo" => "11",
+                "numerador" =>  174,
+                "denominador" =>  53778,
+                "titulo" => "Mujeres de 30 a 49 años con tamizaje para la detección de lesiones premalignas e incipientes de cáncer de cuello uterino",
+                "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=79d5ec590a7785c707e1"
+            ],
+            [
+                "codigo" => "12",
+                "numerador" =>    1,
+                "denominador" =>    510,
+                "titulo" => "Porcentaje de niñas y niños (6 meses a 6 años) que reciben procedimientos estomatológicos preventivos",
+                "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=98547b064d0a859585bd"
+            ],
+            [
+                "codigo" => "13",
+                "numerador" =>    4,
+                "denominador" =>   4960,
+                "titulo" => "Porcentaje de personas que acceden a algún método anticonceptivo moderno de planificación familiar",
+                "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=63942bbc036658348194"
+            ],
+            [
+                "codigo" => "15",
+                "numerador" =>   65,
+                "denominador" =>    707,
+                "titulo" => "Gestantes con paquete preventivo completo.",
+                "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=8f8262d7eb4e662e9d23"
+            ],
+            [
+                "codigo" => "16",
+                "numerador" =>   43,
+                "denominador" =>   4111,
+                "titulo" => "Porcentaje de adolescentes que reciben prestaciones priorizadas para el cuidado integral de la salud.",
+                "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=2d3189ecb4779a80839c"
+            ],
+            [
+                "codigo" => "17",
+                "numerador" =>    0,
+                "denominador" =>      1,
+                "titulo" => "Porcentaje de niños y niñas menores de 5 años con deficiencias o factores de riesgo de discapacidad, con dos o más atenciones en la UPSS Medicina de Rehabilitación.",
+                "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=36230e6a93177cb6b128"
+            ],
+            [
+                "codigo" => "18",
+                "numerador" =>    4,
+                "denominador" =>     10,
+                "titulo" => "Rendimiento cama en Unidades de Hospitalización de Salud Mental y Adicciones en hospitales.",
+                "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=48658675ee6044751996"
+            ],
+            [
+                "codigo" => "19",
+                "numerador" =>   47,
+                "denominador" =>    278,
+                "titulo" => "Porcentaje de personas con diagnóstico de Depresión que recibieron paquete mínimo de intervenciones terapéuticas en centro de salud mental comunitaria.",
+                "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=ce0bc94526e00ad0c828"
+            ],
+            [
+                "codigo" => "20",
+                "numerador" =>    0,
+                "denominador" =>   2432,
+                "titulo" => "Porcentaje de Resolutividad",
+                "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=a144cf0c8ca3a1a3edb7"
+            ],
+            [
+                "codigo" => "23",
+                "numerador" =>  101,
+                "denominador" =>    214,
+                "titulo" => "Porcentaje de Ocupación Cama",
+                "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=75a43930808d890664a5"
+            ],
+            [
+                "codigo" => "24",
+                "numerador" =>    0,
+                "denominador" =>    657,
+                "titulo" => "Intervalo de Sustitución de Cama",
+                "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=3efbe9854a435ec4d53b"
+            ],
+            [
+                "codigo" => "25",
+                "numerador" => 3045,
+                "denominador" =>     99,
+                "titulo" => "Promedio de Espera para la Atención en Consulta Externa de un Paciente Referido ",
+                "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=b552aae1e06e79a9d348"
+            ],
+            [
+                "codigo" => "26",
+                "numerador" => 1754,
+                "denominador" =>     10,
+                "titulo" => "Promedio de Espera para la Atención en Apoyo al Diagnóstico de un Paciente Referido",
+                "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=c2ed9308e99984006203"
+            ],
+            [
+                "codigo" => "27",
+                "numerador" => 8975,
+                "denominador" =>      1,
+                "titulo" => " Productividad Hora Médico ",
+                "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=36adf0ac7e65a9c0b324"
+            ],
+            [
+                "codigo" => "32",
+                "numerador" =>  255,
+                "denominador" => 507895,
+                "titulo" => "Utilización de los servicios de telemedicina (teleinterconsultas - teleconsultas - telemonitoreo)",
+                "enlace" => "https://app.powerbi.com/view?r=eyJrIjoiZTVjMWI5ZjEtNmY3NC00MGM5LWI2NDgtMDUxYjYyNjFlOGM2IiwidCI6IjU3OTIyZTZhLTIzY2EtNDFhYy04ZGYxLTI5YTZmODgxYzBiYiIsImMiOjl9&pageName=aff690b33e9647e21508"
+            ]
         ];
         return view('salud.Indicadores.ConvenioGestion', compact('indicadores'));
     }

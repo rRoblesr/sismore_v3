@@ -60,9 +60,6 @@ class CuboPacto4Repositorio
             DB::raw('100*sum(numerador)/sum(denominador) as indicador')
         )->where('anio', $anio)->where('mes', '<=', $mes);
 
-        // if ($provincia > 0) $v1 = $v1->where('provincia_id', $provincia);
-        // if ($distrito > 0) $v1 = $v1->where('distrito_id', $distrito);
-
         $v1 = $v1->groupBy('distrito_id');
 
         $v1 = Ubigeo::from('par_ubigeo as u')
@@ -78,9 +75,6 @@ class CuboPacto4Repositorio
             )
             ->whereRaw('LENGTH(u.codigo) = 6')->where('u.codigo', 'like', '25%')->orderBy('indicador', 'desc')->get();
 
-        // foreach ($v1 as $key => $value) {
-        //     $value->distrito = $distritos[$value->distrito_id] ?? '';
-        // }
         $v3 = IndicadorGeneralMeta::where('indicadorgeneral', $indicador)->where('anio', $anio)->pluck('valor', 'distrito');
 
         foreach ($v1 as $key => $value) {
@@ -92,37 +86,6 @@ class CuboPacto4Repositorio
 
     public static function Tabla02($importacion, $indicador, $anio, $mes, $provincia, $distrito)
     {
-        // $filtro = function ($query) use ($provincia, $distrito) {
-        //     if ($provincia > 0) $query->where('c4.provincia_id', $provincia);
-        //     if ($distrito > 0) $query->where('c4.distrito_id', $distrito);
-        // };
-
-        // $query = CuboPacto4Padron12Meses::from('sal_cubo_pacto4_padron_12meses as c4')->select(            
-        //     'e.codigo_unico',
-        //     'eess',
-        //     'r.nombre as red',
-        //     'm.nombre as microrred',
-        //     // 'departamento',
-        //     'p.nombre as provincia',
-        //     'd.nombre as distrito',
-        //     DB::raw('sum(c4.denominador) as denominador'),
-        //     DB::raw('sum(c4.numerador) as numerador'),
-        //     // DB::raw('sum(num_cred) as condicion1'),
-        //     // DB::raw('sum(num_vac) as condicion2'),
-        //     // DB::raw('sum(num_esq) as condicion3'),
-        //     // DB::raw('sum(num_hb) as condicion4'),
-        //     // DB::raw('sum(num_dniemision) as condicion5'),
-        //     DB::raw('100*sum(c4.numerador)/sum(c4.denominador) as indicador')
-        // )
-        //     ->join('sal_establecimiento as e', 'e.id', '=', 'establecimiento_id')
-        //     ->join('sal_red as r', 'r.id', '=', 'e.red_id')
-        //     ->join('sal_microred as m', 'm.id', '=', 'e.microrred_id')
-        //     ->join('par_ubigeo as d', 'd.id', '=', 'c4.distrito_id')
-        //     ->join('par_ubigeo as p', 'p.id', '=', 'd.dependencia')
-        //     ->where('c4.anio', $anio)->where('c4.mes', '=', $mes)->tap($filtro)//->where('departamento', 'UCAYALI')
-        //     ->groupBy('codigo_unico', 'eess', 'r.nombre', 'm.nombre', 'p.nombre', 'd.nombre',)->orderBy('indicador', 'desc')->get();
-        // return $query;
-
         $query = "SELECT 
                     lpad(e.cod_unico,8,'0') codigo_unico,
                     e.nombre_establecimiento eess,

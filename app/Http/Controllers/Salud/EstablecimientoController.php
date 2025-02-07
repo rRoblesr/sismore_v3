@@ -93,8 +93,13 @@ class EstablecimientoController extends Controller
     public function ajax_edit($id)
     {
         $eess = Establecimiento::find($id);
-
         return response()->json(compact('eess'));
+    }
+
+    public function ajax_codunico02($cod_unico)
+    {
+        $eess = Establecimiento::select('codigo_unico', 'nombre_establecimiento as nombre')->where('cod_unico', $cod_unico)->get()->first();
+        return response()->json($eess);
     }
 
     public function registro_listarDT(Request $rq)

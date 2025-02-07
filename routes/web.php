@@ -1379,6 +1379,8 @@ Route::get('/EESS/Cargareess', [EstablecimientoController::class, 'cargarEESS'])
 Route::get('/EESS/Cargareess/Select/{microred}', [EstablecimientoController::class, 'cargarEESSSelect'])->name('eess.cargareess.select');
 Route::get('/EESS/Find/AUTOCOMPLETE', [EstablecimientoController::class, 'autocompletarEntidad'])->name('eess.autocomplete');
 Route::get('/EESS/Find/{id}', [EstablecimientoController::class, 'ajax_edit'])->name('eess.find');
+Route::get('/EESS/Find/cod_unico/01/{cod_unico}', [EstablecimientoController::class, 'ajax_codunico02'])->name('eess.find.cod_unico.01');
+Route::get('/EESS/Find/cod_unico/02/{cod_unico}', [EstablecimientoController::class, 'ajax_codunico02'])->name('eess.find.cod_unico.02');
 
 Route::get('/Microred/Find/cargarMicrored/{red}', [EstablecimientoController::class, 'cargarMicroredSelect'])->name('microred.cargar.find');
 Route::get('/Microred/Find/cargarMicroredUcayali/{red}', [EstablecimientoController::class, 'cargarMicroredUcayaliSelect'])->name('microred.cargar.find.2');
