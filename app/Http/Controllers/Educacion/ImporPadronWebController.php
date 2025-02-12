@@ -3,16 +3,12 @@
 namespace App\Http\Controllers\Educacion;
 
 use App\Exports\ImporPadronWebExport;
-use App\Exports\tablaXExport;
 use App\Http\Controllers\Controller;
 use App\Imports\tablaXImport;
 use App\Models\Administracion\Entidad;
 use App\Models\Educacion\Importacion;
 use App\Models\Educacion\ImporPadronWeb;
 use App\Models\Educacion\PadronWeb;
-use App\Repositories\Administracion\EntidadRepositorio;
-use App\Repositories\Educacion\ImporPadronWebRepositorio;
-use App\Utilities\Utilitario;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use Exception;
 use Illuminate\Http\Request;
@@ -57,7 +53,177 @@ class ImporPadronWebController extends Controller
         die;
     }
 
-    public function guardar(Request $request)
+    public function guardar(Request $rq)
+    {
+        ini_set('memory_limit', '-1');
+        set_time_limit(0);
+
+        if (ImportacionRepositorio::Importacion_PE($rq->fechaActualizacion, $this->fuente) !== null) {
+            return $this->json_output(400, "Error, ya existe un archivo pendiente de aprobación para la fecha ingresada");
+        }
+
+        if (ImportacionRepositorio::Importacion_PR($rq->fechaActualizacion, $this->fuente) !== null) {
+            return $this->json_output(400, "Error, ya existe un archivo procesado para la fecha ingresada");
+        }
+
+        $this->validate($rq, ['file' => 'required|mimes:xls,xlsx']);
+        $archivo = $rq->file('file');
+        $array = (new tablaXImport)->toArray($archivo);
+
+        $encabezadosEsperados = [
+            'cod_mod',
+            'cod_local',
+            'institucion_educativa',
+            'cod_nivelmod',
+            'nivel_modalidad',
+            'forma',
+            'cod_car',
+            'caracteristica',
+            'cod_genero',
+            'genero',
+            'cod_gest',
+            'gestion',
+            'cod_ges_dep',
+            'gestion_dependencia',
+            'director',
+            'telefono',
+            'direccion_centro_educativo',
+            'ubigeo_ccpp',
+            'cod_ccpp',
+            'centro_poblado',
+            'cod_area',
+            'area_geografica',
+            'ubigeo',
+            'provincia',
+            'distrito',
+            'dre',
+            'cod_ugel',
+            'ugel',
+            'nlat_ie',
+            'nlong_ie',
+            'cod_tur',
+            'turno',
+            'cod_estado',
+            'estado',
+            'talum_hom',
+            'talum_muj',
+            'talumno',
+            'tdocente',
+            'tseccion',
+            'fechareg',
+        ];
+
+        $encabezadosArchivo = array_keys($array[0][0]);
+
+        $faltantes = array_diff($encabezadosEsperados, $encabezadosArchivo);
+        if (!empty($faltantes)) {
+            return $this->json_output(400, 'Error: Los encabezados del archivo no coinciden con el formato esperado. Faltan columnas esperadas.', $faltantes);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $importacion = Importacion::create([
+                'fuenteImportacion_id' => $this->fuente,
+                'usuarioId_Crea' => auth()->user()->id,
+                'fechaActualizacion' => $rq->fechaActualizacion,
+                'estado' => 'PR'
+            ]);
+
+            // $distritos = Ubigeo::where('codigo', 'like', '25%')->whereRaw('length(codigo)=6')->pluck('id', 'codigo');
+            // $provincias = Ubigeo::where('codigo', 'like', '25%')->whereRaw('length(codigo)=4')->pluck('id', 'codigo');
+
+            $batchSize = 500;
+            $dataBatch = [];
+
+            foreach ($array[0] as $row) {
+                $dataBatch[] = [
+                    'importacion_id' => $importacion->id,
+                    'cod_mod' => $row['cod_mod'],
+                    'cod_local' => $row['cod_local'],
+                    'institucion_educativa' => $row['institucion_educativa'],
+                    'cod_nivelmod' => $row['cod_nivelmod'],
+                    'nivel_modalidad' => $row['nivel_modalidad'],
+                    'forma' => $row['forma'],
+                    'cod_car' => $row['cod_car'],
+                    'caracteristica' => $row['caracteristica'],
+                    'cod_genero' => $row['cod_genero'],
+                    'genero' => $row['genero'],
+                    'cod_gest' => $row['cod_gest'],
+                    'gestion' => $row['gestion'],
+                    'cod_ges_dep' => $row['cod_ges_dep'],
+                    'gestion_dependencia' => $row['gestion_dependencia'],
+                    'director' => $row['director'],
+                    'telefono' => $row['telefono'],
+                    'direccion_centro_educativo' => $row['direccion_centro_educativo'],
+                    'ubigeo_ccpp' => $row['ubigeo_ccpp'],
+                    'cod_ccpp' => $row['cod_ccpp'],
+                    'centro_poblado' => $row['centro_poblado'],
+                    'cod_area' => $row['cod_area'],
+                    'area_geografica' => $row['area_geografica'],
+                    'ubigeo' => $row['ubigeo'],
+                    'provincia' => $row['provincia'],
+                    'distrito' => $row['distrito'],
+                    'dre' => $row['dre'],
+                    'cod_ugel' => $row['cod_ugel'],
+                    'ugel' => $row['ugel'],
+                    'nlat_ie' => $row['nlat_ie'],
+                    'nlong_ie' => $row['nlong_ie'],
+                    'cod_tur' => $row['cod_tur'],
+                    'turno' => $row['turno'],
+                    'cod_estado' => $row['cod_estado'],
+                    'estado' => $row['estado'],
+                    'talum_hom' => $row['talum_hom'],
+                    'talum_muj' => $row['talum_muj'],
+                    'talumno' => $row['talumno'],
+                    'tdocente' => $row['tdocente'],
+                    'tseccion' => $row['tseccion'],
+                    'fechareg' => $row['fechareg'],
+                ];
+
+                if (count($dataBatch) >= $batchSize) {
+                    ImporPadronWeb::insert($dataBatch);
+                    $dataBatch = [];
+                }
+            }
+
+            if (!empty($dataBatch)) {
+                ImporPadronWeb::insert($dataBatch);
+            }
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            $importacion->estado = 'PE';
+            $importacion->save();
+
+            return $this->json_output(400, "Error en la carga de datos: " . $e->getMessage());
+        }
+
+        // try {
+        //     DB::select('call sal_pa_procesarControlCalidadColumnas(?)', [$importacion->id]);
+        // } catch (Exception $e) {
+        //     $importacion->estado = 'PE';
+        //     $importacion->save();
+
+        //     $mensaje = "Error al procesar la normalizacion de datos sal_pa_procesarControlCalidadColumnas. " . $e->getMessage();
+        //     return $this->json_output(400, $mensaje);
+        // }
+
+        // try {
+        //     DB::select('call sal_pa_procesarPadronEstablecimiento(?,?)', [$importacion->id, auth()->user()->id]);
+        // } catch (Exception $e) {
+        //     $importacion->estado = 'PE';
+        //     $importacion->save();
+
+        //     $mensaje = "Error al procesar la normalizacion de datos sal_pa_procesarCalidadReporte. " . $e->getMessage();
+        //     return $this->json_output(400, $mensaje);
+        // }
+
+        $this->json_output(200, "Archivo Excel subido y procesado correctamente.");
+    }
+
+    public function guardarxxx(Request $request)
     {
         ini_set('memory_limit', '-1');
         set_time_limit(0);

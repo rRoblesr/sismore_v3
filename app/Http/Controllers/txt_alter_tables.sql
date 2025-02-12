@@ -2856,6 +2856,143 @@ CREATE TABLE `adm_directorios_auditoria` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
+/*  */
+
+
+CREATE TABLE edu_impor_padronweb (
+  id int AUTO_INCREMENT PRIMARY KEY,
+  importacion_id int(11) DEFAULT NULL,
+		cod_mod int(11) DEFAULT NULL,
+		cod_local int(11) DEFAULT NULL,
+		institucion_educativa varchar(62) DEFAULT NULL,
+		cod_nivelmod varchar(2) DEFAULT NULL,
+		nivel_modalidad varchar(39) DEFAULT NULL,
+		forma varchar(15) DEFAULT NULL,
+		cod_car varchar(1) DEFAULT NULL,
+		caracteristica varchar(22) DEFAULT NULL,
+		cod_genero int(11) DEFAULT NULL,
+		genero varchar(7) DEFAULT NULL,
+		cod_gest varchar(1) DEFAULT NULL,
+		gestion varchar(26) DEFAULT NULL,
+		cod_ges_dep varchar(2) DEFAULT NULL,
+		gestion_dependencia varchar(32) DEFAULT NULL,
+		director varchar(43) DEFAULT NULL,
+		telefono varchar(23) DEFAULT NULL,
+		direccion_centro_educativo varchar(66) DEFAULT NULL,
+		ubigeo_ccpp varchar(10) DEFAULT NULL,
+		cod_ccpp varchar(6) DEFAULT NULL,
+		centro_poblado varchar(40) DEFAULT NULL,
+		cod_area varchar(1) DEFAULT NULL,
+		area_geografica varchar(6) DEFAULT NULL,
+		ubigeo varchar(6) DEFAULT NULL,
+		provincia varchar(16) DEFAULT NULL,
+		distrito varchar(22) DEFAULT NULL,
+		dre varchar(11) DEFAULT NULL,
+		cod_ugel varchar(6) DEFAULT NULL,
+		ugel varchar(21) DEFAULT NULL,
+		nlat_ie double DEFAULT NULL,
+		nlong_ie double DEFAULT NULL,
+		cod_tur int(11) DEFAULT NULL,
+		turno varchar(18) DEFAULT NULL,
+		cod_estado int(11) DEFAULT NULL,
+		estado varchar(8) DEFAULT NULL,
+		talum_hom int(11) DEFAULT NULL,
+		talum_muj int(11) DEFAULT NULL,
+		talumno int(11) DEFAULT NULL,
+		tdocente int(11) DEFAULT NULL,
+		tseccion int(11) DEFAULT NULL,
+		fechareg date DEFAULT NULL,
+		foreign key (importacion_id) references par_importacion(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
+
+campo
+cod_mod
+cod_local
+institucion_educativa
+cod_nivelmod
+nivel_modalidad
+forma
+cod_car
+caracteristica
+cod_genero
+genero
+cod_gest
+gestion
+cod_ges_dep
+gestion_dependencia
+director
+telefono
+direccion_centro_educativo
+ubigeo_ccpp
+cod_ccpp
+centro_poblado
+cod_area
+area_geografica
+ubigeo
+provincia
+distrito
+dre
+cod_ugel
+ugel
+nlat_ie
+nlong_ie
+cod_tur
+turno
+cod_estado
+estado
+talum_hom
+talum_muj
+talumno
+tdocente
+tseccion
+fechareg
+
+
+
+ALTER TABLE `edu_institucioneducativa` ADD `fecha_reg` DATE NULL DEFAULT NULL AFTER `es_eib`;
+
+
+ALTER TABLE `edu_sfl` ADD `estado_iiee` ENUM('0','1') NOT NULL AFTER `documento`;
+ALTER TABLE `edu_sfl` CHANGE `estado_servicio` `estado_servicio` TINYINT NOT NULL DEFAULT '0';
+
+
+
+CREATE TABLE sal_impor_padron_programa (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  importacion_id INT DEFAULT NULL,
+  usuariou INT DEFAULT NULL,
+  programa INT DEFAULT NULL,
+  servicio VARCHAR(6) DEFAULT NULL,
+  anio INT DEFAULT NULL,
+  mes INT DEFAULT NULL,
+  tipo_doc VARCHAR(40) DEFAULT NULL,
+  num_doc_m VARCHAR(12) DEFAULT NULL,
+  ape_pat_m VARCHAR(20) DEFAULT NULL,
+  ape_mat_m VARCHAR(20) DEFAULT NULL,
+  nombre_m VARCHAR(30) DEFAULT NULL,
+  sexo INT DEFAULT NULL,
+  fec_nac_m DATE DEFAULT NULL,
+  telefono VARCHAR(15) DEFAULT NULL,
+  direccion VARCHAR(70) DEFAULT NULL,
+  referencia VARCHAR(70) DEFAULT NULL,
+  ubigeo_distrito VARCHAR(6) DEFAULT NULL,
+  ubigeo_ccpp VARCHAR(10) DEFAULT NULL,
+  latitud DOUBLE DEFAULT NULL,
+  longitud DOUBLE DEFAULT NULL,
+  num_doc_a VARCHAR(12) DEFAULT NULL,
+  ape_pat_a VARCHAR(20) DEFAULT NULL,
+  ape_mat_a VARCHAR(20) DEFAULT NULL,
+  nombre_a VARCHAR(30) DEFAULT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_importacion (importacion_id),
+  INDEX idx_usuariou (usuariou),
+  FOREIGN KEY (importacion_id) REFERENCES par_importacion(id),
+  FOREIGN KEY (usuariou) REFERENCES adm_usuario(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 

@@ -84,6 +84,7 @@ use App\Http\Controllers\Salud\EstablecimientoController;
 use App\Http\Controllers\Salud\ImporPadronActasController;
 use App\Http\Controllers\Salud\ImporPadronEstablecimientoController;
 use App\Http\Controllers\Salud\ImporPadronNominalController;
+use App\Http\Controllers\Salud\ImporPadronProgramaController;
 use App\Http\Controllers\Salud\ImporPadronPvicaController;
 use App\Http\Controllers\Salud\ImporReportePN05Controller;
 use App\Http\Controllers\Salud\IndicadoresController;
@@ -1299,6 +1300,12 @@ Route::post('/ImporPadronEESS/Importar', [ImporPadronEstablecimientoController::
 Route::get('/ImporPadronEESS/Listar/ImportarDT', [ImporPadronEstablecimientoController::class, 'ListarDTImportFuenteTodos'])->name('imporpadronestablecimiento.listar.importados');
 Route::post('/ImporPadronEESS/ListaImportada', [ImporPadronEstablecimientoController::class, 'ListaImportada'])->name('imporpadronestablecimiento.listarimportados');
 Route::get('/ImporPadronEESS/eliminar/{id}', [ImporPadronEstablecimientoController::class, 'eliminar'])->name('imporpadronestablecimiento.eliminar');
+
+Route::get('/ImporPadronPrograma/Importar', [ImporPadronProgramaController::class, 'importar'])->name('imporpadronprograma.importar');
+Route::post('/ImporPadronPrograma/Importar', [ImporPadronProgramaController::class, 'guardar'])->name('imporpadronprograma.guardar');
+Route::get('/ImporPadronPrograma/Listar/ImportarDT', [ImporPadronProgramaController::class, 'ListarDTImportFuenteTodos'])->name('imporpadronprograma.listar.importados');
+Route::post('/ImporPadronPrograma/ListaImportada', [ImporPadronProgramaController::class, 'ListaImportada'])->name('imporpadronprograma.listarimportados');
+Route::get('/ImporPadronPrograma/eliminar/{id}', [ImporPadronProgramaController::class, 'eliminar'])->name('imporpadronprograma.eliminar');
 
 Route::get('/ImporPadronPvica/Importar', [ImporPadronPvicaController::class, 'importar'])->name('imporpadronpvica.importar');
 Route::post('/ImporPadronPvica/Importar', [ImporPadronPvicaController::class, 'guardar'])->name('imporpadronpvica.guardar');
