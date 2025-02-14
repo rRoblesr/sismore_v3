@@ -30,11 +30,12 @@
                                         <thead class="text-primary">
                                             <tr>
                                                 <th>N°</th>
-                                                <th>Versión</th>
+                                                <th>Registro</th>
                                                 <th>Programa</th>
+                                                <th>Servicio</th>
                                                 <th>Usuario</th>
                                                 <th>Área</th>
-                                                <th>Registro</th>
+                                                <th>Registros</th>
                                                 <th>Estado</th>
                                                 <th>Acción</th>
                                             </tr>
@@ -86,8 +87,8 @@
 
                                 <div class="col-lg-6">
                                     <label class="col-form-label">Fecha Registro</label>
-                                    <input type="date" class="form-control" name="fechaActualizacion" value="{{ date('Y-m-d') }}"
-                                        placeholder="Ingrese fecha actualización" required>
+                                    <input type="date" class="form-control" name="fechaActualizacion"
+                                        value="{{ date('Y-m-d') }}" placeholder="Ingrese fecha actualización" required>
                                 </div>
                             </div>
 
@@ -120,7 +121,7 @@
                                 </div>
                             </div> --}}
 
-                           
+
 
                             {{-- <div class="form-group">
                                 <label class="col-form-label">Archivo</label>
@@ -180,7 +181,7 @@
                                 <p class="text-center mt-2 text-muted" id="nombreArchivo3">Ningún archivo seleccionado</p>
                             </div> --}}
 
-                            
+
 
 
                             <div class="form-group pwrapper" style="display:none;">
@@ -297,10 +298,27 @@
                                 style="font-size:12px">
                                 {{-- width:7200px; --}}
                                 <thead class="text-primary">
-                                    <th>UBIGEO</th>
-                                    <th>SEXO</th>
-                                    <th>EDAD</th>
-                                    <th>TOTAL</th>
+                                    <th>SERVICIO</th>
+                                    <th>ANIO</th>
+                                    <th>MES</th>
+                                    <th>TIPO_DOC_MENOR</th>
+                                    <th>NUM_DOC_MENOR</th>
+                                    <th>APE_PAT_MENOR</th>
+                                    <th>APE_MAT_MENOR</th>
+                                    <th>NOMBRE_MENOR</th>
+                                    <th>SEXO_MENOR</th>
+                                    <th>FEC_NAC_MENOR</th>
+                                    <th>TELEFONO</th>
+                                    <th>DIRECCION</th>
+                                    <th>REFERENCIA</th>
+                                    <th>UBIGEO_DISTRITO</th>
+                                    <th>UBIGEO_CCPP</th>
+                                    <th>LATITUD</th>
+                                    <th>LONGITUD</th>
+                                    <th>NUM_DOC_APODERADO</th>
+                                    <th>APE_PAT_APODERADO</th>
+                                    <th>APE_MAT_APODERADO</th>
+                                    <th>NOMBRE_APODERADO</th>
                                 </thead>
                                 <tbody>
 
@@ -472,22 +490,28 @@
                         "type": "POST",
                         "dataType": 'JSON',
                     },
-                    "columns": [{
-                            data: 'codigo',
-                            name: 'codigo'
-                        },
-                        {
-                            data: 'sexo',
-                            name: 'sexo'
-                        },
-                        {
-                            data: 'edad',
-                            name: 'edad'
-                        },
-                        {
-                            data: 'total',
-                            name: 'total'
-                        },
+                    "columns": [
+                        {data: 'servicio',name: 'servicio'},
+{data: 'anio',name: 'anio'},
+{data: 'mes',name: 'mes'},
+{data: 'tipo_doc',name: 'tipo_doc'},
+{data: 'num_doc_m',name: 'num_doc_m'},
+{data: 'ape_pat_m',name: 'ape_pat_m'},
+{data: 'ape_mat_m',name: 'ape_mat_m'},
+{data: 'nombre_m',name: 'nombre_m'},
+{data: 'sexo',name: 'sexo'},
+{data: 'fec_nac_m',name: 'fec_nac_m'},
+{data: 'telefono',name: 'telefono'},
+{data: 'direccion',name: 'direccion'},
+{data: 'referencia',name: 'referencia'},
+{data: 'ubigeo',name: 'ubigeo'},
+{data: 'ubigeo_ccpp',name: 'ubigeo_ccpp'},
+{data: 'latitud',name: 'latitud'},
+{data: 'longitud',name: 'longitud'},
+{data: 'num_doc_a',name: 'num_doc_a'},
+{data: 'ape_pat_a',name: 'ape_pat_a'},
+{data: 'ape_mat_a',name: 'ape_mat_a'},
+{data: 'nombre_a',name: 'nombre_a'},
                     ],
                 }
 

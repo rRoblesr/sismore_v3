@@ -2,22 +2,20 @@
 
 namespace App\Http\Controllers\Salud;
 
+use App\Exports\Salud\PadronProgramaErroresExport;
 use App\Http\Controllers\Controller;
 use App\Imports\tablaXImport;
 use App\Models\Administracion\Entidad;
 use App\Models\Educacion\Importacion;
-use App\Models\Parametro\Anio;
-use App\Models\Parametro\ImporPoblacion;
-use App\Models\Parametro\PoblacionDetalle;
-use App\Models\Salud\Establecimiento;
-use App\Models\Salud\ImporPadronEstablecimiento;
 use App\Models\Salud\ImporPadronPrograma;
+use App\Models\Salud\PadronProgramaB;
+use App\Models\Salud\PadronProgramaH;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Utilities\Utilitario;
-use DateTime;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
 
 class ImporPadronProgramaController extends Controller
@@ -71,13 +69,13 @@ class ImporPadronProgramaController extends Controller
             'servicio',
             'anio',
             'mes',
-            'tipo_doc',
-            'num_doc_m',
-            'ape_pat_m',
-            'ape_mat_m',
-            'nombre_m',
-            'sexo',
-            'fec_nac_m',
+            'tipo_doc_menor',
+            'num_doc_menor',
+            'ape_pat_menor',
+            'ape_mat_menor',
+            'nombre_menor',
+            'sexo_menor',
+            'fec_nac_menor',
             'telefono',
             'direccion',
             'referencia',
@@ -85,10 +83,10 @@ class ImporPadronProgramaController extends Controller
             'ubigeo_ccpp',
             'latitud',
             'longitud',
-            'num_doc_a',
-            'ape_pat_a',
-            'ape_mat_a',
-            'nombre_a',
+            'num_doc_apoderado',
+            'ape_pat_apoderado',
+            'ape_mat_apoderado',
+            'nombre_apoderado',
         ];
 
         $encabezadosArchivo = array_keys($array[0][0]);
@@ -97,6 +95,53 @@ class ImporPadronProgramaController extends Controller
         if (!empty($faltantes)) {
             return $this->json_output(400, 'Error: Los encabezados del archivo no coinciden con el formato esperado. Faltan columnas esperadas.', $faltantes);
         }
+
+        // ***********************************************
+        // $tamaniosMaximos = [
+        //     'servicio' => 10,
+        //     'anio' => 4,
+        //     'mes' => 2,
+        //     'tipo_doc_menor' => 40,
+        //     'num_doc_menor' => 8,
+        //     'ape_pat_menor' => 30,
+        //     'ape_mat_menor' => 30,
+        //     'nombre_menor' => 40,
+        //     'sexo_menor' => 1,
+        //     'fec_nac_menor' => 10,
+        //     'telefono' => 9,
+        //     'direccion' => 300,
+        //     'referencia' => 300,
+        //     'ubigeo_distrito' => 6,
+        //     'ubigeo_ccpp' => 10,
+        //     'latitud' => 19,
+        //     'longitud' => 18,
+        //     'num_doc_apoderado' => 12,
+        //     'ape_pat_apoderado' => 25,
+        //     'ape_mat_apoderado' => 35,
+        //     'nombre_apoderado' => 40,
+        // ];
+
+        // $errores = [];
+
+        // foreach ($array[0] as $filaIndex => $fila) {
+        //     foreach ($fila as $columna => $valor) {
+        //         if (isset($tamaniosMaximos[$columna])) {
+        //             $longitudValor = mb_strlen(trim($valor)); // Evita espacios innecesarios
+
+        //             if ($longitudValor > $tamaniosMaximos[$columna]) {
+        //                 $errores[] = "Error en fila " . ($filaIndex + 1) . ", columna '$columna': el tamaño máximo es " . $tamaniosMaximos[$columna] . ", pero se encontró uno de $longitudValor.";
+        //             }
+        //         }
+        //     }
+        // }
+
+        // // Si hay errores, devolverlos
+        // if (!empty($errores)) {
+        //     return $this->json_output(400, 'Error: Algunas columnas exceden el tamaño permitido.', $errores);
+        // }
+
+
+        // ***********************************************
 
         try {
             DB::beginTransaction();
@@ -121,13 +166,13 @@ class ImporPadronProgramaController extends Controller
                     'servicio' => $row['servicio'],
                     'anio' => $row['anio'],
                     'mes' => $row['mes'],
-                    'tipo_doc' => $row['tipo_doc'],
-                    'num_doc_m' => $row['num_doc_m'],
-                    'ape_pat_m' => $row['ape_pat_m'],
-                    'ape_mat_m' => $row['ape_mat_m'],
-                    'nombre_m' => $row['nombre_m'],
-                    'sexo' => $row['sexo'] == 'M' ? 0 : 1,
-                    'fec_nac_m' => Utilitario::textDateToMySQL($row['fec_nac_m']),
+                    'tipo_doc_m' => $row['tipo_doc_menor'],
+                    'num_doc_m' => $row['num_doc_menor'],
+                    'ape_pat_m' => $row['ape_pat_menor'],
+                    'ape_mat_m' => $row['ape_mat_menor'],
+                    'nombre_m' => $row['nombre_menor'],
+                    'sexo_m' => $row['sexo_menor'], // == 'M' ? 0 : 1,
+                    'fec_nac_m' => $row['fec_nac_menor'], //Utilitario::textDateToMySQL($row['fec_nac_menor']),
                     'telefono' => $row['telefono'],
                     'direccion' => $row['direccion'],
                     'referencia' => $row['referencia'],
@@ -135,10 +180,10 @@ class ImporPadronProgramaController extends Controller
                     'ubigeo_ccpp' => $row['ubigeo_ccpp'],
                     'latitud' => $row['latitud'],
                     'longitud' => $row['longitud'],
-                    'num_doc_a' => $row['num_doc_a'],
-                    'ape_pat_a' => $row['ape_pat_a'],
-                    'ape_mat_a' => $row['ape_mat_a'],
-                    'nombre_a' => $row['nombre_a'],
+                    'num_doc_a' => $row['num_doc_apoderado'],
+                    'ape_pat_a' => $row['ape_pat_apoderado'],
+                    'ape_mat_a' => $row['ape_mat_apoderado'],
+                    'nombre_a' => $row['nombre_apoderado'],
                 ];
 
                 if (count($dataBatch) >= $batchSize) {
@@ -172,16 +217,16 @@ class ImporPadronProgramaController extends Controller
         //     return $this->json_output(400, $mensaje);
         // }
 
-        // try {
-        //     DB::select('call sal_pa_procesarPadronEstablecimiento(?,?)', [$importacion->id, auth()->user()->id]);
-        // } catch (Exception $e) {
-        //     // Si ocurre un error, actualizar el estado a 'PE' (pendiente) si es necesario
-        //     $importacion->estado = 'PE';
-        //     $importacion->save();
+        try {
+            DB::select('call sal_pa_procesarPadronProgramas(?)', [$importacion->id]);
+        } catch (Exception $e) {
+            // Si ocurre un error, actualizar el estado a 'PE' (pendiente) si es necesario
+            $importacion->estado = 'PE';
+            $importacion->save();
 
-        //     $mensaje = "Error al procesar la normalizacion de datos sal_pa_procesarCalidadReporte. " . $e->getMessage();
-        //     return $this->json_output(400, $mensaje);
-        // }
+            $mensaje = "Error al procesar la normalizacion de datos sal_pa_procesarPadronProgramas. " . $e->getMessage();
+            return $this->json_output(400, $mensaje);
+        }
 
         $this->json_output(200, "Archivo Excel subido y procesado correctamente.");
     }
@@ -200,25 +245,34 @@ class ImporPadronProgramaController extends Controller
         foreach ($query as $key => $value) {
             $ent = Entidad::find($value->entidad);
             $padron = ImporPadronPrograma::where('importacion_id', $value->id)->first();
+            $registros = PadronProgramaB::where('importacion_id', $value->id)->count();
             $nom = '';
             if (strlen($value->cnombre) > 0) {
                 $xx = explode(' ', $value->cnombre);
                 $nom = $xx[0];
             }
             if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || in_array(session('perfil_administrador_id'), [3, 8, 9, 10, 11]))
-                $boton = '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> </button>';
+                $boton = '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" title="ELIMINAR REGISTRO"><i class="fa fa-trash"></i> </button>';
             else
                 $boton = '';
-            $boton2 = '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> </button>';
+            $boton2 = '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-success btn-xs" title="VER LISTA DE REGISTROS ACEPTADOS"><i class="fa fa-eye"></i> </button>';
+            // $boton3 = '<button type="button" onclick="errores(' . $value->id . ')" class="btn btn-warning btn-xs"><i class="fa fa-eye"></i> </button>';
+            $boton3 = '<a href="' . route('imporpadronprograma.exportar.padron', ['importacion_id' => $value->id]) . '" class="btn btn-warning btn-xs" title="DESCARGAR LISTA DE REGISTROS CON ERRORES"><i class="fa fa-download"></i></a>';
+
+
+            //             <a href="{{ route('exportar.padron', ['importacion_id' => $importacion_id]) }}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
+
             $data[] = array(
                 $key + 1,
                 date("d/m/Y", strtotime($value->fechaActualizacion)),
                 $programas[$padron->programa - 1] ?? 'No Definido',
+                $padron->servicio,
                 $nom . ' ' . $value->capellido1,
                 $ent ? $ent->abreviado : '',
-                date("d/m/Y", strtotime($value->created_at)),
+                $registros,
+                // date("d/m/Y", strtotime($value->created_at)),
                 $value->estado == "PR" ? "PROCESADO" : "PENDIENTE",
-                $boton . '&nbsp;' . $boton2,
+                $boton2 . '&nbsp;' . $boton3 . '&nbsp;' . $boton,
             );
         }
         $result = array(
@@ -226,7 +280,7 @@ class ImporPadronProgramaController extends Controller
             "recordsTotal" => $start,
             "recordsFiltered" => $length,
             "data" => $data,
-            "conteo" => $conteo
+            // "conteo" => $conteo
         );
         return response()->json($result);
     }
@@ -234,7 +288,33 @@ class ImporPadronProgramaController extends Controller
     /* metodo para cargar una importacion especifica */
     public function ListaImportada(Request $rq)
     {
-        $data = ImporPadronPrograma::all();
+        $data = PadronProgramaB::from('sal_padron_programa_b as b')->where('b.importacion_id', $rq->importacion_id)
+            ->select(
+                'h.programa',
+                'h.servicio',
+                'h.anio',
+                'h.mes',
+                'b.tipo_doc',
+                'b.num_doc_m',
+                'b.ape_pat_m',
+                'b.ape_mat_m',
+                'b.nombre_m',
+                DB::raw('IF(b.sexo=1,"M","F") as sexo'),
+                'b.fec_nac_m',
+                'b.telefono',
+                'b.direccion',
+                'b.referencia',
+                'b.ubigeo',
+                'b.ubigeo_ccpp',
+                'b.latitud',
+                'b.longitud',
+                'b.num_doc_a',
+                'b.ape_pat_a',
+                'b.ape_mat_a',
+                'b.nombre_a',
+            )
+            ->join('sal_padron_programa_h as h', 'h.importacion_id', '=', 'b.importacion_id')
+            ->get();
         return DataTables::of($data)->make(true);
     }
 
@@ -242,7 +322,20 @@ class ImporPadronProgramaController extends Controller
     public function eliminar($id)
     {
         ImporPadronPrograma::where('importacion_id', $id)->delete();
+        PadronProgramaB::where('importacion_id', $id)->delete();
+        PadronProgramaH::where('importacion_id', $id)->delete();
         Importacion::find($id)->delete();
         return response()->json(array('status' => true));
+    }
+
+    public function exportarPadron(Request $request)
+    {
+        $importacion_id = $request->get('importacion_id');
+        if (!$importacion_id) {
+            return redirect()->back()->with('error', 'Falta el parámetro importacion_id.');
+        }
+
+        $filename = 'padron_export_' . date('Ymd_His') . '.xlsx';
+        return Excel::download(new PadronProgramaErroresExport($importacion_id), $filename);
     }
 }

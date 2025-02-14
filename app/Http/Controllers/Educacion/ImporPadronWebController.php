@@ -200,25 +200,15 @@ class ImporPadronWebController extends Controller
             return $this->json_output(400, "Error en la carga de datos: " . $e->getMessage());
         }
 
-        // try {
-        //     DB::select('call sal_pa_procesarControlCalidadColumnas(?)', [$importacion->id]);
-        // } catch (Exception $e) {
-        //     $importacion->estado = 'PE';
-        //     $importacion->save();
+        try {
+            DB::select('call edu_pa_procesarPadronWeb(?,?)', [$importacion->id, auth()->user()->id]);
+        } catch (Exception $e) {
+            $importacion->estado = 'PE';
+            $importacion->save();
 
-        //     $mensaje = "Error al procesar la normalizacion de datos sal_pa_procesarControlCalidadColumnas. " . $e->getMessage();
-        //     return $this->json_output(400, $mensaje);
-        // }
-
-        // try {
-        //     DB::select('call sal_pa_procesarPadronEstablecimiento(?,?)', [$importacion->id, auth()->user()->id]);
-        // } catch (Exception $e) {
-        //     $importacion->estado = 'PE';
-        //     $importacion->save();
-
-        //     $mensaje = "Error al procesar la normalizacion de datos sal_pa_procesarCalidadReporte. " . $e->getMessage();
-        //     return $this->json_output(400, $mensaje);
-        // }
+            $mensaje = "Error al procesar la normalizacion de datos edu_pa_procesarPadronWeb." . $e;
+            return $this->json_output(400, $mensaje);
+        }
 
         $this->json_output(200, "Archivo Excel subido y procesado correctamente.");
     }
@@ -414,6 +404,7 @@ class ImporPadronWebController extends Controller
         $query = ImportacionRepositorio::Listar_FuenteTodos(ImporPadronWebController::$FUENTE);
         $data = [];
         foreach ($query as $key => $value) {
+            $registros = PadronWeb::where('importacion_id', $value->id)->count();
             $nom = '';
             if (strlen($value->cnombre) > 0) {
                 $xx = explode(' ', $value->cnombre);
@@ -439,6 +430,7 @@ class ImporPadronWebController extends Controller
                 $nom . ' ' . $ape,
                 $ent ? $ent->abreviado : '',
                 date("d/m/Y", strtotime($value->created_at)),
+                $registros,
                 $value->estado == "PR" ? "PROCESADO" : ($value->estado == "PE" ? "PENDIENTE" : "ELIMINADO"),
                 $boton . '&nbsp;' . $boton2,
             );

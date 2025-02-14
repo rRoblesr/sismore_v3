@@ -2994,6 +2994,44 @@ CREATE TABLE sal_impor_padron_programa (
   FOREIGN KEY (usuariou) REFERENCES adm_usuario(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE sal_padron_programa_h (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  importacion_id INT DEFAULT NULL,
+  programa INT DEFAULT NULL,
+  servicio VARCHAR(6) DEFAULT NULL,
+  anio INT DEFAULT NULL,
+  mes INT DEFAULT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_importacion (importacion_id),
+  FOREIGN KEY (importacion_id) REFERENCES par_importacion(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE sal_padron_programa_b (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  importacion_id INT DEFAULT NULL,
+  tipo_doc VARCHAR(3) DEFAULT NULL,
+  num_doc_m VARCHAR(8) DEFAULT NULL,
+  ape_pat_m VARCHAR(30) DEFAULT NULL,
+  ape_mat_m VARCHAR(30) DEFAULT NULL,
+  nombre_m VARCHAR(40) DEFAULT NULL,
+  sexo INT DEFAULT NULL,
+  fec_nac_m DATE DEFAULT NULL,
+  telefono VARCHAR(9) DEFAULT NULL,
+  direccion TEXT DEFAULT NULL,
+  referencia TEXT DEFAULT NULL,
+  ubigeo VARCHAR(6) DEFAULT NULL,
+  ubigeo_ccpp VARCHAR(10) DEFAULT NULL,
+  latitud DOUBLE DEFAULT NULL,
+  longitud DOUBLE DEFAULT NULL,
+  num_doc_a VARCHAR(12) DEFAULT NULL,
+  ape_pat_a VARCHAR(25) DEFAULT NULL,
+  ape_mat_a VARCHAR(35) DEFAULT NULL,
+  nombre_a VARCHAR(40) DEFAULT NULL,
+  INDEX idx_importacion (importacion_id),
+  FOREIGN KEY (importacion_id) REFERENCES par_importacion(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 
 

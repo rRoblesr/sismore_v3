@@ -78,7 +78,7 @@
                             <div class="table-responsive">
                                 <table id="datatable" class="table table-striped table-bordered dt-responsive nowrap"
                                     style="font-size: 12px">
-                                    <thead class="text-white bg-success-0">
+                                    {{-- <thead class="text-white bg-success-0">
                                         <tr>
                                             <th>N°</th>
                                             <th>Fecha Versión</th>
@@ -89,7 +89,39 @@
                                             <th>Estado</th>
                                             <th>Acción</th>
                                         </tr>
-                                    </thead>
+                                    </thead> --}}
+                                    @switch($fuente)
+                                        @case(1)
+                                            <thead class="text-white bg-success-0">
+                                                <tr>
+                                                    <th>N°</th>
+                                                    <th>Fecha Versión</th>
+                                                    <th>Fuente</th>
+                                                    <th>Usuario</th>
+                                                    <th>Área</th>
+                                                    <th>Registro</th>
+                                                    <th>Estado</th>
+                                                    <th>Registros</th>
+                                                    <th>Acción</th>
+                                                </tr>
+                                            </thead>
+                                        @break
+
+                                        @default
+                                            <thead class="text-white bg-success-0">
+                                                <tr>
+                                                    <th>N°</th>
+                                                    <th>Fecha Versión</th>
+                                                    <th>Fuente</th>
+                                                    <th>Usuario</th>
+                                                    <th>Área</th>
+                                                    <th>Registro</th>
+                                                    <th>Estado</th>
+                                                    <th>Acción</th>
+                                                </tr>
+                                            </thead>
+                                    @endswitch
+                                   
                                 </table>
                             </div>
                         </div>
@@ -589,8 +621,7 @@
                                     <div class="">
                                         <label class="col-form-label">Fuente de datos</label>
                                         <div class="">
-                                            <input type="text" class="form-control" readonly="readonly"
-                                                value="ESCALE">
+                                            <input type="text" class="form-control" readonly="readonly" value="ESCALE">
                                         </div>
                                     </div>
                                 </div>
@@ -607,7 +638,8 @@
                                     <div class="">
                                         <label class="col-form-label">Archivo</label>
                                         <div class="">
-                                            <input type="file" name="file" class="form-control" accept=".xlsx" required>
+                                            <input type="file" name="file" class="form-control" accept=".xlsx"
+                                                required>
                                         </div>
                                     </div>
                                 </div>
