@@ -268,7 +268,6 @@ class ImporPadronProgramaController extends Controller
                 $programas[$padron->programa - 1] ?? 'No Definido',
                 $padron->servicio,
                 $nom . ' ' . $value->capellido1,
-                $ent ? $ent->abreviado : '',
                 $registros,
                 // date("d/m/Y", strtotime($value->created_at)),
                 $value->estado == "PR" ? "PROCESADO" : "PENDIENTE",

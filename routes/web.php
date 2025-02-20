@@ -109,6 +109,7 @@ use App\Models\Administracion\DirectoriosAuditoria;
 use App\Models\Administracion\UsuarioAuditoria;
 use App\Models\Educacion\ImporDocentesBilingues;
 use App\Models\Educacion\ImporServiciosBasicos;
+use App\Models\Educacion\InstitucionEducativa;
 use App\Models\Parametro\Icono;
 use App\Models\Parametro\Ubigeo;
 use App\Repositories\Parametro\UbigeoRepositorio;
@@ -752,6 +753,14 @@ Route::get('/educación/SFL/TableroControl/reprote', [SFLController::class, 'tab
 
 Route::get('/educación/SFL/TableroControl2', [SFLController::class, 'tablerocontrol'])->name('educacion.sfl.tablerocontrolx');
 Route::get('/educación/SFL/TableroControl2/reprote', [SFLController::class, 'tablerocontrolreporte'])->name('educacion.sfl.tablerocontrol.reportex');
+
+Route::get('/educación/Mantenimiento/IIEE', [InstEducativaController::class, 'mantenimiento'])->middleware('auth')->name('mantenimiento.iiee.principal');
+Route::get('/Man/IIEE/Listar/', [InstEducativaController::class, 'ListarDT'])->name('mantenimiento.iiee.listar');
+Route::post('/Man/IIEE/AjaxAdd', [InstEducativaController::class, 'ajax_add'])->name('mantenimiento.iiee.guardar');
+Route::post('/Man/IIEE/AjaxUpdate', [InstEducativaController::class, 'ajax_update'])->name('mantenimiento.iiee.modificar');
+Route::get('/Man/IIEE/AjaxEdit/{id}', [InstEducativaController::class, 'ajax_edit'])->name('mantenimiento.iiee.editar');
+Route::get('/Man/IIEE/AjaxEstado/{id}', [InstEducativaController::class, 'ajax_estado'])->name('mantenimiento.iiee.estado');
+Route::get('/Man/IIEE/AjaxDelete/{id}', [InstEducativaController::class, 'ajax_delete'])->name('mantenimiento.iiee.eliminar');
 // Route::get('/xx/descargar-excel', function () {
 //     $filePath = base_path('plantillas_excels/plantilla_sfl.xlsx');  // Ruta absoluta al archivo en la raíz del proyecto
 //     return response()->download($filePath);

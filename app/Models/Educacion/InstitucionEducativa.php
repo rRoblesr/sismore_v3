@@ -9,8 +9,8 @@ class InstitucionEducativa extends Model
 {
     use HasFactory;
 
-    protected $table = "edu_institucionEducativa"; 
-    
+    protected $table = "edu_institucionEducativa";
+
     protected $fillable = [
         'NivelModalidad_id',
         'Forma_id',
@@ -22,7 +22,7 @@ class InstitucionEducativa extends Model
         'Area_id',
         'EstadoInsEdu_id',
         'Turno_id',
-        'CentroPoblado_id',       
+        'CentroPoblado_id',
         'codModular',
         'anexo',
         'codLocal',
@@ -37,7 +37,9 @@ class InstitucionEducativa extends Model
         'coordGeoLongitud',
         'fechaReg',
         'fechaAct',
+        'modo_registro',
+        'estado',
         'created_at',
-        'updated_at'];
+        'updated_at'
+    ];
 }
-

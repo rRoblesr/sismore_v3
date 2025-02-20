@@ -26,6 +26,7 @@ class SFL extends Model
         'fecha_registro',
         'fecha_inscripcion',
         'documento',
+        'estado_servicio'
     ];
 
     protected $hidden = [

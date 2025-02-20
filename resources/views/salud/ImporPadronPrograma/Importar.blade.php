@@ -34,7 +34,6 @@
                                                 <th>Programa</th>
                                                 <th>Servicio</th>
                                                 <th>Usuario</th>
-                                                <th>Área</th>
                                                 <th>Registros</th>
                                                 <th>Estado</th>
                                                 <th>Acción</th>
@@ -283,7 +282,7 @@
         </div> --}}
 
         <!-- Bootstrap modal -->
-        <div id="modal-siagie-matricula" class="modal fade centrarmodal" tabindex="-1" role="dialog">
+        {{-- <div id="modal-siagie-matricula" class="modal fade centrarmodal" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -294,9 +293,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="table-responsive">
-                            <table id="siagie-matricula" class="table table-striped table-bordered"
-                                style="font-size:12px">
-                                {{-- width:7200px; --}}
+                            <table id="siagie-matricula" class="table font-12 table-striped table-bordered">
                                 <thead class="text-primary">
                                     <th>SERVICIO</th>
                                     <th>ANIO</th>
@@ -330,9 +327,57 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cerrar</button>
                     </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
+                </div>
+            </div>
+        </div> --}}
+
+        <div id="modal-siagie-matricula" class="modal fade centrarmodal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Lista de Matriculados</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="table-responsive">
+                            <table id="siagie-matricula" class="table font-12 table-striped table-bordered">
+                                <thead class="text-primary">
+                                    <th>SERVICIO</th>
+                                    <th>ANIO</th>
+                                    <th>MES</th>
+                                    <th>TIPO_DOC_MENOR</th>
+                                    <th>NUM_DOC_MENOR</th>
+                                    <th>APE_PAT_MENOR</th>
+                                    <th>APE_MAT_MENOR</th>
+                                    <th>NOMBRE_MENOR</th>
+                                    <th>SEXO_MENOR</th>
+                                    <th>FEC_NAC_MENOR</th>
+                                    <th>TELEFONO</th>
+                                    <th>DIRECCION</th>
+                                    <th>REFERENCIA</th>
+                                    <th>UBIGEO_DISTRITO</th>
+                                    <th>UBIGEO_CCPP</th>
+                                    <th>LATITUD</th>
+                                    <th>LONGITUD</th>
+                                    <th>NUM_DOC_APODERADO</th>
+                                    <th>APE_PAT_APODERADO</th>
+                                    <th>APE_MAT_APODERADO</th>
+                                    <th>NOMBRE_APODERADO</th>
+                                </thead>
+                                <tbody>
+                                    <!-- Aquí se insertarán los datos -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- End Bootstrap modal -->
 
     </div>
@@ -474,8 +519,9 @@
             $('#siagie-matricula').DataTable({
                     "processing": true,
                     "serverSide": true,
-                    "responsive": false,
+                    "responsive": true,
                     "autoWidth": false,
+                    "scrollX": true,
                     "ordered": true,
                     "destroy": true,
                     "language": table_language,
@@ -490,32 +536,98 @@
                         "type": "POST",
                         "dataType": 'JSON',
                     },
-                    "columns": [
-                        {data: 'servicio',name: 'servicio'},
-{data: 'anio',name: 'anio'},
-{data: 'mes',name: 'mes'},
-{data: 'tipo_doc',name: 'tipo_doc'},
-{data: 'num_doc_m',name: 'num_doc_m'},
-{data: 'ape_pat_m',name: 'ape_pat_m'},
-{data: 'ape_mat_m',name: 'ape_mat_m'},
-{data: 'nombre_m',name: 'nombre_m'},
-{data: 'sexo',name: 'sexo'},
-{data: 'fec_nac_m',name: 'fec_nac_m'},
-{data: 'telefono',name: 'telefono'},
-{data: 'direccion',name: 'direccion'},
-{data: 'referencia',name: 'referencia'},
-{data: 'ubigeo',name: 'ubigeo'},
-{data: 'ubigeo_ccpp',name: 'ubigeo_ccpp'},
-{data: 'latitud',name: 'latitud'},
-{data: 'longitud',name: 'longitud'},
-{data: 'num_doc_a',name: 'num_doc_a'},
-{data: 'ape_pat_a',name: 'ape_pat_a'},
-{data: 'ape_mat_a',name: 'ape_mat_a'},
-{data: 'nombre_a',name: 'nombre_a'},
+                    "columns": [{
+                            data: 'servicio',
+                            name: 'servicio'
+                        },
+                        {
+                            data: 'anio',
+                            name: 'anio'
+                        },
+                        {
+                            data: 'mes',
+                            name: 'mes'
+                        },
+                        {
+                            data: 'tipo_doc',
+                            name: 'tipo_doc'
+                        },
+                        {
+                            data: 'num_doc_m',
+                            name: 'num_doc_m'
+                        },
+                        {
+                            data: 'ape_pat_m',
+                            name: 'ape_pat_m'
+                        },
+                        {
+                            data: 'ape_mat_m',
+                            name: 'ape_mat_m'
+                        },
+                        {
+                            data: 'nombre_m',
+                            name: 'nombre_m'
+                        },
+                        {
+                            data: 'sexo',
+                            name: 'sexo'
+                        },
+                        {
+                            data: 'fec_nac_m',
+                            name: 'fec_nac_m'
+                        },
+                        {
+                            data: 'telefono',
+                            name: 'telefono'
+                        },
+                        {
+                            data: 'direccion',
+                            name: 'direccion'
+                        },
+                        {
+                            data: 'referencia',
+                            name: 'referencia'
+                        },
+                        {
+                            data: 'ubigeo',
+                            name: 'ubigeo'
+                        },
+                        {
+                            data: 'ubigeo_ccpp',
+                            name: 'ubigeo_ccpp'
+                        },
+                        {
+                            data: 'latitud',
+                            name: 'latitud'
+                        },
+                        {
+                            data: 'longitud',
+                            name: 'longitud'
+                        },
+                        {
+                            data: 'num_doc_a',
+                            name: 'num_doc_a'
+                        },
+                        {
+                            data: 'ape_pat_a',
+                            name: 'ape_pat_a'
+                        },
+                        {
+                            data: 'ape_mat_a',
+                            name: 'ape_mat_a'
+                        },
+                        {
+                            data: 'nombre_a',
+                            name: 'nombre_a'
+                        },
                     ],
                 }
 
             );
+
+            $('#modal-siagie-matricula').on('shown.bs.modal', function() {
+                $($.fn.dataTable.tables(true)).DataTable().columns.adjust().responsive.recalc();
+            });
 
             $('#modal-siagie-matricula').modal('show');
             $('#modal-siagie-matricula .modal-title').text('Importado');

@@ -210,6 +210,16 @@ class ImporPadronWebController extends Controller
             return $this->json_output(400, $mensaje);
         }
 
+        try {
+            DB::select('call edu_pa_procesar_cubo_pacto2_01(?)', [$importacion->id]);
+        } catch (Exception $e) {
+            $importacion->estado = 'PE';
+            $importacion->save();
+
+            $mensaje = "Error al procesar la normalizacion de datos edu_pa_procesar_cubo_pacto2_01." . $e;
+            return $this->json_output(400, $mensaje);
+        }
+
         $this->json_output(200, "Archivo Excel subido y procesado correctamente.");
     }
 

@@ -3,7 +3,16 @@
 namespace App\Http\Controllers\Educacion;
 
 use App\Http\Controllers\Controller;
+use App\Models\Educacion\Area;
+use App\Models\Educacion\Caracteristica;
+use App\Models\Educacion\Forma;
+use App\Models\Educacion\Genero;
 use App\Models\Educacion\InstitucionEducativa;
+use App\Models\Educacion\NivelModalidad;
+use App\Models\Educacion\SFL;
+use App\Models\Educacion\TipoGestion;
+use App\Models\Educacion\Turno;
+use App\Models\Educacion\Ugel;
 use App\Repositories\Educacion\InstEducativaRepositorio;
 use App\Repositories\Educacion\InstitucionEducativaRepositorio;
 use App\Utilities\Utilitario;
@@ -151,5 +160,316 @@ class InstEducativaController extends Controller
         if ($provincia) $query = $query->where('dt.dependencia', $provincia);
         $query = $query->get();
         return $query;
+    }
+
+    /* Mantenimiento */
+    public function mantenimiento()
+    {
+        $nivel = NivelModalidad::select('id', 'codigo', 'nombre')->where('estado', 'AC')->orderBy('codigo')->get();
+        $forma = Forma::select('id',  'nombre')->where('estado', 'AC')->get();
+        $carac = Caracteristica::select('id', 'codigo', 'nombre')->where('estado', 'AC')->get();
+        $gener = Genero::select('id', 'codigo', 'nombre')->where('estado', 'AC')->orderBy('codigo')->get();
+        $tipog = TipoGestion::select('id', 'codigo', 'nombre')->where('dependencia', '>', '0')->where('estado', 'AC')->orderBy('dependencia')->orderBy('codigo')->get();
+        $ugels = Ugel::select('id', 'codigo', 'nombre')->where('estado', 'AC')->orderBy('codigo')->get();
+        $areas = Area::select('id', 'codigo', 'nombre')->where('estado', 'AC')->orderBy('codigo')->get();
+        $turno = Turno::select('id', 'codigo', 'nombre')->where('estado', 'AC')->orderBy('codigo')->get();
+        return view('educacion.InstEducativa.Mantenimiento', compact('nivel', 'forma', 'carac', 'gener', 'tipog', 'ugels', 'areas', 'turno'));
+    }
+
+    public function ListarDT(Request $rq)
+    {
+        $draw   = intval($rq->draw);
+        $start  = intval($rq->start);
+        $length = intval($rq->length);
+
+        $estado = ['AC' => '<span class="badge badge-success">Activo</span>', 'EL' => '<span class="badge badge-danger">Inactivo</span>'];
+
+        $query = InstitucionEducativa::from('edu_institucioneducativa as ie')
+            ->join('edu_centropoblado as cp', 'cp.id', '=', 'ie.CentroPoblado_id')
+            ->join('par_ubigeo as d', 'd.id', '=', 'cp.Ubigeo_id')
+            ->join('par_ubigeo as p', 'p.id', '=', 'd.dependencia')
+            ->join('edu_area as a', 'a.id', '=', 'ie.Area_id')
+            ->join('edu_ugel as u', 'u.id', '=', 'ie.Ugel_id')
+            ->join('edu_nivelmodalidad as n', 'n.id', '=', 'ie.NivelModalidad_id')
+            ->join('edu_tipogestion as g', 'g.id', '=', 'ie.TipoGestion_id')
+            ->select(
+                'ie.id',
+                'ie.codLocal as local',
+                'ie.codModular as modular',
+                'ie.nombreInstEduc as nombre',
+                'u.nombre as ugel',
+                'n.nombre as nivel',
+                DB::raw('case  when g.dependencia in(1,2) then "PÚBLICA" when g.dependencia = 3 then "PRIVADA" else "" end as gestion'),
+                'ie.es_eib as eib',
+                'a.nombre as area',
+                'p.nombre as provincia',
+                'd.nombre as distrito',
+                'ie.estado',
+                'ie.modo_registro'
+            )
+            // ->tap(function ($query) use ($rq) {
+            //     if ($rq->ugel > 0) {
+            //         $query->where('u.id', $rq->ugel);
+            //     }
+            //     if ($rq->provincia > 0) {
+            //         $query->where('p.id', $rq->provincia);
+            //     }
+            //     if ($rq->distrito > 0) {
+            //         $query->where('d.id', $rq->distrito);
+            //     }
+            //     if ($rq->estado > 0) {
+            //         $query->where('s.estado', $rq->estado);
+            //     }
+            // })
+            ->orderBy('id', 'desc')->get();
+
+
+
+        // Procesamos los resultados para formar el arreglo final para DataTables
+        $data = [];
+        foreach ($query as $key => $value) {
+            $btn = '';
+
+            if ($value->estado == 'AC') {
+                $btn .= '<a href="#" class="btn btn-info btn-xs" onclick="edit(' . $value->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
+                $btn .= '&nbsp;<a class="btn btn-sm btn-dark btn-xs" href="javascript:void(0)" title="Desactivar" onclick="estado(' . $value->id . ',`' . $value->estado . '`)"><i class="fa fa-power-off"></i></a> ';
+                if ($value->modo_registro == 1) {
+                    $btn .= '&nbsp;<a href="javascript:void(0)" class="btn btn-danger btn-xs" onclick="borrar(' . $value->id . ')"  title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
+                }
+            } else {
+                $btn .= '&nbsp;<a class="btn btn-sm btn-default btn-xs"  title="Activar" onclick="estado(' . $value->id . ',`' . $value->estado . '`)"><i class="fa fa-check"></i></a> ';
+            }
+
+
+            // Construir la fila de datos (aplicando filtro de estado si se ha enviado)
+            $data[] = [
+                ($key + 1),
+                $value->local == 0 ? '' : str_pad($value->local, 6, '0', STR_PAD_LEFT),
+                $value->modular,
+                $value->nombre,
+                $value->ugel,
+                $value->nivel,
+                $value->gestion,
+                $value->area,
+                $value->eib,
+                $estado[$value->estado] ?? '',
+                $btn,
+            ];
+        }
+
+        $result = [
+            "draw"            => $draw,
+            "recordsTotal"    => $start,
+            "recordsFiltered" => $length,
+            "data"            => $data,
+            // Opcional: para depuración, puedes comentar estos dos:
+            // "xxx1"            => $queryResult,
+            // "xxx2"            => $querySFL,
+        ];
+
+        return response()->json($result);
+    }
+
+    private function _validate($request)
+    {
+        $data = array();
+        $data['error_string'] = array();
+        $data['inputerror'] = array();
+        $data['status'] = TRUE;
+
+        $modular = InstitucionEducativa::where('codModular', $request->codModular)->first();
+
+        // if ($request->codLocal == '') {
+        //     $data['inputerror'][] = 'codLocal';
+        //     $data['error_string'][] = 'Este campo es obligatorio.';
+        //     $data['status'] = FALSE;
+        // } else if (strlen($request->codLocal) != 6) {
+        //     $data['inputerror'][] = 'codLocal';
+        //     $data['error_string'][] = 'Codigo Modular ya Existe.';
+        //     $data['status'] = FALSE;
+        // }
+
+        if ($request->codModular == '') {
+            $data['inputerror'][] = 'codModular';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        } else if (strlen($request->codModular) != 7) {
+            $data['inputerror'][] = 'codModular';
+            $data['error_string'][] = 'Codigo Modular debe tener 7 digitos.';
+            $data['status'] = FALSE;
+        } else if ($modular && $request->id == '') {
+            $data['inputerror'][] = 'codModular';
+            $data['error_string'][] = 'Codigo Modular ya Existe.';
+            $data['status'] = FALSE;
+        }
+
+        if ($request->nombreInstEduc == '') {
+            $data['inputerror'][] = 'nombreInstEduc';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+
+        if ($request->NivelModalidad_id == '') {
+            $data['inputerror'][] = 'NivelModalidad_id';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+
+        if ($request->Forma_id == '') {
+            $data['inputerror'][] = 'Forma_id';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+
+        if ($request->Caracteristica_id == '') {
+            $data['inputerror'][] = 'Caracteristica_id';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+
+        if ($request->Genero_id == '') {
+            $data['inputerror'][] = 'Genero_id';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+
+        if ($request->TipoGestion_id == '') {
+            $data['inputerror'][] = 'TipoGestion_id';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+
+        if ($request->Ugel_id == '') {
+            $data['inputerror'][] = 'Ugel_id';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+
+        if ($request->Area_id == '') {
+            $data['inputerror'][] = 'Area_id';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+
+        if ($request->Turno_id == '') {
+            $data['inputerror'][] = 'Turno_id';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+
+        if ($data['status'] === FALSE) {
+            echo json_encode($data);
+            exit();
+        }
+    }
+
+    public function ajax_add(Request $rq)
+    {
+        $this->_validate($rq);
+        $rq->merge(['EstadoInsEdu_id' => '3']);
+        $rq->merge(['modo_registro' => '1']);
+        $rq->merge(['CentroPoblado_id' => '1']);
+        $rq->merge(['estado' => 'AC']);
+        $ie = InstitucionEducativa::create($rq->all());
+
+        /* aqui se guarda en sfl los permitidos */
+        $aux = InstitucionEducativa::where('id', $ie->id)->where('estadoInsEdu_id', '3')->where('estado', 'AC')->where(DB::raw('length(codLocal)'), 6)->whereIn('TipoGestion_id', [4, 5, 7, 8])->whereNotIn('NivelModalidad_id', [14, 15])->first();
+        if ($aux) {
+            $auxsfl = SFL::where('institucioneducativa_id', $ie->id)->first();
+            if ($auxsfl) {
+                $auxsfl->estado_servicio = 1;
+                $auxsfl->save();
+            } else {
+                SFL::create([
+                    'institucioneducativa_id' => $ie->id,
+                    'estado' => '4',
+                    'tipo' => '0',
+                    'partida_electronica' => null,
+                    'zona_registral' => 'ZONA N° VI - OFICINA REGISTRAL DE PUCALLPA',
+                    'anotacion' => '0',
+                    'fecha_registro' => null,
+                    'fecha_inscripcion' => null,
+                    'documento' => null,
+                    'estado_servicio' => '1'
+                ]);
+            }
+        }
+        return response()->json(array('status' => true));
+    }
+
+    public function ajax_edit($id)
+    {
+        $ie = InstitucionEducativa::find($id);
+        return response()->json($ie);
+    }
+
+    public function ajax_update(Request $rq)
+    {
+        $this->_validate($rq);
+        $ie = InstitucionEducativa::find($rq->id);
+        $ie->update($rq->all());
+
+        /* aqui se guarda en sfl los permitidos */
+        $aux = InstitucionEducativa::where('id', $ie->id)->where('estadoInsEdu_id', '3')->where('estado', 'AC')->where(DB::raw('length(codLocal)'), 6)->whereIn('TipoGestion_id', [4, 5, 7, 8])->whereNotIn('NivelModalidad_id', [14, 15])->first();
+        if ($aux) {
+            $auxsfl = SFL::where('institucioneducativa_id', $ie->id)->first();
+            if ($auxsfl) {
+                $auxsfl->estado_servicio = 1;
+                $auxsfl->save();
+            } else {
+                SFL::create([
+                    'institucioneducativa_id' => $ie->id,
+                    'estado' => '4',
+                    'tipo' => '0',
+                    'partida_electronica' => null,
+                    'zona_registral' => 'ZONA N° VI - OFICINA REGISTRAL DE PUCALLPA',
+                    'anotacion' => '0',
+                    'fecha_registro' => null,
+                    'fecha_inscripcion' => null,
+                    'documento' => null,
+                    'estado_servicio' => '1'
+                ]);
+            }
+        }
+
+        return response()->json(array('status' => true, 'aux' => $aux));
+    }
+
+    public function ajax_delete($id) //elimina deverdad *o*
+    {
+        $rer = InstitucionEducativa::find($id);
+        $rer->delete();
+        return response()->json(array('status' => true));
+    }
+
+    public function ajax_estado($id)
+    {
+        $ie = InstitucionEducativa::find($id);
+        $ie->estado = $ie->estado == "AC" ? "EL" : "AC";
+        $ie->save();
+
+        /* aqui se guarda en sfl los permitidos */
+        $aux = InstitucionEducativa::where('id', $ie->id)->where('estadoInsEdu_id', '3')->where('estado', 'AC')->where(DB::raw('length(codLocal)'), 6)->whereIn('TipoGestion_id', [4, 5, 7, 8])->whereNotIn('NivelModalidad_id', [14, 15])->first();
+        if ($aux) {
+            $auxsfl = SFL::where('institucioneducativa_id', $ie->id)->first();
+            if ($auxsfl) {
+                $auxsfl->estado_servicio = 1;
+                $auxsfl->save();
+            } else {
+                SFL::create([
+                    'institucioneducativa_id' => $ie->id,
+                    'estado' => '4',
+                    'tipo' => '0',
+                    'partida_electronica' => null,
+                    'zona_registral' => 'ZONA N° VI - OFICINA REGISTRAL DE PUCALLPA',
+                    'anotacion' => '0',
+                    'fecha_registro' => null,
+                    'fecha_inscripcion' => null,
+                    'documento' => null,
+                    'estado_servicio' => '1'
+                ]);
+            }
+        }
+        return response()->json(array('status' => true, 'estado' => $ie->estado));
     }
 }

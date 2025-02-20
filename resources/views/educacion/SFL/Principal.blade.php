@@ -61,114 +61,115 @@
     </style>
 @endsection
 @section('content')
-    <div class="form-group row align-items-center vh-5">
-        <div class="col-lg-4 col-md-4 col-sm-4">
-            <h4 class="page-title font-16">Saneamiento Físico Legal </h4>
-        </div>
-        <div class="col-lg-2 col-md-2 col-sm-2">
-            <div class="custom-select-container">
-                <label for="ugel">UGEL</label>
-                <select id="ugel" name="ugel" class="form-control font-11" onchange="cargarCards();">
-                    <option value="0">TODOS</option>
-                    @foreach ($ugel as $item)
-                        <option value="{{ $item->id }}">{{ $item->nombre }}</option>
-                    @endforeach
-                </select>
+    <div class="card">
+        <div
+            class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center p-2">
+            <!--h3 class="card-title"></h3-->
+            <h6 class="card-title mb-2 mb-md-0 text-center text-white text-md-left text-wrap">
+                <!--i class="fas fa-chart-bar"></i--> Saneamiento Físico Legal
+            </h6>
+            <div class="text-center text-md-right">
+                {{-- <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
+                    <i class="fa fa-redo"></i> Actualizar</button> --}}
+                {{-- <button type="button" class="btn btn-primary btn-xs" onclick="add()">
+                    <i class="fa fa-plus"></i> Nuevo</button> --}}
+                <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i class="fa fa-redo"></i>
+                    Actualizar</button>
             </div>
-
-
         </div>
-        <div class="col-lg-2 col-md-2 col-sm-2">
-            <div class="custom-select-container">
-                <label for="provincia">PROVINCIA</label>
-                <select id="provincia" name="provincia" class="form-control font-11"
-                    onchange="cargar_distrito();cargarCards();">
-                    <option value="0">TODOS</option>
-                    @foreach ($provincia as $item)
-                        <option value="{{ $item->id }}">{{ $item->nombre }}</option>
-                    @endforeach
-                </select>
+        <div class="card-body p-2">
+            <div class="row mb-0">
+                {{-- <div class="col-md-8"></div> --}}
+
+                <div class="col-md-3 my-1">
+                    <div class="custom-select-container">
+                        <label for="ugel">UGEL</label>
+                        <select id="ugel" name="ugel" class="form-control font-11" onchange="cargarCards();">
+                            <option value="0">TODOS</option>
+                            @foreach ($ugel as $item)
+                                <option value="{{ $item->id }}">{{ $item->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-3 my-1">
+                    <div class="custom-select-container">
+                        <label for="provincia">Provincia</label>
+                        <select id="provincia" name="provincia" class="form-control font-11"
+                            onchange="cargar_distrito();cargarCards();">
+                            <option value="0">TODOS</option>
+                            @foreach ($provincia as $item)
+                                <option value="{{ $item->id }}">{{ $item->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-3 my-1">
+                    <div class="custom-select-container">
+                        <label for="distrito">Distrito</label>
+                        <select id="distrito" name="distrito" class="form-control font-11" onchange="cargarCards();">
+                            <option value="0">TODOS</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-3 my-1">
+                    <div class="custom-select-container">
+                        <label for="estado">Estado</label>
+                        <select id="estado" name="area" class="form-control font-11" onchange="cargarCards();">
+                            <option value="0">TODOS</option>
+                            <option value="1">SANEADO</option>
+                            <option value="2">NO SANEADO</option>
+                            <option value="3">NO REGISTRADO</option>
+                            <option value="4">EN PROCESO</option>
+                        </select>
+                    </div>
+                </div>
+
             </div>
-
-
-        </div>
-        <div class="col-lg-2 col-md-2 col-sm-2">
-            <div class="custom-select-container">
-                <label for="distrito">DISTRITO</label>
-                <select id="distrito" name="distrito" class="form-control font-11" onchange="cargarCards();">
-                    <option value="0">TODOS</option>
-                </select>
-            </div>
-
-
-        </div>
-        <div class="col-lg-2 col-md-2 col-sm-2">
-            <div class="custom-select-container">
-                <label for="estado">ESTADO</label>
-                <select id="estado" name="area" class="form-control font-11" onchange="cargarCards();">
-                    <option value="0">TODOS</option>
-                    <option value="1">SANEADO</option>
-                    <option value="2">NO SANEADO</option>
-                    <option value="3">NO REGISTRADO</option>
-                    <option value="4">EN PROCESO</option>
-                </select>
-            </div>
-
-
         </div>
     </div>
 
-    <form class="cmxform form-horizontal tasi-form upload_file">
-        @csrf
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card card-border">
-                    <div class="card-header border-success-0 bg-transparent pb-0">
-                        <div class="card-widgets">
-                            {{-- <button type="button" class="btn btn-success btn-xs" onclick="descargarplantilla()"><i
-                                    class="fa fa-file-excel"></i> Plantilla</button> --}}
-                            <button type="button" class="btn btn-success btn-xs" onclick="abrirvistaprevia()"><i
-                                    class="fa fa-file-excel"></i> Plantilla</button>
-                            <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i
-                                    class="fa fa-redo"></i> Actualizar</button>
-                            {{-- <button type="button" class="btn btn-primary btn-xs" onclick="add()"><i
-                                        class="fa fa-plus"></i>
-                                    Nuevo</button> --}}
-
-                            <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
-                                    class="fa fa-file-excel"></i> Descargar</button>
-                        </div>
-                        <h3 class="card-title"></h3>
-                    </div>
-
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table id="tbprincipal" class="table table-striped table-bordered tablex"
-                                style="font-size: 12px">
-                                <thead class="cabecera-dataTable">
-                                    <tr class="text-white bg-success-0">
-                                        <th>Nº</th>
-                                        <th>Código Local</th>
-                                        <th>Total II.EE</th>
-                                        <th>UGEL</th>
-                                        <th>Provincia</th>
-                                        <th>Distrito</th>
-                                        <th>Área</th>
-                                        <th>Fecha Inscripción</th>
-                                        <th>Tipo SFL</th>
-                                        <th>Estado SFL</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-
+    <div class="card card-border border border-plomo-0">
+        <div
+            class="card-header border-success-0 bg-transparent text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center px-2 py-2">
+            <h6 class="card-title mb-2 mb-md-0 text-center text-md-left text-wrap">Lista de Locales</h6>
+            <div class="text-center text-md-right">
+                <button type="button" class="btn btn-success-0 btn-xs" onclick="abrirvistaprevia()"><i
+                        class="fa fa-file-excel"></i> Plantilla</button>
+                <button type="button" class="btn btn-success-0 btn-xs" onclick="descargar1()"><i
+                        class="fa fa-file-excel"></i> Descargar</button>
+            </div>
+        </div>
+        <div class="card-body p-2">
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <table id="tbprincipal" class="table table-sm font-11 table-striped table-bordered">
+                            <thead class="cabecera-dataTable">
+                                <tr class="text-white bg-success-0">
+                                    <th>Nº</th>
+                                    <th>Código Local</th>
+                                    <th>Total II.EE</th>
+                                    <th>UGEL</th>
+                                    <th>Provincia</th>
+                                    <th>Distrito</th>
+                                    <th>Área</th>
+                                    <th>Fecha Inscripción</th>
+                                    <th>Tipo SFL</th>
+                                    <th>Estado SFL</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-        </div> <!-- End row -->
-    </form>
+        </div>
+    </div>
 
     <!-- Bootstrap modal -->
     <div id="modal_form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
@@ -182,8 +183,8 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="" id="form" name="form" class="form-horizontal" enctype="multipart/form-data"
-                        method="POST" autocomplete="off">
+                    <form action="" id="form" name="form" class="form-horizontal"
+                        enctype="multipart/form-data" method="POST" autocomplete="off">
                         @csrf
                         <input type="hidden" id="id" name="id" value="">
                         <input type="hidden" id="nmodular" name="nmodular" value="0">
@@ -703,6 +704,10 @@
                     }
                     //"dataType": 'JSON',
                 },
+                columnDefs: [{
+                    className: 'text-center',
+                    targets: [0, 1, 2, 6, 7, 8, 9, 10]
+                }],
             });
         }
 

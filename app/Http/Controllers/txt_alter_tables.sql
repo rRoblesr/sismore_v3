@@ -3033,5 +3033,6 @@ CREATE TABLE sal_padron_programa_b (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
+ALTER TABLE `edu_institucioneducativa` ADD `modo_registro` INT NOT NULL AFTER `fecha_reg`;
 
 
