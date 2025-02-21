@@ -251,27 +251,25 @@ class ImporPadronProgramaController extends Controller
                 $xx = explode(' ', $value->cnombre);
                 $nom = $xx[0];
             }
-            if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || in_array(session('perfil_administrador_id'), [3, 8, 9, 10, 11]))
-                $boton = '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" title="ELIMINAR REGISTRO"><i class="fa fa-trash"></i> </button>';
-            else
-                $boton = '';
-            $boton2 = '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-success btn-xs" title="VER LISTA DE REGISTROS ACEPTADOS"><i class="fa fa-eye"></i> </button>';
-            // $boton3 = '<button type="button" onclick="errores(' . $value->id . ')" class="btn btn-warning btn-xs"><i class="fa fa-eye"></i> </button>';
-            $boton3 = '<a href="' . route('imporpadronprograma.exportar.padron', ['importacion_id' => $value->id]) . '" class="btn btn-warning btn-xs" title="DESCARGAR LISTA DE REGISTROS CON ERRORES"><i class="fa fa-download"></i></a>';
-
-
-            //             <a href="{{ route('exportar.padron', ['importacion_id' => $importacion_id]) }}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
-
+            $btn = '';
+            
+            $btn .= '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-success btn-xs" title="VER LISTA DE REGISTROS ACEPTADOS"><i class="fa fa-eye"></i> </button>&nbsp;';
+            $btn .= '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-warning btn-xs" title="VER LISTA DE REGISTROS ACEPTADOS"><i class="fa fa-eye"></i> </button>&nbsp;';
+            // $btn .= '<a href="' . route('imporpadronprograma.exportar.padron', ['importacion_id' => $value->id]) . '" class="btn btn-warning btn-xs" title="DESCARGAR LISTA DE REGISTROS CON ERRORES"><i class="fa fa-download"></i></a>&nbsp;';
+            if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || in_array(session('perfil_administrador_id'), [3, 8, 9, 10, 11])) {
+                $btn .= '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" title="ELIMINAR REGISTRO"><i class="fa fa-trash"></i> </button>&nbsp;';
+            }
+            
             $data[] = array(
                 $key + 1,
-                date("d/m/Y", strtotime($value->fechaActualizacion)),
+                $nom . ' ' . $value->capellido1,
                 $programas[$padron->programa - 1] ?? 'No Definido',
                 $padron->servicio,
-                $nom . ' ' . $value->capellido1,
+                date("d/m/Y", strtotime($value->fechaActualizacion)),
                 $registros,
                 // date("d/m/Y", strtotime($value->created_at)),
                 $value->estado == "PR" ? "PROCESADO" : "PENDIENTE",
-                $boton2 . '&nbsp;' . $boton3 . '&nbsp;' . $boton,
+                $btn,
             );
         }
         $result = array(
