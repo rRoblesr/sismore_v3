@@ -1314,8 +1314,10 @@ Route::get('/ImporPadronPrograma/Importar', [ImporPadronProgramaController::clas
 Route::post('/ImporPadronPrograma/Importar', [ImporPadronProgramaController::class, 'guardar'])->name('imporpadronprograma.guardar');
 Route::get('/ImporPadronPrograma/Listar/ImportarDT', [ImporPadronProgramaController::class, 'ListarDTImportFuenteTodos'])->name('imporpadronprograma.listar.importados');
 Route::post('/ImporPadronPrograma/ListaImportada', [ImporPadronProgramaController::class, 'ListaImportada'])->name('imporpadronprograma.listarimportados');
+Route::post('/ImporPadronPrograma/ListaImportada2', [ImporPadronProgramaController::class, 'ListaImportada2'])->name('imporpadronprograma.listarimportados2');
 Route::get('/ImporPadronPrograma/eliminar/{id}', [ImporPadronProgramaController::class, 'eliminar'])->name('imporpadronprograma.eliminar');
 Route::get('/ImporPadronPrograma/exportar', [ImporPadronProgramaController::class, 'exportarPadron'])->name('imporpadronprograma.exportar.padron');
+Route::get('/ImporPadronPrograma/errores/{importacion}', [ImporPadronProgramaController::class, 'errores'])->name('imporpadronprograma.errores');
 
 
 Route::get('/ImporPadronPvica/Importar', [ImporPadronPvicaController::class, 'importar'])->name('imporpadronpvica.importar');

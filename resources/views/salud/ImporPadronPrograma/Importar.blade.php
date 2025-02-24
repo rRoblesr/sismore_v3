@@ -99,6 +99,16 @@
                             </div>
                         </div>
 
+                        <div class="alert alert-danger mb-0 fade show" id="window-error" style="display: none">
+                            <h5 class="text-danger">Errores en la Cargar de Datos</h5>
+                            <p id="valor1"></p>
+                            <p id="valor2"></p>
+                            <p id="valor3"></p>
+                            {{-- <div>
+                                <button type="button" class="btn btn-danger waves-effect waves-light mr-1">Wanna do this</button>
+                                <button type="button" class="btn btn-light waves-effect">Or do this</button>
+                            </div> --}}
+                        </div>
 
                         <div class="form-group text-center">
                             <button class="btn btn-primary waves-effect waves-light" type="submit">
@@ -122,7 +132,66 @@
                 </div>
                 <div class="modal-body">
                     <div class="table-responsive">
-                        <table id="siagie-matricula" class="table font-12 table-striped table-bordered">
+                        <table id="siagie-matricula" class="table table-sm font-10 table-striped table-bordered">
+                            <thead class="text-primary">
+                                <th>SERVICIO</th>
+                                <th>ANIO</th>
+                                <th>MES</th>
+                                <th>TIPO_DOC_MENOR</th>
+                                <th>NUM_DOC_MENOR</th>
+                                <th>APE_PAT_MENOR</th>
+                                <th>APE_MAT_MENOR</th>
+                                <th>NOMBRE_MENOR</th>
+                                <th>SEXO_MENOR</th>
+                                <th>FEC_NAC_MENOR</th>
+                                <th>TELEFONO</th>
+                                <th>DIRECCION</th>
+                                <th>REFERENCIA</th>
+                                <th>UBIGEO_DISTRITO</th>
+                                <th>UBIGEO_CCPP</th>
+                                <th>LATITUD</th>
+                                <th>LONGITUD</th>
+                                <th>NUM_DOC_APODERADO</th>
+                                <th>APE_PAT_APODERADO</th>
+                                <th>APE_MAT_APODERADO</th>
+                                <th>NOMBRE_APODERADO</th>
+                            </thead>
+                            <tbody>
+                                <!-- Aquí se insertarán los datos -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-siagie-matricula2" class="modal fade centrarmodal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Lista de Matriculados</h5>
+
+                    {{-- <a href="{{ route('imporpadronprograma.exportar.padron', ['importacion_id' => '2918']) }}"
+                        class="btn btn-success-0 btn-xs" title="DESCARGAR LISTA DE REGISTROS CON ERRORES">
+                        <i class="fa fa-download"></i></a> --}}
+
+                    <button class="btn btn-success-0 btn-xs" title="DESCARGAR LISTA DE REGISTROS CON ERRORES"
+                        onclick="descargarPadron()">
+                        <i class="fa fa-download"></i> Descargar
+                    </button>
+
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table id="siagie-matricula2" class="table table-sm font-10 table-striped table-bordered">
                             <thead class="text-primary">
                                 <th>SERVICIO</th>
                                 <th>ANIO</th>
@@ -163,6 +232,7 @@
 @section('js')
     <script>
         var table_principal = '';
+        var importacion_id_x;
         $(document).ready(function() {
             $('.upload_file').on('submit', upload);
 
@@ -180,6 +250,42 @@
             let fileName = this.files.length ? this.files[0].name : "Selecciona un archivo";
             document.getElementById('nombreArchivo').value = fileName;
         });
+
+        function errores(id) {
+            $.ajax({
+                url: "{{ route('imporpadronprograma.errores', '') }}/" + id,
+                type: "GET",
+                dataType: "JSON",
+                success: function(data) {
+                    console.log(data);
+                    // $('#modal_form').modal('hide');
+                    // table_principal.ajax.reload();
+                    // toastr.success('El registro fue eliminado exitosamente.', 'Mensaje');
+                    $('#valor1').text(`${data.total} registros procesados`);
+                    $('#valor2').text(`${data.ok} registros guardados`);
+                    $('#valor3').text(`${data.error} registros tienen errores`);
+                    if(data.error>0)
+                    $('#window-error').show();
+                else $('#window-error').hide();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    toastr.error(
+                        'No se puede eliminar este registro por seguridad de su base de datos, Contacte al Administrador del Sistema',
+                        'Mensaje');
+                }
+            });
+            
+        }
+
+        function descargarPadron() {
+            
+            // Generar la URL con la ruta que necesitas
+            var url = "{{ route('imporpadronprograma.exportar.padron', ['importacion_id' => '__importacion_id__']) }}";
+            url = url.replace('__importacion_id__', importacion_id_x);
+
+            // Redirigir al usuario a la URL generada
+            window.location.href = url;
+        }
 
 
         function upload(e) {
@@ -223,7 +329,8 @@
                     progress_bar.removeClass('bg-info').addClass('bg-success');
                     progress_bar.html('Listo!');
                     form.trigger('reset');
-
+                    toastr.success('El archivo se ha subido correctamente al servidor.', 'Subida Exitosa');
+                    errores(res.importacion_id);
                     setTimeout(() => {
                         wrapper.fadeOut();
                         progress_bar.removeClass('bg-success bg-danger').addClass('bg-info');
@@ -385,6 +492,125 @@
 
             $('#modal-siagie-matricula').modal('show');
             $('#modal-siagie-matricula .modal-title').text('Importado');
+        }
+
+        function monitor2(id) {
+            importacion_id_x=id;
+            $('#siagie-matricula2').DataTable({
+                    "processing": true,
+                    "serverSide": true,
+                    "responsive": true,
+                    "autoWidth": false,
+                    "scrollX": true,
+                    "ordered": true,
+                    "destroy": true,
+                    "language": table_language,
+                    "ajax": {
+                        "headers": {
+                            'X-CSRF-TOKEN': $('input[name=_token]').val()
+                        },
+                        "url": "{{ route('imporpadronprograma.listarimportados2') }}",
+                        "data": {
+                            "importacion_id": id
+                        },
+                        "type": "POST",
+                        "dataType": 'JSON',
+                    },
+                    "columns": [{
+                            data: 'servicio',
+                            name: 'servicio'
+                        },
+                        {
+                            data: 'anio',
+                            name: 'anio'
+                        },
+                        {
+                            data: 'mes',
+                            name: 'mes'
+                        },
+                        {
+                            data: 'tipo_doc_m',
+                            name: 'tipo_doc_m'
+                        },
+                        {
+                            data: 'num_doc_m',
+                            name: 'num_doc_m'
+                        },
+                        {
+                            data: 'ape_pat_m',
+                            name: 'ape_pat_m'
+                        },
+                        {
+                            data: 'ape_mat_m',
+                            name: 'ape_mat_m'
+                        },
+                        {
+                            data: 'nombre_m',
+                            name: 'nombre_m'
+                        },
+                        {
+                            data: 'sexo_m',
+                            name: 'sexo_m'
+                        },
+                        {
+                            data: 'fec_nac_m',
+                            name: 'fec_nac_m'
+                        },
+                        {
+                            data: 'telefono',
+                            name: 'telefono'
+                        },
+                        {
+                            data: 'direccion',
+                            name: 'direccion'
+                        },
+                        {
+                            data: 'referencia',
+                            name: 'referencia'
+                        },
+                        {
+                            data: 'ubigeo_distrito',
+                            name: 'ubigeo_distrito'
+                        },
+                        {
+                            data: 'ubigeo_ccpp',
+                            name: 'ubigeo_ccpp'
+                        },
+                        {
+                            data: 'latitud',
+                            name: 'latitud'
+                        },
+                        {
+                            data: 'longitud',
+                            name: 'longitud'
+                        },
+                        {
+                            data: 'num_doc_a',
+                            name: 'num_doc_a'
+                        },
+                        {
+                            data: 'ape_pat_a',
+                            name: 'ape_pat_a'
+                        },
+                        {
+                            data: 'ape_mat_a',
+                            name: 'ape_mat_a'
+                        },
+                        {
+                            data: 'nombre_a',
+                            name: 'nombre_a'
+                        },
+                    ],
+                }
+
+            );
+
+            $('#modal-siagie-matricula2').on('shown.bs.modal', function() {
+                $($.fn.dataTable.tables(true)).DataTable().columns.adjust().responsive.recalc();
+            });
+
+            $('#modal-siagie-matricula2').modal('show');
+            $('#modal-siagie-matricula2 .modal-title').text('Importado');
         }
     </script>
     <script src="{{ asset('/') }}public/assets/libs/jquery-validation/jquery.validate.min.js"></script>

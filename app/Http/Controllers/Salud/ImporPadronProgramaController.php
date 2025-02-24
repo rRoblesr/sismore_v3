@@ -36,13 +36,14 @@ class ImporPadronProgramaController extends Controller
     }
 
     /* metodo para tener una salida de respuesta de la carga del excel */
-    function json_output($status = 200, $msg = 'OK!!', $data = null)
+    function json_output($status = 200, $msg = 'OK!!', $importacion_id = null, $data = null)
     {
         header('Content-Type:application/json');
         echo json_encode([
             'status' => $status,
             'msg' => $msg,
-            'data' => $data
+            'data' => $data,
+            'importacion_id' => $importacion_id
         ]);
         die;
     }
@@ -203,7 +204,7 @@ class ImporPadronProgramaController extends Controller
             $importacion->estado = 'PE';
             $importacion->save();
 
-            return $this->json_output(400, "Error en la carga de datos: " . $e->getMessage());
+            return $this->json_output(400, "Error en la carga de datos: " . $e->getMessage(), $importacion->id);
         }
 
         // try {
@@ -218,17 +219,17 @@ class ImporPadronProgramaController extends Controller
         // }
 
         try {
-            DB::select('call sal_pa_procesarPadronProgramas(?)', [$importacion->id]);
+            DB::select('call sal_pa_procesarPadronProgramasx(?)', [$importacion->id]);
         } catch (Exception $e) {
             // Si ocurre un error, actualizar el estado a 'PE' (pendiente) si es necesario
             $importacion->estado = 'PE';
             $importacion->save();
 
             $mensaje = "Error al procesar la normalizacion de datos sal_pa_procesarPadronProgramas. " . $e->getMessage();
-            return $this->json_output(400, $mensaje);
+            return $this->json_output(400, $mensaje, $importacion->id);
         }
 
-        $this->json_output(200, "Archivo Excel subido y procesado correctamente.");
+        $this->json_output(200, "Archivo Excel subido y procesado correctamente.", $importacion->id);
     }
 
     /* metodo para listar las importaciones */
@@ -252,14 +253,14 @@ class ImporPadronProgramaController extends Controller
                 $nom = $xx[0];
             }
             $btn = '';
-            
+
             $btn .= '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-success btn-xs" title="VER LISTA DE REGISTROS ACEPTADOS"><i class="fa fa-eye"></i> </button>&nbsp;';
-            $btn .= '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-warning btn-xs" title="VER LISTA DE REGISTROS ACEPTADOS"><i class="fa fa-eye"></i> </button>&nbsp;';
+            $btn .= '<button type="button" onclick="monitor2(' . $value->id . ')" class="btn btn-warning btn-xs" title="VER LISTA DE REGISTROS ACEPTADOS"><i class="fa fa-eye"></i> </button>&nbsp;';
             // $btn .= '<a href="' . route('imporpadronprograma.exportar.padron', ['importacion_id' => $value->id]) . '" class="btn btn-warning btn-xs" title="DESCARGAR LISTA DE REGISTROS CON ERRORES"><i class="fa fa-download"></i></a>&nbsp;';
             if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || in_array(session('perfil_administrador_id'), [3, 8, 9, 10, 11])) {
                 $btn .= '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" title="ELIMINAR REGISTRO"><i class="fa fa-trash"></i> </button>&nbsp;';
             }
-            
+
             $data[] = array(
                 $key + 1,
                 $nom . ' ' . $value->capellido1,
@@ -315,6 +316,39 @@ class ImporPadronProgramaController extends Controller
         return DataTables::of($data)->make(true);
     }
 
+    /* metodo para cargar una importacion especifica */
+    public function ListaImportada2(Request $rq)
+    {
+        $data = ImporPadronPrograma::where('importacion_id', $rq->importacion_id)
+            ->select(
+                'servicio',
+                'anio',
+                'mes',
+                'tipo_doc_m',
+                'num_doc_m',
+                'ape_pat_m',
+                'ape_mat_m',
+                'nombre_m',
+                'sexo_m',
+                'fec_nac_m',
+                'edad_m',
+                'telefono',
+                'direccion',
+                'referencia',
+                'ubigeo_distrito',
+                'ubigeo_ccpp',
+                'latitud',
+                'longitud',
+                'num_doc_a',
+                'ape_pat_a',
+                'ape_mat_a',
+                'nombre_a',
+            )
+            ->where('estado_guardado', '0')
+            ->get();
+        return DataTables::of($data)->make(true);
+    }
+
     /* metodo para eliminar una importacion */
     public function eliminar($id)
     {
@@ -334,5 +368,12 @@ class ImporPadronProgramaController extends Controller
 
         $filename = 'padron_export_' . date('Ymd_His') . '.xlsx';
         return Excel::download(new PadronProgramaErroresExport($importacion_id), $filename);
+    }
+
+    public function errores($importacion)
+    {
+        $error = ImporPadronPrograma::where('importacion_id', $importacion)->where('estado_guardado','0')->count();
+        $ok = PadronProgramaB::where('importacion_id', $importacion)->count();
+        return response()->json(array('status' => true, 'error' => $error, 'ok' => $ok, 'total' => $error + $ok));
     }
 }
