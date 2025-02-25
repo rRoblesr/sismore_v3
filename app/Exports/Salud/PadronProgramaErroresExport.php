@@ -51,9 +51,7 @@ class PadronProgramaErroresExport implements FromCollection, WithHeadings, WithE
         //     ->get();
 
         $data = DB::table('sal_impor_padron_programa as p')
-            ->leftJoin('sal_padron_programa_b as b', 'b.impor_padron_programa_id', '=', 'p.id')
-            ->whereNull('b.impor_padron_programa_id')
-            ->where('p.importacion_id', $this->importacion_id)
+            ->where('p.importacion_id', $this->importacion_id)->where('p.estado_guardado','0')
             ->select(
                 'p.servicio',
                 'p.anio',
@@ -155,11 +153,14 @@ class PadronProgramaErroresExport implements FromCollection, WithHeadings, WithE
                 $event->sheet->getDelegate()->getStyle('A1:V1')->getFont()->setBold(true);
 
                 // Define el rango para las columnas 'servicio', 'anio', 'mes'
-                $range1 = "C1:F{$highestRow}";
+                $range1 = "A1:E1";
+                // $range1 = "C1:F{$highestRow}";
                 // Define el rango para las columnas 'sexo_m' y 'fec_nac_m'
-                $range2 = "I1:J{$highestRow}";
+                $range2 = "I1:J1";
+                // $range2 = "I1:J{$highestRow}";
 
-                $range3 = "N1:O{$highestRow}";
+                $range3 = "N1:O1";
+                // $range3 = "N1:O{$highestRow}";
 
                 $styleArray = [
                     'fill' => [

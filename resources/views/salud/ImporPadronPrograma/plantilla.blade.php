@@ -1,0 +1,28 @@
+<table>
+    <thead>
+        <tr>
+            <th>Servicio</th>
+            <th>Anio</th>
+            <th>Mes</th>
+            <th>Tipo_Doc_Menor</th>
+            <th>Num_Doc_Menor</th>
+            <th>Ape_Pat_Menor</th>
+            <th>Ape_Mat_Menor</th>
+            <th>Nombre_Menor</th>
+            <th>Sexo_Menor</th>
+            <th>Fec_Nac_Menor</th>
+            <th>Telefono</th>
+            <th>Direccion</th>
+            <th>Referencia</th>
+            <th>Ubigeo_Distrito</th>
+            <th>Ubigeo_CCPP</th>
+            <th>Latitud</th>
+            <th>Longitud</th>
+            <th>Num_Doc_Apoderado</th>
+            <th>Ape_Pat_Apoderado</th>
+            <th>Ape_Mat_Apoderado</th>
+            <th>Nombre_Apoderado</th>
+
+        </tr>
+    </thead>
+</table>

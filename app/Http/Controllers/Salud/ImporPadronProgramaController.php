@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Salud;
 
 use App\Exports\Salud\PadronProgramaErroresExport;
+use App\Exports\Salud\PlantillaExport;
 use App\Http\Controllers\Controller;
 use App\Imports\tablaXImport;
 use App\Models\Administracion\Entidad;
@@ -246,6 +247,7 @@ class ImporPadronProgramaController extends Controller
         foreach ($query as $key => $value) {
             $ent = Entidad::find($value->entidad);
             $padron = ImporPadronPrograma::where('importacion_id', $value->id)->first();
+            $observados = ImporPadronPrograma::where('importacion_id', $value->id)->where('estado_guardado', '0')->count();
             $registros = PadronProgramaB::where('importacion_id', $value->id)->count();
             $nom = '';
             if (strlen($value->cnombre) > 0) {
@@ -254,7 +256,7 @@ class ImporPadronProgramaController extends Controller
             }
             $btn = '';
 
-            $btn .= '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-success btn-xs" title="VER LISTA DE REGISTROS ACEPTADOS"><i class="fa fa-eye"></i> </button>&nbsp;';
+            // $btn .= '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-success btn-xs" title="VER LISTA DE REGISTROS ACEPTADOS"><i class="fa fa-eye"></i> </button>&nbsp;';
             $btn .= '<button type="button" onclick="monitor2(' . $value->id . ')" class="btn btn-warning btn-xs" title="VER LISTA DE REGISTROS ACEPTADOS"><i class="fa fa-eye"></i> </button>&nbsp;';
             // $btn .= '<a href="' . route('imporpadronprograma.exportar.padron', ['importacion_id' => $value->id]) . '" class="btn btn-warning btn-xs" title="DESCARGAR LISTA DE REGISTROS CON ERRORES"><i class="fa fa-download"></i></a>&nbsp;';
             if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || in_array(session('perfil_administrador_id'), [3, 8, 9, 10, 11])) {
@@ -268,8 +270,9 @@ class ImporPadronProgramaController extends Controller
                 $padron->servicio,
                 date("d/m/Y", strtotime($value->fechaActualizacion)),
                 $registros,
+                $observados,
                 // date("d/m/Y", strtotime($value->created_at)),
-                $value->estado == "PR" ? "PROCESADO" : "PENDIENTE",
+                $value->estado == "PR" ? ($observados == 0 ? "PROCESADO" : "OBSERVADO")  : "PENDIENTE",
                 $btn,
             );
         }
@@ -372,8 +375,14 @@ class ImporPadronProgramaController extends Controller
 
     public function errores($importacion)
     {
-        $error = ImporPadronPrograma::where('importacion_id', $importacion)->where('estado_guardado','0')->count();
+        $error = ImporPadronPrograma::where('importacion_id', $importacion)->where('estado_guardado', '0')->count();
         $ok = PadronProgramaB::where('importacion_id', $importacion)->count();
         return response()->json(array('status' => true, 'error' => $error, 'ok' => $ok, 'total' => $error + $ok));
+    }
+
+    public function descargarPlantilla()
+    {
+        $fileName = 'plantilla.xlsx';
+        return Excel::download(new PlantillaExport, $fileName);
     }
 }
