@@ -226,7 +226,8 @@ class ImporPadronProgramaController extends Controller
             $importacion->estado = 'PE';
             $importacion->save();
 
-            $mensaje = "Error al procesar la normalizacion de datos sal_pa_procesarPadronProgramas. " . $e->getMessage();
+            //$mensaje = "Error al procesar la normalizacion de datos sal_pa_procesarPadronProgramas. " . $e->getMessage();
+            $mensaje = $e->getMessage();
             return $this->json_output(400, $mensaje, $importacion->id);
         }
 
@@ -269,10 +270,11 @@ class ImporPadronProgramaController extends Controller
                 $programas[$padron->programa - 1] ?? 'No Definido',
                 $padron->servicio,
                 date("d/m/Y", strtotime($value->fechaActualizacion)),
+                $registros + $observados,
                 $registros,
                 $observados,
                 // date("d/m/Y", strtotime($value->created_at)),
-                $value->estado == "PR" ? ($observados == 0 ? "PROCESADO" : "OBSERVADO")  : "PENDIENTE",
+                // $value->estado == "PR" ? ($observados == 0 ? "PROCESADO" : "OBSERVADO")  : "PENDIENTE",
                 $btn,
             );
         }

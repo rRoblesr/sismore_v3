@@ -30,7 +30,7 @@
             </h6>
             <div class="text-center text-md-right">
                 <a href="{{ route('imporpadronprograma.exportar.plantilla') }}" class="btn btn-success-0 btn-xs">
-                    <i class="ion ion-md-cloud-download"></i> Descargar Plantilla</a>
+                    <i class="ion ion-md-cloud-download"></i> Plantilla</a>
 
                 <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i class="fa fa-redo"></i>
                     Actualizar</button>
@@ -62,8 +62,9 @@
                                     <th>Servicio</th>
                                     <th>Fecha Registro</th>
                                     <th>Total Reg.</th>
+                                    <th>Guardado</th>
                                     <th>Observados</th>
-                                    <th>Estado</th>
+                                    {{-- <th>Estado</th> --}}
                                     <th>Acción</th>
                                 </tr>
                             </thead>
@@ -201,7 +202,8 @@
                 </div>
                 <div class="modal-body">
                     <div class="table-responsive">
-                        <table id="siagie-matricula2" class="table table-sm font-10 table-striped table-bordered" style="width: 3000px">
+                        <table id="siagie-matricula2" class="table table-sm font-10 table-striped table-bordered"
+                            style="width: 3000px">
                             <thead class="text-white bg-success-0">
                                 <th style="width: 100px">SERVICIO</th>
                                 <th style="width: 100px">ANIO</th>
@@ -252,7 +254,12 @@
                 language: table_language,
                 ajax: "{{ route('imporpadronprograma.listar.importados') }}",
                 type: "POST",
+                columnDefs: [{
+                    className: "text-center",
+                    targets: [0, 4, 5, 6, 7]
+                }]
             });
+
         });
 
         document.getElementById('archivoSubir').addEventListener('change', function() {
@@ -308,15 +315,15 @@
                     // });
 
                     Swal.fire({
-                        type: data.error == 0 ? "success" : "error", // Cambié 'type' por 'icon'
-                        title: `<span class="${data.error == 0 ? "text-primary" : "text-danger"}">${data.error == 0 ? "Satisfactorio" : "Observados"}</span>`,
+                        type: data.error == 0 ? "success" : "warning", // Cambié 'type' por 'icon'
+                        title: `<span class="${data.error == 0 ? "text-primary" : "text-warning"}">${data.error == 0 ? "Satisfactorio" : "Advertencia"}</span>`,
                         html: `
-                                <span style="color: #007bff;">${data.total} registros procesados</span><br>
-                                <span style="color: #28a745;">${data.ok} registros guardados</span><br>
-                                <span style="color: #dc3545;">${data.error} registros tienen errores</span><br>
+                                <span style="color: #007bff;">${data.total.toLocaleString('en-US')} Registros Procesados</span><br>
+                                <span style="color: #28a745;">${data.ok.toLocaleString('en-US')} Registros Guardados</span><br>
+                                <span style="color: #dc3545;">${data.error.toLocaleString('en-US')} Registros Observados</span><br>
                             `,
                         confirmButtonColor: "#348cd4",
-                        confirmButtonText: "Confirmar"
+                        // confirmButtonText: "Confirmar"
                     }).then((result) => {
                         $('.bs-example-modal-lg').modal('hide');
                     });
@@ -391,11 +398,21 @@
                         progress_bar.css('width', '0%');
                         table_principal.ajax.reload();
                     }, 1500);
-                } else {
+                } else {console.log('ddddd');
                     progress_bar.css('width', '100%');
                     progress_bar.html(res.msg);
                     form.trigger('reset');
                     //alert(res.msg);
+
+                    Swal.fire({
+                        type: "error", // Cambié 'type' por 'icon'
+                        title: `<span class=""text-danger">"Advertencia"</span>`,
+                        html: `${res.msg}`,
+                        confirmButtonColor: "#348cd4",
+                        // confirmButtonText: "Confirmar"
+                    }).then((result) => {
+                        $('.bs-example-modal-lg').modal('hide');
+                    });
                 }
             }).fail(err => {
                 progress_bar.removeClass('bg-success bg-info').addClass('bg-danger');

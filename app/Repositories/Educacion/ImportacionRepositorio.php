@@ -245,7 +245,7 @@ class ImportacionRepositorio
                 // 'v4.apellido1 as aapellido1',
                 // 'v4.apellido2 as aapellido2'
             )
-            ->get();
+            ->orderBy('id','desc')->get();
         return $query;
     }
 
