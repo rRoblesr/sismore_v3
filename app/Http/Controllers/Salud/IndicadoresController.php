@@ -223,27 +223,27 @@ class IndicadoresController extends Controller
                 $den = $gl;
 
                 break;
-                // case 'DIT-SAL-05':
-                //     $gls = 0;
-                //     $gl = 0;
-                //     $num = $gls;
-                //     $den = $gl;
-                //     $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
-                //     break;
-                // case 'DIT-SAL-06':
-                //     $gls = 10;
-                //     $gl = 19;
-                //     $num = $gls;
-                //     $den = $gl;
-                //     $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
-                //     break;
-                // case 'DIT-SAL-07':
-                //     $gls = 60;
-                //     $gl = 100;
-                //     $num = $gls;
-                //     $den = $gl;
-                //     $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
-                //     break;
+            // case 'DIT-SAL-05':
+            //     $gls = 0;
+            //     $gl = 0;
+            //     $num = $gls;
+            //     $den = $gl;
+            //     $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
+            //     break;
+            // case 'DIT-SAL-06':
+            //     $gls = 10;
+            //     $gl = 19;
+            //     $num = $gls;
+            //     $den = $gl;
+            //     $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
+            //     break;
+            // case 'DIT-SAL-07':
+            //     $gls = 60;
+            //     $gl = 100;
+            //     $num = $gls;
+            //     $den = $gl;
+            //     $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: ' . date('d/m/Y');
+            //     break;
             case 'DIT-EDU-01':
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
                 $actualizado =  'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion));
@@ -726,10 +726,10 @@ class IndicadoresController extends Controller
         if ($distrito > 0) $ndis = Ubigeo::find($distrito)->nombre;
         else $ndis = '';
         switch ($div) {
-                // case 'tabla1':
-                //     $base = IndicadorGeneralMetaRepositorio::getPacto1tabla1($indicador, $anio, $mes);
-                //     $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla1', compact('base', 'ndis'))->render();
-                //     return compact('excel', 'base');
+            // case 'tabla1':
+            //     $base = IndicadorGeneralMetaRepositorio::getPacto1tabla1($indicador, $anio, $mes);
+            //     $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla1', compact('base', 'ndis'))->render();
+            //     return compact('excel', 'base');
 
             case 'tabla2':
                 $base = IndicadorGeneralMetaRepositorio::getPacto1tabla2($indicador, $anio);
@@ -746,9 +746,9 @@ class IndicadoresController extends Controller
     {
         if ($anio > 0) {
             switch ($div) {
-                    // case 'tabla1':
-                    //     $name = 'Listado de establecimientos de salud ' . date('Y-m-d') . '.xlsx';
-                    //     break;
+                // case 'tabla1':
+                //     $name = 'Listado de establecimientos de salud ' . date('Y-m-d') . '.xlsx';
+                //     break;
                 case 'tabla2':
                     $name = 'Evaluación de cumplimiento de los logros esperados por distrito ' . date('Y-m-d') . '.xlsx';
                     break;
@@ -1563,6 +1563,35 @@ class IndicadoresController extends Controller
     public function ConvenioFED()
     {
         return view('salud.Indicadores.ConvenioFED');
+    }
+
+    // public function ConvenioFED()
+    // {
+    //     return view('educacion.Indicadores.ConvenioFED');
+    // }
+
+    public function ConvenioFEDEdu()
+    {
+        $sector = 4;
+        $instrumento = 8;
+        // $indedu = IndicadorGeneralRepositorio::find_pactoregional($sector, $instrumento);
+
+        // $ind = IndicadorGeneralRepositorio::findNoFichatecnicaCodigo('DIT-EDU-01');
+        // // $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios($ind->id);
+        // // $anio = collect(range(2023, Carbon::now()->year));
+        // $updateMin1 = PoblacionPNRepositorio::actualizado();
+        // $updateMin2 = CuboPacto1Repositorio::actualizado();
+        // $updateMin3 = CuboPacto1Repositorio::actualizado();
+        // $anios = [$updateMin1->anio, $updateMin2->anio, $updateMin3->anio];
+        // $anio = array_unique($anios);
+        $anio = [2024, 2025];
+        $provincia = UbigeoRepositorio::provincia('25');
+
+        // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_1']);
+        // // return response()->json(compact('imp'));
+        $aniomax = date('Y');
+
+        return view('educacion.Indicadores.ConvenioFED', compact('anio', 'provincia', 'aniomax'));
     }
 
     public function ConvenioGestion()

@@ -27,6 +27,7 @@ use App\Http\Controllers\Educacion\ImporPadronWebController;
 use App\Http\Controllers\Educacion\ImporMatriculaController;
 use App\Http\Controllers\Educacion\ImporMatriculaGeneralController;
 use App\Http\Controllers\Educacion\ImporPadronEibController;
+use App\Http\Controllers\Educacion\ImporPadronNominalController as EducacionImporPadronNominalController;
 use App\Http\Controllers\Educacion\ImporRERController;
 use App\Http\Controllers\Educacion\ImporServiciosBasicosController;
 use App\Http\Controllers\Educacion\ImporTabletaController;
@@ -217,6 +218,15 @@ Route::get('/ImporPadronWeb/Listar/ImportarDT', [ImporPadronWebController::class
 Route::get('/ImporPadronWeb/Eliminar/{id}', [ImporPadronWebController::class, 'eliminar'])->name('ImporPadronWeb.eliminar');
 Route::get('/ImporPadronWeb/Exportar', [ImporPadronWebController::class, 'exportar'])->name('imporpadronweb.exportar');
 Route::get('/ImporPadronWeb/Exportar/PadronWEB', [ImporPadronWebController::class, 'download'])->name('imporpadronweb.download');
+
+
+Route::get('/educación/Importar/PN', [EducacionImporPadronNominalController::class, 'importar'])->name('edu.imporpadronnominal.importar');
+Route::post('/ImporPN/Importar', [EducacionImporPadronNominalController::class, 'guardar'])->name('edu.imporpadronnominal.guardar');
+Route::post('/ImporPN/LI/{importacion_id}', [EducacionImporPadronNominalController::class, 'ListaImportada'])->name('edu.imporpadronnominal.listarimportados');
+Route::get('/ImporPN/Listar/ImportarDT', [EducacionImporPadronNominalController::class, 'ListarDTImportFuenteTodos'])->name('edu.imporpadronnominal.listar.importados');
+Route::get('/ImporPN/Eliminar/{id}', [EducacionImporPadronNominalController::class, 'eliminar'])->name('edu.imporpadronnominal.eliminar');
+// Route::get('/ImporPN/Exportar', [ImporPadronNominalController::class, 'exportar'])->name('ImporPadronNominal.exportar');
+// Route::get('/ImporPN/Exportar/PadronWEB', [ImporPadronNominalController::class, 'download'])->name('ImporPadronNominal.download');
 
 
 //Route::get('/PadronWeb/codigo_modular/{codigo_modular}', [PadronWebController::class, 'buscariiee']);//esta por ver
@@ -1272,6 +1282,13 @@ Route::get('/salud/pdrc/edu', [IndicadoresController::class, 'PDRCEdu'])->name('
 Route::get('/salud/pdrc/{indicador_id}', [IndicadoresController::class, 'PDRCDetalle'])->name('salud.indicador.pdrc.detalle');
 
 Route::get('/salud/pei', [IndicadoresController::class, 'PEI'])->name('salud.indicador.pei');
+
+
+Route::get('/educacion/conveniofedx', [IndicadoresController::class, 'EduConvenioFED'])->name('educacion.indicador.conveniofedx');
+
+Route::get('/educacion/conveniofed', [IndicadoresController::class, 'ConvenioFEDEdu'])->name('educacion.indicador.conveniofed');
+// Route::get('/educacion/conveniofed/Reports1', [IndicadoresController::class, 'PactoRegionalEduPacto1Reports'])->name('educacion.indicador.pactoregional.edu.pacto1.reports');
+// Route::get('/educacion/conveniofed/Edu/Reports1/find/mes/{anio}', [IndicadoresController::class, 'PactoRegionalEduPacto1FindMes'])->name('educacion.indicador.pactoregional.edu.pacto1.find.mes');
 
 
 Route::get('/salud/pruebas', function () {

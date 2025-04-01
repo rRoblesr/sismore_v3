@@ -351,6 +351,7 @@
 
         function upload(e) {
             e.preventDefault();
+
             let form = $(this),
                 wrapper = $('.pwrapper'),
                 /* wrapper_f = $('.wrapper_files'), */
@@ -398,7 +399,8 @@
                         progress_bar.css('width', '0%');
                         table_principal.ajax.reload();
                     }, 1500);
-                } else {console.log('ddddd');
+                } else {
+                    console.log('ddddd');
                     progress_bar.css('width', '100%');
                     progress_bar.html(res.msg);
                     form.trigger('reset');
