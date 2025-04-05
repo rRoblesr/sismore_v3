@@ -1573,8 +1573,8 @@ class IndicadoresController extends Controller
     public function ConvenioFEDEdu()
     {
         $sector = 4;
-        $instrumento = 8;
-        // $indedu = IndicadorGeneralRepositorio::find_pactoregional($sector, $instrumento);
+        $instrumento = 6;
+        $indedu = IndicadorGeneralRepositorio::find_pactoregional($sector, $instrumento);
 
         // $ind = IndicadorGeneralRepositorio::findNoFichatecnicaCodigo('DIT-EDU-01');
         // // $anio = IndicadorGeneralMetaRepositorio::getPacto1Anios($ind->id);
@@ -1591,7 +1591,25 @@ class IndicadoresController extends Controller
         // // return response()->json(compact('imp'));
         $aniomax = date('Y');
 
-        return view('educacion.Indicadores.ConvenioFED', compact('anio', 'provincia', 'aniomax'));
+        return view('educacion.Indicadores.ConvenioFED', compact('indedu', 'anio', 'provincia', 'aniomax'));
+    }
+
+    public function ConvenioFEDEduDetalle($indicador_id)
+    {
+        $ind = IndicadorGeneralRepositorio::findNoFichatecnica($indicador_id);
+        switch ($ind->codigo) {
+            case 'DIT-EDU-01':
+                $fuente = ImporPadronNominalController::$FUENTE;
+                $anio = ImportacionRepositorio::anios_porfuente_select(ImporPadronNominalController::$FUENTE);
+                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronNominalController::$FUENTE);
+                $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
+                $provincia = UbigeoRepositorio::provincia('25');
+                $aniomax = $imp->anio;
+                return view('salud.Indicadores.PactoRegionalSalPacto1', compact('actualizado', 'fuente', 'anio', 'provincia', 'aniomax', 'ind'));
+ 
+            default:
+                return 'ERROR, PAGINA NO ENCONTRADA';
+        }
     }
 
     public function ConvenioGestion()

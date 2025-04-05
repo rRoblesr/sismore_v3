@@ -52,7 +52,7 @@
                     <div class="card-body pb-0 pt-3">
                         <div class="form-group row">
                             <div class="col-lg-6 col-md-12 col-sm-12">
-                                <h4 class="page-title font-16">PACTO REGIONAL</h4>
+                                <h4 class="page-title font-16">FED</h4>
                             </div>
                             <div class="col-lg-1 col-md-6 col-sm-6">
                                 <div class="custom-select-container">
@@ -132,8 +132,9 @@
                                 <li class="mt-0 pt-0 font-16">Avance</li>
                                 <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 % --}}
                                 <li class="m-0 pt-0">
-                                    <figure class="p-0 m-0">
-                                        <div id="gra{{ $item->codigo }}"></div>
+                                    <figure class="p-0 m-0">{{-- DIT-EDU-01 --}}
+                                        {{-- <div id="gra{{ $item->codigo }}"></div> --}}
+                                        <div id="graDIT-EDU-01"></div>
                                         {{-- graDITSALUD01 --}}
                                     </figure>
                                 </li>
