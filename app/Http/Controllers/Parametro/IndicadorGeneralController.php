@@ -187,11 +187,11 @@ class IndicadorGeneralController extends Controller
             $data['inputerror'][] = 'codigo';
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
-        } else if (strlen($request->codigo) != $request->codigoconteo) {
+        } /*else if (strlen($request->codigo) != $request->codigoconteo) {
             $data['inputerror'][] = 'codigo';
             $data['error_string'][] = 'Este campo esta incompleto';
             $data['status'] = FALSE;
-        }
+        }*/
 
         // if ($request->denominador == '') {
         //     $data['inputerror'][] = 'denominador';
@@ -394,8 +394,19 @@ class IndicadorGeneralController extends Controller
         $inst = DB::table('par_instrumento')->where('id', $rq->instrumento)->first();
         $sect = Sector::where('id', $rq->sector)->first();
 
-        $codigo = $inst ? $inst->abreviado . '-' : '';
-        $codigo .= $sect ? substr($sect->nombre, 0, 3) . '-' : '';
+        switch ($rq->instrumento) {
+            case '6':
+                break;
+
+            default:
+                $codigo = $inst ? $inst->abreviado . '-' : '';
+                $codigo .= $sect ? substr($sect->nombre, 0, 3) . '-' : '';
+                break;
+        }
+        // if ($rq->instrumento != 6) {
+        //     $codigo = $inst ? $inst->abreviado . '-' : '';
+        //     $codigo .= $sect ? substr($sect->nombre, 0, 3) . '-' : '';
+        // }
 
         $conteo = strlen($codigo) + 2;
 

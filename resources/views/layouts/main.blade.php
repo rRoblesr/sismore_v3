@@ -61,7 +61,7 @@
             background-color: #f04c27;
         }
 
-        .badge-orange-x{
+        .badge-orange-x {
             background-color: #eb960d;
         }
 
@@ -1567,6 +1567,20 @@
                     console.log(jqXHR);
                 },
             });
+        }
+
+        function convertirAMayusculas(elementId) {
+            const elemento = document.getElementById(elementId);
+            if (elemento) {
+                elemento.addEventListener('input', function(e) {
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.toUpperCase();
+                    this.setSelectionRange(start, end);
+                });
+            } else {
+                console.warn(`Elemento con ID "${elementId}" no encontrado.`);
+            }
         }
     </script>
     @yield('js')

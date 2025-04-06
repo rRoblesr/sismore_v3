@@ -886,12 +886,32 @@
             });
 
             //convierte texto a mayuscula en proceso
-            document.getElementById('nombre').addEventListener('input', function(e) {
-                const start = this.selectionStart;
-                const end = this.selectionEnd;
-                this.value = this.value.toUpperCase();
-                this.setSelectionRange(start, end);
-            });
+            // document.getElementById('nombre').addEventListener('input', function(e) {
+            //     const start = this.selectionStart;
+            //     const end = this.selectionEnd;
+            //     this.value = this.value.toUpperCase();
+            //     this.setSelectionRange(start, end);
+            // });
+
+            // document.getElementById('codigo').addEventListener('input', function(e) {
+            //     const start = this.selectionStart;
+            //     const end = this.selectionEnd;
+            //     this.value = this.value.toUpperCase();
+            //     this.setSelectionRange(start, end);
+            // });
+
+            // document.getElementById('descripcion').addEventListener('input', function(e) {
+            //     const start = this.selectionStart;
+            //     const end = this.selectionEnd;
+            //     this.value = this.value.toUpperCase();
+            //     this.setSelectionRange(start, end);
+            // });
+
+            convertirAMayusculas('nombre');
+            convertirAMayusculas('codigo');
+            convertirAMayusculas('descripcion');
+            convertirAMayusculas('numerador');
+            convertirAMayusculas('denominador');
 
             table_principal = $('#tbprincipal').DataTable({
                 responsive: true,
