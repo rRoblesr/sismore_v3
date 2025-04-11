@@ -109,9 +109,13 @@ class IndicadorGeneralController extends Controller
             }
             $btn3 = '&nbsp;<a href="#" class="btn btn-danger btn-xs" onclick="borrar(' . $value->id . ')"  title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
             $btn4 = '&nbsp;<button type="button" onclick="verpdf(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fas fa-file"></i> </button>';
-            switch ($instrumento->abreviado == 'DIT') {
-                case 'value':
+            switch ($instrumento->abreviado) {
+                case 'DIT':
                     $btn5 = '&nbsp;<a href="#" class="btn btn-success btn-xs" onclick="metas_dit(' . $value->id . ')"  title="Agregar Metas"> <i class="fa fa-plus"></i> </a>';
+                    break;
+
+                case 'FED':
+                    $btn5 = '&nbsp;<a href="#" class="btn btn-success btn-xs" onclick="metas_fed(' . $value->id . ')"  title="Agregar Metas"> <i class="fa fa-plus"></i> </a>';
                     break;
 
                 default:
@@ -725,6 +729,140 @@ class IndicadorGeneralController extends Controller
         return response()->json(['status' => true, 'meta' => $meta]);
     }
 
+
+    public function ListarDTMeta_fed(Request $rq)
+    {
+        $draw = intval($rq->draw);
+        $start = intval($rq->start);
+        $length = intval($rq->length);
+
+        $ig = IndicadorGeneral::select('id', 'unidad_id')->where('id', $rq->indicadorgeneral)->first();
+        $query = IndicadorGeneralMeta::where('indicadorgeneral', $rq->indicadorgeneral)->orderBy('id', 'desc')->get();
+        $data = [];
+        foreach ($query as $key => $value) {
+            $dis = Ubigeo::find($value->distrito);
+            // $pro = Ubigeo::find($dis->dependencia);
+
+            $btn = '&nbsp;<a href="#" class="btn btn-primary btn-xs" onclick="editmeta_fed(' . $value->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
+            $btn .= '&nbsp;<a href="#" class="btn btn-danger btn-xs" onclick="borrarmeta(' . $value->id . ')"  title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
+
+            $data[] = array(
+                $key + 1,
+                // '<div style="text-align:center">' . $pro->nombre . '</div>',
+                '<div>' . $dis->nombre . '</div>',
+                // '<div style="text-align:center">' . $value->anio_base . '</div>',
+                // '<div style="text-align:center">' . $value->valor_base . '</div>',
+                '<div style="text-align:center">' . $value->anio . '</div>',
+                '<div style="text-align:center">' . $value->valor . ($ig->unidad_id == 1 ? '%' : '') . '</div>',
+                "<center>" . $btn . "</center>",
+            );
+        }
+        $result = array(
+            "draw" => $draw,
+            "recordsTotal" => $start,
+            "recordsFiltered" => $length,
+            "data" => $data,
+        );
+        return response()->json($result);
+    }
+
+    private function _validate_meta_fed($request)
+    {
+        $data = array();
+        $data['error_string'] = array();
+        $data['inputerror'] = array();
+        $data['status'] = TRUE;
+
+        // if ($request->aniobase_fed < 1) {
+        //     $data['inputerror'][] = 'aniobase_fed';
+        //     $data['error_string'][] = 'Este campo es obligatorio.';
+        //     $data['status'] = FALSE;
+        // } else if ($request->aniobase_fed < 2022) {
+        //     $data['inputerror'][] = 'aniobase_fed';
+        //     $data['error_string'][] = 'Ingrese un año valido.';
+        //     $data['status'] = FALSE;
+        // }
+
+        // if ($request->valorbase_fed == '') {
+        //     $data['inputerror'][] = 'valorbase_fed';
+        //     $data['error_string'][] = 'Este campo es obligatorio.';
+        //     $data['status'] = FALSE;
+        // }
+
+        if ($request->anioesperado_fed < 1) {
+            $data['inputerror'][] = 'anioesperado_fed';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        } else if ($request->anioesperado_fed < 2023) {
+            $data['inputerror'][] = 'anioesperado_fed';
+            $data['error_string'][] = 'Ingrese un Año valido.';
+            $data['status'] = FALSE;
+        }
+
+        if ($request->idmeta_fed > 0) {
+        } else {
+            if ($request->distrito_fed == '0') {
+                $data['inputerror'][] = 'distrito_fed';
+                $data['error_string'][] = 'Este campo es obligatorio.';
+                $data['status'] = FALSE;
+            } else {
+                $meta = IndicadorGeneralMeta::where('indicadorgeneral', $request->indicadorgeneral_fed)->where('distrito', $request->distrito_fed)->where('anio', $request->anioesperado_fed)->first();
+                if ($meta) {
+                    $data['inputerror'][] = 'distrito_fed';
+                    $data['error_string'][] = 'Distrito ya registrado.';
+                    $data['status'] = FALSE;
+                }
+            }
+        }
+
+
+        if ($request->valoresperado_fed == '') {
+            $data['inputerror'][] = 'valoresperado_fed';
+            $data['error_string'][] = 'Este campo es obligatorio.';
+            $data['status'] = FALSE;
+        }
+
+        if ($data['status'] === FALSE) {
+            echo json_encode($data);
+            exit();
+        }
+    }
+
+    public function ajax_add_meta_fed(Request $request)
+    {
+        $this->_validate_meta_fed($request);
+        $ind = IndicadorGeneral::find($request->indicadorgeneral_fed);
+        $meta = IndicadorGeneralMeta::Create([
+            'indicadorgeneral' => $request->indicadorgeneral_fed,
+            'periodo' => '', //$request->periodo,
+            'distrito' => $request->distrito_fed,
+            'anio_base' => $ind->anio_base, // 0, //$request->aniobase_fed,
+            'valor_base' => $ind->valor_base, // '', //$request->valorbase_fed,
+            'anio' => $request->anioesperado_fed,
+            'valor' => $request->valoresperado_fed
+        ]);
+        return response()->json(['status' => true, 'meta' => $meta]);
+    }
+
+    public function ajax_find_meta_fed($id)
+    {
+        $meta = IndicadorGeneralMeta::find($id);
+        $dist = Ubigeo::find($meta->distrito);
+        $prov = Ubigeo::find($dist->dependencia);
+        return response()->json(compact('meta', 'dist', 'prov'));
+    }
+
+    public function ajax_update_meta_fed(Request $request)
+    {
+        $this->_validate_meta_fed($request);
+        $meta = IndicadorGeneralMeta::find($request->idmeta_fed);
+        $meta->distrito = $request->distrito_fed;
+        $meta->anio = $request->anioesperado_fed;
+        $meta->valor = $request->valoresperado_fed;
+        $meta->save();
+        return response()->json(['status' => true, 'meta' => $meta]);
+    }
+
     public function descargarExcel($indicador)
     {
         $codigo = IndicadorGeneral::select('codigo')->where('id', $indicador)->first()->codigo;
@@ -739,8 +877,18 @@ class IndicadorGeneralController extends Controller
         ]);
 
         IndicadorGeneralMeta::where('indicadorgeneral', $rq->indicador)->delete();
-
         Excel::import(new AgregarMetasImport, $rq->file('archivo'));
+
+        return redirect()->back()->with('success', 'Archivo importado correctamente.');
+    }
+
+    public function cargarExcelFED(Request $rq)
+    {
+        $rq->validate([
+            'archivo_fed' => 'required|mimes:xlsx,csv'
+        ]);
+        IndicadorGeneralMeta::where('indicadorgeneral', $rq->indicador_fed)->delete();
+        Excel::import(new AgregarMetasImport, $rq->file('archivo_fed'));
 
         return redirect()->back()->with('success', 'Archivo importado correctamente.');
     }

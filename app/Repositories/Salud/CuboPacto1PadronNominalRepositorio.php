@@ -99,6 +99,27 @@ class CuboPacto1PadronNominalRepositorio
 
     public static function pacto01Tabla01($importacion, $indicador, $anio, $mes, $provincia, $distrito)
     {
+        $basal = [
+            36 => 53,
+            37 => 48,
+            38 => 64,
+            39 => 64,
+            40 => 30,
+            41 => 46,
+            42 => 74,
+            44 => 0,
+            45 => 55,
+            46 => 44,
+            47 => 7,
+            49 => 50,
+            50 => 4,
+            51 => 21,
+            52 => 0,
+            53 => 53,
+            56 => 71,
+            57 => 83,
+            55 => 13,
+        ];
         $v1 = CuboPacto1PadronNominal::select(
             'distrito_id',
             'distrito',
@@ -111,6 +132,7 @@ class CuboPacto1PadronNominalRepositorio
         $v3 = IndicadorGeneralMeta::where('indicadorgeneral', $indicador)->where('anio', $anio)->pluck('valor', 'distrito');
 
         foreach ($v1 as $key => $value) {
+            $value->basal = $basal[$value->distrito_id] ?? 0;
             $value->meta = $v3[$value->distrito_id] ?? 0;
             $value->cumple = $value->indicador >= $value->meta ? 1 : 0;
         }

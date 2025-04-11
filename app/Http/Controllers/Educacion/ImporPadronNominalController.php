@@ -73,6 +73,7 @@ class ImporPadronNominalController extends Controller
 
         $encabezadosEsperados = [
             'cod_mod',
+            'modalidad',
             'cod_estudiante',
             'dni',
             'validacion_dni',
@@ -83,9 +84,11 @@ class ImporPadronNominalController extends Controller
             'nacionalidad',
             'fecha_nacimiento',
             'lengua_materna',
-            'fecha_matricula',
             'grado',
             'seccion',
+            'fecha_matricula',
+            'sr_regular',
+            'sf_recuperacion',
         ];
 
         $encabezadosArchivo = array_keys($array[0][0]);
@@ -115,6 +118,7 @@ class ImporPadronNominalController extends Controller
                 $dataBatch[] = [
                     'importacion_id' => $importacion->id,
                     'cod_mod' => $row['cod_mod'],
+                    'modalidad' => $row['modalidad'],
                     'cod_estudiante' => $row['cod_estudiante'],
                     'dni' => $row['dni'],
                     'validacion_dni' => $row['validacion_dni'],
@@ -125,9 +129,11 @@ class ImporPadronNominalController extends Controller
                     'nacionalidad' => $row['nacionalidad'],
                     'fecha_nacimiento' => $row['fecha_nacimiento'],
                     'lengua_materna' => $row['lengua_materna'],
-                    'fecha_matricula' => $row['fecha_matricula'],
                     'grado' => $row['grado'],
                     'seccion' => $row['seccion'],
+                    'fecha_matricula' => $row['fecha_matricula'],
+                    'sr_regular' => $row['sr_regular'],
+                    'sf_recuperacion' => $row['sf_recuperacion'],
                 ];
 
                 if (count($dataBatch) >= $batchSize) {
@@ -148,7 +154,7 @@ class ImporPadronNominalController extends Controller
 
             return $this->json_output(400, "Error en la carga de datos: " . $e->getMessage());
         }
-/*
+        /*
         try {
             DB::select('call edu_pa_procesarPadronWeb(?,?)', [$importacion->id, auth()->user()->id]);
         } catch (Exception $e) {
@@ -230,7 +236,7 @@ class ImporPadronNominalController extends Controller
         );
         return response()->json($result);
     }
- 
+
     public function ListaImportada($importacion_id) //(Request $request, $importacion_id)
     {
         //$data = ImporPadronWeb::where('importacion_id', $importacion_id)->get();

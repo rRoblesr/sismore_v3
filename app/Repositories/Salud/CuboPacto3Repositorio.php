@@ -49,6 +49,27 @@ class CuboPacto3Repositorio
 
     public static function Tabla01($importacion, $indicador, $anio, $mes, $provincia, $distrito)
     {
+        $basal = [
+            53 => 0,
+            57 => 0,
+            37 => 27,
+            42 => 44,
+            50 => 67,
+            56 => 42,
+            41 => 43,
+            51 => 21,
+            38 => 50,
+            40 => 25,
+            52 => 33,
+            39 => 100,
+            49 => 58,
+            55 => 33,
+            45 => 65,
+            46 => 43,
+            47 => 71,
+            36 => 28,
+            44 => 67,
+        ];
         $v1 = CuboPacto3PadronMaterno::select(
             'distrito_id',
             DB::raw('sum(numerador) as numerador'),
@@ -74,6 +95,7 @@ class CuboPacto3Repositorio
         $v3 = IndicadorGeneralMeta::where('indicadorgeneral', $indicador)->where('anio', $anio)->pluck('valor', 'distrito');
 
         foreach ($v1 as $key => $value) {
+            $value->basal = $basal[$value->distrito_id] ?? 0;
             $value->meta = $v3[$value->distrito_id] ?? 0;
             $value->cumple = $value->indicador >= $value->meta ? 1 : 0;
         }

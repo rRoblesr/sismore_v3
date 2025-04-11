@@ -3036,23 +3036,26 @@ CREATE TABLE sal_padron_programa_b (
 ALTER TABLE `edu_institucioneducativa` ADD `modo_registro` INT NOT NULL AFTER `fecha_reg`;
 
 
-CREATE TABLE edu_impor_padro_nominal (
+CREATE TABLE edu_impor_padron_nominal (
   id INT AUTO_INCREMENT PRIMARY KEY,
   importacion_id INT DEFAULT NULL,
 		cod_mod VARCHAR(7) DEFAULT NULL,
+		modalidad VARCHAR(3) DEFAULT NULL,
 		cod_estudiante VARCHAR(14) DEFAULT NULL,
 		dni VARCHAR(8) DEFAULT NULL,
-		validacion_dni VARCHAR(15) DEFAULT NULL,
-		apellido_paterno VARCHAR(30) DEFAULT NULL,
-		apellido_materno VARCHAR(30) DEFAULT NULL,
-		nombres VARCHAR(50) DEFAULT NULL,
+		validacion_dni VARCHAR(19) DEFAULT NULL,
+		apellido_paterno VARCHAR(40) DEFAULT NULL,
+		apellido_materno VARCHAR(40) DEFAULT NULL,
+		nombres VARCHAR(60) DEFAULT NULL,
 		sexo VARCHAR(6) DEFAULT NULL,
 		nacionalidad VARCHAR(40) DEFAULT NULL,
-		fecha_nacimiento DATE DEFAULT NULL,
-		lengua_materna VARCHAR(40) DEFAULT NULL,
-		fecha_matricula DATE DEFAULT NULL,
-		grado VARCHAR(25) DEFAULT NULL,
-		seccion VARCHAR(35) DEFAULT NULL,
+		fecha_nacimiento VARCHAR(10) DEFAULT NULL,
+		lengua_materna VARCHAR(50) DEFAULT NULL,
+		grado VARCHAR(30) DEFAULT NULL,
+		seccion VARCHAR(40) DEFAULT NULL,
+		fecha_matricula VARCHAR(10) DEFAULT NULL,
+		sr_regular VARCHAR(50) DEFAULT NULL,
+		sf_recuperacion VARCHAR(40) DEFAULT NULL,
   INDEX idx_importacion (importacion_id),
   FOREIGN KEY (importacion_id) REFERENCES par_importacion(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -39,49 +39,47 @@
     </style>
 @endsection
 @section('content')
-    <div class="content">
-        <form class="cmxform form-horizontal tasi-form upload_file">
-            @csrf
+    <form class="cmxform form-horizontal tasi-form upload_file">
+        @csrf
 
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card card-border">
-                        <div class="card-header border-success-0 bg-transparent pb-0">
-                            <div class="card-widgets">
-                                <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
-                                    <i class="fa fa-redo"></i> Actualizar</button>
-                                <button type="button" class="btn btn-primary btn-xs" onclick="add()">
-                                    <i class="fa fa-plus"></i>Nuevo</button>
-                            </div>
-                            <h3 class="card-title">Indicadores </h3>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent pb-0">
+                        <div class="card-widgets">
+                            <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
+                                <i class="fa fa-redo"></i> Actualizar</button>
+                            <button type="button" class="btn btn-primary btn-xs" onclick="add()">
+                                <i class="fa fa-plus"></i>Nuevo</button>
+                        </div>
+                        <h3 class="card-title">Indicadores </h3>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="tbprincipal" class="table table-striped table-bordered tablex"
+                                style="font-size: 12px">
+                                <thead class="cabecera-dataTable">
+                                    <tr class="text-white bg-success-0">
+                                        <th>Nº</th>
+                                        <th>Código</th>
+                                        <th>Nombre del Indicador</th>
+                                        <th>Sector</th>
+                                        <th>Tipo</th>
+                                        <th>Instrumento</th>
+                                        <th>Año Base</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
                         </div>
 
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="tbprincipal" class="table table-striped table-bordered tablex"
-                                    style="font-size: 12px">
-                                    <thead class="cabecera-dataTable">
-                                        <tr class="text-white bg-success-0">
-                                            <th>Nº</th>
-                                            <th>Código</th>
-                                            <th>Nombre del Indicador</th>
-                                            <th>Sector</th>
-                                            <th>Tipo</th>
-                                            <th>Instrumento</th>
-                                            <th>Año Base</th>
-                                            <th>Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-                            </div>
-
-                        </div>
                     </div>
                 </div>
-            </div> <!-- End row -->
-        </form>
-    </div>
+            </div>
+        </div> <!-- End row -->
+    </form>
 
     <!-- Bootstrap modal -->
     <div id="modal_form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
@@ -712,7 +710,7 @@
                         </div>
                     </form>
                 </div>
-                <div class="modal-body pt-0" style="text-align:center">
+                {{-- <div class="modal-body pt-0" style="text-align:center">
                     @if (auth()->user()->id == 49)
                         <button type="button" class="btn btn-xs btn-success" id=""
                             onclick="descargarMetaExcel()" title="DESCARGAR"><i class="fas fa-download"></i> </button>
@@ -730,17 +728,200 @@
 
                             <span id="nombreArchivo" class="text-muted"></span>
                         </form>
-                        {{-- <button type="button" class="btn btn-xs btn-success" id="" onclick="ajustarMetas()" title="CARGAR"><i class="fas fa-upload"></i> </button> --}}
+                        <button type="button" class="btn btn-xs btn-success" id="" onclick="ajustarMetas()" title="CARGAR"><i class="fas fa-upload"></i> </button>
                     @endif
 
                     <button type="button" class="btn btn-xs btn-primary" id="btnSaveMeta_dit"
                         onclick="savemeta_dit()"><i class="fa fa-plus"></i> Agregar</button>
                     <button type="button" class="btn btn-xs btn-danger" id="btnSaveMlleta_dit"
                         onclick="delemeta_dit()"><i class="fa fa-times"></i> Limpiar</button>
+                </div> --}}
+
+                <div class="modal-body pt-0"
+                    style="display: flex; justify-content: center; align-items: center; gap: 5px;">
+                    @if (auth()->user()->id == 49)
+                        <!-- Botón Descargar -->
+                        <button type="button" class="btn btn-xs btn-success" onclick="descargarMetaExcel()"
+                            title="DESCARGAR TODO">
+                            <i class="fas fa-download"></i>
+                        </button>
+
+                        <!-- Formulario para Importar -->
+                        <form id="importForm" action="{{ route('mantenimiento.indicadorgeneralmeta.importar') }}"
+                            method="POST" enctype="multipart/form-data" style="display: inline;">
+                            @csrf
+                            <input type="hidden" name="indicador" id="indicador">
+                            <input type="file" name="archivo" id="archivo" class="d-none"
+                                onchange="procesarArchivo()" accept=".xlsx">
+
+                            <button type="button" class="btn btn-xs btn-success"
+                                onclick="document.getElementById('archivo').click()" title="IMPORTAR">
+                                <i class="fas fa-upload"></i>
+                            </button>
+                        </form>
+
+                        <span id="nombreArchivo" class="text-muted"></span>
+                    @endif
+
+                    <!-- Botón Agregar -->
+                    <button type="button" class="btn btn-xs btn-primary" id="btnSaveMeta_dit" onclick="savemeta_dit()">
+                        <i class="fa fa-plus"></i> Agregar
+                    </button>
+
+                    <!-- Botón Limpiar -->
+                    <button type="button" class="btn btn-xs btn-danger" id="btnSaveMlleta_dit"
+                        onclick="delemeta_dit()">
+                        <i class="fa fa-times"></i> Limpiar
+                    </button>
                 </div>
+
                 <div class="modal-body">
                     <div class="table-responsive">
                         <table id="tbmeta_dit" class="table table-sm table-striped table-bordered font-12">
+                            <thead class="cabecera-dataTable">
+                                <tr class="text-white bg-success-0 text-center">
+                                    <th>Nº</th>
+                                    <th>Distrito</th>
+                                    {{-- <th>Año Base</th> --}}
+                                    {{-- <th>Valor Base</th> --}}
+                                    <th>Año</th>
+                                    <th>Meta</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Bootstrap modal -->
+
+    <!-- Bootstrap modal -->
+    <div id="modal_meta_fed" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pb-0">
+                    <form action="" id="form_meta_fed" name="form_meta_fed" class="form-horizontal"
+                        autocomplete="off">
+                        @csrf
+                        <input type="hidden" id="idmeta_fed" name="idmeta_fed" value="">
+                        <input type="hidden" id="indicadorgeneral_fed" name="indicadorgeneral_fed" value="">
+                        <div class="form-body">
+                            <div class="form-group">
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Provincia<span class="required">*</span></label>
+                                        <select name="provincia_fed" id="provincia_fed" class="form-control"
+                                            onchange="cargarDistritos('_fed',0)">
+                                            <option value="0">SELECCIONAR</option>
+
+                                        </select>
+                                        <span class="help-block"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Distrito<span class="required">*</span></label>
+                                        <select name="distrito_fed" id="distrito_fed" class="form-control">
+                                            <option value="0">SELECCIONAR</option>
+                                        </select>
+                                        <span class="help-block"></span>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Año esperado<span class="required">*</span></label>
+                                        <input id="anioesperado_fed" name="anioesperado_fed" class="form-control"
+                                            type="number">
+                                        <span class="help-block"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Valor esperado<span class="required">*</span></label>
+                                        <input id="valoresperado_fed" name="valoresperado_fed" class="form-control"
+                                            type="text">
+                                        <span class="help-block"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                {{-- <div class="modal-body pt-0" style="text-align:center">
+                    @if (auth()->user()->id == 49)
+                        <button type="button" class="btn btn-xs btn-success" id=""
+                            onclick="descargarMetaFEDExcel()" title="DESCARGAR"><i class="fas fa-download"></i> </button>
+                        <form id="importForm_fed" action="{{ route('mantenimiento.indicadorgeneralmeta.fed.importar') }}"
+                            method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="indicador_fed" id="indicador_fed">
+                            <input type="file" name="archivo_fed" id="archivo_fed" class="d-none"
+                                onchange="procesarArchivoFED()" accept=".xlsx">
+
+                            <button type="button" class="btn btn-xs btn-success"
+                                onclick="document.getElementById('archivo_fed').click()" title="IMPORTAR">
+                                <i class="fas fa-upload"></i>
+                            </button>
+
+                            <span id="nombreArchivo_fed" class="text-muted"></span>
+                        </form>
+                        <button type="button" class="btn btn-xs btn-success" id="" onclick="ajustarMetas()" title="CARGAR"><i class="fas fa-upload"></i> </button>
+                    @endif
+
+                    <button type="button" class="btn btn-xs btn-primary" id="btnSaveMeta_fed"
+                        onclick="savemeta_fed()"><i class="fa fa-plus"></i> Agregar</button>
+                    <button type="button" class="btn btn-xs btn-danger" id="btnSaveMlleta_fed"
+                        onclick="delemeta_fed()"><i class="fa fa-times"></i> Limpiar</button>
+                </div> --}}
+
+                <div class="modal-body pt-0"
+                    style="display: flex; justify-content: center; align-items: center; gap: 5px;">
+                    @if (auth()->user()->id == 49)
+                        <!-- Botón Descargar -->
+                        <button type="button" class="btn btn-xs btn-success" onclick="descargarMetaFEDExcel()"
+                            title="DESCARGAR TODO">
+                            <i class="fas fa-download"></i>
+                        </button>
+
+                        <!-- Formulario para Importar -->
+                        <form id="importForm_fed" action="{{ route('mantenimiento.indicadorgeneralmeta.fed.importar') }}"
+                            method="POST" enctype="multipart/form-data" style="display: inline;">
+                            @csrf
+                            <input type="hidden" name="indicador_fed" id="indicador_fed">
+                            <input type="file" name="archivo_fed" id="archivo_fed" class="d-none"
+                                onchange="procesarArchivoFED()" accept=".xlsx">
+
+                            <button type="button" class="btn btn-xs btn-success"
+                                onclick="document.getElementById('archivo_fed').click()" title="IMPORTAR">
+                                <i class="fas fa-upload"></i>
+                            </button>
+                        </form>
+
+                        <span id="nombreArchivo_fed" class="text-muted"></span>
+                    @endif
+
+                    <!-- Botón Agregar -->
+                    <button type="button" class="btn btn-xs btn-primary" id="btnSaveMeta_fed" onclick="savemeta_fed()">
+                        <i class="fa fa-plus"></i> Agregar
+                    </button>
+
+                    <!-- Botón Limpiar -->
+                    <button type="button" class="btn btn-xs btn-danger" id="btnSaveMlleta_fed"
+                        onclick="delemeta_fed()">
+                        <i class="fa fa-times"></i> Limpiar
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table id="tbmeta_fed" class="table table-sm table-striped table-bordered font-12">
                             <thead class="cabecera-dataTable">
                                 <tr class="text-white bg-success-0 text-center">
                                     <th>Nº</th>
@@ -821,6 +1002,7 @@
         var save_method = '';
         var save_method_meta_pdrc = '';
         var save_method_dit = '';
+        var save_method_fed = '';
         var table_principal;
         var table_meta;
         var form_entidad = 0;
@@ -1202,34 +1384,6 @@
             });
         };
 
-        function metas_dit(id) {
-            save_method_dit = 'add';
-            $('#form_meta_dit')[0].reset();
-            $('.form-group').removeClass('has-error');
-            $('.help-block').empty();
-            $('#modal_meta_dit').modal('show');
-            $('.modal-title').text('Agregar Metas');
-            $('#indicadorgeneral_dit').val(id);
-            $('#btnSaveMeta_dit').html('<i class="fa fa-plus"></i> Agregar');
-
-            table_meta = $('#tbmeta_dit').DataTable({
-                responsive: true,
-                autoWidth: false,
-                ordered: false,
-                language: table_language,
-                ajax: {
-                    "url": "{{ route('mantenimiento.indicadorgeneralmeta.listar.dit') }}",
-                    "data": {
-                        "indicadorgeneral": id
-                    },
-                    "type": "GET",
-                    //"dataType": 'JSON',
-                },
-                destroy: true,
-            });
-            cargarProvincia('_dit', 0);
-        };
-
         function savemeta() {
             $('#btnSaveMeta').text('Guardando...');
             $('#btnSaveMeta').attr('disabled', true);
@@ -1293,6 +1447,34 @@
                     alert('Error get data from ajax');
                 }
             });
+        };
+
+        function metas_dit(id) {
+            save_method_dit = 'add';
+            $('#form_meta_dit')[0].reset();
+            $('.form-group').removeClass('has-error');
+            $('.help-block').empty();
+            $('#modal_meta_dit').modal('show');
+            $('.modal-title').text('Agregar Metas');
+            $('#indicadorgeneral_dit').val(id);
+            $('#btnSaveMeta_dit').html('<i class="fa fa-plus"></i> Agregar');
+
+            table_meta = $('#tbmeta_dit').DataTable({
+                responsive: true,
+                autoWidth: false,
+                ordered: false,
+                language: table_language,
+                ajax: {
+                    "url": "{{ route('mantenimiento.indicadorgeneralmeta.listar.dit') }}",
+                    "data": {
+                        "indicadorgeneral": id
+                    },
+                    "type": "GET",
+                    //"dataType": 'JSON',
+                },
+                destroy: true,
+            });
+            cargarProvincia('_dit', 0);
         };
 
         function savemeta_dit() {
@@ -1371,6 +1553,122 @@
                                     "</option>"
                             });
                             $("#distrito_dit").append(options);
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.log(jqXHR);
+                        },
+                    });
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert('Error get data from ajax');
+                }
+            });
+        };
+
+        function metas_fed(id) {
+            save_method_fed = 'add';
+            $('#form_meta_fed')[0].reset();
+            $('.form-group').removeClass('has-error');
+            $('.help-block').empty();
+            $('#modal_meta_fed').modal('show');
+            $('.modal-title').text('Agregar Metas');
+            $('#indicadorgeneral_fed').val(id);
+            $('#btnSaveMeta_fed').html('<i class="fa fa-plus"></i> Agregar');
+
+            table_meta = $('#tbmeta_fed').DataTable({
+                responsive: true,
+                autoWidth: false,
+                ordered: false,
+                language: table_language,
+                ajax: {
+                    "url": "{{ route('mantenimiento.indicadorgeneralmeta.listar.fed') }}",
+                    "data": {
+                        "indicadorgeneral": id
+                    },
+                    "type": "GET",
+                    //"dataType": 'JSON',
+                },
+                destroy: true,
+            });
+            cargarProvincia('_fed', 0);
+        };
+
+        function savemeta_fed() {
+            $('#btnSaveMeta_fed').text('Guardando...');
+            $('#btnSaveMeta_fed').attr('disabled', true);
+            var url;
+            if (save_method_fed == 'add') {
+                url = "{{ route('mantenimiento.indicadorgeneralmeta.guardar.fed') }}";
+                msgsuccess = "El registro fue creado exitosamente.";
+                msgerror = "El registro no se pudo crear verifique las validaciones.";
+            } else {
+                url = "{{ route('mantenimiento.indicadorgeneralmeta.editar.fed') }}";
+                msgsuccess = "El registro fue actualizado exitosamente.";
+                msgerror = "El registro no se pudo actualizar. Verifique la operación";
+            }
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: $('#form_meta_fed').serialize(),
+                dataType: "JSON",
+                success: function(data) {
+                    if (data.status) {
+                        table_meta.ajax.reload(null, false);
+                        $('#form_meta_fed')[0].reset();
+                        save_method_fed = 'add';
+                        delemeta_fed();
+                    } else {
+                        for (var i = 0; i < data.inputerror.length; i++) {
+                            $('[name="' + data.inputerror[i] + '"]').parent().addClass('has-error');
+                            $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]);
+                        }
+                    }
+                    // $('#btnSaveMeta_fed').text('Guardar');
+                    $('#btnSaveMeta_fed').attr('disabled', false);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    toastr.error(msgerror, 'Mensaje');
+                    $('#btnSaveMeta_fed').text('Guardar');
+                    $('#btnSaveMeta_fed').attr('disabled', false);
+                }
+            });
+        };
+
+        function delemeta_fed() {
+            $('#btnSaveMeta_fed').html('<i class="fa fa-plus"></i> Agregar');
+            save_method_fed = 'add';
+            $("#idmeta_fed").val('');
+            $("#provincia_fed").val('0');
+            $("#distrito_fed").val('0');
+            $("#anioesperado_fed").val('');
+            $("#valoresperado_fed").val('');
+        }
+
+        function editmeta_fed(id) {
+            save_method_fed = 'update';
+            $('#btnSaveMeta_fed').html('<i class="fa fa-edit"></i> Modificar');
+            $.ajax({
+                url: "{{ route('mantenimiento.indicadorgeneralmeta.find.fed', '') }}/" + id,
+                type: "GET",
+                dataType: "JSON",
+                success: function(data) {
+                    $('[name="provincia_fed"]').val(data.prov.id);
+                    $('[name="anioesperado_fed"]').val(data.meta.anio);
+                    $('[name="valoresperado_fed"]').val(data.meta.valor);
+                    $('#idmeta_fed').val(data.meta.id);
+                    $.ajax({
+                        url: "{{ route('ubigeo.distrito.25', '') }}/" + data.prov.id,
+                        type: 'GET',
+                        success: function(data2) {
+                            $("#distrito_fed option").remove();
+                            var options = '<option value="0">SELECCIONAR</option>';
+                            $.each(data2, function(index, value) {
+                                ss = (data.dist.id == value.id ? "selected" : "");
+                                options += "<option value='" + value.id + "' " + ss + ">" +
+                                    value.nombre +
+                                    "</option>"
+                            });
+                            $("#distrito_fed").append(options);
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
                             console.log(jqXHR);
@@ -1493,6 +1791,49 @@
             if (input.files.length > 0) {
                 nombreArchivo.textContent = "Procesando: " + input.files[0].name;
                 form.submit(); // Envía el formulario automáticamente
+            }
+        }
+
+        function descargarMetaFEDExcel() {
+            window.location.href =
+                "{{ route('mantenimiento.indicadorgeneralmeta.exportar', ['indicador' => ':indicador']) }}".replace(
+                    ':indicador', $('#indicadorgeneral_fed').val());
+        }
+
+        function procesarArchivoFED() {
+            let input = document.getElementById('archivo_fed');
+            let nombreArchivo = document.getElementById('nombreArchivo_fed');
+            let form = document.getElementById('importForm_fed');
+            $('#indicador_fed').val($('#indicadorgeneral_fed').val());
+
+            if (input.files.length > 0) {
+                //aqui              
+                nombreArchivo.textContent = "Procesando: " + input.files[0].name;
+                form.submit(); // Envía el formulario automáticamente
+
+                // Mostrar todos los campos relevantes del formulario en la consola
+                // console.log("Campos del formulario:");
+                // Array.from(form.elements).forEach(element => {
+                //     if (element.tagName === 'INPUT' || element.tagName === 'SELECT') {
+                //         if (element.type === 'file') {
+                //             // Para campos de archivo, mostrar detalles del archivo seleccionado
+                //             if (element.files.length > 0) {
+                //                 console.log(`${element.name || element.id}:`, {
+                //                     nombre: element.files[0].name,
+                //                     tamaño: element.files[0].size + " bytes",
+                //                     tipo: element.files[0].type
+                //                 });
+                //             } else {
+                //                 console.log(`${element.name || element.id}:`, "Sin archivo seleccionado");
+                //             }
+                //         } else {
+                //             // Para otros campos, mostrar su valor
+                //             console.log(`${element.name || element.id}:`, element.value);
+                //         }
+                //     }
+                // });
+
+
             }
         }
     </script>

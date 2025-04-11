@@ -275,6 +275,27 @@ class IndicadorGeneralMetaRepositorio
 
     public static function getSalPacto2tabla1($indicador_id, $anio, $mes, $provincia, $distrito)
     {
+        $basal = [
+            53 => 0,
+            57 => 33,
+            37 => 31,
+            42 => 67,
+            50 => 33,
+            56 => 0,
+            41 => 40,
+            51 => 100,
+            38 => 47,
+            40 => 25,
+            52 => 75,
+            39 => 0,
+            49 => 0,
+            55 => 0,
+            45 => 40,
+            46 => 100,
+            47 => 0,
+            36 => 27,
+            44 => 0,
+        ];
         // $v1 = ImporPadronAnemia::select(
         //     'ubigeo as distrito_id',
         //     DB::raw('sum(num) as num'),
@@ -309,6 +330,7 @@ class IndicadorGeneralMetaRepositorio
 
         $v3 = IndicadorGeneralMeta::where('indicadorgeneral', $indicador_id)->where('anio', $anio)->pluck('valor', 'distrito');
         foreach ($v1 as $key => $value) {
+            $value->basal = $basal[$value->distrito_id] ?? 0;
             $value->valor = $v3[$value->distrito_id] ?? 0;
             $value->cumple = $value->ind >= $value->valor ? 1 : 0;
         }

@@ -721,9 +721,17 @@ Route::post('/Mantenimiento/Indicador/Meta/DIT/Update', [IndicadorGeneralControl
 Route::get('/Mantenimiento/Indicador/Meta/DIT/Find/{id}', [IndicadorGeneralController::class, 'ajax_find_meta_dit'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.find.dit');
 Route::get('/Mantenimiento/Indicador/Meta/Delete/{id}', [IndicadorGeneralController::class, 'ajax_delete_meta'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.eliminar');
 
+Route::get('/Mantenimiento/Indicador/Meta/FED/Listar', [IndicadorGeneralController::class, 'ListarDTMeta_fed'])->name('mantenimiento.indicadorgeneralmeta.listar.fed');
+Route::post('/Mantenimiento/Indicador/Meta/FED/Add', [IndicadorGeneralController::class, 'ajax_add_meta_fed'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.guardar.fed');
+Route::post('/Mantenimiento/Indicador/Meta/FED/Update', [IndicadorGeneralController::class, 'ajax_update_meta_fed'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.editar.fed');
+Route::get('/Mantenimiento/Indicador/Meta/FED/Find/{id}', [IndicadorGeneralController::class, 'ajax_find_meta_fed'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.find.fed');
+Route::get('/Mantenimiento/Indicador/Meta/FED/Delete/{id}', [IndicadorGeneralController::class, 'ajax_delete_meta'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.eliminar');
+
 
 Route::get('/Mantenimiento/Indicador/Meta/exportar/{indicador}',  [IndicadorGeneralController::class, 'descargarExcel'])->name('mantenimiento.indicadorgeneralmeta.exportar');
 Route::post('Mantenimiento/Indicador/Meta/importar', [IndicadorGeneralController::class, 'cargarExcel'])->name('mantenimiento.indicadorgeneralmeta.importar');
+
+Route::post('Mantenimiento/Indicador/Meta/FED/importar', [IndicadorGeneralController::class, 'cargarExcelFED'])->name('mantenimiento.indicadorgeneralmeta.fed.importar');
 
 Route::get('/educación/Mantenimiento/PadronEIB', [PadronEIBController::class, 'principal'])->middleware('auth')->name('padroneib.principal');
 Route::post('/PadronEIB/ajax_add_opt1/', [PadronEIBController::class, 'ajax_add_opt1'])->name('padroneib.ajax.add.opt1');
@@ -1246,6 +1254,7 @@ Route::get('/salud/pactoregional/find/{codigo}', [IndicadoresController::class, 
 
 Route::get('/salud/pactoregional/sal', [IndicadoresController::class, 'PactoRegionalSal'])->name('salud.indicador.pactoregional.sal');
 Route::get('/salud/pactoregional/Actualizarx', [IndicadoresController::class, 'PactoRegionalActualizar'])->name('salud.indicador.pactoregional.actualizar');
+
 Route::get('/salud/pactoregional/Sal/Reports1', [IndicadoresController::class, 'PactoRegionalSalPacto1Reports'])->name('salud.indicador.pactoregional.detalle.reports');
 Route::post('/salud/pactoregional/Sal/Reports1/2', [IndicadoresController::class, 'PactoRegionalSalPacto1Reports2'])->name('salud.indicador.pactoregional.detalle.reports.2');
 Route::post('/salud/pactoregional/Sal/Reports1/3', [IndicadoresController::class, 'PactoRegionalSalPacto1Reports3'])->name('salud.indicador.pactoregional.detalle.reports.3');
@@ -1284,11 +1293,18 @@ Route::get('/salud/pdrc/{indicador_id}', [IndicadoresController::class, 'PDRCDet
 Route::get('/salud/pei', [IndicadoresController::class, 'PEI'])->name('salud.indicador.pei');
 
 
-Route::get('/educacion/conveniofedx', [IndicadoresController::class, 'EduConvenioFED'])->name('educacion.indicador.conveniofedx');
+// Route::get('/educacion/conveniofedx', [IndicadoresController::class, 'EduConvenioFED'])->name('educacion.indicador.conveniofedx');
 
 Route::get('/educacion/conveniofed', [IndicadoresController::class, 'ConvenioFEDEdu'])->name('educacion.indicador.conveniofed');
+Route::get('/educacion/conveniofed/Actualizar', [IndicadoresController::class, 'ConvenioFEDEduActualizar'])->name('educacion.indicador.conveniofed.actualizar');
+Route::get('/educacion/conveniofed/{indicador_id}', [IndicadoresController::class, 'ConvenioFEDEduDetalle'])->name('educacion.indicador.conveniofed.detalle');
 // Route::get('/educacion/conveniofed/Reports1', [IndicadoresController::class, 'PactoRegionalEduPacto1Reports'])->name('educacion.indicador.pactoregional.edu.pacto1.reports');
 // Route::get('/educacion/conveniofed/Edu/Reports1/find/mes/{anio}', [IndicadoresController::class, 'PactoRegionalEduPacto1FindMes'])->name('educacion.indicador.pactoregional.edu.pacto1.find.mes');
+
+Route::get('/educacion/conveniofed/edu/Reports1', [IndicadoresController::class, 'ConvenioFEDEduMC0501Reports'])->name('educacion.indicador.conveniofed.detalle.reports');
+Route::post('/educacion/conveniofed/edu/Reports1/2', [IndicadoresController::class, 'PactoRegionalSalPacto1Reports2'])->name('educacion.indicador.conveniofed.detalle.reports.2');
+Route::post('/educacion/conveniofed/edu/Reports1/3', [IndicadoresController::class, 'PactoRegionalSalPacto1Reports3'])->name('educacion.indicador.conveniofed.detalle.reports.3');
+// Route::get('/educacion/conveniofed/edu/Reports1/Exportar/{div}/{indicador}/{anio}/{mes}/{provincia}/{distrito}', [IndicadoresController::class, 'PactoRegionalSalPacto1download'])->name('salud.indicador.pactoregional.sal.pacto1.excel');
 
 
 Route::get('/salud/pruebas', function () {

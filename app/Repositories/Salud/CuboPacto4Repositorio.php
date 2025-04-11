@@ -51,6 +51,27 @@ class CuboPacto4Repositorio
 
     public static function Tabla01($importacion, $indicador, $anio, $mes, $provincia, $distrito)
     {
+        $basal = [
+            53 => 7,
+            57 => 6,
+            37 => 6,
+            42 => 9,
+            50 => 11,
+            56 => 9,
+            41 => 4,
+            51 => 8,
+            38 => 7,
+            40 => 6,
+            52 => 4,
+            39 => 8,
+            49 => 11,
+            55 => 1,
+            45 => 6,
+            46 => 8,
+            47 => 4,
+            36 => 8,
+            44 => 1,
+        ];
         $distritos = UbigeoRepositorio::arrayDistritoIdNombre();
 
         $v1 = CuboPacto4Padron12Meses::select(
@@ -78,6 +99,7 @@ class CuboPacto4Repositorio
         $v3 = IndicadorGeneralMeta::where('indicadorgeneral', $indicador)->where('anio', $anio)->pluck('valor', 'distrito');
 
         foreach ($v1 as $key => $value) {
+            $value->basal = $basal[$value->distrito_id] ?? 0;
             $value->meta = $v3[$value->distrito_id] ?? 0;
             $value->cumple = $value->indicador >= $value->meta ? 1 : 0;
         }
@@ -148,7 +170,7 @@ class CuboPacto4Repositorio
             'numerador',
         )
             ->join('par_ubigeo as d', 'd.id', '=', 'c4.distrito_id')
-            ->where('c4.anio', $anio)->where('c4.mes', '=', $mes)->where('cod_unico', $cod_unico)//->tap($filtro) //->where('departamento', 'UCAYALI')
+            ->where('c4.anio', $anio)->where('c4.mes', '=', $mes)->where('cod_unico', $cod_unico) //->tap($filtro) //->where('departamento', 'UCAYALI')
             ->orderBy('numerador', 'desc')->get();
         return $query;
     }

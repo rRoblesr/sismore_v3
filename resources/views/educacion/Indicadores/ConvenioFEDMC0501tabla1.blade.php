@@ -3,7 +3,6 @@
         <tr class="bg-success-0 text-white text-center">
             <th rowspan="1" class="text-center">Nº</th>
             <th rowspan="1" class="text-center">Distrito</th>
-            <th colspan="1" class="text-center">Basal</th>
             <th colspan="1" class="text-center">Meta</th>
             <th rowspan="1" class="text-center">Numerador</th>
             <th rowspan="1" class="text-center">Denominador</th>
@@ -18,11 +17,10 @@
                 <tr class="text-center {{ $item->distrito == $ndis ? 'table-warning' : '' }}">
                     <td>{{ $key + 1 }}</td>
                     <td class="text-left">{{ $item->distrito }}</td>
-                    <td class="table-warning">{{ $item->basal }}%</td>
-                    <td class="table-warning">{{ $item->valor }}%</td>
-                    <td>{{ $item->num }}</td>
-                    <td>{{ $item->den }}</td>
-                    <td>{!! avance($item->ind) !!}</td>
+                    <td class="table-warning">{{ $item->meta }}%</td>
+                    <td>{{ number_format($item->numerador, 0) }}</td>
+                    <td>{{ number_format($item->denominador, 0) }}</td>
+                    <td>{!! avance($item->indicador) !!}</td>
                     <td>
                         @if ($item->cumple == 1)
                             <i class="mdi mdi-thumb-up" style="font-size:13px;color:#43beac" title="CUMPLE"></i>
@@ -36,12 +34,10 @@
         {{-- <tfoot>
             <tr class="text-center bg-success-0 text-white">
                 <th colspan="2" class="text-right">TOTAL</th>
-                <th class="text-center">-</th>
-                <th class="text-center">{{ number_format($foot->num, 0) }}</th>
-                <th class="text-center">{{ number_format($foot->den, 0) }}</th>
-                <th class="text-center">{!! avance($foot->ind, 1) !!}</th>
-                <td>-
-                </td>
+                <th class="text-center">{{ number_format($foot->total, 0) }}</th>
+                <th class="text-center">{{ number_format($foot->con, 0) }}</th>
+                <th class="text-center">{{ number_format($foot->sin, 0) }}</th>
+                <th class="text-center">{!! avance($foot->indicador, 1) !!}</th>
             </tr>
         </tfoot> --}}
     @else
@@ -56,21 +52,23 @@
 
 
 @php
+
     function avance($monto)
     {
+        $roundedMonto = round($monto, 1); // Redondear una sola vez
+        $badgeClass = '';
         if ($monto < 51) {
-            return '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px">' .
-                round($monto, 1) .
-                '%</span>';
-        } elseif ($monto < 100) {
-            return '<span class="badge badge-pill badge-warning" style="font-size:90%; width:50px">' .
-                round($monto, 1) .
-                '%</span>';
+            $badgeClass = 'badge-danger';
+        } elseif ($monto < 95) {
+            $badgeClass = 'badge-orange-x';
         } else {
-            return '<span class="badge badge-pill badge-success" style="font-size:90%; width:50px">' .
-                round($monto, 1) .
-                '%</span>';
+            $badgeClass = 'badge-success';
         }
+        return '<span class="badge badge-pill ' .
+            $badgeClass .
+            '" style="font-size:90%; width:50px;">' .
+            $roundedMonto .
+            '%</span>';
     }
     function bajas($monto)
     {

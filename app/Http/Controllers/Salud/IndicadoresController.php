@@ -7,7 +7,9 @@ use App\Exports\pactoregionalSal2Export;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Educacion\ImporMatriculaController;
 use App\Http\Controllers\Educacion\ImporMatriculaGeneralController;
+use App\Http\Controllers\Educacion\ImporPadronNominalController as eduImporPadronNominalController;
 use App\Models\Educacion\CuboPacto1;
+use App\Models\Educacion\ImporPadronNominal as eduImporPadronNominal;
 use App\Models\Educacion\Importacion;
 use App\Models\Educacion\Indicador;
 use App\Models\Educacion\SFL;
@@ -20,6 +22,7 @@ use App\Models\Salud\CuboPacto1PadronNominal;
 use App\Models\Salud\CuboPacto3PadronMaterno;
 use App\Models\Salud\CuboPacto4Padron12Meses;
 use App\Models\Salud\ImporPadronAnemia;
+use App\Models\Salud\ImporPadronNominal as salImporPadronNominal;
 use App\Repositories\Educacion\CuboPacto1Repositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\SFLRepositorio;
@@ -31,7 +34,9 @@ use App\Repositories\Salud\CuboPacto1PadronNominalRepositorio;
 use App\Repositories\Salud\CuboPacto2Repositorio;
 use App\Repositories\Salud\CuboPacto3Repositorio;
 use App\Repositories\Salud\CuboPacto4Repositorio;
-use App\Repositories\Salud\PadronNominalRepositorio;
+use App\Repositories\Salud\PadronNominalRepositorio as salPadronNominalRepositorio;
+use App\Repositories\Educacion\PadronNominalRepositorio as eduPadronNominalRepositorio;
+
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -156,7 +161,7 @@ class IndicadoresController extends Controller
         switch ($rq->codigo) {
             case 'DIT-SAL-01':
                 $fuente = ImporPadronNominalController::$FUENTE;
-                $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio, 0);
+                $impMaxAnio = salPadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio, 0);
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronNominalController::$FUENTE);
 
                 $base = CuboPacto1PadronNominalRepositorio::pacto01Head($impMaxAnio, $rq->anio, 0, $rq->provincia, $rq->distrito);
@@ -489,7 +494,7 @@ class IndicadoresController extends Controller
     {
         if ($rq->distrito > 0) $ndis = Ubigeo::find($rq->distrito)->nombre;
         else $ndis = '';
-        $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($rq->fuente, $rq->anio, $rq->mes);
+        $impMaxAnio = salPadronNominalRepositorio::PNImportacion_idmax($rq->fuente, $rq->anio, $rq->mes);
         switch ($rq->div) {
             case 'head':
                 $base = CuboPacto1PadronNominalRepositorio::pacto01Head($impMaxAnio, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
@@ -618,7 +623,7 @@ class IndicadoresController extends Controller
 
     public function PactoRegionalSalPacto1Reports2(Request $rq)
     {
-        $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($rq->fuente, $rq->anio, $rq->mes);
+        $impMaxAnio = salPadronNominalRepositorio::PNImportacion_idmax($rq->fuente, $rq->anio, $rq->mes);
 
         $draw = intval($rq->draw);
         $start = intval($rq->start);
@@ -665,7 +670,7 @@ class IndicadoresController extends Controller
 
     public function PactoRegionalSalPacto1Reports3(Request $rq)
     {
-        $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($rq->fuente, $rq->anio, $rq->mes);
+        $impMaxAnio = salPadronNominalRepositorio::PNImportacion_idmax($rq->fuente, $rq->anio, $rq->mes);
 
         $draw = intval($rq->draw);
         $start = intval($rq->start);
@@ -961,7 +966,7 @@ class IndicadoresController extends Controller
     {
         if ($rq->distrito > 0) $ndis = Ubigeo::find($rq->distrito)->nombre;
         else $ndis = '';
-        $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($rq->fuente, $rq->anio, $rq->mes);
+        $impMaxAnio = salPadronNominalRepositorio::PNImportacion_idmax($rq->fuente, $rq->anio, $rq->mes);
         switch ($rq->div) {
             case 'head':
                 $base = CuboPacto3Repositorio::head($rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
@@ -1027,7 +1032,7 @@ class IndicadoresController extends Controller
 
             case 'tabla1':
                 $base = CuboPacto3Repositorio::Tabla01($impMaxAnio, $rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
-                $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla1', compact('base', 'ndis'))->render();
+                $excel = view('salud.Indicadores.PactoRegionalSalPacto3tabla1', compact('base', 'ndis'))->render();
                 return response()->json(compact('excel', 'base'));
 
             case 'tabla2':
@@ -1185,7 +1190,7 @@ class IndicadoresController extends Controller
     public function PactoRegionalSalPacto4Reports(Request $rq)
     {
         $ndis = $rq->distrito > 0 ? Ubigeo::find($rq->distrito)->nombre : '';
-        $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($rq->fuente, $rq->anio, $rq->mes);
+        $impMaxAnio = salPadronNominalRepositorio::PNImportacion_idmax($rq->fuente, $rq->anio, $rq->mes);
         switch ($rq->div) {
             case 'head':
                 $base = CuboPacto4Repositorio::head($rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
@@ -1594,22 +1599,311 @@ class IndicadoresController extends Controller
         return view('educacion.Indicadores.ConvenioFED', compact('indedu', 'anio', 'provincia', 'aniomax'));
     }
 
+    public function ConvenioFEDEduActualizar(Request $rq)
+    {
+        $imp = null;
+        $gls = 0;
+        $gl = 0;
+        switch ($rq->codigo) {
+            case 'MC-05.01':
+                // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
+                // $actualizado =  'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion));
+                // $updateMin1 = PoblacionPNRepositorio::actualizado();
+                // $updateMin2 = CuboPacto1Repositorio::actualizado();
+                // $mes = min($updateMin1->mes, $updateMin2->mes);
+
+                $gl = 80; //(int)PoblacionPNRepositorio::conteo3a5_acumulado($rq->anio, $mes, $rq->provincia, $rq->distrito, 0);
+                $gls = 79; //CuboPacto1Repositorio::pacto1_matriculados($rq->anio, $mes, $rq->provincia, $rq->distrito);
+                $num = number_format($gls, 0);
+                $den = number_format($gl, 0);
+
+                break;
+            case 'DIT-EDU-02':
+                $gl = SFLRepositorio::get_localsx($rq->anio, 0, $rq->provincia, $rq->distrito, 0);
+                $gls = SFLRepositorio::get_localsx($rq->anio, 0, $rq->provincia, $rq->distrito, 1);
+                $num = number_format($gls, 0);
+                $den = number_format($gl, 0);
+                $fecha = SFLRepositorio::inscripcion_max($rq->anio, 0, $rq->provincia, $rq->distrito, 1);
+                $actualizado =  'Actualizado: ' . date('d/m/Y', strtotime($fecha));
+                break;
+            case 'DIT-EDU-03':
+                $gls = 0;
+                $gl = 0;
+                $num = $gls;
+                $den = $gl;
+                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: __/__/____';
+                break;
+            case 'DIT-EDU-04':
+                $gls = 0;
+                $gl = 0;
+                $num = $gls;
+                $den = $gl;
+                $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: __/__/____';
+                break;
+            default:
+                break;
+        }
+        $avance =  round(100 * ($gl > 0 ? $gls / $gl : 0), 1);
+        $meta = '100%';
+        $cumple = $gls >= $gl;
+        return response()->json(compact('avance', 'actualizado', 'meta', 'cumple', 'num', 'den'));
+    }
+
     public function ConvenioFEDEduDetalle($indicador_id)
     {
         $ind = IndicadorGeneralRepositorio::findNoFichatecnica($indicador_id);
         switch ($ind->codigo) {
-            case 'DIT-EDU-01':
-                $fuente = ImporPadronNominalController::$FUENTE;
-                $anio = ImportacionRepositorio::anios_porfuente_select(ImporPadronNominalController::$FUENTE);
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronNominalController::$FUENTE);
+            case 'MC-05.01':
+                $fuente = eduImporPadronNominalController::$FUENTE;
+                $anio = ImportacionRepositorio::anios_porfuente_select(eduImporPadronNominalController::$FUENTE);
+                $imp = ImportacionRepositorio::ImportacionMax_porfuente(eduImporPadronNominalController::$FUENTE);
                 $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
                 $provincia = UbigeoRepositorio::provincia('25');
                 $aniomax = $imp->anio;
-                return view('salud.Indicadores.PactoRegionalSalPacto1', compact('actualizado', 'fuente', 'anio', 'provincia', 'aniomax', 'ind'));
- 
+                return view('educacion.Indicadores.ConvenioFEDMC0501', compact('actualizado', 'fuente', 'anio', 'provincia', 'aniomax', 'ind'));
+
             default:
                 return 'ERROR, PAGINA NO ENCONTRADA';
         }
+    }
+
+    // ############ FED MC0501 #################
+    public function ConvenioFEDEduMC0501Reports(Request $rq)
+    {
+        if ($rq->distrito > 0) $ndis = Ubigeo::find($rq->distrito)->nombre;
+        else $ndis = '';
+        $impMaxAnio = eduPadronNominalRepositorio::PNImportacion_idmax($rq->fuente, $rq->anio, $rq->mes);
+        switch ($rq->div) {
+            case 'head':
+                return $c1 = salImporPadronNominal::where('importacion_id', $impMaxAnio)->count();
+                return $c1 = eduImporPadronNominal::where('importacion_id', $impMaxAnio)->count();
+                $base = CuboPacto1PadronNominalRepositorio::pacto01Head($impMaxAnio, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $gln = $base->gl - $base->gls;
+
+                $ri = number_format($base->indicador, 1);
+                $gls = number_format($base->gls, 0);
+                $gln = number_format($base->gln, 0);
+                $gl = number_format($base->gl, 0);
+                return response()->json(['aa' => $rq->all(), 'ri' => $ri, 'gl' => $gl, 'gls' => $gls, 'gln' => $gln, 'base' => $base]);
+
+            case 'anal1':
+                $base = CuboPacto1PadronNominalRepositorio::pacto01Anal01($impMaxAnio, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $info = [];
+                foreach ($base as $key => $value) {
+                    $info['categoria'][] = $value->distrito;
+                    $info['serie'][] = ['y' => round($value->indicador, 1), 'color' => (round($value->indicador, 1) > 95 ? '#43beac' : (round($value->indicador, 1) > 50 ? '#eb960d' : '#ef5350'))];
+                }
+                return response()->json(compact('info'));
+
+            case 'anal2':
+                $base = CuboPacto1PadronNominalRepositorio::pacto01Anal02($impMaxAnio, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $base1 = collect($base['query'] ?? []);
+                $base1 = $base1->pluck('indicador', 'mes');
+                $mes = Mes::select('id', 'abreviado')->get();
+
+                $info = [];
+                foreach ($mes as $key => $value) {
+                    $info['cat'][] = $value->abreviado;
+                    $info['dat'][$key] = $base1[$value->id] ?? null;
+                    if ($info['dat'][$key] > 0) $info['dat'][$key] = (float)$info['dat'][$key];
+                }
+
+                return response()->json(compact('info', 'base1'));
+
+            case 'anal3': //lineas
+                $base = CuboPacto1PadronNominalRepositorio::pacto01Anal03($impMaxAnio, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $info['serie'] = [];
+                $info['serie'][0]['name'] = 'No Cumplen';
+                $info['serie'][1]['name'] = 'Cumplen';
+                foreach ($base as $key => $value) {
+                    $info['categoria'][] = $value->edades;
+                    // $info['serie'][$key]['data'] = [$value->si, $value->no];
+                    $info['serie'][0]['data'][] = (int)$value->no;
+                    $info['serie'][1]['data'][] = (int)$value->si;
+                }
+                return response()->json(compact('info', 'base'));
+
+            case 'tabla1':
+                $base = CuboPacto1PadronNominalRepositorio::pacto01Tabla01($impMaxAnio, $rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla1', compact('base', 'ndis'))->render();
+                return response()->json(compact('excel'));
+
+            case 'tabla2':
+                $draw = intval($rq->draw);
+                $start = intval($rq->start);
+                $length = intval($rq->length);
+
+                $query = CuboPacto1PadronNominalRepositorio::pacto01Tabla02($impMaxAnio, $rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+
+                $data = [];
+                foreach ($query as $key => $value) {
+                    $data[] = array(
+                        $key + 1,
+                        $value->codigo,
+                        $value->ipress,
+                        $value->red,
+                        $value->microrred,
+                        $value->provincia,
+                        $value->distrito,
+                        $value->denominador,
+                        $value->numerador,
+                        // $value->indicador
+                        $value->indicador < 51 ?
+                            '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px">' . number_format($value->indicador, 1) . '%</span>' : ($value->indicador < 100 ?
+                                '<span class="badge badge-pill badge-warning" style="font-size:90%; width:50px">' . number_format($value->indicador, 1) . '%</span>' :
+                                '<span class="badge badge-pill badge-success" style="font-size:90%; width:50px">' . number_format($value->indicador, 1) . '%</span>'
+                            ),
+                        $value->indicador >= 90 ? 1 : 0
+                    );
+                }
+                $result = array(
+                    "draw" => $draw,
+                    "recordsTotal" => $start,
+                    "recordsFiltered" => $length,
+                    "data" => $data,
+                    // "data2" => $rq->all(),
+                );
+                return response()->json($result);
+                break;
+
+            case 'tabla0201':
+                $draw = intval($rq->draw);
+                $start = intval($rq->start);
+                $length = intval($rq->length);
+
+                $query = CuboPacto1PadronNominal::where('importacion', $impMaxAnio)->where('cui_atencion', $rq->cod_unico)->whereIn('tipo_doc', ['DNI', 'CNV'])->get();
+
+                $data = [];
+                foreach ($query as $key => $value) {
+                    $data[] = array(
+                        $key + 1,
+                        $value->tipo_doc,
+                        $value->num_doc,
+                        $value->nombre_completo,
+                        $value->fecha_nacimiento,
+                        $value->distrito,
+                        $value->seguro,
+                        $value->num_doc_madre,
+                        $value->nombre_completo_madre,
+                        $value->num,
+                    );
+                }
+                $result = array(
+                    "draw" => $draw,
+                    "recordsTotal" => $start,
+                    "recordsFiltered" => $length,
+                    "data" => $data,
+                );
+                return response()->json($result);
+
+            default:
+                return [];
+        }
+    }
+
+    public function ConvenioFEDEduMC0501Reports2(Request $rq)
+    {
+        $impMaxAnio = salPadronNominalRepositorio::PNImportacion_idmax($rq->fuente, $rq->anio, $rq->mes);
+
+        $draw = intval($rq->draw);
+        $start = intval($rq->start);
+        $length = intval($rq->length);
+
+        $query = CuboPacto1PadronNominal::where('importacion', $impMaxAnio);
+
+        $query = $query->whereIn('tipo_doc', ['DNI', 'CNV']);
+
+        if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
+        if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
+
+        $recordsTotal = $query->count();
+        $recordsFiltered = $recordsTotal;
+
+        $query = $query->skip($start)->take($length)->get();
+
+        $query = $query->map(function ($item, $key) use ($start) {
+            $item->item = $start + $key + 1;
+            return $item;
+        });
+
+        $query->transform(function ($value) {
+            $value->nacimiento = $value->fecha_nacimiento ? date('d/m/Y', strtotime($value->fecha_nacimiento)) : null;
+            $value->ipress = str_pad($value->cui_atencion, 8, '0', STR_PAD_LEFT);
+            $value->estado = $value->num == 1
+                ? '<span class="badge badge-pill badge-success" style="font-size:90%;">CUMPLE</span>'
+                :  '<span class="badge badge-pill badge-danger" style="font-size:90%;">NO CUMPLE</span>';
+            return $value;
+        });
+
+        $result = [
+            "draw" => $draw,
+            "recordsTotal" => $recordsTotal,
+            "recordsFiltered" => $recordsFiltered,
+            "data" => $query,
+            "input" => $rq->all(),
+            "queries" => $query->toArray(),
+            'importacion' => $impMaxAnio
+        ];
+
+        return response()->json($result);
+    }
+
+    public function ConvenioFEDEduMC0501Reports3(Request $rq)
+    {
+        $impMaxAnio = eduPadronNominalRepositorio::PNImportacion_idmax($rq->fuente, $rq->anio, $rq->mes);
+
+        $draw = intval($rq->draw);
+        $start = intval($rq->start);
+        $length = intval($rq->length);
+
+        $query = CuboPacto1PadronNominal::where('importacion', $impMaxAnio);
+
+        $query = $query->whereIn('tipo_doc', ['DNI', 'CNV']);
+
+        if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
+        if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
+
+        $recordsTotal = $query->count();
+        $recordsFiltered = $recordsTotal;
+
+        $query = $query->skip($start)->take($length)->get();
+
+        $query = $query->map(function ($item, $key) use ($start) {
+            $item->item = $start + $key + 1;
+            return $item;
+        });
+
+        $estado = ['<i class="mdi mdi-thumb-down" style="font-size:12px;color:red" title="NO CUMPLE"></i>', '<i class="mdi mdi-thumb-up" style="font-size:12px;color:#43beac" title="CUMPLE"></i>'];
+        $query->transform(function ($value) use ($estado) {
+            $value->nacimiento = $value->fecha_nacimiento ? date('d/m/Y', strtotime($value->fecha_nacimiento)) : null;
+            $value->c01 = $estado[$value->critero01];
+            $value->c02 = $estado[$value->critero02];
+            $value->c03 = $estado[$value->critero04];
+            $value->c04 = $estado[$value->critero05];
+            $value->c05 = $estado[$value->critero03];
+            $value->c06 = $estado[$value->critero06];
+            $value->c07 = $estado[$value->critero07];
+            $value->c08 = $estado[$value->critero08];
+            $value->c09 = $estado[$value->critero09];
+            $value->c10 = $estado[$value->critero10];
+
+            $value->estado = $value->num == 1
+                ? '<span class="badge badge-pill badge-success" style="font-size:90%;">CUMPLEN</span>'
+                :  '<span class="badge badge-pill badge-danger" style="font-size:90%;">NO CUMPLEN</span>';
+            return $value;
+        });
+
+        $result = [
+            "draw" => $draw,
+            "recordsTotal" => $recordsTotal,
+            "recordsFiltered" => $recordsFiltered,
+            "data" => $query,
+            "input" => $rq->all(),
+            "queries" => $query->toArray(),
+            'importacion' => $impMaxAnio
+        ];
+
+        return response()->json($result);
     }
 
     public function ConvenioGestion()

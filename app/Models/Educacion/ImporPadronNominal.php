@@ -19,6 +19,7 @@ class ImporPadronNominal extends Model
     protected $fillable = [
         'importacion_id',
         'cod_mod',
+        'modalidad',
         'cod_estudiante',
         'dni',
         'validacion_dni',
@@ -29,9 +30,11 @@ class ImporPadronNominal extends Model
         'nacionalidad',
         'fecha_nacimiento',
         'lengua_materna',
-        'fecha_matricula',
         'grado',
         'seccion',
+        'fecha_matricula',
+        'sr_regular',
+        'sf_recuperacion',
     ];
 
     // protected $hide = [
