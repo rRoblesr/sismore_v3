@@ -187,7 +187,7 @@ class IndicadorGeneralController extends Controller
             $data['inputerror'][] = 'codigo';
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
-        } else if ($request->codigoconteo == 0) {
+        }/* else if ($request->codigoconteo == 0) {
             $data['inputerror'][] = 'codigo';
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;

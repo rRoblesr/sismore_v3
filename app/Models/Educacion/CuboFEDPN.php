@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Models\Salud;
+namespace App\Models\Educacion;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ImporPadronNominal extends Model
+class CuboFEDPN extends Model
 {
     use HasFactory;
 
     public $timestamps = false;
-    protected $table = "sal_impor_padron_nominal";
+    protected $table = "edu_cubo_fed_pn";
 
     /**
      * The attributes that are mass assignable.
@@ -19,30 +19,21 @@ class ImporPadronNominal extends Model
      */
     protected $fillable = [
         'importacion_id',
-        'padron',
-        'cnv',
-        'cui',
+        'anio',
+        'mes',
         'dni',
-        'num_doc',
-        'tipo_doc',
         'apellido_paterno',
         'apellido_materno',
         'nombre',
-        'genero',
+        'sexo',
         'fecha_nacimiento',
+        'edad',
+        'tipo_edad',
         'direccion',
         'ubigeo',
-        'provincia_id',
-        'distrito_id',
         'centro_poblado',
         'centro_poblado_nombre',
         'area_ccpp',
-        'cui_nacimiento',
-        'cui_atencion',
-        'seguro',
-        'programa_social',
-        'visita',
-        'menor_encontrado',
         'codigo_ie',
         'nombre_ie',
         'tipo_doc_madre',
@@ -53,6 +44,15 @@ class ImporPadronNominal extends Model
         'celular_madre',
         'grado_instruccion',
         'lengua_madre',
-        'repetido'
+        'distrito_id',
+        'distrito',
+        'dependencia',
+        'provincia',
+        'ugel',
+        'cod_mod',
+        'den',
+        'num',
+        'numx',
+
     ];
 }

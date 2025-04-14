@@ -3,12 +3,11 @@
         <tr class="bg-success-0 text-white text-center">
             <th rowspan="1" class="text-center">Nº</th>
             <th rowspan="1" class="text-center">Distrito</th>
-            {{-- <th colspan="1" class="text-center">Meta</th> --}}
-            <th rowspan="1" class="text-center">Matriculados</th>
-            <th rowspan="1" class="text-center">Poblacion</th>
-            <th rowspan="1" class="text-center">Brecha</th>
-            <th colspan="1" class="text-center">%Avance</th>
-            {{-- <th colspan="1" class="text-center">Cumple</th> --}}
+            <th colspan="1" class="text-center">Meta</th>
+            <th rowspan="1" class="text-center">Numerador</th>
+            <th rowspan="1" class="text-center">Denominador</th>
+            <th rowspan="1" class="text-center">Indicador</th>
+            <th colspan="1" class="text-center">Cumple</th>
         </tr>
 
     </thead>
@@ -18,18 +17,18 @@
                 <tr class="text-center {{ $item->distrito == $ndis ? 'table-warning' : '' }}">
                     <td>{{ $key + 1 }}</td>
                     <td class="text-left">{{ $item->distrito }}</td>
-                    {{-- <td class="table-warning">{{ $item->meta }}%</td> --}}
+                    <td class="table-warning">{{ $item->meta }}%</td>
                     <td>{{ number_format($item->numerador, 0) }}</td>
                     <td>{{ number_format($item->denominador, 0) }}</td>
-                    <td>{{ number_format($item->denominador - $item->numerador, 0) }}</td>
+                    {{-- <td>{{ number_format($item->denominador - $item->numerador, 0) }}</td> --}}
                     <td>{!! avance($item->indicador) !!}</td>
-                    {{-- <td>
+                    <td>
                         @if ($item->cumple == 1)
                             <i class="mdi mdi-thumb-up" style="font-size:13px;color:#43beac" title="CUMPLE"></i>
                         @else
                             <i class="mdi mdi-thumb-down" style="font-size:13px;color: red" title="NO CUMPLE"></i>
                         @endif
-                    </td> --}}
+                    </td>
                 </tr>
             @endforeach
         </tbody>

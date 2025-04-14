@@ -12,42 +12,7 @@
 @endsection
 
 @section('content')
-    {{-- <div class="card  card-border border border-plomo-0">
-    <div
-        class="card-header border-success-0 bg-transparent text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center px-2 py-2">
-        <h6 class="card-title mb-2 mb-md-0 text-center text-primary text-md-left text-wrap">
-            Directorio de establecimientos de salud de Ucayali
-        </h6>
-        <div class="text-center text-md-right">
-            <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
-                <i class="fa fa-redo"></i> Actualizar
-            </button>
-        </div>
-    </div>
-    <div class="card-body p-2">
-        <!-- Contenido de la tarjeta -->
-    </div>
-</div> --}}
-
-    {{-- <div class="card">
-    <div
-        class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center p-2">
-        <h6 class="mb-2 mb-md-0 text-center text-md-left text-wrap text-white">
-            <i class="fas fa-chart-bar d-none"></i> {{ $ind->nombre }}
-        </h6>
-        <div class="text-center text-md-right">
-            <button type="button" class="btn btn-orange-0 btn-xs my-1" onclick="history.back()" title="VOLVER">
-                <i class="fas fa-arrow-left"></i> Volver</button>
-            <button type="button" class="btn btn-orange-0 btn-xs my-1" onclick="verpdf({{ $ind->id }})"
-                title='FICHA TÉCNICA'><i class="fas fa-file"></i> Ficha Técnica</button>
-            <button type="button" class="btn btn-orange-0 btn-xs my-1" onclick="location.reload()" title='ACTUALIZAR'>
-                <i class=" fas fa-history"></i> Actualizar</button>
-        </div>
-    </div>
-    <div class="card-body p-2">
-     
-    </div>
-</div> --}}
+    
 
     <div class="card">
         <div
@@ -133,7 +98,7 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="ri"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Meta del indicador</p>
+                            <p class="mb-0 mt-1 text-truncate">Avance del Indicador</p>
                         </div>
                     </div>
                 </div>
@@ -159,7 +124,7 @@
                                 {{-- <span onclick="verinformacion(0)" data-toggle="modal" data-target="#info_denominador">
                                     <i class="mdi mdi-rotate-180 mdi-alert-circle" style="color:#43beac;"></i>
                                 </span> --}}
-                                Avance del Indicador
+                                Denominador
                             </p>
                         </div>
                     </div>
@@ -185,7 +150,7 @@
                                 {{-- <span onclick="verinformacion(1)" data-toggle="modal" data-target="#info_numerador">
                                     <i class="mdi mdi-rotate-180 mdi-alert-circle" style="color:#43beac;"></i>
                                 </span> --}}
-                                Población
+                                Numerador
                             </p>
                         </div>
                     </div>
@@ -208,7 +173,7 @@
                                 <span data-plugin="counterup" id="gln"></span>
                             </h4>
                             <p class="mb-0 mt-1 text-truncate">
-                                Matriculados
+                                Brecha
                             </p>
                         </div>
                     </div>
@@ -756,7 +721,7 @@
 
         function panelGraficas(div) {
             $.ajax({
-                url: "{{ route('educacion.indicador.conveniofed.detalle.reports') }}",
+                url: "{{ route('educacion.indicador.conveniofed.detalle.reports.2') }}",
                 data: {
                     'div': div,
                     "anio": $('#anio').val(),
@@ -780,14 +745,10 @@
                 },
                 success: function(data) {
                     if (div == "head") {
-                        // $('#ri').text(data.ri + '%');
-                        // $('#gl').text(data.gl);
-                        // $('#gls').text(data.gls);
-                        // $('#gln').text(data.gln);
-                        $('#ri').text('74.7%');
-                        $('#gl').text(data.ri + '%');
-                        $('#gls').text(data.gl);
-                        $('#gln').text(data.gls);
+                        $('#ri').text(data.ri + '%');
+                        $('#gl').text(data.gl);
+                        $('#gls').text(data.gls);
+                        $('#gln').text(data.gln);
                     } else if (div == "anal1") {
                         gbar('anal1', data.info.categoria,
                             data.info.serie,

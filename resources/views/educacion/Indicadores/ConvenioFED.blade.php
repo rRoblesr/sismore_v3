@@ -275,6 +275,7 @@
 
         function cargarpacto1() {
             cargarActualizar('MC-05.01');
+            cargarActualizar('MC-05.02');
         }
 
         function cargarActualizar(codigo) {

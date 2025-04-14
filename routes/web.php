@@ -1305,7 +1305,9 @@ Route::get('/educacion/conveniofed/edu/Reports1', [IndicadoresController::class,
 Route::post('/educacion/conveniofed/edu/Reports1/2', [IndicadoresController::class, 'PactoRegionalSalPacto1Reports2'])->name('educacion.indicador.conveniofed.detalle.reports.2');
 Route::post('/educacion/conveniofed/edu/Reports1/3', [IndicadoresController::class, 'PactoRegionalSalPacto1Reports3'])->name('educacion.indicador.conveniofed.detalle.reports.3');
 // Route::get('/educacion/conveniofed/edu/Reports1/Exportar/{div}/{indicador}/{anio}/{mes}/{provincia}/{distrito}', [IndicadoresController::class, 'PactoRegionalSalPacto1download'])->name('salud.indicador.pactoregional.sal.pacto1.excel');
-
+Route::get('/educacion/conveniofed/edu/Reports2', [IndicadoresController::class, 'ConvenioFEDEduMC0502Reports'])->name('educacion.indicador.conveniofed.detalle.reports.2');
+// Route::post('/educacion/conveniofed/edu/Reports2/2', [IndicadoresController::class, 'PactoRegionalSalPacto1Reports2'])->name('educacion.indicador.conveniofed.detalle.reports.2');
+// Route::post('/educacion/conveniofed/edu/Reports2/3', [IndicadoresController::class, 'PactoRegionalSalPacto1Reports3'])->name('educacion.indicador.conveniofed.detalle.reports.3');
 
 Route::get('/salud/pruebas', function () {
     return view('salud.Indicadores.pruebaxxx00');

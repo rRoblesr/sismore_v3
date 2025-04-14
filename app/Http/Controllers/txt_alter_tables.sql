@@ -3062,3 +3062,46 @@ CREATE TABLE edu_impor_padron_nominal (
 
 
 
+CREATE TABLE 	edu_cubo_fed_pn (
+    id INT AUTO_INCREMENT PRIMARY KEY, -- Campo id autoincremental
+    importacion_id INT,
+				anio INT,
+				mes INT,
+    dni VARCHAR(20),
+    apellido_paterno VARCHAR(50),
+    apellido_materno VARCHAR(50),
+    nombre VARCHAR(100),
+    sexo VARCHAR(10),
+    fecha_nacimiento DATE,
+    edad INT,
+    tipo_edad VARCHAR(1),
+    direccion VARCHAR(255),
+    ubigeo VARCHAR(10),
+    centro_poblado VARCHAR(20),
+    centro_poblado_nombre VARCHAR(100),
+    area_ccpp VARCHAR(20),
+    codigo_ie VARCHAR(20),
+    nombre_ie VARCHAR(100),
+    tipo_doc_madre VARCHAR(20),
+    num_doc_madre VARCHAR(20),
+    apellido_paterno_madre VARCHAR(50),
+    apellido_materno_madre VARCHAR(50),
+    nombres_madre VARCHAR(100),
+    celular_madre VARCHAR(20),
+    grado_instruccion VARCHAR(50),
+    lengua_madre VARCHAR(50),
+    distrito_id INT,
+    distrito VARCHAR(50),
+    dependencia VARCHAR(50),
+    provincia VARCHAR(50),
+    ugel VARCHAR(100),
+    cod_mod VARCHAR(20),
+    den INT,
+    num INT,
+    numx INT
+);
+
+
+
+
+
