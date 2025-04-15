@@ -1607,11 +1607,6 @@ class IndicadoresController extends Controller
         $gl = 0;
         switch ($rq->codigo) {
             case 'MC-05.01':
-                // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-                // $actualizado =  'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion));
-                // $updateMin1 = PoblacionPNRepositorio::actualizado();
-                // $updateMin2 = CuboPacto1Repositorio::actualizado();
-                // $mes = min($updateMin1->mes, $updateMin2->mes);
                 $base = CuboFEDPN::where('anio', 2025)->select(
                     DB::raw('sum(den) as gl'),
                     DB::raw('sum(num) as gls'),
@@ -1620,11 +1615,9 @@ class IndicadoresController extends Controller
                 )->first();
                 $gl = (int)$base->gl;
                 $gls = (int)$base->gls;
-                // $gl = 80; //(int)PoblacionPNRepositorio::conteo3a5_acumulado($rq->anio, $mes, $rq->provincia, $rq->distrito, 0);
-                // $gls = 79; //CuboPacto1Repositorio::pacto1_matriculados($rq->anio, $mes, $rq->provincia, $rq->distrito);
                 $num = number_format($gls, 0);
                 $den = number_format($gl, 0);
-                $actualizado =  'Actualizado: ';
+                $actualizado =  'Actualizado: 31/03/2025';
                 break;
             case 'MC-05.02':
                 $base = CuboFEDPN::where('anio', 2025)->select(
@@ -1637,8 +1630,7 @@ class IndicadoresController extends Controller
                 $gls = (int)$base->gls;
                 $num = number_format($gls, 0);
                 $den = number_format($gl, 0);
-                // $fecha = SFLRepositorio::inscripcion_max($rq->anio, 0, $rq->provincia, $rq->distrito, 1);
-                $actualizado =  'Actualizado: ';
+                $actualizado =  'Actualizado: 31/03/2025';
                 break;
             case 'DIT-EDU-03':
                 $gls = 0;
@@ -1671,7 +1663,8 @@ class IndicadoresController extends Controller
                 $fuente = eduImporPadronNominalController::$FUENTE;
                 $anio = ImportacionRepositorio::anios_porfuente_select(eduImporPadronNominalController::$FUENTE);
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(eduImporPadronNominalController::$FUENTE);
-                $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
+                // $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
+                $actualizado = '31/03/2025';
                 $provincia = UbigeoRepositorio::provincia('25');
                 $aniomax = $imp->anio;
                 return view('educacion.Indicadores.ConvenioFEDMC0501', compact('actualizado', 'fuente', 'anio', 'provincia', 'aniomax', 'ind'));
@@ -1679,7 +1672,8 @@ class IndicadoresController extends Controller
                 $fuente = eduImporPadronNominalController::$FUENTE;
                 $anio = ImportacionRepositorio::anios_porfuente_select(eduImporPadronNominalController::$FUENTE);
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(eduImporPadronNominalController::$FUENTE);
-                $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
+                // $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
+                $actualizado = '31/03/2025';
                 $provincia = UbigeoRepositorio::provincia('25');
                 $aniomax = $imp->anio;
                 return view('educacion.Indicadores.ConvenioFEDMC0502', compact('actualizado', 'fuente', 'anio', 'provincia', 'aniomax', 'ind'));
@@ -1697,12 +1691,12 @@ class IndicadoresController extends Controller
         $impMaxAnio = eduPadronNominalRepositorio::PNImportacion_idmax($rq->fuente, $rq->anio, $rq->mes);
         switch ($rq->div) {
             case 'head':
-                $v = CuboFEDPN::where('anio', 2025)->select(DB::raw('sum(den) as gl'), DB::raw('sum(num) as gls'), DB::raw('sum(den)-sum(num) as gln'), DB::raw('round(100*sum(num)/sum(den),1) as indicador'))->first();
-                // return $c1 = salImporPadronNominal::where('importacion_id', $impMaxAnio)->count();
-                // return $c1 = eduImporPadronNominal::where('importacion_id', $impMaxAnio)->count();
-                // $base = CuboPacto1PadronNominalRepositorio::pacto01Head($impMaxAnio, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
-                // $gln = $base->gl - $base->gls;
-
+                $v = CuboFEDPN::where('anio', 2025)->select(
+                    DB::raw('sum(den) as gl'),
+                    DB::raw('sum(num) as gls'),
+                    DB::raw('sum(den)-sum(num) as gln'),
+                    DB::raw('round(100*sum(num)/sum(den),1) as indicador')
+                )->first();
                 $ri = number_format($v->indicador, 1);
                 $gls = number_format($v->gls, 0);
                 $gln = number_format($v->gln, 0);
@@ -1726,41 +1720,28 @@ class IndicadoresController extends Controller
                     DB::raw('sum(if(den=1,1,0)) as pd'),
                     DB::raw('100*sum(num)/sum(den) as pi')
                 )->where('anio', $rq->anio);
-                return $base = $base->groupBy('provincia')->orderBy('pi', 'desc')->get();
-
-
-                $base = CuboPacto1PadronNominalRepositorio::pacto01Anal02($impMaxAnio, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
-                $base1 = collect($base['query'] ?? []);
-                $base1 = $base1->pluck('indicador', 'mes');
-                $mes = Mes::select('id', 'abreviado')->get();
-
+                $base = $base->groupBy('provincia')->orderBy('pi', 'desc')->get();
                 $info = [];
-                foreach ($mes as $key => $value) {
-                    $info['cat'][] = $value->abreviado;
-                    $info['dat'][$key] = $base1[$value->id] ?? null;
-                    if ($info['dat'][$key] > 0) $info['dat'][$key] = (float)$info['dat'][$key];
+                foreach ($base as $key => $value) {
+                    $info['categorias'][] = $value->provincia;
+                    $info['poblacion'][] = (int)$value->pd;
+                    $info['matriculados'][] = (int)$value->pn;
                 }
-
-                return response()->json(compact('info', 'base1'));
+                return response()->json(compact('info', 'base'));
 
             case 'anal3': //lineas
                 $base = CuboFEDPN::select(
-                    'provincia',
+                    'ugel',
                     DB::raw('sum(if(num=1,1,0)) as pn'),
                     DB::raw('sum(if(den=1,1,0)) as pd'),
                     DB::raw('100*sum(num)/sum(den) as pi')
                 )->where('anio', $rq->anio);
-                return $base = $base->groupBy('provincia')->orderBy('pi', 'desc')->get();
-
-                // $base = CuboPacto1PadronNominalRepositorio::pacto01Anal03($impMaxAnio, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
-                $info['serie'] = [];
-                $info['serie'][0]['name'] = 'No Cumplen';
-                $info['serie'][1]['name'] = 'Cumplen';
+                $base = $base->groupBy('ugel')->orderBy('pi', 'desc')->get();
+                $info = [];
                 foreach ($base as $key => $value) {
-                    $info['categoria'][] = $value->edades;
-                    // $info['serie'][$key]['data'] = [$value->si, $value->no];
-                    $info['serie'][0]['data'][] = (int)$value->no;
-                    $info['serie'][1]['data'][] = (int)$value->si;
+                    $info['categorias'][] = $value->ugel;
+                    $info['poblacion'][] = (int)$value->pd;
+                    $info['matriculados'][] = (int)$value->pn;
                 }
                 return response()->json(compact('info', 'base'));
 
@@ -1787,27 +1768,34 @@ class IndicadoresController extends Controller
                 $start = intval($rq->start);
                 $length = intval($rq->length);
 
-                $query = CuboPacto1PadronNominalRepositorio::pacto01Tabla02($impMaxAnio, $rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
-
+                $query = CuboFEDPN::where('anio', $rq->anio)
+                    ->select(
+                        'dni',
+                        'provincia',
+                        'distrito',
+                        'centro_poblado_nombre',
+                        'area_ccpp',
+                        'eess',
+                        'cod_mod',
+                        'iiee',
+                        DB::raw('if(length(cod_mod)=7,1,0) as cumple')
+                    );
+                $query = $query->get();
                 $data = [];
                 foreach ($query as $key => $value) {
                     $data[] = array(
                         $key + 1,
-                        $value->codigo,
-                        $value->ipress,
-                        $value->red,
-                        $value->microrred,
+                        $value->dni,
                         $value->provincia,
                         $value->distrito,
-                        $value->denominador,
-                        $value->numerador,
-                        // $value->indicador
-                        $value->indicador < 51 ?
-                            '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px">' . number_format($value->indicador, 1) . '%</span>' : ($value->indicador < 100 ?
-                                '<span class="badge badge-pill badge-warning" style="font-size:90%; width:50px">' . number_format($value->indicador, 1) . '%</span>' :
-                                '<span class="badge badge-pill badge-success" style="font-size:90%; width:50px">' . number_format($value->indicador, 1) . '%</span>'
-                            ),
-                        $value->indicador >= 90 ? 1 : 0
+                        $value->centro_poblado_nombre,
+                        $value->area_ccpp,
+                        $value->eess,
+                        $value->cod_mod,
+                        $value->iiee,
+                        $value->cumple == 0 ?
+                            '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px">NO</span>' :
+                            '<span class="badge badge-pill badge-success" style="font-size:90%; width:50px">SI</span>'
                     );
                 }
                 $result = array(
@@ -1857,18 +1845,22 @@ class IndicadoresController extends Controller
 
     public function ConvenioFEDEduMC0501Reports2(Request $rq)
     {
-        $impMaxAnio = salPadronNominalRepositorio::PNImportacion_idmax($rq->fuente, $rq->anio, $rq->mes);
-
         $draw = intval($rq->draw);
         $start = intval($rq->start);
         $length = intval($rq->length);
 
-        $query = CuboPacto1PadronNominal::where('importacion', $impMaxAnio);
-
-        $query = $query->whereIn('tipo_doc', ['DNI', 'CNV']);
-
-        if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
-        if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
+        $query = CuboFEDPN::where('anio', $rq->anio)
+            ->select(
+                'dni',
+                'provincia',
+                'distrito',
+                'centro_poblado_nombre',
+                'area_ccpp',
+                'eess',
+                'cod_mod',
+                'iiee',
+                DB::raw('if(length(cod_mod)=7,1,0) as cumple')
+            );
 
         $recordsTotal = $query->count();
         $recordsFiltered = $recordsTotal;
@@ -1896,7 +1888,6 @@ class IndicadoresController extends Controller
             "data" => $query,
             "input" => $rq->all(),
             "queries" => $query->toArray(),
-            'importacion' => $impMaxAnio
         ];
 
         return response()->json($result);
@@ -1969,11 +1960,6 @@ class IndicadoresController extends Controller
         switch ($rq->div) {
             case 'head':
                 $v = CuboFEDPN::where('anio', 2025)->select(DB::raw('sum(num) as gl'), DB::raw('sum(numx) as gls'), DB::raw('sum(num)-sum(numx) as gln'), DB::raw('round(100*sum(numx)/sum(num),1) as indicador'))->first();
-                // return $c1 = salImporPadronNominal::where('importacion_id', $impMaxAnio)->count();
-                // return $c1 = eduImporPadronNominal::where('importacion_id', $impMaxAnio)->count();
-                // $base = CuboPacto1PadronNominalRepositorio::pacto01Head($impMaxAnio, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
-                // $gln = $base->gl - $base->gls;
-
                 $ri = number_format($v->indicador, 1);
                 $gls = number_format($v->gls, 0);
                 $gln = number_format($v->gln, 0);
@@ -1993,45 +1979,34 @@ class IndicadoresController extends Controller
             case 'anal2':
                 $base = CuboFEDPN::select(
                     'provincia',
-                    DB::raw('sum(if(num=1,1,0)) as pn'),
-                    DB::raw('sum(if(den=1,1,0)) as pd'),
-                    DB::raw('100*sum(num)/sum(den) as pi')
-                )->where('anio', $rq->anio);
-                return $base = $base->groupBy('provincia')->orderBy('pi', 'desc')->get();
-
-
-                $base = CuboPacto1PadronNominalRepositorio::pacto01Anal02($impMaxAnio, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
-                $base1 = collect($base['query'] ?? []);
-                $base1 = $base1->pluck('indicador', 'mes');
-                $mes = Mes::select('id', 'abreviado')->get();
+                    DB::raw('sum(numx) as pn'),
+                    DB::raw('sum(num) as pd'),
+                    DB::raw('100*sum(numx)/sum(num) as pi')
+                )->where('anio', $rq->anio)->where('num', '1');
+                $base = $base->groupBy('provincia')->orderBy('pi', 'desc')->get();
 
                 $info = [];
-                foreach ($mes as $key => $value) {
-                    $info['cat'][] = $value->abreviado;
-                    $info['dat'][$key] = $base1[$value->id] ?? null;
-                    if ($info['dat'][$key] > 0) $info['dat'][$key] = (float)$info['dat'][$key];
+                foreach ($base as $key => $value) {
+                    $info['categorias'][] = $value->provincia;
+                    $info['poblacion'][] = (int)$value->pd;
+                    $info['matriculados'][] = (int)$value->pn;
                 }
 
-                return response()->json(compact('info', 'base1'));
+                return response()->json(compact('info', 'base'));
 
             case 'anal3': //lineas
                 $base = CuboFEDPN::select(
-                    'provincia',
-                    DB::raw('sum(if(num=1,1,0)) as pn'),
-                    DB::raw('sum(if(den=1,1,0)) as pd'),
-                    DB::raw('100*sum(num)/sum(den) as pi')
-                )->where('anio', $rq->anio);
-                return $base = $base->groupBy('provincia')->orderBy('pi', 'desc')->get();
-
-                // $base = CuboPacto1PadronNominalRepositorio::pacto01Anal03($impMaxAnio, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
-                $info['serie'] = [];
-                $info['serie'][0]['name'] = 'No Cumplen';
-                $info['serie'][1]['name'] = 'Cumplen';
+                    'ugel',
+                    DB::raw('sum(numx) as pn'),
+                    DB::raw('sum(num) as pd'),
+                    DB::raw('100*sum(numx)/sum(num) as pi')
+                )->where('anio', $rq->anio)->where('num', '1');
+                $base = $base->groupBy('ugel')->orderBy('pi', 'desc')->get();
+                $info = [];
                 foreach ($base as $key => $value) {
-                    $info['categoria'][] = $value->edades;
-                    // $info['serie'][$key]['data'] = [$value->si, $value->no];
-                    $info['serie'][0]['data'][] = (int)$value->no;
-                    $info['serie'][1]['data'][] = (int)$value->si;
+                    $info['categorias'][] = $value->ugel;
+                    $info['poblacion'][] = (int)$value->pd;
+                    $info['matriculados'][] = (int)$value->pn;
                 }
                 return response()->json(compact('info', 'base'));
 
@@ -2058,27 +2033,34 @@ class IndicadoresController extends Controller
                 $start = intval($rq->start);
                 $length = intval($rq->length);
 
-                $query = CuboPacto1PadronNominalRepositorio::pacto01Tabla02($impMaxAnio, $rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
-
+                $query = CuboFEDPN::where('anio', $rq->anio)->where('num', '1')
+                    ->select(
+                        'dni',
+                        'provincia',
+                        'distrito',
+                        'centro_poblado_nombre',
+                        'area_ccpp',
+                        'eess',
+                        'cod_mod',
+                        'iiee',
+                        DB::raw('if(length(cod_mod)=7 and numx=1,1,0) as cumple')
+                    );
+                $query = $query->get();
                 $data = [];
                 foreach ($query as $key => $value) {
                     $data[] = array(
                         $key + 1,
-                        $value->codigo,
-                        $value->ipress,
-                        $value->red,
-                        $value->microrred,
+                        $value->dni,
                         $value->provincia,
                         $value->distrito,
-                        $value->denominador,
-                        $value->numerador,
-                        // $value->indicador
-                        $value->indicador < 51 ?
-                            '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px">' . number_format($value->indicador, 1) . '%</span>' : ($value->indicador < 100 ?
-                                '<span class="badge badge-pill badge-warning" style="font-size:90%; width:50px">' . number_format($value->indicador, 1) . '%</span>' :
-                                '<span class="badge badge-pill badge-success" style="font-size:90%; width:50px">' . number_format($value->indicador, 1) . '%</span>'
-                            ),
-                        $value->indicador >= 90 ? 1 : 0
+                        $value->centro_poblado_nombre,
+                        $value->area_ccpp,
+                        $value->eess,
+                        $value->cod_mod,
+                        $value->iiee,
+                        $value->cumple == 0 ?
+                            '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px">NO</span>' :
+                            '<span class="badge badge-pill badge-success" style="font-size:90%; width:50px">SI</span>'
                     );
                 }
                 $result = array(
@@ -2090,6 +2072,69 @@ class IndicadoresController extends Controller
                 );
                 return response()->json($result);
                 break;
+
+            case 'tabla3':
+                $base = CuboFEDPN::where('anio', $rq->anio)
+                    ->select(
+                        'provincia',
+                        DB::raw('round(100*sum(numx)/sum(num),1) as it'),
+                        DB::raw('sum(if(area_ccpp="URBANA" and num=1,1,0)) as mu'),
+                        DB::raw('sum(if(area_ccpp="RURAL" and num=1,1,0)) as mr'),
+                        DB::raw('sum(num) as mt'),
+
+                        DB::raw('sum(if(area_ccpp="URBANA" and numx=1,1,0)) as hu'),
+                        DB::raw('sum(if(area_ccpp="RURAL" and numx=1,1,0)) as hr'),
+                        DB::raw('sum(numx) as ht'),
+
+                        DB::raw('sum(if(area_ccpp="URBANA" and num=1,1,0)) as um'),
+                        DB::raw('sum(if(area_ccpp="URBANA" and numx=1,1,0)) as uh'),
+                        DB::raw('round(100*sum(if(area_ccpp="URBANA" and numx=1,1,0))/sum(if(area_ccpp="URBANA" and num=1,1,0)),1) as uit'),
+
+                        DB::raw('sum(if(area_ccpp="RURAL" and num=1,1,0)) as rm'),
+                        DB::raw('sum(if(area_ccpp="RURAL" and numx=1,1,0)) as rh'),
+                        DB::raw('round(100*sum(if(area_ccpp="RURAL" and numx=1,1,0))/sum(if(area_ccpp="RURAL" and num=1,1,0)),1) as rit'),
+                    );
+                $base = $base->groupBy('provincia')->orderBy('it', 'desc')->get();
+                $foot = clone $base[0];
+                $foot->it = 0;
+
+                $foot->mu = 0;
+                $foot->mr = 0;
+                $foot->mt = 0;
+
+                $foot->hu = 0;
+                $foot->hr = 0;
+                $foot->ht = 0;
+
+                $foot->um = 0;
+                $foot->uh = 0;
+                $foot->uit = 0;
+
+                $foot->rm = 0;
+                $foot->rh = 0;
+                $foot->rit = 0;
+
+                foreach ($base as $key => $value) {
+
+                    $foot->mu += $value->mu;
+                    $foot->mr += $value->mr;
+                    $foot->mt += $value->mt;
+
+                    $foot->hu += $value->hu;
+                    $foot->hr += $value->hr;
+                    $foot->ht += $value->ht;
+
+                    $foot->um += $value->um;
+                    $foot->uh += $value->uh;
+
+                    $foot->rm += $value->rm;
+                    $foot->rh += $value->rh;
+                }
+                $foot->it = round(100 * $foot->ht / $foot->mt, 1);
+                $foot->uit = round(100 * $foot->uh / $foot->um, 1);
+                $foot->rit = round(100 * $foot->rh / $foot->rm, 1);
+                $excel = view('educacion.Indicadores.ConvenioFEDMC0502tabla2', compact('base', 'foot'))->render();
+                return response()->json(compact('excel'));
 
             case 'tabla0201':
                 $draw = intval($rq->draw);

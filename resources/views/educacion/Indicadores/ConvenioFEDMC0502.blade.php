@@ -12,8 +12,6 @@
 @endsection
 
 @section('content')
-    
-
     <div class="card">
         <div
             class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center p-2">
@@ -219,7 +217,7 @@
 
     </div>
 
-    <div class="row">
+    <div class="row d-none">
         <div class="col-lg-6">
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent p-0">
@@ -245,6 +243,27 @@
         </div>
     </div>
 
+    
+    <div class="card card-border border border-plomo-0">
+        <div class="card-header border-success-0 bg-transparent p-0">
+            {{-- <div class="card-widgets">
+            <button type="button" class="btn btn-success btn-xs"><i
+                    class="fa fa-file-excel"></i> Descargar</button>
+        </div> --}}
+            <h3 class="text-black font-14 mb-0">Avance acumulado de la evaluación de Cumplimiento por
+                Distrito
+            </h3>
+        </div>
+        <div class="card-body p-0">
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-responsive" id="vtabla2">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="card  card-border border border-plomo-0">
         <div
             class="card-header border-success-0 bg-transparent text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center px-2 py-2">
@@ -265,16 +284,15 @@
                             <thead>
                                 <tr class="bg-success-0 text-white text-center">
                                     <th>N°</th>
-                                    <th>Codigo</th>
-                                    <th>Establecimiento de Salud</th>
-                                    <th>Red</th>
-                                    <th>Microrred</th>
+                                    <th>Documento</th>
                                     <th>Provincia</th>
                                     <th>Distrito</th>
-                                    <th>Denominador</th>
-                                    <th>Numerador</th>
-                                    <th>Indicador</th>
-                                    <th>Estado</th>
+                                    <th>Centro Poblado</th>
+                                    <th>Area Geografica</th>
+                                    <th>EESS Atencion</th>
+                                    <th>Codigo Modular</th>
+                                    <th>Institucion Educativa</th>
+                                    <th>Matriculado</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -285,158 +303,7 @@
             </div>
         </div>
     </div>
-
-    {{-- <div class="card border border-plomo-0">
-        <div
-            class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center p-2 ">
-            <h6 class="mb-2 mb-md-0 text-center text-md-left text-wrap text-white">
-                <i class="fas fa-chart-bar d-none"></i> Evaluación de cumplimiento de los registros de niños y niñas
-                menores de 6 años del padrón nominal
-            </h6>
-            <div class="text-center text-md-right">
-                <button type="button" class="btn btn-success btn-xs" onclick="descargar1()">
-                    <i class="fa fa-file-excel"></i> Descargar</button>
-            </div>
-        </div>
-        <div class="card-body p-2">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="table-responsive">
-                        <table id="tabla2" class="table table-sm table-striped table-bordered font-11 m-0">
-                            <thead>
-                                <tr class="bg-success-0 text-white text-center">
-                                    <th>N°</th>
-                                    <th>Codigo</th>
-                                    <th>Establecimiento de Salud</th>
-                                    <th>Red</th>
-                                    <th>Microrred</th>
-                                    <th>Provincia</th>
-                                    <th>Distrito</th>
-                                    <th>Denominador</th>
-                                    <th>Numerador</th>
-                                    <th>Indicador</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
-    {{-- <div class="row">
-        <div class="col-lg-12">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent p-0">
-                    <div class="card-widgets">
-                        <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
-                                class="fa fa-file-excel"></i> Descargar</button>
-                    </div>
-                    <h3 class="text-black font-14 mb-0">Evaluación de cumplimiento de los registros de niños y niñas
-                        menores de 6 años del padrón nominal
-                    </h3>
-                </div>
-                <div class="card-body">
-                    
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
-    {{-- <div class="row d-none">
-        <div class="col-lg-12">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent p-0">
-                    <div class="card-widgets">
-                        <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
-                                class="fa fa-file-excel"></i> Descargar</button>
-                    </div>
-                    <h3 class="text-black font-14 mb-0">Evaluación de cumplimiento de los registros de niños y niñas
-                        menores de 6 años del padrón nominal
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="table-responsive">
-                                <table id="padronTable" class="table table-sm table-striped table-bordered font-11">
-                                    <thead>
-                                        <tr class="table-success-0 text-white">
-                                            <th class="text-center">Nº</th>
-                                            <th class="text-center">Tipo Doc.</th>
-                                            <th class="text-center">Documento</th>
-                                            <th class="text-center">Nombre</th>
-                                            <th class="text-center">Fecha Nac.</th>
-                                            <th class="text-center">Distrito</th>
-                                            <th class="text-center">Seguro</th>
-                                            <th class="text-center">Cód. EESS</th>
-                                            <th class="text-center">EESS de Atención</th>
-                                            <th class="text-center">Doc. Madre</th>
-                                            <th class="text-center">Nombre Madre</th>
-                                            <th class="text-center">Estado</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
-    {{-- <div class="row">
-        <div class="col-lg-12">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent p-0">
-                    <div class="card-widgets">
-                        <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
-                                class="fa fa-file-excel"></i> Descargar</button>
-                    </div>
-                    <h3 class="text-black font-14 mb-0">Evaluación de cumplimiento de los registros de niños y niñas
-                        menores de 6 años del padrón nominal
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="table-responsive">
-                                <table id="table3" class="table table-sm table-striped table-bordered font-11">
-                                    <thead>
-                                        <tr class="table-success-0 text-white">
-                                            <th class="text-center">Nº</th>
-                                            <th class="text-center">Tipo Doc.</th>
-                                            <th class="text-center">Documento</th>
-                                            <th class="text-center">Nombre del Menor</th>
-                                            <th class="text-center">Fecha Nac.</th>
-                                            <th class="text-left vertical">Nro Doc.</th>
-                                            <th class="text-left vertical">Nombres</th>
-                                            <th class="text-left vertical">Dirección</th>
-                                            <th class="text-left vertical">CCPP</th>
-                                            <th class="text-left vertical">Seguro</th>
-                                            <th class="text-left vertical">EESS</th>
-                                            <th class="text-left vertical">Doc. Madre</th>
-                                            <th class="text-left vertical">Nombre Madre</th>
-                                            <th class="text-left vertical">Grado Madre</th>
-                                            <th class="text-left vertical">Lengua Madre</th>
-                                            <th class="text-center">Estado</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
+ 
     <!--  Modal content for the above example -->
     <div class="modal fade" id="modal-nino" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
         aria-hidden="true" style="display: none;">
@@ -716,6 +583,7 @@
             panelGraficas('anal2');
             panelGraficas('anal3');
             panelGraficas('tabla1');
+            panelGraficas('tabla3');
             tabla2('tabla2');
         }
 
@@ -756,12 +624,15 @@
                             'Porcentaje de Cumplimiento por Distrito',
                         );
                     } else if (div == "anal2") {
-                        gLineaBasica(div, data.info, '',
-                            'Porcentaje Mensual de la Evaluación',
-                            '', 'CALLERIA');
+                        graficarMatriculados(div,
+                            data.info.categorias,
+                            data.info.poblacion,
+                            data.info.matriculados);
                     } else if (div == "anal3") {
-                        anal3 = gColumn(div, data.info, '',
-                            'Población de niños y niñas menores de 6 años, según sexo', 'Etapa Vida')
+                        graficarMatriculados(div,
+                            data.info.categorias,
+                            data.info.poblacion,
+                            data.info.matriculados);
                     } else if (div == "tabla1") {
                         $('#vtabla1').html(data.excel);
                         // $('#tabla1').DataTable({
@@ -778,6 +649,20 @@
                         // });
                     } else if (div == "tabla2") {
 
+                    } else if (div == "tabla3") {
+                        $('#vtabla2').html(data.excel);
+                        // $('#tabla1').DataTable({
+                        //     // responsive: false,
+                        //     // autoWidth: false,
+                        //     // ordered: true,
+                        //     // searching: false,
+                        //     // bPaginate: false,
+                        //     // info: false,
+                        //     // language: table_language,
+                        //     paging: false,
+                        //     info: false,
+                        //     searching: false,
+                        // });
                     }
 
                 },
@@ -796,7 +681,7 @@
                 language: table_language,
                 destroy: true,
                 ajax: {
-                    "url": "{{ route('salud.indicador.pactoregional.detalle.reports') }}",
+                    "url": "{{ route('educacion.indicador.conveniofed.detalle.reports.2') }}",
                     "type": "GET",
                     //"dataType": 'JSON',
                     data: {
@@ -811,23 +696,25 @@
                     },
                 },
                 columnDefs: [{
-                    targets: 1,
-                    render: function(data, type, row) {
-                        return '<a href="javascript:void(0)" onclick="abrirmodalinfoipress(`' + data +
-                        '`)">' + data +
-                            '</a>';
-                    }
-                }, {
-                    targets: [0, 1, 7, 8, 9],
-                    className: 'text-center'
-                }, {
-                    targets: 10,
-                    render: function(data, type, row) {
-                        return data == 1 ?
-                            '<span class="badge badge-pill badge-success" style="font-size:100%;"> Cumple </span>' :
-                            '<span class="badge badge-pill badge-danger" style="font-size:100%;"> No Cumple </span>';
-                    }
-                }],
+                        targets: 1,
+                        render: function(data, type, row) {
+                            return '<a href="javascript:void(0)" onclick="abrirmodalinfoipress(`' + data +
+                            '`)">' + data +
+                                '</a>';
+                        }
+                    }, {
+                        targets: [0, 1, 7, 8, 9],
+                        className: 'text-center'
+                    },
+                    // {
+                    //     targets: 10,
+                    //     render: function(data, type, row) {
+                    //         return data == 1 ?
+                    //             '<span class="badge badge-pill badge-success" style="font-size:100%;"> Cumple </span>' :
+                    //             '<span class="badge badge-pill badge-danger" style="font-size:100%;"> No Cumple </span>';
+                    //     }
+                    // }
+                ],
             });
         }
 
@@ -1284,6 +1171,125 @@
                     enabled: true,
                 },
                 credits: false,
+
+            });
+        }
+
+        function graficarMatriculados(div, categorias, poblacion, matriculados) {
+            const porcentajes = matriculados.map((val, i) => {
+                return parseFloat(((val / poblacion[i]) * 100).toFixed(1));
+            });
+
+            Highcharts.chart(div, {
+                chart: {
+                    zoomType: 'xy',
+                    style: {
+                        fontSize: '11px'
+                    }
+                },
+                // color:["#5eb9aa", "#f5bd22", "#e65310"],// ['#ef5350', '#5eb9a0', '#f5bd22', '#ef5350'],
+                title: {
+                    text: 'Población de niñas y niños de 3 años matriculados por provincia',
+                    style: {
+                        fontSize: '11px'
+                    }
+                },
+                xAxis: {
+                    categories: categorias,
+                    crosshair: true,
+                    labels: {
+                        style: {
+                            fontSize: '11px'
+                        }
+                    }
+                },
+                yAxis: [{
+                        // Línea (porcentaje) arriba
+                        title: {
+                            text: null
+                        },
+                        top: '0%',
+                        height: '40%',
+                        max: 100,
+                        labels: {
+                            enabled: false // ❌ Oculta los números del eje Y
+                        }
+                    },
+                    {
+                        // Barras (cantidad) abajo
+                        title: {
+                            text: null
+                        },
+                        top: '45%',
+                        height: '55%',
+                        offset: 0,
+                        labels: {
+                            enabled: false // ❌ Oculta los números del eje Y
+                        }
+                    }
+                ],
+                tooltip: {
+                    shared: true,
+                    style: {
+                        fontSize: '11px'
+                    }
+                },
+                legend: {
+                    itemStyle: {
+                        fontSize: '11px'
+                    }
+                },
+
+                series: [{
+                        name: 'Población',
+                        type: 'column',
+                        yAxis: 1,
+                        data: poblacion,
+                        color: '#5eb9aa',
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontSize: '11px'
+                            }
+                        }
+                    },
+                    {
+                        name: 'Matriculados',
+                        type: 'column',
+                        yAxis: 1,
+                        data: matriculados,
+                        color: '#e65310',
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontSize: '11px'
+                            }
+                        }
+                    },
+                    {
+                        name: '% Avance',
+                        type: 'spline',
+                        yAxis: 0,
+                        data: porcentajes,
+                        showInLegend: false, // 👈 Oculta solo esta leyenda
+                        tooltip: {
+                            valueSuffix: ' %'
+                        },
+                        marker: {
+                            enabled: true
+                        },
+                        dataLabels: {
+                            enabled: true,
+                            formatter: function() {
+                                return this.y + ' %';
+                            },
+                            style: {
+                                fontSize: '11px'
+                            }
+                        },
+                        color: '#d32f2f'
+                    }
+                ]
 
             });
         }

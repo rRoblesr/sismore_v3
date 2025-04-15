@@ -295,6 +295,8 @@
                 },
                 success: function(data) {
                     console.log(data);
+                    console.log('#actualizado' + codigo + ": " + data.actualizado);
+                    console.log('#num' + codigo);
                     GaugeSeries('gra' + codigo, data.avance);
                     $('#actualizado' + codigo).text(data.actualizado);
                     $('#meta' + codigo).text('Meta: ' + data.meta);

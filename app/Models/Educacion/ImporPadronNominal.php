@@ -19,7 +19,7 @@ class ImporPadronNominal extends Model
     protected $fillable = [
         'importacion_id',
         'cod_mod',
-        'modalidad',
+        'modalidad',                
         'cod_estudiante',
         'dni',
         'validacion_dni',
