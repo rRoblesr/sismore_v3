@@ -52,7 +52,7 @@
     <div class="card">
         <div
             class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center p-2">
-            <h6 class="mb-2 mb-md-0 text-center text-md-left text-wrap text-white">
+            <h6 class="mb-2 mb-md-0 text-center text-md-left text-wrap text-white font-12">
                 <i class="fas fa-chart-bar d-none"></i> {{ $ind->nombre }}
             </h6>
             <div class="text-center text-md-right">
@@ -84,12 +84,25 @@
                 </div>
 
                 <div class="col-md-2 col-6">
+                    <div class="custom-select-container my-2">
+                        <label for="ugel">Ugel</label>
+                        <select id="ugel" name="ugel" class="form-control font-12" onchange="cargarcuadros();">
+                            <option value="">TODOS</option>
+                            @foreach ($ugel as $item)
+                                <option value="{{ $item->ugel }}">
+                                    {{ $item->ugel }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                {{-- <div class="col-md-2 col-6">
                     <div class="custom-select-container my-1">
                         <label for="mes">Mes</label>
                         <select id="mes" name="mes" class="form-control font-12" onchange="cargarcuadros();">
                         </select>
                     </div>
-                </div>
+                </div> --}}
 
                 <div class="col-md-2 col-6">
                     <div class="custom-select-container my-1">
@@ -573,6 +586,69 @@
             </div>
         </div>
     </div>
+
+    <!-- MODAL -->
+    <div class="modal fade" id="modalDatosMenor" tabindex="-1" role="dialog" aria-labelledby="modalDatosMenorLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content shadow rounded">
+
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title" id="modalDatosMenorLabel"><i class="fas fa-child"></i> Datos del Menor</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+    
+
+                <div class="modal-body">
+                    <table class="table table-bordered font-12">
+                        <tbody>
+                            <tr>
+                                <th class="bg-light">DNI MENOR</th>
+                                <td id="dmdniMenor"></td>
+                                <th class="bg-light">APELLIDOS MENOR</th>
+                                <td id="dmapellidosMenor"></td>
+                                <th class="bg-light">NOMBRES MENOR</th>
+                                <td id="dmnombresMenor"></td>
+                            </tr>
+                            <tr>
+                                <th class="bg-light">SEXO</th>
+                                <td id="dmsexoMenor"></td>
+                                <th class="bg-light">FECHA DE NACIMIENTO</th>
+                                <td id="dmfechaNacimiento"></td>
+                                <th class="bg-light">EDAD</th>
+                                <td id="dmedadMenor"></td>
+                            </tr>
+                            <tr>
+                                <th class="bg-light">DEPARTAMENTO</th>
+                                <td id="dmdepartamento"></td>
+                                <th class="bg-light">PROVINCIA</th>
+                                <td id="dmprovincia"></td>
+                                <th class="bg-light">DISTRITO</th>
+                                <td id="dmdistrito"></td>
+                            </tr>
+                            <tr>
+                                <th class="bg-light">CENTRO POBLADO</th>
+                                <td id="dmcentroPoblado"></td>
+                                <th class="bg-light">DIRECCIÓN</th>
+                                <td colspan="3" id="dmdireccion"></td>
+                            </tr>
+                            <tr>
+                                <th class="bg-light">CELULAR</th>
+                                <td id="dmcelular"></td>
+                                <th class="bg-light">APELLIDOS MADRE</th>
+                                <td id="dmapellidosMadre"></td>
+                                <th class="bg-light">NOMBRES MADRE</th>
+                                <td id="dmnombresMadre"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('js')
@@ -610,6 +686,7 @@
                     'div': div,
                     "anio": $('#anio').val(),
                     "mes": $('#mes').val(),
+                    "ugel": $('#ugel').val(),
                     "provincia": $('#provincia').val(),
                     "distrito": $('#distrito').val(),
                     "fuente": {{ $fuente }},
@@ -643,12 +720,14 @@
                         graficarMatriculados(div,
                             data.info.categorias,
                             data.info.poblacion,
-                            data.info.matriculados);
+                            data.info.matriculados,
+                            'Población de niñas y niños de 3 años matriculados por provincia');
                     } else if (div == "anal3") {
                         graficarMatriculados(div,
                             data.info.categorias,
                             data.info.poblacion,
-                            data.info.matriculados);
+                            data.info.matriculados,
+                            'Población de niñas y niños de 3 años matriculados por ugel');
                     } else if (div == "tabla1") {
                         $('#vtabla1').html(data.excel);
                         // $('#tabla1').DataTable({
@@ -690,6 +769,7 @@
                         'div': div,
                         "anio": $('#anio').val(),
                         "mes": $('#mes').val(),
+                        "ugel": $('#ugel').val(),
                         "provincia": $('#provincia').val(),
                         "distrito": $('#distrito').val(),
                         "fuente": {{ $fuente }},
@@ -698,26 +778,59 @@
                     },
                 },
                 columnDefs: [{
-                    targets: 1,
-                    render: function(data, type, row) {
-                        return '<a href="javascript:void(0)" onclick="abrirmodalinfoipress(`' + data +
-                        '`)">' + data +
-                            '</a>';
-                    }
-                }, {
-                    targets: [0, 1, 7, 8, 9],
-                    className: 'text-center'
-                }, 
-                // {
-                //     targets: 10,
-                //     render: function(data, type, row) {
-                //         return data == 1 ?
-                //             '<span class="badge badge-pill badge-success" style="font-size:100%;"> Cumple </span>' :
-                //             '<span class="badge badge-pill badge-danger" style="font-size:100%;"> No Cumple </span>';
-                //     }
-                // }
-            ],
+                        targets: 1,
+                        render: function(data, type, row) {
+                            return '<a href="javascript:void(0)" onclick="mostrarDatosMenor(`' + data +
+                            '`)">' + data +
+                                '</a>';
+                        }
+                    }, {
+                        targets: [0, 1, 7, 9],
+                        className: 'text-center'
+                    },
+                    // {
+                    //     targets: 10,
+                    //     render: function(data, type, row) {
+                    //         return data == 1 ?
+                    //             '<span class="badge badge-pill badge-success" style="font-size:100%;"> Cumple </span>' :
+                    //             '<span class="badge badge-pill badge-danger" style="font-size:100%;"> No Cumple </span>';
+                    //     }
+                    // }
+                ],
             });
+        }
+
+        function mostrarDatosMenor(dni) {
+            $.ajax({
+                url: "{{ route('educacion.indicador.conveniofed.buscarninio', ['dni' => 'xdni']) }}"
+                    .replace('xdni', dni),
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    console.log(data);
+                    $('#dmdniMenor').text(data.dni);
+                    $('#dmapellidosMenor').text(data.apellidos);
+                    $('#dmnombresMenor').text(data.nombres);
+                    $('#dmsexoMenor').text(data.sexo);
+                    $('#dmfechaNacimiento').text(data.nacimiento);
+                    $('#dmedadMenor').text(data.edad);
+                    $('#dmdepartamento').text(data.departamento);
+                    $('#dmprovincia').text(data.provincia);
+                    $('#dmdistrito').text(data.distrito);
+                    $('#dmcentroPoblado').text(data.centroPoblado);
+                    $('#dmdireccion').text(data.direccion);
+                    $('#dmcelular').text(data.celular);
+                    $('#dmapellidosMadre').text(data.apellidosMadre);
+                    $('#dmnombresMadre').text(data.nombresMadre);
+
+                    $('#modalDatosMenor').modal('show');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error al obtener datos del menor:', error);
+                    alert('No se pudo cargar la información del menor.');
+                }
+            });
+
         }
 
         function cargarMes() {
@@ -1109,7 +1222,7 @@
             });
         }
 
-        function graficarMatriculados(div, categorias, poblacion, matriculados) {
+        function graficarMatriculados(div, categorias, poblacion, matriculados, title) {
             const porcentajes = matriculados.map((val, i) => {
                 return parseFloat(((val / poblacion[i]) * 100).toFixed(1));
             });
@@ -1123,7 +1236,7 @@
                 },
                 // color:["#5eb9aa", "#f5bd22", "#e65310"],// ['#ef5350', '#5eb9a0', '#f5bd22', '#ef5350'],
                 title: {
-                    text: 'Población de niñas y niños de 3 años matriculados por provincia',
+                    text: title,
                     style: {
                         fontSize: '11px'
                     }
@@ -1223,100 +1336,9 @@
                         },
                         color: '#d32f2f'
                     }
-                ]
+                ],
+                credits: false,
 
-            });
-        }
-
-
-        function gColumn(div, data, titulo, subtitulo, tooltip) {
-            return Highcharts.chart(div, {
-                chart: {
-                    type: 'column'
-                },
-                colors: ['#ef5350', '#5eb9a0', '#f5bd22', '#ef5350'],
-                title: {
-                    text: titulo
-                },
-                subtitle: {
-                    text: subtitulo //null // Si no necesitas un subtítulo, puedes dejarlo como null
-                },
-                xAxis: {
-                    categories: data.categoria, //
-                    crosshair: true,
-                    labels: {
-                        style: {
-                            fontSize: '11px' // Ajusta el tamaño de la fuente
-                        }
-                    },
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: null // Puedes agregar un título si lo necesitas
-                    },
-                    labels: {
-                        style: {
-                            fontSize: '11px' // Ajusta el tamaño de la fuente
-                        }
-                    },
-                },
-                tooltip: {
-                    shared: true, // Muestra los valores de todas las series en el mismo tooltip
-                    formatter: function() {
-                        let tooltipText = '<b>' + tooltip + ': ' + this.x +
-                            '</b><br/>'; // Muestra la categoría (año)
-                        this.points.forEach(function(point) {
-                            tooltipText += point.series.name + ': ' + Highcharts.numberFormat(Math.abs(
-                                point.y), 0) + '<br/>';
-                        });
-                        return tooltipText;
-                    }
-                },
-                plotOptions: {
-                    column: {
-                        stacking: data.serie.length > 1 ? 'normal' : null, // Apila las columnas
-                        dataLabels: {
-                            enabled: true,
-                            formatter: function() {
-                                return Highcharts.numberFormat(Math.abs(this.y),
-                                    0); // Formatea los números con separadores de miles
-                            },
-                            style: {
-                                color: data.serie.length > 1 ? 'white' : 'black',
-                                textOutline: 'none',
-                                fontSize: '10px'
-                            }
-                        }
-                    }
-                },
-                series: data.serie,
-                legend: {
-                    enabled: data.serie.length > 1,
-                    itemStyle: {
-                        //color: "#333333",
-                        // cursor: "pointer",
-                        fontSize: "11px",
-                        // fontWeight: "normal",
-                        // textOverflow: "ellipsis"
-                    },
-                },
-                credits: {
-                    enabled: false,
-                    text: 'Fuente: RENIEC - PADRÓN NOMINAL | Actualizado: JULIO 2024',
-                    href: null,
-                    position: {
-                        align: 'center',
-                        verticalAlign: 'bottom',
-                        x: 0,
-                        y: -5
-                    },
-                    style: {
-                        color: '#666',
-                        fontSize: '10px',
-                        textAlign: 'center'
-                    }
-                }
             });
         }
 
@@ -1395,91 +1417,6 @@
                 credits: {
                     enabled: false
                 },
-            });
-        }
-
-        function gLineaBasica(div, data, titulo, subtitulo, titulovetical, categoriaSeleccionada) {
-            const colors = ["#5eb9aa", "#f5bd22", "#e65310"];
-            Highcharts.chart(div, {
-                title: {
-                    text: titulo
-                },
-                subtitle: {
-                    text: subtitulo
-                },
-                yAxis: {
-                    title: {
-                        text: titulovetical
-                    },
-                    labels: {
-                        style: {
-                            fontSize: '10px'
-                        }
-                    },
-                    min: 0,
-                },
-                xAxis: {
-                    categories: data.cat,
-                    labels: {
-                        style: {
-                            fontSize: '10px'
-                        }
-                    }
-                    /* accessibility: {
-                        rangeDescription: 'Range: 2010 to 2017'
-                    } */
-                },
-                /* legend: {
-                    layout: 'vertical',
-                    align: 'right',
-                    verticalAlign: 'middle'
-                }, */
-                plotOptions: {
-                    series: {
-                        dataLabels: {
-                            enabled: true,
-                            style: {
-                                fontSize: '10px',
-                                fontWeight: 'normal',
-                            },
-                            formatter: function() {
-                                return this.y + '%';
-                            }
-                        },
-                        /* label: {
-                            connectorAllowed: false
-                        },
-                        pointStart: 2010 */
-                    }
-                },
-                tooltip: {
-                    pointFormat: '{series.name}: <b>{point.y}%</b>',
-                    shared: true
-                },
-                series: [{
-                    name: 'Cumplen',
-                    showInLegend: false,
-                    data: data.dat
-                }],
-                responsive: {
-                    rules: [{
-                        condition: {
-                            maxWidth: 500
-                        },
-                        chartOptions: {
-                            legend: {
-                                layout: 'horizontal',
-                                align: 'center',
-                                verticalAlign: 'bottom'
-                            }
-                        }
-                    }]
-                },
-                exporting: {
-                    enabled: true,
-                },
-                credits: false,
-
             });
         }
     </script>

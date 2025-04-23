@@ -102,7 +102,8 @@
 
         @foreach ($indedu as $key => $item)
             <div class="col-md-6 col-xl-3">
-                <div class="card text-center border border-success-0">
+                <div class="card text-center border border-success-0 h-100 d-flex flex-column justify-content-between">
+
                     <div class="pricing-header bg-success-0 p-0 rounded-top">
                         <div class="card-widgets">
                             {{-- <i class="mdi mdi-alert-circle-outline"></i> --}}
@@ -160,8 +161,11 @@
                                 </div>
                             </li>
                             <li class="mt-1 pt-1">
-                                <p class="font-12" style="height: 5rem;">
-                                    {{ $item->nombre }}</p>
+                                <p class="font-12 m-0"
+                                   style="min-height: 4.5rem; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;"
+                                   title="{{ $item->nombre }}">
+                                    {{ $item->nombre }}
+                                </p>
                             </li>
 
                         </ul>

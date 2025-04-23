@@ -1661,22 +1661,24 @@ class IndicadoresController extends Controller
         switch ($ind->codigo) {
             case 'MC-05.01':
                 $fuente = eduImporPadronNominalController::$FUENTE;
-                $anio = ImportacionRepositorio::anios_porfuente_select(eduImporPadronNominalController::$FUENTE);
+                $anio = CuboFEDPN::distinct()->select('anio')->where('anio', 2025)->get(); // ImportacionRepositorio::anios_porfuente_select(eduImporPadronNominalController::$FUENTE);
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(eduImporPadronNominalController::$FUENTE);
                 // $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
                 $actualizado = '31/03/2025';
                 $provincia = UbigeoRepositorio::provincia('25');
+                $ugel = CuboFEDPN::distinct()->select('ugel')->where('anio', 2025)->get();
                 $aniomax = $imp->anio;
-                return view('educacion.Indicadores.ConvenioFEDMC0501', compact('actualizado', 'fuente', 'anio', 'provincia', 'aniomax', 'ind'));
+                return view('educacion.Indicadores.ConvenioFEDMC0501', compact('actualizado', 'fuente', 'anio', 'ugel', 'provincia', 'aniomax', 'ind'));
             case 'MC-05.02':
                 $fuente = eduImporPadronNominalController::$FUENTE;
-                $anio = ImportacionRepositorio::anios_porfuente_select(eduImporPadronNominalController::$FUENTE);
+                $anio = CuboFEDPN::distinct()->select('anio')->where('anio', 2025)->get(); //ImportacionRepositorio::anios_porfuente_select(eduImporPadronNominalController::$FUENTE);
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(eduImporPadronNominalController::$FUENTE);
                 // $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
                 $actualizado = '31/03/2025';
                 $provincia = UbigeoRepositorio::provincia('25');
+                $ugel = CuboFEDPN::distinct()->select('ugel')->where('anio', 2025)->get();
                 $aniomax = $imp->anio;
-                return view('educacion.Indicadores.ConvenioFEDMC0502', compact('actualizado', 'fuente', 'anio', 'provincia', 'aniomax', 'ind'));
+                return view('educacion.Indicadores.ConvenioFEDMC0502', compact('actualizado', 'fuente', 'anio', 'ugel', 'provincia', 'aniomax', 'ind'));
 
             default:
                 return 'ERROR, PAGINA NO ENCONTRADA';
@@ -1688,7 +1690,7 @@ class IndicadoresController extends Controller
     {
         if ($rq->distrito > 0) $ndis = Ubigeo::find($rq->distrito)->nombre;
         else $ndis = '';
-        $impMaxAnio = eduPadronNominalRepositorio::PNImportacion_idmax($rq->fuente, $rq->anio, $rq->mes);
+        // $impMaxAnio = eduPadronNominalRepositorio::PNImportacion_idmax($rq->fuente, $rq->anio, $rq->mes);
         switch ($rq->div) {
             case 'head':
                 $v = CuboFEDPN::where('anio', 2025)->select(
@@ -1696,7 +1698,11 @@ class IndicadoresController extends Controller
                     DB::raw('sum(num) as gls'),
                     DB::raw('sum(den)-sum(num) as gln'),
                     DB::raw('round(100*sum(num)/sum(den),1) as indicador')
-                )->first();
+                );
+                if ($rq->ugel != '') $v->where('ugel', $rq->ugel);
+                if ($rq->provincia > 0) $v->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $v->where('distrito_id', $rq->distrito);
+                $v = $v->first();
                 $ri = number_format($v->indicador, 1);
                 $gls = number_format($v->gls, 0);
                 $gln = number_format($v->gln, 0);
@@ -1778,6 +1784,7 @@ class IndicadoresController extends Controller
                         'eess',
                         'cod_mod',
                         'iiee',
+                        'numx',
                         DB::raw('if(length(cod_mod)=7,1,0) as cumple')
                     );
                 $query = $query->get();
@@ -1791,8 +1798,10 @@ class IndicadoresController extends Controller
                         $value->centro_poblado_nombre,
                         $value->area_ccpp,
                         $value->eess,
-                        $value->cod_mod,
-                        $value->iiee,
+                        // $value->cod_mod,
+                        // $value->iiee,
+                        $value->numx == 1 ? $value->cod_mod : '',
+                        $value->numx == 1 ? $value->iiee : '',
                         $value->cumple == 0 ?
                             '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px">NO</span>' :
                             '<span class="badge badge-pill badge-success" style="font-size:90%; width:50px">SI</span>'
@@ -1951,13 +1960,35 @@ class IndicadoresController extends Controller
         return response()->json($result);
     }
 
+    public function ConvenioFEDbuscarninio($dni)
+    {
+        $menor = CuboFEDPN::where('dni', $dni)->firstOrFail();
+        $ubigeo = UbigeoRepositorio::ubicacionUbigeo($menor->ubigeo);
+        return response()->json([
+            'dni' => $menor->dni,
+            'apellidos' => $menor->apellido_paterno . ' ' . $menor->apellido_materno,
+            'nombres' => $menor->nombre,
+            'sexo' => $menor->sexo,
+            'nacimiento' => $menor->fecha_nacimiento,
+            'edad' => $menor->edad,
+            'departamento' => $ubigeo->depn,
+            'provincia' => $menor->provincia,
+            'distrito' => $menor->distrito,
+            'centroPoblado' => $menor->centro_poblado_nombre,
+            'direccion' => $menor->direccion,
+            'celular' => $menor->celular_madre,
+            'apellidosMadre' => $menor->apellido_paterno_madre . ' ' . $menor->apellido_materno_madre,
+            'nombresMadre' => $menor->nombres_madre
+        ]);
+    }
+
     // ############ FED MC0501 #################
     public function ConvenioFEDEduMC0502Reports(Request $rq)
     {
         if ($rq->distrito > 0) $ndis = Ubigeo::find($rq->distrito)->nombre;
         else $ndis = '';
-        $impMaxAnio = eduPadronNominalRepositorio::PNImportacion_idmax($rq->fuente, $rq->anio, $rq->mes);
-        switch ($rq->div) {
+        // $impMaxAnio = eduPadronNominalRepositorio::PNImportacion_idmax($rq->fuente, $rq->anio, $rq->mes);
+        switch ($rq->div . 'ADSAS') {
             case 'head':
                 $v = CuboFEDPN::where('anio', 2025)->select(DB::raw('sum(num) as gl'), DB::raw('sum(numx) as gls'), DB::raw('sum(num)-sum(numx) as gln'), DB::raw('round(100*sum(numx)/sum(num),1) as indicador'))->first();
                 $ri = number_format($v->indicador, 1);

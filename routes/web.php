@@ -1301,6 +1301,8 @@ Route::get('/educacion/conveniofed/{indicador_id}', [IndicadoresController::clas
 // Route::get('/educacion/conveniofed/Reports1', [IndicadoresController::class, 'PactoRegionalEduPacto1Reports'])->name('educacion.indicador.pactoregional.edu.pacto1.reports');
 // Route::get('/educacion/conveniofed/Edu/Reports1/find/mes/{anio}', [IndicadoresController::class, 'PactoRegionalEduPacto1FindMes'])->name('educacion.indicador.pactoregional.edu.pacto1.find.mes');
 
+Route::get('/educacion/conveniofed/edu/buscarninio/{dni}', [IndicadoresController::class, 'ConvenioFEDbuscarninio'])->name('educacion.indicador.conveniofed.buscarninio');
+
 Route::get('/educacion/conveniofed/edu/Reports1', [IndicadoresController::class, 'ConvenioFEDEduMC0501Reports'])->name('educacion.indicador.conveniofed.detalle.reports');
 Route::post('/educacion/conveniofed/edu/Reports1/2', [IndicadoresController::class, 'PactoRegionalSalPacto1Reports2'])->name('educacion.indicador.conveniofed.detalle.reports.2');
 Route::post('/educacion/conveniofed/edu/Reports1/3', [IndicadoresController::class, 'PactoRegionalSalPacto1Reports3'])->name('educacion.indicador.conveniofed.detalle.reports.3');

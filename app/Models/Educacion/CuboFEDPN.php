@@ -53,6 +53,5 @@ class CuboFEDPN extends Model
         'den',
         'num',
         'numx',
-
     ];
 }

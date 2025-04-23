@@ -76,6 +76,13 @@ class UbigeoRepositorio
         return $query;
     }
 
+    public static function ubicacionUbigeo($ubigeo)
+    {
+        $query = Ubigeo::from('par_ubigeo as dis')->select('dis.id as disi', 'dis.nombre as disn', 'pro.id as proi', 'pro.nombre as pron', 'dep.id as depi', 'dep.nombre as depn')
+            ->join('par_ubigeo as pro', 'pro.id', '=', 'dis.dependencia')->join('par_ubigeo as dep', 'dep.id', '=', 'pro.dependencia')->where('dis.codigo', $ubigeo)->first();
+        return $query;
+    }
+
     public static function arrayDistritoIdCodigo()
     {
         $query = Ubigeo::select('id', 'codigo')->whereRaw('length(codigo) = 6')->where('codigo', 'like', '25%')->get()->pluck('id', 'codigo');
