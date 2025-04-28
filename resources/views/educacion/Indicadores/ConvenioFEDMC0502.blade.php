@@ -15,7 +15,7 @@
     <div class="card">
         <div
             class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center p-2">
-            <h6 class="mb-2 mb-md-0 text-center text-md-left text-wrap text-white">
+            <h6 class="mb-2 mb-md-0 text-center text-md-left text-wrap text-white font-12">
                 <i class="fas fa-chart-bar d-none"></i> {{ $ind->nombre }}
             </h6>
             <div class="text-center text-md-right">
@@ -35,7 +35,7 @@
                 </div>
 
                 <div class="col-md-2 col-6">
-                    <div class="custom-select-container my-2">
+                    <div class="custom-select-container my-1">
                         <label for="anio">Año</label>
                         <select id="anio" name="anio" class="form-control font-12" onchange="cargarMes();">
                             @foreach ($anio as $item)
@@ -46,10 +46,23 @@
                     </div>
                 </div>
 
-                <div class="col-md-2 col-6">
+                {{-- <div class="col-md-2 col-6">
                     <div class="custom-select-container my-1">
                         <label for="mes">Mes</label>
                         <select id="mes" name="mes" class="form-control font-12" onchange="cargarcuadros();">
+                        </select>
+                    </div>
+                </div> --}}
+
+                <div class="col-md-2 col-6">
+                    <div class="custom-select-container my-1">
+                        <label for="ugel">Ugel</label>
+                        <select id="ugel" name="ugel" class="form-control font-12" onchange="cargarcuadros();">
+                            <option value="TODOS">TODOS</option>
+                            @foreach ($ugel as $item)
+                                <option value="{{ $item->ugel }}">
+                                    {{ $item->ugel }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
@@ -111,7 +124,8 @@
                         {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
                         width="70%" height="70%"> --}}
                         {{-- <i class=" mdi mdi-city font-35 text-green-0"></i> --}}
-                        <i class="fas fa-child font-35 text-green-0"></i>
+                        {{-- <i class="fas fa-child font-35 text-green-0"></i> --}}
+                        <i class="mdi mdi-account-group font-35 text-green-0"></i>
                     </div>
                     <div class="media-body align-self-center">
                         <div class="text-right">
@@ -243,7 +257,7 @@
         </div>
     </div>
 
-    
+
     <div class="card card-border border border-plomo-0">
         <div class="card-header border-success-0 bg-transparent p-0">
             {{-- <div class="card-widgets">
@@ -292,7 +306,7 @@
                                     <th>EESS Atencion</th>
                                     <th>Codigo Modular</th>
                                     <th>Institucion Educativa</th>
-                                    <th>Matriculado</th>
+                                    <th>Homologado</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -303,7 +317,7 @@
             </div>
         </div>
     </div>
- 
+
     <!--  Modal content for the above example -->
     <div class="modal fade" id="modal-nino" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
         aria-hidden="true" style="display: none;">
@@ -556,6 +570,69 @@
             </div>
         </div>
     </div>
+
+    <!-- MODAL -->
+    <div class="modal fade" id="modalDatosMenor" tabindex="-1" role="dialog" aria-labelledby="modalDatosMenorLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content shadow rounded">
+
+                <div class="modal-header bg-success-0 text-white">
+                    <h5 class="modal-title text-white" id="modalDatosMenorLabel">Datos del Menor</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+
+                <div class="modal-body">
+                    <table class="table table-bordered font-12">
+                        <tbody>
+                            <tr>
+                                <th class="bg-light">DNI MENOR</th>
+                                <td id="dmdniMenor"></td>
+                                <th class="bg-light">APELLIDOS MENOR</th>
+                                <td id="dmapellidosMenor"></td>
+                                <th class="bg-light">NOMBRES MENOR</th>
+                                <td id="dmnombresMenor"></td>
+                            </tr>
+                            <tr>
+                                <th class="bg-light">SEXO</th>
+                                <td id="dmsexoMenor"></td>
+                                <th class="bg-light">FECHA DE NACIMIENTO</th>
+                                <td id="dmfechaNacimiento"></td>
+                                <th class="bg-light">EDAD</th>
+                                <td id="dmedadMenor"></td>
+                            </tr>
+                            <tr>
+                                <th class="bg-light">DEPARTAMENTO</th>
+                                <td id="dmdepartamento"></td>
+                                <th class="bg-light">PROVINCIA</th>
+                                <td id="dmprovincia"></td>
+                                <th class="bg-light">DISTRITO</th>
+                                <td id="dmdistrito"></td>
+                            </tr>
+                            <tr>
+                                <th class="bg-light">CENTRO POBLADO</th>
+                                <td id="dmcentroPoblado"></td>
+                                <th class="bg-light">DIRECCIÓN</th>
+                                <td colspan="3" id="dmdireccion"></td>
+                            </tr>
+                            <tr>
+                                <th class="bg-light">CELULAR</th>
+                                <td id="dmcelular"></td>
+                                <th class="bg-light">APELLIDOS MADRE</th>
+                                <td id="dmapellidosMadre"></td>
+                                <th class="bg-light">NOMBRES MADRE</th>
+                                <td id="dmnombresMadre"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('js')
@@ -593,7 +670,7 @@
                 data: {
                     'div': div,
                     "anio": $('#anio').val(),
-                    "mes": $('#mes').val(),
+                    "ugel": $('#ugel').val(),
                     "provincia": $('#provincia').val(),
                     "distrito": $('#distrito').val(),
                     "fuente": {{ $fuente }},
@@ -688,6 +765,7 @@
                         'div': div,
                         "anio": $('#anio').val(),
                         "mes": $('#mes').val(),
+                        "ugel": $('#ugel').val(),
                         "provincia": $('#provincia').val(),
                         "distrito": $('#distrito').val(),
                         "fuente": {{ $fuente }},
@@ -698,7 +776,7 @@
                 columnDefs: [{
                         targets: 1,
                         render: function(data, type, row) {
-                            return '<a href="javascript:void(0)" onclick="abrirmodalinfoipress(`' + data +
+                            return '<a href="javascript:void(0)" onclick="mostrarDatosMenor(`' + data +
                             '`)">' + data +
                                 '</a>';
                         }
@@ -717,6 +795,40 @@
                 ],
             });
         }
+
+        function mostrarDatosMenor(dni) {
+            $.ajax({
+                url: "{{ route('educacion.indicador.conveniofed.buscarninio', ['dni' => 'xdni']) }}"
+                    .replace('xdni', dni),
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    console.log(data);
+                    $('#dmdniMenor').text(data.dni);
+                    $('#dmapellidosMenor').text(data.apellidos);
+                    $('#dmnombresMenor').text(data.nombres);
+                    $('#dmsexoMenor').text(data.sexo);
+                    $('#dmfechaNacimiento').text(data.nacimiento);
+                    $('#dmedadMenor').text(data.edad+' AÑOS');
+                    $('#dmdepartamento').text(data.departamento);
+                    $('#dmprovincia').text(data.provincia);
+                    $('#dmdistrito').text(data.distrito);
+                    $('#dmcentroPoblado').text(data.centroPoblado);
+                    $('#dmdireccion').text(data.direccion);
+                    $('#dmcelular').text(data.celular);
+                    $('#dmapellidosMadre').text(data.apellidosMadre);
+                    $('#dmnombresMadre').text(data.nombresMadre);
+
+                    $('#modalDatosMenor').modal('show');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error al obtener datos del menor:', error);
+                    alert('No se pudo cargar la información del menor.');
+                }
+            });
+
+        }
+
 
         function cargarMes() {
             $.ajax({
@@ -889,10 +1001,16 @@
             });
         }
 
+        // function descargar0100() {
+        //     window.open(
+        //         "{{ route('salud.indicador.pactoregional.sal.pacto1.excel', ['', '', '', '', '', '']) }}/tabla2/{{ $ind->id }}/" +
+        //         $('#anio').val() + "/" + $('#mes').val() + "/" + $('#provincia').val() + "/" + $('#distrito').val());
+        // }
+
         function descargar0100() {
             window.open(
-                "{{ route('salud.indicador.pactoregional.sal.pacto1.excel', ['', '', '', '', '', '']) }}/tabla2/{{ $ind->id }}/" +
-                $('#anio').val() + "/" + $('#mes').val() + "/" + $('#provincia').val() + "/" + $('#distrito').val());
+                "{{ route('educacion.indicador.conveniofed.fed2.excel', ['', '', '', '', '', '']) }}/tabla2/{{ $ind->id }}/" +
+                $('#anio').val() + "/" + $('#ugel').val() + "/" + $('#provincia').val() + "/" + $('#distrito').val());
         }
 
         function descargar0101() {

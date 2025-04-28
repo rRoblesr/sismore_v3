@@ -477,7 +477,7 @@
 
                     } else if (div == "anal1") {
                         // console.log(data.info);
-                        
+
                         if ($('#vprovincia').val() == 0) {
                             anal1 = maps01(div, data.info, '',
                                 'Población Estimada y Proyectada, según Provincia y Distritos');
@@ -646,19 +646,25 @@
         }
 
         function descargar1() {
-            window.open("{{ url('/') }}/MatriculaGeneral/EBR/Excel/tabla1/" + $('#anio').val() + "/" + $('#ugel')
-                .val() + "/" + $('#gestion').val() + "/" + $('#area').val() + "/0");
+            window.open(
+                "{{ route('poblacionprincipal.peru.ucayali.descargar', ['', '', '', '', '']) }}/tabla1/" +
+                $('#vanio').val() + "/" + $('#vprovincia').val() + "/" + $('#vdistrito').val() + "/0");
         }
 
-        function descargar2() {
-            window.open("{{ url('/') }}/MatriculaGeneral/EBR/Excel/tabla2/" + $('#anio').val() + "/" + $('#ugel')
-                .val() + "/" + $('#gestion').val() + "/" + $('#area').val() + "/" + provincia_select);
-        }
+        // function descargar1() {
+        //     window.open("{{ url('/') }}/MatriculaGeneral/EBR/Excel/tabla1/" + $('#anio').val() + "/" + $('#ugel')
+        //         .val() + "/" + $('#gestion').val() + "/" + $('#area').val() + "/0");
+        // }
 
-        function descargar3() {
-            window.open("{{ url('/') }}/MatriculaGeneral/EBR/Excel/tabla3/" + $('#anio').val() + "/" + $('#ugel')
-                .val() + "/" + $('#gestion').val() + "/" + $('#area').val() + "/" + distrito_select);
-        }
+        // function descargar2() {
+        //     window.open("{{ url('/') }}/MatriculaGeneral/EBR/Excel/tabla2/" + $('#anio').val() + "/" + $('#ugel')
+        //         .val() + "/" + $('#gestion').val() + "/" + $('#area').val() + "/" + provincia_select);
+        // }
+
+        // function descargar3() {
+        //     window.open("{{ url('/') }}/MatriculaGeneral/EBR/Excel/tabla3/" + $('#anio').val() + "/" + $('#ugel')
+        //         .val() + "/" + $('#gestion').val() + "/" + $('#area').val() + "/" + distrito_select);
+        // }
 
         function verpdf(id) {
             window.open("{{ route('mantenimiento.indicadorgeneral.exportar.pdf', '') }}/" + id);

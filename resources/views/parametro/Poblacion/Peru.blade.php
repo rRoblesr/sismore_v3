@@ -674,19 +674,25 @@
         }
 
         function descargar1() {
-            window.open("{{ url('/') }}/MatriculaGeneral/EBR/Excel/tabla1/" + $('#anio').val() + "/" + $('#ugel')
-                .val() + "/" + $('#gestion').val() + "/" + $('#area').val() + "/0");
+            window.open(
+                "{{ route('poblacionprincipal.peru.descargar', ['', '', '', '']) }}/tabla1/" +
+                $('#vanio').val() + "/" + $('#vdepartamento').val() + "/" + $('#vetapavida').val() );
         }
 
-        function descargar2() {
-            window.open("{{ url('/') }}/MatriculaGeneral/EBR/Excel/tabla2/" + $('#anio').val() + "/" + $('#ugel')
-                .val() + "/" + $('#gestion').val() + "/" + $('#area').val() + "/" + provincia_select);
-        }
+        // function descargar1() {
+        //     window.open("{{ url('/') }}/MatriculaGeneral/EBR/Excel/tabla1/" + $('#anio').val() + "/" + $('#ugel')
+        //         .val() + "/" + $('#gestion').val() + "/" + $('#area').val() + "/0");
+        // }
 
-        function descargar3() {
-            window.open("{{ url('/') }}/MatriculaGeneral/EBR/Excel/tabla3/" + $('#anio').val() + "/" + $('#ugel')
-                .val() + "/" + $('#gestion').val() + "/" + $('#area').val() + "/" + distrito_select);
-        }
+        // function descargar2() {
+        //     window.open("{{ url('/') }}/MatriculaGeneral/EBR/Excel/tabla2/" + $('#anio').val() + "/" + $('#ugel')
+        //         .val() + "/" + $('#gestion').val() + "/" + $('#area').val() + "/" + provincia_select);
+        // }
+
+        // function descargar3() {
+        //     window.open("{{ url('/') }}/MatriculaGeneral/EBR/Excel/tabla3/" + $('#anio').val() + "/" + $('#ugel')
+        //         .val() + "/" + $('#gestion').val() + "/" + $('#area').val() + "/" + distrito_select);
+        // }
 
         function verpdf(id) {
             window.open("{{ route('mantenimiento.indicadorgeneral.exportar.pdf', '') }}/" + id);

@@ -96,7 +96,7 @@ class ImporCensoMatriculaRepositorio
         switch ($valor) {
             case 1:
                 switch ($anio) {
-                        //case 2021:$cuadro = 'C201';break;
+                    //case 2021:$cuadro = 'C201';break;
                     default:
                         $cuadro = 'C201';
                         break;
@@ -124,7 +124,7 @@ class ImporCensoMatriculaRepositorio
                 return $query = $query->get()->count();
             case 2:
                 switch ($anio) {
-                        //case 2021:$cuadro = 'C201';break;
+                    //case 2021:$cuadro = 'C201';break;
                     default:
                         $cuadro = 'C201';
                         break;
@@ -500,6 +500,9 @@ class ImporCensoMatriculaRepositorio
                         $cuadro = ['C201', 'C202'];
                         break;
                     case 2023:
+                        $cuadro = ['C201', 'C208', 'C215'];
+                        break;
+                    case 2024:
                         $cuadro = ['C201', 'C208', 'C215'];
                         break;
                     default:
@@ -953,7 +956,7 @@ class ImporCensoMatriculaRepositorio
                 return $query = $query->get()->count();
             case 2:
                 switch ($anio) {
-                        //case 2021:$cuadro = 'C201';break;
+                    //case 2021:$cuadro = 'C201';break;
                     default:
                         $cuadro = 'C202';
                         break;
@@ -1436,10 +1439,10 @@ class ImporCensoMatriculaRepositorio
         $query = Importacion::select(
             DB::raw('year(par_importacion.fechaActualizacion) as anio'),
             DB::raw('sum(CASE
-            WHEN year(fechaActualizacion)=2019 THEN IF(cuadro="C202",v1.d01+v1.d02+v1.d03+v1.d04,0)
-            WHEN year(fechaActualizacion)=2021 THEN IF(cuadro="C201",v1.d01+v1.d02+v1.d03+v1.d04,0)
-            ELSE IF(cuadro="C203",v1.d01+v1.d02+v1.d03+v1.d04,0)
-            END) as total')
+                        WHEN year(fechaActualizacion)=2019 THEN IF(cuadro="C202",v1.d01+v1.d02+v1.d03+v1.d04,0)
+                        WHEN year(fechaActualizacion)=2021 THEN IF(cuadro="C201",v1.d01+v1.d02+v1.d03+v1.d04,0)
+                        ELSE IF(cuadro="C203",v1.d01+v1.d02+v1.d03+v1.d04,0)
+                        END) as total')
         )
             ->join('edu_impor_censomatricula as v1', 'v1.importacion_id', '=', 'par_importacion.id')
             ->where(DB::raw('year(fechaActualizacion)'), $anio)->where('par_importacion.estado', 'PR')

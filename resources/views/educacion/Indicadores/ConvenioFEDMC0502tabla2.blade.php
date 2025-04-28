@@ -34,38 +34,38 @@
                 <tr class="text-center">
                     {{-- <td>{{ $key + 1 }}</td> --}}
                     <td class="text-left">{{ $item->provincia }}</td>
-                    <td>{{ $item->it }} %</td>
-                    <td>{{ $item->mu }}</td>
-                    <td>{{ $item->mr }}</td>
-                    <td class="table-warning">{{ $item->mt }}</td>
-                    <td>{{ $item->hu }}</td>
-                    <td>{{ $item->hr }}</td>
-                    <td class="table-warning">{{ $item->ht }}</td>
-                    <td>{{ $item->um }}</td>
-                    <td>{{ $item->uh }}</td>
-                    <td>{{ $item->uit }} %</td>
-                    <td>{{ $item->rm }}</td>
-                    <td>{{ $item->rh }}</td>
-                    <td>{{ $item->rit }} %</td>
+                    <td>{!! avance($item->it) !!} </td>
+                    <td>{{ number_format($item->mu, 0) }}</td>
+                    <td>{{ number_format($item->mr, 0) }}</td>
+                    <td class="table-warning">{{ number_format($item->mt, 0) }}</td>
+                    <td>{{ number_format($item->hu, 0) }}</td>
+                    <td>{{ number_format($item->hr, 0) }}</td>
+                    <td class="table-warning">{{ number_format($item->ht, 0) }}</td>
+                    <td>{{ number_format($item->um, 0) }}</td>
+                    <td>{{ number_format($item->uh, 0) }}</td>
+                    <td>{!! avance($item->uit) !!} </td>
+                    <td>{{ number_format($item->rm, 0) }}</td>
+                    <td>{{ number_format($item->rh, 0) }}</td>
+                    <td>{!! avance($item->rit) !!} </td>
                 </tr>
             @endforeach
         </tbody>
         <tfoot>
             <tr class="text-center bg-success-0 text-white">
                 <th colspan="1" class="text-right">TOTAL</th>
-                <th>{{ $foot->it }} %</th>
-                <th>{{ $foot->mu }}</th>
-                <th>{{ $foot->mr }}</th>
-                <th>{{ $foot->mt }}</th>
-                <th>{{ $foot->hu }}</th>
-                <th>{{ $foot->hr }}</th>
-                <th>{{ $foot->ht }}</th>
-                <th>{{ $foot->um }}</th>
-                <th>{{ $foot->uh }}</th>
-                <th>{{ $foot->uit }} %</th>
-                <th>{{ $foot->rm }}</th>
-                <th>{{ $foot->rh }}</th>
-                <th>{{ $foot->rit }} %</th>
+                <th>{!! avance($foot->it) !!} </th>
+                <th>{{ number_format($foot->mu, 0) }}</th>
+                <th>{{ number_format($foot->mr, 0) }}</th>
+                <th>{{ number_format($foot->mt, 0) }}</th>
+                <th>{{ number_format($foot->hu, 0) }}</th>
+                <th>{{ number_format($foot->hr, 0) }}</th>
+                <th>{{ number_format($foot->ht, 0) }}</th>
+                <th>{{ number_format($foot->um, 0) }}</th>
+                <th>{{ number_format($foot->uh, 0) }}</th>
+                <th>{!! avance($foot->uit) !!}</th>
+                <th>{{ number_format($foot->rm, 0) }}</th>
+                <th>{{ number_format($foot->rh, 0) }}</th>
+                <th>{!! avance($foot->rit) !!}</th>
             </tr>
         </tfoot>
     @else

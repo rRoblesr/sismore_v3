@@ -37,11 +37,94 @@
             background-color: #43beac;
             color: #FFF;
         }
+
+        /*  */
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            background-color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .pricing-header {
+            background-color: #17a2b8;
+            color: #fff;
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
+            text-align: center;
+        }
+
+        .pricing-header h5 {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .card-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        .card-body .row {
+            margin-bottom: 10px;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
+
+        .text-green-0 {
+            color: #28a745;
+        }
+
+        .font-13 {
+            font-size: 13px;
+        }
+
+        .font-12 {
+            font-size: 12px;
+            color: #6c757d;
+        }
+
+        .text-white {
+            color: #fff;
+        }
+
+        .font-weight-bold {
+            font-weight: bold;
+        }
+
+        .mdi {
+            font-size: 18px;
+        }
+
+        .btn-sm {
+            font-size: 14px;
+            padding: 8px 16px;
+        }
+
+        .card .mt-1.pt-1 {
+            margin-top: auto;
+        }
     </style>
 @endsection
 
 @section('content')
-    <div class="row">
+    {{-- <div class="row">
         <div class="col-lg-12 col-md-12">
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
@@ -49,139 +132,97 @@
                 </div>
                 <div class="card-body pb-0 pt-3">
                     <div class="form-group row">
-                        <div class="col-lg-6 col-md-12 col-sm-12">
+                        <div class="col-lg-10 col-md-12 col-sm-12">
                             <h4 class="page-title font-16">FED</h4>
                         </div>
-                        <div class="col-lg-1 col-md-6 col-sm-6">
-                            <div class="custom-select-container">
-                                <label for="anio">AÑO</label>
-                                <select id="anio" name="anio" class="form-control font-11 p-0"
-                                    onchange="cargarpacto1();">
-                                    @foreach ($anio as $item)
-                                        <option value="{{ $item }}" {{ $item == $aniomax ? 'selected' : '' }}>
-                                            {{ $item }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-2 col-md-6 col-sm-6">
-                            <div class="custom-select-container">
-                                <label for="provincia">PROVINCIA</label>
-                                <select id="provincia" name="provincia" class="form-control font-11"
-                                    onchange="cargarDistritos();">
-                                    <option value="0">TODOS</option>
-                                    @foreach ($provincia as $item)
-                                        <option value="{{ $item->id }}">
-                                            {{ $item->nombre }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-2 col-md-6 col-sm-6">
-                            <div class="custom-select-container">
-                                <label for="distrito">DISTRITO</label>
-                                <select id="distrito" name="distrito" class="form-control font-11"
-                                    onchange="cargarpacto1();">
-                                    <option value="0">TODOS</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-1 col-md-6 col-sm-6 text-center">
+
+                        <div class="col-lg-2 col-md-6 col-sm-6 text-right">
                             <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
                                 title='ACTUALIZAR'>
-                                <i class="fas fa-history"></i>
+                                <i class="fas fa-history"></i> Actualizar
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div> --}}
+
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="form-group row">
+                <div class="col-lg-10 col-md-12 col-sm-12">
+                    <h4 class="page-title font-16">FED</h4>
+                </div>
+
+                <div class="col-lg-2 col-md-6 col-sm-6 text-right">
+                    <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
+                        title='ACTUALIZAR'>
+                        <i class="fas fa-history"></i> Actualizar
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="row">
-
         @foreach ($indedu as $key => $item)
             <div class="col-md-6 col-xl-3">
-                <div class="card text-center border border-success-0 h-100 d-flex flex-column justify-content-between">
-
+                <div class="card text-center border border-success-0" style="height: 100%;">
                     <div class="pricing-header bg-success-0 p-0 rounded-top">
                         <div class="card-widgets">
-                            {{-- <i class="mdi mdi-alert-circle-outline"></i> --}}
-                            <span onclick="datosIndicador({{ $item->id }})"><i
-                                    class="mdi mdi-rotate-180 mdi-alert-circle"
-                                    style="color:#FFF;font-size: 20px;"></i>&nbsp;&nbsp;</span>
-                            {{-- <a href="" title='' class=""><i class="mdi mdi-alert-circle"
-                                        style="color:#FFF;font-size: 20px"></i></a> --}}
+                            <span onclick="datosIndicador({{ $item->id }})">
+                                <i class="mdi mdi-rotate-180 mdi-alert-circle"
+                                    style="color:#FFF;font-size: 20px;"></i>&nbsp;&nbsp;
+                            </span>
                         </div>
-                        <h5 class="text-white font-14 font-weight-normal mt-1 mb-1"><i class="mdi mdi-school"
-                                style="font-size: 20px"></i>
-                            Indicador {{ $key + 1 }}</h5>
-                        {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
-                        {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
+                        <h5 class="text-white font-14 font-weight-normal mt-1 mb-1">
+                            <i class="mdi mdi-school" style="font-size: 20px"></i> Indicador {{ $key + 1 }}
+                        </h5>
                     </div>
-                    <div class="pb-4 pl-4 pr-4">
-                        <ul class="list-unstyled mt-0">
-                            <li class="mt-0 pt-0">
-                                {{-- <i class="mdi mdi-finance font-44 text-green-0"></i></li>
-                                <li class="mt-0 pt-0 font-16">Avance</li>
-                                <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 % --}}
+                    <div class="px-1 d-flex flex-column" style="flex-grow: 1;">
+                        <ul class="list-unstyled mt-0" style="margin-bottom: 0;">
                             <li class="m-0 pt-0">
-                                <figure class="p-0 m-0">{{-- DIT-EDU-01 --}}
-                                    <div id="gra{{ $item->codigo }}"></div>
-                                    {{-- <div id="graDIT-EDU-01"></div> --}}
-                                    {{-- graDITSALUD01 --}}
+                                <figure class="p-0 m-0" style="height: 160px; width: 100%;">
+                                    <div id="gra{{ $item->codigo }}" style="height: 100%;"></div>
                                 </figure>
                             </li>
-                            </li>
-                            <li class="mt-0 pt-0 font-10" id="actualizado{{ $item->codigo }}">
-                            </li>
-                            {{-- <li class="mt-0 pt-0 font-18 font-weight-bold"
-                                    id="meta{{ $item->codigo }}"></li>
-                                <li class="mt-0 pt-0" id="cumple{{ $item->codigo }}"></li> --}}
-                            <li class="mt-1 pt-1">
+                            <li class="mt-0 pt-0 font-10" id="actualizado{{ $item->codigo }}">Actualizado: 02/04/2024</li>
+                            <li class="mt-1 pt-1" style="margin-bottom: 0;">
                                 <div class="row">
-                                    <div class="col-6 p-0">
-                                        <span class="text-green-0 font-weight-bold font-13" style="font-size: 100%">
-                                            <i class="mdi mdi-arrow-up-bold"></i>
-                                            Numerador
-                                            {{-- <i class="mdi mdi-rotate-180 mdi-alert-circle"
-                                                    onclick="#"></i> --}}
+                                    <div class="col-6 p-0 text-center">
+                                        <span class="text-green-0 font-weight-bold font-12">
+                                            <i class="mdi mdi-arrow-up-bold"></i> Numerador
                                         </span>
                                         <div class="font-weight-bold" id="num{{ $item->codigo }}">100</div>
                                     </div>
-                                    <div class="col-6 p-0">
-                                        <span class="text-green-0 font-weight-bold font-13" style="font-size: 100%">
-                                            <i class="mdi mdi-arrow-down-bold"></i>
-                                            Denominador
-                                            {{-- <i class="mdi mdi-rotate-180 mdi-alert-circle"
-                                                    onclick="#"></i> --}}
+                                    <div class="col-6 p-0 text-center">
+                                        <span class="text-green-0 font-weight-bold font-12">
+                                            <i class="mdi mdi-arrow-down-bold"></i> Denominador
                                         </span>
                                         <div class="font-weight-bold" id="den{{ $item->codigo }}">100</div>
                                     </div>
                                 </div>
                             </li>
-                            <li class="mt-1 pt-1">
-                                <p class="font-12 m-0"
-                                   style="min-height: 4.5rem; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;"
-                                   title="{{ $item->nombre }}">
+                            <li class="mt-1 pt-1" style="margin-bottom: 0;">
+                                <p class="font-11"
+                                    style="word-wrap: break-word; word-break: break-word; white-space: normal; margin: 0;">
                                     {{ $item->nombre }}
                                 </p>
                             </li>
-
                         </ul>
-                        <div class="mt-1 pt-1">
-                            {{-- <button class="btn btn-primary width-md waves-effect waves-light">Sign Up</button> --}}
-                            <a href="{{ route('educacion.indicador.conveniofed.detalle', $item->id) }}"
-                                class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">
-                                Ver detalle</a>
-                        </div>
-
+                    </div>
+                    <!-- Botón en el footer -->
+                    <div class="card-footer text-center bg-white" style="padding: 10px 15px; margin-top: auto;">
+                        <a href="{{ route('educacion.indicador.conveniofed.detalle', $item->id) }}"
+                            class="btn btn-warning btn-sm text-dark width-md waves-effect waves-light py-1">
+                            <i class="mdi mdi-eye"></i> Ver detalle
+                        </a>
                     </div>
                 </div>
             </div>
         @endforeach
     </div>
-    <!-- end row -->
 
     <div id="modal_datosindicador" class="modal fade font-10" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true">
@@ -283,7 +324,6 @@
         }
 
         function cargarActualizar(codigo) {
-
             $.ajax({
                 url: "{{ route('educacion.indicador.conveniofed.actualizar') }}",
                 data: {
@@ -295,21 +335,22 @@
                 dataType: "JSON",
                 beforeSend: function() {
                     GaugeSeries('gra' + codigo, 0);
-                    $('#actualizado' + codigo).text('');
+                    document.getElementById(`actualizado${codigo}`).textContent = '';
+                    document.getElementById(`num${codigo}`).textContent = 0;
+                    document.getElementById(`den${codigo}`).textContent = 0;
                 },
                 success: function(data) {
-                    console.log(data);
-                    console.log('#actualizado' + codigo + ": " + data.actualizado);
-                    console.log('#num' + codigo);
+                    console.log(data.avance);
+                    console.log('#actualizado' + codigo);
                     GaugeSeries('gra' + codigo, data.avance);
-                    $('#actualizado' + codigo).text(data.actualizado);
-                    $('#meta' + codigo).text('Meta: ' + data.meta);
-                    $('#cumple' + codigo).html(data.cumple ?
-                        '<span class="badge badge-success m-2" style="font-size: 90%; width:100px"> <i class="mdi mdi-thumb-up"></i> CUMPLE</span>' :
-                        '<span class="badge badge-danger m-2" style="font-size: 90%; width:100px"> <i class="mdi mdi-thumb-down"></i> NO CUMPLE</span>'
-                    );
-                    $('#num' + codigo).text(data.num);
-                    $('#den' + codigo).text(data.den);
+                    document.getElementById(`actualizado${codigo}`).textContent = data.actualizado;
+                    // $('#meta' + codigo).text('Meta: ' + data.meta);
+                    // $('#cumple' + codigo).html(data.cumple ?
+                    //     '<span class="badge badge-success m-2" style="font-size: 90%; width:100px"> <i class="mdi mdi-thumb-up"></i> CUMPLE</span>' :
+                    //     '<span class="badge badge-danger m-2" style="font-size: 90%; width:100px"> <i class="mdi mdi-thumb-down"></i> NO CUMPLE</span>'
+                    // );
+                    document.getElementById(`num${codigo}`).textContent = data.num;
+                    document.getElementById(`den${codigo}`).textContent = data.den;
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR cargarActualizar");

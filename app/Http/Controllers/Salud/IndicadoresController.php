@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Salud;
 
+use App\Exports\eduConvenioFed1Export;
+use App\Exports\eduConvenioFed2Export;
 use App\Exports\pactoregionalSal1Export;
 use App\Exports\pactoregionalSal2Export;
 use App\Http\Controllers\Controller;
@@ -1699,15 +1701,15 @@ class IndicadoresController extends Controller
                     DB::raw('sum(den)-sum(num) as gln'),
                     DB::raw('round(100*sum(num)/sum(den),1) as indicador')
                 );
-                if ($rq->ugel != '') $v->where('ugel', $rq->ugel);
-                if ($rq->provincia > 0) $v->where('provincia_id', $rq->provincia);
+                if ($rq->ugel != 'TODOS') $v->where('ugel', $rq->ugel);
+                if ($rq->provincia > 0) $v->where('dependencia', $rq->provincia);
                 if ($rq->distrito > 0) $v->where('distrito_id', $rq->distrito);
                 $v = $v->first();
                 $ri = number_format($v->indicador, 1);
                 $gls = number_format($v->gls, 0);
                 $gln = number_format($v->gln, 0);
                 $gl = number_format($v->gl, 0);
-                return response()->json(['aa' => $rq->all(), 'ri' => $ri, 'gl' => $gl, 'gls' => $gls, 'gln' => $gln, 'base' => $v]);
+                return response()->json(['aa' => $rq->all(), 'ri' => $ri, 'gl' => $gl, 'gls' => $gls, 'gln' => $gln, 'base' => $v, 'xx' => $rq->all()]);
 
             case 'anal1':
                 $base = CuboFEDPN::select('distrito', DB::raw('100*sum(num)/sum(den) as indicador'))->where('anio', $rq->anio);
@@ -1787,6 +1789,9 @@ class IndicadoresController extends Controller
                         'numx',
                         DB::raw('if(length(cod_mod)=7,1,0) as cumple')
                     );
+                if ($rq->ugel != 'TODOS') $query->where('ugel', $rq->ugel);
+                if ($rq->provincia > 0) $query->where('dependencia', $rq->provincia);
+                if ($rq->distrito > 0) $query->where('distrito_id', $rq->distrito);
                 $query = $query->get();
                 $data = [];
                 foreach ($query as $key => $value) {
@@ -1817,35 +1822,71 @@ class IndicadoresController extends Controller
                 return response()->json($result);
                 break;
 
-            case 'tabla0201':
-                $draw = intval($rq->draw);
-                $start = intval($rq->start);
-                $length = intval($rq->length);
 
-                $query = CuboPacto1PadronNominal::where('importacion', $impMaxAnio)->where('cui_atencion', $rq->cod_unico)->whereIn('tipo_doc', ['DNI', 'CNV'])->get();
 
-                $data = [];
-                foreach ($query as $key => $value) {
-                    $data[] = array(
-                        $key + 1,
-                        $value->tipo_doc,
-                        $value->num_doc,
-                        $value->nombre_completo,
-                        $value->fecha_nacimiento,
-                        $value->distrito,
-                        $value->seguro,
-                        $value->num_doc_madre,
-                        $value->nombre_completo_madre,
-                        $value->num,
+            default:
+                return [];
+        }
+    }
+
+    public function ConvenioFEDEduMC0501Export($div, $indicador, $anio, $ugel, $provincia, $distrito)
+    {
+        switch ($div) {
+            // case 'tabla1':
+            //     $base = IndicadorGeneralMetaRepositorio::getPacto1tabla1($indicador, $anio, $mes);
+            //     $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla1', compact('base', 'ndis'))->render();
+            //     return compact('excel', 'base');
+
+            case 'tabla2':
+                $base = CuboFEDPN::where('anio', $anio)
+                    ->select(
+                        'id',
+                        'importacion_id',
+                        'anio',
+                        'mes',
+                        'dni',
+                        'apellido_paterno',
+                        'apellido_materno',
+                        'nombre',
+                        'sexo',
+                        'fecha_nacimiento',
+                        'edad',
+                        'tipo_edad',
+                        'direccion',
+                        'ubigeo',
+                        'centro_poblado',
+                        'centro_poblado_nombre',
+                        'area_ccpp',
+                        'codigo_ie',
+                        'nombre_ie',
+                        'tipo_doc_madre',
+                        'num_doc_madre',
+                        'apellido_paterno_madre',
+                        'apellido_materno_madre',
+                        'nombres_madre',
+                        'celular_madre',
+                        'grado_instruccion',
+                        'lengua_madre',
+                        'distrito_id',
+                        'distrito',
+                        'dependencia',
+                        'provincia',
+                        'ugel',
+                        'eess',
+                        'cod_mod',
+                        'iiee',
+                        'den',
+                        'num',
+                        'numx',
+                        DB::raw('if(length(cod_mod)=7,1,0) as cumple')
                     );
-                }
-                $result = array(
-                    "draw" => $draw,
-                    "recordsTotal" => $start,
-                    "recordsFiltered" => $length,
-                    "data" => $data,
-                );
-                return response()->json($result);
+                if ($ugel != 'TODOS') $base->where('ugel', $ugel);
+                if ($provincia > 0) $base->where('dependencia', $provincia);
+                if ($distrito > 0) $base->where('distrito_id', $distrito);
+                $base = $base->get();
+
+                return compact('base');
+
 
             default:
                 return [];
@@ -1960,6 +2001,25 @@ class IndicadoresController extends Controller
         return response()->json($result);
     }
 
+    public function ConvenioFEDEduMC0501Reports1download($div, $indicador, $anio, $mes, $provincia, $distrito)
+    {
+        if ($anio > 0) {
+            switch ($div) {
+                // case 'tabla1':
+                //     $name = 'Listado de establecimientos de salud ' . date('Y-m-d') . '.xlsx';
+                //     break;
+                case 'tabla2':
+                    $name = 'Evaluación de cumplimiento de los registros de niños y niñas menores de 6 años del padrón nominal ' . date('Y-m-d') . '.xlsx';
+                    break;
+                default:
+                    $name = 'sin nombre.xlsx';
+                    break;
+            }
+
+            return Excel::download(new eduConvenioFed1Export($div, $indicador, $anio, $mes, $provincia, $distrito), $name);
+        }
+    }
+
     public function ConvenioFEDbuscarninio($dni)
     {
         $menor = CuboFEDPN::where('dni', $dni)->firstOrFail();
@@ -1982,15 +2042,24 @@ class IndicadoresController extends Controller
         ]);
     }
 
-    // ############ FED MC0501 #################
+    // ############ FED MC0502 #################
     public function ConvenioFEDEduMC0502Reports(Request $rq)
     {
         if ($rq->distrito > 0) $ndis = Ubigeo::find($rq->distrito)->nombre;
         else $ndis = '';
         // $impMaxAnio = eduPadronNominalRepositorio::PNImportacion_idmax($rq->fuente, $rq->anio, $rq->mes);
-        switch ($rq->div . 'ADSAS') {
+        switch ($rq->div) {
             case 'head':
-                $v = CuboFEDPN::where('anio', 2025)->select(DB::raw('sum(num) as gl'), DB::raw('sum(numx) as gls'), DB::raw('sum(num)-sum(numx) as gln'), DB::raw('round(100*sum(numx)/sum(num),1) as indicador'))->first();
+                $v = CuboFEDPN::where('anio', 2025)->select(
+                    DB::raw('sum(num) as gl'),
+                    DB::raw('sum(numx) as gls'),
+                    DB::raw('sum(num)-sum(numx) as gln'),
+                    DB::raw('round(100*sum(numx)/sum(num),1) as indicador')
+                );
+                if ($rq->ugel != 'TODOS') $v->where('ugel', $rq->ugel);
+                if ($rq->provincia > 0) $v->where('dependencia', $rq->provincia);
+                if ($rq->distrito > 0) $v->where('distrito_id', $rq->distrito);
+                $v = $v->first();
                 $ri = number_format($v->indicador, 1);
                 $gls = number_format($v->gls, 0);
                 $gln = number_format($v->gln, 0);
@@ -2072,10 +2141,15 @@ class IndicadoresController extends Controller
                         'centro_poblado_nombre',
                         'area_ccpp',
                         'eess',
+                        // DB::raw('if(length(cod_mod)=7 and numx=1,cod_mod,"") as cod_mod'),
                         'cod_mod',
+                        // DB::raw('if(length(cod_mod)=7 and numx=1,iiee,"") as iiee'),
                         'iiee',
                         DB::raw('if(length(cod_mod)=7 and numx=1,1,0) as cumple')
                     );
+                if ($rq->ugel != 'TODOS') $query->where('ugel', $rq->ugel);
+                if ($rq->provincia > 0) $query->where('dependencia', $rq->provincia);
+                if ($rq->distrito > 0) $query->where('distrito_id', $rq->distrito);
                 $query = $query->get();
                 $data = [];
                 foreach ($query as $key => $value) {
@@ -2167,35 +2241,89 @@ class IndicadoresController extends Controller
                 $excel = view('educacion.Indicadores.ConvenioFEDMC0502tabla2', compact('base', 'foot'))->render();
                 return response()->json(compact('excel'));
 
-            case 'tabla0201':
-                $draw = intval($rq->draw);
-                $start = intval($rq->start);
-                $length = intval($rq->length);
 
-                $query = CuboPacto1PadronNominal::where('importacion', $impMaxAnio)->where('cui_atencion', $rq->cod_unico)->whereIn('tipo_doc', ['DNI', 'CNV'])->get();
+            default:
+                return [];
+        }
+    }
 
-                $data = [];
-                foreach ($query as $key => $value) {
-                    $data[] = array(
-                        $key + 1,
-                        $value->tipo_doc,
-                        $value->num_doc,
-                        $value->nombre_completo,
-                        $value->fecha_nacimiento,
-                        $value->distrito,
-                        $value->seguro,
-                        $value->num_doc_madre,
-                        $value->nombre_completo_madre,
-                        $value->num,
+    public function ConvenioFEDEduMC0502Reports1download($div, $indicador, $anio, $mes, $provincia, $distrito)
+    {
+        if ($anio > 0) {
+            switch ($div) {
+                // case 'tabla1':
+                //     $name = 'Listado de establecimientos de salud ' . date('Y-m-d') . '.xlsx';
+                //     break;
+                case 'tabla2':
+                    $name = 'Evaluación de cumplimiento de los registros de niños y niñas menores de 6 años del padrón nominal ' . date('Y-m-d') . '.xlsx';
+                    break;
+                default:
+                    $name = 'sin nombre.xlsx';
+                    break;
+            }
+
+            return Excel::download(new eduConvenioFed2Export($div, $indicador, $anio, $mes, $provincia, $distrito), $name);
+        }
+    }
+
+    public function ConvenioFEDEduMC0502Export($div, $indicador, $anio, $ugel, $provincia, $distrito)
+    {
+        switch ($div) {
+            // case 'tabla1':
+            //     $base = IndicadorGeneralMetaRepositorio::getPacto1tabla1($indicador, $anio, $mes);
+            //     $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla1', compact('base', 'ndis'))->render();
+            //     return compact('excel', 'base');
+
+            case 'tabla2':
+                $base = CuboFEDPN::where('anio', $anio)->where('num', '1')
+                    ->select(
+                        'id',
+                        'importacion_id',
+                        'anio',
+                        'mes',
+                        'dni',
+                        'apellido_paterno',
+                        'apellido_materno',
+                        'nombre',
+                        'sexo',
+                        'fecha_nacimiento',
+                        'edad',
+                        'tipo_edad',
+                        'direccion',
+                        'ubigeo',
+                        'centro_poblado',
+                        'centro_poblado_nombre',
+                        'area_ccpp',
+                        'codigo_ie',
+                        'nombre_ie',
+                        'tipo_doc_madre',
+                        'num_doc_madre',
+                        'apellido_paterno_madre',
+                        'apellido_materno_madre',
+                        'nombres_madre',
+                        'celular_madre',
+                        'grado_instruccion',
+                        'lengua_madre',
+                        'distrito_id',
+                        'distrito',
+                        'dependencia',
+                        'provincia',
+                        'ugel',
+                        'eess',
+                        'cod_mod',
+                        'iiee',
+                        'den',
+                        'num',
+                        'numx',
+                        DB::raw('if(length(cod_mod)=7,1,0) as cumple')
                     );
-                }
-                $result = array(
-                    "draw" => $draw,
-                    "recordsTotal" => $start,
-                    "recordsFiltered" => $length,
-                    "data" => $data,
-                );
-                return response()->json($result);
+                if ($ugel != 'TODOS') $base->where('ugel', $ugel);
+                if ($provincia > 0) $base->where('dependencia', $provincia);
+                if ($distrito > 0) $base->where('distrito_id', $distrito);
+                $base = $base->get();
+
+                return compact('base');
+
 
             default:
                 return [];

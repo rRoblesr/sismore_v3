@@ -1307,7 +1307,11 @@ Route::get('/educacion/conveniofed/edu/Reports1', [IndicadoresController::class,
 Route::post('/educacion/conveniofed/edu/Reports1/2', [IndicadoresController::class, 'PactoRegionalSalPacto1Reports2'])->name('educacion.indicador.conveniofed.detalle.reports.2');
 Route::post('/educacion/conveniofed/edu/Reports1/3', [IndicadoresController::class, 'PactoRegionalSalPacto1Reports3'])->name('educacion.indicador.conveniofed.detalle.reports.3');
 // Route::get('/educacion/conveniofed/edu/Reports1/Exportar/{div}/{indicador}/{anio}/{mes}/{provincia}/{distrito}', [IndicadoresController::class, 'PactoRegionalSalPacto1download'])->name('salud.indicador.pactoregional.sal.pacto1.excel');
+Route::get('/educacion/conveniofed/edu/Reports1/Exportar/{div}/{indicador}/{anio}/{mes}/{provincia}/{distrito}', [IndicadoresController::class, 'ConvenioFEDEduMC0501Reports1download'])->name('educacion.indicador.conveniofed.fed.excel');
+
 Route::get('/educacion/conveniofed/edu/Reports2', [IndicadoresController::class, 'ConvenioFEDEduMC0502Reports'])->name('educacion.indicador.conveniofed.detalle.reports.2');
+Route::get('/educacion/conveniofed/edu/Reports2/Exportar/{div}/{indicador}/{anio}/{mes}/{provincia}/{distrito}', [IndicadoresController::class, 'ConvenioFEDEduMC0502Reports1download'])->name('educacion.indicador.conveniofed.fed2.excel');
+
 // Route::post('/educacion/conveniofed/edu/Reports2/2', [IndicadoresController::class, 'PactoRegionalSalPacto1Reports2'])->name('educacion.indicador.conveniofed.detalle.reports.2');
 // Route::post('/educacion/conveniofed/edu/Reports2/3', [IndicadoresController::class, 'PactoRegionalSalPacto1Reports3'])->name('educacion.indicador.conveniofed.detalle.reports.3');
 
@@ -1480,16 +1484,20 @@ Route::get('/Poblacion/Principalx', [PoblacionController::class, 'poblacionprinc
 
 Route::get('/Poblacion/Peru', [PoblacionController::class, 'poblacionprincipalperu'])->name('poblacionprincipal.peru');
 Route::get('/Poblacion/Perux', [PoblacionController::class, 'poblacionprincipalperutabla'])->name('poblacionprincipal.peru.tablas');
+Route::get('/Poblacion/Peru/Excel/{div}/{anio}/{departamento}/{etapavida}', [PoblacionController::class, 'poblacionprincipalperuDownload'])->name('poblacionprincipal.peru.descargar');
+
 
 Route::get('/Poblacion/Peru/Ucayali', [PoblacionController::class, 'poblacionprincipalucayali'])->name('poblacionprincipal.peru.ucayali');
 Route::get('/Poblacion/Peru/ucayalix', [PoblacionController::class, 'poblacionprincipalucayalitabla'])->name('poblacionprincipal.peru.ucayali.tablas');
+Route::get('/Poblacion/Peru/ucayali/Excel/{div}/{anio}/{provincia}/{distrito}/{sexo}', [PoblacionController::class, 'poblacionprincipalucayaliDownload'])->name('poblacionprincipal.peru.ucayali.descargar');
+
 
 Route::get('/Poblacion/Peru/Ucayali/PadrónNominal', [PoblacionController::class, 'poblacionprincipalucayalipn'])->name('poblacionprincipal.peru.ucayali.pn');
 Route::get('/Poblacion/Peru/ucayali/PNx', [PoblacionController::class, 'poblacionprincipalucayalitablapn'])->name('poblacionprincipal.peru.ucayali.pn.tablas');
 Route::get('/Poblacion/Peru/ucayali/PN/mes', [PoblacionController::class, 'poblacionprincipalucayalitablapnmes'])->name('poblacionprincipal.peru.ucayali.pn.mes');
 Route::get('/Poblacion/Peru/ucayali/PN/provincia', [PoblacionController::class, 'poblacionprincipalucayalitablapnprovincia'])->name('poblacionprincipal.peru.ucayali.pn.provincia');
 Route::get('/Poblacion/Peru/ucayali/PN/distrito', [PoblacionController::class, 'poblacionprincipalucayalitablapndistrito'])->name('poblacionprincipal.peru.ucayali.pn.distrito');
-// Route::get('/MatriculaGeneral/EBR/Excel/{div}/{anio}/{ugel}/{gestion}/{area}/{provincia}', [MatriculaGeneralController::class, 'basicaregularDownload']);
+Route::get('/Poblacion/Peru/ucayali/PN/Excel/{div}/{anio}/{departamento}/{etapavida}', [PoblacionController::class, 'poblacionprincipalperudownload'])->name('poblacionprincipal.peru.ucayali.pn.descargar');
 
 /****************************************** FIN PARAMETRO ***************************************************/
 

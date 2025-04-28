@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Parametro;
 
+use App\Exports\parPoblacionPeruExport;
+use App\Exports\parPoblacionPeruUcayaliExport;
 use App\Http\Controllers\Controller;
 use App\Models\Educacion\Importacion;
 use App\Models\Parametro\CentroPoblado;
@@ -348,6 +350,53 @@ class PoblacionController extends Controller
         }
     }
 
+    public function poblacionprincipalperuExport($div, $anio, $departamento, $etapavida)
+    {
+        $base = PoblacionProyectadaRepositorio::conteo_departamento_etapavida($anio);
+        $foot = [];
+        if ($base->count() > 0) {
+            $foot = clone $base[0];
+            $foot->conteo = 0;
+            $foot->hconteo = 0;
+            $foot->mconteo = 0;
+            $foot->ev1 = 0;
+            $foot->ev2 = 0;
+            $foot->ev3 = 0;
+            $foot->ev4 = 0;
+            $foot->ev5 = 0;
+            foreach ($base as $key => $value) {
+                $foot->conteo += $value->conteo;
+                $foot->hconteo += $value->hconteo;
+                $foot->mconteo += $value->mconteo;
+                $foot->ev1 += $value->ev1;
+                $foot->ev2 += $value->ev2;
+                $foot->ev3 += $value->ev3;
+                $foot->ev4 += $value->ev4;
+                $foot->ev5 += $value->ev5;
+            }
+        }
+        return compact('foot', 'base');
+    }
+
+    public function poblacionprincipalperuDownload($div, $anio, $departamento, $etapavida)
+    {
+        if ($anio > 0) {
+            switch ($div) {
+                // case 'tabla1':
+                //     $name = 'Listado de establecimientos de salud ' . date('Y-m-d') . '.xlsx';
+                //     break;
+                case 'tabla1':
+                    $name = 'Evaluación de cumplimiento de los registros de niños y niñas menores de 6 años del padrón nominal ' . date('Y-m-d') . '.xlsx';
+                    break;
+                default:
+                    $name = 'sin nombre.xlsx';
+                    break;
+            }
+
+            return Excel::download(new parPoblacionPeruExport($div, $anio, $departamento, $etapavida), $name);
+        }
+    }
+
     public function poblacionprincipalucayali()
     {
         $anios = ImportacionRepositorio::anios_porfuente(ImporPoblacionDiresaController::$FUENTE);
@@ -476,6 +525,60 @@ class PoblacionController extends Controller
 
             default:
                 return [];
+        }
+    }
+
+
+    public function poblacionprincipalucayaliExport($div, $anio, $provincia, $distrito, $sexo)
+    {
+        $base = PoblacionDiresaRepositorio::listar_distrito_sexo_edad($anio, $provincia, $distrito, $sexo);
+        $foot = [];
+        if ($base->count() > 0) {
+            $foot = clone $base[0];
+            $foot->conteo = 0;
+            $foot->hconteo = 0;
+            $foot->mconteo = 0;
+            $foot->ev1 = 0;
+            $foot->ev2 = 0;
+            $foot->ev3 = 0;
+            $foot->ev4 = 0;
+            $foot->ev5 = 0;
+            $foot->nacimiento = 0;
+            $foot->gestante = 0;
+            $foot->fertiles = 0;
+            foreach ($base as $key => $value) {
+                $foot->conteo += $value->conteo;
+                $foot->hconteo += $value->hconteo;
+                $foot->mconteo += $value->mconteo;
+                $foot->ev1 += $value->ev1;
+                $foot->ev2 += $value->ev2;
+                $foot->ev3 += $value->ev3;
+                $foot->ev4 += $value->ev4;
+                $foot->ev5 += $value->ev5;
+                $foot->nacimiento += $value->nacimiento;
+                $foot->gestante += $value->gestante;
+                $foot->fertiles += $value->fertiles;
+            }
+        }
+        return compact('foot', 'base');
+    }
+
+    public function poblacionprincipalucayaliDownload($div, $anio, $provincia, $distrito, $sexo)
+    {
+        if ($anio > 0) {
+            switch ($div) {
+                // case 'tabla1':
+                //     $name = 'Listado de establecimientos de salud ' . date('Y-m-d') . '.xlsx';
+                //     break;
+                case 'tabla1':
+                    $name = 'Evaluación de cumplimiento de los registros de niños y niñas menores de 6 años del padrón nominal ' . date('Y-m-d') . '.xlsx';
+                    break;
+                default:
+                    $name = 'sin nombre.xlsx';
+                    break;
+            }
+
+            return Excel::download(new parPoblacionPeruUcayaliExport($div,$anio, $provincia, $distrito, $sexo), $name);
         }
     }
 

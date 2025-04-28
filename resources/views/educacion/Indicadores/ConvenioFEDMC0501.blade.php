@@ -72,7 +72,7 @@
                 </div>
 
                 <div class="col-md-2 col-6">
-                    <div class="custom-select-container my-2">
+                    <div class="custom-select-container my-1">
                         <label for="anio">Año</label>
                         <select id="anio" name="anio" class="form-control font-12" onchange="cargarMes();">
                             @foreach ($anio as $item)
@@ -84,10 +84,10 @@
                 </div>
 
                 <div class="col-md-2 col-6">
-                    <div class="custom-select-container my-2">
+                    <div class="custom-select-container my-1">
                         <label for="ugel">Ugel</label>
                         <select id="ugel" name="ugel" class="form-control font-12" onchange="cargarcuadros();">
-                            <option value="">TODOS</option>
+                            <option value="TODOS">TODOS</option>
                             @foreach ($ugel as $item)
                                 <option value="{{ $item->ugel }}">
                                     {{ $item->ugel }}</option>
@@ -139,7 +139,9 @@
                     <div class="text-center">
                         {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
                         width="70%" height="70%"> --}}
-                        <i class="mdi mdi-finance font-35 text-green-0"></i>
+                        {{-- <i class="mdi mdi-finance font-35 text-green-0"></i> --}}
+                        <i class="mdi mdi-power font-35 text-green-0"></i>
+                        {{-- <i class="mdi mdi-alert-circle font-35 text-green-0"></i> --}}
                     </div>
                     <div class="media-body align-self-center">
                         <div class="text-right">
@@ -161,7 +163,9 @@
                         {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
                         width="70%" height="70%"> --}}
                         {{-- <i class=" mdi mdi-city font-35 text-green-0"></i> --}}
-                        <i class="fas fa-child font-35 text-green-0"></i>
+                        {{-- <i class="fas fa-child font-35 text-green-0"></i>] --}}
+                        {{-- <i class="mdi mdi-chart-bar font-35 text-green-0"></i> --}}
+                        <i class="mdi mdi-finance font-35 text-green-0"></i>
                     </div>
                     <div class="media-body align-self-center">
                         <div class="text-right">
@@ -187,7 +191,8 @@
                     <div class="text-center">
                         {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
                         width="70%" height="70%"> --}}
-                        <i class="mdi mdi-thumb-up font-35 text-green-0"></i>
+                        {{-- <i class="mdi mdi-thumb-up font-35 text-green-0"></i> --}}
+                        <i class="mdi mdi-account-group font-35 text-green-0"></i>
                     </div>
                     <div class="media-body align-self-center">
                         <div class="text-right">
@@ -213,7 +218,8 @@
                     <div class="text-center">
                         {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
                         width="70%" height="70%"> --}}
-                        <i class="mdi mdi-thumb-down font-35 text-green-0"></i>
+                        {{-- <i class="mdi mdi-thumb-down font-35 text-green-0"></i> --}}
+                        <i class="mdi mdi-school font-35 text-green-0"></i>
                     </div>
                     <div class="media-body align-self-center">
                         <div class="text-right">
@@ -239,7 +245,7 @@
                     <button type="button" class="btn btn-success btn-xs"><i
                             class="fa fa-file-excel"></i> Descargar</button>
                 </div> --}}
-                    <h3 class="text-black font-14 mb-0">Avance acumulado de la evaluación de Cumplimiento por
+                    <h3 class="text-black font-12 mb-0">Avance acumulado de la evaluación de Cumplimiento por
                         Distrito
                     </h3>
                 </div>
@@ -294,10 +300,10 @@
     </div>
 
 
-    <div class="card  card-border border border-plomo-0">
+    <div class="card card-border border border-plomo-0">
         <div
             class="card-header border-success-0 bg-transparent text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center px-2 py-2">
-            <h6 class="card-title mb-2 mb-md-0 text-center text-md-left text-wrap">
+            <h6 class="card-title mb-2 mb-md-0 text-center text-md-left text-wrap font-12">
                 Evaluación de cumplimiento de los registros de niños y niñas
                 menores de 6 años del padrón nominal
             </h6>
@@ -593,8 +599,8 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content shadow rounded">
 
-                <div class="modal-header bg-info text-white">
-                    <h5 class="modal-title" id="modalDatosMenorLabel"><i class="fas fa-child"></i> Datos del Menor</h5>
+                <div class="modal-header bg-success-0 text-white">
+                    <h5 class="modal-title text-white" id="modalDatosMenorLabel">Datos del Menor</h5>
                     <button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -813,7 +819,7 @@
                     $('#dmnombresMenor').text(data.nombres);
                     $('#dmsexoMenor').text(data.sexo);
                     $('#dmfechaNacimiento').text(data.nacimiento);
-                    $('#dmedadMenor').text(data.edad);
+                    $('#dmedadMenor').text(data.edad+' AÑOS');
                     $('#dmdepartamento').text(data.departamento);
                     $('#dmprovincia').text(data.provincia);
                     $('#dmdistrito').text(data.distrito);
@@ -1006,8 +1012,8 @@
 
         function descargar0100() {
             window.open(
-                "{{ route('salud.indicador.pactoregional.sal.pacto1.excel', ['', '', '', '', '', '']) }}/tabla2/{{ $ind->id }}/" +
-                $('#anio').val() + "/" + $('#mes').val() + "/" + $('#provincia').val() + "/" + $('#distrito').val());
+                "{{ route('educacion.indicador.conveniofed.fed.excel', ['', '', '', '', '', '']) }}/tabla2/{{ $ind->id }}/" +
+                $('#anio').val() + "/" + $('#ugel').val() + "/" + $('#provincia').val() + "/" + $('#distrito').val());
         }
 
         function descargar0101() {
