@@ -18,7 +18,7 @@ class ImporMatriculaGeneral extends Model
      */
     protected $fillable = [
         'importacion_id',
-        'id_anio',
+        'anio',
         'cod_mod',
         'id_mod',
         'id_nivel',
@@ -31,7 +31,6 @@ class ImporMatriculaGeneral extends Model
         'id_discapacidad',
         'discapacidad',
         'situacion_matricula',
-        'estado_matricula',
         'fecha_matricula',
         'id_grado',
         'grado',

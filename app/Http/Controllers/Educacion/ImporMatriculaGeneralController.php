@@ -82,7 +82,7 @@ class ImporMatriculaGeneralController extends Controller
         $array = (new tablaXImport)->toArray($archivo);
 
         $encabezadosEsperados = [
-            'id_anio',
+            'anio',
             'cod_mod',
             'id_mod',
             'id_nivel',
@@ -95,7 +95,6 @@ class ImporMatriculaGeneralController extends Controller
             'id_discapacidad',
             'discapacidad',
             'situacion_matricula',
-            'estado_matricula',
             'fecha_matricula',
             'id_grado',
             'grado',
@@ -126,6 +125,12 @@ class ImporMatriculaGeneralController extends Controller
             ]);
             $anio = Anio::where('anio', date('Y', strtotime($request->fechaActualizacion)))->first();
 
+            if (!$anio) {
+                $anio = Anio::create([
+                    'anio' => date('Y', strtotime($request->fechaActualizacion))
+                ]);
+            }
+
             $matricula = MatriculaGeneral::Create([
                 'importacion_id' => $importacion->id,
                 'anio_id' => $anio->id
@@ -137,7 +142,7 @@ class ImporMatriculaGeneralController extends Controller
             foreach ($array[0] as $row) {
                 $dataBatch[] = [
                     'importacion_id' => $importacion->id,
-                    'id_anio' => $row['id_anio'],
+                    'anio' => $row['anio'],
                     'cod_mod' => $row['cod_mod'],
                     'id_mod' => $row['id_mod'],
                     'id_nivel' => $row['id_nivel'],
@@ -150,7 +155,6 @@ class ImporMatriculaGeneralController extends Controller
                     'id_discapacidad' => $row['id_discapacidad'],
                     'discapacidad' => $row['discapacidad'],
                     'situacion_matricula' => $row['situacion_matricula'],
-                    'estado_matricula' => $row['estado_matricula'],
                     'fecha_matricula' => $row['fecha_matricula'],
                     'id_grado' => $row['id_grado'],
                     'grado' => $row['grado'],

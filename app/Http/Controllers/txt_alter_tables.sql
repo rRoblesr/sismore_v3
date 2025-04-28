@@ -3102,6 +3102,10 @@ CREATE TABLE 	edu_cubo_fed_pn (
 );
 
 
+ALTER TABLE `edu_impor_matricula_general` CHANGE `id_anio` `anio` INT(11) NULL DEFAULT NULL;
+
+eliminar estado_matricula
+
 
 
 
