@@ -1664,22 +1664,22 @@ class IndicadoresController extends Controller
             case 'MC-05.01':
                 $fuente = eduImporPadronNominalController::$FUENTE;
                 $anio = CuboFEDPN::distinct()->select('anio')->where('anio', 2025)->get(); // ImportacionRepositorio::anios_porfuente_select(eduImporPadronNominalController::$FUENTE);
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(eduImporPadronNominalController::$FUENTE);
+                // $imp = ImportacionRepositorio::ImportacionMax_porfuente(eduImporPadronNominalController::$FUENTE);
                 // $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
                 $actualizado = '31/03/2025';
                 $provincia = UbigeoRepositorio::provincia('25');
                 $ugel = CuboFEDPN::distinct()->select('ugel')->where('anio', 2025)->get();
-                $aniomax = $imp->anio;
+                $aniomax = $anio->max('anio');
                 return view('educacion.Indicadores.ConvenioFEDMC0501', compact('actualizado', 'fuente', 'anio', 'ugel', 'provincia', 'aniomax', 'ind'));
             case 'MC-05.02':
                 $fuente = eduImporPadronNominalController::$FUENTE;
                 $anio = CuboFEDPN::distinct()->select('anio')->where('anio', 2025)->get(); //ImportacionRepositorio::anios_porfuente_select(eduImporPadronNominalController::$FUENTE);
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(eduImporPadronNominalController::$FUENTE);
+                // $imp = ImportacionRepositorio::ImportacionMax_porfuente(eduImporPadronNominalController::$FUENTE);
                 // $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
                 $actualizado = '31/03/2025';
                 $provincia = UbigeoRepositorio::provincia('25');
                 $ugel = CuboFEDPN::distinct()->select('ugel')->where('anio', 2025)->get();
-                $aniomax = $imp->anio;
+                $aniomax = $anio->max('anio');
                 return view('educacion.Indicadores.ConvenioFEDMC0502', compact('actualizado', 'fuente', 'anio', 'ugel', 'provincia', 'aniomax', 'ind'));
 
             default:

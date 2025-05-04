@@ -536,6 +536,7 @@ class ImporCensoMatriculaRepositorio
                     DB::raw('sum(CASE
                 WHEN year(fechaActualizacion) in (2017,2018) THEN IF(cuadro in ("C201","C202"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16,0)
                 WHEN year(fechaActualizacion) in (2023) THEN IF(cuadro in ("C201","C208","C215"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20,0)
+                WHEN year(fechaActualizacion) in (2024) THEN IF(cuadro in ("C201"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20,0)
                 ELSE IF(cuadro in ("C201","C202","C203"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20,0)
                 END ) as conteo'),
                 )

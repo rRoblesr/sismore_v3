@@ -2,7 +2,7 @@
     <thead>
         <tr class="table-success-0 text-white">
             <th style="text-align: center" rowspan="2">N°</th>
-            <th style="text-align: center" rowspan="2">PROVINCIA</th>
+            <th style="text-align: center" rowspan="2">DISTRITO</th>
             <th style="text-align: center" rowspan="2">MEDIA PROMEDIO</th>
             <th style="text-align: center" colspan="3">II.EE EVALUADAS</th>
             <th style="text-align: center" colspan="3">ESTUDIANTES EVALUADOS</th>
