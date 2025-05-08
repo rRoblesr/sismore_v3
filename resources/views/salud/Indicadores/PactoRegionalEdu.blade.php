@@ -37,6 +37,90 @@
             background-color: #43beac;
             color: #FFF;
         }
+
+        /*  */
+
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            background-color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .pricing-header {
+            background-color: #17a2b8;
+            color: #fff;
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
+            text-align: center;
+        }
+
+        .pricing-header h5 {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .card-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        .card-body .row {
+            margin-bottom: 10px;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
+
+        .text-green-0 {
+            color: #28a745;
+        }
+
+        .font-13 {
+            font-size: 13px;
+        }
+
+        .font-12 {
+            font-size: 12px;
+            color: #6c757d;
+        }
+
+        .text-white {
+            color: #fff;
+        }
+
+        .font-weight-bold {
+            font-weight: bold;
+        }
+
+        .mdi {
+            font-size: 18px;
+        }
+
+        .btn-sm {
+            font-size: 14px;
+            padding: 8px 16px;
+        }
+
+        .card .mt-1.pt-1 {
+            margin-top: auto;
+        }
     </style>
 @endsection
 
@@ -105,52 +189,40 @@
 
 
 
-        <div class="row">
+        {{-- <div class="row">
 
             @foreach ($indedu as $key => $item)
                 <div class="col-md-6 col-xl-3">
                     <div class="card text-center border border-success-0">
                         <div class="pricing-header bg-success-0 p-0 rounded-top">
                             <div class="card-widgets">
-                                {{-- <i class="mdi mdi-alert-circle-outline"></i> --}}
                                 <span onclick="datosIndicador({{ $item->id }})"><i
                                         class="mdi mdi-rotate-180 mdi-alert-circle"
                                         style="color:#FFF;font-size: 20px;"></i>&nbsp;&nbsp;</span>
-                                {{-- <a href="" title='' class=""><i class="mdi mdi-alert-circle"
-                                        style="color:#FFF;font-size: 20px"></i></a> --}}
                             </div>
                             <h5 class="text-white font-14 font-weight-normal mt-1 mb-1"><i class="mdi mdi-school"
                                     style="font-size: 20px"></i>
                                 Indicador {{ $key + 1 }}</h5>
-                            {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
-                            {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
                         </div>
                         <div class="pb-4 pl-4 pr-4">
                             <ul class="list-unstyled mt-0">
                                 <li class="mt-0 pt-0">
-                                    {{-- <i class="mdi mdi-finance font-44 text-green-0"></i></li>
-                                <li class="mt-0 pt-0 font-16">Avance</li>
-                                <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 % --}}
+
                                 <li class="m-0 pt-0">
                                     <figure class="p-0 m-0">
                                         <div id="gra{{ $item->codigo }}"></div>
-                                        {{-- graDITSALUD01 --}}
                                     </figure>
                                 </li>
                                 </li>
                                 <li class="mt-0 pt-0 font-10" id="actualizado{{ $item->codigo }}">
                                 </li>
-                                {{-- <li class="mt-0 pt-0 font-18 font-weight-bold"
-                                    id="meta{{ $item->codigo }}"></li>
-                                <li class="mt-0 pt-0" id="cumple{{ $item->codigo }}"></li> --}}
+
                                 <li class="mt-1 pt-1">
                                     <div class="row">
                                         <div class="col-6 p-0">
                                             <span class="text-green-0 font-weight-bold font-13" style="font-size: 100%">
                                                 <i class="mdi mdi-arrow-up-bold"></i>
                                                 Numerador
-                                                {{-- <i class="mdi mdi-rotate-180 mdi-alert-circle"
-                                                    onclick="#"></i> --}}
                                             </span>
                                             <div class="font-weight-bold" id="num{{ $item->codigo }}">100</div>
                                         </div>
@@ -158,8 +230,6 @@
                                             <span class="text-green-0 font-weight-bold font-13" style="font-size: 100%">
                                                 <i class="mdi mdi-arrow-down-bold"></i>
                                                 Denominador
-                                                {{-- <i class="mdi mdi-rotate-180 mdi-alert-circle"
-                                                    onclick="#"></i> --}}
                                             </span>
                                             <div class="font-weight-bold" id="den{{ $item->codigo }}">100</div>
                                         </div>
@@ -172,7 +242,7 @@
 
                             </ul>
                             <div class="mt-1 pt-1">
-                                {{-- <button class="btn btn-primary width-md waves-effect waves-light">Sign Up</button> --}}
+                                <button class="btn btn-primary width-md waves-effect waves-light">Sign Up</button>
                                 <a href="{{ route('salud.indicador.pactoregional.detalle', $item->id) }}"
                                     class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">
                                     Ver detalle</a>
@@ -182,8 +252,67 @@
                     </div>
                 </div>
             @endforeach
-        </div>
+        </div> --}}
         <!-- end row -->
+
+        <div class="row">
+            @foreach ($indedu as $key => $item)
+                <div class="col-md-6 col-xl-3">
+                    <div class="card text-center border border-success-0" style="height: 100%;">
+                        <div class="pricing-header bg-success-0 p-0 rounded-top">
+                            <div class="card-widgets">
+                                <span onclick="datosIndicador({{ $item->id }})">
+                                    <i class="mdi mdi-rotate-180 mdi-alert-circle"
+                                        style="color:#FFF;font-size: 20px;"></i>&nbsp;&nbsp;
+                                </span>
+                            </div>
+                            <h5 class="text-white font-14 font-weight-normal mt-1 mb-1">
+                                <i class="mdi mdi-school" style="font-size: 20px"></i> Indicador {{ $key + 1 }}
+                            </h5>
+                        </div>
+                        <div class="px-1 d-flex flex-column" style="flex-grow: 1;">
+                            <ul class="list-unstyled mt-0" style="margin-bottom: 0;">
+                                <li class="m-0 pt-0">
+                                    <figure class="p-0 m-0" style="height: 160px; width: 100%;">
+                                        <div id="gra{{ $item->codigo }}" style="height: 100%;"></div>
+                                    </figure>
+                                </li>
+                                <li class="mt-0 pt-0 font-10" id="actualizado{{ $item->codigo }}">Actualizado: 02/04/2024</li>
+                                <li class="mt-1 pt-1" style="margin-bottom: 0;">
+                                    <div class="row">
+                                        <div class="col-6 p-0 text-center">
+                                            <span class="text-green-0 font-weight-bold font-12">
+                                                <i class="mdi mdi-arrow-up-bold"></i> Numerador
+                                            </span>
+                                            <div class="font-weight-bold" id="num{{ $item->codigo }}">100</div>
+                                        </div>
+                                        <div class="col-6 p-0 text-center">
+                                            <span class="text-green-0 font-weight-bold font-12">
+                                                <i class="mdi mdi-arrow-down-bold"></i> Denominador
+                                            </span>
+                                            <div class="font-weight-bold" id="den{{ $item->codigo }}">100</div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="mt-1 pt-1" style="margin-bottom: 0;">
+                                    <p class="font-11"
+                                        style="word-wrap: break-word; word-break: break-word; white-space: normal; margin: 0;">
+                                        {{ $item->nombre }}
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Botón en el footer -->
+                        <div class="card-footer text-center bg-white" style="padding: 10px 15px; margin-top: auto;">
+                            <a href="{{ route('salud.indicador.pactoregional.detalle', $item->id) }}"
+                                class="btn btn-warning btn-sm text-dark width-md waves-effect waves-light py-1">
+                                <i class="mdi mdi-eye"></i> Ver detalle
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
 
         <div id="modal_datosindicador" class="modal fade font-10" tabindex="-1" role="dialog"
             aria-labelledby="myModalLabel" aria-hidden="true">
@@ -284,8 +413,8 @@
         function cargarpacto1() {
             cargarActualizar('DIT-EDU-01');
             cargarActualizar('DIT-EDU-02');
-            cargarActualizar('DIT-EDU-03');
-            cargarActualizar('DIT-EDU-04');
+            cargarActualizar('DIT-EDU-06');
+            // cargarActualizar('DIT-EDU-04');
         }
 
         function cargarActualizar(codigo) {

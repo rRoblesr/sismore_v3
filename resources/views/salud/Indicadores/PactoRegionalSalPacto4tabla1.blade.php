@@ -3,7 +3,7 @@
         <tr class="bg-success-0 text-white text-center">
             <th rowspan="1" class="text-center">Nº</th>
             <th rowspan="1" class="text-center">Distrito</th>
-            <th colspan="1" class="text-center">Basal</th>
+            {{-- <th colspan="1" class="text-center">Basal</th> --}}
             <th colspan="1" class="text-center">Meta</th>
             <th rowspan="1" class="text-center">Numerador</th>
             <th rowspan="1" class="text-center">Denominador</th>
@@ -18,7 +18,7 @@
                 <tr class="text-center {{ $item->distrito == $ndis ? 'table-warning' : '' }}">
                     <td>{{ $key + 1 }}</td>
                     <td class="text-left">{{ $item->distrito }}</td>
-                    <td class="table-warning">{{ $item->basal }}%</td>
+                    {{-- <td class="table-warning">{{ $item->basal }}%</td> --}}
                     <td class="table-warning">{{ $item->meta }}%</td>
                     <td>{{ number_format($item->numerador, 0) }}</td>
                     <td>{{ number_format($item->denominador, 0) }}</td>

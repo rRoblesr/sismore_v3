@@ -125,31 +125,32 @@
 @endsection
 
 @section('content')
-    {{-- <div class="row">
+    <div class="content">
+
+        <div class="row">
             <div class="col-lg-12 col-md-12">
                 <div class="card card-border border border-plomo-0">
-                    <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                    <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
                         <h3 class="card-title text-white"></h3>
                     </div>
-                    <div class="card-body pb-2 pt-2">
-                        <div class="row">
-                            <div class="col-lg-4 col-md-6 col-sm-6">
+                    <div class="card-body pb-0 pt-3">
+                        <div class="form-group row">
+                            <div class="col-lg-6 col-md-12 col-sm-12">
                                 <h4 class="page-title font-16">PACTO REGIONAL</h4>
                             </div>
-                            <div class="col-lg-2 col-md-1 col-sm-1">
+                            <div class="col-lg-1 col-md-6 col-sm-6">
                                 <div class="custom-select-container">
                                     <label for="anio">AÑO</label>
                                     <select id="anio" name="anio" class="form-control font-11 p-0"
                                         onchange="cargarpacto1();">
                                         @foreach ($anio as $item)
-                                            <option value="{{ $item->anio }}"
-                                                {{ $item->anio == $aniomax ? 'selected' : '' }}>
-                                                {{ $item->anio }}</option>
+                                            <option value="{{ $item }}" {{ $item == $aniomax ? 'selected' : '' }}>
+                                                {{ $item }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="col-lg-2 col-md-6 col-sm-6">
                                 <div class="custom-select-container">
                                     <label for="provincia">PROVINCIA</label>
                                     <select id="provincia" name="provincia" class="form-control font-11"
@@ -162,7 +163,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="col-lg-2 col-md-6 col-sm-6">
                                 <div class="custom-select-container">
                                     <label for="distrito">DISTRITO</label>
                                     <select id="distrito" name="distrito" class="form-control font-11"
@@ -171,232 +172,184 @@
                                     </select>
                                 </div>
                             </div>
-
-                            <div class="col-lg-2 col-md-1 col-sm-1 text-center">
+                            <div class="col-lg-1 col-md-6 col-sm-6 text-center">
                                 <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
                                     title='ACTUALIZAR'>
-                                    <span class="d-block d-lg-none">
-                                        <i class=" fas fa-history"></i></span>
-                                    <span class="d-none d-lg-block text-center">
-                                        <i class=" fas fa-history"></i> Actualizar</span>
+                                    <i class="fas fa-history"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div> --}}
-
-
-    <div class="row">
-        <div class="col-lg-12 col-md-12">
-            <div class="card card-border border border-plomo-0">{{--  pb-0 pt-0 --}}
-                <div class="card-header border-success-0 bg-transparent py-0">
-                    <h3 class="card-title text-white"></h3>
-                </div>{{--  pb-0 pt-3 --}}
-                <div class="card-body p-2">
-                    <div class="row">
-                        <div class="col-lg-5 col-md-6 col-sm-6">
-                            <h4 class="page-title font-16">PACTO REGIONAL</h4>
-                        </div>
-
-                        <div class="col-lg-2 col-md-6 my-1">
-                            <div class="custom-select-container">
-                                <label for="anio">Año</label>
-                                <select id="anio" name="anio" class="form-control font-12"
-                                    onchange="cargarpacto1();">
-                                    @foreach ($anio as $item)
-                                        <option value="{{ $item }}" {{ $item == $aniomax ? 'selected' : '' }}>
-                                            {{ $item }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-2 col-md-6 my-1">
-                            <div class="custom-select-container">
-                                <label for="provincia">Provincia</label>
-                                <select id="provincia" name="provincia" class="form-control font-12"
-                                    onchange="cargarDistritos();cargarpacto1();">
-                                    <option value="0">TODOS</option>
-                                    @foreach ($provincia as $item)
-                                        <option value="{{ $item->id }}">
-                                            {{ $item->nombre }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-2 col-md-6 my-1">
-                            <div class="custom-select-container">
-                                <label for="distrito">Distrito</label>
-                                <select id="distrito" name="distrito" class="form-control font-12"
-                                    onchange="cargarpacto1();">
-                                    <option value="0">TODOS</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-1 col-md-6 text-center my-1">
-                            <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
-                                title='ACTUALIZAR'>
-                                <span class="d-block d-lg-none">
-                                    <i class=" fas fa-history"></i> Actualizar</span>
-                                <span class="d-none d-lg-block text-center">
-                                    <i class=" fas fa-history"></i></span>
-                            </button>
-                        </div>
-                        {{-- <input type="hidden" name="anio" id="anio" value="2024"> --}}
-                        {{-- <input type="hidden" name="provincia" id="provincia" value="0"> --}}
-                        {{-- <input type="hidden" name="distrito" id="distrito" value="0"> --}}
-                    </div>
-
-                </div>
-            </div>
         </div>
-    </div>
 
 
 
-    <div class="row">
-        @foreach ($indsal as $key => $item)
-            <div class="col-md-6 col-xl-3">
-                <div class="card text-center border border-success-0">
-                    <div class="pricing-header bg-success-0 p-0 rounded-top">
-                        <div class="card-widgets">
-                            <span onclick="datosIndicador({{ $item->id }})"><i
-                                    class="mdi mdi-rotate-180 mdi-alert-circle"
-                                    style="color:#FFF;font-size: 20px;"></i>&nbsp;&nbsp;</span>
+
+
+
+        <div class="row">
+
+            @foreach ($indedu as $key => $item)
+                <div class="col-md-6 col-xl-3">
+                    <div class="card text-center border border-success-0">
+                        <div class="pricing-header bg-success-0 p-0 rounded-top">
+                            <div class="card-widgets">
+                                {{-- <i class="mdi mdi-alert-circle-outline"></i> --}}
+                                <span onclick="datosIndicador({{ $item->id }})"><i
+                                        class="mdi mdi-rotate-180 mdi-alert-circle"
+                                        style="color:#FFF;font-size: 20px;"></i>&nbsp;&nbsp;</span>
+                                {{-- <a href="" title='' class=""><i class="mdi mdi-alert-circle"
+                                        style="color:#FFF;font-size: 20px"></i></a> --}}
+                            </div>
+                            <h5 class="text-white font-14 font-weight-normal mt-1 mb-1"><i class="mdi mdi-school"
+                                    style="font-size: 20px"></i>
+                                Indicador {{ $key + 1 }}</h5>
+                            {{-- <h1 class="text-white font-44 font-weight-normal">$19</h1> --}}
+                            {{-- <h5 class="text-white font-17 mt-4">Starter Pack</h5> --}}
                         </div>
-                        <h5 class="text-white font-14 font-weight-normal mt-1 mb-1"><i class="mdi mdi-shield-plus"
-                                style="font-size: 20px"></i>
-                            Indicador {{ $key + 1 }}</h5>
-                    </div>
-                    <div class="pb-4 pl-4 pr-4">
-                        <ul class="list-unstyled mt-0">
-                            <li class="mt-0 pt-0">
-                            <li class="m-0 pt-0">
-                                <figure class="p-0 m-0">
-                                    <div id="gra{{ $item->codigo }}"></div>
-                                    {{-- graDITSALUD01 --}}
-                                </figure>
-                            </li>
-                            </li>
-                            <li class="mt-0 pt-0 font-10" id="actualizado{{ $item->codigo }}"></li>
-
-                            <li class="mt-1 pt-1">
-                                <div class="row">
-                                    <div class="col-6 p-0">
-                                        <span class="text-green-0 font-weight-bold font-13" style="font-size: 100%">
-                                            <i class="mdi mdi-arrow-up-bold"></i>
-                                            Numerador
-
-                                        </span>
-                                        <div class="font-weight-bold" id="num{{ $item->codigo }}">100</div>
+                        <div class="pb-4 pl-4 pr-4">
+                            <ul class="list-unstyled mt-0">
+                                <li class="mt-0 pt-0">
+                                    {{-- <i class="mdi mdi-finance font-44 text-green-0"></i></li>
+                                <li class="mt-0 pt-0 font-16">Avance</li>
+                                <li class="mt-0 pt-0 font-40 font-weight-bold">98.8 % --}}
+                                <li class="m-0 pt-0">
+                                    <figure class="p-0 m-0">
+                                        <div id="gra{{ $item->codigo }}"></div>
+                                        {{-- graDITSALUD01 --}}
+                                    </figure>
+                                </li>
+                                </li>
+                                <li class="mt-0 pt-0 font-10" id="actualizado{{ $item->codigo }}">
+                                </li>
+                                {{-- <li class="mt-0 pt-0 font-18 font-weight-bold"
+                                    id="meta{{ $item->codigo }}"></li>
+                                <li class="mt-0 pt-0" id="cumple{{ $item->codigo }}"></li> --}}
+                                <li class="mt-1 pt-1">
+                                    <div class="row">
+                                        <div class="col-6 p-0">
+                                            <span class="text-green-0 font-weight-bold font-13" style="font-size: 100%">
+                                                <i class="mdi mdi-arrow-up-bold"></i>
+                                                Numerador
+                                                {{-- <i class="mdi mdi-rotate-180 mdi-alert-circle"
+                                                    onclick="#"></i> --}}
+                                            </span>
+                                            <div class="font-weight-bold" id="num{{ $item->codigo }}">100</div>
+                                        </div>
+                                        <div class="col-6 p-0">
+                                            <span class="text-green-0 font-weight-bold font-13" style="font-size: 100%">
+                                                <i class="mdi mdi-arrow-down-bold"></i>
+                                                Denominador
+                                                {{-- <i class="mdi mdi-rotate-180 mdi-alert-circle"
+                                                    onclick="#"></i> --}}
+                                            </span>
+                                            <div class="font-weight-bold" id="den{{ $item->codigo }}">100</div>
+                                        </div>
                                     </div>
-                                    <div class="col-6 p-0">
-                                        <span class="text-green-0 font-weight-bold font-13" style="font-size: 100%">
-                                            <i class="mdi mdi-arrow-down-bold"></i>
-                                            Denominador
+                                </li>
+                                <li class="mt-1 pt-1">
+                                    <p class="font-12" style="height: 5rem;">
+                                        {{ $item->nombre }}</p>
+                                </li>
 
-                                        </span>
-                                        <div class="font-weight-bold" id="den{{ $item->codigo }}">100</div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="mt-1 pt-1">
-                                <p class="font-12" style="height: 5.2rem;">
-                                    {{ $item->nombre }}</p>
-                            </li>
+                            </ul>
+                            {{-- <div class="mt-1 pt-1">
+                                <button class="btn btn-primary width-md waves-effect waves-light">Sign Up</button>
+                                <a href="{{ route('salud.indicador.pactoregional.detalle', $item->id) }}"
+                                    class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">
+                                    Ver detalle</a>
+                            </div> --}}
+                            <div class="card-footer text-center bg-white" style="padding: 10px 15px; margin-top: auto;">
+                                <a href="{{ route('salud.indicador.pactoregional.detalle', $item->id) }}"
+                                    class="btn btn-warning btn-sm text-dark width-md waves-effect waves-light py-1">
+                                    <i class="mdi mdi-eye"></i> Ver detalle
+                                </a>
+                            </div>
 
-                        </ul>
-                        <div class="mt-1 pt-1">
-                            <a href="{{ route('salud.indicador.pactoregional.detalle', $item->id) }}"
-                                class="btn btn-warning btn-sm text-dark  width-md waves-effect waves-light">
-                                <i class="mdi mdi-eye"></i> Ver detalle</a>
                         </div>
-
                     </div>
                 </div>
-            </div>
-        @endforeach
+            @endforeach
+        </div>
+        <!-- end row -->
 
-    </div>
- 
-
-    <div id="modal_datosindicador" class="modal fade font-10" tabindex="-1" role="dialog"
-        aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title font-16" id="myModalLabel">Datos del indicador</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                </div>
-                <div class="modal-body">
-                    <form action="" id="form_datosindicador" name="form" class="form-horizontal"
-                        autocomplete="off">
-                        @csrf
-                        <input type="hidden" id="indicador" name="indicador" value="">
-                        <div class="form-body">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <label>Indicador</label>
-                                        <textarea class="form-control" name="indicadornombre" id="indicadornombre" cols="30" rows="2"
-                                            placeholder="Definición del indicador"></textarea>
-                                        {{-- <input id="indicadornombre" name="indicadornombre" class="form-control"
+        <div id="modal_datosindicador" class="modal fade font-10" tabindex="-1" role="dialog"
+            aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title font-16" id="myModalLabel">Datos del indicador</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" id="form_datosindicador" name="form" class="form-horizontal"
+                            autocomplete="off">
+                            @csrf
+                            <input type="hidden" id="indicador" name="indicador" value="">
+                            <div class="form-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label>Indicador</label>
+                                            <textarea class="form-control" name="indicadornombre" id="indicadornombre" cols="30" rows="2"
+                                                placeholder="Definición del indicador"></textarea>
+                                            {{-- <input id="indicadornombre" name="indicadornombre" class="form-control"
                                         type="text" placeholder="Nombre del indicador"> --}}
-                                        <span class="help-block"></span>
+                                            <span class="help-block"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label>Definición</label>
+                                            <textarea class="form-control" name="indicadordescripcion" id="indicadordescripcion" cols="30" rows="3"
+                                                placeholder="Definición del indicador"></textarea>
+                                            <span class="help-block"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Numerador</label>
+                                            <textarea class="form-control" name="indicadornumerador" id="indicadornumerador" cols="30" rows="5"
+                                                placeholder="Definición del indicador"></textarea>
+                                            <span class="help-block"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Denominador</label>
+                                            <textarea class="form-control" name="indicadordenominador" id="indicadordenominador" cols="30" rows="5"
+                                                placeholder="Definición del indicador"></textarea>
+                                            <span class="help-block"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Instrumento de gestion</label>
+                                            <input id="indicadorinstrumento" name="indicadorinstrumento"
+                                                class="form-control" type="text" placeholder="Fuente de datos">
+                                            <span class="help-block"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Fuente de datos</label>
+                                            <input id="indicadorfuentedato" name="indicadorfuentedato"
+                                                class="form-control" type="text" placeholder="Fuente de datos">
+                                            <span class="help-block"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <label>Definición</label>
-                                        <textarea class="form-control" name="indicadordescripcion" id="indicadordescripcion" cols="30" rows="3"
-                                            placeholder="Definición del indicador"></textarea>
-                                        <span class="help-block"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label>Numerador</label>
-                                        <textarea class="form-control" name="indicadornumerador" id="indicadornumerador" cols="30" rows="5"
-                                            placeholder="Definición del indicador"></textarea>
-                                        <span class="help-block"></span>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Denominador</label>
-                                        <textarea class="form-control" name="indicadordenominador" id="indicadordenominador" cols="30" rows="5"
-                                            placeholder="Definición del indicador"></textarea>
-                                        <span class="help-block"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label>Instrumento de gestion</label>
-                                        <input id="indicadorinstrumento" name="indicadorinstrumento" class="form-control"
-                                            type="text" placeholder="Fuente de datos">
-                                        <span class="help-block"></span>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Fuente de datos</label>
-                                        <input id="indicadorfuentedato" name="indicadorfuentedato" class="form-control"
-                                            type="text" placeholder="Fuente de datos">
-                                        <span class="help-block"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    {{-- <button type="button" class="btn btn-xs btn-danger waves-effect" data-dismiss="modal">Cerrar</button> --}}
-                    {{-- <button type="button" class="btn btn-primary btn-xs waves-effect waves-light" onclick="verpdf(8)">Ficha Tecnica</button> --}}
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        {{-- <button type="button" class="btn btn-xs btn-danger waves-effect" data-dismiss="modal">Cerrar</button> --}}
+                        {{-- <button type="button" class="btn btn-primary btn-xs waves-effect waves-light" onclick="verpdf(8)">Ficha Tecnica</button> --}}
+                    </div>
                 </div>
             </div>
         </div>
@@ -419,51 +372,14 @@
         });
 
         function cargarpacto1() {
-            cargarActualizar('DIT-SAL-01');
-            cargarActualizar('DIT-SAL-02');
-            cargarActualizar('DIT-SAL-03');
-            cargarActualizar('DIT-SAL-04');
-            // cargarActualizar('DIT-SAL-05');
-            // cargarActualizar('DIT-SAL-06');
-            // cargarActualizar('DIT-SAL-07');
-
-            // cargarActualizar('DIT-EDU-01');
-            // cargarActualizar('DIT-EDU-02');
-            // cargarActualizar('DIT-EDU-03');
+            cargarActualizar('DIT-EDU-01');
+            cargarActualizar('DIT-EDU-02');
+            cargarActualizar('DIT-EDU-06');
             // cargarActualizar('DIT-EDU-04');
-
-            // GaugeSeries('graeducacion01', 71);
-            // GaugeSeries('graeducacion02', 82);
-            // GaugeSeries('graeducacion03', 92);
-            // GaugeSeries('graeducacion04', 99);
-            // GaugeSeries('graeducacion05', 62);
-            // GaugeSeries('graeducacion06', 62);
-
-            // cargarActualizar('DIT-VIV-01');
-            // cargarActualizar('DIT-VIV-02');
-            // cargarActualizar('DIT-VIV-03');
-            // cargarActualizar('DIT-VIV-04');
-
-            // GaugeSeries('gravivienda01', 71);
-            // GaugeSeries('gravivienda02', 82);
-            // GaugeSeries('gravivienda03', 92);
-            // GaugeSeries('gravivienda04', 99);
-            // GaugeSeries('gravivienda05', 62);
-
-            // cargarActualizar('DIT-ART-01');
-            // cargarActualizar('DIT-ART-02');
-            // cargarActualizar('DIT-ART-03');
-            // cargarActualizar('DIT-ART-04');
-
-            // GaugeSeries('graarticulacion01', 71);
-            // GaugeSeries('graarticulacion02', 82);
-            // GaugeSeries('graarticulacion03', 92);
-            // GaugeSeries('graarticulacion04', 99);
-            // GaugeSeries('graarticulacion05', 62);
-
         }
 
         function cargarActualizar(codigo) {
+
             $.ajax({
                 url: "{{ route('salud.indicador.pactoregional.actualizar') }}",
                 data: {
@@ -502,7 +418,7 @@
                 type: 'GET',
                 success: function(data) {
                     $("#distrito option").remove();
-                    var options = data.length > 1 ? '<option value="0">TODOS</option>' : '';
+                    var options = '<option value="0">TODOS</option>';
                     $.each(data, function(index, value) {
                         //ss = (id == value.id ? "selected" : "");
                         options += "<option value='" + value.id + "'>" + value.nombre +
@@ -977,14 +893,14 @@
                     max: 100,
                     dataClasses: [{
                         from: 0,
-                        to: 50,
+                        to: 75,
                         color: '#ef5350'
                     }, {
-                        from: 51,
-                        to: 99,
+                        from: 76,
+                        to: 95,
                         color: '#f5bd22'
                     }, {
-                        from: 100,
+                        from: 95,
                         to: 150,
                         color: '#5eb9aa'
                     }],

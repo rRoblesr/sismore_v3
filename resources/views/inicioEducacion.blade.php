@@ -14,7 +14,7 @@
     <div class="col-lg-4 col-md-4 col-sm-4">
         <h4 class="page-title font-16">MODULO EDUCACIÓN</h4>
     </div>
-    <div class="col-lg-2 col-md-2 col-sm-2">
+    {{-- <div class="col-lg-2 col-md-2 col-sm-2">
         <div class="custom-select-container">
             <label for="provincia">PROVINCIA</label>
             <select id="provincia" name="provincia" class="form-control form-control-sm"
@@ -25,8 +25,8 @@
                 @endforeach
             </select>
         </div>
-    </div>
-    <div class="col-lg-2 col-md-2 col-sm-2">
+    </div> --}}
+    {{-- <div class="col-lg-2 col-md-2 col-sm-2">
         <div class="custom-select-container">
             <label for="distrito">DISTRITO</label>
             <select id="distrito" name="distrito" class="form-control form-control-sm" onchange="cargarCards();">
@@ -37,8 +37,8 @@
                 @endforeach
             </select>
         </div>
-    </div>
-    <div class="col-lg-2 col-md-2 col-sm-2">
+    </div> --}}
+    {{-- <div class="col-lg-2 col-md-2 col-sm-2">
         <div class="custom-select-container">
             <label for="tipogestion">TIPO DE GESTIÓN</label>
             <select id="tipogestion" name="tipogestion" class="form-control form-control-sm" onchange="cargarCards();">
@@ -47,8 +47,8 @@
                 <option value="3">PRIVADA</option>
             </select>
         </div>
-    </div>
-    <div class="col-lg-2 col-md-2 col-sm-2">
+    </div> --}}
+    {{-- <div class="col-lg-2 col-md-2 col-sm-2">
         <div class="custom-select-container">
             <label for="ambito">ÁMBITO</label>
             <select id="ambito" name="ambito" class="form-control form-control-sm" onchange="cargarCards();">
@@ -59,7 +59,7 @@
                 @endforeach
             </select>
         </div>
-    </div>
+    </div> --}}
 </div>
 
 {{-- <div class="row">

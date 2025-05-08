@@ -1983,6 +1983,7 @@ class PadronNominalController extends Controller
         $data->distrito = $data->distrito_id > 0 ? Ubigeo::find($data->distrito_id)->nombre : '';
         $data->provincia = $data->provincia_id > 0 ? Ubigeo::find($data->provincia_id)->nombre : '';
         $data->departamento = 'UCAYALI';
+        $data->apoderado = 'MADRE';
         return  $data;
     }
 

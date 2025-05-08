@@ -377,9 +377,49 @@
                                     <th>Microrred</th>
                                     <th>Provincia</th>
                                     <th>Distrito</th>
-                                    <th>Denominador</th>
                                     <th>Numerador</th>
+                                    <th>Denominador</th>
                                     <th>Indicador</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card  card-border border border-plomo-0">
+        <div
+            class="card-header border-success-0 bg-transparent text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center px-2 py-2">
+            <h6 class="card-title mb-2 mb-md-0 text-center text-md-left text-wrap">
+                Evaluación de cumplimiento de los registros de niños y niñas
+                menores de 6 años del padrón nominal
+            </h6>
+            <div class="text-center text-md-right">
+                <button type="button" class="btn btn-success btn-xs" onclick="descargar0100()">
+                    <i class="fa fa-file-excel"></i> Descargar</button>
+            </div>
+        </div>
+        <div class="card-body p-2">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+                        <table id="tabla3" class="table table-sm table-striped table-bordered font-11 m-0">
+                            <thead>
+                                <tr class="bg-success-0 text-white text-center">
+                                    <th>N°</th>
+                                    <th>Tipo Doc</th>
+                                    <th>Documento</th>
+                                    <th>Departamento</th>
+                                    <th>Provincia</th>
+                                    <th>Distrito</th>
+                                    <th>Centro Poblado</th>
+                                    <th>CUI EESS</th>
+                                    <th>Establecimiento de Salud</th>
                                     <th>Estado</th>
                                 </tr>
                             </thead>
@@ -549,14 +589,14 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="myLargeModalLabel">Niño(a) con datos observados</h5>
+                    <h5 class="modal-title" id="myLargeModalLabel">Datos Personales</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-12">
                             <div class="table-responsive">
-                                <table id="xx" class="table table-striped table-bordered font-12 text-dark">
+                                <table id="XX" class="table table-striped table-bordered font-12 text-dark">
                                     <tbody>
                                         <tr>
                                             <td class="text-right" style="background-color: #D4F2F0">CÓDIGO PADRÓN</td>
@@ -823,6 +863,7 @@
             panelGraficas('anal3');
             panelGraficas('tabla1');
             tabla2('tabla2');
+            tabla3('tabla3');
         }
 
         function panelGraficas(div) {
@@ -928,6 +969,56 @@
                     className: 'text-center'
                 }, {
                     targets: 10,
+                    render: function(data, type, row) {
+                        return data == 1 ?
+                            '<span class="badge badge-pill badge-success" style="font-size:100%;"> Cumple </span>' :
+                            '<span class="badge badge-pill badge-danger" style="font-size:100%;"> No Cumple </span>';
+                    }
+                }],
+            });
+        }
+
+        function tabla3(div) {
+            tablex = $('#tabla3').DataTable({
+                responsive: true,
+                autoWidth: false,
+                ordered: false,
+                language: table_language,
+                destroy: true,
+                ajax: {
+                    "url": "{{ route('salud.indicador.pactoregional.detalle.reports') }}",
+                    "type": "GET",
+                    //"dataType": 'JSON',
+                    data: {
+                        'div': div,
+                        "anio": $('#anio').val(),
+                        "mes": $('#mes').val(),
+                        "provincia": $('#provincia').val(),
+                        "distrito": $('#distrito').val(),
+                        "fuente": {{ $fuente }},
+                        "indicador": '{{ $ind->id }}',
+                        "codigo": '{{ $ind->codigo }}',
+                    },
+                },
+                columnDefs: [{
+                    targets: 2,
+                    render: function(data, type, row) {
+                        return '<a href="javascript:void(0)" onclick="abrirmodalpadron(`' + data +
+                        '`)">' + data +
+                            '</a>';
+                    }
+                }, {
+                    targets: 7,
+                    render: function(data, type, row) {
+                        return '<a href="javascript:void(0)" onclick="abrirmodaleess(`' + data +
+                        '`)">' + data +
+                            '</a>';
+                    }
+                }, {
+                    targets: [0, 1, 7, 9],
+                    className: 'text-center'
+                }, {
+                    targets: 9,
                     render: function(data, type, row) {
                         return data == 1 ?
                             '<span class="badge badge-pill badge-success" style="font-size:100%;"> Cumple </span>' :

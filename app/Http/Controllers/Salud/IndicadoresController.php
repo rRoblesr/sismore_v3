@@ -287,6 +287,19 @@ class IndicadoresController extends Controller
                 $den = $gl;
                 $actualizado =  $imp ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: __/__/____';
                 break;
+            case 'DIT-EDU-06':
+                $base = CuboFEDPN::where('anio', 2025)->select(
+                    DB::raw('sum(num) as gl'),
+                    DB::raw('sum(numx) as gls'),
+                    DB::raw('sum(num)-sum(numx) as gln'),
+                    DB::raw('round(100*sum(numx)/sum(num),1) as indicador')
+                )->first();
+                $gl = (int)$base->gl;
+                $gls = (int)$base->gls;
+                $num = number_format($gls, 0);
+                $den = number_format($gl, 0);
+                $actualizado =  'Actualizado: 31/03/2025';
+                break;
             case 'DIT-VIV-01':
                 $gls = 25;
                 $gl = 100;
@@ -487,6 +500,17 @@ class IndicadoresController extends Controller
                 return '';
             case 'DIT-EDU-04':
                 return '';
+            case 'DIT-EDU-06':
+                $fuente = eduImporPadronNominalController::$FUENTE;
+                $anio = CuboFEDPN::distinct()->select('anio')->where('anio', 2025)->get(); //ImportacionRepositorio::anios_porfuente_select(eduImporPadronNominalController::$FUENTE);
+                // $imp = ImportacionRepositorio::ImportacionMax_porfuente(eduImporPadronNominalController::$FUENTE);
+                // $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
+                $actualizado = '31/03/2025';
+                $provincia = UbigeoRepositorio::provincia('25');
+                $ugel = CuboFEDPN::distinct()->select('ugel')->where('anio', 2025)->get();
+                $aniomax = $anio->max('anio');
+                return view('educacion.Indicadores.ConvenioFEDMC0502', compact('actualizado', 'fuente', 'anio', 'ugel', 'provincia', 'aniomax', 'ind'));
+
             default:
                 return 'ERROR, PAGINA NO ENCONTRADA';
         }
@@ -568,8 +592,8 @@ class IndicadoresController extends Controller
                         $value->microrred,
                         $value->provincia,
                         $value->distrito,
-                        $value->denominador,
                         $value->numerador,
+                        $value->denominador,
                         // $value->indicador
                         $value->indicador < 51 ?
                             '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px">' . number_format($value->indicador, 1) . '%</span>' : ($value->indicador < 100 ?
@@ -608,6 +632,39 @@ class IndicadoresController extends Controller
                         $value->seguro,
                         $value->num_doc_madre,
                         $value->nombre_completo_madre,
+                        $value->num,
+                    );
+                }
+                $result = array(
+                    "draw" => $draw,
+                    "recordsTotal" => $start,
+                    "recordsFiltered" => $length,
+                    "data" => $data,
+                );
+                return response()->json($result);
+
+            case 'tabla3':
+                $draw = intval($rq->draw);
+                $start = intval($rq->start);
+                $length = intval($rq->length);
+
+                $query = CuboPacto1PadronNominal::where('importacion', $impMaxAnio)->whereIn('tipo_doc', ['DNI', 'CNV']);
+                if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
+                if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
+                $query = $query->get();
+
+                $data = [];
+                foreach ($query as $key => $value) {
+                    $data[] = array(
+                        $key + 1,
+                        $value->tipo_doc,
+                        $value->num_doc,
+                        $value->departamento,
+                        $value->provincia,
+                        $value->distrito,
+                        $value->centro_poblado,
+                        $value->cui_atencion > 0 ? str_pad($value->cui_atencion, 8, '0', STR_PAD_LEFT) : '',
+                        $value->cui_atencion > 0 ? $value->nombre_establecimiento : '',
                         $value->num,
                     );
                 }
@@ -1510,6 +1567,8 @@ class IndicadoresController extends Controller
     }
 
 
+
+
     public function exportarPDFx($id)
     {
         $ind = IndicadorGeneral::select('codigo', 'ficha_tecnica')->where('id', $id)->first();
@@ -1784,10 +1843,10 @@ class IndicadoresController extends Controller
                         'centro_poblado_nombre',
                         'area_ccpp',
                         'eess',
-                        'cod_mod',
-                        'iiee',
+                        'codmod_salud',
+                        'iiee_salud',
                         'numx',
-                        DB::raw('if(length(cod_mod)=7,1,0) as cumple')
+                        DB::raw('if(length(codmod_salud)=7,1,0) as cumple')
                     );
                 if ($rq->ugel != 'TODOS') $query->where('ugel', $rq->ugel);
                 if ($rq->provincia > 0) $query->where('dependencia', $rq->provincia);
@@ -1805,8 +1864,8 @@ class IndicadoresController extends Controller
                         $value->eess,
                         // $value->cod_mod,
                         // $value->iiee,
-                        $value->numx == 1 ? $value->cod_mod : '',
-                        $value->numx == 1 ? $value->iiee : '',
+                        $value->numx == 1 ? $value->codmod_salud : '',
+                        $value->numx == 1 ? $value->iiee_salud : '',
                         $value->cumple == 0 ?
                             '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px">NO</span>' :
                             '<span class="badge badge-pill badge-success" style="font-size:90%; width:50px">SI</span>'
@@ -2142,10 +2201,10 @@ class IndicadoresController extends Controller
                         'area_ccpp',
                         'eess',
                         // DB::raw('if(length(cod_mod)=7 and numx=1,cod_mod,"") as cod_mod'),
-                        'cod_mod',
+                        'codmod_salud',
                         // DB::raw('if(length(cod_mod)=7 and numx=1,iiee,"") as iiee'),
-                        'iiee',
-                        DB::raw('if(length(cod_mod)=7 and numx=1,1,0) as cumple')
+                        'iiee_salud',
+                        DB::raw('if(length(codmod_salud)=7 and numx=1,1,0) as cumple')
                     );
                 if ($rq->ugel != 'TODOS') $query->where('ugel', $rq->ugel);
                 if ($rq->provincia > 0) $query->where('dependencia', $rq->provincia);
@@ -2161,8 +2220,8 @@ class IndicadoresController extends Controller
                         $value->centro_poblado_nombre,
                         $value->area_ccpp,
                         $value->eess,
-                        $value->cod_mod,
-                        $value->iiee,
+                        $value->codmod_salud,
+                        $value->iiee_salud,
                         $value->cumple == 0 ?
                             '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px">NO</span>' :
                             '<span class="badge badge-pill badge-success" style="font-size:90%; width:50px">SI</span>'

@@ -3107,5 +3107,10 @@ ALTER TABLE `edu_impor_matricula_general` CHANGE `id_anio` `anio` INT(11) NULL D
 eliminar estado_matricula
 
 
+ALTER TABLE `sal_cubo_pacto1_padron_nominal` ADD `departamento` VARCHAR(20) NULL DEFAULT NULL AFTER `provincia_id`, ADD `provincia` VARCHAR(30) NULL DEFAULT NULL AFTER `departamento`;
+ALTER TABLE `sal_cubo_pacto1_padron_nominal` ADD `ubigeo_cp` VARCHAR(10) NULL DEFAULT NULL AFTER `distrito`, ADD `centro_poblado` VARCHAR(60) NOT NULL AFTER `ubigeo_cp`;
+ALTER TABLE `sal_cubo_pacto1_padron_nominal` CHANGE `centro_poblado` `centro_poblado` VARCHAR(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
+
+
 
 

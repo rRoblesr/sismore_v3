@@ -6,8 +6,8 @@
             <th class="text-center">Establecimiento de Salud</th>
             <th class="text-center">Provincia</th>
             <th class="text-center">Distrito</th>
-            <th class="text-center">Denominador</th>
             <th class="text-center">Numerador</th>
+            <th class="text-center">Denominador</th>
             <th class="text-center">Indicador</th>
         </tr>
     </thead>
@@ -20,8 +20,8 @@
                     <td class="text-left">{{ $item->ipress }}</td>
                     <td>{{ $item->provincia }}</td>
                     <td>{{ $item->distrito }}</td>
-                    <td>{{ $item->denominador }}</td>
                     <td>{{ $item->numerador }}</td>
+                    <td>{{ $item->denominador }}</td>
                     <td>{!! avance($item->indicador) !!}</td>
                 </tr>
             @endforeach
