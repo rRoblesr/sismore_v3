@@ -786,8 +786,9 @@ class IndicadoresController extends Controller
         return response()->json($result);
     }
 
-    public function PactoRegionalSalPacto1Export($div, $indicador, $anio, $mes, $provincia, $distrito)
+    public function PactoRegionalSalPacto1Export($div, $fuente, $indicador, $anio, $mes, $provincia, $distrito)
     {
+        ini_set('memory_limit', '-1');
         if ($distrito > 0) $ndis = Ubigeo::find($distrito)->nombre;
         else $ndis = '';
         switch ($div) {
@@ -797,17 +798,18 @@ class IndicadoresController extends Controller
             //     return compact('excel', 'base');
 
             case 'tabla2':
-                $base = IndicadorGeneralMetaRepositorio::getPacto1tabla2($indicador, $anio);
+                // $base = IndicadorGeneralMetaRepositorio::getPacto1tabla2($indicador, $anio);
+                $impMaxAnio = salPadronNominalRepositorio::PNImportacion_idmax($fuente, $anio, $mes);
+                $base = CuboPacto1PadronNominalRepositorio::pacto01Tabla02($impMaxAnio, $indicador, $anio, $mes, $provincia, $distrito);
                 $aniob = $anio;
                 return compact('base', 'ndis', 'aniob');
-
 
             default:
                 return [];
         }
     }
 
-    public function PactoRegionalSalPacto1download($div, $indicador, $anio, $mes, $provincia, $distrito)
+    public function PactoRegionalSalPacto1download($div, $fuente, $indicador, $anio, $mes, $provincia, $distrito)
     {
         if ($anio > 0) {
             switch ($div) {
@@ -815,14 +817,14 @@ class IndicadoresController extends Controller
                 //     $name = 'Listado de establecimientos de salud ' . date('Y-m-d') . '.xlsx';
                 //     break;
                 case 'tabla2':
-                    $name = 'Evaluación de cumplimiento de los logros esperados por distrito ' . date('Y-m-d') . '.xlsx';
+                    $name = 'Establecimiento de Salud' . date('Y-m-d') . '.xlsx';
                     break;
                 default:
                     $name = 'sin nombre.xlsx';
                     break;
             }
 
-            return Excel::download(new pactoregionalSal1Export($div, $indicador, $anio, $mes, $provincia, $distrito), $name);
+            return Excel::download(new pactoregionalSal1Export($div, $fuente, $indicador, $anio, $mes, $provincia, $distrito), $name);
         }
     }
 

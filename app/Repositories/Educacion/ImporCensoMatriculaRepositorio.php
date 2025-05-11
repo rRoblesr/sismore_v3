@@ -503,7 +503,7 @@ class ImporCensoMatriculaRepositorio
                         $cuadro = ['C201', 'C208', 'C215'];
                         break;
                     case 2024:
-                        $cuadro = ['C201', 'C208', 'C215'];
+                        $cuadro = ['C208'];
                         break;
                     default:
                         $cuadro = ['C201', 'C202', 'C203'];
@@ -536,7 +536,7 @@ class ImporCensoMatriculaRepositorio
                     DB::raw('sum(CASE
                 WHEN year(fechaActualizacion) in (2017,2018) THEN IF(cuadro in ("C201","C202"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16,0)
                 WHEN year(fechaActualizacion) in (2023) THEN IF(cuadro in ("C201","C208","C215"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20,0)
-                WHEN year(fechaActualizacion) in (2024) THEN IF(cuadro in ("C201"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20,0)
+                WHEN year(fechaActualizacion) in (2024) THEN IF(cuadro in ("C208"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20,0)
                 ELSE IF(cuadro in ("C201","C202","C203"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20,0)
                 END ) as conteo'),
                 )
@@ -568,6 +568,8 @@ class ImporCensoMatriculaRepositorio
                         THEN IF(cuadro in("C217","C218","C219"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20,0)
                     WHEN year(fechaActualizacion)=2023
                         THEN IF(cuadro in("C206","C213","C220"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20,0)
+                    WHEN year(fechaActualizacion)=2024
+                        THEN IF(cuadro in("C213"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20,0)
                     ELSE IF(cuadro in("C218","C219","C220"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20,0)
                     END) as conteo'),
                 )
@@ -628,6 +630,7 @@ class ImporCensoMatriculaRepositorio
                     DB::raw('sum(CASE
                     WHEN year(fechaActualizacion) in(2017,2018) THEN IF(cuadro in("C201","C202"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16,0)
                     WHEN year(fechaActualizacion) in(2023) THEN IF(cuadro in("C201","C208","C215"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20,0)
+                    WHEN year(fechaActualizacion) in(2024) THEN IF(cuadro in("C208"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20,0)
                     ELSE IF(cuadro in("C201","C202","C203"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20,0)
                     END ) as total')
                 )
@@ -693,11 +696,13 @@ class ImporCensoMatriculaRepositorio
                     DB::raw('sum(CASE
                     WHEN year(fechaActualizacion) in(2017,2018) THEN IF(cuadro in("C201","C202"),d01+d03+d05+d07+d09+d11+d13+d15,0)
                     WHEN year(fechaActualizacion) in(2023) THEN IF(cuadro in("C201","C208","C215"),d01+d03+d05+d07+d09+d11+d13+d15+d17+d19,0)
+                    WHEN year(fechaActualizacion) in(2024) THEN IF(cuadro in("C208"),d01+d03+d05+d07+d09+d11+d13+d15+d17+d19,0)
                     ELSE IF(cuadro in("C201","C202","C203"),d01+d03+d05+d07+d09+d11+d13+d15+d17+d19,0)
                     END ) as h'),
                     DB::raw('sum(CASE
                     WHEN year(fechaActualizacion) in(2017,2018) THEN IF(cuadro in("C201","C202"),d02+d04+d06+d08+d10+d12+d14+d16,0)
                     WHEN year(fechaActualizacion) in(2023) THEN IF(cuadro in("C201","C208","C215"),d02+d04+d06+d08+d10+d12+d14+d16+d18+d20,0)
+                    WHEN year(fechaActualizacion) in(2024) THEN IF(cuadro in("C208"),d02+d04+d06+d08+d10+d12+d14+d16+d18+d20,0)
                     ELSE IF(cuadro in("C201","C202","C203"),d02+d04+d06+d08+d10+d12+d14+d16+d18+d20,0)
                     END ) as m'),
                 )
@@ -733,6 +738,8 @@ class ImporCensoMatriculaRepositorio
                         THEN IF(cuadro in("C217","C218","C219"),d01+d03+d05+d07+d09+d11+d13+d15+d17+d19,0)
                     WHEN year(fechaActualizacion)=2023
                         THEN IF(cuadro in("C206","C213","C220"),d01+d03+d05+d07+d09+d11+d13+d15+d17+d19,0)
+                        WHEN year(fechaActualizacion)=2024
+                        THEN IF(cuadro in("C213"),d01+d03+d05+d07+d09+d11+d13+d15+d17+d19,0)
                     ELSE IF(cuadro in("C218","C219","C220"),d01+d03+d05+d07+d09+d11+d13+d15+d17+d19,0)
                     END) as h'),
                     DB::raw('sum(CASE
@@ -741,6 +748,8 @@ class ImporCensoMatriculaRepositorio
                         THEN IF(cuadro in("C217","C218","C219"),d02+d04+d06+d08+d10+d12+d14+d16+d18+d20,0)
                     WHEN year(fechaActualizacion)=2023
                         THEN IF(cuadro in("C206","C213","C220"),d02+d04+d06+d08+d10+d12+d14+d16+d18+d20,0)
+                        WHEN year(fechaActualizacion)=2024
+                        THEN IF(cuadro in("C213"),d02+d04+d06+d08+d10+d12+d14+d16+d18+d20,0)
                     ELSE IF(cuadro in("C218","C219","C220"),d02+d04+d06+d08+d10+d12+d14+d16+d18+d20,0)
                     END) as m'),
                     DB::raw('sum(CASE
@@ -749,6 +758,8 @@ class ImporCensoMatriculaRepositorio
                         THEN IF(cuadro in("C217","C218","C219"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20,0)
                     WHEN year(fechaActualizacion)=2023
                         THEN IF(cuadro in("C206","C213","C220"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20,0)
+                        WHEN year(fechaActualizacion)=2024
+                        THEN IF(cuadro in("C213"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20,0)
                     ELSE IF(cuadro in("C218","C219","C220"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20,0)
                     END) as tt'),
                 )
@@ -785,11 +796,13 @@ class ImporCensoMatriculaRepositorio
                     DB::raw('sum(CASE
                     WHEN year(fechaActualizacion) in(2017,2018) THEN IF(cuadro in("C201","C202"),d01+d03+d05+d07+d09+d11+d13+d15,0)
                     WHEN year(fechaActualizacion) in(2023) THEN IF(cuadro in("C201","C208","C215"),d01+d03+d05+d07+d09+d11+d13+d15+d17+d19,0)
+                    WHEN year(fechaActualizacion) in(2024) THEN IF(cuadro in("C208"),d01+d03+d05+d07+d09+d11+d13+d15+d17+d19,0)
                     ELSE IF(cuadro in("C201","C202","C203"),d01+d03+d05+d07+d09+d11+d13+d15+d17+d19,0)
                     END ) as at'),
                     DB::raw('sum(CASE
                     WHEN year(fechaActualizacion) in(2017,2018) THEN IF(cuadro="C201" OR cuadro="C202",d02+d04+d06+d08+d10+d12+d14+d16,0)
                     WHEN year(fechaActualizacion) in(2023) THEN IF(cuadro in("C201","C208","C215"),d02+d04+d06+d08+d10+d12+d14+d16+d18+d20,0)
+                    WHEN year(fechaActualizacion) in(2024) THEN IF(cuadro in("C208"),d02+d04+d06+d08+d10+d12+d14+d16+d18+d20,0)
                     ELSE IF(cuadro in("C201","C202","C203"),d02+d04+d06+d08+d10+d12+d14+d16+d18+d20,0)
                     END ) as t'),
                 )
@@ -830,6 +843,7 @@ class ImporCensoMatriculaRepositorio
             DB::raw('sum(CASE
                         WHEN year(fechaActualizacion) in(2017,2018) THEN IF(cuadro in ("C201","C202"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16,0)
                         WHEN year(fechaActualizacion) in(2023) THEN IF(cuadro in("C201","C208","C215"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20,0)
+                        WHEN year(fechaActualizacion) in(2024) THEN IF(cuadro in("C208"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20,0)
                         ELSE IF(cuadro in("C201","C202","C203"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20,0)
                     END ) as total')
         )
@@ -867,7 +881,7 @@ class ImporCensoMatriculaRepositorio
             DB::raw('sum(CASE
             WHEN year(fechaActualizacion) in(2017,2018)
                 THEN IF(cuadro="C201" OR cuadro="C202",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20,0)
-            ELSE IF(cuadro="C201" OR cuadro="C202" OR cuadro="C203",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20,0)
+            ELSE IF(cuadro="C201" OR cuadro="C202" OR cuadro="C203" OR cuadro="C208",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20,0)
             END ) as meta')
         )
             ->join('edu_impor_censomatricula as v1', 'v1.importacion_id', '=', 'par_importacion.id')

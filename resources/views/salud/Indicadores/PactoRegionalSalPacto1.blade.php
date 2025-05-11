@@ -12,42 +12,44 @@
 @endsection
 
 @section('content')
-    {{-- <div class="card  card-border border border-plomo-0">
-    <div
-        class="card-header border-success-0 bg-transparent text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center px-2 py-2">
-        <h6 class="card-title mb-2 mb-md-0 text-center text-primary text-md-left text-wrap">
-            Directorio de establecimientos de salud de Ucayali
-        </h6>
-        <div class="text-center text-md-right">
-            <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
-                <i class="fa fa-redo"></i> Actualizar
-            </button>
+    {{-- 
+    <div class="card  card-border border border-plomo-0">
+        <div
+            class="card-header border-success-0 bg-transparent text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center px-2 py-2">
+            <h6 class="card-title mb-2 mb-md-0 text-center text-primary text-md-left text-wrap">
+                Directorio de establecimientos de salud de Ucayali
+            </h6>
+            <div class="text-center text-md-right">
+                <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
+                    <i class="fa fa-redo"></i> Actualizar
+                </button>
+            </div>
         </div>
-    </div>
-    <div class="card-body p-2">
-        <!-- Contenido de la tarjeta -->
-    </div>
-</div> --}}
+        <div class="card-body p-2">
+            <!-- Contenido de la tarjeta -->
+        </div>
+    </div> --}}
 
-    {{-- <div class="card">
-    <div
-        class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center p-2">
-        <h6 class="mb-2 mb-md-0 text-center text-md-left text-wrap text-white">
-            <i class="fas fa-chart-bar d-none"></i> {{ $ind->nombre }}
-        </h6>
-        <div class="text-center text-md-right">
-            <button type="button" class="btn btn-orange-0 btn-xs my-1" onclick="history.back()" title="VOLVER">
-                <i class="fas fa-arrow-left"></i> Volver</button>
-            <button type="button" class="btn btn-orange-0 btn-xs my-1" onclick="verpdf({{ $ind->id }})"
-                title='FICHA TÉCNICA'><i class="fas fa-file"></i> Ficha Técnica</button>
-            <button type="button" class="btn btn-orange-0 btn-xs my-1" onclick="location.reload()" title='ACTUALIZAR'>
-                <i class=" fas fa-history"></i> Actualizar</button>
+    {{-- 
+    <div class="card">
+        <div
+            class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center p-2">
+            <h6 class="mb-2 mb-md-0 text-center text-md-left text-wrap text-white">
+                <i class="fas fa-chart-bar d-none"></i> {{ $ind->nombre }}
+            </h6>
+            <div class="text-center text-md-right">
+                <button type="button" class="btn btn-orange-0 btn-xs my-1" onclick="history.back()" title="VOLVER">
+                    <i class="fas fa-arrow-left"></i> Volver</button>
+                <button type="button" class="btn btn-orange-0 btn-xs my-1" onclick="verpdf({{ $ind->id }})"
+                    title='FICHA TÉCNICA'><i class="fas fa-file"></i> Ficha Técnica</button>
+                <button type="button" class="btn btn-orange-0 btn-xs my-1" onclick="location.reload()" title='ACTUALIZAR'>
+                    <i class=" fas fa-history"></i> Actualizar</button>
+            </div>
         </div>
-    </div>
-    <div class="card-body p-2">
-     
-    </div>
-</div> --}}
+        <div class="card-body p-2">
+        
+        </div>
+    </div> --}}
 
 
     <div class="card">
@@ -359,7 +361,7 @@
                 menores de 6 años del padrón nominal
             </h6>
             <div class="text-center text-md-right">
-                <button type="button" class="btn btn-success btn-xs" onclick="descargar0100()">
+                <button type="button" class="btn btn-success btn-xs" onclick="descargar0101()">
                     <i class="fa fa-file-excel"></i> Descargar</button>
             </div>
         </div>
@@ -400,7 +402,7 @@
                 menores de 6 años del padrón nominal
             </h6>
             <div class="text-center text-md-right">
-                <button type="button" class="btn btn-success btn-xs" onclick="descargar0100()">
+                <button type="button" class="btn btn-success btn-xs" onclick="descargar0102()">
                     <i class="fa fa-file-excel"></i> Descargar</button>
             </div>
         </div>
@@ -1199,16 +1201,16 @@
             });
         }
 
-        function descargar0100() {
+        function descargar0101() {
             window.open(
                 "{{ route('salud.indicador.pactoregional.sal.pacto1.excel', ['', '', '', '', '', '']) }}/tabla2/{{ $ind->id }}/" +
                 $('#anio').val() + "/" + $('#mes').val() + "/" + $('#provincia').val() + "/" + $('#distrito').val());
         }
 
-        function descargar0101() {
-            window.open("{{ url('/') }}/INDICADOR/Home/01/Excel/tabla2/" + $('#anio').val() + "/" + $('#provincia')
-                .val() + "/" + $('#distrito').val() + "/" + $('#gestion').val() + "/" + ugel_select);
-        }
+        // function descargar0101() {
+        //     window.open("{{ url('/') }}/INDICADOR/Home/01/Excel/tabla2/" + $('#anio').val() + "/" + $('#provincia')
+        //         .val() + "/" + $('#distrito').val() + "/" + $('#gestion').val() + "/" + ugel_select);
+        // }
 
         function verpdf(id) {
             window.open("{{ route('salud.indicador.pactoregional.exportar.pdf', '') }}/" + id);
