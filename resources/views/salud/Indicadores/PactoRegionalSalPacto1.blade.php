@@ -1203,8 +1203,26 @@
 
         function descargar0101() {
             window.open(
-                "{{ route('salud.indicador.pactoregional.sal.pacto1.excel', ['', '', '', '', '', '']) }}/tabla2/{{ $ind->id }}/" +
-                $('#anio').val() + "/" + $('#mes').val() + "/" + $('#provincia').val() + "/" + $('#distrito').val());
+                "{{ route('salud.indicador.pactoregional.sal.pacto1.excel', ['div' => ':div', 'fuente' => ':fuente', 'indicador' => ':indicador', 'anio' => ':anio', 'mes' => ':mes', 'provincia' => ':provincia', 'distrito' => ':distrito']) }}"
+                .replace(':div', 'tabla2')
+                .replace(':fuente', '{{ $fuente }}')
+                .replace(':indicador', '{{ $ind->id }}')
+                .replace(':anio', $('#anio').val())
+                .replace(':mes', $('#mes').val())
+                .replace(':provincia', $('#provincia').val())
+                .replace(':distrito', $('#distrito').val()));
+        }
+
+        function descargar0102() {
+            window.open(
+                "{{ route('salud.indicador.pactoregional.sal.pacto1.excel', ['div' => ':div', 'fuente' => ':fuente', 'indicador' => ':indicador', 'anio' => ':anio', 'mes' => ':mes', 'provincia' => ':provincia', 'distrito' => ':distrito']) }}"
+                .replace(':div', 'tabla3')
+                .replace(':fuente', '{{ $fuente }}')
+                .replace(':indicador', '{{ $ind->id }}')
+                .replace(':anio', $('#anio').val())
+                .replace(':mes', $('#mes').val())
+                .replace(':provincia', $('#provincia').val())
+                .replace(':distrito', $('#distrito').val()));
         }
 
         // function descargar0101() {

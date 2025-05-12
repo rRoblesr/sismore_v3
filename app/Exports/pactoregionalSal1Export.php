@@ -36,7 +36,7 @@ class pactoregionalSal1Export implements FromView, ShouldAutoSize
             $mgs = (new IndicadoresController())->PactoRegionalSalPacto1Export($this->div, $this->fuente, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
             return view('salud.Indicadores.PactoRegionalSalPacto1tabla1Export', $mgs);
         } else if ($this->div == 'tabla2') {
-            $mgs = (new IndicadoresController())->PactoRegionalSalPacto1Export($this->div, $this->fuente, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
+             $mgs = (new IndicadoresController())->PactoRegionalSalPacto1Export($this->div, $this->fuente, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
             return view('salud.Indicadores.PactoRegionalSalPacto1tabla2Export', $mgs);
         } else if ($this->div == 'tabla3') {
             $mgs = (new IndicadoresController())->PactoRegionalSalPacto1Export($this->div, $this->fuente, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);

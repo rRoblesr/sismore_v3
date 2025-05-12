@@ -519,6 +519,7 @@ class IndicadoresController extends Controller
     // ############ salud pacto 1 #################
     public function PactoRegionalSalPacto1Reports(Request $rq)
     {
+        ini_set('memory_limit', '-1');
         if ($rq->distrito > 0) $ndis = Ubigeo::find($rq->distrito)->nombre;
         else $ndis = '';
         $impMaxAnio = salPadronNominalRepositorio::PNImportacion_idmax($rq->fuente, $rq->anio, $rq->mes);
@@ -648,10 +649,11 @@ class IndicadoresController extends Controller
                 $start = intval($rq->start);
                 $length = intval($rq->length);
 
-                $query = CuboPacto1PadronNominal::where('importacion', $impMaxAnio)->whereIn('tipo_doc', ['DNI', 'CNV']);
-                if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
-                if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
-                $query = $query->get();
+                $query = CuboPacto1PadronNominalRepositorio::pacto01Tabla03($impMaxAnio, $rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                // $query = CuboPacto1PadronNominal::where('importacion', $impMaxAnio)->whereIn('tipo_doc', ['DNI', 'CNV']);
+                // if ($rq->provincia > 0) $query = $query->where('provincia_id', $rq->provincia);
+                // if ($rq->distrito > 0) $query = $query->where('distrito_id', $rq->distrito);
+                // $query = $query->get();
 
                 $data = [];
                 foreach ($query as $key => $value) {
@@ -789,8 +791,6 @@ class IndicadoresController extends Controller
     public function PactoRegionalSalPacto1Export($div, $fuente, $indicador, $anio, $mes, $provincia, $distrito)
     {
         ini_set('memory_limit', '-1');
-        if ($distrito > 0) $ndis = Ubigeo::find($distrito)->nombre;
-        else $ndis = '';
         switch ($div) {
             // case 'tabla1':
             //     $base = IndicadorGeneralMetaRepositorio::getPacto1tabla1($indicador, $anio, $mes);
@@ -801,8 +801,27 @@ class IndicadoresController extends Controller
                 // $base = IndicadorGeneralMetaRepositorio::getPacto1tabla2($indicador, $anio);
                 $impMaxAnio = salPadronNominalRepositorio::PNImportacion_idmax($fuente, $anio, $mes);
                 $base = CuboPacto1PadronNominalRepositorio::pacto01Tabla02($impMaxAnio, $indicador, $anio, $mes, $provincia, $distrito);
-                $aniob = $anio;
-                return compact('base', 'ndis', 'aniob');
+                // if (!empty($base)) {
+                //     $foot = clone $base[0];
+                //     foreach ($base as $key => $value) {
+                //         $foot->numerador += $value->numerador;
+                //         $foot->denominador += $value->denominador;
+                //     }
+                // }
+                return compact('base');
+
+            case 'tabla3':
+                // $base = IndicadorGeneralMetaRepositorio::getPacto1tabla2($indicador, $anio);
+                $impMaxAnio = salPadronNominalRepositorio::PNImportacion_idmax($fuente, $anio, $mes);
+                $base = CuboPacto1PadronNominalRepositorio::pacto01Tabla03($impMaxAnio, $indicador, $anio, $mes, $provincia, $distrito);
+                // if (!empty($base)) {
+                //     $foot = clone $base[0];
+                //     foreach ($base as $key => $value) {
+                //         $foot->numerador += $value->numerador;
+                //         $foot->denominador += $value->denominador;
+                //     }
+                // }
+                return compact('base');
 
             default:
                 return [];
@@ -817,7 +836,10 @@ class IndicadoresController extends Controller
                 //     $name = 'Listado de establecimientos de salud ' . date('Y-m-d') . '.xlsx';
                 //     break;
                 case 'tabla2':
-                    $name = 'Establecimiento de Salud' . date('Y-m-d') . '.xlsx';
+                    $name = 'Establecimiento de Salud ' . date('Y-m-d') . '.xlsx';
+                    break;
+                case 'tabla3':
+                    $name = 'Padron Nominal ' . date('Y-m-d') . '.xlsx';
                     break;
                 default:
                     $name = 'sin nombre.xlsx';

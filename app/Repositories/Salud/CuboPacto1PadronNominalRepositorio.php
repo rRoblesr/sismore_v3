@@ -173,9 +173,18 @@ class CuboPacto1PadronNominalRepositorio
         JOIN sal_microred m ON m.id = e.microrred_id
         JOIN sal_red r ON r.id = m.red_id 
         where 1 $pp $dd 
-        order by indicador desc;";
+        order by indicador desc, c.num asc, c.den asc;";
 
         $resultados = DB::select(DB::raw($query));
         return $resultados;
+    }
+
+    public static function pacto01Tabla03($importacion, $indicador, $anio, $mes, $provincia, $distrito)
+    {
+        $query = CuboPacto1PadronNominal::where('importacion', $importacion)->whereIn('tipo_doc', ['DNI', 'CNV']);
+        if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
+        if ($distrito > 0) $query = $query->where('distrito_id', $distrito);
+        $query = $query->get();
+        return $query;
     }
 }
