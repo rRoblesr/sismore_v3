@@ -180,7 +180,7 @@ class CuboPacto1PadronNominalRepositorio
     }
 
     public static function pacto01Tabla03($importacion, $indicador, $anio, $mes, $provincia, $distrito)
-    {
+    {ini_set('memory_limit', '-1');
         $query = CuboPacto1PadronNominal::where('importacion', $importacion)->whereIn('tipo_doc', ['DNI', 'CNV']);
         if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
         if ($distrito > 0) $query = $query->where('distrito_id', $distrito);

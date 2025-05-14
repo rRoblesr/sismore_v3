@@ -507,9 +507,9 @@ class IndicadoresController extends Controller
                 // $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
                 $actualizado = '31/03/2025';
                 $provincia = UbigeoRepositorio::provincia('25');
-                $ugel = CuboFEDPN::distinct()->select('ugel')->where('anio', 2025)->get();
+                // $ugel = CuboFEDPN::distinct()->select('ugel')->where('anio', 2025)->get();
                 $aniomax = $anio->max('anio');
-                return view('educacion.Indicadores.ConvenioFEDMC0502', compact('actualizado', 'fuente', 'anio', 'ugel', 'provincia', 'aniomax', 'ind'));
+                return view('educacion.Indicadores.ConvenioFEDMC0502', compact('actualizado', 'fuente', 'anio', 'provincia', 'aniomax', 'ind'));
 
             default:
                 return 'ERROR, PAGINA NO ENCONTRADA';
@@ -790,37 +790,16 @@ class IndicadoresController extends Controller
 
     public function PactoRegionalSalPacto1Export($div, $fuente, $indicador, $anio, $mes, $provincia, $distrito)
     {
-        ini_set('memory_limit', '-1');
-        switch ($div) {
-            // case 'tabla1':
-            //     $base = IndicadorGeneralMetaRepositorio::getPacto1tabla1($indicador, $anio, $mes);
-            //     $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla1', compact('base', 'ndis'))->render();
-            //     return compact('excel', 'base');
 
+        switch ($div) {
             case 'tabla2':
-                // $base = IndicadorGeneralMetaRepositorio::getPacto1tabla2($indicador, $anio);
                 $impMaxAnio = salPadronNominalRepositorio::PNImportacion_idmax($fuente, $anio, $mes);
                 $base = CuboPacto1PadronNominalRepositorio::pacto01Tabla02($impMaxAnio, $indicador, $anio, $mes, $provincia, $distrito);
-                // if (!empty($base)) {
-                //     $foot = clone $base[0];
-                //     foreach ($base as $key => $value) {
-                //         $foot->numerador += $value->numerador;
-                //         $foot->denominador += $value->denominador;
-                //     }
-                // }
                 return compact('base');
 
             case 'tabla3':
-                // $base = IndicadorGeneralMetaRepositorio::getPacto1tabla2($indicador, $anio);
                 $impMaxAnio = salPadronNominalRepositorio::PNImportacion_idmax($fuente, $anio, $mes);
                 $base = CuboPacto1PadronNominalRepositorio::pacto01Tabla03($impMaxAnio, $indicador, $anio, $mes, $provincia, $distrito);
-                // if (!empty($base)) {
-                //     $foot = clone $base[0];
-                //     foreach ($base as $key => $value) {
-                //         $foot->numerador += $value->numerador;
-                //         $foot->denominador += $value->denominador;
-                //     }
-                // }
                 return compact('base');
 
             default:
@@ -832,9 +811,6 @@ class IndicadoresController extends Controller
     {
         if ($anio > 0) {
             switch ($div) {
-                // case 'tabla1':
-                //     $name = 'Listado de establecimientos de salud ' . date('Y-m-d') . '.xlsx';
-                //     break;
                 case 'tabla2':
                     $name = 'Establecimiento de Salud ' . date('Y-m-d') . '.xlsx';
                     break;
@@ -1784,7 +1760,7 @@ class IndicadoresController extends Controller
                     DB::raw('sum(den)-sum(num) as gln'),
                     DB::raw('round(100*sum(num)/sum(den),1) as indicador')
                 );
-                if ($rq->ugel != 'TODOS') $v->where('ugel', $rq->ugel);
+                // if ($rq->ugel != 'TODOS') $v->where('ugel', $rq->ugel);
                 if ($rq->provincia > 0) $v->where('dependencia', $rq->provincia);
                 if ($rq->distrito > 0) $v->where('distrito_id', $rq->distrito);
                 $v = $v->first();
@@ -1872,9 +1848,10 @@ class IndicadoresController extends Controller
                         'numx',
                         DB::raw('if(length(codmod_salud)=7,1,0) as cumple')
                     );
-                if ($rq->ugel != 'TODOS') $query->where('ugel', $rq->ugel);
+                // if ($rq->ugel != 'TODOS') $query->where('ugel', $rq->ugel);
                 if ($rq->provincia > 0) $query->where('dependencia', $rq->provincia);
                 if ($rq->distrito > 0) $query->where('distrito_id', $rq->distrito);
+                if ($rq->mes > 0) $query->where('mes', $rq->mes);
                 $query = $query->get();
                 $data = [];
                 foreach ($query as $key => $value) {
@@ -1956,14 +1933,16 @@ class IndicadoresController extends Controller
                         'provincia',
                         'ugel',
                         'eess',
-                        'cod_mod',
-                        'iiee',
+                        'codmod_salud',
+                        'iiee_salud',
+                        'codmod_educacion',
+                        'iiee_educacion',
                         'den',
                         'num',
                         'numx',
-                        DB::raw('if(length(cod_mod)=7,1,0) as cumple')
+                        DB::raw('if(length(codmod_educacion)=7,1,0) as cumple')
                     );
-                if ($ugel != 'TODOS') $base->where('ugel', $ugel);
+                // if ($ugel != 'TODOS') $base->where('ugel', $ugel);s
                 if ($provincia > 0) $base->where('dependencia', $provincia);
                 if ($distrito > 0) $base->where('distrito_id', $distrito);
                 $base = $base->get();
@@ -2092,7 +2071,7 @@ class IndicadoresController extends Controller
                 //     $name = 'Listado de establecimientos de salud ' . date('Y-m-d') . '.xlsx';
                 //     break;
                 case 'tabla2':
-                    $name = 'Evaluación de cumplimiento de los registros de niños y niñas menores de 6 años del padrón nominal ' . date('Y-m-d') . '.xlsx';
+                    $name = 'Padrón Nominal ' . date('Y-m-d') . '.xlsx';
                     break;
                 default:
                     $name = 'sin nombre.xlsx';
@@ -2139,7 +2118,7 @@ class IndicadoresController extends Controller
                     DB::raw('sum(num)-sum(numx) as gln'),
                     DB::raw('round(100*sum(numx)/sum(num),1) as indicador')
                 );
-                if ($rq->ugel != 'TODOS') $v->where('ugel', $rq->ugel);
+                // if ($rq->ugel != 'TODOS') $v->where('ugel', $rq->ugel);
                 if ($rq->provincia > 0) $v->where('dependencia', $rq->provincia);
                 if ($rq->distrito > 0) $v->where('distrito_id', $rq->distrito);
                 $v = $v->first();
@@ -2230,7 +2209,7 @@ class IndicadoresController extends Controller
                         'iiee_salud',
                         DB::raw('if(length(codmod_salud)=7 and numx=1,1,0) as cumple')
                     );
-                if ($rq->ugel != 'TODOS') $query->where('ugel', $rq->ugel);
+                // if ($rq->ugel != 'TODOS') $query->where('ugel', $rq->ugel);
                 if ($rq->provincia > 0) $query->where('dependencia', $rq->provincia);
                 if ($rq->distrito > 0) $query->where('distrito_id', $rq->distrito);
                 $query = $query->get();
@@ -2338,7 +2317,7 @@ class IndicadoresController extends Controller
                 //     $name = 'Listado de establecimientos de salud ' . date('Y-m-d') . '.xlsx';
                 //     break;
                 case 'tabla2':
-                    $name = 'Evaluación de cumplimiento de los registros de niños y niñas menores de 6 años del padrón nominal ' . date('Y-m-d') . '.xlsx';
+                    $name = 'Padrón Nominal ' . date('Y-m-d') . '.xlsx';
                     break;
                 default:
                     $name = 'sin nombre.xlsx';
@@ -2393,14 +2372,16 @@ class IndicadoresController extends Controller
                         'provincia',
                         'ugel',
                         'eess',
-                        'cod_mod',
-                        'iiee',
+                        'codmod_salud',
+                        'iiee_salud',
+                        'codmod_educacion',
+                        'iiee_educacion',
                         'den',
                         'num',
                         'numx',
-                        DB::raw('if(length(cod_mod)=7,1,0) as cumple')
+                        DB::raw('if(length(codmod_educacion)=7,1,0) as cumple')
                     );
-                if ($ugel != 'TODOS') $base->where('ugel', $ugel);
+                if ($ugel > 0) $base->where('mes', $ugel);
                 if ($provincia > 0) $base->where('dependencia', $provincia);
                 if ($distrito > 0) $base->where('distrito_id', $distrito);
                 $base = $base->get();

@@ -46,15 +46,15 @@
                     </div>
                 </div>
 
-                {{-- <div class="col-md-2 col-6">
+                <div class="col-md-2 col-6">
                     <div class="custom-select-container my-1">
                         <label for="mes">Mes</label>
                         <select id="mes" name="mes" class="form-control font-12" onchange="cargarcuadros();">
                         </select>
                     </div>
-                </div> --}}
+                </div>
 
-                <div class="col-md-2 col-6">
+                {{-- <div class="col-md-2 col-6">
                     <div class="custom-select-container my-1">
                         <label for="ugel">Ugel</label>
                         <select id="ugel" name="ugel" class="form-control font-12" onchange="cargarcuadros();">
@@ -65,7 +65,7 @@
                             @endforeach
                         </select>
                     </div>
-                </div>
+                </div> --}}
 
                 <div class="col-md-2 col-6">
                     <div class="custom-select-container my-1">
@@ -1001,12 +1001,7 @@
             });
         }
 
-        // function descargar0100() {
-        //     window.open(
-        //         "{{ route('salud.indicador.pactoregional.sal.pacto1.excel', ['', '', '', '', '', '']) }}/tabla2/{{ $ind->id }}/" +
-        //         $('#anio').val() + "/" + $('#mes').val() + "/" + $('#provincia').val() + "/" + $('#distrito').val());
-        // }
-
+       
         function descargar0100() {
             window.open(
                 "{{ route('educacion.indicador.conveniofed.fed2.excel', ['', '', '', '', '', '']) }}/tabla2/{{ $ind->id }}/" +

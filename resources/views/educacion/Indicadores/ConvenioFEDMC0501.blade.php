@@ -12,42 +12,6 @@
 @endsection
 
 @section('content')
-    {{-- <div class="card  card-border border border-plomo-0">
-    <div
-        class="card-header border-success-0 bg-transparent text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center px-2 py-2">
-        <h6 class="card-title mb-2 mb-md-0 text-center text-primary text-md-left text-wrap">
-            Directorio de establecimientos de salud de Ucayali
-        </h6>
-        <div class="text-center text-md-right">
-            <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
-                <i class="fa fa-redo"></i> Actualizar
-            </button>
-        </div>
-    </div>
-    <div class="card-body p-2">
-        <!-- Contenido de la tarjeta -->
-    </div>
-</div> --}}
-
-    {{-- <div class="card">
-    <div
-        class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center p-2">
-        <h6 class="mb-2 mb-md-0 text-center text-md-left text-wrap text-white">
-            <i class="fas fa-chart-bar d-none"></i> {{ $ind->nombre }}
-        </h6>
-        <div class="text-center text-md-right">
-            <button type="button" class="btn btn-orange-0 btn-xs my-1" onclick="history.back()" title="VOLVER">
-                <i class="fas fa-arrow-left"></i> Volver</button>
-            <button type="button" class="btn btn-orange-0 btn-xs my-1" onclick="verpdf({{ $ind->id }})"
-                title='FICHA TÉCNICA'><i class="fas fa-file"></i> Ficha Técnica</button>
-            <button type="button" class="btn btn-orange-0 btn-xs my-1" onclick="location.reload()" title='ACTUALIZAR'>
-                <i class=" fas fa-history"></i> Actualizar</button>
-        </div>
-    </div>
-    <div class="card-body p-2">
-     
-    </div>
-</div> --}}
 
     <div class="card">
         <div
@@ -83,7 +47,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-2 col-6">
+                {{-- <div class="col-md-2 col-6">
                     <div class="custom-select-container my-1">
                         <label for="ugel">Ugel</label>
                         <select id="ugel" name="ugel" class="form-control font-12" onchange="cargarcuadros();">
@@ -94,15 +58,15 @@
                             @endforeach
                         </select>
                     </div>
-                </div>
+                </div> --}}
 
-                {{-- <div class="col-md-2 col-6">
+                <div class="col-md-2 col-6">
                     <div class="custom-select-container my-1">
                         <label for="mes">Mes</label>
                         <select id="mes" name="mes" class="form-control font-12" onchange="cargarcuadros();">
                         </select>
                     </div>
-                </div> --}}
+                </div>
 
                 <div class="col-md-2 col-6">
                     <div class="custom-select-container my-1">
@@ -308,7 +272,7 @@
                 menores de 6 años del padrón nominal
             </h6>
             <div class="text-center text-md-right">
-                <button type="button" class="btn btn-success btn-xs" onclick="descargar0100()">
+                <button type="button" class="btn btn-success btn-xs" onclick="descargar0101()">
                     <i class="fa fa-file-excel"></i> Descargar</button>
             </div>
         </div>
@@ -605,7 +569,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-    
+
 
                 <div class="modal-body">
                     <table class="table table-bordered font-12">
@@ -749,7 +713,6 @@
                         //     searching: false,
                         // });
                     } else if (div == "tabla2") {
-
                     }
 
                 },
@@ -775,7 +738,7 @@
                         'div': div,
                         "anio": $('#anio').val(),
                         "mes": $('#mes').val(),
-                        "ugel": $('#ugel').val(),
+                        // "ugel": $('#ugel').val(),
                         "provincia": $('#provincia').val(),
                         "distrito": $('#distrito').val(),
                         "fuente": {{ $fuente }},
@@ -819,7 +782,7 @@
                     $('#dmnombresMenor').text(data.nombres);
                     $('#dmsexoMenor').text(data.sexo);
                     $('#dmfechaNacimiento').text(data.nacimiento);
-                    $('#dmedadMenor').text(data.edad+' AÑOS');
+                    $('#dmedadMenor').text(data.edad + ' AÑOS');
                     $('#dmdepartamento').text(data.departamento);
                     $('#dmprovincia').text(data.provincia);
                     $('#dmdistrito').text(data.distrito);
@@ -1010,13 +973,23 @@
             });
         }
 
-        function descargar0100() {
+        function descargar0101() {
+            // window.open(
+            //     "{{ route('educacion.indicador.conveniofed.fed.excel', ['', '', '', '', '', '']) }}/tabla2/{{ $ind->id }}/" +
+            //     $('#anio').val() + "/" + $('#ugel').val() + "/" + $('#provincia').val() + "/" + $('#distrito').val());
+
             window.open(
-                "{{ route('educacion.indicador.conveniofed.fed.excel', ['', '', '', '', '', '']) }}/tabla2/{{ $ind->id }}/" +
-                $('#anio').val() + "/" + $('#ugel').val() + "/" + $('#provincia').val() + "/" + $('#distrito').val());
+                "{{ route('educacion.indicador.conveniofed.fed.excel', ['div' => ':div', 'fuente' => ':fuente', 'indicador' => ':indicador', 'anio' => ':anio', 'mes' => ':mes', 'provincia' => ':provincia', 'distrito' => ':distrito']) }}"
+                .replace(':div', 'tabla2')
+                .replace(':fuente', '{{ $fuente }}')
+                .replace(':indicador', '{{ $ind->id }}')
+                .replace(':anio', $('#anio').val())
+                .replace(':mes', $('#mes').val())
+                .replace(':provincia', $('#provincia').val())
+                .replace(':distrito', $('#distrito').val()));
         }
 
-        function descargar0101() {
+        function descargar0102() {
             window.open("{{ url('/') }}/INDICADOR/Home/01/Excel/tabla2/" + $('#anio').val() + "/" + $('#provincia')
                 .val() + "/" + $('#distrito').val() + "/" + $('#gestion').val() + "/" + ugel_select);
         }

@@ -149,7 +149,7 @@ class SFLRepositorio
         return $query;
     }
 
-    public static function get_localsx($anio, $ugel, $provincia, $distrito, $estado)
+    public static function get_localsx($anio, $mes, $provincia, $distrito, $estado)
     {
         $query = DB::table('edu_cubo_pacto02_local')->select(
             DB::raw('count(local) as conteo')

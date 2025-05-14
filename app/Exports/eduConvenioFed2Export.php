@@ -34,17 +34,17 @@ class eduConvenioFed2Export implements FromView, ShouldAutoSize
             $mgs = (new IndicadoresController())->ConvenioFEDEduMC0502Export($this->div, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
             return view('educacion.Indicadores.ConvenioFEDMC0502tabla2Export', $mgs);
         } else if ($this->div == 'tabla1') {
-            $mgs = (new IndicadoresController())->PactoRegionalSalPacto1Export($this->div, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
-            return view('salud.Indicadores.PactoRegionalSalPacto1tabla2Export', $mgs);
+            $mgs = (new IndicadoresController())->ConvenioFEDEduMC0502Export($this->div, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
+            return view('educacion.Indicadores.ConvenioFEDMC0502tabla2Export', $mgs);
         } else if ($this->div == 'tabla3') {
-            $mgs = (new IndicadoresController())->PactoRegionalSalPacto1Export($this->div, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
-            return view('salud.Indicadores.PactoRegionalSalPacto1tabla3Export', $mgs);
+            $mgs = (new IndicadoresController())->ConvenioFEDEduMC0502Export($this->div, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
+            return view('educacion.Indicadores.ConvenioFEDMC0502tabla2Export', $mgs);
         } else if ($this->div == 'tabla4') {
-            $mgs = (new IndicadoresController())->PactoRegionalSalPacto1Export($this->div, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
-            return view('salud.Indicadores.PactoRegionalSalPacto1tabla4Export', $mgs);
+            $mgs = (new IndicadoresController())->ConvenioFEDEduMC0502Export($this->div, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
+            return view('educacion.Indicadores.ConvenioFEDMC0502tabla2Export', $mgs);
         } else {
-            $mgs = (new IndicadoresController())->PactoRegionalSalPacto1Export($this->div, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
-            return view('salud.Indicadores.PactoRegionalSalPacto1tabla5Export', $mgs);
+            $mgs = (new IndicadoresController())->ConvenioFEDEduMC0502Export($this->div, $this->indicador, $this->anio, $this->mes, $this->provincia, $this->distrito);
+            return view('educacion.Indicadores.ConvenioFEDMC0502tabla2Export', $mgs);
         }
     }
 }
