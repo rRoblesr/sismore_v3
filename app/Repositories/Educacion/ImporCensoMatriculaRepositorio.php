@@ -1176,6 +1176,12 @@ class ImporCensoMatriculaRepositorio
                                                 when "C209" then d01+d03+d05+d07+d09+d11+d13+d15+d17+d19
                                                 else 0
                                             end
+                                when 2024 then
+                                            case cuadro
+                                                when "C201" then d01+d03+d05+d07+d09+d11+d13+d15+d17+d19
+                                                when "C209" then d01+d03+d05+d07+d09+d11+d13+d15+d17+d19
+                                                else 0
+                                            end                                            
                                 else
                                     case cuadro
                                         when "C201" then d01+d03+d05+d07+d09+d11+d13+d15+d17+d19
@@ -1290,6 +1296,12 @@ class ImporCensoMatriculaRepositorio
                                                 when "C209" then d01+d03+d05+d07+d09+d11+d13+d15+d17+d19
                                                 else 0
                                             end
+                                when 2024 then
+                                            case cuadro
+                                                when "C201" then d01+d03+d05+d07+d09+d11+d13+d15+d17+d19
+                                                when "C209" then d01+d03+d05+d07+d09+d11+d13+d15+d17+d19
+                                                else 0
+                                            end                                            
                                 else
                                     case cuadro
                                         when "C201" then d01+d03+d05+d07+d09+d11+d13+d15+d17+d19
@@ -1305,6 +1317,12 @@ class ImporCensoMatriculaRepositorio
                                                 when "C209" then d02+d04+d06+d08+d10+d12+d14+d16+d18+d20
                                                 else 0
                                             end
+                                when 2024 then
+                                            case cuadro
+                                                when "C201" then d02+d04+d06+d08+d10+d12+d14+d16+d18+d20
+                                                when "C209" then d02+d04+d06+d08+d10+d12+d14+d16+d18+d20
+                                                else 0
+                                            end                                            
                                 else
                                     case cuadro
                                         when "C201" then d02+d04+d06+d08+d10+d12+d14+d16+d18+d20
@@ -1355,6 +1373,12 @@ class ImporCensoMatriculaRepositorio
                                 when "C209" then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20
                                 else 0
                             end
+                    when 2024 then
+                            case cuadro
+                                when "C201" then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20
+                                when "C209" then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20
+                                else 0
+                            end                            
                     else
                         case cuadro
                             when "C201" then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20
