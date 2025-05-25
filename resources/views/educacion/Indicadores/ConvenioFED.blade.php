@@ -156,8 +156,7 @@
                 </div>
 
                 <div class="col-lg-2 col-md-6 col-sm-6 text-right">
-                    <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
-                        title='ACTUALIZAR'>
+                    <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()" title='ACTUALIZAR'>
                         <i class="fas fa-history"></i> Actualizar
                     </button>
                 </div>
@@ -313,8 +312,7 @@
                     thousandsSep: ","
                 }
             });
-            // cargarCards();
-            cargarDistritos();
+            // cargarDistritos();
             cargarpacto1();
         });
 
@@ -327,8 +325,9 @@
             $.ajax({
                 url: "{{ route('educacion.indicador.conveniofed.actualizar') }}",
                 data: {
-                    "anio": $('#anio').val(),
-                    "distrito": $('#distrito').val(),
+                    "anio": {{ $anio }},
+                    "mes": {{ $mes }},
+                    "distrito": 0,
                     "codigo": codigo,
                 },
                 type: "GET",

@@ -8,8 +8,6 @@ use App\Imports\tablaXImport;
 use App\Models\Administracion\Entidad;
 use App\Models\Educacion\ImporPadronNominal;
 use App\Models\Educacion\Importacion;
-use App\Models\Educacion\ImporPadronWeb;
-use App\Models\Educacion\PadronWeb;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use Exception;
 use Illuminate\Http\Request;
@@ -74,7 +72,6 @@ class ImporPadronNominalController extends Controller
         $encabezadosEsperados = [
             'cod_mod',
             'modalidad',
-            'cod_estudiante',
             'dni',
             'validacion_dni',
             'apellido_paterno',
@@ -87,8 +84,6 @@ class ImporPadronNominalController extends Controller
             'grado',
             'seccion',
             'fecha_matricula',
-            'sr_regular',
-            'sf_recuperacion',
         ];
 
         $encabezadosArchivo = array_keys($array[0][0]);
@@ -119,7 +114,6 @@ class ImporPadronNominalController extends Controller
                     'importacion_id' => $importacion->id,
                     'cod_mod' => $row['cod_mod'],
                     'modalidad' => $row['modalidad'],
-                    'cod_estudiante' => $row['cod_estudiante'],
                     'dni' => $row['dni'],
                     'validacion_dni' => $row['validacion_dni'],
                     'apellido_paterno' => $row['apellido_paterno'],
@@ -132,8 +126,6 @@ class ImporPadronNominalController extends Controller
                     'grado' => $row['grado'],
                     'seccion' => $row['seccion'],
                     'fecha_matricula' => $row['fecha_matricula'],
-                    'sr_regular' => $row['sr_regular'],
-                    'sf_recuperacion' => $row['sf_recuperacion'],
                 ];
 
                 if (count($dataBatch) >= $batchSize) {
@@ -154,9 +146,9 @@ class ImporPadronNominalController extends Controller
 
             return $this->json_output(400, "Error en la carga de datos: " . $e->getMessage());
         }
-        /*
+
         try {
-            DB::select('call edu_pa_procesarPadronWeb(?,?)', [$importacion->id, auth()->user()->id]);
+            DB::select('call edu_pa_procesarImporPadronNominal(?,?)', [$importacion->id, '2025-03-31']);
         } catch (Exception $e) {
             $importacion->estado = 'PE';
             $importacion->save();
@@ -164,7 +156,7 @@ class ImporPadronNominalController extends Controller
             $mensaje = "Error al procesar la normalizacion de datos edu_pa_procesarPadronWeb." . $e;
             return $this->json_output(400, $mensaje);
         }
-
+        /*
         try {
             DB::select('call edu_pa_procesar_cubo_pacto2_01(?)', [$importacion->id]);
         } catch (Exception $e) {

@@ -670,7 +670,7 @@
                 data: {
                     'div': div,
                     "anio": $('#anio').val(),
-                    "ugel": $('#ugel').val(),
+                    "mes": $('#mes').val(),
                     "provincia": $('#provincia').val(),
                     "distrito": $('#distrito').val(),
                     "fuente": {{ $fuente }},

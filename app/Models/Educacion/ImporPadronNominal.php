@@ -20,7 +20,6 @@ class ImporPadronNominal extends Model
         'importacion_id',
         'cod_mod',
         'modalidad',                
-        'cod_estudiante',
         'dni',
         'validacion_dni',
         'apellido_paterno',
@@ -33,8 +32,6 @@ class ImporPadronNominal extends Model
         'grado',
         'seccion',
         'fecha_matricula',
-        'sr_regular',
-        'sf_recuperacion',
     ];
 
     // protected $hide = [
