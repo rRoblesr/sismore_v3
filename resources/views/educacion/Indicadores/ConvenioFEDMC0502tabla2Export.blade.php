@@ -16,10 +16,12 @@
             <th class="text-center">CENTRO POBLADO</th>
             <th class="text-center">AREA CCPP</th>
             <th class="text-center">ESTABLECIMIENTO SALUD</th>
-            <th class="text-center">COD MUDULAR</th>
-            <th class="text-center">INSTITUCION EDUCATIVA</th>
+            <th class="text-center">CODMOD_PN</th>
+            <th class="text-center">IIEE_PN</th>
             <th class="text-center">NOMBRE COMPLETO MADRE</th>
             <th class="text-center">CELULAR MADRE</th>
+            <th class="text-center">CODMOD_SIAGIE</th>
+            <th class="text-center">IIEE_SIAGIE</th>
             <th class="text-center">HOMOLAGADO</th>
         </tr>
 
@@ -41,10 +43,12 @@
                     <td>{{ $item->centro_poblado_nombre }}</td>
                     <td>{{ $item->area_ccpp }}</td>
                     <td>{{ $item->eess }}</td>
-                    <td>{{ $item->codigo_ie }}</td>
-                    <td>{{ $item->nombre_ie }}</td>
+                    <td>{{ $item->codmod_salud }}</td>
+                    <td>{{ $item->iiee_salud }}</td>
                     <td>{{ $item->apellido_paterno_madre . ' ' . $item->apellido_materno_madre . ', ' . $item->nombres_madre }}</td>
                     <td>{{ $item->celular_madre }}</td>
+                    <td>{{ $item->codigo_ie }}</td>
+                    <td>{{ $item->nombre_ie }}</td>
                     <td>
                         @if ($item->cumple == 1)
                             <button type="button"

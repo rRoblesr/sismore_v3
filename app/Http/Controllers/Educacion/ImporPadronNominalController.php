@@ -108,7 +108,6 @@ class ImporPadronNominalController extends Controller
 
             $batchSize = 500;
             $dataBatch = [];
-
             foreach ($array[0] as $row) {
                 $dataBatch[] = [
                     'importacion_id' => $importacion->id,
@@ -121,11 +120,11 @@ class ImporPadronNominalController extends Controller
                     'nombres' => $row['nombres'],
                     'sexo' => $row['sexo'],
                     'nacionalidad' => $row['nacionalidad'],
-                    'fecha_nacimiento' => $row['fecha_nacimiento'],
+                    'fecha_nacimiento' => $row['fecha_nacimiento'] === 'NULL' ? null : $row['fecha_nacimiento'],
                     'lengua_materna' => $row['lengua_materna'],
                     'grado' => $row['grado'],
                     'seccion' => $row['seccion'],
-                    'fecha_matricula' => $row['fecha_matricula'],
+                    'fecha_matricula' => $row['fecha_matricula'] === 'NULL' ? null : $row['fecha_matricula'],
                 ];
 
                 if (count($dataBatch) >= $batchSize) {
@@ -280,5 +279,17 @@ class ImporPadronNominalController extends Controller
     {
         $name = 'Padron Web ' . date('Y-m-d') . '.xlsx';
         return Excel::download(new ImporPadronWebExport, $name);
+    }
+
+    public function cargar_edupaprocesarimporpadronnominal($importacion_id)
+    {
+        ini_set('memory_limit', '-1');
+        set_time_limit(0);
+        try {
+            DB::select('call edu_pa_procesarImporPadronNominal(?,?)', [$importacion_id, '2025-03-31']);
+            return response()->json(['status' => 'success', 'message' => 'Proceso completado correctamente']);
+        } catch (Exception $e) {
+            return response()->json(['status' => 'error', 'message' => 'Error en la ejecución del proceso', 'error' => $e->getMessage()], 500);
+        }
     }
 }

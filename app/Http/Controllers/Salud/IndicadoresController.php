@@ -1875,7 +1875,7 @@ class IndicadoresController extends Controller
         }
     }
 
-    public function ConvenioFEDEduMC0501Export($div, $indicador, $anio, $ugel, $provincia, $distrito)
+    public function ConvenioFEDEduMC0501Export($div, $indicador, $anio, $mes, $provincia, $distrito)
     {
         switch ($div) {
             // case 'tabla1':
@@ -1884,6 +1884,9 @@ class IndicadoresController extends Controller
             //     return compact('excel', 'base');
 
             case 'tabla2':
+                ini_set('memory_limit', '-1');
+                set_time_limit(0);
+
                 $base = CuboFEDPN::where('anio', $anio)
                     ->select(
                         'id',
@@ -1928,7 +1931,7 @@ class IndicadoresController extends Controller
                         'numx',
                         DB::raw('if(length(codmod_educacion)=7,1,0) as cumple')
                     );
-                // if ($ugel != 'TODOS') $base->where('ugel', $ugel);s
+                if ($mes > 0) $base->where('mes', $mes);
                 if ($provincia > 0) $base->where('dependencia', $provincia);
                 if ($distrito > 0) $base->where('distrito_id', $distrito);
                 $base = $base->get();
@@ -2299,9 +2302,7 @@ class IndicadoresController extends Controller
     {
         if ($anio > 0) {
             switch ($div) {
-                // case 'tabla1':
-                //     $name = 'Listado de establecimientos de salud ' . date('Y-m-d') . '.xlsx';
-                //     break;
+                // case 'tabla1':$name = 'Listado de establecimientos de salud ' . date('Y-m-d') . '.xlsx';break;
                 case 'tabla2':
                     $name = 'Padrón Nominal ' . date('Y-m-d') . '.xlsx';
                     break;
@@ -2314,7 +2315,7 @@ class IndicadoresController extends Controller
         }
     }
 
-    public function ConvenioFEDEduMC0502Export($div, $indicador, $anio, $ugel, $provincia, $distrito)
+    public function ConvenioFEDEduMC0502Export($div, $indicador, $anio, $mes, $provincia, $distrito)
     {
         switch ($div) {
             // case 'tabla1':
@@ -2367,7 +2368,7 @@ class IndicadoresController extends Controller
                         'numx',
                         DB::raw('if(length(codmod_educacion)=7,1,0) as cumple')
                     );
-                if ($ugel > 0) $base->where('mes', $ugel);
+                if ($mes > 0) $base->where('mes', $mes);
                 if ($provincia > 0) $base->where('dependencia', $provincia);
                 if ($distrito > 0) $base->where('distrito_id', $distrito);
                 $base = $base->get();

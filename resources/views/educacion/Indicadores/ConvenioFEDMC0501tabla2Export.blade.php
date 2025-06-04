@@ -17,8 +17,8 @@
             <th class="text-center">CENTRO POBLADO</th>
             <th class="text-center">AREA CCPP</th>
             <th class="text-center">ESTABLECIMIENTO SALUD</th>
-            <th class="text-center">COD MUDULAR</th>
-            <th class="text-center">INSTITUCION EDUCATIVA</th>
+            <th class="text-center">CODMOD_PN</th>
+            <th class="text-center">IIEE_PN</th>
             <th class="text-center">NOMBRE COMPLETO MADRE</th>
             <th class="text-center">CELULAR MADRE</th>
             <th class="text-center">MATRICULADO</th>

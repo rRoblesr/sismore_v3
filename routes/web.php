@@ -225,6 +225,8 @@ Route::post('/ImporPN/Importar', [EducacionImporPadronNominalController::class, 
 Route::post('/ImporPN/LI/{importacion_id}', [EducacionImporPadronNominalController::class, 'ListaImportada'])->name('edu.imporpadronnominal.listarimportados');
 Route::get('/ImporPN/Listar/ImportarDT', [EducacionImporPadronNominalController::class, 'ListarDTImportFuenteTodos'])->name('edu.imporpadronnominal.listar.importados');
 Route::get('/ImporPN/Eliminar/{id}', [EducacionImporPadronNominalController::class, 'eliminar'])->name('edu.imporpadronnominal.eliminar');
+Route::post('/edu/imp/pn/sp/procesar/{importacion}', [EducacionImporPadronNominalController::class, 'cargar_edupaprocesarimporpadronnominal'])->name('edu.imporpadronnominal.sp.procesar.imporpadronnominal');
+// Route::post('/Salud/PadronNominal/{importacion}', [ImporPadronNominalController::class, 'ejecutarProceso3'])->name('imporpadronnominal.procesar.3');
 // Route::get('/ImporPN/Exportar', [ImporPadronNominalController::class, 'exportar'])->name('ImporPadronNominal.exportar');
 // Route::get('/ImporPN/Exportar/PadronWEB', [ImporPadronNominalController::class, 'download'])->name('ImporPadronNominal.download');
 
