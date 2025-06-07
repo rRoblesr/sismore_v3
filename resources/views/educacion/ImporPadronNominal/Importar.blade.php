@@ -334,9 +334,10 @@
                     headers: {
                         'X-CSRF-TOKEN': $('input[name=_token]').val()
                     },
-                    url: "{{ route('edu.imporpadronnominal.listarimportados','importacion_id') }}".replace('importacion_id',id),
+                    url: "{{ route('edu.imporpadronnominal.listarimportados', 'importacion_id') }}".replace(
+                        'importacion_id', id),
                     type: "POST",
-                    
+
                 },
                 columns: [{
                         data: 'padron',
@@ -503,12 +504,12 @@
 
             // Llamar AJAX para ejecutar proceso en el backend
             $.ajax({
-                url: "{{-- route('edu.imporpadronnominal.procesar.3', ['importacion' => ':importacion']) --}}"
+                url: "{{ route('edu.imporpadronnominal.sp.procesar.imporpadronnominal', ['importacion' => ':importacion']) }}"
                     .replace(':importacion', importacion),
                 type: "POST",
                 data: {
                     _token: $('meta[name="csrf-token"]').attr('content')
-                }, // CSRF Token
+                }, 
                 beforeSend: function() {
                     iniciarBarraProgreso();
                 },

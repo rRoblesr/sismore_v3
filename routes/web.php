@@ -220,11 +220,11 @@ Route::get('/ImporPadronWeb/Exportar', [ImporPadronWebController::class, 'export
 Route::get('/ImporPadronWeb/Exportar/PadronWEB', [ImporPadronWebController::class, 'download'])->name('imporpadronweb.download');
 
 
-Route::get('/educación/Importar/PN', [EducacionImporPadronNominalController::class, 'importar'])->name('edu.imporpadronnominal.importar');
-Route::post('/ImporPN/Importar', [EducacionImporPadronNominalController::class, 'guardar'])->name('edu.imporpadronnominal.guardar');
-Route::post('/ImporPN/LI/{importacion_id}', [EducacionImporPadronNominalController::class, 'ListaImportada'])->name('edu.imporpadronnominal.listarimportados');
-Route::get('/ImporPN/Listar/ImportarDT', [EducacionImporPadronNominalController::class, 'ListarDTImportFuenteTodos'])->name('edu.imporpadronnominal.listar.importados');
-Route::get('/ImporPN/Eliminar/{id}', [EducacionImporPadronNominalController::class, 'eliminar'])->name('edu.imporpadronnominal.eliminar');
+Route::get('/educación/Importar/PadronNominal', [EducacionImporPadronNominalController::class, 'importar'])->name('edu.imporpadronnominal.importar');
+Route::post('/edu/imp/pn/Importar', [EducacionImporPadronNominalController::class, 'guardar'])->name('edu.imporpadronnominal.guardar');
+Route::post('/edu/imp/pn/LI/{importacion_id}', [EducacionImporPadronNominalController::class, 'ListaImportada'])->name('edu.imporpadronnominal.listarimportados');
+Route::get('/edu/imp/pn/Listar/ImportarDT', [EducacionImporPadronNominalController::class, 'ListarDTImportFuenteTodos'])->name('edu.imporpadronnominal.listar.importados');
+Route::get('/edu/imp/pn/Eliminar/{id}', [EducacionImporPadronNominalController::class, 'eliminar'])->name('edu.imporpadronnominal.eliminar');
 Route::post('/edu/imp/pn/sp/procesar/{importacion}', [EducacionImporPadronNominalController::class, 'cargar_edupaprocesarimporpadronnominal'])->name('edu.imporpadronnominal.sp.procesar.imporpadronnominal');
 // Route::post('/Salud/PadronNominal/{importacion}', [ImporPadronNominalController::class, 'ejecutarProceso3'])->name('imporpadronnominal.procesar.3');
 // Route::get('/ImporPN/Exportar', [ImporPadronNominalController::class, 'exportar'])->name('ImporPadronNominal.exportar');

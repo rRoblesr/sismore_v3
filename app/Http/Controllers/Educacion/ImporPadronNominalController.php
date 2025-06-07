@@ -147,7 +147,7 @@ class ImporPadronNominalController extends Controller
         }
 
         try {
-            DB::select('call edu_pa_procesarImporPadronNominal(?,?)', [$importacion->id, '2025-03-31']);
+            DB::select('call edu_pa_procesarImporPadronNominal(?)', [$importacion->id]);
         } catch (Exception $e) {
             $importacion->estado = 'PE';
             $importacion->save();
@@ -202,11 +202,23 @@ class ImporPadronNominalController extends Controller
 
             $ent = Entidad::find($value->entidad);
 
+            $btn = '';
             if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11)
-                $boton = '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" id="eliminar' . $value->id . '"><i class="fa fa-trash"></i> </button>';
-            else
-                $boton = '';
-            $boton2 = '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> </button>';
+                $btn .= '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" id="eliminar' . $value->id . '"><i class="fa fa-trash"></i> </button>';
+            $btn .= '&nbsp;';
+            $btn .= '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> </button>';
+            if (auth()->user()->id == 49) {
+                $btn .= ' <div class="btn-group">
+                                <button type="button" class="btn btn-secondary dropdown-toggle waves-effect waves-light btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-procedures"></i>
+                                        <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <!-- <li><a href="#" class="dropdown-item">Procesar Completar Columnas</a></li> -->
+                                    <li><a href="javascript:void(0)" onclick="abrirModalProceso(' . $value->id . ')" class="dropdown-item">Procesar Cubo FED</a></li>
+                                </ul>
+                            </div>';
+            }
             $data[] = array(
                 $key + 1,
                 date("d/m/Y", strtotime($value->fechaActualizacion)),
@@ -216,7 +228,7 @@ class ImporPadronNominalController extends Controller
                 date("d/m/Y", strtotime($value->created_at)),
                 $registros,
                 $value->estado == "PR" ? "PROCESADO" : ($value->estado == "PE" ? "PENDIENTE" : "ELIMINADO"),
-                $boton . '&nbsp;' . $boton2,
+                $btn
             );
         }
         $result = array(
@@ -286,7 +298,7 @@ class ImporPadronNominalController extends Controller
         ini_set('memory_limit', '-1');
         set_time_limit(0);
         try {
-            DB::select('call edu_pa_procesarImporPadronNominal(?,?)', [$importacion_id, '2025-03-31']);
+            DB::select('call edu_pa_procesarImporPadronNominal(?)', [$importacion_id]);
             return response()->json(['status' => 'success', 'message' => 'Proceso completado correctamente']);
         } catch (Exception $e) {
             return response()->json(['status' => 'error', 'message' => 'Error en la ejecución del proceso', 'error' => $e->getMessage()], 500);
