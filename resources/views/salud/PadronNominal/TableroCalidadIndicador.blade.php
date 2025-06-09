@@ -31,7 +31,7 @@
                                 <select id="anio" name="anio" class="form-control form-control-sm"
                                     onchange="cargarMes();">
                                     @foreach ($anios as $item)
-                                        <option value="{{ $item->anio }}">{{ $item->anio }}</option>
+                                        <option value="{{ $item->anio }}" {{ $item->anio==$aniomax?'selected':'' }}>{{ $item->anio }}</option>
                                     @endforeach
                                 </select>
                             </div>

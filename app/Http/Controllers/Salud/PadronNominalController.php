@@ -1962,7 +1962,7 @@ class PadronNominalController extends Controller
         $programa = [0 => 'NINGUNO', 1 => 'PIN', 2 => 'PVL', 4 => 'JUNTOS', 5 => 'QALIWARMA', 7 => 'CUNA+ SCD', 8 => 'CUNA+ SAF'];
         $data = CalidadCriterio::where('importacion_id', $importacion)->where('num_doc', $documento)->first();
         // dd($importacion, $documento);
-        $data->centro_poblado_nombre = !empty($data->centro_poblado_nombre) ? explode(', ', $data->centro_poblado_nombre)[0] : null;
+        // $data->centro_poblado_nombre = !empty($data->centro_poblado_nombre) ? explode(', ', $data->centro_poblado_nombre)[0] : null;
         $data->seguro = $seguro[$data->seguro_id] ?? 'NINGUNO';
         $programaaux = null;
         if (!empty($data->programa_social)) {
@@ -2135,9 +2135,10 @@ class PadronNominalController extends Controller
         $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronNominalController::$FUENTE);
         $mes = Mes::find($imp->mes);
         $anios = ImportacionRepositorio::anios_porfuente_select(ImporPadronNominalController::$FUENTE);
+        $aniomax=$anios->max('anio');
         // $provincias = UbigeoRepositorio::provincia_select('25');
         $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $mes->mes . ' del ' . $imp->anio;
-        return view('salud.PadronNominal.TableroCalidadIndicador', compact('actualizado', 'imp', 'anios'));
+        return view('salud.PadronNominal.TableroCalidadIndicador', compact('actualizado', 'imp', 'anios','aniomax'));
 
         // $fuente = ImporPadronNominalController::$FUENTE;
         // $importacion = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio, $mes);

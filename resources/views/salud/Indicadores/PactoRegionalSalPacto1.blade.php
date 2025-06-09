@@ -357,8 +357,8 @@
         <div
             class="card-header border-success-0 bg-transparent text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center px-2 py-2">
             <h6 class="card-title mb-2 mb-md-0 text-center text-md-left text-wrap">
-                Evaluación de cumplimiento de los registros de niños y niñas
-                menores de 6 años del padrón nominal
+                Evaluación de cumplimiento de los 90% de establecimientos de salud con niños y niñas menores de 6 años del
+                padrón nominal, según distrito
             </h6>
             <div class="text-center text-md-right">
                 <button type="button" class="btn btn-success btn-xs" onclick="descargar0101()">
@@ -433,157 +433,6 @@
             </div>
         </div>
     </div>
-
-    {{-- <div class="card border border-plomo-0">
-        <div
-            class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center p-2 ">
-            <h6 class="mb-2 mb-md-0 text-center text-md-left text-wrap text-white">
-                <i class="fas fa-chart-bar d-none"></i> Evaluación de cumplimiento de los registros de niños y niñas
-                menores de 6 años del padrón nominal
-            </h6>
-            <div class="text-center text-md-right">
-                <button type="button" class="btn btn-success btn-xs" onclick="descargar1()">
-                    <i class="fa fa-file-excel"></i> Descargar</button>
-            </div>
-        </div>
-        <div class="card-body p-2">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="table-responsive">
-                        <table id="tabla2" class="table table-sm table-striped table-bordered font-11 m-0">
-                            <thead>
-                                <tr class="bg-success-0 text-white text-center">
-                                    <th>N°</th>
-                                    <th>Codigo</th>
-                                    <th>Establecimiento de Salud</th>
-                                    <th>Red</th>
-                                    <th>Microrred</th>
-                                    <th>Provincia</th>
-                                    <th>Distrito</th>
-                                    <th>Denominador</th>
-                                    <th>Numerador</th>
-                                    <th>Indicador</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
-    {{-- <div class="row">
-        <div class="col-lg-12">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent p-0">
-                    <div class="card-widgets">
-                        <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
-                                class="fa fa-file-excel"></i> Descargar</button>
-                    </div>
-                    <h3 class="text-black font-14 mb-0">Evaluación de cumplimiento de los registros de niños y niñas
-                        menores de 6 años del padrón nominal
-                    </h3>
-                </div>
-                <div class="card-body">
-                    
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
-    {{-- <div class="row d-none">
-        <div class="col-lg-12">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent p-0">
-                    <div class="card-widgets">
-                        <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
-                                class="fa fa-file-excel"></i> Descargar</button>
-                    </div>
-                    <h3 class="text-black font-14 mb-0">Evaluación de cumplimiento de los registros de niños y niñas
-                        menores de 6 años del padrón nominal
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="table-responsive">
-                                <table id="padronTable" class="table table-sm table-striped table-bordered font-11">
-                                    <thead>
-                                        <tr class="table-success-0 text-white">
-                                            <th class="text-center">Nº</th>
-                                            <th class="text-center">Tipo Doc.</th>
-                                            <th class="text-center">Documento</th>
-                                            <th class="text-center">Nombre</th>
-                                            <th class="text-center">Fecha Nac.</th>
-                                            <th class="text-center">Distrito</th>
-                                            <th class="text-center">Seguro</th>
-                                            <th class="text-center">Cód. EESS</th>
-                                            <th class="text-center">EESS de Atención</th>
-                                            <th class="text-center">Doc. Madre</th>
-                                            <th class="text-center">Nombre Madre</th>
-                                            <th class="text-center">Estado</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
-    {{-- <div class="row">
-        <div class="col-lg-12">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent p-0">
-                    <div class="card-widgets">
-                        <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
-                                class="fa fa-file-excel"></i> Descargar</button>
-                    </div>
-                    <h3 class="text-black font-14 mb-0">Evaluación de cumplimiento de los registros de niños y niñas
-                        menores de 6 años del padrón nominal
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="table-responsive">
-                                <table id="table3" class="table table-sm table-striped table-bordered font-11">
-                                    <thead>
-                                        <tr class="table-success-0 text-white">
-                                            <th class="text-center">Nº</th>
-                                            <th class="text-center">Tipo Doc.</th>
-                                            <th class="text-center">Documento</th>
-                                            <th class="text-center">Nombre del Menor</th>
-                                            <th class="text-center">Fecha Nac.</th>
-                                            <th class="text-left vertical">Nro Doc.</th>
-                                            <th class="text-left vertical">Nombres</th>
-                                            <th class="text-left vertical">Dirección</th>
-                                            <th class="text-left vertical">CCPP</th>
-                                            <th class="text-left vertical">Seguro</th>
-                                            <th class="text-left vertical">EESS</th>
-                                            <th class="text-left vertical">Doc. Madre</th>
-                                            <th class="text-left vertical">Nombre Madre</th>
-                                            <th class="text-left vertical">Grado Madre</th>
-                                            <th class="text-left vertical">Lengua Madre</th>
-                                            <th class="text-center">Estado</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
 
     <!--  Modal content for the above example -->
     <div class="modal fade" id="modal-nino" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
@@ -837,6 +686,44 @@
             </div>
         </div>
     </div>
+
+     <!-- Modal Detalle Documento -->
+    <div class="modal fade" id="modalDocumento" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detalle del Registro</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalDocumentoBody">
+                    <div class="text-center">
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only">Cargando...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal CUI Atención -->
+    <div class="modal fade" id="modalCui" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Información del Establecimiento</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalCuiBody">
+                    <!-- Contenido dinámico -->
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('js')
@@ -910,7 +797,7 @@
                             '', 'CALLERIA');
                     } else if (div == "anal3") {
                         anal3 = gColumn(div, data.info, '',
-                            'Población de niños y niñas menores de 6 años, según sexo', 'Etapa Vida')
+                            'Población de niños y niñas menores de 6 años, según edad', 'Etapa Vida')
                     } else if (div == "tabla1") {
                         $('#vtabla1').html(data.excel);
                         // $('#tabla1').DataTable({
@@ -981,53 +868,184 @@
         }
 
         function tabla3(div) {
-            tablex = $('#tabla3').DataTable({
+            var tablax = $('#tabla3').DataTable({
+                processing: true,
+                serverSide: true,
                 responsive: true,
-                autoWidth: false,
-                ordered: false,
-                language: table_language,
-                destroy: true,
                 ajax: {
-                    "url": "{{ route('salud.indicador.pactoregional.detalle.reports') }}",
-                    "type": "GET",
-                    //"dataType": 'JSON',
-                    data: {
-                        'div': div,
-                        "anio": $('#anio').val(),
-                        "mes": $('#mes').val(),
-                        "provincia": $('#provincia').val(),
-                        "distrito": $('#distrito').val(),
-                        "fuente": {{ $fuente }},
-                        "indicador": '{{ $ind->id }}',
-                        "codigo": '{{ $ind->codigo }}',
-                    },
+                    url: "{{ route('salud.indicador.pactoregional.detalle.reports') }}",
+                    data: function(d) {
+                        d.div = div;
+                        d.anio = $('#anio').val();
+                        d.mes = $('#mes').val();
+                        d.provincia = $('#provincia').val();
+                        d.distrito = $('#distrito').val();
+                        d.fuente = {{ $fuente }};
+                        d.indicador = '{{ $ind->id }}';
+                        d.codigo = '{{ $ind->codigo }}';
+                    }
                 },
+                columns: [
+                    { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+                    { data: 'tipo_doc', name: 'tipo_doc' },
+                    { data: 'documento_link', name: 'num_doc', orderable: true },
+                    { data: 'departamento', name: 'departamento' },
+                    { data: 'provincia', name: 'provincia' },
+                    { data: 'distrito', name: 'distrito' },
+                    { data: 'centro_poblado', name: 'centro_poblado' },
+                    { data: 'cui_atencion_formatted', name: 'cui_atencion', orderable: true },
+                    { data: 'nombre_establecimiento', name: 'nombre_establecimiento' },
+                    { data: 'estado_badge', name: 'num', orderable: true, searchable: false }
+                ],
+                language: {
+                    url: table_language //'//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                },
+                pageLength: 10,
+                lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+                order: [[0, 'asc']],
                 columnDefs: [{
-                    targets: 2,
-                    render: function(data, type, row) {
-                        return '<a href="javascript:void(0)" onclick="abrirmodalpadron(`' + data +
-                        '`)">' + data +
-                            '</a>';
-                    }
-                }, {
-                    targets: 7,
-                    render: function(data, type, row) {
-                        return '<a href="javascript:void(0)" onclick="abrirmodaleess(`' + data +
-                        '`)">' + data +
-                            '</a>';
-                    }
-                }, {
-                    targets: [0, 1, 7, 9],
+                    targets: [0, 1, 2, 7, 9],
                     className: 'text-center'
-                }, {
-                    targets: 9,
-                    render: function(data, type, row) {
-                        return data == 1 ?
-                            '<span class="badge badge-pill badge-success" style="font-size:100%;"> Cumple </span>' :
-                            '<span class="badge badge-pill badge-danger" style="font-size:100%;"> No Cumple </span>';
-                    }
                 }],
+                drawCallback: function() {
+                    // Eventos para los enlaces de documento
+                    $('.btn-documento').off('click').on('click', function(e) {
+                        e.preventDefault();
+                        // var id = $(this).data('id');
+                        // mostrarDetalleDocumento(id);
+                        var dni = $(this).data('dni');
+                        abrirmodalpadron(dni);
+                    });
+
+                    // Eventos para los enlaces de CUI
+                    $('.btn-cui').off('click').on('click', function(e) {
+                        e.preventDefault();
+                        var cui = $(this).data('cui');
+                        // var establecimiento = $(this).data('establecimiento');
+                        // mostrarDetalleCui(cui, establecimiento);
+                        abrirmodaleess(cui);                        
+                    });
+                }
             });
+
+
+
+            // var tablex = $('#tabla3').DataTable({
+            //     processing: true,
+            //     serverSide: true,
+            //     ajax: {
+            //         url: "{{ route('salud.indicador.pactoregional.detalle.reports') }}",
+            //         data: function(d) {
+            //             d.div = div;
+            //             d.anio = $('#anio').val();
+            //             d.mes = $('#mes').val();
+            //             d.provincia = $('#provincia').val();
+            //             d.distrito = $('#distrito').val();
+            //             d.fuente = {{ $fuente }};
+            //             d.indicador = '{{ $ind->id }}';
+            //             d.codigo = '{{ $ind->codigo }}';
+            //         }
+            //     },
+            //     columns: [
+            //         { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+            //         { data: 'tipo_doc', name: 'tipo_doc' },
+            //         { data: 'documento', name: 'num_doc', orderable: false, searchable: false },
+            //         { data: 'departamento', name: 'departamento' },
+            //         { data: 'provincia', name: 'provincia' },
+            //         { data: 'distrito', name: 'distrito' },
+            //         { data: 'centro_poblado', name: 'centro_poblado' },
+            //         { data: 'cui_atencion', name: 'cui_atencion', orderable: false, searchable: false },
+            //         { data: 'nombre_establecimiento', name: 'nombre_establecimiento' },
+            //         { data: 'estado', name: 'estado', orderable: false, searchable: false }
+            //     ],
+            //     responsive: true,
+            //     pageLength: 10,
+            //     language: {
+            //         url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
+            //     }
+            // });
+
+
+        //     tablex =  $('#tabla3').DataTable({
+        //     processing: true,
+        //     serverSide: true,
+        //     ajax: {
+        //         url: "{{ route('salud.indicador.pactoregional.detalle.reports') }}",
+        //         data: function (d) {
+        //             d.div = div;
+        //             d.anio = $('#anio').val();
+        //             d.mes = $('#mes').val();
+        //             d.provincia = $('#provincia').val();
+        //             d.distrito = $('#distrito').val();
+        //             d.fuente = {{ $fuente }};
+        //             d.indicador = '{{ $ind->id }}';
+        //             d.codigo = '{{ $ind->codigo }}';
+        //         }
+        //     },
+        //     columns: [
+        //         // { data: 'DT_RowIndex', name: 'DT_RowIndex', title: 'N°'},
+        //         { data: 'id', name: 'id' },
+        //         { data: 'tipo_doc', name: 'tipo_doc' },
+        //         { data: 'documento', name: 'num_doc'},
+        //         { data: 'departamento', name: 'departamento' },
+        //         { data: 'provincia', name: 'provincia' },
+        //         { data: 'distrito', name: 'distrito' },
+        //         { data: 'centro_poblado', name: 'centro_poblado' },
+        //         { data: 'cui_atencion', name: 'cui_atencion'},
+        //         { data: 'nombre_establecimiento', name: 'nombre_establecimiento' },
+        //         { data: 'estado', name: 'estado'},
+        //     ],
+        //     responsive: true,
+        //     language: table_language //{ url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json" }
+        // });
+
+            // tablex = $('#tabla3').DataTable({
+            //     responsive: true,
+            //     autoWidth: false,
+            //     ordered: false,
+            //     language: table_language,
+            //     destroy: true,
+            //     ajax: {
+            //         "url": "{{ route('salud.indicador.pactoregional.detalle.reports') }}",
+            //         "type": "GET",
+            //         //"dataType": 'JSON',
+            //         data: {
+            //             'div': div,
+            //             "anio": $('#anio').val(),
+            //             "mes": $('#mes').val(),
+            //             "provincia": $('#provincia').val(),
+            //             "distrito": $('#distrito').val(),
+            //             "fuente": {{ $fuente }},
+            //             "indicador": '{{ $ind->id }}',
+            //             "codigo": '{{ $ind->codigo }}',
+            //         },
+            //     },
+            //     columnDefs: [{
+            //         targets: 2,
+            //         render: function(data, type, row) {
+            //             return '<a href="javascript:void(0)" onclick="abrirmodalpadron(`' + data +
+            //             '`)">' + data +
+            //                 '</a>';
+            //         }
+            //     }, {
+            //         targets: 7,
+            //         render: function(data, type, row) {
+            //             return '<a href="javascript:void(0)" onclick="abrirmodaleess(`' + data +
+            //             '`)">' + data +
+            //                 '</a>';
+            //         }
+            //     }, {
+            //         targets: [0, 1, 7, 9],
+            //         className: 'text-center'
+            //     }, {
+            //         targets: 9,
+            //         render: function(data, type, row) {
+            //             return data == 1 ?
+            //                 '<span class="badge badge-pill badge-success" style="font-size:100%;"> Cumple </span>' :
+            //                 '<span class="badge badge-pill badge-danger" style="font-size:100%;"> No Cumple </span>';
+            //         }
+            //     }],
+            // });
         }
 
         function cargarMes() {
@@ -1074,7 +1092,7 @@
         }
 
         function abrirmodalpadron(padron) {
-
+console.log(padron);
             $.ajax({
                 url: "{{ route('salud.padronnominal.tablerocalidad.criterio.find3', ['fuente' => ':fuente', 'anio' => ':anio', 'mes' => ':mes', 'documento' => ':documento']) }}"
                     .replace(':fuente', {{ $fuente }})
@@ -1200,6 +1218,62 @@
                 }]
             });
         }
+
+        
+            // Mostrar detalle del documento
+            function mostrarDetalleDocumento(id) {
+                console.log(id);
+                $('#modalDocumento').modal('show');
+                
+                $.ajax({
+                    url: '{{ route("padron.getDetalle") }}',
+                    method: 'GET',
+                    data: { id: id },
+                    success: function(data) {
+                        var html = '<div class="row">';
+                        
+                        // Campos principales
+                        html += '<div class="col-md-6"><strong>Tipo Documento:</strong> ' + (data.tipo_doc || 'N/A') + '</div>';
+                        html += '<div class="col-md-6"><strong>Número Documento:</strong> ' + (data.num_doc || 'N/A') + '</div>';
+                        html += '<div class="col-md-12"><strong>Nombre Completo:</strong> ' + (data.nombre_completo || 'N/A') + '</div>';
+                        html += '<div class="col-md-6"><strong>Fecha Nacimiento:</strong> ' + (data.fecha_nacimiento || 'N/A') + '</div>';
+                        html += '<div class="col-md-6"><strong>Edad:</strong> ' + (data.edad || 'N/A') + ' ' + (data.tipo_edad || '') + '</div>';
+                        html += '<div class="col-md-12"><strong>Dirección:</strong> ' + (data.direccion || 'N/A') + '</div>';
+                        html += '<div class="col-md-4"><strong>Departamento:</strong> ' + (data.departamento || 'N/A') + '</div>';
+                        html += '<div class="col-md-4"><strong>Provincia:</strong> ' + (data.provincia || 'N/A') + '</div>';
+                        html += '<div class="col-md-4"><strong>Distrito:</strong> ' + (data.distrito || 'N/A') + '</div>';
+                        html += '<div class="col-md-12"><strong>Centro Poblado:</strong> ' + (data.centro_poblado || 'N/A') + '</div>';
+                        html += '<div class="col-md-6"><strong>Seguro:</strong> ' + (data.seguro || 'N/A') + '</div>';
+                        html += '<div class="col-md-6"><strong>CUI Atención:</strong> ' + String(data.cui_atencion || '').padStart(8, '0') + '</div>';
+                        html += '<div class="col-md-12"><strong>Establecimiento:</strong> ' + (data.nombre_establecimiento || 'N/A') + '</div>';
+                        html += '<div class="col-md-12"><strong>Madre:</strong> ' + (data.nombre_completo_madre || 'N/A') + ' (' + (data.num_doc_madre || 'N/A') + ')</div>';
+                        html += '<div class="col-md-6"><strong>Lengua Madre:</strong> ' + (data.lengua_madre || 'N/A') + '</div>';
+                        html += '<div class="col-md-6"><strong>Estado:</strong> ' + (data.num == 1 ? '<span class="badge badge-success">Cumple</span>' : '<span class="badge badge-danger">No Cumple</span>') + '</div>';
+                        
+                        html += '</div>';
+                        
+                        $('#modalDocumentoBody').html(html);
+                    },
+                    error: function() {
+                        $('#modalDocumentoBody').html('<div class="alert alert-danger">Error al cargar los datos</div>');
+                    }
+                });
+            }
+
+            // Mostrar detalle del CUI
+            function mostrarDetalleCui(cui, establecimiento) {
+                var cuiFormateado = String(cui).padStart(8, '0');
+                var html = '<div class="text-center">';
+                html += '<h5>CUI de Atención</h5>';
+                html += '<h3 class="text-primary">' + cuiFormateado + '</h3>';
+                html += '<hr>';
+                html += '<h6>Establecimiento</h6>';
+                html += '<p>' + establecimiento + '</p>';
+                html += '</div>';
+                
+                $('#modalCuiBody').html(html);
+                $('#modalCui').modal('show');
+            }
 
         function descargar0101() {
             window.open(

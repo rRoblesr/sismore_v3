@@ -45,6 +45,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
+use Yajra\DataTables\Facades\DataTables as FacadesDataTables;
 
 class IndicadoresController extends Controller
 {
@@ -573,6 +574,7 @@ class IndicadoresController extends Controller
                 $excel = view('salud.Indicadores.PactoRegionalSalPacto1tabla1', compact('base', 'ndis'))->render();
                 return response()->json(compact('excel'));
 
+                //===========================================
             case 'tabla2':
                 $draw = intval($rq->draw);
                 $start = intval($rq->start);
@@ -610,7 +612,7 @@ class IndicadoresController extends Controller
                 );
                 return response()->json($result);
                 break;
-
+            //===============================
             case 'tabla0201':
                 $draw = intval($rq->draw);
                 $start = intval($rq->start);
@@ -642,6 +644,147 @@ class IndicadoresController extends Controller
                 return response()->json($result);
 
             case 'tabla3':
+                $query = DB::table('sal_cubo_pacto1_padron_nominal')->where('anio', $rq->anio)->where('mes', $rq->mes);
+
+                // Aplicar filtros iniciales
+                // if ($rq->filled('anio')) {
+                //     $query->where('anio', $rq->anio);
+                // }
+
+                // if ($rq->filled('mes')) {
+                //     $query->where('mes', $rq->mes);
+                // }
+
+                if ($rq->provincia > 0) {
+                    $query->where('provincia_id', $rq->provincia);
+                }
+
+                if ($rq->distrito > 0) {
+                    $query->where('distrito_id', $rq->distrito);
+                }
+
+                return DataTables::of($query)
+                    ->addIndexColumn()
+                    ->addColumn('documento_link', function ($row) {
+                        return '<a href="#" class="btn-documento" data-id="' . $row->id . '" data-dni="' . $row->num_doc . '">' . $row->num_doc . '</a>';
+                    })
+                    ->addColumn('cui_atencion_formatted', function ($row) {
+                        $cui = $row->cui_atencion > 0 ? str_pad($row->cui_atencion, 8, '0', STR_PAD_LEFT) : '';
+                        return '<a href="#" class="btn-cui" data-cui="' . $row->cui_atencion . '" data-establecimiento="' . htmlspecialchars($row->nombre_establecimiento) . '">' . $cui . '</a>';
+                    })
+                    ->addColumn('estado_badge', function ($row) {
+                        if ($row->num == 1) {
+                            return '<span class="badge badge-pill badge-success" style="font-size:100%;">Cumple</span>';
+                        } else {
+                            return '<span class="badge badge-pill badge-danger" style="font-size:100%;">No Cumple</span>';
+                        }
+                    })
+                    ->rawColumns(['documento_link', 'cui_atencion_formatted', 'estado_badge'])
+                    ->make(true);
+
+                // if ($rq->ajax()) {
+                //     $query = CuboPacto1PadronNominal::query()
+                //         ->select([
+                //             'id',
+                //             'tipo_doc',
+                //             'num_doc',
+                //             'departamento',
+                //             'provincia',
+                //             'distrito',
+                //             'centro_poblado',
+                //             'cui_atencion',
+                //             'nombre_establecimiento',
+                //             'num',
+                //             'den',
+                //             'nombre_completo',
+                //             'fecha_nacimiento',
+                //             'edad',
+                //             'direccion',
+                //             'seguro',
+                //             'num_doc_madre',
+                //             'nombre_completo_madre'
+                //         ])
+                //         ->where('anio', $rq->anio)
+                //         ->where('mes', $rq->mes);
+
+                //     if (!empty($rq->provincia)) {
+                //         $query->where('provincia_id', $rq->provincia);
+                //     }
+
+                //     if (!empty($rq->distrito)) {
+                //         $query->where('distrito_id', $rq->distrito);
+                //     }
+
+                //     return FacadesDataTables::eloquent($query)
+                //         ->addColumn('estado', function ($row) {
+                //             $estado = $row->num == 1 ? 'Cumple' : 'No Cumple';
+                //             $badge = $row->num == 1 ? 'success' : 'danger';
+                //             return "<span class='badge badge-pill badge-{$badge}'>{$estado}</span>";
+                //         })
+                //         ->addColumn('documento', function ($row) {
+                //             return "<a href='#' class='text-primary documento-link' data-id='{$row->id}' data-toggle='modal' data-target='#registroModal'>{$row->num_doc}</a>";
+                //         })
+                //         ->addColumn('cui_atencion', function ($row) {
+                //             $cui = $row->cui_atencion > 0 ? str_pad($row->cui_atencion, 8, '0', STR_PAD_LEFT) : '';
+                //             return "<a href='#' class='text-info cui-link' data-cui='{$cui}' data-nombre='{$row->nombre_establecimiento}' data-toggle='modal' data-target='#cuiModal'>{$cui}</a>";
+                //         })
+                //         ->addColumn('DT_RowIndex', function ($row) use ($rq) {
+                //             static $contador = 0;
+                //             $contador++;
+                //             return $contador;
+                //         })
+                //         ->rawColumns(['estado', 'documento', 'cui_atencion'])
+                //         ->make(true);
+                // }
+
+                // if ($rq->ajax()) {
+                //     $data = CuboPacto1PadronNominal::select([
+                //         'id',
+                //         'tipo_doc',
+                //         'num_doc',
+                //         'departamento',
+                //         'provincia',
+                //         'distrito',
+                //         'centro_poblado',
+                //         'cui_atencion',
+                //         'nombre_establecimiento',
+                //         'num',
+                //         'den'
+                //     ])->where('anio', $rq->anio)->where('mes', $rq->mes);
+
+                //     if (!empty($rq->provincia)) {
+                //         $data->where('provincia_id', $rq->provincia);
+                //     }
+                //     if (!empty($rq->distrito_id)) {
+                //         $data->where('distrito_id', $rq->distrito);
+                //     }
+
+                //     $contador = $rq->start;
+
+                //     return FacadesDataTables::eloquent($data)
+                //         ->addColumn('DT_RowIndex', function ($row) use (&$contador) {
+                //             return ++$contador;
+                //         })
+                //         ->addColumn('id', function ($row) use (&$contador) {
+                //             return $contador; 
+                //         })
+                //         ->addColumn('estado', function ($row) {
+                //             $estado = $row->num == 1 ? 'Cumple' : 'No Cumple';
+                //             $badge = $row->num == 1 ? 'success' : 'danger';
+                //             return "<span class='badge badge-pill badge-{$badge}' style=\"font-size:100%;\">{$estado}</span>";
+                //         })
+                //         ->addColumn('documento', function ($row) {
+                //             return "<a href='#' class='text-primary documento-link' data-doc='{$row->num_doc}' data-toggle='modal' data-target='#documentoModal'>{$row->num_doc}</a>";
+                //         })
+                //         ->addColumn('cui_atencion', function ($row) {
+                //             $cui = $row->cui_atencion > 0 ? str_pad($row->cui_atencion, 8, '0', STR_PAD_LEFT) : '';
+                //             return "<a href='#' class='text-info cui-link' data-cui='{$row->cui_atencion}' data-toggle='modal' data-target='#cuiModal'>{$cui}</a>";
+                //         })
+                //         ->rawColumns(['estado', 'documento', 'cui_atencion'])
+                //         ->make(true);
+                // }
+
+            case 'tabla3__':
                 $draw = intval($rq->draw);
                 $start = intval($rq->start);
                 $length = intval($rq->length);
@@ -678,6 +821,21 @@ class IndicadoresController extends Controller
             default:
                 return [];
         }
+    }
+
+     public function getDetalle(Request $request)
+    {
+        $id = $request->get('id');
+        
+        $registro = DB::table('sal_cubo_pacto1_padron_nominal')
+            ->where('id', $id)
+            ->first();
+            
+        if (!$registro) {
+            return response()->json(['error' => 'Registro no encontrado'], 404);
+        }
+        
+        return response()->json($registro);
     }
 
     public function PactoRegionalSalPacto1Reports2(Request $rq)
