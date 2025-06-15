@@ -1298,9 +1298,15 @@ class ImporCensoDocenteRepositorio
                                     when 2023 then
                                                 case nroced
                                                     when  "1A" then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11
-                                                    when "3AP" then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14
+                                                    when "3AP" then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15
                                                     when "3AS" then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26
                                                 end
+                                    when 2024 then
+                                                case nroced
+                                                    when  "1A" then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11
+                                                    when "3AP" then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15
+                                                    when "3AS" then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26
+                                                end                                                
                                 end) as conteo')
                 )
                     ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
@@ -1342,7 +1348,6 @@ class ImporCensoDocenteRepositorio
                     DB::raw('sum(
                         case nroced
                             when "1A"  then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
-                            when "2A"  then IF(cuadro="C302" and tipdato in("01","06"),d01+d02,0)
                             when "3AP" then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                             when "3AS" then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
                             when "4AI" then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
@@ -1414,7 +1419,6 @@ class ImporCensoDocenteRepositorio
                         case year(par_importacion.fechaActualizacion)
                             when 2018 then case nroced
                                                 when "1A"  then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
-                                                when "2A"  then IF(cuadro="C302" and tipdato in("01","06"),d01+d02,0)
                                                 when "3AP" then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                 when "3AS" then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
                                                 when "4AI" then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
@@ -1430,7 +1434,6 @@ class ImporCensoDocenteRepositorio
                                             end
                             when 2019 then case nroced
                                                 when "1A"  then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
-                                                when "2A"  then IF(cuadro="C302" and tipdato in("01","06"),d01+d02,0)
                                                 when "3AP" then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                 when "3AS" then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
                                                 when "4AI" then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
@@ -1446,7 +1449,6 @@ class ImporCensoDocenteRepositorio
                                             end
                             when 2020 then case nroced
                                                 when "1A"  then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
-                                                when "2A"  then IF(cuadro="C302" and tipdato in("01","06"),d01+d02,0)
                                                 when "3AP" then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                 when "3AS" then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
                                                 when "4AI" then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
@@ -1462,7 +1464,6 @@ class ImporCensoDocenteRepositorio
                                             end
                             when 2021 then case nroced
                                                 when "1A"  then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
-                                                when "2A"  then IF(cuadro="C302" and tipdato in("01","06"),d01+d02,0)
                                                 when "3AP" then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                 when "3AS" then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
                                                 when "4AI" then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
@@ -1478,7 +1479,6 @@ class ImporCensoDocenteRepositorio
                                             end
                             when 2022 then case nroced
                                                 when "1A"  then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
-                                                when "2A"  then IF(cuadro="C302" and tipdato in("01","06"),d01+d02,0)
                                                 when "3AP" then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                 when "3AS" then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
                                                 when "4AI" then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
@@ -1494,7 +1494,21 @@ class ImporCensoDocenteRepositorio
                                             end
                             when 2023 then  case nroced
                                                 when "1A"  then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
-                                                when "2A"  then IF(cuadro="C302" and tipdato in("01","06"),d01+d02,0)
+                                                when "3AP" then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                when "3AS" then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                when "4AI" then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                when "4AA" then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                when "5A"  then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                when "6A"  then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                when "7A"  then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                when "8A"  then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06,0)
+                                                when "8AI" then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                when "8AP" then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                when "9A"  then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                else 0
+                                            end
+                            when 2024 then  case nroced
+                                                when "1A"  then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                 when "3AP" then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                 when "3AS" then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
                                                 when "4AI" then IF(cuadro="C303" and tipdato in("01","02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
@@ -1540,7 +1554,6 @@ class ImporCensoDocenteRepositorio
                         case year(par_importacion.fechaActualizacion)
                             when 2018 then case nroced
                                                 when "1A"  then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
-                                                when "2A"  then IF(cuadro="C302" and tipdato in("01","06"),d01,0)
                                                 when "3AP" then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                 when "3AS" then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
                                                 when "4AI" then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
@@ -1556,7 +1569,6 @@ class ImporCensoDocenteRepositorio
                                             end
                             when 2019 then case nroced
                                                 when "1A"  then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
-                                                when "2A"  then IF(cuadro="C302" and tipdato in("01","06"),d01,0)
                                                 when "3AP" then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                 when "3AS" then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
                                                 when "4AI" then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
@@ -1572,7 +1584,6 @@ class ImporCensoDocenteRepositorio
                                             end
                             when 2020 then case nroced
                                                 when "1A"  then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
-                                                when "2A"  then IF(cuadro="C302" and tipdato in("01","06"),d01,0)
                                                 when "3AP" then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                 when "3AS" then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
                                                 when "4AI" then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
@@ -1588,7 +1599,6 @@ class ImporCensoDocenteRepositorio
                                             end
                             when 2021 then case nroced
                                                 when "1A"  then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
-                                                when "2A"  then IF(cuadro="C302" and tipdato in("01","06"),d01,0)
                                                 when "3AP" then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                 when "3AS" then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
                                                 when "4AI" then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
@@ -1604,7 +1614,6 @@ class ImporCensoDocenteRepositorio
                                             end
                             when 2022 then case nroced
                                                 when "1A"  then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
-                                                when "2A"  then IF(cuadro="C302" and tipdato in("01","06"),d01,0)
                                                 when "3AP" then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                 when "3AS" then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
                                                 when "4AI" then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
@@ -1620,7 +1629,21 @@ class ImporCensoDocenteRepositorio
                                             end
                             when 2023 then  case nroced
                                                 when "1A"  then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
-                                                when "2A"  then IF(cuadro="C302" and tipdato in("01","06"),d01,0)
+                                                when "3AP" then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                when "3AS" then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                when "4AI" then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                when "4AA" then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                when "5A"  then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                when "6A"  then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                when "7A"  then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                when "8A"  then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06,0)
+                                                when "8AI" then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                when "8AP" then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                when "9A"  then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                else 0
+                                            end
+                            when 2024 then  case nroced
+                                                when "1A"  then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                 when "3AP" then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                 when "3AS" then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
                                                 when "4AI" then IF(cuadro="C303" and tipdato in("01"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
@@ -1641,7 +1664,6 @@ class ImporCensoDocenteRepositorio
                         case year(par_importacion.fechaActualizacion)
                             when 2018 then case nroced
                                                 when "1A"  then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
-                                                when "2A"  then IF(cuadro="C302" and tipdato in("01","06"),d02,0)
                                                 when "3AP" then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                 when "3AS" then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
                                                 when "4AI" then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
@@ -1657,7 +1679,6 @@ class ImporCensoDocenteRepositorio
                                             end
                             when 2019 then case nroced
                                                 when "1A"  then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
-                                                when "2A"  then IF(cuadro="C302" and tipdato in("01","06"),d02,0)
                                                 when "3AP" then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                 when "3AS" then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
                                                 when "4AI" then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
@@ -1673,7 +1694,6 @@ class ImporCensoDocenteRepositorio
                                             end
                             when 2020 then case nroced
                                                 when "1A"  then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
-                                                when "2A"  then IF(cuadro="C302" and tipdato in("01","06"),d02,0)
                                                 when "3AP" then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                 when "3AS" then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
                                                 when "4AI" then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
@@ -1689,7 +1709,6 @@ class ImporCensoDocenteRepositorio
                                             end
                             when 2021 then case nroced
                                                 when "1A"  then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
-                                                when "2A"  then IF(cuadro="C302" and tipdato in("01","06"),d02,0)
                                                 when "3AP" then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                 when "3AS" then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
                                                 when "4AI" then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
@@ -1705,7 +1724,6 @@ class ImporCensoDocenteRepositorio
                                             end
                             when 2022 then case nroced
                                                 when "1A"  then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
-                                                when "2A"  then IF(cuadro="C302" and tipdato in("01","06"),d02,0)
                                                 when "3AP" then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                 when "3AS" then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
                                                 when "4AI" then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
@@ -1721,7 +1739,21 @@ class ImporCensoDocenteRepositorio
                                             end
                             when 2023 then  case nroced
                                                 when "1A"  then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
-                                                when "2A"  then IF(cuadro="C302" and tipdato in("01","06"),d02,0)
+                                                when "3AP" then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                when "3AS" then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                when "4AI" then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                when "4AA" then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                when "5A"  then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                when "6A"  then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                when "7A"  then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                when "8A"  then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06,0)
+                                                when "8AI" then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                when "8AP" then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                when "9A"  then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                else 0
+                                            end
+                            when 2024 then  case nroced
+                                                when "1A"  then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                 when "3AP" then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                 when "3AS" then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
                                                 when "4AI" then IF(cuadro="C303" and tipdato in("02"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
@@ -1853,6 +1885,20 @@ class ImporCensoDocenteRepositorio
                                                 when "9A"  then IF(tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                 else 0
                                             end
+                            when 2024 then  case nroced
+                                                when "1A"  then IF(tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                when "3AP" then IF(tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                when "3AS" then IF(tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                when "4AI" then IF(tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                when "4AA" then IF(tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                when "5A"  then IF(tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                when "6A"  then IF(tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                when "7A"  then IF(tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                when "8AI" then IF(tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                when "8AP" then IF(tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                when "9A"  then IF(tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                else 0
+                                            end
                             else 0
                         end
                                 ) as dn'),
@@ -1929,6 +1975,20 @@ class ImporCensoDocenteRepositorio
                                                 else 0
                                             end
                             when 2023 then  case nroced
+                                                when "1A"  then IF(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                when "3AP" then IF(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                when "3AS" then IF(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                when "4AI" then IF(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                when "4AA" then IF(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                when "5A"  then IF(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                when "6A"  then IF(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                when "7A"  then IF(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                when "8AI" then IF(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                when "8AP" then IF(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                when "9A"  then IF(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                else 0
+                                            end
+                            when 2024 then  case nroced
                                                 when "1A"  then IF(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                 when "3AP" then IF(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                 when "3AS" then IF(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
@@ -2058,6 +2118,20 @@ class ImporCensoDocenteRepositorio
                                                 when "9A"  then IF(tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                 else 0
                                             end
+                            when 2024 then  case nroced
+                                                when "1A"  then IF(tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                when "3AP" then IF(tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                when "3AS" then IF(tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                when "4AI" then IF(tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                when "4AA" then IF(tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                when "5A"  then IF(tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                when "6A"  then IF(tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                when "7A"  then IF(tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                when "8AI" then IF(tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                when "8AP" then IF(tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                when "9A"  then IF(tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                else 0
+                                            end
                             else 0
                         end
                                 ) as dn'),
@@ -2134,6 +2208,20 @@ class ImporCensoDocenteRepositorio
                                                 else 0
                                             end
                             when 2023 then  case nroced
+                                                when "1A"  then IF(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                when "3AP" then IF(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                when "3AS" then IF(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                when "4AI" then IF(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                when "4AA" then IF(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                when "5A"  then IF(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                when "6A"  then IF(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                when "7A"  then IF(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                when "8AI" then IF(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                when "8AP" then IF(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                when "9A"  then IF(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                else 0
+                                            end
+                            when 2024 then  case nroced
                                                 when "1A"  then IF(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                 when "3AP" then IF(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                 when "3AS" then IF(tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
@@ -2266,6 +2354,20 @@ class ImporCensoDocenteRepositorio
                                                 when "9A"  then IF(ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                 else 0
                                             end
+                            when 2024 then  case nroced
+                                                when "1A"  then IF(ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                when "3AP" then IF(ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                when "3AS" then IF(ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                when "4AI" then IF(ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                when "4AA" then IF(ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                when "5A"  then IF(ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                when "6A"  then IF(ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                when "7A"  then IF(ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                when "8AI" then IF(ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                when "8AP" then IF(ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                when "9A"  then IF(ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                else 0
+                                            end
                             else 0
                         end
                                 ) as pub'),
@@ -2342,6 +2444,20 @@ class ImporCensoDocenteRepositorio
                                                 else 0
                                             end
                             when 2023 then  case nroced
+                                                when "1A"  then IF(ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                when "3AP" then IF(ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                when "3AS" then IF(ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                when "4AI" then IF(ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                when "4AA" then IF(ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                when "5A"  then IF(ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                when "6A"  then IF(ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                when "7A"  then IF(ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                when "8AI" then IF(ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                when "8AP" then IF(ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                when "9A"  then IF(ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                else 0
+                                            end
+                            when 2024 then  case nroced
                                                 when "1A"  then IF(ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                 when "3AP" then IF(ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                 when "3AS" then IF(ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
@@ -2471,6 +2587,20 @@ class ImporCensoDocenteRepositorio
                                                     when "9A"  then IF(ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
+                                when 2024 then  case nroced
+                                                    when "1A"  then IF(ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                    when "3AP" then IF(ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                    when "3AS" then IF(ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8AI" then IF(ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    else 0
+                                                end
                                 else 0
                             end
                                     ) as pub'),
@@ -2560,6 +2690,20 @@ class ImporCensoDocenteRepositorio
                                                     when "9A"  then IF(ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
+                                when 2024 then  case nroced
+                                                    when "1A"  then IF(ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                    when "3AP" then IF(ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                    when "3AS" then IF(ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8AI" then IF(ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    else 0
+                                                end
                                 else 0
                             end
                                     ) as pri'),
@@ -2624,6 +2768,12 @@ class ImporCensoDocenteRepositorio
                                                 else 0
                                             end
                             when 2023 then  case nroced
+                                                when "1A"  then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11
+                                                when "3AP" then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15
+                                                when "3AS" then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26
+                                                else 0
+                                            end
+                            when 2024 then  case nroced
                                                 when "1A"  then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11
                                                 when "3AP" then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15
                                                 when "3AS" then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26
@@ -2705,6 +2855,20 @@ class ImporCensoDocenteRepositorio
                                                 else 0
                                             end
                             when 2023 then  case nroced
+                                                when "1A"  then IF(tipdato="01" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                when "3AP" then IF(tipdato="01" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                when "3AS" then IF(tipdato="01" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                when "4AI" then IF(tipdato="01" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                when "4AA" then IF(tipdato="01" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                when "5A"  then IF(tipdato="01" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                when "6A"  then IF(tipdato="01" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                when "7A"  then IF(tipdato="01" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                when "8AI" then IF(tipdato="01" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                when "8AP" then IF(tipdato="01" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                when "9A"  then IF(tipdato="01" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                else 0
+                                            end
+                            when 2024 then  case nroced
                                                 when "1A"  then IF(tipdato="01" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                 when "3AP" then IF(tipdato="01" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                 when "3AS" then IF(tipdato="01" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
@@ -2807,6 +2971,20 @@ class ImporCensoDocenteRepositorio
                                                 when "9A"  then IF(tipdato="02" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                 else 0
                                             end
+                            when 2024 then  case nroced
+                                                when "1A"  then IF(tipdato="02" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                when "3AP" then IF(tipdato="02" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                when "3AS" then IF(tipdato="02" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                when "4AI" then IF(tipdato="02" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                when "4AA" then IF(tipdato="02" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                when "5A"  then IF(tipdato="02" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                when "6A"  then IF(tipdato="02" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                when "7A"  then IF(tipdato="02" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                when "8AI" then IF(tipdato="02" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                when "8AP" then IF(tipdato="02" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                when "9A"  then IF(tipdato="02" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                else 0
+                                            end
                             else 0
                         end
                                 ) as tpubc'),
@@ -2883,6 +3061,20 @@ class ImporCensoDocenteRepositorio
                                                             else 0
                                                         end
                                         when 2023 then  case nroced
+                                                            when "1A"  then IF(tipdato="01" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                            when "3AP" then IF(tipdato="01" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                            when "3AS" then IF(tipdato="01" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                            when "4AI" then IF(tipdato="01" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                            when "4AA" then IF(tipdato="01" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                            when "5A"  then IF(tipdato="01" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                            when "6A"  then IF(tipdato="01" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                            when "7A"  then IF(tipdato="01" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                            when "8AI" then IF(tipdato="01" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                            when "8AP" then IF(tipdato="01" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                            when "9A"  then IF(tipdato="01" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                            else 0
+                                                        end
+                                        when 2024 then  case nroced
                                                             when "1A"  then IF(tipdato="01" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                             when "3AP" then IF(tipdato="01" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                             when "3AS" then IF(tipdato="01" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
@@ -2985,6 +3177,20 @@ class ImporCensoDocenteRepositorio
                                                             when "9A"  then IF(tipdato="02" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                             else 0
                                                         end
+                                        when 2024 then  case nroced
+                                                            when "1A"  then IF(tipdato="02" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                            when "3AP" then IF(tipdato="02" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                            when "3AS" then IF(tipdato="02" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                            when "4AI" then IF(tipdato="02" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                            when "4AA" then IF(tipdato="02" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                            when "5A"  then IF(tipdato="02" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                            when "6A"  then IF(tipdato="02" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                            when "7A"  then IF(tipdato="02" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                            when "8AI" then IF(tipdato="02" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                            when "8AP" then IF(tipdato="02" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                            when "9A"  then IF(tipdato="02" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                            else 0
+                                                        end
                                         else 0
                                     end
                                             ) as tpric'),
@@ -3021,6 +3227,12 @@ class ImporCensoDocenteRepositorio
                                                             else 0
                                                         end
                                         when 2023 then  case nroced
+                                                            when "1A"  then IF(tipdato="01" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                            when "3AP" then IF(tipdato="01" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                            when "3AS" then IF(tipdato="01" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                            else 0
+                                                        end
+                                        when 2024 then  case nroced
                                                             when "1A"  then IF(tipdato="01" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                             when "3AP" then IF(tipdato="01" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                             when "3AS" then IF(tipdato="01" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
@@ -3067,6 +3279,12 @@ class ImporCensoDocenteRepositorio
                                                             when "3AS" then IF(tipdato="02" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
                                                             else 0
                                                         end
+                                        when 2024 then  case nroced
+                                                            when "1A"  then IF(tipdato="02" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                            when "3AP" then IF(tipdato="02" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                            when "3AS" then IF(tipdato="02" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                            else 0
+                                                        end
                                         else 0
                                     end
                                             ) as turbc'),
@@ -3108,6 +3326,12 @@ class ImporCensoDocenteRepositorio
                                                             when "3AS" then IF(tipdato="01" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
                                                             else 0
                                                         end
+                                        when 2024 then  case nroced
+                                                            when "1A"  then IF(tipdato="01" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                            when "3AP" then IF(tipdato="01" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                            when "3AS" then IF(tipdato="01" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                            else 0
+                                                        end
                                         else 0
                                     end
                                             ) as trurn'),
@@ -3144,6 +3368,12 @@ class ImporCensoDocenteRepositorio
                                                             else 0
                                                         end
                                         when 2023 then  case nroced
+                                                            when "1A"  then IF(tipdato="02" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                            when "3AP" then IF(tipdato="02" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                            when "3AS" then IF(tipdato="02" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                            else 0
+                                                        end
+                                        when 2024 then  case nroced
                                                             when "1A"  then IF(tipdato="02" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                             when "3AP" then IF(tipdato="02" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                             when "3AS" then IF(tipdato="02" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
@@ -3243,6 +3473,20 @@ class ImporCensoDocenteRepositorio
                                                 when "9A"  then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26
                                                 else 0
                                             end
+                            when 2024 then  case nroced
+                                                when "1A"  then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11
+                                                when "3AP" then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15
+                                                when "3AS" then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26
+                                                when "4AI" then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14
+                                                when "4AA" then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13
+                                                when "8AI" then d01+d02+d03+d04+d05+d06+d07+d08
+                                                when "8AP" then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14
+                                                when "5A"  then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32
+                                                when "6A"  then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24
+                                                when "7A"  then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32
+                                                when "9A"  then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26
+                                                else 0
+                                            end
                             else 0
                         end
                                 ) as tt'),
@@ -3287,6 +3531,20 @@ class ImporCensoDocenteRepositorio
                                                 else 0
                                             end
                             when 2023 then  case nroced
+                                                when "1A"  then IF(tipdato="01" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                when "3AP" then IF(tipdato="01" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                when "3AS" then IF(tipdato="01" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                when "4AI" then IF(tipdato="01" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                when "4AA" then IF(tipdato="01" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13,0)
+                                                when "8AI" then IF(tipdato="01" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                when "8AP" then IF(tipdato="01" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                when "5A"  then IF(tipdato="01" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                when "6A"  then IF(tipdato="01" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                when "7A"  then IF(tipdato="01" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                when "9A"  then IF(tipdato="01" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                else 0
+                                            end
+                            when 2024 then  case nroced
                                                 when "1A"  then IF(tipdato="01" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                 when "3AP" then IF(tipdato="01" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                 when "3AS" then IF(tipdato="01" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
@@ -3359,6 +3617,21 @@ class ImporCensoDocenteRepositorio
                                                 when "9A"  then IF(tipdato="02" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
                                                 else 0
                                             end
+                            when 2024 then  case nroced
+                                                when "1A"  then IF(tipdato="02" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                when "3AP" then IF(tipdato="02" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                when "3AS" then IF(tipdato="02" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                when "4AI" then IF(tipdato="02" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                when "4AI" then IF(tipdato="02" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                when "4AA" then IF(tipdato="02" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13,0)
+                                                when "8AI" then IF(tipdato="02" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                when "8AP" then IF(tipdato="02" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                when "5A"  then IF(tipdato="02" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                when "6A"  then IF(tipdato="02" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                when "7A"  then IF(tipdato="02" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                when "9A"  then IF(tipdato="02" and ges_dep in("A1","A2","A3","A4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                else 0
+                                            end
                             else 0
                         end
                                 ) as tpubc'),
@@ -3403,6 +3676,20 @@ class ImporCensoDocenteRepositorio
                                                             else 0
                                                         end
                                         when 2023 then  case nroced
+                                                            when "1A"  then IF(tipdato="01" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                            when "3AP" then IF(tipdato="01" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                            when "3AS" then IF(tipdato="01" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                            when "4AI" then IF(tipdato="01" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                            when "4AA" then IF(tipdato="01" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13,0)
+                                                            when "8AI" then IF(tipdato="01" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                            when "8AP" then IF(tipdato="01" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                            when "5A"  then IF(tipdato="01" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                            when "6A"  then IF(tipdato="01" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                            when "7A"  then IF(tipdato="01" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                            when "9A"  then IF(tipdato="01" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                            else 0
+                                                        end
+                                        when 2024 then  case nroced
                                                             when "1A"  then IF(tipdato="01" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                             when "3AP" then IF(tipdato="01" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                             when "3AS" then IF(tipdato="01" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
@@ -3473,6 +3760,20 @@ class ImporCensoDocenteRepositorio
                                                             when "9A"  then IF(tipdato="02" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
                                                             else 0
                                                         end
+                                        when 2024 then  case nroced
+                                                            when "1A"  then IF(tipdato="02" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                            when "3AP" then IF(tipdato="02" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                            when "3AS" then IF(tipdato="02" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                            when "4AI" then IF(tipdato="02" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                            when "4AA" then IF(tipdato="02" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13,0)
+                                                            when "8AI" then IF(tipdato="02" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                            when "8AP" then IF(tipdato="02" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                            when "5A"  then IF(tipdato="02" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                            when "6A"  then IF(tipdato="02" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                            when "7A"  then IF(tipdato="02" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                            when "9A"  then IF(tipdato="02" and ges_dep in("B2","B3","B4"),d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                            else 0
+                                                        end
                                         else 0
                                     end
                                             ) as tpric'),
@@ -3517,6 +3818,21 @@ class ImporCensoDocenteRepositorio
                                                             else 0
                                                         end
                                         when 2023 then  case nroced
+                                                            when "1A"  then IF(tipdato="01" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                            when "3AP" then IF(tipdato="01" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                            when "3AS" then IF(tipdato="01" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                            when "4AI" then IF(tipdato="01" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                            when "4AA" then IF(tipdato="01" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13,0)
+                                                            when "8AI" then IF(tipdato="01" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                            when "8AP" then IF(tipdato="01" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                            when "5A"  then IF(tipdato="01" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                            when "6A"  then IF(tipdato="01" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                            when "7A"  then IF(tipdato="01" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                            when "9A"  then IF(tipdato="01" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                            else 0
+                                                        end
+                                                        
+                                        when 2024 then  case nroced
                                                             when "1A"  then IF(tipdato="01" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                             when "3AP" then IF(tipdato="01" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                             when "3AS" then IF(tipdato="01" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
@@ -3587,6 +3903,20 @@ class ImporCensoDocenteRepositorio
                                                             when "9A"  then IF(tipdato="02" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
                                                             else 0
                                                         end
+                                        when 2024 then  case nroced
+                                                            when "1A"  then IF(tipdato="02" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                            when "3AP" then IF(tipdato="02" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                            when "3AS" then IF(tipdato="02" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                            when "4AI" then IF(tipdato="02" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                            when "4AA" then IF(tipdato="02" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13,0)
+                                                            when "8AI" then IF(tipdato="02" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                            when "8AP" then IF(tipdato="02" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                            when "5A"  then IF(tipdato="02" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                            when "6A"  then IF(tipdato="02" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                            when "7A"  then IF(tipdato="02" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                            when "9A"  then IF(tipdato="02" and area_censo=1,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                            else 0
+                                                        end
                                         else 0
                                     end
                                             ) as turbc'),
@@ -3631,6 +3961,20 @@ class ImporCensoDocenteRepositorio
                                                             else 0
                                                         end
                                         when 2023 then  case nroced
+                                                            when "1A"  then IF(tipdato="01" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                            when "3AP" then IF(tipdato="01" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                            when "3AS" then IF(tipdato="01" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                            when "4AI" then IF(tipdato="01" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                            when "4AA" then IF(tipdato="01" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13,0)
+                                                            when "8AI" then IF(tipdato="01" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                            when "8AP" then IF(tipdato="01" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                            when "5A"  then IF(tipdato="01" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                            when "6A"  then IF(tipdato="01" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                            when "7A"  then IF(tipdato="01" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                            when "9A"  then IF(tipdato="01" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                            else 0
+                                                        end
+                                        when 2024 then  case nroced
                                                             when "1A"  then IF(tipdato="01" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                             when "3AP" then IF(tipdato="01" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                             when "3AS" then IF(tipdato="01" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
@@ -3701,6 +4045,20 @@ class ImporCensoDocenteRepositorio
                                                             when "9A"  then IF(tipdato="02" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
                                                             else 0
                                                         end
+                                        when 2024 then  case nroced
+                                                            when "1A"  then IF(tipdato="02" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                            when "3AP" then IF(tipdato="02" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                            when "3AS" then IF(tipdato="02" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                            when "4AI" then IF(tipdato="02" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                            when "4AA" then IF(tipdato="02" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13,0)
+                                                            when "8AI" then IF(tipdato="02" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                            when "8AP" then IF(tipdato="02" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                            when "5A"  then IF(tipdato="02" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                            when "6A"  then IF(tipdato="02" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                            when "7A"  then IF(tipdato="02" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                            when "9A"  then IF(tipdato="02" and area_censo=2,d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                            else 0
+                                                        end
                                         else 0
                                     end
                                             ) as trurc'),
@@ -3742,7 +4100,7 @@ class ImporCensoDocenteRepositorio
 
             case 'tabla3':
                 $query = Importacion::select(
-                    'cod_mod         as modular',
+                    'cod_mod as modular',
                     DB::raw('max(codgeo)     as coddistrito'),
                     DB::raw('max(niv_mod)    as codnivel'),
                     DB::raw('max(ges_dep)    as codgestion'),
@@ -3753,36 +4111,105 @@ class ImporCensoDocenteRepositorio
                                                     when "1A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 when 2019 then case nroced
                                                     when "1A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 when 2020 then case nroced
                                                     when "1A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 when 2021 then case nroced
                                                     when "1A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 when 2022 then case nroced
                                                     when "1A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 when 2023 then  case nroced
                                                     when "1A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    else 0
+                                                end
+                                when 2024 then  case nroced 
+                                                    when "1A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                    when "3AP" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                    when "3AS" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C304",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 else 0
@@ -3794,36 +4221,105 @@ class ImporCensoDocenteRepositorio
                                                     when "1A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 when 2019 then case nroced
                                                     when "1A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 when 2020 then case nroced
                                                     when "1A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 when 2021 then case nroced
                                                     when "1A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 when 2022 then case nroced
                                                     when "1A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 when 2023 then  case nroced
                                                     when "1A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    else 0
+                                                end
+                                when 2024 then  case nroced
+                                                    when "1A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                    when "3AP" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                    when "3AS" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C303" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 else 0
@@ -3835,36 +4331,105 @@ class ImporCensoDocenteRepositorio
                                                     when "1A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 when 2019 then case nroced
                                                     when "1A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 when 2020 then case nroced
                                                     when "1A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 when 2021 then case nroced
                                                     when "1A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 when 2022 then case nroced
                                                     when "1A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 when 2023 then  case nroced
                                                     when "1A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    else 0
+                                                end
+                                when 2024 then  case nroced
+                                                    when "1A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                    when "3AP" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                    when "3AS" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C303" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 else 0
@@ -3876,36 +4441,105 @@ class ImporCensoDocenteRepositorio
                                                     when "1A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 when 2019 then case nroced
                                                     when "1A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 when 2020 then case nroced
                                                     when "1A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 when 2021 then case nroced
                                                     when "1A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 when 2022 then case nroced
                                                     when "1A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 when 2023 then  case nroced
                                                     when "1A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    else 0
+                                                end
+                                when 2024 then  case nroced
+                                                    when "1A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                    when "3AP" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                    when "3AS" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C304" and tipdato="01",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 else 0
@@ -3917,36 +4551,105 @@ class ImporCensoDocenteRepositorio
                                                     when "1A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 when 2019 then case nroced
                                                     when "1A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 when 2020 then case nroced
                                                     when "1A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 when 2021 then case nroced
                                                     when "1A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 when 2022 then case nroced
                                                     when "1A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 when 2023 then  case nroced
                                                     when "1A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
                                                     when "3AP" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
                                                     when "3AS" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    else 0
+                                                end
+                                when 2024 then  case nroced
+                                                    when "1A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11,0)
+                                                    when "3AP" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15,0)
+                                                    when "3AS" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26,0)
+                                                    when "4AI" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "4AA" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14,0)
+                                                    when "5A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "6A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
+                                                    when "7A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26+d27+d28+d29+d30+d31+d32,0)
+                                                    when "8A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06,0)
+                                                    when "8AI" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "8AP" then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08,0)
+                                                    when "9A"  then IF(cuadro="C304" and tipdato="02",d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24,0)
                                                     else 0
                                                 end
                                 else 0
@@ -3955,7 +4658,7 @@ class ImporCensoDocenteRepositorio
 
                 )
                     ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
-                    ->whereIn('v1.nroced', ['1A', '3AP', '3AS'])->whereIn('v1.cuadro', ['C303', 'C304'])->whereIn('v1.tipdato', ['01', '02'])
+                    ->whereIn('v1.nroced', ['1A', '3AP', '3AS', '4AI', '4AA', '5A', '6A', '7A', '8A', '8AI', '8AP', '9A'])->whereIn('v1.cuadro', ['C303', 'C304'])->whereIn('v1.tipdato', ['01', '02'])
                     ->where('par_importacion.id', $anio);
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
@@ -3976,40 +4679,50 @@ class ImporCensoDocenteRepositorio
                 }
                 $docentes = $query->groupBy('modular')->get();
 
-                $area = Area::all();
-                $nivel = NivelModalidad::all();
-                $ubigeo = Ubigeo::where(DB::raw('length(codigo)'), 6)->get();
-                $iiee = InstitucionEducativa::select('codModular as modular', 'nombreInstEduc as nombre')->get();
+                $area = Area::pluck('nombre', 'id'); //Area::all();
+                $nivel_nombre = NivelModalidad::where('id', '!=', '15')->pluck('nombre', 'codigo'); //NivelModalidad::all();
+                $nivel_modalidad = NivelModalidad::where('id', '!=', '15')->pluck('tipo', 'codigo');
+                $ubigeo = Ubigeo::where(DB::raw('length(codigo)'), 6)->where('codigo', 'like', '25%')->pluck('nombre', 'codigo'); //Ubigeo::where(DB::raw('length(codigo)'), 6)->get();
+                $iiee = InstitucionEducativa::select('codModular as modular', 'nombreInstEduc as nombre')->pluck('nombre', 'modular'); //InstitucionEducativa::select('codModular as modular', 'nombreInstEduc as nombre')->get();
 
                 foreach ($docentes as $dd) {
-                    foreach ($area as $aa) {
-                        if ($aa->id == $dd->idarea)
-                            $dd->area = $aa->nombre;
-                    }
+                    // foreach ($area as $aa) {
+                    //     if ($aa->id == $dd->idarea)
+                    //         $dd->area = $aa->nombre;
+                    // }
+                    $dd->area = $area[$dd->idarea] ?? 'ERROR';
+
                     if ($dd->codgestion == "A1" || $dd->codgestion == "A2" || $dd->codgestion == "A3" || $dd->codgestion == "A4") {
                         $dd->gestion = "Pública";
                     } else {
                         $dd->gestion = "Privada";
                     }
-                    foreach ($nivel as $nn) {
-                        if ($nn->codigo == $dd->codnivel) {
-                            $dd->nivel = $nn->nombre;
-                            $dd->modalidad = $nn->tipo;
-                            break;
-                        }
-                    }
-                    foreach ($ubigeo as $uu) {
-                        if ($uu->codigo == $dd->coddistrito) {
-                            $dd->distrito = $uu->nombre;
-                            break;
-                        }
-                    }
-                    foreach ($iiee as $ie) {
-                        if ($ie->modular == $dd->modular) {
-                            $dd->iiee = $ie->nombre;
-                            break;
-                        }
-                    }
+
+                    // foreach ($nivel as $nn) {
+                    //     if ($nn->codigo == $dd->codnivel) {
+                    //         $dd->nivel = $nn->nombre;
+                    //         $dd->modalidad = $nn->tipo;
+                    //         break;
+                    //     }
+                    // }
+                    $dd->nivel = $nivel_nombre[$dd->codnivel] ?? 'Error';
+                    $dd->modalidad = $nivel_modalidad[$dd->codnivel] ?? 'Error';
+
+                    // foreach ($ubigeo as $uu) {
+                    //     if ($uu->codigo == $dd->coddistrito) {
+                    //         $dd->distrito = $uu->nombre;
+                    //         break;
+                    //     }
+                    // }
+                    $dd->distrito = $ubigeo[$dd->coddistrito] ?? 'Error';
+
+                    // foreach ($iiee as $ie) {
+                    //     if ($ie->modular == $dd->modular) {
+                    //         $dd->iiee = $ie->nombre;
+                    //         break;
+                    //     }
+                    // }
+                    $dd->iiee =  $iiee[$dd->modular] ?? 'Error';
                 }
 
                 return $docentes;
@@ -4017,5 +4730,242 @@ class ImporCensoDocenteRepositorio
             default:
                 return response()->json([]);
         }
+    }
+
+    //=>DOCENTES TITULADOS EBR SECUNDARIA
+    public static function PersonaDocenteTitulado3AS($anio, $provincia, $distrito, $gestion, $area)
+    {
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporCensoDocenteController::$FUENTE);
+        //get valor denominador
+        $query = Importacion::select(
+            DB::raw('year(par_importacion.fechaActualizacion) as anio'),
+            DB::raw(
+                'sum(
+                        case 
+                            when year(par_importacion.fechaActualizacion) in(2018, 2019)                   then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25
+                            when year(par_importacion.fechaActualizacion) in(2020, 2021, 2022, 2023, 2024) then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26
+                            else 0
+                        end
+                                ) as v'
+            )
+        )
+            ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
+            ->whereIn('v1.nroced', ['3AS'])->whereIn('v1.cuadro', ['C305'])->whereIn('v1.tipdato', ['01', '05'])->where('par_importacion.id', $imp->id);
+        if ($provincia > 0) {
+            $prov = Ubigeo::find($provincia);
+            $query = $query->where('v1.codgeo', 'like', $prov->codigo . '%');
+        }
+        if ($distrito > 0) {
+            $dist = Ubigeo::find($distrito);
+            $query = $query->where('v1.codgeo', $dist->codigo);
+        }
+        if ($gestion > 0) {
+            if ($gestion == 3) {
+                $gestionx = ['B3', 'B4'];
+                $query = $query->whereIn('v1.ges_dep', $gestionx);
+            } else {
+                $gestionx = ['A1', 'A2', 'A3', 'A4'];
+                $query = $query->whereIn('v1.ges_dep', $gestionx);
+            }
+        }
+        if ($area > 0) {
+            $areax = Area::find($area);
+            $query = $query->where('v1.area_censo', $areax->codigo);
+        }
+        $query = $query->groupBy('anio')->orderBy('anio', 'asc')->orderBy('v1.tipdato', 'desc')->first();
+        $den = $query ? $query->v : 0;
+
+        //get valor numerador
+        $query = Importacion::select(
+            DB::raw('year(par_importacion.fechaActualizacion) as anio'),
+            DB::raw('sum(
+                                case v1.cuadro
+                                    when "C309" then if(year(par_importacion.fechaActualizacion) in (2018,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                end) as v')
+        )
+            ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
+            ->whereIn('v1.nroced', ['3AS'])->whereIn('v1.cuadro', ['C309'])->whereNotIn('v1.tipdato', ['01', '02', '03', '04', '05', '06', '42'])->where('par_importacion.id', $imp->id);
+        if ($provincia > 0) {
+            $prov = Ubigeo::find($provincia);
+            $query = $query->where('v1.codgeo', 'like', $prov->codigo . '%');
+        }
+        if ($distrito > 0) {
+            $dist = Ubigeo::find($distrito);
+            $query = $query->where('v1.codgeo', $dist->codigo);
+        }
+        if ($gestion > 0) {
+            if ($gestion == 3) {
+                $gestionx = ['B3', 'B4'];
+                $query = $query->whereIn('v1.ges_dep', $gestionx);
+            } else {
+                $gestionx = ['A1', 'A2', 'A3', 'A4'];
+                $query = $query->whereIn('v1.ges_dep', $gestionx);
+            }
+        }
+        if ($area > 0) {
+            $areax = Area::find($area);
+            $query = $query->where('v1.area_censo', $areax->codigo);
+        }
+        $query = $query->groupBy('anio')->orderBy('anio', 'asc')->orderBy('v1.tipdato', 'desc')->first();
+        $num = $query ? $query->v : 0;
+        return ['avance' => $den > 0 ? round(100 * $num / $den, 1) : 0, 'fecha' => date('d/m/Y', strtotime($imp->fechaActualizacion))];
+    }
+
+    //=>DOCENTES TITULADOS EBR PRIMARIA
+    public static function PersonaDocenteTitulado3AP($anio, $provincia, $distrito, $gestion, $area)
+    {
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporCensoDocenteController::$FUENTE);
+        //get valor denominador
+        $query = Importacion::select(
+            DB::raw('year(par_importacion.fechaActualizacion) as anio'),
+            DB::raw(
+                'sum(
+                        case 
+                            when year(par_importacion.fechaActualizacion) in(2018, 2019)                   then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13
+                            when year(par_importacion.fechaActualizacion) in(2020, 2021, 2022, 2023, 2024) then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15
+                            else 0
+                        end
+                                ) as v'
+            )
+        )
+            ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
+            ->whereIn('v1.nroced', ['3AS'])->whereIn('v1.cuadro', ['C305'])->whereIn('v1.tipdato', ['01', '05'])->where('par_importacion.id', $imp->id);
+        if ($provincia > 0) {
+            $prov = Ubigeo::find($provincia);
+            $query = $query->where('v1.codgeo', 'like', $prov->codigo . '%');
+        }
+        if ($distrito > 0) {
+            $dist = Ubigeo::find($distrito);
+            $query = $query->where('v1.codgeo', $dist->codigo);
+        }
+        if ($gestion > 0) {
+            if ($gestion == 3) {
+                $gestionx = ['B3', 'B4'];
+                $query = $query->whereIn('v1.ges_dep', $gestionx);
+            } else {
+                $gestionx = ['A1', 'A2', 'A3', 'A4'];
+                $query = $query->whereIn('v1.ges_dep', $gestionx);
+            }
+        }
+        if ($area > 0) {
+            $areax = Area::find($area);
+            $query = $query->where('v1.area_censo', $areax->codigo);
+        }
+        $query = $query->groupBy('anio')->orderBy('anio', 'asc')->orderBy('v1.tipdato', 'desc')->first();
+        $den = $query ? $query->v : 0;
+
+        //get valor numerador
+        $query = Importacion::select(
+            DB::raw('year(par_importacion.fechaActualizacion) as anio'),
+            DB::raw('sum(
+                                case v1.cuadro
+                                    when "C309" then if(year(par_importacion.fechaActualizacion) in (2018,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                end) as v')
+        )
+            ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
+            ->whereIn('v1.nroced', ['3AS'])->whereIn('v1.cuadro', ['C309'])->whereNotIn('v1.tipdato', ['02', '04', '07', '08'])->where('par_importacion.id', $imp->id);
+        if ($provincia > 0) {
+            $prov = Ubigeo::find($provincia);
+            $query = $query->where('v1.codgeo', 'like', $prov->codigo . '%');
+        }
+        if ($distrito > 0) {
+            $dist = Ubigeo::find($distrito);
+            $query = $query->where('v1.codgeo', $dist->codigo);
+        }
+        if ($gestion > 0) {
+            if ($gestion == 3) {
+                $gestionx = ['B3', 'B4'];
+                $query = $query->whereIn('v1.ges_dep', $gestionx);
+            } else {
+                $gestionx = ['A1', 'A2', 'A3', 'A4'];
+                $query = $query->whereIn('v1.ges_dep', $gestionx);
+            }
+        }
+        if ($area > 0) {
+            $areax = Area::find($area);
+            $query = $query->where('v1.area_censo', $areax->codigo);
+        }
+        $query = $query->groupBy('anio')->orderBy('anio', 'asc')->orderBy('v1.tipdato', 'desc')->first();
+        $num = $query ? $query->v : 0;
+        return ['avance' => $den > 0 ? round(100 * $num / $den, 1) : 0, 'fecha' => date('d/m/Y', strtotime($imp->fechaActualizacion))];
+    }
+
+    //=>DOCENTES TITULADOS EBR INCIAL ESCOLARIZADO
+    public static function PersonaDocenteTitulado1A($anio, $provincia, $distrito, $gestion, $area)
+    {
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporCensoDocenteController::$FUENTE);
+        //get valor denominador
+        $query = Importacion::select(
+            DB::raw('year(par_importacion.fechaActualizacion) as anio'),
+            DB::raw(
+                'sum(
+                        case 
+                            when year(par_importacion.fechaActualizacion) in(2018, 2019)                   then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13
+                            when year(par_importacion.fechaActualizacion) in(2020, 2021, 2022, 2023, 2024) then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11
+                            else 0
+                        end
+                                ) as v'
+            )
+        )
+            ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
+            ->whereIn('v1.nroced', ['3AS'])->whereIn('v1.cuadro', ['C305'])->whereIn('v1.tipdato', ['01', '05'])->where('par_importacion.id', $imp->id);
+        if ($provincia > 0) {
+            $prov = Ubigeo::find($provincia);
+            $query = $query->where('v1.codgeo', 'like', $prov->codigo . '%');
+        }
+        if ($distrito > 0) {
+            $dist = Ubigeo::find($distrito);
+            $query = $query->where('v1.codgeo', $dist->codigo);
+        }
+        if ($gestion > 0) {
+            if ($gestion == 3) {
+                $gestionx = ['B3', 'B4'];
+                $query = $query->whereIn('v1.ges_dep', $gestionx);
+            } else {
+                $gestionx = ['A1', 'A2', 'A3', 'A4'];
+                $query = $query->whereIn('v1.ges_dep', $gestionx);
+            }
+        }
+        if ($area > 0) {
+            $areax = Area::find($area);
+            $query = $query->where('v1.area_censo', $areax->codigo);
+        }
+        $query = $query->groupBy('anio')->orderBy('anio', 'asc')->orderBy('v1.tipdato', 'desc')->first();
+        $den = $query ? $query->v : 0;
+
+        //get valor numerador
+        $query = Importacion::select(
+            DB::raw('year(par_importacion.fechaActualizacion) as anio'),
+            DB::raw('sum(
+                                case v1.cuadro
+                                    when "C309" then if(year(par_importacion.fechaActualizacion) in (2018,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                end) as v')
+        )
+            ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
+            ->whereIn('v1.nroced', ['3AS'])->whereIn('v1.cuadro', ['C309'])->whereNotIn('v1.tipdato', ['01', '03', '07', '08'])->where('par_importacion.id', $imp->id);
+        if ($provincia > 0) {
+            $prov = Ubigeo::find($provincia);
+            $query = $query->where('v1.codgeo', 'like', $prov->codigo . '%');
+        }
+        if ($distrito > 0) {
+            $dist = Ubigeo::find($distrito);
+            $query = $query->where('v1.codgeo', $dist->codigo);
+        }
+        if ($gestion > 0) {
+            if ($gestion == 3) {
+                $gestionx = ['B3', 'B4'];
+                $query = $query->whereIn('v1.ges_dep', $gestionx);
+            } else {
+                $gestionx = ['A1', 'A2', 'A3', 'A4'];
+                $query = $query->whereIn('v1.ges_dep', $gestionx);
+            }
+        }
+        if ($area > 0) {
+            $areax = Area::find($area);
+            $query = $query->where('v1.area_censo', $areax->codigo);
+        }
+        $query = $query->groupBy('anio')->orderBy('anio', 'asc')->orderBy('v1.tipdato', 'desc')->first();
+        $num = $query ? $query->v : 0;
+        return ['avance' => $den > 0 ? round(100 * $num / $den, 1) : 0, 'fecha' => date('d/m/Y', strtotime($imp->fechaActualizacion))];
     }
 }

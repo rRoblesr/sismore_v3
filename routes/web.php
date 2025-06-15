@@ -108,11 +108,15 @@ use App\Http\Controllers\Vivienda\PadronEmapacopsaController;
 use App\Mail\MsnCorreo;
 use App\Models\Administracion\DirectoriosAuditoria;
 use App\Models\Administracion\UsuarioAuditoria;
+use App\Models\Educacion\Area;
 use App\Models\Educacion\ImporDocentesBilingues;
 use App\Models\Educacion\ImporServiciosBasicos;
 use App\Models\Educacion\InstitucionEducativa;
+use App\Models\Educacion\NivelModalidad;
+use App\Models\Educacion\TipoGestion;
 use App\Models\Parametro\Icono;
 use App\Models\Parametro\Ubigeo;
+use App\Repositories\Educacion\ImporCensoDocenteRepositorio;
 use App\Repositories\Parametro\UbigeoRepositorio;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -1555,6 +1559,18 @@ Route::get('/recursos/highcharts', function () {
 });
 
 Route::get('/recursos/pruebas', function () {
+    return ImporCensoDocenteRepositorio::PersonaDocenteTitulado3AS(0, 0, 0, 0, 0);
+    // return TipoGestion::all();
+    return TipoGestion::whereNotNull('dependencia')->pluck('nombre', 'codigo');
+    // return InstitucionEducativa::select('codModular as modular', 'nombreInstEduc as nombre')->get();
+    return InstitucionEducativa::select('codModular as modular', 'nombreInstEduc as nombre')->pluck('nombre', 'modular');
+    // return Ubigeo::where(DB::raw('length(codigo)'), 6)->where('codigo','like', '25%')->get();
+    return Ubigeo::where(DB::raw('length(codigo)'), 6)->where('codigo', 'like', '25%')->pluck('nombre', 'codigo');
+    return NivelModalidad::where('id', '!=', '15')->pluck('nombre', 'codigo');
+    return NivelModalidad::all();
+    return NivelModalidad::pluck('nombre', 'id');
+    return NivelModalidad::pluck('nombre', 'codigo');
+    return Area::pluck('nombre', 'id');
     return $distritos = Ubigeo::where('codigo', 'like', '25%')->whereRaw('length(codigo)=6')->pluck('id', 'codigo');
     return view('prueba/prueba12');
 });

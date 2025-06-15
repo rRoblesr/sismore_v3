@@ -983,223 +983,24 @@ class HomeController extends Controller
                 return response()->json(compact('puntos', 'info'));
 
             case 'dtanal1':
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporCensoDocenteController::$FUENTE);
-                $dx = Importacion::select(
-                    DB::raw('year(par_importacion.fechaActualizacion) as anio'),
-                    DB::raw('sum(
-                        IF(year(par_importacion.fechaActualizacion) in (2018,2019),(v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13+v1.d14+v1.d15+v1.d16+v1.d17+v1.d18+v1.d19+v1.d20+v1.d21+v1.d22+v1.d23+v1.d24+v1.d25),
-                        IF(year(par_importacion.fechaActualizacion) not in (2018,2019),v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13+v1.d14+v1.d15+v1.d16+v1.d17+v1.d18+v1.d19+v1.d20+v1.d21+v1.d22+v1.d23+v1.d24+v1.d25+v1.d26,0))
-                                ) as d')
-                )
-                    ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
-                    ->whereIn('v1.nroced', ['3AS'])->whereIn('v1.cuadro', ['C305'])->whereIn('v1.tipdato', ['01', '05'])->where('par_importacion.id', $imp->id);
-                if ($rq->provincia > 0) {
-                    $prov = Ubigeo::find($rq->provincia);
-                    $dx = $dx->where('v1.codgeo', 'like', $prov->codigo . '%');
-                }
-                if ($rq->distrito > 0) {
-                    $dist = Ubigeo::find($rq->distrito);
-                    $dx = $dx->where('v1.codgeo', $dist->codigo);
-                }
-                if ($rq->tipogestion > 0) {
-                    if ($rq->tipogestion == 3) {
-                        $gestion = ['B3', 'B4'];
-                        $dx = $dx->whereIn('v1.ges_dep', $gestion);
-                    } else {
-                        $gestion = ['A1', 'A2', 'A3', 'A4'];
-                        $dx = $dx->whereIn('v1.ges_dep', $gestion);
-                    }
-                }
-                if ($rq->ambito > 0) {
-                    $area = Area::find($rq->ambito);
-                    $dx = $dx->where('v1.area_censo', $area->codigo);
-                }
-                $dx = $dx->groupBy('anio')->orderBy('anio', 'asc')->orderBy('v1.tipdato', 'desc')->first();
-
-                $nx = Importacion::select(
-                    DB::raw('year(par_importacion.fechaActualizacion) as anio'),
-                    DB::raw('sum(
-                                case v1.cuadro
-                                    when "C309" then if(year(par_importacion.fechaActualizacion) in (2018,2023),v1.d01+v1.d02+v1.d03+v1.d04,0)
-                                    when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023),v1.d01+v1.d02+v1.d03+v1.d04,0)
-                                end) as d')
-                )
-                    ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
-                    ->whereIn('v1.nroced', ['3AS'])->whereIn('v1.cuadro', ['C309', 'C310'])->whereNotIn('v1.tipdato', ['01', '02', '03', '04', '05', '06', '42'])->where('par_importacion.id', $imp->id);
-                if ($rq->provincia > 0) {
-                    $prov = Ubigeo::find($rq->provincia);
-                    $nx = $nx->where('v1.codgeo', 'like', $prov->codigo . '%');
-                }
-                if ($rq->distrito > 0) {
-                    $dist = Ubigeo::find($rq->distrito);
-                    $nx = $nx->where('v1.codgeo', $dist->codigo);
-                }
-                if ($rq->tipogestion > 0) {
-                    if ($rq->tipogestion == 3) {
-                        $gestion = ['B3', 'B4'];
-                        $nx = $nx->whereIn('v1.ges_dep', $gestion);
-                    } else {
-                        $gestion = ['A1', 'A2', 'A3', 'A4'];
-                        $nx = $nx->whereIn('v1.ges_dep', $gestion);
-                    }
-                }
-                if ($rq->ambito > 0) {
-                    $area = Area::find($rq->ambito);
-                    $nx = $nx->where('v1.area_censo', $area->codigo);
-                }
-                $nx = $nx->groupBy('anio')->orderBy('anio', 'asc')->orderBy('v1.tipdato', 'desc')->first();
-                $v1 = $nx ? $nx->d : 0;
-                $v2 = $dx ? $dx->d : 0;
-                $info['indicador'] = round(100 * $v2 > 0 ? $v1 / $v2 : 0, 1);
+                $base = ImporCensoDocenteRepositorio::PersonaDocenteTitulado3AS(0, 0, 0, 0, 0);
+                $info['indicador'] = $base['avance'];
                 $info['fuente'] = 'Censo Educativo - MINEDU';
-                $info['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
+                $info['fecha'] = $base['fecha'];
                 return response()->json(compact('info'));
 
             case 'dtanal2':
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporCensoDocenteController::$FUENTE);
-                $dx = Importacion::select(
-                    DB::raw('year(par_importacion.fechaActualizacion) as anio'),
-                    DB::raw('sum(
-                        IF(year(par_importacion.fechaActualizacion) in (2018,2019),(v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13),
-                        IF(year(par_importacion.fechaActualizacion) not in (2018,2019),v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13+v1.d14+v1.d15,0))
-                                ) as d')
-                )
-                    ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
-                    ->whereIn('v1.nroced', ['3AP'])->whereIn('v1.cuadro', ['C305'])->whereIn('v1.tipdato', ['01', '05'])->where('par_importacion.id', $imp->id);
-                if ($rq->provincia > 0) {
-                    $prov = Ubigeo::find($rq->provincia);
-                    $dx = $dx->where('v1.codgeo', 'like', $prov->codigo . '%');
-                }
-                if ($rq->distrito > 0) {
-                    $dist = Ubigeo::find($rq->distrito);
-                    $dx = $dx->where('v1.codgeo', $dist->codigo);
-                }
-                if ($rq->tipogestion > 0) {
-                    if ($rq->tipogestion == 3) {
-                        $gestion = ['B3', 'B4'];
-                        $dx = $dx->whereIn('v1.ges_dep', $gestion);
-                    } else {
-                        $gestion = ['A1', 'A2', 'A3', 'A4'];
-                        $dx = $dx->whereIn('v1.ges_dep', $gestion);
-                    }
-                }
-                if ($rq->ambito > 0) {
-                    $area = Area::find($rq->ambito);
-                    $dx = $dx->where('v1.area_censo', $area->codigo);
-                }
-                $dx = $dx->groupBy('anio')->orderBy('anio', 'asc')->orderBy('v1.tipdato', 'desc')->first();
-
-                $nx = Importacion::select(
-                    DB::raw('year(par_importacion.fechaActualizacion) as anio'),
-                    DB::raw('sum(
-                                case v1.cuadro
-                                    when "C309" then if(year(par_importacion.fechaActualizacion) in (2018,2023),v1.d01+v1.d02+v1.d03+v1.d04,0)
-                                    when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023),v1.d01+v1.d02+v1.d03+v1.d04,0)
-                                end) as d')
-                )
-                    ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
-                    ->whereIn('v1.nroced', ['3AP'])->whereIn('v1.cuadro', ['C309', 'C310'])->whereIn('v1.tipdato', ['02', '04', '07', '08'])->where('par_importacion.id', $imp->id);
-                if ($rq->provincia > 0) {
-                    $prov = Ubigeo::find($rq->provincia);
-                    $nx = $nx->where('v1.codgeo', 'like', $prov->codigo . '%');
-                }
-                if ($rq->distrito > 0) {
-                    $dist = Ubigeo::find($rq->distrito);
-                    $nx = $nx->where('v1.codgeo', $dist->codigo);
-                }
-                if ($rq->tipogestion > 0) {
-                    if ($rq->tipogestion == 3) {
-                        $gestion = ['B3', 'B4'];
-                        $nx = $nx->whereIn('v1.ges_dep', $gestion);
-                    } else {
-                        $gestion = ['A1', 'A2', 'A3', 'A4'];
-                        $nx = $nx->whereIn('v1.ges_dep', $gestion);
-                    }
-                }
-                if ($rq->ambito > 0) {
-                    $area = Area::find($rq->ambito);
-                    $nx = $nx->where('v1.area_censo', $area->codigo);
-                }
-                $nx = $nx->groupBy('anio')->orderBy('anio', 'asc')->orderBy('v1.tipdato', 'desc')->first();
-                $v1 = $nx ? $nx->d : 0;
-                $v2 = $dx ? $dx->d : 0;
-                $info['indicador'] = round(100 * ($v1 > 0 ? $v1 / $v2 : 0), 1);
+                $base = ImporCensoDocenteRepositorio::PersonaDocenteTitulado3AP(0, 0, 0, 0, 0);
+                $info['indicador'] = $base['avance'];
                 $info['fuente'] = 'Censo Educativo - MINEDU';
-                $info['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
+                $info['fecha'] = $base['fecha'];
                 return response()->json(compact('info'));
 
             case 'dtanal3':
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporCensoDocenteController::$FUENTE);
-                $dx = Importacion::select(
-                    DB::raw('year(par_importacion.fechaActualizacion) as anio'),
-                    DB::raw('sum(
-                        IF(year(par_importacion.fechaActualizacion) in (2018,2019),(v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13),
-                        IF(year(par_importacion.fechaActualizacion) not in (2018,2019),v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11,0))
-                                ) as d')
-                )
-                    ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
-                    ->whereIn('v1.nroced', ['1A'])->whereIn('v1.cuadro', ['C305'])->whereIn('v1.tipdato', ['01', '05'])->where('par_importacion.id', $imp->id);
-                if ($rq->provincia > 0) {
-                    $prov = Ubigeo::find($rq->provincia);
-                    $dx = $dx->where('v1.codgeo', 'like', $prov->codigo . '%');
-                }
-                if ($rq->distrito > 0) {
-                    $dist = Ubigeo::find($rq->distrito);
-                    $dx = $dx->where('v1.codgeo', $dist->codigo);
-                }
-                if ($rq->tipogestion > 0) {
-                    if ($rq->tipogestion == 3) {
-                        $gestion = ['B3', 'B4'];
-                        $dx = $dx->whereIn('v1.ges_dep', $gestion);
-                    } else {
-                        $gestion = ['A1', 'A2', 'A3', 'A4'];
-                        $dx = $dx->whereIn('v1.ges_dep', $gestion);
-                    }
-                }
-                if ($rq->ambito > 0) {
-                    $area = Area::find($rq->ambito);
-                    $dx = $dx->where('v1.area_censo', $area->codigo);
-                }
-                $dx = $dx->groupBy('anio')->orderBy('anio', 'asc')->orderBy('v1.tipdato', 'desc')->first();
-
-                $nx = Importacion::select(
-                    DB::raw('year(par_importacion.fechaActualizacion) as anio'),
-                    DB::raw('sum(
-                                case v1.cuadro
-                                    when "C309" then if(year(par_importacion.fechaActualizacion) in (2018,2023),v1.d01+v1.d02+v1.d03+v1.d04,0)
-                                    when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023),v1.d01+v1.d02+v1.d03+v1.d04,0)
-                                end) as d')
-                )
-                    ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
-                    ->whereIn('v1.nroced', ['1A'])->whereIn('v1.cuadro', ['C309', 'C310'])->whereIn('v1.tipdato', ['01', '03', '07', '08'])->where('par_importacion.id', $imp->id);
-                if ($rq->provincia > 0) {
-                    $prov = Ubigeo::find($rq->provincia);
-                    $nx = $nx->where('v1.codgeo', 'like', $prov->codigo . '%');
-                }
-                if ($rq->distrito > 0) {
-                    $dist = Ubigeo::find($rq->distrito);
-                    $nx = $nx->where('v1.codgeo', $dist->codigo);
-                }
-                if ($rq->tipogestion > 0) {
-                    if ($rq->tipogestion == 3) {
-                        $gestion = ['B3', 'B4'];
-                        $nx = $nx->whereIn('v1.ges_dep', $gestion);
-                    } else {
-                        $gestion = ['A1', 'A2', 'A3', 'A4'];
-                        $nx = $nx->whereIn('v1.ges_dep', $gestion);
-                    }
-                }
-                if ($rq->ambito > 0) {
-                    $area = Area::find($rq->ambito);
-                    $nx = $nx->where('v1.area_censo', $area->codigo);
-                }
-                $nx = $nx->groupBy('anio')->orderBy('anio', 'asc')->orderBy('v1.tipdato', 'desc')->first();
-                $v1 = $nx ? $nx->d : 0;
-                $v2 = $dx ? $dx->d : 0;
-                $info['indicador'] = round(100 * ($v1 > 0 ? $v1 / $v2 : 0), 1);
-                // $info['indicador'] = round(100 * $nx->d / $dx->d, 1);
+                $base = ImporCensoDocenteRepositorio::PersonaDocenteTitulado1a(0, 0, 0, 0, 0);
+                $info['indicador'] = $base['avance'];
                 $info['fuente'] = 'Censo Educativo - MINEDU';
-                $info['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
+                $info['fecha'] = $base['fecha'];
                 return response()->json(compact('info'));
 
             case 'siagie001':
@@ -1259,13 +1060,15 @@ class HomeController extends Controller
                 foreach ($data->unique('nivel') as $key => $value) {
                     $info['dat'][] = ["name" => $value->nivel, "data" => $xx[$key]];
                 }
-
+                $info['title'] = 'Numero de docentes en educacion basica regular, periodo ' . reset($info['cat']) . ' - ' . end($info['cat']);
                 $reg['fuente'] = 'Censo Educativo - MINEDU';
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporCensoDocenteController::$FUENTE);
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
                 return response()->json(compact('info', 'reg'));
 
             case 'skills001':
+                ini_set('memory_limit', '-1');
+                set_time_limit(0);
                 $anio = Anio::where('anio', $rq->anio - 1)->first();
                 $data1 = MatriculaGeneralRepositorio::estudiantesModeloEIB($anio->id, $rq->provincia, $rq->distrito, 0, $rq->ambito,  $rq->gestion);
                 $anio = Anio::where('anio', $rq->anio)->first();
@@ -1376,6 +1179,8 @@ class HomeController extends Controller
                 return response()->json(compact('info', 'reg'));
 
             case 'tabla1':
+                ini_set('memory_limit', '-1');
+                set_time_limit(0);
                 $aniox = Anio::where('anio', $rq->anio)->first();
                 $anioy = Anio::where('anio', $aniox->anio - 1)->first();
                 $meta = MatriculaGeneralRepositorio::metaUgel($anioy->id, $rq->provincia, $rq->distrito,  $rq->gestion, 0);

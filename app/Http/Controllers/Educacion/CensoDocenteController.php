@@ -2,50 +2,16 @@
 
 namespace App\Http\Controllers\Educacion;
 
-use App\Exports\AvanceMatricula1Export;
 use App\Exports\CensoDocenteInicialExport;
-use App\Exports\CensoDocentePrimariaExport;
-use App\Exports\CensoDocenteSecundariaExport;
 use App\Http\Controllers\Controller;
-use App\Models\Administracion\Sistema;
-use App\Models\Educacion\Area;
-use App\Models\Educacion\ImporCensoDocente;
-use App\Models\Educacion\ImporCensoMatricula;
 use App\Models\Educacion\Importacion;
-use App\Models\Educacion\Indicador;
 use App\Models\Educacion\InstitucionEducativa;
-use App\Models\Educacion\Materia;
-use App\Models\Educacion\NivelModalidad;
-use App\Models\Educacion\Ugel;
-use App\Models\Parametro\Anio;
-use App\Models\Parametro\Clasificador;
-use App\Models\Parametro\FuenteImportacion;
-use App\Models\Parametro\Lengua;
 use App\Models\Parametro\Ubigeo;
-use App\Models\Vivienda\EstadoConexion;
-use App\Repositories\Educacion\CensoRepositorio;
-use App\Repositories\Educacion\EceRepositorio;
-use App\Repositories\Educacion\GradoRepositorio;
 use App\Repositories\Educacion\ImporCensoDocenteRepositorio;
-use App\Repositories\Educacion\ImporCensoMatriculaRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
-use App\Repositories\Educacion\IndicadorRepositorio;
-use App\Repositories\Educacion\MateriaRepositorio;
-use App\Repositories\Educacion\MatriculaDetalleRepositorio;
-use App\Repositories\Educacion\MatriculaGeneralRepositorio;
-use App\Repositories\Educacion\MatriculaRepositorio;
-use App\Repositories\Educacion\PadronWebRepositorio;
-use App\Repositories\Educacion\PlazaRepositorio;
-use App\Repositories\Educacion\ServiciosBasicosRepositorio;
-use App\Repositories\Parametro\UbigeoRepositorio;
-use App\Repositories\Vivienda\CentroPobladoDatassRepositorio;
-use App\Repositories\Vivienda\CentroPobladoRepositotio;
-use App\Repositories\Vivienda\EmapacopsaRepositorio;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
-use Spatie\Browsershot\Browsershot;
 
 class CensoDocenteController extends Controller
 {
@@ -331,7 +297,7 @@ class CensoDocenteController extends Controller
                     }
                     // return compact('base', 'foot');
                     $excel = view('educacion.CensoDocente.PersonalDocenteTable3excel', compact('base', 'foot'))->render();
-                    return response()->json(compact('excel'));
+                    return response()->json(compact('excel', 'base', 'foot'));
                 } else {
                     $base = [];
                     $foot = null;

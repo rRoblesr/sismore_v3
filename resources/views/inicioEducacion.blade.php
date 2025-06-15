@@ -1386,7 +1386,7 @@
                                 data.info.cat,
                                 data.info.dat,
                                 '',
-                                'Numero de docentes en educacion basica regular, periodo 2018 - 2023',
+                                data.info.title,
                                 data.info.maxbar
                             );
                             $('#span-censodocente001-fuente').html("Fuente: " + data.reg.fuente);
