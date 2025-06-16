@@ -1207,22 +1207,30 @@ class IndicadorController extends Controller
     {
         // $denonimador = ImporCensoDocenteRepositorio::_3ASTotalDocente($rq->anio, $rq->provincia, $rq->distrito, $rq->tipogestion, $rq->ambito);
         // $numerador = ImporCensoDocenteRepositorio::_3ASTotalTitulado($rq->anio, $rq->provincia, $rq->distrito, $rq->tipogestion, $rq->ambito);
-        $base = ImporCensoDocenteRepositorio::_3ASReportes('head', $rq->anio, $rq->provincia, $rq->distrito, $rq->tipogestion, 0);
-        $denonimador = $base['docentes'];
-        $numerador = $base['titulados'];
+        // $base = ImporCensoDocenteRepositorio::_3ASReportes('head', $rq->anio, $rq->provincia, $rq->distrito, $rq->tipogestion, 0);
+        // $denonimador = $base['docentes'];
+        // $numerador = $base['titulados'];
 
-        $v1 = isset($numerador->d) ? $numerador->d : 0;
-        $v2 = isset($denonimador->d) ? $denonimador->d : 0;
+        // $v1 = isset($numerador->d) ? $numerador->d : 0;
+        // $v2 = isset($denonimador->d) ? $denonimador->d : 0;
 
-        $valor1 = $v2 > 0 ? 100 * $v1 / $v2 : 0;
-        $valor2 = $v2;
-        $valor3 = $v1;
-        $valor4 = $v2 - $v1;
+        // $valor1 = $v2 > 0 ? 100 * $v1 / $v2 : 0;
+        // $valor2 = $v2;
+        // $valor3 = $v1;
+        // $valor4 = $v2 - $v1;
 
-        $valor1 = number_format($valor1, 1);
-        $valor2 = number_format($valor2, 0);
-        $valor3 = number_format($valor3, 0);
-        $valor4 = number_format($valor4, 0);
+        // $valor1 = number_format($valor1, 1);
+        // $valor2 = number_format($valor2, 0);
+        // $valor3 = number_format($valor3, 0);
+        // $valor4 = number_format($valor4, 0);
+
+        $base = ImporCensoDocenteRepositorio::PersonaDocenteTitulado3AS($rq->anio, $rq->provincia, $rq->distrito, $rq->tipogestion, 0);
+
+        $valor1 = number_format($base['avance'], 1);
+        $valor2 = number_format($base['den'], 0);
+        $valor3 = number_format($base['num'], 0);
+        $valor4 = number_format($base['brecha'], 0);
+
         return response()->json(compact('valor1', 'valor2', 'valor3', 'valor4'));
     }
 
@@ -1356,7 +1364,7 @@ class IndicadorController extends Controller
                     }
                     // return compact('base', 'foot');
                     $excel = view('parametro.indicador.educacion.inicioEducacionIndicador04Table2excel', compact('base', 'foot'))->render();
-                    return response()->json(compact('excel'));
+                    return response()->json(compact('excel','base'));
                 } else {
                     $base = [];
                     $foot = null;
@@ -1491,22 +1499,29 @@ class IndicadorController extends Controller
 
     public function panelControlEduacionNuevoindicador05Head(Request $rq)
     {
-        $base = ImporCensoDocenteRepositorio::_3APReportes('head', $rq->anio, $rq->provincia, $rq->distrito, $rq->tipogestion, 0);
-        $denonimador = $base['docentes'];
-        $numerador = $base['titulados'];
+        // $base = ImporCensoDocenteRepositorio::_3APReportes('head', $rq->anio, $rq->provincia, $rq->distrito, $rq->tipogestion, 0);
+        // $denonimador = $base['docentes'];
+        // $numerador = $base['titulados'];
 
-        $v1 = isset($numerador->d) ? $numerador->d : 0;
-        $v2 = isset($denonimador->d) ? $denonimador->d : 0;
+        // $v1 = isset($numerador->d) ? $numerador->d : 0;
+        // $v2 = isset($denonimador->d) ? $denonimador->d : 0;
 
-        $valor1 = $v2 > 0 ? 100 * $v1 / $v2 : 0;
-        $valor2 = $v2;
-        $valor3 = $v1;
-        $valor4 = $v2 - $v1;
+        // $valor1 = $v2 > 0 ? 100 * $v1 / $v2 : 0;
+        // $valor2 = $v2;
+        // $valor3 = $v1;
+        // $valor4 = $v2 - $v1;
 
-        $valor1 = number_format($valor1, 1);
-        $valor2 = number_format($valor2, 0);
-        $valor3 = number_format($valor3, 0);
-        $valor4 = number_format($valor4, 0);
+        // $valor1 = number_format($valor1, 1);
+        // $valor2 = number_format($valor2, 0);
+        // $valor3 = number_format($valor3, 0);
+        // $valor4 = number_format($valor4, 0);
+
+        $base = ImporCensoDocenteRepositorio::PersonaDocenteTitulado3AP($rq->anio, $rq->provincia, $rq->distrito, $rq->tipogestion, 0);
+
+        $valor1 = number_format($base['avance'], 1);
+        $valor2 = number_format($base['den'], 0);
+        $valor3 = number_format($base['num'], 0);
+        $valor4 = number_format($base['brecha'], 0);
         return response()->json(compact('valor1', 'valor2', 'valor3', 'valor4'));
     }
 
@@ -1781,22 +1796,24 @@ class IndicadorController extends Controller
 
     public function panelControlEduacionNuevoindicador06Head(Request $rq)
     {
-        $base = ImporCensoDocenteRepositorio::_1AReportes('head', $rq->anio, $rq->provincia, $rq->distrito, $rq->tipogestion, 0);
-        $denonimador = $base['docentes'];
-        $numerador = $base['titulados'];
+        // $base = ImporCensoDocenteRepositorio::_1AReportes('head', $rq->anio, $rq->provincia, $rq->distrito, $rq->tipogestion, 0);
+        // $denonimador = $base['docentes'];
+        // $numerador = $base['titulados'];
 
-        $v1 = isset($numerador->d) ? $numerador->d : 0;
-        $v2 = isset($denonimador->d) ? $denonimador->d : 0;
+        // $v1 = isset($numerador->d) ? $numerador->d : 0;
+        // $v2 = isset($denonimador->d) ? $denonimador->d : 0;
 
-        $valor1 = $v2 > 0 ? 100 * $v1 / $v2 : 0;
-        $valor2 = $v2;
-        $valor3 = $v1;
-        $valor4 = $v2 - $v1;
+        // $valor1 = $v2 > 0 ? 100 * $v1 / $v2 : 0;
+        // $valor2 = $v2;
+        // $valor3 = $v1;
+        // $valor4 = $v2 - $v1;}
 
-        $valor1 = number_format($valor1, 1);
-        $valor2 = number_format($valor2, 0);
-        $valor3 = number_format($valor3, 0);
-        $valor4 = number_format($valor4, 0);
+        $base = ImporCensoDocenteRepositorio::PersonaDocenteTitulado1A($rq->anio, $rq->provincia, $rq->distrito, $rq->tipogestion, 0);
+
+        $valor1 = number_format($base['avance'], 1);
+        $valor2 = number_format($base['den'], 0);
+        $valor3 = number_format($base['num'], 0);
+        $valor4 = number_format($base['brecha'], 0);
         return response()->json(compact('valor1', 'valor2', 'valor3', 'valor4'));
     }
 

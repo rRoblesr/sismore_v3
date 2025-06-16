@@ -983,21 +983,24 @@ class HomeController extends Controller
                 return response()->json(compact('puntos', 'info'));
 
             case 'dtanal1':
-                $base = ImporCensoDocenteRepositorio::PersonaDocenteTitulado3AS(0, 0, 0, 0, 0);
+                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporCensoDocenteController::$FUENTE);
+                $base = ImporCensoDocenteRepositorio::PersonaDocenteTitulado3AS($imp->id, 0, 0, 0, 0);
                 $info['indicador'] = $base['avance'];
                 $info['fuente'] = 'Censo Educativo - MINEDU';
                 $info['fecha'] = $base['fecha'];
                 return response()->json(compact('info'));
 
             case 'dtanal2':
-                $base = ImporCensoDocenteRepositorio::PersonaDocenteTitulado3AP(0, 0, 0, 0, 0);
+                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporCensoDocenteController::$FUENTE);
+                $base = ImporCensoDocenteRepositorio::PersonaDocenteTitulado3AP($imp->id, 0, 0, 0, 0);
                 $info['indicador'] = $base['avance'];
                 $info['fuente'] = 'Censo Educativo - MINEDU';
                 $info['fecha'] = $base['fecha'];
                 return response()->json(compact('info'));
 
             case 'dtanal3':
-                $base = ImporCensoDocenteRepositorio::PersonaDocenteTitulado1a(0, 0, 0, 0, 0);
+                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporCensoDocenteController::$FUENTE);
+                $base = ImporCensoDocenteRepositorio::PersonaDocenteTitulado1a($imp->id, 0, 0, 0, 0);
                 $info['indicador'] = $base['avance'];
                 $info['fuente'] = 'Censo Educativo - MINEDU';
                 $info['fecha'] = $base['fecha'];
