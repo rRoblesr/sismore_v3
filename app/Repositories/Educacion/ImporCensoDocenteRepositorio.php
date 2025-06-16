@@ -100,13 +100,9 @@ class ImporCensoDocenteRepositorio
                 $docentes = Importacion::select(
                     DB::raw('year(par_importacion.fechaActualizacion) as anio'),
                     DB::raw('sum(
-                        case year(par_importacion.fechaActualizacion)
-                            when 2018 then v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13
-                            when 2019 then v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13
-                            when 2020 then v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11
-                            when 2021 then v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11
-                            when 2022 then v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11
-                            when 2023 then v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11
+                        case 
+                            when year(par_importacion.fechaActualizacion)     in(2018,2019) then v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13
+                            when year(par_importacion.fechaActualizacion) not in(2018,2019) then v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11
                         end
                                 ) as d')
                 )
@@ -132,19 +128,11 @@ class ImporCensoDocenteRepositorio
                 $docentes = $docentes->groupBy('anio')->orderBy('anio', 'asc')->orderBy('v1.tipdato', 'desc')->get();
 
                 $titulados = Importacion::select(
-                    DB::raw('year(par_importacion.fechaActualizacion) as anio'),
+                    DB::raw('year(fechaActualizacion) as anio'),
                     DB::raw('sum(
-                                case v1.cuadro
-                                    when "C309" then (case year(par_importacion.fechaActualizacion)
-                                                         when 2018 then v1.d01+v1.d02+v1.d03+v1.d04
-                                                         when 2023 then v1.d01+v1.d02+v1.d03+v1.d04
-                                                     end)
-                                    when "C310" then (case year(par_importacion.fechaActualizacion)
-                                                         when 2019 then v1.d01+v1.d02+v1.d03+v1.d04
-                                                         when 2020 then v1.d01+v1.d02+v1.d03+v1.d04
-                                                         when 2021 then v1.d01+v1.d02+v1.d03+v1.d04
-                                                         when 2022 then v1.d01+v1.d02+v1.d03+v1.d04
-                                                     end)
+                                case 
+                                    when cuadro="C309" and year(fechaActualizacion) in(2018,2023,2024)      then v1.d01+v1.d02+v1.d03+v1.d04
+                                    when cuadro="C310" and year(fechaActualizacion) in(2019,2020,2021,2022) then v1.d01+v1.d02+v1.d03+v1.d04
                                 end) as d')
                 )
                     ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
@@ -172,26 +160,26 @@ class ImporCensoDocenteRepositorio
             case 'dianal1':
             case 'dianal2':
                 $query = Importacion::select(
-                    DB::raw('year(par_importacion.fechaActualizacion) as anio'),
+                    DB::raw('year(fechaActualizacion) as anio'),
                     DB::raw('sum(
                         case v1.cuadro
-                            when "C309" then if(year(par_importacion.fechaActualizacion) in (2018,2023,2024),v1.d01,0)
-                            when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d01,0)
+                            when "C309" then if(year(fechaActualizacion)     in (2018,2023,2024),v1.d01,0)
+                            when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024),v1.d01,0)
                         end) as d01'),
                     DB::raw('sum(
                         case v1.cuadro
-                            when "C309" then if(year(par_importacion.fechaActualizacion) in (2018,2023,2024),v1.d02,0)
-                            when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d02,0)
+                            when "C309" then if(year(fechaActualizacion)     in (2018,2023,2024),v1.d02,0)
+                            when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024),v1.d02,0)
                         end) as d02'),
                     DB::raw('sum(
                         case v1.cuadro
-                            when "C309" then if(year(par_importacion.fechaActualizacion) in (2018,2023,2024),v1.d03,0)
-                            when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d03,0)
+                            when "C309" then if(year(fechaActualizacion)     in (2018,2023,2024),v1.d03,0)
+                            when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024),v1.d03,0)
                         end) as d03'),
                     DB::raw('sum(
                         case v1.cuadro
-                            when "C309" then if(year(par_importacion.fechaActualizacion) in (2018,2023,2024),v1.d04,0)
-                            when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d04,0)
+                            when "C309" then if(year(fechaActualizacion)     in (2018,2023,2024),v1.d04,0)
+                            when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024),v1.d04,0)
                         end) as d04'),
                 )
                     ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
@@ -220,12 +208,12 @@ class ImporCensoDocenteRepositorio
 
             case 'dianal3':
                 $query = Importacion::select(
-                    DB::raw('year(par_importacion.fechaActualizacion) as anio'),
+                    DB::raw('year(fechaActualizacion) as anio'),
                     'area_censo as area',
                     DB::raw('sum(
                             case v1.cuadro
-                                when "C309" then if(year(par_importacion.fechaActualizacion) in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
-                                when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                when "C309" then if(year(fechaActualizacion)     in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
                             end) as d'),
                 )
                     ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
@@ -260,45 +248,43 @@ class ImporCensoDocenteRepositorio
                     DB::raw('max(ds.nombre) as distrito'),
                     DB::raw('sum(IF(cuadro="C305" and tipdato in("01","05"),
                                 case
-                                    when year(par_importacion.fechaActualizacion)     in (2018,2019)
-                                        then v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13
-                                    when year(par_importacion.fechaActualizacion) not in (2018,2019)
-                                        then v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11
+                                    when year(fechaActualizacion)     in (2018,2019) then v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13
+                                    when year(fechaActualizacion) not in (2018,2019) then v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11
                                 end ,0)) as total'),
                     DB::raw('sum(IF(cuadro in("C309","C310") and tipdato in("01","03","07","08"),
                                 case v1.cuadro
-                                    when "C309" then if(year(par_importacion.fechaActualizacion)     in (2018,2023,2024),v1.d01,0)
-                                    when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d01,0)
+                                    when "C309" then if(year(fechaActualizacion)     in (2018,2023,2024),v1.d01,0)
+                                    when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024),v1.d01,0)
                                 end ,0)) as d01'),
                     DB::raw('sum(IF(cuadro in("C309","C310") and tipdato in("01","03","07","08"),
                                 case v1.cuadro
-                                    when "C309" then if(year(par_importacion.fechaActualizacion)     in (2018,2023,2024),v1.d02,0)
-                                    when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d02,0)
+                                    when "C309" then if(year(fechaActualizacion)     in (2018,2023,2024),v1.d02,0)
+                                    when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024),v1.d02,0)
                                 end ,0)) as d02'),
                     DB::raw('sum(IF(cuadro in("C309","C310") and tipdato in("01","03","07","08"),
                                 case v1.cuadro
-                                    when "C309" then if(year(par_importacion.fechaActualizacion)     in (2018,2023,2024),v1.d03,0)
-                                    when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d03,0)
+                                    when "C309" then if(year(fechaActualizacion)     in (2018,2023,2024),v1.d03,0)
+                                    when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024),v1.d03,0)
                                 end ,0)) as d03'),
                     DB::raw('sum(IF(cuadro in("C309","C310") and tipdato in("01","03","07","08"),
                                 case v1.cuadro
-                                    when "C309" then if(year(par_importacion.fechaActualizacion)     in (2018,2023,2024),v1.d04,0)
-                                    when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d04,0)
+                                    when "C309" then if(year(fechaActualizacion)     in (2018,2023,2024),v1.d04,0)
+                                    when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024),v1.d04,0)
                                 end ,0)) as d04'),
                     DB::raw('sum(IF(cuadro in("C309","C310") and tipdato in("01","03","07","08"),
                                 case v1.cuadro
-                                    when "C309" then if(year(par_importacion.fechaActualizacion)     in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
-                                    when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                    when "C309" then if(year(fechaActualizacion)     in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                    when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
                                 end ,0)) as tt'),
                     DB::raw('sum(IF(cuadro in("C309","C310") and tipdato in("01","03","07","08"),
                                 case v1.cuadro
-                                    when "C309" then if(year(par_importacion.fechaActualizacion)     in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
-                                    when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                    when "C309" then if(year(fechaActualizacion)     in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                    when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
                                 end ,0)) as ttn'),
                     DB::raw('sum(IF(cuadro in("C309","C310") and tipdato in("01","03","07","08"),
                                 case v1.cuadro
-                                    when "C309" then if(year(par_importacion.fechaActualizacion)     in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
-                                    when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                    when "C309" then if(year(fechaActualizacion)     in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                    when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
                                 end ,0)) as ttc'),
                 )
                     ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
@@ -330,56 +316,61 @@ class ImporCensoDocenteRepositorio
                 $query = Importacion::select(
                     DB::raw('uu.codigo as cod_ugel'),
                     DB::raw('uu.nombre as ugel'),
+                    DB::raw('sum(IF(cuadro="C305" and tipdato in("01","05"),
+                                case
+                                    when year(fechaActualizacion)     in (2018,2019) then v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13
+                                    when year(fechaActualizacion) not in (2018,2019) then v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11
+                                end ,0)) as td'),
                     DB::raw('sum(
                         case v1.cuadro
-                            when "C309" then if(year(par_importacion.fechaActualizacion) in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
-                            when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                            when "C309" then if(year(fechaActualizacion)     in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                            when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
                         end) as tt'),
                     DB::raw('sum(
                                 case v1.cuadro
-                                    when "C309" then if(year(par_importacion.fechaActualizacion) in (2018,2023,2024),v1.d01+v1.d03,0)
-                                    when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d03,0)
+                                    when "C309" then if(year(fechaActualizacion)     in (2018,2023,2024),v1.d01+v1.d03,0)
+                                    when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d03,0)
                                 end) as tth'),
                     DB::raw('sum(
                                 case v1.cuadro
-                                    when "C309" then if(year(par_importacion.fechaActualizacion) in (2018,2023,2024),v1.d02+v1.d04,0)
-                                    when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d02+v1.d04,0)
+                                    when "C309" then if(year(fechaActualizacion)     in (2018,2023,2024),v1.d02+v1.d04,0)
+                                    when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024),v1.d02+v1.d04,0)
                                 end) as ttm'),
                     DB::raw('sum(
                                 case v1.cuadro
-                                    when "C309" then if(year(par_importacion.fechaActualizacion) in (2018,2023,2024),v1.d01+v1.d02,0)
-                                    when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d02,0)
+                                    when "C309" then if(year(fechaActualizacion)     in (2018,2023,2024),v1.d01+v1.d02,0)
+                                    when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d02,0)
                                 end) as ttn'),
                     DB::raw('sum(
                                 case v1.cuadro
-                                    when "C309" then if(year(par_importacion.fechaActualizacion) in (2018,2023,2024),v1.d03+v1.d04,0)
-                                    when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d03+v1.d04,0)
+                                    when "C309" then if(year(fechaActualizacion)     in (2018,2023,2024),v1.d03+v1.d04,0)
+                                    when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024),v1.d03+v1.d04,0)
                                 end) as ttc'),
                     DB::raw('sum(
                             case v1.cuadro
-                                when "C309" then if(year(par_importacion.fechaActualizacion) in (2018,2023,2024) and v1.ges_dep in("A1","A2","A3","A4"),v1.d01+v1.d02+v1.d03+v1.d04,0)
-                                when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024) and v1.ges_dep in("A1","A2","A3","A4"),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                when "C309" then if(year(fechaActualizacion)     in (2018,2023,2024) and v1.ges_dep in("A1","A2","A3","A4"),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024) and v1.ges_dep in("A1","A2","A3","A4"),v1.d01+v1.d02+v1.d03+v1.d04,0)
                             end) as pub'),
                     DB::raw('sum(
                             case v1.cuadro
-                                when "C309" then if(year(par_importacion.fechaActualizacion) in (2018,2023,2024) and v1.ges_dep in("B3","B4"),v1.d01+v1.d02+v1.d03+v1.d04,0)
-                                when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024) and v1.ges_dep in("B3","B4"),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                when "C309" then if(year(fechaActualizacion)     in (2018,2023,2024) and v1.ges_dep in("B3","B4"),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024) and v1.ges_dep in("B3","B4"),v1.d01+v1.d02+v1.d03+v1.d04,0)
                             end) as pri'),
                     DB::raw('sum(
                             case v1.cuadro
-                                when "C309" then if(year(par_importacion.fechaActualizacion) in (2018,2023,2024) and v1.area_censo=1,v1.d01+v1.d02+v1.d03+v1.d04,0)
-                                when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024) and v1.area_censo=1,v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                when "C309" then if(year(fechaActualizacion)     in (2018,2023,2024) and v1.area_censo=1,v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024) and v1.area_censo=1,v1.d01+v1.d02+v1.d03+v1.d04,0)
                             end) as urb'),
                     DB::raw('sum(
                             case v1.cuadro
-                                when "C309" then if(year(par_importacion.fechaActualizacion) in (2018,2023,2024) and v1.area_censo=2,v1.d01+v1.d02+v1.d03+v1.d04,0)
-                                when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024) and v1.area_censo=2,v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                when "C309" then if(year(fechaActualizacion)     in (2018,2023,2024) and v1.area_censo=2,v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024) and v1.area_censo=2,v1.d01+v1.d02+v1.d03+v1.d04,0)
                             end) as rur'),
 
                 )
                     ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
                     ->join('edu_ugel as uu', 'uu.codigo', '=', 'v1.codooii')
-                    ->whereIn('v1.nroced', ['1A'])->whereIn('v1.cuadro', ['C309', 'C310'])->whereIn('v1.tipdato', ['01', '03', '07', '08'])
+                    ->whereIn('v1.nroced', ['1A'])->whereIn('v1.cuadro', ['C305', 'C309', 'C310'])->whereIn('v1.tipdato', ['05', '01', '03', '07', '08'])
                     ->where('par_importacion.id', $anio);
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
@@ -399,42 +390,7 @@ class ImporCensoDocenteRepositorio
                     }
                 }
                 $query = $query->groupBy('cod_ugel', 'ugel')->get();
-
-                foreach ($query as $value) {
-                    $value->td = 0;
-                    $docentes = Importacion::select(
-                        DB::raw('sum(
-                            case
-                                when year(par_importacion.fechaActualizacion) in (2018,2019)
-                                    then v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13
-                                when year(par_importacion.fechaActualizacion) not in (2018,2019)
-                                    then v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11
-                            end) as total'),
-                    )
-                        ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
-                        ->whereIn('v1.nroced', ['1A'])->whereIn('v1.cuadro', ['C305'])->whereIn('v1.tipdato', ['01', '05'])
-                        ->where('par_importacion.id', $anio)->where('v1.codooii', $value->cod_ugel);
-                    if ($provincia > 0) {
-                        $prov = Ubigeo::find($provincia);
-                        $docentes = $docentes->where('v1.codgeo', 'like', $prov->codigo . '%');
-                    }
-                    if ($distrito > 0) {
-                        $dist = Ubigeo::find($distrito);
-                        $docentes = $docentes->where('v1.codgeo', $dist->codigo);
-                    }
-                    if ($gestion > 0) {
-                        if ($gestion == 3) {
-                            $gestionx = ['B3', 'B4'];
-                            $docentes = $docentes->whereIn('v1.ges_dep', $gestionx);
-                        } else {
-                            $gestionx = ['A1', 'A2', 'A3', 'A4'];
-                            $docentes = $docentes->whereIn('v1.ges_dep', $gestionx);
-                        }
-                    }
-                    $docentes = $docentes->first();
-                    if ($docentes)
-                        $value->td = $docentes->total;
-                }
+ 
                 return $query;
 
             default:
@@ -518,10 +474,10 @@ class ImporCensoDocenteRepositorio
                 $anios = Importacion::select('id', DB::raw('year(fechaActualizacion) as anio'))->where('fuenteImportacion_id', ImporCensoDocenteController::$FUENTE)->where('estado', 'PR')->orderBy('anio')->get();
 
                 $titulados = Importacion::select(
-                    DB::raw('year(par_importacion.fechaActualizacion) as anio'),
+                    DB::raw('year(fechaActualizacion) as anio'),
                     DB::raw('sum(
-                        IF(year(par_importacion.fechaActualizacion) in (2018,2019),(v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13),
-                        IF(year(par_importacion.fechaActualizacion) not in (2018,2019),v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13+v1.d14+v1.d15,0))
+                        IF(year(fechaActualizacion)     in (2018,2019),(v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13),
+                        IF(year(fechaActualizacion) not in (2018,2019),v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13+v1.d14+v1.d15,0))
                                 ) as d')
                 )
                     ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
@@ -544,18 +500,18 @@ class ImporCensoDocenteRepositorio
                         $titulados = $titulados->whereIn('v1.ges_dep', $gestionx);
                     }
                 }
-                // if ($ambito > 0) {
-                //     $area = Area::find($ambito);
-                //     $titulados = $titulados->where('v1.area_censo', $area->codigo);
-                // }
+                if ($area > 0) {
+                    $areax = Area::find($area);
+                    $titulados = $titulados->where('v1.area_censo', $areax->codigo);
+                }
                 $titulados = $titulados->groupBy('anio')->orderBy('anio', 'asc')->orderBy('v1.tipdato', 'desc')->get();
 
                 $docentes = Importacion::select(
                     DB::raw('year(par_importacion.fechaActualizacion) as anio'),
                     DB::raw('sum(
                                 case v1.cuadro
-                                    when "C309" then if(year(par_importacion.fechaActualizacion) in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
-                                    when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                    when "C309" then if(year(fechaActualizacion) in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                    when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
                                 end) as d')
                 )
                     ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
@@ -590,22 +546,22 @@ class ImporCensoDocenteRepositorio
                     DB::raw('year(par_importacion.fechaActualizacion) as anio'),
                     DB::raw('sum(
                         case v1.cuadro
-                            when "C309" then if(year(par_importacion.fechaActualizacion) in (2018,2023,2024),v1.d01,0)
-                            when "C310" then if(year(par_importacion.fechaActualizacion) not  in (2018,2023,2024),v1.d01,0)
+                            when "C309" then if(year(par_importacion.fechaActualizacion)     in (2018,2023,2024),v1.d01,0)
+                            when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d01,0)
                         end) as d01'),
                     DB::raw('sum(
                         case v1.cuadro
                             when "C309" then if(year(par_importacion.fechaActualizacion) in (2018,2023,2024),v1.d02,0)
-                            when "C310" then if(year(par_importacion.fechaActualizacion) not  in (2018,2023,2024),v1.d02,0)
+                            when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d02,0)
                         end) as d02'),
                     DB::raw('sum(
                         case v1.cuadro
-                            when "C309" then if(year(par_importacion.fechaActualizacion) in (2018,2023,2024),v1.d03,0)
+                            when "C309" then if(year(par_importacion.fechaActualizacion)    in (2018,2023,2024),v1.d03,0)
                             when "C310" then if(year(par_importacion.fechaActualizacion)not in (2018,2023,2024),v1.d03,0)
                         end) as d03'),
                     DB::raw('sum(
                         case v1.cuadro
-                            when "C309" then if(year(par_importacion.fechaActualizacion) in (2018,2023,2024),v1.d04,0)
+                            when "C309" then if(year(par_importacion.fechaActualizacion)     in (2018,2023,2024),v1.d04,0)
                             when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d04,0)
                         end) as d04'),
                 )
@@ -637,13 +593,9 @@ class ImporCensoDocenteRepositorio
                     'area_censo as area',
                     DB::raw('sum(
                         case v1.cuadro
-                            when "C309" then if(year(par_importacion.fechaActualizacion) in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                            when "C309" then if(year(par_importacion.fechaActualizacion)     in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
                             when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
                         end) as d'),
-                    /* DB::raw('sum(
-                            IF(year(par_importacion.fechaActualizacion)=2018 or year(par_importacion.fechaActualizacion)=2019,(v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13+v1.d14+v1.d15+v1.d16+v1.d17+v1.d18+v1.d19+v1.d20+v1.d21+v1.d22+v1.d23+v1.d24+v1.d25),
-                            IF(year(par_importacion.fechaActualizacion)>2019,v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13+v1.d14+v1.d15+v1.d16+v1.d17+v1.d18+v1.d19+v1.d20+v1.d21+v1.d22+v1.d23+v1.d24+v1.d25+v1.d26,0))
-                                    ) as d') */
                 )
                     ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
                     ->whereIn('v1.nroced', ['3AP'])->whereIn('v1.cuadro', ['C309', 'C310'])->whereIn('v1.tipdato', ['02', '04', '07', '08'])->where('par_importacion.id', $anio);
@@ -674,45 +626,43 @@ class ImporCensoDocenteRepositorio
                     DB::raw('max(ds.nombre) as distrito'),
                     DB::raw('sum(IF(cuadro="C305" and tipdato in("01","05"),
                                     case
-                                        when year(par_importacion.fechaActualizacion)     in (2018,2019)
-                                            then v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13
-                                        when year(par_importacion.fechaActualizacion) not in (2018,2019)
-                                            then v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13+v1.d14+v1.d15
+                                        when year(fechaActualizacion)     in (2018,2019) then v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13
+                                        when year(fechaActualizacion) not in (2018,2019) then v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13+v1.d14+v1.d15
                                     end ,0)) as total'),
                     DB::raw('sum(IF(cuadro in("C309","C310") and tipdato in("02","04","07","08"),
                                     case v1.cuadro
-                                        when "C309" then if(year(par_importacion.fechaActualizacion)     in (2018,2023,2024),v1.d01,0)
-                                        when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d01,0)
+                                        when "C309" then if(year(fechaActualizacion)     in (2018,2023,2024),v1.d01,0)
+                                        when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024),v1.d01,0)
                                     end ,0)) as d01'),
                     DB::raw('sum(IF(cuadro in("C309","C310") and tipdato in("02","04","07","08"),
                                     case v1.cuadro
-                                        when "C309" then if(year(par_importacion.fechaActualizacion)     in (2018,2023,2024),v1.d02,0)
-                                        when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d02,0)
+                                        when "C309" then if(year(fechaActualizacion)     in (2018,2023,2024),v1.d02,0)
+                                        when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024),v1.d02,0)
                                     end ,0)) as d02'),
                     DB::raw('sum(IF(cuadro in("C309","C310") and tipdato in("02","04","07","08"),
                                     case v1.cuadro
-                                        when "C309" then if(year(par_importacion.fechaActualizacion)     in (2018,2023,2024),v1.d03,0)
-                                        when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d03,0)
+                                        when "C309" then if(year(fechaActualizacion)     in (2018,2023,2024),v1.d03,0)
+                                        when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024),v1.d03,0)
                                     end ,0)) as d03'),
                     DB::raw('sum(IF(cuadro in("C309","C310") and tipdato in("02","04","07","08"),
                                     case v1.cuadro
-                                        when "C309" then if(year(par_importacion.fechaActualizacion)     in (2018,2023,2024),v1.d04,0)
-                                        when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d04,0)
+                                        when "C309" then if(year(fechaActualizacion)     in (2018,2023,2024),v1.d04,0)
+                                        when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024),v1.d04,0)
                                     end ,0)) as d04'),
                     DB::raw('sum(IF(cuadro in("C309","C310") and tipdato in("02","04","07","08"),
                                     case v1.cuadro
-                                        when "C309" then if(year(par_importacion.fechaActualizacion)     in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
-                                        when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                        when "C309" then if(year(fechaActualizacion)     in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                        when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
                                     end ,0)) as tt'),
                     DB::raw('sum(IF(cuadro in("C309","C310") and tipdato in("02","04","07","08"),
                                     case v1.cuadro
-                                        when "C309" then if(year(par_importacion.fechaActualizacion)     in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
-                                        when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                        when "C309" then if(year(fechaActualizacion)     in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                        when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
                                     end ,0)) as ttn'),
                     DB::raw('sum(IF(cuadro in("C309","C310") and tipdato in("02","04","07","08"),
                                     case v1.cuadro
-                                        when "C309" then if(year(par_importacion.fechaActualizacion)     in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
-                                        when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                        when "C309" then if(year(fechaActualizacion)     in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                        when "C310" then if(year(fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
                                     end ,0)) as ttc'),
                 )
                     ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
@@ -744,55 +694,60 @@ class ImporCensoDocenteRepositorio
                 $query = Importacion::select(
                     DB::raw('uu.codigo as cod_ugel'),
                     DB::raw('uu.nombre as ugel'),
+                    DB::raw('sum(IF(cuadro="C305" and tipdato in("01","05"),
+                                    case
+                                        when year(fechaActualizacion)     in (2018,2019) then v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13
+                                        when year(fechaActualizacion) not in (2018,2019) then v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13+v1.d14+v1.d15
+                                    end ,0)) as td'),
                     DB::raw('sum(
                                 case v1.cuadro
-                                    when "C309" then if(year(par_importacion.fechaActualizacion)     in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
-                                    when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                    when "C309" then if(tipdato in("02","04","07","08") and year(fechaActualizacion)     in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                    when "C310" then if(tipdato in("02","04","07","08") and year(fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
                                 end) as tt'),
                     DB::raw('sum(
                                 case v1.cuadro
-                                    when "C309" then if(year(par_importacion.fechaActualizacion)     in (2018,2023,2024),v1.d01+v1.d03,0)
-                                    when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d03,0)
+                                    when "C309" then if(tipdato in("02","04","07","08") and year(fechaActualizacion)     in (2018,2023,2024),v1.d01+v1.d03,0)
+                                    when "C310" then if(tipdato in("02","04","07","08") and year(fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d03,0)
                                 end) as tth'),
                     DB::raw('sum(
                                 case v1.cuadro
-                                    when "C309" then if(year(par_importacion.fechaActualizacion)     in (2018,2023,2024),v1.d02+v1.d04,0)
-                                    when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d02+v1.d04,0)
+                                    when "C309" then if(tipdato in("02","04","07","08") and year(fechaActualizacion)     in (2018,2023,2024),v1.d02+v1.d04,0)
+                                    when "C310" then if(tipdato in("02","04","07","08") and year(fechaActualizacion) not in (2018,2023,2024),v1.d02+v1.d04,0)
                                 end) as ttm'),
                     DB::raw('sum(
                                 case v1.cuadro
-                                    when "C309" then if(year(par_importacion.fechaActualizacion)     in (2018,2023,2024),v1.d01+v1.d02,0)
-                                    when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d02,0)
+                                    when "C309" then if(tipdato in("02","04","07","08") and year(fechaActualizacion)     in (2018,2023,2024),v1.d01+v1.d02,0)
+                                    when "C310" then if(tipdato in("02","04","07","08") and year(fechaActualizacion) not in (2018,2023,2024),v1.d01+v1.d02,0)
                                 end) as ttn'),
                     DB::raw('sum(
                                 case v1.cuadro
-                                    when "C309" then if(year(par_importacion.fechaActualizacion)     in (2018,2023,2024),v1.d03+v1.d04,0)
-                                    when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024),v1.d03+v1.d04,0)
+                                    when "C309" then if(tipdato in("02","04","07","08") and year(fechaActualizacion)     in (2018,2023,2024),v1.d03+v1.d04,0)
+                                    when "C310" then if(tipdato in("02","04","07","08") and year(fechaActualizacion) not in (2018,2023,2024),v1.d03+v1.d04,0)
                                 end) as ttc'),
                     DB::raw('sum(
                                 case v1.cuadro
-                                    when "C309" then if(year(par_importacion.fechaActualizacion)     in (2018,2023,2024) and v1.ges_dep in("A1","A2","A3","A4"),v1.d01+v1.d02+v1.d03+v1.d04,0)
-                                    when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024) and v1.ges_dep in("A1","A2","A3","A4"),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                    when "C309" then if(tipdato in("02","04","07","08") and year(fechaActualizacion)     in (2018,2023,2024) and v1.ges_dep in("A1","A2","A3","A4"),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                    when "C310" then if(tipdato in("02","04","07","08") and year(fechaActualizacion) not in (2018,2023,2024) and v1.ges_dep in("A1","A2","A3","A4"),v1.d01+v1.d02+v1.d03+v1.d04,0)
                                 end) as pub'),
                     DB::raw('sum(
                                 case v1.cuadro
-                                    when "C309" then if(year(par_importacion.fechaActualizacion)     in (2018,2023,2024) and v1.ges_dep in("B3","B4"),v1.d01+v1.d02+v1.d03+v1.d04,0)
-                                    when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024) and v1.ges_dep in("B3","B4"),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                    when "C309" then if(tipdato in("02","04","07","08") and year(fechaActualizacion)     in (2018,2023,2024) and v1.ges_dep in("B3","B4"),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                    when "C310" then if(tipdato in("02","04","07","08") and year(fechaActualizacion) not in (2018,2023,2024) and v1.ges_dep in("B3","B4"),v1.d01+v1.d02+v1.d03+v1.d04,0)
                                 end) as pri'),
                     DB::raw('sum(
                                 case v1.cuadro
-                                    when "C309" then if(year(par_importacion.fechaActualizacion)     in (2018,2023,2024) and v1.area_censo=1,v1.d01+v1.d02+v1.d03+v1.d04,0)
-                                    when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024) and v1.area_censo=1,v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                    when "C309" then if(tipdato in("02","04","07","08") and year(fechaActualizacion)     in (2018,2023,2024) and v1.area_censo=1,v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                    when "C310" then if(tipdato in("02","04","07","08") and year(fechaActualizacion) not in (2018,2023,2024) and v1.area_censo=1,v1.d01+v1.d02+v1.d03+v1.d04,0)
                                 end) as urb'),
                     DB::raw('sum(
                                 case v1.cuadro
-                                    when "C309" then if(year(par_importacion.fechaActualizacion)     in (2018,2023,2024) and v1.area_censo=2,v1.d01+v1.d02+v1.d03+v1.d04,0)
-                                    when "C310" then if(year(par_importacion.fechaActualizacion) not in (2018,2023,2024) and v1.area_censo=2,v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                    when "C309" then if(tipdato in("02","04","07","08") and year(fechaActualizacion)     in (2018,2023,2024) and v1.area_censo=2,v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                    when "C310" then if(tipdato in("02","04","07","08") and year(fechaActualizacion) not in (2018,2023,2024) and v1.area_censo=2,v1.d01+v1.d02+v1.d03+v1.d04,0)
                                 end) as rur'),
                 )
                     ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
                     ->join('edu_ugel as uu', 'uu.codigo', '=', 'v1.codooii')
-                    ->whereIn('v1.nroced', ['3AP'])->whereIn('v1.cuadro', ['C309', 'C310'])->whereIn('v1.tipdato', ['02', '04', '07', '08'])
+                    ->whereIn('v1.nroced', ['3AP'])->whereIn('v1.cuadro', ['C305', 'C309', 'C310'])->whereIn('v1.tipdato', ['01', '05', '02', '04', '07', '08'])
                     ->where('par_importacion.id', $anio);
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
@@ -813,41 +768,6 @@ class ImporCensoDocenteRepositorio
                 }
                 $query = $query->groupBy('cod_ugel', 'ugel')->get();
 
-                foreach ($query as $value) {
-                    $value->td = 0;
-                    $docentes = Importacion::select(
-                        DB::raw('sum(
-                                case
-                                    when year(par_importacion.fechaActualizacion)     in (2018,2019)
-                                        then v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13
-                                    when year(par_importacion.fechaActualizacion) not in (2018,2019)
-                                        then v1.d01+v1.d02+v1.d03+v1.d04+v1.d05+v1.d06+v1.d07+v1.d08+v1.d09+v1.d10+v1.d11+v1.d12+v1.d13+v1.d14+v1.d15
-                                end) as total'),
-                    )
-                        ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
-                        ->whereIn('v1.nroced', ['3AP'])->whereIn('v1.cuadro', ['C305'])->whereIn('v1.tipdato', ['01', '05'])
-                        ->where('par_importacion.id', $anio)->where('v1.codooii', $value->cod_ugel);
-                    if ($provincia > 0) {
-                        $prov = Ubigeo::find($provincia);
-                        $docentes = $docentes->where('v1.codgeo', 'like', $prov->codigo . '%');
-                    }
-                    if ($distrito > 0) {
-                        $dist = Ubigeo::find($distrito);
-                        $docentes = $docentes->where('v1.codgeo', $dist->codigo);
-                    }
-                    if ($gestion > 0) {
-                        if ($gestion == 3) {
-                            $gestionx = ['B3', 'B4'];
-                            $docentes = $docentes->whereIn('v1.ges_dep', $gestionx);
-                        } else {
-                            $gestionx = ['A1', 'A2', 'A3', 'A4'];
-                            $docentes = $docentes->whereIn('v1.ges_dep', $gestionx);
-                        }
-                    }
-                    $docentes = $docentes->first();
-                    if ($docentes)
-                        $value->td = $docentes->total;
-                }
                 return $query;
             default:
                 return response()->json([]);
@@ -4798,7 +4718,7 @@ class ImporCensoDocenteRepositorio
             )
         )
             ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
-            ->whereIn('v1.nroced', ['3AS'])->whereIn('v1.cuadro', ['C305'])->whereIn('v1.tipdato', ['01', '05'])->where('par_importacion.id', $importacion);
+            ->whereIn('v1.nroced', ['3AP'])->whereIn('v1.cuadro', ['C305'])->whereIn('v1.tipdato', ['01', '05'])->where('par_importacion.id', $importacion);
         if ($provincia > 0) {
             $prov = Ubigeo::find($provincia);
             $query = $query->where('v1.codgeo', 'like', $prov->codigo . '%');
@@ -4828,11 +4748,11 @@ class ImporCensoDocenteRepositorio
             DB::raw('year(par_importacion.fechaActualizacion) as anio'),
             DB::raw('sum(
                                 case v1.cuadro
-                                    when "C309" then if(year(par_importacion.fechaActualizacion) in (2018,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                    when "C309" then v1.d01+v1.d02+v1.d03+v1.d04
                                 end) as v')
         )
             ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
-            ->whereIn('v1.nroced', ['3AS'])->whereIn('v1.cuadro', ['C309'])->whereNotIn('v1.tipdato', ['02', '04', '07', '08'])->where('par_importacion.id', $importacion);
+            ->whereIn('v1.nroced', ['3AP'])->whereIn('v1.cuadro', ['C309'])->whereIn('v1.tipdato', ['02', '04', '07', '08'])->where('par_importacion.id', $importacion);
         if ($provincia > 0) {
             $prov = Ubigeo::find($provincia);
             $query = $query->where('v1.codgeo', 'like', $prov->codigo . '%');
@@ -4878,7 +4798,7 @@ class ImporCensoDocenteRepositorio
             )
         )
             ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
-            ->whereIn('v1.nroced', ['3AS'])->whereIn('v1.cuadro', ['C305'])->whereIn('v1.tipdato', ['01', '05'])->where('par_importacion.id', $importacion);
+            ->whereIn('v1.nroced', ['1A'])->whereIn('v1.cuadro', ['C305'])->whereIn('v1.tipdato', ['01', '05'])->where('par_importacion.id', $importacion);
         if ($provincia > 0) {
             $prov = Ubigeo::find($provincia);
             $query = $query->where('v1.codgeo', 'like', $prov->codigo . '%');
@@ -4908,11 +4828,11 @@ class ImporCensoDocenteRepositorio
             DB::raw('year(par_importacion.fechaActualizacion) as anio'),
             DB::raw('sum(
                                 case v1.cuadro
-                                    when "C309" then if(year(par_importacion.fechaActualizacion) in (2018,2024),v1.d01+v1.d02+v1.d03+v1.d04,0)
+                                    when "C309" then v1.d01+v1.d02+v1.d03+v1.d04
                                 end) as v')
         )
             ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
-            ->whereIn('v1.nroced', ['3AS'])->whereIn('v1.cuadro', ['C309'])->whereNotIn('v1.tipdato', ['01', '03', '07', '08'])->where('par_importacion.id', $importacion);
+            ->whereIn('v1.nroced', ['1A'])->whereIn('v1.cuadro', ['C309'])->whereIn('v1.tipdato', ['01', '03', '07', '08'])->where('par_importacion.id', $importacion);
         if ($provincia > 0) {
             $prov = Ubigeo::find($provincia);
             $query = $query->where('v1.codgeo', 'like', $prov->codigo . '%');

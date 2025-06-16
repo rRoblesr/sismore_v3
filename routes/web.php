@@ -1559,6 +1559,7 @@ Route::get('/recursos/highcharts', function () {
 });
 
 Route::get('/recursos/pruebas', function () {
+    return ImporCensoDocenteRepositorio::_3APReportes('dpanal0', 0, 0, 0, 0, 0);
     return ImporCensoDocenteRepositorio::_3ASReportes('dsanal0', 0, 0, 0, 0, 0);
     return ImporCensoDocenteRepositorio::PersonaDocenteTitulado3AS(0, 0, 0, 0, 0);
     // return TipoGestion::all();
