@@ -116,6 +116,7 @@ use App\Models\Educacion\NivelModalidad;
 use App\Models\Educacion\TipoGestion;
 use App\Models\Parametro\Icono;
 use App\Models\Parametro\Ubigeo;
+use App\Repositories\Educacion\EduCuboMatriculaRepositorio;
 use App\Repositories\Educacion\ImporCensoDocenteRepositorio;
 use App\Repositories\Parametro\UbigeoRepositorio;
 use Illuminate\Support\Facades\Route;
@@ -1559,6 +1560,8 @@ Route::get('/recursos/highcharts', function () {
 });
 
 Route::get('/recursos/pruebas', function () {
+    return EduCuboMatriculaRepositorio::total_anio_ugel_detalles(2025, 0, 0, 0, 0);
+    return EduCuboMatriculaRepositorio::total_anio_ugel(2025, 0, 0, 0, 0);
     return ImporCensoDocenteRepositorio::_3APReportes('dpanal0', 0, 0, 0, 0, 0);
     return ImporCensoDocenteRepositorio::_3ASReportes('dsanal0', 0, 0, 0, 0, 0);
     return ImporCensoDocenteRepositorio::PersonaDocenteTitulado3AS(0, 0, 0, 0, 0);

@@ -16,6 +16,8 @@ use App\Models\Administracion\Perfil;
 use App\Models\Administracion\Sistema;
 use App\Models\Administracion\TipoEntidad;
 use App\Models\Educacion\Area;
+use App\Models\Educacion\EduCuboMatricula;
+use App\Models\Educacion\ImporMatriculaGeneral;
 use App\Models\Educacion\ImporPadronWeb;
 use App\Models\Educacion\Importacion;
 use App\Models\Educacion\MatriculaGeneral;
@@ -31,6 +33,7 @@ use App\Repositories\Administracion\MenuRepositorio;
 use App\Repositories\Administracion\SistemaRepositorio;
 use App\Repositories\Administracion\UsuarioPerfilRepositorio;
 use App\Repositories\Administracion\UsuarioRepositorio;
+use App\Repositories\Educacion\EduCuboMatriculaRepositorio;
 use App\Repositories\Educacion\ImporCensoDocenteRepositorio;
 use App\Repositories\Educacion\ImporCensoMatriculaRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
@@ -694,18 +697,36 @@ class HomeController extends Controller
 
     public function panelControlEduacionHead(Request $rq)
     {
-        $anio = Anio::where('anio', $rq->anio)->first(); //MatriculaGeneralRepositorio::anioId();
-        $xx = MatriculaGeneralRepositorio::indicador01head($anio->id, $rq->provincia, $rq->distrito,  $rq->tipogestion, $rq->area);
-        $valor1 = $xx->basica;
-        $valor2 = $xx->ebr;
-        $valor3 = $xx->ebe;
-        $valor4 = $xx->eba;
-        $aa = Anio::where('anio', -1 + (int)$anio->anio)->first();
-        $xx = MatriculaGeneralRepositorio::indicador01head($aa->id, $rq->provincia, $rq->distrito,  $rq->tipogestion, $rq->area);
-        $valor1x = $xx->basica;
-        $valor2x = $xx->ebr;
-        $valor3x = $xx->ebe;
-        $valor4x = $xx->eba;
+        // return 'ronald';
+        // return $rq->all();
+        // return ImporMatriculaGeneralController::$FUENTE;
+
+        $t = EduCuboMatriculaRepositorio::total_anio($rq->anio, $rq->provincia, $rq->distrito,  $rq->tipogestion, $rq->area);
+        $m = EduCuboMatriculaRepositorio::modalidad_total($rq->anio, $rq->provincia, $rq->distrito,  $rq->tipogestion, $rq->area);
+        $ma = [];
+        if ($m && $m->isNotEmpty()) {
+            $ma = $m->pluck('conteo', 'modalidad')->all();
+        }
+        // return $ma;
+        // $anio = Anio::where('anio', $rq->anio)->first(]); //MatriculaGeneralRepositorio::anioId();
+        // $xx = MatriculaGeneralRepositorio::indicador01head($anio->id, $rq->provincia, $rq->distrito,  $rq->tipogestion, $rq->area);
+        $valor1 = $t;
+        $valor2 = $ma['EBR'];
+        $valor3 = $ma['EBE'];
+        $valor4 = $ma['EBA'];
+        // $aa = Anio::where('anio', -1 + (int)$anio->anio)->first();
+        // $xx = MatriculaGeneralRepositorio::indicador01head($aa->id, $rq->provincia, $rq->distrito,  $rq->tipogestion, $rq->area);
+
+        $t = EduCuboMatriculaRepositorio::total_anio($rq->anio - 1, $rq->provincia, $rq->distrito,  $rq->tipogestion, $rq->area);
+        $m = EduCuboMatriculaRepositorio::modalidad_total($rq->anio - 1, $rq->provincia, $rq->distrito,  $rq->tipogestion, $rq->area);
+        $ma = ["EBR" => 0, "EBE" => 0, "EBA" => 0];
+        if ($m && $m->isNotEmpty()) {
+            $ma = $m->pluck('conteo', 'modalidad')->all();
+        }
+        $valor1x = $t;
+        $valor2x = $ma['EBR'];
+        $valor3x = $ma['EBE'];
+        $valor4x = $ma['EBA'];
 
         $ind1 = number_format($valor1x > 0 ? 100 * $valor1 / $valor1x : 0, 1);
         $ind2 = number_format($valor2x > 0 ? 100 * $valor2 / $valor2x : 0, 1);
@@ -1007,7 +1028,8 @@ class HomeController extends Controller
                 return response()->json(compact('info'));
 
             case 'siagie001':
-                $data = MatriculaGeneralRepositorio::basicaregularopcion2('siagie001', $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
+                // return $data = MatriculaGeneralRepositorio::basicaregularopcion2('siagie001', $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
+                $data = EduCuboMatriculaRepositorio::ebr_nivel_incial_primaria_secundaria($rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
                 // return response()->json(compact('data'));
                 $info['cat'] = [];
                 $info['dat'] = [];
@@ -1019,21 +1041,21 @@ class HomeController extends Controller
                     $info['cat'][] = $value->anio;
                     $pos += 1;
                 }
-                foreach ($data->unique('nivel') as $key => $value) {
-                    $info['dat'][] = ["name" => $value->nivel, "data" => []];
+                foreach ($data->unique('nivel_nombre') as $key => $value) {
+                    $info['dat'][] = ["name" => $value->nivel_nombre, "data" => []];
                     $xx[] = [];
                 }
                 foreach ($data as $value) {
                     foreach ($info['dat'] as $key => $dat) {
-                        if ($value->nivel == $dat['name']) {
+                        if ($value->nivel_nombre == $dat['name']) {
                             $xx[$key][] = $value->conteo;
                         }
                     }
                 }
                 $info['dat'] = [];
                 $pos = 0;
-                foreach ($data->unique('nivel') as $value) {
-                    $info['dat'][] = ["name" => $value->nivel, "data" => $xx[$pos++]];
+                foreach ($data->unique('nivel_nombre') as $value) {
+                    $info['dat'][] = ["name" => $value->nivel_nombre, "data" => $xx[$pos++]];
                 }
 
                 $reg['fuente'] = 'Siagie - MINEDU';
@@ -1184,10 +1206,14 @@ class HomeController extends Controller
             case 'tabla1':
                 ini_set('memory_limit', '-1');
                 set_time_limit(0);
-                $aniox = Anio::where('anio', $rq->anio)->first();
-                $anioy = Anio::where('anio', $aniox->anio - 1)->first();
-                $meta = MatriculaGeneralRepositorio::metaUgel($anioy->id, $rq->provincia, $rq->distrito,  $rq->gestion, 0);
-                $base = MatriculaGeneralRepositorio::educacionbasicasexougel($aniox->id, $rq->provincia, $rq->distrito,  $rq->gestion, 0, 0);
+                // $aniox = Anio::where('anio', $rq->anio)->first();
+                // $anioy = Anio::where('anio', $aniox->anio - 1)->first();
+                // $meta = MatriculaGeneralRepositorio::metaUgel($anioy->id, $rq->provincia, $rq->distrito,  $rq->gestion, 0);
+                // $base = MatriculaGeneralRepositorio::educacionbasicasexougel($aniox->id, $rq->provincia, $rq->distrito,  $rq->gestion, 0, 0);
+
+                $meta =  EduCuboMatriculaRepositorio::total_anio_ugel($rq->anio-1, 0, 0, 0, 0);
+                $base = EduCuboMatriculaRepositorio::total_anio_ugel_detalles($rq->anio, 0, 0, 0, 0);
+
                 $foot = [];
                 if ($base->count() > 0) {
                     $foot = clone $base[0];
@@ -1230,7 +1256,7 @@ class HomeController extends Controller
                 $reg['fuente'] = 'Siagie - MINEDU';
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
-                return response()->json(compact('excel', 'reg'));
+                return response()->json(compact('excel', 'reg', 'meta', 'base', 'foot'));
 
             default:
                 return response()->json([]);

@@ -275,3 +275,43 @@ update `par_poblacion_padron_nominal` pn set sexo_id=sexo, mes_id=mes;
 
 
 
+CREATE TABLE `bdsismore`.`edu_cubo_matricula` (
+    `id` INT NOT NULL primary key auto_increment,
+    `importacion_id` INT NULL,
+    `anio` INT NULL,
+    `mes` INT NULL,
+    `clocal` VARCHAR(50) NULL,
+    `cmodular` VARCHAR(50) NULL,
+    `institucion_educativa` VARCHAR(500) NULL,
+    `id_provincia` INT NULL,
+    `provincia` VARCHAR(200) NULL,
+    `id_distrito` INT NULL,
+    `distrito` VARCHAR(200) NULL,    
+    `id_ugel` VARCHAR(20) NULL,
+    `ugel` VARCHAR(200) NULL,
+    `id_area` INT NULL,
+    `area` VARCHAR(200) NULL,
+    `id_mod` INT NULL,
+    `modalidad` VARCHAR(100) NULL,
+    `id_nivel` VARCHAR(20) NULL,
+    `nivel` VARCHAR(100) NULL,
+    `id_gestion` VARCHAR(20) NULL,
+    `gestion` VARCHAR(20) NULL,
+    `fecha_nacimiento` DATE NULL,
+    `edad` INT NULL,
+    `id_sexo` INT NULL,
+    `sexo` VARCHAR(10) NULL,
+    `lengua_materna` VARCHAR(100) NULL,
+    `segunda_lengua` VARCHAR(100) NULL,
+    `id_discapacidad` VARCHAR(20) NULL,
+    `discapacidad` VARCHAR(200) NULL,
+    `fecha_matricula` DATE NULL,
+    `id_grado` VARCHAR(20) NULL,
+    `grado` VARCHAR(50) NULL,
+    INDEX `idx_importacion_id` (`importacion_id`),
+    INDEX `idx_cmodular` (`cmodular`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+
+

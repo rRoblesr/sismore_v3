@@ -226,8 +226,8 @@
                             <span data-plugin="counterup" id="ebe"></span>
                         </h4>
                         <p class="mb-0 mt-1 text-truncate">
-                            <a href="{{ route('matriculageneral.ebe.principal') }}"
-                                title="Ir a Matricula EBE">Matricula EBE</a>
+                            <a href="{{ route('matriculageneral.ebe.principal') }}" title="Ir a Matricula EBE">Matricula
+                                EBE</a>
                         </p>
                     </div>
                 </div>
@@ -1242,15 +1242,16 @@
                 url: "{{ route('panelcontrol.educacion.head') }}",
                 data: {
                     "anio": {{ $anio }},
-                    "provincia": $('#provincia').val(),
-                    "distrito": $('#distrito').val(),
-                    "tipogestion": $('#tipogestion').val(),
-                    "ambito": $('#ambito').val(),
+                    "provincia": 0, // $('#provincia').val(),
+                    "distrito": 0, //$('#distrito').val(),
+                    "tipogestion": 0, //$('#tipogestion').val(),
+                    "ambito": 0, // $('#ambito').val(),
                 },
                 type: "GET",
                 dataType: "JSON",
                 beforeSend: function() {
-                    $('#basico').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                    const spin = '<span><i class="fa fa-spinner fa-spin"></i></span>';
+                    $('#basico').html(spin);
                     $('#ebr').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
                     $('#ebe').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
                     $('#eba').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
