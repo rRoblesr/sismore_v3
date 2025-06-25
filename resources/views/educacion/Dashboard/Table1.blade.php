@@ -1,4 +1,4 @@
-<table id="tabla1" class="table table-bordered mb-0 tablex" style="font-size:11px;">
+<table id="tabla1" class="table table-bordered mb-0 font-11">
     <thead>
         <tr class="table-success-0 text-white">
             <th rowspan="2" style="text-align: center">UGEL</th>
@@ -30,7 +30,7 @@
                     <td>{{ number_format($item->th, 0) }}</td>
                     <td>{{ number_format($item->tm, 0) }}</td>
                     <td>{{ number_format($item->tt, 0) }}</td>
-                    <td class="table-warning">{{ number_format($item->avance, 0) }}</td>
+                    <td class="table-warning">{!! avance($item->avance, 0) !!}</td>
                     <td>{{ number_format($item->EBRth, 0) }}</td>
                     <td>{{ number_format($item->EBRtm, 0) }}</td>
                     <td>{{ number_format($item->EBEth, 0) }}</td>
@@ -47,7 +47,7 @@
                 <th style="text-align: center">{{ number_format($foot->th, 0) }}</th>
                 <th style="text-align: center">{{ number_format($foot->tm, 0) }}</th>
                 <th style="text-align: center">{{ number_format($foot->tt, 0) }}</th>
-                <th style="text-align: center">{{ number_format($foot->avance, 0) }}</th>
+                <th style="text-align: center">{!! avance($foot->avance) !!}</th>
                 <th style="text-align: center">{{ number_format($foot->EBRth, 0) }}</th>
                 <th style="text-align: center">{{ number_format($foot->EBRtm, 0) }}</th>
                 <th style="text-align: center">{{ number_format($foot->EBEth, 0) }}</th>

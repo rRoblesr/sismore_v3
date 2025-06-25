@@ -1560,6 +1560,9 @@ Route::get('/recursos/highcharts', function () {
 });
 
 Route::get('/recursos/pruebas', function () {
+    return EduCuboMatriculaRepositorio::modalidad_nivel_total_anio_mes(0,2025, 0, 0, 0, 0);
+    return EduCuboMatriculaRepositorio::modalidad_total_anio_meses(1,2025, 0, 0, 0, 0);
+    return EduCuboMatriculaRepositorio::modalidad_total_anios(3, 0, 0, 0, 0);
     return EduCuboMatriculaRepositorio::total_anio_ugel_detalles(2025, 0, 0, 0, 0);
     return EduCuboMatriculaRepositorio::total_anio_ugel(2025, 0, 0, 0, 0);
     return ImporCensoDocenteRepositorio::_3APReportes('dpanal0', 0, 0, 0, 0, 0);

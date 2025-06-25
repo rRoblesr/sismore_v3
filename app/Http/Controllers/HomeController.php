@@ -681,18 +681,18 @@ class HomeController extends Controller
             return view('paginabloqueado'); //viv_centropoblado_datass
         }
         // return 'xxx';
+        $data = EduCuboMatriculaRepositorio::anio_max();
         $actualizado = '';
         $tipo_acceso = 0;
-        $imgd = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-        $anio = $imgd->anio;
+        // $imgd = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
+        $anio = $data->anio;
 
         $provincias = UbigeoRepositorio::provincia_select('25'); //Ubigeo::select('v2.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();
         $distritos = UbigeoRepositorio::distrito_select('25', 0); //Ubigeo::select('v3.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->join('par_ubigeo as v3', 'v3.dependencia', '=', 'v2.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();
         $ambitos = Area::select('id', DB::raw('upper(nombre) as nombre'))->get();
 
-        // return compact('tipo_acceso', 'provincias', 'distritos', 'ambitos', 'anio', 'imgd');
-
-        return  view('home', compact('tipo_acceso', 'provincias', 'distritos', 'ambitos', 'anio',));
+        // return compact('tipo_acceso', 'provincias', 'distritos', 'ambitos', 'anio');
+        return  view('home', compact('tipo_acceso', 'provincias', 'distritos', 'ambitos', 'anio'));
     }
 
     public function panelControlEduacionHead(Request $rq)
@@ -1211,7 +1211,7 @@ class HomeController extends Controller
                 // $meta = MatriculaGeneralRepositorio::metaUgel($anioy->id, $rq->provincia, $rq->distrito,  $rq->gestion, 0);
                 // $base = MatriculaGeneralRepositorio::educacionbasicasexougel($aniox->id, $rq->provincia, $rq->distrito,  $rq->gestion, 0, 0);
 
-                $meta =  EduCuboMatriculaRepositorio::total_anio_ugel($rq->anio-1, 0, 0, 0, 0);
+                $meta =  EduCuboMatriculaRepositorio::total_anio_ugel($rq->anio - 1, 0, 0, 0, 0);
                 $base = EduCuboMatriculaRepositorio::total_anio_ugel_detalles($rq->anio, 0, 0, 0, 0);
 
                 $foot = [];
@@ -1256,7 +1256,8 @@ class HomeController extends Controller
                 $reg['fuente'] = 'Siagie - MINEDU';
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
-                return response()->json(compact('excel', 'reg', 'meta', 'base', 'foot'));
+                // return response()->json(compact('excel', 'reg', 'meta', 'base', 'foot'));
+                return response()->json(compact('excel'));
 
             default:
                 return response()->json([]);

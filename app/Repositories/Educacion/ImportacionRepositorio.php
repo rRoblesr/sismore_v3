@@ -245,7 +245,7 @@ class ImportacionRepositorio
                 // 'v4.apellido1 as aapellido1',
                 // 'v4.apellido2 as aapellido2'
             )
-            ->orderBy('id','desc')->get();
+            ->orderBy('id', 'desc')->get();
         return $query;
     }
 
@@ -331,6 +331,21 @@ class ImportacionRepositorio
             ->where('fuenteimportacion_id', $fuente)
             ->where('estado', 'PR')
             ->orderBy('fechaActualizacion', 'desc')->get();
+        return  $query->first();
+        //return Importacion::select(DB::raw('max(id) as maximo'))->where('fuenteimportacion_id', $fuente)->where('estado', 'PR')->first()->maximo;
+    }
+
+    public static function ImportacionMax_id($id)
+    {
+        $query = Importacion::select(
+            'id',
+            DB::raw('date(fechaActualizacion) as fecha'),
+            DB::raw('year(fechaActualizacion) as anio'),
+            DB::raw('month(fechaActualizacion) as mes'),
+            DB::raw('day(fechaActualizacion) as dia')
+        )
+            ->where('id', $id)
+            ->where('estado', 'PR')->get();
         return  $query->first();
         //return Importacion::select(DB::raw('max(id) as maximo'))->where('fuenteimportacion_id', $fuente)->where('estado', 'PR')->first()->maximo;
     }
