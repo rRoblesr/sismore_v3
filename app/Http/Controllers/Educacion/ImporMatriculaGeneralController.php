@@ -349,11 +349,18 @@ class ImporMatriculaGeneralController extends Controller
 
             $ent = Entidad::find($value->entidad);
 
-            if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11)
-                $boton = '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" id="eliminar' . $value->id . '"><i class="fa fa-trash"></i> </button>';
-            else
-                $boton = '';
-            $boton2 = '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> </button>';
+            $btn = '';
+            // if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11)
+            //     $btn .= '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" id="eliminar' . $value->id . '"><i class="fa fa-trash"></i> </button>&nbsp;';
+            // else $btn = '';
+            if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') ||  in_array(session('perfil_administrador_id'), [3, 8, 9, 10, 11])) {
+                $btn .= '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" id="eliminar' . $value->id . '"><i class="fa fa-trash"></i> </button>&nbsp;';
+            }
+            $btn .= '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> </button>&nbsp;';
+            if (auth()->user()->id == 49) {
+                $btn .= '<button type="button" onclick="procesarCubo(' . $value->id . ')" class="btn btn-info btn-xs"> <i class="fa fa-cube"></i> </button>&nbsp;';
+            }
+
             $data[] = array(
                 $key + 1,
                 date("d/m/Y", strtotime($value->fechaActualizacion)),
@@ -362,7 +369,7 @@ class ImporMatriculaGeneralController extends Controller
                 $ent ? $ent->abreviado : '',
                 date("d/m/Y", strtotime($value->created_at)),
                 $value->estado == "PR" ? "PROCESADO" : ($value->estado == "PE" ? "PENDIENTE" : "ELIMINADO"),
-                $boton . '&nbsp;' . $boton2,
+                $btn,
             );
         }
         $result = array(
@@ -442,5 +449,16 @@ class ImporMatriculaGeneralController extends Controller
     {
         //$name = 'SIAGIE MATRICULAS ' . date('Y-m-d') . '.xlsx';
         //return Excel::download(new ImporPadronSiagieExport, $name);
+    }
+
+    public function procesarCubo(Request $request)
+    {
+        $importacion_id = $request->input('importacion_id');
+        try {
+            DB::statement('CALL edu_pa_procesar_cubo_matricula(?)', [$importacion_id]);
+            return response()->json(['status' => 200, 'message' => 'Cubo procesado exitosamente.']);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 400, 'message' => 'Error al procesar el cubo: ' . $e->getMessage()], 400);
+        }
     }
 }

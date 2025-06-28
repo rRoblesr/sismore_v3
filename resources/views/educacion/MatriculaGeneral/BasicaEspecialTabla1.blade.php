@@ -1,3 +1,4 @@
+
 <table id="tabla1" class="table table-striped table-bordered tablex" style="font-size:11px;">
     <thead>
         <tr class="bg-success-0 text-white text-center">
@@ -38,7 +39,7 @@
                     <td>{{ number_format($item->thp, 0) }}</td>
                     <td>{{ number_format($item->tmp, 0) }}</td>
                     <td>{{ number_format($item->ths, 0) }}</td>
-                    <td>{{ number_format($item->ths, 0) }}</td>
+                    <td>{{ number_format($item->tms, 0) }}</td>
                 </tr>
             @endforeach
         </tbody>

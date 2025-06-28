@@ -58,7 +58,7 @@
                                     onchange="cargarCards();">
                                     <option value="0">AÑO</option>
                                     @foreach ($anios as $item)
-                                        <option value="{{ $item->id }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                        <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
                                             {{ $item->anio }}</option>
                                     @endforeach
                                 </select>

@@ -748,30 +748,6 @@ class MatriculaGeneralController extends Controller
         $valor3 = number_format($valor3, 0);
         $valor4 = number_format($valor4, 0);
 
-        // $xx = MatriculaGeneralRepositorio::indicador01head($rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion, $rq->area);
-        // $valor1 = $xx->basica;
-        // $valor2 = $xx->ebr;
-        // $valor3 = $xx->ebe;
-        // $valor4 = $xx->eba;
-        // $aa = Anio::find($rq->anio);
-        // $aav =  -1 + (int)$aa->anio;
-        // $aa = Anio::where('anio', $aav)->first();
-        // $xx = MatriculaGeneralRepositorio::indicador01head($aa->id, $rq->provincia, $rq->distrito,  $rq->gestion, $rq->area);
-        // $valor1x = $xx->basica;
-        // $valor2x = $xx->ebr;
-        // $valor3x = $xx->ebe;
-        // $valor4x = $xx->eba;
-
-        // $ind1 = number_format($valor1x > 0 ? 100 * $valor1 / $valor1x : 0, 1);
-        // $ind2 = number_format($valor2x > 0 ? 100 * $valor2 / $valor2x : 0, 1);
-        // $ind3 = number_format($valor3x > 0 ? 100 * $valor3 / $valor3x : 0, 1);
-        // $ind4 = number_format($valor4x > 0 ? 100 * $valor4 / $valor4x : 0, 1);
-
-        // $valor1 = number_format($valor1, 0);
-        // $valor2 = number_format($valor2, 0);
-        // $valor3 = number_format($valor3, 0);
-        // $valor4 = number_format($valor4, 0);
-
         return response()->json(compact('valor1', 'valor2', 'valor3', 'valor4', 'ind1', 'ind2', 'ind3', 'ind4'));
     }
 
@@ -1502,67 +1478,47 @@ class MatriculaGeneralController extends Controller
         $actualizado = '';
         $tipo_acceso = 0;
 
-        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE); //nexus
+        $anios = EduCuboMatriculaRepositorio::listar_anios();
+        $aniomax = $anios->max('anio');
+        $imp = ImportacionRepositorio::ImportacionMax_id(EduCuboMatriculaRepositorio::importacion($aniomax));
 
         $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mes[$imp->mes - 1] . ' del ' . $imp->anio;
 
-        $anios = MatriculaGeneralRepositorio::anios();
-        $aniomax = MatriculaGeneralRepositorio::anioMax();
-        //$provincia = UbigeoRepositorio::provincia25();
-        $ugel = MatriculaGeneralRepositorio::ugels();
-        $area = MatriculaGeneralRepositorio::areas();
+        $ugel = EduCuboMatriculaRepositorio::listar_ugel($aniomax);
+        $area = EduCuboMatriculaRepositorio::listar_area($aniomax);
 
         $fecha = '';
-
+        // return compact('anios', 'aniomax', 'actualizado', 'ugel', 'area', 'fecha');
         return view('educacion.MatriculaGeneral.BasicaRegular', compact('anios', 'aniomax', 'actualizado', 'ugel', 'area', 'fecha'));
-    }
-
-    public function basicaregularhead(Request $rq) //eliminar
-    {
-        $xx = MatriculaGeneralRepositorio::indicador01head($rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion, 1);
-        $valor1 = $xx->basica;
-        $valor2 = $xx->ebr;
-        $valor3 = $xx->ebe;
-        $valor4 = $xx->eba;
-        $aa = Anio::find($rq->anio);
-        $aav =  -1 + (int)$aa->anio;
-        $aa = Anio::where('anio', $aav)->first();
-        $xx = MatriculaGeneralRepositorio::indicador01head($aa->id, $rq->provincia, $rq->distrito,  $rq->gestion, 1);
-        $valor1x = $xx->basica;
-        $valor2x = $xx->ebr;
-        $valor3x = $xx->ebe;
-        $valor4x = $xx->eba;
-
-        $ind1 = number_format($valor1x > 0 ? 100 * $valor1 / $valor1x : 0, 1);
-        $ind2 = number_format($valor2x > 0 ? 100 * $valor2 / $valor2x : 0, 1);
-        $ind3 = number_format($valor3x > 0 ? 100 * $valor3 / $valor3x : 0, 1);
-        $ind4 = number_format($valor4x > 0 ? 100 * $valor4 / $valor4x : 0, 1);
-
-        $valor1 = number_format($valor1, 0);
-        $valor2 = number_format($valor2, 0);
-        $valor3 = number_format($valor3, 0);
-        $valor4 = number_format($valor4, 0);
-
-        return response()->json(compact('valor1', 'valor2', 'valor3', 'valor4', 'ind1', 'ind2', 'ind3', 'ind4'));
     }
 
     public function basicaregulartabla(Request $rq)
     {
         switch ($rq->div) {
             case 'head':
-                $mh = MatriculaGeneralRepositorio::basicaregulartabla('mhead', $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
-                $valor1 = (int)$mh->conteo;
-                $valor2 = (int)$mh->conteoi;
-                $valor3 = (int)$mh->conteop;
-                $valor4 = (int)$mh->conteos;
-                $aa = Anio::find($rq->anio);
-                $aav =  -1 + (int)$aa->anio;
-                $aa = Anio::where('anio', $aav)->first();
-                $mh = MatriculaGeneralRepositorio::metaEBR($rq->anio == 3 ? 3 : $aa->id, $rq->ugel, $rq->gestion,  $rq->area);
-                $valor1x = (int)$mh->conteo;
-                $valor2x = (int)$mh->conteoi;
-                $valor3x = (int)$mh->conteop;
-                $valor4x = (int)$mh->conteos;
+                $m = EduCuboMatriculaRepositorio::ebr_nivel_total($rq->anio, $rq->provincia, $rq->distrito,  $rq->tipogestion, $rq->area);
+                $t = $m->sum('y');
+                $ma = [];
+                if ($m && $m->isNotEmpty()) {
+                    $ma = $m->pluck('y', 'name')->all();
+                }
+
+                $valor1 = $t;
+                $valor2 = $ma['INICIAL'];
+                $valor3 = $ma['PRIMARIA'];
+                $valor4 = $ma['SECUNDARIA'];
+
+                $m = EduCuboMatriculaRepositorio::ebr_nivel_total($rq->anio - 1, $rq->provincia, $rq->distrito,  $rq->tipogestion, $rq->area);
+                $t = $m->sum('y');
+                $ma = [];
+                if ($m && $m->isNotEmpty()) {
+                    $ma = $m->pluck('y', 'name')->all();
+                }
+
+                $valor1x = $t;
+                $valor2x = $ma['INICIAL'];
+                $valor3x = $ma['PRIMARIA'];
+                $valor4x = $ma['SECUNDARIA'];
 
                 $ind1 = number_format($valor1x > 0 ? 100 * $valor1 / $valor1x : 0, 1);
                 $ind2 = number_format($valor2x > 0 ? 100 * $valor2 / $valor2x : 0, 1);
@@ -1576,7 +1532,8 @@ class MatriculaGeneralController extends Controller
 
                 return response()->json(compact('valor1', 'valor2', 'valor3', 'valor4', 'ind1', 'ind2', 'ind3', 'ind4'));
             case 'anal1':
-                $datax = MatriculaGeneralRepositorio::basicaregulartabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
+                // $datax = MatriculaGeneralRepositorio::basicaregulartabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
+                $datax = EduCuboMatriculaRepositorio::modalidad_total_anios(1, $rq->provincia, $rq->distrito,  $rq->gestion, $rq->area);
                 $info['series'] = [];
                 $alto = 0;
                 $btotal = 0;
@@ -1589,8 +1546,8 @@ class MatriculaGeneralController extends Controller
                 // }
                 foreach ($datax as $keyi => $ii) {
                     $info['categoria'][] = $ii->anio;
-                    $n = (int)$ii->conteo;
-                    $d = $ii->anio == 2018 ? $n : (int)$datax[$keyi - 1]->conteo;
+                    $n = (int)$ii->suma;
+                    $d = $ii->anio == 2018 ? $n : (int)$datax[$keyi - 1]->suma;
                     $dx3[$keyi] = $n;
                     $dx4[$keyi] = $d > 0 ? round(100 * $n / $d, 1) : 0;
                     $alto = $n > $alto ? $n : $alto;
@@ -1603,72 +1560,63 @@ class MatriculaGeneralController extends Controller
 
                 $reg['fuente'] = 'Siagie - MINEDU';
                 $reg['periodo'] = "período $anioi - $aniof";
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-                $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
+                $imp = ImportacionRepositorio::ImportacionMax_id(EduCuboMatriculaRepositorio::importacion($rq->anio));
+                $reg['fecha'] = date('d/m/Y', strtotime($imp->fecha));
                 return response()->json(compact('info', 'reg'));
             case 'anal2':
-                $periodo = Mes::select('codigo', 'abreviado as mes', DB::raw('0 as conteo'))->get();
-                $datax = MatriculaGeneralRepositorio::basicaregulartabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
+                $data = EduCuboMatriculaRepositorio::modalidad_total_anio_meses(1, $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion, $rq->area);
+                $mes = Mes::select('codigo', 'abreviado as mes')->pluck('mes', 'codigo');
                 $info['cat'] = [];
                 $info['dat'] = [];
-                $mesmax = $datax->max('mes');
-                foreach ($periodo as $key => $pp) {
-                    $info['cat'][$key] = $pp->mes;
-                    if ($pp->codigo > $mesmax) {
-                        $info['dat'][$key] = null;
-                    } else {
-                        $info['dat'][$key] = 0;
-                        foreach ($datax as $dd) {
-                            if ($dd->mes == $pp->codigo) {
-                                $info['dat'][$key] = $key > 0 ? $info['dat'][$key - 1] + $dd->conteo : $dd->conteo;
-                                break;
-                            }
-                        }
-                    }
+                foreach ($data as $key => $value) {
+                    $info['cat'][$key] = $mes[$value['mes']] ?? 'ERROR';
+                    $info['dat'][$key] = $value['acumulado'];
                 }
-
                 $reg['fuente'] = 'Siagie - MINEDU';
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-                $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
-                return response()->json(compact('info', 'reg', 'datax'));
+                $imp = ImportacionRepositorio::ImportacionMax_id(EduCuboMatriculaRepositorio::importacion($rq->anio));
+                $reg['fecha'] = date('d/m/Y', strtotime($imp->fecha));
+                return response()->json(compact('info', 'reg'));
             case 'anal3':
-                $data = MatriculaGeneralRepositorio::basicaregulartabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
+                $data = EduCuboMatriculaRepositorio::ebr_nivel_incial_primaria_secundaria(0, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
                 $info['cat'] = [];
                 $info['dat'] = [];
-                $anioi = 0;
-                $aniof = 0;
+                $rango = '';
+                $pos = 0;
                 foreach ($data->unique('anio') as $key => $value) {
+                    if ($pos == 0) $rango .= '' . $value->anio . ' - ';
+                    if ($pos == $data->unique('anio')->count() - 1) $rango .= '' . $value->anio;
                     $info['cat'][] = $value->anio;
+                    $pos += 1;
                 }
-                foreach ($data->unique('nivel') as $key => $value) {
-                    $info['dat'][] = ["name" => $value->nivel, "data" => []];
+                foreach ($data->unique('nivel_nombre') as $key => $value) {
+                    $info['dat'][] = ["name" => $value->nivel_nombre, "data" => []];
                     $xx[] = [];
                 }
-                foreach ($data as $key => $value) {
-                    foreach ($info['dat'] as $key2 => $dat) {
-                        if ($value->nivel == $dat['name']) {
-                            $xx[$key2][] = $value->conteo;
+                foreach ($data as $value) {
+                    foreach ($info['dat'] as $key => $dat) {
+                        if ($value->nivel_nombre == $dat['name']) {
+                            $xx[$key][] = $value->conteo;
                         }
                     }
-                    if ($key == 0) $anioi = $value->anio;
-                    if ($key == $data->count() - 1) $aniof = $value->anio;
                 }
                 $info['dat'] = [];
-                foreach ($data->unique('nivel') as $key => $value) {
-                    $info['dat'][] = ["name" => $value->nivel, "data" => $xx[$key]];
+                $pos = 0;
+                foreach ($data->unique('nivel_nombre') as $value) {
+                    $info['dat'][] = ["name" => $value->nivel_nombre, "data" => $xx[$pos++]];
                 }
 
-                $reg['periodo'] = "$anioi - $aniof";
+                $reg['periodo'] = reset($info['cat']) . ' - ' . end($info['cat']);
                 $reg['fuente'] = 'Siagie - MINEDU';
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-                $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
+                $imp = ImportacionRepositorio::ImportacionMax_id(EduCuboMatriculaRepositorio::importacion($rq->anio));
+                $reg['fecha'] = date('d/m/Y', strtotime($imp->fecha));
+                $reg['rango'] = $rango;
                 return response()->json(compact('info', 'reg'));
             case 'anal4':
-                $info = MatriculaGeneralRepositorio::basicaregulartabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
+                $info = EduCuboMatriculaRepositorio::ebr_nivel_total($rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
 
                 $reg['fuente'] = 'Siagie - MINEDU';
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-                $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
+                $imp = ImportacionRepositorio::ImportacionMax_id(EduCuboMatriculaRepositorio::importacion($rq->anio));
+                $reg['fecha'] = date('d/m/Y', strtotime($imp->fecha));
                 return response()->json(compact('info', 'reg'));
             case 'anal5':
                 $info = MatriculaGeneralRepositorio::basicaregulartabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
@@ -1754,10 +1702,8 @@ class MatriculaGeneralController extends Controller
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
                 return response()->json(compact('info', 'reg'));
             case 'tabla1':
-                $aniox = Anio::find($rq->anio);
-                $anioy = Anio::where('anio', $aniox->anio - 1)->first();
-                $meta = MatriculaGeneralRepositorio::metaEBRProvincia($rq->anio == 3 ? 3 : $anioy->id, $rq->ugel, $rq->gestion,  $rq->area);
-                $base = MatriculaGeneralRepositorio::basicaregulartabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
+                $meta = EduCuboMatriculaRepositorio::ebr_tabla1_provincia_conteo($rq->anio - 1, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
+                $base = EduCuboMatriculaRepositorio::ebr_tabla1_provincia_conteo_detalles($rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
                 $foot = [];
                 if ($base->count() > 0) {
                     $foot = clone $base[0];
@@ -1799,62 +1745,13 @@ class MatriculaGeneralController extends Controller
                 $excel = view('educacion.MatriculaGeneral.BasicaRegularTabla1', compact('base', 'foot'))->render();
 
                 $reg['fuente'] = 'Siagie - MINEDU';
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-                $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
+                $imp = ImportacionRepositorio::ImportacionMax_id(EduCuboMatriculaRepositorio::importacion($rq->anio));
+                $reg['fecha'] = date('d/m/Y', strtotime($imp->fecha));
                 return response()->json(compact('excel', 'reg'));
-            case 'tabla1x':
-                $aniox = Anio::find($rq->anio);
-                $anioy = Anio::where('anio', $aniox->anio - 1)->first();
-                $meta = MatriculaGeneralRepositorio::metaEBRProvincia($rq->anio == 3 ? 3 : $anioy->id, $rq->ugel, $rq->gestion,  $rq->area);
-                $base = MatriculaGeneralRepositorio::basicaregulartabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
-                $foot = [];
-                if ($base->count() > 0) {
-                    $foot = clone $base[0];
-                    $foot->meta = 0;
-                    $foot->tt = 0;
-                    $foot->th = 0;
-                    $foot->tm = 0;
-                    $foot->thi = 0;
-                    $foot->tmi = 0;
-                    $foot->thp = 0;
-                    $foot->tmp = 0;
-                    $foot->ths = 0;
-                    $foot->tms = 0;
 
-                    foreach ($base as $key => $value) {
-                        $value->meta = 0;
-                        foreach ($meta as $kk => $mm) {
-                            if ($value->provincia == $mm->provincia) {
-                                $value->meta = $mm->conteo;
-                                break;
-                            }
-                        }
-                        $value->avance = $value->meta > 0 ? 100 * $value->tt / $value->meta : 0;
-                        $foot->meta += $value->meta;
-                        $foot->tt += $value->tt;
-                        $foot->th += $value->th;
-                        $foot->tm += $value->tm;
-                        $foot->thi += $value->thi;
-                        $foot->tmi += $value->tmi;
-                        $foot->thp += $value->thp;
-                        $foot->tmp += $value->tmp;
-                        $foot->ths += $value->ths;
-                        $foot->tms += $value->tms;
-                    }
-                    $foot->avance = $foot->meta > 0 ? 100 * $foot->tt / $foot->meta : 0;
-                }
-                $excel = view('educacion.MatriculaGeneral.BasicaRegularTabla1', compact('base', 'foot'))->render();
-                // return response()->json(compact('excel'));
-
-                $reg['fuente'] = 'Siagie - MINEDU';
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-                $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
-                return response()->json(compact('excel', 'reg'));
             case 'tabla2':
-                $aniox = Anio::find($rq->anio);
-                $anioy = Anio::where('anio', $aniox->anio - 1)->first();
-                $meta = MatriculaGeneralRepositorio::metaEBRDistrito($rq->anio == 3 ? 3 : $anioy->id, $rq->ugel, $rq->gestion,  $rq->area, $rq->provincia);
-                $base = MatriculaGeneralRepositorio::basicaregulartabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area, $rq->provincia);
+                $meta = EduCuboMatriculaRepositorio::ebr_tabla2_distrito_conteo($rq->anio - 1, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
+                $base = EduCuboMatriculaRepositorio::ebr_tabla2_distrito_conteo_detalles($rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
                 $foot = [];
                 if ($base->count() > 0) {
                     $foot = clone $base[0];
@@ -1896,8 +1793,8 @@ class MatriculaGeneralController extends Controller
 
                 $excel = view('educacion.MatriculaGeneral.BasicaRegularTabla2', compact('base', 'foot'))->render();
                 $reg['fuente'] = 'Siagie - MINEDU';
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-                $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
+                $imp = ImportacionRepositorio::ImportacionMax_id(EduCuboMatriculaRepositorio::importacion($rq->anio));
+                $reg['fecha'] = date('d/m/Y', strtotime($imp->fecha));
                 return response()->json(compact('excel', 'reg'));
             case 'tabla2x':
                 $aniox = Anio::find($rq->anio);
@@ -2203,18 +2100,18 @@ class MatriculaGeneralController extends Controller
         $actualizado = '';
         $tipo_acceso = 0;
 
-        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
+        $anios = EduCuboMatriculaRepositorio::listar_anios();
+        $aniomax = $anios->max('anio');
+        $imp = ImportacionRepositorio::ImportacionMax_id(EduCuboMatriculaRepositorio::importacion($aniomax));
 
         $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mes[$imp->mes - 1] . ' del ' . $imp->anio;
 
-        $anios = MatriculaGeneralRepositorio::anios();
-        $aniomax = MatriculaGeneralRepositorio::anioMax();
-        $distrito = MatriculaGeneralRepositorio::distritosEBE(0);
-        $ugel = MatriculaGeneralRepositorio::ugelsEBE();
-        $dependencia = MatriculaGeneralRepositorio::dependencia(0);
+        $ugel = EduCuboMatriculaRepositorio::listar_ugel($aniomax);
+        $distrito = EduCuboMatriculaRepositorio::listar_distrito($aniomax);
+        $dependencia = EduCuboMatriculaRepositorio::listar_gestion($aniomax);
 
         $fecha = '';
-
+        // return compact('anios', 'aniomax', 'actualizado', 'ugel', 'distrito', 'gestion', 'fecha');
         return view('educacion.MatriculaGeneral.BasicaEspecial', compact('actualizado', 'anios', 'aniomax',  'ugel', 'distrito', 'dependencia', 'fecha'));
     }
 
@@ -2222,24 +2119,34 @@ class MatriculaGeneralController extends Controller
     {
         switch ($rq->div) {
             case 'head':
-                $mh = MatriculaGeneralRepositorio::basicaespecialtabla('mhead', $rq->anio, $rq->ugel, $rq->distrito,  $rq->dependencia);
-                $valor1 = (int)$mh->conteo;
-                $valor2 = (int)$mh->conteox;
-                $valor3 = (int)$mh->conteoi;
-                $valor4 = (int)$mh->conteop;
-                $aa = Anio::find($rq->anio);
-                $aav =  -1 + (int)$aa->anio;
-                $aa = Anio::where('anio', $aav)->first();
-                $mh = MatriculaGeneralRepositorio::metaEBE($rq->anio == 3 ? 3 : $aa->id,  $rq->ugel, $rq->distrito,  $rq->dependencia);
-                $valor1x = (int)$mh->conteo;
-                $valor2x = (int)$mh->conteox;
-                $valor3x = (int)$mh->conteoi;
-                $valor4x = (int)$mh->conteop;
+                $m = EduCuboMatriculaRepositorio::ebe_nivel_total($rq->anio, $rq->provincia, $rq->distrito,  $rq->tipogestion, $rq->area);
+                $t = $m->sum('y');
+                $ma = [];
+                if ($m && $m->isNotEmpty()) {
+                    $ma = $m->pluck('y', 'name')->all();
+                }
 
-                $ind1 = number_format($valor1x > 0 ? 100 * $valor1 / $valor1x : 100, 1);
-                $ind2 = number_format($valor2x > 0 ? 100 * $valor2 / $valor2x : 100, 1);
-                $ind3 = number_format($valor3x > 0 ? 100 * $valor3 / $valor3x : 100, 1);
-                $ind4 = number_format($valor4x > 0 ? 100 * $valor4 / $valor4x : 100, 1);
+                $valor1 = $t;
+                $valor2 = $ma['PRITE'];
+                $valor3 = $ma['INICIAL'];
+                $valor4 = $ma['PRIMARIA'];
+
+                $m = EduCuboMatriculaRepositorio::ebe_nivel_total($rq->anio - 1, $rq->provincia, $rq->distrito,  $rq->tipogestion, $rq->area);
+                $t = $m->sum('y');
+                $ma = [];
+                if ($m && $m->isNotEmpty()) {
+                    $ma = $m->pluck('y', 'name')->all();
+                }
+
+                $valor1x = $t;
+                $valor2x = $ma['PRITE'];
+                $valor3x = $ma['INICIAL'];
+                $valor4x = $ma['PRIMARIA'];
+
+                $ind1 = number_format($valor1x > 0 ? 100 * $valor1 / $valor1x : 0, 1);
+                $ind2 = number_format($valor2x > 0 ? 100 * $valor2 / $valor2x : 0, 1);
+                $ind3 = number_format($valor3x > 0 ? 100 * $valor3 / $valor3x : 0, 1);
+                $ind4 = number_format($valor4x > 0 ? 100 * $valor4 / $valor4x : 0, 1);
 
                 $valor1 = number_format($valor1, 0);
                 $valor2 = number_format($valor2, 0);
@@ -2248,7 +2155,8 @@ class MatriculaGeneralController extends Controller
 
                 return response()->json(compact('valor1', 'valor2', 'valor3', 'valor4', 'ind1', 'ind2', 'ind3', 'ind4'));
             case 'anal1':
-                $datax = MatriculaGeneralRepositorio::basicaespecialtabla($rq->div,  $rq->anio, $rq->ugel, $rq->distrito,  $rq->dependencia);
+                // $datax = MatriculaGeneralRepositorio::basicaespecialtabla($rq->div,  $rq->anio, $rq->ugel, $rq->distrito,  $rq->dependencia);
+                $datax = EduCuboMatriculaRepositorio::modalidad_total_anios(2, $rq->provincia, $rq->distrito,  $rq->gestion, $rq->area);
                 $info['series'] = [];
                 $alto = 0;
                 $btotal = 0;
@@ -2261,8 +2169,8 @@ class MatriculaGeneralController extends Controller
                 // }
                 foreach ($datax as $keyi => $ii) {
                     $info['categoria'][] = $ii->anio;
-                    $n = (int)$ii->conteo;
-                    $d = $ii->anio == $datax[0]->anio ? $n : (int)$datax[$keyi - 1]->conteo;
+                    $n = (int)$ii->suma;
+                    $d = $ii->anio == $datax[0]->anio ? $n : (int)$datax[$keyi - 1]->suma;
                     $dx3[$keyi] = $n;
                     $dx4[$keyi] = $d > 0 ? round(100 * $n / $d, 1) : 0;
                     $alto = $n > $alto ? $n : $alto;
@@ -2279,73 +2187,84 @@ class MatriculaGeneralController extends Controller
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
                 return response()->json(compact('info', 'reg'));
             case 'anal2':
-                $periodo = Mes::select('codigo', 'abreviado as mes', DB::raw('0 as conteo'))->get();
-                $datax = MatriculaGeneralRepositorio::basicaespecialtabla($rq->div,  $rq->anio, $rq->ugel, $rq->distrito,  $rq->dependencia);
+                $data = EduCuboMatriculaRepositorio::modalidad_total_anio_meses(2, $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion, $rq->area);
+                $mes = Mes::select('codigo', 'abreviado as mes')->pluck('mes', 'codigo');
                 $info['cat'] = [];
                 $info['dat'] = [];
-                $mesmax = $datax->max('mes');
-                foreach ($periodo as $key => $pp) {
-                    $info['cat'][$key] = $pp->mes;
-                    if ($pp->codigo > $mesmax) {
-                        $info['dat'][$key] = null;
-                    } else {
-                        $info['dat'][$key] = 0;
-                        foreach ($datax as $dd) {
-                            if ($dd->mes == $pp->codigo) {
-                                $info['dat'][$key] = $key > 0 ? $info['dat'][$key - 1] + $dd->conteo : $dd->conteo;
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                $reg['fuente'] = 'Siagie - MINEDU';
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-                $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
-                return response()->json(compact('info', 'reg', 'datax'));
-            case 'anal3':
-                $data = MatriculaGeneralRepositorio::basicaespecialtabla($rq->div,  $rq->anio, $rq->ugel, $rq->distrito,  $rq->dependencia);
-                $info['cat'] = [];
-                $info['dat'] = [];
-                $xa = [];
-                $ix = 0;
-                $anioi = 0;
-                $aniof = 0;
-                foreach ($data->unique('anio') as $key => $value) {
-                    $info['cat'][] = $value->anio;
-                    $xa[$value->anio] = $ix++;
-                }
-                foreach ($data->unique('nivel') as $key => $value) {
-                    $info['dat'][] = ["name" => $value->nivel, "data" => []];
-                    $xx[] = array_fill(0, count($xa), 0);
-                }
                 foreach ($data as $key => $value) {
-                    foreach ($info['dat'] as $key2 => $dat) {
-                        if ($value->nivel == $dat['name']) {
-                            $xx[$key2][$xa[$value->anio]] = $value->conteo;
+                    $info['cat'][$key] = $mes[$value['mes']] ?? 'ERROR';
+                    $info['dat'][$key] = $value['acumulado'];
+                }
+                $reg['fuente'] = 'Siagie - MINEDU';
+                $imp = ImportacionRepositorio::ImportacionMax_id(EduCuboMatriculaRepositorio::importacion($rq->anio));
+                $reg['fecha'] = date('d/m/Y', strtotime($imp->fecha));
+
+                // $periodo = Mes::select('codigo', 'abreviado as mes', DB::raw('0 as conteo'))->get();
+                // $datax = MatriculaGeneralRepositorio::basicaespecialtabla($rq->div,  $rq->anio, $rq->ugel, $rq->distrito,  $rq->dependencia);
+                // $info['cat'] = [];
+                // $info['dat'] = [];
+                // $mesmax = $datax->max('mes');
+                // foreach ($periodo as $key => $pp) {
+                //     $info['cat'][$key] = $pp->mes;
+                //     if ($pp->codigo > $mesmax) {
+                //         $info['dat'][$key] = null;
+                //     } else {
+                //         $info['dat'][$key] = 0;
+                //         foreach ($datax as $dd) {
+                //             if ($dd->mes == $pp->codigo) {
+                //                 $info['dat'][$key] = $key > 0 ? $info['dat'][$key - 1] + $dd->conteo : $dd->conteo;
+                //                 break;
+                //             }
+                //         }
+                //     }
+                // }
+
+                // $reg['fuente'] = 'Siagie - MINEDU';
+                // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
+                // $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
+                return response()->json(compact('info', 'reg'));
+            case 'anal3':
+                $data = EduCuboMatriculaRepositorio::ebe_nivel_rango_total(0, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
+                $info['cat'] = [];
+                $info['dat'] = [];
+                $rango = '';
+                $pos = 0;
+                foreach ($data->unique('anio') as $key => $value) {
+                    if ($pos == 0) $rango .= '' . $value->anio . ' - ';
+                    if ($pos == $data->unique('anio')->count() - 1) $rango .= '' . $value->anio;
+                    $info['cat'][] = $value->anio;
+                    $pos += 1;
+                }
+                foreach ($data->unique('nivel_nombre') as $key => $value) {
+                    $info['dat'][] = ["name" => $value->nivel_nombre, "data" => []];
+                    $xx[] = [];
+                }
+                foreach ($data as $value) {
+                    foreach ($info['dat'] as $key => $dat) {
+                        if ($value->nivel_nombre == $dat['name']) {
+                            $xx[$key][] = $value->conteo;
                         }
                     }
-                    if ($key == 0) $anioi = $value->anio;
-                    if ($key == $data->count() - 1) $aniof = $value->anio;
                 }
                 $info['dat'] = [];
-                $ii = 0;
-                foreach ($data->unique('nivel') as $key => $value) {
-                    $info['dat'][] = ["name" => $value->nivel, "data" => $xx[$ii++]];
+                $pos = 0;
+                foreach ($data->unique('nivel_nombre') as $value) {
+                    $info['dat'][] = ["name" => $value->nivel_nombre, "data" => $xx[$pos++]];
                 }
 
-                $reg['periodo'] = "$anioi - $aniof";
+                $reg['periodo'] = reset($info['cat']) . ' - ' . end($info['cat']);
                 $reg['fuente'] = 'Siagie - MINEDU';
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-                $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
-                return response()->json(compact('info', 'reg'));
+                $imp = ImportacionRepositorio::ImportacionMax_id(EduCuboMatriculaRepositorio::importacion($rq->anio));
+                $reg['fecha'] = date('d/m/Y', strtotime($imp->fecha));
+                $reg['rango'] = $rango;
+                return response()->json(compact('info', 'reg', 'data'));
             case 'anal4':
-                $info = MatriculaGeneralRepositorio::basicaespecialtabla($rq->div, $rq->anio, $rq->ugel, $rq->distrito,  $rq->dependencia);
-
+                $info = EduCuboMatriculaRepositorio::ebe_nivel_total($rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
                 $reg['fuente'] = 'Siagie - MINEDU';
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-                $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
+                $imp = ImportacionRepositorio::ImportacionMax_id(EduCuboMatriculaRepositorio::importacion($rq->anio));
+                $reg['fecha'] = date('d/m/Y', strtotime($imp->fecha));
                 return response()->json(compact('info', 'reg'));
+
             case 'anal5':
                 $info = MatriculaGeneralRepositorio::basicaespecialtabla($rq->div, $rq->anio, $rq->ugel, $rq->distrito,  $rq->dependencia);
 
@@ -2430,10 +2349,8 @@ class MatriculaGeneralController extends Controller
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
                 return response()->json(compact('info', 'reg'));
             case 'tabla1':
-                $aniox = Anio::find($rq->anio);
-                $anioy = Anio::where('anio', $aniox->anio - 1)->first();
-                $meta = MatriculaGeneralRepositorio::metaEBEProvincia($rq->anio == 3 ? 3 : $anioy->id,  $rq->ugel, $rq->distrito,  $rq->dependencia);
-                $base = MatriculaGeneralRepositorio::basicaespecialtabla($rq->div,  $rq->anio, $rq->ugel, $rq->distrito,  $rq->dependencia);
+                $meta = EduCuboMatriculaRepositorio::ebe_tabla1_provincia_conteo($rq->anio - 1, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
+                $base = EduCuboMatriculaRepositorio::ebe_tabla1_provincia_conteo_detalles($rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
                 $foot = [];
                 if ($base->count() > 0) {
                     $foot = clone $base[0];
@@ -2476,10 +2393,9 @@ class MatriculaGeneralController extends Controller
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
                 return response()->json(compact('excel', 'reg'));
             case 'tabla2':
-                $aniox = Anio::find($rq->anio);
-                $anioy = Anio::where('anio', $aniox->anio - 1)->first();
-                $meta = MatriculaGeneralRepositorio::metaEBEDistrito($rq->anio == 3 ? 3 : $anioy->id,  $rq->ugel, $rq->distrito,  $rq->dependencia,  $rq->provincia);
-                $base = MatriculaGeneralRepositorio::basicaespecialtabla($rq->div,  $rq->anio, $rq->ugel, $rq->distrito,  $rq->dependencia,  $rq->provincia);
+                $meta = EduCuboMatriculaRepositorio::ebe_tabla2_distrito_conteo($rq->anio - 1, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
+                $base = EduCuboMatriculaRepositorio::ebe_tabla2_distrito_conteo_detalles($rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
+
                 $foot = [];
                 if ($base->count() > 0) {
                     $foot = clone $base[0];
@@ -2521,7 +2437,7 @@ class MatriculaGeneralController extends Controller
                 $reg['fuente'] = 'Siagie - MINEDU';
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
-                return response()->json(compact('excel', 'reg'));
+                return response()->json(compact('excel', 'reg', 'meta', 'base'));
             default:
                 return [];
         }
@@ -2638,18 +2554,16 @@ class MatriculaGeneralController extends Controller
         $actualizado = '';
         $tipo_acceso = 0;
 
-        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE); //nexus
+        $anios = EduCuboMatriculaRepositorio::listar_anios();
+        $aniomax = $anios->max('anio');
+        $imp = ImportacionRepositorio::ImportacionMax_id(EduCuboMatriculaRepositorio::importacion($aniomax));
 
         $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mes[$imp->mes - 1] . ' del ' . $imp->anio;
 
-        $anios = MatriculaGeneralRepositorio::aniosModalidad('EBA');
-        $aniomax = MatriculaGeneralRepositorio::anioMax();
-        //$provincia = UbigeoRepositorio::provincia25();
-        $ugel = MatriculaGeneralRepositorio::ugels();
-        $area = MatriculaGeneralRepositorio::areas();
+        $ugel = EduCuboMatriculaRepositorio::listar_ugel($aniomax);
+        $area = EduCuboMatriculaRepositorio::listar_area($aniomax);
 
         $fecha = '';
-
         return view('educacion.MatriculaGeneral.basicaalternativa', compact('anios', 'aniomax', 'actualizado', 'ugel', 'area', 'fecha'));
     }
 
@@ -2657,24 +2571,34 @@ class MatriculaGeneralController extends Controller
     {
         switch ($rq->div) {
             case 'head':
-                $mh = MatriculaGeneralRepositorio::basicaalternativatabla('mhead', $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
-                $valor1 = (int)$mh->conteo;
-                $valor2 = (int)$mh->conteox;
-                $valor3 = (int)$mh->conteoi;
-                $valor4 = (int)$mh->conteop;
-                $aa = Anio::find($rq->anio);
-                $aav =  -1 + (int)$aa->anio;
-                $aa = Anio::where('anio', $aav)->first();
-                $mh = MatriculaGeneralRepositorio::metaEBA($aa->id, $rq->ugel, $rq->gestion,  $rq->area);
-                $valor1x = (int)$mh->conteo;
-                $valor2x = (int)$mh->conteox;
-                $valor3x = (int)$mh->conteoi;
-                $valor4x = (int)$mh->conteop;
+                $m = EduCuboMatriculaRepositorio::eba_nivel_total($rq->anio, $rq->provincia, $rq->distrito,  $rq->tipogestion, $rq->area);
+                $t = $m->sum('y');
+                $ma = [];
+                if ($m && $m->isNotEmpty()) {
+                    $ma = $m->pluck('y', 'name')->all();
+                }
 
-                $ind1 = number_format($valor1x > 0 ? 100 * $valor1 / $valor1x : 100, 1);
-                $ind2 = number_format($valor2x > 0 ? 100 * $valor2 / $valor2x : 100, 1);
-                $ind3 = number_format($valor3x > 0 ? 100 * $valor3 / $valor3x : 100, 1);
-                $ind4 = number_format($valor4x > 0 ? 100 * $valor4 / $valor4x : 100, 1);
+                $valor1 = $t;
+                $valor2 = $ma['INICIAL'];
+                $valor3 = $ma['INTERMEDIO'];
+                $valor4 = $ma['AVANZADO'];
+
+                $m = EduCuboMatriculaRepositorio::eba_nivel_total($rq->anio - 1, $rq->provincia, $rq->distrito,  $rq->tipogestion, $rq->area);
+                $t = $m->sum('y');
+                $ma = [];
+                if ($m && $m->isNotEmpty()) {
+                    $ma = $m->pluck('y', 'name')->all();
+                }
+
+                $valor1x = $t;
+                $valor2x = $ma['INICIAL'];
+                $valor3x = $ma['INTERMEDIO'];
+                $valor4x = $ma['AVANZADO'];
+
+                $ind1 = number_format($valor1x > 0 ? 100 * $valor1 / $valor1x : 0, 1);
+                $ind2 = number_format($valor2x > 0 ? 100 * $valor2 / $valor2x : 0, 1);
+                $ind3 = number_format($valor3x > 0 ? 100 * $valor3 / $valor3x : 0, 1);
+                $ind4 = number_format($valor4x > 0 ? 100 * $valor4 / $valor4x : 0, 1);
 
                 $valor1 = number_format($valor1, 0);
                 $valor2 = number_format($valor2, 0);
@@ -2683,7 +2607,8 @@ class MatriculaGeneralController extends Controller
 
                 return response()->json(compact('valor1', 'valor2', 'valor3', 'valor4', 'ind1', 'ind2', 'ind3', 'ind4'));
             case 'anal1':
-                $datax = MatriculaGeneralRepositorio::basicaalternativatabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
+                // $datax = MatriculaGeneralRepositorio::basicaalternativatabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
+                $datax = EduCuboMatriculaRepositorio::modalidad_total_anios(3, $rq->provincia, $rq->distrito,  $rq->gestion, $rq->area);
                 $info['series'] = [];
                 $alto = 0;
                 $btotal = 0;
@@ -2696,8 +2621,8 @@ class MatriculaGeneralController extends Controller
                 // }
                 foreach ($datax as $keyi => $ii) {
                     $info['categoria'][] = $ii->anio;
-                    $n = (int)$ii->conteo;
-                    $d = $ii->anio == $datax[0]->anio ? $n : (int)$datax[$keyi - 1]->conteo;
+                    $n = (int)$ii->suma;
+                    $d = $ii->anio == $datax[0]->anio ? $n : (int)$datax[$keyi - 1]->suma;
                     $dx3[$keyi] = $n;
                     $dx4[$keyi] = $d > 0 ? round(100 * $n / $d, 1) : 0;
                     $alto = $n > $alto ? $n : $alto;
@@ -2715,82 +2640,102 @@ class MatriculaGeneralController extends Controller
                 // $reg['periodo'] = '' . $datax[0]->anio . ' - ' . $datax[$datax->count() - 1]->anio;
                 return response()->json(compact('info', 'reg'));
             case 'anal2':
-                $periodo = Mes::select('codigo', 'abreviado as mes', DB::raw('0 as conteo'))->get();
-                $datax = MatriculaGeneralRepositorio::basicaalternativatabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
+                $data = EduCuboMatriculaRepositorio::modalidad_total_anio_meses(3, $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion, $rq->area);
+                $mes = Mes::select('codigo', 'abreviado as mes')->pluck('mes', 'codigo');
                 $info['cat'] = [];
                 $info['dat'] = [];
-                $mesmax = $datax->max('mes');
-                foreach ($periodo as $key => $pp) {
-                    $info['cat'][$key] = $pp->mes;
-                    if ($pp->codigo > $mesmax) {
-                        $info['dat'][$key] = null;
-                    } else {
-                        $info['dat'][$key] = 0;
-                        foreach ($datax as $dd) {
-                            if ($dd->mes == $pp->codigo) {
-                                $info['dat'][$key] = $key > 0 ? $info['dat'][$key - 1] + $dd->conteo : $dd->conteo;
-                                break;
-                            }
-                        }
-                    }
+                foreach ($data as $key => $value) {
+                    $info['cat'][$key] = $mes[$value['mes']] ?? 'ERROR';
+                    $info['dat'][$key] = $value['acumulado'];
                 }
                 $reg['fuente'] = 'Siagie - MINEDU';
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-                $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
-                return response()->json(compact('info', 'reg', 'datax'));
+                $imp = ImportacionRepositorio::ImportacionMax_id(EduCuboMatriculaRepositorio::importacion($rq->anio));
+                $reg['fecha'] = date('d/m/Y', strtotime($imp->fecha));
+                // $periodo = Mes::select('codigo', 'abreviado as mes', DB::raw('0 as conteo'))->get();
+                // $datax = MatriculaGeneralRepositorio::basicaalternativatabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
+                // $info['cat'] = [];
+                // $info['dat'] = [];
+                // $mesmax = $datax->max('mes');
+                // foreach ($periodo as $key => $pp) {
+                //     $info['cat'][$key] = $pp->mes;
+                //     if ($pp->codigo > $mesmax) {
+                //         $info['dat'][$key] = null;
+                //     } else {
+                //         $info['dat'][$key] = 0;
+                //         foreach ($datax as $dd) {
+                //             if ($dd->mes == $pp->codigo) {
+                //                 $info['dat'][$key] = $key > 0 ? $info['dat'][$key - 1] + $dd->conteo : $dd->conteo;
+                //                 break;
+                //             }
+                //         }
+                //     }
+                // }
+                // $reg['fuente'] = 'Siagie - MINEDU';
+                // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
+                // $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
+                return response()->json(compact('info', 'reg'));
             case 'anal3':
-                $data = MatriculaGeneralRepositorio::basicaalternativatabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
+                $data = EduCuboMatriculaRepositorio::eba_nivel_rango_total(0, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
                 $info['cat'] = [];
                 $info['dat'] = [];
-                $xa = [];
-                $ix = 0;
-                $anioi = 0;
-                $aniof = 0;
+                $rango = '';
+                $pos = 0;
                 foreach ($data->unique('anio') as $key => $value) {
+                    if ($pos == 0) $rango .= '' . $value->anio . ' - ';
+                    if ($pos == $data->unique('anio')->count() - 1) $rango .= '' . $value->anio;
                     $info['cat'][] = $value->anio;
-                    $xa[$value->anio] = $ix++;
+                    $pos += 1;
                 }
-                foreach ($data->unique('nivel') as $key => $value) {
-                    $info['dat'][] = ["name" => $value->nivel, "data" => []];
+                foreach ($data->unique('nivel_nombre') as $key => $value) {
+                    $info['dat'][] = ["name" => $value->nivel_nombre, "data" => []];
                     $xx[] = [];
                 }
-                $xx[0] = [0, 0];
-                $xx[1] = [0, 0];
-                $xx[2] = [0, 0];
-
-                foreach ($data as $key => $value) {
-                    foreach ($info['dat'] as $key2 => $dat) {
-                        if ($value->nivel == $dat['name']) {
-                            $xx[$key2][$xa[$value->anio]] = $value->conteo;
+                foreach ($data as $value) {
+                    foreach ($info['dat'] as $key => $dat) {
+                        if ($value->nivel_nombre == $dat['name']) {
+                            $xx[$key][] = $value->conteo;
                         }
                     }
-                    if ($key == 0) $anioi = $value->anio;
-                    if ($key == $data->count() - 1) $aniof = $value->anio;
                 }
                 $info['dat'] = [];
-                $ii = 0;
-                foreach ($data->unique('nivel') as $key => $value) {
-                    $info['dat'][] = ["name" => $value->nivel, "data" => $xx[$ii++]];
+                $pos = 0;
+                foreach ($data->unique('nivel_nombre') as $value) {
+                    $info['dat'][] = ["name" => $value->nivel_nombre, "data" => $xx[$pos++]];
                 }
 
-                $reg['periodo'] = "$anioi - $aniof";
+                $reg['periodo'] = reset($info['cat']) . ' - ' . end($info['cat']);
                 $reg['fuente'] = 'Siagie - MINEDU';
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-                $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
-                return response()->json(compact('info', 'reg'));
+                $imp = ImportacionRepositorio::ImportacionMax_id(EduCuboMatriculaRepositorio::importacion($rq->anio));
+                $reg['fecha'] = date('d/m/Y', strtotime($imp->fecha));
+                $reg['rango'] = $rango;
+                return response()->json(compact('info', 'reg', 'data'));
+
             case 'anal4':
-                $info = MatriculaGeneralRepositorio::basicaalternativatabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
+                // $info = MatriculaGeneralRepositorio::basicaalternativatabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
 
+                // $reg['fuente'] = 'Siagie - MINEDU';
+                // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
+                // $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
+                // return response()->json(compact('info', 'reg'));
+
+                $info = EduCuboMatriculaRepositorio::eba_nivel_total($rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
                 $reg['fuente'] = 'Siagie - MINEDU';
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-                $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
+                $imp = ImportacionRepositorio::ImportacionMax_id(EduCuboMatriculaRepositorio::importacion($rq->anio));
+                $reg['fecha'] = date('d/m/Y', strtotime($imp->fecha));
                 return response()->json(compact('info', 'reg'));
-            case 'anal5':
-                $info = MatriculaGeneralRepositorio::basicaalternativatabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
 
+            case 'anal5':
+                // $info = MatriculaGeneralRepositorio::basicaalternativatabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
+
+                // $reg['fuente'] = 'Siagie - MINEDU';
+                // $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
+                // $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
+                // return response()->json(compact('info', 'reg'));
+
+                $info = EduCuboMatriculaRepositorio::eba_nivel_total($rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
                 $reg['fuente'] = 'Siagie - MINEDU';
-                $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-                $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
+                $imp = ImportacionRepositorio::ImportacionMax_id(EduCuboMatriculaRepositorio::importacion($rq->anio));
+                $reg['fecha'] = date('d/m/Y', strtotime($imp->fecha));
                 return response()->json(compact('info', 'reg'));
             case 'anal6':
                 $data = MatriculaGeneralRepositorio::basicaalternativatabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
@@ -2869,10 +2814,13 @@ class MatriculaGeneralController extends Controller
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
                 return response()->json(compact('info', 'reg'));
             case 'tabla1':
-                $aniox = Anio::find($rq->anio);
-                $anioy = Anio::where('anio', $aniox->anio - 1)->first();
-                $meta = MatriculaGeneralRepositorio::metaEBAProvincia($anioy->id, $rq->ugel, $rq->gestion,  $rq->area);
-                $base = MatriculaGeneralRepositorio::basicaalternativatabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
+                // $aniox = Anio::find($rq->anio);
+                // $anioy = Anio::where('anio', $aniox->anio - 1)->first();
+                // $meta = MatriculaGeneralRepositorio::metaEBAProvincia($anioy->id, $rq->ugel, $rq->gestion,  $rq->area);
+                // $base = MatriculaGeneralRepositorio::basicaalternativatabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
+                
+                $meta = EduCuboMatriculaRepositorio::eba_tabla1_provincia_conteo($rq->anio - 1, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
+                $base = EduCuboMatriculaRepositorio::eba_tabla1_provincia_conteo_detalles($rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
                 $foot = [];
                 if ($base->count() > 0) {
                     $foot = clone $base[0];
@@ -2915,10 +2863,13 @@ class MatriculaGeneralController extends Controller
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fechaActualizacion));
                 return response()->json(compact('excel', 'reg', 'meta', 'base'));
             case 'tabla2':
-                $aniox = Anio::find($rq->anio);
-                $anioy = Anio::where('anio', $aniox->anio - 1)->first();
-                $meta = MatriculaGeneralRepositorio::metaEBADistrito($anioy->id, $rq->ugel, $rq->gestion,  $rq->area,  $rq->provincia);
-                $base = MatriculaGeneralRepositorio::basicaalternativatabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area,  $rq->provincia);
+                // $aniox = Anio::find($rq->anio);
+                // $anioy = Anio::where('anio', $aniox->anio - 1)->first();
+                // $meta = MatriculaGeneralRepositorio::metaEBADistrito($anioy->id, $rq->ugel, $rq->gestion,  $rq->area,  $rq->provincia);
+                // $base = MatriculaGeneralRepositorio::basicaalternativatabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area,  $rq->provincia);
+                
+                $meta = EduCuboMatriculaRepositorio::eba_tabla2_distrito_conteo($rq->anio - 1, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
+                $base = EduCuboMatriculaRepositorio::eba_tabla2_distrito_conteo_detalles($rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
                 $foot = [];
                 if ($base->count() > 0) {
                     $foot = clone $base[0];

@@ -1029,7 +1029,7 @@ class HomeController extends Controller
 
             case 'siagie001':
                 // return $data = MatriculaGeneralRepositorio::basicaregularopcion2('siagie001', $rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
-                $data = EduCuboMatriculaRepositorio::ebr_nivel_incial_primaria_secundaria($rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
+                $data = EduCuboMatriculaRepositorio::ebr_nivel_incial_primaria_secundaria(0, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
                 // return response()->json(compact('data'));
                 $info['cat'] = [];
                 $info['dat'] = [];

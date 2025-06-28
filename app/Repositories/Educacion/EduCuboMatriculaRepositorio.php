@@ -22,6 +22,42 @@ class EduCuboMatriculaRepositorio
         return EduCuboMatricula::distinct()->select('importacion_id')->where('anio', $anio)->first()->importacion_id;
     }
 
+    public static function listar_ugel($anio)
+    {
+        return EduCuboMatricula::select('id_ugel as id', 'ugel as nombre')
+            ->where('anio', $anio)
+            ->groupBy('id_ugel', 'ugel')
+            ->orderBy('id_ugel')
+            ->get();
+    }
+
+    public static function listar_area($anio)
+    {
+        return EduCuboMatricula::select('id_area as id', 'area as nombre')
+            ->where('anio', $anio)
+            ->groupBy('id_area', 'area')
+            ->orderBy('id_area')
+            ->get();
+    }
+
+    public static function listar_distrito($anio)
+    {
+        return EduCuboMatricula::select('id_distrito as id', 'distrito as nombre')
+            ->where('anio', $anio)
+            ->groupBy('id_distrito', 'distrito')
+            ->orderBy('id_distrito')
+            ->get();
+    }
+
+    public static function listar_gestion($anio)
+    {
+        return EduCuboMatricula::select('id_gestion as id', 'gestion as nombre')
+            ->where('anio', $anio)->whereIn('id_gestion', [2, 3])
+            ->groupBy('id_gestion', 'gestion')
+            ->orderBy('id_gestion')
+            ->get();
+    }
+
     public static function total_anio($anio, $provincia = 0, $distrito = 0, $gestion = 0, $area = 0)
     {
         $query = EduCuboMatricula::where('anio', $anio);
@@ -87,6 +123,10 @@ class EduCuboMatriculaRepositorio
                 DB::raw('COUNT(*) AS conteo')
             )
             ->where('modalidad', 'ebr');
+
+        if ($anio > 0) {
+            $query->where('anio', $anio);
+        }
 
         if ($provincia > 0) {
             $query->where('id_provincia', $provincia);
@@ -202,7 +242,6 @@ class EduCuboMatriculaRepositorio
 
         return $resultados;
     }
-
 
     public static function modalidad_total_anio_meses($modalidad, $anio, $provincia = 0, $distrito = 0, $gestion = 0, $area = 0)
     {
@@ -346,7 +385,6 @@ class EduCuboMatriculaRepositorio
             ->orderByDesc('conteo')
             ->get();
     }
-
 
     public static function modalidad_total_anio_ugel_mes($modalidad, $anio, $provincia = 0, $distrito = 0, $gestion = 0, $area = 0)
     {
@@ -510,6 +548,583 @@ class EduCuboMatriculaRepositorio
         if ($modalidad > 0) {
             $query->where('id_mod', $modalidad);
         }
+
+        if ($provincia > 0) {
+            $query->where('id_provincia', $provincia);
+        }
+
+        if ($distrito > 0) {
+            $query->where('id_distrito', $distrito);
+        }
+
+        if ($gestion > 0) {
+            $query->where('id_gestion', $gestion);
+        }
+
+        if ($area > 0) {
+            $query->where('id_area', $area);
+        }
+
+        return $query->get();
+    }
+
+    public static function ebr_nivel_total($anio, $provincia = 0, $distrito = 0, $gestion = 0, $area = 0)
+    {
+        $query = EduCuboMatricula::select(
+            DB::raw("
+                CASE 
+                    WHEN id_nivel IN ('A2', 'A3', 'A5') THEN 'INICIAL' 
+                    WHEN id_nivel = 'B0' THEN 'PRIMARIA' 
+                    WHEN id_nivel = 'F0' THEN 'SECUNDARIA' 
+                END AS name
+            "),
+            DB::raw('COUNT(*) AS y')
+        )
+            ->where('anio', $anio)
+            ->where('id_mod', '1')
+            ->groupBy('anio', 'name')
+            ->orderBy('anio')
+            ->orderByRaw("FIELD(name, 'INICIAL', 'PRIMARIA', 'SECUNDARIA')");
+
+        if ($provincia > 0) {
+            $query->where('id_provincia', $provincia);
+        }
+
+        if ($distrito > 0) {
+            $query->where('id_distrito', $distrito);
+        }
+
+        if ($gestion > 0) {
+            $query->where('id_gestion', $gestion);
+        }
+
+        if ($area > 0) {
+            $query->where('id_area', $area);
+        }
+
+        return $query->get();
+    }
+
+    public static function ebr_tabla1_provincia_conteo($anio, $provincia = 0, $distrito = 0, $gestion = 0, $area = 0)
+    {
+        $query = EduCuboMatricula::select('provincia', DB::raw('COUNT(*) AS conteo'))->where('anio', $anio)->where('id_mod', '1');
+
+        if ($provincia > 0) {
+            $query->where('id_provincia', $provincia);
+        }
+
+        if ($distrito > 0) {
+            $query->where('id_distrito', $distrito);
+        }
+
+        if ($gestion > 0) {
+            $query->where('id_gestion', $gestion);
+        }
+
+        if ($area > 0) {
+            $query->where('id_area', $area);
+        }
+
+        return $query->groupBy('provincia')
+            ->orderByDesc('conteo')
+            ->get();
+    }
+
+    public static function ebr_tabla1_provincia_conteo_detalles($anio, $provincia = 0, $distrito = 0, $gestion = 0, $area = 0)
+    {
+        $query = EduCuboMatricula::select([
+            'id_provincia',
+            'provincia',
+            DB::raw('count(anio) as tt'),
+            DB::raw('sum(IF(id_sexo = 1,1,0)) as th'),
+            DB::raw('sum(IF(id_sexo = 2,1,0)) as tm'),
+            DB::raw('sum(IF(id_nivel in ("A3","A5") and id_grado=1,1,0)) as ci'),
+            DB::raw('sum(IF(id_nivel in ("A2","A3","A5") and id_grado in (2,3,4,5),1,0)) as cii'),
+            DB::raw('sum(IF(id_nivel = "B0" and id_grado in (4,5),1,0)) as ciii'),
+            DB::raw('sum(IF(id_nivel = "B0" and id_grado in (6,7),1,0)) as civ'),
+            DB::raw('sum(IF(id_nivel = "B0" and id_grado in (8,9),1,0)) as cv'),
+            DB::raw('sum(IF(id_nivel = "F0" and id_grado in (10,11),1,0)) as cvi'),
+            DB::raw('sum(IF(id_nivel = "F0" and id_grado in (12,13,14),1,0)) as cvii'),
+        ])
+            ->where('anio', $anio)->where('id_mod', '1')
+            ->groupBy('id_provincia', 'provincia')
+            ->orderBy('ugel');
+
+        if ($provincia > 0) {
+            $query->where('id_provincia', $provincia);
+        }
+
+        if ($distrito > 0) {
+            $query->where('id_distrito', $distrito);
+        }
+
+        if ($gestion > 0) {
+            $query->where('id_gestion', $gestion);
+        }
+
+        if ($area > 0) {
+            $query->where('id_area', $area);
+        }
+
+        return $query->get();
+    }
+
+    public static function ebr_tabla2_distrito_conteo($anio, $provincia = 0, $distrito = 0, $gestion = 0, $area = 0)
+    {
+        $query = EduCuboMatricula::select('distrito', DB::raw('COUNT(*) AS conteo'))->where('anio', $anio)->where('id_mod', '1');
+
+        if ($provincia > 0) {
+            $query->where('id_provincia', $provincia);
+        }
+
+        if ($distrito > 0) {
+            $query->where('id_distrito', $distrito);
+        }
+
+        if ($gestion > 0) {
+            $query->where('id_gestion', $gestion);
+        }
+
+        if ($area > 0) {
+            $query->where('id_area', $area);
+        }
+
+        return $query->groupBy('distrito')
+            ->orderByDesc('conteo')
+            ->get();
+    }
+
+    public static function ebr_tabla2_distrito_conteo_detalles($anio, $provincia = 0, $distrito = 0, $gestion = 0, $area = 0)
+    {
+        $query = EduCuboMatricula::select([
+            'id_distrito',
+            'distrito',
+            DB::raw('count(anio) as tt'),
+            DB::raw('sum(IF(id_sexo = 1,1,0)) as th'),
+            DB::raw('sum(IF(id_sexo = 2,1,0)) as tm'),
+            DB::raw('sum(IF(id_nivel in ("A3","A5") and id_grado=1,1,0)) as ci'),
+            DB::raw('sum(IF(id_nivel in ("A2","A3","A5") and id_grado in (2,3,4,5),1,0)) as cii'),
+            DB::raw('sum(IF(id_nivel = "B0" and id_grado in (4,5),1,0)) as ciii'),
+            DB::raw('sum(IF(id_nivel = "B0" and id_grado in (6,7),1,0)) as civ'),
+            DB::raw('sum(IF(id_nivel = "B0" and id_grado in (8,9),1,0)) as cv'),
+            DB::raw('sum(IF(id_nivel = "F0" and id_grado in (10,11),1,0)) as cvi'),
+            DB::raw('sum(IF(id_nivel = "F0" and id_grado in (12,13,14),1,0)) as cvii'),
+        ])
+            ->where('anio', $anio)->where('id_mod', '1')
+            ->groupBy('id_distrito', 'distrito')
+            ->orderBy('ugel');
+
+        if ($provincia > 0) {
+            $query->where('id_provincia', $provincia);
+        }
+
+        if ($distrito > 0) {
+            $query->where('id_distrito', $distrito);
+        }
+
+        if ($gestion > 0) {
+            $query->where('id_gestion', $gestion);
+        }
+
+        if ($area > 0) {
+            $query->where('id_area', $area);
+        }
+
+        return $query->get();
+    }
+
+    public static function ebe_nivel_total($anio, $provincia = 0, $distrito = 0, $gestion = 0, $area = 0)
+    {
+        $query = EduCuboMatricula::select(
+            DB::raw("
+                CASE 
+                    WHEN id_nivel = 'E0' THEN 'PRITE' 
+                    WHEN id_nivel = 'E1' THEN 'INICIAL' 
+                    WHEN id_nivel = 'E2' THEN 'PRIMARIA' 
+                END AS name
+            "),
+            // 'nivel as name',
+            DB::raw('COUNT(*) AS y')
+        )
+            ->where('anio', $anio)
+            ->where('id_mod', '2')
+            ->groupBy('name')
+            // ->orderByRaw("FIELD(name, 'INICIAL', 'PRIMARIA', 'SECUNDARIA')")
+        ;
+
+        if ($provincia > 0) {
+            $query->where('id_provincia', $provincia);
+        }
+
+        if ($distrito > 0) {
+            $query->where('id_distrito', $distrito);
+        }
+
+        if ($gestion > 0) {
+            $query->where('id_gestion', $gestion);
+        }
+
+        if ($area > 0) {
+            $query->where('id_area', $area);
+        }
+
+        return $query->get();
+    }
+
+    public static function ebe_nivel_rango_total($anio, $provincia = 0, $distrito = 0, $gestion = 0, $area = 0)
+    {
+        $query = EduCuboMatricula::select(
+            'anio',
+            DB::raw("
+                CASE 
+                    WHEN id_nivel = 'E0' THEN 'PRITE' 
+                    WHEN id_nivel = 'E1' THEN 'INICIAL' 
+                    WHEN id_nivel = 'E2' THEN 'PRIMARIA' 
+                END AS nivel_nombre
+            "),
+            DB::raw('COUNT(*) AS conteo')
+        )
+            ->where('id_mod', '2');
+
+        if ($anio > 0) {
+            $query->where('anio', $anio);
+        }
+
+        if ($provincia > 0) {
+            $query->where('id_provincia', $provincia);
+        }
+
+        if ($distrito > 0) {
+            $query->where('id_distrito', $distrito);
+        }
+
+        if ($gestion > 0) {
+            $query->where('id_gestion', $gestion);
+        }
+
+        if ($area > 0) {
+            $query->where('id_area', $area);
+        }
+
+        $resultados = $query->groupBy('anio', 'nivel_nombre')
+            ->orderBy('anio')
+            ->orderBy('nivel_nombre')
+            ->get();
+
+        return $resultados;
+    }
+
+    public static function ebe_tabla1_provincia_conteo($anio, $provincia = 0, $distrito = 0, $gestion = 0, $area = 0)
+    {
+        $query = EduCuboMatricula::select('provincia', DB::raw('COUNT(*) AS conteo'))->where('anio', $anio)->where('id_mod', '2');
+
+        if ($provincia > 0) {
+            $query->where('id_provincia', $provincia);
+        }
+
+        if ($distrito > 0) {
+            $query->where('id_distrito', $distrito);
+        }
+
+        if ($gestion > 0) {
+            $query->where('id_gestion', $gestion);
+        }
+
+        if ($area > 0) {
+            $query->where('id_area', $area);
+        }
+
+        return $query->groupBy('provincia')
+            ->orderByDesc('conteo')
+            ->get();
+    }
+
+    public static function ebe_tabla1_provincia_conteo_detalles($anio, $provincia = 0, $distrito = 0, $gestion = 0, $area = 0)
+    {
+        $query = EduCuboMatricula::select([
+            'id_provincia',
+            'provincia',
+            DB::raw('count(anio) as tt'),
+            DB::raw('sum(IF(id_sexo = 1,1,0)) as th'),
+            DB::raw('sum(IF(id_sexo = 2,1,0)) as tm'),
+            DB::raw('sum(IF(id_sexo = 1 and id_nivel = "E0", 1, 0)) as thi'),
+            DB::raw('sum(IF(id_sexo = 2 and id_nivel = "E0", 1, 0)) as tmi'),
+            DB::raw('sum(IF(id_sexo = 1 and id_nivel = "E1", 1, 0)) as thp'),
+            DB::raw('sum(IF(id_sexo = 2 and id_nivel = "E1", 1, 0)) as tmp'),
+            DB::raw('sum(IF(id_sexo = 1 and id_nivel = "E2", 1, 0)) as ths'),
+            DB::raw('sum(IF(id_sexo = 2 and id_nivel = "E2", 1, 0)) as tms'),
+        ])
+            ->where('anio', $anio)->where('id_mod', '2')
+            ->groupBy('id_provincia', 'provincia')
+            ->orderBy('provincia');
+
+        if ($provincia > 0) {
+            $query->where('id_provincia', $provincia);
+        }
+
+        if ($distrito > 0) {
+            $query->where('id_distrito', $distrito);
+        }
+
+        if ($gestion > 0) {
+            $query->where('id_gestion', $gestion);
+        }
+
+        if ($area > 0) {
+            $query->where('id_area', $area);
+        }
+
+        return $query->get();
+    }
+
+    public static function ebe_tabla2_distrito_conteo($anio, $provincia = 0, $distrito = 0, $gestion = 0, $area = 0)
+    {
+        $query = EduCuboMatricula::select('distrito', DB::raw('COUNT(*) AS conteo'))->where('anio', $anio)->where('id_mod', '2');
+
+        if ($provincia > 0) {
+            $query->where('id_provincia', $provincia);
+        }
+
+        if ($distrito > 0) {
+            $query->where('id_distrito', $distrito);
+        }
+
+        if ($gestion > 0) {
+            $query->where('id_gestion', $gestion);
+        }
+
+        if ($area > 0) {
+            $query->where('id_area', $area);
+        }
+
+        return $query->groupBy('distrito')
+            ->orderByDesc('conteo')
+            ->get();
+    }
+
+    public static function ebe_tabla2_distrito_conteo_detalles($anio, $provincia = 0, $distrito = 0, $gestion = 0, $area = 0)
+    {
+        $query = EduCuboMatricula::select([
+            'id_distrito',
+            'distrito',
+            DB::raw('count(anio) as tt'),
+            DB::raw('sum(IF(id_sexo=1,1,0)) as th'),
+            DB::raw('sum(IF(id_sexo=2,1,0)) as tm'),
+            DB::raw('sum(IF(id_sexo=1 and id_nivel="E0",1,0)) as thi'),
+            DB::raw('sum(IF(id_sexo=2 and id_nivel="E0",1,0)) as tmi'),
+            DB::raw('sum(IF(id_sexo=1 and id_nivel="E1",1,0)) as thp'),
+            DB::raw('sum(IF(id_sexo=2 and id_nivel="E1",1,0)) as tmp'),
+            DB::raw('sum(IF(id_sexo=1 and id_nivel="E2",1,0)) as ths'),
+            DB::raw('sum(IF(id_sexo=2 and id_nivel="E2",1,0)) as tms'),
+        ])
+            ->where('anio', $anio)->where('id_mod', '2')
+            ->groupBy('id_distrito', 'distrito')
+            ->orderBy('ugel');
+
+        if ($provincia > 0) {
+            $query->where('id_provincia', $provincia);
+        }
+
+        if ($distrito > 0) {
+            $query->where('id_distrito', $distrito);
+        }
+
+        if ($gestion > 0) {
+            $query->where('id_gestion', $gestion);
+        }
+
+        if ($area > 0) {
+            $query->where('id_area', $area);
+        }
+
+        return $query->get();
+    }
+
+    public static function eba_nivel_total($anio, $provincia = 0, $distrito = 0, $gestion = 0, $area = 0)
+    {
+        $query = EduCuboMatricula::select(
+            DB::raw("
+                CASE 
+                    WHEN grado like'%inicial%' THEN 'INICIAL' 
+                    WHEN grado like'%intermedio%' THEN 'INTERMEDIO' 
+                    WHEN grado like'%avanzado%' THEN 'AVANZADO' 
+                END AS name
+            "),
+            DB::raw('COUNT(*) AS y')
+        )
+            ->where('anio', $anio)
+            ->where('id_mod', '3')
+            ->groupBy('name')
+            ->orderByRaw("FIELD(name, 'INICIAL', 'INTERMEDIO', 'AVANZADO')");
+
+        if ($provincia > 0) {
+            $query->where('id_provincia', $provincia);
+        }
+
+        if ($distrito > 0) {
+            $query->where('id_distrito', $distrito);
+        }
+
+        if ($gestion > 0) {
+            $query->where('id_gestion', $gestion);
+        }
+
+        if ($area > 0) {
+            $query->where('id_area', $area);
+        }
+
+        return $query->get();
+    }
+
+    public static function eba_nivel_rango_total($anio, $provincia = 0, $distrito = 0, $gestion = 0, $area = 0)
+    {
+        $query = EduCuboMatricula::select(
+            'anio',
+            DB::raw("
+                CASE 
+                    WHEN grado like'%inicial%' THEN 'INICIAL' 
+                    WHEN grado like'%intermedio%' THEN 'INTERMEDIO' 
+                    WHEN grado like'%avanzado%' THEN 'AVANZADO' 
+                END AS nivel_nombre
+            "),
+            DB::raw('COUNT(*) AS conteo')
+        )
+            ->where('id_mod', '3');
+
+        if ($anio > 0) {
+            $query->where('anio', $anio);
+        }
+
+        if ($provincia > 0) {
+            $query->where('id_provincia', $provincia);
+        }
+
+        if ($distrito > 0) {
+            $query->where('id_distrito', $distrito);
+        }
+
+        if ($gestion > 0) {
+            $query->where('id_gestion', $gestion);
+        }
+
+        if ($area > 0) {
+            $query->where('id_area', $area);
+        }
+
+        $resultados = $query->groupBy('anio', 'nivel_nombre')
+            ->orderBy('anio')
+            ->orderBy('nivel_nombre')
+            ->get();
+
+        return $resultados;
+    }
+
+    public static function eba_tabla1_provincia_conteo($anio, $provincia = 0, $distrito = 0, $gestion = 0, $area = 0)
+    {
+        $query = EduCuboMatricula::select('provincia', DB::raw('COUNT(*) AS conteo'))->where('anio', $anio)->where('id_mod', '3');
+
+        if ($provincia > 0) {
+            $query->where('id_provincia', $provincia);
+        }
+
+        if ($distrito > 0) {
+            $query->where('id_distrito', $distrito);
+        }
+
+        if ($gestion > 0) {
+            $query->where('id_gestion', $gestion);
+        }
+
+        if ($area > 0) {
+            $query->where('id_area', $area);
+        }
+
+        return $query->groupBy('provincia')
+            ->orderByDesc('conteo')
+            ->get();
+    }
+
+    public static function eba_tabla1_provincia_conteo_detalles($anio, $provincia = 0, $distrito = 0, $gestion = 0, $area = 0)
+    {
+        $query = EduCuboMatricula::select([
+            'id_provincia',
+            'provincia',
+            DB::raw('count(anio) as tt'),
+            DB::raw('sum(IF(id_sexo=1,1,0)) as th'),
+            DB::raw('sum(IF(id_sexo=2,1,0)) as tm'),
+            DB::raw('sum(IF(id_sexo=1 and id_nivel="D1" and id_grado in (1,2),1,0)) as thi'),
+            DB::raw('sum(IF(id_sexo=2 and id_nivel="D1" and id_grado in (1,2),1,0)) as tmi'),
+            DB::raw('sum(IF(id_sexo=1 and id_nivel="D1" and id_grado in (3,4,5),1,0)) as thp'),
+            DB::raw('sum(IF(id_sexo=2 and id_nivel="D1" and id_grado in (3,4,5),1,0)) as tmp'),
+            DB::raw('sum(IF(id_sexo=1 and id_nivel="D2",1,0)) as ths'),
+            DB::raw('sum(IF(id_sexo=2 and id_nivel="D2",1,0)) as tms'),
+        ])
+            ->where('anio', $anio)->where('id_mod', '3')
+            ->groupBy('id_provincia', 'provincia')
+            ->orderBy('provincia');
+
+        if ($provincia > 0) {
+            $query->where('id_provincia', $provincia);
+        }
+
+        if ($distrito > 0) {
+            $query->where('id_distrito', $distrito);
+        }
+
+        if ($gestion > 0) {
+            $query->where('id_gestion', $gestion);
+        }
+
+        if ($area > 0) {
+            $query->where('id_area', $area);
+        }
+
+        return $query->get();
+    }
+
+    public static function eba_tabla2_distrito_conteo($anio, $provincia = 0, $distrito = 0, $gestion = 0, $area = 0)
+    {
+        $query = EduCuboMatricula::select('distrito', DB::raw('COUNT(*) AS conteo'))->where('anio', $anio)->where('id_mod', '3');
+
+        if ($provincia > 0) {
+            $query->where('id_provincia', $provincia);
+        }
+
+        if ($distrito > 0) {
+            $query->where('id_distrito', $distrito);
+        }
+
+        if ($gestion > 0) {
+            $query->where('id_gestion', $gestion);
+        }
+
+        if ($area > 0) {
+            $query->where('id_area', $area);
+        }
+
+        return $query->groupBy('distrito')
+            ->orderByDesc('conteo')
+            ->get();
+    }
+
+    public static function eba_tabla2_distrito_conteo_detalles($anio, $provincia = 0, $distrito = 0, $gestion = 0, $area = 0)
+    {
+        $query = EduCuboMatricula::select([
+            'id_distrito',
+            'distrito',
+            DB::raw('count(anio) as tt'),
+            DB::raw('sum(IF(id_sexo=1,1,0)) as th'),
+            DB::raw('sum(IF(id_sexo=2,1,0)) as tm'),
+            DB::raw('sum(IF(id_sexo=1 and id_nivel="D1" and id_grado in   (1,2),1,0)) as thi'),
+            DB::raw('sum(IF(id_sexo=2 and id_nivel="D1" and id_grado in   (1,2),1,0)) as tmi'),
+            DB::raw('sum(IF(id_sexo=1 and id_nivel="D1" and id_grado in (3,4,5),1,0)) as thp'),
+            DB::raw('sum(IF(id_sexo=2 and id_nivel="D1" and id_grado in (3,4,5),1,0)) as tmp'),
+            DB::raw('sum(IF(id_sexo=1 and id_nivel="D2",1,0)) as ths'),
+            DB::raw('sum(IF(id_sexo=2 and id_nivel="D2",1,0)) as tms'),
+        ])
+            ->where('anio', $anio)->where('id_mod', '3')
+            ->groupBy('id_distrito', 'distrito')
+            ->orderBy('ugel');
 
         if ($provincia > 0) {
             $query->where('id_provincia', $provincia);

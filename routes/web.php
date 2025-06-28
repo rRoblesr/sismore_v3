@@ -267,6 +267,7 @@ Route::get('/ImporMatriculaGeneral/Listar/ImportarDT', [ImporMatriculaGeneralCon
 Route::get('/ImporMatriculaGeneral/Eliminar/{id}', [ImporMatriculaGeneralController::class, 'eliminar'])->name('impormatriculageneral.eliminar');
 //Route::get('/ImporMatriculaGeneral/Exportar', [ImporMatriculaGeneralController::class, 'exportar'])->name('impormatriculageneral.exportar');
 //Route::get('/ImporMatriculaGeneral/Exportar/PadronSiagie', [ImporMatriculaGeneralController::class, 'download'])->name('impormatriculageneral.download');
+Route::post('/procesar-cubo-matricula', [ImporMatriculaGeneralController::class, 'procesarCubo'])->name('impormatriculageneral.procesar.cubo');
 
 Route::get('/ImporIS/Importar', [ImporISController::class, 'importar'])->name('imporis.importar');
 Route::post('/ImporIS/Admision/Importar', [ImporISController::class, 'guardaradmision'])->name('imporis.guardar.admision');
@@ -1560,8 +1561,9 @@ Route::get('/recursos/highcharts', function () {
 });
 
 Route::get('/recursos/pruebas', function () {
-    return EduCuboMatriculaRepositorio::modalidad_nivel_total_anio_mes(0,2025, 0, 0, 0, 0);
-    return EduCuboMatriculaRepositorio::modalidad_total_anio_meses(1,2025, 0, 0, 0, 0);
+    return auth()->user();
+    return EduCuboMatriculaRepositorio::ebr_tabla2_distrito_conteo_detalles(2025, 0, 0, 0, 0);
+    return EduCuboMatriculaRepositorio::modalidad_total_anio_meses(1, 2025, 0, 0, 0, 0);
     return EduCuboMatriculaRepositorio::modalidad_total_anios(3, 0, 0, 0, 0);
     return EduCuboMatriculaRepositorio::total_anio_ugel_detalles(2025, 0, 0, 0, 0);
     return EduCuboMatriculaRepositorio::total_anio_ugel(2025, 0, 0, 0, 0);

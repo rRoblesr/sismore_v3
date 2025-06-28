@@ -121,7 +121,7 @@
                                                 </tr>
                                             </thead>
                                     @endswitch
-                                   
+
                                 </table>
                             </div>
                         </div>
@@ -669,6 +669,34 @@
             </div>
         </div>
     </div><!-- /.modal -->
+
+    <!-- Modal para procesar cubo -->
+    <div id="modal-procesar-cubo" class="modal fade centrarmodal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Procesando Cubo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <p><strong>Ejecutando el procedimiento...</strong></p>
+                    <div class="progress mb-3">
+                        <div id="progress-bar-cubo"
+                            class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar"
+                            style="width: 0%">
+                            0%
+                        </div>
+                    </div>
+                    <p id="mensaje-cubo"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('js')
@@ -686,6 +714,101 @@
                 type: "POST",
             });
         });
+
+        function procesarCubo(importacion_id) {
+    $('#mensaje-cubo').text('');
+    $('#progress-bar-cubo')
+        .removeClass('bg-success bg-danger')
+        .addClass('bg-info')
+        .css('width', '0%')
+        .text('0%');
+
+    $('#modal-procesar-cubo').modal('show');
+
+    let percent = 0;
+    const intervalId = setInterval(() => {
+        if (percent < 95) {
+            percent += 2; // Velocidad de simulación
+            $('#progress-bar-cubo')
+                .css('width', percent + '%')
+                .text(percent + '%');
+        }
+    }, 100); // Actualiza cada 100ms
+
+    $.ajax({
+        url: "{{ route('impormatriculageneral.procesar.cubo') }}",
+        method: "POST",
+        data: {
+            _token: $('input[name=_token]').val(),
+            importacion_id: importacion_id
+        },
+        success: function(response) {
+            clearInterval(intervalId);
+            percent = 100;
+            $('#progress-bar-cubo')
+                .removeClass('bg-info progress-bar-animated')
+                .addClass('bg-success')
+                .css('width', percent + '%')
+                .text('Completado');
+
+            $('#mensaje-cubo').text('¡El cubo fue procesado correctamente!');
+            setTimeout(() => {
+                $('#modal-procesar-cubo').modal('hide');
+                table_principal.ajax.reload(); // Recargar tabla principal
+            }, 1500);
+        },
+        error: function(xhr) {
+            clearInterval(intervalId);
+            $('#progress-bar-cubo')
+                .removeClass('bg-info progress-bar-animated')
+                .addClass('bg-danger')
+                .css('width', '100%')
+                .text('Error');
+
+            $('#mensaje-cubo').text('Ocurrió un fallo: ' + xhr.responseText);
+        }
+    });
+}
+
+        function procesarCuboxxx(importacion_id) {
+            $('#mensaje-cubo').text('');
+            $('#progress-bar-cubo').css('width', '0%').text('0%');
+            $('#modal-procesar-cubo').modal('show');
+            $.ajax({
+                url: "{{ route('impormatriculageneral.procesar.cubo') }}",
+                method: "POST",
+                data: {
+                    _token: $('input[name=_token]').val(),
+                    importacion_id: importacion_id
+                },
+                xhrFields: {
+                    onprogress: function(e) {
+                        let percent = Math.round((e.loaded / e.total) * 100);
+                        $('#progress-bar-cubo').css('width', percent + '%').text(percent + '%');
+                    }
+                },
+                success: function(response) {
+                    if (response.status === 200) {
+                        $('#progress-bar-cubo').removeClass('bg-info').addClass('bg-success')
+                            .css('width', '100%').text('100%');
+                        $('#mensaje-cubo').text('¡El cubo fue procesado correctamente!');
+                        setTimeout(() => {
+                            $('#modal-procesar-cubo').modal('hide');
+                            table_principal.ajax.reload(); // Recargar tabla principal
+                        }, 1500);
+                    } else {
+                        $('#progress-bar-cubo').removeClass('bg-info').addClass('bg-danger')
+                            .css('width', '100%').text('Error');
+                        $('#mensaje-cubo').text('Hubo un error al procesar el cubo.');
+                    }
+                },
+                error: function(xhr) {
+                    $('#progress-bar-cubo').removeClass('bg-info').addClass('bg-danger')
+                        .css('width', '100%').text('Error');
+                    $('#mensaje-cubo').text('Ocurrió un fallo: ' + xhr.responseText);
+                }
+            });
+        }
 
         function url_tabla_principal(fuente) {
             switch (fuente) {

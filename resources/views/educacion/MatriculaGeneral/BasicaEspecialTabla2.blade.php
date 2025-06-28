@@ -36,7 +36,7 @@
                     <td>{{ number_format($item->thp, 0) }}</td>
                     <td>{{ number_format($item->tmp, 0) }}</td>
                     <td>{{ number_format($item->ths, 0) }}</td>
-                    <td>{{ number_format($item->ths, 0) }}</td>
+                    <td>{{ number_format($item->tms, 0) }}</td>
                 </tr>
             @endforeach
         </tbody>
