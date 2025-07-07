@@ -1590,6 +1590,7 @@ class MatriculaGeneralController extends Controller
                 }
                 foreach ($data->unique('nivel_nombre') as $key => $value) {
                     $info['dat'][] = ["name" => $value->nivel_nombre, "data" => []];
+                    // $info['dat'][] = ["name" => $value->nivel_nombre, "data" => array_fill(0, count($info['cat']), null)];
                     $xx[] = [];
                 }
                 foreach ($data as $value) {
@@ -1610,7 +1611,82 @@ class MatriculaGeneralController extends Controller
                 $imp = ImportacionRepositorio::ImportacionMax_id(EduCuboMatriculaRepositorio::importacion($rq->anio));
                 $reg['fecha'] = date('d/m/Y', strtotime($imp->fecha));
                 $reg['rango'] = $rango;
-                return response()->json(compact('info', 'reg'));
+                //=>
+                // // Obtener años y niveles únicos
+                // $anios = $data->unique('anio')->pluck('anio')->sort()->values();
+                // $niveles = $data->unique('nivel_nombre')->pluck('nivel_nombre');
+
+                // // Crear estructura base
+                // $info['cat'] = $anios->toArray();
+                // $info['dat'] = [];
+
+                // // Agrupar datos por nivel
+                // $datosAgrupados = $data->groupBy('nivel_nombre');
+
+                // foreach ($niveles as $nivel) {
+                //     $datosNivel = array_fill(0, count($anios), 0);
+
+                //     // Llenar datos para este nivel
+                //     foreach ($datosAgrupados[$nivel] as $registro) {
+                //         $indiceAnio = array_search($registro->anio, $info['cat']);
+                //         if ($indiceAnio !== false) {
+                //             $datosNivel[$indiceAnio] = $registro->conteo;
+                //         }
+                //     }
+
+                //     $info['dat'][] = [
+                //         "name" => $nivel,
+                //         "data" => $datosNivel
+                //     ];
+                // }
+
+                // // Información adicional
+                // $reg['periodo'] = $anios->first() . ' - ' . $anios->last();
+                // $reg['fuente'] = 'Siagie - MINEDU';
+                // $reg['rango'] = $anios->first() . ' - ' . $anios->last();
+                //=>
+
+                // // Inicializar arrays
+                // $info['cat'] = [];
+                // $info['dat'] = [];
+
+                // // 1. Obtener categorías (años) y crear el rango
+                // $anios = $data->unique('anio')->pluck('anio')->sort()->values();
+                // $info['cat'] = $anios->toArray();
+                // $rango = $anios->first() . ' - ' . $anios->last();
+
+                // // 2. Obtener niveles únicos
+                // $niveles = $data->unique('nivel_nombre')->pluck('nivel_nombre');
+
+                // // 3. Crear estructura de datos con valores inicializados
+                // foreach ($niveles as $nivel) {
+                //     $info['dat'][] = [
+                //         "name" => $nivel,
+                //         "data" => array_fill(0, count($info['cat']), 0) // Inicializar con 0 o null
+                //     ];
+                // }
+
+                // // 4. Llenar los datos
+                // foreach ($data as $registro) {
+                //     // Encontrar el índice del año
+                //     $anioIndex = array_search($registro->anio, $info['cat']);
+
+                //     // Encontrar el índice del nivel
+                //     $nivelIndex = $niveles->search($registro->nivel_nombre);
+
+                //     // Asignar el valor
+                //     if ($anioIndex !== false && $nivelIndex !== false) {
+                //         $info['dat'][$nivelIndex]['data'][$anioIndex] = $registro->conteo;
+                //     }
+                // }
+
+                // // 5. Información adicional
+                // $reg['periodo'] = reset($info['cat']) . ' - ' . end($info['cat']);
+                // $reg['fuente'] = 'Siagie - MINEDU';
+                // $imp = ImportacionRepositorio::ImportacionMax_id(EduCuboMatriculaRepositorio::importacion($rq->anio));
+                // $reg['fecha'] = date('d/m/Y', strtotime($imp->fecha));
+                // $reg['rango'] = $rango;
+                return response()->json(compact('info', 'reg', 'data'));
             case 'anal4':
                 $info = EduCuboMatriculaRepositorio::ebr_nivel_total($rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
 
@@ -2228,38 +2304,72 @@ class MatriculaGeneralController extends Controller
                 return response()->json(compact('info', 'reg'));
             case 'anal3':
                 $data = EduCuboMatriculaRepositorio::ebe_nivel_rango_total(0, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
-                $info['cat'] = [];
+                // $info['cat'] = [];
+                // $info['dat'] = [];
+                // $rango = '';
+                // $pos = 0;
+                // foreach ($data->unique('anio') as $key => $value) {
+                //     if ($pos == 0) $rango .= '' . $value->anio . ' - ';
+                //     if ($pos == $data->unique('anio')->count() - 1) $rango .= '' . $value->anio;
+                //     $info['cat'][] = $value->anio;
+                //     $pos += 1;
+                // }
+                // foreach ($data->unique('nivel_nombre') as $key => $value) {
+                //     $info['dat'][] = ["name" => $value->nivel_nombre, "data" => []];
+                //     $xx[] = [];
+                // }
+                // foreach ($data as $value) {
+                //     foreach ($info['dat'] as $key => $dat) {
+                //         if ($value->nivel_nombre == $dat['name']) {
+                //             $xx[$key][] = $value->conteo;
+                //         }
+                //     }
+                // }
+                // $info['dat'] = [];
+                // $pos = 0;
+                // foreach ($data->unique('nivel_nombre') as $value) {
+                //     $info['dat'][] = ["name" => $value->nivel_nombre, "data" => $xx[$pos++]];
+                // }
+
+                // $reg['periodo'] = reset($info['cat']) . ' - ' . end($info['cat']);
+                // $reg['fuente'] = 'Siagie - MINEDU';
+                // $imp = ImportacionRepositorio::ImportacionMax_id(EduCuboMatriculaRepositorio::importacion($rq->anio));
+                // $reg['fecha'] = date('d/m/Y', strtotime($imp->fecha));
+                // $reg['rango'] = $rango;
+                //=>
+                // Obtener años y niveles únicos
+                $anios = $data->unique('anio')->pluck('anio')->sort()->values();
+                $niveles = $data->unique('nivel_nombre')->pluck('nivel_nombre');
+
+                // Crear estructura base
+                $info['cat'] = $anios->toArray();
                 $info['dat'] = [];
-                $rango = '';
-                $pos = 0;
-                foreach ($data->unique('anio') as $key => $value) {
-                    if ($pos == 0) $rango .= '' . $value->anio . ' - ';
-                    if ($pos == $data->unique('anio')->count() - 1) $rango .= '' . $value->anio;
-                    $info['cat'][] = $value->anio;
-                    $pos += 1;
-                }
-                foreach ($data->unique('nivel_nombre') as $key => $value) {
-                    $info['dat'][] = ["name" => $value->nivel_nombre, "data" => []];
-                    $xx[] = [];
-                }
-                foreach ($data as $value) {
-                    foreach ($info['dat'] as $key => $dat) {
-                        if ($value->nivel_nombre == $dat['name']) {
-                            $xx[$key][] = $value->conteo;
+
+                // Agrupar datos por nivel
+                $datosAgrupados = $data->groupBy('nivel_nombre');
+
+                foreach ($niveles as $nivel) {
+                    $datosNivel = array_fill(0, count($anios), null);
+
+                    // Llenar datos para este nivel
+                    foreach ($datosAgrupados[$nivel] as $registro) {
+                        $indiceAnio = array_search($registro->anio, $info['cat']);
+                        if ($indiceAnio !== false) {
+                            $datosNivel[$indiceAnio] = $registro->conteo;
                         }
                     }
-                }
-                $info['dat'] = [];
-                $pos = 0;
-                foreach ($data->unique('nivel_nombre') as $value) {
-                    $info['dat'][] = ["name" => $value->nivel_nombre, "data" => $xx[$pos++]];
+
+                    $info['dat'][] = [
+                        "name" => $nivel,
+                        "data" => $datosNivel
+                    ];
                 }
 
-                $reg['periodo'] = reset($info['cat']) . ' - ' . end($info['cat']);
+                // Información adicional
+                $reg['periodo'] = $anios->first() . ' - ' . $anios->last();
                 $reg['fuente'] = 'Siagie - MINEDU';
-                $imp = ImportacionRepositorio::ImportacionMax_id(EduCuboMatriculaRepositorio::importacion($rq->anio));
-                $reg['fecha'] = date('d/m/Y', strtotime($imp->fecha));
-                $reg['rango'] = $rango;
+                $reg['rango'] = $anios->first() . ' - ' . $anios->last();
+
                 return response()->json(compact('info', 'reg', 'data'));
             case 'anal4':
                 $info = EduCuboMatriculaRepositorio::ebe_nivel_total($rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
@@ -2821,7 +2931,7 @@ class MatriculaGeneralController extends Controller
                 // $anioy = Anio::where('anio', $aniox->anio - 1)->first();
                 // $meta = MatriculaGeneralRepositorio::metaEBAProvincia($anioy->id, $rq->ugel, $rq->gestion,  $rq->area);
                 // $base = MatriculaGeneralRepositorio::basicaalternativatabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area);
-                
+
                 $meta = EduCuboMatriculaRepositorio::eba_tabla1_provincia_conteo($rq->anio - 1, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
                 $base = EduCuboMatriculaRepositorio::eba_tabla1_provincia_conteo_detalles($rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
                 $foot = [];
@@ -2870,7 +2980,7 @@ class MatriculaGeneralController extends Controller
                 // $anioy = Anio::where('anio', $aniox->anio - 1)->first();
                 // $meta = MatriculaGeneralRepositorio::metaEBADistrito($anioy->id, $rq->ugel, $rq->gestion,  $rq->area,  $rq->provincia);
                 // $base = MatriculaGeneralRepositorio::basicaalternativatabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area,  $rq->provincia);
-                
+
                 $meta = EduCuboMatriculaRepositorio::eba_tabla2_distrito_conteo($rq->anio - 1, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
                 $base = EduCuboMatriculaRepositorio::eba_tabla2_distrito_conteo_detalles($rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
                 $foot = [];
