@@ -1848,6 +1848,9 @@ class MatriculaGeneralController extends Controller
                 $anioy = Anio::where('anio', $aniox->anio - 1)->first();
                 $meta = MatriculaGeneralRepositorio::metaEBRCentroPoblado($rq->anio == 3 ? 3 : $anioy->id, $rq->ugel, $rq->gestion,  $rq->area, $rq->provincia);
                 $base = MatriculaGeneralRepositorio::basicaregulartabla($rq->div, $rq->anio, $rq->ugel, $rq->gestion,  $rq->area, $rq->provincia);
+
+                $meta = EduCuboMatriculaRepositorio::ebr_tabla2_distrito_conteo($rq->anio - 1, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
+                $base = EduCuboMatriculaRepositorio::ebr_tabla2_distrito_conteo_detalles($rq->anio, $rq->provincia, $rq->distrito,  $rq->gestion,  $rq->ambito);
                 $foot = [];
                 if ($base->count() > 0) {
                     $foot = clone $base[0];

@@ -956,7 +956,7 @@
             });
         }
 
-        function gAnidadaColumnxx(div, categoria, series, titulo, subtitulo, maxBar) {
+        function gAnidadaColumn(div, categoria, series, titulo, subtitulo, maxBar) {
             var rango = categoria.length;
             var posPorcentaje = rango * 2 + 1;
             var cont = 0;
@@ -1098,7 +1098,7 @@
             });
         }
 
-        function gAnidadaColumn(div, categoria, series, titulo, subtitulo, maxBar) {
+        function gAnidadaColumnxxx(div, categoria, series, titulo, subtitulo, maxBar) {
             // Validaciones de entrada
             if (!div || !categoria || !series) {
                 console.error('Parámetros requeridos faltantes');

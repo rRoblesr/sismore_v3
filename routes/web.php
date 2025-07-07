@@ -109,6 +109,7 @@ use App\Mail\MsnCorreo;
 use App\Models\Administracion\DirectoriosAuditoria;
 use App\Models\Administracion\UsuarioAuditoria;
 use App\Models\Educacion\Area;
+use App\Models\Educacion\EduCuboMatricula;
 use App\Models\Educacion\ImporDocentesBilingues;
 use App\Models\Educacion\ImporServiciosBasicos;
 use App\Models\Educacion\InstitucionEducativa;
@@ -1323,6 +1324,14 @@ Route::get('/educacion/conveniofed/edu/Reports2/Exportar/{div}/{indicador}/{anio
 
 // Route::post('/educacion/conveniofed/edu/Reports2/2', [IndicadoresController::class, 'PactoRegionalSalPacto1Reports2'])->name('educacion.indicador.conveniofed.detalle.reports.2');
 // Route::post('/educacion/conveniofed/edu/Reports2/3', [IndicadoresController::class, 'PactoRegionalSalPacto1Reports3'])->name('educacion.indicador.conveniofed.detalle.reports.3');
+
+Route::get('/educacion/pruebas', function () {
+    return EduCuboMatricula::select('importacion_id',DB::raw('count(*) as conteo'))->groupBy('importacion_id')->get();
+    // return view('salud.Indicadores.pruebaxxx00');
+    // return UbigeoRepositorio::arrayDistritoIdNombre();
+
+    //return view('pruebas3');
+});
 
 Route::get('/salud/pruebas', function () {
     return view('salud.Indicadores.pruebaxxx00');

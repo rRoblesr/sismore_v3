@@ -496,19 +496,21 @@
             });
             // cargarCards();
             var data = {
-                'cat': ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', ],
-                'dat': [0.596, 0.543, 0.571, 0.591, 0.564, 0.537, 0.572, 0.60809847527, 0.6575241822, 0.594, ]
+                'cat': ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'],
+                'dat': [0.596, 0.543, 0.571, 0.591, 0.564, 0.537, 0.572, 0.60809847527, 0.6575241822, 0.594,
+                    0.546
+                ]
             };
             gLineaBasica('anal1', data, '',
-                'Porcentaje de niñas y niños entre 6 a 35 meses  de edad con anemia',
+                'UCAYALI: Porcentaje de niñas y niños entre 6 a 35 meses  de edad con anemia',
                 '');
             var data = {
-                'cat': ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', ],
-                'dat': [0.261, 0.24, 0.248, 0.194, 0.178, 0.177, 0.174, 0.17541049234, 0.196901, 0.191, ]
+                'cat': ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'],
+                'dat': [0.261, 0.24, 0.248, 0.194, 0.178, 0.177, 0.174, 0.17541049234, 0.196901, 0.191, 0.195]
             };
             gLineaBasica('anal2', data, '',
-                
-                'Porcentaje de niñas y niños menores de cinco años de edad con desnutrición crónica',
+
+                'UCAYALI: Porcentaje de niñas y niños menores de cinco años de edad con desnutrición crónica',
                 '');
 
         });
@@ -604,7 +606,7 @@
 
 
 
-        function gLineaBasica(div, data, titulo, subtitulo, titulovetical) {
+        function __gLineaBasica(div, data, titulo, subtitulo, titulovetical) {
             const colors = ["#5eb9aa", "#f5bd22", "#e65310"];
             Highcharts.chart(div, {
                 title: {
@@ -697,6 +699,94 @@
                 },
                 credits: false,
 
+            });
+        }
+
+        function gLineaBasica(div, data, titulo, subtitulo, titulovetical) {
+            const colors = ["#5eb9aa", "#f5bd22", "#e65310"];
+
+            Highcharts.chart(div, {
+                colors: colors,
+                title: {
+                    text: titulo
+                },
+                subtitle: {
+                    text: subtitulo,
+                    style: {
+                        fontSize: '13px'
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: titulovetical
+                    },
+                    labels: {
+                        formatter: function() {
+                            return (this.value ).toFixed(0) + '%';
+                            // return (this.value * 100).toFixed(1) + '%';
+                        },
+                        style: {
+                            fontSize: '10px'
+                        }
+                    },
+                    min: 0
+                },
+                xAxis: {
+                    categories: data.cat,
+                    labels: {
+                        style: {
+                            fontSize: '10px'
+                        }
+                    }
+                },
+                tooltip: {
+                    pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f}%</b><br/>',
+                    shared: true
+                },
+                plotOptions: {
+                    series: {
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontSize: '10px',
+                                fontWeight: 'normal'
+                            }
+                        }
+                    },
+                    line: {
+                        dataLabels: {
+                            enabled: true,
+                            formatter: function() {
+                                // return (this.y * 100).toFixed(1) + '%';
+                                return (this.y ).toFixed(1) + '%';
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Ucayali',
+                    showInLegend: false,
+                    data: data.dat.map(val => parseFloat((val * 100).toFixed(
+                        2))) // opcional: preconvierte a %
+                }],
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 500
+                        },
+                        chartOptions: {
+                            legend: {
+                                layout: 'horizontal',
+                                align: 'center',
+                                verticalAlign: 'bottom'
+                            }
+                        }
+                    }]
+                },
+                exporting: {
+                    enabled: true
+                },
+                credits: false
             });
         }
 
