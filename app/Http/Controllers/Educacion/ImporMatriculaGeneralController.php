@@ -192,7 +192,18 @@ class ImporMatriculaGeneralController extends Controller
             $importacion->estado = 'PE';
             $importacion->save();
 
-            $mensaje = "Error al procesar la normalizacion de datos sal_pa_procesarControlCalidadColumnas. " . $e->getMessage();
+            $mensaje = "Error al procesar la normalizacion de datos edu_pa_procesarImporMatriculaGeneral. " . $e->getMessage();
+            return $this->json_output(400, $mensaje);
+        }
+
+
+        try {
+            DB::select('call edu_pa_procesar_cubo_matricula(?)', [$importacion->id]);
+        } catch (Exception $e) {
+            $importacion->estado = 'PE';
+            $importacion->save();
+
+            $mensaje = "Error al procesar la normalizacion de datos edu_pa_procesar_cubo_matricula. " . $e->getMessage();
             return $this->json_output(400, $mensaje);
         }
 
