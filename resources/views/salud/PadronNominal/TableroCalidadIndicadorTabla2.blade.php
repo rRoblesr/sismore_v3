@@ -1,4 +1,4 @@
-<table id="tabla1" class="table table-sm table-striped table-bordered font-11">
+<table id="tabla2" class="table table-sm table-striped table-bordered font-11">
     <thead>
         <tr class="table-success-0 text-white">
             <th class="text-center" rowspan="2">N°</th>
@@ -27,7 +27,8 @@
         @foreach ($base as $key => $item)
             <tr class="text-center">
                 <td>{{ $key + 1 }}</td>
-                <td class="text-left"><a href="javascript:void(0)" onclick="abrirmodalcentropoblado2({{ $item->distrito_id }})">{{ $item->distrito }}</a></td>
+                <td class="text-left"><a href="javascript:void(0)"
+                        onclick="abrirmodalcentropoblado2({{ $item->distrito_id }})">{{ $item->distrito }}</a></td>
                 <td>{{ number_format($item->cdni, 0) }}</td>
                 <td>{{ number_format($item->total, 0) }}</td>
                 <td>{!! avance($item->ii1) !!}</td>
@@ -43,22 +44,39 @@
             </tr>
         @endforeach
     </tbody>
+    <tfoot>
+        <tr class="text-center table-success-0 text-white">
+            <td colspan="2"></td>
+            <td>{{ number_format($foot->cdni, 0) }}</td>
+            <td>{{ number_format($foot->total, 0) }}</td>
+            <td>{!! avance($foot->ii1) !!}</td>
+            <td>{{ number_format($foot->cseguro, 0) }}</td>
+            <td>{{ number_format($foot->total, 0) }}</td>
+            <td>{!! avance($foot->ii2) !!}</td>
+            <td>{{ number_format($foot->ceess, 0) }}</td>
+            <td>{{ number_format($foot->total, 0) }}</td>
+            <td>{!! avance($foot->ii3) !!}</td>
+            <td>{{ number_format($foot->cvisita, 0) }}</td>
+            <td>{{ number_format($foot->total, 0) }}</td>
+            <td>{!! avance($foot->ii4) !!}</td>
+        </tr>
+    </tfoot>
 </table>
 
 @php
     function avance($monto)
     {
-        if ($monto < 50) {
+        if ($monto < 51) {
             return '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px;">' .
-                round($monto, 1) .
+                number_format($monto, 1) .
                 '%</span>';
         } elseif ($monto < 95) {
             return '<span class="badge badge-pill badge-warning" style="font-size:90%; width:50px;background-color:#eb960d;">' .
-                round($monto, 1) .
+                number_format($monto, 1) .
                 '%</span>';
         } else {
             return '<span class="badge badge-pill badge-success" style="font-size:90%; width:50px;">' .
-                round($monto, 1) .
+                number_format($monto, 1) .
                 '%</span>';
         }
     }

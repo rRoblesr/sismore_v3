@@ -2155,14 +2155,14 @@ class PadronNominalController extends Controller
 
         switch ($rq->div) {
             case 'head':
-                $data = ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->edades);
+                $data = ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->edades, 0);
                 $card1 = number_format($data->avance, 1);
                 $card2 = number_format($data->conteo);
                 $card3 = number_format($data->cdni);
                 $card4 = number_format($data->sdni);
                 return response()->json(compact('card1', 'card2', 'card3', 'card4'));
             case 'anal1':
-                $data = ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->edades);
+                $data = ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->edades, 0);
                 $info['categoria'] = [];
                 $info['serie'] = [];
                 foreach ($data as $key => $value) {
@@ -2172,14 +2172,13 @@ class PadronNominalController extends Controller
 
                 return response()->json(compact('info', 'data'));
             case 'anal2':
-                $info = ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->edades);
+                $info = ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->edades, 0);
                 return response()->json(compact('info'));
             case 'anal3':
-                $info = ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->edades);
+                $info = ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->edades, 0);
                 return response()->json(compact('info'));
             case 'tabla1':
-                $base = ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->edades);
-                // return response()->json(compact('base'));
+                $base = ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->edades, 0);
                 $foot = [];
                 if ($base->count() > 0) {
                     $foot = clone $base[0];
@@ -2196,8 +2195,62 @@ class PadronNominalController extends Controller
                 }
                 $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base', 'foot'))->render();
                 return response()->json(compact('excel'));
-                // return response()->json(compact('data'));
-
+            case 'tabla2':
+                $base = ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->edades, 0);
+                $foot = [];
+                if ($base->count() > 0) {
+                    $foot = clone $base[0];
+                    $foot->total = 0;
+                    $foot->cdni = 0;
+                    $foot->ii1 = 0;
+                    $foot->cseguro = 0;
+                    $foot->ii2 = 0;
+                    $foot->ceess = 0;
+                    $foot->ii3 = 0;
+                    $foot->cvisita = 0;
+                    $foot->ii4 = 0;
+                    foreach ($base as $key => $value) {
+                        $foot->total += $value->total;
+                        $foot->cdni += $value->cdni;
+                        $foot->cseguro += $value->cseguro;
+                        $foot->ceess += $value->ceess;
+                        $foot->cvisita += $value->cvisita;
+                    }
+                    $foot->ii1 = round(100 * $foot->cdni / $foot->total, 1);
+                    $foot->ii2 = round(100 * $foot->cseguro / $foot->total, 1);
+                    $foot->ii3 = round(100 * $foot->ceess / $foot->total, 1);
+                    $foot->ii4 = round(100 * $foot->cvisita / $foot->total, 1);
+                }
+                $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla2', compact('base', 'foot'))->render();
+                return response()->json(compact('excel'));
+            case 'tabla0201':
+                $base =  ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->edades, $rq->ubigeo);
+                $foot = [];
+                if ($base->count() > 0) {
+                    $foot = clone $base[0];
+                    $foot->total = 0;
+                    $foot->cdni = 0;
+                    $foot->ii1 = 0;
+                    $foot->cseguro = 0;
+                    $foot->ii2 = 0;
+                    $foot->ceess = 0;
+                    $foot->ii3 = 0;
+                    $foot->cvisita = 0;
+                    $foot->ii4 = 0;
+                    foreach ($base as $key => $value) {
+                        $foot->total += $value->total;
+                        $foot->cdni += $value->cdni;
+                        $foot->cseguro += $value->cseguro;
+                        $foot->ceess += $value->ceess;
+                        $foot->cvisita += $value->cvisita;
+                    }
+                    $foot->ii1 = round(100 * $foot->cdni / $foot->total, 1);
+                    $foot->ii2 = round(100 * $foot->cseguro / $foot->total, 1);
+                    $foot->ii3 = round(100 * $foot->ceess / $foot->total, 1);
+                    $foot->ii4 = round(100 * $foot->cvisita / $foot->total, 1);
+                }
+                $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla0201', compact('base', 'foot'))->render();
+                return response()->json(compact('excel'));
             case 'anal1xx':
                 switch ($rq->indicador) {
                     case 1:
@@ -2893,23 +2946,23 @@ class PadronNominalController extends Controller
                     default:
                         return response()->json([]);
                 }
-            case 'tabla2':
+            case 'tabla2xx':
                 switch ($rq->indicador) {
                     case 1:
                         $data = ImporPadronNominal::select(
                             'distrito_id',
                             DB::raw('count(*) as total'),
                             DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
-                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),2) as ii1'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),1) as ii1'),
 
                             DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
-                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),2) as ii2'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),1) as ii2'),
 
                             DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
-                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),2) as ii3'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),1) as ii3'),
 
                             DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
-                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),1) as ii4'),
                         )
                             ->where('importacion_id', $importacion);
                         if ($rq->edades > 0) {
@@ -3254,7 +3307,7 @@ class PadronNominalController extends Controller
                     default:
                         return response()->json([]);
                 }
-            case 'tabla0201':
+            case 'tabla0201xx':
                 switch ($rq->indicador) {
                     case 1:
                         $data = ImporPadronNominal::select(

@@ -367,9 +367,9 @@
                             'Porcentaje de Cumplimiento por Distrito',
                         );
                     } else if (div == "anal2") {
-                        gPie2(div, data.info, '', 'Numero de estudiantes matriculados según sexo', '');
+                        gPie2(div, data.info, '', $('#indicador option:selected').text() + ', según sexo', '');
                     } else if (div == "anal3") {
-                        gPie2(div, data.info, '', 'Numero de estudiantes matriculados según sexo', '');
+                        gPie2(div, data.info, '', $('#indicador option:selected').text() + ', según Área', '');
                     } else if (div == "tabla1") {
                         $('#ctabla1').html(data.excel);
                         // $('#tabla2').DataTable({

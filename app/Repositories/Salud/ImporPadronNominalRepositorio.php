@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class ImporPadronNominalRepositorio
 {
-    public static function head_lista_indicadores($div, $indicador, $importacion, $edades)
+    public static function head_lista_indicadores($div, $indicador, $importacion, $edades, $ubigeo)
     {
         switch ($div) {
             case 'head':
@@ -862,6 +862,584 @@ class ImporPadronNominalRepositorio
                         foreach ($data as $key => $value) {
                             $value->distrito = $dd[$value->distrito_id] ?? 'No Especificado';
                         }
+                        return $data;
+                    default:
+                        return [];
+                }
+            case 'tabla2':
+                switch ($indicador) {
+                    case '1': //Niñas y Niños con DNI
+                        $data = ImporPadronNominal::where('importacion_id', $importacion);
+                        if ($edades > 0) {
+                            if ($edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
+                            }
+                        }
+                        $data = $data->select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),1) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),1) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),1) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),1) as ii4'),
+                        )->orderBy('ubigeo')->groupBy('distrito_id')->get();
+                        $dd = Ubigeo::where(DB::raw('length(codigo)'), 6)->where('codigo', 'like', '25%')->pluck('nombre', 'id');
+                        foreach ($data as $key => $value) {
+                            $value->distrito = $dd[$value->distrito_id] ?? 'No Especificado';
+                        }
+                        return $data;
+                    case '2': //Niñas y Niños con DNI de 0 a 30 días
+                        $data = ImporPadronNominal::where('importacion_id', $importacion);
+                        if ($edades > 0) {
+                            if ($edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
+                            }
+                        }
+                        $data = $data->where('tipo_edad', 'D')->where('edad', '<=', 30);
+                        $data = $data->select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),1) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),1) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),1) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),1) as ii4'),
+                        )->orderBy('ubigeo')->groupBy('distrito_id')->get();
+                        $dd = Ubigeo::where(DB::raw('length(codigo)'), 6)->where('codigo', 'like', '25%')->pluck('nombre', 'id');
+                        foreach ($data as $key => $value) {
+                            $value->distrito = $dd[$value->distrito_id] ?? 'No Especificado';
+                        }
+                        return $data;
+                    case '3': //Niñas y Niños con DNI menores a 60 días 
+                        $data = ImporPadronNominal::where('importacion_id', $importacion);
+                        if ($edades > 0) {
+                            if ($edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
+                            }
+                        }
+                        $data = $data->where(function ($query) {
+                            $query->where(function ($subQuery) {
+                                $subQuery->where('tipo_edad', 'D')->where('edad', '<=', 31);
+                            })
+                                ->orWhere(function ($subQuery) {
+                                    $subQuery->where('tipo_edad', 'M')->where('edad', '<=', 2);
+                                });
+                        });
+                        $data = $data->select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),1) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),1) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),1) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),1) as ii4'),
+                        )->orderBy('ubigeo')->groupBy('distrito_id')->get();
+                        $dd = Ubigeo::where(DB::raw('length(codigo)'), 6)->where('codigo', 'like', '25%')->pluck('nombre', 'id');
+                        foreach ($data as $key => $value) {
+                            $value->distrito = $dd[$value->distrito_id] ?? 'No Especificado';
+                        }
+                        return $data;
+                    case '4': //Niñas y Niños con Seguro de Salud
+                        $data = ImporPadronNominal::where('importacion_id', $importacion);
+                        if ($edades > 0) {
+                            if ($edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
+                            }
+                        }
+                        $data = $data->select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),1) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),1) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),1) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),1) as ii4'),
+                        )->orderBy('ubigeo')->groupBy('distrito_id')->get();
+                        $dd = Ubigeo::where(DB::raw('length(codigo)'), 6)->where('codigo', 'like', '25%')->pluck('nombre', 'id');
+                        foreach ($data as $key => $value) {
+                            $value->distrito = $dd[$value->distrito_id] ?? 'No Especificado';
+                        }
+                        return $data;
+                    case '5': //Niñas y Niños con Programas Sociales
+                        $data = ImporPadronNominal::where('importacion_id', $importacion);
+                        if ($edades > 0) {
+                            if ($edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
+                            }
+                        }
+                        $data = $data->select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),1) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),1) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),1) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),1) as ii4'),
+                        )->orderBy('ubigeo')->groupBy('distrito_id')->get();
+                        $dd = Ubigeo::where(DB::raw('length(codigo)'), 6)->where('codigo', 'like', '25%')->pluck('nombre', 'id');
+                        foreach ($data as $key => $value) {
+                            $value->distrito = $dd[$value->distrito_id] ?? 'No Especificado';
+                        }
+                        return $data;
+                    case '6': //Niñas y Niños con Establecimientos de Salud de Atención
+                        $data = ImporPadronNominal::where('importacion_id', $importacion);
+                        if ($edades > 0) {
+                            if ($edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
+                            }
+                        }
+                        $data = $data->select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),1) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),1) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),1) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),1) as ii4'),
+                        )->orderBy('ubigeo')->groupBy('distrito_id')->get();
+                        $dd = Ubigeo::where(DB::raw('length(codigo)'), 6)->where('codigo', 'like', '25%')->pluck('nombre', 'id');
+                        foreach ($data as $key => $value) {
+                            $value->distrito = $dd[$value->distrito_id] ?? 'No Especificado';
+                        }
+                        return $data;
+                    case '7': //Niñas y Niños con Visita Domiciliaria
+                        $data = ImporPadronNominal::where('importacion_id', $importacion);
+                        if ($edades > 0) {
+                            if ($edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
+                            }
+                        }
+                        $data = $data->select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),1) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),1) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),1) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),1) as ii4'),
+                        )->orderBy('ubigeo')->groupBy('distrito_id')->get();
+                        $dd = Ubigeo::where(DB::raw('length(codigo)'), 6)->where('codigo', 'like', '25%')->pluck('nombre', 'id');
+                        foreach ($data as $key => $value) {
+                            $value->distrito = $dd[$value->distrito_id] ?? 'No Especificado';
+                        }
+                        return $data;
+                    case '8': //Niñas y Niños No Encontrados
+                        $data = ImporPadronNominal::where('importacion_id', $importacion);
+                        if ($edades > 0) {
+                            if ($edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
+                            }
+                        }
+                        $data = $data->select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),1) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),1) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),1) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),1) as ii4'),
+                        )->orderBy('ubigeo')->groupBy('distrito_id')->get();
+                        $dd = Ubigeo::where(DB::raw('length(codigo)'), 6)->where('codigo', 'like', '25%')->pluck('nombre', 'id');
+                        foreach ($data as $key => $value) {
+                            $value->distrito = $dd[$value->distrito_id] ?? 'No Especificado';
+                        }
+                        return $data;
+                    case '9': //Niñas y Niños Visitados y No Encontrados
+                        $data = ImporPadronNominal::where('importacion_id', $importacion);
+                        if ($edades > 0) {
+                            if ($edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
+                            }
+                        }
+                        $data = $data->select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),1) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),1) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),1) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),1) as ii4'),
+                        )->orderBy('ubigeo')->groupBy('distrito_id')->get();
+                        $dd = Ubigeo::where(DB::raw('length(codigo)'), 6)->where('codigo', 'like', '25%')->pluck('nombre', 'id');
+                        foreach ($data as $key => $value) {
+                            $value->distrito = $dd[$value->distrito_id] ?? 'No Especificado';
+                        }
+                        return $data;
+                    case '10': //Niñas y Niños con Institución Educativa
+                        $data = ImporPadronNominal::where('importacion_id', $importacion);
+                        if ($edades > 0) {
+                            if ($edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
+                            }
+                        }
+                        $data = $data->select(
+                            'distrito_id',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),1) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),1) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),1) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),1) as ii4'),
+                        )->orderBy('ubigeo')->groupBy('distrito_id')->get();
+                        $dd = Ubigeo::where(DB::raw('length(codigo)'), 6)->where('codigo', 'like', '25%')->pluck('nombre', 'id');
+                        foreach ($data as $key => $value) {
+                            $value->distrito = $dd[$value->distrito_id] ?? 'No Especificado';
+                        }
+                        return $data;
+                    default:
+                        return [];
+                }
+            case 'tabla0201':
+                switch ($indicador) {
+                    case '1': //Niñas y Niños con DNI
+                        $data = ImporPadronNominal::where('importacion_id', $importacion)->where('distrito_id', $ubigeo);
+                        if ($edades > 0) {
+                            if ($edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
+                            }
+                        }
+                        $data = $data->select(
+                            'centro_poblado',
+                            'centro_poblado_nombre',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),2) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),2) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),2) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
+                        )->orderBy('centro_poblado')->groupBy('centro_poblado', 'centro_poblado_nombre')->get();
+                        return $data;
+                    case '2': //Niñas y Niños con DNI de 0 a 30 días
+                        $data = ImporPadronNominal::where('importacion_id', $importacion)->where('distrito_id', $ubigeo);
+                        if ($edades > 0) {
+                            if ($edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
+                            }
+                        }
+                        $data = $data->where('tipo_edad', 'D')->where('edad', '<=', 30);
+                        $data = $data->select(
+                            'centro_poblado',
+                            'centro_poblado_nombre',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),2) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),2) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),2) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
+                        )->orderBy('centro_poblado')->groupBy('centro_poblado', 'centro_poblado_nombre')->get();
+                        return $data;
+                    case '3': //Niñas y Niños con DNI menores a 60 días 
+                        $data = ImporPadronNominal::where('importacion_id', $importacion)->where('distrito_id', $ubigeo);
+                        if ($edades > 0) {
+                            if ($edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
+                            }
+                        }
+                        $data = $data->where(function ($query) {
+                            $query->where(function ($subQuery) {
+                                $subQuery->where('tipo_edad', 'D')->where('edad', '<=', 31);
+                            })
+                                ->orWhere(function ($subQuery) {
+                                    $subQuery->where('tipo_edad', 'M')->where('edad', '<=', 2);
+                                });
+                        });
+                        $data = $data->select(
+                            'centro_poblado',
+                            'centro_poblado_nombre',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),2) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),2) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),2) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
+                        )->orderBy('centro_poblado')->groupBy('centro_poblado', 'centro_poblado_nombre')->get();
+                        return $data;
+                    case '4': //Niñas y Niños con Seguro de Salud
+                        $data = ImporPadronNominal::where('importacion_id', $importacion)->where('distrito_id', $ubigeo);
+                        if ($edades > 0) {
+                            if ($edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
+                            }
+                        }
+                        $data = $data->select(
+                            'centro_poblado',
+                            'centro_poblado_nombre',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),2) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),2) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),2) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
+                        )->orderBy('centro_poblado')->groupBy('centro_poblado', 'centro_poblado_nombre')->get();
+                        return $data;
+                    case '5': //Niñas y Niños con Programas Sociales
+                        $data = ImporPadronNominal::where('importacion_id', $importacion)->where('distrito_id', $ubigeo);
+                        if ($edades > 0) {
+                            if ($edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
+                            }
+                        }
+                        $data = $data->select(
+                            'centro_poblado',
+                            'centro_poblado_nombre',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),2) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),2) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),2) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
+                        )->orderBy('centro_poblado')->groupBy('centro_poblado', 'centro_poblado_nombre')->get();
+                        return $data;
+                    case '6': //Niñas y Niños con Establecimientos de Salud de Atención
+                        $data = ImporPadronNominal::where('importacion_id', $importacion)->where('distrito_id', $ubigeo);
+                        if ($edades > 0) {
+                            if ($edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
+                            }
+                        }
+                        $data = $data->select(
+                            'centro_poblado',
+                            'centro_poblado_nombre',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),2) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),2) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),2) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
+                        )->orderBy('centro_poblado')->groupBy('centro_poblado', 'centro_poblado_nombre')->get();
+                        return $data;
+                    case '7': //Niñas y Niños con Visita Domiciliaria
+                        $data = ImporPadronNominal::where('importacion_id', $importacion)->where('distrito_id', $ubigeo);
+                        if ($edades > 0) {
+                            if ($edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
+                            }
+                        }
+                        $data = $data->select(
+                            'centro_poblado',
+                            'centro_poblado_nombre',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),2) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),2) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),2) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
+                        )->orderBy('centro_poblado')->groupBy('centro_poblado', 'centro_poblado_nombre')->get();
+                        return $data;
+                    case '8': //Niñas y Niños No Encontrados
+                        $data = ImporPadronNominal::where('importacion_id', $importacion)->where('distrito_id', $ubigeo);
+                        if ($edades > 0) {
+                            if ($edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
+                            }
+                        }
+                        $data = $data->select(
+                            'centro_poblado',
+                            'centro_poblado_nombre',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),2) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),2) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),2) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
+                        )->orderBy('centro_poblado')->groupBy('centro_poblado', 'centro_poblado_nombre')->get();
+                        return $data;
+                    case '9': //Niñas y Niños Visitados y No Encontrados
+                        $data = ImporPadronNominal::where('importacion_id', $importacion)->where('distrito_id', $ubigeo);
+                        if ($edades > 0) {
+                            if ($edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
+                            }
+                        }
+                        $data = $data->select(
+                            'centro_poblado',
+                            'centro_poblado_nombre',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),2) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),2) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),2) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
+                        )->orderBy('centro_poblado')->groupBy('centro_poblado', 'centro_poblado_nombre')->get();
+                        return $data;
+                    case '10': //Niñas y Niños con Institución Educativa
+                        $data = ImporPadronNominal::where('importacion_id', $importacion)->where('distrito_id', $ubigeo);
+                        if ($edades > 0) {
+                            if ($edades == 1) {
+                                $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                            } else {
+                                $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
+                            }
+                        }
+                        $data = $data->select(
+                            'centro_poblado',
+                            'centro_poblado_nombre',
+                            DB::raw('count(*) as total'),
+                            DB::raw('sum(case when tipo_doc = "DNI" then 1 else 0 end) as cdni'),
+                            DB::raw('round(100*sum(case when tipo_doc = "DNI" then 1 else 0 end)/count(*),2) as ii1'),
+
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cseguro'),
+                            DB::raw('round(100*sum(case when seguro_id = 1 then 1 else 0 end)/count(*),2) as ii2'),
+
+                            DB::raw('sum(case when cui_atencion > 0 then 1 else 0 end) as ceess'),
+                            DB::raw('round(100*sum(case when cui_atencion > 0 then 1 else 0 end)/count(*),2) as ii3'),
+
+                            DB::raw('sum(case when visita = 1 then 1 else 0 end) as cvisita'),
+                            DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii4'),
+                        )->orderBy('centro_poblado')->groupBy('centro_poblado', 'centro_poblado_nombre')->get();
                         return $data;
                     default:
                         return [];

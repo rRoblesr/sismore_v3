@@ -43,22 +43,39 @@
             </tr>
         @endforeach
     </tbody>
+     <tfoot>
+        <tr class="text-center table-success-0 text-white">
+            <td colspan="2"></td>
+            <td>{{ number_format($foot->cdni, 0) }}</td>
+            <td>{{ number_format($foot->total, 0) }}</td>
+            <td>{!! avance($foot->ii1) !!}</td>
+            <td>{{ number_format($foot->cseguro, 0) }}</td>
+            <td>{{ number_format($foot->total, 0) }}</td>
+            <td>{!! avance($foot->ii2) !!}</td>
+            <td>{{ number_format($foot->ceess, 0) }}</td>
+            <td>{{ number_format($foot->total, 0) }}</td>
+            <td>{!! avance($foot->ii3) !!}</td>
+            <td>{{ number_format($foot->cvisita, 0) }}</td>
+            <td>{{ number_format($foot->total, 0) }}</td>
+            <td>{!! avance($foot->ii4) !!}</td>
+        </tr>
+    </tfoot>
 </table>
 
 @php
     function avance($monto)
     {
-        if ($monto < 60) {
+        if ($monto < 51) {
             return '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px;">' .
-                round($monto, 1) .
+                number_format($monto, 1) .
                 '%</span>';
         } elseif ($monto < 95) {
             return '<span class="badge badge-pill badge-warning" style="font-size:90%; width:50px;background-color:#eb960d;">' .
-                round($monto, 1) .
+                number_format($monto, 1) .
                 '%</span>';
         } else {
             return '<span class="badge badge-pill badge-success" style="font-size:90%; width:50px;">' .
-                round($monto, 1) .
+                number_format($monto, 1) .
                 '%</span>';
         }
     }
