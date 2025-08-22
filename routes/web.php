@@ -1570,21 +1570,21 @@ Route::get('/recursos/highcharts', function () {
 });
 
 Route::get('/recursos/pruebas', function () {
-    return auth()->user();
-    return EduCuboMatriculaRepositorio::ebr_tabla2_distrito_conteo_detalles(2025, 0, 0, 0, 0);
-    return EduCuboMatriculaRepositorio::modalidad_total_anio_meses(1, 2025, 0, 0, 0, 0);
-    return EduCuboMatriculaRepositorio::modalidad_total_anios(3, 0, 0, 0, 0);
-    return EduCuboMatriculaRepositorio::total_anio_ugel_detalles(2025, 0, 0, 0, 0);
-    return EduCuboMatriculaRepositorio::total_anio_ugel(2025, 0, 0, 0, 0);
-    return ImporCensoDocenteRepositorio::_3APReportes('dpanal0', 0, 0, 0, 0, 0);
-    return ImporCensoDocenteRepositorio::_3ASReportes('dsanal0', 0, 0, 0, 0, 0);
-    return ImporCensoDocenteRepositorio::PersonaDocenteTitulado3AS(0, 0, 0, 0, 0);
+    // return auth()->user();
+    // return EduCuboMatriculaRepositorio::ebr_tabla2_distrito_conteo_detalles(2025, 0, 0, 0, 0);
+    // return EduCuboMatriculaRepositorio::modalidad_total_anio_meses(1, 2025, 0, 0, 0, 0);
+    // return EduCuboMatriculaRepositorio::modalidad_total_anios(3, 0, 0, 0, 0);
+    // return EduCuboMatriculaRepositorio::total_anio_ugel_detalles(2025, 0, 0, 0, 0);
+    // return EduCuboMatriculaRepositorio::total_anio_ugel(2025, 0, 0, 0, 0);
+    // return ImporCensoDocenteRepositorio::_3APReportes('dpanal0', 0, 0, 0, 0, 0);
+    // return ImporCensoDocenteRepositorio::_3ASReportes('dsanal0', 0, 0, 0, 0, 0);
+    // return ImporCensoDocenteRepositorio::PersonaDocenteTitulado3AS(0, 0, 0, 0, 0);
     // return TipoGestion::all();
-    return TipoGestion::whereNotNull('dependencia')->pluck('nombre', 'codigo');
+    // return TipoGestion::whereNotNull('dependencia')->pluck('nombre', 'codigo');
     // return InstitucionEducativa::select('codModular as modular', 'nombreInstEduc as nombre')->get();
-    return InstitucionEducativa::select('codModular as modular', 'nombreInstEduc as nombre')->pluck('nombre', 'modular');
+    // return InstitucionEducativa::select('codModular as modular', 'nombreInstEduc as nombre')->pluck('nombre', 'modular');
     // return Ubigeo::where(DB::raw('length(codigo)'), 6)->where('codigo','like', '25%')->get();
-    return Ubigeo::where(DB::raw('length(codigo)'), 6)->where('codigo', 'like', '25%')->pluck('nombre', 'codigo');
+    return Ubigeo::where(DB::raw('length(codigo)'), 6)->where('codigo', 'like', '25%')->pluck('nombre', 'id');
     return NivelModalidad::where('id', '!=', '15')->pluck('nombre', 'codigo');
     return NivelModalidad::all();
     return NivelModalidad::pluck('nombre', 'id');

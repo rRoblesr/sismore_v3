@@ -648,6 +648,7 @@ class ImporPadronNominalController extends Controller
                 $nom . ' ' . $value->capellido1,
                 $ent ? $ent->abreviado : '',
                 date("d/m/Y", strtotime($value->created_at)),
+                '',
                 $value->estado == "PR" ? "PROCESADO" : "PENDIENTE",
                 $boton
             );

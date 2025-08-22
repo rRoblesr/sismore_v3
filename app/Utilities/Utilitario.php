@@ -109,4 +109,9 @@ class Utilitario
         $fecha = DateTime::createFromFormat('d/m/Y', $fechaTexto);
         return $fecha ? $fecha->format('Y-m-d') : null;
     }
+
+    public static function semaforo($avance)
+    {
+        return ($avance > 95 ? '#43beac' : ($avance > 50 ? '#eb960d' : '#ef5350'));
+    }
 }

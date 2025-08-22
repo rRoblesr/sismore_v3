@@ -18,8 +18,10 @@ use App\Models\Salud\PadronNominal;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Parametro\UbigeoRepositorio;
 use App\Repositories\Salud\EstablecimientoRepositorio;
+use App\Repositories\Salud\ImporPadronNominalRepositorio;
 use App\Repositories\Salud\PadronNominalRepositorio;
 use App\Repositories\Salud\PadronNominalRepositorioSalud;
+use App\Utilities\Utilitario;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -131,7 +133,7 @@ class PadronNominalController extends Controller
         return view('salud.PadronNominal.tableroseguimiento', compact('actualizado', 'anios', 'provincias'));
     }
 
-    
+
 
     public function tablerocalidad()
     {
@@ -2135,10 +2137,10 @@ class PadronNominalController extends Controller
         $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronNominalController::$FUENTE);
         $mes = Mes::find($imp->mes);
         $anios = ImportacionRepositorio::anios_porfuente_select(ImporPadronNominalController::$FUENTE);
-        $aniomax=$anios->max('anio');
+        $aniomax = $anios->max('anio');
         // $provincias = UbigeoRepositorio::provincia_select('25');
         $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $mes->mes . ' del ' . $imp->anio;
-        return view('salud.PadronNominal.TableroCalidadIndicador', compact('actualizado', 'imp', 'anios','aniomax'));
+        return view('salud.PadronNominal.TableroCalidadIndicador', compact('actualizado', 'imp', 'anios', 'aniomax'));
 
         // $fuente = ImporPadronNominalController::$FUENTE;
         // $importacion = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio, $mes);
@@ -2148,13 +2150,55 @@ class PadronNominalController extends Controller
     public function tablerocalidadindicadorreporte(Request $rq)
     {
         $fuente = ImporPadronNominalController::$FUENTE;
-        $query = Importacion::select('id')
-            ->where(DB::raw('year(fechaActualizacion)'), $rq->anio)->where(DB::raw('month(fechaActualizacion)'), $rq->mes)->where('estado', 'PR')->where('fuenteImportacion_id', $fuente)
-            ->orderBy('fechaActualizacion', 'desc')->first();
+        $query = Importacion::select('id')->where(DB::raw('year(fechaActualizacion)'), $rq->anio)->where(DB::raw('month(fechaActualizacion)'), $rq->mes)->where('estado', 'PR')->where('fuenteImportacion_id', $fuente)->orderBy('fechaActualizacion', 'desc')->first();
         $importacion = $query ? $query->id : null;
 
         switch ($rq->div) {
+            case 'head':
+                $data = ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->edades);
+                $card1 = number_format($data->avance, 1);
+                $card2 = number_format($data->conteo);
+                $card3 = number_format($data->cdni);
+                $card4 = number_format($data->sdni);
+                return response()->json(compact('card1', 'card2', 'card3', 'card4'));
             case 'anal1':
+                $data = ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->edades);
+                $info['categoria'] = [];
+                $info['serie'] = [];
+                foreach ($data as $key => $value) {
+                    $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
+                    $info['serie'][] = ['y' => round($value->ii, 1), 'color' => Utilitario::semaforo($value->ii)];
+                }
+
+                return response()->json(compact('info', 'data'));
+            case 'anal2':
+                $info = ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->edades);
+                return response()->json(compact('info'));
+            case 'anal3':
+                $info = ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->edades);
+                return response()->json(compact('info'));
+            case 'tabla1':
+                $base = ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->edades);
+                // return response()->json(compact('base'));
+                $foot = [];
+                if ($base->count() > 0) {
+                    $foot = clone $base[0];
+                    $foot->total = 0;
+                    $foot->cdni = 0;
+                    $foot->sdni = 0;
+                    $foot->ii = 0;
+                    foreach ($base as $key => $value) {
+                        $foot->total += $value->total;
+                        $foot->cdni += $value->cdni;
+                        $foot->sdni += $value->sdni;
+                    }
+                    $foot->ii = round(100 * $foot->cdni / $foot->total, 2);
+                }
+                $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base', 'foot'))->render();
+                return response()->json(compact('excel'));
+                // return response()->json(compact('data'));
+
+            case 'anal1xx':
                 switch ($rq->indicador) {
                     case 1:
                         $data = ImporPadronNominal::select(
@@ -2176,7 +2220,7 @@ class PadronNominalController extends Controller
                         foreach ($data as $key => $value) {
                             // $value->distrito = Ubigeo::find($value->distrito_id)->nombre;
                             $info['categoria'][] = Ubigeo::find($value->distrito_id)->nombre;
-                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => (round($value->ii, 1) > 95 ? '#43beac' : (round($value->ii, 1) > 50 ? '#eb960d' : '#ef5350'))];
+                            $info['serie'][] = ['y' => round($value->ii, 1), 'color' => Utilitario::semaforo($value->ii)];
                         }
 
                         return response()->json(compact('info', 'data'));
@@ -2426,7 +2470,7 @@ class PadronNominalController extends Controller
                         return response()->json([]);
                 }
 
-            case 'tabla1':
+            case 'tabla1xx':
                 switch ($rq->indicador) {
                     case 1:
                         $data = ImporPadronNominal::select(
@@ -2561,7 +2605,7 @@ class PadronNominalController extends Controller
                         $data = ImporPadronNominal::select(
                             'distrito_id',
                             DB::raw('count(*) as total'),
-                            DB::raw('sum(case when seguro_id=1 then 1 else 0 end) as cdni'),
+                            DB::raw('sum(case when seguro_id = 1 then 1 else 0 end) as cdni'),
                             DB::raw('sum(case when seguro_id!=1 or seguro_id is null then 1 else 0 end) as sdni'),
                             DB::raw('round(100*sum(case when seguro_id=1 then 1 else 0 end)/count(*),2) as ii'),
                         )

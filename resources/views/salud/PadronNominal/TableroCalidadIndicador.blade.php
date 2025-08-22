@@ -31,7 +31,8 @@
                                 <select id="anio" name="anio" class="form-control form-control-sm"
                                     onchange="cargarMes();">
                                     @foreach ($anios as $item)
-                                        <option value="{{ $item->anio }}" {{ $item->anio==$aniomax?'selected':'' }}>{{ $item->anio }}</option>
+                                        <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                            {{ $item->anio }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -84,6 +85,132 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card-box border border-plomo-0">
+                <div class="media">
+                    <div class="text-center">
+                        {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                        width="70%" height="70%"> --}}
+                        <i class="mdi mdi-finance font-35 text-green-0"></i>
+                    </div>
+                    <div class="media-body align-self-center">
+                        <div class="text-right">
+                            <h4 class="font-20 my-0 font-weight-bold">
+                                <span data-plugin="counterup" id="ri"></span>
+                            </h4>
+                            <p class="mb-0 mt-1 text-truncate">Resultado</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end card-box-->
+        </div>
+
+        <div class="col-md-3">
+            <div class="card-box border border-plomo-0">
+                <div class="media">
+                    <div class="text-center">
+                        {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                        width="70%" height="70%"> --}}
+                        {{-- <i class=" mdi mdi-city font-35 text-green-0"></i> --}}
+                        <i class="fas fa-child font-35 text-green-0"></i>
+                    </div>
+                    <div class="media-body align-self-center">
+                        <div class="text-right">
+                            <h4 class="font-20 my-0 font-weight-bold">
+                                <span data-plugin="counterup" id="gl"></span>
+                            </h4>
+                            <p class="mb-0 mt-1 text-truncate">
+                                <span onclick="verinformacion(0)" data-toggle="modal" data-target="#info_denominador">
+                                    <i class="mdi mdi-rotate-180 mdi-alert-circle" style="color:#43beac;"></i>
+                                </span>
+                                Total de Niños y Niñas
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end card-box-->
+        </div>
+
+        <div class="col-md-3">
+            <div class="card-box border border-plomo-0">
+                <div class="media">
+                    <div class="text-center">
+                        {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                        width="70%" height="70%"> --}}
+                        <i class="mdi mdi-thumb-up font-35 text-green-0"></i>
+                    </div>
+                    <div class="media-body align-self-center">
+                        <div class="text-right">
+                            <h4 class="font-20 my-0 font-weight-bold">
+                                <span data-plugin="counterup" id="gls"></span>
+                            </h4>
+                            <p class="mb-0 mt-1 text-truncate">
+                                <span onclick="verinformacion(1)" data-toggle="modal" data-target="#info_numerador">
+                                    <i class="mdi mdi-rotate-180 mdi-alert-circle" style="color:#43beac;"></i>
+                                </span>
+                                Cumplen
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end card-box-->
+        </div>
+
+        <div class="col-md-3">
+            <div class="card-box border border-plomo-0">
+                <div class="media">
+                    <div class="text-center">
+                        {{-- <img src="{{ asset('/') }}public/img/icon/docentes.png" alt="" class=""
+                        width="70%" height="70%"> --}}
+                        <i class="mdi mdi-thumb-down font-35 text-green-0"></i>
+                    </div>
+                    <div class="media-body align-self-center">
+                        <div class="text-right">
+                            <h4 class="font-20 my-0 font-weight-bold">
+                                <span data-plugin="counterup" id="gln"></span>
+                            </h4>
+                            <p class="mb-0 mt-1 text-truncate">
+                                No Cumplen
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent p-0">
+                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
+                </div>
+                <div class="card-body p-0">
+                    <figure class="highcharts-figure p-0 m-0">
+                        <div id="anal2" style="height: 20rem"></div>
+                    </figure>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent p-0">
+                    {{-- <h3 class="text-black text-center font-weight-normal font-11"></h3> --}}
+                </div>
+                <div class="card-body p-0">
+                    <figure class="highcharts-figure p-0 m-0">
+                        <div id="anal3" style="height: 20rem"></div>
+                    </figure>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <div class="row">
@@ -181,7 +308,10 @@
         });
 
         function cargarCards() {
+            panelGraficas('head');
             panelGraficas('anal1');
+            panelGraficas('anal2');
+            panelGraficas('anal3');
             panelGraficas('tabla1');
             panelGraficas('tabla2');
         }
@@ -219,12 +349,27 @@
                     }
                 },
                 success: function(data) {
-                    if (div == "anal1") {
+                    if (div == "head") {
+                        $('#ri').html(data.card1 + '%');
+                        $('#gl').html(data.card2);
+                        $('#gls').html(data.card3);
+                        $('#gln').html(data.card4);
+                    } else if (div == "anal1") {
                         gbar('anal1', data.info.categoria,
                             data.info.serie,
                             '',
                             'Porcentaje de Cumplimiento por Distrito',
                         );
+                    } else if (div == "anal1") {
+                        gbar('anal1', data.info.categoria,
+                            data.info.serie,
+                            '',
+                            'Porcentaje de Cumplimiento por Distrito',
+                        );
+                    } else if (div == "anal2") {
+                        gPie2(div, data.info, '', 'Numero de estudiantes matriculados según sexo', '');
+                    } else if (div == "anal3") {
+                        gPie2(div, data.info, '', 'Numero de estudiantes matriculados según sexo', '');
                     } else if (div == "tabla1") {
                         $('#ctabla1').html(data.excel);
                         // $('#tabla2').DataTable({
@@ -410,6 +555,74 @@
                 credits: {
                     enabled: false
                 },
+            });
+        }
+
+        function gPie2(div, datos, titulo, subtitulo, tituloserie) {
+            // const colors = ["#5eb9aa", "#f5bd22", "#e65310"];
+            const colors = ['#5eb9aa', '#ef5350', '#f5bd22', '#ef5350'];
+            Highcharts.chart(div, {
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title: {
+                    enabled: false,
+                    text: titulo, //'Browser market shares in January, 2018'
+                },
+                subtitle: {
+                    enabled: true,
+                    text: subtitulo,
+                },
+                tooltip: {
+                    //pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
+                    pointFormat: '<b>{point.percentage:.1f}% ({point.y:,0f})</b>',
+                    style: {
+                        fontSize: '10px'
+                    }
+                },
+                accessibility: {
+                    point: {
+                        valueSuffix: '%'
+                    }
+                }, //labels:{style:{fontSize:'10px'},}
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        colors,
+                        dataLabels: {
+                            enabled: true,
+                            // distance: -20,
+                            //format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            //format: '{point.percentage:.1f}% ({point.y})',
+                            format: '{point.y:,0f} ( {point.percentage:.1f}% )',
+                            // format: '{point.percentage:.1f}%',
+                            connectorColor: 'silver',
+                        },
+                    }
+                },
+                legend: {
+                    itemStyle: {
+                        //color: "#333333",
+                        cursor: "pointer",
+                        fontSize: "10px",
+                        fontWeight: "normal",
+                        textOverflow: "ellipsis"
+                    },
+                },
+                series: [{
+                    innerSize: '50%',
+                    showInLegend: true,
+                    //name: 'Share',
+                    data: datos,
+                }],
+                exporting: {
+                    enabled: true
+                },
+                credits: false,
             });
         }
     </script>

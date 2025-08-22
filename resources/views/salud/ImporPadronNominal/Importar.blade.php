@@ -33,7 +33,8 @@
                                             <th>Fuente</th>
                                             <th>Usuario</th>
                                             <th>Área</th>
-                                            <th>Registro</th>
+                                            <th>Registrado</th>
+                                            <th>Registros</th>
                                             <th>Estado</th>
                                             <th>Acción</th>
                                         </tr>

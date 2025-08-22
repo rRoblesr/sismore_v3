@@ -505,7 +505,9 @@ class IndicadoresController extends Controller
                 $fuente = eduImporPadronNominalController::$FUENTE;
                 $anio = CuboFEDPN::distinct()->select('anio')->get();
                 $aniomax = $anio->max('anio');
-                $actualizado = '30/04/2025';
+                // $actualizado = '30/04/2025';
+                $imp = ImportacionRepositorio::ImportacionMax_porfuente(eduImporPadronNominalController::$FUENTE);
+                $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
                 $provincia = UbigeoRepositorio::provincia('25');
                 return view('educacion.Indicadores.ConvenioFEDMC0502', compact('actualizado', 'fuente', 'anio', 'provincia', 'aniomax', 'ind'));
 
