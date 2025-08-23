@@ -1266,7 +1266,6 @@ class PadronNominalController extends Controller
         return Excel::download(new TableroCalidadExport($div, $importacion, $anio, $mes, $provincia, $distrito, $ubigeo), $name);
     }
 
-
     public function criterio1_red($importacion, $criterio)
     {
         switch ($criterio) {
@@ -4397,5 +4396,16 @@ class PadronNominalController extends Controller
     {
         $name = 'centropoblado.xlsx';
         return Excel::download(new TableroCalidadIndicadorExport($div, $anio, $mes, $edades, $indicador, $ubigeo), $name);
+    }
+
+    public function tablerocalidadeess()
+    {
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronNominalController::$FUENTE); //nexus $imp3
+        // $mes = Mes::find($imp->mes);
+        $anios = ImportacionRepositorio::anios_porfuente_select(ImporPadronNominalController::$FUENTE);
+        $provincias = UbigeoRepositorio::provincia_select('25');
+        // $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $mes->mes . ' del ' . $imp->anio;
+        $actualizado = 'Actualizado al ' . $imp->dia . '/' . $imp->mes . '/' . $imp->anio;
+        return view('salud.PadronNominal.TableroCalidadEESS', compact('actualizado', 'anios', 'provincias'));
     }
 }

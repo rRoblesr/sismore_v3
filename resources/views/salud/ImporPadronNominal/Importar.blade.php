@@ -494,7 +494,7 @@
         // }
 
         ////
-        function abrirModalProceso(importacion) {
+        function abrirModalProceso(proceso, importacion) {
             // Reiniciar barra de progreso
             $('#progressBar').css('width', '0%').attr('aria-valuenow', 0).removeClass('bg-success').addClass(
                 'progress-bar-animated');
@@ -505,8 +505,9 @@
 
             // Llamar AJAX para ejecutar proceso en el backend
             $.ajax({
-                url: "{{ route('imporpadronnominal.procesar.3', ['importacion' => ':importacion']) }}"
-                    .replace(':importacion', importacion),
+                url: "{{ route('imporpadronnominal.procedures', ['proceso' => ':proceso', 'importacion' => ':importacion']) }}"
+                    .replace(':importacion', importacion)
+                    .replace(':proceso', proceso),
                 type: "POST",
                 data: {
                     _token: $('meta[name="csrf-token"]').attr('content')

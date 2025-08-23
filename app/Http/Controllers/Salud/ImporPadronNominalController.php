@@ -375,7 +375,7 @@ class ImporPadronNominalController extends Controller
             $importacion->estado = 'PE';
             $importacion->save();
 
-            $mensaje = "Error al procesar la normalizacion de datos sal_pa_procesarCalidadReporte. " . $e->getMessage();
+            $mensaje = "Error al procesar la normalizacion de datos sal_pa_procesarPacto01Homologados. " . $e->getMessage();
             return $this->json_output(400, $mensaje);
         }
 
@@ -635,9 +635,9 @@ class ImporPadronNominalController extends Controller
                                         <i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#" class="dropdown-item">Procesar Completar Columnas</a></li>
-                                    <li><a href="#" class="dropdown-item">Procesar Reporte Calidad</a></li>
-                                    <li><a href="javascript:void(0)" onclick="abrirModalProceso(' . $value->id . ')" class="dropdown-item">Procesar Cubo Pacto 1</a></li>
+                                    <li><a href="javascript:void(0)" onclick="abrirModalProceso(1, ' . $value->id . ')" class="dropdown-item">Procesar Completar Columnas</a></li>
+                                    <li><a href="javascript:void(0)" onclick="abrirModalProceso(2, ' . $value->id . ')" class="dropdown-item">Procesar Reporte Calidad</a></li>
+                                    <li><a href="javascript:void(0)" onclick="abrirModalProceso(3, ' . $value->id . ')" class="dropdown-item">Procesar Cubo Pacto 1</a></li>
                                 </ul>
                             </div>';
             }
@@ -685,6 +685,26 @@ class ImporPadronNominalController extends Controller
         set_time_limit(0);
         try {
             DB::select('call sal_pa_procesarPacto01Homologados(?)', [$importacion]);
+            return response()->json(['status' => 'success', 'message' => 'Proceso completado correctamente']);
+        } catch (Exception $e) {
+            return response()->json(['status' => 'error', 'message' => 'Error en la ejecución del proceso', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function ejecutarProcesos($proceso, $importacion)
+    {
+        ini_set('memory_limit', '-1');
+        set_time_limit(0);
+        try {
+            if ($proceso == 1) {
+                DB::select('call sal_pa_procesarControlCalidadColumnas(?)', [$importacion]);
+            } elseif ($proceso == 2) {
+                DB::select('call sal_pa_procesarCalidadReporte(?)', [$importacion]);
+            } elseif ($proceso == 3) {
+                DB::select('call sal_pa_procesarPacto01Homologados(?)', [$importacion]);
+            } else {
+                return response()->json(['status' => 'error', 'message' => 'Proceso no válido'], 400);
+            }
             return response()->json(['status' => 'success', 'message' => 'Proceso completado correctamente']);
         } catch (Exception $e) {
             return response()->json(['status' => 'error', 'message' => 'Error en la ejecución del proceso', 'error' => $e->getMessage()], 500);

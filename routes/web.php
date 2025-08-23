@@ -1326,7 +1326,7 @@ Route::get('/educacion/conveniofed/edu/Reports2/Exportar/{div}/{indicador}/{anio
 // Route::post('/educacion/conveniofed/edu/Reports2/3', [IndicadoresController::class, 'PactoRegionalSalPacto1Reports3'])->name('educacion.indicador.conveniofed.detalle.reports.3');
 
 Route::get('/educacion/pruebas', function () {
-    return EduCuboMatricula::select('importacion_id',DB::raw('count(*) as conteo'))->groupBy('importacion_id')->get();
+    return EduCuboMatricula::select('importacion_id', DB::raw('count(*) as conteo'))->groupBy('importacion_id')->get();
     // return view('salud.Indicadores.pruebaxxx00');
     // return UbigeoRepositorio::arrayDistritoIdNombre();
 
@@ -1447,6 +1447,7 @@ Route::get('/Salud/PadronNominal/TableroCalidad/Indicador/reportes', [PadronNomi
 Route::get('/Salud/PadronNominal/TableroCalidad/Indicador/Exportar/{div}/{anio}/{mes}/{edades}/{indicador}/{ubigeo}', [PadronNominalController::class, 'tablerocalidadindicadordownload'])->name('salud.padronnominal.tablerocalidad.indicador.exportar.excel');
 Route::get('/Salud/PadronNominal/TableroCalidad/Indicador/Exportar2/{div}/{anio}/{mes}/{edades}/{indicador}/{ubigeo}', [PadronNominalController::class, 'tablerocalidadindicadordownload2'])->name('salud.padronnominal.tablerocalidad.indicador.exportar.excel2');
 
+Route::get('/Salud/PadronNominal/TableroCalidadEESS', [PadronNominalController::class, 'tablerocalidadeess'])->name('salud.padronnominal.tablerocalidad.eess');
 
 Route::get('/Salud/PadronNominal/Mes/{anio}', [PadronNominalController::class, 'meses'])->name('salud.padronnominal.mes');
 Route::get('/Salud/PadronNominal/Edades/{anio}/{mes}', [PadronNominalController::class, 'edades'])->name('salud.padronnominal.edades');
@@ -1473,6 +1474,8 @@ Route::post('/Salud/PadronNominal/ListaImportada', [ImporPadronNominalController
 Route::get('/Salud/PadronNominal/eliminar/{id}', [ImporPadronNominalController::class, 'eliminar'])->name('imporpadronnominal.eliminar');
 
 Route::post('/Salud/PadronNominal/{importacion}', [ImporPadronNominalController::class, 'ejecutarProceso3'])->name('imporpadronnominal.procesar.3');
+
+Route::post('/Salud/PadronNominal/{proceso}/{importacion}', [ImporPadronNominalController::class, 'ejecutarProcesos'])->name('imporpadronnominal.procedures');
 
 /******************************************** FIN SALUD ***************************************************/
 
