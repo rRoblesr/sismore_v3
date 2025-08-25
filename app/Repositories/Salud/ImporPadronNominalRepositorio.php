@@ -1551,4 +1551,146 @@ class ImporPadronNominalRepositorio
     }
 
     public static function Listar_UnDatoSabana($id) {}
+
+    public static function TableroCalidadEESS_head($importacion, $red, $microrred, $tipo_doc = FALSE, $seguro = FALSE)
+    {
+        $filtros = function ($query) use ($red, $microrred, $tipo_doc, $seguro) {
+            if ($red > 0) $query->where('m.red_id', $red);
+            if ($microrred > 0) $query->where('m.id', $microrred);
+            if ($tipo_doc) $query->where('pn.tipo_doc', 'DNI');
+            if ($seguro) $query->where('pn.seguro_id', '>', '0');
+        };
+        return ImporPadronNominal::from('sal_impor_padron_nominal as pn')
+            ->join('sal_establecimiento as e', 'e.id', '=', 'pn.establecimiento_id')
+            ->join('sal_microrred as m', 'm.id', '=', 'e.microrred_id')
+            ->where('pn.importacion_id', $importacion)
+            ->where('pn.repetido', 1)
+            ->where('m.cod_disa', 34)
+            ->whereIn('m.red_id', [9, 10, 11, 12])
+            ->tap($filtros)
+            ->count();
+    }
+
+    public static function TableroCalidadEESS_tabla02($importacion, $red, $microrred)
+    {
+        $filtros = function ($query) use ($red, $microrred) {
+            if ($red > 0) $query->where('m.red_id', $red);
+            if ($microrred > 0) $query->where('m.id', $microrred);
+        };
+        return ImporPadronNominal::from('sal_impor_padron_nominal as pn')
+            ->join('sal_establecimiento as e', 'e.id', '=', 'pn.establecimiento_id')
+            ->join('sal_microrred as m', 'm.id', '=', 'e.microrred_id')
+            ->where('pn.importacion_id', $importacion)
+            ->where('pn.repetido', '1')
+            ->whereIn('m.red_id', [9, 10, 11, 12])
+            ->tap($filtros)
+            ->select(
+                DB::raw('case when seguro_id=1 then "SIS" when seguro_id=2 then "ESSALUD" when seguro_id=3 then "SANIDAD" when seguro_id=4 then "PRIVADO" else "NINGUNO" end as nseguro'),
+                DB::raw('count(*) as pob'),
+                DB::raw('sum(if(genero="M",1,0)) as pobm'),
+                DB::raw('sum(if(genero="F",1,0)) as pobf'),
+                DB::raw('sum(if(tipo_edad in("D","M"),1,0)) as pob0'),
+                DB::raw('sum(if(edad=1 and tipo_edad="A",1,0)) as pob1'),
+                DB::raw('sum(if(edad=2 and tipo_edad="A",1,0)) as pob2'),
+                DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
+                DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
+                DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
+                DB::raw('sum(if(tipo_doc="DNI",1,0)) as dni'),
+                DB::raw('sum(if(tipo_doc="CNV",1,0)) as seguro'),
+                DB::raw('sum(if(tipo_doc="CUI",1,0)) as programa'),
+                DB::raw('sum(if(tipo_doc="Padron",1,0)) as padron'),
+            )
+            ->groupBy('nseguro')
+            ->orderByRaw('field(nseguro,"SIS","ESSALUD","SANIDAD","PRIVADO","NINGUNO")')
+            ->get();
+    }
+
+    public static function TableroCalidadEESS_tabla03($importacion, $red, $microrred)
+    {
+        $filtros = function ($query) use ($red, $microrred) {
+            if ($red > 0) $query->where('m.red_id', $red);
+            if ($microrred > 0) $query->where('m.id', $microrred);
+        };
+        return ImporPadronNominal::from('sal_impor_padron_nominal as pn')
+            ->join('par_ubigeo as u', 'u.id', '=', 'pn.distrito_id')
+            ->join('sal_establecimiento as e', 'e.id', '=', 'pn.establecimiento_id')
+            ->join('sal_microrred as m', 'm.id', '=', 'e.microrred_id')
+            ->where('pn.importacion_id', $importacion)->where('repetido', '1')
+            ->whereIn('m.red_id', [9, 10, 11, 12])
+            ->tap($filtros)
+            ->select(
+                'pn.ubigeo',
+                'u.nombre as distrito',
+                DB::raw('count(*) as pob'),
+                DB::raw('sum(if(genero="M",1,0)) as pobm'),
+                DB::raw('sum(if(genero="F",1,0)) as pobf'),
+                DB::raw('sum(if(tipo_edad in("D","M"),1,0)) as pob0'),
+                DB::raw('sum(if(edad=1 and tipo_edad="A",1,0)) as pob1'),
+                DB::raw('sum(if(edad=2 and tipo_edad="A",1,0)) as pob2'),
+                DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
+                DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
+                DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
+                DB::raw('sum(if(tipo_doc="DNI",1,0)) as dni'),
+                DB::raw('sum(case when FIND_IN_SET("1", seguro) > 0 then 1 
+                              when FIND_IN_SET("2", seguro) > 0 then 1 
+                              when FIND_IN_SET("3", seguro) > 0 then 1 
+                              when FIND_IN_SET("4", seguro) > 0 then 1 
+                              else 0 end) as seguro'),
+                DB::raw('sum(case when FIND_IN_SET("1", programa_social) > 0 then 1 
+                              when FIND_IN_SET("2", programa_social) > 0 then 1 
+                              when FIND_IN_SET("5", programa_social) > 0 then 1 
+                              when FIND_IN_SET("5", programa_social) > 0 then 1 
+                              when FIND_IN_SET("7", programa_social) > 0 then 1 
+                              when FIND_IN_SET("8", programa_social) > 0 then 1 
+                              else 0 end) as programa')
+            )
+            ->groupBy('ubigeo', 'distrito')
+            ->orderBy('ubigeo')
+            ->get();
+    }
+
+    public static function TableroCalidadEESS_tabla0301($importacion, $red, $microrred, $ubigeo)
+    {
+        $filtros = function ($query) use ($red, $microrred) {
+            if ($red > 0) $query->where('m.red_id', $red);
+            if ($microrred > 0) $query->where('m.id', $microrred);
+        };
+        return ImporPadronNominal::from('sal_impor_padron_nominal as pn')
+            ->join('sal_establecimiento as e', 'e.id', '=', 'pn.establecimiento_id')
+            ->join('sal_microrred as m', 'm.id', '=', 'e.microrred_id')
+            ->join('par_ubigeo as u', 'u.id', '=', 'pn.distrito_id')
+            ->where('pn.importacion_id', $importacion)
+            ->where('repetido', '1')
+            ->whereIn('m.red_id', [9, 10, 11, 12])
+            ->tap($filtros)->where('ubigeo', $ubigeo)
+            ->select(
+                'centro_poblado',
+                'centro_poblado_nombre',
+                DB::raw('count(*) as pob'),
+                DB::raw('sum(if(genero="M",1,0)) as pobm'),
+                DB::raw('sum(if(genero="F",1,0)) as pobf'),
+                DB::raw('sum(if(tipo_edad in("D","M"),1,0)) as pob0'),
+                DB::raw('sum(if(edad=1 and tipo_edad="A",1,0)) as pob1'),
+                DB::raw('sum(if(edad=2 and tipo_edad="A",1,0)) as pob2'),
+                DB::raw('sum(if(edad=3 and tipo_edad="A",1,0)) as pob3'),
+                DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
+                DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
+                DB::raw('sum(if(tipo_doc="DNI",1,0)) as dni'),
+                DB::raw('sum(case when FIND_IN_SET("1", seguro) > 0 then 1 
+                                  when FIND_IN_SET("2", seguro) > 0 then 1 
+                                  when FIND_IN_SET("3", seguro) > 0 then 1 
+                                  when FIND_IN_SET("4", seguro) > 0 then 1 
+                                  else 0 end) as seguro'),
+                DB::raw('sum(case when FIND_IN_SET("1", programa_social) > 0 then 1 
+                                  when FIND_IN_SET("2", programa_social) > 0 then 1 
+                                  when FIND_IN_SET("5", programa_social) > 0 then 1 
+                                  when FIND_IN_SET("5", programa_social) > 0 then 1 
+                                  when FIND_IN_SET("7", programa_social) > 0 then 1 
+                                  when FIND_IN_SET("8", programa_social) > 0 then 1 
+                                  else 0 end) as programa')
+            )
+            ->groupBy('centro_poblado', 'centro_poblado_nombre')
+            ->orderBy('centro_poblado_nombre')
+            ->get();
+    }
 }

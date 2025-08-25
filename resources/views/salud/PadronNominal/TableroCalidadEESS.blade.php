@@ -49,12 +49,12 @@
 
                 <div class="col-md-2 col-6 my-1">
                     <div class="custom-select-container">
-                        <label for="provincia">Red</label>
-                        <select id="provincia" name="provincia" class="form-control font-11"
-                            onchange="cargarDistritos();cargarCards();">
+                        <label for="red">Red</label>
+                        <select id="red" name="red" class="form-control font-11"
+                            onchange="cargarMicrorred();cargarCards();">
                             <option value="0">TODOS</option>
-                            @foreach ($provincias as $item)
-                                <option value="{{ $item->id }}"> {{ $item->nombre }}</option>
+                            @foreach ($red as $item)
+                                <option value="{{ $item->id }}"> {{ $item->codigo }} {{ $item->nombre }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -62,8 +62,8 @@
 
                 <div class="col-md-2 col-6 my-1">
                     <div class="custom-select-container">
-                        <label for="distrito">Microrred</label>
-                        <select id="distrito" name="distrito" class="form-control font-11" onchange="cargarCards();">
+                        <label for="microrred">Microrred</label>
+                        <select id="microrred" name="microrred" class="form-control font-11" onchange="cargarCards();">
                             <option value="0">TODOS</option>
                         </select>
                     </div>
@@ -75,6 +75,38 @@
     </div>
 
     <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card-box border border-plomo-0">
+                <div class="media">
+                    {{-- <div class="text-center">
+                        <img src="{{ asset('/') }}public/img/icon/cargador32px.png" alt="" class=""
+                            width="100%" height="100%">
+                    </div> --}}
+                    <div class="avatar-md mr-2">
+                        <i class="far fa-hospital avatar-title font-30 text-dark"></i>
+
+                    </div>
+                    <div class="media-body align-self-center">
+                        <div class="text-right">
+                            <h4 class="font-20 my-0 font-weight-bold">
+                                <span data-plugin="counterup" id="card4"></span>
+                            </h4>
+                            <p class="mb-0 mt-1 text-truncate">Niños y Niñas con EESS</p>
+                        </div>
+                    </div>
+                </div>
+                {{-- <div class="mt-4" id="pcard4">
+                    <h6 class="text-uppercase font-12">Porcentaje con EESS <span class="float-right">0%</span></h6>
+                    <div class="progress progress-sm m-0">
+                        <div class="progress-bar bg-info" role="progressbar" aria-valuenow="0" aria-valuemin="0"
+                            aria-valuemax="100" style="width: 0%">
+                            <span class="sr-only">0% Complete</span>
+                        </div>
+                    </div>
+                </div> --}}
+            </div>
+        </div>
+
         <div class="col-lg-3 col-md-6 col-sm-6">
             <div class="card-box border border-plomo-0">
                 <div class="media">
@@ -95,7 +127,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="mt-4" id="pcard1">
+                {{-- <div class="mt-4" id="pcard1">
                     <h6 class="text-uppercase font-12">Registros Completos <span class="float-right">0%</span></h6>
                     <div class="progress progress-sm m-0">
                         <div class="progress-bar bg-info" role="progressbar" aria-valuenow="0" aria-valuemin="0"
@@ -103,7 +135,7 @@
                             <span class="sr-only">0% Complete</span>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
 
@@ -127,7 +159,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="mt-4" id="pcard2">
+                {{-- <div class="mt-4" id="pcard2">
                     <h6 class="text-uppercase font-12">Porcentaje con DNI <span class="float-right">0%</span></h6>
                     <div class="progress progress-sm m-0">
                         <div class="progress-bar bg-info" role="progressbar" aria-valuenow="0" aria-valuemin="0"
@@ -135,7 +167,7 @@
                             <span class="sr-only">0% Complete</span>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
 
@@ -159,7 +191,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="mt-4" id="pcard3">
+                {{-- <div class="mt-4" id="pcard3">
                     <h6 class="text-uppercase font-12">Porcentaje con Seguro <span class="float-right">0%</span></h6>
                     <div class="progress progress-sm m-0">
                         <div class="progress-bar bg-info" role="progressbar" aria-valuenow="0" aria-valuemin="0"
@@ -167,41 +199,11 @@
                             <span class="sr-only">0% Complete</span>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
 
-        <div class="col-lg-3 col-md-6 col-sm-6">
-            <div class="card-box border border-plomo-0">
-                <div class="media">
-                    {{-- <div class="text-center">
-                        <img src="{{ asset('/') }}public/img/icon/cargador32px.png" alt="" class=""
-                            width="100%" height="100%">
-                    </div> --}}
-                    <div class="avatar-md mr-2">
-                        <i class="far fa-hospital avatar-title font-30 text-dark"></i>
 
-                    </div>
-                    <div class="media-body align-self-center">
-                        <div class="text-right">
-                            <h4 class="font-20 my-0 font-weight-bold">
-                                <span data-plugin="counterup" id="card4"></span>
-                            </h4>
-                            <p class="mb-0 mt-1 text-truncate">Niños y Niñas con EESS</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-4" id="pcard4">
-                    <h6 class="text-uppercase font-12">Porcentaje con EESS <span class="float-right">0%</span></h6>
-                    <div class="progress progress-sm m-0">
-                        <div class="progress-bar bg-info" role="progressbar" aria-valuenow="0" aria-valuemin="0"
-                            aria-valuemax="100" style="width: 0%">
-                            <span class="sr-only">0% Complete</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <div class="row">
@@ -484,15 +486,11 @@
         ];
         var ubigeo_select = '';
         const spinners = {
-            head: ['#card1', '#card2', '#card3', '#card4'],
+            // head: ['#card1', '#card2', '#card3', '#card4'],
             head1: ['#card1'],
             head2: ['#card2'],
             head3: ['#card3'],
             head4: ['#card4'],
-            anal1: ['#anal1'],
-            anal2: ['#anal2'],
-            anal3: ['#anal3'],
-            anal4: ['#anal4'],
             tabla1: ['#ctabla1'],
             tabla2: ['#ctabla2'],
             tabla3: ['#ctabla3'],
@@ -501,7 +499,7 @@
 
         $(document).ready(function() {
             cargarMes();
-            cargarDistritos();
+            cargarMicrorred();
             // cargarCards();
 
         });
@@ -511,27 +509,130 @@
             panelGraficas('head2');
             panelGraficas('head3');
             panelGraficas('head4');
-            panelGraficas('anal1');
-            panelGraficas('anal2');
-            panelGraficas('anal3');
-            panelGraficas('anal4');
-            panelGraficas('tabla1');
-            panelGraficas('tabla2');
-            panelGraficas('tabla3');
+            panelGraficas('tabla01');
+            panelGraficas('tabla02');
+            panelGraficas('tabla03');
         }
 
-        function cargarDistritos() {
+        function panelGraficas(div) {
             $.ajax({
-                url: "{{ route('ubigeo.distrito.25', '') }}/" + $('#provincia').val(),
+                url: "{{ route('salud.padronnominal.tablerocalidad.eess.reporte') }}",
+                data: {
+                    'div': div,
+                    "anio": $('#anio').val(),
+                    "mes": $('#mes').val(),
+                    "red": $('#red').val(),
+                    "microrred": $('#microrred').val(),
+                    "ubigeo": ubigeo_select,
+                },
+                type: "GET",
+                dataType: "JSON",
+                beforeSend: function() {
+                    if (spinners[div]) {
+                        spinners[div].forEach(selector => {
+                            $(selector).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+                        });
+                    }
+                },
+                success: function(data) {
+                    switch (div) {
+                        case 'head1':
+                            $('#card1').text(data.card1).counterUp({
+                                delay: 10,
+                                time: 1000
+                            });
+                            break;
+                        case 'head2':
+                            $('#card2').text(data.card2).counterUp({
+                                delay: 10,
+                                time: 1000
+                            });
+                            break;
+                        case 'head3':
+                            $('#card3').text(data.card3).counterUp({
+                                delay: 10,
+                                time: 1000
+                            });
+                            break;
+                        case 'head4':
+                            $('#card4').text(data.card4).counterUp({
+                                delay: 10,
+                                time: 1000
+                            });
+                            break;
+
+                        case 'tabla01':
+                            $('#ctabla1').html(data.excel);
+                            break;
+                        case 'tabla02':
+                            $('#ctabla2').html(data.excel);
+                            // $('#tabla2').DataTable({
+                            //     responsive: true,
+                            //     autoWidth: false,
+                            //     ordered: true,
+                            //     language: table_language,
+                            // });
+                            break;
+                        case 'tabla03':
+                            $('#ctabla3').html(data.excel);
+                            $('#tabla3').DataTable({
+                                responsive: true,
+                                autoWidth: false,
+                                ordered: true,
+                                language: table_language,
+                                searching: false,
+                                paging: false,
+                                info: false,
+                                // columnDefs: [{
+                                //     targets: 1,
+                                //     render: function(data, type, row) {
+                                //         return `<a href="#" onclick="abrirmodalcentropoblado(${data})">${data}</a>`;
+                                //     }
+                                // }]
+                            });
+                            break;
+
+                        case 'tabla0301':
+                            $('#ctabla3_1').html(data.excel);
+                            $('#tabla3_1').DataTable({
+                                responsive: true,
+                                autoWidth: false,
+                                ordered: true,
+                                destroy: true,
+                                language: table_language,
+                                // searching: false,
+                                // paging: false,
+                                // info: false,
+                            });
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                },
+                erro: function(jqXHR, textStatus, errorThrown) {
+                    console.log("ERROR GRAFICA 1");
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cargarMicrorred() {
+            $.ajax({
+                url: "{{ route('salud.padronnominal.calidadcriterio.microrred', ['anio' => ':anio', 'mes' => ':mes', 'red' => ':red']) }}"
+                    .replace(':anio', $('#anio').val())
+                    .replace(':mes', $('#mes').val())
+                    .replace(':red', $('#red').val()),
                 type: 'GET',
                 success: function(data) {
-                    $("#distrito option").remove();
+                    $("#microrred option").remove();
                     var options = '<option value="0">TODOS</option>';
                     $.each(data, function(index, value) {
-                        options += "<option value='" + value.id + "'>" + value.nombre +
-                            "</option>"
+                        options += "<option value='" + value.id + "'>" + value.codigo + " " +
+                            value.nombre + "</option>"
                     });
-                    $("#distrito").append(options);
+                    $("#microrred").append(options);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -554,210 +655,10 @@
                         options += `<option value='${vv.id}' ${ss}>${vv.mes}</option>`
                     });
                     $("#mes").append(options);
+                    cargarMicrorred();
                     cargarCards();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
-        }
-
-        function panelGraficas(div) {
-            $.ajax({
-                url: "{{ route('salud.padronnominal.tablerocalidad.reporte') }}",
-                data: {
-                    'div': div,
-                    "anio": $('#anio').val(),
-                    "mes": $('#mes').val(),
-                    "provincia": $('#provincia').val(),
-                    "distrito": $('#distrito').val(),
-                    "ubigeo": ubigeo_select,
-                },
-                type: "GET",
-                dataType: "JSON",
-                beforeSend: function() {
-                    if (spinners[div]) {
-                        spinners[div].forEach(selector => {
-                            $(selector).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                        });
-                    }
-                },
-                success: function(data) {
-                    switch (div) {
-                        case 'head':
-                            $('#card1').text(data.card1).counterUp({
-                                delay: 10,
-                                time: 1000
-                            });
-                            $('#card2').text(data.card2).counterUp({
-                                delay: 10,
-                                time: 1000
-                            });
-                            $('#card3').text(data.card3).counterUp({
-                                delay: 10,
-                                time: 1000
-                            });
-                            $('#card4').text(data.card4).counterUp({
-                                delay: 10,
-                                time: 1000
-                            });
-                            $('#pcard1 h6 span').text(`${data.pcard1}%`);
-                            $('#pcard1 .progress-bar')
-                                .removeClass('bg-info bg-success bg-warning bg-danger')
-                                .addClass(data.pcard1 > 95 ? 'bg-success' : (data.pcard1 > 50 ? 'bg-warning' :
-                                    'bg-danger'))
-                                .css('width', `${data.pcard1}%`)
-                                .attr('aria-valuenow', data.pcard1);
-
-                            $('#pcard2 h6 span').text(`${data.pcard2}%`);
-                            $('#pcard2 .progress-bar')
-                                .removeClass('bg-info bg-success bg-warning bg-danger')
-                                .addClass(data.pcard2 > 95 ? 'bg-success' : (data.pcard2 > 50 ? 'bg-warning' :
-                                    'bg-danger'))
-                                .css('width', `${data.pcard2}%`)
-                                .attr('aria-valuenow', data.pcard2);
-
-                            $('#pcard3 h6 span').text(`${data.pcard3}%`);
-                            $('#pcard3 .progress-bar')
-                                .removeClass('bg-info bg-success bg-warning bg-danger')
-                                .addClass(data.pcard3 > 95 ? 'bg-success' : (data.pcard3 > 50 ? 'bg-warning' :
-                                    'bg-danger'))
-                                .css('width', `${data.pcard3}%`)
-                                .attr('aria-valuenow', data.pcard3);
-
-                            $('#pcard4 h6 span').text(`${data.pcard4}%`);
-                            $('#pcard4 .progress-bar')
-                                .removeClass('bg-info bg-success bg-warning bg-danger')
-                                .addClass(data.pcard4 > 95 ? 'bg-success' : (data.pcard4 > 50 ? 'bg-warning' :
-                                    'bg-danger'))
-                                .css('width', `${data.pcard4}%`)
-                                .attr('aria-valuenow', data.pcard4);
-
-                            break;
-                        case 'head1':
-                            $('#card1').text(data.card1).counterUp({
-                                delay: 10,
-                                time: 1000
-                            });
-
-                            $('#pcard1 h6 span').text(`${data.pcard1}%`);
-                            $('#pcard1 .progress-bar')
-                                .removeClass('bg-info bg-success bg-warning bg-danger')
-                                .addClass(data.pcard1 > 95 ? 'bg-success' : (data.pcard1 > 50 ? 'bg-warning' :
-                                    'bg-danger'))
-                                .css('width', `${data.pcard1}%`)
-                                .attr('aria-valuenow', data.pcard1);
-
-                            break;
-                        case 'head2':
-                            $('#card2').text(data.card2).counterUp({
-                                delay: 10,
-                                time: 1000
-                            });
-
-                            $('#pcard2 h6 span').text(`${data.pcard2}%`);
-                            $('#pcard2 .progress-bar')
-                                .removeClass('bg-info bg-success bg-warning bg-danger')
-                                .addClass(data.pcard2 > 95 ? 'bg-success' : (data.pcard2 > 50 ? 'bg-warning' :
-                                    'bg-danger'))
-                                .css('width', `${data.pcard2}%`)
-                                .attr('aria-valuenow', data.pcard2);
-                            break;
-                        case 'head3':
-                            $('#card3').text(data.card3).counterUp({
-                                delay: 10,
-                                time: 1000
-                            });
-
-                            $('#pcard3 h6 span').text(`${data.pcard3}%`);
-                            $('#pcard3 .progress-bar')
-                                .removeClass('bg-info bg-success bg-warning bg-danger')
-                                .addClass(data.pcard3 > 95 ? 'bg-success' : (data.pcard3 > 50 ? 'bg-warning' :
-                                    'bg-danger'))
-                                .css('width', `${data.pcard3}%`)
-                                .attr('aria-valuenow', data.pcard3);
-                            break;
-                        case 'head4':
-                            $('#card4').text(data.card4).counterUp({
-                                delay: 10,
-                                time: 1000
-                            });
-
-                            $('#pcard4 h6 span').text(`${data.pcard4}%`);
-                            $('#pcard4 .progress-bar')
-                                .removeClass('bg-info bg-success bg-warning bg-danger')
-                                .addClass(data.pcard4 > 95 ? 'bg-success' : (data.pcard4 > 50 ? 'bg-warning' :
-                                    'bg-danger'))
-                                .css('width', `${data.pcard4}%`)
-                                .attr('aria-valuenow', data.pcard4);
-
-                            break;
-
-                        case 'anal1':
-                            console.log(data.avance);
-                            GaugeSeries('anal1', data.avance, 'Menores de 1 año Visitados');
-                            break;
-                        case 'anal2':
-                            GaugeSeries('anal2', data.avance, 'Menores de 1 año con DNI');
-                            break;
-                        case 'anal3':
-                            GaugeSeries('anal3', data.avance, 'Menores de 1 año con Seguro Salud');
-                            break;
-                        case 'anal4':
-                            GaugeSeries('anal4', data.avance, 'Menores de 1 año con EESS');
-                            break;
-                        case 'tabla1':
-                            $('#ctabla1').html(data.excel);
-                            break;
-                        case 'tabla2':
-                            $('#ctabla2').html(data.excel);
-                            // $('#tabla2').DataTable({
-                            //     responsive: true,
-                            //     autoWidth: false,
-                            //     ordered: true,
-                            //     language: table_language,
-                            // });
-                            break;
-                        case 'tabla3':
-                            $('#ctabla3').html(data.excel);
-                            $('#tabla3').DataTable({
-                                responsive: true,
-                                autoWidth: false,
-                                ordered: true,
-                                language: table_language,
-                                searching: false,
-                                paging: false,
-                                info: false,
-                                // columnDefs: [{
-                                //     targets: 1,
-                                //     render: function(data, type, row) {
-                                //         return `<a href="#" onclick="abrirmodalcentropoblado(${data})">${data}</a>`;
-                                //     }
-                                // }]
-                            });
-                            break;
-
-                        case 'tabla3_1':
-                            $('#ctabla3_1').html(data.excel);
-                            $('#tabla3_1').DataTable({
-                                responsive: true,
-                                autoWidth: false,
-                                ordered: true,
-                                destroy: true,
-                                language: table_language,
-                                // searching: false,
-                                // paging: false,
-                                // info: false,
-                            });
-                            break;
-
-                        default:
-                            break;
-                    }
-
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 1");
                     console.log(jqXHR);
                 },
             });

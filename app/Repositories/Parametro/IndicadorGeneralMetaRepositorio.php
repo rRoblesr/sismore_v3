@@ -342,7 +342,7 @@ class IndicadorGeneralMetaRepositorio
         $query = ImporPadronAnemia::select('rr.id as idred', 'rr.nombre as red', DB::raw('sum(den) as den'), DB::raw('sum(num) as num'), DB::raw('round(100*sum(num)/sum(den),1) as ind'))
             ->where('anio', $anio);
         $query = $query->join('sal_establecimiento as es', 'es.cod_unico', '=', 'sal_impor_padron_anemia.cod_unico');
-        $query = $query->join('sal_microred as mr', 'mr.id', '=', 'es.microrred_id');
+        $query = $query->join('sal_microrred as mr', 'mr.id', '=', 'es.microrred_id');
         $query = $query->join('sal_red as rr', 'rr.id', '=', 'mr.red_id');
         $query = $query->join('par_ubigeo as dd', 'dd.id', '=', 'ubigeo');
         $query = $query->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia');
@@ -360,7 +360,7 @@ class IndicadorGeneralMetaRepositorio
         $query = ImporPadronAnemia::select('mr.id as idmicro', 'mr.nombre as micro', DB::raw('sum(den) as den'), DB::raw('sum(num) as num'), DB::raw('round(100*sum(num)/sum(den),1) as ind'))
             ->where('anio', $anio);
         $query = $query->join('sal_establecimiento as es', 'es.cod_unico', '=', 'sal_impor_padron_anemia.cod_unico');
-        $query = $query->join('sal_microred as mr', 'mr.id', '=', 'es.microrred_id');
+        $query = $query->join('sal_microrred as mr', 'mr.id', '=', 'es.microrred_id');
         $query = $query->join('sal_red as rr', 'rr.id', '=', 'mr.red_id');
         $query = $query->join('par_ubigeo as dd', 'dd.id', '=', 'ubigeo');
         $query = $query->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia');
@@ -389,7 +389,7 @@ class IndicadorGeneralMetaRepositorio
         // );
         // $query = $query->where('anio', $anio);
         // $query = $query->join('sal_establecimiento as es', 'es.cod_unico', '=', 'sal_impor_padron_anemia.cod_unico');
-        // $query = $query->join('sal_microred as mr', 'mr.id', '=', 'es.microrred_id');
+        // $query = $query->join('sal_microrred as mr', 'mr.id', '=', 'es.microrred_id');
         // $query = $query->join('sal_red as rr', 'rr.id', '=', 'mr.red_id');
         // $query = $query->join('par_ubigeo as dd', 'dd.id', '=', 'es.ubigeo_id');
         // $query = $query->join('par_ubigeo as pp', 'pp.id', '=', 'dd.dependencia');
@@ -435,7 +435,7 @@ class IndicadorGeneralMetaRepositorio
             ) AS e ON e.cod_unico = a.cod_unico
         JOIN par_ubigeo d ON d.id = e.ubigeo_id
         JOIN par_ubigeo p ON p.id = d.dependencia
-        JOIN sal_microred m ON m.id = e.microrred_id
+        JOIN sal_microrred m ON m.id = e.microrred_id
         JOIN sal_red r ON r.id = m.red_id
         ORDER BY ind desc;";
 

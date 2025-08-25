@@ -56,7 +56,7 @@ class EstablecimientoController extends Controller
     public function cargarRedSelect($red)
     {
         $micro = DB::select("SELECT * FROM sal_red where id in(
-        SELECT DISTINCT red_id from sal_microred where id in( 
+        SELECT DISTINCT red_id from sal_microrred where id in( 
         SELECT DISTINCT microrred_id FROM `sal_establecimiento` 
         where red_id=$red and cod_disa=34 and categoria in ('I-1','I-2','I-3','I-4') and institucion in ('GOBIERNO REGIONAL','MINSA') and estado='ACTIVO'))");
         return  response()->json($micro);
@@ -64,7 +64,7 @@ class EstablecimientoController extends Controller
 
     public function cargarMicroredSelect($red)
     {
-        $micro = DB::select("SELECT * from sal_microred where id in( 
+        $micro = DB::select("SELECT * from sal_microrred where id in( 
         SELECT DISTINCT microrred_id FROM `sal_establecimiento` 
         where red_id=$red and cod_disa=34 and categoria in ('I-1','I-2','I-3','I-4') and institucion in ('GOBIERNO REGIONAL','MINSA') and estado='ACTIVO')");
         return  response()->json($micro);
@@ -243,7 +243,7 @@ class EstablecimientoController extends Controller
                     : [['label' => 'SIN REGISTROS', 'id' => 0]];
                 break;
             case '3':
-                $query = DB::table('sal_microred as m')->join('sal_red as r', 'r.id', '=', 'm.red_id')->select('m.id', 'm.codigo', 'm.nombre', 'r.nombre as red')
+                $query = DB::table('sal_microrred as m')->join('sal_red as r', 'r.id', '=', 'm.red_id')->select('m.id', 'm.codigo', 'm.nombre', 'r.nombre as red')
                     ->where('r.cod_disa', '34')->where(function ($q) use ($term) {
                         $q->where('m.nombre', 'like', '%' . $term . '%')->orWhere('m.codigo', 'like', '%' . $term . '%');
                     })->get();

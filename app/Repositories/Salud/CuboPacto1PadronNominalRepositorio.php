@@ -170,7 +170,7 @@ class CuboPacto1PadronNominalRepositorio
 
         JOIN par_ubigeo d ON d.id = e.ubigeo_id
         JOIN par_ubigeo p ON p.id = d.dependencia
-        JOIN sal_microred m ON m.id = e.microrred_id
+        JOIN sal_microrred m ON m.id = e.microrred_id
         JOIN sal_red r ON r.id = m.red_id 
         where 1 $pp $dd 
         order by indicador desc, c.num asc, c.den asc;";

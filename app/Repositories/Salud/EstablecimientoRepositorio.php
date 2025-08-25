@@ -14,7 +14,7 @@ class EstablecimientoRepositorio
     {
         $query = Establecimiento::from('sal_establecimiento as es')
             ->select('es.id', 're.nombre as red', 'mi.nombre as microred', 'es.cod_unico', 'es.nombre_establecimiento as eess')
-            ->join('sal_microred as mi', 'mi.id', '=', 'es.microrred_id')
+            ->join('sal_microrred as mi', 'mi.id', '=', 'es.microrred_id')
             ->join('sal_red as re', 're.id', '=', 'mi.red_id')
             ->join('par_ubigeo as ub', 'ub.id', '=', 'es.ubigeo_id')
             ->join('adm_entidad as en', 'en.codigo', '=', 'ub.codigo')
@@ -39,7 +39,7 @@ class EstablecimientoRepositorio
     {
         $query = Establecimiento::from('sal_establecimiento as es')
             ->select('es.id', 're.nombre as red', 'mi.nombre as microred', 'es.cod_unico', 'es.nombre_establecimiento as eess', 'en.nombre as muni')
-            ->join('sal_microred as mi', 'mi.id', '=', 'es.microrred_id')
+            ->join('sal_microrred as mi', 'mi.id', '=', 'es.microrred_id')
             ->join('sal_red as re', 're.id', '=', 'mi.red_id')
             ->join('par_ubigeo as ub', 'ub.id', '=', 'es.ubigeo_id')
             ->join('adm_entidad as en', 'en.codigo', '=', 'ub.codigo')
@@ -80,7 +80,7 @@ class EstablecimientoRepositorio
     public static function listRed($sector, $municipio)
     {
         $query = Establecimiento::from('sal_establecimiento as es')->distinct()->select('re.*')
-            ->join('sal_microred as mi', 'mi.id', '=', 'es.microrred_id')
+            ->join('sal_microrred as mi', 'mi.id', '=', 'es.microrred_id')
             ->join('sal_red as re', 're.id', '=', 'mi.red_id')
             ->join('par_ubigeo as ub', 'ub.id', '=', 'es.ubigeo_id')
             ->join('adm_entidad as en', 'en.codigo', '=', 'ub.codigo')
@@ -98,7 +98,7 @@ class EstablecimientoRepositorio
     public static function listMicrored($sector, $municipio, $red)
     {
         $query = Establecimiento::from('sal_establecimiento as es')->distinct()->select('mi.*')
-            ->join('sal_microred as mi', 'mi.id', '=', 'es.microrred_id')
+            ->join('sal_microrred as mi', 'mi.id', '=', 'es.microrred_id')
             ->join('sal_red as re', 're.id', '=', 'mi.red_id')
             ->join('par_ubigeo as ub', 'ub.id', '=', 'es.ubigeo_id')
             ->join('adm_entidad as en', 'en.codigo', '=', 'ub.codigo')
@@ -117,7 +117,7 @@ class EstablecimientoRepositorio
     public static function listEESS($sector, $municipio, $red, $microred)
     {
         $query = Establecimiento::from('sal_establecimiasdasento as es')->distinct()->select('es.*')
-            ->join('sal_microred as mi', 'mi.id', '=', 'es.microrred_id')
+            ->join('sal_microrred as mi', 'mi.id', '=', 'es.microrred_id')
             ->join('sal_red as re', 're.id', '=', 'mi.red_id')
             ->join('par_ubigeo as ub', 'ub.id', '=', 'es.ubigeo_id')
             ->join('adm_entidad as en', 'en.codigo', '=', 'ub.codigo')
@@ -150,7 +150,7 @@ class EstablecimientoRepositorio
             'pa.fecha_envio',
             'pa.nro_archivos'
         )
-            ->join('sal_microred as mi', 'mi.id', '=', 'es.microrred_id')
+            ->join('sal_microrred as mi', 'mi.id', '=', 'es.microrred_id')
             ->join('sal_red as re', 're.id', '=', 'mi.red_id')
             ->join('par_ubigeo as ub', 'ub.id', '=', 'es.ubigeo_id')
             ->join('adm_entidad as en', 'en.codigo', '=', 'ub.codigo')
@@ -204,7 +204,7 @@ class EstablecimientoRepositorio
                 if ($mm->codigo <= $mesA) {
                     $conteo = PadronActas::from('sal_padron_actas as pa')
                         ->join('sal_establecimiento as es', 'es.id', '=', 'pa.establecimiento_id')
-                        ->join('sal_microred as mi', 'mi.id', '=', 'es.microrred_id')
+                        ->join('sal_microrred as mi', 'mi.id', '=', 'es.microrred_id')
                         ->join('sal_red as re', 're.id', '=', 'mi.red_id')
                         ->where('pa.establecimiento_id', $value->id)
                         ->where('pa.fecha_envio', 'like', $anio . '-' . str_pad($mm->codigo, 2, '0', STR_PAD_LEFT) . '-%');
@@ -218,7 +218,7 @@ class EstablecimientoRepositorio
 
             $conteo = PadronActas::from('sal_padron_actas as pa')
                 ->join('sal_establecimiento as es', 'es.id', '=', 'pa.establecimiento_id')
-                ->join('sal_microred as mi', 'mi.id', '=', 'es.microrred_id')
+                ->join('sal_microrred as mi', 'mi.id', '=', 'es.microrred_id')
                 ->join('sal_red as re', 're.id', '=', 'mi.red_id')
                 ->where('pa.establecimiento_id', $value->id)
                 ->where('pa.fecha_envio', 'like', $anio . '-%');
@@ -259,13 +259,13 @@ class EstablecimientoRepositorio
     public static function ubicacion($establecimiento)
     {
         $query = Establecimiento::from('sal_establecimiento as es')->select('mi.id as mii', 'mi.nombre as min', 're.id as rei', 're.nombre as ren', 'es.cod_disa as dsi', 'es.disa as dsn')
-            ->join('sal_microred as mi', 'mi.id', '=', 'es.microrred_id')->join('sal_red as re', 're.id', '=', 'mi.red_id')->where('es.id', $establecimiento)->first();
+            ->join('sal_microrred as mi', 'mi.id', '=', 'es.microrred_id')->join('sal_red as re', 're.id', '=', 'mi.red_id')->where('es.id', $establecimiento)->first();
         return $query;
     }
 
     public static function queAtiendenAutocompletar($term)
     {
-        $query = Establecimiento::from('sal_establecimiento as es') //->join('sal_microred as m', 'm.id', '=', 'es.microrred_id')->join('sal_red as r', 'r.id', '=', 'm.red_id')
+        $query = Establecimiento::from('sal_establecimiento as es') //->join('sal_microrred as m', 'm.id', '=', 'es.microrred_id')->join('sal_red as r', 'r.id', '=', 'm.red_id')
             ->select('es.id', 'es.cod_unico', 'es.nombre_establecimiento')
             ->where('es.cod_disa', '34')->where('es.estado', 'ACTIVO')->whereIn('es.institucion', ['GOBIERNO REGIONAL', 'MINSA'])
             ->whereIn('es.categoria', ['I-1', 'I-2', 'I-3', 'I-4'])
@@ -277,7 +277,7 @@ class EstablecimientoRepositorio
 
     public static function queAtiendenCargar()
     {
-        $query = Establecimiento::from('sal_establecimiento as es') //->join('sal_microred as m', 'm.id', '=', 'es.microrred_id')->join('sal_red as r', 'r.id', '=', 'm.red_id')
+        $query = Establecimiento::from('sal_establecimiento as es') //->join('sal_microrred as m', 'm.id', '=', 'es.microrred_id')->join('sal_red as r', 'r.id', '=', 'm.red_id')
             ->select('es.id', DB::raw('concat(LPAD(es.cod_unico, 8, "0")," | ",es.nombre_establecimiento) as nombrex'))
             ->where('es.cod_disa', '34')->where('es.estado', 'ACTIVO')->whereIn('es.institucion', ['GOBIERNO REGIONAL', 'MINSA'])
             ->whereIn('es.categoria', ['I-1', 'I-2', 'I-3', 'I-4'])
@@ -287,7 +287,7 @@ class EstablecimientoRepositorio
 
     public static function queAtiendenIdCodunico()
     {
-        $query = Establecimiento::from('sal_establecimiento as es') //->join('sal_microred as m', 'm.id', '=', 'es.microrred_id')->join('sal_red as r', 'r.id', '=', 'm.red_id')
+        $query = Establecimiento::from('sal_establecimiento as es') //->join('sal_microrred as m', 'm.id', '=', 'es.microrred_id')->join('sal_red as r', 'r.id', '=', 'm.red_id')
             ->select('es.id', 'es.cod_unico')
             ->where('es.cod_disa', '34')->where('es.estado', 'ACTIVO')->whereIn('es.institucion', ['GOBIERNO REGIONAL', 'MINSA'])
             ->whereIn('es.categoria', ['I-1', 'I-2', 'I-3', 'I-4'])
@@ -303,7 +303,7 @@ class EstablecimientoRepositorio
 
     public static function arrayIdRed()
     {
-        $query = DB::select("SELECT * FROM sal_red where id in(SELECT DISTINCT red_id from sal_microred where id in( SELECT DISTINCT microrred_id FROM `sal_establecimiento` where cod_disa=34 and categoria in ('I-1','I-2','I-3','I-4') and institucion in ('GOBIERNO REGIONAL','MINSA') and estado='ACTIVO'))");
+        $query = DB::select("SELECT * FROM sal_red where id in(SELECT DISTINCT red_id from sal_microrred where id in( SELECT DISTINCT microrred_id FROM `sal_establecimiento` where cod_disa=34 and categoria in ('I-1','I-2','I-3','I-4') and institucion in ('GOBIERNO REGIONAL','MINSA') and estado='ACTIVO'))");
         // return collect($query)->map(function ($item) {
         //     return ['id' => $item->id, 'codigo' => $item->codigo, 'nombre' => $item->nombre];
         // });
@@ -312,7 +312,7 @@ class EstablecimientoRepositorio
 
     public static function arrayIdmicrored()
     {
-        $query = DB::select("SELECT * from sal_microred where id in( SELECT DISTINCT microrred_id FROM `sal_establecimiento` where cod_disa=34 and categoria in ('I-1','I-2','I-3','I-4') and institucion in ('GOBIERNO REGIONAL','MINSA') and estado='ACTIVO')");
+        $query = DB::select("SELECT * from sal_microrred where id in( SELECT DISTINCT microrred_id FROM `sal_establecimiento` where cod_disa=34 and categoria in ('I-1','I-2','I-3','I-4') and institucion in ('GOBIERNO REGIONAL','MINSA') and estado='ACTIVO')");
         return collect($query)->pluck('nombre', 'id');
     }
 
@@ -334,7 +334,7 @@ class EstablecimientoRepositorio
     public static function listMicrorredUcayali_select($red)
     {
         $query = Establecimiento::from('sal_establecimiento as es')->distinct()->select('m.id', 'm.codigo', 'm.nombre');
-        $query->join('sal_microred as m', 'm.id', '=', 'es.microrred_id');
+        $query->join('sal_microrred as m', 'm.id', '=', 'es.microrred_id');
         $query->where('es.estado', 'ACTIVO')->where('es.cod_disa', '34')->where('es.red_id', $red);
         // $query->whereIn('es.institucion', ['GOBIERNO REGIONAL', 'MINSA'])->whereIn('es.categoria', ['I-1', 'I-2', 'I-3', 'I-4']);
         return $query->get();
@@ -501,5 +501,19 @@ class EstablecimientoRepositorio
         }
 
         return $query;
+    }
+
+    public static function TableroCalidadEESS_head($red, $microrred)
+    {
+        $filtros = function ($query) use ($red, $microrred) {
+            if ($red > 0) $query->where('red_id', $red);
+            if ($microrred > 0) $query->where('microrred_id', $microrred);
+        };
+        return Establecimiento::where('cod_disa', 34)
+            ->where('estado', 'activo')
+            ->whereIn('institucion', ['GOBIERNO REGIONAL', 'MINSA'])
+            ->whereIn('categoria', ['I-1', 'I-2', 'I-3', 'I-4', 'II-1', 'II-2', 'SIN CATEGORÍA'])
+            ->tap($filtros)
+            ->count();
     }
 }

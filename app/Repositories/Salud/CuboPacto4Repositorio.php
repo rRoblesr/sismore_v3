@@ -140,7 +140,7 @@ class CuboPacto4Repositorio
                 JOIN par_ubigeo d ON d.id = e.ubigeo_id
                 JOIN par_ubigeo p ON p.id = d.dependencia
                 JOIN par_ubigeo u ON u.id = p.dependencia
-                JOIN sal_microred m ON m.id = e.microrred_id
+                JOIN sal_microrred m ON m.id = e.microrred_id
                 JOIN sal_red r ON r.id = m.red_id
                 ORDER BY indicador DESC;";
 

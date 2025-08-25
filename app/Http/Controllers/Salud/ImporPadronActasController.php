@@ -1282,7 +1282,7 @@ class ImporPadronActasController extends Controller
         $query = PadronActas::from('sal_padron_actas as pa')
             ->select('pa.id', 'es.cod_unico', 'es.nombre_establecimiento as eess', 'pa.fecha_inicial', 'pa.fecha_final', 'pa.fecha_envio', 'pa.nro_archivos')
             ->join('sal_establecimiento as es', 'es.id', '=', 'pa.establecimiento_id')
-            ->join('sal_microred as mi', 'mi.id', '=', 'es.microrred_id')
+            ->join('sal_microrred as mi', 'mi.id', '=', 'es.microrred_id')
             ->join('sal_red as re', 're.id', '=', 'mi.red_id')
             ->where('es.ubigeo_id', $rq->municipio);
         if ($rq->eess) {

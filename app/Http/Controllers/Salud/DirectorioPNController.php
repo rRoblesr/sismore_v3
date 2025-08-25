@@ -25,7 +25,7 @@ class DirectorioPNController extends Controller
     public function dashboard()
     {
         // $red = DB::table('sal_red')->where('cod_disa', '34')->get();
-        $red = DB::select("SELECT * from sal_red where id in( SELECT DISTINCT red_id from sal_microred where id in( SELECT DISTINCT microrred_id FROM `sal_establecimiento` where cod_disa=34 and categoria in ('I-1','I-2','I-3','I-4') and institucion in ('GOBIERNO REGIONAL','MINSA') and estado='ACTIVO'))");
+        $red = DB::select("SELECT * from sal_red where id in( SELECT DISTINCT red_id from sal_microrred where id in( SELECT DISTINCT microrred_id FROM `sal_establecimiento` where cod_disa=34 and categoria in ('I-1','I-2','I-3','I-4') and institucion in ('GOBIERNO REGIONAL','MINSA') and estado='ACTIVO'))");
         $mensaje = "";
         $vista = 'D';
         return view('salud.DirectorioPN.Principal', compact('vista', 'mensaje', 'red'));
@@ -34,7 +34,7 @@ class DirectorioPNController extends Controller
     public function principal()
     {
         // $red = DB::table('sal_red')->where('cod_disa', '34')->get();
-        $red = DB::select("SELECT * from sal_red where id in( SELECT DISTINCT red_id from sal_microred where id in( SELECT DISTINCT microrred_id FROM `sal_establecimiento` where cod_disa=34 and categoria in ('I-1','I-2','I-3','I-4') and institucion in ('GOBIERNO REGIONAL','MINSA') and estado='ACTIVO'))");
+        $red = DB::select("SELECT * from sal_red where id in( SELECT DISTINCT red_id from sal_microrred where id in( SELECT DISTINCT microrred_id FROM `sal_establecimiento` where cod_disa=34 and categoria in ('I-1','I-2','I-3','I-4') and institucion in ('GOBIERNO REGIONAL','MINSA') and estado='ACTIVO'))");
         $mensaje = "";
         $vista = 'M';
         return view('salud.DirectorioPN.Principal', compact('vista', 'mensaje', 'red'));
@@ -296,7 +296,7 @@ class DirectorioPNController extends Controller
                 break;
 
             case '3':
-                $query = DB::table('sal_microred')->where('id', $codigo)->first();
+                $query = DB::table('sal_microrred')->where('id', $codigo)->first();
                 if ($query) {
                     return $query->codigo . ' ' . $query->nombre;
                 }
@@ -401,7 +401,7 @@ class DirectorioPNController extends Controller
     //         case '2':
     //             return DB::table('sal_red')->select('id', DB::raw('concat(codigo," ",nombre) as nombrex'))->where('cod_disa', '34')->get();
     //         case '3':
-    //             return DB::table('sal_microred as m')->join('sal_red as r', 'r.id', '=', 'm.red_id')
+    //             return DB::table('sal_microrred as m')->join('sal_red as r', 'r.id', '=', 'm.red_id')
     //                 ->select('m.id', DB::raw('concat(m.codigo," ",m.nombre," | ",r.nombre) as nombrex'))->where('m.cod_disa', '34')->get();
     //         case '4':
     //             return EstablecimientoRepositorio::queAtiendenCargar();

@@ -144,7 +144,7 @@ class CuboPacto3Repositorio
         //             ) as e on e.cod_unico = c.codigo_unico 
         //             join par_ubigeo d on d.id = e.ubigeo_id
         //             join par_ubigeo p on p.id = d.dependencia
-        //             join sal_microred m on m.id = e.microrred_id
+        //             join sal_microrred m on m.id = e.microrred_id
         //             join sal_red r on r.id = m.red_id
         //             order by indicador desc ;";
 
@@ -180,7 +180,7 @@ class CuboPacto3Repositorio
                         ) AS e ON e.cod_unico = c.codigo_unico
                     JOIN par_ubigeo d ON d.id = e.ubigeo_id
                     JOIN par_ubigeo p ON p.id = d.dependencia
-                    JOIN sal_microred m ON m.id = e.microrred_id
+                    JOIN sal_microrred m ON m.id = e.microrred_id
                     JOIN sal_red r ON r.id = m.red_id
                     ORDER BY indicador DESC;";
 

@@ -13,10 +13,13 @@ use App\Models\Parametro\Ubigeo;
 use App\Models\Salud\CalidadCriterio;
 use App\Models\Salud\Establecimiento;
 use App\Models\Salud\ImporPadronNominal;
+use App\Models\Salud\Microrred;
 use App\Models\Salud\PadronCalidad;
 use App\Models\Salud\PadronNominal;
+use App\Models\Salud\Red;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Parametro\UbigeoRepositorio;
+use App\Repositories\Salud\CalidadCriterioRepositorio;
 use App\Repositories\Salud\EstablecimientoRepositorio;
 use App\Repositories\Salud\ImporPadronNominalRepositorio;
 use App\Repositories\Salud\PadronNominalRepositorio;
@@ -26,6 +29,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use phpDocumentor\Reflection\PseudoTypes\False_;
 // use Yajra\DataTables\DataTables;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -1271,7 +1275,7 @@ class PadronNominalController extends Controller
         switch ($criterio) {
             case '1':
                 $sql = "SELECT distinct r.id, r.nombre from (select distinct cui_atencion as eess from sal_impor_padron_nominal where importacion_id=? and cui_atencion != 0 AND tipo_doc='Padron' order by eess asc) as aeess 
-                join sal_establecimiento as e on e.cod_unico = aeess.eess join sal_microred as m on m.id = e.microrred_id join sal_red as r on r.id=m.red_id order by e.cod_disa";
+                join sal_establecimiento as e on e.cod_unico = aeess.eess join sal_microrred as m on m.id = e.microrred_id join sal_red as r on r.id=m.red_id order by e.cod_disa";
                 return DB::select($sql, [$importacion]);
 
             default:
@@ -1285,7 +1289,7 @@ class PadronNominalController extends Controller
         switch ($criterio) {
             case '1':
                 $sql = "SELECT distinct m.id, m.nombre from (select distinct cui_atencion as eess from sal_impor_padron_nominal where importacion_id=? and cui_atencion != 0 AND tipo_doc='Padron' order by eess asc) as aeess
-                join sal_establecimiento as e on e.cod_unico = aeess.eess join sal_microred as m on m.id = e.microrred_id join sal_red as r on r.id=m.red_id where r.id = ? order by m.cod_disa, red_id";
+                join sal_establecimiento as e on e.cod_unico = aeess.eess join sal_microrred as m on m.id = e.microrred_id join sal_red as r on r.id=m.red_id where r.id = ? order by m.cod_disa, red_id";
                 // return response()->json(DB::select($sql, [$importacion, $red]));
                 return DB::select($sql, [$importacion, $red]);
 
@@ -1299,7 +1303,7 @@ class PadronNominalController extends Controller
         switch ($criterio) {
             case '1':
                 $sql = "SELECT distinct e.id, e.nombre_establecimiento as nombre from (select distinct cui_atencion as eess from sal_impor_padron_nominal where importacion_id=? and cui_atencion != 0 AND tipo_doc='Padron' order by eess asc) as aeess
-                join sal_establecimiento as e on e.cod_unico = aeess.eess join sal_microred as m on m.id = e.microrred_id join sal_red as r on r.id=m.red_id where r.id = ? and m.id = ? order by e.cod_disa, red_id, microrred_id ";
+                join sal_establecimiento as e on e.cod_unico = aeess.eess join sal_microrred as m on m.id = e.microrred_id join sal_red as r on r.id=m.red_id where r.id = ? and m.id = ? order by e.cod_disa, red_id, microrred_id ";
                 return DB::select($sql, [$importacion_id, $red, $microred]);
 
             default:
@@ -1307,20 +1311,53 @@ class PadronNominalController extends Controller
         }
     }
 
-    public function criterio_red($importacion, $criterio)
+    public function criterio_red($importacion, $criterio, $edad)
     {
-        $query = CalidadCriterio::distinct()->select('red_id as id')->where('importacion_id', $importacion)->where('criterio', $criterio)->whereNotNull('red_id')->get();
+        $filtros = function ($query) use ($edad) {
+            if ($edad > 0) {
+                if ($edad == 1) {
+                    $query->where('tipo_edad', '!=', 'A');
+                } else {
+                    $query->where('tipo_edad', 'A')->where('edad', $edad - 1);
+                }
+            }
+        };
+        $red = Red::whereIn('id', [8, 9, 10, 11, 12])->pluck('nombre', 'id');
+        $query = CalidadCriterio::distinct()->select('red_id as id')
+            ->where('importacion_id', $importacion)
+            ->where('criterio', $criterio)
+            ->whereNotNull('red_id')
+            ->tap($filtros)
+            ->get();
         foreach ($query as $key => $value) {
-            $value->nombre = DB::table('sal_red')->where('id', $value->id)->first()->nombre;
+            $value->nombre = $red[$value->id] ?? 'No Definido'; //DB::table('sal_red')->where('id', $value->id)->first()->nombre;
         }
         return $query;
     }
 
-    public function criterio_microred($importacion, $red, $criterio)
+    public function criterio_microred($importacion, $criterio, $red, $edad)
     {
-        $query = CalidadCriterio::distinct()->select('microred_id as id')->where('importacion_id', $importacion)->where('criterio', $criterio)->where('red_id', $red)->whereNotNull('microred_id')->get();
+        $filtros = function ($query) use ($edad, $red) {
+            if ($edad > 0) {
+                if ($edad == 1) {
+                    $query->where('tipo_edad', '!=', 'A');
+                } else {
+                    $query->where('tipo_edad', 'A')->where('edad', $edad - 1);
+                }
+            }
+            if ($red > 0) {
+                $query->where('red_id', $red);
+            }
+        };
+        $query = CalidadCriterio::distinct()->select('microred_id as id')
+            ->where('importacion_id', $importacion)
+            ->where('criterio', $criterio)
+            ->whereNotNull('microred_id')
+            ->tap($filtros)
+            ->get();
+        $microrred = Microrred::whereIn('red_id', [8, 9, 10, 11, 12])->pluck('nombre', 'id');
         foreach ($query as $key => $value) {
-            $value->nombre = DB::table('sal_microred')->where('id', $value->id)->first()->nombre;
+            $value->nombre = $microrred[$value->id] ?? 'No Definido'; //DB::table('sal_microrred')->where('id', $value->id)->first()->nombre;
         }
         return $query;
     }
@@ -4398,14 +4435,175 @@ class PadronNominalController extends Controller
         return Excel::download(new TableroCalidadIndicadorExport($div, $anio, $mes, $edades, $indicador, $ubigeo), $name);
     }
 
+    public function calidadcriterio_microrred($anio, $mes, $red)
+    {
+        $microrred = CalidadCriterioRepositorio::microrred_select_mensual($anio, $mes, $red);
+        return response()->json($microrred);
+    }
+
     public function tablerocalidadeess()
     {
-        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronNominalController::$FUENTE); //nexus $imp3
-        // $mes = Mes::find($imp->mes);
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronNominalController::$FUENTE);
         $anios = ImportacionRepositorio::anios_porfuente_select(ImporPadronNominalController::$FUENTE);
-        $provincias = UbigeoRepositorio::provincia_select('25');
-        // $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $mes->mes . ' del ' . $imp->anio;
+        $red = CalidadCriterioRepositorio::red_select($imp->id);
         $actualizado = 'Actualizado al ' . $imp->dia . '/' . $imp->mes . '/' . $imp->anio;
-        return view('salud.PadronNominal.TableroCalidadEESS', compact('actualizado', 'anios', 'provincias'));
+        return view('salud.PadronNominal.TableroCalidadEESS', compact('actualizado', 'anios', 'red'));
+    }
+
+    public function tablerocalidadeessreporte(Request $rq)
+    {
+        $fuente = ImporPadronNominalController::$FUENTE;
+        $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio, $rq->mes);
+        switch ($rq->div) {
+            case 'head1':
+                $card1 = ImporPadronNominalRepositorio::TableroCalidadEESS_head($impMaxAnio, $rq->red, $rq->microrred, FALSE, FALSE);
+                $card1 = number_format($card1, 0);
+                return response()->json(compact('card1'));
+            case 'head2':
+                $card2 = ImporPadronNominalRepositorio::TableroCalidadEESS_head($impMaxAnio, $rq->red, $rq->microrred, TRUE, FALSE);
+                $card2 = number_format($card2, 0);
+                return response()->json(compact('card2'));
+
+            case 'head3':
+                $card3 = ImporPadronNominalRepositorio::TableroCalidadEESS_head($impMaxAnio, $rq->red, $rq->microrred, FALSE, TRUE);
+                $card3 = number_format($card3, 0);
+                return response()->json(compact('card3'));
+
+            case 'head4':
+                $card4 = EstablecimientoRepositorio::TableroCalidadEESS_head($rq->red, $rq->microrred);
+                return response()->json(compact('card4'));
+
+            case 'tabla01':
+                $base = CalidadCriterioRepositorio::TableroCalidadEESS_tabla01($impMaxAnio, $rq->red, $rq->microrred);
+                $excel = view('salud.PadronNominal.TableroCalidadEESSTabla1', compact('base', 'impMaxAnio'))->render();
+                return response()->json(compact('base', 'excel'));
+
+            case 'tabla02':
+                $base = ImporPadronNominalRepositorio::TableroCalidadEESS_tabla02($impMaxAnio, $rq->red, $rq->microrred);
+                $foot = [];
+                if ($base->count() > 0) {
+                    $foot = clone $base[0];
+                    $foot->pob = 0;
+                    $foot->pobm = 0;
+                    $foot->pobf = 0;
+                    $foot->pob0 = 0;
+                    $foot->pob1 = 0;
+                    $foot->pob2 = 0;
+                    $foot->pob3 = 0;
+                    $foot->pob4 = 0;
+                    $foot->pob5 = 0;
+                    $foot->dni = 0;
+                    $foot->seguro = 0;
+                    $foot->padron = 0;
+                    foreach ($base as $key => $value) {
+                        $foot->pob += $value->pob;
+                        $foot->pobm += $value->pobm;
+                        $foot->pobf += $value->pobf;
+                        $foot->pob0 += $value->pob0;
+                        $foot->pob1 += $value->pob1;
+                        $foot->pob2 += $value->pob2;
+                        $foot->pob3 += $value->pob3;
+                        $foot->pob4 += $value->pob4;
+                        $foot->pob5 += $value->pob5;
+                        $foot->dni += $value->dni;
+                        $foot->seguro += $value->seguro;
+                        $foot->programa += $value->programa;
+                        $foot->padron += $value->padron;
+                    }
+                }
+                $excel = view('salud.PadronNominal.TableroCalidadTabla2', compact('base', 'foot'))->render();
+                return response()->json(compact('excel', 'base', 'foot'));
+
+            case 'tabla03':
+                $base = ImporPadronNominalRepositorio::TableroCalidadEESS_tabla03($impMaxAnio, $rq->red, $rq->microrred);
+
+                $foot = [];
+                if ($base->count() > 0) {
+                    $foot = clone $base[0];
+                    $foot->pob = 0;
+                    $foot->pobm = 0;
+                    $foot->pobf = 0;
+                    $foot->pob0 = 0;
+                    $foot->pob1 = 0;
+                    $foot->pob2 = 0;
+                    $foot->pob3 = 0;
+                    $foot->pob4 = 0;
+                    $foot->pob5 = 0;
+                    $foot->dni = 0;
+                    $foot->seguro = 0;
+                    $foot->programa = 0;
+                    foreach ($base as $key => $value) {
+                        $foot->pob += $value->pob;
+                        $foot->pobm += $value->pobm;
+                        $foot->pobf += $value->pobf;
+                        $foot->pob0 += $value->pob0;
+                        $foot->pob1 += $value->pob1;
+                        $foot->pob2 += $value->pob2;
+                        $foot->pob3 += $value->pob3;
+                        $foot->pob4 += $value->pob4;
+                        $foot->pob5 += $value->pob5;
+                        $foot->dni += $value->dni;
+                        $foot->seguro += $value->seguro;
+                        $foot->programa += $value->programa;
+                    }
+                }
+
+                $excel = view('salud.PadronNominal.TableroCalidadTabla3', compact('base', 'foot'))->render();
+                return response()->json(compact('excel'));
+
+            case 'tabla0301':
+                $base = ImporPadronNominalRepositorio::TableroCalidadEESS_tabla0301($impMaxAnio, $rq->red, $rq->microrred, $rq->ubigeo);
+                $foot = [];
+                if ($base->count() > 0) {
+                    $foot = clone $base[0];
+                    $foot->pob = 0;
+                    $foot->pobm = 0;
+                    $foot->pobf = 0;
+                    $foot->pob0 = 0;
+                    $foot->pob1 = 0;
+                    $foot->pob2 = 0;
+                    $foot->pob3 = 0;
+                    $foot->pob4 = 0;
+                    $foot->pob5 = 0;
+                    $foot->dni = 0;
+                    $foot->seguro = 0;
+                    $foot->programa = 0;
+                    foreach ($base as $key => $value) {
+                        $foot->pob += $value->pob;
+                        $foot->pobm += $value->pobm;
+                        $foot->pobf += $value->pobf;
+                        $foot->pob0 += $value->pob0;
+                        $foot->pob1 += $value->pob1;
+                        $foot->pob2 += $value->pob2;
+                        $foot->pob3 += $value->pob3;
+                        $foot->pob4 += $value->pob4;
+                        $foot->pob5 += $value->pob5;
+                        $foot->dni += $value->dni;
+                        $foot->seguro += $value->seguro;
+                        $foot->programa += $value->programa;
+                    }
+                }
+
+                $excel = view('salud.PadronNominal.TableroCalidadTabla3_1', compact('base', 'foot'))->render();
+                return response()->json(compact('excel'));
+
+            default:
+                # code...
+                return [];
+        }
+    }
+
+    public function tablerocalidadeesscriterio($importacion, $criterio)
+    {
+        $fuente = ImporPadronNominalController::$FUENTE;
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronNominalController::$FUENTE);
+        $title = DB::table('sal_calidad_criterio_nombres')->find($criterio)->nombre;
+        $pos = DB::table('sal_calidad_criterio_nombres')->find($criterio)->pos;
+
+        $edades = $this->criterio_edades($importacion, $criterio);
+        $red = CalidadCriterioRepositorio::red_select($imp->id);
+        $actualizado = 'Actualizado al ' . $imp->dia . '/' . $imp->mes . '/' . $imp->anio;
+
+        return view('salud.PadronNominal.TableroCalidadEESSCriterio', compact('importacion', 'criterio', 'pos', 'actualizado', 'edades', 'title'));
     }
 }
