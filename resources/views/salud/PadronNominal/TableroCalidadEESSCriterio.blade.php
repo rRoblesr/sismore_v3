@@ -37,7 +37,7 @@
                             <div class="custom-select-container">
                                 <label for="edades">Edad del Menor</label>
                                 <select id="edades" name="edades" class="form-control font-11"
-                                    onchange="cargarProvincia();cargarCards();">
+                                    onchange="cargarRed();cargarCards();">
                                     <option value="0">TODOS</option>
                                     @foreach ($edades as $item)
                                         <option value="{{ $item->edades_id }}">{{ $item->edades }}</option>
@@ -50,7 +50,7 @@
                             <div class="custom-select-container">
                                 <label for="red">Red</label>
                                 <select id="red" name="red" class="form-control font-11"
-                                    onchange="cargarDistrito();cargarCards();">
+                                    onchange="cargarMicrorred();cargarCards();">
                                     <option value="0">TODOS</option>
                                 </select>
                             </div>
@@ -553,7 +553,7 @@
                 language: table_language,
                 destroy: true,
                 ajax: {
-                    url: "{{ route('salud.padronnominal.tablerocalidad.criterio.listar3') }}",
+                    url: "{{ route('salud.padronnominal.tablerocalidad.eess.criterio.reporte.tabla1') }}",
                     type: "POST",
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -563,8 +563,8 @@
                         d.criterio = {{ $criterio }};
                         d.pos = {{ $pos }};
                         d.edades = $('#edades').val();
-                        d.provincia = $('#provincia').val();
-                        d.distrito = $('#distrito').val();
+                        d.red = $('#red').val();
+                        d.microrred = $('#microrred').val();
                         d.desa = 0;
                     }
                 },
@@ -609,296 +609,6 @@
                     }
                 ]
             });
-
-            tableprincipalxxx = $('#tabla1xxx').DataTable({
-                responsive: true,
-                autoWidth: false,
-                processing: true, // Indica que los datos se procesan en el servidor
-                serverSide: true, // Habilita la paginación en el servidor
-                ordered: true,
-                language: table_language,
-                destroy: true,
-                ajax: {
-                    url: "{{ route('salud.padronnominal.tablerocalidad.criterio.listar') }}",
-                    type: "GET",
-                    data: function(d) {
-                        d.importacion = {{ $importacion }};
-                        d.criterio = {{ $criterio }};
-                        d.edades = $('#edades').val();
-                        d.provincia = $('#provincia').val();
-                        d.distrito = $('#distrito').val();
-                        d.desa = 0;
-                    }
-                },
-                columns: [{
-                        data: 'item',
-                        name: 'item'
-                    }, {
-                        data: 'padron',
-                        name: 'padron'
-                    },
-                    {
-                        data: 'tipo_doc',
-                        name: 'tipo_doc'
-                    },
-                    {
-                        data: 'num_doc',
-                        name: 'num_doc'
-                    },
-                    {
-                        data: 'nombrecompleto',
-                        name: 'nombrecompleto'
-                    },
-                    {
-                        data: 'nedad',
-                        name: 'nedad'
-                    },
-                    {
-                        data: 'nseguro',
-                        name: 'nseguro'
-                    },
-                    {
-                        data: 'nvisita',
-                        name: 'nvisita'
-                    },
-                    {
-                        data: 'nencontrado',
-                        name: 'nencontrado'
-                    },
-                    {
-                        data: 'ndistrito',
-                        name: 'ndistrito'
-                    },
-                    {
-                        data: 'ncui_atencion',
-                        name: 'ncui_atencion'
-                    },
-                    {
-                        data: 'nestablecimiento',
-                        name: 'nestablecimiento'
-                    }
-                ]
-                // columnDefs: [{
-                //         className: 'text-center',
-                //         targets: [0, 1, 2, 3, 5, 6, 7, 8]
-                //     },
-                //     {
-                //         targets: 1,
-                //         render: function(data, type, row) {
-                //             return `<a href="#" onclick="abrirmodalpadron(${data})">${data}</a>`;
-                //         }
-                //     },
-                //     {
-                //         targets: 9,
-                //         render: function(data, type, row) {
-
-                //             if (criterio == 10 || criterio == 11 || criterio == 12 || criterio == 13) {
-                //                 return data ?
-                //                     `<a href="#" onclick="abrirmodaleess(${parseInt(data, 10)})">${data}</a>` :
-                //                     '';
-                //             } else {
-                //                 return data;
-                //             }
-
-                //         }
-                //     },
-                //     {
-                //         targets: 10,
-                //         render: function(data, type, row) {
-                //             if (criterio == 10 || criterio == 11 || criterio == 12 || criterio == 13) {
-                //                 return data;
-                //             } else {
-                //                 return data ?
-                //                     `<a href="#" onclick="abrirmodaleess(${parseInt(data, 10)})">${data}</a>` :
-                //                     '';
-
-                //             }
-                //         }
-                //     }
-                // ]
-            });
-
-            tableprincipalx = $('#tabla1x').DataTable({
-                responsive: true,
-                autoWidth: false,
-                processing: true, // Indica que los datos se procesan en el servidor
-                serverSide: true, // Habilita la paginación en el servidor
-                ordered: true,
-                language: table_language,
-                destroy: true,
-                ajax: {
-                    url: "{{ route('salud.padronnominal.tablerocalidad.criterio.listar') }}",
-                    type: "GET",
-                    data: function(d) {
-                        d.importacion = {{ $importacion }};
-                        d.criterio = {{ $criterio }};
-                        d.edades = $('#edades').val();
-                        d.provincia = $('#provincia').val();
-                        d.distrito = $('#distrito').val();
-                        d.desa = 0;
-                    }
-                },
-                columnDefs: [{
-                        className: 'text-center',
-                        targets: [0, 1, 2, 3, 5, 6, 7, 8]
-                    },
-                    {
-                        targets: 1,
-                        render: function(data, type, row) {
-                            return `<a href="#" onclick="abrirmodalpadron(${data})">${data}</a>`;
-                        }
-                    },
-                    {
-                        targets: 9,
-                        render: function(data, type, row) {
-
-                            if (criterio == 10 || criterio == 11 || criterio == 12 || criterio == 13) {
-                                return data ?
-                                    `<a href="#" onclick="abrirmodaleess(${parseInt(data, 10)})">${data}</a>` :
-                                    '';
-                            } else {
-                                return data;
-                            }
-
-                        }
-                    },
-                    {
-                        targets: 10,
-                        render: function(data, type, row) {
-                            if (criterio == 10 || criterio == 11 || criterio == 12 || criterio == 13) {
-                                return data;
-                            } else {
-                                return data ?
-                                    `<a href="#" onclick="abrirmodaleess(${parseInt(data, 10)})">${data}</a>` :
-                                    '';
-
-                            }
-                        }
-                    }
-                ]
-            });
-
-            tableprincipalxx = $('#tabla1xx').DataTable({
-                processing: true,
-                serverSide: true,
-                responsive: false,
-                autoWidth: false,
-                ordered: true,
-                destroy: true, // Este permite reconfigurar la tabla si ya existe
-                language: table_language,
-                ajax: {
-
-                    url: "{{ route('salud.padronnominal.tablerocalidad.criterio.listar2') }}",
-                    type: "GET",
-                    data: function(d) {
-                        d.importacion = {{ $importacion }};
-                        d.criterio = {{ $criterio }};
-                        d.edades = $('#edades').val();
-                        d.provincia = $('#provincia').val();
-                        d.distrito = $('#distrito').val();
-                        d.desa = 0;
-                    }
-                },
-                columns: [{
-                        data: 'padron',
-                        name: 'padron'
-                    },
-                    {
-                        data: 'num_doc',
-                        name: 'num_doc'
-                    },
-                    {
-                        data: 'tipo_doc',
-                        name: 'tipo_doc'
-                    }, {
-                        data: 'padron',
-                        name: 'padron'
-                    },
-                    {
-                        data: 'num_doc',
-                        name: 'num_doc'
-                    },
-                    {
-                        data: 'tipo_doc',
-                        name: 'tipo_doc'
-                    }, {
-                        data: 'padron',
-                        name: 'padron'
-                    },
-                    {
-                        data: 'num_doc',
-                        name: 'num_doc'
-                    },
-                    {
-                        data: 'tipo_doc',
-                        name: 'tipo_doc'
-                    }, {
-                        data: 'padron',
-                        name: 'padron'
-                    },
-                    {
-                        data: 'num_doc',
-                        name: 'num_doc'
-                    },
-                    {
-                        data: 'tipo_doc',
-                        name: 'tipo_doc'
-                    },
-                ]
-            });
-
-            // tableresumen = $('#tabla2').DataTable({
-            //     responsive: true,
-            //     autoWidth: false,
-            //     processing: true, // Indica que los datos se procesan en el servidor
-            //     serverSide: true, // Habilita la paginación en el servidor
-            //     ordered: true,
-            //     language: table_language,
-            //     destroy: true,
-            //     ajax: {
-            //         url: "{{ route('salud.padronnominal.tablerocalidad.criterio.listar4') }}",
-            //         type: "POST",
-            //         headers: {
-            //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            //         },
-            //         data: function(d) {
-            //             d.importacion = {{ $importacion }};
-            //             d.criterio = {{ $criterio }};
-            //             d.pos = {{ $pos }};
-            //             d.edades = $('#edades').val();
-            //             d.provincia = $('#provincia').val();
-            //             d.distrito = $('#distrito').val();
-            //             d.desa = 0;
-            //         }
-            //     },
-            //     columns: [{
-            //             data: 'item',
-            //             name: 'item'
-            //         }, {
-            //             data: 'provincia',
-            //             name: 'provincia'
-            //         },
-            //         {
-            //             data: 'distrito',
-            //             name: 'distrito'
-            //         },
-            //         {
-            //             data: 'centro_poblado',
-            //             name: 'centro_poblado'
-            //         },
-            //         {
-            //             data: 'conteo',
-            //             name: 'conteo'
-            //         },
-            //     ],
-
-            //     columnDefs: [{
-            //         className: 'text-left',
-            //         targets: [1, 2, 3],
-            //         className: 'text-center',
-            //         targets: [0, 4]
-            //     }, ]
-            // });
             panelGraficas('anal1');
             panelGraficas('anal2');
             panelGraficas('tabla2');
@@ -906,14 +616,14 @@
 
         function panelGraficas(div) {
             $.ajax({
-                url: "{{ route('salud.padronnominal.tablerocalidad.criterio.reporte') }}",
+                url: "{{ route('salud.padronnominal.tablerocalidad.eess.criterio.reporte') }}",
                 data: {
                     div: div,
                     importacion: {{ $importacion }},
                     criterio: {{ $criterio }},
                     edades: $('#edades').val(),
-                    provincia: $('#provincia').val(),
-                    distrito: $('#distrito').val(),
+                    red: $('#red').val(),
+                    microrred: $('#microrred').val(),
                     desa: 0,
                 },
                 type: "GET",
@@ -1086,7 +796,7 @@
                     $("#red option").remove();
                     var options = '<option value="0">TODOS</option>';
                     $.each(data, function(index, value) {
-                        options += `<option value='${value.id}'>${value.nombre}</option>`;
+                        options += `<option value='${value.id}'>${value.codigo} ${value.nombre}</option>`;
                     });
                     $("#red").append(options);
                 },
@@ -1098,7 +808,7 @@
 
         function cargarMicrorred() {
             $.ajax({
-                url: "{{ route('salud.calidadcriterio.microrred', ['importacion' => $importacion, 'criterio' => $criterio, 'edad' => ':edad', 'red' => ':red']) }}"
+                url: "{{ route('salud.calidadcriterio.microrred', ['importacion' => $importacion, 'criterio' => $criterio, 'red' => ':red', 'edad' => ':edad']) }}"
                     .replace(':edad', $('#edades').val())
                     .replace(':red', $('#red').val()),
                 type: 'GET',
@@ -1106,7 +816,7 @@
                     $("#microrred option").remove();
                     var options = '<option value="0">TODOS</option>';
                     $.each(data, function(index, value) {
-                        options += `<option value='${value.id}'>${value.nombre}</option>`;
+                        options += `<option value='${value.id}'>${value.codigo} ${value.nombre}</option>`;
                     });
                     $("#microrred").append(options);
                 },

@@ -1323,14 +1323,17 @@ class PadronNominalController extends Controller
             }
         };
         $red = Red::whereIn('id', [8, 9, 10, 11, 12])->pluck('nombre', 'id');
+        $codigo = Red::whereIn('id', [8, 9, 10, 11, 12])->pluck('codigo', 'id');
         $query = CalidadCriterio::distinct()->select('red_id as id')
             ->where('importacion_id', $importacion)
             ->where('criterio', $criterio)
             ->whereNotNull('red_id')
+            ->whereIn('red_id', [8, 9, 10, 11, 12])
             ->tap($filtros)
             ->get();
         foreach ($query as $key => $value) {
             $value->nombre = $red[$value->id] ?? 'No Definido'; //DB::table('sal_red')->where('id', $value->id)->first()->nombre;
+            $value->codigo = $codigo[$value->id] ?? 'No Definido';
         }
         return $query;
     }
@@ -1353,11 +1356,14 @@ class PadronNominalController extends Controller
             ->where('importacion_id', $importacion)
             ->where('criterio', $criterio)
             ->whereNotNull('microred_id')
+            ->whereIn('red_id', [8, 9, 10, 11, 12])
             ->tap($filtros)
             ->get();
         $microrred = Microrred::whereIn('red_id', [8, 9, 10, 11, 12])->pluck('nombre', 'id');
+        $codigo = Microrred::whereIn('red_id', [8, 9, 10, 11, 12])->pluck('codigo', 'id');
         foreach ($query as $key => $value) {
             $value->nombre = $microrred[$value->id] ?? 'No Definido'; //DB::table('sal_microrred')->where('id', $value->id)->first()->nombre;
+            $value->codigo = $codigo[$value->id] ?? 'No Definido';
         }
         return $query;
     }
@@ -4605,5 +4611,189 @@ class PadronNominalController extends Controller
         $actualizado = 'Actualizado al ' . $imp->dia . '/' . $imp->mes . '/' . $imp->anio;
 
         return view('salud.PadronNominal.TableroCalidadEESSCriterio', compact('importacion', 'criterio', 'pos', 'actualizado', 'edades', 'title'));
+    }
+
+    public function tablerocalidadeesscriterioreporte(Request $rq)
+    {
+        $fuente = ImporPadronNominalController::$FUENTE;
+        switch ($rq->div) {
+            case 'anal1':
+                $data = CalidadCriterioRepositorio::TableroCalidadEESS_Criterio_anal1($rq->importacion, $rq->criterio, $rq->edades, $rq->red, $rq->microrred);
+                $info['categoria'] = [];
+                $info['serie'] = [];
+                $info['serie'][0]['name'] = 'Cantidad';
+                foreach ($data as $key => $value) {
+                    $info['categoria'][] = '' . $value->edades;
+                    $info['serie'][0]['data'][] = (int)$value->total;
+                }
+                return response()->json(compact('info'));
+
+            case 'anal2':
+                $data = CalidadCriterio::from('sal_calidad_criterio as cc')->join('par_ubigeo as pro', 'pro.id', '=', 'cc.provincia_id')->select(
+                    DB::raw('pro.id as provincia_id'),
+                    DB::raw('pro.nombre as provincia'),
+                    DB::raw('count(*) as total'),
+                )
+                    ->where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)->whereIn('red_id', [9, 10, 11, 12]);
+
+                if ($rq->edades > 0) {
+                    if ($rq->edades == 1) {
+                        $data = $data->whereIn('tipo_edad', ['D', 'M']);
+                    } else {
+                        $data = $data->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                    }
+                }
+                $data = $data->groupBy('pro.id', 'provincia_id', 'provincia')->orderBy('total', 'desc')->get();
+
+                //#################################################################
+
+                $data2 = CalidadCriterio::from('sal_calidad_criterio as cc')->join('par_ubigeo as dis', 'dis.id', '=', 'cc.distrito_id')->select(
+                    DB::raw('dis.dependencia as provincia'),
+                    DB::raw('dis.nombre as distrito'),
+                    DB::raw('count(*) as total'),
+                )
+                    ->where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)->whereIn('red_id', [9, 10, 11, 12]);
+                if ($rq->red > 0) $data = $data->where('red_id', $rq->red);
+                if ($rq->microrred > 0) $data = $data->where('microred_id', $rq->microrred);
+                if ($rq->edades > 0) {
+                    if ($rq->edades == 1) {
+                        $data2 = $data2->whereIn('tipo_edad', ['D', 'M']);
+                    } else {
+                        $data2 = $data2->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                    }
+                }
+                $data2 = $data2->groupBy('provincia', 'distrito')->orderBy('total', 'desc')->get();
+
+                //#################################################################
+
+                $info['serie'] = [];
+                $info['serie'][0]['name'] = 'Provincia';
+                $info['serie'][0]['colorByPoint'] = true;
+
+                $info['drilldown'] = [];
+                $kdd = 0;
+                foreach ($data as $key => $value) {
+                    $info['serie'][0]['data'][] = ['name' => $value->provincia, 'y' => (int)$value->total, 'drilldown' => $value->provincia];
+                    $info['drilldown'][$kdd]['name'] = 'Conteo';
+                    $info['drilldown'][$kdd]['id'] = $value->provincia;
+                    foreach ($data2 as $key2 => $value2) {
+                        if ($value2->provincia == $value->provincia_id) {
+                            $info['drilldown'][$kdd]['data'][] = [$value2->distrito, $value2->total];
+                        }
+                    }
+                    $kdd++;
+                }
+
+                return response()->json(compact('info'));
+            case 'tabla2':
+
+                $base = CalidadCriterio::from('sal_calidad_criterio as cc')
+                    ->select('p.nombre as provincia', 'd.nombre as distrito', 'cc.centro_poblado_nombre as centro_poblado', DB::raw('count(cc.id) as conteo'))
+                    ->join('par_ubigeo as d', 'd.id', '=', 'cc.distrito_id')
+                    ->join('par_ubigeo as p', 'p.id', '=', 'd.dependencia')
+                    ->where('importacion_id', $rq->importacion)->where('criterio', $rq->criterio)->whereIn('red_id', [9, 10, 11, 12]);
+                if ($rq->edades > 0) {
+                    if ($rq->edades == 1) {
+                        $base = $base->whereIn('tipo_edad', ['D', 'M']);
+                    } else {
+                        $base = $base->where('tipo_edad', 'A')->where('edad', $rq->edades - 1);
+                    }
+                }
+                if ($rq->red > 0) $base = $base->where('red_id', $rq->red);
+                if ($rq->microrred > 0) $base = $base->where('microred_id', $rq->microrred);
+                $base = $base->groupBy('provincia', 'distrito', 'cc.centro_poblado_nombre', 'centro_poblado')->get();
+
+                $excel = view('salud.PadronNominal.TableroCalidadCriterioTabla2', compact('base'))->render();
+                return response()->json(compact('base', 'excel'));
+            default:
+                # code...
+                return [];
+        }
+    }
+
+    public function tablerocalidadeesscriterioreportetabla1(Request $rq)
+    {
+        ini_set('memory_limit', '1G'); // Incrementa el límite de memoria a 1GB
+        $data = CalidadCriterioRepositorio::TableroCalidadEESS_Criterio_tabla01($rq->importacion, $rq->criterio, $rq->edades, $rq->red, $rq->microrred);
+        $ubi = Ubigeo::whereIn('codigo', $data->pluck('ubigeo')->toArray())->get()->keyBy('codigo');
+        $est = Establecimiento::whereIn('cod_unico', $data->whereNotNull('cui_atencion')->unique('cui_atencion')->where('cui_atencion', '>', '0')->pluck('cui_atencion')->toArray())->get()->keyBy('cod_unico');
+        $sim = ['D' => 'DÍAS', 'M' => 'MESES', 'A' => 'AÑOS'];
+        // $pos = DB::table('sal_calidad_criterio_nombres')->find($rq->criterio)->pos;
+
+        if ($rq->pos < 11) {
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('atipodoc', function ($value) {
+                    return $value->tipo_doc != 'Padron' ? $value->tipo_doc : '';
+                })
+                ->addColumn('adoc', function ($value) {
+                    return $value->tipo_doc != 'Padron' ? $value->num_doc : '';
+                })
+                ->addColumn('anombre', function ($value) {
+                    return $value->apellido_paterno . ' ' . $value->apellido_materno . ', ' . $value->nombre;
+                })
+                ->addColumn('aedad', function ($value) use ($sim) {
+                    // return $value->edad . '.' . ($sim[$value->tipo_edad] ?? '');
+                    return date('d/m/Y', strtotime($value->fecha_nacimiento));
+                })
+                ->addColumn('aseguro', function ($value) {
+                    return  $seguro[$value->seguro_id] ?? '';
+                })
+                ->addColumn('avisita', function ($value) {
+                    return $value->visita == 1 ? 'SI' : 'NO';
+                })
+                ->addColumn('aencontrado', function ($value) {
+                    return $value->encontrado == 1 ? 'SI' : 'NO';
+                })
+                ->addColumn('adistrito', function ($value) use ($ubi) {
+                    $dis = $ubi[$value->ubigeo] ?? null;
+                    return $dis ? $dis->nombre : '';
+                })
+                ->addColumn('acui', function ($value) {
+                    return $value->cui_atencion > 0 ? str_pad($value->cui_atencion, 8, '0', STR_PAD_LEFT) : '';
+                })
+                ->addColumn('aeesss', function ($value) use ($est) {
+                    $eess = $est[$value->cui_atencion] ?? null;
+                    return $eess ? $eess->nombre_establecimiento : '';
+                })
+                // ->addColumn('actions', function ($row) {return '<a href="/detalle/' . $row->id . '" class="btn btn-sm btn-primary">Ver</a>';})
+                ->rawColumns(['atipodoc', 'adoc', 'anonbre', 'aedad', 'aseguro', 'avisita', 'aencontrado', 'adistrito', 'acui', 'aeesss'])
+                ->make(true);
+        } else {
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('atipodoc', function ($value) {
+                    return $value->tipo_doc_madre != 'Padron' ? $value->tipo_doc_madre : '';
+                })
+                ->addColumn('adoc', function ($value) {
+                    return $value->tipo_doc_madre != 'Padron' ? $value->num_doc_madre : '';
+                })
+                ->addColumn('anombre', function ($value) {
+                    return $value->apellido_paterno_madre . ' ' . $value->apellido_materno_madre . ', ' . $value->nombres_madre;
+                })
+                ->addColumn('aedad', function ($value) use ($sim) {
+                    return $value->celular_madre;
+                })
+                ->addColumn('aseguro', function ($value) {
+                    return  $value->grado_instruccion;
+                })
+                ->addColumn('avisita', function ($value) {
+                    return $value->lengua_madre;
+                })
+                ->addColumn('adistrito', function ($value) use ($ubi) {
+                    $dis = $ubi[$value->ubigeo] ?? null;
+                    return $dis ? $dis->nombre : '';
+                })
+                ->addColumn('acui', function ($value) {
+                    return $value->cui_atencion > 0 ? str_pad($value->cui_atencion, 8, '0', STR_PAD_LEFT) : '';
+                })
+                ->addColumn('aeesss', function ($value) use ($est) {
+                    $eess = $est[$value->cui_atencion] ?? null;
+                    return $eess ? $eess->nombre_establecimiento : '';
+                })
+                // ->addColumn('actions', function ($row) {return '<a href="/detalle/' . $row->id . '" class="btn btn-sm btn-primary">Ver</a>';})
+                ->rawColumns(['atipodoc', 'adoc', 'anonbre', 'aedad', 'aseguro', 'avisita', 'adistrito', 'acui', 'aeesss'])
+                ->make(true);
+        }
     }
 }

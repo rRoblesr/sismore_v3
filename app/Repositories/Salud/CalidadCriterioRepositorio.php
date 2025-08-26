@@ -59,4 +59,76 @@ class CalidadCriterioRepositorio
             ->orderBy('pos')
             ->get();
     }
+
+    public static function TableroCalidadEESS_Criterio_tabla01($importacion, $criterio, $edad, $red, $microrred)
+    {
+        $filtros = function ($query) use ($edad, $red, $microrred) {
+            if ($red > 0) $query->where('red_id', $red);
+            if ($microrred > 0) $query->where('microred_id', $microrred);
+            if ($edad > 0) {
+                if ($edad == 1) {
+                    $query->whereIn('tipo_edad', ['D', 'M']);
+                } else {
+                    $query->where('tipo_edad', 'A')->where('edad', $edad - 1);
+                }
+            }
+        };
+        return CalidadCriterio::where('importacion_id', $importacion)
+            ->where('criterio', $criterio)
+            ->tap($filtros)
+            ->whereIn('red_id', [9, 10, 11, 12])
+            ->get();
+    }
+
+    public static function TableroCalidadEESS_Criterio_anal1($importacion, $criterio, $edad, $red, $microrred)
+    {
+        $filtros = function ($query) use ($edad, $red, $microrred) {
+            if ($red > 0) $query->where('red_id', $red);
+            if ($microrred > 0) $query->where('microred_id', $microrred);
+            if ($edad > 0) {
+                if ($edad == 1) {
+                    $query->whereIn('tipo_edad', ['D', 'M']);
+                } else {
+                    $query->where('tipo_edad', 'A')->where('edad', $edad - 1);
+                }
+            }
+        };
+        return CalidadCriterio::select(
+            DB::raw('case when tipo_edad in("D","M") then 1 else edad+1 end as edades_id'),
+            DB::raw('case when tipo_edad in("D","M") then "< 1 AÑO" when tipo_edad="A" AND edad=1 then "1 AÑO" else concat(edad," AÑOS") end as edades'),
+            DB::raw('count(*) as total'),
+        )
+            ->where('importacion_id', $importacion)
+            ->where('criterio', $criterio)
+            ->whereIn('red_id', [9, 10, 11, 12])
+            ->tap($filtros)
+            ->groupBy('edades_id', 'edades')
+            ->get();
+    }
+
+    public static function TableroCalidadEESS_Criterio_anal2($importacion, $criterio, $edad, $red, $microrred)
+    {
+        $filtros = function ($query) use ($edad, $red, $microrred) {
+            if ($red > 0) $query->where('red_id', $red);
+            if ($microrred > 0) $query->where('microred_id', $microrred);
+            if ($edad > 0) {
+                if ($edad == 1) {
+                    $query->whereIn('tipo_edad', ['D', 'M']);
+                } else {
+                    $query->where('tipo_edad', 'A')->where('edad', $edad - 1);
+                }
+            }
+        };
+        return CalidadCriterio::select(
+            DB::raw('case when tipo_edad in("D","M") then 1 else edad+1 end as edades_id'),
+            DB::raw('case when tipo_edad in("D","M") then "< 1 AÑO" when tipo_edad="A" AND edad=1 then "1 AÑO" else concat(edad," AÑOS") end as edades'),
+            DB::raw('count(*) as total'),
+        )
+            ->where('importacion_id', $importacion)
+            ->where('criterio', $criterio)
+            ->whereIn('red_id', [9, 10, 11, 12])
+            ->tap($filtros)
+            ->groupBy('edades_id', 'edades')
+            ->get();
+    }
 }

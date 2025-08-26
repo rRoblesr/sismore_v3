@@ -120,6 +120,7 @@ use App\Models\Parametro\Ubigeo;
 use App\Repositories\Educacion\EduCuboMatriculaRepositorio;
 use App\Repositories\Educacion\ImporCensoDocenteRepositorio;
 use App\Repositories\Parametro\UbigeoRepositorio;
+use App\Repositories\Salud\CalidadCriterioRepositorio;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -1431,7 +1432,7 @@ Route::get('/Salud/PadronNominal/TableroCalidad/Criterio/{importacion}/{criterio
 Route::get('/Salud/PadronNominal/TableroCalidad/Criterio/{importacion}/{criterio}/{edad}', [PadronNominalController::class, 'criterio_provincia'])->name('salud.padronnominal.tablerocalidad.criterio.provincia');
 Route::get('/Salud/PadronNominal/TableroCalidad/Criterio/{importacion}/{criterio}/{edad}/{provincia}', [PadronNominalController::class, 'criterio_distrito'])->name('salud.padronnominal.tablerocalidad.criterio.distrito');
 Route::get('/Salud/calidadcriterio/red/{importacion}/{criterio}/{edad}', [PadronNominalController::class, 'criterio_red'])->name('salud.calidadcriterio.red');
-Route::get('/Salud/calidadcriterio/microrred/{importacion}/{criterio}/{edad}/{red}', [PadronNominalController::class, 'criterio_microred'])->name('salud.calidadcriterio.microrred');
+Route::get('/Salud/calidadcriterio/microrred/{importacion}/{criterio}/{red}/{edad}', [PadronNominalController::class, 'criterio_microred'])->name('salud.calidadcriterio.microrred');
 
 Route::get('/Salud/PadronNominal/TableroCalidad/Criterio/listar', [PadronNominalController::class, 'tablerocalidadcriteriolistar'])->name('salud.padronnominal.tablerocalidad.criterio.listar');
 Route::get('/Salud/PadronNominal/TableroCalidad/Criterio/listar2', [PadronNominalController::class, 'ListaImportada'])->name('salud.padronnominal.tablerocalidad.criterio.listar2');
@@ -1454,6 +1455,8 @@ Route::get('/Salud/PadronNominal/TableroCalidadEESS', [PadronNominalController::
 Route::get('/Salud/PadronNominal/TableroCalidadEESS/reportes', [PadronNominalController::class, 'tablerocalidadeessreporte'])->name('salud.padronnominal.tablerocalidad.eess.reporte');
 
 Route::get('/Salud/PadronNominal/TableroCalidadEESS/Criterio/{importacion}/{criterio}', [PadronNominalController::class, 'tablerocalidadeesscriterio'])->name('salud.padronnominal.tablerocalidad.eess.criterio');
+Route::get('/Salud/PadronNominal/TableroCalidadEESS/Criterio/reportes', [PadronNominalController::class, 'tablerocalidadeesscriterioreporte'])->name('salud.padronnominal.tablerocalidad.eess.criterio.reporte');
+Route::post('/Salud/PadronNominal/TableroCalidadEESS/Criterio/tabla1', [PadronNominalController::class, 'tablerocalidadeesscriterioreportetabla1'])->name('salud.padronnominal.tablerocalidad.eess.criterio.reporte.tabla1');
 
 Route::get('/Salud/PadronNominal/calidadcriterio/microrred/{anio}/{mes}/{red}', [PadronNominalController::class, 'calidadcriterio_microrred'])->name('salud.padronnominal.calidadcriterio.microrred');
 
@@ -1595,6 +1598,7 @@ Route::get('/recursos/pruebas', function () {
     // return InstitucionEducativa::select('codModular as modular', 'nombreInstEduc as nombre')->get();
     // return InstitucionEducativa::select('codModular as modular', 'nombreInstEduc as nombre')->pluck('nombre', 'modular');
     // return Ubigeo::where(DB::raw('length(codigo)'), 6)->where('codigo','like', '25%')->get();
+    // return PadronNominalController::criterio_microred(2994, 1, 0, 0);
     return Ubigeo::where(DB::raw('length(codigo)'), 6)->where('codigo', 'like', '25%')->pluck('nombre', 'id');
     return NivelModalidad::where('id', '!=', '15')->pluck('nombre', 'codigo');
     return NivelModalidad::all();
