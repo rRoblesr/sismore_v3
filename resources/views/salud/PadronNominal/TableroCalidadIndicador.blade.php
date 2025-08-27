@@ -50,6 +50,18 @@
 
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
+                                <label for="area">Ambito</label>
+                                <select id="area" name="area" class="form-control form-control-sm"
+                                    onchange="cargarCards()">
+                                    <option value="0">TODOS</option>
+                                    <option value="1">RURAL</option>
+                                    <option value="2">URBANO</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="custom-select-container">
                                 <label for="edades">Edad del Menor</label>
                                 <select id="edades" name="edades" class="form-control form-control-sm"
                                     onchange="cargarCards()">
@@ -61,7 +73,7 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-6 col-md-2 col-sm-2">
+                        <div class="col-lg-4 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="indicador">Indicador</label>
                                 <select id="indicador" name="indicador" class="form-control form-control-sm"
@@ -127,7 +139,7 @@
                                 <span onclick="verinformacion(0)" data-toggle="modal" data-target="#info_denominador">
                                     <i class="mdi mdi-rotate-180 mdi-alert-circle" style="color:#43beac;"></i>
                                 </span>
-                                Total de Niños y Niñas
+                                Población
                             </p>
                         </div>
                     </div>
