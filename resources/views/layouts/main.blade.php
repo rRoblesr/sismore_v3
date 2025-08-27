@@ -508,7 +508,6 @@
                                     </ul> --}}
                                 </div>
                                 <p class="font-10 text-muted m-0">
-
                                     {{ auth()->user()->id == 49 ? (session()->has('sistema_nombre') ? session('sistema_nombre') : 'SIN MODULO') : '' }}
                                 </p>
                                 <p class="font-10 text-muted m-0">

@@ -152,6 +152,7 @@ class PerfilController extends Controller
         $ticket .= '</ul>';
         return  $ticket;
     }
+    
     public function ajax_add_menu(Request $request)
     {
         $modulos = Menu::where('sistema_id', $request->msistema_id)->get();
