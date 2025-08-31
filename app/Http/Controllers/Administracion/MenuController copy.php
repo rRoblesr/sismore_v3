@@ -65,26 +65,10 @@ class MenuController extends Controller
             ->make(true);
     }
 
-    public function cargarNivel1($sistema)
+    public function cargarGrupo($sistema_id)
     {
-        $grupo = MenuRepositorio::listarGrupo($sistema);
+        $grupo = MenuRepositorio::listarGrupo($sistema_id);
         return response()->json(compact('grupo'));
-    }
-
-    public function cargarNivelx($sistema, $nivel)
-    {
-        $nivel = MenuRepositorio::listarNivel2($sistema, $nivel);
-        return response()->json(compact('nivel'));
-    }
-
-    public function get_tipoenlace($menu)
-    {
-        if ($menu > 0) {
-            $menu = Menu::find($menu);
-            return response()->json(array('tipo_enlace' => $menu->tipo_enlace, 'menu' => $menu));
-        } else {
-            return response()->json(array('tipo_enlace' => 0, 'menu' => null));
-        }
     }
 
     public function ajax_edit($menu_id)
@@ -100,9 +84,6 @@ class MenuController extends Controller
         $data['inputerror'] = array();
         $data['status'] = TRUE;
 
-        $tipoenlace = $request->tipo_enlace;
-        $dependencia = $request->dependencia == '';
-
         if ($request->sistema_id == '') {
             $data['inputerror'][] = 'sistema_id';
             $data['error_string'][] = 'Este campo es obligatorio.';
@@ -113,17 +94,12 @@ class MenuController extends Controller
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
         }*/
-        if ($request->icono == '' && $dependencia) {
-            $data['inputerror'][] = 'icono';
-            $data['error_string'][] = '';
-            $data['status'] = FALSE;
-        }
         if ($request->nombre == '') {
             $data['inputerror'][] = 'nombre';
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
         }
-        if ($request->url == '' && in_array($tipoenlace, [1, 2])) {
+        if ($request->url == '' && $request->dependencia) {
             $data['inputerror'][] = 'url';
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
@@ -133,48 +109,28 @@ class MenuController extends Controller
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
         }
-        if ($data['status'] === FALSE) {
-            echo json_encode($data);
-            exit();
-        }
+        return $data;
     }
 
     public function ajax_add(Request $request)
     {
-        $this->_validate($request);
-        $d1 = $request->dependencia;
-        $d2 = $request->dependencia2;
-        $te = $request->tipo_enlace;
-
-        $menu = $d1 > 0 ? ($d2 > 0 ? $d2 : $d1) : null;
-
+        $val = $this->_validate($request);
+        if ($val['status'] === FALSE) {
+            return response()->json($val);
+        }
         $menu = Menu::Create([
             'sistema_id' => $request->sistema_id,
-            'dependencia' => $menu,
+            'dependencia' => $request->dependencia,
             'nombre' => $request->nombre,
-            'url' => $te == 0 ? '' : $request->url,
+            'url' => ($request->dependencia ? $request->url : ""),
             'posicion' => $request->posicion,
             'icono' => $request->icono,
             'parametro' => $request->parametro,
-            'tipo_enlace' => $request->tipo_enlace,
-            'link' => '',
+            'link' => "",
             'estado' => '1',
         ]);
 
-        // $menu = [
-        //     'sistema_id' => $request->sistema_id,
-        //     'dependencia' => $menu,
-        //     'nombre' => $request->nombre,
-        //     'url' => $request->url,
-        //     'posicion' => $request->posicion,
-        //     'icono' => $request->icono,
-        //     'parametro' => $request->parametro,
-        //     'tipo_enlace' => $request->tipo_enlace,
-        //     'link' => '',
-        //     'estado' => '1',
-        // ];
-
-        return response()->json(array('status' => true, 'menu' => $menu, 'd1' => $d1, 'd2' => $d2));
+        return response()->json(array('status' => true));
     }
 
     public function ajax_update(Request $request)

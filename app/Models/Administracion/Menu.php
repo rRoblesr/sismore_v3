@@ -18,6 +18,7 @@ class Menu extends Model
         'icono',
         'parametro',
         'link',
-        'estado',
+        'estado',        
+        'tipo_enlace',
     ];
 }

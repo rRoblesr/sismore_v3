@@ -134,7 +134,7 @@ class PerfilController extends Controller
         $datas = MenuRepositorio::getMenu($sistema_id);
         $ticket = '';
         $ticket .= '<input type="hidden" class="form-control" name="perfil" id="perfil" value="' . $perfil_id . '">';
-        $ticket .= '<ul >'; //class="checktree"
+        $ticket .= '<ul>'; //class="checktree"
         foreach ($datas as $value) {
             $perfilmenu = Menuperfil::where('perfil_id', $perfil_id)->where('menu_id', $value->id)->first();
             $ticket .= '<li><label>';
@@ -145,14 +145,22 @@ class PerfilController extends Controller
                 $perfilmenus = Menuperfil::where('perfil_id', $perfil_id)->where('menu_id', $menu->id)->first();
                 $ticket .= '<li><label>';
                 $ticket .= '<input id="menu" name="menu[]" type="checkbox" value="' . $menu->id . '" ' . (isset($perfilmenus->id) ? 'checked' : '') . '> ' . $menu->nombre;
-                $ticket .= '</label></li>';
+                $ticket .= '</label><ul>';
+                $menusx = Menu::where('dependencia', $menu->id)->get();
+                foreach ($menusx as $menux) {
+                    $perfilmenus = Menuperfil::where('perfil_id', $perfil_id)->where('menu_id', $menux->id)->first();
+                    $ticket .= '<li><label>';
+                    $ticket .= '<input id="menu" name="menu[]" type="checkbox" value="' . $menux->id . '" ' . (isset($perfilmenus->id) ? 'checked' : '') . '> ' . $menux->nombre;
+                    $ticket .= '</label></li>';
+                }
+                $ticket .= '</ul></li>';
             }
             $ticket .= '</ul></li>';
         }
         $ticket .= '</ul>';
         return  $ticket;
     }
-    
+
     public function ajax_add_menu(Request $request)
     {
         $modulos = Menu::where('sistema_id', $request->msistema_id)->get();
@@ -214,7 +222,11 @@ class PerfilController extends Controller
             }
         }
         return response()->json(array(
-            'status' => true, 'csistemas' => $request->csistemas, 'sistemas' => $sistemas, 'csistema_id' => $request->csistema_id, 'cperfil_id' => $request->cperfil_id
+            'status' => true,
+            'csistemas' => $request->csistemas,
+            'sistemas' => $sistemas,
+            'csistema_id' => $request->csistema_id,
+            'cperfil_id' => $request->cperfil_id
         ));
     }
 }

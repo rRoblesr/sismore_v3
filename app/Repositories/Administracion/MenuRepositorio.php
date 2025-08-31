@@ -18,6 +18,7 @@ class MenuRepositorio
       'adm_menu.icono',
       'adm_menu.parametro',
       'adm_menu.link',
+      'adm_menu.tipo_enlace',
     )
       ->join('adm_menu_perfil as menPer', 'adm_menu.id', '=', 'menPer.menu_id')
       ->join('adm_perfil as per', 'menPer.perfil_id', '=', 'per.id')
@@ -33,7 +34,48 @@ class MenuRepositorio
     return $data;
   }
 
+  /* 
+  * Listar Nivel 2
+  *  Nivel 1: dependencia = null
+  *  Nivel 2: dependencia = id de Nivel 1
+  *  Nivel 3: dependencia = id de Nivel 2     
+  */
   public static function Listar_Nivel02_porUsuario_Sistema($usuario_id, $sistema_id)
+  {
+    $data = Menu::from('adm_menu as sm')->select(
+      'sm.id',
+      'sm.dependencia',
+      'sm.nombre',
+      'sm.url',
+      'sm.posicion',
+      'sm.icono',
+      'sm.parametro',
+      'sm.link',
+      'sm.tipo_enlace',
+    )
+      ->join('adm_menu as m', 'm.id', '=', 'sm.dependencia')
+      ->join('adm_menu_perfil as mp', 'sm.id', '=', 'mp.menu_id')
+      ->join('adm_perfil as p', 'mp.perfil_id', '=', 'p.id')
+      ->join('adm_usuario_perfil as up', 'p.id', '=', 'up.perfil_id')
+      ->where("up.usuario_id", "=", $usuario_id)
+      ->where("m.sistema_id", "=", $sistema_id)
+      ->where("m.estado", "=", 1)
+      ->where("sm.estado", "=", 1)
+      ->where("m.dependencia", "=", null)
+      ->orderBy('m.posicion', 'asc')
+      ->orderBy('sm.posicion', 'asc')
+      ->get();
+
+    return $data;
+  }
+
+  /* 
+  * Listar Nivel 2 y Nivel 3 juntos
+  *  Nivel 1: dependencia = null
+  *  Nivel 2: dependencia = id de Nivel 1
+  *  Nivel 3: dependencia = id de Nivel 2   
+  */
+  public static function Listar_Nivel02_porUsuario_Sistemax($usuario_id, $sistema_id)
   {
     $data = Menu::select(
       'adm_menu.id',
@@ -59,6 +101,42 @@ class MenuRepositorio
     return $data;
   }
 
+  /* 
+  * Listar Nivel 3
+  *  Nivel 1: dependencia = null
+  *  Nivel 2: dependencia = id de Nivel 1
+  *  Nivel 3: dependencia = id de Nivel 2     
+  */
+  public static function Listar_Nivel03_porUsuario_Sistema($usuario_id, $sistema_id)
+  {
+    $data = Menu::from('adm_menu as ssm')->select(
+      'ssm.id',
+      'ssm.dependencia',
+      'ssm.nombre',
+      'ssm.url',
+      'ssm.posicion',
+      'ssm.icono',
+      'ssm.parametro',
+      'ssm.link',
+      'ssm.tipo_enlace',
+    )
+      ->join('adm_menu as sm', 'sm.id', '=', 'ssm.dependencia')
+      ->join('adm_menu as m', 'm.id', '=', 'sm.dependencia')
+      ->join('adm_menu_perfil as mp', 'ssm.id', '=', 'mp.menu_id')
+      ->join('adm_perfil as p', 'mp.perfil_id', '=', 'p.id')
+      ->join('adm_usuario_perfil as up', 'p.id', '=', 'up.perfil_id')
+      ->where("up.usuario_id", "=", $usuario_id)
+      ->where("m.sistema_id", "=", $sistema_id)
+      ->where("m.estado", "=", 1)
+      ->where("m.dependencia", "=", null)
+      ->orderBy('m.posicion', 'asc')
+      ->orderBy('sm.posicion', 'asc')
+      ->orderBy('ssm.posicion', 'asc')
+      ->get();
+
+    return $data;
+  }
+
   public static function listarMenu($sistema_id)
   {
     $query = DB::table('adm_menu as v1')
@@ -73,12 +151,22 @@ class MenuRepositorio
   public static function listarGrupo($sistema_id)
   { //tiene un problema con el url cuando es NULO
     $query = DB::table('adm_menu as v1')
-      ->select('v1.*')
+      ->select('v1.id', 'v1.nombre')
       ->where('v1.sistema_id', $sistema_id)
       ->where('v1.url', '')
       ->where('v1.dependencia')
-      ->where('v1.estado',1)
+      ->where('v1.estado', 1)
       ->orderBy('v1.posicion', 'asc')
+      ->get();
+    return $query;
+  }
+
+  public static function listarNivel2($sistema_id, $nivel1)
+  { //tiene un problema con el url cuando es NULO
+    $query = menu::select('id', 'nombre')->where('sistema_id', $sistema_id)
+      ->where('dependencia', $nivel1)
+      ->where('estado', 1)
+      ->orderBy('posicion', 'asc')
       ->get();
     return $query;
   }

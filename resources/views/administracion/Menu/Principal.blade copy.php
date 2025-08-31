@@ -46,8 +46,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="table-responsive">
-                                {{-- <table id="dtPrincipal" class="table table-striped table-bordered" style="width:100%"> --}}
-                                <table id="dtPrincipal" class="table table-striped table-bordered table-sm font-13">
+                                <table id="dtPrincipal" class="table table-striped table-bordered" style="width:100%">
                                     <thead class="cabecera-dataTable table-success-0 text-white">
                                         <!--th>Nº</th-->
                                         <th>Menu</th>
@@ -68,7 +67,7 @@
             </div>
         </div>
     </div> <!-- End row -->
-
+    
     <!-- Modal  Eliminar -->
     <div class="modal fade" id="confirmModalEliminar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -109,8 +108,9 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Sistema<span class="required">*</span></label>
-                                    <select class="form-control" name="sistema_id" id="sistema_id" onchange="">
-                                        <option value="">SELECCIONAR</option>
+                                    <select class="form-control" name="sistema_id" id="sistema_id"
+                                        onchange="cargarGrupo();">
+                                        <option value="">Seleccionar</option>
                                         @foreach ($sistemas as $item)
                                             <option value="{{ $item->id }}">{{ $item->nombre }}</option>
                                         @endforeach
@@ -120,7 +120,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Menu
+                                    <label>Grupo
                                         <!--span class="required">*</span-->
                                     </label>
                                     <select class="form-control" name="dependencia" id="dependencia" onchange="">
@@ -129,36 +129,9 @@
                                     <span class="help-block"></span>
                                 </div>
                             </div>
-
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>SubMenu
-                                        <!--span class="required">*</span-->
-                                    </label>
-                                    <select class="form-control" name="dependencia2" id="dependencia2" onchange="">
-                                        <option value="">Seleccionar</option>
-                                    </select>
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Tipo Enlace
-                                        <!--span class="required">*</span-->
-                                    </label>
-                                    <select class="form-control" name="tipo_enlace" id="tipo_enlace" onchange="">
-                                        <option value="0">Sin Ruta</option>
-                                        <option value="1">Ruta</option>
-                                        <option value="2">Link PowerBi</option>
-                                    </select>
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Nombre<span class="required">*</span></label>
+                                    <label>Menu<span class="required">*</span></label>
                                     <input id="nombre" name="nombre" class="form-control" type="text">
                                     <span class="help-block"></span>
                                 </div>
@@ -186,7 +159,7 @@
                                     <span class="help-block"></span>
                                     <span class="input-group-append">
                                         <button type="button" class="btn waves-effect waves-light btn-primary"
-                                            onclick="open_modal_icon();" id="btnicono">
+                                            onclick="open_modal_icon();">
                                             <i class="fas fa-search"></i>
                                         </button>
                                     </span>
@@ -296,38 +269,7 @@
                 $(this).next().empty();
             });
             listarDT();
-            bloquearURL();
-            $('#sistema_id').on('change', function() {
-                cargarNivel1();
-            });
-            $('#dependencia').on('change', function() {
-                bloquearBtnIcono();
-                cargarNivelx();
-            });
-            $('#tipo_enlace').on('change', function() {
-                bloquearURL();
-            });
-
         });
-
-        function bloquearURL() { // si es 0 deshabilitar url type=text si es 1 habilitar url type=text si es 2 habilitar url cambiar por textaraea
-            if ($('#tipo_enlace').val() == 0) {
-                $('#url').prop('disabled', true);
-                $('#url').val('');
-            } else {
-                $('#url').prop('disabled', false);
-            }
-        }
-
-        function bloquearBtnIcono() {
-            if ($('#dependencia').val() == '') {
-                $('#icono').prop('disabled', false);
-                $('#btnicono').prop('disabled', false);
-            } else {
-                $('#icono').prop('disabled', true);
-                $('#btnicono').prop('disabled', true);
-            }
-        }
 
         function add() {
             save_method = 'add';
@@ -336,66 +278,20 @@
             $('.help-block').empty();
             $('#modal_form').modal('show');
             $('.modal-title').text('Crear Nuevo Menu');
-            $('#sistema_id').val($('#sistema').val());
-            cargarNivel1()
         };
 
-        function cargarNivel1() {
+        function cargarGrupo() {
             $.ajax({
-                url: "{{ route('menu.cargarnivel.1', ['sistema' => ':sistema']) }}"
-                    .replace(':sistema', $('#sistema_id').val()),
+                url: "{{ url('/') }}/Menu/cargarGrupo/" + $('#sistema_id').val(),
                 type: 'get',
                 success: function(data) {
-                    console.log("cargarNivel1:");
-                    console.log(data);
+                    console.log(data)
                     $("#dependencia option").remove();
                     var options = '<option value="">SELECCIONAR</option>';
                     $.each(data.grupo, function(index, value) {
                         options += "<option value='" + value.id + "'>" + value.nombre + "</option>"
                     });
                     $("#dependencia").append(options);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
-        }
-
-        function cargarNivelx() {
-            // estadoTipoEnlace($('#dependencia').val());
-            $.ajax({
-                url: "{{ route('menu.cargarnivel.x', ['sistema' => ':sistema', 'nivel' => ':nivel']) }}"
-                    .replace(':sistema', $('#sistema_id').val())
-                    .replace(':nivel', $('#dependencia').val()),
-                type: 'get',
-                success: function(data) {
-                    console.log("cargarNivelx:");
-                    console.log(data);
-                    $("#dependencia2 option").remove();
-                    var options = '<option value="">SELECCIONAR</option>';
-                    $.each(data.nivel, function(index, value) {
-                        options += "<option value='" + value.id + "'>" + value.nombre + "</option>"
-                    });
-                    $("#dependencia2").append(options);
-
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
-        }
-
-        function estadoTipoEnlace(menu) {
-            $.ajax({
-                url: "{{ route('menu.campo.tipoenlace', ['menu' => ':menu']) }}"
-                    .replace(':menu', menu > 0 ? menu : 0),
-                type: 'get',
-                dataType: "JSON",
-                success: function(data) {
-                    console.log("estadoTipoEnlace:");
-                    console.log(data);
-                    $('#tipo_enlace').val(data.tipo_enlace);
-                    bloquearURL();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);

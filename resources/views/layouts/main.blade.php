@@ -520,6 +520,84 @@
                             @if (session()->has('menuNivel01'))
                                 @foreach (session('menuNivel01') as $key => $menu)
                                     <li>
+
+                                        @if ($menu->tipo_enlace == 0)
+                                            <a href="javascript: void(0);" class="waves-effect">
+                                                <i class="{{ $menu->icono }}"></i>
+                                                <span>{{ $menu->nombre }}</span>
+                                                <span class="menu-arrow"></span>
+                                            </a>
+
+                                            <ul class="nav-second-level" aria-expanded="false">
+
+                                                @foreach (session('menuNivel02') as $key => $subMenu)
+                                                    @if ($menu->id == $subMenu->dependencia)
+                                                        @if ($subMenu->tipo_enlace == 0)
+                                                            <li>
+                                                                <a href="javascript: void(0);">
+                                                                    {{ $subMenu->nombre }}xxx
+                                                                    <span class="menu-arrow"></span>
+                                                                </a>
+                                                                <ul class="nav-third-level" aria-expanded="false">
+                                                                    @foreach (session('menuNivel03') as $key => $zmenu)
+                                                                        @if ($subMenu->id == $zmenu->dependencia)
+                                                                            @if ($zmenu->tipo_enlace == 1)
+                                                                                <li><a
+                                                                                        href="{{ route($zmenu->url) }}">{{ $zmenu->nombre }}</a>
+                                                                                </li>
+                                                                            @elseif ($zmenu->tipo_enlace == 2)
+                                                                                <li><a
+                                                                                        href="{{ route($zmenu->url, $zmenu->id) }}">{{ $zmenu->nombre }}</a>
+                                                                                </li>
+                                                                            @endif
+                                                                        @endif
+                                                                    @endforeach
+                                                                </ul>
+                                                            </li>
+                                                        @elseif ($subMenu->tipo_enlace == 1)
+                                                            <li>
+                                                                <a
+                                                                    href="{{ route($subMenu->url) }}">{{ $subMenu->nombre }}</a>
+                                                            </li>
+                                                        @elseif ($subMenu->tipo_enlace == 2)
+                                                            <li><a
+                                                                    href="{{ route($subMenu->url, $subMenu->id) }}">{{ $subMenu->nombre }}</a>
+                                                            </li>
+                                                        @endif
+                                                    @endif
+                                                @endforeach
+
+                                            </ul>
+                                        @elseif ($menu->tipo_enlace == 1)
+                                            <a href="{{ route($menu->url, mb_strtolower(session('sistema_nombre'), 'UTF-8')) }}"
+                                                class="waves-effect">
+                                                <i class="{{ $menu->icono }}"></i>
+                                                <span>{{ $menu->nombre }}</span>
+                                            </a>
+                                        @elseif ($menu->tipo_enlace == 2)
+                                            <a href="{{ route($menu->url, $menu->id) }}" class="waves-effect">
+                                                <i class="{{ $menu->icono }}"></i>
+                                                <span>{{ $menu->nombre }}</span>
+                                            </a>
+                                            {{-- <a href="{{ route($menu->url, $menu->link == '' ? $menu->parametro : $menu->id) }}" --}}
+                                            {{-- <a href="{{ route($menu->url, $menu->link == '' ? mb_strtolower(session('sistema_nombre'), 'UTF-8') : $menu->id) }}"
+                                                class="waves-effect">
+                                                <i class="{{ $menu->icono }}"></i>
+                                                <span> {{ $menu->nombre }}</span>
+                                            </a> --}}
+                                        @endif
+
+                                    </li>
+                                @endforeach
+                            @endif
+                        </ul>
+
+                        {{-- 
+                        
+                        <ul class="metismenu" id="side-menu">
+                            @if (session()->has('menuNivel01'))
+                                @foreach (session('menuNivel01') as $key => $menu)
+                                    <li>
                                         @if ($menu->url == '')
                                             <a href="javascript: void(0);" class="waves-effect">
                                                 <i class="{{ $menu->icono }}"></i>
@@ -532,9 +610,33 @@
                                                 @foreach (session('menuNivel02') as $key => $subMenu)
                                                     @if ($menu->id == $subMenu->dependencia)
                                                         @if ($subMenu->link == '')
-                                                            <li><a
-                                                                    href="{{ route($subMenu->url) }}">{{ $subMenu->nombre }}</a>
-                                                            </li>
+                                                            @if ($subMenu->url == '')
+                                                                <li>
+                                                                    <a href="javascript: void(0);">
+                                                                        {{ $subMenu->nombre }}
+                                                                        <span class="menu-arrow"></span>
+                                                                    </a>
+                                                                    <ul class="nav-third-level" aria-expanded="false">
+                                                                        @foreach (session('menuNivel03') as $key => $subSubMenu)
+                                                                            @if ($subMenu->id == $subSubMenu->dependencia)
+                                                                                @if ($subSubMenu->link == '')
+                                                                                    <li><a
+                                                                                            href="{{ route($subSubMenu->url) }}">{{ $subSubMenu->nombre }}</a>
+                                                                                    </li>
+                                                                                @else
+                                                                                    <li><a
+                                                                                            href="{{ route($subSubMenu->url, $subSubMenu->id) }}">{{ $subSubMenu->nombre }}</a>
+                                                                                    </li>
+                                                                                @endif
+                                                                            @endif
+                                                                        @endforeach
+                                                                    </ul>
+                                                                </li>
+                                                            @else
+                                                                <li><a
+                                                                        href="{{ route($subMenu->url) }}">{{ $subMenu->nombre }}</a>
+                                                                </li>
+                                                            @endif
                                                         @else
                                                             <li><a
                                                                     href="{{ route($subMenu->url, $subMenu->id) }}">{{ $subMenu->nombre }}</a>
@@ -545,7 +647,6 @@
 
                                             </ul>
                                         @else
-                                            {{-- <a href="{{ route($menu->url, $menu->link == '' ? $menu->parametro : $menu->id) }}" --}}
                                             <a href="{{ route($menu->url, $menu->link == '' ? mb_strtolower(session('sistema_nombre'), 'UTF-8') : $menu->id) }}"
                                                 class="waves-effect">
                                                 <i class="{{ $menu->icono }}"></i>
@@ -557,6 +658,7 @@
                                 @endforeach
                             @endif
                         </ul>
+                        --}}
 
                     </div>
                     <!-- End Sidebar -->

@@ -3125,3 +3125,9 @@ ALTER TABLE `sal_cubo_pacto1_padron_nominal` CHANGE `centro_poblado` `centro_pob
 "OHORING,C,5", "OFECEGR,D", "OHOREGR,C,5", "TOTALEST,N,3,0", "OCAMA,C,10", "OCODPSAL,C,11", "OCODDIAG1,C,5", "OCODDIAG2,C,5", "FECHAREG,D", "ESTADO,N,1,0", "PRIORIDAD,N,1,0", "FECHAREG,C,10", 
 "PRIORIDAD,C,1", "OBSERV,C,1", "PRIORIDAD,C,15"})
 
+
+
+ALTER TABLE `adm_menu` ADD `tipo_enlace` INT(0) NOT NULL DEFAULT '0' COMMENT '0:ruta;1:powerbi' AFTER `link`;
+ALTER TABLE `adm_menu` CHANGE `tipo_enlace` `tipo_enlace` INT(11) NOT NULL DEFAULT '0' COMMENT '0:NULL;1:ruta;2:powerbi';
+
+

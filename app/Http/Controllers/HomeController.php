@@ -162,6 +162,10 @@ class HomeController extends Controller
         $menuNivel02 = MenuRepositorio::Listar_Nivel02_porUsuario_Sistema(auth()->user()->id, $sistema_id);
         session(['menuNivel02' => $menuNivel02]);
 
+        $menuNivel03 = MenuRepositorio::Listar_Nivel03_porUsuario_Sistema(auth()->user()->id, $sistema_id);
+        session(['menuNivel03' => $menuNivel03]);
+
+        // return compact('menuNivel01', 'menuNivel02', 'menuNivel03');
         $nimp = ImportacionRepositorio::noti_importaciones($sistema_id, date('Y'));
         session(['nimp' => $nimp]);
         $ncon = $nimp->count();

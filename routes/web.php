@@ -892,7 +892,9 @@ Route::get('/Sistema/ajax_estado/{sistema_id}', [SistemaController::class, 'ajax
 
 Route::get('/administrador/Menu/Principal', [MenuController::class, 'principal'])->middleware('auth')->name('menu.principal');
 Route::get('/Menu/listarDT/{sistema_id}', [MenuController::class, 'listarDT'])->name('menu.listarDT');
-Route::get('/Menu/cargarGrupo/{sistema_id}', [MenuController::class, 'cargarGrupo']);
+Route::get('/Menu/cargarNivel1/{sistema}', [MenuController::class, 'cargarNivel1'])->name('menu.cargarnivel.1');
+Route::get('/Menu/cargarNivelx/{sistema}/{nivel}', [MenuController::class, 'cargarNivelx'])->name('menu.cargarnivel.x');
+Route::get('/Menu/tipoenlace/{menu}', [MenuController::class, 'get_tipoenlace'])->name('menu.campo.tipoenlace');
 Route::get('/Menu/ajax_edit/{menu_id}', [MenuController::class, 'ajax_edit']);
 Route::post('/Menu/ajax_add', [MenuController::class, 'ajax_add']);
 Route::post('/Menu/ajax_update', [MenuController::class, 'ajax_update']);
