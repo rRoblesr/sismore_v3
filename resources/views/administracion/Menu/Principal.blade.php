@@ -147,7 +147,7 @@
                                     <label>Tipo Enlace
                                         <!--span class="required">*</span-->
                                     </label>
-                                    <select class="form-control" name="tipo_enlace" id="tipo_enlace" onchange="">
+                                    <select class="form-control" name="tipo_enlace" id="tipo_enlace">
                                         <option value="0">Sin Ruta</option>
                                         <option value="1">Ruta</option>
                                         <option value="2">Link PowerBi</option>
@@ -303,6 +303,10 @@
             $('#dependencia').on('change', function() {
                 bloquearBtnIcono();
                 cargarNivelx();
+                mostrarTipoEnlace();
+            });
+            $('#dependencia2').on('change', function() {
+                mostrarTipoEnlace();
             });
             $('#tipo_enlace').on('change', function() {
                 bloquearURL();
@@ -329,6 +333,22 @@
             }
         }
 
+        function mostrarTipoEnlace() {
+            var menux = $('#dependencia').val() != '';
+            var menuy = $('#dependencia2').val() != '';
+            const selectEnlace = document.getElementById('tipo_enlace');
+            const optionSinRuta = selectEnlace.querySelector('option[value="0"]');
+            if (menux && menuy) {
+                optionSinRuta.style.display = 'none';
+                if (selectEnlace.value === '0') {
+                    selectEnlace.value = '1';
+                }
+            } else {
+                optionSinRuta.style.display = 'block';
+            }
+            bloquearURL();
+        }
+
         function add() {
             save_method = 'add';
             $('#form')[0].reset();
@@ -346,8 +366,6 @@
                     .replace(':sistema', $('#sistema_id').val()),
                 type: 'get',
                 success: function(data) {
-                    console.log("cargarNivel1:");
-                    console.log(data);
                     $("#dependencia option").remove();
                     var options = '<option value="">SELECCIONAR</option>';
                     $.each(data.grupo, function(index, value) {
@@ -450,38 +468,84 @@
             $('.form-group').removeClass('has-error');
             $('.help-block').empty();
             $.ajax({
-                url: "{{ url('/') }}/Menu/ajax_edit/" + id,
+                url: "{{ route('menu.search.id', ['menu' => ':menu']) }}"
+                    .replace(':menu', id),
                 type: "GET",
                 dataType: "JSON",
                 success: function(data) {
                     $('[name="id"]').val(data.menu.id);
                     $('[name="sistema_id"]').val(data.menu.sistema_id);
                     $('[name="nombre"]').val(data.menu.nombre);
-                    $('[name="url"]').val(data.menu.url);
                     $('[name="icono"]').val(data.menu.icono);
-                    // $('[name="para-metro"]').val(data.menu.para-metro);
                     $('[name="posicion"]').val(data.menu.posicion);
+
                     $.ajax({
-                        url: "{{ url('/') }}/Menu/cargarGrupo/" + data.menu.sistema_id,
+                        url: "{{ route('menu.cargarnivel.1', ['sistema' => ':sistema']) }}"
+                            .replace(':sistema', data.menu.sistema_id),
                         type: 'get',
-                        success: function(data2) {
+                        success: function(nivel1) {
                             $("#dependencia option").remove();
                             var options = '<option value="">SELECCIONAR</option>';
-                            $.each(data2.grupo, function(index, value) {
-                                options += "<option value='" + value.id + "'>" + value
-                                    .nombre + "</option>"
+                            $.each(nivel1.grupo, function(index, vv) {
+                                ss = !data.menu.menux ? '' :
+                                    (data.menu.menux == vv.id ? 'selected' : '');
+                                options +=
+                                    `<option value='${vv.id}' ${ss}>${vv.nombre}</option>`;
                             });
                             $("#dependencia").append(options);
-                            $('[name="dependencia"]').val(data.menu.dependencia);
-
-                            $('#modal_form').modal('show');
-                            $('.modal-title').text('Modificar Menu');
+                            if ($("#dependencia").val() > 0) {
+                                $.ajax({
+                                    url: "{{ route('menu.cargarnivel.x', ['sistema' => ':sistema', 'nivel' => ':nivel']) }}"
+                                        .replace(':sistema', data.menu.sistema_id)
+                                        .replace(':nivel', $("#dependencia").val()),
+                                    type: 'get',
+                                    success: function(nivel2) {
+                                        $("#dependencia2 option").remove();
+                                        var options =
+                                            '<option value="">SELECCIONAR</option>';
+                                        $.each(nivel2.nivel, function(index, vv) {
+                                            ss = !data.menu.menuy ? '' : (data
+                                                .menu.menuy == vv.id ?
+                                                'selected' : '');
+                                            options +=
+                                                `<option value='${vv.id}' ${ss}>${vv.nombre}</option>`;
+                                        });
+                                        $("#dependencia2").append(options);
+                                        //=================================>
+                                        $('[name="tipo_enlace"]').val(data.menu
+                                            .tipo_enlace);
+                                        $('[name="url"]').val(
+                                            data.menu.tipo_enlace == 2 ?
+                                            data.menu.link : data.menu.url
+                                        );
+                                        bloquearURL();
+                                        mostrarTipoEnlace();
+                                        bloquearBtnIcono();
+                                        //=================================>
+                                    },
+                                    error: function(jqXHR, textStatus, errorThrown) {
+                                        console.log(jqXHR);
+                                    },
+                                });
+                            } else {
+                                $('[name="tipo_enlace"]').val(data.menu.tipo_enlace);
+                                $('[name="url"]').val(
+                                    data.menu.tipo_enlace == 2 ?
+                                    data.menu.link : data.menu.url
+                                );
+                                bloquearURL();
+                                mostrarTipoEnlace();
+                                bloquearBtnIcono();
+                            }
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
                             console.log(jqXHR);
                         },
                     });
 
+
+                    $('#modal_form').modal('show');
+                    $('.modal-title').text('Modificar Menu');
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     alert('Error get data from ajax');

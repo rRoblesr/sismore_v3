@@ -895,7 +895,7 @@ Route::get('/Menu/listarDT/{sistema_id}', [MenuController::class, 'listarDT'])->
 Route::get('/Menu/cargarNivel1/{sistema}', [MenuController::class, 'cargarNivel1'])->name('menu.cargarnivel.1');
 Route::get('/Menu/cargarNivelx/{sistema}/{nivel}', [MenuController::class, 'cargarNivelx'])->name('menu.cargarnivel.x');
 Route::get('/Menu/tipoenlace/{menu}', [MenuController::class, 'get_tipoenlace'])->name('menu.campo.tipoenlace');
-Route::get('/Menu/ajax_edit/{menu_id}', [MenuController::class, 'ajax_edit']);
+Route::get('/Menu/ajax_edit/{menu}', [MenuController::class, 'ajax_edit'])->name('menu.search.id');
 Route::post('/Menu/ajax_add', [MenuController::class, 'ajax_add']);
 Route::post('/Menu/ajax_update', [MenuController::class, 'ajax_update']);
 Route::get('/Menu/ajax_delete/{menu_id}', [MenuController::class, 'ajax_delete']);

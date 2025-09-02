@@ -87,9 +87,47 @@ class MenuController extends Controller
         }
     }
 
-    public function ajax_edit($menu_id)
+    public function ajax_edit($menu)
     {
-        $menu = Menu::find($menu_id);
+        $menux = null;
+        $menuy = null;
+        $menuz = null;
+
+        $menu = Menu::find($menu);
+        if ($menu) {
+            if ($menu->dependencia) {
+                $menux = $menu->dependencia;
+                $menuy = null;
+                $menuz = null;
+
+                $menu2 = Menu::find($menu->dependencia);
+                if ($menu2) {
+                    if ($menu2->dependencia) {
+                        $menux = $menu2->dependencia;
+                        $menuy = $menu->dependencia;
+                        $menuz = $menu->id;
+                    } else {
+                        $menux = $menu->dependencia;
+                        $menuy = null;
+                        $menuz = null;
+                    }
+                } else {
+                    $menux = $menu->dependencia;
+                    $menuy = null;
+                    $menuz = null;
+                }
+            } else {
+                $menux = $menu->id;
+                $menuy = null;
+                $menuz = null;
+            }
+        }
+
+        // $menu3 = Menu::find($menu2->id);
+        $menu->menux = $menux;
+        $menu->menuy = $menuy;
+        $menu->menuz = $menuz;
+
         return response()->json(compact('menu'));
     }
 
@@ -101,7 +139,8 @@ class MenuController extends Controller
         $data['status'] = TRUE;
 
         $tipoenlace = $request->tipo_enlace;
-        $dependencia = $request->dependencia == '';
+        $menux = $request->dependencia == '';
+        $menuy = $request->dependencia2 == '';
 
         if ($request->sistema_id == '') {
             $data['inputerror'][] = 'sistema_id';
@@ -113,7 +152,7 @@ class MenuController extends Controller
             $data['error_string'][] = 'Este campo es obligatorio.';
             $data['status'] = FALSE;
         }*/
-        if ($request->icono == '' && $dependencia) {
+        if ($request->icono == '' && $menux) {
             $data['inputerror'][] = 'icono';
             $data['error_string'][] = '';
             $data['status'] = FALSE;
@@ -146,55 +185,50 @@ class MenuController extends Controller
         $d2 = $request->dependencia2;
         $te = $request->tipo_enlace;
 
-        $menu = $d1 > 0 ? ($d2 > 0 ? $d2 : $d1) : null;
+        $menux = $d1 > 0 ? ($d2 > 0 ? $d2 : $d1) : null;
+        $url = $te == 0 ? '' : ($te == 1 ? $request->url : 'powerbi.salud.menu');
+        $link = $te == 2 ? $request->url : '';
 
         $menu = Menu::Create([
             'sistema_id' => $request->sistema_id,
-            'dependencia' => $menu,
+            'dependencia' => $menux,
             'nombre' => $request->nombre,
-            'url' => $te == 0 ? '' : $request->url,
+            'url' => $url,
             'posicion' => $request->posicion,
             'icono' => $request->icono,
             'parametro' => $request->parametro,
             'tipo_enlace' => $request->tipo_enlace,
-            'link' => '',
+            'link' => $link,
             'estado' => '1',
         ]);
-
-        // $menu = [
-        //     'sistema_id' => $request->sistema_id,
-        //     'dependencia' => $menu,
-        //     'nombre' => $request->nombre,
-        //     'url' => $request->url,
-        //     'posicion' => $request->posicion,
-        //     'icono' => $request->icono,
-        //     'parametro' => $request->parametro,
-        //     'tipo_enlace' => $request->tipo_enlace,
-        //     'link' => '',
-        //     'estado' => '1',
-        // ];
 
         return response()->json(array('status' => true, 'menu' => $menu, 'd1' => $d1, 'd2' => $d2));
     }
 
     public function ajax_update(Request $request)
     {
-        $val = $this->_validate($request);
-        if ($val['status'] === FALSE) {
-            return response()->json($val);
-        }
+        $this->_validate($request);
+        $d1 = $request->dependencia;
+        $d2 = $request->dependencia2;
+        $te = $request->tipo_enlace;
+
+        $menux = $d1 > 0 ? ($d2 > 0 ? $d2 : $d1) : null;
+        $url = $te == 0 ? '' : ($te == 1 ? $request->url : 'powerbi.salud.menu');
+        $link = $te == 2 ? $request->url : '';
+
         $menu = Menu::find($request->id);
         $menu->sistema_id = $request->sistema_id;
-        $menu->dependencia = $request->dependencia;
+        $menu->dependencia = $menux;
         $menu->nombre = $request->nombre;
-        $menu->url = $request->url == null ? '' : $request->url;
+        $menu->url = $url;
         $menu->posicion = $request->posicion;
         $menu->icono = $request->icono;
         $menu->parametro = $request->parametro;
-        $menu->link = "";
+        $menu->link = $link;
+        $menu->tipo_enlace = $request->tipo_enlace;
         $menu->save();
 
-        return response()->json(array('status' => true, 'menu' => $request->url));
+        return response()->json(array('status' => true, 'menu' => $menu));
     }
 
     public function ajax_delete($menu_id)

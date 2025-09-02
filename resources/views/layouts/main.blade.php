@@ -535,7 +535,7 @@
                                                         @if ($subMenu->tipo_enlace == 0)
                                                             <li>
                                                                 <a href="javascript: void(0);">
-                                                                    {{ $subMenu->nombre }}xxx
+                                                                    {{ $subMenu->nombre }}
                                                                     <span class="menu-arrow"></span>
                                                                 </a>
                                                                 <ul class="nav-third-level" aria-expanded="false">
