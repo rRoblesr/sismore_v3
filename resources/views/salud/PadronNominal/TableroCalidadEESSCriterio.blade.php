@@ -68,49 +68,6 @@
 
                     </div>
                 </div>
-
-                {{-- <div class="card-body pb-0">
-                    <div class="form-group row align-items-center vh-5">
-
-                        <div class="col-lg-3 col-md-4 col-sm-4">
-                            <h4 class="page-title font-12">{{ $actualizado }}</h4>
-                        </div>
-
-                        <div class="col-lg-3 col-md-2 col-sm-2">
-                            <div class="custom-select-container">
-                                <label for="red">RED</label>
-                                <select id="red" name="red" class="form-control font-11"
-                                    onchange="cargarMicrored();cargarCards();">
-                                    <option value="0">TODOS</option>
-                                    @foreach ($red as $item)
-                                        <option value="{{ $item->id }}">{{ $item->nombre }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-3 col-md-2 col-sm-2">
-                            <div class="custom-select-container">
-                                <label for="microred">MICRORED</label>
-                                <select id="microred" name="microred" class="form-control font-11"
-                                    onchange="cargarEstablecimiento();cargarCards();">
-                                    <option value="0">TODOS</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-3 col-md-2 col-sm-2">
-                            <div class="custom-select-container">
-                                <label for="establecimiento">ESTABLECIMIENTO</label>
-                                <select id="establecimiento" name="establecimiento" class="form-control font-11"
-                                    onchange="cargarCards();">
-                                    <option value="0">TODOS</option>
-                                </select>
-                            </div>
-                        </div>
-
-                    </div>
-                </div> --}}
             </div>
         </div>
     </div>

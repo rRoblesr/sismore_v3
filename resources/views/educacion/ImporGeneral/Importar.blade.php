@@ -131,7 +131,6 @@
         </div>
     </div>
 
-
     <!-- Bootstrap modal -->
     <div id="modal-siagie-matricula" class="modal fade centrarmodal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-xl">
@@ -600,7 +599,6 @@
             </div>
         </div>
     </div>
-    <!-- End Bootstrap modal -->
 
     <!--  Modal content for the above example -->
     <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
@@ -668,7 +666,7 @@
                 </div>
             </div>
         </div>
-    </div><!-- /.modal -->
+    </div>
 
     <!-- Modal para procesar cubo -->
     <div id="modal-procesar-cubo" class="modal fade centrarmodal" tabindex="-1" role="dialog">
@@ -716,59 +714,59 @@
         });
 
         function procesarCubo(importacion_id) {
-    $('#mensaje-cubo').text('');
-    $('#progress-bar-cubo')
-        .removeClass('bg-success bg-danger')
-        .addClass('bg-info')
-        .css('width', '0%')
-        .text('0%');
-
-    $('#modal-procesar-cubo').modal('show');
-
-    let percent = 0;
-    const intervalId = setInterval(() => {
-        if (percent < 95) {
-            percent += 2; // Velocidad de simulación
+            $('#mensaje-cubo').text('');
             $('#progress-bar-cubo')
-                .css('width', percent + '%')
-                .text(percent + '%');
+                .removeClass('bg-success bg-danger')
+                .addClass('bg-info')
+                .css('width', '0%')
+                .text('0%');
+
+            $('#modal-procesar-cubo').modal('show');
+
+            let percent = 0;
+            const intervalId = setInterval(() => {
+                if (percent < 95) {
+                    percent += 2; // Velocidad de simulación
+                    $('#progress-bar-cubo')
+                        .css('width', percent + '%')
+                        .text(percent + '%');
+                }
+            }, 100); // Actualiza cada 100ms
+
+            $.ajax({
+                url: "{{ route('impormatriculageneral.procesar.cubo') }}",
+                method: "POST",
+                data: {
+                    _token: $('input[name=_token]').val(),
+                    importacion_id: importacion_id
+                },
+                success: function(response) {
+                    clearInterval(intervalId);
+                    percent = 100;
+                    $('#progress-bar-cubo')
+                        .removeClass('bg-info progress-bar-animated')
+                        .addClass('bg-success')
+                        .css('width', percent + '%')
+                        .text('Completado');
+
+                    $('#mensaje-cubo').text('¡El cubo fue procesado correctamente!');
+                    setTimeout(() => {
+                        $('#modal-procesar-cubo').modal('hide');
+                        table_principal.ajax.reload(); // Recargar tabla principal
+                    }, 1500);
+                },
+                error: function(xhr) {
+                    clearInterval(intervalId);
+                    $('#progress-bar-cubo')
+                        .removeClass('bg-info progress-bar-animated')
+                        .addClass('bg-danger')
+                        .css('width', '100%')
+                        .text('Error');
+
+                    $('#mensaje-cubo').text('Ocurrió un fallo: ' + xhr.responseText);
+                }
+            });
         }
-    }, 100); // Actualiza cada 100ms
-
-    $.ajax({
-        url: "{{ route('impormatriculageneral.procesar.cubo') }}",
-        method: "POST",
-        data: {
-            _token: $('input[name=_token]').val(),
-            importacion_id: importacion_id
-        },
-        success: function(response) {
-            clearInterval(intervalId);
-            percent = 100;
-            $('#progress-bar-cubo')
-                .removeClass('bg-info progress-bar-animated')
-                .addClass('bg-success')
-                .css('width', percent + '%')
-                .text('Completado');
-
-            $('#mensaje-cubo').text('¡El cubo fue procesado correctamente!');
-            setTimeout(() => {
-                $('#modal-procesar-cubo').modal('hide');
-                table_principal.ajax.reload(); // Recargar tabla principal
-            }, 1500);
-        },
-        error: function(xhr) {
-            clearInterval(intervalId);
-            $('#progress-bar-cubo')
-                .removeClass('bg-info progress-bar-animated')
-                .addClass('bg-danger')
-                .css('width', '100%')
-                .text('Error');
-
-            $('#mensaje-cubo').text('Ocurrió un fallo: ' + xhr.responseText);
-        }
-    });
-}
 
         function procesarCuboxxx(importacion_id) {
             $('#mensaje-cubo').text('');

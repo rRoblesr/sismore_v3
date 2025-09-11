@@ -13,7 +13,7 @@
             class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center p-2">
             <h6 class="mb-2 mb-md-0 text-center text-md-left text-white">
                 <i class="fas fa-chart-bar d-none"></i>CONTROL DE CALIDAD DEL PADRÓN NOMINAL DE NIÑOS Y NIÑAS MENORES DE 6
-                AÑOS
+                AÑOS por EE.SS MINSA
             </h6>
             <div class="text-center text-md-right">
                 <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
@@ -23,7 +23,7 @@
         <div class="card-body p-2">
             <div class="row">
 
-                <div class="col-md-4 col-12">
+                <div class="col-md-2 col-12">
                     <h4 class="page-title font-12">Fuente: Padron Nominal, {{ $actualizado }}</h4>
                 </div>
 
@@ -65,6 +65,20 @@
                         <label for="microrred">Microrred</label>
                         <select id="microrred" name="microrred" class="form-control font-11" onchange="cargarCards();">
                             <option value="0">TODOS</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-2 col-6 my-1">
+                    <div class="custom-select-container">
+                        <label for="microrred">Establecimiento</label>
+                        <select id="establecimiento" name="establecimiento" class="form-control font-11"
+                            onchange="cargarCards();">
+                            <option value="0">TODOS</option>
+                            @foreach ($eess as $item)
+                                <option value="{{ $item->id }}"> {{ $item->codigo_unico }} | {{ $item->nombre }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
                 </div>

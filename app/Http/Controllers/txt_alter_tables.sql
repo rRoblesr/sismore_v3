@@ -3127,7 +3127,7 @@ ALTER TABLE `sal_cubo_pacto1_padron_nominal` CHANGE `centro_poblado` `centro_pob
 
 
 
-ALTER TABLE `adm_menu` ADD `tipo_enlace` INT(0) NOT NULL DEFAULT '0' COMMENT '0:ruta;1:powerbi' AFTER `link`;
+ALTER TABLE `adm_menu` ADD `tipo_enlace` INT(11) NOT NULL DEFAULT '0' COMMENT '0:NULL;1:ruta;2:powerbi' AFTER `link`;
 ALTER TABLE `adm_menu` CHANGE `tipo_enlace` `tipo_enlace` INT(11) NOT NULL DEFAULT '0' COMMENT '0:NULL;1:ruta;2:powerbi';
 
 

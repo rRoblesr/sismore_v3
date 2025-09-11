@@ -4452,8 +4452,9 @@ class PadronNominalController extends Controller
         $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronNominalController::$FUENTE);
         $anios = ImportacionRepositorio::anios_porfuente_select(ImporPadronNominalController::$FUENTE);
         $red = CalidadCriterioRepositorio::red_select($imp->id);
+        $eess = EstablecimientoRepositorio::establecimientosminsa(0, 0);
         $actualizado = 'Actualizado al ' . $imp->dia . '/' . $imp->mes . '/' . $imp->anio;
-        return view('salud.PadronNominal.TableroCalidadEESS', compact('actualizado', 'anios', 'red'));
+        return view('salud.PadronNominal.TableroCalidadEESS', compact('actualizado', 'anios', 'red', 'eess'));
     }
 
     public function tablerocalidadeessreporte(Request $rq)

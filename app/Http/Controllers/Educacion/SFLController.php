@@ -8,13 +8,8 @@ use App\Imports\tablaXImport;
 use App\Models\Administracion\Entidad;
 use App\Models\Educacion\Area;
 use App\Models\Educacion\InstitucionEducativa;
-use App\Models\Educacion\NivelModalidad;
-use App\Models\Educacion\PadronWeb;
 use App\Models\Educacion\SFL;
-use App\Models\Educacion\Ugel;
 use App\Models\Parametro\IndicadorGeneral;
-use App\Models\Parametro\IndicadorGeneralMeta;
-use App\Models\Presupuesto\Sector;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\UgelRepositorio;
 use App\Repositories\Parametro\IndicadorGeneralRepositorio;
@@ -24,13 +19,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
-use phpDocumentor\Reflection\PseudoTypes\False_;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpParser\Node\Stmt\Else_;
 
 class SFLController extends Controller
 {

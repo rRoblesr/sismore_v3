@@ -1453,12 +1453,12 @@ Route::get('/Salud/PadronNominal/TableroCalidad/Indicador/reportes', [PadronNomi
 Route::get('/Salud/PadronNominal/TableroCalidad/Indicador/Exportar/{div}/{anio}/{mes}/{edades}/{indicador}/{ubigeo}', [PadronNominalController::class, 'tablerocalidadindicadordownload'])->name('salud.padronnominal.tablerocalidad.indicador.exportar.excel');
 Route::get('/Salud/PadronNominal/TableroCalidad/Indicador/Exportar2/{div}/{anio}/{mes}/{edades}/{indicador}/{ubigeo}', [PadronNominalController::class, 'tablerocalidadindicadordownload2'])->name('salud.padronnominal.tablerocalidad.indicador.exportar.excel2');
 
-Route::get('/Salud/PadronNominal/TableroCalidadEESS', [PadronNominalController::class, 'tablerocalidadeess'])->name('salud.padronnominal.tablerocalidad.eess');
-Route::get('/Salud/PadronNominal/TableroCalidadEESS/reportes', [PadronNominalController::class, 'tablerocalidadeessreporte'])->name('salud.padronnominal.tablerocalidad.eess.reporte');
+Route::get('/Salud/PadronNominal/TableroCalidad/EESS', [PadronNominalController::class, 'tablerocalidadeess'])->name('salud.padronnominal.tablerocalidad.eess');
+Route::get('/Salud/PadronNominal/TableroCalidad/EESS/reportes', [PadronNominalController::class, 'tablerocalidadeessreporte'])->name('salud.padronnominal.tablerocalidad.eess.reporte');
 
-Route::get('/Salud/PadronNominal/TableroCalidadEESS/Criterio/{importacion}/{criterio}', [PadronNominalController::class, 'tablerocalidadeesscriterio'])->name('salud.padronnominal.tablerocalidad.eess.criterio');
-Route::get('/Salud/PadronNominal/TableroCalidadEESS/Criterio/reportes', [PadronNominalController::class, 'tablerocalidadeesscriterioreporte'])->name('salud.padronnominal.tablerocalidad.eess.criterio.reporte');
-Route::post('/Salud/PadronNominal/TableroCalidadEESS/Criterio/tabla1', [PadronNominalController::class, 'tablerocalidadeesscriterioreportetabla1'])->name('salud.padronnominal.tablerocalidad.eess.criterio.reporte.tabla1');
+Route::get('/Salud/PadronNominal/TableroCalidad/EESS/Criterio/{importacion}/{criterio}', [PadronNominalController::class, 'tablerocalidadeesscriterio'])->name('salud.padronnominal.tablerocalidad.eess.criterio');
+Route::get('/Salud/PadronNominal/TableroCalidad/EESS/Criterio/reportes', [PadronNominalController::class, 'tablerocalidadeesscriterioreporte'])->name('salud.padronnominal.tablerocalidad.eess.criterio.reporte');
+Route::post('/Salud/PadronNominal/TableroCalidad/EESS/Criterio/tabla1', [PadronNominalController::class, 'tablerocalidadeesscriterioreportetabla1'])->name('salud.padronnominal.tablerocalidad.eess.criterio.reporte.tabla1');
 
 Route::get('/Salud/PadronNominal/calidadcriterio/microrred/{anio}/{mes}/{red}', [PadronNominalController::class, 'calidadcriterio_microrred'])->name('salud.padronnominal.calidadcriterio.microrred');
 
