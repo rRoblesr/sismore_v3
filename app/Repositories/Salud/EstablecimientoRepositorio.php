@@ -503,11 +503,12 @@ class EstablecimientoRepositorio
         return $query;
     }
 
-    public static function TableroCalidadEESS_head($red, $microrred)
+    public static function TableroCalidadEESS_head($red, $microrred, $eess)
     {
-        $filtros = function ($query) use ($red, $microrred) {
+        $filtros = function ($query) use ($red, $microrred, $eess) {
             if ($red > 0) $query->where('red_id', $red);
             if ($microrred > 0) $query->where('microrred_id', $microrred);
+            if ($eess > 0) $query->where('id', $eess);
         };
         return Establecimiento::where('cod_disa', 34)
             ->where('estado', 'activo')
@@ -517,7 +518,7 @@ class EstablecimientoRepositorio
             ->count();
     }
 
-    public static function establecimientosminsa($red, $microrred)
+    public static function establecimientos_minsa_select($red, $microrred)
     {
         $filtros = function ($query) use ($red, $microrred) {
             if ($red > 0) $query->where('red_id', $red);

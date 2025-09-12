@@ -4447,14 +4447,22 @@ class PadronNominalController extends Controller
         return response()->json($microrred);
     }
 
+    public function ipn_establecimientos_minsa($anio, $mes, $red, $microrred)
+    {
+        $fuente = ImporPadronNominalController::$FUENTE;
+        $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio, $mes);
+        $eess = ImporPadronNominalRepositorio::eess_minsa($impMaxAnio, $red, $microrred);
+        return response()->json($eess);
+    }
+
     public function tablerocalidadeess()
     {
         $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronNominalController::$FUENTE);
         $anios = ImportacionRepositorio::anios_porfuente_select(ImporPadronNominalController::$FUENTE);
         $red = CalidadCriterioRepositorio::red_select($imp->id);
-        $eess = EstablecimientoRepositorio::establecimientosminsa(0, 0);
+        // $eess = ImporPadronNominalRepositorio::eess_minsa($imp->id, 0, 0, 0);
         $actualizado = 'Actualizado al ' . $imp->dia . '/' . $imp->mes . '/' . $imp->anio;
-        return view('salud.PadronNominal.TableroCalidadEESS', compact('actualizado', 'anios', 'red', 'eess'));
+        return view('salud.PadronNominal.TableroCalidadEESS', compact('actualizado', 'anios', 'red'));
     }
 
     public function tablerocalidadeessreporte(Request $rq)
@@ -4463,25 +4471,25 @@ class PadronNominalController extends Controller
         $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio, $rq->mes);
         switch ($rq->div) {
             case 'head1':
-                $card1 = ImporPadronNominalRepositorio::TableroCalidadEESS_head($impMaxAnio, $rq->red, $rq->microrred, FALSE, FALSE);
+                $card1 = ImporPadronNominalRepositorio::TableroCalidadEESS_head($impMaxAnio, $rq->red, $rq->microrred, $rq->eess, FALSE, FALSE);
                 $card1 = number_format($card1, 0);
                 return response()->json(compact('card1'));
             case 'head2':
-                $card2 = ImporPadronNominalRepositorio::TableroCalidadEESS_head($impMaxAnio, $rq->red, $rq->microrred, TRUE, FALSE);
+                $card2 = ImporPadronNominalRepositorio::TableroCalidadEESS_head($impMaxAnio, $rq->red, $rq->microrred, $rq->eess, TRUE, FALSE);
                 $card2 = number_format($card2, 0);
                 return response()->json(compact('card2'));
 
             case 'head3':
-                $card3 = ImporPadronNominalRepositorio::TableroCalidadEESS_head($impMaxAnio, $rq->red, $rq->microrred, FALSE, TRUE);
+                $card3 = ImporPadronNominalRepositorio::TableroCalidadEESS_head($impMaxAnio, $rq->red, $rq->microrred, $rq->eess, FALSE, TRUE);
                 $card3 = number_format($card3, 0);
                 return response()->json(compact('card3'));
 
             case 'head4':
-                $card4 = EstablecimientoRepositorio::TableroCalidadEESS_head($rq->red, $rq->microrred);
+                $card4 = EstablecimientoRepositorio::TableroCalidadEESS_head($rq->red, $rq->microrred, $rq->eess);
                 return response()->json(compact('card4'));
 
             case 'tabla01':
-                $base = CalidadCriterioRepositorio::TableroCalidadEESS_tabla01($impMaxAnio, $rq->red, $rq->microrred);
+                $base = CalidadCriterioRepositorio::TableroCalidadEESS_tabla01($impMaxAnio, $rq->red, $rq->microrred, $rq->eess);
                 $excel = view('salud.PadronNominal.TableroCalidadEESSTabla1', compact('base', 'impMaxAnio'))->render();
                 return response()->json(compact('base', 'excel'));
 
@@ -4522,7 +4530,7 @@ class PadronNominalController extends Controller
                 return response()->json(compact('excel', 'base', 'foot'));
 
             case 'tabla03':
-                $base = ImporPadronNominalRepositorio::TableroCalidadEESS_tabla03($impMaxAnio, $rq->red, $rq->microrred);
+                $base = ImporPadronNominalRepositorio::TableroCalidadEESS_tabla03($impMaxAnio, $rq->red, $rq->microrred, $rq->eess);
 
                 $foot = [];
                 if ($base->count() > 0) {
@@ -4554,45 +4562,18 @@ class PadronNominalController extends Controller
                         $foot->programa += $value->programa;
                     }
                 }
-
-                $excel = view('salud.PadronNominal.TableroCalidadTabla3', compact('base', 'foot'))->render();
+                // return response()->json(compact('base', 'foot'));
+                $excel = view('salud.PadronNominal.TableroCalidadEESSTabla3', compact('base', 'foot'))->render();
                 return response()->json(compact('excel'));
 
             case 'tabla0301':
-                $base = ImporPadronNominalRepositorio::TableroCalidadEESS_tabla0301($impMaxAnio, $rq->red, $rq->microrred, $rq->ubigeo);
-                $foot = [];
-                if ($base->count() > 0) {
-                    $foot = clone $base[0];
-                    $foot->pob = 0;
-                    $foot->pobm = 0;
-                    $foot->pobf = 0;
-                    $foot->pob0 = 0;
-                    $foot->pob1 = 0;
-                    $foot->pob2 = 0;
-                    $foot->pob3 = 0;
-                    $foot->pob4 = 0;
-                    $foot->pob5 = 0;
-                    $foot->dni = 0;
-                    $foot->seguro = 0;
-                    $foot->programa = 0;
-                    foreach ($base as $key => $value) {
-                        $foot->pob += $value->pob;
-                        $foot->pobm += $value->pobm;
-                        $foot->pobf += $value->pobf;
-                        $foot->pob0 += $value->pob0;
-                        $foot->pob1 += $value->pob1;
-                        $foot->pob2 += $value->pob2;
-                        $foot->pob3 += $value->pob3;
-                        $foot->pob4 += $value->pob4;
-                        $foot->pob5 += $value->pob5;
-                        $foot->dni += $value->dni;
-                        $foot->seguro += $value->seguro;
-                        $foot->programa += $value->programa;
-                    }
-                }
-
-                $excel = view('salud.PadronNominal.TableroCalidadTabla3_1', compact('base', 'foot'))->render();
-                return response()->json(compact('excel'));
+                $base = ImporPadronNominalRepositorio::TableroCalidadEESS_tabla0301($impMaxAnio, $rq->red, $rq->microrred, $rq->eess, $rq->ubigeo);
+                $query = Establecimiento::select(DB::raw('CONCAT(codigo_unico," | ", nombre_establecimiento) AS nombre'))->where('id', $rq->ubigeo)->first();
+                $eess = $query ? $query->nombre : '';
+                //  return response()->json($base);
+                // return response()->json(compact('base', 'foot',$rq->all()));
+                $excel = view('salud.PadronNominal.TableroCalidadEESSTabla0301', compact('base'))->render();
+                return response()->json(compact('excel', 'eess'));
 
             default:
                 # code...

@@ -30,7 +30,7 @@
                 <div class="col-md-2 col-6 my-1">
                     <div class="custom-select-container">
                         <label for="anio">Año</label>
-                        <select id="anio" name="anio" class="form-control font-11" onchange="cargarMes();">
+                        <select id="anio" name="anio" class="form-control font-11">
                             @foreach ($anios as $item)
                                 <option value="{{ $item->anio }}" {{ $item->anio == date('Y') ? 'selected' : '' }}>
                                     {{ $item->anio }}</option>
@@ -42,7 +42,7 @@
                 <div class="col-md-2 col-6 my-1">
                     <div class="custom-select-container">
                         <label for="mes">Mes</label>
-                        <select id="mes" name="mes" class="form-control font-11" onchange="cargarCards();">
+                        <select id="mes" name="mes" class="form-control font-11">
                         </select>
                     </div>
                 </div>
@@ -50,8 +50,7 @@
                 <div class="col-md-2 col-6 my-1">
                     <div class="custom-select-container">
                         <label for="red">Red</label>
-                        <select id="red" name="red" class="form-control font-11"
-                            onchange="cargarMicrorred();cargarCards();">
+                        <select id="red" name="red" class="form-control font-11">
                             <option value="0">TODOS</option>
                             @foreach ($red as $item)
                                 <option value="{{ $item->id }}"> {{ $item->codigo }} {{ $item->nombre }}</option>
@@ -63,7 +62,7 @@
                 <div class="col-md-2 col-6 my-1">
                     <div class="custom-select-container">
                         <label for="microrred">Microrred</label>
-                        <select id="microrred" name="microrred" class="form-control font-11" onchange="cargarCards();">
+                        <select id="microrred" name="microrred" class="form-control font-11">
                             <option value="0">TODOS</option>
                         </select>
                     </div>
@@ -71,14 +70,9 @@
 
                 <div class="col-md-2 col-6 my-1">
                     <div class="custom-select-container">
-                        <label for="microrred">Establecimiento</label>
-                        <select id="establecimiento" name="establecimiento" class="form-control font-11"
-                            onchange="cargarCards();">
+                        <label for="establecimiento">Establecimiento</label>
+                        <select id="establecimiento" name="establecimiento" class="form-control font-11">
                             <option value="0">TODOS</option>
-                            @foreach ($eess as $item)
-                                <option value="{{ $item->id }}"> {{ $item->codigo_unico }} | {{ $item->nombre }}
-                                </option>
-                            @endforeach
                         </select>
                     </div>
                 </div>
@@ -105,7 +99,7 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card4"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Niños y Niñas con EESS</p>
+                            <p class="mb-0 mt-1 text-truncate">Total de EESS</p>
                         </div>
                     </div>
                 </div>
@@ -241,10 +235,10 @@
         </div>
     </div>
 
-    <div class="row">
+    {{-- <div class="row">
         <div class="col-lg-12">
-            {{-- <div class="card">
-                <div class="card-header"> --}}
+            <div class="card">
+                <div class="card-header">
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
                     <div class="card-widgets">
@@ -267,7 +261,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <div class="row">
         <div class="col-lg-12">
@@ -302,7 +296,6 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-
                     <h5 class="modal-title" id="myLargeModalLabel">Población de niños y niñas menos de 6 años por Centro
                         Poblado, segun sexo y edades</h5>
                     <div class="card-widgets">
@@ -506,14 +499,28 @@
             head3: ['#card3'],
             head4: ['#card4'],
             tabla1: ['#ctabla1'],
-            tabla2: ['#ctabla2'],
+            // tabla2: ['#ctabla2'],
             tabla3: ['#ctabla3'],
             tabla3_1: ['#ctabla3_1']
         };
 
         $(document).ready(function() {
+            $('#anio').on('change', function() {
+                cargarCards();
+            });
+            $('#mes').on('change', function() {
+                cargarCards();
+            });
+            $('#red').on('change', function() {
+                cargarMicrorred();
+            });
+            $('#microrred').on('change', function() {
+                cargarEESS();
+            });
+            $('#establecimiento').on('change', function() {
+                cargarCards();
+            });
             cargarMes();
-            cargarMicrorred();
             // cargarCards();
 
         });
@@ -524,7 +531,7 @@
             panelGraficas('head3');
             panelGraficas('head4');
             panelGraficas('tabla01');
-            panelGraficas('tabla02');
+            // panelGraficas('tabla02');
             panelGraficas('tabla03');
         }
 
@@ -537,6 +544,7 @@
                     "mes": $('#mes').val(),
                     "red": $('#red').val(),
                     "microrred": $('#microrred').val(),
+                    "eess": $('#establecimiento').val(),
                     "ubigeo": ubigeo_select,
                 },
                 type: "GET",
@@ -594,9 +602,9 @@
                                 autoWidth: false,
                                 ordered: true,
                                 language: table_language,
-                                searching: false,
-                                paging: false,
-                                info: false,
+                                // searching: false,
+                                // paging: false,
+                                // info: false,
                                 // columnDefs: [{
                                 //     targets: 1,
                                 //     render: function(data, type, row) {
@@ -607,6 +615,8 @@
                             break;
 
                         case 'tabla0301':
+                            $('#modal-centropoblado .modal-title').text(data.eess +
+                                " - Población de niños y niñas menos de 6 años");
                             $('#ctabla3_1').html(data.excel);
                             $('#tabla3_1').DataTable({
                                 responsive: true,
@@ -618,6 +628,7 @@
                                 // paging: false,
                                 // info: false,
                             });
+                            $('#modal-centropoblado').modal('show');
                             break;
 
                         default:
@@ -627,28 +638,6 @@
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");
-                    console.log(jqXHR);
-                },
-            });
-        }
-
-        function cargarMicrorred() {
-            $.ajax({
-                url: "{{ route('salud.padronnominal.calidadcriterio.microrred', ['anio' => ':anio', 'mes' => ':mes', 'red' => ':red']) }}"
-                    .replace(':anio', $('#anio').val())
-                    .replace(':mes', $('#mes').val())
-                    .replace(':red', $('#red').val()),
-                type: 'GET',
-                success: function(data) {
-                    $("#microrred option").remove();
-                    var options = '<option value="0">TODOS</option>';
-                    $.each(data, function(index, value) {
-                        options += "<option value='" + value.id + "'>" + value.codigo + " " +
-                            value.nombre + "</option>"
-                    });
-                    $("#microrred").append(options);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
                 },
             });
@@ -670,6 +659,52 @@
                     });
                     $("#mes").append(options);
                     cargarMicrorred();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cargarMicrorred() {
+            $.ajax({
+                url: "{{ route('salud.padronnominal.calidadcriterio.microrred', ['anio' => ':anio', 'mes' => ':mes', 'red' => ':red']) }}"
+                    .replace(':anio', $('#anio').val())
+                    .replace(':mes', $('#mes').val())
+                    .replace(':red', $('#red').val()),
+                type: 'GET',
+                success: function(data) {
+                    $("#microrred option").remove();
+                    var options = '<option value="0">TODOS</option>';
+                    $.each(data, function(index, vv) {
+                        options +=
+                            `<option value='${vv.id}'>${vv.codigo} | ${vv.nombre}</option>`;
+                    });
+                    $("#microrred").append(options);
+                    cargarEESS();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cargarEESS() {
+            $.ajax({
+                url: "{{ route('salud.padronnominal.eess.minsa', ['anio' => ':anio', 'mes' => ':mes', 'red' => ':red', 'microrred' => ':microrred']) }}"
+                    .replace(':anio', $('#anio').val())
+                    .replace(':mes', $('#mes').val())
+                    .replace(':red', $('#red').val())
+                    .replace(':microrred', $('#microrred').val()),
+                type: 'GET',
+                success: function(data) {
+                    $("#establecimiento option").remove();
+                    var options = '<option value="0">TODOS</option>';
+                    $.each(data, function(index, vv) {
+                        options +=
+                            `<option value='${vv.id}'>${vv.codigo} | ${vv.nombre}</option>`;
+                    });
+                    $("#establecimiento").append(options);
                     cargarCards();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
@@ -681,9 +716,9 @@
         function abrirmodalcentropoblado(ubigeo) {
             ubigeo_select = ubigeo;
             // console.log(ubigeo_select)]
-            panelGraficas('tabla3_1');
+            panelGraficas('tabla0301');
 
-            $('#modal-centropoblado').modal('show');
+
 
         }
 

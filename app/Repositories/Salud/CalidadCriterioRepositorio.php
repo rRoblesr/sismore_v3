@@ -34,11 +34,12 @@ class CalidadCriterioRepositorio
         return $query;
     }
 
-    public static function TableroCalidadEESS_tabla01($importacion, $red, $microrred)
+    public static function TableroCalidadEESS_tabla01($importacion, $red, $microrred, $eess)
     {
-        $filtros = function ($query) use ($red, $microrred) {
+        $filtros = function ($query) use ($red, $microrred,$eess) {
             if ($red > 0) $query->where('red_id', $red);
             if ($microrred > 0) $query->where('microred_id', $microrred);
+            if ($eess > 0) $query->where('establecimiento_id', $eess);
         };
         return CalidadCriterio::where('importacion_id', $importacion)
             ->whereIn('red_id', [9, 10, 11, 12])
@@ -54,6 +55,7 @@ class CalidadCriterioRepositorio
                 DB::raw('sum(if(edad=4 and tipo_edad="A",1,0)) as pob4'),
                 DB::raw('sum(if(edad=5 and tipo_edad="A",1,0)) as pob5'),
             )
+            ->whereNotIn('criterio', [7, 8, 9])
             ->tap($filtros)
             ->groupBy('criterio_id', 'criterio', 'c.nombre')
             ->orderBy('pos')

@@ -1461,6 +1461,7 @@ Route::get('/Salud/PadronNominal/TableroCalidad/EESS/Criterio/reportes', [Padron
 Route::post('/Salud/PadronNominal/TableroCalidad/EESS/Criterio/tabla1', [PadronNominalController::class, 'tablerocalidadeesscriterioreportetabla1'])->name('salud.padronnominal.tablerocalidad.eess.criterio.reporte.tabla1');
 
 Route::get('/Salud/PadronNominal/calidadcriterio/microrred/{anio}/{mes}/{red}', [PadronNominalController::class, 'calidadcriterio_microrred'])->name('salud.padronnominal.calidadcriterio.microrred');
+Route::get('/Salud/PadronNominal/establecimiento/{anio}/{mes}/{red}/{microrred}', [PadronNominalController::class, 'ipn_establecimientos_minsa'])->name('salud.padronnominal.eess.minsa');
 
 Route::get('/Salud/PadronNominal/Mes/{anio}', [PadronNominalController::class, 'meses'])->name('salud.padronnominal.mes');
 Route::get('/Salud/PadronNominal/Edades/{anio}/{mes}', [PadronNominalController::class, 'edades'])->name('salud.padronnominal.edades');
