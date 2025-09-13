@@ -5,11 +5,12 @@ namespace App\Repositories\Salud;
 use App\Models\Parametro\Ubigeo;
 use App\Models\Salud\Establecimiento;
 use App\Models\Salud\ImporPadronNominal;
+use App\Models\Salud\Microrred;
 use Illuminate\Support\Facades\DB;
 
 class ImporPadronNominalRepositorio
 {
-    public static function head_lista_indicadores($div, $indicador, $importacion, $edades, $ubigeo)
+    public static function head_lista_indicadores($div, $indicador, $importacion, $area, $edades, $ubigeo)
     {
         switch ($div) {
             case 'head':
@@ -22,6 +23,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
 
                         return $data->select(
@@ -39,6 +43,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         $data = $data->where('tipo_edad', 'D')->where('edad', '<=', 30);
                         return $data->select(
                             DB::raw('COUNT(*) AS conteo'),
@@ -54,6 +61,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         $data = $data->where(function ($query) {
                             $query->where(function ($subQuery) {
@@ -78,6 +88,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         // $data = $data->where('seguro_id', '1');
                         return $data->select(
@@ -95,6 +108,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         // $data = $data->where('seguro_id', '1');
                         return $data->select(
                             DB::raw('COUNT(*) AS conteo'),
@@ -111,6 +127,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         return $data->select(
                             DB::raw('COUNT(*) AS conteo'),
                             DB::raw("SUM(IF((cui_atencion > 0 and cui_atencion is not null), 1, 0)) AS cdni"),
@@ -125,6 +144,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         // $data = $data->where('seguro_id', '1');
                         return $data->select(
@@ -142,6 +164,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         // $data = $data->where('seguro_id', '1');
                         return $data->select(
                             DB::raw('COUNT(*) AS conteo'),
@@ -157,6 +182,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         // $data = $data->where('seguro_id', '1');
                         return $data->select(
@@ -174,6 +202,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         // $data = $data->where('seguro_id', '1');
                         return $data->select(
                             DB::raw('COUNT(*) AS conteo'),
@@ -184,7 +215,7 @@ class ImporPadronNominalRepositorio
                     default:
                         return [];
                 }
-            case 'anal1':
+            case 'anal01':
                 switch ($indicador) {
                     case '1': //Niñas y Niños con DNI
                         $data = ImporPadronNominal::where('importacion_id', $importacion);
@@ -194,6 +225,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         return $data->select(
                             'distrito_id',
@@ -209,6 +243,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         $data = $data->where('tipo_edad', 'D')->where('edad', '<=', 30);
                         return $data->select(
                             'distrito_id',
@@ -222,6 +259,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         $data = $data->where(function ($query) {
                             $query->where(function ($subQuery) {
@@ -243,6 +283,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         return $data->select(
                             'distrito_id',
@@ -257,6 +300,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         return $data->select(
                             'distrito_id',
                             DB::raw('round(100*sum(case when !(programa_social = "0," or programa_social is null) then 1 else 0 end)/count(*),2) as ii'),
@@ -269,6 +315,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         return $data->select(
                             'distrito_id',
@@ -283,6 +332,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         return $data->select(
                             'distrito_id',
                             DB::raw('round(100*sum(case when visita = 1 then 1 else 0 end)/count(*),2) as ii'),
@@ -295,6 +347,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         return $data->select(
                             'distrito_id',
@@ -309,6 +364,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         return $data->select(
                             'distrito_id',
                             DB::raw('round(100*sum(case when visita = 1 and menor_encontrado = 2 then 1 else 0 end)/count(*),2) as ii'),
@@ -322,6 +380,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         return $data->select(
                             'distrito_id',
                             DB::raw('round(100*sum(case when codigo_ie != "" or codigo_ie is not null then 1 else 0 end)/count(*),2) as ii'),
@@ -330,7 +391,7 @@ class ImporPadronNominalRepositorio
                         return [];
                 }
 
-            case 'anal2':
+            case 'anal02':
                 switch ($indicador) {
                     case '1': //Niñas y Niños con DNI
                         $data = ImporPadronNominal::where('importacion_id', $importacion);
@@ -340,6 +401,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         return $data->select(
                             DB::raw('case genero when"M" then "HOMBRE" when "F" then "MUJER" ELSE "NO ESPECIFICADO" end as name'),
@@ -355,6 +419,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         $data = $data->where('tipo_edad', 'D')->where('edad', '<=', 30);
                         return $data->select(
                             DB::raw('case genero when"M" then "HOMBRE" when "F" then "MUJER" ELSE "NO ESPECIFICADO" end as name'),
@@ -369,6 +436,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         $data = $data->where(function ($query) {
                             $query->where(function ($subQuery) {
@@ -391,6 +461,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         $data = $data->where('seguro_id', '1');
                         return $data->select(
@@ -407,6 +480,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         $data = $data->whereRaw("programa_social != '0,' AND programa_social IS NOT NULL");
                         return $data->select(
                             DB::raw('case genero when"M" then "HOMBRE" when "F" then "MUJER" ELSE "NO ESPECIFICADO" end as name'),
@@ -421,6 +497,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         $data = $data->whereRaw("cui_atencion > 0 and cui_atencion is not null");
                         return $data->select(
@@ -437,6 +516,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         $data = $data->whereRaw("visita = 1");
                         return $data->select(
                             DB::raw('case genero when"M" then "HOMBRE" when "F" then "MUJER" ELSE "NO ESPECIFICADO" end as name'),
@@ -451,6 +533,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         $data = $data->whereRaw("menor_encontrado = 2");
                         return $data->select(
@@ -467,6 +552,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         $data = $data->whereRaw("visita = 1 and menor_encontrado = 2");
                         return $data->select(
                             DB::raw('case genero when"M" then "HOMBRE" when "F" then "MUJER" ELSE "NO ESPECIFICADO" end as name'),
@@ -482,6 +570,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         $data = $data->whereRaw("codigo_ie != '' and codigo_ie is not null");
                         return $data->select(
                             DB::raw('case genero when"M" then "HOMBRE" when "F" then "MUJER" ELSE "NO ESPECIFICADO" end as name'),
@@ -491,7 +582,7 @@ class ImporPadronNominalRepositorio
                     default:
                         return [];
                 }
-            case 'anal3':
+            case 'anal03':
                 switch ($indicador) {
                     case '1': //Niñas y Niños con DNI
                         $data = ImporPadronNominal::where('importacion_id', $importacion);
@@ -502,7 +593,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
-
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         return $data->select(
                             DB::raw('area_ccpp as name'),
                             DB::raw("count(*) AS y"),
@@ -515,6 +608,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         $data = $data->where('tipo_edad', 'D')->where('edad', '<=', 30);
                         return $data->select(
@@ -529,6 +625,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         $data = $data->where(function ($query) {
                             $query->where(function ($subQuery) {
@@ -550,6 +649,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         $data = $data->where('seguro_id', '1');
                         return $data->select(
@@ -565,6 +667,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         $data = $data->whereRaw("programa_social != '0,' AND programa_social IS NOT NULL");
                         return $data->select(
                             DB::raw('area_ccpp as name'),
@@ -578,6 +683,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         $data = $data->whereRaw("cui_atencion > 0 and cui_atencion is not null");
                         return $data->select(
@@ -593,6 +701,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         $data = $data->whereRaw("visita = 1");
                         return $data->select(
                             DB::raw('area_ccpp as name'),
@@ -606,6 +717,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         $data = $data->whereRaw("menor_encontrado = 2");
                         return $data->select(
@@ -621,6 +735,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         $data = $data->whereRaw("visita = 1 and menor_encontrado = 2");
                         return $data->select(
                             DB::raw('area_ccpp as name'),
@@ -635,6 +752,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         $data = $data->whereRaw("codigo_ie != '' and codigo_ie is not null");
                         return $data->select(
                             DB::raw('area_ccpp as name'),
@@ -643,7 +763,7 @@ class ImporPadronNominalRepositorio
                     default:
                         return [];
                 }
-            case 'tabla1':
+            case 'tabla01':
                 switch ($indicador) {
                     case '1': //Niñas y Niños con DNI
                         $data = ImporPadronNominal::where('importacion_id', $importacion);
@@ -653,6 +773,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         $data = $data->select(
                             'distrito_id',
@@ -675,6 +798,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         $data = $data->where('tipo_edad', 'D')->where('edad', '<=', 30);
                         $data = $data->select(
                             'distrito_id',
@@ -696,6 +822,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         $data = $data->where(function ($query) {
                             $query->where(function ($subQuery) {
@@ -725,6 +854,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         $data = $data->select(
                             'distrito_id',
@@ -747,6 +879,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         $data = $data->select(
                             'distrito_id',
                             DB::raw('count(*) as total'),
@@ -767,6 +902,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         $data = $data->select(
                             'distrito_id',
@@ -789,6 +927,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         $data = $data->select(
                             'distrito_id',
                             DB::raw('count(*) as total'),
@@ -810,6 +951,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         $data = $data->select(
                             'distrito_id',
                             DB::raw('count(*) as total'),
@@ -830,6 +974,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         $data = $data->select(
                             'distrito_id',
@@ -867,7 +1014,7 @@ class ImporPadronNominalRepositorio
                     default:
                         return [];
                 }
-            case 'tabla2':
+            case 'tabla02':
                 switch ($indicador) {
                     case '1': //Niñas y Niños con DNI
                         $data = ImporPadronNominal::where('importacion_id', $importacion);
@@ -877,6 +1024,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         $data = $data->select(
                             'distrito_id',
@@ -907,6 +1057,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         $data = $data->where('tipo_edad', 'D')->where('edad', '<=', 30);
                         $data = $data->select(
                             'distrito_id',
@@ -936,6 +1089,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         $data = $data->where(function ($query) {
                             $query->where(function ($subQuery) {
@@ -974,6 +1130,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         $data = $data->select(
                             'distrito_id',
                             DB::raw('count(*) as total'),
@@ -1002,6 +1161,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         $data = $data->select(
                             'distrito_id',
@@ -1032,6 +1194,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         $data = $data->select(
                             'distrito_id',
                             DB::raw('count(*) as total'),
@@ -1060,6 +1225,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         $data = $data->select(
                             'distrito_id',
@@ -1090,6 +1258,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         $data = $data->select(
                             'distrito_id',
                             DB::raw('count(*) as total'),
@@ -1119,6 +1290,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         $data = $data->select(
                             'distrito_id',
                             DB::raw('count(*) as total'),
@@ -1147,6 +1321,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         $data = $data->select(
                             'distrito_id',
@@ -1182,6 +1359,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         $data = $data->select(
                             'centro_poblado',
                             'centro_poblado_nombre',
@@ -1207,6 +1387,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         $data = $data->where('tipo_edad', 'D')->where('edad', '<=', 30);
                         $data = $data->select(
@@ -1234,6 +1417,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         $data = $data->where(function ($query) {
                             $query->where(function ($subQuery) {
@@ -1269,6 +1455,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         $data = $data->select(
                             'centro_poblado',
                             'centro_poblado_nombre',
@@ -1294,6 +1483,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         $data = $data->select(
                             'centro_poblado',
@@ -1321,6 +1513,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         $data = $data->select(
                             'centro_poblado',
                             'centro_poblado_nombre',
@@ -1346,6 +1541,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         $data = $data->select(
                             'centro_poblado',
@@ -1373,6 +1571,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         $data = $data->select(
                             'centro_poblado',
                             'centro_poblado_nombre',
@@ -1399,6 +1600,9 @@ class ImporPadronNominalRepositorio
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
                         }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
+                        }
                         $data = $data->select(
                             'centro_poblado',
                             'centro_poblado_nombre',
@@ -1424,6 +1628,9 @@ class ImporPadronNominalRepositorio
                             } else {
                                 $data = $data->where('tipo_edad', 'A')->where('edad', $edades - 1);
                             }
+                        }
+                        if ($area > 0) {
+                            $data = $data->where('area_ccpp', ($area == 1 ? 'RURAL' : 'URBANA'));
                         }
                         $data = $data->select(
                             'centro_poblado',
@@ -1610,16 +1817,15 @@ class ImporPadronNominalRepositorio
     public static function TableroCalidadEESS_tabla03($importacion, $red, $microrred, $eess)
     {
         $filtros = function ($query) use ($red, $microrred, $eess) {
-            if ($red > 0) $query->where('m.red_id', $red);
-            if ($microrred > 0) $query->where('m.id', $microrred);
+            if ($red > 0) $query->where('e.red_id', $red);
+            if ($microrred > 0) $query->where('e.microrred_id', $microrred);
             if ($eess > 0) $query->where('e.id', $eess);
         };
         return ImporPadronNominal::from('sal_impor_padron_nominal as pn')
             ->join('par_ubigeo as u', 'u.id', '=', 'pn.distrito_id')
             ->join('sal_establecimiento as e', 'e.id', '=', 'pn.establecimiento_id')
-            ->join('sal_microrred as m', 'm.id', '=', 'e.microrred_id')
             ->where('pn.importacion_id', $importacion)->where('repetido', '1')
-            ->whereIn('m.red_id', [9, 10, 11, 12])
+            ->whereIn('e.red_id', [9, 10, 11, 12])
             ->tap($filtros)
             ->select(
                 'e.id',
@@ -1656,8 +1862,8 @@ class ImporPadronNominalRepositorio
     public static function TableroCalidadEESS_tabla0301($importacion, $red, $microrred, $eess, $ubigeo)
     {
         $filtros = function ($query) use ($red, $microrred, $eess) {
-            if ($red > 0) $query->where('m.red_id', $red);
-            if ($microrred > 0) $query->where('m.id', $microrred);
+            if ($red > 0) $query->where('e.red_id', $red);
+            if ($microrred > 0) $query->where('e.microrred_id', $microrred);
             // if ($eess > 0) $query->where('e.id', $eess);
         };
         return ImporPadronNominal::from('sal_impor_padron_nominal as pn')
@@ -1684,17 +1890,31 @@ class ImporPadronNominalRepositorio
             ->get();
     }
 
-    public static function eess_minsa($importacion, $red, $microrred)
+    public static function microrred_minsa($importacion, $red)
     {
-        $filtros = function ($query) use ($red, $microrred) {
-            if ($red > 0) $query->where('e.red_id', $red);
-            if ($microrred > 0) $query->where('e.microrred_id', $microrred);
-        };
-        return Establecimiento::from('sal_establecimiento as e')->select('e.id', 'e.codigo_unico as codigo', 'e.nombre_establecimiento as nombre')
+        $query = Microrred::from('sal_microrred as m')
+            ->join('sal_establecimiento as e', 'e.microrred_id', '=', 'm.id')
             ->join('sal_impor_padron_nominal as ipn', 'ipn.establecimiento_id', '=', 'e.id')
             ->where('e.cod_disa', 34)
             ->where('ipn.importacion_id', $importacion)
+            ->where('ipn.establecimiento_id', '>', 0);
+        if ($red > 0) $query->where('m.red_id', $red);
+        return $query->select('m.*')->distinct()->get();
+    }
+
+    public static function eess_minsa($importacion, $red, $microrred)
+    {
+        $filtros = function ($query) use ($red, $microrred) {
+            if ($red > 0) $query->where('m.red_id', $red);
+            if ($microrred > 0) $query->where('e.microrred_id', $microrred);
+        };
+        return Establecimiento::from('sal_establecimiento as e')
+            ->join('sal_impor_padron_nominal as ipn', 'ipn.establecimiento_id', '=', 'e.id')
+            ->join('sal_microrred as m', 'm.id', '=', 'e.microrred_id')
+            ->where('e.cod_disa', 34)
+            ->where('ipn.importacion_id', $importacion)
             ->tap($filtros)
+            ->select('e.id', 'e.codigo_unico as codigo', 'e.nombre_establecimiento as nombre')
             ->groupBy('e.id', 'e.codigo_unico', 'e.nombre_establecimiento')
             ->get();
     }

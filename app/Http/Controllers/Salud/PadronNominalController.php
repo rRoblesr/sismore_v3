@@ -51,17 +51,25 @@ class PadronNominalController extends Controller
         return response()->json($mes);
     }
 
+    public function area($anio, $mes)
+    {
+        $fuente = ImporPadronNominalController::$FUENTE;
+        $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio, $mes);
+        $query = ImporPadronNominal::select('area_ccpp as area')
+            ->distinct()
+            ->where('importacion_id', $impMaxAnio)->get();
+        return $query;
+    }
+
     public function edades($anio, $mes)
     {
-        $query = Importacion::select('id')
-            ->where(DB::raw('year(fechaActualizacion)'), $anio)->where(DB::raw('month(fechaActualizacion)'), $mes)->where('estado', 'PR')->where('fuenteImportacion_id', ImporPadronNominalController::$FUENTE)
-            ->orderBy('fechaActualizacion', 'desc')->first();
-        $importacion = $query ? $query->id : null;
+        $fuente = ImporPadronNominalController::$FUENTE;
+        $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio, $mes);
         $query = ImporPadronNominal::select(
             DB::raw('case when tipo_edad in("D","M") then 1 else edad+1 end as edades_id'),
             DB::raw('case when tipo_edad in("D","M") then "MENOR DE 1 AÑO" when tipo_edad="A" AND edad=1 then "1 AÑO" else concat(edad," AÑOS") end as edades')
         )
-            ->where('importacion_id', $importacion)
+            ->where('importacion_id', $impMaxAnio)
             ->groupBy('edades_id', 'edades')->get();
         return $query;
     }
@@ -2192,19 +2200,18 @@ class PadronNominalController extends Controller
     public function tablerocalidadindicadorreporte(Request $rq)
     {
         $fuente = ImporPadronNominalController::$FUENTE;
-        $query = Importacion::select('id')->where(DB::raw('year(fechaActualizacion)'), $rq->anio)->where(DB::raw('month(fechaActualizacion)'), $rq->mes)->where('estado', 'PR')->where('fuenteImportacion_id', $fuente)->orderBy('fechaActualizacion', 'desc')->first();
-        $importacion = $query ? $query->id : null;
+        $importacion = PadronNominalRepositorio::PNImportacion_idmax($fuente, $rq->anio, $rq->mes);
 
         switch ($rq->div) {
             case 'head':
-                $data = ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->edades, 0);
+                $data = ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->area, $rq->edades, 0);
                 $card1 = number_format($data->avance, 1);
                 $card2 = number_format($data->conteo);
                 $card3 = number_format($data->cdni);
                 $card4 = number_format($data->sdni);
                 return response()->json(compact('card1', 'card2', 'card3', 'card4'));
-            case 'anal1':
-                $data = ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->edades, 0);
+            case 'anal01':
+                $data = ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->area, $rq->edades, 0);
                 $info['categoria'] = [];
                 $info['serie'] = [];
                 foreach ($data as $key => $value) {
@@ -2213,14 +2220,14 @@ class PadronNominalController extends Controller
                 }
 
                 return response()->json(compact('info', 'data'));
-            case 'anal2':
-                $info = ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->edades, 0);
+            case 'anal02':
+                $info = ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->area, $rq->edades, 0);
                 return response()->json(compact('info'));
-            case 'anal3':
-                $info = ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->edades, 0);
+            case 'anal03':
+                $info = ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->area, $rq->edades, 0);
                 return response()->json(compact('info'));
-            case 'tabla1':
-                $base = ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->edades, 0);
+            case 'tabla01':
+                $base = ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->area, $rq->edades, 0);
                 $foot = [];
                 if ($base->count() > 0) {
                     $foot = clone $base[0];
@@ -2237,8 +2244,8 @@ class PadronNominalController extends Controller
                 }
                 $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla1', compact('base', 'foot'))->render();
                 return response()->json(compact('excel'));
-            case 'tabla2':
-                $base = ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->edades, 0);
+            case 'tabla02':
+                $base = ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->area, $rq->edades, 0);
                 $foot = [];
                 if ($base->count() > 0) {
                     $foot = clone $base[0];
@@ -2266,7 +2273,7 @@ class PadronNominalController extends Controller
                 $excel = view('salud.PadronNominal.TableroCalidadIndicadorTabla2', compact('base', 'foot'))->render();
                 return response()->json(compact('excel'));
             case 'tabla0201':
-                $base =  ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->edades, $rq->ubigeo);
+                $base =  ImporPadronNominalRepositorio::head_lista_indicadores($rq->div, $rq->indicador, $importacion, $rq->edades, $rq->area, $rq->ubigeo);
                 $foot = [];
                 if ($base->count() > 0) {
                     $foot = clone $base[0];
@@ -4447,7 +4454,15 @@ class PadronNominalController extends Controller
         return response()->json($microrred);
     }
 
-    public function ipn_establecimientos_minsa($anio, $mes, $red, $microrred)
+    public function microrred_minsa($anio, $mes, $red)
+    {
+        $fuente = ImporPadronNominalController::$FUENTE;
+        $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio, $mes);
+        $microrred = ImporPadronNominalRepositorio::microrred_minsa($impMaxAnio, $red);
+        return response()->json($microrred);
+    }
+
+    public function establecimiento_minsa($anio, $mes, $red, $microrred)
     {
         $fuente = ImporPadronNominalController::$FUENTE;
         $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio, $mes);

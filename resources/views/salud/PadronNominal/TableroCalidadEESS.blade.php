@@ -505,6 +505,9 @@
         };
 
         $(document).ready(function() {
+            Object.keys(spinners).forEach(key => {
+                SpinnerManager.show(key);
+            });
             $('#anio').on('change', function() {
                 cargarCards();
             });
@@ -550,11 +553,7 @@
                 type: "GET",
                 dataType: "JSON",
                 beforeSend: function() {
-                    if (spinners[div]) {
-                        spinners[div].forEach(selector => {
-                            $(selector).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                        });
-                    }
+                    SpinnerManager.show(div);
                 },
                 success: function(data) {
                     switch (div) {
@@ -668,7 +667,7 @@
 
         function cargarMicrorred() {
             $.ajax({
-                url: "{{ route('salud.padronnominal.calidadcriterio.microrred', ['anio' => ':anio', 'mes' => ':mes', 'red' => ':red']) }}"
+                url: "{{ route('salud.padronnominal.microrred.minsa', ['anio' => ':anio', 'mes' => ':mes', 'red' => ':red']) }}"
                     .replace(':anio', $('#anio').val())
                     .replace(':mes', $('#mes').val())
                     .replace(':red', $('#red').val()),

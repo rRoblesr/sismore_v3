@@ -12,7 +12,8 @@
         <div
             class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center p-2">
             <h6 class="mb-2 mb-md-0 text-center text-md-left text-white">
-                <i class="fas fa-chart-bar d-none"></i>CONTROL DE CALIDAD DEL PADRÓN NOMINAL DE NIÑOS Y NIÑAS MENORES DE 6 AÑOS
+                <i class="fas fa-chart-bar d-none"></i>CONTROL DE CALIDAD DEL PADRÓN NOMINAL DE NIÑOS Y NIÑAS MENORES DE 6
+                AÑOS
             </h6>
             <div class="text-center text-md-right">
                 <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
@@ -29,11 +30,9 @@
                 <div class="col-md-2 col-6 my-1">
                     <div class="custom-select-container">
                         <label for="anio">Año</label>
-                        <select id="anio" name="anio" class="form-control font-11"
-                            onchange="cargarMes();">
+                        <select id="anio" name="anio" class="form-control font-11" onchange="cargarMes();">
                             @foreach ($anios as $item)
-                                <option value="{{ $item->anio }}"
-                                    {{ $item->anio == date('Y') ? 'selected' : '' }}>
+                                <option value="{{ $item->anio }}" {{ $item->anio == date('Y') ? 'selected' : '' }}>
                                     {{ $item->anio }}</option>
                             @endforeach
                         </select>
@@ -43,8 +42,7 @@
                 <div class="col-md-2 col-6 my-1">
                     <div class="custom-select-container">
                         <label for="mes">Mes</label>
-                        <select id="mes" name="mes" class="form-control font-11"
-                            onchange="cargarCards();">
+                        <select id="mes" name="mes" class="form-control font-11" onchange="cargarCards();">
                         </select>
                     </div>
                 </div>
@@ -65,8 +63,7 @@
                 <div class="col-md-2 col-6 my-1">
                     <div class="custom-select-container">
                         <label for="distrito">Distrito</label>
-                        <select id="distrito" name="distrito" class="form-control font-11"
-                            onchange="cargarCards();">
+                        <select id="distrito" name="distrito" class="form-control font-11" onchange="cargarCards();">
                             <option value="0">TODOS</option>
                         </select>
                     </div>
@@ -623,6 +620,9 @@
         };
 
         $(document).ready(function() {
+            Object.keys(spinners).forEach(key => {
+                SpinnerManager.show(key);
+            });
             cargarMes();
             cargarDistritos();
             // cargarCards();
@@ -699,11 +699,7 @@
                 type: "GET",
                 dataType: "JSON",
                 beforeSend: function() {
-                    if (spinners[div]) {
-                        spinners[div].forEach(selector => {
-                            $(selector).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                        });
-                    }
+                    SpinnerManager.show(div);
                 },
                 success: function(data) {
                     switch (div) {
