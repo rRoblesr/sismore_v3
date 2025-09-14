@@ -8,43 +8,6 @@
 @endsection
 
 @section('content')
-    {{-- <div class="card border" style="border-color: #88D1B7;">
-        <div
-            class="card-header  border-success-0 bg-transparent text-danger d-flex flex-column flex-md-row justify-content-between align-items-md-center px-2 py-2">
-            <h6 class="card-title mb-2 mb-md-0 text-center text-primary text-md-left text-wrap">
-                Directorio de establecimientos de salud de Ucayali
-            </h6>
-            <div class="text-center text-md-right">
-                <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
-                    <i class="fa fa-redo"></i> Actualizar
-                </button>
-            </div>
-        </div>
-        <div class="card-body p-2">
-            <!-- Contenido de la tarjeta -->
-        </div>
-    </div> --}}
-
-
-    {{-- <div class="card  card-border border border-plomo-0">
-        <div
-            class="card-header border-success-0 bg-transparent text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center px-2 py-2">
-            <h6 class="card-title mb-2 mb-md-0 text-center text-primary text-md-left text-wrap">
-                Directorio de establecimientos de salud de Ucayali
-            </h6>
-            <div class="text-center text-md-right">
-                <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
-                    <i class="fa fa-redo"></i> Actualizar
-                </button>
-            </div>
-        </div>
-        <div class="card-body p-2">
-            <!-- Contenido de la tarjeta -->
-        </div>
-    </div> --}}
-
-
-
     <div class="card">
         <div
             class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center px-2 py-2">
@@ -66,8 +29,7 @@
                 <div class="col-md-2 my-1">
                     <div class="custom-select-container">
                         <label for="provincia">Provincia</label>
-                        <select id="provincia" name="provincia" class="form-control font-11"
-                            onchange="cargarDistritos();">
+                        <select id="provincia" name="provincia" class="form-control font-11" onchange="">
                             <option value="0">TODOS</option>
                             @foreach ($provincias as $item)
                                 <option value="{{ $item->id }}"> {{ $item->nombre }}</option>
@@ -79,8 +41,7 @@
                 <div class="col-md-2 my-1">
                     <div class="custom-select-container">
                         <label for="distrito">Distrito</label>
-                        <select id="distrito" name="distrito" class="form-control font-11"
-                            onchange="cargarCards();">
+                        <select id="distrito" name="distrito" class="form-control font-11" onchange="">
                             <option value="0">TODOS</option>
                         </select>
                     </div>
@@ -89,12 +50,11 @@
                 <div class="col-md-2 my-1">
                     <div class="custom-select-container">
                         <label for="red">Red</label>
-                        <select id="red" name="red" class="form-control font-11"
-                            onchange="cargarMicrorred();cargarCards();">
+                        <select id="red" name="red" class="form-control font-11" onchange="">
                             <option value="0">TODOS</option>
-                            @foreach ($red as $item)
+                            {{-- @foreach ($red as $item)
                                 <option value="{{ $item->id }}"> {{ $item->nombre }}</option>
-                            @endforeach
+                            @endforeach --}}
                         </select>
                     </div>
                 </div>
@@ -102,8 +62,7 @@
                 <div class="col-md-2 my-1">
                     <div class="custom-select-container">
                         <label for="microrred">Microrred</label>
-                        <select id="microrred" name="microrred" class="form-control font-11"
-                            onchange="cargarCards();">
+                        <select id="microrred" name="microrred" class="form-control font-11" onchange="">
                             <option value="0">TODOS</option>
                         </select>
                     </div>
@@ -113,91 +72,6 @@
 
         </div>
     </div>
-
-
-    {{-- <div class="card">
-        <!--div class="card card-border"><div class="card-header border-success-0 bg-transparent p-0"-->
-        <div
-            class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center px-2 py-2">
-            <!--h3 class="card-title"></h3-->
-            <h6 class="card-title mb-2 mb-md-0 text-center text-white text-md-left text-wrap">
-                <!--i class="fas fa-chart-bar"></i--> Directorio de establecimientos de salud de ucayali
-            </h6>
-            <div class="text-center text-md-right">
-                <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
-                    <i class="fa fa-redo"></i> Actualizar</button>
-            </div>
-        </div>
-        <div class="card-body p-2">
-          
-        </div>
-    </div> --}}
-
-    {{-- <div class="row">
-        <div class="col-lg-12 col-md-12">
-            <div class="card">
-                <div class="card-header bg-success-0">
-                    <div class="card-widgets">
-                        <button type="button" class="btn btn-danger btn-xs"
-                            onclick="window.location.href=`{{ route('salud.padronnominal.tablerocalidad.consulta', ['anio' => 'anio', 'mes' => 'mes']) }}`.replace('anio',$('#anio').val()).replace('mes',$('#mes').val())">
-                            <i class="fas fa-search"></i> Consultas</button>
-                        <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
-                            <i class="fa fa-redo"></i> Actualizar</button>
-                    </div>
-                    <h3 class="card-title text-white font-14">Directorio de establecimientos de salud de ucayali</h3>
-                </div>
-                <div class="card-body pb-0">
-                    <div class="form-group row align-items-center vh-5">
-                        <div class="col-lg-4 col-md-4 col-sm-4 my-1">
-                            <h4 class="page-title font-12">Fuente: RENIPRESS - MINSA, {{ $actualizado }}</h4>
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2 my-1">
-                            <div class="custom-select-container">
-                                <label for="provincia">PROVINCIA</label>
-                                <select id="provincia" name="provincia" class="form-control font-11"
-                                    onchange="cargarDistritos();">
-                                    <option value="0">TODOS</option>
-                                    @foreach ($provincias as $item)
-                                        <option value="{{ $item->id }}"> {{ $item->nombre }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2 my-1">
-                            <div class="custom-select-container">
-                                <label for="distrito">DISTRITO</label>
-                                <select id="distrito" name="distrito" class="form-control font-11"
-                                    onchange="cargarCards();">
-                                    <option value="0">TODOS</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2 my-1">
-                            <div class="custom-select-container">
-                                <label for="red">RED</label>
-                                <select id="red" name="red" class="form-control font-11"
-                                    onchange="cargarMicrorred();cargarCards();">
-                                    <option value="0">TODOS</option>
-                                    @foreach ($red as $item)
-                                        <option value="{{ $item->id }}"> {{ $item->nombre }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2 my-1">
-                            <div class="custom-select-container">
-                                <label for="microrred">MICRORRED</label>
-                                <select id="microrred" name="microrred" class="form-control font-11"
-                                    onchange="cargarCards();">
-                                    <option value="0">TODOS</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
 
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6">
@@ -303,7 +177,7 @@
                 regional
             </h6>
             <div class="text-center text-md-right">
-                <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla2')">
+                <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla1')">
                     <i class="fa fa-file-excel"></i> Descargar</button>
             </div>
         </div>
@@ -319,36 +193,6 @@
         </div>
     </div>
 
-
-    {{-- <div class="row">
-        <div class="col-lg-12">
-            <!--div class="card">
-                <div class="card-header"-->
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                    <div class="card-widgets">
-                        <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla2')">
-                            <i class="fa fa-file-excel"></i> Descargar</button>
-                    </div>
-                    <h3 class="card-title">
-                        Número de establecimientos de salud y centros de apoyo activos por institucion, según categoría a
-                        nivel regional
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="table-responsive" id="ctabla1">
-
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
     <div class="card card-border border border-plomo-0">
         <div
             class="card-header border-success-0 bg-transparent text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center px-2 py-2">
@@ -357,7 +201,7 @@
                 regional
             </h6>
             <div class="text-center text-md-right">
-                <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla3')">
+                <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla2')">
                     <i class="fa fa-file-excel"></i> Descargar</button>
             </div>
         </div>
@@ -372,35 +216,6 @@
             </div>
         </div>
     </div>
-
-    {{-- <div class="row">
-        <div class="col-lg-12">
-            <!--div class="card">
-                <div class="card-header"-->
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                    <div class="card-widgets">
-                        <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla3')">
-                            <i class="fa fa-file-excel"></i> Descargar</button>
-                    </div>
-                    <h3 class="card-title">
-                        Número de establecimientos de salud y centros de apoyo activos por distritos, según categoría a
-                        nivel regional
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="table-responsive" id="ctabla2">
-
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
 
     <div class="card card-border border border-plomo-0">
         <div
@@ -424,62 +239,6 @@
             </div>
         </div>
     </div>
-
-    {{-- <div class="row">
-        <div class="col-lg-12">
-            <!--div class="card">
-                <div class="card-header"-->
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                    <div class="card-widgets">
-                        <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla3')">
-                            <i class="fa fa-file-excel"></i> Descargar</button>
-                    </div>
-                    <h3 class="card-title">
-                        Listado de establecimiento de salud de ucayali
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="table-responsive" id="ctabla3">
-
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
-    <!--  Modal content for the above example -->
-    <div class="modal fade" id="modal-centropoblado" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-        aria-hidden="true" style="display: none;">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-
-                    <h5 class="modal-title" id="myLargeModalLabel">Población de niños y niñas menos de 6 años por Centro
-                        Poblado, segun sexo y edades</h5>
-                    <div class="card-widgets">
-                        <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla3_1')">
-                            <i class="fa fa-file-excel"></i> Descargar</button>
-                    </div>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="table-responsive" id="ctabla3_1">
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div><!-- /.modal -->
 
     <!--  Modal content for the above example -->
     <div class="modal fade" id="modal-consulta" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
@@ -647,7 +406,7 @@
             </div>
 
         </div>
-    </div><!-- /.modal -->
+    </div>
 @endsection
 
 @section('js')
@@ -658,10 +417,6 @@
         var ubigeo_select = '';
         const spinners = {
             head: ['#card1', '#card2', '#card3', '#card4'],
-            head1: ['#card1'],
-            head2: ['#card2'],
-            head3: ['#card3'],
-            head4: ['#card4'],
             anal1: ['#anal1'],
             anal2: ['#anal2'],
             anal3: ['#anal3'],
@@ -673,9 +428,22 @@
         };
 
         $(document).ready(function() {
-            cargarMicrorred();
+            Object.keys(spinners).forEach(key => {
+                SpinnerManager.show(key);
+            });
+            $('#provincia').on('change', function() {
+                cargarDistritos();
+            });
+            $('#distrito').on('change', function() {
+                cargarRed();
+            });
+            $('#red').on('change', function() {
+                cargarMicrorred();
+            });
+            $('#microrred').on('change', function() {
+                cargarCards();
+            });
             cargarDistritos();
-
         });
 
         function cargarCards() {
@@ -699,11 +467,7 @@
                 type: "GET",
                 dataType: "JSON",
                 beforeSend: function() {
-                    // if (spinners[div]) {
-                    //     spinners[div].forEach(selector => {
-                    //         $(selector).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    //     });
-                    // }
+                    SpinnerManager.show(div);
                 },
                 success: function(data) {
                     switch (div) {
@@ -990,7 +754,8 @@
 
         function cargarDistritos() {
             $.ajax({
-                url: "{{ route('ubigeo.distrito.25', '') }}/" + $('#provincia').val(),
+                url: "{{ route('eess.ubigeo.provincia', ['provincia' => ':provincia']) }}"
+                    .replace(':provincia', $('#provincia').val()),
                 type: 'GET',
                 success: function(data) {
                     $("#distrito option").remove();
@@ -1000,7 +765,7 @@
                             "</option>"
                     });
                     $("#distrito").append(options);
-                    cargarCards();
+                    cargarRed();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -1008,18 +773,43 @@
             });
         }
 
+        function cargarRed() {
+            $.ajax({
+                url: "{{ route('eess.ubigeo.red', ['provincia' => ':provincia', 'distrito' => ':distrito']) }}"
+                    .replace(':provincia', $('#provincia').val())
+                    .replace(':distrito', $('#distrito').val()),
+                type: 'GET',
+                success: function(data) {
+                    $("#red option").remove();
+                    var options = '<option value="0">TODOS</option>';
+                    $.each(data, function(index, value) {
+                        options += `<option value='${value.id}'>${value.codigo} | ${value.nombre}</option>`;
+                    });
+                    $("#red").append(options);
+                    cargarMicrorred();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+        {{--  url: "{{ route('microred.cargar.find.2', '') }}/" + $('#red').val(), --}}
+
         function cargarMicrorred() {
             $.ajax({
-                url: "{{ route('microred.cargar.find.2', '') }}/" + $('#red').val(),
+                url: "{{ route('eess.ubigeo.microrred', ['provincia' => ':provincia', 'distrito' => ':distrito', 'red' => ':red']) }}"
+                    .replace(':provincia', $('#provincia').val())
+                    .replace(':distrito', $('#distrito').val())
+                    .replace(':red', $('#red').val()),
                 type: 'GET',
                 success: function(data) {
                     $("#microrred option").remove();
                     var options = '<option value="0">TODOS</option>';
                     $.each(data, function(index, value) {
-                        options += `<option value='${value.id}'>${value.nombre}</option>`;
+                        options += `<option value='${value.id}'>${value.codigo} | ${value.nombre}</option>`;
                     });
                     $("#microrred").append(options);
-                    // cargarCards();
+                    cargarCards();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -1041,13 +831,12 @@
 
         function descargarExcel(div) {
             window.open(
-                "{{ route('salud.padronnominal.tablerocalidad.exportar.excel', ['div' => 'div', 'importacion' => 0, 'anio' => 'anio', 'mes' => 'mes', 'provincia' => 'provincia', 'distrito' => 'distrito', 'ubigeo' => 'ubigeo']) }}"
-                .replace('div', div)
-                .replace('anio', $('#anio').val())
-                .replace('mes', $('#mes').val())
-                .replace('provincia', $('#provincia').val())
-                .replace('distrito', $('#distrito').val())
-                .replace('ubigeo', ubigeo_select)
+                "{{ route('salud.ipress.dashboard.exportar.excel', ['div' => ':div', 'provincia' => ':provincia', 'distrito' => ':distrito', 'red' => ':red', 'microrred' => ':microrred']) }}"
+                .replace(':div', div)
+                .replace(':provincia', $('#provincia').val())
+                .replace(':distrito', $('#distrito').val())
+                .replace(':red', $('#red').val())
+                .replace(':microrred', $('#microrred').val())
             );
         }
         // https://www.google.com/maps?q=-8.3928622,-74.5826166 (HOSPITAL AMAZONICO - YARINACOCHA)

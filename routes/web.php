@@ -1420,6 +1420,10 @@ Route::get('/Salud/PadronNominal/TableroSeguimiento', [PadronNominalController::
 
 Route::get('/Salud/IPRESS/TableroControl', [EstablecimientoController::class, 'dashboard'])->name('salud.ipress.dashboard');
 Route::get('/Salud/IPRESS/TableroControl/Contenido', [EstablecimientoController::class, 'dashboardContenido'])->name('salud.ipress.dashboard.contenido');
+Route::get('/Salud/IPRESS/TableroControl/Exportar/{div}/{provincia}/{distrito}/{red}/{microrred}', [EstablecimientoController::class, 'dashboardExport'])->name('salud.ipress.dashboard.exportar.excel');
+
+// Route::get('/Salud/IPRESS/TableroControl', [EstablecimientoController::class, 'dashboard'])->name('salud.ipress.dashboard');
+
 
 Route::get('/Salud/PadronNominal/TableroCalidad', [PadronNominalController::class, 'tablerocalidad'])->name('salud.padronnominal.tablerocalidad');
 Route::get('/Salud/PadronNominal/TableroCalidad/reportes', [PadronNominalController::class, 'tablerocalidadreporte'])->name('salud.padronnominal.tablerocalidad.reporte');
@@ -1479,8 +1483,14 @@ Route::get('/EESS/Find/{id}', [EstablecimientoController::class, 'ajax_edit'])->
 Route::get('/EESS/Find/cod_unico/01/{cod_unico}', [EstablecimientoController::class, 'ajax_codunico02'])->name('eess.find.cod_unico.01');
 Route::get('/EESS/Find/cod_unico/02/{cod_unico}', [EstablecimientoController::class, 'ajax_codunico02'])->name('eess.find.cod_unico.02');
 
+Route::get('/EESS/PROVINCIA', [EstablecimientoController::class, 'ubigeo_provincia_select'])->name('eess.ubigeo.distrito');
+Route::get('/EESS/DISTRITO/{provincia}', [EstablecimientoController::class, 'ubigeo_distrito_select'])->name('eess.ubigeo.provincia');
+Route::get('/EESS/UBIGEO/RED/{provincia}/{distrito}', [EstablecimientoController::class, 'ubigeo_red_select'])->name('eess.ubigeo.red');
+Route::get('/EESS/UBIGEO/MICRORRED/{provincia}/{distrito}/{red}', [EstablecimientoController::class, 'ubigeo_microrred_select'])->name('eess.ubigeo.microrred');
+
 Route::get('/Microred/Find/cargarMicrored/{red}', [EstablecimientoController::class, 'cargarMicroredSelect'])->name('microred.cargar.find');
 Route::get('/Microred/Find/cargarMicroredUcayali/{red}', [EstablecimientoController::class, 'cargarMicroredUcayaliSelect'])->name('microred.cargar.find.2');
+
 
 
 Route::get('/Salud/PadronNominal/Importar', [ImporPadronNominalController::class, 'importar'])->name('salud.padron.importar.index'); //->name('salud.padronnominal.importar');
