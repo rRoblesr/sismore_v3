@@ -200,7 +200,7 @@ class ImporPadronWebController extends Controller
             return $this->json_output(400, "Error en la carga de datos: " . $e->getMessage());
         }
 
-        try {
+        try { //proceso nro 01
             DB::select('call edu_pa_procesarPadronWeb(?,?)', [$importacion->id, auth()->user()->id]);
         } catch (Exception $e) {
             $importacion->estado = 'PE';
@@ -210,7 +210,7 @@ class ImporPadronWebController extends Controller
             return $this->json_output(400, $mensaje);
         }
 
-        try {
+        try { //proceso rno 02
             DB::select('call edu_pa_procesar_cubo_pacto2_01(?)', [$importacion->id]);
         } catch (Exception $e) {
             $importacion->estado = 'PE';
@@ -540,5 +540,29 @@ class ImporPadronWebController extends Controller
     {
         $name = 'Padron Web ' . date('Y-m-d') . '.xlsx';
         return Excel::download(new ImporPadronWebExport, $name);
+    }
+
+
+    public function ejecutarProcesos($proceso, $importacion)
+    {
+        ini_set('memory_limit', '-1');
+        set_time_limit(0);
+        try {
+            switch ($proceso) {
+                case '1':
+                    DB::select('call edu_pa_procesarPadronWeb(?,?)', [$importacion, auth()->user()->id]);
+                    break;
+                case '2':
+                    $imp = ImportacionRepositorio::ImportacionMax_porfuente($this->fuente);
+                    DB::select('call edu_pa_procesar_cubo_pacto2_01(?)', [$imp->id]);
+                    break;
+                default:
+                    throw new Exception("No se encuentra el proceso seleccionado.");
+                    break;
+            }
+        } catch (Exception $e) {
+            return response()->json(['error' => true, 'mensaje' => 'Error en SFLController ' . $e->getMessage()]);
+        }
+        return response()->json(['error' => false, 'mensaje' => 'Proceso ejecutado correctamente.', 'importacion_id' => $imp ? $imp->id : $importacion]);
     }
 }

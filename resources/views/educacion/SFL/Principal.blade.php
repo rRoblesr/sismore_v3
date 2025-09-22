@@ -73,6 +73,9 @@
                     <i class="fa fa-redo"></i> Actualizar</button> --}}
                 {{-- <button type="button" class="btn btn-primary btn-xs" onclick="add()">
                     <i class="fa fa-plus"></i> Nuevo</button> --}}
+                {{-- <button type="button" class="btn btn-primary btn-xs" onclick="ejecutarPacto2()">
+                    <i class="fa fa-plus"></i> Actualizar Pacto 2
+                </button> --}}
                 <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i class="fa fa-redo"></i>
                     Actualizar</button>
             </div>
@@ -579,6 +582,36 @@
         </div>
     </div>
     <!-- End Bootstrap modal -->
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalProceso" tabindex="-1" role="dialog" aria-labelledby="modalProcesoLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="modalProcesoLabel">Procesando...</h5>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="progress">
+                        <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                            role="progressbar" style="width: 0%">0%</div>
+                    </div>
+                    <p id="statusText" class="mt-3">Iniciando proceso...</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnCerrarModal" class="btn btn-secondary btn-sm" data-dismiss="modal"
+                        disabled>Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Audio (pitido) -->
+    <audio id="beepAudio">
+        <source src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" type="audio/ogg">
+    </audio>
 @endsection
 
 @section('js')
@@ -1108,6 +1141,48 @@
                 $('#btnSavePlantilla').html('Guardar');
                 $('#btnSavePlantilla').attr('disabled', false);
             }
+        }
+
+        function ejecutarPacto2() {
+            // Abre modal y resetea estado
+            $('#modalProceso').modal('show');
+            $('#progressBar').css('width', '0%').text('0%');
+            $('#statusText').text('Iniciando proceso...');
+            $('#btnCerrarModal').prop('disabled', true);
+
+            // Simula progreso mientras se ejecuta
+            let progress = 0;
+            let interval = setInterval(function() {
+                if (progress < 90) {
+                    progress += 10;
+                    $('#progressBar').css('width', progress + '%').text(progress + '%');
+                }
+            }, 500);
+
+            // Llamada AJAX al backend
+            $.ajax({
+                url: "{{ route('ImporPadronWeb.procedures', ['proceso' => 2, 'importacion' => 1]) }}",
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(response) {
+                    clearInterval(interval);
+                    $('#progressBar').css('width', '100%').text('100%');
+                    $('#statusText').text('✅ Proceso completado correctamente');
+                    $('#btnCerrarModal').prop('disabled', false);
+
+                    // Pitido de finalización
+                    document.getElementById('beepAudio').play();
+                },
+                error: function(xhr) {
+                    clearInterval(interval);
+                    $('#progressBar').removeClass('bg-success').addClass('bg-danger')
+                        .css('width', '100%').text('Error');
+                    $('#statusText').text('❌ Error en el proceso: ' + xhr.responseJSON.mensaje);
+                    $('#btnCerrarModal').prop('disabled', false);
+                }
+            });
         }
     </script>
 @endsection

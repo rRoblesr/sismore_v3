@@ -14,7 +14,9 @@ use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\UgelRepositorio;
 use App\Repositories\Parametro\IndicadorGeneralRepositorio;
 use App\Repositories\Parametro\UbigeoRepositorio;
+use App\Services\educacion\ProcesamientoService;
 use DateTime;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -27,6 +29,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 class SFLController extends Controller
 {
     public $mesname = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'setiembre', 'octubre', 'noviembre', 'diciembre'];
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -46,6 +49,112 @@ class SFLController extends Controller
     }
 
     public function ListarDT(Request $rq)
+    {
+        $draw   = intval($rq->draw);
+        $start  = intval($rq->start);
+        $length = intval($rq->length);
+
+        // Arrays para mostrar el estado y el tipo
+        $est = ['', 'SANEADO', 'NO SANEADO', 'NO REGISTRADO', 'EN PROCESO'];
+        $tip = ['', 'AFECTACION EN USO', 'TITULARIDAD', 'APORTE REGLAMENTARIO', 'OTROS'];
+
+        $query = DB::table('edu_sfl as s')
+            ->join('edu_institucioneducativa as ie', 'ie.id', '=', 's.institucioneducativa_id')
+            ->join('edu_centropoblado as cp', 'cp.id', '=', 'ie.CentroPoblado_id')
+            ->join('par_ubigeo as d', 'd.id', '=', 'cp.Ubigeo_id')
+            ->join('par_ubigeo as p', 'p.id', '=', 'd.dependencia')
+            ->join('edu_area as a', 'a.id', '=', 'ie.Area_id')
+            ->join('edu_ugel as u', 'u.id', '=', 'ie.Ugel_id')
+            ->where('s.estado_servicio', 1)
+            ->tap(function ($query) use ($rq) {
+                if ($rq->ugel > 0) {
+                    $query->where('u.id', $rq->ugel);
+                }
+                if ($rq->provincia > 0) {
+                    $query->where('p.id', $rq->provincia);
+                }
+                if ($rq->distrito > 0) {
+                    $query->where('d.id', $rq->distrito);
+                }
+                if ($rq->estado > 0) {
+                    // $query->where('estados', $rq->estado);
+                    $query->having('estados', $rq->estado);
+                }
+            })
+            ->select(
+                'ie.codLocal as local',
+                DB::raw('MAX(u.nombre) as ugel'),
+                DB::raw('MAX(a.nombre) as area'),
+                DB::raw('MAX(p.nombre) as provincia'),
+                DB::raw('MAX(d.nombre) as distrito'),
+                DB::raw('MAX(s.fecha_inscripcion) as inscripcion'),
+                DB::raw('MAX(s.tipo) as tipo'),
+                DB::raw('COUNT(s.id) as servicios'),
+                DB::raw("
+                CASE 
+                    WHEN COUNT(DISTINCT s.estado) = 1 THEN MAX(s.estado)  
+                    ELSE 
+                        CASE 
+                            WHEN SUM(s.estado = 2) > 0 THEN 2  
+                            WHEN SUM(s.estado = 1) > 0 AND (SUM(s.estado = 3) > 0 OR SUM(s.estado = 4) > 0) THEN 2  
+                            WHEN SUM(s.estado = 3) > 0 OR SUM(s.estado = 4) > 0 THEN 3  
+                            ELSE MAX(s.estado)  
+                        END
+                END AS estados
+            ")
+            )
+            ->groupBy('ie.codLocal')
+            ->get();
+
+        $data = [];
+        foreach ($query as $key => $value) {
+            $value->estado = $est[$value->estados] ?? '';
+            $btn  = '&nbsp;<a href="#" class="btn btn-info btn-xs" onclick="open_modular(`' . $value->local . '`)" title="MODIFICAR"><i class="fa fa-pen"></i></a>';
+            $btn .= '&nbsp;<a href="#" class="btn btn-orange-0 btn-xs" onclick="open_ver(`' . $value->local . '`)" title="VER"><i class="fas fa-eye"></i></a>';
+
+            switch ($value->estados) {
+                case '1':
+                    $estadox = '<span class="badge badge-success" style="font-size: 90%;">' . $value->estado . '</span>';
+                    break;
+                case '2':
+                    $estadox = '<span class="badge badge-danger" style="font-size: 90%;">' . $value->estado . '</span>';
+                    break;
+                case '3':
+                    $estadox = '<span class="badge badge-secondary" style="font-size: 90%;">' . $value->estado . '</span>';
+                    break;
+                case '4':
+                    $estadox = '<span class="badge badge-warning" style="font-size: 90%;">' . $value->estado . '</span>';
+                    break;
+                default:
+                    $estadox = '';
+                    break;
+            }
+            $data[] = [
+                ($key + 1),
+                str_pad($value->local, 6, '0', STR_PAD_LEFT),
+                $value->servicios,
+                $value->ugel,
+                $value->provincia,
+                $value->distrito,
+                $value->area,
+                $value->inscripcion ? date('d/m/Y', strtotime($value->inscripcion)) : '',
+                $tip[$value->tipo] ?? '',
+                $estadox,
+                "<div class='btn-group'>" . $btn . "</div>",
+            ];
+        }
+
+        $result = [
+            "draw"            => $draw,
+            "recordsTotal"    => $start,
+            "recordsFiltered" => $length,
+            "data"            => $data,
+        ];
+
+        return response()->json($result);
+    }
+
+    public function ListarDT_xxx(Request $rq)
     {
         // Parámetros de DataTables
         $draw   = intval($rq->draw);
@@ -1075,9 +1184,6 @@ class SFLController extends Controller
             $indicador->ficha_tecnica = $fichatecnica;
         $indicador->save();
 
-        // Cache::forget(session('listarDT_cacheKey'));
-        // Cache::forget(session('listarDT_sfl_cacheKey'));
-
         return response()->json(array('status' => true));
     }
 
@@ -1171,6 +1277,8 @@ class SFLController extends Controller
                 'documento' => $documento,
             ]);
         }
+        app(ProcesamientoService::class)->ejecutarProcesos(2, 1);
+
         Cache::forget(session('listarDT_cacheKey'));
         Cache::forget(session('listarDT_sfl_cacheKey'));
         return response()->json(array('status' => true));
@@ -1627,6 +1735,7 @@ class SFLController extends Controller
     //     }
     //     return null;
     // }
+
     public function fechaExcel($ff)
     {
         if ($ff) {

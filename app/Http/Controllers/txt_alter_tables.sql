@@ -3131,3 +3131,6 @@ ALTER TABLE `adm_menu` ADD `tipo_enlace` INT(11) NOT NULL DEFAULT '0' COMMENT '0
 ALTER TABLE `adm_menu` CHANGE `tipo_enlace` `tipo_enlace` INT(11) NOT NULL DEFAULT '0' COMMENT '0:NULL;1:ruta;2:powerbi';
 
 
+SELECT * FROM `adm_menu` where url like'%imporpadronweb.exportar%';
+cambiar por =>ImporPadronWeb.exportar
+
