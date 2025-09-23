@@ -513,7 +513,7 @@ class EstablecimientoRepositorio
         return Establecimiento::where('cod_disa', 34)
             ->where('estado', 'activo')
             ->whereIn('institucion', ['GOBIERNO REGIONAL', 'MINSA'])
-            ->whereIn('categoria', ['I-1', 'I-2', 'I-3', 'I-4', 'II-1', 'II-2', 'SIN CATEGORÍA'])
+            ->whereIn('categoria', ['I-1', 'I-2', 'I-3', 'I-4', 'II-1', 'II-2'])
             ->tap($filtros)
             ->count();
     }

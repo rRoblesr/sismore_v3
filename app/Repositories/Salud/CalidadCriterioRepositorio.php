@@ -12,7 +12,8 @@ class CalidadCriterioRepositorio
         $query = CalidadCriterio::from('sal_calidad_criterio as cc')
             ->join('sal_red as r', 'r.id', '=', 'cc.red_id')
             ->where('cc.importacion_id', $importacion)
-            ->whereIn('cc.red_id', [9, 10, 11, 12])
+            // ->whereIn('cc.red_id', [9, 10, 11, 12])
+            ->where('r.cod_disa', 34)
             ->select('r.id', 'r.codigo', 'r.nombre')
             ->groupBy('r.id', 'r.codigo', 'r.nombre')
             ->get();
@@ -26,7 +27,8 @@ class CalidadCriterioRepositorio
             ->join('par_importacion as i', 'i.id', '=', 'cc.importacion_id')
             ->whereYear('i.fechaActualizacion', $anio)
             ->whereMonth('i.fechaActualizacion', $mes)
-            ->whereIn('cc.red_id', [9, 10, 11, 12]);
+            ->where('mr.cod_disa', 34);
+            // ->whereIn('cc.red_id', [9, 10, 11, 12]);
         if ($red > 0) {
             $query = $query->where('mr.red_id', $red);
         }
