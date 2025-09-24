@@ -3,7 +3,6 @@
 namespace App\Repositories\Educacion;
 
 use App\Models\Educacion\CuboPacto1;
-use App\Models\Educacion\NivelModalidad;
 use App\Models\Educacion\Ugel;
 use Illuminate\Support\Facades\DB;
 

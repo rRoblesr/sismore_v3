@@ -13,6 +13,7 @@ use App\Http\Controllers\Administracion\UsuarioController;
 use App\Http\Controllers\Educacion\CensoController;
 use App\Http\Controllers\Educacion\CensoDocenteController;
 use App\Http\Controllers\Educacion\CuadroAsigPersonalController;
+use App\Http\Controllers\Educacion\CuboPacto2Controller;
 use App\Http\Controllers\Educacion\ImportacionController;
 use App\Http\Controllers\Educacion\EceController;
 use App\Http\Controllers\Educacion\ImporCensoDocenteController;
@@ -1310,7 +1311,11 @@ Route::get('/educacion/pactoregional/Edu/Reports1/find/mes/{anio}', [Indicadores
 Route::get('/educacion/pactoregional/Reports2', [IndicadoresController::class, 'PactoRegionalEduPacto2Reports'])->name('salud.indicador.pactoregional.edu.pacto2.reports');
 Route::get('/educacion/pactoregional/Edu/Reports2/find/mes/{anio}', [IndicadoresController::class, 'PactoRegionalEduPacto2FindMes'])->name('salud.indicador.pactoregional.edu.pacto2.find.mes');
 
-Route::get('/salud/pactoregional/{indicador_id}', [IndicadoresController::class, 'PactoRegionalDetalle'])->name('salud.indicador.pactoregional.detalle');
+Route::get('/educacion/pactoregional/pacto2/mes/{anio}', [CuboPacto2Controller::class, 'mes'])->name('educacion.pactoregional.pacto2.mes');
+Route::get('/educacion/pactoregional/pacto2/provincia/{anio}/{mes}', [CuboPacto2Controller::class, 'provincia'])->name('educacion.pactoregional.pacto2.provincia');
+Route::get('/educacion/pactoregional/pacto2/distrito/{anio}/{mes}/{provincia}', [CuboPacto2Controller::class, 'distrito'])->name('educacion.pactoregional.pacto2.distrito');
+
+Route::get('/pactoregional/{indicador_id}', [IndicadoresController::class, 'PactoRegionalDetalle'])->name('salud.indicador.pactoregional.detalle');
 Route::get('/salud/pactoregional/Exportar/{id}', [IndicadoresController::class, 'exportarPDF'])->name('salud.indicador.pactoregional.exportar.pdf');
 
 Route::get('/salud/conveniofed', [IndicadoresController::class, 'ConvenioFED'])->name('salud.indicador.conveniofed');

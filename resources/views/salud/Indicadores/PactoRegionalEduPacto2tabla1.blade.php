@@ -16,9 +16,9 @@
                 <tr class="text-center {{ $item->distrito == $ndis ? 'table-warning' : '' }}">
                     <td>{{ $key + 1 }}</td>
                     <td class="text-left">{{ $item->distrito }}</td>
-                    <td>{{ $item->valor }}%</td>
+                    <td>{{ $item->meta }}%</td>{{-- <td>{{ $item->valor }}%</td> --}}
                     <td>{{ $item->avance }}</td>
-                    <td>{!! avance($item->porcentaje) !!}</td>
+                    <td>{!! avance($item->indicador) !!}</td>
                     <td>
                         @if ($item->cumple == 1)
                             <i class="mdi mdi-thumb-up" style="font-size:13px;color:#43beac" title="CUMPLE"></i>
@@ -54,15 +54,15 @@
     {
         if ($monto < 51) {
             return '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px">' .
-                round($monto, 1) .
+                number_format($monto, 1) .
                 '%</span>';
         } elseif ($monto < 100) {
             return '<span class="badge badge-pill badge-warning" style="font-size:90%; width:50px">' .
-                round($monto, 1) .
+                number_format($monto, 1) .
                 '%</span>';
         } else {
             return '<span class="badge badge-pill badge-success" style="font-size:90%; width:50px">' .
-                round($monto, 1) .
+                number_format($monto, 1) .
                 '%</span>';
         }
     }

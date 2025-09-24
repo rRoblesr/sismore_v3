@@ -17,6 +17,7 @@ use App\Models\Salud\ImporPadronAnemia;
 use App\Models\Salud\ImporReportePN05;
 use App\Repositories\Educacion\CuboPacto1Repositorio;
 use App\Repositories\Educacion\CuboPacto2Repositorio;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class IndicadorGeneralMetaRepositorio
@@ -1044,19 +1045,21 @@ class IndicadorGeneralMetaRepositorio
     //###################### educacion pacto 2  #######################
     public static function getEduPacto2anal1($anio, $mes, $provincia, $distrito, $estado)
     {
-        // $query = DB::select('call edu_pa_sfl_porlocal_provincia(?,?,?,?)', [$ugel, $provincia, $distrito, $estado]);
-        // return $query;
-
-        // $npro = Ubigeo::where(DB::raw('length(codigo)'), 4)->where('nombre', $provincia)->first();
-        // $ndis = Ubigeo::where(DB::raw('length(codigo)'), 6)->where('nombre', $distrito)->first();
-        //
         return CuboPacto2Repositorio::getEduPacto2anal1($anio, $mes, $provincia, $distrito, $estado);
     }
 
-    public static function getEduPacto2tabla1($indicador_id, $anio, $mes, $provincia, $distrito, $estado)
+    public static function getEduPacto2tabla1_para_eliminar($indicador_id, $anio, $mes, $provincia, $distrito, $estado)
     {
-        $query = IndicadorGeneralMeta::select('par_Indicador_general_meta.*', 'd.codigo', 'd.id as distrito_id', 'd.nombre as distrito')->where('indicadorgeneral', $indicador_id)->where('anio', $anio)
-            ->join('par_ubigeo as d', 'd.id', '=', 'par_Indicador_general_meta.distrito')->get();
+        $query = IndicadorGeneralMeta::select(
+            'par_Indicador_general_meta.*',
+            'd.codigo',
+            'd.id as distrito_id',
+            'd.nombre as distrito'
+        )
+            ->where('indicadorgeneral', $indicador_id)
+            ->where('anio', $anio)
+            ->join('par_ubigeo as d', 'd.id', '=', 'par_Indicador_general_meta.distrito')
+            ->get();
         foreach ($query as $key => $value) {
             $data = CuboPacto2Repositorio::getEduPacto2tabla1($anio, $mes, 0, $value->distrito_id, 0);
             $value->avance = $data->count() > 0 ? ($data->first()->conteo ? $data->first()->conteo : 0) : 0; //$query->conteo ? $query->conteo : 0;
@@ -1066,11 +1069,71 @@ class IndicadorGeneralMetaRepositorio
         return $query;
     }
 
-    public static function getEduPacto2tabla2($anio, $ugel, $provincia, $distrito, $estado)
+    public static function getEduPacto2tabla1($indicador_id, $anio, $mes = null, $provincia = 0, $distrito = 0, $estado = 0)
     {
-        // $npro = Ubigeo::where(DB::raw('length(codigo)'), 4)->where('nombre', $provincia)->first();
-        // $ndis = Ubigeo::where(DB::raw('length(codigo)'), 6)->where('nombre', $distrito)->first();
-        // $query = DB::select('call edu_pa_sfl_porlocal_distrito(?,?,?,?)', [$ugel, $provincia, $distrito, $estado]);
+        // === 1. Subconsulta: Metas por distrito ===
+        $metas = DB::table('par_ubigeo as d')
+            ->leftJoin('par_indicador_general_meta as m', 'm.distrito', '=', 'd.id')
+            ->select('d.id', 'd.nombre', 'm.valor as meta')
+            ->where('m.indicadorgeneral', $indicador_id)
+            ->where('m.anio', $anio)
+            ->groupBy('d.id', 'd.nombre', 'm.valor');
+
+        // === 2. Subconsulta: Avance por distrito ===
+        $avances = DB::table('edu_cubo_pacto02_local as c')
+            ->select('c.distrito_id', DB::raw('COUNT(*) as avance'));
+
+        if ($anio) {
+            $fechaInicio = Carbon::create($anio, 1, 1);
+            if ($mes && $mes >= 1 && $mes <= 12) {
+                $fechaFin = Carbon::create($anio, $mes, 1)->endOfMonth();
+            } else {
+                $fechaFin = $fechaInicio->copy()->endOfYear();
+            }
+            $avances->whereBetween('c.fecha_inscripcion', [$fechaInicio, $fechaFin]);
+        }
+
+        if ($provincia > 0) $avances->where('c.provincia_id', $provincia);
+        if ($distrito > 0) $avances->where('c.distrito_id', $distrito);
+        if ($estado > 0) $avances->where('c.estado', $estado);
+
+        $avances->groupBy('c.distrito_id');
+
+        // === 3. Consulta principal con subconsultas ===
+        $sqlMetas = $metas->toSql();
+        $sqlAvances = $avances->toSql();
+
+        $bindingsMetas = $metas->getBindings();
+        $bindingsAvances = $avances->getBindings();
+
+        $resultado = DB::table(DB::raw("({$sqlMetas}) as ubigeo"))
+            ->select(
+                'ubigeo.id',
+                'ubigeo.nombre as distrito',
+                DB::raw('COALESCE(ubigeo.meta, 0) as meta'),
+                DB::raw('COALESCE(tb.avance, 0) as avance'),
+                DB::raw("
+                        CASE 
+                            WHEN COALESCE(tb.avance, 0) = 0 THEN NULL 
+                            ELSE ROUND(ubigeo.meta / tb.avance, 1) 
+                        END as indicador
+                    "),
+                DB::raw('if((CASE 
+                    WHEN COALESCE(tb.avance, 0) = 0 THEN NULL 
+                    ELSE ROUND(ubigeo.meta / tb.avance, 1) 
+                END)>ubigeo.meta,1,0) as cumple')
+            )
+            ->leftJoin(DB::raw("({$sqlAvances}) as tb"), 'tb.distrito_id', '=', 'ubigeo.id')
+            ->mergeBindings($metas)      // Inyecta bindings de metas
+            ->mergeBindings($avances)    // Inyecta bindings de avances
+            ->orderBy('indicador', 'desc')
+            ->get();
+
+        return $resultado;
+    }
+
+    public static function getEduPacto2tabla2_para_eliminar($anio, $mes, $provincia, $distrito, $estado)
+    {
         $query = DB::table('edu_cubo_pacto02_local')->select(
             'distrito',
             DB::raw('count(local) as conteo'),
@@ -1085,6 +1148,44 @@ class IndicadorGeneralMetaRepositorio
 
         $query = $query->groupBy('distrito')->get();
         return $query;
+    }
+
+    public static function getEduPacto2tabla2($anio = null, $mes = null, $provincia = 0, $distrito = 0, $estado = 0)
+    {
+        $query = DB::table('edu_cubo_pacto02_local')
+            ->select(
+                'distrito',
+                DB::raw('COUNT(*) as conteo'),
+                DB::raw('
+                        CASE 
+                            WHEN COUNT(*) = 0 THEN 0 
+                            ELSE ROUND(100 * SUM(CASE WHEN estado = 1 THEN 1 ELSE 0 END) / COUNT(*), 1)
+                        END AS indicador
+                    '),
+                DB::raw('SUM(CASE WHEN estado = 1 THEN 1 ELSE 0 END) as si'),
+                DB::raw('SUM(CASE WHEN estado = 2 THEN 1 ELSE 0 END) as no'),
+                DB::raw('SUM(CASE WHEN estado = 3 THEN 1 ELSE 0 END) as pro'),
+                DB::raw('SUM(CASE WHEN estado = 4 THEN 1 ELSE 0 END) as sin')
+            );
+        if ($anio) {
+            $fechaInicio = Carbon::create($anio, 1, 1);
+            if ($mes && $mes >= 1 && $mes <= 12) {
+                $fechaFin = Carbon::create($anio, $mes, 1)->endOfMonth();
+            } else {
+                $fechaFin = $fechaInicio->copy()->endOfYear();
+            }
+            $query->whereBetween('fecha_inscripcion', [$fechaInicio, $fechaFin]);
+        }
+        if ($provincia > 0) {
+            $query->where('provincia_id', $provincia);
+        }
+        if ($distrito > 0) {
+            $query->where('distrito_id', $distrito);
+        }
+        if ($estado > 0) {
+            $query->where('estado', $estado);
+        }
+        return $query->groupBy('distrito')->orderBy('indicador', 'desc')->get();
     }
 
     public static function getEduPacto2tabla3($indicador_id, $anio, $mes, $provincia, $distrito, $estado)
@@ -1119,7 +1220,6 @@ class IndicadorGeneralMetaRepositorio
             $anioxx = 2024;
             // $poblacion = PoblacionPNRepositorio::conteo3a5_acumulado($anioxx, $mes, 0, $value->dis_id, 0);
             // $cubo = CuboPacto1Repositorio::pacto1_matriculados_mes_a($anioxx, $mes, 0, $value->dis_id);
-            $cubo1 = CuboPacto2Repositorio::getEduPacto2tabla1x($anioxx, 0, 0, $value->dis_id, 0);
             $cubo = CuboPacto2Repositorio::getEduPacto2tabla1($anioxx, $mes, 0, $value->dis_id, 0);
             $den = 1; //$cubo1->first() ? $cubo1->first()->conteo : 0;
             $num = $cubo->first() ? $cubo->first()->conteo : 0;

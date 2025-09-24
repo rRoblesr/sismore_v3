@@ -9,8 +9,12 @@ class CuboPacto2 extends Model
 {
     use HasFactory;
 
-    public $timestamps = false;
     protected $table = "edu_cubo_pacto02_local";
+
+    protected $primaryKey = 'id';
+
+    public $timestamps = false;
+
 
     /**
      * The attributes that are mass assignable.
