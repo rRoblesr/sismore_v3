@@ -32,4 +32,20 @@ class CuboPacto2Controller extends Controller
         $distrito = CuboPacto2Repositorio::distrito_inscripcion($anio, $mes, $provincia);
         return response()->json($distrito);
     }
+
+    public function sflprovincia($ugel)
+    {
+        $provincia = CuboPacto2Repositorio::sfl_provincia($ugel);
+        return response()->json($provincia);
+    }
+    public function sfldistrito($ugel, $provincia)
+    {
+        $distrito = CuboPacto2Repositorio::sfl_distrito($ugel, $provincia);
+        return response()->json($distrito);
+    }
+    public function sflestado($ugel, $provincia, $distrito)
+    {
+        $estado = CuboPacto2Repositorio::sfl_estado($ugel, $provincia, $distrito);
+        return response()->json($estado);
+    }
 }

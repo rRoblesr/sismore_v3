@@ -227,7 +227,6 @@ Route::get('/InstitucionEducativa/Distrito/{provincia}', [InstEducativaControlle
 // Route::get('/ImporPadronWeb/Eliminar/{id}', [ImporPadronWebController::class, 'eliminar'])->name('ImporPadronWeb.eliminar');
 // Route::get('/ImporPadronWeb/Exportar', [ImporPadronWebController::class, 'exportar'])->name('imporpadronweb.exportar');
 // Route::get('/ImporPadronWeb/Exportar/PadronWEB', [ImporPadronWebController::class, 'download'])->name('imporpadronweb.download');
-//xxxx
 // Route::post('/ImporPadronWeb/PA/{proceso}/{importacion}', [ImporPadronWebController::class, 'ejecutarProcesos'])->name('imporpadronnominal.procedures');
 
 
@@ -789,7 +788,7 @@ Route::get('/Man/SFL/Listar/Modular', [SFLController::class, 'ListarDTModular'])
 Route::get('/Man/SFL/Listar/Modular2', [SFLController::class, 'ListarDTModular2'])->name('mantenimiento.sfl.modular.listar.2');
 Route::post('/Man/SFL/AjaxUpdate/Modular', [SFLController::class, 'ajax_update_modulares'])->middleware('auth')->name('mantenimiento.sfl.modular.modificar');
 Route::get('/Man/SFL/Download/PDF/{id}', [SFLController::class, 'exportarPDF'])->name('mantenimiento.sfl.exportar.pdf');
-Route::get('/Man/SFL/Download/EXCEL/{ugel}/{provincia}/{distrito}/{estado}', [SFLController::class, 'Download']);
+Route::get('/educación/SFL/Download/EXCEL', [SFLController::class, 'Download'])->name('mantenimiento.sfl.exportar.xxx');
 Route::get('/Man/SFL/Download/plantilla', [SFLController::class, 'download_plantilla'])->name('mantenimiento.sfl.exportar.plantilla');
 Route::post('/Man/SFL/Download/plantilla/visualizar', [SFLController::class, 'cargar_plantilla'])->name('mantenimiento.sfl.exportar.plantilla.cargar');
 Route::post('/Man/SFL/Download/plantilla/guardar', [SFLController::class, 'plantilla_guardar'])->name('mantenimiento.sfl.exportar.plantilla.guardar');
@@ -1311,9 +1310,13 @@ Route::get('/educacion/pactoregional/Edu/Reports1/find/mes/{anio}', [Indicadores
 Route::get('/educacion/pactoregional/Reports2', [IndicadoresController::class, 'PactoRegionalEduPacto2Reports'])->name('salud.indicador.pactoregional.edu.pacto2.reports');
 Route::get('/educacion/pactoregional/Edu/Reports2/find/mes/{anio}', [IndicadoresController::class, 'PactoRegionalEduPacto2FindMes'])->name('salud.indicador.pactoregional.edu.pacto2.find.mes');
 
-Route::get('/educacion/pactoregional/pacto2/mes/{anio}', [CuboPacto2Controller::class, 'mes'])->name('educacion.pactoregional.pacto2.mes');
-Route::get('/educacion/pactoregional/pacto2/provincia/{anio}/{mes}', [CuboPacto2Controller::class, 'provincia'])->name('educacion.pactoregional.pacto2.provincia');
-Route::get('/educacion/pactoregional/pacto2/distrito/{anio}/{mes}/{provincia}', [CuboPacto2Controller::class, 'distrito'])->name('educacion.pactoregional.pacto2.distrito');
+Route::get('/cubo/pacto2/local/mes/{anio}', [CuboPacto2Controller::class, 'mes'])->name('educacion.pactoregional.pacto2.mes');
+Route::get('/cubo/pacto2/local/provincia/{anio}/{mes}', [CuboPacto2Controller::class, 'provincia'])->name('educacion.pactoregional.pacto2.provincia');
+Route::get('/cubo/pacto2/local/distrito/{anio}/{mes}/{provincia}', [CuboPacto2Controller::class, 'distrito'])->name('educacion.pactoregional.pacto2.distrito');
+
+Route::get('/cubo/pacto2/sfl/provincia/{ugel}', [CuboPacto2Controller::class, 'sflprovincia'])->name('cubopacto2.sfl.provincia');
+Route::get('/cubo/pacto2/sfl/distrito/{ugel}/{provincia}', [CuboPacto2Controller::class, 'sfldistrito'])->name('cubopacto2.sfl.distrito');
+Route::get('/cubo/pacto2/sfl/estado/{ugel}/{provincia}/{distrito}', [CuboPacto2Controller::class, 'sflestado'])->name('cubopacto2.sfl.estado');
 
 Route::get('/pactoregional/{indicador_id}', [IndicadoresController::class, 'PactoRegionalDetalle'])->name('salud.indicador.pactoregional.detalle');
 Route::get('/salud/pactoregional/Exportar/{id}', [IndicadoresController::class, 'exportarPDF'])->name('salud.indicador.pactoregional.exportar.pdf');

@@ -4,14 +4,6 @@
     <!-- Table datatable css -->
     <link href="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.css" rel="stylesheet"
         type="text/css" />
-    {{-- <link href="{{ asset('/') }}public/assets/libs/datatables/buttons.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" />
-    <link href="{{ asset('/') }}public/assets/libs/datatables/fixedHeader.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" />
-    <link href="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" />
-    <link href="{{ asset('/') }}public/assets/libs/datatables/scroller.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" /> --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 
     <link href="assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
@@ -83,11 +75,10 @@
         <div class="card-body p-2">
             <div class="row mb-0">
                 {{-- <div class="col-md-8"></div> --}}
-
                 <div class="col-md-3 my-1">
                     <div class="custom-select-container">
                         <label for="ugel">UGEL</label>
-                        <select id="ugel" name="ugel" class="form-control font-11" onchange="cargarCards();">
+                        <select id="ugel" name="ugel" class="form-control font-11">
                             <option value="0">TODOS</option>
                             @foreach ($ugel as $item)
                                 <option value="{{ $item->id }}">{{ $item->nombre }}</option>
@@ -99,12 +90,8 @@
                 <div class="col-md-3 my-1">
                     <div class="custom-select-container">
                         <label for="provincia">Provincia</label>
-                        <select id="provincia" name="provincia" class="form-control font-11"
-                            onchange="cargar_distrito();cargarCards();">
+                        <select id="provincia" name="provincia" class="form-control font-11">
                             <option value="0">TODOS</option>
-                            @foreach ($provincia as $item)
-                                <option value="{{ $item->id }}">{{ $item->nombre }}</option>
-                            @endforeach
                         </select>
                     </div>
                 </div>
@@ -112,7 +99,7 @@
                 <div class="col-md-3 my-1">
                     <div class="custom-select-container">
                         <label for="distrito">Distrito</label>
-                        <select id="distrito" name="distrito" class="form-control font-11" onchange="cargarCards();">
+                        <select id="distrito" name="distrito" class="form-control font-11">
                             <option value="0">TODOS</option>
                         </select>
                     </div>
@@ -121,12 +108,8 @@
                 <div class="col-md-3 my-1">
                     <div class="custom-select-container">
                         <label for="estado">Estado</label>
-                        <select id="estado" name="area" class="form-control font-11" onchange="cargarCards();">
+                        <select id="estado" name="estado" class="form-control font-11">
                             <option value="0">TODOS</option>
-                            <option value="1">SANEADO</option>
-                            <option value="2">NO SANEADO</option>
-                            <option value="3">NO REGISTRADO</option>
-                            <option value="4">EN PROCESO</option>
                         </select>
                     </div>
                 </div>
@@ -140,9 +123,13 @@
             class="card-header border-success-0 bg-transparent text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center px-2 py-2">
             <h6 class="card-title mb-2 mb-md-0 text-center text-md-left text-wrap">Lista de Locales</h6>
             <div class="text-center text-md-right">
-                <button type="button" class="btn btn-success-0 btn-xs" onclick="abrirvistaprevia()"><i
-                        class="fa fa-file-excel"></i> Plantilla</button>
-                <button type="button" class="btn btn-success-0 btn-xs" onclick="descargar1()"><i
+                {{-- <button type="button" class="btn btn-success-0 btn-xs" onclick="abrirvistaprevia()"><i
+                        class="fa fa-file-excel"></i> Plantilla</button> --}}
+                @if (auth()->user()->id == 49)
+                    <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarxxx('locales')"><i
+                            class="fa fa-file-excel"></i> Descargar Locales</button>
+                @endif
+                <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarxxx('servicios')"><i
                         class="fa fa-file-excel"></i> Descargar</button>
             </div>
         </div>
@@ -186,8 +173,8 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="" id="form" name="form" class="form-horizontal"
-                        enctype="multipart/form-data" method="POST" autocomplete="off">
+                    <form action="" id="form" name="form" class="form-horizontal" enctype="multipart/form-data"
+                        method="POST" autocomplete="off">
                         @csrf
                         <input type="hidden" id="id" name="id" value="">
                         <input type="hidden" id="nmodular" name="nmodular" value="0">
@@ -634,7 +621,6 @@
         var table_vistaprevia;
         var form_entidad = 0;
         $(document).ready(function() {
-            cargar_distrito();
             $("input").change(function() {
                 $(this).parent().removeClass('has-error');
                 $(this).next().empty();
@@ -647,6 +633,21 @@
                 $(this).parent().removeClass('has-error');
                 $(this).next().empty();
             });
+
+            $('#ugel').on('change', function() {
+                cargar_provincia();
+            });
+            $('#provincia').on('change', function() {
+                cargar_distrito();
+            });
+            $('#distrito').on('change', function() {
+                cargar_estado();
+            });
+            $('#estado').on('change', function() {
+                cargarCards();
+            });
+
+            cargar_provincia();
 
             $("#documentomodulares").on("change", function() {
                 var fileName = $(this).val().split("\\").pop();
@@ -715,7 +716,6 @@
             });
 
 
-            cargarCards();
 
         });
 
@@ -1058,9 +1058,32 @@
             window.open("{{ route('mantenimiento.sfl.exportar.pdf', '') }}/" + id);
         };
 
+        function cargar_provincia() {
+            $.ajax({
+                url: "{{ route('cubopacto2.sfl.provincia', ['ugel' => ':ugel']) }}"
+                    .replace(':ugel', $('#ugel').val()),
+                type: "GET",
+                dataType: "JSON",
+                success: function(data) {
+                    $('#provincia option ').remove();
+                    var opt = '<option value="0">TODOS</option>';
+                    $.each(data, function(index, vv) {
+                        opt += `<option value="${vv.id}">${vv.nombre}</option>`;
+                    });
+                    $('#provincia').append(opt);
+                    cargar_distrito()
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    toastr.error("El registro no se pudo crear verifique las validaciones.", 'Mensaje');
+                }
+            });
+        }
+
         function cargar_distrito() {
             $.ajax({
-                url: "{{ route('iiee.cargar.distrito', '') }}/" + $('#provincia').val(),
+                url: "{{ route('cubopacto2.sfl.distrito', ['ugel' => ':ugel', 'provincia' => ':provincia']) }}"
+                    .replace(':ugel', $('#ugel').val())
+                    .replace(':provincia', $('#provincia').val()),
                 type: "GET",
                 dataType: "JSON",
                 success: function(data) {
@@ -1070,6 +1093,7 @@
                         opt += '<option value="' + vv.id + '">' + vv.nombre + '</option>';
                     });
                     $('#distrito').append(opt);
+                    cargar_estado();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     toastr.error("El registro no se pudo crear verifique las validaciones.", 'Mensaje');
@@ -1077,9 +1101,38 @@
             });
         }
 
-        function descargar1() {
-            window.open("{{ url('/') }}/Man/SFL/Download/EXCEL/" + $('#ugel').val() + "/" + $('#provincia')
-                .val() + "/" + $('#distrito').val() + "/" + $('#estado').val());
+        function cargar_estado() {
+            $.ajax({
+                url: "{{ route('cubopacto2.sfl.estado', ['ugel' => ':ugel', 'provincia' => ':provincia', 'distrito' => ':distrito']) }}"
+                    .replace(':ugel', $('#ugel').val())
+                    .replace(':provincia', $('#provincia').val())
+                    .replace(':distrito', $('#distrito').val()),
+                type: "GET",
+                dataType: "JSON",
+                success: function(data) {
+                    $('#estado option ').remove();
+                    var opt = '<option value="0">TODOS</option>';
+                    $.each(data, function(index, vv) {
+                        opt += '<option value="' + vv.id + '">' + vv.nombre + '</option>';
+                    });
+                    $('#estado').append(opt);
+                    cargarCards();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    toastr.error("El registro no se pudo crear verifique las validaciones.", 'Mensaje');
+                }
+            });
+        }
+
+        function descargarxxx(tipo) {
+            const params = new URLSearchParams({
+                tipo: tipo || '',
+                ugel: $('#ugel').val() || 0,
+                provincia: $('#provincia').val() || 0,
+                distrito: $('#distrito').val() || 0,
+                estado: $('#estado').val() || 0
+            });
+            window.open("{{ route('mantenimiento.sfl.exportar.xxx') }}?" + params, '_blank');
         }
 
         function descargarplantilla() {

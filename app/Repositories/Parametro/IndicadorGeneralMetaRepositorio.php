@@ -1043,9 +1043,36 @@ class IndicadorGeneralMetaRepositorio
 
 
     //###################### educacion pacto 2  #######################
-    public static function getEduPacto2anal1($anio, $mes, $provincia, $distrito, $estado)
+    public static function getEduPacto2anal1($anio = null, $mes = null, $provincia = 0, $distrito = 0, $estado = 0)
     {
-        return CuboPacto2Repositorio::getEduPacto2anal1($anio, $mes, $provincia, $distrito, $estado);
+        $query = DB::table('edu_cubo_pacto02_local')
+            ->select(
+                'provincia_id as provincia', // 👈 más claro y consistente
+                DB::raw('COUNT(*) as conteo'),
+                DB::raw('SUM(CASE WHEN estado = 1 THEN 1 ELSE 0 END) as si'),
+                DB::raw('SUM(CASE WHEN estado != 1 THEN 1 ELSE 0 END) as no')
+            );
+        if ($anio) {
+            if ($mes && $mes >= 1 && $mes <= 12) {
+                $fechaInicio = Carbon::create($anio, $mes, 1);
+                $fechaFin = $fechaInicio->copy()->endOfMonth();
+                $query->whereBetween('fecha_inscripcion', [$fechaInicio, $fechaFin]);
+            } else {
+                $fechaInicio = Carbon::create($anio, 1, 1);
+                $fechaFin = $fechaInicio->copy()->endOfYear();
+                $query->whereBetween('fecha_inscripcion', [$fechaInicio, $fechaFin]);
+            }
+        }
+        if ($provincia > 0) {
+            $query->where('provincia_id', $provincia);
+        }
+        if ($distrito > 0) {
+            $query->where('distrito_id', $distrito);
+        }
+        if ($estado > 0) {
+            $query->where('estado', $estado);
+        }
+        return $query->groupBy('provincia_id')->get();
     }
 
     public static function getEduPacto2tabla1_para_eliminar($indicador_id, $anio, $mes, $provincia, $distrito, $estado)

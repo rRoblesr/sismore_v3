@@ -5,7 +5,6 @@
     <link href="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.css" rel="stylesheet"
         type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-
     <link href="assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
 
     <style>
@@ -51,6 +50,7 @@
             height: auto;
         }
     </style>
+
 @endsection
 @section('content')
     <div class="card card-border border border-plomo-0">
@@ -72,7 +72,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="table-responsive">
-                        <table id="tbprincipal" class="table table-sm font-11 table-striped table-bordered">
+                        <table id="tbprincipal" class="table font-11 table-striped table-bordered">
                             <thead class="cabecera-dataTable">
                                 <tr class="text-white bg-success-0">
                                     <th>Nº</th>

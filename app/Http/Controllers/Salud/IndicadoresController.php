@@ -1615,7 +1615,7 @@ class IndicadoresController extends Controller
                 return response()->json(['loc' => number_format($loc, 0), 'ssa' => number_format($ssa, 0), 'nsa' => number_format($nsa), 'rin' => $rin]);
 
             case 'anal1':
-                $base = IndicadorGeneralMetaRepositorio::getEduPacto2anal1($rq->anio, $rq->ugel, $rq->provincia, $rq->distrito, 0);
+                $base = IndicadorGeneralMetaRepositorio::getEduPacto2anal1(0, 0, $rq->provincia, $rq->distrito, 0);
                 $info['series'] = [];
                 $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' =>    'SANEADO', 'data' => []];
                 $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'NO SANEADO', 'data' => []];
@@ -1626,12 +1626,12 @@ class IndicadoresController extends Controller
                 }
                 return response()->json(compact('info', 'base'));
             case 'anal2':
-                $tt = EduCuboPacto2Repositorio::locales($rq->anio, $rq->mes, $rq->provincia, $rq->distrito, 0); //->count();
-                $ssa = EduCuboPacto2Repositorio::locales($rq->anio, $rq->mes, $rq->provincia, $rq->distrito, 1); //->count();
-                $nsa = $tt - $ssa;
-                $info = [];
-                $info[] = ['name' => 'SANEADO', 'y' => $ssa];
-                $info[] = ['name' => 'NO SANEADO', 'y' => $nsa];
+                // $tt = EduCuboPacto2Repositorio::locales($rq->anio, $rq->mes, $rq->provincia, $rq->distrito, 0); //->count();
+                // $ssa = EduCuboPacto2Repositorio::locales($rq->anio, $rq->mes, $rq->provincia, $rq->distrito, 1); //->count();
+                // $nsa = $tt - $ssa;
+                $info = EduCuboPacto2Repositorio::PactoRegionalEduPacto2Reports_anal2($rq->provincia, $rq->distrito);
+                // $info[] = ['name' => 'SANEADO', 'y' => $ssa];
+                // $info[] = ['name' => 'NO SANEADO', 'y' => $nsa];
                 $reg['fuente'] = 'Siagie - MINEDU';
                 return response()->json(compact('info', 'reg'));
             case 'tabla1':
@@ -1641,7 +1641,7 @@ class IndicadoresController extends Controller
                 return response()->json(compact('excel', 'base', 'xx'));
 
             case 'tabla2':
-                $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla2(0,0, $rq->provincia, $rq->distrito, 0);
+                $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla2(0, 0, $rq->provincia, $rq->distrito, 0);
                 $aniob = $rq->anio;
                 $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla2', compact('base', 'ndis', 'aniob'))->render();
                 return response()->json(compact('excel', 'base'));

@@ -7,9 +7,11 @@ use App\Http\Controllers\Controller;
 use App\Imports\tablaXImport;
 use App\Models\Administracion\Entidad;
 use App\Models\Educacion\Area;
+use App\Models\Educacion\CuboPacto2;
 use App\Models\Educacion\InstitucionEducativa;
 use App\Models\Educacion\SFL;
 use App\Models\Parametro\IndicadorGeneral;
+use App\Repositories\Educacion\CuboPacto2Repositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\UgelRepositorio;
 use App\Repositories\Parametro\IndicadorGeneralRepositorio;
@@ -37,15 +39,8 @@ class SFLController extends Controller
 
     public function principal()
     {
-        $ugel = InstitucionEducativa::distinct()->select('uu.*')
-            ->join('edu_ugel as uu', 'uu.id', '=', 'edu_institucioneducativa.Ugel_id')->where('uu.estado', 'AC')
-            ->get();
-        $provincia = InstitucionEducativa::distinct()->select('pv.*')
-            ->join('edu_centropoblado as cp', 'cp.id', '=', 'edu_institucioneducativa.CentroPoblado_id')
-            ->join('par_ubigeo as dt', 'dt.id', '=', 'cp.Ubigeo_id')
-            ->join('par_ubigeo as pv', 'pv.id', '=', 'dt.dependencia')
-            ->get();
-        return view('educacion.SFL.Principal', compact('ugel', 'provincia'));
+        $ugel = CuboPacto2Repositorio::sfl_ugel();
+        return view('educacion.SFL.Principal', compact('ugel'));
     }
 
     public function ListarDT(Request $rq)
@@ -1295,46 +1290,20 @@ class SFLController extends Controller
         }
     }
 
-    public function Download($ugel, $provincia, $distrito, $estado)
+    public function Download(Request $rq)
     {
+
+        $tipo = $rq->get('tipo', 'servicios');
+        $ugel = $rq->get('ugel', 0);
+        $provincia = $rq->get('provincia', 0);
+        $distrito = $rq->get('distrito', 0);
+        $estado = $rq->get('estado', 0);
         $name = 'SANEAMIENTO FÍSICO LEGAL ' . date('Y-m-d') . '.xlsx';
-        return Excel::download(new SFLExport($ugel, $provincia, $distrito, $estado), $name);
+        return Excel::download(new SFLExport($tipo, $ugel, $provincia, $distrito, $estado), $name);
     }
 
     public function ListarDTExport($ugel, $provincia, $distrito, $estado)
     {
-        // $est = ['', 'SANEADO', 'NO SANEADO', 'NO REGISTRADO', 'EN PROCESO'];
-        // $tip = ['', 'AFECTACION EN USO', 'TITULARIDAD', 'APORTE REGLAMENTARIO', 'OTROS'];
-
-        // $query = InstitucionEducativa::select(
-        //     'edu_institucioneducativa.codLocal as local',
-        //     'edu_institucioneducativa.codModular as modular',
-        //     'edu_institucioneducativa.nombreInstEduc as iiee',
-        //     'nm.nombre as nivel',
-        //     'pv.nombre as provincia',
-        //     'dt.nombre as distrito',
-        //     'uu.nombre as ugel',
-        //     'aa.nombre as area',
-        //     'sfl.fecha_registro as fecha',
-        //     db::raw('(case sfl.estado when 1 then "SANEADO" when 2 then "NO SANEADO" when 3 then "NO REGISTRADO" when 4 then "EN PROCESO" else "" end) as estado'),
-        // )
-        //     ->join('edu_centropoblado as cp', 'cp.id', '=', 'edu_institucioneducativa.CentroPoblado_id')
-        //     ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'edu_institucioneducativa.NivelModalidad_id')
-        //     ->join('edu_area as aa', 'aa.id', '=', 'edu_institucioneducativa.Area_id')
-        //     ->join('edu_ugel as uu', 'uu.id', '=', 'edu_institucioneducativa.Ugel_id')
-        //     ->join('par_ubigeo as dt', 'dt.id', '=', 'cp.Ubigeo_id')
-        //     ->join('par_ubigeo as pv', 'pv.id', '=', 'dt.dependencia')
-        //     ->join('edu_sfl as sfl', 'sfl.institucioneducativa_id', '=', 'edu_institucioneducativa.id', 'left')
-        //     ->where('edu_institucioneducativa.EstadoInsEdu_id', 3)->whereIn('edu_institucioneducativa.TipoGestion_id', [4, 5, 7, 8])
-        //     ->where('edu_institucioneducativa.estado', 'AC')->whereNotIn('edu_institucioneducativa.NivelModalidad_id', [14, 15]);
-
-        // if ($ugel > 0) $query = $query->where('uu.id', $ugel);
-        // if ($provincia > 0) $query = $query->where('dt.dependencia', $provincia);
-        // if ($distrito > 0) $query = $query->where('dt.id', $distrito);
-        // if ($estado > 0) $query = $query->where('sfl.estado', $estado);
-
-        // $query = $query->get();
-
         $query = DB::table('edu_sfl as s')
             ->join('edu_institucioneducativa as ie', 'ie.id', '=', 's.institucioneducativa_id')
             ->join('edu_centropoblado as cp', 'cp.id', '=', 'ie.CentroPoblado_id')

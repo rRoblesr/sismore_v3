@@ -26,25 +26,6 @@ class CuboPacto2Repositorio
         return $query ?: null;
     }
 
-    public static function getEduPacto2anal1($anio, $mes, $provincia, $distrito, $estado)
-    {
-        $query = DB::table('edu_cubo_pacto02_local')->select(
-            'provincia',
-            DB::raw('count(local) as conteo'),
-            DB::raw('sum(if(estado=1,1,0)) as si'),
-            DB::raw('sum(if(estado!=1,1,0)) as no'),
-        ); //->where(DB::raw('year(fecha_inscripcion)'), $anio);
-
-        if ($mes > 0) $query = $query->where(DB::raw('month(fecha_inscripcion)'), $mes);
-        if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
-        if ($distrito > 0) $query = $query->where('distrito_id', $distrito);
-        if ($estado > 0) $query = $query->where('estado', $estado);
-
-        $query = $query->groupBy('provincia')->get();
-        return $query;
-    }
-
-
     public static function getEduPacto2tabla1($anio = null, $mes = null, $provincia = 0, $distrito = 0, $estado = 0)
     {
         $query = CuboPacto2::select('distrito', DB::raw('COUNT(*) as conteo'));
@@ -91,6 +72,54 @@ class CuboPacto2Repositorio
         }
         return $query->first();
     }
+
+    public static function sfl_ugel()
+    {
+        $query = CuboPacto2::distinct()
+            ->select('ugel_id as id', 'ugel as nombre')
+            ->get();
+        return $query;
+    }
+
+    public static function sfl_provincia($ugel)
+    {
+        return CuboPacto2::distinct()
+            ->select('provincia_id  as id', 'provincia as nombre')
+            ->when($ugel > 0, function ($query) use ($ugel) {
+                return $query->where('ugel_id', $ugel);
+            })
+            ->get();
+    }
+
+    public static function sfl_distrito($ugel, $provincia)
+    {
+        return CuboPacto2::distinct()
+            ->select('distrito_id  as id', 'distrito as nombre')
+            ->when($ugel > 0, function ($query) use ($ugel) {
+                return $query->where('ugel_id', $ugel);
+            })
+            ->when($provincia > 0, function ($query) use ($provincia) {
+                return $query->where('provincia_id', $provincia);
+            })
+            ->get();
+    }
+
+    public static function sfl_estado($ugel, $provincia, $distrito)
+    {
+        return CuboPacto2::distinct()
+            ->select('estado as id', DB::raw('case when estado = 1 then "SANEADO" when estado = 2 then "NO SANEADO" when estado = 3 then "NO REGISTRADO" ELSE "EN PROCESO" end as nombre'))
+            ->when($ugel > 0, function ($query) use ($ugel) {
+                return $query->where('ugel_id', $ugel);
+            })
+            ->when($provincia > 0, function ($query) use ($provincia) {
+                return $query->where('provincia_id', $provincia);
+            })
+            ->when($distrito > 0, function ($query) use ($distrito) {
+                return $query->where('distrito_id', $distrito);
+            })
+            ->get();
+    }
+
 
     public static function anios_inscripcion()
     {
@@ -163,6 +192,22 @@ class CuboPacto2Repositorio
 
         $query = $query->first();
         return $query->conteo;
+    }
+
+    public static function PactoRegionalEduPacto2Reports_anal2($provincia = 0, $distrito = 0)
+    {
+        $query = CuboPacto2::select(
+            DB::raw("CASE WHEN estado = 1 THEN 'SANEADO' ELSE 'NO SANEADO' END AS name"),
+            DB::raw('COUNT(*) as y')
+        );
+
+        if ($provincia > 0) {
+            $query->where('provincia_id', $provincia);
+        }
+        if ($distrito > 0) {
+            $query->where('distrito_id', $distrito);
+        }
+        return $query->groupBy(DB::raw("CASE WHEN estado = 1 THEN 'SANEADO' ELSE 'NO SANEADO' END "))->get();
     }
 
     public static function PactoRegionalEduPacto2Reports_locales($anio = null, $mes = null, $provincia = 0, $distrito = 0, $estado = 0)
