@@ -52,9 +52,7 @@
                         <label for="red">Red</label>
                         <select id="red" name="red" class="form-control font-11">
                             <option value="0">TODOS</option>
-                            @foreach ($red as $item)
-                                <option value="{{ $item->id }}"> {{ $item->codigo }} {{ $item->nombre }}</option>
-                            @endforeach
+                           
                         </select>
                     </div>
                 </div>
@@ -509,10 +507,10 @@
                 SpinnerManager.show(key);
             });
             $('#anio').on('change', function() {
-                cargarCards();
+                cargarMes();
             });
             $('#mes').on('change', function() {
-                cargarCards();
+               cargarRed();
             });
             $('#red').on('change', function() {
                 cargarMicrorred();
@@ -657,6 +655,28 @@
                         options += `<option value='${vv.id}' ${ss}>${vv.mes}</option>`
                     });
                     $("#mes").append(options);
+                    cargarRed();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cargarRed() {
+            $.ajax({
+                url: "{{ route('salud.padronnominal.red.minsa', ['anio' => ':anio', 'mes' => ':mes']) }}"
+                    .replace(':anio', $('#anio').val())
+                    .replace(':mes', $('#mes').val()),
+                type: 'GET',
+                success: function(data) {
+                    $("#red option").remove();
+                    var options = '<option value="0">TODOS</option>';
+                    $.each(data, function(index, vv) {
+                        options +=
+                            `<option value='${vv.id}'>${vv.codigo} | ${vv.nombre}</option>`;
+                    });
+                    $("#red").append(options);
                     cargarMicrorred();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {

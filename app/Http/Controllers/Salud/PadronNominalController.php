@@ -4454,6 +4454,14 @@ class PadronNominalController extends Controller
         return response()->json($microrred);
     }
 
+    public function red_minsa($anio, $mes)
+    {
+        $fuente = ImporPadronNominalController::$FUENTE;
+        $impMaxAnio = PadronNominalRepositorio::PNImportacion_idmax($fuente, $anio, $mes);
+        $red = ImporPadronNominalRepositorio::red_minsa($impMaxAnio);
+        return response()->json($red);
+    }
+
     public function microrred_minsa($anio, $mes, $red)
     {
         $fuente = ImporPadronNominalController::$FUENTE;

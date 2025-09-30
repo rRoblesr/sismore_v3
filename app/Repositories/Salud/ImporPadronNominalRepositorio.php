@@ -6,6 +6,7 @@ use App\Models\Parametro\Ubigeo;
 use App\Models\Salud\Establecimiento;
 use App\Models\Salud\ImporPadronNominal;
 use App\Models\Salud\Microrred;
+use App\Models\Salud\Red;
 use Illuminate\Support\Facades\DB;
 
 class ImporPadronNominalRepositorio
@@ -1891,14 +1892,28 @@ class ImporPadronNominalRepositorio
             ->get();
     }
 
+    public static function red_minsa($importacion)
+    {
+        $query = Red::from('sal_red as r')
+            ->join('sal_microrred as m', 'm.red_id', '=', 'r.id')
+            ->join('sal_establecimiento as e', 'e.microrred_id', '=', 'm.id')
+            ->join('sal_impor_padron_nominal as ipn', 'ipn.establecimiento_id', '=', 'e.id')
+            ->where('e.cod_disa', 34)
+            ->where('e.estado', 'ACTIVO')
+            ->whereIn('e.institucion', ['GOBIERNO REGIONAL', 'MINSA'])
+            ->where('ipn.importacion_id', $importacion);
+        return $query->select('r.*')->distinct()->get();
+    }
+
     public static function microrred_minsa($importacion, $red)
     {
         $query = Microrred::from('sal_microrred as m')
             ->join('sal_establecimiento as e', 'e.microrred_id', '=', 'm.id')
             ->join('sal_impor_padron_nominal as ipn', 'ipn.establecimiento_id', '=', 'e.id')
             ->where('e.cod_disa', 34)
-            ->where('ipn.importacion_id', $importacion)
-            ->where('ipn.establecimiento_id', '>', 0);
+            ->where('e.estado', 'ACTIVO')
+            ->whereIn('e.institucion', ['GOBIERNO REGIONAL', 'MINSA'])
+            ->where('ipn.importacion_id', $importacion);
         if ($red > 0) $query->where('m.red_id', $red);
         return $query->select('m.*')->distinct()->get();
     }
@@ -1913,11 +1928,13 @@ class ImporPadronNominalRepositorio
             ->join('sal_impor_padron_nominal as ipn', 'ipn.establecimiento_id', '=', 'e.id')
             ->join('sal_microrred as m', 'm.id', '=', 'e.microrred_id')
             ->where('e.cod_disa', 34)
+            ->where('e.estado', 'ACTIVO')
+            ->whereIn('e.institucion', ['GOBIERNO REGIONAL', 'MINSA'])
             ->where('e.categoria', '<>', 'SIN CATEGORÍA') // Excluir EESS de Categoria 6,7,8,9
             ->where('ipn.importacion_id', $importacion)
             ->tap($filtros)
             ->select('e.id', 'e.codigo_unico as codigo', 'e.nombre_establecimiento as nombre')
-            ->groupBy('e.id', 'e.codigo_unico', 'e.nombre_establecimiento')
-            ->get();
+            // ->groupBy('e.id', 'e.codigo_unico', 'e.nombre_establecimiento')
+            ->distinct()->get();
     }
 }
