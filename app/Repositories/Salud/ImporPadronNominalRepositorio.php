@@ -1775,7 +1775,7 @@ class ImporPadronNominalRepositorio
             ->join('sal_microrred as m', 'm.id', '=', 'e.microrred_id')
             ->where('pn.importacion_id', $importacion)
             ->where('pn.repetido', 1)
-            ->where('m.cod_disa', 34)
+            ->where('e.cod_disa', 34)
             // ->where('e.categoria','=', 'SIN CATEGORÍA') // Excluir EESS de Categoria 6,7,8,9
             // ->whereIn('m.red_id', [9, 10, 11, 12])
             ->tap($filtros)
@@ -1819,15 +1819,17 @@ class ImporPadronNominalRepositorio
     public static function TableroCalidadEESS_tabla03($importacion, $red, $microrred, $eess)
     {
         $filtros = function ($query) use ($red, $microrred, $eess) {
-            if ($red > 0) $query->where('e.red_id', $red);
-            if ($microrred > 0) $query->where('e.microrred_id', $microrred);
+            if ($red > 0) $query->where('m.red_id', $red);
+            if ($microrred > 0) $query->where('m.id', $microrred);
             if ($eess > 0) $query->where('e.id', $eess);
         };
         return ImporPadronNominal::from('sal_impor_padron_nominal as pn')
             ->join('par_ubigeo as u', 'u.id', '=', 'pn.distrito_id')
             ->join('sal_establecimiento as e', 'e.id', '=', 'pn.establecimiento_id')
-            ->where('pn.importacion_id', $importacion)->where('repetido', '1')
-            ->whereIn('e.red_id', [9, 10, 11, 12])
+            ->join('sal_microrred as m', 'm.id', '=', 'e.microrred_id')
+            ->where('pn.importacion_id', $importacion)
+            ->where('repetido', '1')
+            ->where('e.cod_disa', 34)
             ->tap($filtros)
             ->select(
                 'e.id',
@@ -1864,18 +1866,19 @@ class ImporPadronNominalRepositorio
     public static function TableroCalidadEESS_tabla0301($importacion, $red, $microrred, $eess, $ubigeo)
     {
         $filtros = function ($query) use ($red, $microrred, $eess) {
-            if ($red > 0) $query->where('e.red_id', $red);
-            if ($microrred > 0) $query->where('e.microrred_id', $microrred);
+            if ($red > 0) $query->where('m.red_id', $red);
+            if ($microrred > 0) $query->where('m.id', $microrred);
             // if ($eess > 0) $query->where('e.id', $eess);
         };
         return ImporPadronNominal::from('sal_impor_padron_nominal as pn')
             ->join('sal_establecimiento as e', 'e.id', '=', 'pn.establecimiento_id')
+            ->join('sal_microrred as m', 'm.id', '=', 'e.microrred_id')
             ->join('par_seguro as s', 's.id', '=', 'pn.seguro_id')
             ->join('par_ubigeo as u', 'u.id', '=', 'pn.distrito_id')
             ->where('pn.importacion_id', $importacion)
             ->where('repetido', '1')
             ->where('e.id', $ubigeo) //->where('ubigeo', $ubigeo)
-            ->whereIn('e.red_id', [9, 10, 11, 12])
+            ->where('e.cod_disa', 34)
             ->tap($filtros)
             ->select(
                 'pn.id',
@@ -1916,6 +1919,24 @@ class ImporPadronNominalRepositorio
             ->where('ipn.importacion_id', $importacion);
         if ($red > 0) $query->where('m.red_id', $red);
         return $query->select('m.*')->distinct()->get();
+    }
+
+    public static function eess_minsaxx($importacion, $red, $microrred)
+    {
+        $filtros = function ($query) use ($red, $microrred) {
+            if ($red > 0) $query->where('r.id', $red);
+            if ($microrred > 0) $query->where('m.id', $microrred);
+        };
+        $query = Red::from('sal_red as r')
+            ->join('sal_microrred as m', 'm.red_id', '=', 'r.id')
+            ->join('sal_establecimiento as e', 'e.microrred_id', '=', 'm.id')
+            ->join('sal_impor_padron_nominal as ipn', 'ipn.establecimiento_id', '=', 'e.id')
+            ->where('e.cod_disa', 34)
+            ->where('e.estado', 'ACTIVO')
+            ->where('e.categoria', '<>', 'SIN CATEGORÍA')
+            ->whereIn('e.institucion', ['GOBIERNO REGIONAL', 'MINSA'])
+            ->where('ipn.importacion_id', $importacion);
+        return $query->select('e.id', 'e.codigo_unico as codigo', 'e.nombre_establecimiento as nombre')->distinct()->get();
     }
 
     public static function eess_minsa($importacion, $red, $microrred)

@@ -506,18 +506,35 @@ class EstablecimientoRepositorio
     public static function TableroCalidadEESS_head($red, $microrred, $eess)
     {
         $filtros = function ($query) use ($red, $microrred, $eess) {
-            if ($red > 0) $query->where('red_id', $red);
-            if ($microrred > 0) $query->where('microrred_id', $microrred);
+            if ($red > 0) $query->where('m.red_id', $red);
+            if ($microrred > 0) $query->where('m.id', $microrred);
             if ($eess > 0) $query->where('id', $eess);
         };
-        return Establecimiento::where('cod_disa', 34)
-            ->where('estado', 'ACTIVO')
-            ->whereIn('institucion', ['GOBIERNO REGIONAL', 'MINSA'])
-            ->where('categoria', '<>', 'SIN CATEGORÍA')
-            // ->whereIn('categoria', ['I-1', 'I-2', 'I-3', 'I-4', 'II-1', 'II-2'])
+        return Establecimiento::from('sal_establecimiento as e')
+        ->join('sal_microrred as m','m.id','=','e.microrred_id')
+            ->where('e.cod_disa', 34)
+            ->where('e.estado', 'ACTIVO')
+            ->whereIn('e.institucion', ['GOBIERNO REGIONAL', 'MINSA'])
+            ->where('e.categoria', '<>', 'SIN CATEGORÍA')
             ->tap($filtros)
             ->count();
     }
+
+    // public function obtenerEstablecimientosActivos()
+    // {
+    //     $establecimientos = SalEstablecimiento::select('sal_establecimiento.id', 'sal_establecimiento.codigo_unico', 'sal_establecimiento.nombre_establecimiento')
+    //         ->join('sal_microrred', 'sal_microrred.id', '=', 'sal_establecimiento.microrred_id')
+    //         ->join('sal_red', 'sal_red.id', '=', 'sal_microrred.red_id')
+    //         ->where('sal_establecimiento.cod_disa', 34)
+    //         ->where('sal_establecimiento.estado', 'ACTIVO')
+    //         ->whereIn('sal_establecimiento.institucion', ['GOBIERNO REGIONAL', 'MINSA'])
+    //         ->where('sal_establecimiento.categoria', '!=', 'SIN CATEGORÍA')
+    //         ->orderBy('sal_establecimiento.codigo_unico')
+    //         ->distinct()
+    //         ->get();
+
+    //     return response()->json($establecimientos);
+    // }
 
     public static function establecimientos_minsa_select($red, $microrred)
     {
