@@ -33,24 +33,28 @@
                             <h4 class="page-title font-12">{{ $actualizado }}</h4>
                         </div>
 
-                        <div class="col-lg-3 col-md-2 col-sm-2">
+                        <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="edades">Edad del Menor</label>
-                                <select id="edades" name="edades" class="form-control font-11"
-                                    onchange="cargarRed();cargarCards();">
+                                <select id="edades" name="edades" class="form-control font-11" onchange="">
                                     <option value="0">TODOS</option>
-                                    @foreach ($edades as $item)
-                                        <option value="{{ $item->edades_id }}">{{ $item->edades }}</option>
-                                    @endforeach
                                 </select>
                             </div>
                         </div>
 
-                        <div class="col-lg-3 col-md-2 col-sm-2">
+                        <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="red">Red</label>
-                                <select id="red" name="red" class="form-control font-11"
-                                    onchange="cargarMicrorred();cargarCards();">
+                                <select id="red" name="red" class="form-control font-11" onchange="">
+                                    <option value="0">TODOS</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="custom-select-container">
+                                <label for="microrred">Microrred</label>
+                                <select id="microrred" name="microrred" class="form-control font-11" onchange="">
                                     <option value="0">TODOS</option>
                                 </select>
                             </div>
@@ -58,9 +62,8 @@
 
                         <div class="col-lg-3 col-md-2 col-sm-2">
                             <div class="custom-select-container">
-                                <label for="microrred">Microrred</label>
-                                <select id="microrred" name="microrred" class="form-control font-11"
-                                    onchange="cargarCards();">
+                                <label for="eess">Establecimiento</label>
+                                <select id="eess" name="eess" class="form-control font-11" onchange="">
                                     <option value="0">TODOS</option>
                                 </select>
                             </div>
@@ -493,11 +496,21 @@
                 }
             ]
         };
-        $(document).ready(function() {
-            cargarRed();
-            cargarMicrorred();
-            cargarCards();
 
+        $(document).ready(function() {
+            $('#edades').on('change', function() {
+                cargarRed();
+            });
+            $('#red').on('change', function() {
+                cargarMicrorred();
+            });
+            $('#microrred').on('change', function() {
+                cargarEESS();
+            });
+            $('#eess').on('change', function() {
+                cargarCards();
+            });
+            cargarEdades();
         });
 
         function cargarCards() {
@@ -744,6 +757,26 @@
             });
         }
 
+        function cargarEdades() {
+            $.ajax({
+                url: "{{ route('salud.calidadcriterio.edades', ['importacion' => $importacion, 'criterio' => $criterio]) }}",
+                type: 'GET',
+                success: function(data) {
+                    $("#edades option").remove();
+                    var options = '<option value="0">TODOS</option>';
+                    $.each(data, function(index, value) {
+                        options +=
+                            `<option value='${value.edades_id}'> ${value.edades}</option>`;
+                    });
+                    $("#edades").append(options);
+                    cargarRed();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
         function cargarRed() {
             $.ajax({
                 url: "{{ route('salud.calidadcriterio.red', ['importacion' => $importacion, 'criterio' => $criterio, 'edad' => ':edad']) }}"
@@ -753,9 +786,11 @@
                     $("#red option").remove();
                     var options = '<option value="0">TODOS</option>';
                     $.each(data, function(index, value) {
-                        options += `<option value='${value.id}'>${value.codigo} ${value.nombre}</option>`;
+                        options +=
+                            `<option value='${value.id}'>${value.codigo} ${value.nombre}</option>`;
                     });
                     $("#red").append(options);
+                    cargarMicrorred();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -765,7 +800,7 @@
 
         function cargarMicrorred() {
             $.ajax({
-                url: "{{ route('salud.calidadcriterio.microrred', ['importacion' => $importacion, 'criterio' => $criterio, 'red' => ':red', 'edad' => ':edad']) }}"
+                url: "{{ route('salud.calidadcriterio.microrred', ['importacion' => $importacion, 'criterio' => $criterio, 'edad' => ':edad', 'red' => ':red']) }}"
                     .replace(':edad', $('#edades').val())
                     .replace(':red', $('#red').val()),
                 type: 'GET',
@@ -773,9 +808,11 @@
                     $("#microrred option").remove();
                     var options = '<option value="0">TODOS</option>';
                     $.each(data, function(index, value) {
-                        options += `<option value='${value.id}'>${value.codigo} ${value.nombre}</option>`;
+                        options +=
+                            `<option value='${value.id}'>${value.codigo} ${value.nombre}</option>`;
                     });
                     $("#microrred").append(options);
+                    cargarEESS();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -783,6 +820,28 @@
             });
         }
 
+        function cargarEESS() {
+            $.ajax({
+                url: "{{ route('salud.calidadcriterio.eess', ['importacion' => $importacion, 'criterio' => $criterio, 'edad' => ':edad', 'red' => ':red', 'microrred' => ':microrred']) }}"
+                    .replace(':edad', $('#edades').val())
+                    .replace(':red', $('#red').val())
+                    .replace(':microrred', $('#microrred').val()),
+                type: 'GET',
+                success: function(data) {
+                    $("#eess option").remove();
+                    var options = '<option value="0">TODOS</option>';
+                    $.each(data, function(index, value) {
+                        options +=
+                            `<option value='${value.id}'>${value.codigo} ${value.nombre}</option>`;
+                    });
+                    $("#eess").append(options);
+                    cargarCards();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
 
         function descargarExcel() {
             window.open(

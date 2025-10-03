@@ -1319,7 +1319,18 @@ class PadronNominalController extends Controller
         }
     }
 
-    public function criterio_red($importacion, $criterio, $edad)
+    public function criterio_edades($importacion, $criterio)
+    {
+        $query = CalidadCriterio::select(
+            DB::raw('case when tipo_edad in("D","M") then 1 else edad + 1 end as edades_id'),
+            DB::raw('case when tipo_edad in("D","M") then "MENOR DE 1 AÑO" when tipo_edad="A" AND edad=1 then "1 AÑO" else concat(edad," AÑOS") end as edades')
+        )
+            ->where('importacion_id', $importacion)->where('criterio', $criterio)
+            ->groupBy('edades_id', 'edades')->get();
+        return $query;
+    }
+
+    public function criterio_red2($importacion, $criterio, $edad)
     {
         $filtros = function ($query) use ($edad) {
             if ($edad > 0) {
@@ -1346,7 +1357,34 @@ class PadronNominalController extends Controller
         return $query;
     }
 
-    public function criterio_microred($importacion, $criterio, $red, $edad)
+    public function criterio_red($importacion, $criterio, $edad)
+    {
+        $filtros = function ($query) use ($edad) {
+            if ($edad > 0) {
+                if ($edad == 1) {
+                    $query->where('cc.tipo_edad', '!=', 'A');
+                } else {
+                    $query->where('cc.tipo_edad', 'A')->where('cc.edad', $edad - 1);
+                }
+            }
+        };
+        return CalidadCriterio::from('sal_calidad_criterio as cc')
+            ->select('r.id', 'r.codigo', 'r.nombre')
+            ->distinct()
+            ->join('sal_establecimiento as e', function ($join) {
+                $join->on('e.id', '=', 'cc.establecimiento_id')
+                    ->where('e.cod_disa', '=', 34);
+            })
+            ->join('sal_microrred as m', 'm.id', '=', 'e.microrred_id')
+            ->join('sal_red as r', 'r.id', '=', 'm.red_id')
+            ->where('cc.importacion_id', $importacion)
+            ->where('cc.criterio', $criterio)
+            ->orderBy('r.codigo')
+            ->tap($filtros)
+            ->get();
+    }
+
+    public function criterio_microred2($importacion, $criterio, $red, $edad)
     {
         $filtros = function ($query) use ($edad, $red) {
             if ($edad > 0) {
@@ -1376,7 +1414,37 @@ class PadronNominalController extends Controller
         return $query;
     }
 
-    public function criterio_establecimiento($importacion, $red, $microred, $criterio)
+    public function criterio_microred($importacion, $criterio, $edad, $red)
+    {
+        $filtros = function ($query) use ($edad, $red) {
+            if ($edad > 0) {
+                if ($edad == 1) {
+                    $query->where('cc.tipo_edad', '!=', 'A');
+                } else {
+                    $query->where('cc.tipo_edad', 'A')->where('cc.edad', $edad - 1);
+                }
+            }
+            if ($red > 0) {
+                $query->where('m.red_id', $red);
+            }
+        };
+        return CalidadCriterio::from('sal_calidad_criterio as cc')
+            ->select('m.id', 'm.codigo', 'm.nombre')
+            ->distinct()
+            ->join('sal_establecimiento as e', function ($join) {
+                $join->on('e.id', '=', 'cc.establecimiento_id')
+                    ->where('e.cod_disa', '=', 34);
+            })
+            ->join('sal_microrred as m', 'm.id', '=', 'e.microrred_id')
+            ->join('sal_red as r', 'r.id', '=', 'm.red_id')
+            ->where('cc.importacion_id', $importacion)
+            ->where('cc.criterio', $criterio)
+            ->orderBy('m.codigo')
+            ->tap($filtros)
+            ->get();
+    }
+
+    public function criterio_establecimiento2($importacion, $red, $microred, $criterio)
     {
         $query = CalidadCriterio::distinct()->select('establecimiento_id as id')->where('importacion_id', $importacion)->where('criterio', $criterio)
             ->where('red_id', $red)->where('microred_id', $microred)->whereNotNull('establecimiento_id')->get();
@@ -1386,15 +1454,37 @@ class PadronNominalController extends Controller
         return $query;
     }
 
-    public function criterio_edades($importacion, $criterio)
+    public function criterio_establecimiento($importacion, $criterio, $edad, $red, $microred)
     {
-        $query = CalidadCriterio::select(
-            DB::raw('case when tipo_edad in("D","M") then 1 else edad+1 end as edades_id'),
-            DB::raw('case when tipo_edad in("D","M") then "MENOR DE 1 AÑO" when tipo_edad="A" AND edad=1 then "1 AÑO" else concat(edad," AÑOS") end as edades')
-        )
-            ->where('importacion_id', $importacion)->where('criterio', $criterio)
-            ->groupBy('edades_id', 'edades')->get();
-        return $query;
+        $filtros = function ($query) use ($edad, $red, $microred) {
+            if ($edad > 0) {
+                if ($edad == 1) {
+                    $query->where('cc.tipo_edad', '!=', 'A');
+                } else {
+                    $query->where('cc.tipo_edad', 'A')->where('cc.edad', $edad - 1);
+                }
+            }
+            if ($red > 0) {
+                $query->where('m.red_id', $red);
+            }
+            if ($microred > 0) {
+                $query->where('m.id', $microred);
+            }
+        };
+        return CalidadCriterio::from('sal_calidad_criterio as cc')
+            ->select('e.id', 'e.codigo_unico as codigo', 'e.nombre_establecimiento as nombre')
+            ->distinct()
+            ->join('sal_establecimiento as e', function ($join) {
+                $join->on('e.id', '=', 'cc.establecimiento_id')
+                    ->where('e.cod_disa', '=', 34);
+            })
+            ->join('sal_microrred as m', 'm.id', '=', 'e.microrred_id')
+            ->join('sal_red as r', 'r.id', '=', 'm.red_id')
+            ->where('cc.importacion_id', $importacion)
+            ->where('cc.criterio', $criterio)
+            ->orderBy('e.codigo_unico')
+            ->tap($filtros)
+            ->get();
     }
 
     public function criterio_provincia($importacion, $criterio, $edad)

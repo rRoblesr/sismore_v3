@@ -28,7 +28,7 @@ class CalidadCriterioRepositorio
             ->whereYear('i.fechaActualizacion', $anio)
             ->whereMonth('i.fechaActualizacion', $mes)
             ->where('mr.cod_disa', 34);
-            // ->whereIn('cc.red_id', [9, 10, 11, 12]);
+        // ->whereIn('cc.red_id', [9, 10, 11, 12]);
         if ($red > 0) {
             $query = $query->where('mr.red_id', $red);
         }
@@ -38,13 +38,13 @@ class CalidadCriterioRepositorio
 
     public static function TableroCalidadEESS_tabla01($importacion, $red, $microrred, $eess)
     {
-        $filtros = function ($query) use ($red, $microrred,$eess) {
+        $filtros = function ($query) use ($red, $microrred, $eess) {
             if ($red > 0) $query->where('red_id', $red);
             if ($microrred > 0) $query->where('microred_id', $microrred);
             if ($eess > 0) $query->where('establecimiento_id', $eess);
         };
         return CalidadCriterio::where('importacion_id', $importacion)
-            ->whereIn('red_id', [9, 10, 11, 12])
+            ->whereIn('red_id', [8, 9, 10, 11, 12])
             ->join('sal_calidad_criterio_nombres as c', 'c.id', '=', 'sal_calidad_criterio.criterio')
             ->select(
                 'c.id as criterio_id',

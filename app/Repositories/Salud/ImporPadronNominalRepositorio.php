@@ -1776,7 +1776,9 @@ class ImporPadronNominalRepositorio
             ->where('pn.importacion_id', $importacion)
             ->where('pn.repetido', 1)
             ->where('e.cod_disa', 34)
-            // ->where('e.categoria','=', 'SIN CATEGORÍA') // Excluir EESS de Categoria 6,7,8,9
+            ->where('e.estado', 'ACTIVO')
+            ->where('e.categoria','<>', 'SIN CATEGORÍA') // Excluir EESS de Categoria 6,7,8,9
+            ->whereIn('institucion', ['GOBIERNO REGIONAL', 'MINSA'])
             // ->whereIn('m.red_id', [9, 10, 11, 12])
             ->tap($filtros)
             ->count();
@@ -1829,7 +1831,10 @@ class ImporPadronNominalRepositorio
             ->join('sal_microrred as m', 'm.id', '=', 'e.microrred_id')
             ->where('pn.importacion_id', $importacion)
             ->where('repetido', '1')
+            ->whereIn('institucion', ['GOBIERNO REGIONAL', 'MINSA'])
             ->where('e.cod_disa', 34)
+            ->where('e.estado', 'ACTIVO')
+            ->where('categoria', '<>', 'SIN CATEGORÍA')
             ->tap($filtros)
             ->select(
                 'e.id',

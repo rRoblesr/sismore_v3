@@ -508,7 +508,7 @@ class EstablecimientoRepositorio
         $filtros = function ($query) use ($red, $microrred, $eess) {
             if ($red > 0) $query->where('m.red_id', $red);
             if ($microrred > 0) $query->where('m.id', $microrred);
-            if ($eess > 0) $query->where('id', $eess);
+            if ($eess > 0) $query->where('e.id', $eess);
         };
         return Establecimiento::from('sal_establecimiento as e')
         ->join('sal_microrred as m','m.id','=','e.microrred_id')
