@@ -13,8 +13,6 @@
             <th rowspan="1" class="text-center">Àrea</th>
             <th rowspan="1" class="text-center">EstadoSFL</th>
         </tr>
-
-
     </thead>
     @if ($base->count() > 0)
         <tbody>
@@ -30,39 +28,7 @@
                     <td>{{ $item->distrito }}</td>
                     <td>{{ $item->centropoblado }}</td>
                     <td>{{ $item->area }}</td>
-                    {{-- <td>{{ $item->estado }}</td> --}}
-                    <td>
-                        {{-- @if ($item->estado == 'SANEADO')
-                            <button type="button"
-                                class="btn btn-xs btn-success-0 font-10">&nbsp;&nbsp;&nbsp;{{$item->estado}}&nbsp;&nbsp;&nbsp;</button>
-                        @else
-                            <button type="button" class="btn btn-xs btn-danger font-10">{{$item->estado}}</button>
-                        @endif --}}
-
-                        @switch($item->estadox)
-                            @case(1)
-                                <span class="badge badge-success">{{ $item->estado }}</span>
-                                {{-- <button type="button" class="btn btn-xs btn-success-0 font-8">{{ $item->estado }}</button> --}}
-                            @break
-
-                            @case(2)
-                                <span class="badge badge-danger">{{ $item->estado }}</span>
-                                {{-- <button type="button" class="btn btn-xs btn-danger font-8">{{ $item->estado }}</button> --}}
-                            @break
-
-                            @case(3)
-                                <span class="badge badge-secondary">{{ $item->estado }}</span>
-                                {{-- <button type="button" class="btn btn-xs btn-secondary font-8">{{ $item->estado }}</button> --}}
-                            @break
-
-                            @case(4)
-                                <span class="badge badge-warning">{{ $item->estado }}</span>
-                                {{-- <button type="button" class="btn btn-xs btn-warning font-8">{{ $item->estado }}</button> --}}
-                            @break
-
-                            @default
-                        @endswitch
-                    </td>
+                    <td><x-estadosfl-badge :estado-id="$item->estadox" /></td>
                 </tr>
             @endforeach
         </tbody>
@@ -83,32 +49,3 @@
         </tbody>
     @endif
 </table>
-
-
-
-@php
-    function avance($monto)
-    {
-        if ($monto < 51) {
-            return '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px">' .
-                round($monto, 1) .
-                '%</span>';
-        } elseif ($monto < 100) {
-            return '<span class="badge badge-pill badge-warning" style="font-size:90%; width:50px">' .
-                round($monto, 1) .
-                '%</span>';
-        } else {
-            return '<span class="badge badge-pill badge-success" style="font-size:90%; width:50px">' .
-                round($monto, 1) .
-                '%</span>';
-        }
-    }
-    function bajas($monto)
-    {
-        if ($monto < 0) {
-            return '<span class="badge badge-pill badge-danger" style="font-size:85%;">' . round($monto, 0) . '</span>';
-        } else {
-            return number_format($monto);
-        }
-    }
-@endphp

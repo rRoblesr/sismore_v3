@@ -4,7 +4,8 @@
             <th rowspan="1" class="text-center">Nº</th>
             <th rowspan="1" class="text-center">Distrito</th>
             <th colspan="1" class="text-center">Meta</th>
-            <th rowspan="1" class="text-center">Avance</th>
+            <th rowspan="1" class="text-center">Denominador</th>
+            <th rowspan="1" class="text-center">Numerador</th>
             <th colspan="1" class="text-center">Indicador</th>
             <th colspan="1" class="text-center">Cumple</th>
         </tr>
@@ -17,8 +18,9 @@
                     <td>{{ $key + 1 }}</td>
                     <td class="text-left">{{ $item->distrito }}</td>
                     <td>{{ $item->meta }}%</td>
-                    <td>{{ $item->avance }}</td>
-                    <td><x-avance-badge :avance="$item->indicador ?? 0" /></td>
+                    <td>{{ $item->denominador }}</td>
+                    <td>{{ $item->numerador }}</td>
+                    <td><x-avance-badge :avance="$item->avance ?? 0" /></td>
                     <td><x-pulgar-badge :cumple="$item->cumple" /> </td>
                 </tr>
             @endforeach

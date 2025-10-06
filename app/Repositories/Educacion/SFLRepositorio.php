@@ -2,11 +2,7 @@
 
 namespace App\Repositories\Educacion;
 
-use App\Models\Educacion\Importacion;
-use App\Models\Educacion\Matricula;
-use App\Models\Educacion\MatriculaAnual;
 use App\Models\Educacion\SFL;
-use App\Models\Parametro\Ubigeo;
 use Illuminate\Support\Facades\DB;
 
 class SFLRepositorio

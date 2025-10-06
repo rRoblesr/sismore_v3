@@ -1047,7 +1047,7 @@ class IndicadorGeneralMetaRepositorio
     {
         $query = DB::table('edu_cubo_pacto02_local')
             ->select(
-                'provincia_id as provincia', // 👈 más claro y consistente
+                'provincia',
                 DB::raw('COUNT(*) as conteo'),
                 DB::raw('SUM(CASE WHEN estado = 1 THEN 1 ELSE 0 END) as si'),
                 DB::raw('SUM(CASE WHEN estado != 1 THEN 1 ELSE 0 END) as no')
@@ -1072,7 +1072,7 @@ class IndicadorGeneralMetaRepositorio
         if ($estado > 0) {
             $query->where('estado', $estado);
         }
-        return $query->groupBy('provincia_id')->get();
+        return $query->groupBy('provincia')->get();
     }
 
     public static function getEduPacto2tabla1_para_eliminar($indicador_id, $anio, $mes, $provincia, $distrito, $estado)
@@ -1096,7 +1096,62 @@ class IndicadorGeneralMetaRepositorio
         return $query;
     }
 
-    public static function getEduPacto2tabla1($indicador_id, $anio, $mes = null, $provincia = 0, $distrito = 0, $estado = 0)
+    public static function getEduPacto2tabla1_opt02($indicador, $anio, $mes = null, $provincia = 0, $distrito = 0, $estado = 0)
+    {
+        return DB::table('par_ubigeo as d')
+            ->select(
+                'd.id',
+                'd.codigo',
+                'd.nombre as distrito',
+                'm.valor as meta',
+                DB::raw('COALESCE(c.denominador, 0) as denominador'),
+                DB::raw('COALESCE(c.numerador, 0) as numerador'),
+                DB::raw("
+                    ROUND(
+                        100 * COALESCE(c.numerador, 0) / NULLIF(COALESCE(c.denominador, 1), 0),
+                        1
+                    ) as avance
+                "),
+                DB::raw("
+                    IF(
+                        ROUND(
+                            100 * COALESCE(c.numerador, 0) / NULLIF(COALESCE(c.denominador, 1), 0),
+                            1
+                        ) > m.valor,
+                        1,
+                        0
+                    ) as cumple
+                ")
+            )
+            ->join('par_indicador_general_meta as m', function ($join) use ($indicador, $anio) {
+                $join->on('m.distrito', '=', 'd.id')
+                    ->where('m.indicadorgeneral', '=', $indicador)
+                    ->where('m.anio', '=', $anio);
+            })
+            ->leftJoinSub(
+                DB::table('edu_cubo_pacto02_local')
+                    ->select(
+                        'distrito_id',
+                        DB::raw('COUNT(`local`) as denominador'),
+                        DB::raw('SUM(CASE WHEN estado = 1 THEN 1 ELSE 0 END) as numerador')
+                    )
+                    ->whereBetween('fecha_inscripcion', [
+                        date("$anio-01-01"),
+                        date("$anio-12-31")
+                    ])
+                    ->groupBy('distrito_id'),
+                'c',
+                'c.distrito_id',
+                '=',
+                'd.id'
+            )
+            ->where('d.codigo', 'like', '25____') // 6 caracteres que empiezan con '25'
+            ->orderBy('avance', 'desc')
+            ->orderBy('c.numerador', 'desc')
+            ->get();
+    }
+
+    public static function getEduPacto2tabla1_opt01($indicador_id, $anio, $mes = null, $provincia = 0, $distrito = 0, $estado = 0)
     {
         // === 1. Subconsulta: Metas por distrito ===
         $metas = DB::table('par_ubigeo as d')
@@ -1215,7 +1270,7 @@ class IndicadorGeneralMetaRepositorio
         return $query->groupBy('distrito')->orderBy('indicador', 'desc')->get();
     }
 
-    public static function getEduPacto2tabla3($indicador_id, $anio, $mes, $provincia, $distrito, $estado)
+    public static function getEduPacto2tabla3_opt01($indicador_id, $anio, $mes, $provincia, $distrito, $estado)
     {
         $query = IndicadorGeneralMeta::select(
             'd.id as dis_id',
@@ -1307,6 +1362,64 @@ class IndicadorGeneralMetaRepositorio
         //     }
         // }
         return $query;
+    }
+
+    public static function getEduPacto2tabla3_opt02($indicador, $anioActual, $mes, $provincia, $distrito, $estado)
+    {
+        // Subconsulta para avances por distrito y año
+        $avances = DB::table('edu_cubo_pacto02_local')
+            ->select(
+                'distrito_id',
+                DB::raw('YEAR(fecha_inscripcion) as anio'),
+                DB::raw('COUNT(`local`) as denominador'),
+                DB::raw('SUM(CASE WHEN estado = 1 THEN 1 ELSE 0 END) as numerador'),
+                DB::raw('ROUND(100 * SUM(CASE WHEN estado = 1 THEN 1 ELSE 0 END) / NULLIF(COUNT(`local`), 0), 1) as avance')
+            )
+            ->groupBy('distrito_id', DB::raw('YEAR(fecha_inscripcion)'));
+
+        return DB::table('par_ubigeo as d')
+            ->select(
+                'd.id',
+                'd.codigo',
+                'd.nombre as dis',
+                'm.valor_base',
+                DB::raw('MAX(m.anio_base) as anio_base'),
+
+                // Metas por año
+                DB::raw('MAX(CASE WHEN m.anio = 2023 THEN m.valor END) as le2023'),
+                DB::raw('MAX(CASE WHEN m.anio = 2024 THEN m.valor END) as le2024'),
+                DB::raw('MAX(CASE WHEN m.anio = 2025 THEN m.valor END) as le2025'),
+                DB::raw('MAX(CASE WHEN m.anio = 2026 THEN m.valor END) as le2026'),
+
+                // Avances por año
+                DB::raw('MAX(CASE WHEN c.anio = 2023 THEN c.avance END) as vo2023'),
+                DB::raw('MAX(CASE WHEN c.anio = 2024 THEN c.avance END) as vo2024'),
+                DB::raw('MAX(CASE WHEN c.anio = 2025 THEN c.avance END) as vo2025'),
+                DB::raw('MAX(CASE WHEN c.anio = 2026 THEN c.avance END) as vo2026'),
+
+                // Lógica de CUMPLE para el año actual
+                DB::raw("
+                    CASE 
+                        WHEN {$anioActual} = 2023 AND MAX(CASE WHEN m.anio = 2023 THEN m.valor END) < MAX(CASE WHEN c.anio = 2023 THEN c.avance END) THEN 1
+                        WHEN {$anioActual} = 2024 AND MAX(CASE WHEN m.anio = 2024 THEN m.valor END) < MAX(CASE WHEN c.anio = 2024 THEN c.avance END) THEN 1
+                        WHEN {$anioActual} = 2025 AND MAX(CASE WHEN m.anio = 2025 THEN m.valor END) < MAX(CASE WHEN c.anio = 2025 THEN c.avance END) THEN 1
+                        WHEN {$anioActual} = 2026 AND MAX(CASE WHEN m.anio = 2026 THEN m.valor END) < MAX(CASE WHEN c.anio = 2026 THEN c.avance END) THEN 1
+                        ELSE 0
+                    END as cumple
+                ")
+            )
+            ->join('par_indicador_general_meta as m', function ($join) use ($indicador) {
+                $join->on('m.distrito', '=', 'd.id')
+                    ->where('m.indicadorgeneral', '=', $indicador);
+            })
+            ->leftJoinSub($avances, 'c', function ($join) {
+                $join->on('c.distrito_id', '=', 'd.id')
+                    ->on('c.anio', '=', 'm.anio'); // ¡Clave: unir por año!
+            })
+            ->whereRaw("d.codigo LIKE '25____'") // 6 caracteres que empiezan con '25'
+            ->groupBy('d.id', 'd.codigo', 'd.nombre', 'm.valor_base')
+            ->orderBy('d.codigo')
+            ->get();
     }
 
     //PDRC EDUCACION
