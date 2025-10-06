@@ -57,6 +57,7 @@ use App\Http\Controllers\Parametro\ImporPoblacionDiresaController;
 use App\Http\Controllers\Parametro\ImporPoblacionPNController;
 use App\Http\Controllers\Parametro\IndicadorGeneralController;
 use App\Http\Controllers\Parametro\PoblacionController;
+use App\Http\Controllers\Parametro\PoblacionPNController;
 use App\Http\Controllers\Parametro\UbigeoController;
 use App\Http\Controllers\PowerBiController;
 use App\Http\Controllers\Presupuesto\BaseGastosController;
@@ -117,9 +118,13 @@ use App\Models\Educacion\InstitucionEducativa;
 use App\Models\Educacion\NivelModalidad;
 use App\Models\Educacion\TipoGestion;
 use App\Models\Parametro\Icono;
+use App\Models\Parametro\PoblacionPN;
 use App\Models\Parametro\Ubigeo;
+use App\Repositories\Educacion\CuboPacto1Repositorio;
 use App\Repositories\Educacion\EduCuboMatriculaRepositorio;
 use App\Repositories\Educacion\ImporCensoDocenteRepositorio;
+use App\Repositories\Educacion\ImportacionRepositorio;
+use App\Repositories\Parametro\PoblacionPNRepositorio;
 use App\Repositories\Parametro\UbigeoRepositorio;
 use App\Repositories\Salud\CalidadCriterioRepositorio;
 use App\Services\educacion\ProcesamientoService;
@@ -1330,6 +1335,10 @@ Route::get('/salud/pdrc/{indicador_id}', [IndicadoresController::class, 'PDRCDet
 
 Route::get('/salud/pei', [IndicadoresController::class, 'PEI'])->name('salud.indicador.pei');
 
+Route::get('/Poblacion/PN/Mes/{anio}', [PoblacionPNController::class, 'mes'])->name('poblacion.padronnominal.mes');
+Route::get('/Poblacion/PN/Provincia/{anio}/{mes}', [PoblacionPNController::class, 'provincia'])->name('poblacion.padronnominal.provincia');
+Route::get('/Poblacion/PN/Distrito/{anio}/{mes}/{provincia}', [PoblacionPNController::class, 'distrito'])->name('poblacion.padronnominal.distrito');
+
 
 // Route::get('/educacion/conveniofedx', [IndicadoresController::class, 'EduConvenioFED'])->name('educacion.indicador.conveniofedx');
 
@@ -1354,7 +1363,17 @@ Route::get('/educacion/conveniofed/edu/Reports2/Exportar/{div}/{indicador}/{anio
 // Route::post('/educacion/conveniofed/edu/Reports2/3', [IndicadoresController::class, 'PactoRegionalSalPacto1Reports3'])->name('educacion.indicador.conveniofed.detalle.reports.3');
 
 Route::get('/educacion/pruebas', function () {
-    dd(app(ProcesamientoService::class)->ejecutarProcesos(2, 2995));
+    $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
+    $actualizado =  'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion));
+    $updateMin1 = PoblacionPNRepositorio::actualizado();
+    $updateMin2 = CuboPacto1Repositorio::actualizado();
+    $mes = min($updateMin1->mes, $updateMin2->mes);
+    $gl = (int)PoblacionPNRepositorio::conteo3a5_acumulado(2025, $mes, 0, 0, 0);
+    $gls = CuboPacto1Repositorio::pacto1_matriculados(2025, $mes, 0, 0);
+    $num = number_format($gls, 0);
+    $den = number_format($gl, 0);
+    return compact('imp', 'actualizado', 'mes', 'gl', 'gls', 'num', 'den');
+    // dd(app(ProcesamientoService::class)->ejecutarProcesos(2, 2995));
     // return EduCuboMatricula::select('importacion_id', DB::raw('count(*) as conteo'))->groupBy('importacion_id')->get();
     // return view('salud.Indicadores.pruebaxxx00');
     // return UbigeoRepositorio::arrayDistritoIdNombre();

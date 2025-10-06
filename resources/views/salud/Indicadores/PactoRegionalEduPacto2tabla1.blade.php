@@ -18,7 +18,8 @@
                     <td class="text-left">{{ $item->distrito }}</td>
                     <td>{{ $item->meta }}%</td>{{-- <td>{{ $item->valor }}%</td> --}}
                     <td>{{ $item->avance }}</td>
-                    <td>{!! avance($item->indicador) !!}</td>
+                    {{-- <td>{!! avance($item->indicador) !!}</td> --}}
+                    <td><x-avance-badge :avance="$item->indicador ?? 0" /></td>
                     <td>
                         @if ($item->cumple == 1)
                             <i class="mdi mdi-thumb-up" style="font-size:13px;color:#43beac" title="CUMPLE"></i>

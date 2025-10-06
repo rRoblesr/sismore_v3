@@ -41,11 +41,9 @@
                         <div class="col-lg-1 col-md-1 col-sm-1  ">
                             <div class="custom-select-container">
                                 <label for="anio">AÑO</label>
-                                <select id="anio" name="anio" class="form-control font-11 p-0"
-                                    onchange="cargarMes()">
+                                <select id="anio" name="anio" class="form-control font-11 p-0">
                                     @foreach ($anio as $item)
-                                        <option value="{{ $item->anio }}"
-                                            {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                        <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
                                             {{ $item->anio }}</option>
 
                                         {{-- <option value="{{ $item }}" {{ $item == $aniomax ? 'selected' : '' }}>
@@ -57,12 +55,11 @@
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="mes">MES </label>
-                                <select id="mes" name="mes" class="form-control font-11"
-                                    onchange="cargarcuadros();">
-                                    @foreach ($mes as $item)
+                                <select id="mes" name="mes" class="form-control font-11">
+                                    {{-- @foreach ($mes as $item)
                                         <option value="{{ $item->id }}"{{ $item->id == $mesmin ? ' selected ' : '' }}>
                                             {{ $item->mes }}</option>
-                                    @endforeach
+                                    @endforeach --}}
                                 </select>
                             </div>
 
@@ -71,13 +68,8 @@
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="provincia">PROVINCIA</label>
-                                <select id="provincia" name="provincia" class="form-control font-11"
-                                    onchange="cargarDistritos();cargarcuadros();">
+                                <select id="provincia" name="provincia" class="form-control font-11">
                                     <option value="0">TODOS</option>
-                                    @foreach ($provincia as $item)
-                                        <option value="{{ $item->id }}">
-                                            {{ $item->nombre }}</option>
-                                    @endforeach
                                 </select>
                             </div>
 
@@ -86,8 +78,7 @@
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="distrito">DISTRITO</label>
-                                <select id="distrito" name="distrito" class="form-control font-11"
-                                    onchange="cargarcuadros();">
+                                <select id="distrito" name="distrito" class="form-control font-11">
                                     <option value="0">TODOS</option>
                                 </select>
                             </div>
@@ -303,13 +294,25 @@
         var ugel_select = 0;
         var anal1, anal2;
         $(document).ready(function() {
+            $('#anio').on('change', function() {
+                cargarMes();
+            });
+            $('#mes').on('change', function() {
+                cargarProvincia();
+            });
+            $('#provincia').on('change', function() {
+                cargarDistritos();
+            });
+            $('#distrito').on('change', function() {
+                cargarcuadros();
+            });
             Highcharts.setOptions({
                 lang: {
                     thousandsSep: ","
                 }
             });
-            cargarDistritos();
-            cargarcuadros();
+            cargarMes();
+
         });
 
         function cargarcuadros() {
@@ -476,8 +479,8 @@
         }
 
         function cargarMes() {
-            $.ajax({
-                url: "{{ route('salud.indicador.pactoregional.edu.pacto1.find.mes', ['anio' => 'anio']) }}"
+            $.ajax({ //salud.indicador.pactoregional.edu.pacto1.find.mes
+                url: "{{ route('poblacion.padronnominal.mes', ['anio' => 'anio']) }}"
                     .replace('anio', $('#anio').val()),
                 type: 'GET',
                 success: function(data) {
@@ -489,7 +492,29 @@
                         options += `<option value='${value.id}' ${ss}>${value.mes}</option>`;
                     });
                     $("#mes").append(options);
-                    cargarcuadros();
+                    cargarProvincia();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cargarProvincia() {
+            $.ajax({
+                url: "{{ route('poblacion.padronnominal.provincia', ['anio' => ':anio', 'mes' => ':mes']) }}"
+                    .replace(':anio', $('#anio').val())
+                    .replace(':mes', $('#mes').val()),
+                type: 'GET',
+                success: function(data) {
+                    $("#provincia option").remove();
+                    var options = '<option value="0">TODOS</option>';
+                    $.each(data, function(index, value) {
+                        options += "<option value='" + value.id + "'>" + value.nombre +
+                            "</option>"
+                    });
+                    $("#provincia").append(options);
+                    cargarDistritos();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -499,7 +524,10 @@
 
         function cargarDistritos() {
             $.ajax({
-                url: "{{ route('ubigeo.distrito.25', '') }}/" + $('#provincia').val(),
+                url: "{{ route('poblacion.padronnominal.distrito', ['anio' => ':anio', 'mes' => ':mes', 'provincia' => ':provincia']) }}"
+                    .replace(':anio', $('#anio').val())
+                    .replace(':mes', $('#mes').val())
+                    .replace(':provincia', $('#provincia').val()),
                 type: 'GET',
                 success: function(data) {
                     $("#distrito option").remove();
@@ -510,6 +538,7 @@
                             "</option>"
                     });
                     $("#distrito").append(options);
+                    cargarcuadros();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);

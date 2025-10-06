@@ -18,7 +18,7 @@
                     <td class="text-left">{{ $item->distrito }}</td>
                     <td>{{ $item->conteo }}</td>
                     <td>{{ $item->si }}</td>
-                    <td>{!! avance($item->indicador) !!}</td>{{-- <td>{!! avance(100*$item->si/$item->conteo) !!}</td> --}}
+                    <td><x-avance-badge :avance="$item->indicador" /></td>
                     <td>{{ $item->no }}</td>
                     <td>{{ $item->pro }}</td>
                     <td>{{ $item->sin }}</td>
@@ -46,22 +46,6 @@
 
 
 @php
-    function avance($monto)
-    {
-        if ($monto < 75) {
-            return '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px">' .
-                number_format($monto, 1) .
-                '%</span>';
-        } elseif ($monto < 95) {
-            return '<span class="badge badge-pill badge-warning" style="font-size:90%; width:50px">' .
-                number_format($monto, 1) .
-                '%</span>';
-        } else {
-            return '<span class="badge badge-pill badge-success" style="font-size:90%; width:50px">' .
-                number_format($monto, 1) .
-                '%</span>';
-        }
-    }
     function bajas($monto)
     {
         if ($monto < 0) {

@@ -41,7 +41,8 @@
                     <td>{{ date('Y') >= 2024 ? $item->r2024 : '' }}%</td>
                     <td>{{ date('Y') >= 2025 ? $item->r2025 : '' }}%</td>
                     <td>{{ date('Y') >= 2026 ? $item->r2026 : '' }}%</td>
-                    <td>{!! avance($item->avance) !!}</td>{{--  --}}
+                    {{-- <td>{!! avance($item->avance) !!}</td> --}}
+                    <td><x-avance-badge :avance="$item->avance ?? 0.0" /></td>
                     <td>
                         @if ($item->cumple == 1)
                             <button type="button"

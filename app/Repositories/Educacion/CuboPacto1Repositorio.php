@@ -12,29 +12,45 @@ class CuboPacto1Repositorio
     {
         $maxAno = CuboPacto1::max('anio');
         $maxMes = CuboPacto1::where('anio', $maxAno)->max('mes_id');
-
         $query = CuboPacto1::from('edu_cubo_pacto01_matriculados as m')
             ->join('par_mes as p', 'p.id', '=', 'm.mes_id')
             ->where('m.anio', $maxAno)
             ->where('m.mes_id', $maxMes)
             ->selectRaw('m.anio,m.mes_id as mes, CONCAT(p.mes, " ", m.anio) AS fecha')
             ->first();
-
         if (!$query) {
             return null;
         }
+        return $query;
+    }
 
+    public static function anios()
+    {
+        return CuboPacto1::select('anio')->distinct()->orderBy('anio', 'asc')->get();
+    }
+
+    public static function ultimoaniodisponible($list_anio, $anio_actual)
+    {
+        return CuboPacto1::whereIn('nivelmodalidad_codigo', ['A2', 'A3', 'A5'])->where('anio', $list_anio->where('anio', '<=', $anio_actual)->max('anio'))->max('anio');
+    }
+
+    public static function pacto1_matriculadosxx($anio, $mes, $provincia, $distrito)
+    { //edu_cubo_pacto01_matriculados
+        $query = CuboPacto1::where('anio', $anio)->where('mes_id', '<=', $mes)
+            ->whereIn('nivelmodalidad_codigo', ['A2', 'A3', 'A5']);
+        if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
+        if ($distrito > 0) $query = $query->where('distrito_id', $distrito);
+        $query = $query->sum('total');
         return $query;
     }
 
     public static function pacto1_matriculados($anio, $mes, $provincia, $distrito)
     {
-        $query = DB::table('edu_cubo_pacto01_matriculados') //->select(DB::raw('sum(total) as conteo'))
-            ->where('anio', $anio)->where('mes_id', '<=', $mes)->whereIn('nivelmodalidad_codigo', ['A2', 'A3', 'A5']);
-        if ($provincia > 0) $query = $query->where('provincia_id', $provincia);
-        if ($distrito > 0) $query = $query->where('distrito_id', $distrito);
-        $query = $query->sum('total');
-        return $query;
+        return CuboPacto1::where('anio', $anio)->where('mes_id', '<=', $mes)
+            ->whereIn('nivelmodalidad_codigo', ['A2', 'A3', 'A5'])
+            ->when($provincia && $provincia > 0, fn($q) => $q->where('provincia_id', $provincia))
+            ->when($distrito && $distrito > 0, fn($q) => $q->where('distrito_id', $distrito))
+            ->sum('total');
     }
 
     public static function pacto1_matriculados_mes_a($anio, $mes, $provincia, $distrito)

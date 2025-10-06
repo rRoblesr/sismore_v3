@@ -29,6 +29,44 @@ class PoblacionPNRepositorio
         return $query;
     }
 
+    public static function ultimoaniodisponible($list_anio, $anio_actual)
+    {
+        return PoblacionPN::where('anio', $list_anio->where('anio', '<=', $anio_actual)->max('anio'))->max('anio');
+    }
+
+    public static function mes($anio)
+    {
+        return Mes::whereIn('id', PoblacionPN::where('anio', $anio)->distinct()->pluck('mes_id'))->orderBy('id', 'asc')->get();
+    }
+
+    public static function provincia($anio, $mes)
+    {
+        return Ubigeo::from('par_ubigeo as p')
+            ->select('p.id', 'p.codigo', 'p.nombre')
+            ->join('par_ubigeo as d', 'd.dependencia', '=', 'p.id')
+            ->join('par_poblacion_padron_nominal as pn', function ($join) use ($anio) {
+                $join->on('d.id', '=', 'pn.ubigeo_id')->where('pn.anio', '=', $anio);
+            })
+            ->when($mes && $mes > 0, fn($q) => $q->where('pn.mes_id', $mes))
+            ->distinct()
+            ->orderBy('p.codigo', 'asc')
+            ->get();
+    }
+
+    public static function distrito($anio, $mes, $provincia)
+    {
+        return Ubigeo::from('par_ubigeo as d')
+            ->select('d.id', 'd.codigo', 'd.nombre')
+            ->join('par_poblacion_padron_nominal as pn', function ($join) use ($anio) {
+                $join->on('d.id', '=', 'pn.ubigeo_id')->where('pn.anio', '=', $anio);
+            })
+            ->when($mes && $mes > 0, fn($q) => $q->where('pn.mes_id', $mes))
+            ->when($provincia && $provincia > 0, fn($q) => $q->where('d.dependencia', $provincia))
+            ->distinct()
+            ->orderBy('d.codigo', 'asc')
+            ->get();
+    }
+
     public static function conteo($anio, $mes, $departamento, $provincia, $distrito, $sexo)
     {
         $query = PoblacionPN::from('par_poblacion_padron_nominal as pn')
@@ -210,7 +248,7 @@ class PoblacionPNRepositorio
         return $query->sum(DB::raw('pn.0a+pn.1a+pn.2a+pn.3a+pn.4a+pn.5a'));
     }
 
-    public static function conteo3a5_acumulado($anio, $mes, $provincia, $distrito, $sexo)
+    public static function conteo3a5_acumuladoxx($anio, $mes, $provincia, $distrito, $sexo)
     {
         $query = PoblacionPN::from('par_poblacion_padron_nominal as pn')
             ->join('par_ubigeo as dis', 'dis.id', '=', 'pn.ubigeo_id')
@@ -220,13 +258,26 @@ class PoblacionPNRepositorio
         if ($mes > 0) $query = $query->where('pn.mes_id', $mes);
         if ($provincia > 0) $query = $query->where('pro.id', $provincia);
         if ($distrito > 0) $query = $query->where('dis.id', $distrito);
-        return $query->sum(DB::raw('pn.3a+pn.4a+pn.5a'));
+        return $query->sum(DB::raw('pn.3a + pn.4a + pn.5a'));
+    }
+
+    public static function conteo3a5_acumulado($anio, $mes = null, $provincia = null, $distrito = null, $sexo = null)
+    {
+        return PoblacionPN::from('par_poblacion_padron_nominal as pn')
+            ->join('par_ubigeo as dis', 'dis.id', '=', 'pn.ubigeo_id')
+            ->join('par_ubigeo as pro', 'pro.id', '=', 'dis.dependencia')
+            ->where('pn.anio', $anio)
+            ->when($sexo && $sexo > 0, fn($q) => $q->where('pn.sexo_id', $sexo))
+            ->when($mes && $mes > 0, fn($q) => $q->where('pn.mes_id', $mes))
+            ->when($provincia && $provincia > 0, fn($q) => $q->where('pro.id', $provincia))
+            ->when($distrito && $distrito > 0, fn($q) => $q->where('dis.id', $distrito))
+            ->sum(DB::raw('`pn`.`3a` + `pn`.`4a` + `pn`.`5a`'));
     }
 
     public static function conteo3a5_mensual($anio, $mes, $provincia, $distrito, $sexo)
     {
         $query = PoblacionPN::from('par_poblacion_padron_nominal as pn')
-            ->select('pn.mes_id', DB::raw('sum(pn.3a+pn.4a+pn.5a) as conteo'))
+            ->select('pn.mes_id', DB::raw('sum(pn.3a + pn.4a + pn.5a) as conteo'))
             ->join('par_ubigeo as dis', 'dis.id', '=', 'pn.ubigeo_id')
             ->join('par_ubigeo as pro', 'pro.id', '=', 'dis.dependencia')
             ->where('pn.anio', $anio);

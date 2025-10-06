@@ -121,7 +121,7 @@ class IndicadoresController extends Controller
         $anio = array_unique($anios);
         $provincia = UbigeoRepositorio::provincia('25');
         $aniomax = date('Y');
-
+        // return compact('indedu', 'anio', 'provincia', 'aniomax');
         return view('salud.Indicadores.PactoRegionalEdu', compact('indedu', 'anio', 'provincia', 'aniomax'));
     }
 
@@ -436,11 +436,12 @@ class IndicadoresController extends Controller
             case 'DIT-EDU-01':
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
                 $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
-                $anio = CuboPacto1::distinct()->select('anio')->get();
+                $anio = EduCuboPacto1Repositorio::anios();
                 $aniomax = $anio->max('anio');
-
-                $am = DB::table('edu_cubo_pacto01_matriculados')->whereIn('nivelmodalidad_codigo', ['A2', 'A3', 'A5'])->where('anio', $anio->where('anio', '<=', date('Y'))->max('anio'))->max('mes_id');
-                $ap = PoblacionPN::where('anio', $anio->where('anio', '<=', date('Y'))->max('anio'))->max('mes_id');
+                // $am = DB::table('edu_cubo_pacto01_matriculados')->whereIn('nivelmodalidad_codigo', ['A2', 'A3', 'A5'])->where('anio', $anio->where('anio', '<=', date('Y'))->max('anio'))->max('mes_id');
+                $am = EduCuboPacto1Repositorio::ultimoaniodisponible($anio, date('Y'));
+                // $ap = PoblacionPN::where('anio', $anio->where('anio', '<=', date('Y'))->max('anio'))->max('mes_id');
+                $ap = PoblacionPNRepositorio::ultimoaniodisponible($anio, date('Y'));
                 $mesmax = 0;
                 if ($mesmax < $am) $mesmax = $am;
                 if ($mesmax < $ap) $mesmax = $ap;
@@ -1496,14 +1497,14 @@ class IndicadoresController extends Controller
         switch ($rq->div) {
             case 'head':
                 $loc = (int)PoblacionPNRepositorio::conteo3a5_acumulado($rq->anio, $rq->mes, $rq->provincia, $rq->distrito, 0);
-                $ssa = CuboPacto1Repositorio::pacto1_matriculados($rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
+                $ssa = EduCuboPacto1Repositorio::pacto1_matriculados($rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
                 $nsa = $loc - $ssa;
                 $nsa = $nsa >= 0 ? $nsa : 0;
                 $rin = number_format(100 * ($loc > 0 ? $ssa / $loc : 0), 1);
                 return response()->json(['rq' => $rq->all(), 'loc' => number_format($loc, 0), 'ssa' => number_format($ssa, 0), 'nsa' => number_format($nsa), 'rin' => $rin]);
 
             case 'anal1':
-                $est = CuboPacto1Repositorio::pacto1_matriculados_mensual($rq->anio, 0, 0, $rq->distrito);
+                $est = EduCuboPacto1Repositorio::pacto1_matriculados_mensual($rq->anio, 0, 0, $rq->distrito);
                 $ppn = PoblacionPNRepositorio::conteo3a5_mensual($rq->anio, 0, 0, $rq->distrito, 0);
                 $base = IndicadorGeneralMetaRepositorio::getEduPacto1anal1($rq->indicador, $rq->anio, 0, 0, $rq->distrito, 0);
                 $info['categoria'] = [];
@@ -1518,7 +1519,7 @@ class IndicadoresController extends Controller
                 $info = [];
                 $alto = 0;
                 $info['categoria'] = ['3 Años', '4 Años', '5 Años'];
-                $data1 = CuboPacto1Repositorio::pacto1_matriculados_edad($rq->anio, $rq->mes, 0, $rq->distrito);
+                $data1 = EduCuboPacto1Repositorio::pacto1_matriculados_edad($rq->anio, $rq->mes, 0, $rq->distrito);
                 foreach ($data1 as $key => $value) {
                     $info['serie'][1][] = (int)$value->conteo;
                     if ($value->conteo > $alto) $alto = (int)$value->conteo;

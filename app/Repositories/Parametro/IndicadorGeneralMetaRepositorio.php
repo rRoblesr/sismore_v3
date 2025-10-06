@@ -1229,7 +1229,6 @@ class IndicadorGeneralMetaRepositorio
         )->where('indicadorgeneral', $indicador_id)
             ->join('par_ubigeo as d', 'd.id', '=', 'par_indicador_general_meta.distrito')->groupBy('dis_id', 'dis', 'anio_base', 'valor_base')->get();
 
-
         foreach ($query as $key => $value) {
             $anioxx = 2023;
             $poblacion = PoblacionPNRepositorio::conteo3a5_acumulado($anioxx, $mes, 0, $value->dis_id, 0);
@@ -1245,10 +1244,8 @@ class IndicadorGeneralMetaRepositorio
 
         foreach ($query as $key => $value) {
             $anioxx = 2024;
-            // $poblacion = PoblacionPNRepositorio::conteo3a5_acumulado($anioxx, $mes, 0, $value->dis_id, 0);
-            // $cubo = CuboPacto1Repositorio::pacto1_matriculados_mes_a($anioxx, $mes, 0, $value->dis_id);
             $cubo = CuboPacto2Repositorio::getEduPacto2tabla1($anioxx, $mes, 0, $value->dis_id, 0);
-            $den = 1; //$cubo1->first() ? $cubo1->first()->conteo : 0;
+            $den = 1;
             $num = $cubo->first() ? $cubo->first()->conteo : 0;
             $value->r2024 = round($den > 0 ? $num / $den : 0, 1);
             if ($anioxx == $anio) {
@@ -1260,29 +1257,55 @@ class IndicadorGeneralMetaRepositorio
 
         foreach ($query as $key => $value) {
             $anioxx = 2025;
-            $poblacion = PoblacionPNRepositorio::conteo3a5_acumulado($anioxx, $mes, 0, $value->dis_id, 0);
-            $cubo = CuboPacto1Repositorio::pacto1_matriculados_mes_a($anioxx, $mes, 0, $value->dis_id);
-            $den = $poblacion ? $poblacion : 0;
+            $cubo = CuboPacto2Repositorio::getEduPacto2tabla1($anioxx, $mes, 0, $value->dis_id, 0);
+            $den = 1;
             $num = $cubo->first() ? $cubo->first()->conteo : 0;
-            $value->r2025 = round($den > 0 ? 100 * $num / $den : 0, 1);
+            $value->r2025 = round($den > 0 ? $num / $den : 0, 1);
             if ($anioxx == $anio) {
                 $value->avance = number_format($value->r2025, 1);
                 $value->cumple = $value->r2025 >= $value->v2025 ? 1 : 0;
+                // $value->cumple = $value->r2024 == $value->v2024  ? 1 : (intval(date('m')) == $value->r2024 ? 1 : (intval(date('m')) - 1 == $value->r2024  ? 1 : 0));
             }
         }
 
+        // foreach ($query as $key => $value) {
+        //     $anioxx = 2025;
+        //     $poblacion = PoblacionPNRepositorio::conteo3a5_acumulado($anioxx, $mes, 0, $value->dis_id, 0);
+        //     $cubo = CuboPacto1Repositorio::pacto1_matriculados_mes_a($anioxx, $mes, 0, $value->dis_id);
+        //     $den = $poblacion ? $poblacion : 0;
+        //     $num = $cubo->first() ? $cubo->first()->conteo : 0;
+        //     $value->r2025 = round($den > 0 ? 100 * $num / $den : 0, 1);
+        //     if ($anioxx == $anio) {
+        //         $value->avance = number_format($value->r2025, 1);
+        //         $value->cumple = $value->r2025 >= $value->v2025 ? 1 : 0;
+        //     }
+        // }
+
         foreach ($query as $key => $value) {
             $anioxx = 2026;
-            $poblacion = PoblacionPNRepositorio::conteo3a5_acumulado($anioxx, $mes, 0, $value->dis_id, 0);
-            $cubo = CuboPacto1Repositorio::pacto1_matriculados_mes_a($anioxx, $mes, 0, $value->dis_id);
-            $den = $poblacion ? $poblacion : 0;
+            $cubo = CuboPacto2Repositorio::getEduPacto2tabla1($anioxx, $mes, 0, $value->dis_id, 0);
+            $den = 1;
             $num = $cubo->first() ? $cubo->first()->conteo : 0;
-            $value->r2026 = round($den > 0 ? 100 * $num / $den : 0, 1);
+            $value->r2026 = round($den > 0 ? $num / $den : 0, 1);
             if ($anioxx == $anio) {
                 $value->avance = number_format($value->r2026, 1);
                 $value->cumple = $value->r2026 >= $value->v2026 ? 1 : 0;
+                // $value->cumple = $value->r2024 == $value->v2024  ? 1 : (intval(date('m')) == $value->r2024 ? 1 : (intval(date('m')) - 1 == $value->r2024  ? 1 : 0));
             }
         }
+
+        // foreach ($query as $key => $value) {
+        //     $anioxx = 2026;
+        //     $poblacion = PoblacionPNRepositorio::conteo3a5_acumulado($anioxx, $mes, 0, $value->dis_id, 0);
+        //     $cubo = CuboPacto1Repositorio::pacto1_matriculados_mes_a($anioxx, $mes, 0, $value->dis_id);
+        //     $den = $poblacion ? $poblacion : 0;
+        //     $num = $cubo->first() ? $cubo->first()->conteo : 0;
+        //     $value->r2026 = round($den > 0 ? 100 * $num / $den : 0, 1);
+        //     if ($anioxx == $anio) {
+        //         $value->avance = number_format($value->r2026, 1);
+        //         $value->cumple = $value->r2026 >= $value->v2026 ? 1 : 0;
+        //     }
+        // }
         return $query;
     }
 
