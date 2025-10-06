@@ -624,8 +624,15 @@ class ImporPadronNominalController extends Controller
                 $nom = $xx[0];
             }
             $boton = '';
-            if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || in_array(session('perfil_administrador_id'), [3, 8, 9, 10, 11])) {
+            if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d')) {
+                // if (date('Y-m-d', strtotime('2025-10-06')) == date('Y-m-d')) {
+                // if (in_array(session('perfil_administrador_id'), [3, 8, 9, 10, 11])) {
                 $boton .= '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>&nbsp;';
+                // }
+            } else {
+                // if (in_array(session('perfil_administrador_id'), [3, 8, 9, 10, 11]))
+                if (in_array(session('perfil_administrador_id'), [3]))
+                    $boton .= '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>&nbsp;';
             }
             $boton .= '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> </button>&nbsp;';
             if (auth()->user()->id == 49) {
