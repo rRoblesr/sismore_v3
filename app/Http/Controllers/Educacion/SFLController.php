@@ -1322,7 +1322,8 @@ class SFLController extends Controller
                 'a.nombre as area',
                 'p.nombre as provincia',
                 'd.nombre as distrito',
-                's.fecha_registro as fecha',
+                's.fecha_registro as fecha',                
+                's.fecha_inscripcion as inscripcion',
                 db::raw('(case s.estado when 1 then "SANEADO" when 2 then "NO SANEADO" when 3 then "NO REGISTRADO" when 4 then "EN PROCESO" else "" end) as estado'),
             )
             ->tap(function ($query) use ($ugel, $provincia, $distrito, $estado) {

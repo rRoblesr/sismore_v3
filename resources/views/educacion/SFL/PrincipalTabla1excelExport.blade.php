@@ -12,6 +12,7 @@
             <th rowspan="1" style="background-color:#317eeb;color:#ffffff;text-align:center;">DISTRITO</th>
             <th rowspan="1" style="background-color:#317eeb;color:#ffffff;text-align:center;">DEPENDENCIA</th>
             <th rowspan="1" style="background-color:#317eeb;color:#ffffff;text-align:center;">FECHA REGISTRO</th>
+            <th rowspan="1" style="background-color:#317eeb;color:#ffffff;text-align:center;">FECHA INSCRIPCIÓN</th>
             <th rowspan="1" style="background-color:#317eeb;color:#ffffff;text-align:center;">ESTADO DEL SFL</th>
         </tr>
     </thead>
@@ -29,6 +30,7 @@
                 <td style="text-align:left;">{{ $item->distrito }}</td>
                 <td style="text-align:left;">{{ $item->ugel }}</td>
                 <td style="text-align:left;">{{ $item->fecha }}</td>
+                <td style="text-align:left;">{{ $item->inscripcion }}</td>
                 <td style="text-align:left;">{{ $item->estado }}</td>
             </tr>
         @endforeach
