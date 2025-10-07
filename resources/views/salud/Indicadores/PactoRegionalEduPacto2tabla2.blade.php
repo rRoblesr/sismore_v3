@@ -14,7 +14,7 @@
     @if (count($base) > 0)
         <tbody>
             @foreach ($base as $key => $item)
-                <tr class="text-center">
+                <tr class="text-center {{ $item->distrito == $ndis ? 'table-warning' : '' }}">
                     <td class="text-left">{{ $item->distrito }}</td>
                     <td>{{ $item->conteo }}</td>
                     <td>{{ $item->si }}</td>
@@ -25,33 +25,24 @@
                 </tr>
             @endforeach
         </tbody>
-        {{-- <tfoot>
-            <tr class="text-center bg-success-0 text-white">
-                <th colspan="2" class="text-right">TOTAL</th>
-                <th class="text-center">{{ number_format($foot->total, 0) }}</th>
-                <th class="text-center">{{ number_format($foot->con, 0) }}</th>
-                <th class="text-center">{{ number_format($foot->sin, 0) }}</th>
-                <th class="text-center">{!! avance($foot->indicador, 1) !!}</th>
-            </tr>
-        </tfoot> --}}
+        @if (isset($foot))
+            <tfoot>
+                <tr class="text-center bg-success-0 text-white">
+                    <th colspan="" class="text-right">{{ $foot->distrito }}</th>
+                    <th class="text-center">{{ number_format($foot->conteo, 0) }}</th>
+                    <th class="text-center">{{ number_format($foot->si, 0) }}</th>
+                    <th class="text-center"><x-avance-badge :avance="$foot->indicador" /></th>
+                    <th class="text-center">{{ number_format($foot->no, 0) }}</th>
+                    <th class="text-center">{{ number_format($foot->pro, 0) }}</th>
+                    <th class="text-center">{{ number_format($foot->sin, 0) }}</th>
+                </tr>
+            </tfoot>
+        @endif
     @else
         <tbody>
             <tr class="text-center">
-                <td class="text-center" colspan="11"><a href="#" class="">Sin información</a></td>
+                <td class="text-center" colspan="7"><a href="#" class="">Sin información</a></td>
             </tr>
         </tbody>
     @endif
 </table>
-
-
-
-@php
-    function bajas($monto)
-    {
-        if ($monto < 0) {
-            return '<span class="badge badge-pill badge-danger" style="font-size:85%;">' . round($monto, 0) . '</span>';
-        } else {
-            return number_format($monto);
-        }
-    }
-@endphp

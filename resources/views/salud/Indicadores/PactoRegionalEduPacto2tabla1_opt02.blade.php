@@ -25,15 +25,16 @@
                 </tr>
             @endforeach
         </tbody>
-        {{-- <tfoot>
+        <tfoot>
             <tr class="text-center bg-success-0 text-white">
-                <th colspan="2" class="text-right">TOTAL</th>
-                <th class="text-center">{{ number_format($foot->total, 0) }}</th>
-                <th class="text-center">{{ number_format($foot->con, 0) }}</th>
-                <th class="text-center">{{ number_format($foot->sin, 0) }}</th>
-                <th class="text-center">{!! avance($foot->indicador, 1) !!}</th>
+                <th colspan="2" class="text-right">{{ $foot->distrito }}</th>
+                <th class="text-right"></th>
+                <th class="text-center">{{ number_format($foot->denominador, 0) }}</th>
+                <th class="text-center">{{ number_format($foot->numerador, 0) }}</th>
+                <td><x-avance-badge :avance="$foot->indicador ?? 0" /></td>
+                 <th class="text-center"></th>
             </tr>
-        </tfoot> --}}
+        </tfoot>
     @else
         <tbody>
             <tr class="text-center">

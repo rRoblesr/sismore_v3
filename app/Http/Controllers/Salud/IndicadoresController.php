@@ -1631,24 +1631,48 @@ class IndicadoresController extends Controller
                 $reg['fuente'] = 'Siagie - MINEDU';
                 return response()->json(compact('info', 'reg'));
             case 'tabla1':
-                $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla1_opt01($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito, $rq->estado);
-                $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla1', compact('base', 'ndis'))->render();
-                // $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla1_opt02($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito, $rq->estado);
-                // $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla1_opt02', compact('base', 'ndis'))->render();
-                return response()->json(compact('excel', 'base'));
+                // $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla1_opt01($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito, $rq->estado);
+                // $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla1', compact('base', 'ndis'))->render();
+                $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla1_opt02($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito, $rq->estado);
+                $foot = null;
+                if ($base->count() > 0) {
+                    $foot = clone $base[0];
+                    // $foot->conteo = $base->sum('conteo');
+                    $foot->distrito = 'Total';
+                    $foot->denominador = $base->sum('denominador');
+                    $foot->numerador = $base->sum('numerador');
+                    // $foot->pro = $base->sum('pro');
+                    // $foot->sin = $base->sum('sin');
+                    $foot->indicador = round(100 * ($foot->denominador > 0 ? $foot->numerador / $foot->denominador : 0), 1);
+                }
+                $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla1_opt02', compact('base', 'foot', 'ndis'))->render();
+                return response()->json(compact('excel', 'base', 'foot'));
 
             case 'tabla2':
-                $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla2(0, 0, $rq->provincia, $rq->distrito, 0);
                 $aniob = $rq->anio;
-                $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla2', compact('base', 'ndis', 'aniob'))->render();
-                return response()->json(compact('excel', 'base'));
+                $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla2(0, 0, $rq->provincia, $rq->distrito, 0);
+                $foot = null;
+                if ($base->count() > 0) {
+                    $foot = clone $base[0];
+                    $foot->conteo = $base->sum('conteo');
+                    $foot->distrito = 'Total';
+                    $foot->si = $base->sum('si');
+                    $foot->no = $base->sum('no');
+                    $foot->pro = $base->sum('pro');
+                    $foot->sin = $base->sum('sin');
+                    $foot->indicador = round(100 * ($foot->conteo > 0 ? $foot->si / $foot->conteo : 0), 1);
+                }
+
+                $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla2', compact('base', 'foot', 'ndis', 'aniob'))->render();
+                return response()->json(compact('excel'));
 
             case 'tabla3':
                 $aniob = $rq->anio;
-                $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla3_opt01($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito, 0);
-                $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla3', compact('base', 'ndis', 'aniob'))->render();
-                // $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla3_opt02($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito, 0);
-                // $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla3_opt02', compact('base', 'ndis', 'aniob'))->render();
+                $unidad = IndicadorGeneral::find($rq->indicador)->unidad_id;
+                // $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla3_opt01($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito, 0);
+                // $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla3', compact('base', 'ndis', 'aniob'))->render();
+                $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla3_opt02($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito, 0);
+                $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla3_opt02', compact('base', 'unidad', 'ndis', 'aniob'))->render();
                 return response()->json(compact('excel', 'base'));
 
             case 'tabla4':

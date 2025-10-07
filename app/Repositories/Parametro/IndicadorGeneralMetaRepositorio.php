@@ -1258,15 +1258,15 @@ class IndicadorGeneralMetaRepositorio
             }
             $query->whereBetween('fecha_inscripcion', [$fechaInicio, $fechaFin]);
         }
-        if ($provincia > 0) {
-            $query->where('provincia_id', $provincia);
-        }
-        if ($distrito > 0) {
-            $query->where('distrito_id', $distrito);
-        }
-        if ($estado > 0) {
-            $query->where('estado', $estado);
-        }
+        // if ($provincia > 0) {
+        //     $query->where('provincia_id', $provincia);
+        // }
+        // if ($distrito > 0) {
+        //     $query->where('distrito_id', $distrito);
+        // }
+        // if ($estado > 0) {
+        //     $query->where('estado', $estado);
+        // }
         return $query->groupBy('distrito')->orderBy('indicador', 'desc')->get();
     }
 
@@ -1366,7 +1366,6 @@ class IndicadorGeneralMetaRepositorio
 
     public static function getEduPacto2tabla3_opt02($indicador, $anioActual, $mes, $provincia, $distrito, $estado)
     {
-        // Subconsulta para avances por distrito y año
         $avances = DB::table('edu_cubo_pacto02_local')
             ->select(
                 'distrito_id',
@@ -1414,9 +1413,9 @@ class IndicadorGeneralMetaRepositorio
             })
             ->leftJoinSub($avances, 'c', function ($join) {
                 $join->on('c.distrito_id', '=', 'd.id')
-                    ->on('c.anio', '=', 'm.anio'); // ¡Clave: unir por año!
+                    ->on('c.anio', '=', 'm.anio');
             })
-            ->whereRaw("d.codigo LIKE '25____'") // 6 caracteres que empiezan con '25'
+            ->whereRaw("d.codigo LIKE '25____'")
             ->groupBy('d.id', 'd.codigo', 'd.nombre', 'm.valor_base')
             ->orderBy('d.codigo')
             ->get();

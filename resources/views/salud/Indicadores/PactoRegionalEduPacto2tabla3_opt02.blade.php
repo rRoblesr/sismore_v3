@@ -32,16 +32,16 @@
                     <td>{{ $key + 1 }}</td>
                     <td class="text-left">{{ $item->dis }}</td>
                     <td>{{ $item->anio_base }}</td>
-                    <td>{{ $item->valor_base }}</td>
-                    <td>{{ date('Y') >= 2023 ? $item->le2023 : '' }}%</td>
-                    <td>{{ date('Y') >= 2024 ? $item->le2024 : '' }}%</td>
-                    <td>{{ date('Y') >= 2025 ? $item->le2025 : '' }}%</td>
-                    <td>{{ date('Y') >= 2026 ? $item->le2026 : '' }}%</td>
-                    <td>{{ date('Y') >= 2023 ? $item->vo2023 : '' }}%</td>
-                    <td>{{ date('Y') >= 2024 ? $item->vo2024 : '' }}%</td>
-                    <td>{{ date('Y') >= 2025 ? $item->vo2025 : '' }}%</td>
-                    <td>{{ date('Y') >= 2026 ? $item->vo2026 : '' }}%</td>
-                    <td><x-avance-badge :avance="$item->cumple ?? 0.0" /></td>
+                    <td>{{ $item->valor_base . '%' }}</td>
+                    <td><x-formatted-value :anio="2023" :value="$item->le2023" :unidad="$unidad" /></td>
+                    <td><x-formatted-value :anio="2024" :value="$item->le2024" :unidad="$unidad" /></td>
+                    <td><x-formatted-value :anio="2025" :value="$item->le2025" :unidad="$unidad" /></td>
+                    <td><x-formatted-value :anio="2026" :value="$item->le2026" :unidad="$unidad" /></td>
+                    <td><x-formatted-value :anio="2023" :value="$item->vo2023" :unidad="$unidad" /></td>
+                    <td><x-formatted-value :anio="2024" :value="$item->vo2024" :unidad="$unidad" /></td>
+                    <td><x-formatted-value :anio="2025" :value="$item->vo2025" :unidad="$unidad" /></td>
+                    <td><x-formatted-value :anio="2026" :value="$item->vo2026" :unidad="$unidad" /></td>
+                    <td><x-avance-badge :avance="$item->{'vo' . now()->year}" /></td>
                     <td><x-cumple-boton :cumple="$item->cumple" /> </td>
                 </tr>
             @endforeach
@@ -63,32 +63,3 @@
         </tbody>
     @endif
 </table>
-
-
-
-@php
-    function avance($monto)
-    {
-        if ($monto < 51) {
-            return '<span class="badge badge-pill badge-danger" style="font-size:90%; width:50px">' .
-                round($monto, 1) .
-                '%</span>';
-        } elseif ($monto < 100) {
-            return '<span class="badge badge-pill badge-warning" style="font-size:90%; width:50px">' .
-                round($monto, 1) .
-                '%</span>';
-        } else {
-            return '<span class="badge badge-pill badge-success" style="font-size:90%; width:50px">' .
-                round($monto, 1) .
-                '%</span>';
-        }
-    }
-    function bajas($monto)
-    {
-        if ($monto < 0) {
-            return '<span class="badge badge-pill badge-danger" style="font-size:85%;">' . round($monto, 0) . '</span>';
-        } else {
-            return number_format($monto);
-        }
-    }
-@endphp
