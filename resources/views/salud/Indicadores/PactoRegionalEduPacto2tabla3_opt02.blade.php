@@ -41,7 +41,7 @@
                     <td><x-formatted-value :anio="2024" :value="$item->vo2024" :unidad="$unidad" /></td>
                     <td><x-formatted-value :anio="2025" :value="$item->vo2025" :unidad="$unidad" /></td>
                     <td><x-formatted-value :anio="2026" :value="$item->vo2026" :unidad="$unidad" /></td>
-                    <td><x-avance-badge :avance="$item->{'vo' . now()->year}" /></td>
+                    <td><x-avance-badge :avance="$item->{'vo' . $aniob}" /></td>
                     <td><x-cumple-boton :cumple="$item->cumple" /> </td>
                 </tr>
             @endforeach

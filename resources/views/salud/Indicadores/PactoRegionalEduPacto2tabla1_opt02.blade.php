@@ -14,7 +14,8 @@
     @if ($base->count() > 0)
         <tbody>
             @foreach ($base as $key => $item)
-                <tr class="text-center {{ $item->distrito == $ndis ? 'table-warning' : '' }}">
+            {{-- <tr class="text-center {{ $item->distrito == $ndis ? 'table-warning' : '' }}"> --}}
+                <tr class="text-center {{ $distritos[$item->id] ?? '' }}">
                     <td>{{ $key + 1 }}</td>
                     <td class="text-left">{{ $item->distrito }}</td>
                     <td>{{ $item->meta }}%</td>

@@ -1006,18 +1006,6 @@ class IndicadoresController extends Controller
                 return response()->json(compact('info', 'mes', 'base', 'mesmax'));
             case 'tabla1':
                 $base = IndicadorGeneralMetaRepositorio::getSalPacto2tabla1($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
-                // $foot = clone $base[0];
-                // $foot->valor = 0;
-                // $foot->num = 0;
-                // $foot->den = 0;
-                // foreach ($base as $key => $value) {
-                //     $foot->valor += $value->valor;
-                //     $foot->num += $value->num;
-                //     $foot->den += $value->den;
-                // }
-                // $foot->valor = round($foot->valor / 19, 1);
-                // $foot->ind = round(100 * $foot->num / $foot->den, 1);
-                // $foot->cumple = $foot->ind >= $foot->valor ? 1 : 0;
                 $excel = view('salud.Indicadores.PactoRegionalSalPacto2tabla1', compact('base', 'ndis'))->render();
                 return response()->json(compact('excel', 'base'));
 
@@ -1038,10 +1026,6 @@ class IndicadoresController extends Controller
 
             case 'tabla3':
                 $base = IndicadorGeneralMetaRepositorio::getSalPacto2tabla3($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito);
-                // foreach ($base as $key => $value) {
-                //     $value->unico = str_pad($value->unico, 8, '0', STR_PAD_LEFT);
-                // }
-                // return response()->json(compact('base'));
                 $aniob = $rq->anio;
                 $excel = view('salud.Indicadores.PactoRegionalSalPacto2tabla3', compact('base', 'ndis', 'aniob'))->render();
                 return response()->json(compact('excel'));
@@ -1605,6 +1589,9 @@ class IndicadoresController extends Controller
 
     public function PactoRegionalEduPacto2Reports(Request $rq)
     {
+        $distritos = [];
+        if ($rq->provincia > 0 && $rq->distrito == 0) $distritos = Ubigeo::select('id', DB::raw('"table-warning" as color '))->where('dependencia', $rq->provincia)->get()->pluck('color', 'id');
+        else if ($rq->distrito > 0) $distritos = Ubigeo::select('id', DB::raw('"table-warning" as color '))->where('id', $rq->distrito)->get()->pluck('color', 'id');
         if ($rq->distrito > 0) $ndis = Ubigeo::find($rq->distrito)->nombre;
         else $ndis = '';
         switch ($rq->div) {
@@ -1637,16 +1624,13 @@ class IndicadoresController extends Controller
                 $foot = null;
                 if ($base->count() > 0) {
                     $foot = clone $base[0];
-                    // $foot->conteo = $base->sum('conteo');
                     $foot->distrito = 'Total';
                     $foot->denominador = $base->sum('denominador');
                     $foot->numerador = $base->sum('numerador');
-                    // $foot->pro = $base->sum('pro');
-                    // $foot->sin = $base->sum('sin');
                     $foot->indicador = round(100 * ($foot->denominador > 0 ? $foot->numerador / $foot->denominador : 0), 1);
                 }
-                $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla1_opt02', compact('base', 'foot', 'ndis'))->render();
-                return response()->json(compact('excel', 'base', 'foot'));
+                $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla1_opt02', compact('base', 'foot', 'ndis', 'distritos'))->render();
+                return response()->json(compact('excel'));
 
             case 'tabla2':
                 $aniob = $rq->anio;
@@ -1663,7 +1647,7 @@ class IndicadoresController extends Controller
                     $foot->indicador = round(100 * ($foot->conteo > 0 ? $foot->si / $foot->conteo : 0), 1);
                 }
 
-                $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla2', compact('base', 'foot', 'ndis', 'aniob'))->render();
+                $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla2', compact('base', 'foot', 'ndis', 'aniob', 'distritos'))->render();
                 return response()->json(compact('excel'));
 
             case 'tabla3':

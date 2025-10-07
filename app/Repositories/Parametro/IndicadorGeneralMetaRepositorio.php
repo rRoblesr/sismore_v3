@@ -1236,6 +1236,7 @@ class IndicadorGeneralMetaRepositorio
     {
         $query = DB::table('edu_cubo_pacto02_local')
             ->select(
+                'distrito_id as id',
                 'distrito',
                 DB::raw('COUNT(*) as conteo'),
                 DB::raw('
@@ -1267,7 +1268,7 @@ class IndicadorGeneralMetaRepositorio
         // if ($estado > 0) {
         //     $query->where('estado', $estado);
         // }
-        return $query->groupBy('distrito')->orderBy('indicador', 'desc')->get();
+        return $query->groupBy('distrito_id','distrito')->orderBy('indicador', 'desc')->get();
     }
 
     public static function getEduPacto2tabla3_opt01($indicador_id, $anio, $mes, $provincia, $distrito, $estado)

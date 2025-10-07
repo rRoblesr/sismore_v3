@@ -1648,6 +1648,8 @@ Route::get('/recursos/highcharts', function () {
 });
 
 Route::get('/recursos/pruebas', function () {
+    // return Ubigeo::where('id',50)->get()->pluck('nombre', 'codigo');
+    return Ubigeo::select('id', DB::raw('"table-warning" as color '))->where('dependencia',43)->get()->pluck('color', 'id');
     // return auth()->user();
     // return EduCuboMatriculaRepositorio::ebr_tabla2_distrito_conteo_detalles(2025, 0, 0, 0, 0);
     // return EduCuboMatriculaRepositorio::modalidad_total_anio_meses(1, 2025, 0, 0, 0, 0);
