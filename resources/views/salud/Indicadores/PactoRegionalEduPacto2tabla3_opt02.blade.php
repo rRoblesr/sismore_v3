@@ -28,7 +28,8 @@
     @if ($base->count() > 0)
         <tbody>
             @foreach ($base as $key => $item)
-                <tr class="text-center {{ $item->dis == $ndis ? 'table-warning' : '' }}">
+                {{-- <tr class="text-center {{ $item->dis == $ndis ? 'table-warning' : '' }}"> --}}
+                <tr class="text-center {{ $distritos[$item->id] ?? '' }}">
                     <td>{{ $key + 1 }}</td>
                     <td class="text-left">{{ $item->dis }}</td>
                     <td>{{ $item->anio_base }}</td>
@@ -46,15 +47,6 @@
                 </tr>
             @endforeach
         </tbody>
-        {{-- <tfoot>
-            <tr class="text-center bg-success-0 text-white">
-                <th colspan="2" class="text-right">TOTAL</th>
-                <th class="text-center">{{ number_format($foot->total, 0) }}</th>
-                <th class="text-center">{{ number_format($foot->con, 0) }}</th>
-                <th class="text-center">{{ number_format($foot->sin, 0) }}</th>
-                <th class="text-center">{!! avance($foot->indicador, 1) !!}</th>
-            </tr>
-        </tfoot> --}}
     @else
         <tbody>
             <tr class="text-center">

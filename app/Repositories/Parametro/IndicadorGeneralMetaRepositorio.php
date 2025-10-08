@@ -1043,7 +1043,7 @@ class IndicadorGeneralMetaRepositorio
 
 
     //###################### educacion pacto 2  #######################
-    public static function getEduPacto2anal1($anio = null, $mes = null, $provincia = 0, $distrito = 0, $estado = 0)
+    public static function PactoRegionalEduPacto2Reports_anal1($anio = null, $mes = null, $provincia = 0, $distrito = 0, $estado = 0)
     {
         $query = DB::table('edu_cubo_pacto02_local')
             ->select(
@@ -1096,7 +1096,7 @@ class IndicadorGeneralMetaRepositorio
         return $query;
     }
 
-    public static function getEduPacto2tabla1_opt02($indicador, $anio, $mes = null, $provincia = 0, $distrito = 0, $estado = 0)
+    public static function PactoRegionalEduPacto2Reports_tabla1($indicador, $anio, $mes = null, $provincia = 0, $distrito = 0, $estado = 0)
     {
         return DB::table('par_ubigeo as d')
             ->select(
@@ -1232,7 +1232,7 @@ class IndicadorGeneralMetaRepositorio
         return $query;
     }
 
-    public static function getEduPacto2tabla2($anio = null, $mes = null, $provincia = 0, $distrito = 0, $estado = 0)
+    public static function PactoRegionalEduPacto2Reports_tabla2($anio = null, $mes = null, $provincia = 0, $distrito = 0, $estado = 0)
     {
         $query = DB::table('edu_cubo_pacto02_local')
             ->select(
@@ -1365,7 +1365,7 @@ class IndicadorGeneralMetaRepositorio
         return $query;
     }
 
-    public static function getEduPacto2tabla3_opt02($indicador, $anioActual, $mes, $provincia, $distrito, $estado)
+    public static function PactoRegionalEduPacto2Reports_tabla3($indicador, $anioActual, $mes, $provincia, $distrito, $estado)
     {
         $avances = DB::table('edu_cubo_pacto02_local')
             ->select(

@@ -19,28 +19,19 @@
             @foreach ($base as $key => $item)
                 <tr class="text-center">
                     <td>{{ $key + 1 }}</td>
-                    <td>{{ $item->local }}</td>
-                    <td>{{ $item->modular }}</td>
+                    <td>{{ $item->clocal }}</td>
+                    <td>{{ $item->cmodular }}</td>
                     <td class="text-left">{{ $item->iiee }}</td>
-                    <td>{{ $item->modalidad }}</td>
+                    <td class="text-left">{{ $item->modalidad }}</td>
                     <td>{{ $item->nivel }}</td>
                     <td>{{ $item->ugel }}</td>
-                    <td>{{ $item->distrito }}</td>
-                    <td>{{ $item->centropoblado }}</td>
+                    <td class="text-left">{{ $item->distrito }}</td>
+                    <td class="text-left">{{ $item->centropoblado }}</td>
                     <td>{{ $item->area }}</td>
                     <td><x-estadosfl-badge :estado-id="$item->estadox" /></td>
                 </tr>
             @endforeach
         </tbody>
-        {{-- <tfoot>
-            <tr class="text-center bg-success-0 text-white">
-                <th colspan="2" class="text-right">TOTAL</th>
-                <th class="text-center">{{ number_format($foot->total, 0) }}</th>
-                <th class="text-center">{{ number_format($foot->con, 0) }}</th>
-                <th class="text-center">{{ number_format($foot->sin, 0) }}</th>
-                <th class="text-center">{!! avance($foot->indicador, 1) !!}</th>
-            </tr>
-        </tfoot> --}}
     @else
         <tbody>
             <tr class="text-center">

@@ -298,6 +298,7 @@
     <script type="text/javascript">
         var ugel_select = 0;
         $(document).ready(function() {
+
             Highcharts.setOptions({
                 lang: {
                     thousandsSep: ","
@@ -317,8 +318,6 @@
                 cargarcuadros();
             });
             cargarMes();
-            // cargarDistritos();
-            // cargarcuadros();
         });
 
         function cargarcuadros() {

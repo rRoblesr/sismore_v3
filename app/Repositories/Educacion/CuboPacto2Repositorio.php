@@ -210,7 +210,7 @@ class CuboPacto2Repositorio
         return $query->groupBy(DB::raw("CASE WHEN estado = 1 THEN 'SANEADO' ELSE 'NO SANEADO' END "))->get();
     }
 
-    public static function PactoRegionalEduPacto2Reports_locales($anio = null, $mes = null, $provincia = 0, $distrito = 0, $estado = 0)
+    public static function PactoRegionalEduPacto2Reports_head($anio = null, $mes = null, $provincia = 0, $distrito = 0, $estado = 0)
     {
         $query = CuboPacto2::query();
         if ($anio) {
