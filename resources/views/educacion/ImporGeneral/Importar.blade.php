@@ -903,7 +903,7 @@
                 case 1:
                     return "{{ route('ImporPadronWeb.guardar') }}";
                 case 2:
-                    return "{{ route('CuadroAsigPersonal.guardar') }}";
+                    return "{{ route('impornexus.guardar') }}";
                 case 8:
                     return "{{ route('ImporMatricula.guardar') }}";
                 case 9:

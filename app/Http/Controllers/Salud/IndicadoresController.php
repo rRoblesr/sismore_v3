@@ -456,11 +456,7 @@ class IndicadoresController extends Controller
                 $f = EduCuboPacto2Repositorio::inscripcion_max(0, 0, 0);
                 $actualizado = 'Actualizado al ' . $f->dia . ' de ' . $this->mesname[$f->mes - 1] . ' del ' . $f->anio;
                 $anio = EduCuboPacto2Repositorio::anios_inscripcion();
-                // $provincia = UbigeoRepositorio::provincia('25');
-                // $mes = DB::table(DB::raw('(select distinct month(fecha_inscripcion) as mes from edu_sfl)as sfl'))
-                //     ->join('par_mes as m', 'm.id', '=', 'sfl.mes')->select('m.id', 'm.mes')->get();
                 $aniomax = $anio->max('anio');
-                // $mesmax = $mes->max('id');
                 return view('salud.Indicadores.PactoRegionalEduPacto2', compact('actualizado', 'anio', 'aniomax', 'ind'));
             case 'DIT-EDU-03':
                 return '';

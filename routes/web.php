@@ -27,6 +27,7 @@ use App\Http\Controllers\Educacion\PadronEIBController;
 use App\Http\Controllers\Educacion\ImporPadronWebController;
 use App\Http\Controllers\Educacion\ImporMatriculaController;
 use App\Http\Controllers\Educacion\ImporMatriculaGeneralController;
+use App\Http\Controllers\Educacion\ImporNexusController;
 use App\Http\Controllers\Educacion\ImporPadronEibController;
 use App\Http\Controllers\Educacion\ImporPadronNominalController as EducacionImporPadronNominalController;
 use App\Http\Controllers\Educacion\ImporRERController;
@@ -224,7 +225,6 @@ Route::get('/NivelModalidad/Buscar/{tipo}', [NivelModalidadController::class, 'b
 Route::get('/InstitucionEducativa/Buscar/{local}', [InstEducativaController::class, 'buscar_codmodular'])->name('iiee.codmodular.buscar');
 Route::get('/InstitucionEducativa/Distrito/{provincia}', [InstEducativaController::class, 'cargar_distrito'])->name('iiee.cargar.distrito');
 
-
 // Route::get('/educación/Importar/PadronWeb', [ImporPadronWebController::class, 'importar'])->name('ImporPadronWeb.importar');
 // Route::post('/ImporPadronWeb/Importar', [ImporPadronWebController::class, 'guardar'])->name('ImporPadronWeb.guardar');
 // Route::post('/ImporPadronWeb/LI/{importacion_id}', [ImporPadronWebController::class, 'ListaImportada'])->name('ImporPadronWeb.listarimportados');
@@ -233,7 +233,6 @@ Route::get('/InstitucionEducativa/Distrito/{provincia}', [InstEducativaControlle
 // Route::get('/ImporPadronWeb/Exportar', [ImporPadronWebController::class, 'exportar'])->name('imporpadronweb.exportar');
 // Route::get('/ImporPadronWeb/Exportar/PadronWEB', [ImporPadronWebController::class, 'download'])->name('imporpadronweb.download');
 // Route::post('/ImporPadronWeb/PA/{proceso}/{importacion}', [ImporPadronWebController::class, 'ejecutarProcesos'])->name('imporpadronnominal.procedures');
-
 
 Route::prefix('educación/Importar/PadronWeb')
     ->name('ImporPadronWeb.')
@@ -247,6 +246,14 @@ Route::prefix('educación/Importar/PadronWeb')
         Route::get('/Exportar', [ImporPadronWebController::class, 'exportar'])->name('exportar');
         Route::get('/Exportar/PadronWEB', [ImporPadronWebController::class, 'download'])->name('download');
         Route::post('/PA/{proceso}/{importacion}', [ImporPadronWebController::class, 'ejecutarProcesos'])->name('procedures');
+    });
+
+Route::prefix('educación/Importar')->name('impornexus.')
+    ->group(function () {
+        Route::get('/Nexus', [ImporNexusController::class, 'importar'])->name('importar'); //impornexus.importar
+        Route::post('/Guardar', [ImporNexusController::class, 'guardar'])->name('guardar'); //impornexus.guardar
+        Route::get('/ListaImportada/{importacion}', [ImporNexusController::class, 'listar_importados'])->name('listar.importados'); //impornexus.listar.importados
+        Route::delete('/eliminar/{id}', [ImporNexusController::class, 'eliminar'])->name('eliminar'); //impornexus.eliminar
     });
 
 Route::get('/educación/Importar/PadronNominal', [EducacionImporPadronNominalController::class, 'importar'])->name('edu.imporpadronnominal.importar');
@@ -301,9 +308,7 @@ Route::get('/ImporIS/ListaImportada_DataTable/{importacion_id}', [ImporISControl
 Route::get('/ImporIS/Listar/ImportarDT', [ImporISController::class, 'ListarDTImportFuenteTodos'])->name('imporis.listar.importados');
 Route::get('/ImporIS/eliminar/{id}', [ImporISController::class, 'eliminar']);
 
-
-
-Route::get('/educación/Importar/Nexus', [CuadroAsigPersonalController::class, 'importar'])->name('CuadroAsigPersonal.importar');
+Route::get('/educación/Importar/Nexusxx', [CuadroAsigPersonalController::class, 'importar'])->name('CuadroAsigPersonal.importar');
 Route::post('/CuadroAsigPersonal/Importar', [CuadroAsigPersonalController::class, 'guardar'])->name('CuadroAsigPersonal.guardar');
 /* Route::get('/CuadroAsigPersonal/lidt/{importacion_id}', [CuadroAsigPersonalController::class, 'ListaImportada_DataTable'])->name('CuadroAsigPersonal.ListaImportada_DataTable'); */
 //Route::get('/CuadroAsigPersonal/Aprobar/{importacion_id}', [CuadroAsigPersonalController::class, 'aprobar'])->name('CuadroAsigPersonal.aprobar');
@@ -1649,7 +1654,7 @@ Route::get('/recursos/highcharts', function () {
 
 Route::get('/recursos/pruebas', function () {
     // return Ubigeo::where('id',50)->get()->pluck('nombre', 'codigo');
-    return Ubigeo::select('id', DB::raw('"table-warning" as color '))->where('dependencia',43)->get()->pluck('color', 'id');
+    return Ubigeo::select('id', DB::raw('"table-warning" as color '))->where('dependencia', 43)->get()->pluck('color', 'id');
     // return auth()->user();
     // return EduCuboMatriculaRepositorio::ebr_tabla2_distrito_conteo_detalles(2025, 0, 0, 0, 0);
     // return EduCuboMatriculaRepositorio::modalidad_total_anio_meses(1, 2025, 0, 0, 0, 0);

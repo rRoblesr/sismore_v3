@@ -542,7 +542,6 @@ class ImporPadronWebController extends Controller
         return Excel::download(new ImporPadronWebExport, $name);
     }
 
-
     public function ejecutarProcesos($proceso, $importacion)
     {
         ini_set('memory_limit', '-1');

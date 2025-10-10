@@ -297,15 +297,21 @@
 @section('js')
     <script type="text/javascript">
         var ugel_select = 0;
+        const spinners = {
+            head: ['#rin', '#nsa', '#ssa', '#loc'],
+            anal: ['#anal1', '#anal2'],
+            tabla: ['#vtabla1', '#vtabla2', '#vtabla3', '#vtabla4']
+        };
         $(document).ready(function() {
-
+            Object.keys(spinners).forEach(key => {
+                SpinnerManager.show(key);
+            });
             Highcharts.setOptions({
                 lang: {
                     thousandsSep: ","
                 }
             });
             $('#anio').on('change', function() {
-                console.log('kkk');
                 cargarMes();
             });
             $('#mes').on('change', function() {
@@ -345,20 +351,29 @@
                 type: "GET",
                 dataType: "JSON",
                 beforeSend: function() {
-                    if (div == "tabla1") {
-                        $('#v' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    } else if (div == "tabla2") {
-                        $('#v' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    } else {
-                        $('#' + div).html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                    }
+                    // SpinnerManager.show(div);
                 },
                 success: function(data) {
                     if (div == "head") {
-                        $('#rin').text(data.rin + '%');
-                        $('#nsa').text(data.nsa);
-                        $('#ssa').text(data.ssa);
-                        $('#loc').text(data.loc);
+                        $('#rin').text(data.rin).counterUp({
+                            delay: 10,
+                            time: 1000,
+                            callback:function() {
+                                $('#rin').append('%');
+                            }
+                        });
+                        $('#nsa').text(data.nsa).counterUp({
+                            delay: 10,
+                            time: 1000
+                        });
+                        $('#ssa').text(data.ssa).counterUp({
+                            delay: 10,
+                            time: 1000
+                        });
+                        $('#loc').text(data.loc).counterUp({
+                            delay: 10,
+                            time: 1000
+                        });
                     } else if (div == "anal1") {
                         gcolumn2(div,
                             data.info.categoria,
