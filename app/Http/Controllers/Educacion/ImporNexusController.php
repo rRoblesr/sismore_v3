@@ -28,7 +28,8 @@ class ImporNexusController extends Controller
     public function importar()
     {
         $fuente = $this->fuente;
-        return view('educacion.ImporGeneral.Importar', compact('fuente'));
+        // return view('educacion.ImporGeneral.Importar', compact('fuente'));        
+        return view('educacion.ImporNexus.Importar', compact('fuente'));
 
         //$mensaje = "";return view('educacion.CuadroAsigPersonal.Importar', compact('mensaje'));
     }
