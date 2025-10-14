@@ -803,7 +803,7 @@ Route::get('/Man/SFL/Download/plantilla', [SFLController::class, 'download_plant
 Route::post('/Man/SFL/Download/plantilla/visualizar', [SFLController::class, 'cargar_plantilla'])->name('mantenimiento.sfl.exportar.plantilla.cargar');
 Route::post('/Man/SFL/Download/plantilla/guardar', [SFLController::class, 'plantilla_guardar'])->name('mantenimiento.sfl.exportar.plantilla.guardar');
 
-Route::get('/educación/SFL/Reportes', [SFLController::class, 'reportes'])->name('educacion.sfl.tablerocontrol');
+Route::get('/educación/SFL/Reportes', [SFLController::class, 'reportes'])->name('educacion.sfl.reportes');
 Route::get('/educación/SFL/Reportes/Reporte', [SFLController::class, 'reportesreporte'])->name('educacion.sfl.reportes.reporte');
 Route::get('/educación/SFL/Reportes/Download/1/{div}/{ugel}/{modalidad}/{nivel}', [SFLController::class, 'reportesrdownloadexcel'])->name('educacion.sfl.reportes.download.excel');
 
