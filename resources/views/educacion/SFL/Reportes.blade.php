@@ -25,18 +25,17 @@
                 <div class="card-body pb-0">
                     <div class="form-group row align-items-center vh-5">
                         <div class="col-lg-5 col-md-4 col-sm-4">
-                            <h4 class="page-title font-12">Fuente: DRUE 2024</h4>
+                            <h4 class="page-title font-12">Fuente: DRUE {{ date('Y') }}</h4>
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="ugel">UGEL</label>
-                                <select id="ugel" name="ugel" class="form-control font-11"
-                                    onchange="cargarMes();">
+                                <select id="ugel" name="ugel" class="form-control font-11">
                                     <option value="0">TODOS</option>
-                                    @foreach ($ugel as $item)
+                                    {{-- @foreach ($ugel as $item)
                                         <option value="{{ $item->id }}">
                                             {{ $item->nombre }}</option>
-                                    @endforeach
+                                    @endforeach --}}
                                 </select>
                             </div>
                         </div>
@@ -44,12 +43,11 @@
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="modalidad">MODALIDAD</label>
-                                <select id="modalidad" name="modalidad" class="form-control font-11"
-                                    onchange="cargarNivel();cargarCards();">
+                                <select id="modalidad" name="modalidad" class="form-control font-11">
                                     <option value="0">TODOS</option>
-                                    @foreach ($modalidad as $item)
+                                    {{-- @foreach ($modalidad as $item)
                                         <option value="{{ $item->tipo }}"> {{ $item->ntipo }}</option>
-                                    @endforeach
+                                    @endforeach --}}
                                 </select>
                             </div>
                         </div>
@@ -57,8 +55,7 @@
                         <div class="col-lg-3 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="nivel">NIVEL EDUCATIVO</label>
-                                <select id="nivel" name="nivel" class="form-control font-11"
-                                    onchange="cargarCards();">
+                                <select id="nivel" name="nivel" class="form-control font-11">
                                     <option value="0">TODOS</option>
                                 </select>
                             </div>
@@ -222,10 +219,10 @@
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
                     <div class="card-widgets">
-                        <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla2')">
+                        <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla1')">
                             <i class="fa fa-file-excel"></i> Descargar</button>
                     </div>
-                    <h3 class="card-title">Locales escolares pblicos por ugel, según estados del saneamiento fisico legal
+                    <h3 class="card-title">Locales escolares públicos por ugel, según estados del saneamiento físico legal
                     </h3>
                 </div>
                 <div class="card-body">
@@ -252,8 +249,8 @@
                         <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla2')">
                             <i class="fa fa-file-excel"></i> Descargar</button>
                     </div>
-                    <h3 class="card-title">Instituciones educativas y locales educativos publicos por distritos, según
-                        estados del saneamiento fisico legal
+                    <h3 class="card-title">Instituciones educativas y locales educativos públicos por distritos, según
+                        estados del saneamiento físico legal
                     </h3>
                 </div>
                 <div class="card-body">
@@ -277,11 +274,11 @@
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
                     <div class="card-widgets">
-                        <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla2')">
+                        <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla3')">
                             <i class="fa fa-file-excel"></i> Descargar</button>
                     </div>
-                    <h3 class="card-title">Instituciones educativas publicas, según
-                        estados del saneamiento fisico legal
+                    <h3 class="card-title">Instituciones educativas públicas, según
+                        estados del saneamiento físico legal
                     </h3>
                 </div>
                 <div class="card-body">
@@ -297,230 +294,6 @@
             </div>
         </div>
     </div>
-
-    <div class="row d-none">
-        <div class="col-lg-12">
-            {{-- <div class="card">
-                <div class="card-header"> --}}
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                    <div class="card-widgets">
-                        <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla3')">
-                            <i class="fa fa-file-excel"></i> Descargar</button>
-                    </div>
-                    <h3 class="card-title">locales educacitvos públicos por modalidad y nivel educativo , según estados del
-                        saneamiento físico legal
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="table-responsive" id="ctabla2">
-
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!--  Modal content for the above example -->
-    <div class="modal fade" id="modal-centropoblado" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-        aria-hidden="true" style="display: none;">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-
-                    <h5 class="modal-title" id="myLargeModalLabel">Población de niños y niñas menos de 6 años por Centro
-                        Poblado, segun sexo y edades</h5>
-                    <div class="card-widgets">
-                        <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla3_1')">
-                            <i class="fa fa-file-excel"></i> Descargar</button>
-                    </div>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="table-responsive" id="ctabla3_1">
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div><!-- /.modal -->
-
-    <!--  Modal content for the above example -->
-    <div class="modal fade" id="modal-consulta" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-        aria-hidden="true" style="display: none;">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content p-0 b-0">
-                <div class="card card-color mb-0">
-                    <div class="card-header bg-success-0">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h3 class="card-title text-white mt-1 mb-0">Busqueda de Niños y Niñas Menores de 6 años del Padron
-                            Nominal</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12">
-                                <div class="card">
-                                    <div class="card-body p-0">
-                                        <div class="form-group row align-items-center vh-5">
-                                            <div class="col-lg-2 col-md-2 col-sm-2">
-                                                <div class="custom-select-container">
-                                                    <label for="tipodocumento">Tipo de Documento</label>
-                                                    <select id="tipodocumento" name="tipodocumento" class="form-control "
-                                                        onchange="">
-                                                        <option value="1">DNI</option>
-                                                        <option value="2">CNV</option>
-                                                        <option value="3">CUI</option>
-                                                        <option value="4">CÓDIGO PADRÓN</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-2 col-md-2 col-sm-2">
-                                                <div class="custom-select-container">
-                                                    <label for="numerodocumento">Documento</label>
-                                                    <input type="number" id="numerodocumento" name="numerodocumento"
-                                                        class="form-control">
-                                                </div>
-
-
-                                            </div>
-                                            <div class="col-lg-4 col-md-2 col-sm-2">
-                                                <div class="custom-select-container">
-                                                    <label for="apellidosnombres">Apellidos y Nombres</label>
-                                                    <input type="text" id="apellidosnombres" name="apellidosnombres"
-                                                        class="form-control">
-                                                </div>
-
-
-                                            </div>
-                                            <div class="col-lg-2 col-md-2 col-sm-2 text-center">
-                                                <button type="button" class="btn btn-success" onclick="consultahacer()">
-                                                    {{-- <i class="fa fa-redo"></i> --}} Consultar</button>
-                                            </div>
-                                            <div class="col-lg-2 col-md-2 col-sm-2 text-center">
-                                                <button type="button" class="btn btn-warning"
-                                                    onclick="consultalimpiar()">
-                                                    {{-- <i class="fa fa-redo"></i> --}} Limpiar</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="table-responsive">
-                                    <table id="sdsds" class="table table-striped table-bordered font-12 text-dark">
-                                        <tbody>
-                                            <tr>
-                                                <td class="text-right table-secondary">CÓDIGO PADRÓN</td>
-                                                <td id="padron"></td>
-                                                <td class="text-right table-secondary">TIPO DOCUMENTO</td>
-                                                <td id="tipodoc"></td>
-                                                <td class="text-right table-secondary">DOCUMENTO</td>
-                                                <td id="doc"></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-right table-secondary">APELLIDO PATERNO</td>
-                                                <td id="apepat"></td>
-                                                <td class="text-right table-secondary">APELLIDO MATERNO</td>
-                                                <td id="apemat"></td>
-                                                <td class="text-right table-secondary">NOMBRES</td>
-                                                <td id="nom"></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-right table-secondary">SEXO</td>
-                                                <td id="sexo"></td>
-                                                <td class="text-right table-secondary">FECHA DE NACIMIENTO</td>
-                                                <td id="nacimiento"></td>
-                                                <td class="text-right table-secondary">EDAD</td>
-                                                <td id="edad"></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-right table-secondary">DEPARTAMENTO</td>
-                                                <td id="dep"></td>
-                                                <td class="text-right table-secondary">PROVINCIA</td>
-                                                <td id="pro"></td>
-                                                <td class="text-right table-secondary">DISTRITO</td>
-                                                <td id="dis"></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-right table-secondary">CENTRO POBLADO</td>
-                                                <td id="cp"></td>
-                                                <td class="text-right table-secondary">DIRECCIÓN</td>
-                                                <td id="dir" colspan="3"></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-right table-secondary">EESS NACIMIENTO</td>
-                                                <td id="esn"></td>
-                                                <td class="text-right table-secondary">ULTIMO EESS ATENCIÓN</td>
-                                                <td id="esa"></td>
-                                                <td class="text-right table-secondary">VISITA DOMICILIARIA</td>
-                                                <td id="visita"></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-right table-secondary">ENCONTRADO</td>
-                                                <td id="encontrado"></td>
-                                                <td class="text-right table-secondary">TIPO DE SEGURO</td>
-                                                <td id="seguro"></td>
-                                                <td class="text-right table-secondary">PROGRAMA SOCIAL</td>
-                                                <td id="programa"></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-right table-secondary">INSTITUTCIÓN EDUCATIVA</td>
-                                                <td></td>
-                                                <td class="text-right table-secondary">NIVEL EDUCATIVO</td>
-                                                <td></td>
-                                                <td class="text-right table-secondary">GRADO Y SECCIÓN</td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-right table-secondary">APODERADO</td>
-                                                <td id="mapoderado"></td>
-                                                <td class="text-right table-secondary">TIPO DOCUMENTO</td>
-                                                <td id="mtipodoc"></td>
-                                                <td class="text-right table-secondary">DOCUMENTO</td>
-                                                <td id="mdoc"></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-right table-secondary">APELLIDO PATERNO</td>
-                                                <td id="mapepat"></td>
-                                                <td class="text-right table-secondary">APELLIDO MATERNO</td>
-                                                <td id="mapemat"></td>
-                                                <td class="text-right table-secondary">NOMBRES</td>
-                                                <td id="mnom"></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-right table-secondary">CELULAR</td>
-                                                <td id="mcel"></td>
-                                                <td class="text-right table-secondary">GRADO DE INSTRUCCIÓN</td>
-                                                <td id="mgrado"></td>
-                                                <td class="text-right table-secondary">LENGUA HABITUAL</td>
-                                                <td id="mlengua"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div><!-- /.modal -->
 @endsection
 
 @section('js')
@@ -532,12 +305,20 @@
         var anal3;
         var anal3valores = [];
         $(document).ready(function() {
+            $('#ugel').on('change', function() {
+                cargarModalidad();
+            });
+            $('#modalidad').on('change', function() {
+                cargarNivel();
+            });
+            $('#nivel').on('change', function() {
+                cargarCards();
+            });
             mapData = otros;
             mapData.features.forEach((element, key) => {
                 console.log('["' + element.properties['hc-key'] + '", ' + (key + 1) + '],');
             });
-            cargarNivel();
-            cargarCards();
+            cargarUgel();
 
         });
 
@@ -554,7 +335,7 @@
 
         function panelGraficas(div) {
             $.ajax({
-                url: "{{ route('educacion.sfl.tablerocontrol.reporte') }}",
+                url: "{{ route('educacion.sfl.reportes.reporte') }}",
                 data: {
                     'div': div,
                     "ugel": $('#ugel').val(),
@@ -679,18 +460,38 @@
             });
         }
 
-        function cargarDistritos() {
+        function cargarUgel() {
             $.ajax({
-                url: "{{ route('ubigeo.distrito.25', '') }}/" + $('#provincia').val(),
+                url: "{{ route('cubopacto2.sfl.ugel') }}",
                 type: 'GET',
                 success: function(data) {
-                    $("#distrito option").remove();
+                    $("#ugel option").remove();
                     var options = '<option value="0">TODOS</option>';
-                    $.each(data, function(index, value) {
-                        options += "<option value='" + value.id + "'>" + value.nombre +
-                            "</option>"
+                    $.each(data, function(index, vv) {
+                        options += `<option value='${vv.id}'>${vv.nombre}</option>`;
                     });
-                    $("#distrito").append(options);
+                    $("#ugel").append(options);
+                    cargarModalidad();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cargarModalidad() {
+            $.ajax({
+                url: "{{ route('cubopacto2.sfl.modalidad', ['ugel' => ':ugel']) }}"
+                    .replace(':ugel', $('#ugel').val()),
+                type: 'GET',
+                success: function(data) {
+                    $('#modalidad').empty();
+                    if (Object.keys(data).length > 1) $('#modalidad').append(
+                        '<option value="0">TODOS</option>');
+                    $.each(data, function(index, value) {
+                        $('#modalidad').append(`<option value='${index}'>${value}</option>`);
+                    });
+                    cargarNivel()
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -700,39 +501,16 @@
 
         function cargarNivel() {
             $.ajax({
-                url: "{{ route('nivelmodalidad.buscar.tipo', ['tipo' => 'tipo']) }}"
-                    .replace('tipo', $('#modalidad').val()),
+                url: "{{ route('cubopacto2.sfl.nivel', ['ugel' => ':ugel', 'modalidad' => ':modalidad']) }}"
+                    .replace(':ugel', $('#ugel').val())
+                    .replace(':modalidad', $('#modalidad').val()),
                 type: 'GET',
                 success: function(data) {
-                    $("#nivel option").remove();
-                    var options = '<option value="0">TODOS</option>';
+                    $("#nivel").empty();
+                    $('#nivel').append('<option value="0">TODOS</option>');
                     $.each(data, function(index, value) {
-                        options += "<option value='" + value.id + "'>" + value.nombre +
-                            "</option>"
+                        $('#nivel').append(`<option value='${index}'>${value}</option>`);
                     });
-                    $("#nivel").append(options);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
-        }
-
-        function cargarMes() {
-            $.ajax({
-                url: "{{ route('salud.padronnominal.mes', '') }}/" + $('#anio').val(),
-                type: 'GET',
-                success: function(data) {
-                    $("#mes option").remove();
-                    var options = ''; // '<option value="0">TODOS</option>';
-
-                    var mesmax = Math.max(...data.map(item => item.id));
-                    // console.log("Mes máximo:", mesmax);
-                    $.each(data, function(ii, vv) {
-                        ss = vv.id == mesmax ? 'selected' : '';
-                        options += `<option value='${vv.id}' ${ss}>${vv.mes}</option>`
-                    });
-                    $("#mes").append(options);
                     cargarCards();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
@@ -756,13 +534,11 @@
 
         function descargarExcel(div) {
             window.open(
-                "{{ route('salud.padronnominal.tablerocalidad.exportar.excel', ['div' => 'div', 'importacion' => 0, 'anio' => 'anio', 'mes' => 'mes', 'provincia' => 'provincia', 'distrito' => 'distrito', 'ubigeo' => 'ubigeo']) }}"
-                .replace('div', div)
-                .replace('anio', $('#anio').val())
-                .replace('mes', $('#mes').val())
-                .replace('provincia', $('#provincia').val())
-                .replace('distrito', $('#distrito').val())
-                .replace('ubigeo', ubigeo_select)
+                "{{ route('educacion.sfl.reportes.download.excel', ['div' => ':div', 'ugel' => ':ugel', 'modalidad' => ':modalidad', 'nivel' => ':nivel']) }}"
+                .replace(':div', div)
+                .replace(':ugel', $('#ugel').val())
+                .replace(':modalidad', $('#modalidad').val())
+                .replace(':nivel', $('#nivel').val())
             );
         }
 
@@ -1083,10 +859,4 @@
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
 
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
-
-    {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts-more.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script> --}}
 @endsection

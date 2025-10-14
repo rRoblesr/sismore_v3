@@ -803,8 +803,10 @@ Route::get('/Man/SFL/Download/plantilla', [SFLController::class, 'download_plant
 Route::post('/Man/SFL/Download/plantilla/visualizar', [SFLController::class, 'cargar_plantilla'])->name('mantenimiento.sfl.exportar.plantilla.cargar');
 Route::post('/Man/SFL/Download/plantilla/guardar', [SFLController::class, 'plantilla_guardar'])->name('mantenimiento.sfl.exportar.plantilla.guardar');
 
-Route::get('/educación/SFL/TableroControl', [SFLController::class, 'tablerocontrol2'])->name('educacion.sfl.tablerocontrol');
-Route::get('/educación/SFL/TableroControl/reprote', [SFLController::class, 'tablerocontrol2reporte'])->name('educacion.sfl.tablerocontrol.reporte');
+Route::get('/educación/SFL/Reportes', [SFLController::class, 'reportes'])->name('educacion.sfl.tablerocontrol');
+Route::get('/educación/SFL/Reportes/Reporte', [SFLController::class, 'reportesreporte'])->name('educacion.sfl.reportes.reporte');
+Route::get('/educación/SFL/Reportes/Download/1/{div}/{ugel}/{modalidad}/{nivel}', [SFLController::class, 'reportesrdownloadexcel'])->name('educacion.sfl.reportes.download.excel');
+
 
 Route::get('/educación/SFL/TableroControl2', [SFLController::class, 'tablerocontrol'])->name('educacion.sfl.tablerocontrolx');
 Route::get('/educación/SFL/TableroControl2/reprote', [SFLController::class, 'tablerocontrolreporte'])->name('educacion.sfl.tablerocontrol.reportex');
@@ -1324,6 +1326,9 @@ Route::get('/cubo/pacto2/local/mes/{anio}', [CuboPacto2Controller::class, 'mes']
 Route::get('/cubo/pacto2/local/provincia/{anio}/{mes}', [CuboPacto2Controller::class, 'provincia'])->name('educacion.pactoregional.pacto2.provincia');
 Route::get('/cubo/pacto2/local/distrito/{anio}/{mes}/{provincia}', [CuboPacto2Controller::class, 'distrito'])->name('educacion.pactoregional.pacto2.distrito');
 
+Route::get('/cubo/pacto2/sfl/ugel', [CuboPacto2Controller::class, 'sflugel'])->name('cubopacto2.sfl.ugel');
+Route::get('/cubo/pacto2/sfl/modalidad/{ugel}', [CuboPacto2Controller::class, 'sflmodalidad'])->name('cubopacto2.sfl.modalidad');
+Route::get('/cubo/pacto2/sfl/nivel/{ugel}/{modalidad}', [CuboPacto2Controller::class, 'sflnivel'])->name('cubopacto2.sfl.nivel');
 Route::get('/cubo/pacto2/sfl/provincia/{ugel}', [CuboPacto2Controller::class, 'sflprovincia'])->name('cubopacto2.sfl.provincia');
 Route::get('/cubo/pacto2/sfl/distrito/{ugel}/{provincia}', [CuboPacto2Controller::class, 'sfldistrito'])->name('cubopacto2.sfl.distrito');
 Route::get('/cubo/pacto2/sfl/estado/{ugel}/{provincia}/{distrito}', [CuboPacto2Controller::class, 'sflestado'])->name('cubopacto2.sfl.estado');

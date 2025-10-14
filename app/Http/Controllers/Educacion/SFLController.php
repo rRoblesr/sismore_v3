@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Educacion;
 
+use App\Exports\Educacion\SFLReportesExport;
 use App\Exports\SFLExport;
 use App\Http\Controllers\Controller;
 use App\Imports\tablaXImport;
 use App\Models\Administracion\Entidad;
 use App\Models\Educacion\Area;
-use App\Models\Educacion\CuboPacto2;
 use App\Models\Educacion\InstitucionEducativa;
 use App\Models\Educacion\SFL;
 use App\Models\Parametro\IndicadorGeneral;
 use App\Repositories\Educacion\CuboPacto2Repositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
+use App\Repositories\Educacion\SFLRepositorio;
 use App\Repositories\Educacion\UgelRepositorio;
 use App\Repositories\Parametro\IndicadorGeneralRepositorio;
 use App\Repositories\Parametro\UbigeoRepositorio;
@@ -1322,7 +1323,7 @@ class SFLController extends Controller
                 'a.nombre as area',
                 'p.nombre as provincia',
                 'd.nombre as distrito',
-                's.fecha_registro as fecha',                
+                's.fecha_registro as fecha',
                 's.fecha_inscripcion as inscripcion',
                 db::raw('(case s.estado when 1 then "SANEADO" when 2 then "NO SANEADO" when 3 then "NO REGISTRADO" when 4 then "EN PROCESO" else "" end) as estado'),
             )
@@ -1978,95 +1979,23 @@ class SFLController extends Controller
         }
     }
 
-    public function tablerocontrol2()
+    public function reportes()
     {
-        $ugel = UgelRepositorio::listar_opt();
-        $provincia = UbigeoRepositorio::provincia_select('25');
-        $area = Area::all();
-        // $modadlidad = NivelModalidad::distinct()->select(
-        //     'tipo',
-        //     DB::raw('case when tipo="EBA" then "Educación Básica Alternativa" when tipo="EBE" then "Educación Básica Especial" when tipo="EBR" then "Educación Básica Regular" when tipo="ETP" then "Educación Técnico Productiva" when tipo="SNU" then "Superior No Universitaria"  end as ntipo')
-        // )->where('id', '!=', 15)->orderBy('tipo')->get();
-
-        $modalidad = DB::table(DB::raw('(select distinct nivel_id from edu_cubo_pacto02_local) as nx'))
-            ->join('edu_nivelmodalidad as n', 'n.id', '=', 'nx.nivel_id')->distinct()->select('n.tipo', DB::raw('case when tipo="EBA" then "Educación Básica Alternativa" when tipo="EBE" then "Educación Básica Especial" when tipo="EBR" then "Educación Básica Regular" when tipo="ETP" then "Educación Técnico Productiva" when tipo="SNU" then "Superior No Universitaria"  end as ntipo'))->get();
-        return view('educacion.SFL.TableroControl2', compact('ugel', 'provincia', 'area', 'modalidad'));
+        return view('educacion.SFL.Reportes');
     }
 
-    public function tablerocontrol2reporte(Request $rq)
+    public function reportesreporte(Request $rq)
     {
-        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronWebController::$FUENTE); //nexus $imp3
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronWebController::$FUENTE);
         switch ($rq->div) {
             case 'head':
-                $query = DB::table(DB::raw("(
-                    select iiee.id, iiee.CentroPoblado_id, iiee.codLocal, iiee.Area_id, iiee.Ugel_id, iiee.NivelModalidad_id
-                    from edu_institucionEducativa as iiee
-                    inner join edu_padronweb pw on pw.institucioneducativa_id=iiee.id and pw.importacion_id=" . $imp->id . "
-                    where iiee.TipoGestion_id in(4, 5, 7, 8) and iiee.NivelModalidad_id not in(14, 15) and pw.estadoinsedu_id = 3
-                ) as iiee"))
-                    ->join('edu_centropoblado as cp', 'cp.id', '=', 'iiee.CentroPoblado_id')
-                    ->join('edu_area as aa', 'aa.id', '=', 'iiee.Area_id')
-                    ->join('edu_ugel as uu', 'uu.id', '=', 'iiee.Ugel_id')
-                    ->join('par_ubigeo as dt', 'dt.id', '=', 'cp.Ubigeo_id')
-                    ->join('par_ubigeo as pv', 'pv.id', '=', 'dt.dependencia')
-                    ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'iiee.NivelModalidad_id');
-
-                if ($rq->ugel > 0) $query = $query->where('uu.id', $rq->ugel);
-                if ($rq->modalidad != '0') $query = $query->where('nm.tipo', $rq->modalidad);
-                if ($rq->nivel > 0) $query = $query->where('nm.id', $rq->nivel);
-                $card1 = $query = $query->count();
-
-                $query = DB::table(DB::raw("(
-                    select iiee.id, iiee.CentroPoblado_id, iiee.codLocal, iiee.Area_id, iiee.Ugel_id, iiee.NivelModalidad_id
-                    from edu_institucionEducativa as iiee
-                    inner join edu_padronweb pw on pw.institucioneducativa_id=iiee.id and pw.importacion_id=" . $imp->id . "
-                    where iiee.TipoGestion_id in(4, 5, 7, 8) and iiee.NivelModalidad_id not in(14, 15) and pw.estadoinsedu_id = 3
-                ) as iiee"))
-                    ->join('edu_centropoblado as cp', 'cp.id', '=', 'iiee.CentroPoblado_id')
-                    ->join('edu_area as aa', 'aa.id', '=', 'iiee.Area_id')
-                    ->join('edu_ugel as uu', 'uu.id', '=', 'iiee.Ugel_id')
-                    ->join('par_ubigeo as dt', 'dt.id', '=', 'cp.Ubigeo_id')
-                    ->join('par_ubigeo as pv', 'pv.id', '=', 'dt.dependencia')
-                    ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'iiee.NivelModalidad_id')
-                    ->select('iiee.codLocal');
-
-                if ($rq->ugel > 0) $query = $query->where('uu.id', $rq->ugel);
-                if ($rq->modalidad != '0') $query = $query->where('nm.tipo', $rq->modalidad);
-                if ($rq->nivel > 0) $query = $query->where('nm.id', $rq->nivel);
-                $card2 = $query->groupBy('iiee.codLocal')->get()->count();
-
-
-
-                $query = DB::table("edu_cubo_pacto02_local")->where('estado', 1);
-
-                if ($rq->ugel > 0) $query = $query->where('ugel_id', $rq->ugel);
-                if ($rq->modalidad != '0') $query = $query->where('modalidad', $rq->modalidad);
-                if ($rq->nivel > 0) $query = $query->where('nivel_id', $rq->nivel);
-                $card3 = $query->count();
-
-                $query = DB::table("edu_cubo_pacto02_local")->where('estado', '!=', 1);
-
-                if ($rq->ugel > 0) $query = $query->where('ugel_id', $rq->ugel);
-                if ($rq->modalidad != '0') $query = $query->where('modalidad', $rq->modalidad);
-                if ($rq->nivel > 0) $query = $query->where('nivel_id', $rq->nivel);
-                $card4 = $query->count();
-
-                $card1 = number_format($card1, 0);
-                $card2 = number_format($card2, 0);
-                $card3 = number_format($card3, 0);
-                $card4 = number_format($card4, 0);
+                $card1 = number_format(SFLRepositorio::reportesreporte_head($rq->ugel, $rq->modalidad, $rq->nivel), 0);
+                $card2 = number_format(CuboPacto2Repositorio::reportesreporte_head($rq->ugel, $rq->modalidad, $rq->nivel, 0), 0);
+                $card3 = number_format(CuboPacto2Repositorio::reportesreporte_head($rq->ugel, $rq->modalidad, $rq->nivel, 1), 0);
+                $card4 = number_format(CuboPacto2Repositorio::reportesreporte_head($rq->ugel, $rq->modalidad, $rq->nivel, 2), 0);
                 return response()->json(compact('card1', 'card2', 'card3', 'card4'));
             case 'anal1':
-                $query = DB::table("edu_cubo_pacto02_local")->join('par_ubigeo as p', 'p.id', '=', 'edu_cubo_pacto02_local.provincia_id')
-                    ->select('p.nombre as provincia', DB::raw("sum(if(estado=1,1,0)) as saneado"), DB::raw("sum(if(estado!=1,1,0)) as nosaneado"));
-
-                if ($rq->ugel > 0) $query = $query->where('ugel_id', $rq->ugel);
-                if ($rq->modalidad > 0) $query = $query->where('modalidad', $rq->modalidad);
-                if ($rq->nivel > 0) $query = $query->where('nivel_id', $rq->nivel);
-                $data = $query->groupBy('p.nombre')->get();
-
-                $nroLocal = $data->sum('saneado') + $data->sum('nosaneado');
-
+                $data = CuboPacto2Repositorio::reportesreporte_anal1($rq->ugel, $rq->modalidad, $rq->nivel);
                 $info['series'][0]['name'] = 'SANEADO';
                 $info['series'][1]['name'] = 'NO SANEADO';
                 $info['series'][0]['color'] = '#5eb9aa';
@@ -2076,19 +2005,13 @@ class SFLController extends Controller
                     $info['series'][0]['data'][] = (int)$value->saneado;
                     $info['series'][1]['data'][] = (int)$value->nosaneado;
                 }
-
-                return response()->json(compact('info', 'data', 'nroLocal'));
+                return response()->json(compact('info'));
 
             case 'anal2':
-                $query = DB::table("edu_cubo_pacto02_local")
-                    ->select(DB::raw("sum(if(estado=1,1,0)) as saneado"), DB::raw("sum(if(estado!=1,1,0)) as nosaneado"));
-
-                if ($rq->ugel > 0) $query = $query->where('ugel_id', $rq->ugel);
-                if ($rq->modalidad != '0') $query = $query->where('modalidad', $rq->modalidad);
-                if ($rq->nivel > 0) $query = $query->where('nivel_id', $rq->nivel);
-                $data = $query->get()->first();
-                $info = [['name' => 'SANEADO', 'y' => (int)$data->saneado], ['name' => 'NO SANEADO', 'y' => (int)$data->nosaneado]];
-
+                $data = CuboPacto2Repositorio::reportesreporte_anal2($rq->ugel, $rq->modalidad, $rq->nivel);
+                $info = $data->map(function ($y, $name) {
+                    return ['name' => $name, 'y' => (int)$y];
+                })->values();
                 return response()->json(compact('info'));
                 break;
             case 'anal3':
@@ -2098,255 +2021,100 @@ class SFLController extends Controller
                     '2503' => 'pe-uc-pa',
                     '2504' => 'pe-uc-pr',
                 ];
-                $query = DB::table("edu_cubo_pacto02_local")->join('par_ubigeo as p', 'p.id', '=', 'edu_cubo_pacto02_local.provincia_id')
-                    ->select(
-                        'p.codigo',
-                        'p.nombre as provincia',
-                        DB::raw("sum(if(estado=1,1,0)) as saneado"),
-                        DB::raw("count(*) as nosaneado"),
-                        DB::raw("round(100*sum(if(estado=1,1,0))/count(*),2) as indicador")
-                    );
-
-                if ($rq->ugel > 0) $query = $query->where('ugel_id', $rq->ugel);
-                if ($rq->modalidad != '0') $query = $query->where('modalidad', $rq->modalidad);
-                if ($rq->nivel > 0) $query = $query->where('nivel_id', $rq->nivel);
-                $data = $query->groupBy('p.codigo', 'p.nombre')->get();
-
+                $data = CuboPacto2Repositorio::reportesreporte_anal3($rq->ugel, $rq->modalidad, $rq->nivel);
                 $info = [];
                 $valores = [];
                 foreach ($data as $key => $value) {
                     $info[] = [$pe_pv[$value->codigo], (float)$value->indicador];
                     $valores[$pe_pv[$value->codigo]] = ['num' => (float)$value->saneado, 'dem' => (float)$value->nosaneado, 'ind' => (float)$value->indicador];
                 }
-
                 return response()->json(compact('info', 'valores'));
 
             case 'anal4':
-                $query = DB::table("edu_cubo_pacto02_local as c")->join('edu_area as a', 'a.id', '=', 'c.area_id')
-                    ->select('a.nombre as provincia', DB::raw("sum(if(c.estado=1,1,0)) as saneado"), DB::raw("sum(if(c.estado!=1,1,0)) as nosaneado"));
-
-                if ($rq->ugel > 0) $query = $query->where('c.ugel_id', $rq->ugel);
-                if ($rq->modalidad != '0') $query = $query->where('modalidad', $rq->modalidad);
-                if ($rq->nivel > 0) $query = $query->where('nivel_id', $rq->nivel);
-                $data = $query->groupBy('a.nombre')->get();
-
+                $data = CuboPacto2Repositorio::reportesreporte_anal4($rq->ugel, $rq->modalidad, $rq->nivel);
                 $info['series'][0]['name'] = 'SANEADO';
                 $info['series'][1]['name'] = 'NO SANEADO';
                 $info['series'][0]['color'] = '#5eb9aa';
                 $info['series'][1]['color'] = '#e65310';
                 foreach ($data as $key => $value) {
-                    $info['categoria'][] = $value->provincia;
+                    $info['categoria'][] = $value->area;
                     $info['series'][0]['data'][] = (int)$value->saneado;
                     $info['series'][1]['data'][] = (int)$value->nosaneado;
                 }
-
                 return response()->json(compact('info', 'data'));
 
             case 'tabla1':
-                $query = DB::table(DB::raw("(
-                    select iiee.id, iiee.CentroPoblado_id, iiee.codLocal, iiee.Area_id, iiee.Ugel_id, iiee.NivelModalidad_id
-                    from edu_institucionEducativa as iiee
-                    inner join edu_padronweb pw on pw.institucioneducativa_id=iiee.id and pw.importacion_id=" . $imp->id . "
-                    where iiee.TipoGestion_id in(4, 5, 7, 8) and iiee.NivelModalidad_id not in(14, 15) and pw.estadoinsedu_id = 3
-                ) as iiee"))
-                    ->join('edu_centropoblado as cp', 'cp.id', '=', 'iiee.CentroPoblado_id')
-                    ->join('edu_area as aa', 'aa.id', '=', 'iiee.Area_id')
-                    ->join('edu_ugel as uu', 'uu.id', '=', 'iiee.Ugel_id')
-                    ->join('par_ubigeo as dt', 'dt.id', '=', 'cp.Ubigeo_id')
-                    ->join('par_ubigeo as pv', 'pv.id', '=', 'dt.dependencia')
-                    ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'iiee.NivelModalidad_id')
-                    ->select('uu.nombre as ugel', DB::raw("count(*) as total"), DB::raw("sum(if(aa.id=1,1,0)) as r"), DB::raw("sum(if(aa.id=2,1,0)) as u"),);
-
-                if ($rq->ugel > 0) $query = $query->where('uu.id', $rq->ugel);
-                if ($rq->modalidad != '0') $query = $query->where('nm.tipo', $rq->modalidad);
-                if ($rq->nivel > 0) $query = $query->where('nm.id', $rq->nivel);
-                $iiee = $query->groupBy('uu.nombre')->get();
-
-                // $sum = $iiee->sum('total');
-                //$iiee->firstWhere('provincia','ATALAYA')->total;
-
-                $query = DB::table("edu_cubo_pacto02_local as c")->join('edu_ugel as u', 'u.id', '=', 'c.ugel_id')
-                    ->select(
-                        'u.nombre as ugel',
-                        DB::raw("count(*) as le"),
-                        DB::raw("sum(if(c.area_id=1,1,0)) as ler"),
-                        DB::raw("sum(if(c.area_id=2,1,0)) as leu"),
-                        DB::raw("sum(if(c.estado=1,1,0)) as e1"),
-                        DB::raw("round(100*sum(if(c.estado=1,1,0))/count(*),2) as e1p"),
-                        DB::raw("sum(if(c.estado=2,1,0)) as e2"),
-                        DB::raw("round(100*sum(if(c.estado=2,1,0))/count(*),2) as e2p"),
-                        DB::raw("sum(if(c.estado=3,1,0)) as e3"),
-                        DB::raw("round(100*sum(if(c.estado=3,1,0))/count(*),2) as e3p"),
-                        DB::raw("sum(if(c.estado=4,1,0)) as e4"),
-                        DB::raw("round(100*sum(if(c.estado=4,1,0))/count(*),2) as e4p"),
-                    );
-
-                if ($rq->ugel > 0) $query = $query->where('ugel_id', $rq->ugel);
-                if ($rq->modalidad != '0') $query = $query->where('modalidad', $rq->modalidad);
-                if ($rq->nivel > 0) $query = $query->where('nivel_id', $rq->nivel);
-                $data = $query->groupBy('u.nombre')->get();
-
-                foreach ($data as $key => $value) {
-                    $value->ie = $iiee->firstWhere('ugel', $value->ugel)->total;
-                    $value->ier = $iiee->firstWhere('ugel', $value->ugel)->r;
-                    $value->ieu = $iiee->firstWhere('ugel', $value->ugel)->u;
-                    // $value->iep = round(100 * $iiee->firstWhere('ugel',  $value->ugel)->total / $iiee->sum('total'), 2);
-                    // $value->lep = round(100 * $data->firstWhere('ugel',  $value->ugel)->le / $data->sum('le'), 2);
-                }
-                $base = $data;
+                $base = CuboPacto2Repositorio::reportesreporte_tabla1($rq->ugel, $rq->modalidad, $rq->nivel);
                 $foot = [];
                 if ($base->count() > 0) {
                     $foot = clone $base[0];
-                    $foot->ie = $data->sum('ie');
-                    $foot->ier = $data->sum('ier');
-                    $foot->ieu = $data->sum('ieu');
-                    $foot->le = $data->sum('le');
-                    $foot->ler = $data->sum('ler');
-                    $foot->leu = $data->sum('leu');
-                    $foot->e1 = $data->sum('e1');
-                    $foot->e2 = $data->sum('e2');
-                    $foot->e3 = $data->sum('e3');
-                    $foot->e4 = $data->sum('e4');
+                    $foot->se = $base->sum('se');
+                    $foot->ser = $base->sum('ser');
+                    $foot->seu = $base->sum('seu');
+                    $foot->le = $base->sum('le');
+                    $foot->ler = $base->sum('ler');
+                    $foot->leu = $base->sum('leu');
+                    $foot->le1 = $base->sum('le1');
+                    $foot->le2 = $base->sum('le2');
+                    $foot->le3 = $base->sum('le3');
+                    $foot->le4 = $base->sum('le4');
+                    $foot->le1p = round(100 * $foot->le1 / $foot->le, 1);
+                    $foot->le2p = round(100 * $foot->le2 / $foot->le, 1);
+                    $foot->le3p = round(100 * $foot->le3 / $foot->le, 1);
+                    $foot->le4p = round(100 * $foot->le4 / $foot->le, 1);
                 }
-                $foot->e1p = round(100 * $data->sum('e1') / $data->sum('le'), 2);
-                $foot->e2p = round(100 * $data->sum('e2') / $data->sum('le'), 2);
-                $foot->e3p = round(100 * $data->sum('e3') / $data->sum('le'), 2);
-                $foot->e4p = round(100 * $data->sum('e4') / $data->sum('le'), 2);
-                $excel = view('educacion.SFL.TableroControl2Tabla1', compact('base', 'foot'))->render();
-                return response()->json(compact('excel', 'iiee', 'base', 'foot'));
+                $excel = view('educacion.SFL.ReportesTabla1', compact('base', 'foot'))->render();
+                return response()->json(compact('excel', 'base', 'foot'));
 
             case 'tabla2':
-                $query = DB::table(DB::raw("(
-                    select iiee.id, iiee.CentroPoblado_id, iiee.codLocal, iiee.Area_id, iiee.Ugel_id, iiee.NivelModalidad_id
-                    from edu_institucionEducativa as iiee
-                    inner join edu_padronweb pw on pw.institucioneducativa_id=iiee.id and pw.importacion_id=" . $imp->id . "
-                    where iiee.TipoGestion_id in(4, 5, 7, 8) and iiee.NivelModalidad_id not in(14, 15) and pw.estadoinsedu_id = 3
-                ) as iiee"))
-                    ->join('edu_centropoblado as cp', 'cp.id', '=', 'iiee.CentroPoblado_id')
-                    ->join('edu_area as aa', 'aa.id', '=', 'iiee.Area_id')
-                    ->join('edu_ugel as uu', 'uu.id', '=', 'iiee.Ugel_id')
-                    ->join('par_ubigeo as dt', 'dt.id', '=', 'cp.Ubigeo_id')
-                    ->join('par_ubigeo as pv', 'pv.id', '=', 'dt.dependencia')
-                    ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'iiee.NivelModalidad_id')
-                    ->select('dt.nombre as distrito', DB::raw("count(*) as total"), DB::raw("sum(if(aa.id=1,1,0)) as r"), DB::raw("sum(if(aa.id=2,1,0)) as u"),);
-
-                if ($rq->ugel > 0) $query = $query->where('uu.id', $rq->ugel);
-                if ($rq->modalidad != '0') $query = $query->where('nm.tipo', $rq->modalidad);
-                if ($rq->nivel > 0) $query = $query->where('nm.id', $rq->nivel);
-                $iiee = $query->groupBy('dt.nombre')->get();
-
-                // $sum = $iiee->sum('total');
-                //$iiee->firstWhere('provincia','ATALAYA')->total;
-
-                $query = DB::table("edu_cubo_pacto02_local as c")->join('par_ubigeo as u', 'u.id', '=', 'c.distrito_id')
-                    ->select(
-                        'u.nombre as distrito',
-                        DB::raw("count(*) as le"),
-                        DB::raw("sum(if(c.area_id=1,1,0)) as ler"),
-                        DB::raw("sum(if(c.area_id=2,1,0)) as leu"),
-                        DB::raw("sum(if(c.estado=1,1,0)) as e1"),
-                        DB::raw("round(100*sum(if(c.estado=1,1,0))/count(*),2) as e1p"),
-                        DB::raw("sum(if(c.estado=2,1,0)) as e2"),
-                        DB::raw("round(100*sum(if(c.estado=2,1,0))/count(*),2) as e2p"),
-                        DB::raw("sum(if(c.estado=3,1,0)) as e3"),
-                        DB::raw("round(100*sum(if(c.estado=3,1,0))/count(*),2) as e3p"),
-                        DB::raw("sum(if(c.estado=4,1,0)) as e4"),
-                        DB::raw("round(100*sum(if(c.estado=4,1,0))/count(*),2) as e4p"),
-                    );
-
-                if ($rq->ugel > 0) $query = $query->where('ugel_id', $rq->ugel);
-                if ($rq->modalidad != '0') $query = $query->where('modalidad', $rq->modalidad);
-                if ($rq->nivel > 0) $query = $query->where('nivel_id', $rq->nivel);
-                $data = $query->groupBy('u.nombre')->get();
-
-                foreach ($data as $key => $value) {
-                    $value->ie = $iiee->firstWhere('distrito', $value->distrito)->total;
-                    $value->ier = $iiee->firstWhere('distrito', $value->distrito)->r;
-                    $value->ieu = $iiee->firstWhere('distrito', $value->distrito)->u;
-                    // $value->iep = round(100 * $iiee->firstWhere('ugel',  $value->ugel)->total / $iiee->sum('total'), 2);
-                    // $value->lep = round(100 * $data->firstWhere('ugel',  $value->ugel)->le / $data->sum('le'), 2);
-                }
-                $base = $data;
+                $base = CuboPacto2Repositorio::reportesreporte_tabla2($rq->ugel, $rq->modalidad, $rq->nivel);
                 $foot = [];
                 if ($base->count() > 0) {
                     $foot = clone $base[0];
-                    $foot->ie = $data->sum('ie');
-                    $foot->ier = $data->sum('ier');
-                    $foot->ieu = $data->sum('ieu');
-                    $foot->le = $data->sum('le');
-                    $foot->ler = $data->sum('ler');
-                    $foot->leu = $data->sum('leu');
-                    $foot->e1 = $data->sum('e1');
-                    $foot->e2 = $data->sum('e2');
-                    $foot->e3 = $data->sum('e3');
-                    $foot->e4 = $data->sum('e4');
+                    $foot->se = $base->sum('se');
+                    $foot->ser = $base->sum('ser');
+                    $foot->seu = $base->sum('seu');
+                    $foot->le = $base->sum('le');
+                    $foot->ler = $base->sum('ler');
+                    $foot->leu = $base->sum('leu');
+                    $foot->le1 = $base->sum('le1');
+                    $foot->le2 = $base->sum('le2');
+                    $foot->le3 = $base->sum('le3');
+                    $foot->le4 = $base->sum('le4');
+                    $foot->le1p = round(100 * $foot->le1 / $foot->le, 1);
+                    $foot->le2p = round(100 * $foot->le2 / $foot->le, 1);
+                    $foot->le3p = round(100 * $foot->le3 / $foot->le, 1);
+                    $foot->le4p = round(100 * $foot->le4 / $foot->le, 1);
                 }
-                $foot->e1p = round(100 * $data->sum('e1') / $data->sum('le'), 2);
-                $foot->e2p = round(100 * $data->sum('e2') / $data->sum('le'), 2);
-                $foot->e3p = round(100 * $data->sum('e3') / $data->sum('le'), 2);
-                $foot->e4p = round(100 * $data->sum('e4') / $data->sum('le'), 2);
-                $excel = view('educacion.SFL.TableroControl2Tabla2', compact('base', 'foot'))->render();
-                return response()->json(compact('excel', 'iiee', 'base', 'foot'));
+                $excel = view('educacion.SFL.ReportesTabla2', compact('base', 'foot'))->render();
+                return response()->json(compact('excel'));
 
             case 'tabla3':
-                $query = DB::table(DB::raw("(
-                        select iiee.id, iiee.CentroPoblado_id, iiee.codLocal, iiee.codModular, iiee.nombreInstEduc, iiee.NivelModalidad_id, iiee.Area_id, iiee.Ugel_id
-                        from edu_institucionEducativa as iiee
-                        inner join edu_padronweb pw on pw.institucioneducativa_id=iiee.id and pw.importacion_id=" . $imp->id . "
-                        where iiee.TipoGestion_id in(4, 5, 7, 8) and iiee.NivelModalidad_id not in(14, 15) and pw.estadoinsedu_id = 3
-                    ) as iiee"))
-                    ->join('edu_centropoblado as cp', 'cp.id', '=', 'iiee.CentroPoblado_id')
-                    ->join('edu_area as aa', 'aa.id', '=', 'iiee.Area_id')
-                    ->join('edu_ugel as uu', 'uu.id', '=', 'iiee.Ugel_id')
-                    ->join('par_ubigeo as dt', 'dt.id', '=', 'cp.Ubigeo_id')
-                    ->join('par_ubigeo as pv', 'pv.id', '=', 'dt.dependencia')
-                    ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'iiee.NivelModalidad_id')
-                    ->join('edu_sfl as sfl', 'sfl.institucioneducativa_id', '=', 'iiee.id')
-                    ->select(
-                        'uu.nombre as ugel',
-                        'pv.nombre as distrito',
-                        'cp.nombre as cpoblado',
-                        'aa.nombre as area',
-                        'iiee.codLocal as clocal',
-                        'iiee.codModular as cmodular',
-                        'iiee.nombreInstEduc as nombre',
-                        'nm.nombre as nivel',
-                        'sfl.estado',
-                        // DB::raw('case when sfl.estado=1 then "SANEADO" when sfl.estado=2 then "NO SANEADO" when sfl.estado=3 then "NO REGISTRADO" when sfl.estado=4 then "EN PROCESO" end as estado'),
-                    );
-
-                if ($rq->ugel > 0) $query = $query->where('uu.id', $rq->ugel);
-                if ($rq->modalidad != '0') $query = $query->where('nm.tipo', $rq->modalidad);
-                if ($rq->nivel > 0) $query = $query->where('nm.id', $rq->nivel);
-                $iiee = $query->get();
-
-                // $sum = $iiee->sum('total');
-                //$iiee->firstWhere('provincia','ATALAYA')->total;
-
-                $base = $iiee;
-                $foot = [];
-                // if ($base->count() > 0) {
-                //     $foot = clone $base[0];
-                //     $foot->ie = $data->sum('ie');
-                //     $foot->ier = $data->sum('ier');
-                //     $foot->ieu = $data->sum('ieu');
-                //     $foot->le = $data->sum('le');
-                //     $foot->ler = $data->sum('ler');
-                //     $foot->leu = $data->sum('leu');
-                //     $foot->e1 = $data->sum('e1');
-                //     $foot->e2 = $data->sum('e2');
-                //     $foot->e3 = $data->sum('e3');
-                //     $foot->e4 = $data->sum('e4');
-                // }
-                // $foot->e1p = round(100 * $data->sum('e1') / $data->sum('le'), 2);
-                // $foot->e2p = round(100 * $data->sum('e2') / $data->sum('le'), 2);
-                // $foot->e3p = round(100 * $data->sum('e3') / $data->sum('le'), 2);
-                // $foot->e4p = round(100 * $data->sum('e4') / $data->sum('le'), 2);
-                $excel = view('educacion.SFL.TableroControl2Tabla3', compact('base', 'foot'))->render();
-                return response()->json(compact('excel', 'base', 'foot'));
+                $base = CuboPacto2Repositorio::reportesreporte_tabla3($rq->ugel, $rq->modalidad, $rq->nivel);
+                $excel = view('educacion.SFL.ReportesTabla3', compact('base'))->render();
+                return response()->json(compact('excel'));
             default:
                 # code...
                 return [];
         }
+    }
+
+    public function reportesrdownloadexcel($div, $ugel, $modalidad, $nivel)
+    {
+        switch ($div) {
+            case 'tabla1':
+                $name='LOCALES_ESCOLARES_PÚBLICOS_POR_UGEL_SEGÚN_ESTADOS_DEL_SFL.xlsx';
+                break;
+            case 'tabla2':
+                $name='INSTITUCIONES_EDUCATIVAS_Y_LOCALES_EDUCATIVOS_PÚBLICOS_POR_DISTRITOS_SEGÚN_ESTADOS_DEL_SFL.xlsx';
+                break;
+            case 'tabla3':
+                $name='INSTITUCIONES_EDUCATIVAS_PÚBLICAS_SEGÚN_ESTADOS_DEL_SFL.xlsx';
+                break;
+            default:
+                $name='REPORTE_SFL.xlsx';
+                break;
+        }
+        return Excel::download(new SFLReportesExport($div, $ugel, $modalidad, $nivel), $name);
     }
 }

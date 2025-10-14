@@ -33,6 +33,24 @@ class CuboPacto2Controller extends Controller
         return response()->json($distrito);
     }
 
+    public function sflugel()
+    {
+        $ugel = CuboPacto2Repositorio::sfl_ugel();
+        return response()->json($ugel);
+    }
+
+    public function sflmodalidad($ugel)
+    {
+        $modalidad = CuboPacto2Repositorio::sfl_modalidad($ugel);
+        return $modalidad;
+    }
+
+    public function sflnivel($ugel, $modalidad)
+    {
+        $nivel = CuboPacto2Repositorio::sfl_nivel($ugel, $modalidad);
+        return $nivel;
+    }
+
     public function sflprovincia($ugel)
     {
         $provincia = CuboPacto2Repositorio::sfl_provincia($ugel);

@@ -50,4 +50,16 @@ class SFLRepositorio
         )->first();
         return $query;
     }
+
+    public static function reportesreporte_head($ugel, $modalidad, $nivel)
+    {
+        return DB::table('edu_sfl as sfl')
+            ->join('edu_institucioneducativa as ie', 'ie.id', '=', 'sfl.institucioneducativa_id')
+            ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'ie.NivelModalidad_id')
+            ->where('sfl.estado_servicio', 1)
+            ->when($ugel > 0, fn($query) => $query->where('ie.Ugel_id', $ugel))
+            ->when($nivel > 0, fn($query) => $query->where('nm.id', $nivel))
+            ->when(!empty($modalidad), fn($query) => $query->where('nm.tipo', $modalidad))
+            ->count();
+    }
 }
