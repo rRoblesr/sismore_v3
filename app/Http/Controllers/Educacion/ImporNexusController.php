@@ -7,6 +7,7 @@ use App\Imports\Educacion\ImporNexusImport;
 use App\Imports\tablaXImport;
 use Illuminate\Http\Request;
 use App\Models\Administracion\Entidad;
+use App\Models\educacion\ImporNexus;
 use App\Models\Educacion\Importacion;
 use App\Repositories\Educacion\ImporNexusRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
@@ -28,8 +29,8 @@ class ImporNexusController extends Controller
     public function importar()
     {
         $fuente = $this->fuente;
-        // return view('educacion.ImporGeneral.Importar', compact('fuente'));        
-        return view('educacion.ImporNexus.Importar', compact('fuente'));
+        return view('educacion.ImporGeneral.Importar', compact('fuente'));
+        // return view('educacion.ImporNexus.Importar', compact('fuente'));
 
         //$mensaje = "";return view('educacion.CuadroAsigPersonal.Importar', compact('mensaje'));
     }
@@ -85,6 +86,7 @@ class ImporNexusController extends Controller
         try {
             Excel::import(new ImporNexusImport($importacion->id), $request->file('file'), null, \Maatwebsite\Excel\Excel::XLSX, 0);
             $importacion->update(['estado' => 'PR']);
+            
             return response()->json([
                 'message' => 'Archivo importado exitosamente.',
                 'importacion_id' => $importacion->id,
@@ -396,11 +398,28 @@ class ImporNexusController extends Controller
         return view('correcto');
     }
 
-    public function eliminar($id)
+    public function eliminarx($id)
     {
         ImporNexus::where('importacion_id', $id)->delete();
         Importacion::find($id)->delete();
         return response()->json(array('status' => true));
+    }
+
+    public function eliminar($id)
+    {
+        try {
+            // Eliminar registros relacionados
+            ImporNexus::where('importacion_id', $id)->delete();
+
+            // Eliminar cabecera
+            $importacion = Importacion::findOrFail($id);
+            $importacion->delete();
+
+            return response()->json(['status' => true]);
+        } catch (\Exception $e) {
+            \Log::error('Error al eliminar importación ID ' . $id . ': ' . $e->getMessage());
+            return response()->json(['status' => false], 500);
+        }
     }
 
     public function download()

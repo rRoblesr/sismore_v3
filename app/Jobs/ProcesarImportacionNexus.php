@@ -2,15 +2,15 @@
 
 namespace App\Jobs;
 
-use App\Imports\Educacion\ImporNexusImport;
-use App\Models\Educacion\Importacion;
+// use App\Imports\Educacion\ImporNexusImport;
+// use App\Models\Educacion\Importacion;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\DB;
+// use Maatwebsite\Excel\Facades\Excel;
+// use Illuminate\Support\Facades\DB;
 
 class ProcesarImportacionNexus implements ShouldQueue
 {
@@ -30,7 +30,7 @@ class ProcesarImportacionNexus implements ShouldQueue
 
     public function handle()
     {
-        $importacion = Importacion::findOrFail($this->importacionId);
+       /*  $importacion = Importacion::findOrFail($this->importacionId);
 
         try {
             // Importar SOLO la primera hoja
@@ -52,7 +52,7 @@ class ProcesarImportacionNexus implements ShouldQueue
             if (file_exists($this->archivoPath)) {
                 unlink($this->archivoPath);
             }
-        }
+        } */
     }
 }
 

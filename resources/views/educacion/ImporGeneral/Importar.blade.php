@@ -930,8 +930,11 @@
                 if (result === true) {
                     $.ajax({
                         url: url_geteliminar({{ $fuente }}, id),
-                        type: "GET",
+                        type: "DELETE",
                         dataType: "JSON",
+                        headers: {
+                            'X-CSRF-TOKEN': $('input[name=_token]').val()
+                        },
                         beforeSend: function() {
                             $('#eliminar' + id).html(
                                 '<span><i class="fa fa-spinner fa-spin"></i></span>');
@@ -956,7 +959,7 @@
                 case 1:
                     return "{{ route('ImporPadronWeb.eliminar', '') }}/" + id;
                 case 2:
-                    return "{{ route('CuadroAsigPersonal.eliminar', '') }}/" + id;
+                    return "{{ route('impornexus.eliminar', ':id') }}".replace(':id', id);
                 case 8:
                     return "{{ url('/') }}/ImporMatricula/eliminar/" + id;
                 case 9:

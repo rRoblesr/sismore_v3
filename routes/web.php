@@ -37,6 +37,7 @@ use App\Http\Controllers\Educacion\LenguaController;
 use App\Http\Controllers\Educacion\LogrosAprendizajeController;
 use App\Http\Controllers\Educacion\MatriculaDetalleController;
 use App\Http\Controllers\Educacion\MatriculaGeneralController;
+use App\Http\Controllers\Educacion\NexusController;
 use App\Http\Controllers\Educacion\NivelModalidadController;
 use App\Http\Controllers\Educacion\PLazaController;
 use App\Http\Controllers\Educacion\PadronRERController;
@@ -807,6 +808,13 @@ Route::get('/educación/SFL/Reportes', [SFLController::class, 'reportes'])->name
 Route::get('/educación/SFL/Reportes/Reporte', [SFLController::class, 'reportesreporte'])->name('educacion.sfl.reportes.reporte');
 Route::get('/educación/SFL/Reportes/Download/1/{div}/{ugel}/{modalidad}/{nivel}', [SFLController::class, 'reportesrdownloadexcel'])->name('educacion.sfl.reportes.download.excel');
 
+Route::get('/educación/Nexus/Reportes', [NexusController::class, 'reportes'])->name('educacion.nexus.reportes');
+Route::get('/educación/Nexus/Reportes/Reporte', [NexusController::class, 'reportesreporte'])->name('educacion.nexus.reportes.reporte');
+Route::get('/educación/Nexus/Reportes/Download/1/{div}/{ugel}/{modalidad}/{nivel}', [NexusController::class, 'reportesrdownloadexcel'])->name('educacion.nexus.reportes.download.excel');
+
+Route::get('/educación/Nexus/Ugel/{anio}', [NexusController::class, 'filtro_ugels'])->name('educacion.nexus.filtro.ugel');
+Route::get('/educación/Nexus/Modalidad/{anio}/{ugel}', [NexusController::class, 'filtro_modalidad'])->name('educacion.nexus.filtro.modalidad');
+Route::get('/educación/Nexus/Nivel/{anio}/{ugel}/{modalidad}', [NexusController::class, 'filtro_nivel'])->name('educacion.nexus.filtro.nivel');
 
 Route::get('/educación/SFL/TableroControl2', [SFLController::class, 'tablerocontrol'])->name('educacion.sfl.tablerocontrolx');
 Route::get('/educación/SFL/TableroControl2/reprote', [SFLController::class, 'tablerocontrolreporte'])->name('educacion.sfl.tablerocontrol.reportex');

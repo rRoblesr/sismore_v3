@@ -317,7 +317,7 @@ class CuboPacto2Repositorio
                 'p.nombre as provincia',
                 DB::raw("sum(if(pct.estado=1,1,0)) as saneado"),
                 DB::raw("count(*) as nosaneado"),
-                DB::raw("round(100*sum(if(pct.estado=1,1,0))/count(*),2) as indicador")
+                DB::raw("round(100*sum(if(pct.estado=1,1,0))/count(*),1) as indicador")
             )
             ->join('par_ubigeo as d', 'd.id', '=', 'pct.distrito_id')
             ->join('par_ubigeo as p', 'p.id', '=', 'd.dependencia')
