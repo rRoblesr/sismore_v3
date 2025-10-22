@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Educacion;
 
+use App\Exports\Educacion\NexusReportesExport;
 use App\Exports\Educacion\SFLReportesExport;
 use App\Http\Controllers\Controller;
 use App\Repositories\Educacion\CuboPacto2Repositorio;
@@ -43,7 +44,7 @@ class NexusController extends Controller
 
     public function reportes()
     {
-        $anios = ImportacionRepositorio::anios_porfuente(ImporNexusController::$FUENTE);
+        $anios = ImportacionRepositorio::anios_porfuente_select(ImporNexusController::$FUENTE);
         $aniomax = $anios->max('anio');
         $mensaje = "";
         return view('educacion.Nexus.Reportes', compact('anios', 'aniomax', 'mensaje'));
@@ -51,137 +52,161 @@ class NexusController extends Controller
 
     public function reportesreporte(Request $rq)
     {
+        $div = $rq->div;
         $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronWebController::$FUENTE);
         switch ($rq->div) {
             case 'head':
                 $data2025 = NexusRepositorio::reportesreporte_head($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
                 $data2024 = NexusRepositorio::reportesreporte_head($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
-                $card1 = number_format(SFLRepositorio::reportesreporte_head($rq->ugel, $rq->modalidad, $rq->nivel), 0);
-                $card2 = number_format(CuboPacto2Repositorio::reportesreporte_head($rq->ugel, $rq->modalidad, $rq->nivel, 0), 0);
-                $card3 = number_format(CuboPacto2Repositorio::reportesreporte_head($rq->ugel, $rq->modalidad, $rq->nivel, 1), 0);
-                $card4 = number_format(CuboPacto2Repositorio::reportesreporte_head($rq->ugel, $rq->modalidad, $rq->nivel, 2), 0);
-                return response()->json(compact('card1', 'card2', 'card3', 'card4', 'data2025', 'data2024'));
+                $card1 = $data2025->docentes;
+                $card2 = $data2025->auxiliar;
+                $card3 = $data2025->promotor;
+                $card4 = $data2025->administrativo;
+                $pcard1 = round($data2024->docentes > 0 ? (100 * $data2025->docentes / $data2024->docentes) : 0, 1);
+                $pcard2 = round($data2024->auxiliar > 0 ? (100 * $data2025->auxiliar / $data2024->auxiliar) : 0, 1);
+                $pcard3 = round($data2024->promotor > 0 ? (100 * $data2025->promotor / $data2024->promotor) : 0, 1);
+                $pcard4 = round($data2024->administrativo > 0 ? (100 * $data2025->administrativo / $data2024->administrativo) : 0, 1);
+                return response()->json(compact('card1', 'card2', 'card3', 'card4', 'pcard1', 'pcard2', 'pcard3', 'pcard4'));
             case 'anal1':
-                $data = CuboPacto2Repositorio::reportesreporte_anal1($rq->ugel, $rq->modalidad, $rq->nivel);
-                $info['series'][0]['name'] = 'SANEADO';
-                $info['series'][1]['name'] = 'NO SANEADO';
-                $info['series'][0]['color'] = '#5eb9aa';
-                $info['series'][1]['color'] = '#e65310';
-                foreach ($data as $key => $value) {
-                    $info['categoria'][] = $value->provincia;
-                    $info['series'][0]['data'][] = (int)$value->saneado;
-                    $info['series'][1]['data'][] = (int)$value->nosaneado;
-                }
-                return response()->json(compact('info'));
-
-            case 'anal2':
-                $data = CuboPacto2Repositorio::reportesreporte_anal2($rq->ugel, $rq->modalidad, $rq->nivel);
-                $info = $data->map(function ($y, $name) {
-                    return ['name' => $name, 'y' => (int)$y];
-                })->values();
-                return response()->json(compact('info'));
-                break;
-            case 'anal3':
                 $pe_pv = [
                     '2501' => 'pe-uc-cp',
                     '2502' => 'pe-uc-at',
                     '2503' => 'pe-uc-pa',
                     '2504' => 'pe-uc-pr',
                 ];
-                $data = CuboPacto2Repositorio::reportesreporte_anal3($rq->ugel, $rq->modalidad, $rq->nivel);
                 $info = [];
                 $valores = [];
+                $data = NexusRepositorio::reportesreporte_anal1($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
+                $total = $data->sum('conteo');
                 foreach ($data as $key => $value) {
-                    $info[] = [$pe_pv[$value->codigo], (float)$value->indicador];
-                    $valores[$pe_pv[$value->codigo]] = ['num' => (float)$value->saneado, 'dem' => (float)$value->nosaneado, 'ind' => (float)$value->indicador];
+                    $info[] = [$value->codigo, round($total > 0 ? 100 * $value->conteo / $total : 0, 1)];
+                    $valores[$value->codigo] = ['num' => (int)$value->conteo, 'dem' => $total, 'ind' => round($total > 0 ? 100 * $value->conteo / $total : 0, 1)];
                 }
                 return response()->json(compact('info', 'valores'));
 
-            case 'anal4':
-                $data = CuboPacto2Repositorio::reportesreporte_anal4($rq->ugel, $rq->modalidad, $rq->nivel);
-                $info['series'][0]['name'] = 'SANEADO';
-                $info['series'][1]['name'] = 'NO SANEADO';
-                $info['series'][0]['color'] = '#5eb9aa';
-                $info['series'][1]['color'] = '#e65310';
+
+            case 'anal2':
+                $data = NexusRepositorio::reportesreporte_anal2($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
+                $info = [];
                 foreach ($data as $key => $value) {
-                    $info['categoria'][] = $value->area;
-                    $info['series'][0]['data'][] = (int)$value->saneado;
-                    $info['series'][1]['data'][] = (int)$value->nosaneado;
+                    $info['categoria'][] = $value->mes;
+                    $info['data'][] = $value->conteo;
                 }
+                // $data = CuboPacto2Repositorio::reportesreporte_anal2($rq->ugel, $rq->modalidad, $rq->nivel);
+                // $info = $data->map(function ($y, $name) {
+                //     return ['name' => $name, 'y' => (int)$y];
+                // })->values();
                 return response()->json(compact('info', 'data'));
+                break;
+            case 'anal3':
+                $color = ['#17a2b8', '#ffc107', '#e91e63'];
+                $data = NexusRepositorio::reportesreporte_anal3($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
+                foreach ($data as $key => $value) {
+                    $value->color = $color[$key % count($color)];
+                }
+                return response()->json($data);
+
+            case 'anal4':
+                $color = ['#17a2b8', '#ffc107', '#e91e63'];
+                $data = NexusRepositorio::reportesreporte_anal4($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
+                foreach ($data as $key => $value) {
+                    $value->color = $color[$key % count($color)];
+                }
+                return response()->json($data);
 
             case 'tabla1':
-                $base = CuboPacto2Repositorio::reportesreporte_tabla1($rq->ugel, $rq->modalidad, $rq->nivel);
+                $base = NexusRepositorio::reportesreporte_tabla01($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
                 $foot = [];
                 if ($base->count() > 0) {
                     $foot = clone $base[0];
-                    $foot->se = $base->sum('se');
-                    $foot->ser = $base->sum('ser');
-                    $foot->seu = $base->sum('seu');
-                    $foot->le = $base->sum('le');
-                    $foot->ler = $base->sum('ler');
-                    $foot->leu = $base->sum('leu');
-                    $foot->le1 = $base->sum('le1');
-                    $foot->le2 = $base->sum('le2');
-                    $foot->le3 = $base->sum('le3');
-                    $foot->le4 = $base->sum('le4');
-                    $foot->le1p = round(100 * $foot->le1 / $foot->le, 1);
-                    $foot->le2p = round(100 * $foot->le2 / $foot->le, 1);
-                    $foot->le3p = round(100 * $foot->le3 / $foot->le, 1);
-                    $foot->le4p = round(100 * $foot->le4 / $foot->le, 1);
+                    $foot->ugel = 'TOTAL';
+                    $foot->td = $base->sum('td');
+                    $foot->tdn = $base->sum('tdn');
+                    $foot->tdc = $base->sum('tdc');
+                    $foot->tde = $base->sum('tde');
+                    $foot->tdd = $base->sum('tdd');
+                    $foot->tdv = $base->sum('tdv');
+                    $foot->ta = $base->sum('ta');
+                    $foot->tan = $base->sum('tan');
+                    $foot->tac = $base->sum('tac');
+                    $foot->tav = $base->sum('tav');
                 }
-                $excel = view('educacion.SFL.ReportesTabla1', compact('base', 'foot'))->render();
-                return response()->json(compact('excel', 'base', 'foot'));
+                $excel = view('educacion.Nexus.ReportesTablas', compact('div', 'base', 'foot'))->render();
+                return response()->json(compact('excel'));
+                // return response()->json(compact('div', 'base', 'foot'));
 
             case 'tabla2':
-                $base = CuboPacto2Repositorio::reportesreporte_tabla2($rq->ugel, $rq->modalidad, $rq->nivel);
+                $base = NexusRepositorio::reportesreporte_tabla02($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
                 $foot = [];
                 if ($base->count() > 0) {
                     $foot = clone $base[0];
-                    $foot->se = $base->sum('se');
-                    $foot->ser = $base->sum('ser');
-                    $foot->seu = $base->sum('seu');
-                    $foot->le = $base->sum('le');
-                    $foot->ler = $base->sum('ler');
-                    $foot->leu = $base->sum('leu');
-                    $foot->le1 = $base->sum('le1');
-                    $foot->le2 = $base->sum('le2');
-                    $foot->le3 = $base->sum('le3');
-                    $foot->le4 = $base->sum('le4');
-                    $foot->le1p = round(100 * $foot->le1 / $foot->le, 1);
-                    $foot->le2p = round(100 * $foot->le2 / $foot->le, 1);
-                    $foot->le3p = round(100 * $foot->le3 / $foot->le, 1);
-                    $foot->le4p = round(100 * $foot->le4 / $foot->le, 1);
+                    $foot->ley = 'TOTAL';
+                    $foot->td = $base->sum('td');
+                    $foot->tdn = $base->sum('tdn');
+                    $foot->tdc = $base->sum('tdc');
+                    $foot->tde = $base->sum('tde');
+                    $foot->tdd = $base->sum('tdd');
+                    $foot->tdv = $base->sum('tdv');
+                    $foot->ta = $base->sum('ta');
+                    $foot->tan = $base->sum('tan');
+                    $foot->tac = $base->sum('tac');
+                    $foot->tav = $base->sum('tav');
                 }
-                $excel = view('educacion.SFL.ReportesTabla2', compact('base', 'foot'))->render();
+                $excel = view('educacion.Nexus.ReportesTablas', compact('div', 'base', 'foot'))->render();
                 return response()->json(compact('excel'));
+                // return response()->json(compact('div', 'base', 'foot'));
 
             case 'tabla3':
-                $base = CuboPacto2Repositorio::reportesreporte_tabla3($rq->ugel, $rq->modalidad, $rq->nivel);
-                $excel = view('educacion.SFL.ReportesTabla3', compact('base'))->render();
+                $base = NexusRepositorio::reportesreporte_tabla03($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
+                $foot = [];
+                if ($base->count() > 0) {
+                    $foot = clone $base[0];
+                    $foot->distrito = 'TOTAL';
+                    $foot->td = $base->sum('td');
+                    $foot->tdn = $base->sum('tdn');
+                    $foot->tdc = $base->sum('tdc');
+                    $foot->tde = $base->sum('tde');
+                    $foot->tdd = $base->sum('tdd');
+                    $foot->tdv = $base->sum('tdv');
+                    $foot->ta = $base->sum('ta');
+                    $foot->tan = $base->sum('tan');
+                    $foot->tac = $base->sum('tac');
+                    $foot->tav = $base->sum('tav');
+                }
+                $excel = view('educacion.Nexus.ReportesTablas', compact('div', 'base', 'foot'))->render();
                 return response()->json(compact('excel'));
+                // return response()->json(compact('div', 'base', 'foot'));
+
+            case 'tabla4':
+                $base = NexusRepositorio::reportesreporte_tabla04($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
+                $excel = view('educacion.Nexus.ReportesTablas', compact('div', 'base'))->render();
+                return response()->json(compact('excel', 'base'));
+                // return response()->json(compact('div', 'base', 'foot'));
             default:
                 # code...
                 return [];
         }
     }
 
-    public function reportesrdownloadexcel($div, $ugel, $modalidad, $nivel)
+    public function reportesrdownloadexcel($div, $anio, $ugel, $modalidad, $nivel)
     {
         switch ($div) {
             case 'tabla1':
-                $name = 'LOCALES_ESCOLARES_PÚBLICOS_POR_UGEL_SEGÚN_ESTADOS_DEL_SFL.xlsx';
+                $name = 'NÚMERO DE PLAZAS DOCENTE Y AUXILIARES DE EDUCACIÓN POR UGEL, SEGÚN SITUACIÓN LABORAL.xlsx';
                 break;
             case 'tabla2':
-                $name = 'INSTITUCIONES_EDUCATIVAS_Y_LOCALES_EDUCATIVOS_PÚBLICOS_POR_DISTRITOS_SEGÚN_ESTADOS_DEL_SFL.xlsx';
+                $name = 'NÚMERO DE PLAZAS DOCENTE Y AUXILIARES DE EDUCACIÓN POR LEY DE CONTRATO, SEGÚN SITUACIÓN LABORAL.xlsx';
                 break;
             case 'tabla3':
-                $name = 'INSTITUCIONES_EDUCATIVAS_PÚBLICAS_SEGÚN_ESTADOS_DEL_SFL.xlsx';
+                $name = 'NÚMERO DE PLAZAS DOCENTE Y AUXILIARES DE EDUCACIÓN POR DISTRITO, SEGÚN SITUACIÓN LABORAL.xlsx';
+                break;
+            case 'tabla4':
+                $name = 'NÚMERO DE PLAZAS POR INSTITUCIÓN EDUCATIVAS.xlsx';
                 break;
             default:
-                $name = 'REPORTE_SFL.xlsx';
+                $name = 'EXCEL_VACIO.xlsx';
                 break;
         }
-        return Excel::download(new SFLReportesExport($div, $ugel, $modalidad, $nivel), $name);
+        return Excel::download(new NexusReportesExport($div, $anio, $ugel, $modalidad, $nivel), $name);
     }
 }

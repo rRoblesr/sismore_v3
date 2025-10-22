@@ -19,8 +19,7 @@
                         <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
                             <i class="fa fa-redo"></i> Actualizar</button>
                     </div>
-                    <h3 class="card-title text-white font-14">Tablero de control del saneamiento físico legal de locales
-                        escolares públicos</h3>
+                    <h3 class="card-title text-white font-14">Reporte nexus</h3>
                 </div>
                 <div class="card-body pb-0">
                     <div class="form-group row align-items-center vh-5">
@@ -100,10 +99,10 @@
                     </div>
                 </div>
                 <div class="mt-0 font-9">
-                    <h6 class="">Avance <span class="float-right" id="card1p">0%</span></h6>
+                    <h6 class="">Avance <span class="float-right" id="card1i">0%</span></h6>
                     <div class="progress progress-sm m-0">
                         <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="90" aria-valuemin="0"
-                            aria-valuemax="100" style="width: 100%" id="bbasico">
+                            aria-valuemax="100" style="width: 100%" id="card1b">
                             <span class="sr-only">0% Complete</span>
                         </div>
                     </div>
@@ -132,10 +131,10 @@
                     </div>
                 </div>
                 <div class="mt-0 font-9">
-                    <h6 class="">Avance <span class="float-right" id="card2p">0%</span></h6>
+                    <h6 class="">Avance <span class="float-right" id="card2i">0%</span></h6>
                     <div class="progress progress-sm m-0">
                         <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="90" aria-valuemin="0"
-                            aria-valuemax="100" style="width: 100%" id="bbasico">
+                            aria-valuemax="100" style="width: 100%" id="card2b">
                             <span class="sr-only">0% Complete</span>
                         </div>
                     </div>
@@ -165,10 +164,10 @@
                     </div>
                 </div>
                 <div class="mt-0 font-9">
-                    <h6 class="">Avance <span class="float-right" id="card3p">0%</span></h6>
+                    <h6 class="">Avance <span class="float-right" id="card3i">0%</span></h6>
                     <div class="progress progress-sm m-0">
                         <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="90" aria-valuemin="0"
-                            aria-valuemax="100" style="width: 100%" id="bbasico">
+                            aria-valuemax="100" style="width: 100%" id="card3b">
                             <span class="sr-only">0% Complete</span>
                         </div>
                     </div>
@@ -197,10 +196,10 @@
                     </div>
                 </div>
                 <div class="mt-0 font-9">
-                    <h6 class="">Avance <span class="float-right" id="card4p">0%</span></h6>
+                    <h6 class="">Avance <span class="float-right" id="card4i">0%</span></h6>
                     <div class="progress progress-sm m-0">
                         <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="90" aria-valuemin="0"
-                            aria-valuemax="100" style="width: 100%" id="bbasico">
+                            aria-valuemax="100" style="width: 100%" id="card4b">
                             <span class="sr-only">0% Complete</span>
                         </div>
                     </div>
@@ -216,7 +215,7 @@
                     <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
                 </div>
                 <div class="card-body p-0">
-                    <div id="anal1" style="height: 20rem"></div>
+                    <div id="anal1" style="height: 25rem"></div>
                 </div>
             </div>
         </div>
@@ -227,7 +226,7 @@
                     <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
                 </div>
                 <div class="card-body p-0">
-                    <div id="anal2" style="height: 20rem"></div>
+                    <div id="anal2" style="height: 25rem"></div>
                 </div>
             </div>
         </div>
@@ -259,30 +258,6 @@
     </div>
 
     <div class="row">
-        <div class="col-lg-6 col-md-6">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
-                    <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
-                </div>
-                <div class="card-body p-0">
-                    <div id="anal5" style="height: 20rem"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-6 col-md-6">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
-                    <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
-                </div>
-                <div class="card-body p-0">
-                    <div id="anal6" style="height: 20rem"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
         <div class="col-lg-12">
             {{-- <div class="card">
                 <div class="card-header"> --}}
@@ -292,8 +267,8 @@
                         <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla1')">
                             <i class="fa fa-file-excel"></i> Descargar</button>
                     </div>
-                    <h3 class="card-title">Locales escolares públicos por ugel, según estados del saneamiento físico legal
-                    </h3>
+                    <h3 class="card-title">NÚMERO DE PLAZAS DOCENTE Y AUXILIARES DE EDUCACIÓN POR UGEL, SEGÚN SITUACIÓN
+                        LABORAL</h3>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -319,9 +294,8 @@
                         <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla2')">
                             <i class="fa fa-file-excel"></i> Descargar</button>
                     </div>
-                    <h3 class="card-title">Instituciones educativas y locales educativos públicos por distritos, según
-                        estados del saneamiento físico legal
-                    </h3>
+                    <h3 class="card-title">NÚMERO DE PLAZAS DOCENTE Y AUXILIARES DE EDUCACIÓN POR LEY DE CONTRATO, SEGÚN
+                        SITUACIÓN LABORAL</h3>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -347,14 +321,39 @@
                         <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla3')">
                             <i class="fa fa-file-excel"></i> Descargar</button>
                     </div>
-                    <h3 class="card-title">Instituciones educativas públicas, según
-                        estados del saneamiento físico legal
-                    </h3>
+                    <h3 class="card-title">NÚMERO DE PLAZAS DOCENTE Y AUXILIARES DE EDUCACIÓN POR DISTRITO, SEGÚN SITUACIÓN
+                        LABORAL</h3>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12">
                             <div class="table-responsive" id="ctabla3">
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            {{-- <div class="card">
+                <div class="card-header"> --}}
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                    <div class="card-widgets">
+                        <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla4')">
+                            <i class="fa fa-file-excel"></i> Descargar</button>
+                    </div>
+                    <h3 class="card-title">NÚMERO DE PLAZAS POR INSTITUCIÓN EDUCATIVAS</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive" id="ctabla4">
 
                             </div>
 
@@ -404,6 +403,7 @@
             panelGraficas('tabla1');
             panelGraficas('tabla2');
             panelGraficas('tabla3');
+            panelGraficas('tabla4');
         }
 
         function panelGraficas(div) {
@@ -411,8 +411,8 @@
                 url: "{{ route('educacion.nexus.reportes.reporte') }}",
                 data: {
                     'div': div,
-                    "anio": $('#ugel').val(),
-                    "gestion": $('#gestion').val(),
+                    "anio": $('#anio').val(),
+                    "ugel": $('#ugel').val(),
                     "modalidad": $('#modalidad').val(),
                     "nivel": $('#nivel').val(),
                 },
@@ -440,60 +440,75 @@
                                 delay: 10,
                                 time: 1000
                             });
+                            $('#card1i').text(data.pcard1 + '%');
+                            $('#card2i').text(data.pcard2 + '%');
+                            $('#card3i').text(data.pcard3 + '%');
+                            $('#card4i').text(data.pcard4 + '%');
+                            $('#card1b').css('width', data.pcard1 + '%')
+                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+                                .addClass(data.pcard1 > 96 ? 'bg-success-0' : (data.pcard1 > 76 ?
+                                    'bg-warning-0' :
+                                    'bg-orange-0'));
+                            $('#card2b').css('width', data.pcard2 + '%')
+                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+                                .addClass(data.pcard2 > 96 ? 'bg-success-0' : (data.pcard2 > 76 ?
+                                    'bg-warning-0' :
+                                    'bg-orange-0'));
+                            $('#card3b').css('width', data.pcard3 + '%')
+                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+                                .addClass(data.pcard3 > 96 ? 'bg-success-0' : (data.pcard3 > 76 ?
+                                    'bg-warning-0' :
+                                    'bg-orange-0'));
+                            $('#card4b').css('width', data.pcard4 + '%')
+                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+                                .addClass(data.pcard4 > 96 ? 'bg-success-0' : (data.pcard4 > 76 ?
+                                    'bg-warning-0' :
+                                    'bg-orange-0'));
                             break;
                         case 'anal1':
-                            gAnidadaColumn(div, data.info.categoria, data.info.series, '',
-                                'Locales Escolares Públicos por Provincia, según estado del SFL');
-
-                            break;
-                        case 'anal2':
-                            gPie(div, data.info, '', 'Locales Escolares Públicos, según estado del SFL', '');
-                            break;
-                        case 'anal3':
-                            // datax = [
-                            //     [
-                            //         "pe-uc-cp",
-                            //         482799
-                            //     ],
-                            //     [
-                            //         "pe-uc-at",
-                            //         65674
-                            //     ],
-                            //     [
-                            //         "pe-uc-pa",
-                            //         89058
-                            //     ],
-                            //     [
-                            //         "pe-uc-pr",
-                            //         3603
-                            //     ]
-                            // ]
                             anal3valores = data.valores;
                             anal3 = maps01(div, data.info, '',
-                                'Avance de saneamiento físico legal, según provincia');
+                                'Porcentaje De Plazas Docentes Por Provincia');
+                            break;
+                        case 'anal2':
+                            crearGraficoLineasAcumuladas(div, data.info, '',
+                                'Acumulado Mensual De Plazas Docentes, Periodo 2025', '#cc0000');
+                            break;
+                        case 'anal3':
+                            crearGraficoDistribucionPlazas(div, data,
+                                'Distribución De Plazas Auxiliares De Educación, Según Gestión');
                             break;
                         case 'anal4':
-                            gAnidadaColumn(div, data.info.categoria, data.info.series, '',
-                                'Locales Escolares Públicos por Provincia, según estado del SFL');
+                            crearGraficoDistribucionPlazas(div, data,
+                                'Distribución De Plazas Auxiliares De Educación, Según Tipo De Trabajador');
                             break;
                         case 'tabla1':
                             $('#ctabla1').html(data.excel);
                             break;
                         case 'tabla2':
                             $('#ctabla2').html(data.excel);
-                            $('#tabla2').DataTable({
-                                responsive: true,
-                                autoWidth: false,
-                                ordered: true,
-                                paging: false,
-                                searching: false,
-                                info: false,
-                                language: table_language,
-                            });
+                            // $('#tabla2').DataTable({
+                            //     responsive: true,
+                            //     autoWidth: false,
+                            //     ordered: true,
+                            //     paging: false,
+                            //     searching: false,
+                            //     info: false,
+                            //     language: table_language,
+                            // });
                             break;
                         case 'tabla3':
                             $('#ctabla3').html(data.excel);
-                            $('#tabla3').DataTable({
+                            // $('#tabla3').DataTable({
+                            //     responsive: true,
+                            //     autoWidth: false,
+                            //     ordered: true,
+                            //     language: table_language,
+                            // });
+                            break;
+                        case 'tabla4':
+                            $('#ctabla4').html(data.excel);
+                            $('#tabla4').DataTable({
                                 responsive: true,
                                 autoWidth: false,
                                 ordered: true,
@@ -590,8 +605,9 @@
 
         function descargarExcel(div) {
             window.open(
-                "{{ route('educacion.sfl.reportes.download.excel', ['div' => ':div', 'ugel' => ':ugel', 'modalidad' => ':modalidad', 'nivel' => ':nivel']) }}"
+                "{{ route('educacion.nexus.reportes.download.excel', ['div' => ':div', 'anio' => ':anio', 'ugel' => ':ugel', 'modalidad' => ':modalidad', 'nivel' => ':nivel']) }}"
                 .replace(':div', div)
+                .replace(':anio', $('#anio').val())
                 .replace(':ugel', $('#ugel').val())
                 .replace(':modalidad', $('#modalidad').val())
                 .replace(':nivel', $('#nivel').val())
@@ -832,7 +848,7 @@
 
                 series: [{
                     data: data,
-                    name: 'SFL',
+                    name: 'NEXUS',
                     states: {
                         hover: {
                             color: '#ef5350' // '#BADA55'
@@ -840,20 +856,38 @@
                     },
                     borderColor: '#cac9c9',
 
+                    // dataLabels: {
+                    //     enabled: true,
+                    //     useHTML: true, // Permite el uso de etiquetas HTML
+                    //     format: '<div style="text-align:center;">{point.name}<br><span style="font-size:12px;">{point.value:,2f}%</span></div>',
+                    //     // nullFormatter: '0%',
+                    //     // formatter: function() {
+                    //     //     const value = this.point.value || 0;
+                    //     //     return `<div style="text-align:center;">${this.point.name}<br><span style="font-size:12px;">${Highcharts.numberFormat(value, 2)}%</span></div>`;
+                    //     // },
+                    //     style: {
+                    //         fontSize: '10px',
+                    //         fontWeight: 'bold',
+                    //         color: '#FFFFFF',
+                    //         textShadow: '0px 0px 3px #000000' // Aplica sombra negra para simular el borde
+                    //     }
+                    // },
+
                     dataLabels: {
                         enabled: true,
-                        useHTML: true, // Permite el uso de etiquetas HTML
-                        format: '<div style="text-align:center;">{point.name}<br><span style="font-size:12px;">{point.value:,2f}%</span></div>',
-                        // nullFormatter: '0%',
-                        // formatter: function() {
-                        //     const value = this.point.value || 0;
-                        //     return `<div style="text-align:center;">${this.point.name}<br><span style="font-size:12px;">${Highcharts.numberFormat(value, 2)}%</span></div>`;
-                        // },
+                        useHTML: true,
+                        formatter: function() {
+                            const value = this.point.value !== undefined ? this.point.value : 0;
+                            return `<div style="text-align:center;">
+                                        ${this.point.name}<br>
+                                        <span style="font-size:12px;">${Highcharts.numberFormat(value, 1)}%</span>
+                                    </div>`;
+                        },
                         style: {
                             fontSize: '10px',
                             fontWeight: 'bold',
                             color: '#FFFFFF',
-                            textShadow: '0px 0px 3px #000000' // Aplica sombra negra para simular el borde
+                            textShadow: '0px 0px 3px #000000'
                         }
                     },
 
@@ -869,9 +903,8 @@
 
                         return `<div style="text-align:left;">
                                     <strong>${this.point.name}</strong><br>
-                                    Numerador: ${provinciaData.num} Locales<br>
-                                    Denominador: ${provinciaData.dem} Locales<br>
-                                    Avance: ${Highcharts.numberFormat(provinciaData.ind, 2)}%
+                                    Docentes: ${Highcharts.numberFormat(provinciaData.num,0)}<br>
+                                    Avance: ${Highcharts.numberFormat(provinciaData.ind, 1)}%
                                 </div>`;
                     },
                     backgroundColor: '#fff', // Fondo blanco translúcido
@@ -896,6 +929,234 @@
 
         function anal3valores(provincia) {
             return anal3valores[provincia] || null;
+        }
+
+        function crearGraficoLineasAcumuladas(div, data, titulo = 'Gráfico', subtitulo = '', colorLinea = '#cc0000') {
+            Highcharts.chart(div, {
+                chart: {
+                    type: 'line',
+                    // backgroundColor: '#f9f9f9',
+                    borderRadius: 10,
+                    spacingTop: 20,
+                    spacingBottom: 20,
+                    spacingLeft: 20,
+                    spacingRight: 20
+                },
+                title: {
+                    text: titulo,
+                    style: {
+                        fontSize: '16px',
+                        fontWeight: 'bold',
+                        color: '#333'
+                    }
+                },
+                subtitle: {
+                    text: subtitulo,
+                    style: {
+                        // fontSize: '12px',
+                        // color: '#666'
+                    }
+                },
+                xAxis: {
+                    categories: data
+                        .categoria, // ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Set', 'Oct', 'Nov', 'Dic'],
+                    tickmarkPlacement: 'on',
+                    lineWidth: 0,
+                    gridLineWidth: 1,
+                    gridLineColor: '#ddd',
+                    labels: {
+                        style: {
+                            fontSize: '12px',
+                            color: '#555'
+                        }
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    },
+                    gridLineColor: '#ddd',
+                    labels: {
+                        style: {
+                            fontSize: '12px',
+                            color: '#555'
+                        }
+                    }
+                },
+                plotOptions: {
+                    line: {
+                        lineWidth: 2,
+                        marker: {
+                            enabled: true,
+                            radius: 4,
+                            fillColor: '#fff',
+                            lineColor: colorLinea,
+                            lineWidth: 2
+                        },
+                        states: {
+                            hover: {
+                                lineWidth: 3
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Plazas Docentes',
+                    data: data.data,
+                    color: colorLinea,
+                    dataLabels: {
+                        enabled: true,
+                        format: '{y}',
+                        style: {
+                            fontSize: '12px',
+                            fontWeight: 'bold',
+                            color: '#333',
+                            textOutline: '2px contrast'
+                        },
+                        verticalAlign: 'bottom',
+                        y: -10
+                    }
+                }],
+                tooltip: {
+                    shared: true,
+                    useHTML: true,
+                    formatter: function() {
+                        return `<b>${this.points[0].series.name}</b><br/>${this.x}: <b>${this.y} plazas</b>`;
+                    },
+                    backgroundColor: '#fff',
+                    borderColor: '#ccc',
+                    borderRadius: 8,
+                    shadow: true,
+                    style: {
+                        fontSize: '12px',
+                        padding: '8px'
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                credits: {
+                    enabled: false
+                },
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 500
+                        },
+                        chartOptions: {
+                            chart: {
+                                spacingTop: 10,
+                                spacingBottom: 10,
+                                spacingLeft: 10,
+                                spacingRight: 10
+                            },
+                            xAxis: {
+                                labels: {
+                                    style: {
+                                        fontSize: '10px'
+                                    }
+                                }
+                            },
+                            yAxis: {
+                                labels: {
+                                    style: {
+                                        fontSize: '10px'
+                                    }
+                                }
+                            },
+                            plotOptions: {
+                                line: {
+                                    marker: {
+                                        radius: 3
+                                    }
+                                }
+                            },
+                            series: [{
+                                dataLabels: {
+                                    style: {
+                                        fontSize: '10px'
+                                    },
+                                    y: -8
+                                }
+                            }]
+                        }
+                    }]
+                }
+            });
+        }
+
+        function crearGraficoDistribucionPlazas(div, data, subtitulo) {
+            Highcharts.chart(div, {
+                chart: {
+                    type: 'pie',
+                    // backgroundColor: '#f5f5f5',
+                    style: {
+                        fontFamily: 'Arial, sans-serif'
+                    }
+                },
+                title: {
+                    text: '',
+                    style: {
+                        fontSize: '14px',
+                        fontWeight: '500',
+                        color: '#666'
+                    }
+                },
+                subtitle: {
+                    text: subtitulo,
+                    style: {
+                        // fontSize: '12px',
+                        // color: '#666'
+                    }
+                },
+                tooltip: {
+                    pointFormat: '<b>{point.percentage:.1f}%</b><br/>Total: {point.y}'
+                },
+                accessibility: {
+                    point: {
+                        valueSuffix: '%'
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        innerSize: '60%', // Esto crea el efecto de dona
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.percentage:.0f}%',
+                            distance: -30,
+                            style: {
+                                fontWeight: 'bold',
+                                color: 'white',
+                                fontSize: '16px',
+                                textOutline: 'none'
+                            }
+                        },
+                        showInLegend: true
+                    }
+                },
+                legend: {
+                    align: 'center',
+                    verticalAlign: 'bottom',
+                    layout: 'horizontal',
+                    itemStyle: {
+                        fontSize: '12px',
+                        fontWeight: 'normal',
+                        color: '#666'
+                    },
+                    symbolRadius: 0,
+                    symbolHeight: 12,
+                    symbolWidth: 12
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'Plazas',
+                    colorByPoint: true,
+                    data: data
+                }]
+            });
         }
     </script>
 
