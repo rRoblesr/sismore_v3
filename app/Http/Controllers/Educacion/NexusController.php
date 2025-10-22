@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Educacion;
 use App\Exports\Educacion\NexusReportesExport;
 use App\Exports\Educacion\SFLReportesExport;
 use App\Http\Controllers\Controller;
+use App\Models\Educacion\NexusRegimenLaboral;
 use App\Repositories\Educacion\CuboPacto2Repositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\NexusRepositorio;
@@ -208,5 +209,76 @@ class NexusController extends Controller
                 break;
         }
         return Excel::download(new NexusReportesExport($div, $anio, $ugel, $modalidad, $nivel), $name);
+    }
+
+    public function consultas()
+    {
+        $subtipo = NexusRegimenLaboral::where('dependencia', '1')->orderBy('nombre')->pluck('nombre', 'id');
+        return view('educacion.Nexus.Consultas', compact('subtipo'));
+    }
+
+    public function consultasreportexx(Request $rq)
+    {
+        switch ($rq->div) {
+            case 'consulta':
+                if ($rq->dni == '') {
+                    return response()->json(['data' => null, 'status' => 'NO', 'dni' => $rq->dni]);
+                } elseif ($rq->nombre_completo == '') {
+                    return response()->json(['data' => null, 'status' => 'NO', 'nombre_completo' => $rq->nombre_completo]);
+                }
+                $data = NexusRepositorio::consultasreporte_consulta($rq->tipo, $rq->dni, $rq->nombre_completo);
+                return response()->json(['data' => $data, 'status' => $data ? 'OK' : 'NO']);
+            default:
+                return [];
+        }
+    }
+
+    public function consultasreporte(Request $rq)
+    {
+        $div = $rq->div;
+        switch ($rq->div) {
+            case 'consulta':
+                $documento = trim($rq->dni ?? '');
+                $nombres   = trim($rq->nombre_completo ?? '');
+
+                // Validación: al menos uno debe tener valor
+                if ($documento === '' && $nombres === '') {
+                    return response()->json([
+                        'data' => null,
+                        'status' => 'NO',
+                        'dni' => $documento,
+                        'nombre_completo' => $nombres,
+                        'message' => 'Debe ingresar al menos el número de documento o el nombre completo.'
+                    ]);
+                }
+
+                // Llamar al repositorio con ambos parámetros (el repositorio decidirá cómo usarlos)
+                $data = NexusRepositorio::consultasreporte_consulta(
+                    $rq->tipo,
+                    $documento !== '' ? $documento : null,
+                    $nombres !== '' ? $nombres : null
+                );
+                $excel = null;
+                if ($data) {
+                    $base = NexusRepositorio::consultasreporte_tabla01($data->dni);
+                    if ($base) {
+                        $div = 'tabla1';
+                        $excel = view('educacion.Nexus.ConsultasTablas', compact('div', 'base'))->render();
+                    }
+                }
+
+                return response()->json([
+                    'data' => $data,
+                    'excel' => $excel,
+                    'status' => $data ? 'OK' : 'NO'
+                ]);
+            case 'tabla2':
+                $base = NexusRepositorio::consultasreporte_tabla0102($rq->iiee);
+                $excel = view('educacion.Nexus.ConsultasTablas', compact('div', 'base'))->render();
+                return response()->json(compact('excel'));
+
+            default:
+                return response()->json(['data' => null, 'status' => 'NO', 'message' => 'Acción no válida.']);
+        }
     }
 }

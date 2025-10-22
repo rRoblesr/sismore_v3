@@ -284,15 +284,16 @@
 @endsection
 
 @section('js')
-    <script >
+    <script>
         var ugel_select = 0;
         var anal1, anal2;
         console.log('Script cargado');
         $(document).ready(function() {
-            
+
             $('#anio').on('change', function() {
                 console.log('anio-xxx');
-                cargarMes();alert('nnn');
+                cargarMes();
+                alert('nnn');
             });
             $('#mes').on('change', function() {
                 console.log('mes-xxx');

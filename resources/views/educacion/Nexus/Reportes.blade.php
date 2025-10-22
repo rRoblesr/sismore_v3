@@ -354,9 +354,7 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="table-responsive" id="ctabla4">
-
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -373,7 +371,17 @@
         var ubigeo_select = '';
         var anal3;
         var anal3valores = [];
+        const spinners = {
+            head: ['#card1', '#card2', '#card3', '#card4', '#card1i', '#card2i', '#card3i', '#card4i', '#card1b',
+                '#card2b', '#card3b', '#card4b'
+            ],
+            anal: ['#anal1', '#anal2', '#anal3', '#anal4'],
+            tabla: ['#ctabla1', '#ctabla2', '#ctabla3', '#ctabla4']
+        };
         $(document).ready(function() {
+            Object.keys(spinners).forEach(key => {
+                SpinnerManager.show(key);
+            });
             $('#anio').on('change', function() {
                 cargarUgel();
             });
@@ -419,7 +427,7 @@
                 type: "GET",
                 dataType: "JSON",
                 beforeSend: function() {
-
+                    SpinnerManager.show(div);
                 },
                 success: function(data) {
                     switch (div) {

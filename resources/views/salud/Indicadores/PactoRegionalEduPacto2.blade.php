@@ -358,7 +358,7 @@
                         $('#rin').text(data.rin).counterUp({
                             delay: 10,
                             time: 1000,
-                            callback:function() {
+                            callback: function() {
                                 $('#rin').append('%');
                             }
                         });

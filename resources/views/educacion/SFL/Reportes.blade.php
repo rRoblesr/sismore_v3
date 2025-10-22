@@ -304,7 +304,15 @@
         var ubigeo_select = '';
         var anal3;
         var anal3valores = [];
+        const spinners = {
+            head: ['#card1', '#card2', '#card3', '#card4'],
+            anal: ['#anal1', '#anal2', '#anal3', '#anal4'],
+            tabla: ['#ctabla1', '#ctabla2', '#ctabla3']
+        };
         $(document).ready(function() {
+            Object.keys(spinners).forEach(key => {
+                SpinnerManager.show(key);
+            });
             $('#ugel').on('change', function() {
                 cargarModalidad();
             });
@@ -345,29 +353,7 @@
                 type: "GET",
                 dataType: "JSON",
                 beforeSend: function() {
-                    switch (div) {
-                        case 'head':
-                            $('#card1').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                            $('#card2').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                            $('#card3').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                            $('#card4').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                            break;
-                        case 'anal1':
-                            $('#anal1').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                            break;
-                        case 'anal2':
-                            $('#anal2').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                            break;
-                        case 'tabla1':
-                            $('#ctabla1').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                            break;
-                        case 'tabla2':
-                            $('#ctabla2').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-                            break;
-
-                        default:
-                            break;
-                    }
+                    SpinnerManager.show(div);
                 },
                 success: function(data) {
                     switch (div) {

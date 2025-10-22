@@ -91,6 +91,10 @@
             background-color: #43beac !important;
         }
 
+        .table-cyan {
+            background-color: #D4F2F0 !important;
+        }
+
         .text-success-0 {
             color: #43beac !important;
         }

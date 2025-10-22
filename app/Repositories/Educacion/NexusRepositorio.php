@@ -4,6 +4,7 @@ namespace App\Repositories\Educacion;
 
 use App\Models\Educacion\Importacion;
 use App\Models\Educacion\Nexus;
+use App\Models\Educacion\NexusInstitucionEducativa;
 use App\Models\Educacion\NexusUgel;
 use Illuminate\Support\Facades\DB;
 
@@ -430,5 +431,116 @@ class NexusRepositorio
             ->when($nivel > 0, fn($q) => $q->where('nm.id', $nivel))
             ->groupBy('ie.cod_mod', 'ie.institucion_educativa', 'tie.nombre', 'nm.nombre', 'g.nombre', 'z.nombre', 'd.nombre')
             ->get();
+    }
+
+    public static function consultasreporte_consulta($tipo, $dni, $nombre_completo)
+    {
+        return Nexus::from('edu_nexus as nx')
+            ->leftJoin('edu_nexus_regimen_laboral as stt', 'stt.id', '=', 'nx.regimenlaboral_id')
+            ->leftJoin('edu_nexus_trabajador as t', 't.id', '=', 'nx.trabajador_id')
+            ->leftJoin('par_sexo as s', 's.id', '=', 't.sexo_id')
+            ->leftJoin('edu_nexus_tipo_estudios as te', 'te.id', '=', 't.tipoestudios_id')
+            ->leftJoin('edu_nexus_grado_obtenido as go', 'go.id', '=', 't.gradoobtenido_id')
+            ->leftJoin('edu_nexus_regimen_pensionario as rp', 'rp.id', '=', 'nx.regimenpensionario_id')
+            ->leftJoin('edu_nexus_ley as l', 'l.id', '=', 'nx.ley_id')
+            ->leftJoin('edu_nexus_situacion_laboral as sl', 'sl.id', '=', 'nx.situacionlaboral_id')
+            ->select(
+                't.num_documento as dni',
+                DB::raw("CONCAT(t.apellido_paterno, ' ', t.apellido_materno) as apellidos"),
+                't.nombres',
+                's.nombre2 as sexo',
+                't.fecha_nacimiento',
+                DB::raw("TIMESTAMPDIFF(YEAR, t.fecha_nacimiento, CURDATE()) as edad"),
+                'te.nombre as tipo_estudio',
+                't.profesion',
+                'go.nombre as grado_obtenido',
+                'rp.nombre as regimen_pensionario',
+                't.afp',
+                'l.nombre as ley',
+                'sl.nombre as situacion_laboral',
+                'nx.fecha_nombramiento',
+                'nx.escala_remunerativa'
+            )
+            ->when($tipo > 0, fn($q) => $q->where('stt.id', $tipo))
+            ->when($dni != '', fn($q) => $q->where('t.num_documento', $dni))
+            ->when($nombre_completo != '', fn($q) => $q->whereRaw("CONCAT(t.apellido_paterno, ' ', t.apellido_materno, ' ', t.nombres) LIKE ?", ['%' . $nombre_completo . '%']))
+            ->where('nx.importacion_id', function ($query) {
+                $query->select('id')
+                    ->from('par_importacion')
+                    ->where('fuenteImportacion_id', 2)
+                    ->where('estado', 'PR')
+                    ->whereRaw('fechaActualizacion = (SELECT MAX(fechaActualizacion) FROM par_importacion WHERE fuenteImportacion_id = 2 AND estado = "PR" )');
+            })
+            ->first();
+    }
+
+    public static function consultasreporte_tabla01($num_documento)
+    {
+        return DB::table('edu_nexus as nx')
+            ->select(
+                DB::raw('YEAR(i.fechaActualizacion) as anio'),
+                'nx.cod_plaza',
+                'sl.nombre as situacion_laboral',
+                'c.nombre as cargo',
+                'nx.jornada_laboral',
+                'e.nombre as estado',
+                'tr.nombre as tipo_registro',
+                'tie.nombre as tipo',
+                'g.nombre as gestion',
+                'z.nombre as zona',
+                'nm.nombre as nivel',
+                'ie.cod_mod as modular',
+                'ie.institucion_educativa',
+                'ie.id as ie_id'
+            )
+            ->leftJoin(DB::raw(
+                "(
+                    SELECT id, fechaActualizacion, ROW_NUMBER() OVER ( PARTITION BY YEAR(fechaActualizacion) ORDER BY fechaActualizacion DESC ) AS rn
+                    FROM par_importacion WHERE fuenteImportacion_id = 2 AND estado = 'PR'
+                ) as i "
+            ), function ($join) {
+                $join->on('i.id', '=', 'nx.importacion_id')->where('i.rn', '=', 1);
+            })
+            ->leftJoin('edu_nexus_trabajador as t', 't.id', '=', 'nx.trabajador_id')
+            ->leftJoin('edu_nexus_situacion_laboral as sl', 'sl.id', '=', 'nx.situacionlaboral_id')
+            ->leftJoin('edu_nexus_cargo as c', 'c.id', '=', 'nx.cargo_id')
+            ->leftJoin('edu_nexus_estado as e', 'e.id', '=', 'nx.estado_id')
+            ->leftJoin('edu_nexus_tipo_registro as tr', 'tr.id', '=', 'nx.tiporegistro_id')
+            ->leftJoin('edu_nexus_institucion_educativa as ie', 'ie.id', '=', 'nx.institucioneducativa_id')
+            ->leftJoin('edu_nexus_tipo_ie as tie', 'tie.id', '=', 'ie.tipoie_id')
+            ->leftJoin('edu_nexus_gestion as g', 'g.id', '=', 'ie.gestion_id')
+            ->leftJoin('edu_nexus_zona as z', 'z.id', '=', 'ie.zona_id')
+            ->leftJoin('edu_nexus_nivel_educativo as nm', 'nm.id', '=', 'ie.niveleducativo_id')
+            ->where('t.num_documento', $num_documento)
+            ->get();
+    }
+
+    public static function consultasreporte_tabla0102($iiee)
+    {
+        return NexusInstitucionEducativa::from('edu_nexus_institucion_educativa as ie')
+            ->select(
+                'u.nombre as ugel',
+                'p.nombre as provincia',
+                'd.nombre as distrito',
+                'tie.nombre as tipo',
+                'g.nombre as gestion',
+                'z.nombre as zona',
+                'ne.nombre as nivel',
+                'm.nombre as modalidad',
+                'ie.cod_mod as modular',
+                'ie.cod_local as local',
+                'ie.institucion_educativa as iiee'
+            )
+            ->leftJoin('edu_nexus_ugel as u', 'u.id', '=', 'ie.ugel_id')
+            ->leftJoin('par_ubigeo as d', 'd.id', '=', 'ie.ubigeo_id')
+            ->leftJoin('par_ubigeo as p', 'p.id', '=', 'd.dependencia')
+            ->leftJoin('edu_nexus_tipo_ie as tie', 'tie.id', '=', 'ie.tipoie_id')
+            ->leftJoin('edu_nexus_gestion as g', 'g.id', '=', 'ie.gestion_id')
+            ->leftJoin('edu_nexus_zona as z', 'z.id', '=', 'ie.zona_id')
+            ->leftJoin('edu_nexus_nivel_educativo as ne', 'ne.id', '=', 'ie.niveleducativo_id')
+            ->leftJoin('edu_nexus_modalidad as m', 'm.id', '=', 'ne.modalidad_id')
+            ->where('ie.id', $iiee)
+            // ->where('ie.estado', 1)
+            ->first();
     }
 }

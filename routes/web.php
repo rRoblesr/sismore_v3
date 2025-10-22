@@ -812,6 +812,9 @@ Route::get('/educación/Nexus/Reportes', [NexusController::class, 'reportes'])->
 Route::get('/educación/Nexus/Reportes/Reporte', [NexusController::class, 'reportesreporte'])->name('educacion.nexus.reportes.reporte');
 Route::get('/educación/Nexus/Reportes/Download/1/{div}/{anio}/{ugel}/{modalidad}/{nivel}', [NexusController::class, 'reportesrdownloadexcel'])->name('educacion.nexus.reportes.download.excel');
 
+Route::get('/educación/Nexus/Consultas', [NexusController::class, 'consultas'])->name('educacion.nexus.consultas');
+Route::get('/educación/Nexus/Consultas/Reporte', [NexusController::class, 'consultasreporte'])->name('educacion.nexus.consultas.reporte');
+
 Route::get('/educación/Nexus/Ugel/{anio}', [NexusController::class, 'filtro_ugels'])->name('educacion.nexus.filtro.ugel');
 Route::get('/educación/Nexus/Modalidad/{anio}/{ugel}', [NexusController::class, 'filtro_modalidad'])->name('educacion.nexus.filtro.modalidad');
 Route::get('/educación/Nexus/Nivel/{anio}/{ugel}/{modalidad}', [NexusController::class, 'filtro_nivel'])->name('educacion.nexus.filtro.nivel');
