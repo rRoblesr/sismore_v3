@@ -274,8 +274,8 @@ class NexusController extends Controller
                 ]);
             case 'tabla2':
                 $base = NexusRepositorio::consultasreporte_tabla0102($rq->iiee);
-                $excel = view('educacion.Nexus.ConsultasTablas', compact('div', 'base'))->render();
-                return response()->json(compact('excel'));
+                // $excel = view('educacion.Nexus.ConsultasTablas', compact('div', 'base'))->render();
+                return response()->json(compact('base'));
 
             default:
                 return response()->json(['data' => null, 'status' => 'NO', 'message' => 'Acción no válida.']);

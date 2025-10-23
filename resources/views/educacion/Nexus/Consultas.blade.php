@@ -145,7 +145,7 @@
 
     <!--  Modal content for the above example -->
     <div class="modal fade" id="modal_iiee" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-        aria-hidden="true" style="display: none;">
+        aria-hidden="true" style="display:none;">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
@@ -155,38 +155,38 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-12">
-                            <div class="table-responsive" id="ctabla2">
+                            <div class="table-responsive">
                                 <table class="table table-striped table-bordered font-12 text-dark">
                                     <tbody>
                                         <tr>
                                             <td class="text-left table-cyan">UGEL</td>
-                                            <td class="text-left" id="v01"></td>
+                                            <td class="text-left" id="i01"></td>
                                             <td class="text-left table-cyan">PROVINCIA</td>
-                                            <td class="text-left" id="v02"></td>
+                                            <td class="text-left" id="i02"></td>
                                             <td class="text-left table-cyan">DISTRITO</td>
-                                            <td class="text-left" id="v03"></td>
+                                            <td class="text-left" id="i03"></td>
                                         </tr>
                                         <tr>
                                             <td class="text-left table-cyan">INSTITUCION EDUCATIVA</td>
-                                            <td class="text-left" id="v04" colspan="3"></td>
+                                            <td class="text-left" id="i04" colspan="3"></td>
                                             <td class="text-left table-cyan">COÓDIGO MODULAR</td>
-                                            <td class="text-left" id="v05"></td>
+                                            <td class="text-left" id="i05"></td>
                                         </tr>
                                         <tr>
                                             <td class="text-left table-cyan">CÓDIGO LOCAL</td>
-                                            <td class="text-left" id="v06"></td>
+                                            <td class="text-left" id="i06"></td>
                                             <td class="text-left table-cyan">TIPO DE I.E</td>
-                                            <td class="text-left" id="v07"></td>
+                                            <td class="text-left" id="i07"></td>
                                             <td class="text-left table-cyan">GESTIÓN</td>
-                                            <td class="text-left" id="v08"></td>
+                                            <td class="text-left" id="i08"></td>
                                         </tr>
                                         <tr>
                                             <td class="text-left table-cyan">ZONA</td>
-                                            <td class="text-left" id="v09"></td>
+                                            <td class="text-left" id="i09"></td>
                                             <td class="text-left table-cyan">NIVEL EDUCATIVO</td>
-                                            <td class="text-left" id="v10"></td>
+                                            <td class="text-left" id="i10"></td>
                                             <td class="text-left table-cyan">MODALIDAD</td>
-                                            <td class="text-left" id="v11"></td>
+                                            <td class="text-left" id="i11"></td>
                                         </tr>
 
                                     </tbody>
@@ -244,8 +244,9 @@
                 },
                 success: function(data) {
                     console.log(data);
+                    console.log('div:' + div);
                     switch (div) {
-                        case 'consultar':
+                        case 'consulta':
                             if (data.status == 'OK') {
                                 $('#dato_personales').removeClass('d-none');
                                 $('#v01').html(data.data.dni);
@@ -273,6 +274,19 @@
                             }
                             break;
                         case 'tabla2':
+                            $('#i01').html(data.base.ugel);
+                            $('#i02').html(data.base.provincia);
+                            $('#i03').html(data.base.distrito);
+                            $('#i04').html(data.base.iiee);
+                            $('#i05').html(data.base.modular);
+                            $('#i06').html(data.base.local);
+                            $('#i07').html(data.base.tipo);
+                            $('#i08').html(data.base.gestion);
+                            $('#i09').html(data.base.zona);
+                            $('#i10').html(data.base.nivel);
+                            $('#i11').html(data.base.modalidad);
+                            $('#i12').html(data.base.provincia);
+                            $('#i13').html(data.base.provincia);
                             break;
 
                         default:
@@ -288,7 +302,7 @@
 
         function openiiee(iiee) {
             iiee_select = iiee;
-            // consultar('tabla2');
+            consultar('tabla2');
             $('#modal_iiee').modal('show');
         }
     </script>
