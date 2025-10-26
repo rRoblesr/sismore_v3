@@ -240,7 +240,7 @@
                     <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
                 </div>
                 <div class="card-body p-0">
-                    <div id="anal3" style="height: 20rem"></div>
+                    <div id="anal3" style="height: 25rem"></div>
                 </div>
             </div>
         </div>
@@ -251,7 +251,7 @@
                     <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
                 </div>
                 <div class="card-body p-0">
-                    <div id="anal4" style="height: 20rem"></div>
+                    <div id="anal4" style="height: 25rem"></div>
                 </div>
             </div>
         </div>
@@ -476,19 +476,19 @@
                         case 'anal1':
                             anal3valores = data.valores;
                             anal3 = maps01(div, data.info, '',
-                                'Porcentaje De Plazas Docentes Por Provincia');
+                                'Porcentaje de Plazas Docentes por Provincia');
                             break;
                         case 'anal2':
                             crearGraficoLineasAcumuladas(div, data.info, '',
-                                'Acumulado Mensual De Plazas Docentes, Periodo 2025', '#cc0000');
+                                'Acumulado Mensual de Plazas Docentes, periodo 2025', '#cc0000');
                             break;
                         case 'anal3':
                             crearGraficoDistribucionPlazas(div, data,
-                                'Distribución De Plazas Auxiliares De Educación, Según Gestión');
+                                'Distribución de Plazas Auxiliares de Educación, según Sexo');
                             break;
                         case 'anal4':
                             crearGraficoDistribucionPlazas(div, data,
-                                'Distribución De Plazas Auxiliares De Educación, Según Tipo De Trabajador');
+                                'Distribución de Plazas Auxiliares de Educación, según Tipo de Trabajador');
                             break;
                         case 'tabla1':
                             $('#ctabla1').html(data.excel);
@@ -516,11 +516,44 @@
                             break;
                         case 'tabla4':
                             $('#ctabla4').html(data.excel);
+                            // Destruir si ya existe (opcional, para evitar errores al recargar)
+                            if ($.fn.DataTable.isDataTable('#tabla4')) {
+                                $('#tabla4').DataTable().destroy();
+                            }
                             $('#tabla4').DataTable({
                                 responsive: true,
                                 autoWidth: false,
                                 ordered: true,
                                 language: table_language,
+                                footerCallback: function() {
+                                    var api = this.api();
+                                    // Índices de las columnas a sumar (0-based)
+                                    var columnas = [8, 9, 10, 11, 12];
+                                    columnas.forEach(function(colIndex) {
+                                        // Calcular la suma solo si el valor es numérico
+                                        var total = api
+                                            // .column(colIndex, { page: 'current' })
+                                            .column(colIndex, {
+                                                page: 'all',
+                                                search: 'applied'
+                                            })
+                                            .data()
+                                            .reduce(function(a, b) {
+                                                // Convertir a número, ignorar NaN
+                                                var num = parseFloat(b);
+                                                return a + (isNaN(num) ? 0 : num);
+                                            }, 0);
+
+                                        // Formatear número (opcional)
+                                        var formatted = total.toLocaleString('es-PE', {
+                                            minimumFractionDigits: 0,
+                                            maximumFractionDigits: 0
+                                        });
+
+                                        // Mostrar en el footer
+                                        $(api.column(colIndex).footer()).html(formatted);
+                                    });
+                                }
                             });
                             break;
                         default:
@@ -912,7 +945,7 @@
                         return `<div style="text-align:left;">
                                     <strong>${this.point.name}</strong><br>
                                     Docentes: ${Highcharts.numberFormat(provinciaData.num,0)}<br>
-                                    Avance: ${Highcharts.numberFormat(provinciaData.ind, 1)}%
+                                    Participación: ${Highcharts.numberFormat(provinciaData.ind, 1)}%
                                 </div>`;
                     },
                     backgroundColor: '#fff', // Fondo blanco translúcido

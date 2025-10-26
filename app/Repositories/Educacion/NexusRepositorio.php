@@ -119,8 +119,8 @@ class NexusRepositorio
                 'p.nombre as provincia',
                 DB::raw('COUNT(DISTINCT nx.cod_plaza) AS conteo')
             )
-            ->where('stt.dependencia', 1)
-            ->whereIn('stt.id', [8, 9, 15])
+            //->where('stt.dependencia', 1)
+            ->whereIn('stt.id', [8, 9, 15, 17])
             ->where('nx.importacion_id', function ($query) use ($anio) {
                 $query->select('id')
                     ->from('par_importacion')
@@ -136,6 +136,7 @@ class NexusRepositorio
             ->groupBy('p.codigo', 'p.nombre')
             ->get();
     }
+
     public static function reportesreporte_anal2($anio, $ugel, $modalidad, $nivel)
     {
         return DB::table('par_mes as m')
@@ -145,8 +146,8 @@ class NexusRepositorio
                     $query->from('edu_nexus as nx')
                         ->join('edu_nexus_regimen_laboral as stt', function ($join) {
                             $join->on('stt.id', '=', 'nx.regimenlaboral_id')
-                                ->where('stt.dependencia', 1)
-                                ->whereIn('stt.id', [8, 9, 15]);
+                                //->where('stt.dependencia', 1)
+                                ->whereIn('stt.id', [8, 9, 15, 17]);
                         })
                         ->join('edu_nexus_institucion_educativa as ie', 'ie.id', '=', 'nx.institucioneducativa_id')
                         ->join('edu_nexus_nivel_educativo as nm', 'nm.id', '=', 'ie.niveleducativo_id')
@@ -196,6 +197,40 @@ class NexusRepositorio
             ->leftJoin('edu_nexus_institucion_educativa as ie', 'ie.id', '=', 'nx.institucioneducativa_id')
             ->leftJoin('edu_nexus_nivel_educativo as nm', 'nm.id', '=', 'ie.niveleducativo_id')
             ->leftJoin('edu_nexus_modalidad as m', 'm.id', '=', 'nm.modalidad_id')
+            ->leftJoin('edu_nexus_trabajador as t', 't.id', '=', 'nx.trabajador_id')
+            ->leftJoin('par_sexo as s', 's.id', '=', 't.sexo_id')
+            ->leftJoin('par_ubigeo as d', 'd.id', '=', 'ie.ubigeo_id')
+            ->leftJoin('par_ubigeo as p', 'p.id', '=', 'd.dependencia')
+            ->select(
+                DB::raw('case when s.nombre2 is null then "NO DEFINIDO" else s.nombre2 end AS name'),
+                DB::raw('COUNT(DISTINCT nx.cod_plaza) AS y')
+            )
+            // ->where('stt.dependencia', 1)
+            ->whereIn('stt.id', [8, 9, 15, 17])
+            ->where('nx.importacion_id', function ($query) use ($anio) {
+                $query->select('id')
+                    ->from('par_importacion')
+                    ->where('fuenteImportacion_id', 2)
+                    ->where('estado', 'PR')
+                    ->whereRaw('fechaActualizacion = (
+                        SELECT MAX(fechaActualizacion) FROM par_importacion WHERE fuenteImportacion_id = 2 AND YEAR(fechaActualizacion) = ? AND estado = "PR"
+                    )', [$anio]);
+            })
+            ->when($ugel > 0, fn($q) => $q->where('ie.ugel_id', $ugel))
+            ->when($modalidad > 0, fn($q) => $q->where('nm.modalidad_id', $modalidad))
+            ->when($nivel > 0, fn($q) => $q->where('nm.id', $nivel))
+            ->groupBy('s.nombre2')
+            ->orderBy('y', 'desc')
+            ->get();
+    }
+
+    public static function reportesreporte_anal3_porgestion($anio, $ugel, $modalidad, $nivel)
+    {
+        return Nexus::from('edu_nexus as nx')
+            ->leftJoin('edu_nexus_regimen_laboral as stt', 'stt.id', '=', 'nx.regimenlaboral_id')
+            ->leftJoin('edu_nexus_institucion_educativa as ie', 'ie.id', '=', 'nx.institucioneducativa_id')
+            ->leftJoin('edu_nexus_nivel_educativo as nm', 'nm.id', '=', 'ie.niveleducativo_id')
+            ->leftJoin('edu_nexus_modalidad as m', 'm.id', '=', 'nm.modalidad_id')
             ->leftJoin('edu_nexus_gestion as g', 'g.id', '=', 'ie.gestion_id')
             ->leftJoin('par_ubigeo as d', 'd.id', '=', 'ie.ubigeo_id')
             ->leftJoin('par_ubigeo as p', 'p.id', '=', 'd.dependencia')
@@ -203,20 +238,16 @@ class NexusRepositorio
                 'g.nombre as name',
                 DB::raw('COUNT(DISTINCT nx.cod_plaza) AS y')
             )
-            ->where('stt.dependencia', 1)
-            ->whereIn('stt.id', [8, 9, 15])
+            // ->where('stt.dependencia', 1)
+            ->whereIn('stt.id', [8, 9, 15, 17])
             ->where('nx.importacion_id', function ($query) use ($anio) {
                 $query->select('id')
                     ->from('par_importacion')
                     ->where('fuenteImportacion_id', 2)
                     ->where('estado', 'PR')
                     ->whereRaw('fechaActualizacion = (
-                    SELECT MAX(fechaActualizacion)
-                    FROM par_importacion
-                    WHERE fuenteImportacion_id = 2
-                      AND YEAR(fechaActualizacion) = ?
-                      AND estado = "PR"
-                )', [$anio]);
+                        SELECT MAX(fechaActualizacion) FROM par_importacion WHERE fuenteImportacion_id = 2 AND YEAR(fechaActualizacion) = ? AND estado = "PR"
+                    )', [$anio]);
             })
             ->when($ugel > 0, fn($q) => $q->where('ie.ugel_id', $ugel))
             ->when($modalidad > 0, fn($q) => $q->where('nm.modalidad_id', $modalidad))
@@ -239,8 +270,8 @@ class NexusRepositorio
                 'stt.nombre as name',
                 DB::raw('COUNT(DISTINCT nx.cod_plaza) AS y')
             )
-            ->where('stt.dependencia', 1)
-            ->whereIn('stt.id', [8, 9, 15])
+            // ->where('stt.dependencia', 1)
+            ->whereIn('stt.id', [8, 9, 15, 17])
             ->where('nx.importacion_id', function ($query) use ($anio) {
                 $query->select('id')
                     ->from('par_importacion')
@@ -285,7 +316,8 @@ class NexusRepositorio
                 DB::raw('SUM(CASE WHEN subtipo.id = 16 THEN 1 ELSE 0 END) AS ta'),
                 DB::raw('SUM(CASE WHEN subtipo.id = 16 AND sl.id = 6 THEN 1 ELSE 0 END) AS tan'),
                 DB::raw('SUM(CASE WHEN subtipo.id = 16 AND sl.id = 1 THEN 1 ELSE 0 END) AS tac'),
-                DB::raw('SUM(CASE WHEN subtipo.id = 16 AND sl.id = 7 THEN 1 ELSE 0 END) AS tav')
+                DB::raw('SUM(CASE WHEN subtipo.id = 16 AND sl.id = 7 THEN 1 ELSE 0 END) AS tav'),
+                DB::raw('SUM(CASE WHEN subtipo.id = 17 AND sl.id = 1 THEN 1 ELSE 0 END) AS tpc'),
             )
             ->where('nx.importacion_id', function ($query) use ($anio) {
                 $query->select('id')
@@ -327,7 +359,8 @@ class NexusRepositorio
                 DB::raw('SUM(CASE WHEN subtipo.id = 16 THEN 1 ELSE 0 END) AS ta'),
                 DB::raw('SUM(CASE WHEN subtipo.id = 16 AND sl.id = 6 THEN 1 ELSE 0 END) AS tan'),
                 DB::raw('SUM(CASE WHEN subtipo.id = 16 AND sl.id = 1 THEN 1 ELSE 0 END) AS tac'),
-                DB::raw('SUM(CASE WHEN subtipo.id = 16 AND sl.id = 7 THEN 1 ELSE 0 END) AS tav')
+                DB::raw('SUM(CASE WHEN subtipo.id = 16 AND sl.id = 7 THEN 1 ELSE 0 END) AS tav'),
+                DB::raw('SUM(CASE WHEN subtipo.id = 17 AND sl.id = 1 THEN 1 ELSE 0 END) AS tpc'),
             )
             ->where('nx.importacion_id', function ($query) use ($anio) {
                 $query->select('id')
@@ -371,7 +404,8 @@ class NexusRepositorio
                 DB::raw('SUM(CASE WHEN subtipo.id = 16 THEN 1 ELSE 0 END) AS ta'),
                 DB::raw('SUM(CASE WHEN subtipo.id = 16 AND sl.id = 6 THEN 1 ELSE 0 END) AS tan'),
                 DB::raw('SUM(CASE WHEN subtipo.id = 16 AND sl.id = 1 THEN 1 ELSE 0 END) AS tac'),
-                DB::raw('SUM(CASE WHEN subtipo.id = 16 AND sl.id = 7 THEN 1 ELSE 0 END) AS tav')
+                DB::raw('SUM(CASE WHEN subtipo.id = 16 AND sl.id = 7 THEN 1 ELSE 0 END) AS tav'),
+                DB::raw('SUM(CASE WHEN subtipo.id = 17 AND sl.id = 1 THEN 1 ELSE 0 END) AS tpc'),
             )
             ->where('nx.importacion_id', function ($query) use ($anio) {
                 $query->select('id')

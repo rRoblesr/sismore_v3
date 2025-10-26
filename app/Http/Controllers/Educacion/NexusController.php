@@ -3,13 +3,10 @@
 namespace App\Http\Controllers\Educacion;
 
 use App\Exports\Educacion\NexusReportesExport;
-use App\Exports\Educacion\SFLReportesExport;
 use App\Http\Controllers\Controller;
 use App\Models\Educacion\NexusRegimenLaboral;
-use App\Repositories\Educacion\CuboPacto2Repositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\NexusRepositorio;
-use App\Repositories\Educacion\SFLRepositorio;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -100,7 +97,7 @@ class NexusController extends Controller
                 return response()->json(compact('info', 'data'));
                 break;
             case 'anal3':
-                $color = ['#17a2b8', '#ffc107', '#e91e63'];
+                $color = ['#43beac', '#ffc107', '#ef5350'];
                 $data = NexusRepositorio::reportesreporte_anal3($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
                 foreach ($data as $key => $value) {
                     $value->color = $color[$key % count($color)];
@@ -108,7 +105,7 @@ class NexusController extends Controller
                 return response()->json($data);
 
             case 'anal4':
-                $color = ['#17a2b8', '#ffc107', '#e91e63'];
+                $color = ['#43beac', '#ffc107', '#ef5350'];
                 $data = NexusRepositorio::reportesreporte_anal4($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
                 foreach ($data as $key => $value) {
                     $value->color = $color[$key % count($color)];
@@ -131,6 +128,7 @@ class NexusController extends Controller
                     $foot->tan = $base->sum('tan');
                     $foot->tac = $base->sum('tac');
                     $foot->tav = $base->sum('tav');
+                    $foot->tpc = $base->sum('tpc');
                 }
                 $excel = view('educacion.Nexus.ReportesTablas', compact('div', 'base', 'foot'))->render();
                 return response()->json(compact('excel'));
@@ -152,6 +150,7 @@ class NexusController extends Controller
                     $foot->tan = $base->sum('tan');
                     $foot->tac = $base->sum('tac');
                     $foot->tav = $base->sum('tav');
+                    $foot->tpc = $base->sum('tpc');
                 }
                 $excel = view('educacion.Nexus.ReportesTablas', compact('div', 'base', 'foot'))->render();
                 return response()->json(compact('excel'));
@@ -173,6 +172,7 @@ class NexusController extends Controller
                     $foot->tan = $base->sum('tan');
                     $foot->tac = $base->sum('tac');
                     $foot->tav = $base->sum('tav');
+                    $foot->tpc = $base->sum('tpc');
                 }
                 $excel = view('educacion.Nexus.ReportesTablas', compact('div', 'base', 'foot'))->render();
                 return response()->json(compact('excel'));
@@ -260,6 +260,9 @@ class NexusController extends Controller
                 );
                 $excel = null;
                 if ($data) {
+                    $data->fn = date('d/m/Y', strtotime($data->fecha_nacimiento));
+                    $data->fr = date('d/m/Y', strtotime($data->fecha_nombramiento));
+
                     $base = NexusRepositorio::consultasreporte_tabla01($data->dni);
                     if ($base) {
                         $div = 'tabla1';

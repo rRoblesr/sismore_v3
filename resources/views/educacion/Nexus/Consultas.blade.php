@@ -20,7 +20,7 @@
                 </div>
                 <div class="card-body pb-0">
                     <div class="form-group row align-items-center vh-5">
-                        <div class="col-lg-2 col-md-2 col-sm-2">
+                        {{-- <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="tipo">Tipo de Personal</label>
                                 <select id="tipo" name="tipo" class="form-control font-12">
@@ -30,10 +30,10 @@
                                     @endforeach
                                 </select>
                             </div>
-                        </div>
+                        </div> --}}
 
 
-                        <div class="col-lg-2 col-md-2 col-sm-2">
+                        <div class="col-lg-3 col-md-2 col-sm-2">
                             <div class="custom-select-container">
                                 <label for="documento">Documento</label>
                                 <input type="text" id="documento" name="documento" class="form-control font-12"
@@ -41,7 +41,7 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div class="col-lg-5 col-md-4 col-sm-4">
                             <div class="custom-select-container">
                                 <label for="nombres">Apellidos y Nombres</label>
                                 <input type="text" id="nombres" name="nombres" class="form-control font-12"
@@ -73,7 +73,7 @@
                 <div class="card-header bg-success-0">
                     <h3 class="card-title text-white font-14">DATOS PERSONALES</h3>
                 </div>
-                <div class="card-body p-0">
+                <div class="card-body px-0">
                     <table class="table table-bordered table-striped table-hover font-12 m-0 text-dark">
                         <tbody>
                             <tr>
@@ -129,7 +129,7 @@
                 <div class="card-header bg-success-0">
                     <h3 class="card-title text-white font-14">DATOS LABORALES</h3>
                 </div>
-                <div class="card-body p-0">
+                <div class="card-body px-0">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="table-responsive" id="ctabla1">
@@ -253,7 +253,7 @@
                                 $('#v02').html(data.data.apellidos);
                                 $('#v03').html(data.data.nombres);
                                 $('#v04').html(data.data.sexo);
-                                $('#v05').html(data.data.fecha_nacimiento);
+                                $('#v05').html(data.data.fn);
                                 $('#v06').html(data.data.edad);
                                 $('#v07').html(data.data.tipo_estudio);
                                 $('#v08').html(data.data.profesion);
@@ -262,7 +262,7 @@
                                 $('#v11').html(data.data.afp);
                                 $('#v12').html(data.data.ley);
                                 $('#v13').html(data.data.situacion_laboral);
-                                $('#v14').html(data.data.fecha_nombramiento);
+                                $('#v14').html(data.data.fr);
                                 $('#v15').html(data.data.escala_remunerativa);
 
                                 $('#dato_laborales').removeClass('d-none');

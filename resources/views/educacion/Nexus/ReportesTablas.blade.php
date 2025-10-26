@@ -6,6 +6,7 @@
                     <th class="text-center" rowspan="2">UGEL</th>
                     <th class="text-center" colspan="6">PLAZAS DOCENTE</th>
                     <th class="text-center" colspan="4">PLAZAS AUXILIARES DE EDUCACIÓN</th>
+                    <th class="text-center" colspan="1">PEC</th>
                 </tr>
                 <tr class="table-success-0 text-white">
                     <th class="text-center">TOTAL</th>
@@ -18,6 +19,7 @@
                     <th class="text-center">NOMBRADO</th>
                     <th class="text-center">CONTRATADO</th>
                     <th class="text-center">VACANTE</th>
+                    <th class="text-center">CONTRATADO</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,6 +36,7 @@
                         <td>{{ number_format($item->tan, 0) }}</td>
                         <td>{{ number_format($item->tac, 0) }}</td>
                         <td>{{ number_format($item->tav, 0) }}</td>
+                        <td>{{ number_format($item->tpc, 0) }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -50,6 +53,7 @@
                     <th>{{ number_format($foot->tan, 0) }}</th>
                     <th>{{ number_format($foot->tac, 0) }}</th>
                     <th>{{ number_format($foot->tav, 0) }}</th>
+                    <th>{{ number_format($foot->tpc, 0) }}</th>
                 </tr>
             </tfoot>
         </table>
@@ -62,6 +66,7 @@
                     <th class="text-center" rowspan="2">LEY</th>
                     <th class="text-center" colspan="6">PLAZAS DOCENTE</th>
                     <th class="text-center" colspan="4">PLAZAS AUXILIARES DE EDUCACIÓN</th>
+                    <th class="text-center" colspan="1">PEC</th>
                 </tr>
                 <tr class="table-success-0 text-white">
                     <th class="text-center">TOTAL</th>
@@ -74,6 +79,7 @@
                     <th class="text-center">NOMBRADO</th>
                     <th class="text-center">CONTRATADO</th>
                     <th class="text-center">VACANTE</th>
+                    <th class="text-center">CONTRATADO</th>
                 </tr>
             </thead>
             <tbody>
@@ -90,6 +96,7 @@
                         <td>{{ number_format($item->tan, 0) }}</td>
                         <td>{{ number_format($item->tac, 0) }}</td>
                         <td>{{ number_format($item->tav, 0) }}</td>
+                        <td>{{ number_format($item->tpc, 0) }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -106,6 +113,7 @@
                     <th>{{ number_format($foot->tan, 0) }}</th>
                     <th>{{ number_format($foot->tac, 0) }}</th>
                     <th>{{ number_format($foot->tav, 0) }}</th>
+                    <th>{{ number_format($foot->tpc, 0) }}</th>
                 </tr>
             </tfoot>
         </table>
@@ -118,6 +126,7 @@
                     <th class="text-center" rowspan="2">DISTRITO</th>
                     <th class="text-center" colspan="6">PLAZAS DOCENTE</th>
                     <th class="text-center" colspan="4">PLAZAS AUXILIARES DE EDUCACIÓN</th>
+                    <th class="text-center" colspan="1">PEC</th>
                 </tr>
                 <tr class="table-success-0 text-white">
                     <th class="text-center">TOTAL</th>
@@ -130,6 +139,7 @@
                     <th class="text-center">NOMBRADO</th>
                     <th class="text-center">CONTRATADO</th>
                     <th class="text-center">VACANTE</th>
+                    <th class="text-center">CONTRATADO</th>
                 </tr>
             </thead>
             <tbody>
@@ -146,6 +156,7 @@
                         <td>{{ number_format($item->tan, 0) }}</td>
                         <td>{{ number_format($item->tac, 0) }}</td>
                         <td>{{ number_format($item->tav, 0) }}</td>
+                        <td>{{ number_format($item->tpc, 0) }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -162,6 +173,7 @@
                     <th>{{ number_format($foot->tan, 0) }}</th>
                     <th>{{ number_format($foot->tac, 0) }}</th>
                     <th>{{ number_format($foot->tav, 0) }}</th>
+                    <th>{{ number_format($foot->tpc, 0) }}</th>
                 </tr>
             </tfoot>
         </table>
@@ -205,6 +217,17 @@
                     </tr>
                 @endforeach
             </tbody>
+            <tfoot>
+                <tr class="table-success-0 text-white">
+                    <!-- Mismo número de <th> que columnas -->
+                    <th class="text-right" colspan="8">TOTAL</th>
+                    <th class="text-center"></th> <!-- col 9 -->
+                    <th class="text-center"></th> <!-- col 10 -->
+                    <th class="text-center"></th> <!-- col 11 -->
+                    <th class="text-center"></th> <!-- col 14 -->
+                    <th class="text-center"></th> <!-- col 15 -->
+                </tr>
+            </tfoot>
         </table>
     @break
 

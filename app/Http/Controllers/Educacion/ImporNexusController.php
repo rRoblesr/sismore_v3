@@ -53,14 +53,14 @@ class ImporNexusController extends Controller
         die;
     }
 
-    public function guardar(Request $request)
+    public function guardar(Request $rq)
     {
-        $request->validate([
+        $rq->validate([
             'file' => 'required|file|mimes:xlsx,xls,csv|max:10240',
             'fechaActualizacion' => 'required|date_format:Y-m-d',
         ]);
 
-        $fechaActualizacion = Carbon::createFromFormat('Y-m-d', $request->fechaActualizacion)->startOfDay();
+        $fechaActualizacion = Carbon::createFromFormat('Y-m-d', $rq->fechaActualizacion)->startOfDay();
         $usuarioId = auth()->user()->id;
 
         $importacionExistente = Importacion::where('fuenteImportacion_id', $this->fuente)
@@ -69,11 +69,15 @@ class ImporNexusController extends Controller
             ->first();
 
         if ($importacionExistente) {
-            return response()->json([
-                'error' => 'Ya existe una importación pendiente o procesada para esta fuente y fecha.',
-                'importacion_id' => $importacionExistente->id,
-                'estado' => $importacionExistente->estado,
-            ], 422); // 422 Unprocessable Entity
+            return $this->json_output(
+                400,
+                'Ya existe una importación pendiente o procesada para esta fuente y fecha.'
+            );
+            // return response()->json([
+            //     'error' => 'Ya existe una importación pendiente o procesada para esta fuente y fecha.',
+            //     'importacion_id' => $importacionExistente->id,
+            //     'estado' => $importacionExistente->estado,
+            // ], 422); // 422 Unprocessable Entity
         }
 
         $importacion = Importacion::create([
@@ -84,22 +88,44 @@ class ImporNexusController extends Controller
         ]);
 
         try {
-            Excel::import(new ImporNexusImport($importacion->id), $request->file('file'), null, \Maatwebsite\Excel\Excel::XLSX, 0);
+            Excel::import(new ImporNexusImport($importacion->id), $rq->file('file'), null, \Maatwebsite\Excel\Excel::XLSX, 0);
             $importacion->update(['estado' => 'PR']);
-            
-            return response()->json([
-                'message' => 'Archivo importado exitosamente.',
-                'importacion_id' => $importacion->id,
-                'total_registros' => DB::table('edu_impor_nexus')->where('importacion_id', $importacion->id)->count(),
-            ], 200);
+
+            // return response()->json([
+            //     'message' => 'Archivo importado exitosamente.',
+            //     'importacion_id' => $importacion->id,
+            //     'total_registros' => DB::table('edu_impor_nexus')->where('importacion_id', $importacion->id)->count(),
+            // ], 200);
         } catch (\InvalidArgumentException $e) {
-            return response()->json(['error' => 'Archivo inválido: ' . $e->getMessage()], 422);
+            return $this->json_output(
+                400,
+                'Archivo inválido: ' . $e->getMessage()
+            );
+            // return response()->json(['error' => 'Archivo inválido: ' . $e->getMessage()], 422);            
         } catch (\Exception $e) {
             $importacion->update(['estado' => 'EL']);
-            return response()->json([
-                'error' => 'Error al importar el archivo: ' . $e->getMessage(),
-            ], 500);
+            return $this->json_output(
+                400,
+                'Error al importar el archivo: ' . $e->getMessage()
+            );
+            // return response()->json([
+            //     'error' => 'Error al importar el archivo: ' . $e->getMessage(),
+            // ], 500);
         }
+
+        try {
+            DB::select('call edu_pa_procesarImporNexus(?)', [$importacion->id]);
+        } catch (Exception $e) {
+            $importacion->update(['estado' => 'EL']);
+
+            $mensaje = "Error al procesar la normalizacion de datos.<br>" . $e;
+            $this->json_output(400, $mensaje);
+        }
+
+        return $this->json_output(
+            200,
+            'Archivo importado exitosamente.'
+        );
     }
 
     public function guardar_x(Request $request)
