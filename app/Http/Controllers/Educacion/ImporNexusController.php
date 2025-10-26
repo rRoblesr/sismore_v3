@@ -407,8 +407,8 @@ class ImporNexusController extends Controller
 
     public function ListaImportada($importacion_id)
     {
-        $data = CuadroAsigPersonal::where('importacion_id', $importacion_id)->get();
-        return DataTables::of($data)->make(true);
+        // $data = CuadroAsigPersonal::where('importacion_id', $importacion_id)->get();
+        // return DataTables::of($data)->make(true);
     }
 
     public function ListaImportada_DataTable($importacion_id)
@@ -450,9 +450,9 @@ class ImporNexusController extends Controller
 
     public function download()
     {
-        ini_set('memory_limit', '-1');
-        set_time_limit(0);
-        $name = 'NEXUS ' . date('Y-m-d') . '.xlsx';
-        return Excel::download(new ImporPadronNexusExport, $name);
+        // ini_set('memory_limit', '-1');
+        // set_time_limit(0);
+        // $name = 'NEXUS ' . date('Y-m-d') . '.xlsx';
+        // return Excel::download(new ImporPadronNexusExport, $name);
     }
 }
