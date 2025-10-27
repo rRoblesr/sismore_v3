@@ -86,7 +86,7 @@
                             width="100%" height="100%">
                     </div> --}}
                     <div class="avatar-md mr-2">
-                        <i class="mdi mdi-city avatar-title font-30 text-dark"></i>
+                        <i class="fa fa-users avatar-title font-30 text-dark"></i>
 
                     </div>
                     <div class="media-body align-self-center">
@@ -118,7 +118,7 @@
                             width="100%" height="100%">
                     </div> --}}
                     <div class="avatar-md mr-2">
-                        <i class="mdi mdi-city avatar-title font-30 text-dark"></i>
+                        <i class="fa fa-users avatar-title font-30 text-dark"></i>
 
                     </div>
                     <div class="media-body align-self-center">
@@ -151,7 +151,7 @@
                             width="100%" height="100%">
                     </div> --}}
                     <div class="avatar-md mr-2">
-                        <i class="mdi mdi-thumb-up avatar-title font-30 text-dark"></i>
+                        <i class="fa fa-users avatar-title font-30 text-dark"></i>
 
                     </div>
                     <div class="media-body align-self-center">
@@ -183,7 +183,7 @@
                             width="100%" height="100%">
                     </div> --}}
                     <div class="avatar-md mr-2">
-                        <i class="mdi mdi-thumb-down avatar-title font-30 text-dark"></i>
+                        <i class="fa fa-users avatar-title font-30 text-dark"></i>
 
                     </div>
                     <div class="media-body align-self-center">
