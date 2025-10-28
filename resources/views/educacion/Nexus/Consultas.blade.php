@@ -159,14 +159,6 @@
                                 <table class="table table-striped table-bordered font-12 text-dark">
                                     <tbody>
                                         <tr>
-                                            <td class="text-left table-cyan">UGEL</td>
-                                            <td class="text-left" id="i01"></td>
-                                            <td class="text-left table-cyan">PROVINCIA</td>
-                                            <td class="text-left" id="i02"></td>
-                                            <td class="text-left table-cyan">DISTRITO</td>
-                                            <td class="text-left" id="i03"></td>
-                                        </tr>
-                                        <tr>
                                             <td class="text-left table-cyan">INSTITUCION EDUCATIVA</td>
                                             <td class="text-left" id="i04" colspan="3"></td>
                                             <td class="text-left table-cyan">COÓDIGO MODULAR</td>
@@ -183,10 +175,18 @@
                                         <tr>
                                             <td class="text-left table-cyan">ZONA</td>
                                             <td class="text-left" id="i09"></td>
-                                            <td class="text-left table-cyan">NIVEL EDUCATIVO</td>
-                                            <td class="text-left" id="i10"></td>
                                             <td class="text-left table-cyan">MODALIDAD</td>
                                             <td class="text-left" id="i11"></td>
+                                            <td class="text-left table-cyan">NIVEL EDUCATIVO</td>
+                                            <td class="text-left" id="i10"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left table-cyan">UGEL</td>
+                                            <td class="text-left" id="i01"></td>
+                                            <td class="text-left table-cyan">PROVINCIA</td>
+                                            <td class="text-left" id="i02"></td>
+                                            <td class="text-left table-cyan">DISTRITO</td>
+                                            <td class="text-left" id="i03"></td>
                                         </tr>
 
                                     </tbody>
