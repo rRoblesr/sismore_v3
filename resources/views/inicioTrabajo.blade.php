@@ -217,11 +217,11 @@
         function Grafico_oferta_demanda_colocados() {
             
             $.ajax({  
-                headers: {
-                     'X-CSRF-TOKEN': $('input[name=_token]').val()
-                },                           
+                // headers: {
+                //      'X-CSRF-TOKEN': $('input[name=_token]').val()
+                // },                           
                 url: "{{ url('/') }}/ProEmpleo/Grafico_oferta_demanda_colocados/"+0,
-                type: 'post',
+                type: 'get',
             }).done(function (data) {               
                 $('#Grafico_oferta_demanda_colocados').html(data);
             }).fail(function () {
@@ -232,11 +232,11 @@
         function Grafico_Promedio_Remuneracion() {
             
             $.ajax({  
-                headers: {
-                     'X-CSRF-TOKEN': $('input[name=_token]').val()
-                },                           
+                // headers: {
+                //      'X-CSRF-TOKEN': $('input[name=_token]').val()
+                // },                           
                 url: "{{ url('/') }}/AnuarioEstadistico/Grafico_Promedio_Remuneracion/"+0,
-                type: 'post',
+                type: 'get',
             }).done(function (data) {               
                 $('#Grafico_Promedio_Remuneracion').html(data);
             }).fail(function () {
@@ -247,11 +247,11 @@
         function Grafico_Promedio_Trabajadores() {
             
             $.ajax({  
-                headers: {
-                     'X-CSRF-TOKEN': $('input[name=_token]').val()
-                },                           
+                // headers: {
+                //      'X-CSRF-TOKEN': $('input[name=_token]').val()
+                // },                           
                 url: "{{ url('/') }}/AnuarioEstadistico/Grafico_Promedio_Trabajadores/"+0,
-                type: 'post',
+                type: 'get',
             }).done(function (data) {               
                 $('#Grafico_Promedio_Trabajadores').html(data);
             }).fail(function () {
@@ -262,11 +262,11 @@
         function Grafico_Prestadores_Servicio4ta_Publico() {
             
             $.ajax({  
-                headers: {
-                     'X-CSRF-TOKEN': $('input[name=_token]').val()
-                },                           
+                // headers: {
+                //      'X-CSRF-TOKEN': $('input[name=_token]').val()
+                // },                           
                 url: "{{ url('/') }}/AnuarioEstadistico/Grafico_Prestadores_Servicio4ta_Publico/"+0,
-                type: 'post',
+                type: 'get',
             }).done(function (data) {               
                 $('#Grafico_Prestadores_Servicio4ta_Publico').html(data);
             }).fail(function () {
@@ -277,11 +277,11 @@
         function Grafico_Prestadores_Servicio4ta_Privado() {
             
             $.ajax({  
-                headers: {
-                     'X-CSRF-TOKEN': $('input[name=_token]').val()
-                },                           
+                // headers: {
+                //      'X-CSRF-TOKEN': $('input[name=_token]').val()
+                // },                           
                 url: "{{ url('/') }}/AnuarioEstadistico/Grafico_Prestadores_Servicio4ta_Privado/"+0,
-                type: 'post',
+                type: 'get',
             }).done(function (data) {               
                 $('#Grafico_Prestadores_Servicio4ta_Privado').html(data);
             }).fail(function () {

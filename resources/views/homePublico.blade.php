@@ -18,7 +18,7 @@
         @elseif (session('sistema_publico_id') == 5)
             @include('inicioPresupuesto')
         @elseif (session('sistema_publico_id') == 6)
-            @include('inicioTrabajoPublico')
+            @include('inicioTrabajo')
         @else
             <h5>.....</h5>
         @endif

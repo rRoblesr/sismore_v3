@@ -120,7 +120,7 @@ class NexusRepositorio
                 DB::raw('COUNT(DISTINCT nx.cod_plaza) AS conteo')
             )
             //->where('stt.dependencia', 1)
-            ->whereIn('stt.id', [8, 9, 15, 17])
+            ->whereIn('stt.id', [8, 9, 15,17])
             ->where('nx.importacion_id', function ($query) use ($anio) {
                 $query->select('id')
                     ->from('par_importacion')
@@ -147,7 +147,7 @@ class NexusRepositorio
                         ->join('edu_nexus_regimen_laboral as stt', function ($join) {
                             $join->on('stt.id', '=', 'nx.regimenlaboral_id')
                                 //->where('stt.dependencia', 1)
-                                ->whereIn('stt.id', [8, 9, 15, 17]);
+                                ->whereIn('stt.id', [8, 9, 15]);
                         })
                         ->join('edu_nexus_institucion_educativa as ie', 'ie.id', '=', 'nx.institucioneducativa_id')
                         ->join('edu_nexus_nivel_educativo as nm', 'nm.id', '=', 'ie.niveleducativo_id')
@@ -206,7 +206,7 @@ class NexusRepositorio
                 DB::raw('COUNT(DISTINCT nx.cod_plaza) AS y')
             )
             // ->where('stt.dependencia', 1)
-            ->whereIn('stt.id', [8, 9, 15, 17])
+            ->whereIn('stt.id', [8, 9, 15])
             ->where('nx.importacion_id', function ($query) use ($anio) {
                 $query->select('id')
                     ->from('par_importacion')
@@ -239,7 +239,7 @@ class NexusRepositorio
                 DB::raw('COUNT(DISTINCT nx.cod_plaza) AS y')
             )
             // ->where('stt.dependencia', 1)
-            ->whereIn('stt.id', [8, 9, 15, 17])
+            ->whereIn('stt.id', [8, 9, 15])
             ->where('nx.importacion_id', function ($query) use ($anio) {
                 $query->select('id')
                     ->from('par_importacion')
@@ -271,7 +271,7 @@ class NexusRepositorio
                 DB::raw('COUNT(DISTINCT nx.cod_plaza) AS y')
             )
             // ->where('stt.dependencia', 1)
-            ->whereIn('stt.id', [8, 9, 15, 17])
+            ->whereIn('stt.id', [8, 9, 15])
             ->where('nx.importacion_id', function ($query) use ($anio) {
                 $query->select('id')
                     ->from('par_importacion')
@@ -546,6 +546,7 @@ class NexusRepositorio
             ->leftJoin('edu_nexus_zona as z', 'z.id', '=', 'ie.zona_id')
             ->leftJoin('edu_nexus_nivel_educativo as nm', 'nm.id', '=', 'ie.niveleducativo_id')
             ->where('t.num_documento', $num_documento)
+            ->orderBy('anio','desc')->orderBy('cod_plaza','desc')
             ->get();
     }
 

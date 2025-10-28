@@ -1,6 +1,6 @@
 @switch($div)
     @case('tabla1')
-        <table id="tabla1" class="table table-sm table-striped table-bordered font-11">
+        <table id="tabla1" class="table table-striped table-bordered font-12">
             <thead>
                 <tr class="table-success-0 text-white">
                     <th class="text-center" rowspan="2">UGEL</th>
@@ -60,7 +60,7 @@
     @break
 
     @case('tabla2')
-        <table id="tabla2" class="table table-sm table-striped table-bordered font-11">
+        <table id="tabla2" class="table table-striped table-bordered font-12">
             <thead>
                 <tr class="table-success-0 text-white">
                     <th class="text-center" rowspan="2">LEY</th>
@@ -120,7 +120,7 @@
     @break
 
     @case('tabla3')
-        <table id="tabla3" class="table table-sm table-striped table-bordered font-11">
+        <table id="tabla3" class="table table-striped table-bordered font-12">
             <thead>
                 <tr class="table-success-0 text-white">
                     <th class="text-center" rowspan="2">DISTRITO</th>
@@ -180,7 +180,7 @@
     @break
 
     @case('tabla4')
-        <table id="tabla4" class="table table-sm table-striped table-bordered font-11">
+        <table id="tabla4" class="table table-striped table-bordered font-12">
             <thead>
                 <tr class="table-success-0 text-white">
                     <th class="text-center">N°</th>

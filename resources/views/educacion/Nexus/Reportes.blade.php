@@ -484,11 +484,11 @@
                             break;
                         case 'anal3':
                             crearGraficoDistribucionPlazas(div, data,
-                                'Distribución de Plazas Auxiliares de Educación, según Sexo');
+                                'Distribución de Plazas Docentes de Educación, según Sexo');
                             break;
                         case 'anal4':
                             crearGraficoDistribucionPlazas(div, data,
-                                'Distribución de Plazas Auxiliares de Educación, según Tipo de Trabajador');
+                                'Distribución de Plazas Docentes de Educación, según Tipo de Trabajador');
                             break;
                         case 'tabla1':
                             $('#ctabla1').html(data.excel);

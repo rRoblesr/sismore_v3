@@ -237,11 +237,11 @@
         function Grafico_PEA() {
             
             $.ajax({  
-                headers: {
-                     'X-CSRF-TOKEN': $('input[name=_token]').val()
-                },                           
+                // headers: {
+                //      'X-CSRF-TOKEN': $('input[name=_token]').val()
+                // },                           
                 url: "{{ url('/') }}/IndicadorTrabajo/Grafico_PEA/" + 0,
-                type: 'post',
+                type: 'get',
             }).done(function (data) {               
                 $('#Grafico_PEA').html(data);
             }).fail(function () {
@@ -252,11 +252,11 @@
         function Grafico_PEA_IPM() {
             
             $.ajax({  
-                headers: {
-                     'X-CSRF-TOKEN': $('input[name=_token]').val()
-                },                           
+                // headers: {
+                //      'X-CSRF-TOKEN': $('input[name=_token]').val()
+                // },                           
                 url: "{{ url('/') }}/IndicadorTrabajo/Grafico_PEA_IPM/" + 0,
-                type: 'post',
+                type: 'get',
             }).done(function (data) {               
                 $('#Grafico_PEA_IPM').html(data);
             }).fail(function () {

@@ -1242,14 +1242,14 @@ Route::get('/ProEmpleo/Importar', [ProEmpleoController::class, 'importar'])->nam
 Route::post('/ProEmpleo/Importar', [ProEmpleoController::class, 'guardar'])->name('ProEmpleo.guardar');
 
 Route::get('/IndicadorTrabajo/Importar', [IndicadorTrabajoController::class, 'importar'])->name('trabajo.indicador');
-Route::post('/IndicadorTrabajo/Grafico_PEA/{id}', [IndicadorTrabajoController::class, 'Grafico_PEA'])->name('trabajo.Grafico_PEA');
-Route::post('/IndicadorTrabajo/Grafico_PEA_IPM/{id}', [IndicadorTrabajoController::class, 'Grafico_PEA_IPM'])->name('trabajo.Grafico_PEA_IPM');
+Route::get('/IndicadorTrabajo/Grafico_PEA/{id}', [IndicadorTrabajoController::class, 'Grafico_PEA'])->name('trabajo.Grafico_PEA');
+Route::get('/IndicadorTrabajo/Grafico_PEA_IPM/{id}', [IndicadorTrabajoController::class, 'Grafico_PEA_IPM'])->name('trabajo.Grafico_PEA_IPM');
 
 Route::get('/ProEmpleo/Aprobar/{importacion_id}', [ProEmpleoController::class, 'aprobar'])->name('ProEmpleo.aprobar');
 Route::post('/ProEmpleo/Aprobar/procesar/{importacion_id}', [ProEmpleoController::class, 'procesar'])->name('ProEmpleo.procesar');
 Route::get('/ProEmpleo/ListaImportada_DataTable/{importacion_id}', [ProEmpleoController::class, 'ListaImportada_DataTable'])->name('ProEmpleo.ListaImportada_DataTable');
 
-Route::post('/ProEmpleo/Grafico_oferta_demanda_colocados/{id}', [ProEmpleoController::class, 'Grafico_oferta_demanda_colocados'])->name('ProEmpleo.Grafico_oferta_demanda_colocados');
+Route::get('/ProEmpleo/Grafico_oferta_demanda_colocados/{id}', [ProEmpleoController::class, 'Grafico_oferta_demanda_colocados'])->name('ProEmpleo.Grafico_oferta_demanda_colocados');
 Route::post('/ProEmpleo/Grafico_Colocados_Hombres_Vs_Mujeres/{id}', [ProEmpleoController::class, 'Grafico_Colocados_Hombres_Vs_Mujeres'])->name('ProEmpleo.Grafico_Colocados_Hombres_Vs_Mujeres');
 Route::post('/ProEmpleo/Grafico_Colocados_per_Con_Discapacidad/{id}', [ProEmpleoController::class, 'Grafico_Colocados_per_Con_Discapacidad'])->name('ProEmpleo.Grafico_Colocados_per_Con_Discapacidad');
 Route::post('/ProEmpleo/VariablesMercado/{id}', [ProEmpleoController::class, 'VariablesMercado'])->name('ProEmpleo.VariablesMercado');
@@ -1262,24 +1262,24 @@ Route::get('/AnuarioEstadistico/Aprobar/{importacion_id}', [AnuarioEstadisticoCo
 Route::post('/AnuarioEstadistico/Aprobar/procesar/{importacion_id}', [AnuarioEstadisticoController::class, 'procesar'])->name('AnuarioEstadistico.procesar');
 Route::get('/AnuarioEstadistico/ListaImportada_DataTable/{importacion_id}', [AnuarioEstadisticoController::class, 'ListaImportada_DataTable'])->name('AnuarioEstadistico.ListaImportada_DataTable');
 
-Route::post('/AnuarioEstadistico/Grafico_Promedio_Remuneracion/{iFd}', [AnuarioEstadisticoController::class, 'Grafico_Promedio_Remuneracion']);
-Route::post('/AnuarioEstadistico/Grafico_Promedio_Trabajadores/{id}', [AnuarioEstadisticoController::class, 'Grafico_Promedio_Trabajadores']);
-Route::post('/AnuarioEstadistico/Grafico_Prestadores_Servicio4ta_Publico/{id}', [AnuarioEstadisticoController::class, 'Grafico_Prestadores_Servicio4ta_Publico']);
-Route::post('/AnuarioEstadistico/Grafico_Prestadores_Servicio4ta_Privado/{id}', [AnuarioEstadisticoController::class, 'Grafico_Prestadores_Servicio4ta_Privado']);
+Route::get('/AnuarioEstadistico/Grafico_Promedio_Remuneracion/{iFd}', [AnuarioEstadisticoController::class, 'Grafico_Promedio_Remuneracion']);
+Route::get('/AnuarioEstadistico/Grafico_Promedio_Trabajadores/{id}', [AnuarioEstadisticoController::class, 'Grafico_Promedio_Trabajadores']);
+Route::get('/AnuarioEstadistico/Grafico_Prestadores_Servicio4ta_Publico/{id}', [AnuarioEstadisticoController::class, 'Grafico_Prestadores_Servicio4ta_Publico']);
+Route::get('/AnuarioEstadistico/Grafico_Prestadores_Servicio4ta_Privado/{id}', [AnuarioEstadisticoController::class, 'Grafico_Prestadores_Servicio4ta_Privado']);
 
 Route::get('/AnuarioEstadistico/rptRemunTrabSectorPrivado/', [AnuarioEstadisticoController::class, 'rptRemunTrabSectorPrivado'])->name('AnuarioEstadistico.rptRemunTrabSectorPrivado');
 Route::get('/AnuarioEstadistico/rptRemunTrabSectorPrivado_DataTable/{id}', [AnuarioEstadisticoController::class, 'rptAnuarioEstadistico_DataTable'])->name('AnuarioEstadistico.rptAnuarioEstadistico_DataTable');
-Route::post('/AnuarioEstadistico/Grafico_Promedio_Remuneracion_porAnio/{id}', [AnuarioEstadisticoController::class, 'Grafico_Promedio_Remuneracion_porAnio'])->name('AnuarioEstadistico.Grafico_Promedio_Remuneracion_porAnio');
-Route::post('/AnuarioEstadistico/Grafico_ranking_promedio_remuneracion_regiones/{id}', [AnuarioEstadisticoController::class, 'Grafico_ranking_promedio_remuneracion_regiones'])->name('AnuarioEstadistico.Grafico_ranking_promedio_remuneracion_regiones');
+Route::get('/AnuarioEstadistico/Grafico_Promedio_Remuneracion_porAnio/{id}', [AnuarioEstadisticoController::class, 'Grafico_Promedio_Remuneracion_porAnio'])->name('AnuarioEstadistico.Grafico_Promedio_Remuneracion_porAnio');
+Route::get('/AnuarioEstadistico/Grafico_ranking_promedio_remuneracion_regiones/{id}', [AnuarioEstadisticoController::class, 'Grafico_ranking_promedio_remuneracion_regiones'])->name('AnuarioEstadistico.Grafico_ranking_promedio_remuneracion_regiones');
 
 
 Route::get('/AnuarioEstadistico/rptTrabajadoresSectorPrivado/', [AnuarioEstadisticoController::class, 'rptTrabajadoresSectorPrivado'])->name('AnuarioEstadistico.rptTrabajadoresSectorPrivado');
 Route::get('/AnuarioEstadistico/rptEmpresasSectorPrivado/', [AnuarioEstadisticoController::class, 'rptEmpresasSectorPrivado'])->name('AnuarioEstadistico.rptEmpresasSectorPrivado');
 
 Route::get('/AnuarioEstadistico/rptPrestadoresServ4taCategoria/', [AnuarioEstadisticoController::class, 'rptPrestadoresServ4taCategoria'])->name('AnuarioEstadistico.rptPrestadoresServ4taCategoria');
-Route::post('/AnuarioEstadistico/Grafico_ranking_promedio_prestadores_servicio4ta/{id}', [AnuarioEstadisticoController::class, 'Grafico_ranking_promedio_prestadores_servicio4ta'])->name('AnuarioEstadistico.Grafico_ranking_promedio_prestadores_servicio4ta');
-Route::post('/AnuarioEstadistico/Grafico_ranking_empresas_regiones/{id}', [AnuarioEstadisticoController::class, 'Grafico_ranking_empresas_regiones'])->name('AnuarioEstadistico.Grafico_ranking_empresas_regiones');
-Route::post('/AnuarioEstadistico/Grafico_promedio_Empresas_sectorPrivado/{id}', [AnuarioEstadisticoController::class, 'Grafico_promedio_Empresas_sectorPrivado'])->name('AnuarioEstadistico.Grafico_promedio_Empresas_sectorPrivado');
+Route::get('/AnuarioEstadistico/Grafico_ranking_promedio_prestadores_servicio4ta/{id}', [AnuarioEstadisticoController::class, 'Grafico_ranking_promedio_prestadores_servicio4ta'])->name('AnuarioEstadistico.Grafico_ranking_promedio_prestadores_servicio4ta');
+Route::get('/AnuarioEstadistico/Grafico_ranking_empresas_regiones/{id}', [AnuarioEstadisticoController::class, 'Grafico_ranking_empresas_regiones'])->name('AnuarioEstadistico.Grafico_ranking_empresas_regiones');
+Route::get('/AnuarioEstadistico/Grafico_promedio_Empresas_sectorPrivado/{id}', [AnuarioEstadisticoController::class, 'Grafico_promedio_Empresas_sectorPrivado'])->name('AnuarioEstadistico.Grafico_promedio_Empresas_sectorPrivado');
 
 Route::get('/Actividades/Principal', [ActividadController::class, 'Principal'])->middleware('auth')->name('Actividades.Principal');
 

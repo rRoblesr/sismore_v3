@@ -56,10 +56,10 @@ class NexusController extends Controller
             case 'head':
                 $data2025 = NexusRepositorio::reportesreporte_head($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
                 $data2024 = NexusRepositorio::reportesreporte_head($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
-                $card1 = $data2025->docentes;
-                $card2 = $data2025->auxiliar;
-                $card3 = $data2025->promotor;
-                $card4 = $data2025->administrativo;
+                $card1 = number_format($data2025->docentes, 0);
+                $card2 = number_format($data2025->auxiliar, 0);
+                $card3 = number_format($data2025->promotor, 0);
+                $card4 = number_format($data2025->administrativo, 0);
                 $pcard1 = round($data2024->docentes > 0 ? (100 * $data2025->docentes / $data2024->docentes) : 0, 1);
                 $pcard2 = round($data2024->auxiliar > 0 ? (100 * $data2025->auxiliar / $data2024->auxiliar) : 0, 1);
                 $pcard3 = round($data2024->promotor > 0 ? (100 * $data2025->promotor / $data2024->promotor) : 0, 1);
@@ -80,7 +80,7 @@ class NexusController extends Controller
                     $info[] = [$value->codigo, round($total > 0 ? 100 * $value->conteo / $total : 0, 1)];
                     $valores[$value->codigo] = ['num' => (int)$value->conteo, 'dem' => $total, 'ind' => round($total > 0 ? 100 * $value->conteo / $total : 0, 1)];
                 }
-                return response()->json(compact('info', 'valores'));
+                return response()->json(compact('info', 'valores', 'data'));
 
 
             case 'anal2':

@@ -101,11 +101,11 @@
     function Grafico_ranking_promedio_prestadores_servicio4ta() {
             
         $.ajax({  
-            headers: {
-                    'X-CSRF-TOKEN': $('input[name=_token]').val()
-            },                           
+            // headers: {
+            //         'X-CSRF-TOKEN': $('input[name=_token]').val()
+            // },                           
             url: "{{ url('/') }}/AnuarioEstadistico/Grafico_ranking_promedio_prestadores_servicio4ta/"+0,
-            type: 'post',
+            type: 'get',
         }).done(function (data) {               
             $('#Grafico_ranking_promedio_prestadores_servicio4ta').html(data);
         }).fail(function () {

@@ -113,11 +113,11 @@
     function Grafico_promedio_Empresas_sectorPrivado() {
             
         $.ajax({  
-            headers: {
-                    'X-CSRF-TOKEN': $('input[name=_token]').val()
-            },                           
+            // headers: {
+            //         'X-CSRF-TOKEN': $('input[name=_token]').val()
+            // },                           
             url: "{{ url('/') }}/AnuarioEstadistico/Grafico_promedio_Empresas_sectorPrivado/"+ 0,
-            type: 'post',
+            type: 'get',
         }).done(function (data) {               
             $('#Grafico_promedio_Empresas_sectorPrivado').html(data);
         }).fail(function () {
@@ -128,11 +128,11 @@
     function Grafico_ranking_empresas_regiones() {
             
         $.ajax({  
-            headers: {
-                    'X-CSRF-TOKEN': $('input[name=_token]').val()
-            },                           
+            // headers: {
+            //         'X-CSRF-TOKEN': $('input[name=_token]').val()
+            // },                           
             url: "{{ url('/') }}/AnuarioEstadistico/Grafico_ranking_empresas_regiones/"+ $('#anio').val(),
-            type: 'post',
+            type: 'get',
         }).done(function (data) {               
             $('#Grafico_ranking_empresas_regiones').html(data);
         }).fail(function () {

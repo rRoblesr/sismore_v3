@@ -113,11 +113,11 @@
     function Grafico_Promedio_Remuneracion_porAnio() {
             
         $.ajax({  
-            headers: {
-                    'X-CSRF-TOKEN': $('input[name=_token]').val()
-            },                           
+            // headers: {
+            //         'X-CSRF-TOKEN': $('input[name=_token]').val()
+            // },                           
             url: "{{ url('/') }}/AnuarioEstadistico/Grafico_Promedio_Remuneracion_porAnio/"+0,
-            type: 'post',
+            type: 'get',
         }).done(function (data) {               
             $('#Grafico_Promedio_Remuneracion_porAnio').html(data);
         }).fail(function () {
@@ -128,11 +128,11 @@
     function Grafico_ranking_promedio_remuneracion_regiones() {
             
             $.ajax({  
-                headers: {
-                        'X-CSRF-TOKEN': $('input[name=_token]').val()
-                },                           
+                // headers: {
+                //         'X-CSRF-TOKEN': $('input[name=_token]').val()
+                // },                           
                 url: "{{ url('/') }}/AnuarioEstadistico/Grafico_ranking_promedio_remuneracion_regiones/"+ $('#anio').val(),
-                type: 'post',
+                type: 'get',
             }).done(function (data) {               
                 $('#Grafico_ranking_promedio_remuneracion_regiones').html(data);
             }).fail(function () {

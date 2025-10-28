@@ -84,11 +84,11 @@
     function Grafico_Promedio_Trabajadores() {
             
             $.ajax({  
-                headers: {
-                     'X-CSRF-TOKEN': $('input[name=_token]').val()
-                },                           
+                // headers: {
+                //      'X-CSRF-TOKEN': $('input[name=_token]').val()
+                // },                           
                 url: "{{ url('/') }}/AnuarioEstadistico/Grafico_Promedio_Trabajadores/"+0,
-                type: 'post',
+                type: 'get',
             }).done(function (data) {               
                 $('#Grafico_Promedio_Trabajadores').html(data);
             }).fail(function () {

@@ -73,7 +73,7 @@
                 <div class="card-header bg-success-0">
                     <h3 class="card-title text-white font-14">DATOS PERSONALES</h3>
                 </div>
-                <div class="card-body px-0">
+                <div class="card-body">
                     <table class="table table-bordered table-striped table-hover font-12 m-0 text-dark">
                         <tbody>
                             <tr>
@@ -129,7 +129,7 @@
                 <div class="card-header bg-success-0">
                     <h3 class="card-title text-white font-14">DATOS LABORALES</h3>
                 </div>
-                <div class="card-body px-0">
+                <div class="card-body">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="table-responsive" id="ctabla1">
@@ -254,7 +254,7 @@
                                 $('#v03').html(data.data.nombres);
                                 $('#v04').html(data.data.sexo);
                                 $('#v05').html(data.data.fn);
-                                $('#v06').html(data.data.edad);
+                                $('#v06').html(data.data.edad + ' AÑOS');
                                 $('#v07').html(data.data.tipo_estudio);
                                 $('#v08').html(data.data.profesion);
                                 $('#v09').html(data.data.grado_obtenido);
