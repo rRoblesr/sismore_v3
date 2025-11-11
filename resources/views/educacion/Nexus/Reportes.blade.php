@@ -159,7 +159,7 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card3"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Pormotores Educativos</p>
+                            <p class="mb-0 mt-1 text-truncate">Promotores Educativos</p>
                         </div>
                     </div>
                 </div>

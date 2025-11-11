@@ -169,7 +169,7 @@
                     <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
                 </div>
                 <div class="card-body p-0">
-                    <div id="anal3" style="height: 20rem"></div>
+                    <div id="anal3" style="height: 25rem"></div>
                 </div>
             </div>
         </div>
@@ -180,7 +180,7 @@
                     <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
                 </div>
                 <div class="card-body p-0">
-                    <div id="anal1" style="height: 20rem"></div>
+                    <div id="anal1" style="height: 25rem"></div>
                 </div>
             </div>
         </div>
@@ -194,7 +194,7 @@
                     <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
                 </div>
                 <div class="card-body p-0">
-                    <div id="anal2" style="height: 20rem"></div>
+                    <div id="anal2" style="height: 25rem"></div>
                 </div>
             </div>
         </div>
@@ -205,7 +205,7 @@
                     <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
                 </div>
                 <div class="card-body p-0">
-                    <div id="anal4" style="height: 20rem"></div>
+                    <div id="anal4" style="height: 25rem"></div>
                 </div>
             </div>
         </div>

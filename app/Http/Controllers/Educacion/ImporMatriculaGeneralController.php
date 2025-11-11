@@ -96,10 +96,10 @@ class ImporMatriculaGeneralController extends Controller
             'id_seccion',
             'seccion',
             'fecha_registro',
-            'fecha_retiro',
-            'motivo_retiro',
-            'sf_regular',
-            'sf_recuperacion'
+            // 'fecha_retiro',
+            // 'motivo_retiro',
+            // 'sf_regular',
+            // 'sf_recuperacion'
         ];
 
         $encabezadosArchivo = array_keys($array[0][0]);
@@ -156,10 +156,10 @@ class ImporMatriculaGeneralController extends Controller
                     'id_seccion' => $row['id_seccion'],
                     'seccion' => $row['seccion'],
                     'fecha_registro' => $row['fecha_registro'],
-                    'fecha_retiro' => $row['fecha_retiro'],
-                    'motivo_retiro' => $row['motivo_retiro'],
-                    'sf_regular' => $row['sf_regular'],
-                    'sf_recuperacion' => $row['sf_recuperacion']
+                    'fecha_retiro' => '', // $row['fecha_retiro'],
+                    'motivo_retiro' => '', // $row['motivo_retiro'],
+                    'sf_regular' => '', // $row['sf_regular'],
+                    'sf_recuperacion' => '', // $row['sf_recuperacion']
                 ];
 
                 if (count($dataBatch) >= $batchSize) {

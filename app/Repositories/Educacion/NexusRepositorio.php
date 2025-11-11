@@ -197,7 +197,7 @@ class NexusRepositorio
             ->leftJoin('edu_nexus_institucion_educativa as ie', 'ie.id', '=', 'nx.institucioneducativa_id')
             ->leftJoin('edu_nexus_nivel_educativo as nm', 'nm.id', '=', 'ie.niveleducativo_id')
             ->leftJoin('edu_nexus_modalidad as m', 'm.id', '=', 'nm.modalidad_id')
-            ->leftJoin('edu_nexus_trabajador as t', 't.id', '=', 'nx.trabajador_id')
+            ->Join('edu_nexus_trabajador as t', 't.id', '=', 'nx.trabajador_id')
             ->leftJoin('par_sexo as s', 's.id', '=', 't.sexo_id')
             ->leftJoin('par_ubigeo as d', 'd.id', '=', 'ie.ubigeo_id')
             ->leftJoin('par_ubigeo as p', 'p.id', '=', 'd.dependencia')
