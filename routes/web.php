@@ -249,13 +249,18 @@ Route::prefix('educación/Importar/PadronWeb')
         Route::post('/PA/{proceso}/{importacion}', [ImporPadronWebController::class, 'ejecutarProcesos'])->name('procedures');
     });
 
-Route::prefix('educación/Importar')->name('impornexus.')
-    ->group(function () {
-        Route::get('/Nexus', [ImporNexusController::class, 'importar'])->name('importar'); //impornexus.importar
-        Route::post('/Guardar', [ImporNexusController::class, 'guardar'])->name('guardar'); //impornexus.guardar
-        Route::get('/ListaImportada/{importacion}', [ImporNexusController::class, 'listar_importados'])->name('listar.importados'); //impornexus.listar.importados
-        Route::delete('/eliminar/{id}', [ImporNexusController::class, 'eliminar'])->name('eliminar'); //impornexus.eliminar
-    });
+// Route::prefix('educación/Importar')->name('impornexus.')
+//     ->group(function () {
+//         Route::get('/Nexus', [ImporNexusController::class, 'importar'])->name('importar'); //impornexus.importar
+//         Route::post('/Guardar', [ImporNexusController::class, 'guardar'])->name('guardar'); //impornexus.guardar
+//         Route::get('/ListaImportada/{importacion}', [ImporNexusController::class, 'listar_importados'])->name('listar.importados'); //impornexus.listar.importados
+//         Route::delete('/eliminar/{id}', [ImporNexusController::class, 'eliminar'])->name('eliminar'); //impornexus.eliminar
+//     });
+
+Route::get('educación/Importar/PadronNexus', [ImporNexusController::class, 'importar'])->name('impornexus.importar');
+Route::post('educación/Importar/PadronNexus/Guardar', [ImporNexusController::class, 'guardar'])->name('impornexus.guardar');
+Route::get('educación/Importar/PadronNexus/ListaImportada/{importacion}', [ImporNexusController::class, 'listar_importados'])->name('impornexus.listar.importados');
+Route::delete('educación/Importar/PadronNexus/eliminar/{id}', [ImporNexusController::class, 'eliminar'])->name('impornexus.eliminar');
 
 Route::get('/educación/Importar/PadronNominal', [EducacionImporPadronNominalController::class, 'importar'])->name('edu.imporpadronnominal.importar');
 Route::post('/edu/imp/pn/Importar', [EducacionImporPadronNominalController::class, 'guardar'])->name('edu.imporpadronnominal.guardar');
@@ -272,12 +277,12 @@ Route::post('/edu/imp/pn/sp/procesar/{importacion}', [EducacionImporPadronNomina
 
 Route::get('/FuenteImportacion/cargar/{sistema_id}', [FuenteImportacionController::class, 'cargar']);
 
-Route::get('/ImporPadronEIB/Importar', [ImporPadronEibController::class, 'importar'])->name('imporpadroneib.importar');
-Route::post('/ImporPadronEIB/Importar', [ImporPadronEibController::class, 'guardar'])->name('imporpadroneib.guardar');
-Route::get('/ImporPadronEIB/Listar/ImportarDT', [ImporPadronEibController::class, 'ListarDTImportFuenteTodos'])->name('imporpadroneib.listar.importados');
-Route::post('/ImporPadronEIB/ListaImportada/{importacion_id}', [ImporPadronEibController::class, 'ListaImportada'])->name('imporpadroneib.listarimportados');
-Route::get('/ImporPadronEIB/eliminar/{id}', [ImporPadronEibController::class, 'eliminar'])->name('imporpadroneib.eliminar');
-Route::get('/ImporPadronEIB/ajax_cargar', [ImporPadronEibController::class, 'ajax_cargarnivel'])->name('padroneib.nivelmodalidad.cargar');
+Route::get('educación/Importar/PadronEIB', [ImporPadronEibController::class, 'importar'])->name('imporpadroneib.importar');
+Route::post('educación/Importar/PadronEIB', [ImporPadronEibController::class, 'guardar'])->name('imporpadroneib.guardar');
+Route::get('educación/Importar/PadronEIB/listar/DT', [ImporPadronEibController::class, 'ListarDTImportFuenteTodos'])->name('imporpadroneib.listar.importados');
+Route::post('educación/Importar/PadronEIB/ListaImportada/{importacion_id}', [ImporPadronEibController::class, 'ListaImportada'])->name('imporpadroneib.listarimportados');
+Route::delete('educación/Importar/PadronEIB/eliminar/{id}', [ImporPadronEibController::class, 'eliminar'])->name('imporpadroneib.eliminar');
+Route::get('educación/Importar/PadronEIB/ajax_cargar', [ImporPadronEibController::class, 'ajax_cargarnivel'])->name('padroneib.nivelmodalidad.cargar');
 
 
 Route::get('/ImporMatricula/Importar', [ImporMatriculaController::class, 'importar'])->name('ImporMatricula.importar');

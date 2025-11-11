@@ -44,9 +44,14 @@ class ImporPadronEIBImport implements ToModel, WithHeadingRow, WithBatchInserts,
             $this->validarEncabezados($row);
             $this->encabezadosValidados = true;
         }
-        // COD_LOCAL: vacío o "0" → null
+        $normalizarLengua = function ($lengua) {
+            if (empty($lengua)) {
+                return null;
+            }
+            $lengua = trim(strtolower($lengua));
+            return ucfirst($lengua);
+        };
         $codLocal = empty($row['cod_local']) || $row['cod_local'] == '0' ? null : $row['cod_local'];
-        // Estado: limpiar y estandarizar
         $estado = isset($row['estado']) ? strtoupper(trim($row['estado'])) : 'ACTIVA';
         return new ImporPadronEib([
             'importacion_id' => $this->importacionId,

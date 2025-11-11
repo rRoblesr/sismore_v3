@@ -965,7 +965,7 @@
                 case 9:
                     return "{{ route('importableta.eliminar', '') }}/" + id;
                 case 12:
-                    return "{{ url('/') }}/ImporPadronEIB/eliminar/" + id;
+                    return "{{ route('imporpadroneib.eliminar', ':id') }}".replace(':id', id);
                 case 32:
                     return "{{ route('imporcensodocente.eliminar', '') }}/" + id;
                 case 33:

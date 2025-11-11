@@ -3,15 +3,18 @@
 namespace App\Http\Controllers\Educacion;
 
 use App\Http\Controllers\Controller;
+use App\Imports\Educacion\ImporPadronEIBImport;
 use App\Imports\tablaXImport;
 use App\Models\Educacion\ImporPadronEib;
 use App\Models\Educacion\Importacion;
 use App\Models\Educacion\PadronEIB;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\PadronEIBRepositorio;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
 
 class ImporPadronEibController extends Controller
@@ -35,15 +38,62 @@ class ImporPadronEibController extends Controller
     function json_output($status = 200, $msg = 'OK!!', $data = null)
     {
         header('Content-Type:application/json');
-        echo json_encode([
-            'status' => $status,
-            'msg' => $msg,
-            'data' => $data
-        ]);
+        echo json_encode(['status' => $status, 'msg' => $msg, 'data' => $data]);
         die;
     }
 
-    public function guardar(Request $request)
+    public function guardar(Request $rq)
+    {
+        $rq->validate([
+            'file' => 'required|file|mimes:xlsx,xls,csv|max:10240',
+            'fechaActualizacion' => 'required|date_format:Y-m-d',
+        ]);
+
+        $fechaActualizacion = Carbon::createFromFormat('Y-m-d', $rq->fechaActualizacion)->startOfDay();
+        $usuarioId = auth()->user()->id;
+
+        $importacionExistente = Importacion::where('fuenteImportacion_id', $this->fuente)
+            ->whereDate('fechaActualizacion', $fechaActualizacion)
+            ->whereIn('estado', ['PE', 'PR'])
+            ->first();
+
+        if ($importacionExistente) {
+            return $this->json_output(400, 'Ya existe una importación pendiente o procesada para esta fuente y fecha.');
+        }
+
+        $importacion = Importacion::create([
+            'fuenteImportacion_id' => $this->fuente,
+            'usuarioId_Crea' => $usuarioId,
+            'fechaActualizacion' => $fechaActualizacion,
+            'estado' => 'PE',
+        ]);
+
+        try {
+            Excel::import(new ImporPadronEIBImport($importacion->id), $rq->file('file'), null, \Maatwebsite\Excel\Excel::XLSX, 0);
+            $importacion->update(['estado' => 'PR']);
+        } catch (\InvalidArgumentException $e) {
+            return $this->json_output(
+                400,
+                'Archivo inválido: ' . $e->getMessage()
+            );
+        } catch (\Exception $e) {
+            $importacion->update(['estado' => 'EL']);
+            return $this->json_output(400, 'Error al importar el archivo: ' . $e->getMessage());
+        }
+
+        // try {
+        //     DB::select('call edu_pa_procesarImporNexus(?)', [$importacion->id]);
+        // } catch (Exception $e) {
+        //     $importacion->update(['estado' => 'EL']);
+
+        //     $mensaje = "Error al procesar la normalizacion de datos.<br>" . $e;
+        //     $this->json_output(400, $mensaje);
+        // }
+
+        return $this->json_output(200, 'Archivo importado exitosamente.');
+    }
+
+    public function guardarxxx(Request $request)
     {
         $existeMismaFecha = ImportacionRepositorio::Importacion_PE($request->fechaActualizacion, $this->fuente);
         if ($existeMismaFecha != null) {
@@ -176,7 +226,7 @@ class ImporPadronEibController extends Controller
                 $value->fuente,
                 $nom . ' ' . $ape,
                 date("d/m/Y", strtotime($value->created_at)),
-                $value->comentario,
+                '', //$value->comentario,
                 $value->estado == "PR" ? "PROCESADO" : ($value->estado == "PE" ? "PENDIENTE" : "ELIMINADO"),
                 $boton . '&nbsp;' . $boton2,
             );
@@ -241,15 +291,20 @@ class ImporPadronEibController extends Controller
 
     public function eliminar($id)
     {
-        /* $entidad = Importacion::find($id);
-        $entidad->estado = 'EL';
-        $entidad->save(); */
+        try {
+            // Eliminar registros relacionados
+            PadronEIB::where('importacion_id', $id)->delete();
+            ImporPadronEib::where('importacion_id', $id)->delete();
 
-        PadronEIB::where('importacion_id', $id)->delete();
-        ImporPadronEib::where('importacion_id', $id)->delete();
-        Importacion::find($id)->delete();
+            // Eliminar cabecera
+            $importacion = Importacion::findOrFail($id);
+            $importacion->delete();
 
-        return response()->json(['status' => true]);
+            return response()->json(['status' => true]);
+        } catch (\Exception $e) {
+            \Log::error('Error al eliminar importación ID ' . $id . ': ' . $e->getMessage());
+            return response()->json(['status' => false], 500);
+        }
     }
 
     public function ajax_cargarnivel(Request $rq)
