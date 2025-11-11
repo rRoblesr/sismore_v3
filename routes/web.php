@@ -272,11 +272,11 @@ Route::post('/edu/imp/pn/sp/procesar/{importacion}', [EducacionImporPadronNomina
 
 Route::get('/FuenteImportacion/cargar/{sistema_id}', [FuenteImportacionController::class, 'cargar']);
 
-Route::get('/ImporPadronEIB/Importar', [ImporPadronEibController::class, 'importar'])->name('PadronEIB.importar');
+Route::get('/ImporPadronEIB/Importar', [ImporPadronEibController::class, 'importar'])->name('imporpadroneib.importar');
 Route::post('/ImporPadronEIB/Importar', [ImporPadronEibController::class, 'guardar'])->name('imporpadroneib.guardar');
 Route::get('/ImporPadronEIB/Listar/ImportarDT', [ImporPadronEibController::class, 'ListarDTImportFuenteTodos'])->name('imporpadroneib.listar.importados');
 Route::post('/ImporPadronEIB/ListaImportada/{importacion_id}', [ImporPadronEibController::class, 'ListaImportada'])->name('imporpadroneib.listarimportados');
-Route::get('/ImporPadronEIB/eliminar/{id}', [ImporPadronEibController::class, 'eliminar']);
+Route::get('/ImporPadronEIB/eliminar/{id}', [ImporPadronEibController::class, 'eliminar'])->name('imporpadroneib.eliminar');
 Route::get('/ImporPadronEIB/ajax_cargar', [ImporPadronEibController::class, 'ajax_cargarnivel'])->name('padroneib.nivelmodalidad.cargar');
 
 

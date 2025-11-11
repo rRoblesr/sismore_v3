@@ -7,17 +7,12 @@ use App\Imports\tablaXImport;
 use App\Models\Educacion\ImporPadronEib;
 use App\Models\Educacion\Importacion;
 use App\Models\Educacion\PadronEIB;
-use App\Models\Parametro\Anio;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\PadronEIBRepositorio;
-use App\Utilities\Utilitario;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
-
-use function PHPUnit\Framework\isNull;
 
 class ImporPadronEibController extends Controller
 {
@@ -137,15 +132,15 @@ class ImporPadronEibController extends Controller
             $this->json_output(400, $mensaje);
         }
 
-        try {
-            $procesar = DB::select('call edu_pa_procesarPadronEIB(?,?)', [$importacion->id, $importacion->usuarioId_Crea]);
-        } catch (Exception $e) {
-            $importacion->estado = 'EL';
-            $importacion->save();
+        // try {
+        //     $procesar = DB::select('call edu_pa_procesarPadronEIB(?,?)', [$importacion->id, $importacion->usuarioId_Crea]);
+        // } catch (Exception $e) {
+        //     $importacion->estado = 'EL';
+        //     $importacion->save();
 
-            $mensaje = "Error al procesar la normalizacion de datos." . $e;
-            $this->json_output(400, $mensaje);
-        }
+        //     $mensaje = "Error al procesar la normalizacion de datos." . $e;
+        //     $this->json_output(400, $mensaje);
+        // }
         $mensaje = "Archivo excel subido y Procesado correctamente .";
         $this->json_output(200, $mensaje, '');
     }

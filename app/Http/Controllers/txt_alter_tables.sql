@@ -3134,3 +3134,15 @@ ALTER TABLE `adm_menu` CHANGE `tipo_enlace` `tipo_enlace` INT(11) NOT NULL DEFAU
 SELECT * FROM `adm_menu` where url like'%imporpadronweb.exportar%';
 cambiar por =>ImporPadronWeb.exportar
 
+-- imporpadroneib
+PadronEIB.importar => imporpadroneib.importar;
+ALTER TABLE `edu_impor_padron_eib` 
+CHANGE `lengua_uno` `lengua_1` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL, 
+CHANGE `lengua_dos` `lengua_2` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
+ALTER TABLE `edu_impor_padron_eib` CHANGE `anio` `periodo` INT(11) NULL DEFAULT NULL;
+ALTER TABLE `edu_impor_padron_eib` ADD `estado` VARCHAR(10) NULL DEFAULT NULL AFTER `lengua_3`;
+ALTER TABLE `edu_impor_padron_eib` CHANGE `updated_at` `updated_at` TIMESTAMP on update CURRENT_TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP;
+eliminar la comuna dre
+
+
+
