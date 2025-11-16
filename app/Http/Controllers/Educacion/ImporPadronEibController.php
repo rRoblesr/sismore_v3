@@ -52,11 +52,7 @@ class ImporPadronEibController extends Controller
         $fechaActualizacion = Carbon::createFromFormat('Y-m-d', $rq->fechaActualizacion)->startOfDay();
         $usuarioId = auth()->user()->id;
 
-        $importacionExistente = Importacion::where('fuenteImportacion_id', $this->fuente)
-            ->whereDate('fechaActualizacion', $fechaActualizacion)
-            ->whereIn('estado', ['PE', 'PR'])
-            ->first();
-
+        $importacionExistente = Importacion::where('fuenteImportacion_id', $this->fuente)->whereDate('fechaActualizacion', $fechaActualizacion)->whereIn('estado', ['PE', 'PR'])->first();
         if ($importacionExistente) {
             return $this->json_output(400, 'Ya existe una importación pendiente o procesada para esta fuente y fecha.');
         }
@@ -72,23 +68,20 @@ class ImporPadronEibController extends Controller
             Excel::import(new ImporPadronEIBImport($importacion->id), $rq->file('file'), null, \Maatwebsite\Excel\Excel::XLSX, 0);
             $importacion->update(['estado' => 'PR']);
         } catch (\InvalidArgumentException $e) {
-            return $this->json_output(
-                400,
-                'Archivo inválido: ' . $e->getMessage()
-            );
+            return $this->json_output(400, 'Archivo inválido: ' . $e->getMessage());
         } catch (\Exception $e) {
             $importacion->update(['estado' => 'EL']);
             return $this->json_output(400, 'Error al importar el archivo: ' . $e->getMessage());
         }
 
-        // try {
-        //     DB::select('call edu_pa_procesarImporNexus(?)', [$importacion->id]);
-        // } catch (Exception $e) {
-        //     $importacion->update(['estado' => 'EL']);
+        try {
+            DB::select('call edu_pa_procesarPadronEIB(?)', [$importacion->id]);
+        } catch (Exception $e) {
+            $importacion->update(['estado' => 'EL']);
 
-        //     $mensaje = "Error al procesar la normalizacion de datos.<br>" . $e;
-        //     $this->json_output(400, $mensaje);
-        // }
+            $mensaje = "Error al procesar la normalizacion de datos.<br>" . $e;
+            return $this->json_output(400, $mensaje);
+        }
 
         return $this->json_output(200, 'Archivo importado exitosamente.');
     }

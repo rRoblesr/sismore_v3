@@ -194,8 +194,8 @@
                     <th class="text-center">Total Plazas</th>
                     <th class="text-center">Docente</th>
                     <th class="text-center">Auxiliar de Educación</th>
-                    <th class="text-center">Personal Administrativo</th>
                     <th class="text-center">Promotores Educativos</th>
+                    <th class="text-center">Personal Administrativo</th>
                 </tr>
             </thead>
             <tbody>
@@ -212,8 +212,8 @@
                         <td class="text-center">{{ $item->conteo }}</td>
                         <td class="text-center">{{ $item->docentes }}</td>
                         <td class="text-center">{{ $item->auxiliar }}</td>
-                        <td class="text-center">{{ $item->administrativo }}</td>
                         <td class="text-center">{{ $item->promotor }}</td>
+                        <td class="text-center">{{ $item->administrativo }}</td>
                     </tr>
                 @endforeach
             </tbody>

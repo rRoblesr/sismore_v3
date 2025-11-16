@@ -9,7 +9,7 @@ class PadronEIB extends Model
 {
     use HasFactory;
 
-    protected $table = "edu_padron_EIB";
+    protected $table = "edu_padron_eib";
 
     /**
      * The attributes that are mass assignable.
@@ -18,8 +18,8 @@ class PadronEIB extends Model
      */
     protected $fillable = [
         'importacion_id',
-        'anio_id',
         'institucioneducativa_id',
+        'periodo',
         'forma_atencion',
         'cod_lengua',
         'lengua1_id',

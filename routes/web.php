@@ -489,6 +489,10 @@ Route::post('/MatriculaDetalle/EIB/grafica4', [MatriculaDetalleController::class
 Route::post('/MatriculaDetalle/EIB/tabla1', [MatriculaDetalleController::class, 'cargarEIBtabla1'])->name('matriculadetalle.eib.tabla1');
 Route::post('/MatriculaDetalle/EIB/tabla2', [MatriculaDetalleController::class, 'cargarEIBtabla2'])->name('matriculadetalle.eib.tabla2');
 
+Route::get('/educación/EIB/Reportes', [PadronEIBController::class, 'reportes'])->name('educacion.padron.eib.reportes');
+Route::get('/educación/EIB/Reportes/Reporte', [PadronEIBController::class, 'reportesreporte'])->name('educacion.padron.eib.reportes.reporte');
+// Route::get('/educación/EIB/Reportes/Download/1/{div}/{anio}/{ugel}/{modalidad}/{nivel}', [NexusController::class, 'reportesrdownloadexcel'])->name('educacion.nexus.reportes.download.excel');
+
 Route::get('/educación/Importar/CensoDocente', [ImporCensoDocenteController::class, 'importar'])->name('imporcensodocente.importar');
 Route::post('/ImporCensoDocente/Importar', [ImporCensoDocenteController::class, 'guardar'])->name('imporcensodocente.guardar');
 Route::get('/ImporCensoDocente/Listar/ImportarDT', [ImporCensoDocenteController::class, 'ListarDTImportFuenteTodos'])->name('imporcensodocente.listar.importados');

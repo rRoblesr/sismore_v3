@@ -10,9 +10,17 @@ class Lengua extends Model
     use HasFactory;
     protected $table = 'par_lengua';
     public $timestamps = false;
-
     protected $fillable = [
+        'codigo',
         'nombre',
-        'estado',
+        'familia_linguistica',
+        'ambito_id',
+        'pueblos_hablantes',
+        'resolucion_ministerial'
     ];
+
+    public function ambito()
+    {
+        return $this->belongsTo(LenguaAmbito::class, 'ambito_id');
+    }
 }

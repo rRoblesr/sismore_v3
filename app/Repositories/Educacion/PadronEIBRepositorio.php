@@ -2,6 +2,10 @@
 
 namespace App\Repositories\Educacion;
 
+use App\Http\Controllers\Educacion\ImporMatriculaGeneralController;
+use App\Http\Controllers\Educacion\ImporPadronEibController;
+use App\Http\Controllers\Educacion\ImporPadronWebController;
+use App\Models\Educacion\Importacion;
 use App\Models\Educacion\PadronEIB;
 use Illuminate\Support\Facades\DB;
 
@@ -123,5 +127,33 @@ class PadronEIBRepositorio
         return PadronEIB::select('v1.id')
             ->join('par_importacion as v1', 'v1.id', '=', 'edu_padron_eib.importacion_id')
             ->orderBy('v1.fechaActualizacion', 'desc')->first()->id;
+    }
+
+    public static function rango_anios_segun_eib()
+    {
+        $minYear = Importacion::where('fuenteImportacion_id', ImporPadronEibController::$FUENTE)->where('estado', 'PR')->min(\DB::raw('YEAR(fechaActualizacion)'));
+        $maxYear = Importacion::where('fuenteImportacion_id', ImporPadronWebController::$FUENTE)->where('estado', 'PR')->max(\DB::raw('YEAR(fechaActualizacion)'));
+        return range($minYear, $maxYear);
+    }
+
+    public static function generarMapaAniosEib()
+    {
+        // Obtener rango global (puedes usar tu método existente o este simple)
+        $minYear = \DB::table('par_importacion')->whereIn('fuenteImportacion_id', [ImporPadronEibController::$FUENTE, ImporMatriculaGeneralController::$FUENTE])->where('estado', 'PR')->min(\DB::raw('YEAR(fechaActualizacion)'));
+
+        $maxYear = \DB::table('par_importacion')
+            ->whereIn('fuenteImportacion_id', [ImporPadronEibController::$FUENTE, ImporMatriculaGeneralController::$FUENTE])
+            ->where('estado', 'PR')
+            ->max(\DB::raw('YEAR(fechaActualizacion)'));
+
+        $minYear = $minYear ?: 2019;
+        $maxYear = max($maxYear ?: 2025, 2025);
+
+        $mapa = [];
+        for ($year = $maxYear; $year >= $minYear; $year--) {
+            $mapa[$year] = self::mapearAnioAEib($year);
+        }
+
+        return $mapa;
     }
 }

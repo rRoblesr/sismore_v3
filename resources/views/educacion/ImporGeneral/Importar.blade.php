@@ -889,10 +889,33 @@
                     form.trigger('reset');
                     //alert(res.msg);
                 }
-            }).fail(err => {
+            }).fail(function(jqXHR, textStatus, errorThrown) {
                 progress_bar.removeClass('bg-success bg-info').addClass('bg-danger');
-                //progress_bar.html('Hubo un error!!');
-                progress_bar.html('Archivo desconocido');
+
+                let msg = 'Error: ' + textStatus;
+
+                // Intentar leer el mensaje del servidor (si hay respuesta)
+                if (jqXHR.responseJSON && jqXHR.responseJSON.msg) {
+                    msg = jqXHR.responseJSON.msg; // ← ¡Este es el mensaje de PHP!
+                } else if (jqXHR.responseText) {
+                    // ¿Es HTML? (página de error de Laravel)
+                    if (jqXHR.responseText.includes('<!DOCTYPE') || jqXHR.responseText.includes('<html')) {
+                        msg = 'Error interno del servidor (ver consola)';
+                        console.error('Respuesta HTML recibida (error no controlado):', jqXHR.responseText);
+                    } else {
+                        // Texto plano o JSON inválido
+                        msg = 'Respuesta inválida: ' + jqXHR.responseText.substring(0, 100) + '...';
+                    }
+                } else if (errorThrown) {
+                    msg = 'Error: ' + errorThrown;
+                }
+
+                progress_bar.html(msg);
+                console.warn('AJAX FALLÓ', { jqXHR, textStatus, errorThrown });
+            // }).fail(err => {
+            //     progress_bar.removeClass('bg-success bg-info').addClass('bg-danger');
+            //     // progress_bar.html('Hubo un error!!');
+            //     progress_bar.html('Archivo desconocido');
             }).always(() => {
                 $('button', form).attr('disabled', false);
             });

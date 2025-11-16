@@ -45,6 +45,7 @@ class NexusController extends Controller
         $anios = ImportacionRepositorio::anios_porfuente_select(ImporNexusController::$FUENTE);
         $aniomax = $anios->max('anio');
         $mensaje = "";
+        // return json_encode(compact('anios', 'aniomax', 'mensaje'));
         return view('educacion.Nexus.Reportes', compact('anios', 'aniomax', 'mensaje'));
     }
 
@@ -153,7 +154,7 @@ class NexusController extends Controller
                     $foot->tpc = $base->sum('tpc');
                 }
                 $excel = view('educacion.Nexus.ReportesTablas', compact('div', 'base', 'foot'))->render();
-                return response()->json(compact('excel'));
+                return response()->json(compact('excel', 'base', 'foot'));
                 // return response()->json(compact('div', 'base', 'foot'));
 
             case 'tabla3':

@@ -23,22 +23,11 @@ class ImporPadronEib extends Model
     protected $fillable = [
         'importacion_id',
         'periodo',
-        'ugel',
-        'departamento',
-        'provincia',
-        'distrito',
-        'centro_poblado',
         'cod_mod',
-        'cod_local',
-        'institucion_educativa',
-        'cod_nivelmod',
-        'nivel_modalidad',
         'forma_atencion',
-        'cod_lengua',
         'lengua_1',
         'lengua_2',
         'lengua_3',
-        'estado',
     ];
 
     /**

@@ -73,76 +73,6 @@ class PadronEIBController extends Controller
         );
         return response()->json($result);
     }
-    /*
-    private function _validate_ajaxopt1($rq)
-    {
-        $data = array();
-        $data['error_string'] = array();
-        $data['inputerror'] = array();
-        $data['status'] = TRUE;
-
-
-        if ($rq->idiiee_padronweb == '') {
-            $data['inputerror'][] = 'codigomodular_padronweb';
-            $data['error_string'][] = '<br>Este campo es obligatorio buscar.';
-            $data['status'] = FALSE;
-        }
-
-        if ($rq->estado_padronweb == 'SI') {
-            $data['inputerror'][] = 'codigomodular_padronweb';
-            $data['error_string'][] = '<br> Servicio Educativo Registrado en el Padron EIB.';
-            $data['status'] = FALSE;
-        }
-
-        if ($data['status'] === FALSE) {
-            echo json_encode($data);
-            exit();
-        }
-    }
-    public function ajax_add_opt1(Request $rq)
-    {
-        $this->_validate_ajaxopt1($rq);
-        $query = DB::table('edu_padron_eib as v1')
-            ->join('par_importacion as v2', 'v2.id', '=', 'v1.importacion_id')
-            ->orderBy('v2.fechaActualizacion', 'desc')
-            ->take(1)
-            ->select('v2.id', 'v1.anio_id as ano')
-            ->get();
-        $data = [
-            'importacion_id' => $query->first()->id,
-            'anio_id' => $query->first()->ano,
-            'institucioneducativa_id' => $rq->idiiee_padronweb,
-            'forma_atencion' => $rq->formaatencion_padronweb,
-            'cod_lengua' => $rq->codigolengua_padronweb,
-            'lengua_uno' => $rq->lenguauno_padronweb,
-            'lengua_dos' => $rq->lenguados_padronweb,
-            'lengua_3' => $rq->lengua3_padronweb,
-        ];
-        //return response()->json(['status' => TRUE, 'info' => $data]);
-        $eib = PadronEIB::Create($data);
-        if ($eib) {
-            $iiee = InstitucionEducativa::find($rq->idiiee_padronweb);
-            $iiee->es_eib = 'SI';
-            $iiee->save();
-        }
-        return response()->json(['status' => TRUE, 'info' => $eib]);
-    }
-
-    public function ajax_delete_opt1($idpadroneib)
-    {
-        $eib = PadronEIB::find($idpadroneib);
-        if ($eib) {
-            $iiee = InstitucionEducativa::find($eib->institucioneducativa_id);
-            $iiee->es_eib = null;
-            $iiee->save();
-        }
-        $eib->delete();
-        return response()->json(['status' => TRUE, 'eib' => $eib]);
-    } */
-
-    /*  */
-    /*  */
-    /*  */
 
     private function _validate($rq)
     {
@@ -206,6 +136,7 @@ class PadronEIBController extends Controller
 
         return response()->json(array('status' => true));
     }
+
     public function ajax_edit($id)
     {
         $eib = PadronEIB::find($id);
@@ -225,6 +156,7 @@ class PadronEIBController extends Controller
         //ib->lengua1=Lengua::find($eib->lengua1_id)->id;
         return response()->json(compact('eib'));
     }
+
     public function ajax_delete($id)
     {
         $eib = PadronEIB::find($id);
@@ -235,5 +167,154 @@ class PadronEIBController extends Controller
         }
         $eib->delete();
         return response()->json(array('status' => true));
+    }
+
+    public function reportes()
+    {
+        $fuenteId = ImporMatriculaGeneralController::$FUENTE;
+        $anios = PadronEIBRepositorio::rango_anios_segun_eib();
+        $aniomax = max($anios);
+        return view('educacion.EIB.Reportes', compact('anios', 'aniomax'));
+    }
+
+    public function reportesreporte(Request $rq)
+    {
+        $div = $rq->div;
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronWebController::$FUENTE);
+        switch ($rq->div) {
+            case 'head':
+                $data2025 = NexusRepositorio::reportesreporte_head($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
+                $data2024 = NexusRepositorio::reportesreporte_head($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
+                $card1 = number_format($data2025->docentes, 0);
+                $card2 = number_format($data2025->auxiliar, 0);
+                $card3 = number_format($data2025->promotor, 0);
+                $card4 = number_format($data2025->administrativo, 0);
+                $pcard1 = round($data2024->docentes > 0 ? (100 * $data2025->docentes / $data2024->docentes) : 0, 1);
+                $pcard2 = round($data2024->auxiliar > 0 ? (100 * $data2025->auxiliar / $data2024->auxiliar) : 0, 1);
+                $pcard3 = round($data2024->promotor > 0 ? (100 * $data2025->promotor / $data2024->promotor) : 0, 1);
+                $pcard4 = round($data2024->administrativo > 0 ? (100 * $data2025->administrativo / $data2024->administrativo) : 0, 1);
+                return response()->json(compact('card1', 'card2', 'card3', 'card4', 'pcard1', 'pcard2', 'pcard3', 'pcard4'));
+            case 'anal1':
+                $pe_pv = [
+                    '2501' => 'pe-uc-cp',
+                    '2502' => 'pe-uc-at',
+                    '2503' => 'pe-uc-pa',
+                    '2504' => 'pe-uc-pr',
+                ];
+                $info = [];
+                $valores = [];
+                $data = NexusRepositorio::reportesreporte_anal1($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
+                $total = $data->sum('conteo');
+                foreach ($data as $key => $value) {
+                    $info[] = [$value->codigo, round($total > 0 ? 100 * $value->conteo / $total : 0, 1)];
+                    $valores[$value->codigo] = ['num' => (int)$value->conteo, 'dem' => $total, 'ind' => round($total > 0 ? 100 * $value->conteo / $total : 0, 1)];
+                }
+                return response()->json(compact('info', 'valores', 'data'));
+
+
+            case 'anal2':
+                $data = NexusRepositorio::reportesreporte_anal2($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
+                $info = [];
+                foreach ($data as $key => $value) {
+                    $info['categoria'][] = $value->mes;
+                    $info['data'][] = $value->conteo;
+                }
+                // $data = CuboPacto2Repositorio::reportesreporte_anal2($rq->ugel, $rq->modalidad, $rq->nivel);
+                // $info = $data->map(function ($y, $name) {
+                //     return ['name' => $name, 'y' => (int)$y];
+                // })->values();
+                return response()->json(compact('info', 'data'));
+                break;
+            case 'anal3':
+                $color = ['#43beac', '#ffc107', '#ef5350'];
+                $data = NexusRepositorio::reportesreporte_anal3($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
+                foreach ($data as $key => $value) {
+                    $value->color = $color[$key % count($color)];
+                }
+                return response()->json($data);
+
+            case 'anal4':
+                $color = ['#43beac', '#ffc107', '#ef5350'];
+                $data = NexusRepositorio::reportesreporte_anal4($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
+                foreach ($data as $key => $value) {
+                    $value->color = $color[$key % count($color)];
+                }
+                return response()->json($data);
+
+            case 'tabla1':
+                $base = NexusRepositorio::reportesreporte_tabla01($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
+                $foot = [];
+                if ($base->count() > 0) {
+                    $foot = clone $base[0];
+                    $foot->ugel = 'TOTAL';
+                    $foot->td = $base->sum('td');
+                    $foot->tdn = $base->sum('tdn');
+                    $foot->tdc = $base->sum('tdc');
+                    $foot->tde = $base->sum('tde');
+                    $foot->tdd = $base->sum('tdd');
+                    $foot->tdv = $base->sum('tdv');
+                    $foot->ta = $base->sum('ta');
+                    $foot->tan = $base->sum('tan');
+                    $foot->tac = $base->sum('tac');
+                    $foot->tav = $base->sum('tav');
+                    $foot->tpc = $base->sum('tpc');
+                }
+                $excel = view('educacion.Nexus.ReportesTablas', compact('div', 'base', 'foot'))->render();
+                return response()->json(compact('excel'));
+                // return response()->json(compact('div', 'base', 'foot'));
+
+            case 'tabla2':
+                $base = NexusRepositorio::reportesreporte_tabla02($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
+                $foot = [];
+                if ($base->count() > 0) {
+                    $foot = clone $base[0];
+                    $foot->ley = 'TOTAL';
+                    $foot->td = $base->sum('td');
+                    $foot->tdn = $base->sum('tdn');
+                    $foot->tdc = $base->sum('tdc');
+                    $foot->tde = $base->sum('tde');
+                    $foot->tdd = $base->sum('tdd');
+                    $foot->tdv = $base->sum('tdv');
+                    $foot->ta = $base->sum('ta');
+                    $foot->tan = $base->sum('tan');
+                    $foot->tac = $base->sum('tac');
+                    $foot->tav = $base->sum('tav');
+                    $foot->tpc = $base->sum('tpc');
+                }
+                $excel = view('educacion.Nexus.ReportesTablas', compact('div', 'base', 'foot'))->render();
+                return response()->json(compact('excel'));
+                // return response()->json(compact('div', 'base', 'foot'));
+
+            case 'tabla3':
+                $base = NexusRepositorio::reportesreporte_tabla03($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
+                $foot = [];
+                if ($base->count() > 0) {
+                    $foot = clone $base[0];
+                    $foot->distrito = 'TOTAL';
+                    $foot->td = $base->sum('td');
+                    $foot->tdn = $base->sum('tdn');
+                    $foot->tdc = $base->sum('tdc');
+                    $foot->tde = $base->sum('tde');
+                    $foot->tdd = $base->sum('tdd');
+                    $foot->tdv = $base->sum('tdv');
+                    $foot->ta = $base->sum('ta');
+                    $foot->tan = $base->sum('tan');
+                    $foot->tac = $base->sum('tac');
+                    $foot->tav = $base->sum('tav');
+                    $foot->tpc = $base->sum('tpc');
+                }
+                $excel = view('educacion.Nexus.ReportesTablas', compact('div', 'base', 'foot'))->render();
+                return response()->json(compact('excel'));
+                // return response()->json(compact('div', 'base', 'foot'));
+
+            case 'tabla4':
+                $base = NexusRepositorio::reportesreporte_tabla04($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
+                $excel = view('educacion.Nexus.ReportesTablas', compact('div', 'base'))->render();
+                return response()->json(compact('excel', 'base'));
+                // return response()->json(compact('div', 'base', 'foot'));
+            default:
+                # code...
+                return [];
+        }
     }
 }

@@ -260,6 +260,35 @@ class NexusRepositorio
     public static function reportesreporte_anal4($anio, $ugel, $modalidad, $nivel)
     {
         return Nexus::from('edu_nexus as nx')
+            ->leftJoin('edu_nexus_situacion_laboral as sl', 'sl.id', '=', 'nx.situacionlaboral_id')
+            ->leftJoin('edu_nexus_institucion_educativa as ie', 'ie.id', '=', 'nx.institucioneducativa_id')
+            ->leftJoin('edu_nexus_nivel_educativo as nm', 'nm.id', '=', 'ie.niveleducativo_id')
+            ->leftJoin('edu_nexus_modalidad as m', 'm.id', '=', 'nm.modalidad_id')
+            ->leftJoin('par_ubigeo as d', 'd.id', '=', 'ie.ubigeo_id')
+            ->leftJoin('par_ubigeo as p', 'p.id', '=', 'd.dependencia')
+            ->select(
+                'sl.nombre as name',
+                DB::raw('COUNT(DISTINCT nx.cod_plaza) AS y')
+            )
+            ->whereIn('sl.id', [1, 6])
+            ->where('nx.importacion_id', function ($query) use ($anio) {
+                $query->select('id')
+                    ->from('par_importacion')
+                    ->where('fuenteImportacion_id', 2)
+                    ->where('estado', 'PR')
+                    ->whereRaw('fechaActualizacion = (SELECT MAX(fechaActualizacion) FROM par_importacion WHERE fuenteImportacion_id = 2 AND YEAR(fechaActualizacion) = ? AND estado = "PR" )', [$anio]);
+            })
+            ->when($ugel > 0, fn($q) => $q->where('ie.ugel_id', $ugel))
+            ->when($modalidad > 0, fn($q) => $q->where('nm.modalidad_id', $modalidad))
+            ->when($nivel > 0, fn($q) => $q->where('nm.id', $nivel))
+            ->groupBy('sl.nombre')
+            ->orderBy('y', 'desc')
+            ->get();
+    }
+
+    public static function reportesreporte_anal4_tipotrabajador($anio, $ugel, $modalidad, $nivel)
+    {
+        return Nexus::from('edu_nexus as nx')
             ->leftJoin('edu_nexus_regimen_laboral as stt', 'stt.id', '=', 'nx.regimenlaboral_id')
             ->leftJoin('edu_nexus_institucion_educativa as ie', 'ie.id', '=', 'nx.institucioneducativa_id')
             ->leftJoin('edu_nexus_nivel_educativo as nm', 'nm.id', '=', 'ie.niveleducativo_id')
@@ -361,6 +390,7 @@ class NexusRepositorio
                 DB::raw('SUM(CASE WHEN subtipo.id = 16 AND sl.id = 1 THEN 1 ELSE 0 END) AS tac'),
                 DB::raw('SUM(CASE WHEN subtipo.id = 16 AND sl.id = 7 THEN 1 ELSE 0 END) AS tav'),
                 DB::raw('SUM(CASE WHEN subtipo.id = 17 AND sl.id = 1 THEN 1 ELSE 0 END) AS tpc'),
+                DB::raw('SUM(CASE WHEN tipo.id in(2,3) and sl THEN 1 ELSE 0 END) AS tad'),
             )
             ->where('nx.importacion_id', function ($query) use ($anio) {
                 $query->select('id')

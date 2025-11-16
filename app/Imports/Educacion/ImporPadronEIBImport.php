@@ -12,23 +12,11 @@ class ImporPadronEIBImport implements ToModel, WithHeadingRow, WithBatchInserts,
 {
     protected const COLUMNAS_OBLIGATORIAS = [
         'periodo',
-        'dre',
-        'ugel',
-        'departamento',
-        'provincia',
-        'distrito',
-        'centro_poblado',
         'cod_mod',
-        'cod_local',
-        'institucion_educativa',
-        'cod_nivelmod',
-        'nivel_modalidad',
         'forma_atencion',
-        'cod_lengua',
         'lengua_1',
         'lengua_2',
         'lengua_3',
-        'estado',
     ];
     protected $importacionId;
     protected $encabezadosValidados = false;
@@ -44,6 +32,7 @@ class ImporPadronEIBImport implements ToModel, WithHeadingRow, WithBatchInserts,
             $this->validarEncabezados($row);
             $this->encabezadosValidados = true;
         }
+
         $normalizarLengua = function ($lengua) {
             if (empty($lengua)) {
                 return null;
@@ -51,29 +40,101 @@ class ImporPadronEIBImport implements ToModel, WithHeadingRow, WithBatchInserts,
             $lengua = trim(strtolower($lengua));
             return ucfirst($lengua);
         };
-        $codLocal = empty($row['cod_local']) || $row['cod_local'] == '0' ? null : $row['cod_local'];
-        $estado = isset($row['estado']) ? strtoupper(trim($row['estado'])) : 'ACTIVA';
         return new ImporPadronEib([
-            'importacion_id' => $this->importacionId,
-            'periodo'           => intval($row['periodo'] ?? 2019),
-            'ugel'              => $row['ugel'] ?? null,
-            'departamento'      => 'UCAYALI',
-            'provincia'         => $row['provincia'] ?? null,
-            'distrito'          => $row['distrito'] ?? null,
-            'centro_poblado'    => $row['centro_poblado'] ?? null,
+            'importacion_id'    => $this->importacionId,
+            'periodo'           => $row['periodo'] ?? null,
             'cod_mod'           => $row['cod_mod'] ?? null,
-            'cod_local'         => $codLocal,
-            'institucion_educativa' => $row['institucion_educativa'] ?? null,
-            'cod_nivelmod'      => $row['cod_nivelmod'] ?? null,
-            'nivel_modalidad'   => $row['nivel_modalidad'] ?? null,
-            'forma_atencion'    => $row['forma_atencion'] ?? null,
-            'cod_lengua'        => null, // no viene en el Excel
-            'lengua_1'          => $normalizarLengua($row['lengua_1'] ?? null),
-            'lengua_2'          => $normalizarLengua($row['lengua_2'] ?? null),
-            'lengua_3'          => $normalizarLengua($row['lengua_3'] ?? null),
-            'estado'            => $estado,
+            'forma_atencion'    => $row['forma_atencion'] ?? null,            
+            'lengua_1'          => ($row['lengua_1'] ?? null),
+            'lengua_2'          => ($row['lengua_2'] ?? null),
+            'lengua_3'          => ($row['lengua_3'] ?? null),
+            // 'lengua_1'          => $this->normalizarLengua($row['lengua_1'] ?? null),
+            // 'lengua_2'          => $this->normalizarLengua($row['lengua_2'] ?? null),
+            // 'lengua_3'          => $this->normalizarLengua($row['lengua_3'] ?? null),
         ]);
     }
+
+    // protected function normalizarLengua($lengua)
+    // {
+    //     if (empty($lengua)) return null;
+
+    //     $lengua = trim(strtolower($lengua));
+
+    //     // 🔹 Mapeo explícito: cada variante → forma oficial
+    //     $mapeo = [
+    //         // Ashaninka (R.M. 303-2015-MINEDU)
+    //         'ashaninka'   => 'Ashaninka',
+    //         'ashaninca'   => 'Ashaninka',
+    //         'ashanincca'  => 'Ashaninka',
+    //         'ashanicca'   => 'Ashaninka',
+    //         'ashanica'    => 'Ashaninka',
+    //         'ashaninkua'  => 'Ashaninka',
+    //         'ashanincqa'  => 'Ashaninka',
+    //         'ashaninqua'  => 'Ashaninka',
+    //         'ashaninkka'  => 'Ashaninka',
+    //         'ashaninca'   => 'Ashaninka', // duplicado intencional (si hay typo)
+
+    //         // Asheninka (R.M. 199-2019-MINEDU) — ¡lengua distinta!
+    //         'asheninka'   => 'Asheninka',
+    //         'asheninca'   => 'Asheninka',
+    //         'ashenica'    => 'Asheninka',
+    //         'ashenincca'  => 'Asheninka',
+
+    //         // Shipibo-Konibo
+    //         'shipibo'            => 'Shipibo-Konibo',
+    //         'konibo'             => 'Shipibo-Konibo',
+    //         'shipibo konibo'     => 'Shipibo-Konibo',
+    //         'shipibo-konibo'     => 'Shipibo-Konibo',
+    //         'shipibokonibo'      => 'Shipibo-Konibo',
+    //         'xipibo'             => 'Shipibo-Konibo',
+    //         'xipibo-konibo'      => 'Shipibo-Konibo',
+
+    //         // Yine
+    //         'yine'               => 'Yine',
+    //         'yine piro'          => 'Yine',
+    //         'yine-mashco piro'   => 'Yine',
+    //         'yines'              => 'Yine',
+    //         'yiné'               => 'Yine',
+
+    //         // Yaminahua
+    //         'yaminahua'          => 'Yaminahua',
+    //         'yaminawa'           => 'Yaminahua',
+    //         'yaminagua'          => 'Yaminahua',
+    //         'yaminahúa'          => 'Yaminahua',
+
+    //         // Cashinahua
+    //         'cashinahua'         => 'Cashinahua',
+    //         'kashinawa'          => 'Cashinahua',
+    //         'kashinahua'         => 'Cashinahua',
+    //         'cashinawa'          => 'Cashinahua',
+
+    //         // Sharanahua
+    //         'sharanahua'         => 'Sharanahua',
+    //         'sharanawa'          => 'Sharanahua',
+    //         'saranahua'          => 'Sharanahua',
+    //         'sharanaua'          => 'Sharanahua',
+
+    //         // Matsigenka
+    //         'matsigenka'         => 'Matsigenka',
+    //         'matsiguenga'        => 'Matsigenka',
+
+    //         // Amahuaca
+    //         'amahuaca'           => 'Amahuaca',
+    //         'amahuaka'           => 'Amahuaca',
+
+    //         // Kakataibo
+    //         'kakataibo'          => 'Kakataibo',
+    //         'cacataibo'          => 'Kakataibo',
+    //     ];
+
+    //     // ✅ Búsqueda directa
+    //     if (isset($mapeo[$lengua])) {
+    //         return $mapeo[$lengua];
+    //     }
+
+    //     // 🔹 Fallback: ucfirst (caso no mapeado)
+    //     return ucfirst($lengua);
+    // }
 
     protected function validarEncabezados($row)
     {
