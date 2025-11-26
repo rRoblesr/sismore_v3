@@ -3,6 +3,7 @@
 use App\Exports\Salud\AgregarMetasExport;
 use App\Http\Controllers\Administracion\DirectoriosAuditoriaController;
 use App\Http\Controllers\Administracion\EntidadController;
+use App\Http\Controllers\Administracion\LogController;
 use App\Http\Controllers\Administracion\LoginRecordsController;
 use App\Http\Controllers\Administracion\MenuController;
 use App\Http\Controllers\Administracion\PerfilController;
@@ -126,6 +127,7 @@ use App\Repositories\Educacion\CuboPacto1Repositorio;
 use App\Repositories\Educacion\EduCuboMatriculaRepositorio;
 use App\Repositories\Educacion\ImporCensoDocenteRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
+use App\Repositories\Educacion\PadronEIBRepositorio;
 use App\Repositories\Parametro\PoblacionPNRepositorio;
 use App\Repositories\Parametro\UbigeoRepositorio;
 use App\Repositories\Salud\CalidadCriterioRepositorio;
@@ -152,6 +154,15 @@ Auth::routes();
 Route::get('/', function () {
     //return view('welcome');
     return redirect('/publico');
+});
+
+// Rutas para gestión de logs
+Route::group(['prefix' => 'logs', 'as' => 'logs.'], function () {
+    Route::get('/', [LogController::class, 'index'])->name('index');
+    Route::get('/{filename}', [LogController::class, 'show'])->name('show');
+    Route::get('/{filename}/download', [LogController::class, 'download'])->name('download');
+    Route::post('/{filename}/clear', [LogController::class, 'clear'])->name('clear');
+    Route::delete('/{filename}', [LogController::class, 'destroy'])->name('destroy');
 });
 
 /**************************************** ACCESO PUBLICO ************************************************/
@@ -492,6 +503,10 @@ Route::post('/MatriculaDetalle/EIB/tabla2', [MatriculaDetalleController::class, 
 Route::get('/educación/EIB/Reportes', [PadronEIBController::class, 'reportes'])->name('educacion.padron.eib.reportes');
 Route::get('/educación/EIB/Reportes/Reporte', [PadronEIBController::class, 'reportesreporte'])->name('educacion.padron.eib.reportes.reporte');
 // Route::get('/educación/EIB/Reportes/Download/1/{div}/{anio}/{ugel}/{modalidad}/{nivel}', [NexusController::class, 'reportesrdownloadexcel'])->name('educacion.nexus.reportes.download.excel');
+
+Route::get('/educación/EIB/Select/CargarGestion/{anio}', [PadronEIBController::class, 'cargargestion'])->name('educacion.padron.eib.select.gestion');
+Route::get('/educación/EIB/Select/CargarProvincia/{anio}', [PadronEIBController::class, 'cargarprovincia'])->name('educacion.padron.eib.select.provincia');
+Route::get('/educación/EIB/Select/CargarDistrito/{anio}/{provincia}', [PadronEIBController::class, 'cargardistrito'])->name('educacion.padron.eib.select.distrito');
 
 Route::get('/educación/Importar/CensoDocente', [ImporCensoDocenteController::class, 'importar'])->name('imporcensodocente.importar');
 Route::post('/ImporCensoDocente/Importar', [ImporCensoDocenteController::class, 'guardar'])->name('imporcensodocente.guardar');
@@ -1393,6 +1408,7 @@ Route::get('/educacion/conveniofed/edu/Reports2/Exportar/{div}/{indicador}/{anio
 // Route::post('/educacion/conveniofed/edu/Reports2/3', [IndicadoresController::class, 'PactoRegionalSalPacto1Reports3'])->name('educacion.indicador.conveniofed.detalle.reports.3');
 
 Route::get('/educacion/pruebas', function () {
+    return PadronEIBRepositorio::reportesreporte_head3(2025, 2022,  0, 0, 0);
     $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
     $actualizado =  'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion));
     $updateMin1 = PoblacionPNRepositorio::actualizado();

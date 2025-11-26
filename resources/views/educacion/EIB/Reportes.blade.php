@@ -19,12 +19,12 @@
                         <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
                             <i class="fa fa-redo"></i> Actualizar</button>
                     </div>
-                    <h3 class="card-title text-white font-14">Cobertura de Plazas en Educación</h3>
+                    <h3 class="card-title text-white font-14">Educación Interculural Bilingüe</h3>
                 </div>
                 <div class="card-body pb-0">
                     <div class="form-group row align-items-center vh-5">
                         <div class="col-lg-4 col-md-4 col-sm-4">
-                            <h4 class="page-title font-12">Fuente: DREU - NEXUS {{ date('Y') }}</h4>
+                            <h4 class="page-title font-12">Fuente: Padron EIB {{ $anioeib }}</h4>
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
@@ -53,10 +53,6 @@
                                 <label for="provincia">Provincia</label>
                                 <select id="provincia" name="provincia" class="form-control font-11">
                                     <option value="0">TODOS</option>
-                                    {{-- @foreach ($ugel as $item)
-                                        <option value="{{ $item->id }}">
-                                            {{ $item->nombre }}</option>
-                                    @endforeach --}}
                                 </select>
                             </div>
                         </div>
@@ -94,16 +90,7 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card1"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Docentes</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-0 font-9">
-                    <h6 class="">Avance <span class="float-right" id="card1i">0%</span></h6>
-                    <div class="progress progress-sm m-0">
-                        <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="90" aria-valuemin="0"
-                            aria-valuemax="100" style="width: 100%" id="card1b">
-                            <span class="sr-only">0% Complete</span>
+                            <p class="mb-0 mt-1 text-truncate">Servicios Educativos</p>
                         </div>
                     </div>
                 </div>
@@ -126,20 +113,10 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card2"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Auxiliar de Educación</p>
+                            <p class="mb-0 mt-1 text-truncate">Lenguas Originarias</p>
                         </div>
                     </div>
                 </div>
-                <div class="mt-0 font-9">
-                    <h6 class="">Avance <span class="float-right" id="card2i">0%</span></h6>
-                    <div class="progress progress-sm m-0">
-                        <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="90" aria-valuemin="0"
-                            aria-valuemax="100" style="width: 100%" id="card2b">
-                            <span class="sr-only">0% Complete</span>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
 
@@ -159,16 +136,7 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card3"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Promotores Educativos</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-0 font-9">
-                    <h6 class="">Avance <span class="float-right" id="card3i">0%</span></h6>
-                    <div class="progress progress-sm m-0">
-                        <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="90" aria-valuemin="0"
-                            aria-valuemax="100" style="width: 100%" id="card3b">
-                            <span class="sr-only">0% Complete</span>
+                            <p class="mb-0 mt-1 text-truncate">Total Matriculados</p>
                         </div>
                     </div>
                 </div>
@@ -191,16 +159,7 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card4"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Personal Administrativo</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-0 font-9">
-                    <h6 class="">Avance <span class="float-right" id="card4i">0%</span></h6>
-                    <div class="progress progress-sm m-0">
-                        <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="90" aria-valuemin="0"
-                            aria-valuemax="100" style="width: 100%" id="card4b">
-                            <span class="sr-only">0% Complete</span>
+                            <p class="mb-0 mt-1 text-truncate">Total Docentes</p>
                         </div>
                     </div>
                 </div>
@@ -258,17 +217,42 @@
     </div>
 
     <div class="row">
+        <div class="col-lg-6 col-md-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
+                    <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
+                </div>
+                <div class="card-body p-0">
+                    <div id="anal5" style="height: 25rem"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
+                    <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
+                </div>
+                <div class="card-body p-0">
+                    <div id="anal6" style="height: 25rem"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-lg-12">
             {{-- <div class="card">
                 <div class="card-header"> --}}
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                    <div class="card-widgets">
+                    {{-- <div class="card-widgets">
                         <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla1')">
                             <i class="fa fa-file-excel"></i> Descargar</button>
-                    </div>
-                    <h3 class="card-title">NÚMERO DE PLAZAS DOCENTE Y AUXILIARES DE EDUCACIÓN POR UGEL, SEGÚN SITUACIÓN
-                        LABORAL</h3>
+                    </div> --}}
+                    <h3 class="card-title">
+                        NÚMERO DE SERVICIOS EDUCATIVOS, ESTUDIANTES, DOCENTES, AUXILIARES DE EDUCACIÓN Y PROMOTORES
+                        EDUCATIVOS POR ÁMBITO GEOGRÁFICO, SEGÚN FORMA DE ATENCIÓN
+                    </h3>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -290,12 +274,14 @@
                 <div class="card-header"> --}}
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                    <div class="card-widgets">
+                    {{-- <div class="card-widgets">
                         <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla2')">
                             <i class="fa fa-file-excel"></i> Descargar</button>
-                    </div>
-                    <h3 class="card-title">NÚMERO DE PLAZAS DOCENTE Y AUXILIARES DE EDUCACIÓN POR LEY DE CONTRATO, SEGÚN
-                        SITUACIÓN LABORAL</h3>
+                    </div> --}}
+                    <h3 class="card-title">
+                        NÚMERO DE SERVICIOS EDUCATIVOS, ESTUDIANTES, DOCENTES, AUXILIARES DE EDUCACIÓN Y PROMOTORES
+                        EDUCATIVOS POR ÁMBITO GEOGRÁFICO, SEGÚN NIVEL EDUCATIVO
+                    </h3>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -317,12 +303,14 @@
                 <div class="card-header"> --}}
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                    <div class="card-widgets">
+                    {{-- <div class="card-widgets">
                         <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla3')">
                             <i class="fa fa-file-excel"></i> Descargar</button>
-                    </div>
-                    <h3 class="card-title">NÚMERO DE PLAZAS DOCENTE Y AUXILIARES DE EDUCACIÓN POR DISTRITO, SEGÚN SITUACIÓN
-                        LABORAL</h3>
+                    </div> --}}
+                    <h3 class="card-title">
+                        NÚMERO DE SERVICIOS EDUCATIVOS, ESTUDIANTES, DOCENTES, AUXILIARES DE EDUCACIÓN Y PROMOTORES
+                        EDUCATIVOS POR ÁMBITO GEOGRÁFICO, SEGÚN LENGUA ORIGINARIA
+                    </h3>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -331,30 +319,6 @@
 
                             </div>
 
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-12">
-            {{-- <div class="card">
-                <div class="card-header"> --}}
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                    <div class="card-widgets">
-                        <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla4')">
-                            <i class="fa fa-file-excel"></i> Descargar</button>
-                    </div>
-                    <h3 class="card-title">NÚMERO DE PLAZAS POR INSTITUCIÓN EDUCATIVAS</h3>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="table-responsive" id="ctabla4">
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -383,22 +347,23 @@
                 SpinnerManager.show(key);
             });
             $('#anio').on('change', function() {
-                cargarUgel();
+                cargarGestion();
             });
-            $('#ugel').on('change', function() {
-                cargarModalidad();
+            $('#gestion').on('change', function() {
+                cargarProvincia();
             });
-            $('#modalidad').on('change', function() {
-                cargarNivel();
+            $('#provincia').on('change', function() {
+                cargarDistrito();
             });
-            $('#nivel').on('change', function() {
+            $('#distrito').on('change', function() {
                 cargarCards();
             });
+
             mapData = otros;
             mapData.features.forEach((element, key) => {
                 console.log('["' + element.properties['hc-key'] + '", ' + (key + 1) + '],');
             });
-            cargarUgel();
+            cargarGestion();
 
         });
 
@@ -408,21 +373,23 @@
             panelGraficas('anal2');
             panelGraficas('anal3');
             panelGraficas('anal4');
+            panelGraficas('anal5');
+            panelGraficas('anal6');
             panelGraficas('tabla1');
             panelGraficas('tabla2');
             panelGraficas('tabla3');
-            panelGraficas('tabla4');
+            // panelGraficas('tabla4');
         }
 
         function panelGraficas(div) {
             $.ajax({
-                url: "{{ route('educacion.nexus.reportes.reporte') }}",
+                url: "{{ route('educacion.padron.eib.reportes.reporte') }}",
                 data: {
                     'div': div,
                     "anio": $('#anio').val(),
-                    "ugel": $('#ugel').val(),
-                    "modalidad": $('#modalidad').val(),
-                    "nivel": $('#nivel').val(),
+                    "gestion": $('#gestion').val(),
+                    "provincia": $('#provincia').val(),
+                    "distrito": $('#distrito').val(),
                 },
                 type: "GET",
                 dataType: "JSON",
@@ -448,30 +415,6 @@
                                 delay: 10,
                                 time: 1000
                             });
-                            $('#card1i').text(data.pcard1 + '%');
-                            $('#card2i').text(data.pcard2 + '%');
-                            $('#card3i').text(data.pcard3 + '%');
-                            $('#card4i').text(data.pcard4 + '%');
-                            $('#card1b').css('width', data.pcard1 + '%')
-                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.pcard1 > 96 ? 'bg-success-0' : (data.pcard1 > 76 ?
-                                    'bg-warning-0' :
-                                    'bg-orange-0'));
-                            $('#card2b').css('width', data.pcard2 + '%')
-                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.pcard2 > 96 ? 'bg-success-0' : (data.pcard2 > 76 ?
-                                    'bg-warning-0' :
-                                    'bg-orange-0'));
-                            $('#card3b').css('width', data.pcard3 + '%')
-                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.pcard3 > 96 ? 'bg-success-0' : (data.pcard3 > 76 ?
-                                    'bg-warning-0' :
-                                    'bg-orange-0'));
-                            $('#card4b').css('width', data.pcard4 + '%')
-                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.pcard4 > 96 ? 'bg-success-0' : (data.pcard4 > 76 ?
-                                    'bg-warning-0' :
-                                    'bg-orange-0'));
                             break;
                         case 'anal1':
                             anal3valores = data.valores;
@@ -479,16 +422,42 @@
                                 'Porcentaje de Plazas Docentes por Provincia');
                             break;
                         case 'anal2':
-                            crearGraficoLineasAcumuladas(div, data.info, '',
-                                'Acumulado Mensual de Plazas Docentes, periodo 2025', '#cc0000');
+                            // crearGraficoMatricula(div, {
+                            //     titulo: 'Matrícula educativa del modelo de servicio de EIB, periodo 2019-2025',
+                            //     years: data.info.categoria,
+                            //     matriculados: data.info.data,
+                            //     porcentajes: data.info.avance
+                            // });
+
+                            gAnidadaColumn(div,
+                                data.info.categoria,
+                                data.info.series,
+                                '',
+                                'Matrícula educativa del modelo de servicio de EIB, periodo 2019-2025',
+                                data.info.maxbar
+                            );
                             break;
                         case 'anal3':
                             crearGraficoDistribucionPlazas(div, data,
-                                'Distribución de Plazas Docentes de Educación, según Sexo');
+                                'Distribución de la matricula educativa del modelo de servicio de EIB, según Nivel Educativo'
+                            );
                             break;
                         case 'anal4':
+                            gLineaMultiple(div, data, '',
+                                'Matricula educativa del modelo de servicio EIB por años, segun Nivel Educativo',
+                                '');
+                            break;
+                        case 'anal5':
                             crearGraficoDistribucionPlazas(div, data,
-                                'Distribución de Plazas Docentes de Educación, según Tipo de Trabajador');
+                                'Distribución de Plazas Docentes de Educación, según Sexo');
+                            break;
+                        case 'anal6':
+                            xxxx(div,
+                                data.categories,
+                                data.series
+                            );
+                            // crearGraficoDistribucionPlazas(div, data,
+                            //     'Distribución de Plazas Docentes de Educación, según Tipo de Trabajador');
                             break;
                         case 'tabla1':
                             $('#ctabla1').html(data.excel);
@@ -568,19 +537,60 @@
             });
         }
 
-        function cargarUgel() {
+        function cargarGestion() {
             $.ajax({
-                url: "{{ route('educacion.nexus.filtro.ugel', ['anio' => ':anio']) }}"
+                url: "{{ route('educacion.padron.eib.select.gestion', ['anio' => ':anio']) }}"
                     .replace(':anio', $('#anio').val()),
                 type: 'GET',
                 success: function(data) {
-                    $('#ugel').empty();
+                    $('#gestion').empty();
                     if (Object.keys(data).length > 1)
-                        $('#ugel').append('<option value="0">TODOS</option>');
+                        $('#gestion').append('<option value="0">TODOS</option>');
                     $.each(data, function(index, value) {
-                        $('#ugel').append(`<option value='${index}'>${value}</option>`);
+                        $('#gestion').append(`<option value='${index}'>${value}</option>`);
                     });
-                    cargarModalidad();
+                    cargarProvincia();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cargarProvincia() {
+            $.ajax({
+                url: "{{ route('educacion.padron.eib.select.provincia', ['anio' => ':anio']) }}"
+                    .replace(':anio', $('#anio').val()),
+                type: 'GET',
+                success: function(data) {
+                    $('#provincia').empty();
+                    if (Object.keys(data).length > 1)
+                        $('#provincia').append('<option value="0">TODOS</option>');
+                    $.each(data, function(index, value) {
+                        $('#provincia').append(`<option value='${index}'>${value}</option>`);
+                    });
+                    cargarDistrito();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cargarDistrito() {
+            $.ajax({
+                url: "{{ route('educacion.padron.eib.select.distrito', ['anio' => ':anio', 'provincia' => ':provincia']) }}"
+                    .replace(':anio', $('#anio').val())
+                    .replace(':provincia', $('#provincia').val()),
+                type: 'GET',
+                success: function(data) {
+                    $('#distrito').empty();
+                    if (Object.keys(data).length > 1)
+                        $('#distrito').append('<option value="0">TODOS</option>');
+                    $.each(data, function(index, value) {
+                        $('#distrito').append(`<option value='${index}'>${value}</option>`);
+                    });
+                    cargarCards();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -944,7 +954,7 @@
 
                         return `<div style="text-align:left;">
                                     <strong>${this.point.name}</strong><br>
-                                    Docentes: ${Highcharts.numberFormat(provinciaData.num,0)}<br>
+                                    Servicios Educativos: ${Highcharts.numberFormat(provinciaData.num,0)}<br>
                                     Participación: ${Highcharts.numberFormat(provinciaData.ind, 1)}%
                                 </div>`;
                     },
@@ -965,6 +975,153 @@
                 credits: {
                     enabled: false
                 },
+            });
+        }
+
+        function crearGraficoMatricula(div, config) {
+            const defaultOpciones = {
+                altura: 500,
+                colorBarras: '#00BCD4',
+                colorLinea: '#E91E63',
+                exportar: true,
+                mostrarEtiquetas: true,
+                tipoGrafico: 'column', // 'column', 'bar', 'line'
+                etiquetaEjeY1: 'Matriculados',
+                etiquetaEjeY2: '% Avance',
+                nombreSerie1: 'MATRICULADOS',
+                nombreSerie2: '% AVANCE'
+            };
+
+            // Combinar opciones
+            const opciones = {
+                ...defaultOpciones,
+                ...config.opciones
+            };
+
+            // Crear el gráfico
+            Highcharts.chart(div, {
+                chart: {
+                    type: opciones.tipoGrafico,
+                    // height: opciones.altura
+                },
+                title: {
+                    text: config.titulo,
+                    style: {
+                        fontSize: '14px',
+                        color: '#666'
+                    }
+                },
+                xAxis: {
+                    categories: config.years,
+                    crosshair: true,
+                },
+                yAxis: [{
+                    title: {
+                        text: opciones.etiquetaEjeY1,
+                        style: {
+                            color: opciones.colorBarras
+                        },
+                        enabled: false,
+                    },
+                    labels: {
+                        format: '{value}'
+                    }
+                }, {
+                    title: {
+                        text: opciones.etiquetaEjeY2,
+                        style: {
+                            color: opciones.colorLinea
+                        },
+                        enabled: false,
+                    },
+                    labels: {
+                        format: '{value}%'
+                    },
+                    opposite: true,
+                    min: 0,
+                    max: 100
+                }],
+                tooltip: {
+                    shared: true,
+                    formatter: function() {
+                        let tooltip = '<b>' + this.x + '</b><br/>';
+                        this.points.forEach(function(point) {
+                            tooltip += '<span style="color:' + point.color + '">\u25CF</span> ' +
+                                point.series.name + ': <b>' +
+                                (point.series.name.includes('%') ?
+                                    (point.y ? point.y + '%' : 'N/A') :
+                                    point.y.toLocaleString()) +
+                                '</b><br/>';
+                        });
+                        return tooltip;
+                    }
+                },
+                legend: {
+                    align: 'center',
+                    verticalAlign: 'bottom',
+                    layout: 'horizontal'
+                },
+                plotOptions: {
+                    column: {
+                        dataLabels: {
+                            enabled: opciones.mostrarEtiquetas,
+                            format: '{point.y:,.0f}',
+                            style: {
+                                fontSize: '11px'
+                            }
+                        }
+                    },
+                    bar: {
+                        dataLabels: {
+                            enabled: opciones.mostrarEtiquetas,
+                            format: '{point.y:,.0f}',
+                            style: {
+                                fontSize: '11px'
+                            }
+                        }
+                    },
+                    line: {
+                        dataLabels: {
+                            enabled: opciones.mostrarEtiquetas,
+                            formatter: function() {
+                                return this.y ? this.y + '%' : '';
+                            },
+                            style: {
+                                fontSize: '11px',
+                                fontWeight: 'bold'
+                            }
+                        },
+                        marker: {
+                            enabled: true,
+                            radius: 5
+                        }
+                    }
+                },
+                series: [{
+                    name: opciones.nombreSerie1,
+                    type: opciones.tipoGrafico,
+                    data: config.matriculados,
+                    color: opciones.colorBarras,
+                    yAxis: 0
+                }, {
+                    name: opciones.nombreSerie2,
+                    type: 'line',
+                    data: config.porcentajes,
+                    color: opciones.colorLinea,
+                    yAxis: 1,
+                    lineWidth: 2
+                }],
+                credits: {
+                    enabled: false
+                },
+                exporting: {
+                    enabled: opciones.exportar,
+                    buttons: {
+                        contextButton: {
+                            menuItems: ['downloadPNG', 'downloadJPEG', 'downloadPDF', 'downloadSVG']
+                        }
+                    }
+                }
             });
         }
 
@@ -1197,6 +1354,236 @@
                     colorByPoint: true,
                     data: data
                 }]
+            });
+        }
+
+        function gLineaMultiple(div, data, titulo, subtitulo, titulovetical) {
+            Highcharts.chart(div, {
+                title: {
+                    text: titulo
+                },
+                subtitle: {
+                    text: subtitulo
+                },
+                yAxis: {
+                    title: {
+                        text: titulovetical
+                    },
+                    /* min:0, */
+                },
+                xAxis: {
+                    categories: data['cat'],
+                    accessibility: {
+                        rangeDescription: 'Range: 2010 to 2017'
+                    }
+                },
+                /* legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle'
+                }, */
+                plotOptions: {
+                    series: {
+                        dataLabels: {
+                            enabled: true,
+                        },
+                        /* label: {
+                            connectorAllowed: false
+                        },
+                        pointStart: 2010 */
+                    }
+                },
+                series: data['dat'],
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 500
+                        },
+                        chartOptions: {
+                            legend: {
+                                layout: 'horizontal',
+                                align: 'center',
+                                verticalAlign: 'bottom'
+                            }
+                        }
+                    }]
+                },
+                credits: false,
+
+            });
+        }
+
+        function gAnidadaColumn(div, categoria, series, titulo, subtitulo, maxBar) {
+            var rango = categoria.length;
+            var posPorcentaje = rango * 2 + 1;
+            var cont = 0;
+            var porMaxBar = maxBar * 0.5;
+            Highcharts.chart(div, {
+                chart: {
+                    zoomType: 'xy',
+                },
+                colors: ['#5eb9aa', '#ef5350', '#f5bd22'],
+                title: {
+                    text: titulo, //'Browser market shares in January, 2018'
+                },
+                subtitle: {
+                    text: subtitulo,
+                    style: {
+                        fontSize: '11px',
+                    }
+                },
+                xAxis: [{
+                    categories: categoria,
+                    crosshair: true,
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                        }
+                    }
+                }],
+                yAxis: [{ // Primary yAxis
+                        max: maxBar > 0 ? maxBar + porMaxBar : null,
+                        labels: {
+                            enabled: true,
+                            style: {
+                                //color: Highcharts.getOptions().colors[2],
+                                fontSize: '10px',
+                            }
+                        },
+                        // title: {
+                        //     enabled: false,
+                        // },
+                        /* labels: {
+                            //format: '{value}°C',
+                            //style: {
+                            //    color: Highcharts.getOptions().colors[2]
+                            //}
+                        }, */
+                        title: {
+                            text: 'Matriculados',
+                            style: {
+                                //color: Highcharts.getOptions().colors[2],
+                                fontSize: '11px',
+                            },
+                            enabled: false,
+                        },
+                        //opposite: true,
+                    }, { // Secondary yAxis
+                        gridLineWidth: 0, //solo indica el tamaño de la linea
+                        labels: {
+                            enabled: false,
+                        },
+                        title: {
+                            enabled: false,
+                        },
+                        /* title: {
+                            //text: 'Rainfall',
+                            text: '%Indicador',
+                            //style: {
+                            //    color: Highcharts.getOptions().colors[0]
+                            //}
+                        }, */
+                        /* labels: {
+                            //format: '{value} mm',
+                            format: '{value} %',
+                            //style: {
+                            //   color: Highcharts.getOptions().colors[0]
+                            //}
+                        }, */
+                        //min: -200,
+                        min: -200,
+                        max: 100,
+                        opposite: true,
+                    },
+                    /* { // Tertiary yAxis
+                        gridLineWidth: 0,
+                        title: {
+                            text: 'Sea-Level Pressure',
+                            style: {
+                                color: Highcharts.getOptions().colors[1]
+                            }
+                        },
+                        labels: {
+                            format: '{value} mb',
+                            style: {
+                                color: Highcharts.getOptions().colors[1]
+                            }
+                        },
+                        opposite: true
+                    } */
+                ],
+                series: series,
+                plotOptions: {
+                    /* columns: {
+                        stacking: 'normal'
+                    }, */
+                    series: {
+                        showInLegend: true,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            //format: '{point.y:,.0f}',
+                            //format: '{point.y:.1f}%',
+                            formatter: function() {
+                                if (this.colorIndex == 1)
+                                    return this.y + " %";
+                                else
+                                    return Highcharts.numberFormat(this.y, 0);
+                            },
+                            style: {
+                                fontWeight: 'normal',
+                                fontSize: '10px',
+                            }
+                        },
+                    },
+                },
+                tooltip: {
+                    shared: true,
+                },
+                legend: {
+                    itemStyle: {
+                        //"color": "#333333",
+                        "cursor": "pointer",
+                        "fontSize": "10px",
+                        "fontWeight": "normal",
+                        "textOverflow": "ellipsis"
+                    },
+                },
+                exporting: {
+                    enabled: true
+                },
+                credits: false,
+            });
+        }
+
+        function xxxx(div, categories, series) {
+            Highcharts.chart(div, {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: ''
+                },
+                subtitle: {
+                    text: 'Plazas docentes EIB por nivel y condición laboral'
+                },
+                xAxis: {
+                    categories: categories
+                },
+                yAxis: {
+                    title: {
+                        text: 'Cantidad de plazas',
+                        enabled: false,
+                    }
+                },
+                series: series,
+                plotOptions: {
+                    column: {
+                        dataLabels: {
+                            enabled: true
+                        }
+                    }
+                }
             });
         }
     </script>

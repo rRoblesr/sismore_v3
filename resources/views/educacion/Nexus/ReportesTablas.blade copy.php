@@ -4,24 +4,20 @@
             <thead>
                 <tr class="table-success-0 text-white">
                     <th class="text-center" rowspan="2">UGEL</th>
-                    <th class="text-center" colspan="4">PLAZAS DOCENTE</th>
+                    <th class="text-center" colspan="6">PLAZAS DOCENTE</th>
                     <th class="text-center" colspan="4">PLAZAS AUXILIARES DE EDUCACIÓN</th>
-                    <th class="text-center" colspan="5">PLAZAS ADMINISTRATIVAS/th>
                     <th class="text-center" colspan="1">PEC</th>
                 </tr>
                 <tr class="table-success-0 text-white">
                     <th class="text-center">TOTAL</th>
                     <th class="text-center">NOMBRADO</th>
                     <th class="text-center">CONTRATADO</th>
-                    <th class="text-center">VACANTE</th>
-                    <th class="text-center">TOTAL</th>
-                    <th class="text-center">NOMBRADO</th>
-                    <th class="text-center">CONTRATADO</th>
-                    <th class="text-center">VACANTE</th>
-                    <th class="text-center">TOTAL</th>
-                    <th class="text-center">NOMBRADO</th>
-                    <th class="text-center">CONTRATADO</th>
+                    <th class="text-center">ENCARGADO</th>
                     <th class="text-center">DESIGNADO</th>
+                    <th class="text-center">VACANTE</th>
+                    <th class="text-center">TOTAL</th>
+                    <th class="text-center">NOMBRADO</th>
+                    <th class="text-center">CONTRATADO</th>
                     <th class="text-center">VACANTE</th>
                     <th class="text-center">CONTRATADO</th>
                 </tr>
@@ -33,16 +29,13 @@
                         <td class="table-warning">{{ number_format($item->td, 0) }}</td>
                         <td>{{ number_format($item->tdn, 0) }}</td>
                         <td>{{ number_format($item->tdc, 0) }}</td>
+                        <td>{{ number_format($item->tde, 0) }}</td>
+                        <td>{{ number_format($item->tdd, 0) }}</td>
                         <td>{{ number_format($item->tdv, 0) }}</td>
                         <td class="table-warning">{{ number_format($item->ta, 0) }}</td>
                         <td>{{ number_format($item->tan, 0) }}</td>
                         <td>{{ number_format($item->tac, 0) }}</td>
                         <td>{{ number_format($item->tav, 0) }}</td>
-                        <td class="table-warning">{{ number_format($item->tad, 0) }}</td>
-                        <td>{{ number_format($item->tadn, 0) }}</td>
-                        <td>{{ number_format($item->tadc, 0) }}</td>
-                        <td>{{ number_format($item->tadd, 0) }}</td>
-                        <td>{{ number_format($item->tadv, 0) }}</td>
                         <td>{{ number_format($item->tpc, 0) }}</td>
                     </tr>
                 @endforeach
@@ -53,16 +46,13 @@
                     <th>{{ number_format($foot->td, 0) }}</th>
                     <th>{{ number_format($foot->tdn, 0) }}</th>
                     <th>{{ number_format($foot->tdc, 0) }}</th>
+                    <th>{{ number_format($foot->tde, 0) }}</th>
+                    <th>{{ number_format($foot->tdd, 0) }}</th>
                     <th>{{ number_format($foot->tdv, 0) }}</th>
                     <th>{{ number_format($foot->ta, 0) }}</th>
                     <th>{{ number_format($foot->tan, 0) }}</th>
                     <th>{{ number_format($foot->tac, 0) }}</th>
                     <th>{{ number_format($foot->tav, 0) }}</th>
-                    <th>{{ number_format($foot->tad, 0) }}</th>
-                    <th>{{ number_format($foot->tadn, 0) }}</th>
-                    <th>{{ number_format($foot->tadc, 0) }}</th>
-                    <th>{{ number_format($foot->tadd, 0) }}</th>
-                    <th>{{ number_format($foot->tadv, 0) }}</th>
                     <th>{{ number_format($foot->tpc, 0) }}</th>
                 </tr>
             </tfoot>
@@ -74,24 +64,20 @@
             <thead>
                 <tr class="table-success-0 text-white">
                     <th class="text-center" rowspan="2">LEY</th>
-                    <th class="text-center" colspan="4">PLAZAS DOCENTE</th>
+                    <th class="text-center" colspan="6">PLAZAS DOCENTE</th>
                     <th class="text-center" colspan="4">PLAZAS AUXILIARES DE EDUCACIÓN</th>
-                    <th class="text-center" colspan="5">PLAZAS ADMINISTRATIVAS/th>
                     <th class="text-center" colspan="1">PEC</th>
                 </tr>
                 <tr class="table-success-0 text-white">
                     <th class="text-center">TOTAL</th>
                     <th class="text-center">NOMBRADO</th>
                     <th class="text-center">CONTRATADO</th>
-                    <th class="text-center">VACANTE</th>
-                    <th class="text-center">TOTAL</th>
-                    <th class="text-center">NOMBRADO</th>
-                    <th class="text-center">CONTRATADO</th>
-                    <th class="text-center">VACANTE</th>
-                    <th class="text-center">TOTAL</th>
-                    <th class="text-center">NOMBRADO</th>
-                    <th class="text-center">CONTRATADO</th>
+                    <th class="text-center">ENCARGADO</th>
                     <th class="text-center">DESIGNADO</th>
+                    <th class="text-center">VACANTE</th>
+                    <th class="text-center">TOTAL</th>
+                    <th class="text-center">NOMBRADO</th>
+                    <th class="text-center">CONTRATADO</th>
                     <th class="text-center">VACANTE</th>
                     <th class="text-center">CONTRATADO</th>
                 </tr>
@@ -103,16 +89,13 @@
                         <td class="table-warning">{{ number_format($item->td, 0) }}</td>
                         <td>{{ number_format($item->tdn, 0) }}</td>
                         <td>{{ number_format($item->tdc, 0) }}</td>
+                        <td>{{ number_format($item->tde, 0) }}</td>
+                        <td>{{ number_format($item->tdd, 0) }}</td>
                         <td>{{ number_format($item->tdv, 0) }}</td>
                         <td class="table-warning">{{ number_format($item->ta, 0) }}</td>
                         <td>{{ number_format($item->tan, 0) }}</td>
                         <td>{{ number_format($item->tac, 0) }}</td>
                         <td>{{ number_format($item->tav, 0) }}</td>
-                        <td class="table-warning">{{ number_format($item->tad, 0) }}</td>
-                        <td>{{ number_format($item->tadn, 0) }}</td>
-                        <td>{{ number_format($item->tadc, 0) }}</td>
-                        <td>{{ number_format($item->tadd, 0) }}</td>
-                        <td>{{ number_format($item->tadv, 0) }}</td>
                         <td>{{ number_format($item->tpc, 0) }}</td>
                     </tr>
                 @endforeach
@@ -123,16 +106,13 @@
                     <th>{{ number_format($foot->td, 0) }}</th>
                     <th>{{ number_format($foot->tdn, 0) }}</th>
                     <th>{{ number_format($foot->tdc, 0) }}</th>
+                    <th>{{ number_format($foot->tde, 0) }}</th>
+                    <th>{{ number_format($foot->tdd, 0) }}</th>
                     <th>{{ number_format($foot->tdv, 0) }}</th>
                     <th>{{ number_format($foot->ta, 0) }}</th>
                     <th>{{ number_format($foot->tan, 0) }}</th>
                     <th>{{ number_format($foot->tac, 0) }}</th>
                     <th>{{ number_format($foot->tav, 0) }}</th>
-                    <th>{{ number_format($foot->tad, 0) }}</th>
-                    <th>{{ number_format($foot->tadn, 0) }}</th>
-                    <th>{{ number_format($foot->tadc, 0) }}</th>
-                    <th>{{ number_format($foot->tadd, 0) }}</th>
-                    <th>{{ number_format($foot->tadv, 0) }}</th>
                     <th>{{ number_format($foot->tpc, 0) }}</th>
                 </tr>
             </tfoot>
@@ -144,27 +124,22 @@
             <thead>
                 <tr class="table-success-0 text-white">
                     <th class="text-center" rowspan="2">DISTRITO</th>
-                    <th class="text-center" colspan="4">PLAZAS DOCENTE</th>
+                    <th class="text-center" colspan="6">PLAZAS DOCENTE</th>
                     <th class="text-center" colspan="4">PLAZAS AUXILIARES DE EDUCACIÓN</th>
-                    <th class="text-center" colspan="5">PLAZAS ADMINISTRATIVAS/th>
                     <th class="text-center" colspan="1">PEC</th>
                 </tr>
                 <tr class="table-success-0 text-white">
                     <th class="text-center">TOTAL</th>
                     <th class="text-center">NOMBRADO</th>
                     <th class="text-center">CONTRATADO</th>
-                    <th class="text-center">VACANTE</th>
-                    <th class="text-center">TOTAL</th>
-                    <th class="text-center">NOMBRADO</th>
-                    <th class="text-center">CONTRATADO</th>
-                    <th class="text-center">VACANTE</th>
-                    <th class="text-center">TOTAL</th>
-                    <th class="text-center">NOMBRADO</th>
-                    <th class="text-center">CONTRATADO</th>
+                    <th class="text-center">ENCARGADO</th>
                     <th class="text-center">DESIGNADO</th>
                     <th class="text-center">VACANTE</th>
+                    <th class="text-center">TOTAL</th>
+                    <th class="text-center">NOMBRADO</th>
                     <th class="text-center">CONTRATADO</th>
-                </tr>
+                    <th class="text-center">VACANTE</th>
+                    <th class="text-center">CONTRATADO</th>
                 </tr>
             </thead>
             <tbody>
@@ -174,16 +149,13 @@
                         <td class="table-warning">{{ number_format($item->td, 0) }}</td>
                         <td>{{ number_format($item->tdn, 0) }}</td>
                         <td>{{ number_format($item->tdc, 0) }}</td>
+                        <td>{{ number_format($item->tde, 0) }}</td>
+                        <td>{{ number_format($item->tdd, 0) }}</td>
                         <td>{{ number_format($item->tdv, 0) }}</td>
                         <td class="table-warning">{{ number_format($item->ta, 0) }}</td>
                         <td>{{ number_format($item->tan, 0) }}</td>
                         <td>{{ number_format($item->tac, 0) }}</td>
                         <td>{{ number_format($item->tav, 0) }}</td>
-                        <td class="table-warning">{{ number_format($item->tad, 0) }}</td>
-                        <td>{{ number_format($item->tadn, 0) }}</td>
-                        <td>{{ number_format($item->tadc, 0) }}</td>
-                        <td>{{ number_format($item->tadd, 0) }}</td>
-                        <td>{{ number_format($item->tadv, 0) }}</td>
                         <td>{{ number_format($item->tpc, 0) }}</td>
                     </tr>
                 @endforeach
@@ -194,16 +166,13 @@
                     <th>{{ number_format($foot->td, 0) }}</th>
                     <th>{{ number_format($foot->tdn, 0) }}</th>
                     <th>{{ number_format($foot->tdc, 0) }}</th>
+                    <th>{{ number_format($foot->tde, 0) }}</th>
+                    <th>{{ number_format($foot->tdd, 0) }}</th>
                     <th>{{ number_format($foot->tdv, 0) }}</th>
                     <th>{{ number_format($foot->ta, 0) }}</th>
                     <th>{{ number_format($foot->tan, 0) }}</th>
                     <th>{{ number_format($foot->tac, 0) }}</th>
                     <th>{{ number_format($foot->tav, 0) }}</th>
-                    <th>{{ number_format($foot->tad, 0) }}</th>
-                    <th>{{ number_format($foot->tadn, 0) }}</th>
-                    <th>{{ number_format($foot->tadc, 0) }}</th>
-                    <th>{{ number_format($foot->tadd, 0) }}</th>
-                    <th>{{ number_format($foot->tadv, 0) }}</th>
                     <th>{{ number_format($foot->tpc, 0) }}</th>
                 </tr>
             </tfoot>

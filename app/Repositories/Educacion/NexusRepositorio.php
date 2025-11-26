@@ -88,12 +88,10 @@ class NexusRepositorio
                     ->from('par_importacion')
                     ->where('fuenteImportacion_id', 2)
                     ->where('estado', 'PR')
-                    ->whereRaw('fechaActualizacion = (
-                        SELECT MAX(fechaActualizacion) FROM par_importacion WHERE fuenteImportacion_id = 2 AND YEAR(fechaActualizacion) = ? AND estado = "PR"
-                    )', [$anio]);
+                    ->whereRaw('fechaActualizacion = (SELECT MAX(fechaActualizacion) FROM par_importacion WHERE fuenteImportacion_id = 2 AND YEAR(fechaActualizacion) = ? AND estado = "PR")', [$anio]);
             })
             ->when($ugel > 0, fn($q) => $q->where('ie.ugel_id', $ugel))
-            ->when($modalidad > 0, fn($q) => $q->where('nm.modalidad', $modalidad))
+            ->when($modalidad > 0, fn($q) => $q->where('nm.modalidad_id', $modalidad))
             ->when($nivel > 0, fn($q) => $q->where('nm.id', $nivel))
             ->first();
     }
@@ -336,6 +334,52 @@ class NexusRepositorio
             ->leftJoin('par_ubigeo as p', 'p.id', '=', 'd.dependencia')
             ->select(
                 'u.nombre as ugel',
+                DB::raw('SUM(CASE WHEN subtipo.id IN (8,9,15) AND sl.id in(1,6,7) THEN 1 ELSE 0 END) AS td'),
+                DB::raw('SUM(CASE WHEN subtipo.id IN (8,9,15) AND sl.id = 6 THEN 1 ELSE 0 END) AS tdn'),
+                DB::raw('SUM(CASE WHEN subtipo.id IN (8,9,15) AND sl.id = 1 THEN 1 ELSE 0 END) AS tdc'),
+                DB::raw('SUM(CASE WHEN subtipo.id IN (8,9,15) AND sl.id = 7 THEN 1 ELSE 0 END) AS tdv'),
+                DB::raw('SUM(CASE WHEN subtipo.id = 16 AND sl.id in(1,6,7) THEN 1 ELSE 0 END) AS ta'),
+                DB::raw('SUM(CASE WHEN subtipo.id = 16 AND sl.id = 6 THEN 1 ELSE 0 END) AS tan'),
+                DB::raw('SUM(CASE WHEN subtipo.id = 16 AND sl.id = 1 THEN 1 ELSE 0 END) AS tac'),
+                DB::raw('SUM(CASE WHEN subtipo.id = 16 AND sl.id = 7 THEN 1 ELSE 0 END) AS tav'),
+                DB::raw('SUM(CASE WHEN tipo.id in(2,3) AND sl.id in(6,1,3,7)  THEN 1 ELSE 0 END) AS tad'),
+                DB::raw('SUM(CASE WHEN tipo.id in(2,3) AND sl.id = 6 THEN 1 ELSE 0 END) AS tadn'),
+                DB::raw('SUM(CASE WHEN tipo.id in(2,3) AND sl.id = 1 THEN 1 ELSE 0 END) AS tadc'),
+                DB::raw('SUM(CASE WHEN tipo.id in(2,3) AND sl.id = 3 THEN 1 ELSE 0 END) AS tadd'),
+                DB::raw('SUM(CASE WHEN tipo.id in(2,3) AND sl.id = 7 THEN 1 ELSE 0 END) AS tadv'),
+                DB::raw('SUM(CASE WHEN subtipo.id = 17 AND sl.id = 1 THEN 1 ELSE 0 END) AS tpc'),
+            )
+            ->where('nx.importacion_id', function ($query) use ($anio) {
+                $query->select('id')
+                    ->from('par_importacion')
+                    ->where('fuenteImportacion_id', 2)
+                    ->where('estado', 'PR')
+                    ->whereRaw('fechaActualizacion = (
+                        SELECT MAX(fechaActualizacion) FROM par_importacion WHERE fuenteImportacion_id = 2 AND YEAR(fechaActualizacion) = ? AND estado = "PR"
+                    )', [$anio]);
+            })
+            ->when($ugel > 0, fn($q) => $q->where('ie.ugel_id', $ugel))
+            ->when($modalidad > 0, fn($q) => $q->where('nm.modalidad_id', $modalidad))
+            ->when($nivel > 0, fn($q) => $q->where('nm.id', $nivel))
+            ->groupBy('u.nombre')
+            ->orderBy('u.nombre')
+            ->get();
+    }
+
+    public static function reportesreporte_tabla01_primero($anio, $ugel, $modalidad, $nivel)
+    {
+        return Nexus::from('edu_nexus as nx')
+            ->leftJoin('edu_nexus_regimen_laboral as subtipo', 'subtipo.id', '=', 'nx.regimenlaboral_id')
+            ->leftJoin('edu_nexus_regimen_laboral as tipo', 'tipo.id', '=', 'subtipo.dependencia')
+            ->leftJoin('edu_nexus_institucion_educativa as ie', 'ie.id', '=', 'nx.institucioneducativa_id')
+            ->leftJoin('edu_nexus_nivel_educativo as nm', 'nm.id', '=', 'ie.niveleducativo_id')
+            ->leftJoin('edu_nexus_modalidad as m', 'm.id', '=', 'nm.modalidad_id')
+            ->leftJoin('edu_nexus_ugel as u', 'u.id', '=', 'ie.ugel_id')
+            ->leftJoin('edu_nexus_situacion_laboral as sl', 'sl.id', '=', 'nx.situacionlaboral_id')
+            ->leftJoin('par_ubigeo as d', 'd.id', '=', 'ie.ubigeo_id')
+            ->leftJoin('par_ubigeo as p', 'p.id', '=', 'd.dependencia')
+            ->select(
+                'u.nombre as ugel',
                 DB::raw('SUM(CASE WHEN subtipo.id IN (8,9,15) THEN 1 ELSE 0 END) AS td'),
                 DB::raw('SUM(CASE WHEN subtipo.id IN (8,9,15) AND sl.id = 6 THEN 1 ELSE 0 END) AS tdn'),
                 DB::raw('SUM(CASE WHEN subtipo.id IN (8,9,15) AND sl.id = 1 THEN 1 ELSE 0 END) AS tdc'),
@@ -379,6 +423,50 @@ class NexusRepositorio
             ->leftJoin('par_ubigeo as p', 'p.id', '=', 'd.dependencia')
             ->select(
                 'l.nombre as ley',
+                DB::raw('SUM(CASE WHEN subtipo.id IN (8,9,15) AND sl.id in(1,6,7) THEN 1 ELSE 0 END) AS td'),
+                DB::raw('SUM(CASE WHEN subtipo.id IN (8,9,15) AND sl.id = 6 THEN 1 ELSE 0 END) AS tdn'),
+                DB::raw('SUM(CASE WHEN subtipo.id IN (8,9,15) AND sl.id = 1 THEN 1 ELSE 0 END) AS tdc'),
+                DB::raw('SUM(CASE WHEN subtipo.id IN (8,9,15) AND sl.id = 7 THEN 1 ELSE 0 END) AS tdv'),
+                DB::raw('SUM(CASE WHEN subtipo.id = 16 AND sl.id in(1,6,7) THEN 1 ELSE 0 END) AS ta'),
+                DB::raw('SUM(CASE WHEN subtipo.id = 16 AND sl.id = 6 THEN 1 ELSE 0 END) AS tan'),
+                DB::raw('SUM(CASE WHEN subtipo.id = 16 AND sl.id = 1 THEN 1 ELSE 0 END) AS tac'),
+                DB::raw('SUM(CASE WHEN subtipo.id = 16 AND sl.id = 7 THEN 1 ELSE 0 END) AS tav'),
+                DB::raw('SUM(CASE WHEN tipo.id in(2,3) AND sl.id in(6,1,3,7)  THEN 1 ELSE 0 END) AS tad'),
+                DB::raw('SUM(CASE WHEN tipo.id in(2,3) AND sl.id = 6 THEN 1 ELSE 0 END) AS tadn'),
+                DB::raw('SUM(CASE WHEN tipo.id in(2,3) AND sl.id = 1 THEN 1 ELSE 0 END) AS tadc'),
+                DB::raw('SUM(CASE WHEN tipo.id in(2,3) AND sl.id = 3 THEN 1 ELSE 0 END) AS tadd'),
+                DB::raw('SUM(CASE WHEN tipo.id in(2,3) AND sl.id = 7 THEN 1 ELSE 0 END) AS tadv'),
+                DB::raw('SUM(CASE WHEN subtipo.id = 17 AND sl.id = 1 THEN 1 ELSE 0 END) AS tpc'),
+            )
+            ->where('nx.importacion_id', function ($query) use ($anio) {
+                $query->select('id')
+                    ->from('par_importacion')
+                    ->where('fuenteImportacion_id', 2)
+                    ->where('estado', 'PR')
+                    ->whereRaw('fechaActualizacion = ( SELECT MAX(fechaActualizacion) FROM par_importacion WHERE fuenteImportacion_id = 2 AND YEAR(fechaActualizacion) = ? AND estado = "PR" )', [$anio]);
+            })
+            ->when($ugel > 0, fn($q) => $q->where('ie.ugel_id', $ugel))
+            ->when($modalidad > 0, fn($q) => $q->where('nm.modalidad_id', $modalidad))
+            ->when($nivel > 0, fn($q) => $q->where('nm.id', $nivel))
+            ->groupBy('l.nombre')
+            ->orderBy('l.nombre')
+            ->get();
+    }
+
+    public static function reportesreporte_tabla02_primero($anio, $ugel, $modalidad, $nivel)
+    {
+        return Nexus::from('edu_nexus as nx')
+            ->leftJoin('edu_nexus_regimen_laboral as subtipo', 'subtipo.id', '=', 'nx.regimenlaboral_id')
+            ->leftJoin('edu_nexus_regimen_laboral as tipo', 'tipo.id', '=', 'subtipo.dependencia')
+            ->leftJoin('edu_nexus_institucion_educativa as ie', 'ie.id', '=', 'nx.institucioneducativa_id')
+            ->leftJoin('edu_nexus_nivel_educativo as nm', 'nm.id', '=', 'ie.niveleducativo_id')
+            ->leftJoin('edu_nexus_modalidad as m', 'm.id', '=', 'nm.modalidad_id')
+            ->leftJoin('edu_nexus_ley as l', 'l.id', '=', 'ie.ugel_id')
+            ->leftJoin('edu_nexus_situacion_laboral as sl', 'sl.id', '=', 'nx.situacionlaboral_id')
+            ->leftJoin('par_ubigeo as d', 'd.id', '=', 'ie.ubigeo_id')
+            ->leftJoin('par_ubigeo as p', 'p.id', '=', 'd.dependencia')
+            ->select(
+                'l.nombre as ley',
                 DB::raw('SUM(CASE WHEN subtipo.id IN (8,9,15) THEN 1 ELSE 0 END) AS td'),
                 DB::raw('SUM(CASE WHEN subtipo.id IN (8,9,15) AND sl.id = 6 THEN 1 ELSE 0 END) AS tdn'),
                 DB::raw('SUM(CASE WHEN subtipo.id IN (8,9,15) AND sl.id = 1 THEN 1 ELSE 0 END) AS tdc'),
@@ -397,11 +485,7 @@ class NexusRepositorio
                     ->from('par_importacion')
                     ->where('fuenteImportacion_id', 2)
                     ->where('estado', 'PR')
-                    ->whereRaw('fechaActualizacion = (
-                        SELECT MAX(fechaActualizacion)
-                        FROM par_importacion
-                        WHERE fuenteImportacion_id = 2 AND YEAR(fechaActualizacion) = ? AND estado = "PR"
-                    )', [$anio]);
+                    ->whereRaw('fechaActualizacion = ( SELECT MAX(fechaActualizacion) FROM par_importacion WHERE fuenteImportacion_id = 2 AND YEAR(fechaActualizacion) = ? AND estado = "PR" )', [$anio]);
             })
             ->when($ugel > 0, fn($q) => $q->where('ie.ugel_id', $ugel))
             ->when($modalidad > 0, fn($q) => $q->where('nm.modalidad_id', $modalidad))
@@ -412,6 +496,52 @@ class NexusRepositorio
     }
 
     public static function reportesreporte_tabla03($anio, $ugel, $modalidad, $nivel)
+    {
+        return Nexus::from('edu_nexus as nx')
+            ->leftJoin('edu_nexus_regimen_laboral as subtipo', 'subtipo.id', '=', 'nx.regimenlaboral_id')
+            ->leftJoin('edu_nexus_regimen_laboral as tipo', 'tipo.id', '=', 'subtipo.dependencia')
+            ->leftJoin('edu_nexus_institucion_educativa as ie', 'ie.id', '=', 'nx.institucioneducativa_id')
+            ->leftJoin('edu_nexus_nivel_educativo as nm', 'nm.id', '=', 'ie.niveleducativo_id')
+            ->leftJoin('edu_nexus_modalidad as m', 'm.id', '=', 'nm.modalidad_id')
+            ->leftJoin('edu_nexus_ley as l', 'l.id', '=', 'ie.ugel_id')
+            ->leftJoin('edu_nexus_situacion_laboral as sl', 'sl.id', '=', 'nx.situacionlaboral_id')
+            ->leftJoin('par_ubigeo as d', 'd.id', '=', 'ie.ubigeo_id')
+            ->leftJoin('par_ubigeo as p', 'p.id', '=', 'd.dependencia')
+            ->select(
+                'd.nombre as distrito',
+                DB::raw('SUM(CASE WHEN subtipo.id IN (8,9,15) AND sl.id in(1,6,7) THEN 1 ELSE 0 END) AS td'),
+                DB::raw('SUM(CASE WHEN subtipo.id IN (8,9,15) AND sl.id = 6 THEN 1 ELSE 0 END) AS tdn'),
+                DB::raw('SUM(CASE WHEN subtipo.id IN (8,9,15) AND sl.id = 1 THEN 1 ELSE 0 END) AS tdc'),
+                DB::raw('SUM(CASE WHEN subtipo.id IN (8,9,15) AND sl.id = 7 THEN 1 ELSE 0 END) AS tdv'),
+                DB::raw('SUM(CASE WHEN subtipo.id = 16 AND sl.id in(1,6,7) THEN 1 ELSE 0 END) AS ta'),
+                DB::raw('SUM(CASE WHEN subtipo.id = 16 AND sl.id = 6 THEN 1 ELSE 0 END) AS tan'),
+                DB::raw('SUM(CASE WHEN subtipo.id = 16 AND sl.id = 1 THEN 1 ELSE 0 END) AS tac'),
+                DB::raw('SUM(CASE WHEN subtipo.id = 16 AND sl.id = 7 THEN 1 ELSE 0 END) AS tav'),
+                DB::raw('SUM(CASE WHEN tipo.id in(2,3) AND sl.id in(6,1,3,7)  THEN 1 ELSE 0 END) AS tad'),
+                DB::raw('SUM(CASE WHEN tipo.id in(2,3) AND sl.id = 6 THEN 1 ELSE 0 END) AS tadn'),
+                DB::raw('SUM(CASE WHEN tipo.id in(2,3) AND sl.id = 1 THEN 1 ELSE 0 END) AS tadc'),
+                DB::raw('SUM(CASE WHEN tipo.id in(2,3) AND sl.id = 3 THEN 1 ELSE 0 END) AS tadd'),
+                DB::raw('SUM(CASE WHEN tipo.id in(2,3) AND sl.id = 7 THEN 1 ELSE 0 END) AS tadv'),
+                DB::raw('SUM(CASE WHEN subtipo.id = 17 AND sl.id = 1 THEN 1 ELSE 0 END) AS tpc'),
+            )
+            ->where('nx.importacion_id', function ($query) use ($anio) {
+                $query->select('id')
+                    ->from('par_importacion')
+                    ->where('fuenteImportacion_id', 2)
+                    ->where('estado', 'PR')
+                    ->whereRaw('fechaActualizacion = (
+                        SELECT MAX(fechaActualizacion) FROM par_importacion WHERE fuenteImportacion_id = 2 AND YEAR(fechaActualizacion) = ? AND estado = "PR"
+                    )', [$anio]);
+            })
+            ->when($ugel > 0, fn($q) => $q->where('ie.ugel_id', $ugel))
+            ->when($modalidad > 0, fn($q) => $q->where('nm.modalidad_id', $modalidad))
+            ->when($nivel > 0, fn($q) => $q->where('nm.id', $nivel))
+            ->groupBy('d.nombre')
+            ->orderBy('d.codigo')
+            ->get();
+    }
+
+    public static function reportesreporte_tabla03_primero($anio, $ugel, $modalidad, $nivel)
     {
         return Nexus::from('edu_nexus as nx')
             ->leftJoin('edu_nexus_regimen_laboral as subtipo', 'subtipo.id', '=', 'nx.regimenlaboral_id')

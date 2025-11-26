@@ -122,13 +122,16 @@ class NexusController extends Controller
                     $foot->td = $base->sum('td');
                     $foot->tdn = $base->sum('tdn');
                     $foot->tdc = $base->sum('tdc');
-                    $foot->tde = $base->sum('tde');
-                    $foot->tdd = $base->sum('tdd');
                     $foot->tdv = $base->sum('tdv');
                     $foot->ta = $base->sum('ta');
                     $foot->tan = $base->sum('tan');
                     $foot->tac = $base->sum('tac');
                     $foot->tav = $base->sum('tav');
+                    $foot->tad = $base->sum('tad');
+                    $foot->tadn = $base->sum('tadn');
+                    $foot->tadc = $base->sum('tadc');
+                    $foot->tadd = $base->sum('tadd');
+                    $foot->tadv = $base->sum('tadv');
                     $foot->tpc = $base->sum('tpc');
                 }
                 $excel = view('educacion.Nexus.ReportesTablas', compact('div', 'base', 'foot'))->render();
@@ -144,13 +147,16 @@ class NexusController extends Controller
                     $foot->td = $base->sum('td');
                     $foot->tdn = $base->sum('tdn');
                     $foot->tdc = $base->sum('tdc');
-                    $foot->tde = $base->sum('tde');
-                    $foot->tdd = $base->sum('tdd');
                     $foot->tdv = $base->sum('tdv');
                     $foot->ta = $base->sum('ta');
                     $foot->tan = $base->sum('tan');
                     $foot->tac = $base->sum('tac');
                     $foot->tav = $base->sum('tav');
+                    $foot->tad = $base->sum('tad');
+                    $foot->tadn = $base->sum('tadn');
+                    $foot->tadc = $base->sum('tadc');
+                    $foot->tadd = $base->sum('tadd');
+                    $foot->tadv = $base->sum('tadv');
                     $foot->tpc = $base->sum('tpc');
                 }
                 $excel = view('educacion.Nexus.ReportesTablas', compact('div', 'base', 'foot'))->render();
@@ -166,13 +172,16 @@ class NexusController extends Controller
                     $foot->td = $base->sum('td');
                     $foot->tdn = $base->sum('tdn');
                     $foot->tdc = $base->sum('tdc');
-                    $foot->tde = $base->sum('tde');
-                    $foot->tdd = $base->sum('tdd');
                     $foot->tdv = $base->sum('tdv');
                     $foot->ta = $base->sum('ta');
                     $foot->tan = $base->sum('tan');
                     $foot->tac = $base->sum('tac');
                     $foot->tav = $base->sum('tav');
+                    $foot->tad = $base->sum('tad');
+                    $foot->tadn = $base->sum('tadn');
+                    $foot->tadc = $base->sum('tadc');
+                    $foot->tadd = $base->sum('tadd');
+                    $foot->tadv = $base->sum('tadv');
                     $foot->tpc = $base->sum('tpc');
                 }
                 $excel = view('educacion.Nexus.ReportesTablas', compact('div', 'base', 'foot'))->render();

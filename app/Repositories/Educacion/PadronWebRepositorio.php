@@ -162,6 +162,7 @@ class PadronWebRepositorio
         $dato['datax'] .= ']';
         return $dato;
     }
+
     public static function grafica_estudiantesmatriculadospormodalidad($importacion_id) //no usado
     {
         $query = DB::table('edu_padronweb as v1')
@@ -214,6 +215,7 @@ class PadronWebRepositorio
         $dato['datax'] .= ']';
         return $dato;
     }
+
     public static function grafica_estudiantessegunmodalidad($importacion_id)
     {
         $query = DB::table('edu_padronweb as v1')
@@ -230,6 +232,7 @@ class PadronWebRepositorio
         }
         return $query;
     }
+
     public static function grafica_docentessegunmodalidad($importacion_id)
     {
         $query = DB::table('edu_padronweb as v1')
@@ -246,6 +249,7 @@ class PadronWebRepositorio
         }
         return $query;
     }
+
     public static function grafica_matriculadosportipogestionyugel($importacion_id)
     {
         $query = DB::table('edu_padronweb as v1')
@@ -302,6 +306,7 @@ class PadronWebRepositorio
         $dato['datax'] .= ']';
         return $dato;
     }
+
     public static function grafica_matriculadosporugel($importacion_id)
     {
         $query = DB::table('edu_padronweb as v1')
@@ -831,7 +836,6 @@ class PadronWebRepositorio
         }
         return $query;
     }
-
 
     public static function listar_totalServicosLocalesSecciones($importacion)
     {
