@@ -3,6 +3,7 @@
     <!-- Table datatable css -->
     <link href="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.css" rel="stylesheet"
         type="text/css" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"> --}}
 @endsection
 @section('content')
@@ -619,7 +620,8 @@
                                     <div class="">
                                         <label class="col-form-label">Fuente de datos</label>
                                         <div class="">
-                                            <input type="text" class="form-control" readonly="readonly" value="ESCALE">
+                                            <input type="text" class="form-control" readonly="readonly"
+                                                value="ESCALE">
                                         </div>
                                     </div>
                                 </div>
@@ -695,6 +697,86 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal - Bootstrap 4 -->
+    <div class="modal fade" id="modalProcesos" tabindex="-1" role="dialog" aria-labelledby="modalProcesosLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalProcesosLabel">
+                        <i class="fa fa-cogs"></i> Ejecutar Procesos de Padrón Web
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="card">
+                                <div class="card-header bg-primary text-white">
+                                    Proceso 1
+                                </div>
+                                <div class="card-body text-center">
+                                    <p>Padrón Web</p>
+                                    <button class="btn btn-primary btn-sm w-100" data-proceso="1">
+                                        <i class="fa fa-play"></i> Iniciar
+                                    </button>
+                                    <div class="progress mt-2 d-none" style="height: 5px;">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary"
+                                            style="width: 100%"></div>
+                                    </div>
+                                    <div class="alert mt-2 d-none"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <div class="card">
+                                <div class="card-header bg-success text-white">
+                                    Proceso 2
+                                </div>
+                                <div class="card-body text-center">
+                                    <p>Cubo Pacto</p>
+                                    <button class="btn btn-success btn-sm w-100" data-proceso="2">
+                                        <i class="fa fa-play"></i> Iniciar
+                                    </button>
+                                    <div class="progress mt-2 d-none" style="height: 5px;">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                                            style="width: 100%"></div>
+                                    </div>
+                                    <div class="alert mt-2 d-none"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <div class="card">
+                                <div class="card-header bg-info text-white">
+                                    Proceso 3
+                                </div>
+                                <div class="card-body text-center">
+                                    <p>Cubo EIB</p>
+                                    <button class="btn btn-info btn-sm w-100" data-proceso="3">
+                                        <i class="fa fa-play"></i> Iniciar
+                                    </button>
+                                    <div class="progress mt-2 d-none" style="height: 5px;">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-info"
+                                            style="width: 100%"></div>
+                                    </div>
+                                    <div class="alert mt-2 d-none"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <small class="text-muted">Los procesos pueden tardar. No cierre esta ventana.</small>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('js')
@@ -711,6 +793,113 @@
                 ajax: url_tabla_principal({{ $fuente }}),
                 type: "POST",
             });
+            ///////////////////////////////
+
+            // ✅ Sonido de éxito (sintético, sin archivos)
+            function playSuccessBeep() {
+                try {
+                    var ctx = new(window.AudioContext || window.webkitAudioContext)();
+                    var osc = ctx.createOscillator();
+                    var gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.value = 800;
+                    gain.gain.value = 0.15;
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start();
+                    setTimeout(function() {
+                        osc.stop();
+                        ctx.close();
+                    }, 300);
+                } catch (e) {
+                    console.log('✅ Proceso terminado');
+                }
+            }
+
+            // ✅ Delegación de eventos (funciona con DataTables)
+            $(document).on('click', '.btn-ejecutar-procesos', function(e) {
+                e.preventDefault();
+                var importacionId = $(this).data('importacion');
+                if (!importacionId) {
+                    alert('ID de importación no encontrado.');
+                    return;
+                }
+
+                // Guardar ID en el modal
+                $('#modalProcesos').data('importacion-actual', importacionId);
+
+                // ✅ Abrir modal con Bootstrap 4 (jQuery)
+                $('#modalProcesos').modal('show');
+            });
+
+            // ✅ Manejar clic en botones de proceso DENTRO del modal
+            $(document).on('click', '#modalProcesos [data-proceso]', function(e) {
+                e.preventDefault();
+                var btn = $(this);
+                var proceso = btn.data('proceso');
+                var importacionId = $('#modalProcesos').data('importacion-actual');
+                var card = btn.closest('.card');
+                var progressBar = card.find('.progress');
+                var alertBox = card.find('.alert');
+
+                if (!importacionId) {
+                    alertBox.removeClass('d-none alert-success alert-danger').addClass('alert alert-danger')
+                        .text('Error: Importación no definida.');
+                    return;
+                }
+
+                // Reset UI
+                alertBox.addClass('d-none');
+                btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Procesando...');
+                progressBar.removeClass('d-none');
+
+                // ✅ Llamada con Axios (compatible con Laravel 8)
+                const baseUrl = "{{ url('/') }}";
+                axios.post(baseUrl + '/educación/Importar/PadronWeb/PA/' + proceso + '/' + importacionId, {
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    })
+                    .then(function(response) {
+                        var data = response.data;
+                        if (!data.error) {
+                            alertBox.removeClass('d-none alert-danger').addClass('alert alert-success')
+                                .html('<i class="fa fa-check"></i> ✔ Proceso ejecutado correctamente.');
+                            btn.html('<i class="fa fa-redo"></i> Iniciar de nuevo');
+                            playSuccessBeep();
+                        } else {
+                            alertBox.removeClass('d-none alert-success').addClass('alert alert-danger')
+                                .html('<i class="fa fa-exclamation-circle"></i> ✘ ' + data.mensaje);
+                            btn.html('<i class="fa fa-redo"></i> Reintentar');
+                        }
+                    })
+                    .catch(function(error) {
+                        var msg = 'Error de conexión.';
+                        if (error.response && error.response.data && error.response.data.mensaje) {
+                            msg = error.response.data.mensaje;
+                        } else if (error.response) {
+                            msg = 'Error HTTP ' + error.response.status;
+                        }
+                        alertBox.removeClass('d-none alert-success').addClass('alert alert-danger')
+                            .html('<i class="fa fa-exclamation-circle"></i> ✘ ' + msg);
+                        btn.html('<i class="fa fa-redo"></i> Reintentar');
+                    })
+                    .finally(function() {
+                        btn.prop('disabled', false);
+                    });
+            });
+
+            // ✅ Opcional: limpiar al cerrar el modal
+            $('#modalProcesos').on('hidden.bs.modal', function() {
+                $(this).removeData('importacion-actual');
+                $(this).find('.alert').addClass('d-none');
+                $(this).find('.progress').addClass('d-none');
+                $(this).find('[data-proceso]').each(function() {
+                    var txt = $(this).data('proceso') == 1 ? 'Iniciar' :
+                        $(this).data('proceso') == 2 ? 'Iniciar' : 'Iniciar';
+                    $(this).html('<i class="fa fa-play"></i> ' + txt);
+                });
+            });
+
+            ///////////////////////////////
         });
 
         function procesarCubo(importacion_id) {
@@ -911,11 +1100,15 @@
                 }
 
                 progress_bar.html(msg);
-                console.warn('AJAX FALLÓ', { jqXHR, textStatus, errorThrown });
-            // }).fail(err => {
-            //     progress_bar.removeClass('bg-success bg-info').addClass('bg-danger');
-            //     // progress_bar.html('Hubo un error!!');
-            //     progress_bar.html('Archivo desconocido');
+                console.warn('AJAX FALLÓ', {
+                    jqXHR,
+                    textStatus,
+                    errorThrown
+                });
+                // }).fail(err => {
+                //     progress_bar.removeClass('bg-success bg-info').addClass('bg-danger');
+                //     // progress_bar.html('Hubo un error!!');
+                //     progress_bar.html('Archivo desconocido');
             }).always(() => {
                 $('button', form).attr('disabled', false);
             });
@@ -2441,4 +2634,14 @@
     <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.responsive.min.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.js"></script>
+
+    <!-- En <head> -->
+    {{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
+
+    <!-- Al final del <body> -->
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+
+    <!-- Si usas FontAwesome -->
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> --}}
 @endsection

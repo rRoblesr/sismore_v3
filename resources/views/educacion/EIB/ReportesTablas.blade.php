@@ -1,62 +1,5 @@
 @switch($div)
     @case('tabla1')
-        {{-- <table id="tabla1" class="table table-striped table-bordered font-12">
-            <thead>
-                <tr class="table-success-0 text-white">
-                    <th class="text-center" rowspan="2">UGEL</th>
-                    <th class="text-center" colspan="6">PLAZAS DOCENTE</th>
-                    <th class="text-center" colspan="4">PLAZAS AUXILIARES DE EDUCACIÓN</th>
-                    <th class="text-center" colspan="1">PEC</th>
-                </tr>
-                <tr class="table-success-0 text-white">
-                    <th class="text-center">TOTAL</th>
-                    <th class="text-center">NOMBRADO</th>
-                    <th class="text-center">CONTRATADO</th>
-                    <th class="text-center">ENCARGADO</th>
-                    <th class="text-center">DESIGNADO</th>
-                    <th class="text-center">VACANTE</th>
-                    <th class="text-center">TOTAL</th>
-                    <th class="text-center">NOMBRADO</th>
-                    <th class="text-center">CONTRATADO</th>
-                    <th class="text-center">VACANTE</th>
-                    <th class="text-center">CONTRATADO</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($base as $key => $item)
-                    <tr class="text-center">
-                        <td class="text-left">{{ $item->ugel }}</td>
-                        <td class="table-warning">{{ number_format($item->td, 0) }}</td>
-                        <td>{{ number_format($item->tdn, 0) }}</td>
-                        <td>{{ number_format($item->tdc, 0) }}</td>
-                        <td>{{ number_format($item->tde, 0) }}</td>
-                        <td>{{ number_format($item->tdd, 0) }}</td>
-                        <td>{{ number_format($item->tdv, 0) }}</td>
-                        <td class="table-warning">{{ number_format($item->ta, 0) }}</td>
-                        <td>{{ number_format($item->tan, 0) }}</td>
-                        <td>{{ number_format($item->tac, 0) }}</td>
-                        <td>{{ number_format($item->tav, 0) }}</td>
-                        <td>{{ number_format($item->tpc, 0) }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-            <tfoot>
-                <tr class="text-center table-success-0 text-white">
-                    <th class="text-left">TOTAL</th>
-                    <th>{{ number_format($foot->td, 0) }}</th>
-                    <th>{{ number_format($foot->tdn, 0) }}</th>
-                    <th>{{ number_format($foot->tdc, 0) }}</th>
-                    <th>{{ number_format($foot->tde, 0) }}</th>
-                    <th>{{ number_format($foot->tdd, 0) }}</th>
-                    <th>{{ number_format($foot->tdv, 0) }}</th>
-                    <th>{{ number_format($foot->ta, 0) }}</th>
-                    <th>{{ number_format($foot->tan, 0) }}</th>
-                    <th>{{ number_format($foot->tac, 0) }}</th>
-                    <th>{{ number_format($foot->tav, 0) }}</th>
-                    <th>{{ number_format($foot->tpc, 0) }}</th>
-                </tr>
-            </tfoot>
-        </table> --}}
         <table id="tabla1" class="table table-striped table-bordered font-12">
             <thead>
                 <tr class="table-success-0 text-white">
@@ -87,58 +30,48 @@
                 @foreach ($base as $item)
                     <tr class="text-center">
                         <td class="text-left">{{ $item->forma_atencion }}</td>
-
                         <!-- SERVICIOS EDUCATIVOS -->
-                        <td class="table-warning">{{ number_format($item->servicios_total, 0) }}</td>
-                        <td>{{ number_format($item->servicios_rural, 0) }}</td>
-                        <td>{{ number_format($item->servicios_urbano, 0) }}</td>
-
+                        <td class="table-warning">{{ number_format($item->ts, 0) }}</td>
+                        <td>{{ number_format($item->tsr, 0) }}</td>
+                        <td>{{ number_format($item->tsu, 0) }}</td>
                         <!-- ESTUDIANTES MATRICULADOS -->
-                        <td class="table-warning">{{ number_format($item->estudiantes_total, 0) }}</td>
-                        <td>{{ number_format($item->estudiantes_rural, 0) }}</td>
-                        <td>{{ number_format($item->estudiantes_urbano, 0) }}</td>
-
+                        <td class="table-warning">{{ number_format($item->tm, 0) }}</td>
+                        <td>{{ number_format($item->tmr, 0) }}</td>
+                        <td>{{ number_format($item->tmu, 0) }}</td>
                         <!-- PERSONAL DOCENTE -->
-                        <td class="table-warning">{{ number_format($item->docentes_total, 0) }}</td>
-                        <td>{{ number_format($item->docentes_rural, 0) }}</td>
-                        <td>{{ number_format($item->docentes_urbano, 0) }}</td>
-
+                        <td class="table-warning">{{ number_format($item->td, 0) }}</td>
+                        <td>{{ number_format($item->tdr, 0) }}</td>
+                        <td>{{ number_format($item->tdu, 0) }}</td>
                         <!-- AUXILIAR DE EDUCACIÓN -->
-                        <td class="table-warning">{{ number_format($item->auxiliares_total, 0) }}</td>
-                        <td>{{ number_format($item->auxiliares_rural, 0) }}</td>
-                        <td>{{ number_format($item->auxiliares_urbano, 0) }}</td>
-
+                        <td class="table-warning">{{ number_format($item->ta, 0) }}</td>
+                        <td>{{ number_format($item->tar, 0) }}</td>
+                        <td>{{ number_format($item->tau, 0) }}</td>
                         <!-- PEC -->
-                        <td>{{ number_format($item->pec_rural, 0) }}</td> <!-- Solo rural, según tu ejemplo -->
+                        <td>{{ number_format($item->tpr, 0) }}</td> <!-- Solo rural, según tu ejemplo -->
                     </tr>
                 @endforeach
             </tbody>
             <tfoot>
                 <tr class="text-center table-success-0 text-white">
                     <th class="text-left">TOTAL</th>
-
                     <!-- SERVICIOS EDUCATIVOS -->
-                    <th>{{ number_format($foot->servicios_total, 0) }}</th>
-                    <th>{{ number_format($foot->servicios_rural, 0) }}</th>
-                    <th>{{ number_format($foot->servicios_urbano, 0) }}</th>
-
+                    <th>{{ number_format($foot->ts, 0) }}</th>
+                    <th>{{ number_format($foot->tsr, 0) }}</th>
+                    <th>{{ number_format($foot->tsu, 0) }}</th>
                     <!-- ESTUDIANTES MATRICULADOS -->
-                    <th>{{ number_format($foot->estudiantes_total, 0) }}</th>
-                    <th>{{ number_format($foot->estudiantes_rural, 0) }}</th>
-                    <th>{{ number_format($foot->estudiantes_urbano, 0) }}</th>
-
+                    <th>{{ number_format($foot->tm, 0) }}</th>
+                    <th>{{ number_format($foot->tmr, 0) }}</th>
+                    <th>{{ number_format($foot->tmu, 0) }}</th>
                     <!-- PERSONAL DOCENTE -->
-                    <th>{{ number_format($foot->docentes_total, 0) }}</th>
-                    <th>{{ number_format($foot->docentes_rural, 0) }}</th>
-                    <th>{{ number_format($foot->docentes_urbano, 0) }}</th>
-
+                    <th>{{ number_format($foot->td, 0) }}</th>
+                    <th>{{ number_format($foot->tdr, 0) }}</th>
+                    <th>{{ number_format($foot->tdu, 0) }}</th>
                     <!-- AUXILIAR DE EDUCACIÓN -->
-                    <th>{{ number_format($foot->auxiliares_total, 0) }}</th>
-                    <th>{{ number_format($foot->auxiliares_rural, 0) }}</th>
-                    <th>{{ number_format($foot->auxiliares_urbano, 0) }}</th>
-
+                    <th>{{ number_format($foot->ta, 0) }}</th>
+                    <th>{{ number_format($foot->tar, 0) }}</th>
+                    <th>{{ number_format($foot->tau, 0) }}</th>
                     <!-- PEC -->
-                    <th>{{ number_format($foot->pec_rural, 0) }}</th>
+                    <th>{{ number_format($foot->tpr, 0) }}</th>
                 </tr>
             </tfoot>
         </table>
@@ -174,59 +107,49 @@
             <tbody>
                 @foreach ($base as $item)
                     <tr class="text-center">
-                        <td class="text-left">{{ $item->nivel_educativox }}</td>
-
+                        <td class="text-left">{{ $item->nivel_modalidad }}</td>
                         <!-- SERVICIOS EDUCATIVOS -->
-                        <td class="table-warning">{{ number_format($item->servicios_total, 0) }}</td>
-                        <td>{{ number_format($item->servicios_rural, 0) }}</td>
-                        <td>{{ number_format($item->servicios_urbano, 0) }}</td>
-
+                        <td class="table-warning">{{ number_format($item->ts, 0) }}</td>
+                        <td>{{ number_format($item->tsr, 0) }}</td>
+                        <td>{{ number_format($item->tsu, 0) }}</td>
                         <!-- ESTUDIANTES MATRICULADOS -->
-                        <td class="table-warning">{{ number_format($item->estudiantes_total, 0) }}</td>
-                        <td>{{ number_format($item->estudiantes_rural, 0) }}</td>
-                        <td>{{ number_format($item->estudiantes_urbano, 0) }}</td>
-
+                        <td class="table-warning">{{ number_format($item->tm, 0) }}</td>
+                        <td>{{ number_format($item->tmr, 0) }}</td>
+                        <td>{{ number_format($item->tmu, 0) }}</td>
                         <!-- PERSONAL DOCENTE -->
-                        <td class="table-warning">{{ number_format($item->docentes_total, 0) }}</td>
-                        <td>{{ number_format($item->docentes_rural, 0) }}</td>
-                        <td>{{ number_format($item->docentes_urbano, 0) }}</td>
-
+                        <td class="table-warning">{{ number_format($item->td, 0) }}</td>
+                        <td>{{ number_format($item->tdr, 0) }}</td>
+                        <td>{{ number_format($item->tdu, 0) }}</td>
                         <!-- AUXILIAR DE EDUCACIÓN -->
-                        <td class="table-warning">{{ number_format($item->auxiliares_total, 0) }}</td>
-                        <td>{{ number_format($item->auxiliares_rural, 0) }}</td>
-                        <td>{{ number_format($item->auxiliares_urbano, 0) }}</td>
-
+                        <td class="table-warning">{{ number_format($item->ta, 0) }}</td>
+                        <td>{{ number_format($item->tar, 0) }}</td>
+                        <td>{{ number_format($item->tau, 0) }}</td>
                         <!-- PEC -->
-                        <td>{{ number_format($item->pec_rural, 0) }}</td> <!-- Solo rural, según tu ejemplo -->
+                        <td>{{ number_format($item->tpr, 0) }}</td> <!-- Solo rural, según tu ejemplo -->
                     </tr>
                 @endforeach
             </tbody>
             <tfoot>
                 <tr class="text-center table-success-0 text-white">
                     <th class="text-left">TOTAL</th>
-
                     <!-- SERVICIOS EDUCATIVOS -->
-                    <th>{{ number_format($foot->servicios_total, 0) }}</th>
-                    <th>{{ number_format($foot->servicios_rural, 0) }}</th>
-                    <th>{{ number_format($foot->servicios_urbano, 0) }}</th>
-
+                    <th>{{ number_format($foot->ts, 0) }}</th>
+                    <th>{{ number_format($foot->tsr, 0) }}</th>
+                    <th>{{ number_format($foot->tsu, 0) }}</th>
                     <!-- ESTUDIANTES MATRICULADOS -->
-                    <th>{{ number_format($foot->estudiantes_total, 0) }}</th>
-                    <th>{{ number_format($foot->estudiantes_rural, 0) }}</th>
-                    <th>{{ number_format($foot->estudiantes_urbano, 0) }}</th>
-
+                    <th>{{ number_format($foot->tm, 0) }}</th>
+                    <th>{{ number_format($foot->tmr, 0) }}</th>
+                    <th>{{ number_format($foot->tmu, 0) }}</th>
                     <!-- PERSONAL DOCENTE -->
-                    <th>{{ number_format($foot->docentes_total, 0) }}</th>
-                    <th>{{ number_format($foot->docentes_rural, 0) }}</th>
-                    <th>{{ number_format($foot->docentes_urbano, 0) }}</th>
-
+                    <th>{{ number_format($foot->td, 0) }}</th>
+                    <th>{{ number_format($foot->tdr, 0) }}</th>
+                    <th>{{ number_format($foot->tdu, 0) }}</th>
                     <!-- AUXILIAR DE EDUCACIÓN -->
-                    <th>{{ number_format($foot->auxiliares_total, 0) }}</th>
-                    <th>{{ number_format($foot->auxiliares_rural, 0) }}</th>
-                    <th>{{ number_format($foot->auxiliares_urbano, 0) }}</th>
-
+                    <th>{{ number_format($foot->ta, 0) }}</th>
+                    <th>{{ number_format($foot->tar, 0) }}</th>
+                    <th>{{ number_format($foot->tau, 0) }}</th>
                     <!-- PEC -->
-                    <th>{{ number_format($foot->pec_rural, 0) }}</th>
+                    <th>{{ number_format($foot->tpr, 0) }}</th>
                 </tr>
             </tfoot>
         </table>
@@ -263,58 +186,48 @@
                 @foreach ($base as $item)
                     <tr class="text-center">
                         <td class="text-left">{{ $item->lengua }}</td>
-
                         <!-- SERVICIOS EDUCATIVOS -->
-                        <td class="table-warning">{{ number_format($item->servicios_total, 0) }}</td>
-                        <td>{{ number_format($item->servicios_rural, 0) }}</td>
-                        <td>{{ number_format($item->servicios_urbano, 0) }}</td>
-
+                        <td class="table-warning">{{ number_format($item->ts, 0) }}</td>
+                        <td>{{ number_format($item->tsr, 0) }}</td>
+                        <td>{{ number_format($item->tsu, 0) }}</td>
                         <!-- ESTUDIANTES MATRICULADOS -->
-                        <td class="table-warning">{{ number_format($item->estudiantes_total, 0) }}</td>
-                        <td>{{ number_format($item->estudiantes_rural, 0) }}</td>
-                        <td>{{ number_format($item->estudiantes_urbano, 0) }}</td>
-
+                        <td class="table-warning">{{ number_format($item->tm, 0) }}</td>
+                        <td>{{ number_format($item->tmr, 0) }}</td>
+                        <td>{{ number_format($item->tmu, 0) }}</td>
                         <!-- PERSONAL DOCENTE -->
-                        <td class="table-warning">{{ number_format($item->docentes_total, 0) }}</td>
-                        <td>{{ number_format($item->docentes_rural, 0) }}</td>
-                        <td>{{ number_format($item->docentes_urbano, 0) }}</td>
-
+                        <td class="table-warning">{{ number_format($item->td, 0) }}</td>
+                        <td>{{ number_format($item->tdr, 0) }}</td>
+                        <td>{{ number_format($item->tdu, 0) }}</td>
                         <!-- AUXILIAR DE EDUCACIÓN -->
-                        <td class="table-warning">{{ number_format($item->auxiliares_total, 0) }}</td>
-                        <td>{{ number_format($item->auxiliares_rural, 0) }}</td>
-                        <td>{{ number_format($item->auxiliares_urbano, 0) }}</td>
-
+                        <td class="table-warning">{{ number_format($item->ta, 0) }}</td>
+                        <td>{{ number_format($item->tar, 0) }}</td>
+                        <td>{{ number_format($item->tau, 0) }}</td>
                         <!-- PEC -->
-                        <td>{{ number_format($item->pec_rural, 0) }}</td> <!-- Solo rural, según tu ejemplo -->
+                        <td>{{ number_format($item->tpr, 0) }}</td> <!-- Solo rural, según tu ejemplo -->
                     </tr>
                 @endforeach
             </tbody>
             <tfoot>
                 <tr class="text-center table-success-0 text-white">
                     <th class="text-left">TOTAL</th>
-
                     <!-- SERVICIOS EDUCATIVOS -->
-                    <th>{{ number_format($foot->servicios_total, 0) }}</th>
-                    <th>{{ number_format($foot->servicios_rural, 0) }}</th>
-                    <th>{{ number_format($foot->servicios_urbano, 0) }}</th>
-
+                    <th>{{ number_format($foot->ts, 0) }}</th>
+                    <th>{{ number_format($foot->tsr, 0) }}</th>
+                    <th>{{ number_format($foot->tsu, 0) }}</th>
                     <!-- ESTUDIANTES MATRICULADOS -->
-                    <th>{{ number_format($foot->estudiantes_total, 0) }}</th>
-                    <th>{{ number_format($foot->estudiantes_rural, 0) }}</th>
-                    <th>{{ number_format($foot->estudiantes_urbano, 0) }}</th>
-
+                    <th>{{ number_format($foot->tm, 0) }}</th>
+                    <th>{{ number_format($foot->tmr, 0) }}</th>
+                    <th>{{ number_format($foot->tmu, 0) }}</th>
                     <!-- PERSONAL DOCENTE -->
-                    <th>{{ number_format($foot->docentes_total, 0) }}</th>
-                    <th>{{ number_format($foot->docentes_rural, 0) }}</th>
-                    <th>{{ number_format($foot->docentes_urbano, 0) }}</th>
-
+                    <th>{{ number_format($foot->td, 0) }}</th>
+                    <th>{{ number_format($foot->tdr, 0) }}</th>
+                    <th>{{ number_format($foot->tdu, 0) }}</th>
                     <!-- AUXILIAR DE EDUCACIÓN -->
-                    <th>{{ number_format($foot->auxiliares_total, 0) }}</th>
-                    <th>{{ number_format($foot->auxiliares_rural, 0) }}</th>
-                    <th>{{ number_format($foot->auxiliares_urbano, 0) }}</th>
-
+                    <th>{{ number_format($foot->ta, 0) }}</th>
+                    <th>{{ number_format($foot->tar, 0) }}</th>
+                    <th>{{ number_format($foot->tau, 0) }}</th>
                     <!-- PEC -->
-                    <th>{{ number_format($foot->pec_rural, 0) }}</th>
+                    <th>{{ number_format($foot->tpr, 0) }}</th>
                 </tr>
             </tfoot>
         </table>

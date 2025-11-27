@@ -15,6 +15,7 @@ use App\Http\Controllers\Educacion\CensoController;
 use App\Http\Controllers\Educacion\CensoDocenteController;
 use App\Http\Controllers\Educacion\CuadroAsigPersonalController;
 use App\Http\Controllers\Educacion\CuboPacto2Controller;
+use App\Http\Controllers\Educacion\CuboPadronEIBController;
 use App\Http\Controllers\Educacion\ImportacionController;
 use App\Http\Controllers\Educacion\EceController;
 use App\Http\Controllers\Educacion\ImporCensoDocenteController;
@@ -246,19 +247,30 @@ Route::get('/InstitucionEducativa/Distrito/{provincia}', [InstEducativaControlle
 // Route::get('/ImporPadronWeb/Exportar/PadronWEB', [ImporPadronWebController::class, 'download'])->name('imporpadronweb.download');
 // Route::post('/ImporPadronWeb/PA/{proceso}/{importacion}', [ImporPadronWebController::class, 'ejecutarProcesos'])->name('imporpadronnominal.procedures');
 
-Route::prefix('educación/Importar/PadronWeb')
-    ->name('ImporPadronWeb.')
-    // ->middleware(['auth', 'can:importar-padron-web']) 
-    ->group(function () {
-        Route::get('/', [ImporPadronWebController::class, 'importar'])->name('importar');
-        Route::post('/Importar', [ImporPadronWebController::class, 'guardar'])->name('guardar');
-        Route::post('/LI/{importacion_id}', [ImporPadronWebController::class, 'ListaImportada'])->name('listarimportados');
-        Route::get('/Listar/ImportarDT', [ImporPadronWebController::class, 'ListarDTImportFuenteTodos'])->name('listar.importados');
-        Route::get('/Eliminar/{id}', [ImporPadronWebController::class, 'eliminar'])->name('eliminar');
-        Route::get('/Exportar', [ImporPadronWebController::class, 'exportar'])->name('exportar');
-        Route::get('/Exportar/PadronWEB', [ImporPadronWebController::class, 'download'])->name('download');
-        Route::post('/PA/{proceso}/{importacion}', [ImporPadronWebController::class, 'ejecutarProcesos'])->name('procedures');
-    });
+// Route::prefix('educación/Importar/PadronWeb')
+//     ->name('ImporPadronWeb.')
+//     // ->middleware(['auth', 'can:importar-padron-web']) 
+//     ->group(function () {
+//         Route::get('/', [ImporPadronWebController::class, 'importar'])->name('importar');
+//         Route::post('/Importar', [ImporPadronWebController::class, 'guardar'])->name('guardar');
+//         Route::post('/LI/{importacion_id}', [ImporPadronWebController::class, 'ListaImportada'])->name('listarimportados');
+//         Route::get('/Listar/ImportarDT', [ImporPadronWebController::class, 'ListarDTImportFuenteTodos'])->name('listar.importados');
+//         Route::get('/Eliminar/{id}', [ImporPadronWebController::class, 'eliminar'])->name('eliminar');
+//         Route::get('/Exportar', [ImporPadronWebController::class, 'exportar'])->name('exportar');
+//         Route::get('/Exportar/PadronWEB', [ImporPadronWebController::class, 'download'])->name('download');
+//         Route::post('/PA/{proceso}/{importacion}', [ImporPadronWebController::class, 'ejecutarProcesos'])->name('procedures');
+//     });
+
+// Rutas desagrupadas para 'educación/Importar/PadronWeb'
+
+Route::get('educación/Importar/PadronWeb/', [ImporPadronWebController::class, 'importar'])->name('ImporPadronWeb.importar');
+Route::post('educación/Importar/PadronWeb/Importar', [ImporPadronWebController::class, 'guardar'])->name('ImporPadronWeb.guardar');
+Route::post('educación/Importar/PadronWeb/LI/{importacion_id}', [ImporPadronWebController::class, 'ListaImportada'])->name('ImporPadronWeb.listarimportados');
+Route::get('educación/Importar/PadronWeb/Listar/ImportarDT', [ImporPadronWebController::class, 'ListarDTImportFuenteTodos'])->name('ImporPadronWeb.listar.importados');
+Route::delete('educación/Importar/PadronWeb/Eliminar/{id}', [ImporPadronWebController::class, 'eliminar'])->name('ImporPadronWeb.eliminar');
+Route::get('educación/Importar/PadronWeb/Exportar', [ImporPadronWebController::class, 'exportar'])->name('ImporPadronWeb.exportar');
+Route::get('educación/Importar/PadronWeb/Exportar/PadronWEB', [ImporPadronWebController::class, 'download'])->name('ImporPadronWeb.download');
+Route::post('educación/Importar/PadronWeb/PA/{proceso}/{importacion}', [ImporPadronWebController::class, 'ejecutarProcesos'])->name('ImporPadronWeb.procedures');
 
 // Route::prefix('educación/Importar')->name('impornexus.')
 //     ->group(function () {
@@ -504,9 +516,13 @@ Route::get('/educación/EIB/Reportes', [PadronEIBController::class, 'reportes'])
 Route::get('/educación/EIB/Reportes/Reporte', [PadronEIBController::class, 'reportesreporte'])->name('educacion.padron.eib.reportes.reporte');
 // Route::get('/educación/EIB/Reportes/Download/1/{div}/{anio}/{ugel}/{modalidad}/{nivel}', [NexusController::class, 'reportesrdownloadexcel'])->name('educacion.nexus.reportes.download.excel');
 
-Route::get('/educación/EIB/Select/CargarGestion/{anio}', [PadronEIBController::class, 'cargargestion'])->name('educacion.padron.eib.select.gestion');
-Route::get('/educación/EIB/Select/CargarProvincia/{anio}', [PadronEIBController::class, 'cargarprovincia'])->name('educacion.padron.eib.select.provincia');
-Route::get('/educación/EIB/Select/CargarDistrito/{anio}/{provincia}', [PadronEIBController::class, 'cargardistrito'])->name('educacion.padron.eib.select.distrito');
+Route::get('/educación/CuboEIB/Select/CargarGestion/{anio}', [CuboPadronEIBController::class, 'cargargestion'])->name('educacion.cubo.padron.eib.select.gestion');
+Route::get('/educación/CuboEIB/Select/CargarProvincia/{anio}/{ugel}', [CuboPadronEIBController::class, 'cargarprovincia'])->name('educacion.cubo.padron.eib.select.provincia');
+Route::get('/educación/CuboEIB/Select/CargarDistrito/{anio}/{ugel}/{provincia}', [CuboPadronEIBController::class, 'cargardistrito'])->name('educacion.cubo.padron.eib.select.distrito');
+
+// Route::get('/educación/EIB/Select/CargarGestion/{anio}', [PadronEIBController::class, 'cargargestion'])->name('educacion.padron.eib.select.gestion');
+// Route::get('/educación/EIB/Select/CargarProvincia/{anio}', [PadronEIBController::class, 'cargarprovincia'])->name('educacion.padron.eib.select.provincia');
+// Route::get('/educación/EIB/Select/CargarDistrito/{anio}/{provincia}', [PadronEIBController::class, 'cargardistrito'])->name('educacion.padron.eib.select.distrito');
 
 Route::get('/educación/Importar/CensoDocente', [ImporCensoDocenteController::class, 'importar'])->name('imporcensodocente.importar');
 Route::post('/ImporCensoDocente/Importar', [ImporCensoDocenteController::class, 'guardar'])->name('imporcensodocente.guardar');

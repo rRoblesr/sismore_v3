@@ -220,6 +220,16 @@ class ImporPadronWebController extends Controller
             return $this->json_output(400, $mensaje);
         }
 
+        try { //proceso rno 03
+            DB::select('call edu_pa_procesar_cubo_eib(?)', [$importacion->id]);
+        } catch (Exception $e) {
+            $importacion->estado = 'PE';
+            $importacion->save();
+
+            $mensaje = "Error al procesar la normalizacion de datos edu_pa_procesar_cubo_pacto2_01." . $e;
+            return $this->json_output(400, $mensaje);
+        }
+
         $this->json_output(200, "Archivo Excel subido y procesado correctamente.");
     }
 
@@ -428,11 +438,15 @@ class ImporPadronWebController extends Controller
 
             $ent = Entidad::find($value->entidad);
 
+            $btn = '';
             if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11)
-                $boton = '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" id="eliminar' . $value->id . '"><i class="fa fa-trash"></i> </button>';
+                $btn .= '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" id="eliminar' . $value->id . '"><i class="fa fa-trash"></i> </button>&nbsp;';
             else
-                $boton = '';
-            $boton2 = '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> </button>';
+                $btn .= '';
+            $btn .= '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> </button>&nbsp;';
+
+            $btn .= '<button type="button" class="btn btn-warning btn-xs btn-ejecutar-procesos" title="Ejecutar procesos" data-importacion="' . e($value->id) . '"> <i class="fa fa-cogs"></i></button>&nbsp;';
+
             $data[] = array(
                 $key + 1,
                 date("d/m/Y", strtotime($value->fechaActualizacion)),
@@ -442,7 +456,7 @@ class ImporPadronWebController extends Controller
                 date("d/m/Y", strtotime($value->created_at)),
                 $registros,
                 $value->estado == "PR" ? "PROCESADO" : ($value->estado == "PE" ? "PENDIENTE" : "ELIMINADO"),
-                $boton . '&nbsp;' . $boton2,
+                $btn,
             );
         }
         $result = array(
@@ -546,22 +560,30 @@ class ImporPadronWebController extends Controller
     {
         ini_set('memory_limit', '-1');
         set_time_limit(0);
+        $nombreproceso = '';
         try {
             switch ($proceso) {
                 case '1':
+                    $nombreproceso = 'proceso01';
                     DB::select('call edu_pa_procesarPadronWeb(?,?)', [$importacion, auth()->user()->id]);
                     break;
                 case '2':
+                    $nombreproceso = 'proceso02';
                     $imp = ImportacionRepositorio::ImportacionMax_porfuente($this->fuente);
-                    DB::select('call edu_pa_procesar_cubo_pacto2_01(?)', [$imp->id]);
+                    DB::select('call edu_pa_procesar_cubo_pacto2_01(?)', [$importacion]);
+                    break;
+                case '3':
+                    $nombreproceso = 'proceso03';
+                    $imp = ImportacionRepositorio::ImportacionMax_porfuente($this->fuente);
+                    DB::select('call edu_pa_procesar_cubo_eib(?)', [$importacion]);
                     break;
                 default:
                     throw new Exception("No se encuentra el proceso seleccionado.");
                     break;
             }
         } catch (Exception $e) {
-            return response()->json(['error' => true, 'mensaje' => 'Error en SFLController ' . $e->getMessage()]);
+            return response()->json(['error' => true, 'mensaje' => "Error en [$nombreproceso]" . $e->getMessage()]);
         }
-        return response()->json(['error' => false, 'mensaje' => 'Proceso ejecutado correctamente.', 'importacion_id' => $imp ? $imp->id : $importacion]);
+        return response()->json(['error' => false, 'mensaje' => 'Proceso ejecutado correctamente.', 'importacion_id' => $importacion]);
     }
 }

@@ -419,16 +419,10 @@
                         case 'anal1':
                             anal3valores = data.valores;
                             anal3 = maps01(div, data.info, '',
-                                'Porcentaje de Plazas Docentes por Provincia');
+                                'Distribución de los Servicios Educativos del Modelo de Servicio de EIB por Provincia'
+                            );
                             break;
                         case 'anal2':
-                            // crearGraficoMatricula(div, {
-                            //     titulo: 'Matrícula educativa del modelo de servicio de EIB, periodo 2019-2025',
-                            //     years: data.info.categoria,
-                            //     matriculados: data.info.data,
-                            //     porcentajes: data.info.avance
-                            // });
-
                             gAnidadaColumn(div,
                                 data.info.categoria,
                                 data.info.series,
@@ -449,7 +443,8 @@
                             break;
                         case 'anal5':
                             crearGraficoDistribucionPlazas(div, data,
-                                'Distribución de Plazas Docentes de Educación, según Sexo');
+                                'Distribución de Docentes del Modelo de Servicio EIB, según Condición Laboral'
+                            );
                             break;
                         case 'anal6':
                             xxxx(div,
@@ -539,7 +534,7 @@
 
         function cargarGestion() {
             $.ajax({
-                url: "{{ route('educacion.padron.eib.select.gestion', ['anio' => ':anio']) }}"
+                url: "{{ route('educacion.cubo.padron.eib.select.gestion', ['anio' => ':anio']) }}"
                     .replace(':anio', $('#anio').val()),
                 type: 'GET',
                 success: function(data) {
@@ -559,8 +554,9 @@
 
         function cargarProvincia() {
             $.ajax({
-                url: "{{ route('educacion.padron.eib.select.provincia', ['anio' => ':anio']) }}"
-                    .replace(':anio', $('#anio').val()),
+                url: "{{ route('educacion.cubo.padron.eib.select.provincia', ['anio' => ':anio', 'ugel' => ':gestion']) }}"
+                    .replace(':anio', $('#anio').val())
+                    .replace(':gestion', $('#gestion').val()),
                 type: 'GET',
                 success: function(data) {
                     $('#provincia').empty();
@@ -579,8 +575,9 @@
 
         function cargarDistrito() {
             $.ajax({
-                url: "{{ route('educacion.padron.eib.select.distrito', ['anio' => ':anio', 'provincia' => ':provincia']) }}"
+                url: "{{ route('educacion.cubo.padron.eib.select.distrito', ['anio' => ':anio', 'ugel' => ':gestion', 'provincia' => ':provincia']) }}"
                     .replace(':anio', $('#anio').val())
+                    .replace(':gestion', $('#gestion').val())
                     .replace(':provincia', $('#provincia').val()),
                 type: 'GET',
                 success: function(data) {
@@ -1491,8 +1488,8 @@
                             //}
                         }, */
                         //min: -200,
-                        min: -200,
-                        max: 100,
+                        min: -300,
+                        max: 120,
                         opposite: true,
                     },
                     /* { // Tertiary yAxis
@@ -1565,7 +1562,7 @@
                     text: ''
                 },
                 subtitle: {
-                    text: 'Plazas docentes EIB por nivel y condición laboral'
+                    text: 'Docentes del Modelo de Servicio de EIB por Nivel Educativo, según Condición Laboral'
                 },
                 xAxis: {
                     categories: categories
