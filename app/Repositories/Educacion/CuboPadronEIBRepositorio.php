@@ -241,7 +241,6 @@ class CuboPadronEIBRepositorio
             ->get();
     }
 
-
     public static function reportesreporte_tabla3($anio, $periodo, $gestion, $provincia, $distrito)
     {
         return DB::table('edu_cubo_padron_eib as ceib')
@@ -270,6 +269,32 @@ class CuboPadronEIBRepositorio
                 DB::raw('sum(case when ceib.area_id=2 then ceib.promotor end) as tpr'),
             ])
             ->groupBy('l.nombre')
+            ->get();
+    }
+    public static function reportesreporte_tabla4($anio, $periodo, $gestion, $provincia, $distrito)
+    {
+        return DB::table('edu_cubo_padron_eib as ceib')
+            ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'ceib.nivelmodalidad_id')
+            ->join('edu_area as a', 'a.id', '=', 'ceib.area_id')
+            ->join('par_lengua as l', 'l.id', '=', 'ceib.lengua_id')
+            ->where('ceib.anio_pw', $anio)
+            ->when($gestion > 0, fn($query) => $query->where('ceib.tipogestion_id', $gestion))
+            ->when($provincia > 0, fn($query) => $query->where('ceib.provincia_id', $provincia))
+            ->when($distrito > 0, fn($query) => $query->where('ceib.distrito_id', $distrito))
+            ->select([
+                'ceib.modular',
+                'ceib.nombre_ie',
+                'nm.nombre as nivel',
+                'ceib.forma_atencion',
+                'l.nombre as lengua',
+                'a.nombre as area',
+                'ceib.matriculados',
+                'ceib.varon',
+                'ceib.mujer',
+                DB::raw('nombrado+contratado as docentes'),
+                DB::raw('nombrado as nombrado'),
+                DB::raw('contratado as contratado'),
+            ])
             ->get();
     }
 }

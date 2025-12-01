@@ -444,8 +444,8 @@ class ImporPadronWebController extends Controller
             else
                 $btn .= '';
             $btn .= '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> </button>&nbsp;';
-
-            $btn .= '<button type="button" class="btn btn-warning btn-xs btn-ejecutar-procesos" title="Ejecutar procesos" data-importacion="' . e($value->id) . '"> <i class="fa fa-cogs"></i></button>&nbsp;';
+            if (auth()->user()->id == 49)
+                $btn .= '<button type="button" class="btn btn-warning btn-xs btn-ejecutar-procesos" title="Ejecutar procesos" data-importacion="' . e($value->id) . '"> <i class="fa fa-cogs"></i></button>&nbsp;';
 
             $data[] = array(
                 $key + 1,

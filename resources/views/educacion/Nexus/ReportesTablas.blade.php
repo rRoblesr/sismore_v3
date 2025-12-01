@@ -1,6 +1,6 @@
 @switch($div)
     @case('tabla1')
-        <table id="tabla1" class="table table-striped table-bordered font-12">
+        <table id="tabla1" class="table table-striped table-bordered font-11">
             <thead>
                 <tr class="table-success-0 text-white">
                     <th class="text-center" rowspan="2">UGEL</th>
@@ -70,7 +70,7 @@
     @break
 
     @case('tabla2')
-        <table id="tabla2" class="table table-striped table-bordered font-12">
+        <table id="tabla2" class="table table-striped table-bordered font-11">
             <thead>
                 <tr class="table-success-0 text-white">
                     <th class="text-center" rowspan="2">LEY</th>
@@ -140,7 +140,7 @@
     @break
 
     @case('tabla3')
-        <table id="tabla3" class="table table-striped table-bordered font-12">
+        <table id="tabla3" class="table table-striped table-bordered font-11">
             <thead>
                 <tr class="table-success-0 text-white">
                     <th class="text-center" rowspan="2">DISTRITO</th>
@@ -211,15 +211,15 @@
     @break
 
     @case('tabla4')
-        <table id="tabla4" class="table table-striped table-bordered font-12">
+        <table id="tabla4" class="table table-striped table-bordered font-11">
             <thead>
                 <tr class="table-success-0 text-white">
                     <th class="text-center">N°</th>
                     <th class="text-center">Código Modular</th>
                     <th class="text-center">Institución Educativa</th>
-                    <th class="text-center">Tipo de Institución</th>
+                    {{-- <th class="text-center">Tipo de Institución</th> --}}
                     <th class="text-center">Nivel Educativo</th>
-                    <th class="text-center">Gestión</th>
+                    {{-- <th class="text-center">Gestión</th> --}}
                     <th class="text-center">Zona</th>
                     <th class="text-center">Distrito</th>
                     <th class="text-center">Total Plazas</th>
@@ -235,9 +235,9 @@
                         <td class="text-center">{{ $key + 1 }}</td>
                         <td class="text-center">{{ $item->modular }}</td>
                         <td class="text-left">{{ $item->iiee }}</td>
-                        <td class="text-left">{{ $item->tipo }}</td>
+                        {{-- <td class="text-left">{{ $item->tipo }}</td> --}}
                         <td class="text-left">{{ $item->nivel }}</td>
-                        <td class="text-left">{{ $item->gestion }}</td>
+                        {{-- <td class="text-left">{{ $item->gestion }}</td> --}}
                         <td class="text-left">{{ $item->zona }}</td>
                         <td class="text-left">{{ $item->distrito }}</td>
                         <td class="text-center">{{ $item->conteo }}</td>
@@ -251,7 +251,7 @@
             <tfoot>
                 <tr class="table-success-0 text-white">
                     <!-- Mismo número de <th> que columnas -->
-                    <th class="text-right" colspan="8">TOTAL</th>
+                    <th class="text-right" colspan="6">TOTAL</th>
                     <th class="text-center"></th> <!-- col 9 -->
                     <th class="text-center"></th> <!-- col 10 -->
                     <th class="text-center"></th> <!-- col 11 -->

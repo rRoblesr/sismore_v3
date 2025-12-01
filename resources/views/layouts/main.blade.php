@@ -888,7 +888,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="http://localhost/sismore_v3/IndicadorTrabajo/Importar?trabajo"
+                                        <a href="{{ url('/') }}/IndicadorTrabajo/Importar?trabajo"
                                             class="waves-effect">
                                             <i class="mdi mdi-equalizer-outline"></i>
                                             <span>Indicadores</span>
@@ -903,21 +903,21 @@
 
                                         <ul class="nav-second-level" aria-expanded="false">
                                             <li>
-                                                <a href="http://localhost/sismore_v3/AnuarioEstadistico/rptEmpresasSectorPrivado">Empresas
+                                                <a href="{{ url('/') }}/AnuarioEstadistico/rptEmpresasSectorPrivado">Empresas
                                                     Sector Privado</a>
                                             </li>
                                             <li>
-                                                <a href="http://localhost/sismore_v3/AnuarioEstadistico/rptRemunTrabSectorPrivado">Remun.
+                                                <a href="{{ url('/') }}/AnuarioEstadistico/rptRemunTrabSectorPrivado">Remun.
                                                     Trab. Sector Privado</a>
                                             </li>
                                             <li>
                                                 <a
-                                                    href="http://localhost/sismore_v3/AnuarioEstadistico/rptTrabajadoresSectorPrivado">Trabajadores
+                                                    href="{{ url('/') }}/AnuarioEstadistico/rptTrabajadoresSectorPrivado">Trabajadores
                                                     Sector Privado</a>
                                             </li>
                                             <li>
                                                 <a
-                                                    href="http://localhost/sismore_v3/AnuarioEstadistico/rptPrestadoresServ4taCategoria">Prestadores
+                                                    href="{{ url('/') }}/AnuarioEstadistico/rptPrestadoresServ4taCategoria">Prestadores
                                                     Serv. 4ta Categoria</a>
                                             </li>
                                         </ul>
@@ -932,25 +932,30 @@
 
                                         <ul class="nav-second-level" aria-expanded="false">
                                             <li>
-                                                <a href="http://localhost/sismore_v3/salud/PowerBi/145">Planilla Electrónica</a>
+                                                <a href="{{ url('/') }}/salud/PowerBi/145">Planilla Electrónica</a>
                                             </li>
                                             <li>
-                                                <a href="http://localhost/sismore_v3/salud/PowerBi/146">Empleo Formal</a>
+                                                <a href="{{ url('/') }}/salud/PowerBi/146">Empleo Formal</a>
                                             </li>
                                             <li>
-                                                <a href="http://localhost/sismore_v3/salud/PowerBi/147">Empleo Informal</a>
+                                                <a href="{{ url('/') }}/salud/PowerBi/147">Empleo Informal</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ url('/') }}/salud/PowerBi/296">Informalidad Laboral</a>
                                             </li>
                                         </ul>
                                     </li>
+
                                     <li>
-                                        <a href="https://sismore.regionucayali.gob.pe/sismore/salud/PowerBi/74"
+                                        <a href="{{ url('/') }}/salud/PowerBi/74"
                                             class="waves-effect">
                                             <i class="mdi mdi-worker"></i>
                                             <span>ProEmpleo</span>
                                         </a>
                                     </li>
+
                                     <li>
-                                        <a href="http://localhost/sismore_v3/unidadorganica/EjecucionGasto?trabajo"
+                                        <a href="{{ url('/') }}/salud/PowerBi/151"
                                             class="waves-effect">
                                             <i class="ion ion-md-cash"></i>
                                             <span>Presupuesto</span>

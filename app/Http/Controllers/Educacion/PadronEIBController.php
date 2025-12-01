@@ -414,8 +414,8 @@ class PadronEIBController extends Controller
                 // return response()->json(compact('div', 'base', 'foot'));
 
             case 'tabla4':
-                $base = NexusRepositorio::reportesreporte_tabla04($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
-                $excel = view('educacion.Nexus.ReportesTablas', compact('div', 'base'))->render();
+                $base = CuboPadronEIBRepositorio::reportesreporte_tabla4($rq->anio, 0, $rq->gestion, $rq->provincia, $rq->distrito);
+                $excel = view('educacion.EIB.ReportesTablas', compact('div', 'base'))->render();
                 return response()->json(compact('excel', 'base'));
                 // return response()->json(compact('div', 'base', 'foot'));
             default:

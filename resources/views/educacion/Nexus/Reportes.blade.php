@@ -528,7 +528,8 @@
                                 footerCallback: function() {
                                     var api = this.api();
                                     // Índices de las columnas a sumar (0-based)
-                                    var columnas = [8, 9, 10, 11, 12];
+                                    // var columnas = [8, 9, 10, 11, 12];
+                                    var columnas = [6, 7, 8, 9, 10];
                                     columnas.forEach(function(colIndex) {
                                         // Calcular la suma solo si el valor es numérico
                                         var total = api

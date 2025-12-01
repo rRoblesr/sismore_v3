@@ -1270,6 +1270,9 @@ Route::get('/SubGenerica/cargarsubgenerica', [SubGenericaController::class, 'car
 Route::get('/Especifica/cargarespecifica', [EspecificaController::class, 'cargar'])->name('especifica.cargar');
 Route::get('/SubGenericaDetalle/cargarsubgenericadetalle', [SubGenericaDetalleController::class, 'cargar'])->name('subgenericadetalle.cargar');
 
+Route::get('/Presupuesto/Edu/Reportes', [BaseSiafWebController::class, 'reportes'])->name('presupuesto.educacion.reportes');
+Route::get('/Presupuesto/Edu/Reportes/Reporte', [BaseSiafWebController::class, 'reportesreporte'])->name('presupuesto.educacion.reportes.reporte');
+
 
 /**************************************** FIN PRESUPUESTO ***************************************************/
 

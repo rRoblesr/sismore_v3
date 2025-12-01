@@ -21,7 +21,9 @@ use App\Models\Presupuesto\GenericaGasto;
 use App\Models\Presupuesto\ProductoProyecto;
 use App\Models\Presupuesto\TipoGobierno;
 use App\Models\Presupuesto\UnidadEjecutora;
+use App\Repositories\Educacion\CuboPadronEIBRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
+use App\Repositories\Educacion\PadronEIBRepositorio;
 use App\Repositories\Presupuesto\BaseGastosRepositorio;
 use App\Repositories\Presupuesto\BaseSiafWebRepositorio;
 use Illuminate\Http\Request;
@@ -635,5 +637,235 @@ class BaseSiafWebController extends Controller
         //     ->where('pres_base_siafweb_detalle.basesiafweb_id', $base->id)->get();
         $ue = BaseSiafWebRepositorio::UE_poranios($rq->anio);
         return response()->json(compact('ue'));
+    }
+
+    public function reportes()
+    {
+        $anios =  CuboPadronEIBRepositorio::select_anios();
+        $aniomax = $anios->max();
+        $anioeib = PadronEIBRepositorio::getYearMapping($aniomax);
+        return view('presupuesto.BaseSiafWeb.EduReportes', compact('anios', 'aniomax', 'anioeib'));
+    }
+
+    public function reportesreporte(Request $rq)
+    {
+        $div = $rq->div;
+        switch ($rq->div) {
+            case 'head':
+                $data = CuboPadronEIBRepositorio::reportesreporte_head($rq->anio, 0, $rq->gestion, $rq->provincia, $rq->distrito);
+                $card1 = number_format($data->servicios, 0);
+                $card2 = number_format($data->lengua, 0);
+                $card3 = number_format($data->matriculados, 0);
+                $card4 = number_format($data->docentes, 0);
+                return response()->json(compact('card1', 'card2', 'card3', 'card4'));
+            case 'anal1':
+                $pe_pv = [
+                    '2501' => 'pe-uc-cp',
+                    '2502' => 'pe-uc-at',
+                    '2503' => 'pe-uc-pa',
+                    '2504' => 'pe-uc-pr',
+                ];
+                $info = [];
+                $valores = [];
+                $data = CuboPadronEIBRepositorio::reportesreporte_anal1($rq->anio, 0, $rq->gestion, $rq->provincia, $rq->distrito);
+                $total = $data->sum('conteo');
+                foreach ($data as $key => $value) {
+                    $info[] = [$value->codigo, round($total > 0 ? 100 * $value->conteo / $total : 0, 1)];
+                    $valores[$value->codigo] = ['num' => (int)$value->conteo, 'dem' => $total, 'ind' => round($total > 0 ? 100 * $value->conteo / $total : 0, 1)];
+                }
+                return response()->json(compact('info', 'valores', 'data'));
+
+            case 'anal2':
+                $info = [
+                    'categoria' => [],
+                    'series' => [
+                        ['type' => 'column', 'yAxis' => 0, 'data' => [], 'name' => 'Matriculados'],
+                        ['type' => 'spline', 'yAxis' => 1, 'data' => [], 'name' => '%Avance'],
+                    ],
+                    'maxbar' => 0,
+                ];
+                $data = CuboPadronEIBRepositorio::reportesreporte_anal2($rq->gestion, $rq->provincia, $rq->distrito);
+                foreach ($data as $key => $value) {
+                    $info['categoria'][] = $value->anio;
+                    $info['series'][0]['data'][] = (int)$value->matriculados;
+                    $info['series'][1]['data'][] = $key == 0 ? 0 : round($data[$key - 1]->matriculados > 0 ? 100 * $value->matriculados / $data[$key - 1]->matriculados : 0, 1);
+                    $info['maxbar'] = max($info['maxbar'], (int)$value->matriculados);
+                }
+                return response()->json(compact('info', 'data'));
+
+            case 'anal3':
+                $color = ['#43beac', '#ffc107', '#ef5350'];
+                $data = CuboPadronEIBRepositorio::reportesreporte_anal3($rq->anio, 0, $rq->gestion, $rq->provincia, $rq->distrito);
+                foreach ($data as $key => $value) {
+                    $value->y = (int)$value->y;
+                    $value->color = $color[$key % count($color)];
+                }
+                return response()->json($data);
+
+            case 'anal4':
+                $color = ['#43beac', '#ffc107', '#ef5350'];
+                $info = [
+                    'cat' => [],
+                    'dat' => [
+                        ['name' => 'inicial',    'data' => [], 'color' => $color[0]],
+                        ['name' => 'primaria',   'data' => [], 'color' => $color[1]],
+                        ['name' => 'secundaria', 'data' => [], 'color' => $color[2]],
+                    ]
+                ];
+                $data = CuboPadronEIBRepositorio::reportesreporte_anal4($rq->gestion, $rq->provincia, $rq->distrito);
+                foreach ($data->unique('anio') as $value) {
+                    $info['cat'][] = $value->anio;
+                }
+                foreach ($data as $value) {
+                    switch (strtolower($value->name)) {
+                        case 'inicial':
+                            $info['dat'][0]['data'][] = (int)$value->y;
+                            break;
+                        case 'primaria':
+                            $info['dat'][1]['data'][] = (int)$value->y;
+                            break;
+                        case 'secundaria':
+                            $info['dat'][2]['data'][] = (int)$value->y;
+                            break;
+                    }
+                }
+                return response()->json($info);
+            case 'anal5':
+                $color = ['#43beac', '#ffc107', '#ef5350'];
+                $data2 = CuboPadronEIBRepositorio::reportesreporte_anal5($rq->anio, 0, $rq->gestion, $rq->provincia, $rq->distrito);
+                $data = [
+                    ["name" => "CONTRATADO", "y" => (int)$data2->contratado, "color" => "#43beac"],
+                    ["name" => "NOMBRADO", "y" => (int)$data2->nombrado, "color" => "#ffc107"]
+                ];
+                return response()->json($data);
+            case 'anal6':
+                $data = CuboPadronEIBRepositorio::reportesreporte_anal6($rq->anio, 0, $rq->gestion, $rq->provincia, $rq->distrito);
+                $niveles = ['INICIAL', 'PRIMARIA', 'SECUNDARIA'];
+                $series = [
+                    'NOMBRADOS'  => ['name' => 'NOMBRADOS',  'color' => '#43beac', 'data' => array_fill(0, count($niveles), 0)],
+                    'CONTRATADOS' => ['name' => 'CONTRATADOS', 'color' => '#ffc107', 'data' => array_fill(0, count($niveles), 0)],
+                ];
+                foreach ($data as $key => $value) {
+                    $nivel = $value->NIVEL;
+                    $nombrados = (int) $value->NOMBRADOS;
+                    $contratados = (int) $value->CONTRATADOS;
+
+                    // Buscar índice del nivel en el array definido
+                    $idx = array_search($nivel, $niveles);
+                    if ($idx !== false) {
+                        $series['NOMBRADOS']['data'][$idx] = $nombrados;
+                        $series['CONTRATADOS']['data'][$idx] = $contratados;
+                    }
+                }
+                $response = [
+                    'categories' => $niveles,
+                    'series' => array_values($series), // convierte a array indexado: [serie1, serie2]
+                    'xx' => $data,
+                ];
+
+                return response()->json($response);
+
+            case 'tabla1':
+                $base = CuboPadronEIBRepositorio::reportesreporte_tabla1($rq->anio, 0, $rq->gestion, $rq->provincia, $rq->distrito);
+                $foot = [];
+                if ($base->isNotEmpty()) {
+                    $foot = clone $base->first();
+                    $foot->forma_atencion = 'TOTAL';
+                    // Servicios educativos
+                    $foot->ts = $base->sum('ts');
+                    $foot->tsr = $base->sum('tsr');
+                    $foot->tsu = $base->sum('tsu');
+                    // Estudiantes matriculados
+                    $foot->tm = $base->sum('tm');
+                    $foot->tmr = $base->sum('tmr');
+                    $foot->tmu = $base->sum('tmu');
+                    // Personal docente
+                    $foot->td = $base->sum('td');
+                    $foot->tdr = $base->sum('tdr');
+                    $foot->tdu = $base->sum('tdu');
+                    // Auxiliar de educación
+                    $foot->ta = $base->sum('ta');
+                    $foot->tar = $base->sum('tar');
+                    $foot->tau = $base->sum('tau');
+                    // PEC
+                    $foot->tp = $base->sum('tp');
+                    $foot->tpr = $base->sum('tpr');
+                    $foot->tpu = $base->sum('tpu');
+                }
+                $excel = view('educacion.EIB.ReportesTablas', compact('div', 'base', 'foot'))->render();
+                return response()->json(compact('excel'));
+                // return response()->json(compact('div', 'base', 'foot'));
+
+            case 'tabla2':
+                $base = CuboPadronEIBRepositorio::reportesreporte_tabla2($rq->anio, 0, $rq->gestion, $rq->provincia, $rq->distrito);
+                $foot = [];
+                if ($base->isNotEmpty()) {
+                    $foot = clone $base->first();
+                    $foot->nivel_modalidad = 'TOTAL';
+                    // Servicios educativos
+                    $foot->ts = $base->sum('ts');
+                    $foot->tsr = $base->sum('tsr');
+                    $foot->tsu = $base->sum('tsu');
+                    // Estudiantes matriculados
+                    $foot->tm = $base->sum('tm');
+                    $foot->tmr = $base->sum('tmr');
+                    $foot->tmu = $base->sum('tmu');
+                    // Personal docente
+                    $foot->td = $base->sum('td');
+                    $foot->tdr = $base->sum('tdr');
+                    $foot->tdu = $base->sum('tdu');
+                    // Auxiliar de educación
+                    $foot->ta = $base->sum('ta');
+                    $foot->tar = $base->sum('tar');
+                    $foot->tau = $base->sum('tau');
+                    // PEC
+                    $foot->tp = $base->sum('tp');
+                    $foot->tpr = $base->sum('tpr');
+                    $foot->tpu = $base->sum('tpu');
+                }
+                $excel = view('educacion.EIB.ReportesTablas', compact('div', 'base', 'foot'))->render();
+                return response()->json(compact('excel'));
+                // return response()->json(compact('div', 'base', 'foot'));
+
+            case 'tabla3':
+                $base = CuboPadronEIBRepositorio::reportesreporte_tabla3($rq->anio, 0, $rq->gestion, $rq->provincia, $rq->distrito);
+                $foot = [];
+                if ($base->isNotEmpty()) {
+                    $foot = clone $base->first();
+                    $foot->lengua = 'TOTAL';
+                    // Servicios educativos
+                    $foot->ts = $base->sum('ts');
+                    $foot->tsr = $base->sum('tsr');
+                    $foot->tsu = $base->sum('tsu');
+                    // Estudiantes matriculados
+                    $foot->tm = $base->sum('tm');
+                    $foot->tmr = $base->sum('tmr');
+                    $foot->tmu = $base->sum('tmu');
+                    // Personal docente
+                    $foot->td = $base->sum('td');
+                    $foot->tdr = $base->sum('tdr');
+                    $foot->tdu = $base->sum('tdu');
+                    // Auxiliar de educación
+                    $foot->ta = $base->sum('ta');
+                    $foot->tar = $base->sum('tar');
+                    $foot->tau = $base->sum('tau');
+                    // PEC
+                    $foot->tp = $base->sum('tp');
+                    $foot->tpr = $base->sum('tpr');
+                    $foot->tpu = $base->sum('tpu');
+                }
+                $excel = view('educacion.EIB.ReportesTablas', compact('div', 'base', 'foot'))->render();
+                return response()->json(compact('excel'));
+                // return response()->json(compact('div', 'base', 'foot'));
+
+            case 'tabla4':
+                $base = CuboPadronEIBRepositorio::reportesreporte_tabla4($rq->anio, 0, $rq->gestion, $rq->provincia, $rq->distrito);
+                $excel = view('educacion.EIB.ReportesTablas', compact('div', 'base'))->render();
+                return response()->json(compact('excel', 'base'));
+                // return response()->json(compact('div', 'base', 'foot'));
+            default:
+                # code...
+                return [];
+        }
     }
 }

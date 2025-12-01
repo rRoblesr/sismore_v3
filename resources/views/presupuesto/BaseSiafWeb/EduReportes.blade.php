@@ -5,6 +5,93 @@
     <style>
 
     </style>
+    <style>
+        /* body {
+                        background-color: #f5f5f5;
+                        padding: 20px;
+                        font-family: Arial, sans-serif;
+                    } */
+
+        .dashboard-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .unidades-box {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            /* height: 100%; */
+        }
+
+        .unidades-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .unidad-item {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .unidad-nombre {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .unidad-porcentaje {
+            font-size: 13px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .progress-bar-custom {
+            height: 8px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .color-yellow {
+            background-color: #F5A623;
+        }
+
+        .color-cyan {
+            background-color: #17A2B8;
+        }
+
+        .color-red {
+            background-color: #DC3545;
+        }
+
+        .grafico-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 400px;
+        }
+
+        @media (max-width: 768px) {
+            .unidades-box {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -19,12 +106,12 @@
                         <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
                             <i class="fa fa-redo"></i> Actualizar</button>
                     </div>
-                    <h3 class="card-title text-white font-14">Educación Interculural Bilingüe</h3>
+                    <h3 class="card-title text-white font-14">Presupuesto en Educación</h3>
                 </div>
                 <div class="card-body pb-0">
                     <div class="form-group row align-items-center vh-5">
                         <div class="col-lg-4 col-md-4 col-sm-4">
-                            <h4 class="page-title font-12">Fuente: Padrón EIB, SIAGIE, NEXUS</h4>
+                            <h4 class="page-title font-12">Fuente: Padrón SIAF-WEB</h4>
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
@@ -41,7 +128,7 @@
 
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
-                                <label for="gestion">Unidad de Gestión</label>
+                                <label for="gestion">Unidad Ejecutora</label>
                                 <select id="gestion" name="gestion" class="form-control font-11">
                                     <option value="0">TODOS</option>
                                 </select>
@@ -50,7 +137,7 @@
 
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
-                                <label for="provincia">Provincia</label>
+                                <label for="provincia">Categoria de Gasto</label>
                                 <select id="provincia" name="provincia" class="form-control font-11">
                                     <option value="0">TODOS</option>
                                 </select>
@@ -60,7 +147,7 @@
 
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
-                                <label for="distrito">Distrito</label>
+                                <label for="distrito">Categoria Presupuestal</label>
                                 <select id="distrito" name="distrito" class="form-control font-11">
                                     <option value="0">TODOS</option>
                                 </select>
@@ -90,7 +177,7 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card1"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Servicios Educativos</p>
+                            <p class="mb-0 mt-1 text-truncate">PIM 2025</p>
                         </div>
                     </div>
                 </div>
@@ -113,7 +200,7 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card2"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Lenguas Originarias</p>
+                            <p class="mb-0 mt-1 text-truncate">CERTIFICADO 2025</p>
                         </div>
                     </div>
                 </div>
@@ -136,7 +223,7 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card3"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Total Matriculados</p>
+                            <p class="mb-0 mt-1 text-truncate">COMPROMETIDO 2025</p>
                         </div>
                     </div>
                 </div>
@@ -159,10 +246,76 @@
                             <h4 class="font-20 my-0 font-weight-bold">
                                 <span data-plugin="counterup" id="card4"></span>
                             </h4>
-                            <p class="mb-0 mt-1 text-truncate">Total Docentes</p>
+                            <p class="mb-0 mt-1 text-truncate">DEVENGADO 2025</p>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Columna Izquierda: Unidades Ejecutoras -->
+        <div class="col-md-4 col-lg-4">
+            <div class="unidades-box">
+                <div class="unidades-title">Unidades Ejecutoras (% Ejecución)</div>
+
+                <div class="unidad-item">
+                    <div class="unidad-nombre">
+                        <span>DREU</span>
+                        <span class="unidad-porcentaje">45.8 %</span>
+                    </div>
+                    <div class="progress-bar-custom">
+                        <div class="progress-fill color-yellow" style="width: 45.8%"></div>
+                    </div>
+                </div>
+
+                <div class="unidad-item">
+                    <div class="unidad-nombre">
+                        <span>UGEL PURUS</span>
+                        <span class="unidad-porcentaje">80 %</span>
+                    </div>
+                    <div class="progress-bar-custom">
+                        <div class="progress-fill color-cyan" style="width: 80%"></div>
+                    </div>
+                </div>
+
+                <div class="unidad-item">
+                    <div class="unidad-nombre">
+                        <span>UGEL ATALAYA</span>
+                        <span class="unidad-porcentaje">45.8 %</span>
+                    </div>
+                    <div class="progress-bar-custom">
+                        <div class="progress-fill color-red" style="width: 45.8%"></div>
+                    </div>
+                </div>
+
+                <div class="unidad-item">
+                    <div class="unidad-nombre">
+                        <span>UGEL CORONEL PORTILLO</span>
+                        <span class="unidad-porcentaje">83.3 %</span>
+                    </div>
+                    <div class="progress-bar-custom">
+                        <div class="progress-fill color-yellow" style="width: 83.3%"></div>
+                    </div>
+                </div>
+
+                <div class="unidad-item">
+                    <div class="unidad-nombre">
+                        <span>UGEL PADRE ABAD</span>
+                        <span class="unidad-porcentaje">75 %</span>
+                    </div>
+                    <div class="progress-bar-custom">
+                        <div class="progress-fill color-yellow" style="width: 75%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna Derecha: Gráfico -->
+        <div class="col-md-8 col-lg-8">
+            <div class="grafico-container">
+                <div id="chartContainer"></div>
             </div>
         </div>
     </div>
@@ -391,6 +544,43 @@
                 console.log('["' + element.properties['hc-key'] + '", ' + (key + 1) + '],');
             });
             cargarGestion();
+
+            // DATOS DE PRUEBA Y EJECUCIÓN
+            // Categorías (Unidades Ejecutoras)
+            const categorias = [
+                'DREU',
+                'UGEL CORONEL PORTILLO',
+                'UGEL PADRE ABAD',
+                'UGEL ATALAYA',
+                'UGEL PURUS'
+            ];
+
+            // Series de datos
+            const series = [{
+                    name: 'PIM',
+                    data: [15, 30, 20, 15, 10]
+                },
+                {
+                    name: 'DEVENGADO',
+                    data: [12, 25, 15, 10, 8]
+                }
+            ];
+
+            // Opciones adicionales
+            const opciones = {
+                yAxisTitle: 'Millones',
+                colors: ['#17A2B8', '#DC3545'],
+                subtitle: ''
+            };
+
+            // Crear el gráfico
+            crearGraficoComparativo(
+                'chartContainer',
+                categorias,
+                series,
+                'Ejecución del Gasto Presupuestal por Unidades Ejecutoras (PIM vs DEVENGADO)',
+                opciones
+            );
 
         });
 
@@ -1578,6 +1768,113 @@
                             enabled: true
                         }
                     }
+                }
+            });
+        }
+
+        function crearGraficoComparativo(divId, categories, seriesData, title, options = {}) {
+            const defaultColors = ['#17A2B8', '#DC3545'];
+            const colors = options.colors || defaultColors;
+
+            Highcharts.chart(divId, {
+                chart: {
+                    type: 'column',
+                    backgroundColor: 'transparent',
+                    style: {
+                        fontFamily: 'Arial, sans-serif'
+                    }
+                },
+                title: {
+                    text: title,
+                    align: 'center',
+                    style: {
+                        fontSize: '14px',
+                        fontWeight: 'normal',
+                        color: '#666'
+                    }
+                },
+                subtitle: {
+                    text: options.subtitle || '',
+                    align: 'center'
+                },
+                xAxis: {
+                    categories: categories,
+                    crosshair: true,
+                    labels: {
+                        style: {
+                            fontSize: '11px'
+                        }
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: options.yAxisTitle || 'Millones'
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '11px'
+                        }
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:11px">{point.key}</span><br>',
+                    pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:.1f} M</b><br/>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.15,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.y:.0f} M',
+                            style: {
+                                fontSize: '10px',
+                                fontWeight: 'normal',
+                                textOutline: 'none'
+                            }
+                        }
+                    }
+                },
+                legend: {
+                    align: 'center',
+                    verticalAlign: 'bottom',
+                    backgroundColor: 'transparent',
+                    itemStyle: {
+                        fontSize: '12px',
+                        fontWeight: 'normal'
+                    }
+                },
+                colors: colors,
+                series: seriesData,
+                credits: {
+                    enabled: false
+                },
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 500
+                        },
+                        chartOptions: {
+                            legend: {
+                                align: 'center',
+                                verticalAlign: 'bottom',
+                                layout: 'horizontal'
+                            },
+                            yAxis: {
+                                labels: {
+                                    align: 'left',
+                                    x: 0,
+                                    y: -5
+                                },
+                                title: {
+                                    text: ''
+                                }
+                            }
+                        }
+                    }]
                 }
             });
         }
