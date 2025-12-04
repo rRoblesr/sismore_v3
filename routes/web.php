@@ -68,6 +68,7 @@ use App\Http\Controllers\Presupuesto\BaseGastosController;
 use App\Http\Controllers\Presupuesto\BaseIngresosController;
 use App\Http\Controllers\Presupuesto\BaseProyectosController;
 use App\Http\Controllers\Presupuesto\BaseSiafWebController;
+use App\Http\Controllers\Presupuesto\BaseSiafWebDetalleController;
 use App\Http\Controllers\Presupuesto\EspecificaController;
 use App\Http\Controllers\Presupuesto\EspecificaDetalleController;
 use App\Http\Controllers\Presupuesto\GobiernosRegionalesController;
@@ -1272,6 +1273,10 @@ Route::get('/SubGenericaDetalle/cargarsubgenericadetalle', [SubGenericaDetalleCo
 
 Route::get('/Presupuesto/Edu/Reportes', [BaseSiafWebController::class, 'reportes'])->name('presupuesto.educacion.reportes');
 Route::get('/Presupuesto/Edu/Reportes/Reporte', [BaseSiafWebController::class, 'reportesreporte'])->name('presupuesto.educacion.reportes.reporte');
+
+Route::get('/Presupuesto/siafweb/detalle/ue/{anio}', [BaseSiafWebDetalleController::class, 'obtenerUnidadesEjecutorasParaSelect'])->name('presupuesto.saifweb.detalle.select.ue');
+Route::get('/Presupuesto/siafweb/detalle/cg/{anio}/{ue}', [BaseSiafWebDetalleController::class, 'obtenerCategoriasGastoParaSelect'])->name('presupuesto.saifweb.detalle.select.cg');
+Route::get('/Presupuesto/siafweb/detalle/cp/{anio}/{ue}/{cg}', [BaseSiafWebDetalleController::class, 'obtenerCategoriasPresupuestalesParaSelect'])->name('presupuesto.saifweb.detalle.select.cp');
 
 
 /**************************************** FIN PRESUPUESTO ***************************************************/

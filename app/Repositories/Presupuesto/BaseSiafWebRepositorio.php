@@ -19,6 +19,19 @@ class BaseSiafWebRepositorio
         return $query;
     }
 
+    public static function obtenerUltimoIdPorAnio(int $anio): ?int
+    {
+        return DB::table('pres_base_siafweb as sw')
+            ->join('par_importacion as i', function ($join) {
+                $join->on('i.id', '=', 'sw.importacion_id')
+                    ->where('i.estado', '=', 'PR');
+            })
+            ->where('sw.anio', $anio)
+            ->orderBy('i.fechaActualizacion', 'desc')
+            ->limit(1)
+            ->value('sw.id');
+    }
+
     public static function UE_poranios($anio)
     {
         if ($anio == 0) {

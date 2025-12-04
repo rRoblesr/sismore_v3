@@ -5,93 +5,6 @@
     <style>
 
     </style>
-    <style>
-        /* body {
-                        background-color: #f5f5f5;
-                        padding: 20px;
-                        font-family: Arial, sans-serif;
-                    } */
-
-        .dashboard-container {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .unidades-box {
-            background: white;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            padding: 20px;
-            /* height: 100%; */
-        }
-
-        .unidades-title {
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        .unidad-item {
-            margin-bottom: 15px;
-            position: relative;
-        }
-
-        .unidad-nombre {
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .unidad-porcentaje {
-            font-size: 13px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .progress-bar-custom {
-            height: 8px;
-            background-color: #e9ecef;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            border-radius: 4px;
-            transition: width 0.3s ease;
-        }
-
-        .color-yellow {
-            background-color: #F5A623;
-        }
-
-        .color-cyan {
-            background-color: #17A2B8;
-        }
-
-        .color-red {
-            background-color: #DC3545;
-        }
-
-        .grafico-container {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            min-height: 400px;
-        }
-
-        @media (max-width: 768px) {
-            .unidades-box {
-                margin-bottom: 20px;
-            }
-        }
-    </style>
 @endsection
 
 @section('content')
@@ -110,7 +23,7 @@
                 </div>
                 <div class="card-body pb-0">
                     <div class="form-group row align-items-center vh-5">
-                        <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div class="col-lg-3 col-md-3 col-sm-4">
                             <h4 class="page-title font-12">Fuente: Padrón SIAF-WEB</h4>
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-2">
@@ -118,8 +31,8 @@
                                 <label for="anio">Año</label>
                                 <select id="anio" name="anio" class="form-control font-11">
                                     @foreach ($anios as $item)
-                                        <option value="{{ $item }}" {{ $item == $aniomax ? 'selected' : '' }}>
-                                            {{ $item }} </option>
+                                        <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                            {{ $item->anio }} </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -128,8 +41,8 @@
 
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
-                                <label for="gestion">Unidad Ejecutora</label>
-                                <select id="gestion" name="gestion" class="form-control font-11">
+                                <label for="ue">Unidad Ejecutora</label>
+                                <select id="ue" name="ue" class="form-control font-11">
                                     <option value="0">TODOS</option>
                                 </select>
                             </div>
@@ -137,18 +50,18 @@
 
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
-                                <label for="provincia">Categoria de Gasto</label>
-                                <select id="provincia" name="provincia" class="form-control font-11">
+                                <label for="cg">Categoria de Gasto</label>
+                                <select id="cg" name="cg" class="form-control font-11">
                                     <option value="0">TODOS</option>
                                 </select>
                             </div>
                         </div>
 
 
-                        <div class="col-lg-2 col-md-2 col-sm-2">
+                        <div class="col-lg-3 col-md-32 col-sm-2">
                             <div class="custom-select-container">
-                                <label for="distrito">Categoria Presupuestal</label>
-                                <select id="distrito" name="distrito" class="form-control font-11">
+                                <label for="cp">Categoria Presupuestal</label>
+                                <select id="cp" name="cp" class="form-control font-11">
                                     <option value="0">TODOS</option>
                                 </select>
                             </div>
@@ -181,6 +94,15 @@
                         </div>
                     </div>
                 </div>
+                <div class="mt-0 font-9">
+                    <h6 class="">Ejecución (DEV/PIM) <span class="float-right" id="card1i">0%</span></h6>
+                    <div class="progress progress-sm m-0">
+                        <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="90" aria-valuemin="0"
+                            aria-valuemax="100" style="width: 100%" id="card1b">
+                            <span class="sr-only">0% Complete</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -201,6 +123,15 @@
                                 <span data-plugin="counterup" id="card2"></span>
                             </h4>
                             <p class="mb-0 mt-1 text-truncate">CERTIFICADO 2025</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-0 font-9">
+                    <h6 class="">Ejecución (CERT/PIM) <span class="float-right" id="card2i">0%</span></h6>
+                    <div class="progress progress-sm m-0">
+                        <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="90" aria-valuemin="0"
+                            aria-valuemax="100" style="width: 100%" id="card2b">
+                            <span class="sr-only">0% Complete</span>
                         </div>
                     </div>
                 </div>
@@ -227,6 +158,15 @@
                         </div>
                     </div>
                 </div>
+                <div class="mt-0 font-9">
+                    <h6 class="">Ejecución (COMP/PIM) <span class="float-right" id="card3i">0%</span></h6>
+                    <div class="progress progress-sm m-0">
+                        <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="90" aria-valuemin="0"
+                            aria-valuemax="100" style="width: 100%" id="card3b">
+                            <span class="sr-only">0% Complete</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -250,88 +190,59 @@
                         </div>
                     </div>
                 </div>
+                <div class="mt-0 font-9">
+                    <h6 class="">Ejecución (DEV/CERT) <span class="float-right" id="card4i">0%</span></h6>
+                    <div class="progress progress-sm m-0">
+                        <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="90" aria-valuemin="0"
+                            aria-valuemax="100" style="width: 100%" id="card4b">
+                            <span class="sr-only">0% Complete</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="row">
-        <!-- Columna Izquierda: Unidades Ejecutoras -->
-        <div class="col-md-4 col-lg-4">
-            <div class="unidades-box">
-                <div class="unidades-title">Unidades Ejecutoras (% Ejecución)</div>
-
-                <div class="unidad-item">
-                    <div class="unidad-nombre">
-                        <span>DREU</span>
-                        <span class="unidad-porcentaje">45.8 %</span>
-                    </div>
-                    <div class="progress-bar-custom">
-                        <div class="progress-fill color-yellow" style="width: 45.8%"></div>
-                    </div>
+        <div class="col-lg-4 col-md-6">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
+                    {{-- <h3 class="text-black text-center font-weight-normal font-12 m-0">
+                        Unidades Ejecutoras (% Ejecución)
+                    </h3> --}}
+                    <h3 class="card-title font-12">
+                        Unidades Ejecutoras (% Ejecución)
+                    </h3>
                 </div>
-
-                <div class="unidad-item">
-                    <div class="unidad-nombre">
-                        <span>UGEL PURUS</span>
-                        <span class="unidad-porcentaje">80 %</span>
-                    </div>
-                    <div class="progress-bar-custom">
-                        <div class="progress-fill color-cyan" style="width: 80%"></div>
-                    </div>
-                </div>
-
-                <div class="unidad-item">
-                    <div class="unidad-nombre">
-                        <span>UGEL ATALAYA</span>
-                        <span class="unidad-porcentaje">45.8 %</span>
-                    </div>
-                    <div class="progress-bar-custom">
-                        <div class="progress-fill color-red" style="width: 45.8%"></div>
-                    </div>
-                </div>
-
-                <div class="unidad-item">
-                    <div class="unidad-nombre">
-                        <span>UGEL CORONEL PORTILLO</span>
-                        <span class="unidad-porcentaje">83.3 %</span>
-                    </div>
-                    <div class="progress-bar-custom">
-                        <div class="progress-fill color-yellow" style="width: 83.3%"></div>
-                    </div>
-                </div>
-
-                <div class="unidad-item">
-                    <div class="unidad-nombre">
-                        <span>UGEL PADRE ABAD</span>
-                        <span class="unidad-porcentaje">75 %</span>
-                    </div>
-                    <div class="progress-bar-custom">
-                        <div class="progress-fill color-yellow" style="width: 75%"></div>
-                    </div>
+                <div class="card-body py-0" style="height: 24rem" id="progress1">
+                    {{-- <div class="mt-4">
+                        <h6 class="text-uppercase">Target <span class="float-right">60%</span></h6>
+                        <div class="progress progress-sm m-0">
+                            <div class="progress-bar bg-info" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                                aria-valuemax="100" style="width: 60%">
+                                <span class="sr-only">60% Complete</span>
+                            </div>
+                        </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
 
-        <!-- Columna Derecha: Gráfico -->
-        <div class="col-md-8 col-lg-8">
-            <div class="grafico-container">
-                <div id="chartContainer"></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-6 col-md-6">
+        <div class="col-lg-8 col-md-6">
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
-                    <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
+                    <h3 class="text-black text-center font-weight-normal font-12 m-0"></h3>
                 </div>
                 <div class="card-body p-0">
-                    <div id="anal1" style="height: 25rem"></div>
+                    {{-- <div id="anal2" style="height: 25rem"></div> --}}
+                    <div id="anal1"></div>
                 </div>
             </div>
         </div>
 
+    </div>
+
+    <div class="row">
         <div class="col-lg-6 col-md-6">
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
@@ -343,9 +254,6 @@
             </div>
         </div>
 
-    </div>
-
-    <div class="row">
         <div class="col-lg-6 col-md-6">
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
@@ -357,6 +265,9 @@
             </div>
         </div>
 
+    </div>
+
+    <div class="row">
         <div class="col-lg-6 col-md-6">
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
@@ -367,9 +278,7 @@
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="row">
         <div class="col-lg-6 col-md-6">
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
@@ -380,18 +289,8 @@
                 </div>
             </div>
         </div>
-
-        <div class="col-lg-6 col-md-6">
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
-                    <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
-                </div>
-                <div class="card-body p-0">
-                    <div id="anal6" style="height: 25rem"></div>
-                </div>
-            </div>
-        </div>
     </div>
+
     <div class="row">
         <div class="col-lg-12">
             {{-- <div class="card">
@@ -403,8 +302,7 @@
                             <i class="fa fa-file-excel"></i> Descargar</button>
                     </div> --}}
                     <h3 class="card-title">
-                        NÚMERO DE SERVICIOS EDUCATIVOS, ESTUDIANTES, DOCENTES, AUXILIARES DE EDUCACIÓN Y PROMOTORES
-                        EDUCATIVOS POR ÁMBITO GEOGRÁFICO, SEGÚN FORMA DE ATENCIÓN
+                        Tabla de Datos - Presupuesto en Educación
                     </h3>
                 </div>
                 <div class="card-body">
@@ -412,92 +310,6 @@
                         <div class="col-12">
                             <div class="table-responsive" id="ctabla1">
 
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-12">
-            {{-- <div class="card">
-                <div class="card-header"> --}}
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                    {{-- <div class="card-widgets">
-                        <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla2')">
-                            <i class="fa fa-file-excel"></i> Descargar</button>
-                    </div> --}}
-                    <h3 class="card-title">
-                        NÚMERO DE SERVICIOS EDUCATIVOS, ESTUDIANTES, DOCENTES, AUXILIARES DE EDUCACIÓN Y PROMOTORES
-                        EDUCATIVOS POR ÁMBITO GEOGRÁFICO, SEGÚN NIVEL EDUCATIVO
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="table-responsive" id="ctabla2">
-
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-12">
-            {{-- <div class="card">
-                <div class="card-header"> --}}
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                    {{-- <div class="card-widgets">
-                        <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla3')">
-                            <i class="fa fa-file-excel"></i> Descargar</button>
-                    </div> --}}
-                    <h3 class="card-title">
-                        NÚMERO DE SERVICIOS EDUCATIVOS, ESTUDIANTES, DOCENTES, AUXILIARES DE EDUCACIÓN Y PROMOTORES
-                        EDUCATIVOS POR ÁMBITO GEOGRÁFICO, SEGÚN LENGUA ORIGINARIA
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="table-responsive" id="ctabla3">
-
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-12">
-            {{-- <div class="card">
-                <div class="card-header"> --}}
-            <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                    {{-- <div class="card-widgets">
-                        <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla4')">
-                            <i class="fa fa-file-excel"></i> Descargar</button>
-                    </div> --}}
-                    <h3 class="card-title">
-                        NÚMERO DE INSTITUCIONES EDUCATIVAS BILINGÜES POR NIVEL EDUCATIVO, FORMA DE ATENCIÓN, LENGUA
-                        ORIGINARIA, ESTUDIANTES Y DOCENTES
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="table-responsive" id="ctabla4">
                             </div>
                         </div>
                     </div>
@@ -516,97 +328,105 @@
         var anal3;
         var anal3valores = [];
         const spinners = {
-            head: ['#card1', '#card2', '#card3', '#card4', '#card1i', '#card2i', '#card3i', '#card4i', '#card1b',
-                '#card2b', '#card3b', '#card4b'
+            head: ['#card1', '#card2', '#card3', '#card4'
+                /* , '#card1i', '#card2i', '#card3i', '#card4i', '#card1b',
+                                '#card2b', '#card3b', '#card4b' */
             ],
             anal: ['#anal1', '#anal2', '#anal3', '#anal4'],
             tabla: ['#ctabla1', '#ctabla2', '#ctabla3', '#ctabla4']
         };
+
+        // DATOS DE PRUEBA Y EJECUCIÓN
+        // Categorías (Unidades Ejecutoras)
+        const categorias2 = [
+            'ene',
+            'feb',
+            'mar',
+            'abr',
+            'may',
+            'jun',
+            'jul',
+            'ago',
+            'set',
+            'oct',
+            'nov',
+            'dic',
+        ];
+
+        // Series de datos
+        const series2 = [{
+            name: 'PIM',
+            data: [15567987, 30567987, 20567987, 15567987, 10567987, 10567987,
+                15567987, 30567987, 20567987, 15567987, 10567987, 10567987
+            ]
+        }];
+
+        // Opciones adicionales
+        const opciones2 = {
+            yAxisTitle: '',
+            colors: ['#43beac', '#ef5350'],
+            subtitle: ''
+        };
+
+        const categorias3 = ['ene',
+            'feb',
+            'mar',
+            'abr',
+            'may',
+            'jun',
+            'jul',
+            'ago',
+            'set',
+            'oct',
+            'nov',
+            'dic',
+        ];
+
+        const series3 = [{
+            name: "avance",
+            data: [0, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 108]
+        }];
+
         $(document).ready(function() {
             Object.keys(spinners).forEach(key => {
                 SpinnerManager.show(key);
             });
             $('#anio').on('change', function() {
-                cargarGestion();
+                cargarEjecutora();
             });
-            $('#gestion').on('change', function() {
-                cargarProvincia();
+            $('#ue').on('change', function() {
+                cargarGasto();
             });
-            $('#provincia').on('change', function() {
-                cargarDistrito();
+            $('#cg').on('change', function() {
+                cargarPresupuesto();
             });
-            $('#distrito').on('change', function() {
+            $('#cp').on('change', function() {
                 cargarCards();
             });
 
-            mapData = otros;
-            mapData.features.forEach((element, key) => {
-                console.log('["' + element.properties['hc-key'] + '", ' + (key + 1) + '],');
-            });
-            cargarGestion();
-
-            // DATOS DE PRUEBA Y EJECUCIÓN
-            // Categorías (Unidades Ejecutoras)
-            const categorias = [
-                'DREU',
-                'UGEL CORONEL PORTILLO',
-                'UGEL PADRE ABAD',
-                'UGEL ATALAYA',
-                'UGEL PURUS'
-            ];
-
-            // Series de datos
-            const series = [{
-                    name: 'PIM',
-                    data: [15, 30, 20, 15, 10]
-                },
-                {
-                    name: 'DEVENGADO',
-                    data: [12, 25, 15, 10, 8]
-                }
-            ];
-
-            // Opciones adicionales
-            const opciones = {
-                yAxisTitle: 'Millones',
-                colors: ['#17A2B8', '#DC3545'],
-                subtitle: ''
-            };
-
-            // Crear el gráfico
-            crearGraficoComparativo(
-                'chartContainer',
-                categorias,
-                series,
-                'Ejecución del Gasto Presupuestal por Unidades Ejecutoras (PIM vs DEVENGADO)',
-                opciones
-            );
-
+            cargarEjecutora();
         });
 
         function cargarCards() {
             panelGraficas('head');
+            panelGraficas('progress1');
             panelGraficas('anal1');
             panelGraficas('anal2');
             panelGraficas('anal3');
             panelGraficas('anal4');
             panelGraficas('anal5');
-            panelGraficas('anal6');
             panelGraficas('tabla1');
-            panelGraficas('tabla2');
-            panelGraficas('tabla3');
-            panelGraficas('tabla4');
         }
 
         function panelGraficas(div) {
             $.ajax({
-                url: "{{ route('educacion.padron.eib.reportes.reporte') }}",
+                url: "{{ route('presupuesto.educacion.reportes.reporte') }}",
                 data: {
                     'div': div,
                     "anio": $('#anio').val(),
-                    "gestion": $('#gestion').val(),
-                    "provincia": $('#provincia').val(),
-                    "distrito": $('#distrito').val(),
+                    "ue": $('#ue').val(),
+                    "cg": $('#cg').val(),
+                    "cp": $('#cp').val(),
                 },
                 type: "GET",
                 dataType: "JSON",
@@ -632,36 +452,128 @@
                                 delay: 10,
                                 time: 1000
                             });
+                            $('#card1i').text(data.pcard1 + '%');
+                            $('#card2i').text(data.pcard2 + '%');
+                            $('#card3i').text(data.pcard3 + '%');
+                            $('#card4i').text(data.pcard4 + '%');
+                            $('#card1b').css('width', data.pcard1 + '%')
+                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+                                .addClass(data.pcard1 > 96 ? 'bg-success-0' : (data.pcard1 > 76 ?
+                                    'bg-warning-0' :
+                                    'bg-orange-0'));
+                            $('#card2b').css('width', data.pcard2 + '%')
+                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+                                .addClass(data.pcard2 > 96 ? 'bg-success-0' : (data.pcard2 > 76 ?
+                                    'bg-warning-0' :
+                                    'bg-orange-0'));
+                            $('#card3b').css('width', data.pcard3 + '%')
+                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+                                .addClass(data.pcard3 > 96 ? 'bg-success-0' : (data.pcard3 > 76 ?
+                                    'bg-warning-0' :
+                                    'bg-orange-0'));
+                            $('#card4b').css('width', data.pcard4 + '%')
+                                .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
+                                .addClass(data.pcard4 > 96 ? 'bg-success-0' : (data.pcard4 > 76 ?
+                                    'bg-warning-0' :
+                                    'bg-orange-0'));
+                            break;
+                        case 'progress1':
+                            var contenedor = $('#progress1');
+                            contenedor.empty();
+                            data.forEach(function(item) {
+                                $color = item.avance > 96 ? 'bg-success-0' : (item.avance > 76 ?
+                                    'bg-warning-0' : 'bg-orange-0');
+                                var progresoHtml = `
+                                    <div class="mt-4 ${item.estado?'table-warning':''} p-1 rounded">
+                                        <h6 class="text-uppercase">${item.ue} <span class="float-right">${item.avance}%</span></h6>
+                                        <div class="progress progress-sm m-0">
+                                            <div class="progress-bar ${$color}" role="progressbar" aria-valuenow="${item.avance}" aria-valuemin="0"
+                                                aria-valuemax="100" style="width: ${item.avance}%">
+                                                <span class="sr-only">${item.avance}% Complete</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                                contenedor.append(progresoHtml);
+                            });
+
                             break;
                         case 'anal1':
-                            anal3valores = data.valores;
-                            anal3 = maps01(div, data.info, '',
-                                'Distribución de los Servicios Educativos del Modelo de Servicio de EIB por Provincia'
+                            // DATOS DE PRUEBA Y EJECUCIÓN
+                            // Categorías (Unidades Ejecutoras)
+                            const categorias = [
+                                'DREU',
+                                'UGEL CORONEL PORTILLO',
+                                'UGEL PADRE ABAD',
+                                'UGEL ATALAYA',
+                                'UGEL PURUS'
+                            ];
+                            // Series de datos
+                            const series = [{
+                                    name: 'PIM',
+                                    data: [15567987, 30567987, 20567987, 15567987, 10567987]
+                                },
+                                {
+                                    name: 'DEVENGADO',
+                                    data: [12567987, 25567987, 15567987, 10567987, 8567987]
+                                }
+                            ];
+                            // Opciones adicionales
+                            const opciones = {
+                                yAxisTitle: '',
+                                colors: ['#43beac', '#ef5350'],
+                                subtitle: ''
+                            };
+                            // Crear el gráfico
+                            crearGraficoComparativo(
+                                div,
+                                data.info.categorias,
+                                data.info.series,
+                                'Ejecución del Gasto Presupuestal por Unidades Ejecutoras (PIM vs DEVENGADO)',
+                                opciones
                             );
                             break;
                         case 'anal2':
-                            gAnidadaColumn(div,
-                                data.info.categoria,
+                            crearGraficoComparativo(
+                                div,
+                                data.info.categorias,
                                 data.info.series,
-                                '',
-                                'Matrícula educativa del modelo de servicio de EIB, periodo 2019-2025',
-                                data.info.maxbar
+                                'Certificado presupuestal mensual - año 2025',
+                                opciones2
                             );
                             break;
                         case 'anal3':
-                            crearGraficoDistribucionPlazas(div, data,
-                                'Distribución de la matricula educativa del modelo de servicio de EIB, según Nivel Educativo'
-                            );
+                            gLineaMultiplePorcentual(div, {
+                                cat: data.info.categorias,
+                                dat: data.info.series
+                            }, {
+                                title: '',
+                                subtitle: 'Certificado presupuestal mensual( % ) - año 2025',
+                                yAxisTitle: '',
+                                // legend: false, // opcional: si quieres forzar ocultar
+                                dataLabels: true // por defecto true
+                            });
                             break;
                         case 'anal4':
-                            gLineaMultiple(div, data, '',
-                                'Matricula educativa del modelo de servicio EIB por años, segun Nivel Educativo',
-                                '');
+                            crearGraficoComparativo(
+                                div,
+                                data.info.categorias,
+                                data.info.series,
+                                'Ejecución del Gasto Presupuestal por Unidades Ejecutoras (PIM vs DEVENGADO)',
+                                opciones2
+                            );
                             break;
                         case 'anal5':
-                            crearGraficoDistribucionPlazas(div, data,
-                                'Distribución de Docentes del Modelo de Servicio EIB, según Condición Laboral'
-                            );
+                            gLineaMultiplePorcentual(div, {
+                                cat: data.info.categorias,
+                                dat: data.info.series
+                            }, {
+                                title: '',
+                                subtitle: 'Devengado presupuestal mensual( % ) - año 2025',
+                                yAxisTitle: '',
+                                // legend: false, // opcional: si quieres forzar ocultar
+                                dataLabels: true // por defecto true
+                            });
                             break;
                         case 'anal6':
                             xxxx(div,
@@ -720,19 +632,19 @@
             });
         }
 
-        function cargarGestion() {
+        function cargarEjecutora() {
             $.ajax({
-                url: "{{ route('educacion.cubo.padron.eib.select.gestion', ['anio' => ':anio']) }}"
+                url: "{{ route('presupuesto.saifweb.detalle.select.ue', ['anio' => ':anio']) }}"
                     .replace(':anio', $('#anio').val()),
                 type: 'GET',
                 success: function(data) {
-                    $('#gestion').empty();
+                    $('#ue').empty();
                     if (Object.keys(data).length > 1)
-                        $('#gestion').append('<option value="0">TODOS</option>');
+                        $('#ue').append('<option value="0">TODOS</option>');
                     $.each(data, function(index, value) {
-                        $('#gestion').append(`<option value='${index}'>${value}</option>`);
+                        $('#ue').append(`<option value='${index}'>${value}</option>`);
                     });
-                    cargarProvincia();
+                    cargarGasto();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -740,20 +652,20 @@
             });
         }
 
-        function cargarProvincia() {
+        function cargarGasto() {
             $.ajax({
-                url: "{{ route('educacion.cubo.padron.eib.select.provincia', ['anio' => ':anio', 'ugel' => ':gestion']) }}"
+                url: "{{ route('presupuesto.saifweb.detalle.select.cg', ['anio' => ':anio', 'ue' => ':ue']) }}"
                     .replace(':anio', $('#anio').val())
-                    .replace(':gestion', $('#gestion').val()),
+                    .replace(':ue', $('#ue').val()),
                 type: 'GET',
                 success: function(data) {
-                    $('#provincia').empty();
+                    $('#cg').empty();
                     if (Object.keys(data).length > 1)
-                        $('#provincia').append('<option value="0">TODOS</option>');
+                        $('#cg').append('<option value="0">TODOS</option>');
                     $.each(data, function(index, value) {
-                        $('#provincia').append(`<option value='${index}'>${value}</option>`);
+                        $('#cg').append(`<option value='${index}'>${value}</option>`);
                     });
-                    cargarDistrito();
+                    cargarPresupuesto();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -761,62 +673,19 @@
             });
         }
 
-        function cargarDistrito() {
+        function cargarPresupuesto() {
             $.ajax({
-                url: "{{ route('educacion.cubo.padron.eib.select.distrito', ['anio' => ':anio', 'ugel' => ':gestion', 'provincia' => ':provincia']) }}"
+                url: "{{ route('presupuesto.saifweb.detalle.select.cp', ['anio' => ':anio', 'ue' => ':ue', 'cg' => ':cg']) }}"
                     .replace(':anio', $('#anio').val())
-                    .replace(':gestion', $('#gestion').val())
-                    .replace(':provincia', $('#provincia').val()),
+                    .replace(':ue', $('#ue').val())
+                    .replace(':cg', $('#cg').val()),
                 type: 'GET',
                 success: function(data) {
-                    $('#distrito').empty();
+                    $('#cp').empty();
                     if (Object.keys(data).length > 1)
-                        $('#distrito').append('<option value="0">TODOS</option>');
+                        $('#cp').append('<option value="0">TODOS</option>');
                     $.each(data, function(index, value) {
-                        $('#distrito').append(`<option value='${index}'>${value}</option>`);
-                    });
-                    cargarCards();
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
-        }
-
-        function cargarModalidad() {
-            $.ajax({
-                url: "{{ route('educacion.nexus.filtro.modalidad', ['anio' => ':anio', 'ugel' => ':ugel']) }}"
-                    .replace(':anio', $('#anio').val())
-                    .replace(':ugel', $('#ugel').val()),
-                type: 'GET',
-                success: function(data) {
-                    $('#modalidad').empty();
-                    if (Object.keys(data).length > 1)
-                        $('#modalidad').append('<option value="0">TODOS</option>');
-                    $.each(data, function(index, value) {
-                        $('#modalidad').append(`<option value='${index}'>${value}</option>`);
-                    });
-                    cargarNivel();
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
-        }
-
-        function cargarNivel() {
-            $.ajax({
-                url: "{{ route('educacion.nexus.filtro.nivel', ['anio' => ':anio', 'ugel' => ':ugel', 'modalidad' => ':modalidad']) }}"
-                    .replace(':anio', $('#anio').val())
-                    .replace(':ugel', $('#ugel').val())
-                    .replace(':modalidad', $('#modalidad').val()),
-                type: 'GET',
-                success: function(data) {
-                    $("#nivel").empty();
-                    if (Object.keys(data).length > 1)
-                        $('#nivel').append('<option value="0">TODOS</option>');
-                    $.each(data, function(index, value) {
-                        $('#nivel').append(`<option value='${index}'>${value}</option>`);
+                        $('#cp').append(`<option value='${index}'>${value}</option>`);
                     });
                     cargarCards();
                 },
@@ -1043,123 +912,6 @@
                     enabled: true
                 },
                 credits: false,
-            });
-        }
-
-        function maps01(div, data, titulo, subtitulo) {
-            return Highcharts.mapChart(div, {
-                chart: {
-                    map: mapData
-                },
-                // states: {
-                //     hover: {
-                //         color: '#ff5733' // Cambia este color al que desees
-                //     }
-                // },
-                title: {
-                    text: titulo, //'Reportes de Mapa'
-                },
-
-                subtitle: {
-                    text: subtitulo, //'Un descripción de reportes'
-                    style: {
-                        // fontSize: '11px'
-                    }
-                },
-
-                mapNavigation: {
-                    enabled: true,
-                    buttonOptions: {
-                        verticalAlign: 'top'
-                    }
-                },
-
-                colorAxis: {
-                    // mixColor: "#e6ebf5",
-                    // manColor: "#003399",
-                    minColor: '#e0f6f3',
-                    maxColor: '#2a7f72',
-                    showInLegend: false
-                },
-
-                series: [{
-                    data: data,
-                    name: 'NEXUS',
-                    states: {
-                        hover: {
-                            color: '#ef5350' // '#BADA55'
-                        }
-                    },
-                    borderColor: '#cac9c9',
-
-                    // dataLabels: {
-                    //     enabled: true,
-                    //     useHTML: true, // Permite el uso de etiquetas HTML
-                    //     format: '<div style="text-align:center;">{point.name}<br><span style="font-size:12px;">{point.value:,2f}%</span></div>',
-                    //     // nullFormatter: '0%',
-                    //     // formatter: function() {
-                    //     //     const value = this.point.value || 0;
-                    //     //     return `<div style="text-align:center;">${this.point.name}<br><span style="font-size:12px;">${Highcharts.numberFormat(value, 2)}%</span></div>`;
-                    //     // },
-                    //     style: {
-                    //         fontSize: '10px',
-                    //         fontWeight: 'bold',
-                    //         color: '#FFFFFF',
-                    //         textShadow: '0px 0px 3px #000000' // Aplica sombra negra para simular el borde
-                    //     }
-                    // },
-
-                    dataLabels: {
-                        enabled: true,
-                        useHTML: true,
-                        formatter: function() {
-                            const value = this.point.value !== undefined ? this.point.value : 0;
-                            return `<div style="text-align:center;">
-                                        ${this.point.name}<br>
-                                        <span style="font-size:12px;">${Highcharts.numberFormat(value, 1)}%</span>
-                                    </div>`;
-                        },
-                        style: {
-                            fontSize: '10px',
-                            fontWeight: 'bold',
-                            color: '#FFFFFF',
-                            textShadow: '0px 0px 3px #000000'
-                        }
-                    },
-
-                }],
-                tooltip: {
-                    useHTML: true,
-                    formatter: function() {
-                        // Obtener los datos desde anal3valores
-                        const provinciaData = anal3valores[this.point.properties['hc-key']];
-                        if (!provinciaData) {
-                            return `<strong>${this.point.name}</strong><br>Datos no disponibles`;
-                        }
-
-                        return `<div style="text-align:left;">
-                                    <strong>${this.point.name}</strong><br>
-                                    Servicios Educativos: ${Highcharts.numberFormat(provinciaData.num,0)}<br>
-                                    Participación: ${Highcharts.numberFormat(provinciaData.ind, 1)}%
-                                </div>`;
-                    },
-                    backgroundColor: '#fff', // Fondo blanco translúcido
-                    borderColor: '#cccccc', // Borde suave
-                    borderRadius: 10, // Bordes redondeados
-                    shadow: true, // Sombra para darle un efecto "suave"
-                    style: {
-                        fontSize: '12px',
-                        fontWeight: 'normal',
-                        color: '#333333',
-                        padding: '10px'
-                    }
-                },
-                legend: {
-                    enabled: false
-                },
-                credits: {
-                    enabled: false
-                },
             });
         }
 
@@ -1542,7 +1294,7 @@
             });
         }
 
-        function gLineaMultiple(div, data, titulo, subtitulo, titulovetical) {
+        function gLineaMultiplexx(div, data, titulo, subtitulo, titulovetical) {
             Highcharts.chart(div, {
                 title: {
                     text: titulo
@@ -1772,7 +1524,7 @@
             });
         }
 
-        function crearGraficoComparativo(divId, categories, seriesData, title, options = {}) {
+        function crearGraficoComparativoxx(divId, categories, seriesData, title, options = {}) {
             const defaultColors = ['#17A2B8', '#DC3545'];
             const colors = options.colors || defaultColors;
 
@@ -1809,7 +1561,7 @@
                 yAxis: {
                     min: 0,
                     title: {
-                        text: options.yAxisTitle || 'Millones'
+                        text: options.yAxisTitle || ''
                     },
                     labels: {
                         style: {
@@ -1871,6 +1623,611 @@
                                 },
                                 title: {
                                     text: ''
+                                }
+                            }
+                        }
+                    }]
+                }
+            });
+        }
+
+        function crearGraficoComparativoxxx(divId, categories, seriesData, title, options = {}) {
+            // Función auxiliar: formateo abreviado (K/M)
+            function formatShort(value) {
+                const abs = Math.abs(value);
+                if (abs >= 1e6) {
+                    return (value / 1e6).toFixed(0).replace(/\.0$/, '') + ' M';
+                } else if (abs >= 1e3) {
+                    return (value / 1e3).toFixed(0).replace(/\.0$/, '') + ' K';
+                }
+                return value.toString();
+            }
+
+            // Función auxiliar: formateo completo con comas (ej. 15567987 → "15,567,987")
+            function formatFull(value) {
+                return value.toLocaleString('en-US', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                });
+            }
+
+            const defaultColors = ['#17A2B8', '#DC3545'];
+            const colors = options.colors || defaultColors;
+
+            Highcharts.chart(divId, {
+                chart: {
+                    type: 'column',
+                    backgroundColor: 'transparent',
+                    style: {
+                        fontFamily: 'Arial, sans-serif'
+                    }
+                },
+                title: {
+                    text: title,
+                    align: 'center',
+                    style: {
+                        fontSize: '14px',
+                        fontWeight: 'normal',
+                        color: '#666'
+                    }
+                },
+                subtitle: {
+                    text: options.subtitle || '',
+                    align: 'center'
+                },
+                xAxis: {
+                    categories: categories,
+                    crosshair: true,
+                    labels: {
+                        style: {
+                            fontSize: '11px'
+                        }
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: options.yAxisTitle || ''
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '11px'
+                        }
+                    }
+                },
+                tooltip: {
+                    shared: true,
+                    useHTML: true,
+                    formatter: function() {
+                        let s = `<span style="font-size:11px">${this.x}</span><br/>`;
+                        this.points.forEach(point => {
+                            const full = formatFull(point.y);
+                            const short = formatShort(point.y);
+                            s +=
+                                `<span style="color:${point.series.color}">${point.series.name}</span>: <b>${full}</b> (${short})<br/>`;
+                        });
+                        return s;
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.15,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            formatter: function() {
+                                return formatShort(this.y);
+                            },
+                            style: {
+                                fontSize: '10px',
+                                fontWeight: 'normal',
+                                textOutline: 'none'
+                            }
+                        }
+                    }
+                },
+                legend: {
+                    align: 'center',
+                    verticalAlign: 'bottom',
+                    backgroundColor: 'transparent',
+                    itemStyle: {
+                        fontSize: '12px',
+                        fontWeight: 'normal'
+                    }
+                },
+                colors: colors,
+                series: seriesData,
+                credits: {
+                    enabled: false
+                },
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 500
+                        },
+                        chartOptions: {
+                            legend: {
+                                align: 'center',
+                                verticalAlign: 'bottom',
+                                layout: 'horizontal'
+                            },
+                            yAxis: {
+                                labels: {
+                                    align: 'left',
+                                    x: 0,
+                                    y: -5
+                                },
+                                title: {
+                                    text: ''
+                                }
+                            }
+                        }
+                    }]
+                }
+            });
+        }
+
+        function crearGraficoComparativo(divId, categories, seriesData, title, options = {}) {
+            // 🔢 Funciones auxiliares de formato
+            function formatShort(value) {
+                const abs = Math.abs(value);
+                if (abs >= 1e6) {
+                    return (value / 1e6).toFixed(0).replace(/\.0$/, '') + ' M';
+                } else if (abs >= 1e3) {
+                    return (value / 1e3).toFixed(0).replace(/\.0$/, '') + ' K';
+                }
+                return value.toString();
+            }
+
+            function formatFull(value) {
+                return value.toLocaleString('en-US', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                });
+            }
+
+            // 🎯 Detectar si es una sola serie
+            const isSingleSeries = seriesData.length === 1;
+
+            // 🎨 Colores
+            const defaultColors = ['#17A2B8', '#DC3545'];
+            const colors = options.colors || defaultColors;
+
+            // 📋 Configuración de leyenda (oculta si solo hay 1 serie)
+            const legendConfig = {
+                align: 'center',
+                verticalAlign: 'bottom',
+                backgroundColor: 'transparent',
+                itemStyle: {
+                    fontSize: '12px',
+                    fontWeight: 'normal'
+                },
+                enabled: !isSingleSeries // ← clave: desactiva si solo hay una serie
+            };
+
+            // 📊 Crear gráfico
+            Highcharts.chart(divId, {
+                chart: {
+                    type: 'column',
+                    backgroundColor: 'transparent',
+                    style: {
+                        fontFamily: 'Arial, sans-serif'
+                    }
+                },
+                title: {
+                    text: title,
+                    align: 'center',
+                    style: {
+                        fontSize: '14px',
+                        fontWeight: 'normal',
+                        color: '#666'
+                    }
+                },
+                subtitle: {
+                    text: options.subtitle || '',
+                    align: 'center'
+                },
+                xAxis: {
+                    categories: categories,
+                    crosshair: true,
+                    labels: {
+                        style: {
+                            fontSize: '11px'
+                        }
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: options.yAxisTitle || ''
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '11px'
+                        }
+                    }
+                },
+                tooltip: {
+                    shared: true,
+                    useHTML: true,
+                    formatter: function() {
+                        let s = `<span style="font-size:11px">${this.key}</span><br/>`;
+                        this.points.forEach(point => {
+                            const full = formatFull(point.y);
+                            const short = formatShort(point.y);
+                            if (isSingleSeries) {
+                                // Solo valor (sin nombre de la serie)
+                                s += `<b>${full}</b> (${short})<br/>`;
+                            } else {
+                                // Nombre de serie + valor
+                                s +=
+                                    `<span style="color:${point.series.color}">${point.series.name}</span>: <b>${full}</b> (${short})<br/>`;
+                            }
+                        });
+                        return s;
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.15,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            formatter: function() {
+                                return formatShort(this.y);
+                            },
+                            style: {
+                                fontSize: '10px',
+                                fontWeight: 'normal',
+                                textOutline: 'none'
+                            }
+                        }
+                    }
+                },
+                legend: legendConfig, // ← usa la configuración condicional
+                colors: colors,
+                series: seriesData,
+                credits: {
+                    enabled: false
+                },
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 500
+                        },
+                        chartOptions: {
+                            legend: {
+                                align: 'center',
+                                verticalAlign: 'bottom',
+                                layout: 'horizontal',
+                                enabled: !isSingleSeries // mantener coherencia en responsive
+                            },
+                            yAxis: {
+                                labels: {
+                                    align: 'left',
+                                    x: 0,
+                                    y: -5
+                                },
+                                title: {
+                                    text: ''
+                                }
+                            }
+                        }
+                    }]
+                }
+            });
+        }
+
+        function gLineaMultiple(div, data, titulo, subtitulo = '', titulovetical = '', options = {}) {
+            // 🔢 Formato abreviado (K/M) y completo
+            function formatShort(value) {
+                const abs = Math.abs(value);
+                if (abs >= 1e6) return (value / 1e6).toFixed(1).replace(/\.0$/, '') + ' M';
+                if (abs >= 1e3) return (value / 1e3).toFixed(1).replace(/\.0$/, '') + ' K';
+                return value.toString();
+            }
+
+            function formatFull(value) {
+                return value.toLocaleString('en-US', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                });
+            }
+
+            // 🎯 Detectar si es una sola serie
+            const isSingleSeries = data.dat.length === 1;
+
+            // 🎨 Colores
+            const defaultColors = [
+                '#17A2B8', '#FF6B35', '#28A745', '#DC3545', '#6F42C1', '#FFC107', '#007BFF'
+            ];
+            const colors = options.colors || defaultColors;
+
+            // 📋 Leyenda: oculta automáticamente si solo hay 1 serie (a menos que se fuerce con { legend: true })
+            const userWantsLegend = options.legend === true;
+            const userHidesLegend = options.legend === false;
+            const showLegend = userWantsLegend || (!userHidesLegend && !isSingleSeries);
+
+            // 📈 Gráfico
+            Highcharts.chart(div, {
+                chart: {
+                    type: 'line',
+                    backgroundColor: 'transparent',
+                    style: {
+                        fontFamily: 'Arial, sans-serif'
+                    }
+                },
+                title: {
+                    text: titulo,
+                    align: 'center',
+                    style: {
+                        fontSize: '16px',
+                        fontWeight: 'bold',
+                        color: '#333'
+                    }
+                },
+                subtitle: {
+                    text: subtitulo,
+                    align: 'center',
+                    style: {
+                        fontSize: '12px',
+                        color: '#666'
+                    }
+                },
+                xAxis: {
+                    categories: data.cat,
+                    crosshair: true,
+                    labels: {
+                        style: {
+                            fontSize: '11px'
+                        }
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: titulovetical,
+                        style: {
+                            fontSize: '12px'
+                        }
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '11px'
+                        }
+                    },
+                    gridLineWidth: 1
+                },
+                tooltip: {
+                    shared: true,
+                    useHTML: true,
+                    formatter: function() {
+                        let s = `<span style="font-size:12px">${this.x}</span><br/>`;
+                        this.points.forEach(point => {
+                            const full = formatFull(point.y);
+                            const short = formatShort(point.y);
+                            if (isSingleSeries) {
+                                // ✅ Solo valor — sin nombre de la serie
+                                s += `<b>${full}</b> (${short})<br/>`;
+                            } else {
+                                // Nombre + valor
+                                s += `<span style="color:${point.series.color}">\u25CF</span> ` +
+                                    `<b>${point.series.name}</b>: ${full} (${short})<br/>`;
+                            }
+                        });
+                        return s;
+                    }
+                },
+                plotOptions: {
+                    line: {
+                        marker: {
+                            enabled: true,
+                            radius: 4
+                        },
+                        lineWidth: 2,
+                        states: {
+                            hover: {
+                                lineWidth: 3
+                            }
+                        },
+                        dataLabels: {
+                            enabled: options.dataLabels !== false,
+                            formatter: function() {
+                                return formatShort(this.y);
+                            },
+                            style: {
+                                fontSize: '10px',
+                                fontWeight: 'normal',
+                                textOutline: 'none'
+                            },
+                            y: -8
+                        }
+                    }
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle',
+                    backgroundColor: 'transparent',
+                    itemStyle: {
+                        fontSize: '12px',
+                        fontWeight: 'normal'
+                    },
+                    enabled: showLegend // ✅ Automático: false si 1 serie (a menos que se fuerce)
+                },
+                series: data.dat,
+                colors: colors,
+                credits: {
+                    enabled: false
+                },
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 500
+                        },
+                        chartOptions: {
+                            legend: {
+                                layout: 'horizontal',
+                                align: 'center',
+                                verticalAlign: 'bottom',
+                                enabled: showLegend
+                            },
+                            yAxis: {
+                                title: {
+                                    text: ''
+                                }
+                            }
+                        }
+                    }]
+                }
+            });
+        }
+
+        function gLineaMultiplePorcentual(div, data, options = {}) {
+            // 🔢 Formato para porcentajes
+            function formatPercent(value, decimals = 1) {
+                return Number(value).toFixed(decimals).replace(/\.0+$/, '') + '%';
+            }
+
+            // 🎯 Detectar si es una sola serie
+            const isSingleSeries = data.dat.length === 1;
+
+            // 🎨 Colores
+            const defaultColors = [
+                '#17A2B8', '#FF6B35', '#28A745', '#DC3545', '#6F42C1', '#FFC107', '#007BFF'
+            ];
+            const colors = options.colors || defaultColors;
+
+            // 📋 Leyenda: oculta automáticamente si solo hay 1 serie (a menos que se fuerce)
+            const userWantsLegend = options.legend === true;
+            const userHidesLegend = options.legend === false;
+            const showLegend = userWantsLegend || (!userHidesLegend && !isSingleSeries);
+
+            // 📈 Gráfico
+            Highcharts.chart(div, {
+                chart: {
+                    type: 'line',
+                    backgroundColor: 'transparent',
+                    style: {
+                        fontFamily: 'Arial, sans-serif'
+                    }
+                },
+                title: {
+                    text: options.title || '',
+                    align: 'center',
+                    style: {
+                        fontSize: '16px',
+                        fontWeight: 'bold',
+                        color: '#333'
+                    }
+                },
+                subtitle: {
+                    text: options.subtitle || '',
+                    align: 'center',
+                    style: {
+                        fontSize: '14px',
+                        color: '#666'
+                    }
+                },
+                xAxis: {
+                    categories: data.cat,
+                    crosshair: true,
+                    labels: {
+                        style: {
+                            fontSize: '11px'
+                        }
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: options.yAxisTitle || '',
+                        style: {
+                            fontSize: '12px'
+                        }
+                    },
+                    labels: {
+                        format: '{value}%',
+                        style: {
+                            fontSize: '11px'
+                        }
+                    },
+                    min: 0,
+                    // max: 100, // ❌ no fijar, permitir >100% (como 108%)
+                    gridLineWidth: 1
+                },
+                tooltip: {
+                    shared: true,
+                    useHTML: true,
+                    formatter: function() {
+                        let s = `<span style="font-size:12px">${this.key}</span><br/>`;
+                        this.points.forEach(point => {
+                            // ✅ SIEMPRE mostrar el nombre, incluso con 1 serie (tu requerimiento)
+                            const pct = formatPercent(point.y, 1); // 1 decimal, pero sin .0 innecesario
+                            s += `<span style="color:${point.series.color}">\u25CF</span> ` +
+                                `<b>${point.series.name}</b>: ${pct}<br/>`;
+                        });
+                        return s;
+                    }
+                },
+                plotOptions: {
+                    line: {
+                        marker: {
+                            enabled: true,
+                            radius: 4
+                        },
+                        lineWidth: 2,
+                        states: {
+                            hover: {
+                                lineWidth: 3
+                            }
+                        },
+                        dataLabels: {
+                            enabled: options.dataLabels !== false,
+                            formatter: function() {
+                                return formatPercent(this.y, 0); // sin decimales en los labels (ej: 10%)
+                            },
+                            style: {
+                                fontSize: '10px',
+                                fontWeight: 'normal',
+                                textOutline: 'none'
+                            },
+                            y: -8
+                        }
+                    }
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle',
+                    backgroundColor: 'transparent',
+                    itemStyle: {
+                        fontSize: '12px',
+                        fontWeight: 'normal'
+                    },
+                    enabled: showLegend
+                },
+                series: data.dat,
+                colors: colors,
+                credits: {
+                    enabled: false
+                },
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 500
+                        },
+                        chartOptions: {
+                            legend: {
+                                layout: 'horizontal',
+                                align: 'center',
+                                verticalAlign: 'bottom',
+                                enabled: showLegend
+                            },
+                            yAxis: {
+                                title: {
+                                    text: ''
+                                },
+                                labels: {
+                                    format: '{value}%'
                                 }
                             }
                         }

@@ -3,75 +3,43 @@
         <table id="tabla1" class="table table-striped table-bordered font-11">
             <thead>
                 <tr class="table-success-0 text-white">
-                    <th class="text-center" rowspan="2">FORMA DE ATENCIÓN</th>
-                    <th class="text-center" colspan="3">SERVICIOS EDUCATIVOS</th>
-                    <th class="text-center" colspan="3">ESTUDIANTES MATRICULADOS</th>
-                    <th class="text-center" colspan="3">PERSONAL DOCENTE</th>
-                    <th class="text-center" colspan="3">AUXILIAR DE EDUCACIÓN</th>
-                    <th class="text-center" colspan="1">PEC</th>
-                </tr>
-                <tr class="table-success-0 text-white">
-                    <th class="text-center">TOTAL</th>
-                    <th class="text-center">RURAL</th>
-                    <th class="text-center">URBANO</th>
-                    <th class="text-center">TOTAL</th>
-                    <th class="text-center">RURAL</th>
-                    <th class="text-center">URBANO</th>
-                    <th class="text-center">TOTAL</th>
-                    <th class="text-center">RURAL</th>
-                    <th class="text-center">URBANO</th>
-                    <th class="text-center">TOTAL</th>
-                    <th class="text-center">RURAL</th>
-                    <th class="text-center">URBANO</th>
-                    <th class="text-center">RURAL</th>
+                    <th class="text-center">UNIDAD EJECUTORA</th>
+                    <th class="text-center">PIA</th>
+                    <th class="text-center">PIM</th>
+                    <th class="text-center">CERTIFICACIÓN</th>
+                    <th class="text-center">COMPROMISO</th>
+                    <th class="text-center">DEVENGADO</th>
+                    <th class="text-center">EJECUCIÓN</th>
+                    <th class="text-center">SALDO CERT.</th>
+                    <th class="text-center">SALDO DEV.</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($base as $item)
                     <tr class="text-center">
-                        <td class="text-left">{{ $item->forma_atencion }}</td>
-                        <!-- SERVICIOS EDUCATIVOS -->
-                        <td class="table-warning">{{ number_format($item->ts, 0) }}</td>
-                        <td>{{ number_format($item->tsr, 0) }}</td>
-                        <td>{{ number_format($item->tsu, 0) }}</td>
-                        <!-- ESTUDIANTES MATRICULADOS -->
-                        <td class="table-warning">{{ number_format($item->tm, 0) }}</td>
-                        <td>{{ number_format($item->tmr, 0) }}</td>
-                        <td>{{ number_format($item->tmu, 0) }}</td>
-                        <!-- PERSONAL DOCENTE -->
-                        <td class="table-warning">{{ number_format($item->td, 0) }}</td>
-                        <td>{{ number_format($item->tdr, 0) }}</td>
-                        <td>{{ number_format($item->tdu, 0) }}</td>
-                        <!-- AUXILIAR DE EDUCACIÓN -->
-                        <td class="table-warning">{{ number_format($item->ta, 0) }}</td>
-                        <td>{{ number_format($item->tar, 0) }}</td>
-                        <td>{{ number_format($item->tau, 0) }}</td>
-                        <!-- PEC -->
-                        <td>{{ number_format($item->tpr, 0) }}</td> <!-- Solo rural, según tu ejemplo -->
+                        <td class="text-left">{{ $item->ue }}</td>
+                        <td>{{ number_format($item->pia, 0) }}</td>
+                        <td>{{ number_format($item->pim, 0) }}</td>
+                        <td>{{ number_format($item->certificado, 0) }}</td>
+                        <td>{{ number_format($item->compromiso, 0) }}</td>e
+                        <td>{{ number_format($item->devengado, 0) }}</td>
+                        <td><x-avance-badge :avance="$item->avance" fontSize="11px" /></td>
+                        <td>{{ number_format($item->saldocer, 0) }}</td>
+                        <td>{{ number_format($item->saldodev, 0) }}</td>
                     </tr>
                 @endforeach
             </tbody>
             <tfoot>
                 <tr class="text-center table-success-0 text-white">
                     <th class="text-left">TOTAL</th>
-                    <!-- SERVICIOS EDUCATIVOS -->
-                    <th>{{ number_format($foot->ts, 0) }}</th>
-                    <th>{{ number_format($foot->tsr, 0) }}</th>
-                    <th>{{ number_format($foot->tsu, 0) }}</th>
-                    <!-- ESTUDIANTES MATRICULADOS -->
-                    <th>{{ number_format($foot->tm, 0) }}</th>
-                    <th>{{ number_format($foot->tmr, 0) }}</th>
-                    <th>{{ number_format($foot->tmu, 0) }}</th>
-                    <!-- PERSONAL DOCENTE -->
-                    <th>{{ number_format($foot->td, 0) }}</th>
-                    <th>{{ number_format($foot->tdr, 0) }}</th>
-                    <th>{{ number_format($foot->tdu, 0) }}</th>
-                    <!-- AUXILIAR DE EDUCACIÓN -->
-                    <th>{{ number_format($foot->ta, 0) }}</th>
-                    <th>{{ number_format($foot->tar, 0) }}</th>
-                    <th>{{ number_format($foot->tau, 0) }}</th>
-                    <!-- PEC -->
-                    <th>{{ number_format($foot->tpr, 0) }}</th>
+                    <th>{{ number_format($foot->pia, 0) }}</th>
+                    <th>{{ number_format($foot->pim, 0) }}</th>
+                    <th>{{ number_format($foot->certificado, 0) }}</th>
+                    <th>{{ number_format($foot->compromiso, 0) }}</th>
+                    <th>{{ number_format($foot->devengado, 0) }}</th>
+                    <th><x-avance-badge :avance="$foot->avance" fontSize="11px" /></th>
+                    <th>{{ number_format($foot->saldocer, 0) }}</th>
+                    <th>{{ number_format($foot->saldodev, 0) }}</th>
                 </tr>
             </tfoot>
         </table>
