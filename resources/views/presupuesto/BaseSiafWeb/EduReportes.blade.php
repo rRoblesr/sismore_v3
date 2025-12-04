@@ -302,7 +302,7 @@
                             <i class="fa fa-file-excel"></i> Descargar</button>
                     </div> --}}
                     <h3 class="card-title">
-                        Tabla de Datos - Presupuesto en Educación
+                        Reporte de Ejecución Presupuestaria por Unidad Ejecutora
                     </h3>
                 </div>
                 <div class="card-body">
