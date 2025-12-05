@@ -9,11 +9,12 @@ class BaseSiafWebDetalleRepositorio
 {
     public static function obtenerUnidadesEjecutorasParaSelect(int $anio)
     {
+        $uePermitidas = BaseSiafWebDetalleRepositorio::ue_segun_sistema(session('sistema_id'));
         $basesiafweb = BaseSiafWebRepositorio::obtenerUltimoIdPorAnio($anio);
         return DB::table('pres_base_siafweb_detalle as sw')
             ->join('pres_unidadejecutora as ue', 'ue.id', '=', 'sw.unidadejecutora_id')
             ->where('sw.basesiafweb_id', $basesiafweb)
-            ->whereIn('sw.unidadejecutora_id', [8, 16, 17, 18, 19])
+            ->whereIn('sw.unidadejecutora_id', $uePermitidas)
             ->select([
                 'ue.id',
                 DB::raw("CONCAT(ue.codigo_ue, ' ', ue.abreviatura) as nombre")
@@ -26,7 +27,7 @@ class BaseSiafWebDetalleRepositorio
     public static function obtenerCategoriasGastoParaSelect(int $anio, int $unidadejecutoraId = 0)
     {
         $basesiafweb = BaseSiafWebRepositorio::obtenerUltimoIdPorAnio($anio);
-        $uePermitidas = [8, 16, 17, 18, 19];
+        $uePermitidas = BaseSiafWebDetalleRepositorio::ue_segun_sistema(session('sistema_id'));
         $query = DB::table('pres_base_siafweb_detalle as sw')
             ->join('pres_categoriagasto as cg', 'cg.id', '=', 'sw.categoriagasto_id')
             ->where('sw.basesiafweb_id', $basesiafweb)
@@ -43,7 +44,23 @@ class BaseSiafWebDetalleRepositorio
     public static function obtenerCategoriasPresupuestalesParaSelect(int $anio, int $unidadejecutoraId = 0, int $categoriagastoId = 0)
     {
         $basesiafweb = BaseSiafWebRepositorio::obtenerUltimoIdPorAnio($anio);
-        $uePermitidas = [8, 16, 17, 18, 19];
+        $uePermitidas = BaseSiafWebDetalleRepositorio::ue_segun_sistema(session('sistema_id'));
+        $query = DB::table('pres_base_siafweb_detalle as sw')
+            ->join('pres_categoriapresupuestal as cp', 'cp.id', '=', 'sw.categoriapresupuestal_id')
+            ->where('sw.basesiafweb_id', $basesiafweb)
+            ->whereIn('sw.unidadejecutora_id', $uePermitidas)
+            ->when($unidadejecutoraId > 0, fn($q) => $q->where('sw.unidadejecutora_id', $unidadejecutoraId))
+            ->when($categoriagastoId > 0, fn($q) => $q->where('sw.categoriagasto_id', $categoriagastoId))
+            ->select('cp.tipo_categoria_presupuestal as nombre')
+            ->distinct()
+            ->orderBy('cp.tipo_categoria_presupuestal', 'asc');
+        return $query->pluck('nombre', 'nombre');
+    }
+
+    public static function obtenerCategoriasPresupuestalesParaSelect_categoria_presupuestal(int $anio, int $unidadejecutoraId = 0, int $categoriagastoId = 0)
+    {
+        $basesiafweb = BaseSiafWebRepositorio::obtenerUltimoIdPorAnio($anio);
+        $uePermitidas = BaseSiafWebDetalleRepositorio::ue_segun_sistema(session('sistema_id'));
         $query = DB::table('pres_base_siafweb_detalle as sw')
             ->join('pres_categoriapresupuestal as cp', 'cp.id', '=', 'sw.categoriapresupuestal_id')
             ->where('sw.basesiafweb_id', $basesiafweb)
@@ -56,10 +73,22 @@ class BaseSiafWebDetalleRepositorio
         return $query->pluck('nombre', 'id');
     }
 
-    public static function obtenerResumenEjecucion(int $anio, int $ue, int $cg, int $cp)
+    public static function ue_segun_sistema(int $sistema)
+    {
+        switch ($sistema) {
+            case '3': // salud
+                return [9, 10, 11, 14, 15, 20];
+            case '1': // educacion
+                return [8, 16, 17, 18, 19];
+            default:
+                return [];
+        }
+    }
+
+    public static function obtenerResumenEjecucion(int $anio, int $ue, int $cg, ?string $cp = null)
     {
         $basesiafweb = BaseSiafWebRepositorio::obtenerUltimoIdPorAnio($anio);
-        $uePermitidas = [8, 16, 17, 18, 19];
+        $uePermitidas = BaseSiafWebDetalleRepositorio::ue_segun_sistema(session('sistema_id'));
         $row = DB::table('pres_base_siafweb_detalle as sw')
             ->selectRaw('
             ROUND(SUM(pim), 0) AS pim,
@@ -67,11 +96,12 @@ class BaseSiafWebDetalleRepositorio
             ROUND(SUM(compromiso_anual), 0) AS compromiso,
             ROUND(SUM(devengado), 0) AS devengado
         ')
+            ->join('pres_categoriapresupuestal as cp', 'cp.id', '=', 'sw.categoriapresupuestal_id')
             ->where('sw.basesiafweb_id', $basesiafweb)
             ->whereIn('sw.unidadejecutora_id', $uePermitidas)
             ->when($ue > 0, fn($q) => $q->where('sw.unidadejecutora_id', $ue))
             ->when($cg > 0, fn($q) => $q->where('sw.categoriagasto_id', $cg))
-            ->when($cp > 0, fn($q) => $q->where('sw.categoriapresupuestal_id', $cp))
+            ->when(filled($cp), fn($q) => $q->where('cp.tipo_categoria_presupuestal', $cp))
             ->first();
 
         // Si no hay resultados, devolver ceros (o nulls, según tu política)
@@ -112,23 +142,26 @@ class BaseSiafWebDetalleRepositorio
         ];
     }
 
-    public static function obtenerResumenPorUnidadEjecutora(int $anio, int $ue, int $cg, int $cp)
+    public static function obtenerResumenPorUnidadEjecutora(int $anio, int $ue, int $cg, ?string $cp = null)
     {
         $basesiafweb = BaseSiafWebRepositorio::obtenerUltimoIdPorAnio($anio);
-        $uePermitidas = [8, 16, 17, 18, 19];
+        // $uePermitidas = [8, 16, 17, 18, 19];
+        $uePermitidas = BaseSiafWebDetalleRepositorio::ue_segun_sistema(session('sistema_id'));
         return  DB::table('pres_base_siafweb_detalle as sw')
             ->join('pres_unidadejecutora as ue', function ($join) use ($uePermitidas) {
                 $join->on('ue.id', '=', 'sw.unidadejecutora_id')
                     ->whereIn('sw.unidadejecutora_id', $uePermitidas);
             })
+            ->join('pres_categoriapresupuestal as cp', 'cp.id', '=', 'sw.categoriapresupuestal_id')
             ->where('sw.basesiafweb_id', $basesiafweb)
             ->when($ue > 0, fn($q) => $q->where('sw.unidadejecutora_id', $ue))
             ->when($cg > 0, fn($q) => $q->where('sw.categoriagasto_id', $cg))
-            ->when($cp > 0, fn($q) => $q->where('sw.categoriapresupuestal_id', $cp))
-            ->groupBy('ue.id', 'ue.abreviatura')
+            ->when(filled($cp), fn($q) => $q->where('cp.tipo_categoria_presupuestal', $cp))
+            ->groupBy('ue.id', 'ue.codigo_ue', 'ue.abreviatura')
             ->select([
                 'ue.id',
-                'ue.abreviatura as ue',
+                // 'ue.abreviatura as ue',
+                DB::raw('concat(ue.codigo_ue," ",ue.abreviatura) as ue'),
                 DB::raw('SUM(sw.pia) as pia'),
                 DB::raw('SUM(sw.pim) as pim'),
                 DB::raw('ROUND(SUM(sw.certificado), 1) as certificado'),
@@ -158,9 +191,10 @@ class BaseSiafWebDetalleRepositorio
         // });
     }
 
-    public static function obtenerCertificadoMensual(int $anio, int $ue, int $cg, int $cp)
+    public static function obtenerCertificadoMensual(int $anio, int $ue, int $cg, ?string $cp = null)
     {
-        $uePermitidas = [8, 16, 17, 18, 19];
+        // $uePermitidas = [8, 16, 17, 18, 19];
+        $uePermitidas = BaseSiafWebDetalleRepositorio::ue_segun_sistema(session('sistema_id'));
         $idsSubquery = DB::table('pres_base_siafweb as sw2')
             ->join('par_importacion as i2', function ($join) {
                 $join->on('i2.id', '=', 'sw2.importacion_id')
@@ -187,12 +221,13 @@ class BaseSiafWebDetalleRepositorio
             ->join('pres_unidadejecutora as ue', 'ue.id', '=', 'swd.unidadejecutora_id')
             ->join('pres_base_siafweb as sw', 'sw.id', '=', 'swd.basesiafweb_id')
             ->join('par_mes as m', 'm.id', '=', 'sw.mes')
+            ->join('pres_categoriapresupuestal as cp', 'cp.id', '=', 'swd.categoriapresupuestal_id')
             ->whereIn('swd.unidadejecutora_id', $uePermitidas)
             ->whereIn('swd.basesiafweb_id', $idsSubquery)
             ->where('sw.anio', $anio)
             ->when($ue > 0, fn($q) => $q->where('swd.unidadejecutora_id', $ue))
             ->when($cg > 0, fn($q) => $q->where('swd.categoriagasto_id', $cg))
-            ->when($cp > 0, fn($q) => $q->where('swd.categoriapresupuestal_id', $cp))
+            ->when(filled($cp), fn($q) => $q->where('cp.tipo_categoria_presupuestal', $cp))
             ->select([
                 'm.id as pos',
                 'm.abreviado as mes',

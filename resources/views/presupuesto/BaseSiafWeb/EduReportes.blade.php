@@ -95,7 +95,7 @@
                     </div>
                 </div>
                 <div class="mt-0 font-9">
-                    <h6 class="">Ejecución (DEV/PIM) <span class="float-right" id="card1i">0%</span></h6>
+                    <h6 class="font-12">Ejecución (DEV/PIM) <span class="float-right" id="card1i">0%</span></h6>
                     <div class="progress progress-sm m-0">
                         <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="90" aria-valuemin="0"
                             aria-valuemax="100" style="width: 100%" id="card1b">
@@ -127,7 +127,7 @@
                     </div>
                 </div>
                 <div class="mt-0 font-9">
-                    <h6 class="">Ejecución (CERT/PIM) <span class="float-right" id="card2i">0%</span></h6>
+                    <h6 class="font-12">Ejecución (CERT/PIM) <span class="float-right" id="card2i">0%</span></h6>
                     <div class="progress progress-sm m-0">
                         <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="90" aria-valuemin="0"
                             aria-valuemax="100" style="width: 100%" id="card2b">
@@ -159,7 +159,7 @@
                     </div>
                 </div>
                 <div class="mt-0 font-9">
-                    <h6 class="">Ejecución (COMP/PIM) <span class="float-right" id="card3i">0%</span></h6>
+                    <h6 class="font-12">Ejecución (COMP/PIM) <span class="float-right" id="card3i">0%</span></h6>
                     <div class="progress progress-sm m-0">
                         <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="90" aria-valuemin="0"
                             aria-valuemax="100" style="width: 100%" id="card3b">
@@ -191,7 +191,7 @@
                     </div>
                 </div>
                 <div class="mt-0 font-9">
-                    <h6 class="">Ejecución (DEV/CERT) <span class="float-right" id="card4i">0%</span></h6>
+                    <h6 class="font-12">Ejecución (DEV/CERT) <span class="float-right" id="card4i">0%</span></h6>
                     <div class="progress progress-sm m-0">
                         <div class="progress-bar bg-success-0" role="progressbar" aria-valuenow="90" aria-valuemin="0"
                             aria-valuemax="100" style="width: 100%" id="card4b">
@@ -480,12 +480,13 @@
                         case 'progress1':
                             var contenedor = $('#progress1');
                             contenedor.empty();
-                            data.forEach(function(item) {
-                                $color = item.avance > 96 ? 'bg-success-0' : (item.avance > 76 ?
-                                    'bg-warning-0' : 'bg-orange-0');
-                                var progresoHtml = `
-                                    <div class="mt-4 ${item.estado?'table-warning':''} p-1 rounded">
-                                        <h6 class="text-uppercase">${item.ue} <span class="float-right">${item.avance}%</span></h6>
+                            @if (session('sistema_id') == 1)
+                                data.forEach(function(item) {
+                                    $color = item.avance > 96 ? 'bg-success-0' : (item.avance > 76 ?
+                                        'bg-warning-0' : 'bg-orange-0');
+                                    var progresoHtml = `
+                                    <div class="mt-4 p-1 rounded">
+                                        <h6 class="text-uppercase font-12">${item.ue} <span class="float-right">${item.avance}%</span></h6>
                                         <div class="progress progress-sm m-0">
                                             <div class="progress-bar ${$color}" role="progressbar" aria-valuenow="${item.avance}" aria-valuemin="0"
                                                 aria-valuemax="100" style="width: ${item.avance}%">
@@ -494,8 +495,27 @@
                                         </div>
                                     </div>
                                 `;
-                                contenedor.append(progresoHtml);
-                            });
+                                    contenedor.append(progresoHtml);
+                                });
+                            @else
+                                data.forEach(function(item) {
+                                    $color = item.avance > 96 ? 'bg-success-0' : (item.avance > 76 ?
+                                        'bg-warning-0' : 'bg-orange-0');
+                                    var progresoHtml = `
+                                    <div class="mt-4 p-0 rounded">
+                                        <h6 class="text-uppercase font-12">${item.ue} <span class="float-right">${item.avance}%</span></h6>
+                                        <div class="progress progress-sm m-0">
+                                            <div class="progress-bar ${$color}" role="progressbar" aria-valuenow="${item.avance}" aria-valuemin="0"
+                                                aria-valuemax="100" style="width: ${item.avance}%">
+                                                <span class="sr-only">${item.avance}% Complete</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                                    contenedor.append(progresoHtml);
+                                });
+                            @endif
+
 
                             break;
                         case 'anal1':
@@ -534,7 +554,7 @@
                             );
                             break;
                         case 'anal2':
-                            crearGraficoComparativo(
+                            crearGraficoComparativo22(
                                 div,
                                 data.info.categorias,
                                 data.info.series,
@@ -555,7 +575,7 @@
                             });
                             break;
                         case 'anal4':
-                            crearGraficoComparativo(
+                            crearGraficoComparativo22(
                                 div,
                                 data.info.categorias,
                                 data.info.series,
@@ -683,7 +703,7 @@
                 success: function(data) {
                     $('#cp').empty();
                     if (Object.keys(data).length > 1)
-                        $('#cp').append('<option value="0">TODOS</option>');
+                        $('#cp').append('<option value="">TODOS</option>');
                     $.each(data, function(index, value) {
                         $('#cp').append(`<option value='${index}'>${value}</option>`);
                     });
@@ -1818,7 +1838,7 @@
                     text: title,
                     align: 'center',
                     style: {
-                        fontSize: '14px',
+                        fontSize: '12px',
                         fontWeight: 'normal',
                         color: '#666'
                     }
@@ -1871,6 +1891,158 @@
                     column: {
                         pointPadding: 0.15,
                         borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            formatter: function() {
+                                return formatShort(this.y);
+                            },
+                            style: {
+                                fontSize: '10px',
+                                fontWeight: 'normal',
+                                textOutline: 'none'
+                            }
+                        }
+                    }
+                },
+                legend: legendConfig, // ← usa la configuración condicional
+                colors: colors,
+                series: seriesData,
+                credits: {
+                    enabled: false
+                },
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 500
+                        },
+                        chartOptions: {
+                            legend: {
+                                align: 'center',
+                                verticalAlign: 'bottom',
+                                layout: 'horizontal',
+                                enabled: !isSingleSeries // mantener coherencia en responsive
+                            },
+                            yAxis: {
+                                labels: {
+                                    align: 'left',
+                                    x: 0,
+                                    y: -5
+                                },
+                                title: {
+                                    text: ''
+                                }
+                            }
+                        }
+                    }]
+                }
+            });
+        }
+
+        function crearGraficoComparativo22(divId, categories, seriesData, title, options = {}) {
+            // 🔢 Funciones auxiliares de formato
+            function formatShort(value) {
+                const abs = Math.abs(value);
+                if (abs >= 1e6) {
+                    return (value / 1e6).toFixed(0).replace(/\.0$/, '') + ' M';
+                } else if (abs >= 1e3) {
+                    return (value / 1e3).toFixed(0).replace(/\.0$/, '') + ' K';
+                }
+                return value.toString();
+            }
+
+            function formatFull(value) {
+                return value.toLocaleString('en-US', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                });
+            }
+
+            // 🎯 Detectar si es una sola serie
+            const isSingleSeries = seriesData.length === 1;
+
+            // 🎨 Colores
+            const defaultColors = ['#17A2B8', '#DC3545'];
+            const colors = options.colors || defaultColors;
+
+            // 📋 Configuración de leyenda (oculta si solo hay 1 serie)
+            const legendConfig = {
+                align: 'center',
+                verticalAlign: 'bottom',
+                backgroundColor: 'transparent',
+                itemStyle: {
+                    fontSize: '12px',
+                    fontWeight: 'normal'
+                },
+                enabled: !isSingleSeries // ← clave: desactiva si solo hay una serie
+            };
+
+            // 📊 Crear gráfico
+            Highcharts.chart(divId, {
+                chart: {
+                    type: 'column',
+                    backgroundColor: 'transparent',
+                    style: {
+                        fontFamily: 'Arial, sans-serif'
+                    }
+                },
+                title: {
+                    text: title,
+                    align: 'center',
+                    style: {
+                        fontSize: '12px',
+                        fontWeight: 'normal',
+                        color: '#666'
+                    }
+                },
+                subtitle: {
+                    text: options.subtitle || '',
+                    align: 'center'
+                },
+                xAxis: {
+                    categories: categories,
+                    crosshair: true,
+                    labels: {
+                        style: {
+                            fontSize: '11px'
+                        }
+                    }
+                },
+                yAxis: {
+                    // min: 0,
+                    title: {
+                        text: options.yAxisTitle || ''
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '11px'
+                        }
+                    }
+                },
+                tooltip: {
+                    shared: true,
+                    useHTML: true,
+                    formatter: function() {
+                        let s = `<span style="font-size:11px">${this.key}</span><br/>`;
+                        this.points.forEach(point => {
+                            const full = formatFull(point.y);
+                            const short = formatShort(point.y);
+                            if (isSingleSeries) {
+                                // Solo valor (sin nombre de la serie)
+                                s += `<b>${full}</b> (${short})<br/>`;
+                            } else {
+                                // Nombre de serie + valor
+                                s +=
+                                    `<span style="color:${point.series.color}">${point.series.name}</span>: <b>${full}</b> (${short})<br/>`;
+                            }
+                        });
+                        return s;
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.15,
+                        borderWidth: 0,
+                        negativeColor: '#DC3545',
                         dataLabels: {
                             enabled: true,
                             formatter: function() {

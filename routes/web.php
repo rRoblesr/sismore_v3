@@ -1669,6 +1669,11 @@ Route::get('/Poblacion/Peru/ucayali/PN/Excel/{div}/{anio}/{departamento}/{etapav
 
 
 /*********************************************** EJEMPLOS Y PRUEBAS ************************************************/
+Route::get('/visualizar/sesiones', function () {
+    $data=session()->all();
+    return response()->json($data);
+});
+
 Route::get('/pruebas/prueba', [PruebaController::class, 'prueba2']);
 Route::get('/pruebas/mapas', function () {
     return view('salud.Establecimiento.map');

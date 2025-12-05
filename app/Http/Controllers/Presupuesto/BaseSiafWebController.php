@@ -701,9 +701,17 @@ class BaseSiafWebController extends Controller
                         ['data' => [], 'name' => 'CERTIFICADO'],
                     ],
                 ];
+                $valor_anterior = 0;
                 foreach ($data as $key => $value) {
                     $info['categorias'][] = $value->mes;
-                    $info['series'][0]['data'][] = (int)$value->certificado;
+                    if ($key == 0) {
+                        $info['series'][0]['data'][] = (int)$value->certificado;
+                        $valor_anterior = (int)$value->certificado;
+                    } else {
+                        $info['series'][0]['data'][] = (int)$value->certificado - $valor_anterior;
+                        $valor_anterior = (int)$value->certificado;
+                        continue;
+                    }
                 }
                 return response()->json(compact('info', 'data'));
 
@@ -729,11 +737,19 @@ class BaseSiafWebController extends Controller
                         ['data' => [], 'name' => 'DEVENGADO'],
                     ],
                 ];
+                $valor_anterior = 0;
                 foreach ($data as $key => $value) {
                     $info['categorias'][] = $value->mes;
-                    $info['series'][0]['data'][] = (int)$value->devengado;
+                    if ($key == 0) {
+                        $info['series'][0]['data'][] = (int)$value->devengado;
+                        $valor_anterior = (int)$value->devengado;
+                    } else {
+                        $info['series'][0]['data'][] = (int)$value->devengado - $valor_anterior;
+                        $valor_anterior = (int)$value->devengado;
+                        continue;
+                    }
                 }
-                return response()->json(compact('info', 'data'));
+                return response()->json(compact('info', 'data'));   
             case 'anal5':
                 $data = BaseSiafWebDetalleRepositorio::obtenerCertificadoMensual($rq->anio, $rq->ue, $rq->cg, $rq->cp);
                 $info = [
