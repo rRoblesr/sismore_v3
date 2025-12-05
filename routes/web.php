@@ -515,7 +515,7 @@ Route::post('/MatriculaDetalle/EIB/tabla2', [MatriculaDetalleController::class, 
 
 Route::get('/educación/EIB/Reportes', [PadronEIBController::class, 'reportes'])->name('educacion.padron.eib.reportes');
 Route::get('/educación/EIB/Reportes/Reporte', [PadronEIBController::class, 'reportesreporte'])->name('educacion.padron.eib.reportes.reporte');
-// Route::get('/educación/EIB/Reportes/Download/1/{div}/{anio}/{ugel}/{modalidad}/{nivel}', [NexusController::class, 'reportesrdownloadexcel'])->name('educacion.nexus.reportes.download.excel');
+Route::get('/educación/EIB/Reportes/Download/{div}/{anio}/{ugel}/{provincia}/{distrito}', [PadronEIBController::class, 'reportesrdownloadexcel'])->name('educacion.padron.eib.reportes.download.excel');
 
 Route::get('/educación/CuboEIB/Select/CargarGestion/{anio}', [CuboPadronEIBController::class, 'cargargestion'])->name('educacion.cubo.padron.eib.select.gestion');
 Route::get('/educación/CuboEIB/Select/CargarProvincia/{anio}/{ugel}', [CuboPadronEIBController::class, 'cargarprovincia'])->name('educacion.cubo.padron.eib.select.provincia');
@@ -1670,7 +1670,7 @@ Route::get('/Poblacion/Peru/ucayali/PN/Excel/{div}/{anio}/{departamento}/{etapav
 
 /*********************************************** EJEMPLOS Y PRUEBAS ************************************************/
 Route::get('/visualizar/sesiones', function () {
-    $data=session()->all();
+    $data = session()->all();
     return response()->json($data);
 });
 

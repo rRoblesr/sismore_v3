@@ -19,7 +19,7 @@
                         <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
                             <i class="fa fa-redo"></i> Actualizar</button>
                     </div>
-                    <h3 class="card-title text-white font-14">Presupuesto en Educación</h3>
+                    <h3 class="card-title text-white font-14">EJECUCIÓN DEL GASTO PRESUPUESTAL</h3>
                 </div>
                 <div class="card-body pb-0">
                     <div class="form-group row align-items-center vh-5">
@@ -204,7 +204,7 @@
     </div>
 
     <div class="row">
-        <div class="col-lg-4 col-md-6">
+        <div class="col-lg-3 col-md-6">
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
                     {{-- <h3 class="text-black text-center font-weight-normal font-12 m-0">
@@ -228,7 +228,7 @@
             </div>
         </div>
 
-        <div class="col-lg-8 col-md-6">
+        <div class="col-lg-9 col-md-6">
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
                     <h3 class="text-black text-center font-weight-normal font-12 m-0"></h3>
@@ -436,6 +436,7 @@
                 success: function(data) {
                     switch (div) {
                         case 'head':
+                            $('.page-title').text('Fuente: Padrón SIAF-WEB ' + $('#anio').val());
                             $('#card1').text(data.card1).counterUp({
                                 delay: 10,
                                 time: 1000
@@ -452,6 +453,17 @@
                                 delay: 10,
                                 time: 1000
                             });
+                            // obtener texto del <p> que está junto a #card1
+                            // var textoP = $('#card1').closest('.text-right').find('p').first().text().trim();
+                            $('#card1').closest('.text-right').find('p').first()
+                                .text('PIM ' + $('#anio').val());
+                            $('#card2').closest('.text-right').find('p').first()
+                                .text('CERTIFICADO ' + $('#anio').val());
+                            $('#card3').closest('.text-right').find('p').first()
+                                .text('COMPROMETIDO ' + $('#anio').val());
+                            $('#card4').closest('.text-right').find('p').first()
+                                .text('DEVENGADO ' + $('#anio').val());
+                            // console.log($('#card1 p').val());
                             $('#card1i').text(data.pcard1 + '%');
                             $('#card2i').text(data.pcard2 + '%');
                             $('#card3i').text(data.pcard3 + '%');
@@ -541,7 +553,8 @@
                             // Opciones adicionales
                             const opciones = {
                                 yAxisTitle: '',
-                                colors: ['#43beac', '#ef5350'],
+                                colors: ['#5eb9aa', '#f5bd22', '#ef5350'],
+                                // colors: ['#43beac', '#ef5350'],
                                 subtitle: ''
                             };
                             // Crear el gráfico
@@ -579,7 +592,7 @@
                                 div,
                                 data.info.categorias,
                                 data.info.series,
-                                'Ejecución del Gasto Presupuestal por Unidades Ejecutoras (PIM vs DEVENGADO)',
+                                'Devengado presupuestal mensual - año 2025',
                                 opciones2
                             );
                             break;
@@ -1724,618 +1737,618 @@
                             const full = formatFull(point.y);
                             const short = formatShort(point.y);
                             s +=
-                                `<span style="color:${point.series.color}">${point.series.name}</span>: <b>${full}</b> (${short})<br/>`;
-                        });
-                        return s;
-                    }
-                },
-                plotOptions: {
-                    column: {
-                        pointPadding: 0.15,
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                            formatter: function() {
-                                return formatShort(this.y);
-                            },
-                            style: {
-                                fontSize: '10px',
-                                fontWeight: 'normal',
-                                textOutline: 'none'
-                            }
-                        }
-                    }
-                },
-                legend: {
-                    align: 'center',
-                    verticalAlign: 'bottom',
-                    backgroundColor: 'transparent',
-                    itemStyle: {
-                        fontSize: '12px',
-                        fontWeight: 'normal'
-                    }
-                },
-                colors: colors,
-                series: seriesData,
-                credits: {
-                    enabled: false
-                },
-                responsive: {
-                    rules: [{
-                        condition: {
-                            maxWidth: 500
+                                `<span style="color:${point.series.color}">${point.series.name}</span>: <b>${full}</b><br/>`; // (${short})<br/>`;
+                    });
+                    return s;
+                }
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.15,
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        formatter: function() {
+                            return formatShort(this.y);
                         },
-                        chartOptions: {
-                            legend: {
-                                align: 'center',
-                                verticalAlign: 'bottom',
-                                layout: 'horizontal'
-                            },
-                            yAxis: {
-                                labels: {
-                                    align: 'left',
-                                    x: 0,
-                                    y: -5
-                                },
-                                title: {
-                                    text: ''
-                                }
-                            }
+                        style: {
+                            fontSize: '10px',
+                            fontWeight: 'normal',
+                            textOutline: 'none'
                         }
-                    }]
+                    }
                 }
-            });
-        }
-
-        function crearGraficoComparativo(divId, categories, seriesData, title, options = {}) {
-            // 🔢 Funciones auxiliares de formato
-            function formatShort(value) {
-                const abs = Math.abs(value);
-                if (abs >= 1e6) {
-                    return (value / 1e6).toFixed(0).replace(/\.0$/, '') + ' M';
-                } else if (abs >= 1e3) {
-                    return (value / 1e3).toFixed(0).replace(/\.0$/, '') + ' K';
-                }
-                return value.toString();
-            }
-
-            function formatFull(value) {
-                return value.toLocaleString('en-US', {
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 0
-                });
-            }
-
-            // 🎯 Detectar si es una sola serie
-            const isSingleSeries = seriesData.length === 1;
-
-            // 🎨 Colores
-            const defaultColors = ['#17A2B8', '#DC3545'];
-            const colors = options.colors || defaultColors;
-
-            // 📋 Configuración de leyenda (oculta si solo hay 1 serie)
-            const legendConfig = {
+            },
+            legend: {
                 align: 'center',
                 verticalAlign: 'bottom',
                 backgroundColor: 'transparent',
                 itemStyle: {
                     fontSize: '12px',
                     fontWeight: 'normal'
-                },
-                enabled: !isSingleSeries // ← clave: desactiva si solo hay una serie
-            };
-
-            // 📊 Crear gráfico
-            Highcharts.chart(divId, {
-                chart: {
-                    type: 'column',
-                    backgroundColor: 'transparent',
-                    style: {
-                        fontFamily: 'Arial, sans-serif'
-                    }
-                },
-                title: {
-                    text: title,
-                    align: 'center',
-                    style: {
-                        fontSize: '12px',
-                        fontWeight: 'normal',
-                        color: '#666'
-                    }
-                },
-                subtitle: {
-                    text: options.subtitle || '',
-                    align: 'center'
-                },
-                xAxis: {
-                    categories: categories,
-                    crosshair: true,
-                    labels: {
-                        style: {
-                            fontSize: '11px'
-                        }
-                    }
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: options.yAxisTitle || ''
-                    },
-                    labels: {
-                        style: {
-                            fontSize: '11px'
-                        }
-                    }
-                },
-                tooltip: {
-                    shared: true,
-                    useHTML: true,
-                    formatter: function() {
-                        let s = `<span style="font-size:11px">${this.key}</span><br/>`;
-                        this.points.forEach(point => {
-                            const full = formatFull(point.y);
-                            const short = formatShort(point.y);
-                            if (isSingleSeries) {
-                                // Solo valor (sin nombre de la serie)
-                                s += `<b>${full}</b> (${short})<br/>`;
-                            } else {
-                                // Nombre de serie + valor
-                                s +=
-                                    `<span style="color:${point.series.color}">${point.series.name}</span>: <b>${full}</b> (${short})<br/>`;
-                            }
-                        });
-                        return s;
-                    }
-                },
-                plotOptions: {
-                    column: {
-                        pointPadding: 0.15,
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                            formatter: function() {
-                                return formatShort(this.y);
-                            },
-                            style: {
-                                fontSize: '10px',
-                                fontWeight: 'normal',
-                                textOutline: 'none'
-                            }
-                        }
-                    }
-                },
-                legend: legendConfig, // ← usa la configuración condicional
-                colors: colors,
-                series: seriesData,
-                credits: {
-                    enabled: false
-                },
-                responsive: {
-                    rules: [{
-                        condition: {
-                            maxWidth: 500
-                        },
-                        chartOptions: {
-                            legend: {
-                                align: 'center',
-                                verticalAlign: 'bottom',
-                                layout: 'horizontal',
-                                enabled: !isSingleSeries // mantener coherencia en responsive
-                            },
-                            yAxis: {
-                                labels: {
-                                    align: 'left',
-                                    x: 0,
-                                    y: -5
-                                },
-                                title: {
-                                    text: ''
-                                }
-                            }
-                        }
-                    }]
                 }
+            },
+            colors: colors,
+            series: seriesData,
+            credits: {
+                enabled: false
+            },
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            align: 'center',
+                            verticalAlign: 'bottom',
+                            layout: 'horizontal'
+                        },
+                        yAxis: {
+                            labels: {
+                                align: 'left',
+                                x: 0,
+                                y: -5
+                            },
+                            title: {
+                                text: ''
+                            }
+                        }
+                    }
+                }]
+            }
+        });
+    }
+
+    function crearGraficoComparativo(divId, categories, seriesData, title, options = {}) {
+        // 🔢 Funciones auxiliares de formato
+        function formatShort(value) {
+            const abs = Math.abs(value);
+            if (abs >= 1e6) {
+                return (value / 1e6).toFixed(0).replace(/\.0$/, '') + ' M';
+            } else if (abs >= 1e3) {
+                return (value / 1e3).toFixed(0).replace(/\.0$/, '') + ' K';
+            }
+            return value.toString();
+        }
+
+        function formatFull(value) {
+            return value.toLocaleString('en-US', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
             });
         }
 
-        function crearGraficoComparativo22(divId, categories, seriesData, title, options = {}) {
-            // 🔢 Funciones auxiliares de formato
-            function formatShort(value) {
-                const abs = Math.abs(value);
-                if (abs >= 1e6) {
-                    return (value / 1e6).toFixed(0).replace(/\.0$/, '') + ' M';
-                } else if (abs >= 1e3) {
-                    return (value / 1e3).toFixed(0).replace(/\.0$/, '') + ' K';
-                }
-                return value.toString();
-            }
+        // 🎯 Detectar si es una sola serie
+        const isSingleSeries = seriesData.length === 1;
 
-            function formatFull(value) {
-                return value.toLocaleString('en-US', {
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 0
-                });
-            }
+        // 🎨 Colores
+        const defaultColors = ['#17A2B8', '#DC3545'];
+        const colors = options.colors || defaultColors;
 
-            // 🎯 Detectar si es una sola serie
-            const isSingleSeries = seriesData.length === 1;
+        // 📋 Configuración de leyenda (oculta si solo hay 1 serie)
+        const legendConfig = {
+            align: 'center',
+            verticalAlign: 'bottom',
+            backgroundColor: 'transparent',
+            itemStyle: {
+                fontSize: '12px',
+                fontWeight: 'normal'
+            },
+            enabled: !isSingleSeries // ← clave: desactiva si solo hay una serie
+        };
 
-            // 🎨 Colores
-            const defaultColors = ['#17A2B8', '#DC3545'];
-            const colors = options.colors || defaultColors;
-
-            // 📋 Configuración de leyenda (oculta si solo hay 1 serie)
-            const legendConfig = {
-                align: 'center',
-                verticalAlign: 'bottom',
+        // 📊 Crear gráfico
+        Highcharts.chart(divId, {
+            chart: {
+                type: 'column',
                 backgroundColor: 'transparent',
-                itemStyle: {
+                style: {
+                    fontFamily: 'Arial, sans-serif'
+                }
+            },
+            title: {
+                text: title,
+                align: 'center',
+                style: {
                     fontSize: '12px',
-                    fontWeight: 'normal'
-                },
-                enabled: !isSingleSeries // ← clave: desactiva si solo hay una serie
-            };
-
-            // 📊 Crear gráfico
-            Highcharts.chart(divId, {
-                chart: {
-                    type: 'column',
-                    backgroundColor: 'transparent',
+                    fontWeight: 'normal',
+                    color: '#666'
+                }
+            },
+            subtitle: {
+                text: options.subtitle || '',
+                align: 'center'
+            },
+            xAxis: {
+                categories: categories,
+                crosshair: true,
+                labels: {
                     style: {
-                        fontFamily: 'Arial, sans-serif'
+                        fontSize: '11px'
                     }
-                },
+                }
+            },
+            yAxis: {
+                min: 0,
                 title: {
-                    text: title,
-                    align: 'center',
+                    text: options.yAxisTitle || ''
+                },
+                labels: {
                     style: {
-                        fontSize: '12px',
-                        fontWeight: 'normal',
-                        color: '#666'
+                        fontSize: '11px'
                     }
-                },
-                subtitle: {
-                    text: options.subtitle || '',
-                    align: 'center'
-                },
-                xAxis: {
-                    categories: categories,
-                    crosshair: true,
-                    labels: {
-                        style: {
-                            fontSize: '11px'
-                        }
-                    }
-                },
-                yAxis: {
-                    // min: 0,
-                    title: {
-                        text: options.yAxisTitle || ''
-                    },
-                    labels: {
-                        style: {
-                            fontSize: '11px'
-                        }
-                    }
-                },
-                tooltip: {
-                    shared: true,
-                    useHTML: true,
-                    formatter: function() {
-                        let s = `<span style="font-size:11px">${this.key}</span><br/>`;
-                        this.points.forEach(point => {
-                            const full = formatFull(point.y);
-                            const short = formatShort(point.y);
-                            if (isSingleSeries) {
-                                // Solo valor (sin nombre de la serie)
-                                s += `<b>${full}</b> (${short})<br/>`;
+                }
+            },
+            tooltip: {
+                shared: true,
+                useHTML: true,
+                formatter: function() {
+                    let s = `<span style="font-size:11px">${this.key}</span><br/>`;
+                    this.points.forEach(point => {
+                        const full = formatFull(point.y);
+                        const short = formatShort(point.y);
+                        if (isSingleSeries) {
+                            // Solo valor (sin nombre de la serie)
+                            s += `<b>${full}</b><br/>`; // (${short})<br/>`;
                             } else {
                                 // Nombre de serie + valor
                                 s +=
-                                    `<span style="color:${point.series.color}">${point.series.name}</span>: <b>${full}</b> (${short})<br/>`;
-                            }
-                        });
-                        return s;
-                    }
-                },
-                plotOptions: {
-                    column: {
-                        pointPadding: 0.15,
-                        borderWidth: 0,
-                        negativeColor: '#DC3545',
-                        dataLabels: {
-                            enabled: true,
-                            formatter: function() {
-                                return formatShort(this.y);
-                            },
-                            style: {
-                                fontSize: '10px',
-                                fontWeight: 'normal',
-                                textOutline: 'none'
-                            }
+                                    `<span style="color:${point.series.color}">${point.series.name}</span>: <b>${full}</b><br/>`; // (${short})<br/>`;
                         }
-                    }
-                },
-                legend: legendConfig, // ← usa la configuración condicional
-                colors: colors,
-                series: seriesData,
-                credits: {
-                    enabled: false
-                },
-                responsive: {
-                    rules: [{
-                        condition: {
-                            maxWidth: 500
-                        },
-                        chartOptions: {
-                            legend: {
-                                align: 'center',
-                                verticalAlign: 'bottom',
-                                layout: 'horizontal',
-                                enabled: !isSingleSeries // mantener coherencia en responsive
-                            },
-                            yAxis: {
-                                labels: {
-                                    align: 'left',
-                                    x: 0,
-                                    y: -5
-                                },
-                                title: {
-                                    text: ''
-                                }
-                            }
-                        }
-                    }]
+                    });
+                    return s;
                 }
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.15,
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        formatter: function() {
+                            return formatShort(this.y);
+                        },
+                        style: {
+                            fontSize: '10px',
+                            fontWeight: 'normal',
+                            textOutline: 'none'
+                        }
+                    }
+                }
+            },
+            legend: legendConfig, // ← usa la configuración condicional
+            colors: colors,
+            series: seriesData,
+            credits: {
+                enabled: false
+            },
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            align: 'center',
+                            verticalAlign: 'bottom',
+                            layout: 'horizontal',
+                            enabled: !isSingleSeries // mantener coherencia en responsive
+                        },
+                        yAxis: {
+                            labels: {
+                                align: 'left',
+                                x: 0,
+                                y: -5
+                            },
+                            title: {
+                                text: ''
+                            }
+                        }
+                    }
+                }]
+            }
+        });
+    }
+
+    function crearGraficoComparativo22(divId, categories, seriesData, title, options = {}) {
+        // 🔢 Funciones auxiliares de formato
+        function formatShort(value) {
+            const abs = Math.abs(value);
+            if (abs >= 1e6) {
+                return (value / 1e6).toFixed(0).replace(/\.0$/, '') + ' M';
+            } else if (abs >= 1e3) {
+                return (value / 1e3).toFixed(0).replace(/\.0$/, '') + ' K';
+            }
+            return value.toString();
+        }
+
+        function formatFull(value) {
+            return value.toLocaleString('en-US', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
             });
         }
 
-        function gLineaMultiple(div, data, titulo, subtitulo = '', titulovetical = '', options = {}) {
-            // 🔢 Formato abreviado (K/M) y completo
-            function formatShort(value) {
-                const abs = Math.abs(value);
-                if (abs >= 1e6) return (value / 1e6).toFixed(1).replace(/\.0$/, '') + ' M';
-                if (abs >= 1e3) return (value / 1e3).toFixed(1).replace(/\.0$/, '') + ' K';
-                return value.toString();
-            }
+        // 🎯 Detectar si es una sola serie
+        const isSingleSeries = seriesData.length === 1;
 
-            function formatFull(value) {
-                return value.toLocaleString('en-US', {
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 0
-                });
-            }
+        // 🎨 Colores
+        const defaultColors = ['#17A2B8', '#DC3545'];
+        const colors = options.colors || defaultColors;
 
-            // 🎯 Detectar si es una sola serie
-            const isSingleSeries = data.dat.length === 1;
+        // 📋 Configuración de leyenda (oculta si solo hay 1 serie)
+        const legendConfig = {
+            align: 'center',
+            verticalAlign: 'bottom',
+            backgroundColor: 'transparent',
+            itemStyle: {
+                fontSize: '12px',
+                fontWeight: 'normal'
+            },
+            enabled: !isSingleSeries // ← clave: desactiva si solo hay una serie
+        };
 
-            // 🎨 Colores
-            const defaultColors = [
-                '#17A2B8', '#FF6B35', '#28A745', '#DC3545', '#6F42C1', '#FFC107', '#007BFF'
-            ];
-            const colors = options.colors || defaultColors;
-
-            // 📋 Leyenda: oculta automáticamente si solo hay 1 serie (a menos que se fuerce con { legend: true })
-            const userWantsLegend = options.legend === true;
-            const userHidesLegend = options.legend === false;
-            const showLegend = userWantsLegend || (!userHidesLegend && !isSingleSeries);
-
-            // 📈 Gráfico
-            Highcharts.chart(div, {
-                chart: {
-                    type: 'line',
-                    backgroundColor: 'transparent',
+        // 📊 Crear gráfico
+        Highcharts.chart(divId, {
+            chart: {
+                type: 'column',
+                backgroundColor: 'transparent',
+                style: {
+                    fontFamily: 'Arial, sans-serif'
+                }
+            },
+            title: {
+                text: title,
+                align: 'center',
+                style: {
+                    fontSize: '12px',
+                    fontWeight: 'normal',
+                    color: '#666'
+                }
+            },
+            subtitle: {
+                text: options.subtitle || '',
+                align: 'center'
+            },
+            xAxis: {
+                categories: categories,
+                crosshair: true,
+                labels: {
                     style: {
-                        fontFamily: 'Arial, sans-serif'
+                        fontSize: '11px'
                     }
-                },
+                }
+            },
+            yAxis: {
+                // min: 0,
                 title: {
-                    text: titulo,
-                    align: 'center',
+                    text: options.yAxisTitle || ''
+                },
+                labels: {
                     style: {
-                        fontSize: '16px',
-                        fontWeight: 'bold',
-                        color: '#333'
+                        fontSize: '11px'
                     }
-                },
-                subtitle: {
-                    text: subtitulo,
-                    align: 'center',
+                }
+            },
+            tooltip: {
+                shared: true,
+                useHTML: true,
+                formatter: function() {
+                    let s = `<span style="font-size:11px">${this.key}</span><br/>`;
+                    this.points.forEach(point => {
+                        const full = formatFull(point.y);
+                        const short = formatShort(point.y);
+                        if (isSingleSeries) {
+                            // Solo valor (sin nombre de la serie)
+                            s += `<b>${full}</b><br/>`; // (${short})<br/>`;
+                            } else {
+                                // Nombre de serie + valor
+                                s +=
+                                    `<span style="color:${point.series.color}">${point.series.name}</span>: <b>${full}</b><br/>`; // (${short})<br/>`;
+                        }
+                    });
+                    return s;
+                }
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.15,
+                    borderWidth: 0,
+                    negativeColor: '#DC3545',
+                    dataLabels: {
+                        enabled: true,
+                        formatter: function() {
+                            return formatShort(this.y);
+                        },
+                        style: {
+                            fontSize: '10px',
+                            fontWeight: 'normal',
+                            textOutline: 'none'
+                        }
+                    }
+                }
+            },
+            legend: legendConfig, // ← usa la configuración condicional
+            colors: colors,
+            series: seriesData,
+            credits: {
+                enabled: false
+            },
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            align: 'center',
+                            verticalAlign: 'bottom',
+                            layout: 'horizontal',
+                            enabled: !isSingleSeries // mantener coherencia en responsive
+                        },
+                        yAxis: {
+                            labels: {
+                                align: 'left',
+                                x: 0,
+                                y: -5
+                            },
+                            title: {
+                                text: ''
+                            }
+                        }
+                    }
+                }]
+            }
+        });
+    }
+
+    function gLineaMultiple(div, data, titulo, subtitulo = '', titulovetical = '', options = {}) {
+        // 🔢 Formato abreviado (K/M) y completo
+        function formatShort(value) {
+            const abs = Math.abs(value);
+            if (abs >= 1e6) return (value / 1e6).toFixed(1).replace(/\.0$/, '') + ' M';
+            if (abs >= 1e3) return (value / 1e3).toFixed(1).replace(/\.0$/, '') + ' K';
+            return value.toString();
+        }
+
+        function formatFull(value) {
+            return value.toLocaleString('en-US', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            });
+        }
+
+        // 🎯 Detectar si es una sola serie
+        const isSingleSeries = data.dat.length === 1;
+
+        // 🎨 Colores
+        const defaultColors = [
+            '#17A2B8', '#FF6B35', '#28A745', '#DC3545', '#6F42C1', '#FFC107', '#007BFF'
+        ];
+        const colors = options.colors || defaultColors;
+
+        // 📋 Leyenda: oculta automáticamente si solo hay 1 serie (a menos que se fuerce con { legend: true })
+        const userWantsLegend = options.legend === true;
+        const userHidesLegend = options.legend === false;
+        const showLegend = userWantsLegend || (!userHidesLegend && !isSingleSeries);
+
+        // 📈 Gráfico
+        Highcharts.chart(div, {
+            chart: {
+                type: 'line',
+                backgroundColor: 'transparent',
+                style: {
+                    fontFamily: 'Arial, sans-serif'
+                }
+            },
+            title: {
+                text: titulo,
+                align: 'center',
+                style: {
+                    fontSize: '16px',
+                    fontWeight: 'bold',
+                    color: '#333'
+                }
+            },
+            subtitle: {
+                text: subtitulo,
+                align: 'center',
+                style: {
+                    fontSize: '12px',
+                    color: '#666'
+                }
+            },
+            xAxis: {
+                categories: data.cat,
+                crosshair: true,
+                labels: {
                     style: {
-                        fontSize: '12px',
-                        color: '#666'
+                        fontSize: '11px'
+                    }
+                }
+            },
+            yAxis: {
+                title: {
+                    text: titulovetical,
+                    style: {
+                        fontSize: '12px'
                     }
                 },
-                xAxis: {
-                    categories: data.cat,
-                    crosshair: true,
-                    labels: {
-                        style: {
-                            fontSize: '11px'
-                        }
+                labels: {
+                    style: {
+                        fontSize: '11px'
                     }
                 },
-                yAxis: {
-                    title: {
-                        text: titulovetical,
-                        style: {
-                            fontSize: '12px'
-                        }
-                    },
-                    labels: {
-                        style: {
-                            fontSize: '11px'
-                        }
-                    },
-                    gridLineWidth: 1
-                },
-                tooltip: {
-                    shared: true,
-                    useHTML: true,
-                    formatter: function() {
-                        let s = `<span style="font-size:12px">${this.x}</span><br/>`;
-                        this.points.forEach(point => {
-                            const full = formatFull(point.y);
-                            const short = formatShort(point.y);
-                            if (isSingleSeries) {
-                                // ✅ Solo valor — sin nombre de la serie
-                                s += `<b>${full}</b> (${short})<br/>`;
+                gridLineWidth: 1
+            },
+            tooltip: {
+                shared: true,
+                useHTML: true,
+                formatter: function() {
+                    let s = `<span style="font-size:12px">${this.x}</span><br/>`;
+                    this.points.forEach(point => {
+                        const full = formatFull(point.y);
+                        const short = formatShort(point.y);
+                        if (isSingleSeries) {
+                            // ✅ Solo valor — sin nombre de la serie
+                            s += `<b>${full}</b><br/>`; // (${short})<br/>`;
                             } else {
                                 // Nombre + valor
                                 s += `<span style="color:${point.series.color}">\u25CF</span> ` +
-                                    `<b>${point.series.name}</b>: ${full} (${short})<br/>`;
-                            }
-                        });
-                        return s;
-                    }
-                },
-                plotOptions: {
-                    line: {
-                        marker: {
-                            enabled: true,
-                            radius: 4
-                        },
-                        lineWidth: 2,
-                        states: {
-                            hover: {
-                                lineWidth: 3
-                            }
-                        },
-                        dataLabels: {
-                            enabled: options.dataLabels !== false,
-                            formatter: function() {
-                                return formatShort(this.y);
-                            },
-                            style: {
-                                fontSize: '10px',
-                                fontWeight: 'normal',
-                                textOutline: 'none'
-                            },
-                            y: -8
+                                    `<b>${point.series.name}</b>: ${full}<br/>`; // (${short})<br/>`;
                         }
-                    }
-                },
-                legend: {
-                    layout: 'vertical',
-                    align: 'right',
-                    verticalAlign: 'middle',
-                    backgroundColor: 'transparent',
-                    itemStyle: {
-                        fontSize: '12px',
-                        fontWeight: 'normal'
-                    },
-                    enabled: showLegend // ✅ Automático: false si 1 serie (a menos que se fuerce)
-                },
-                series: data.dat,
-                colors: colors,
-                credits: {
-                    enabled: false
-                },
-                responsive: {
-                    rules: [{
-                        condition: {
-                            maxWidth: 500
-                        },
-                        chartOptions: {
-                            legend: {
-                                layout: 'horizontal',
-                                align: 'center',
-                                verticalAlign: 'bottom',
-                                enabled: showLegend
-                            },
-                            yAxis: {
-                                title: {
-                                    text: ''
-                                }
-                            }
-                        }
-                    }]
+                    });
+                    return s;
                 }
-            });
+            },
+            plotOptions: {
+                line: {
+                    marker: {
+                        enabled: true,
+                        radius: 4
+                    },
+                    lineWidth: 2,
+                    states: {
+                        hover: {
+                            lineWidth: 3
+                        }
+                    },
+                    dataLabels: {
+                        enabled: options.dataLabels !== false,
+                        formatter: function() {
+                            return formatShort(this.y);
+                        },
+                        style: {
+                            fontSize: '10px',
+                            fontWeight: 'normal',
+                            textOutline: 'none'
+                        },
+                        y: -8
+                    }
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                backgroundColor: 'transparent',
+                itemStyle: {
+                    fontSize: '12px',
+                    fontWeight: 'normal'
+                },
+                enabled: showLegend // ✅ Automático: false si 1 serie (a menos que se fuerce)
+            },
+            series: data.dat,
+            colors: colors,
+            credits: {
+                enabled: false
+            },
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            verticalAlign: 'bottom',
+                            enabled: showLegend
+                        },
+                        yAxis: {
+                            title: {
+                                text: ''
+                            }
+                        }
+                    }
+                }]
+            }
+        });
+    }
+
+    function gLineaMultiplePorcentual(div, data, options = {}) {
+        // 🔢 Formato para porcentajes
+        function formatPercent(value, decimals = 1) {
+            return Number(value).toFixed(decimals).replace(/\.0+$/, '') + '%';
         }
 
-        function gLineaMultiplePorcentual(div, data, options = {}) {
-            // 🔢 Formato para porcentajes
-            function formatPercent(value, decimals = 1) {
-                return Number(value).toFixed(decimals).replace(/\.0+$/, '') + '%';
-            }
+        // 🎯 Detectar si es una sola serie
+        const isSingleSeries = data.dat.length === 1;
 
-            // 🎯 Detectar si es una sola serie
-            const isSingleSeries = data.dat.length === 1;
+        // 🎨 Colores
+        const defaultColors = [
+            '#17A2B8', '#FF6B35', '#28A745', '#DC3545', '#6F42C1', '#FFC107', '#007BFF'
+        ];
+        const colors = options.colors || defaultColors;
 
-            // 🎨 Colores
-            const defaultColors = [
-                '#17A2B8', '#FF6B35', '#28A745', '#DC3545', '#6F42C1', '#FFC107', '#007BFF'
-            ];
-            const colors = options.colors || defaultColors;
+        // 📋 Leyenda: oculta automáticamente si solo hay 1 serie (a menos que se fuerce)
+        const userWantsLegend = options.legend === true;
+        const userHidesLegend = options.legend === false;
+        const showLegend = userWantsLegend || (!userHidesLegend && !isSingleSeries);
 
-            // 📋 Leyenda: oculta automáticamente si solo hay 1 serie (a menos que se fuerce)
-            const userWantsLegend = options.legend === true;
-            const userHidesLegend = options.legend === false;
-            const showLegend = userWantsLegend || (!userHidesLegend && !isSingleSeries);
-
-            // 📈 Gráfico
-            Highcharts.chart(div, {
-                chart: {
-                    type: 'line',
-                    backgroundColor: 'transparent',
+        // 📈 Gráfico
+        Highcharts.chart(div, {
+            chart: {
+                type: 'line',
+                backgroundColor: 'transparent',
+                style: {
+                    fontFamily: 'Arial, sans-serif'
+                }
+            },
+            title: {
+                text: options.title || '',
+                align: 'center',
+                style: {
+                    fontSize: '16px',
+                    fontWeight: 'bold',
+                    color: '#333'
+                }
+            },
+            subtitle: {
+                text: options.subtitle || '',
+                align: 'center',
+                style: {
+                    fontSize: '14px',
+                    color: '#666'
+                }
+            },
+            xAxis: {
+                categories: data.cat,
+                crosshair: true,
+                labels: {
                     style: {
-                        fontFamily: 'Arial, sans-serif'
+                        fontSize: '11px'
                     }
-                },
+                }
+            },
+            yAxis: {
                 title: {
-                    text: options.title || '',
-                    align: 'center',
+                    text: options.yAxisTitle || '',
                     style: {
-                        fontSize: '16px',
-                        fontWeight: 'bold',
-                        color: '#333'
+                        fontSize: '12px'
                     }
                 },
-                subtitle: {
-                    text: options.subtitle || '',
-                    align: 'center',
+                labels: {
+                    format: '{value}%',
                     style: {
-                        fontSize: '14px',
-                        color: '#666'
+                        fontSize: '11px'
                     }
                 },
-                xAxis: {
-                    categories: data.cat,
-                    crosshair: true,
-                    labels: {
-                        style: {
-                            fontSize: '11px'
-                        }
-                    }
-                },
-                yAxis: {
-                    title: {
-                        text: options.yAxisTitle || '',
-                        style: {
-                            fontSize: '12px'
-                        }
-                    },
-                    labels: {
-                        format: '{value}%',
-                        style: {
-                            fontSize: '11px'
-                        }
-                    },
-                    min: 0,
-                    // max: 100, // ❌ no fijar, permitir >100% (como 108%)
-                    gridLineWidth: 1
-                },
-                tooltip: {
-                    shared: true,
-                    useHTML: true,
-                    formatter: function() {
-                        let s = `<span style="font-size:12px">${this.key}</span><br/>`;
-                        this.points.forEach(point => {
-                            // ✅ SIEMPRE mostrar el nombre, incluso con 1 serie (tu requerimiento)
-                            const pct = formatPercent(point.y, 1); // 1 decimal, pero sin .0 innecesario
-                            s += `<span style="color:${point.series.color}">\u25CF</span> ` +
-                                `<b>${point.series.name}</b>: ${pct}<br/>`;
+                min: 0,
+                // max: 100, // ❌ no fijar, permitir >100% (como 108%)
+                gridLineWidth: 1
+            },
+            tooltip: {
+                shared: true,
+                useHTML: true,
+                formatter: function() {
+                    let s = `<span style="font-size:12px">${this.key}</span><br/>`;
+                    this.points.forEach(point => {
+                        // ✅ SIEMPRE mostrar el nombre, incluso con 1 serie (tu requerimiento)
+                        const pct = formatPercent(point.y, 1); // 1 decimal, pero sin .0 innecesario
+                        s += `<span style="color:${point.series.color}">\u25CF</span> ` +
+                            `<b>${point.series.name}</b>: ${pct}<br/>`;
                         });
                         return s;
                     }

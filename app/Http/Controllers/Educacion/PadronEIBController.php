@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Educacion;
 
+use App\Exports\Educacion\EIBReportesExport;
 use App\Http\Controllers\Controller;
 use App\Models\Educacion\Importacion;
 use Illuminate\Http\Request;
@@ -16,6 +17,7 @@ use App\Repositories\Educacion\InstitucionEducativaRepositorio;
 use App\Repositories\Educacion\NexusRepositorio;
 use App\Repositories\Educacion\PadronEIBRepositorio;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PadronEIBController extends Controller
 {
@@ -191,10 +193,6 @@ class PadronEIBController extends Controller
 
     public function reportes()
     {
-        // return PadronEIBRepositorio::gestion_select(2025,2024);
-        //return CuboPadronEIBRepositorio::select_anios();
-        // $fuenteId = ImporMatriculaGeneralController::$FUENTE;
-        // $anios = PadronEIBRepositorio::rango_anios_segun_eib();
         $anios =  CuboPadronEIBRepositorio::select_anios();
         $aniomax = $anios->max();
         $anioeib = PadronEIBRepositorio::getYearMapping($aniomax);
@@ -422,5 +420,27 @@ class PadronEIBController extends Controller
                 # code...
                 return [];
         }
+    }
+
+    public function reportesrdownloadexcel($div, $anio, $ugel, $provincia, $distrito)
+    {
+        switch ($div) {
+            case 'tabla1':
+                $name = 'EXCEL_VACIO.xlsx';
+                break;
+            case 'tabla2':
+                $name = 'EXCEL_VACIO.xlsx';
+                break;
+            case 'tabla3':
+                $name = 'EXCEL_VACIO.xlsx';
+                break;
+            case 'tabla4':
+                $name = 'NÚMERO DE INSTITUCIONES EDUCATIVAS BILINGÜES POR NIVEL EDUCATIVO, FORMA DE ATENCIÓN, LENGUA ORIGINARIA, ESTUDIANTES Y DOCENTES.xlsx';
+                break;
+            default:
+                $name = 'EXCEL_VACIO.xlsx';
+                break;
+        }
+        return Excel::download(new EIBReportesExport($div, $anio,  $ugel, $provincia, $distrito), $name);
     }
 }

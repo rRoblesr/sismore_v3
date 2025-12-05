@@ -332,10 +332,10 @@
                 <div class="card-header"> --}}
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
-                    {{-- <div class="card-widgets">
+                    <div class="card-widgets">
                         <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarExcel('tabla4')">
                             <i class="fa fa-file-excel"></i> Descargar</button>
-                    </div> --}}
+                    </div>
                     <h3 class="card-title">
                         NÚMERO DE INSTITUCIONES EDUCATIVAS BILINGÜES POR NIVEL EDUCATIVO, FORMA DE ATENCIÓN, LENGUA
                         ORIGINARIA, ESTUDIANTES Y DOCENTES
@@ -651,12 +651,12 @@
 
         function descargarExcel(div) {
             window.open(
-                "{{ route('educacion.nexus.reportes.download.excel', ['div' => ':div', 'anio' => ':anio', 'ugel' => ':ugel', 'modalidad' => ':modalidad', 'nivel' => ':nivel']) }}"
+                "{{ route('educacion.padron.eib.reportes.download.excel', ['div' => ':div', 'anio' => ':anio', 'ugel' => ':ugel', 'provincia' => ':provincia', 'distrito' => ':distrito']) }}"
                 .replace(':div', div)
                 .replace(':anio', $('#anio').val())
-                .replace(':ugel', $('#ugel').val())
-                .replace(':modalidad', $('#modalidad').val())
-                .replace(':nivel', $('#nivel').val())
+                .replace(':ugel', $('#gestion').val())
+                .replace(':provincia', $('#provincia').val())
+                .replace(':distrito', $('#distrito').val())
             );
         }
 

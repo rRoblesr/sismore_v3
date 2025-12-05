@@ -683,13 +683,15 @@ class BaseSiafWebController extends Controller
                     'categorias' => [],
                     'series' => [
                         ['data' => [], 'name' => 'PIM'],
+                        ['data' => [], 'name' => 'CERTIFICADO'],
                         ['data' => [], 'name' => 'DEVENGADO'],
                     ],
                 ];
                 foreach ($data as $key => $value) {
                     $info['categorias'][] = $value->ue;
                     $info['series'][0]['data'][] = (int)$value->pim;
-                    $info['series'][1]['data'][] = (int)$value->devengado;
+                    $info['series'][1]['data'][] = (int)$value->certificado;
+                    $info['series'][2]['data'][] = (int)$value->devengado;
                 }
                 return response()->json(compact('info', 'data'));
 
@@ -703,7 +705,7 @@ class BaseSiafWebController extends Controller
                 ];
                 $valor_anterior = 0;
                 foreach ($data as $key => $value) {
-                    $info['categorias'][] = $value->mes;
+                    $info['categorias'][] = ucfirst(strtolower($value->mes));
                     if ($key == 0) {
                         $info['series'][0]['data'][] = (int)$value->certificado;
                         $valor_anterior = (int)$value->certificado;
@@ -724,7 +726,7 @@ class BaseSiafWebController extends Controller
                     ],
                 ];
                 foreach ($data as $key => $value) {
-                    $info['categorias'][] = $value->mes;
+                    $info['categorias'][] = ucfirst(strtolower($value->mes));
                     $info['series'][0]['data'][] = round($value->pim > 0 ? 100 * (int)$value->certificado / (int)$value->pim : 0, 1);
                 }
                 return response()->json(compact('info', 'data'));
@@ -739,7 +741,7 @@ class BaseSiafWebController extends Controller
                 ];
                 $valor_anterior = 0;
                 foreach ($data as $key => $value) {
-                    $info['categorias'][] = $value->mes;
+                    $info['categorias'][] = ucfirst(strtolower($value->mes));
                     if ($key == 0) {
                         $info['series'][0]['data'][] = (int)$value->devengado;
                         $valor_anterior = (int)$value->devengado;
@@ -759,7 +761,7 @@ class BaseSiafWebController extends Controller
                     ],
                 ];
                 foreach ($data as $key => $value) {
-                    $info['categorias'][] = $value->mes;
+                    $info['categorias'][] = ucfirst(strtolower($value->mes));
                     $info['series'][0]['data'][] = round($value->pim > 0 ? 100 * (int)$value->devengado / (int)$value->pim : 0, 1);
                 }
                 return response()->json(compact('info', 'data'));
