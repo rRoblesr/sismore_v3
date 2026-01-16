@@ -53,3 +53,9 @@ mis estilos XD
 .bg-success-1 {
     background-color: #43beac !important;
 }
+
+@media (max-width: 600px) {
+    .demos-show-btn {
+        display: block !important;
+    }
+}

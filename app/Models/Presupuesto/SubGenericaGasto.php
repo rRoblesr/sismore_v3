@@ -16,4 +16,14 @@ class SubGenericaGasto extends Model
         'generica_id',
         'nombre',
     ];
+
+    public function generica()
+    {
+        return $this->belongsTo(GenericaGasto::class, 'generica_id');
+    }
+
+    public function getNombreAttribute($value)
+    {
+        return '2.' . $this->codigo . ' ' . $value;
+    }
 }

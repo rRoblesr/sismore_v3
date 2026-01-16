@@ -14,6 +14,7 @@ const SpinnerManager = {
             }
             $el.html('<span><i class="fa fa-spinner fa-spin"></i></span>');
         });
+        // console.log("SpinnerManager State:", this.originalContent);
     },
     hide(div) {
         if (!spinners[div]) return;

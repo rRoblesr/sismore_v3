@@ -29,4 +29,24 @@ class BaseSiafWebDetalleController extends Controller
     {
         return BaseSiafWebDetalleRepositorio::obtenerCategoriasPresupuestalesParaSelect($anio, $ue, $cg);
     }
+
+    public function obtenerFuenteFinanciamientoParaSelect($anio, $ue, $cg)
+    {
+        return BaseSiafWebDetalleRepositorio::obtenerFuenteFinanciamientoParaSelect($anio, $ue, $cg);
+    }
+
+    public function obtenerGenericaParaSelect($anio, $ue, $cg)
+    {
+        return BaseSiafWebDetalleRepositorio::obtenerGenericaParaSelect($anio, $ue, $cg);
+    }
+
+    public function obtenerCategoriasPresupuestalesParaSelect2($anio, $ue)
+    {
+        return BaseSiafWebDetalleRepositorio::obtenerCategoriasPresupuestalesParaSelect2($anio, $ue);
+    }
+
+    public function obtenerFuenteFinanciamientoParaSelect2($anio, $ue, $cp)
+    {
+        return BaseSiafWebDetalleRepositorio::obtenerFuenteFinanciamientoParaSelect2($anio, $ue, $cp);
+    }
 }

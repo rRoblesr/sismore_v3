@@ -6,7 +6,7 @@
         type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 
-    <link href="assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+    {{-- <link href="assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" /> --}}
 
     <style>
         .centrarmodal {
@@ -123,21 +123,21 @@
             class="card-header border-success-0 bg-transparent text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center px-2 py-2">
             <h6 class="card-title mb-2 mb-md-0 text-center text-md-left text-wrap">Lista de Locales</h6>
             <div class="text-center text-md-right">
-                {{-- <button type="button" class="btn btn-success-0 btn-xs" onclick="abrirvistaprevia()"><i
-                        class="fa fa-file-excel"></i> Plantilla</button> --}}
+                {{-- <button type="button" class="btn btn-success-0 btn-xs" onclick="abrirvistaprevia()">
+                    <i class="fa fa-file-excel"></i> Importar Plantilla</button> --}}
                 @if (auth()->user()->id == 49)
-                    <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarxxx('locales')"><i
-                            class="fa fa-file-excel"></i> Descargar Locales</button>
+                    <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarSFL('locales')"><i
+                            class="fa fa-file-excel"></i> Locales</button>
                 @endif
-                <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarxxx('servicios')"><i
-                        class="fa fa-file-excel"></i> Descargar</button>
+                <button type="button" class="btn btn-success-0 btn-xs" onclick="descargarSFL('servicios')"><i
+                        class="fa fa-file-excel"></i> {{ auth()->user()->id == 49 ? 'Servicios' : 'Descargar' }}</button>
             </div>
         </div>
         <div class="card-body p-2">
             <div class="row">
                 <div class="col-12">
                     <div class="table-responsive">
-                        <table id="tbprincipal" class="table table-sm font-11 table-striped table-bordered">
+                        <table id="tbprincipal" class="table font-12 table-striped table-bordered">
                             <thead class="cabecera-dataTable">
                                 <tr class="text-white bg-success-0">
                                     <th>Nº</th>
@@ -609,9 +609,9 @@
     <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.responsive.min.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.js"></script>
 
-    <script src="assets/libs/sweetalert2/sweetalert2.min.js"></script>
+    {{-- <script src="assets/libs/sweetalert2/sweetalert2.min.js"></script> --}}
     <!-- Sweet alert init js-->
-    <script src="assets/js/pages/sweet-alerts.init.js"></script>
+    {{-- <script src="assets/js/pages/sweet-alerts.init.js"></script> --}}
 
     <script>
         var save_method = '';
@@ -1124,7 +1124,7 @@
             });
         }
 
-        function descargarxxx(tipo) {
+        function descargarSFL(tipo) {
             const params = new URLSearchParams({
                 tipo: tipo || '',
                 ugel: $('#ugel').val() || 0,
@@ -1132,7 +1132,7 @@
                 distrito: $('#distrito').val() || 0,
                 estado: $('#estado').val() || 0
             });
-            window.open("{{ route('mantenimiento.sfl.exportar.xxx') }}?" + params, '_blank');
+            window.open("{{ route('mantenimiento.sfl.exportar.excel') }}?" + params, '_blank');
         }
 
         function descargarplantilla() {

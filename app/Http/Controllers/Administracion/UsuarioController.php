@@ -65,11 +65,10 @@ class UsuarioController extends Controller
             })
             ->addColumn('action', function ($data) { // '.auth()->user()->usuario.'
                 $acciones = '';
-
-                $acciones = '<a href="#" class="btn btn-info btn-sm" onclick="edit(' . $data->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i></a>';
-                $acciones .= '&nbsp;<a href="#" class="btn btn-warning btn-sm" onclick="perfil(' . $data->id . ')" title="AGREGAR PERFIL"> <i class="fa fa-list"></i> </a>';
-
                 if ($data->estado == '1') {
+                    $acciones = '<a href="#" class="btn btn-info btn-sm" onclick="edit(' . $data->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i></a>';
+                    $acciones .= '&nbsp;<a href="#" class="btn btn-warning btn-sm" onclick="perfil(' . $data->id . ')" title="AGREGAR PERFIL"> <i class="fa fa-list"></i> </a>';
+
                     $acciones .= '&nbsp;<a class="btn btn-sm btn-dark" href="javascript:void(0)" title="Desactivar" onclick="estadoUsuario(' . $data->id . ',' . $data->estado . ')"><i class="fa fa-power-off"></i></a> ';
                 } else {
                     $acciones .= '&nbsp;<a class="btn btn-sm btn-default"  title="Activar" onclick="estadoUsuario(' . $data->id . ',' . $data->estado . ')"><i class="fa fa-check"></i></a> ';

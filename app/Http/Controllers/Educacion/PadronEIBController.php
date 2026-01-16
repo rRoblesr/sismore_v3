@@ -230,9 +230,10 @@ class PadronEIBController extends Controller
 
             case 'anal2':
                 $info = [
-                    'categoria' => [],
+                    'categoria' => ['programa presupuestal','acciones centrales','apnop'],
                     'series' => [
-                        ['type' => 'column', 'yAxis' => 0, 'data' => [], 'name' => 'Matriculados'],
+                        ['type' => 'column', 'yAxis' => 0, 'data' => [], 'name' => 'Pim'],
+                        ['type' => 'column', 'yAxis' => 0, 'data' => [], 'name' => 'Devengado'],
                         ['type' => 'spline', 'yAxis' => 1, 'data' => [], 'name' => '%Avance'],
                     ],
                     'maxbar' => 0,

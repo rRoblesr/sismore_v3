@@ -76,7 +76,7 @@
                         @endforeach
                     </ul>
                 @elseif ($menu->tipo_enlace == 1)
-                    <a href="{{ route($menu->url, mb_strtolower(session('sistema_nombre'), 'UTF-8')) }}"
+                    <a href="{{ route($menu->url, session('sistema_nombre')) }}"
                         class="waves-effect">
                         <i class="{{ $menu->icono }}"></i>
                         <span>{{ $menu->nombre }}</span>

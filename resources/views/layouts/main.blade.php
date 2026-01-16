@@ -343,6 +343,14 @@
                                 <span>Perfil</span>
                             </a>
 
+                            @if (session('total_sistema') > 1)
+                                <a href="javascript:void(0);"
+                                    class="dropdown-item notify-item d-block d-md-none right-bar-toggle">
+                                    <i class="mdi mdi-view-grid"></i>
+                                    <span>Modulos</span>
+                                </a>
+                            @endif
+
                             <div class="dropdown-divider"></div>
 
                             <!-- item-->
@@ -386,7 +394,8 @@
 
                 <!-- LOGO -->
                 <div class="logo-box">
-                    <a href="#" class="logo text-center logo-dark">
+                    <a href="{{ session()->has('sistema_nombre') ? route('sistema_acceder', session('sistema_nombre')) : route('home') }}"
+                        class="logo text-center logo-dark">
                         <span class="logo-lg">
                             <img src="{{ asset('/') }}public/assets/images/logo-dark.png" alt=""
                                 height="16">
@@ -399,7 +408,8 @@
                         </span>
                     </a>
 
-                    <a href="#" class="logo text-center logo-light">
+                    <a href="{{ session()->has('sistema_nombre') ? route('sistema_acceder', session('sistema_nombre')) : route('home') }}"
+                        class="logo text-center logo-light">
                         <span class="logo-lg">
                             {{-- <img src="{{ asset('/') }}public/assets/images/logo-light.png" alt=""
                                 height="16"> --}}
@@ -888,6 +898,101 @@
                                         </a>
                                     </li>
                                     <li>
+                                        <a href="{{ url('/') }}/IndicadorTrabajo/Importar?trabajo" class="waves-effect">
+                                            <i class="mdi mdi-equalizer-outline"></i>
+                                            <span>Indicadores</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript: void(0);" class="waves-effect">
+                                            <i class="mdi mdi-chart-tree"></i>
+                                            <span>Estadísticas y Ranking</span>
+                                            <span class="menu-arrow"></span>
+                                        </a>
+
+                                        <ul class="nav-second-level" aria-expanded="false">
+                                            <li>
+                                                <a href="{{ url('/') }}/AnuarioEstadistico/rptEmpresasSectorPrivado">Empresas
+                                                    Sector Privado</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ url('/') }}/AnuarioEstadistico/rptRemunTrabSectorPrivado">Remun.
+                                                    Trab. Sector Privado</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ url('/') }}/AnuarioEstadistico/rptTrabajadoresSectorPrivado">Trabajadores
+                                                    Sector Privado</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ url('/') }}/AnuarioEstadistico/rptPrestadoresServ4taCategoria">Prestadores
+                                                    Serv. 4ta Categoria</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                    <li>
+                                        <a href="javascript: void(0);" class="waves-effect">
+                                            <i class="ion ion-ios-man"></i>
+                                            <span>Formalización Laboral</span>
+                                            <span class="menu-arrow"></span>
+                                        </a>
+
+                                        <ul class="nav-second-level" aria-expanded="false">
+                                            <li>
+                                                <a href="{{ url('/') }}/salud/PowerBi/145">Planilla Electrónica</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ url('/') }}/salud/PowerBi/146">Empleo Formal</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ url('/') }}/salud/PowerBi/147">Empleo Informal</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ url('/') }}/salud/PowerBi/296">Informalidad Laboral</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{ url('/') }}/salud/PowerBi/74" class="waves-effect">
+                                            <i class="mdi mdi-worker"></i> <span>ProEmpleo</span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{ url('/') }}/trabajo/AsesoriaLegal/309" class="waves-effect">
+                                            <i class="mdi mdi-human-male-male"></i> <span>Busqueda de Empleo</span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{ url('/') }}/trabajo/OfertaTrabajo/303" class="waves-effect">
+                                            <i class="fas fa-suitcase"></i> <span>Ofertas de Trabajo</span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{ url('/') }}/trabajo/certificadolaboral/310" class="waves-effect">
+                                            <i class="mdi mdi-certificate"></i> <span>Certificado Laboral</span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{ url('/') }}/salud/PowerBi/151" class="waves-effect">
+                                            <i class="ion ion-md-cash"></i>
+                                            <span>Presupuesto</span>
+                                        </a>
+                                    </li>
+                                @break
+
+                                {{-- @case(6)
+                                    <li>
+                                        <a href="{{ route('acceso.publico.modulo', 'TRABAJO') }}" class="waves-effect">
+                                            <i class="mdi mdi-home"></i>
+                                            <span> Inicio </span>
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a href="{{ url('/') }}/IndicadorTrabajo/Importar?trabajo"
                                             class="waves-effect">
                                             <i class="mdi mdi-equalizer-outline"></i>
@@ -961,7 +1066,7 @@
                                             <span>Presupuesto</span>
                                         </a>
                                     </li>
-                                @break
+                                @break --}}
 
                                 @default
                             @endswitch
@@ -1241,8 +1346,7 @@
                                             //   $sis=ucwords($sistema->nombre);
                                             // $str = ucfirst($sistema->nombre);
                                         @endphp
-                                        <a
-                                            href="{{ route('sistema_acceder', mb_strtolower($sistema->nombre, 'UTF-8')) }}">
+                                        <a href="{{ route('sistema_acceder', $sistema->nombre) }}">
                                             <div class="media">
                                                 <div class="avatar-md bg-info rounded-circle mr-2"
                                                     style="height: 2.5rem;width: 2.5rem;">

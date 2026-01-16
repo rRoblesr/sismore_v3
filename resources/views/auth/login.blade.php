@@ -44,7 +44,7 @@
 
     <form method="post" action="{{ route('login') }}" id="form1">
         @csrf
-        
+
 
         <section class="wrapper">
             <aside
@@ -103,7 +103,7 @@
                             </svg> --}}
                             <br><br>
                             <figcaption>
-                                
+
                                 <h1 class="brand">SISMORE</h1>
                                 <p class="small">Sistema de Monitoreo Regional</p>
                             </figcaption>
@@ -125,6 +125,23 @@
                     <h4 class="text-center mb-0">Inicia sesión</h4>
                     <p class="text-center">Por favor, ingresa tus credenciales</p>
 
+                    @if ($errors->has('usuario'))
+                        <div class="alert alert-danger">{{ $errors->first('usuario') }}</div>
+                    @endif
+                    @if ($errors->has('password'))
+                        <div class="alert alert-danger">{{ $errors->first('password') }}</div>
+                    @endif
+
+                    @if (session('error'))
+                        <div class="alert alert-danger">{{ session('error') }}</div>
+                    @endif
+                    @if (session('warning'))
+                        <div class="alert alert-warning">{{ session('warning') }}</div>
+                    @endif
+                    @if (session('params_missing'))
+                        <div class="alert alert-warning">{{ session('params_missing') }}</div>
+                    @endif
+
                     <div class="form-label-group">
                         <input name="usuario" type="text" id="usuario" class="form-control"
                             placeholder="Usuario" />
@@ -138,6 +155,46 @@
                         <label id="lblClave" for="password">Contraseña</label>
 
                     </div>
+
+                    <div class="form-group mb-4">
+                        <div class="row no-gutters">
+                            <div class="col-md-5 col-12 mb-2 mb-md-0">
+                                <div class="captcha captcha-container d-flex align-items-center justify-content-center border rounded bg-white"
+                                    style="height: calc(1.5em + 0.75rem + 2px);">
+                                    <span>{!! captcha_img('login') !!}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-7 col-12">
+                                <input id="captcha" type="text" class="form-control captcha-input"
+                                    placeholder="CAPTCHA" name="captcha">
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-1">
+                            <a href="javascript:void(0)" id="reload" class="text-primary small">Refrescar</a>
+                            @if ($errors->has('captcha'))
+                                <span class="text-danger help-block small">
+                                    <strong>{{ $errors->first('captcha') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+
+                    {{-- <div class="form-group mb-2 mt-2">
+                        <div class="captcha d-flex align-items-center">
+                            <span>{!! captcha_img('login') !!}</span>
+                            <button type="button" class="btn btn-danger ml-2" class="reload" id="reload">
+                                &#x21bb;
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group mb-4">
+                        <input id="captcha" type="text" class="form-control" placeholder="Ingrese Captcha" name="captcha">
+                        @if ($errors->has('captcha'))
+                            <span class="text-danger help-block" style="font-size: 0.8rem;">
+                                <strong>{{ $errors->first('captcha') }}</strong>
+                            </span>
+                        @endif
+                    </div> --}}
 
                     <!-- <div id="Panel1" class="form-group" onkeypress="javascript:return WebForm_FireDefaultButton(event, &#39;btnAceptar&#39;)"> -->
                     <div id="Panel1" class="form-group">
@@ -156,8 +213,8 @@
                             </div>
                         </div>
                         <label for=""></label>
-                        <div class="float-right"><a id="btnmodal" href="#" data-toggle="modal"
-                                data-target="#divCambioContraseña" style="color:#007bff">Olvidé mi clave</a></div>
+                        <div class="float-right"><a id="btnmodal" href="{{ route('password.request') }}"
+                                style="color:#007bff">Olvidé mi clave</a></div>
                     </div>
 
                     <div class="form-label-group"></div>
@@ -233,33 +290,47 @@
             //]]>
         </script> --}}
 
-{{--         <script
+        {{--         <script
             src="/WebResource.axd?d=pynGkmcFUV13He1Qd6_TZBMjd1ZBAaat8alifBLD1Up6L1bKzb6yQiGXAKCplDrDnsdt00LQ52pb5Mj0n6usMg2&amp;t=637823185705833095"
             type="text/javascript"></script> --}}
     </form>
     {{-- <script src="../dist/scripts/app.min.js"></script> --}}
     <script type="text/javascript">
         /* function ingresar(field, event) {
-                var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
-                if (event.keyCode == 13) {
-                    var obj = document.getElementById("btnAceptar.ClientID");
-                    obj.click();
+                    var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+                    if (event.keyCode == 13) {
+                        var obj = document.getElementById("btnAceptar.ClientID");
+                        obj.click();
+                    }
                 }
-            }
 
-            function Enter(field, event) {
-                var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
-                if (keyCode == 13) {
-                    var i;
-                    for (i = 0; i < field.form.elements.length; i++)
-                        if (field == field.form.elements[i])
-                            break;
-                    i = (i + 1) % field.form.elements.length;
-                    field.form.elements[i].focus();
-                    return false;
-                } else
-                    return true;
-            } */
+                function Enter(field, event) {
+                    var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+                    if (keyCode == 13) {
+                        var i;
+                        for (i = 0; i < field.form.elements.length; i++)
+                            if (field == field.form.elements[i])
+                                break;
+                        i = (i + 1) % field.form.elements.length;
+                        field.form.elements[i].focus();
+                        return false;
+                    } else
+                        return true;
+                } */
+    </script>
+    <script type="text/javascript">
+        $(function() {
+            $('body').on('click', '#reload', function(e) {
+                e.preventDefault();
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ url("reload-captcha") }}',
+                    success: function(data) {
+                        $(".captcha span").html(data.captcha);
+                    }
+                });
+            });
+        });
     </script>
 </body>
 <script></script>

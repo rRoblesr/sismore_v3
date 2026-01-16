@@ -4,10 +4,6 @@
  <div class="navbar-custom">
 
      <ul class="list-unstyled topnav-menu float-right mb-0">
-<<<<<<< HEAD
-
-=======
->>>>>>> 35fe3f126b6eccca61bdec622b2dce0465518f4e
 
             <li class="dropdown notification-list">
                 <!-- Mobile menu toggle-->
@@ -22,10 +18,6 @@
             </li>
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 35fe3f126b6eccca61bdec622b2dce0465518f4e
          {{-- <li class="dropdown notification-list d-none d-md-inline-block">
              <a href="#" id="btn-fullscreen" class="nav-link waves-effect waves-light">
                  <i class="mdi mdi-crop-free noti-icon"></i>
@@ -50,6 +42,12 @@
                      <i class="mdi mdi-face-profile"></i>
                      <span>Perfil</span>
                  </a>
+                 @if (session('total_sistema') > 1)
+                     <a href="javascript:void(0);" class="dropdown-item notify-item d-block d-md-none right-bar-toggle">
+                         <i class="mdi mdi-view-grid"></i>
+                         <span>Modulos</span>
+                     </a>
+                 @endif
 
                  <div class="dropdown-divider"></div>
                  <!-- item-->
@@ -85,7 +83,7 @@
 
      <!-- LOGO -->
      <div class="logo-box">
-         <a href="{{ route('home') }}" class="logo text-center logo-dark">
+         <a href="{{ session()->has('sistema_nombre') ? route('sistema_acceder', session('sistema_nombre')) : route('home') }}" class="logo text-center logo-dark">
              <span class="logo-lg">
                  <!-- <img src="{{ asset('/') }}public/assets/images/logo-GRU-a1.png" alt="" height="16"> -->
                  <span class="logo-lg-text-dark">SISMORE</span>
@@ -95,7 +93,7 @@
                  <!-- <img src="{{ asset('/') }}public/assets/images/logo-GRU-a1.png" alt="" height="25"> -->
              </span>
          </a>
-         <a href="{{ route('home') }}" class="logo text-center logo-light">
+         <a href="{{ session()->has('sistema_nombre') ? route('sistema_acceder', session('sistema_nombre')) : route('home') }}" class="logo text-center logo-light">
 
              <span class="logo-lg">
                  {{-- <img src="{{ asset('/') }}public/assets/images/logo-sm-blanco.png" alt="" height="68"> --}}
@@ -132,7 +130,5 @@
      <!-- LOGO -->
  </div>
  <!-- end Topbar -->
-
-
 
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Educacion;
 
 use App\Exports\Educacion\SFLReportesExport;
-use App\Exports\SFLExport;
+use App\Exports\Educacion\SFLExport;
 use App\Http\Controllers\Controller;
 use App\Imports\tablaXImport;
 use App\Models\Administracion\Entidad;
@@ -53,54 +53,9 @@ class SFLController extends Controller
         // Arrays para mostrar el estado y el tipo
         $est = ['', 'SANEADO', 'NO SANEADO', 'NO REGISTRADO', 'EN PROCESO'];
         $tip = ['', 'AFECTACION EN USO', 'TITULARIDAD', 'APORTE REGLAMENTARIO', 'OTROS'];
+        $color = ['', 'success', 'danger', 'secondary', 'warning'];
 
-        $query = DB::table('edu_sfl as s')
-            ->join('edu_institucioneducativa as ie', 'ie.id', '=', 's.institucioneducativa_id')
-            ->join('edu_centropoblado as cp', 'cp.id', '=', 'ie.CentroPoblado_id')
-            ->join('par_ubigeo as d', 'd.id', '=', 'cp.Ubigeo_id')
-            ->join('par_ubigeo as p', 'p.id', '=', 'd.dependencia')
-            ->join('edu_area as a', 'a.id', '=', 'ie.Area_id')
-            ->join('edu_ugel as u', 'u.id', '=', 'ie.Ugel_id')
-            ->where('s.estado_servicio', 1)
-            ->tap(function ($query) use ($rq) {
-                if ($rq->ugel > 0) {
-                    $query->where('u.id', $rq->ugel);
-                }
-                if ($rq->provincia > 0) {
-                    $query->where('p.id', $rq->provincia);
-                }
-                if ($rq->distrito > 0) {
-                    $query->where('d.id', $rq->distrito);
-                }
-                if ($rq->estado > 0) {
-                    // $query->where('estados', $rq->estado);
-                    $query->having('estados', $rq->estado);
-                }
-            })
-            ->select(
-                'ie.codLocal as local',
-                DB::raw('MAX(u.nombre) as ugel'),
-                DB::raw('MAX(a.nombre) as area'),
-                DB::raw('MAX(p.nombre) as provincia'),
-                DB::raw('MAX(d.nombre) as distrito'),
-                DB::raw('MAX(s.fecha_inscripcion) as inscripcion'),
-                DB::raw('MAX(s.tipo) as tipo'),
-                DB::raw('COUNT(s.id) as servicios'),
-                DB::raw("
-                CASE 
-                    WHEN COUNT(DISTINCT s.estado) = 1 THEN MAX(s.estado)  
-                    ELSE 
-                        CASE 
-                            WHEN SUM(s.estado = 2) > 0 THEN 2  
-                            WHEN SUM(s.estado = 1) > 0 AND (SUM(s.estado = 3) > 0 OR SUM(s.estado = 4) > 0) THEN 2  
-                            WHEN SUM(s.estado = 3) > 0 OR SUM(s.estado = 4) > 0 THEN 3  
-                            ELSE MAX(s.estado)  
-                        END
-                END AS estados
-            ")
-            )
-            ->groupBy('ie.codLocal')
-            ->get();
+        $query = SFLRepositorio::locales_activos($rq->ugel, $rq->provincia, $rq->distrito, $rq->estado);
 
         $data = [];
         foreach ($query as $key => $value) {
@@ -108,23 +63,7 @@ class SFLController extends Controller
             $btn  = '&nbsp;<a href="#" class="btn btn-info btn-xs" onclick="open_modular(`' . $value->local . '`)" title="MODIFICAR"><i class="fa fa-pen"></i></a>';
             $btn .= '&nbsp;<a href="#" class="btn btn-orange-0 btn-xs" onclick="open_ver(`' . $value->local . '`)" title="VER"><i class="fas fa-eye"></i></a>';
 
-            switch ($value->estados) {
-                case '1':
-                    $estadox = '<span class="badge badge-success" style="font-size: 90%;">' . $value->estado . '</span>';
-                    break;
-                case '2':
-                    $estadox = '<span class="badge badge-danger" style="font-size: 90%;">' . $value->estado . '</span>';
-                    break;
-                case '3':
-                    $estadox = '<span class="badge badge-secondary" style="font-size: 90%;">' . $value->estado . '</span>';
-                    break;
-                case '4':
-                    $estadox = '<span class="badge badge-warning" style="font-size: 90%;">' . $value->estado . '</span>';
-                    break;
-                default:
-                    $estadox = '';
-                    break;
-            }
+            $estadox = '<span class="badge badge-' . $color[$value->estados] . '" style="font-size: 80%;">' . $value->estado . '</span>';
             $data[] = [
                 ($key + 1),
                 str_pad($value->local, 6, '0', STR_PAD_LEFT),
@@ -147,707 +86,6 @@ class SFLController extends Controller
             "data"            => $data,
         ];
 
-        return response()->json($result);
-    }
-
-    public function ListarDT_xxx(Request $rq)
-    {
-        // Parámetros de DataTables
-        $draw   = intval($rq->draw);
-        $start  = intval($rq->start);
-        $length = intval($rq->length);
-
-        // Arrays para mostrar el estado y el tipo
-        $est = ['', 'SANEADO', 'NO SANEADO', 'NO REGISTRADO', 'EN PROCESO'];
-        $tip = ['', 'AFECTACION EN USO', 'TITULARIDAD', 'APORTE REGLAMENTARIO', 'OTROS'];
-
-        // Definir un key de caché en función de los filtros recibidos
-        $cacheKey = 'listarDT_' . md5(json_encode($rq->all()));
-        session(['listarDT_cacheKey' => $cacheKey]);
-        $cacheKeySFL = 'listarDT_sfl_' . md5(json_encode($rq->all()));
-        session(['listarDT_sfl_cacheKey' => $cacheKeySFL]);
-
-        // Cache::forget(session('listarDT_cacheKey'));
-        // Cache::forget(session('listarDT_sfl_cacheKey'));
-
-
-        // Consulta principal pesada: se agrupa por codLocal (local) y se unen varias tablas
-        $queryResult = Cache::remember($cacheKey, now()->addMinutes(5), function () use ($rq) {
-            return DB::table('edu_sfl as s')
-                ->join('edu_institucioneducativa as ie', 'ie.id', '=', 's.institucioneducativa_id')
-                ->join('edu_centropoblado as cp', 'cp.id', '=', 'ie.CentroPoblado_id')
-                ->join('par_ubigeo as d', 'd.id', '=', 'cp.Ubigeo_id')
-                ->join('par_ubigeo as p', 'p.id', '=', 'd.dependencia')
-                ->join('edu_area as a', 'a.id', '=', 'ie.Area_id')
-                ->join('edu_ugel as u', 'u.id', '=', 'ie.Ugel_id')
-                ->where('s.estado_servicio', 1)
-                ->select(
-                    'ie.codLocal as local',
-                    'u.nombre as ugel',
-                    'a.nombre as area',
-                    'p.nombre as provincia',
-                    'd.nombre as distrito',
-                    DB::raw('COUNT(*) as servicios')
-                )
-                ->tap(function ($query) use ($rq) {
-                    if ($rq->ugel > 0) {
-                        $query->where('u.id', $rq->ugel);
-                    }
-                    if ($rq->provincia > 0) {
-                        $query->where('p.id', $rq->provincia);
-                    }
-                    if ($rq->distrito > 0) {
-                        $query->where('d.id', $rq->distrito);
-                    }
-                    if ($rq->estado > 0) {
-                        $query->where('s.estado', $rq->estado);
-                    }
-                })
-                ->groupBy(
-                    'ie.codLocal',
-                    'ie.CentroPoblado_id',
-                    'ie.Area_id',
-                    'ie.Ugel_id',
-                    'u.nombre',
-                    'a.nombre',
-                    'p.nombre',
-                    'd.nombre'
-                )
-                ->get();
-        });
-
-        // Segunda consulta para obtener los datos detallados de SFL
-        $querySFL = Cache::remember($cacheKeySFL, now()->addMinutes(5), function () use ($rq) {
-            return DB::table('edu_sfl as s')
-                ->join('edu_institucioneducativa as ie', 'ie.id', '=', 's.institucioneducativa_id')
-                ->where('s.estado_servicio', 1)
-                ->select(
-                    'ie.id',
-                    'ie.codLocal as local',
-                    'ie.codModular as modular',
-                    's.estado',
-                    's.tipo',
-                    's.fecha_registro',
-                    's.fecha_inscripcion'
-                )
-                ->orderBy('ie.id')
-                ->get();
-        });
-
-        // Procesamos los resultados para formar el arreglo final para DataTables
-        $data = [];
-        foreach ($queryResult as $key => $value) {
-            $local = $value->local;
-            $sflLOCAL = $querySFL->where('local', $local);
-
-            $saneado      = 0;
-            $nosaneado    = 0;
-            $noregistrado = 0;
-            $enproceso    = 0;
-            $blanco       = 0;
-            $pos          = 0;
-            $var0         = false;
-
-            foreach ($sflLOCAL as $item) {
-                if ($item->estado == 1) {
-                    $saneado++;
-                }
-                if ($item->estado == 2) {
-                    $nosaneado++;
-                }
-                if ($item->estado == 3) {
-                    $noregistrado++;
-                }
-                if ($item->estado == 4) {
-                    $enproceso++;
-                }
-                if ($item->estado === null) {
-                    $blanco++;
-                }
-                if ($pos == 0) {
-                    $var0 = clone $item;
-                }
-                $pos++;
-            }
-
-            // Determinar el estado general según la cantidad de registros
-            $estado = '';
-            if ($sflLOCAL->count() == $saneado || $sflLOCAL->count() == $saneado + $blanco) {
-                $estado = 'SANEADO';
-            } else if ($sflLOCAL->count() == $nosaneado + $blanco) {
-                $estado = 'NO SANEADO';
-            } else if ($sflLOCAL->count() == $noregistrado + $blanco) {
-                $estado = 'NO REGISTRADO';
-            } else if ($sflLOCAL->count() == $enproceso + $blanco) {
-                $estado = 'EN PROCESO';
-            } else if ($sflLOCAL->count() == 1) {
-                switch ($var0->estado) {
-                    case 2:
-                        $estado = 'NO SANEADO';
-                        break;
-                    case 3:
-                        $estado = 'NO REGISTRADO';
-                        break;
-                    case 4:
-                        $estado = 'EN PROCESO';
-                        break;
-                    case null:
-                        $estado = 'NO REGISTRADO';
-                        break;
-                    default:
-                        break;
-                }
-            } else {
-                $estado = 'NO SANEADO';
-            }
-
-            // Botones de acción
-            $btn  = '&nbsp;<a href="#" class="btn btn-info btn-xs" onclick="open_modular(`' . $value->local . '`)" title="MODIFICAR"><i class="fa fa-pen"></i></a>';
-            $btn .= '&nbsp;<a href="#" class="btn btn-orange-0 btn-xs" onclick="open_ver(`' . $value->local . '`)" title="VER"><i class="fas fa-eye"></i></a>';
-
-            // Definir la etiqueta del estado con estilo
-            switch ($estado) {
-                case 'SANEADO':
-                    $estadox = '<span class="badge badge-success">' . $estado . '</span>';
-                    break;
-                case 'NO SANEADO':
-                    $estadox = '<span class="badge badge-danger">' . $estado . '</span>';
-                    break;
-                case 'NO REGISTRADO':
-                    $estadox = '<span class="badge badge-secondary">' . $estado . '</span>';
-                    break;
-                case 'EN PROCESO':
-                    $estadox = '<span class="badge badge-warning">' . $estado . '</span>';
-                    break;
-                default:
-                    $estadox = '';
-                    break;
-            }
-
-            // Construir la fila de datos (aplicando filtro de estado si se ha enviado)
-            if ($rq->estado > 0) {
-                if ($est[$rq->estado] == $estado) {
-                    $data[] = [
-                        ($key + 1),
-                        str_pad($value->local, 6, '0', STR_PAD_LEFT),
-                        $sflLOCAL->count(),
-                        $value->ugel,
-                        $value->provincia,
-                        $value->distrito,
-                        $value->area,
-                        ($sflLOCAL->first() && $sflLOCAL->first()->fecha_inscripcion ? date('d/m/Y', strtotime($sflLOCAL->first()->fecha_inscripcion)) : ''),
-                        ($sflLOCAL->first() && $sflLOCAL->first()->tipo > 0 ? $tip[$sflLOCAL->first()->tipo] : ''),
-                        $estadox,
-                        "<div class='btn-group'>" . $btn . "</div>",
-                    ];
-                }
-            } else {
-                $data[] = [
-                    ($key + 1),
-                    str_pad($value->local, 6, '0', STR_PAD_LEFT),
-                    $sflLOCAL->count(),
-                    $value->ugel,
-                    $value->provincia,
-                    $value->distrito,
-                    $value->area,
-                    ($sflLOCAL->first() && $sflLOCAL->first()->fecha_inscripcion ? date('d/m/Y', strtotime($sflLOCAL->first()->fecha_inscripcion)) : ''),
-                    ($sflLOCAL->first() && $sflLOCAL->first()->tipo > 0 ? $tip[$sflLOCAL->first()->tipo] : ''),
-                    $estadox,
-                    "<div class='btn-group'>" . $btn . "</div>",
-                ];
-            }
-        }
-
-        $result = [
-            "draw"            => $draw,
-            "recordsTotal"    => $start,
-            "recordsFiltered" => $length,
-            "data"            => $data,
-            // Opcional: para depuración, puedes comentar estos dos:
-            // "xxx1"            => $queryResult,
-            // "xxx2"            => $querySFL,
-        ];
-
-        return response()->json($result);
-    }
-
-
-    public function ListarDTxx(Request $rq)
-    {
-        $draw = intval($rq->draw);
-        $start = intval($rq->start);
-        $length = intval($rq->length);
-        $est = ['', 'SANEADO', 'NO SANEADO', 'NO REGISTRADO', 'EN PROCESO'];
-        $tip = ['', 'AFECTACION EN USO', 'TITULARIDAD', 'APORTE REGLAMENTARIO', 'OTROS'];
-        //iiee.EstadoInsEdu_id = 3 and  and iiee.estado = 'AC'
-        // $query = DB::table(DB::raw("(
-        //     select iiee.id, iiee.CentroPoblado_id, iiee.codLocal, iiee.Area_id, iiee.Ugel_id
-        //     from edu_institucionEducativa as iiee
-        //     inner join edu_padronweb pw on pw.institucioneducativa_id=iiee.id
-        //     where iiee.TipoGestion_id in(4, 5, 7, 8) and iiee.NivelModalidad_id not in(14, 15) and pw.estadoinsedu_id = 3
-        // ) as iiee"))
-        //     ->join('edu_centropoblado as cp', 'cp.id', '=', 'iiee.CentroPoblado_id')
-        //     ->join('edu_area as aa', 'aa.id', '=', 'iiee.Area_id')
-        //     ->join('edu_ugel as uu', 'uu.id', '=', 'iiee.Ugel_id')
-        //     ->join('par_ubigeo as dt', 'dt.id', '=', 'cp.Ubigeo_id')
-        //     ->join('par_ubigeo as pv', 'pv.id', '=', 'dt.dependencia')
-        //     ->join('edu_sfl as sfl', 'sfl.institucioneducativa_id', '=', 'iiee.id');
-        // $query = $query->select(
-        //     'iiee.codLocal as local',
-        //     DB::raw('max(iiee.id) as id'),
-        //     DB::raw('max(uu.nombre) as ugel'),
-        //     DB::raw('max(pv.nombre) as provincia'),
-        //     DB::raw('max(dt.nombre) as distrito'),
-        //     DB::raw('max(aa.nombre) as area'),
-        // );
-
-        // $query = SFL::from('edu_sfl as s')->where('estado_servicio', '1')
-        //     ->join('edu_institucionEducativa as iiee', 'iiee.id', '=', 's.institucioneducativa_id')
-        //     ->join('edu_centropoblado as cp', 'cp.id', '=', 'iiee.CentroPoblado_id')
-        //     ->join('edu_area as aa', 'aa.id', '=', 'iiee.Area_id')
-        //     ->join('edu_ugel as uu', 'uu.id', '=', 'iiee.Ugel_id')
-        //     ->join('par_ubigeo as dt', 'dt.id', '=', 'cp.Ubigeo_id')
-        //     ->join('par_ubigeo as pv', 'pv.id', '=', 'dt.dependencia');
-        // $query->select(
-        //     'iiee.codLocal as local',
-        //     DB::raw('max(iiee.id) as id'),
-        //     DB::raw('max(uu.nombre) as ugel'),
-        //     DB::raw('max(pv.nombre) as provincia'),
-        //     DB::raw('max(dt.nombre) as distrito'),
-        //     DB::raw('max(aa.nombre) as area'),
-        // );
-
-        $filtro = function ($query) use ($rq) {
-            if ($rq->ugel > 0) $query->where('u.id', $rq->ugel);
-            if ($rq->provincia > 0) $query->where('p.id', $rq->provincia);
-            if ($rq->distrito > 0) $query->where('d.id', $rq->distrito);
-            if ($rq->estado > 0) $query->where('s.estado', $rq->estado);
-        };
-        $query = DB::table('edu_sfl as s')
-            ->join('edu_institucioneducativa as ie', 'ie.id', '=', 's.institucioneducativa_id')
-            ->join('edu_centropoblado as cp', 'cp.id', '=', 'ie.CentroPoblado_id')
-            ->join('par_ubigeo as d', 'd.id', '=', 'cp.Ubigeo_id')
-            ->join('par_ubigeo as p', 'p.id', '=', 'd.dependencia')
-            ->join('edu_area as a', 'a.id', '=', 'ie.Area_id')
-            ->join('edu_ugel as u', 'u.id', '=', 'ie.Ugel_id')
-            ->where('s.estado_servicio', 1)
-            ->select(
-                'ie.codLocal as local',
-                'u.nombre as ugel',
-                'a.nombre as area',
-                'p.nombre as provincia',
-                'd.nombre as distrito',
-                DB::raw('COUNT(*) as servicios')
-            )
-            ->tap($filtro)
-            ->groupBy(
-                'ie.codLocal',
-                'ie.CentroPoblado_id',
-                'ie.Area_id',
-                'ie.Ugel_id',
-                'u.nombre',
-                'a.nombre',
-                'p.nombre',
-                'd.nombre'
-            )
-            ->get();
-
-
-        // if ($rq->ugel > 0) $query = $query->where('uu.id', $rq->ugel);
-        // if ($rq->provincia > 0) $query = $query->where('dt.dependencia', $rq->provincia);
-        // if ($rq->distrito > 0) $query = $query->where('dt.id', $rq->distrito);
-        // if ($rq->estado > 0) $query = $query->where('s.estado', $rq->estado);
-
-        // $query = $query->groupBy('local')->get();
-
-        // $querySFL = DB::table(DB::raw('(select id, codLocal as local, codModular as modular from edu_institucioneducativa where EstadoInsEdu_id=3)as ie'))
-        //     ->join('edu_sfl as sfl', 'sfl.institucioneducativa_id', '=', 'ie.id', 'left')->where('ie.local', '!=', '')
-        //     ->select('ie.*', 'sfl.estado', 'sfl.tipo', 'sfl.fecha_registro', 'sfl.fecha_inscripcion')
-        //     ->orderBy('ie.id')->get();
-
-        $querySFL = SFL::from('edu_sfl as s')->where('estado_servicio', '1')
-            ->join('edu_institucioneducativa as ie', 'ie.id', '=', 's.institucioneducativa_id')
-            ->select('ie.id', 'ie.codLocal as local', 'ie.codModular as modular', 's.estado', 's.tipo', 's.fecha_registro', 's.fecha_inscripcion')
-            ->orderBy('ie.id')->get();
-
-        $data = [];
-        foreach ($query as $key => $value) {
-            $local = $value->local;
-            $sflLOCAL = $querySFL->where('local', $local);
-
-            $saneado = 0;
-            $nosaneado = 0;
-            $noregistrado = 0;
-            $enproceso = 0;
-            $blanco = 0;
-            $pos = 0;
-            $var0 = FALSE;
-            foreach ($sflLOCAL as $item) {
-                if ($item->estado == 1) {
-                    $saneado++;
-                }
-                if ($item->estado == 2) {
-                    $nosaneado++;
-                }
-                if ($item->estado == 3) {
-                    $noregistrado++;
-                }
-                if ($item->estado == 4) {
-                    $enproceso++;
-                }
-                if ($item->estado == null) {
-                    $blanco++;
-                }
-                if ($pos == 0) {
-                    $var0 = clone $item;
-                }
-                $pos++;
-            }
-            //NIURCA 941696330
-            $estado = '';
-            if ($sflLOCAL->count() == $saneado) {
-                $estado = 'SANEADO';
-            } else if ($sflLOCAL->count() == $saneado + $blanco) {
-                $estado = 'SANEADO';
-            } else   if ($sflLOCAL->count() == $nosaneado + $blanco) {
-                $estado = 'NO SANEADO';
-            } else  if ($sflLOCAL->count() == $noregistrado + $blanco) {
-                $estado = 'NO REGISTRADO';
-            } else  if ($sflLOCAL->count() == $enproceso + $blanco) {
-                $estado = 'EN PROCESO';
-            } else if ($sflLOCAL->count() == 1) {
-                switch ($var0->estado) {
-                    case 2:
-                        $estado = 'NO SANEADO';
-                        break;
-                    case 3:
-                        $estado = 'NO REGISTRADO';
-                        break;
-                    case 4:
-                        $estado = 'EN PROCESO';
-                        break;
-                    case null:
-                        $estado = 'NO REGISTRADO';
-                        break;
-                    default:
-                        # code...
-                        break;
-                }
-            } else {
-                $estado = 'NO SANEADO';
-            }
-            $btn = '';
-            $btn .= '&nbsp;<a href="#" class="btn btn-info btn-xs" onclick="open_modular(`' . $value->local . '`)"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
-            $btn .= '&nbsp;<a href="#" class="btn btn-orange-0 btn-xs" onclick="open_ver(`' . $value->local . '`)"  title="VER"> <i class="fas fa-eye"></i> </a>';
-
-            $sfl = null;
-            if ($sflLOCAL->count() > 0)
-                $sfl = $var0;
-
-            switch ($estado) {
-                case 'SANEADO':
-                    $estadox = '<span class="badge badge-success">' . $estado . '</span>';
-                    break;
-                case 'NO SANEADO':
-                    $estadox = '<span class="badge badge-danger">' . $estado . '</span>';
-                    break;
-                case 'NO REGISTRADO':
-                    $estadox = '<span class="badge badge-secondary">' . $estado . '</span>';
-                    break;
-                case 'EN PROCESO':
-                    $estadox = '<span class="badge badge-warning">' . $estado . '</span>';
-                    break;
-                default:
-                    $estadox = '';
-                    break;
-            }
-            if ($rq->estado > 0) {
-                if ($est[$rq->estado] == $estado) {
-                    $data[] = array(
-                        '<div style="text-align:center">' . ($key + 1) . '</div>',
-                        '<div style="text-align:center">' . $value->local . '</div>',
-                        '<div style="text-align:center">' . $sflLOCAL->count() . '</div>',
-                        $value->ugel,
-                        $value->provincia,
-                        $value->distrito,
-                        '<div style="text-align:center">' . $value->area . '</div>',
-                        '<div style="text-align:center">' . ($sfl->fecha_inscripcion != null ? date('d/m/Y', strtotime($sfl->fecha_inscripcion)) : '') . '</div>',
-                        '<div style="text-align:center">' . ($sfl->tipo > 0 ? ($tip[$sfl->tipo == NULL ? 0 : $sfl->tipo]) : '') . '</div>',
-                        '<div style="text-align:center">' . $estadox . '</div>',
-                        "<center><div class='btn-group'>" . $btn . "</div></center>",
-                    );
-                }
-            } else {
-                $data[] = array(
-                    '<div style="text-align:center">' . ($key + 1) . '</div>',
-                    '<div style="text-align:center">' . $value->local . '</div>',
-                    '<div style="text-align:center">' . $sflLOCAL->count() . '</div>',
-                    $value->ugel,
-                    $value->provincia,
-                    $value->distrito,
-                    '<div style="text-align:center">' . $value->area . '</div>',
-                    '<div style="text-align:center">' . ($sfl->fecha_inscripcion != null ? date('d/m/Y', strtotime($sfl->fecha_inscripcion)) : '') . '</div>',
-                    '<div style="text-align:center">' . ($sfl->tipo > 0 ? ($tip[$sfl->tipo == NULL ? 0 : $sfl->tipo]) : '') . '</div>',
-                    '<div style="text-align:center">' . $estadox . '</div>',
-                    "<center><div class='btn-group'>" . $btn . "</div></center>",
-                );
-            }
-        }
-        $result = array(
-            "draw" => $draw,
-            "recordsTotal" => $start,
-            "recordsFiltered" => $length,
-            "data" => $data,
-            "xxx1" => $query,
-            "xxx2" => $querySFL,
-        );
-        return response()->json($result);
-    }
-
-    public function ListarDT2xx(Request $rq)
-    {
-        $draw = intval($rq->draw);
-        $start = intval($rq->start);
-        $length = intval($rq->length);
-        // $est = ['', 'SANEADO', 'NO SANEADO', 'NO REGISTRADO', 'EN PROCESO'];
-        $tip = ['', 'AFECTACION EN USO', 'TITULARIDAD', 'APORTE REGLAMENTARIO', 'OTROS'];
-
-        $query = DB::table(DB::raw("(
-            select iiee.id, iiee.CentroPoblado_id, iiee.codLocal, iiee.Area_id, iiee.Ugel_id
-	        from edu_institucionEducativa as iiee
-	        where iiee.EstadoInsEdu_id = 3 and iiee.TipoGestion_id in (4, 5, 7, 8) and iiee.estado = 'AC' and iiee.NivelModalidad_id not in (14, 15)
-        ) as iiee"))
-            ->join('edu_centropoblado as cp', 'cp.id', '=', 'iiee.CentroPoblado_id')
-            ->join('edu_area as aa', 'aa.id', '=', 'iiee.Area_id')
-            ->join('edu_ugel as uu', 'uu.id', '=', 'iiee.Ugel_id')
-            ->join('par_ubigeo as dt', 'dt.id', '=', 'cp.Ubigeo_id')
-            ->join('par_ubigeo as pv', 'pv.id', '=', 'dt.dependencia')
-            ->join('edu_sfl as sfl', 'sfl.institucioneducativa_id', '=', 'iiee.id');
-        $query = $query->select(
-            'iiee.codLocal as local',
-            DB::raw('max(iiee.id) as id'),
-            DB::raw('max(uu.nombre) as ugel'),
-            DB::raw('max(pv.nombre) as provincia'),
-            DB::raw('max(dt.nombre) as distrito'),
-            DB::raw('max(aa.nombre) as area'),
-        );
-
-        if ($rq->ugel > 0) $query = $query->where('uu.id', $rq->ugel);
-        if ($rq->provincia > 0) $query = $query->where('dt.dependencia', $rq->provincia);
-        if ($rq->distrito > 0) $query = $query->where('dt.id', $rq->distrito);
-        if ($rq->estado > 0) $query = $query->where('sfl.estado', $rq->estado);
-
-        $query = $query->groupBy('local')->get();
-
-        $querySFL = DB::table(DB::raw('(select id, codLocal as local, codModular as modular from edu_institucioneducativa)as ie'))
-            ->join('edu_sfl as sfl', 'sfl.institucioneducativa_id', '=', 'ie.id', 'left')->where('ie.local', '!=', '')
-            ->select('ie.*', 'sfl.estado', 'sfl.tipo', 'sfl.fecha_registro', 'sfl.fecha_inscripcion')
-            ->orderBy('ie.id')->get();
-
-        $data = [];
-        foreach ($query as $key => $value) {
-            $local = $value->local;
-            $sflLOCAL = $querySFL->where('local', $local);
-
-            $saneado = 0;
-            $nosaneado = 0;
-            $noregistrado = 0;
-            $enproceso = 0;
-            $pos = 0;
-            $var0 = FALSE;
-            foreach ($sflLOCAL as $item) {
-                if ($item->estado == 1) {
-                    $saneado++;
-                }
-                if ($item->estado == 2) {
-                    $nosaneado++;
-                }
-                if ($item->estado == 3) {
-                    $noregistrado++;
-                }
-                if ($item->estado == 4) {
-                    $enproceso++;
-                }
-                if ($pos == 0) {
-                    $var0 = clone $item;
-                }
-                $pos++;
-            }
-            //NIURCA 941696330
-            $estado = '';
-            if ($sflLOCAL->count() == $saneado) {
-                $estado = 'SANEADO';
-            } else  if ($sflLOCAL->count() == $nosaneado) {
-                $estado = 'NO SANEADO';
-            } else  if ($sflLOCAL->count() == $noregistrado) {
-                $estado = 'NO REGISTRADO';
-            } else  if ($sflLOCAL->count() == $enproceso) {
-                $estado = 'EN PROCESO';
-            } else if ($sflLOCAL->count() == 1) {
-                switch ($var0->estado) {
-                    case 2:
-                        $estado = 'NO SANEADO';
-                        break;
-                    case 3:
-                        $estado = 'NO REGISTRADO';
-                        break;
-                    case 4:
-                        $estado = 'EN PROCESO';
-                        break;
-                    default:
-                        # code...
-                        break;
-                }
-            } else {
-                $estado = 'NO SANEADO';
-            }
-            $btn = '';
-            $btn .= '&nbsp;<a href="#" class="btn btn-info btn-xs" onclick="open_modular(`' . $value->local . '`)"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
-            $btn .= '&nbsp;<a href="#" class="btn btn-orange-0 btn-xs" onclick="open_ver(`' . $value->local . '`)"  title="VER"> <i class="fas fa-eye"></i> </a>';
-
-            $sfl = null;
-            if ($sflLOCAL->count() > 0)
-                $sfl = $var0;
-
-            switch ($estado) {
-                case 'SANEADO':
-                    $estadox = '<span class="badge badge-success">' . $estado . '</span>';
-                    break;
-                case 'NO SANEADO':
-                    $estadox = '<span class="badge badge-danger">' . $estado . '</span>';
-                    break;
-                case 'NO REGISTRADO':
-                    $estadox = '<span class="badge badge-secondary">' . $estado . '</span>';
-                    break;
-                case 'EN PROCESO':
-                    $estadox = '<span class="badge badge-warning">' . $estado . '</span>';
-                    break;
-                default:
-                    $estadox = '';
-                    break;
-            }
-
-            $data[] = array(
-                '<div style="text-align:center">' . ($key + 1) . '</div>',
-                '<div style="text-align:center">' . $value->local . '</div>',
-                '<div style="text-align:center">' . $sflLOCAL->count() . '</div>',
-                $value->ugel,
-                $value->provincia,
-                $value->distrito,
-                '<div style="text-align:center">' . $value->area . '</div>',
-                '<div style="text-align:center">' . ($sfl->fecha_inscripcion != null ? date('d/m/Y', strtotime($sfl->fecha_inscripcion)) : '') . '</div>',
-                '<div style="text-align:center">' . ($sfl->tipo > 0 ? ($tip[$sfl->tipo == NULL ? 0 : $sfl->tipo]) : '') . '</div>',
-                '<div style="text-align:center">' . $estadox . '</div>',
-                "<center><div class='btn-group'>" . $btn . "</div></center>",
-            );
-        }
-        $result = array(
-            "draw" => $draw,
-            "recordsTotal" => $start,
-            "recordsFiltered" => $length,
-            "data" => $data,
-            // "xxx" => $sflLOCAL->count(),
-        );
-        return response()->json($result);
-    }
-
-    public function ListarDTxxxx(Request $rq)
-    {
-        $draw = intval($rq->draw);
-        $start = intval($rq->start);
-        $length = intval($rq->length);
-        $est = ['', 'SANEADO', 'NO SANEADO', 'NO REGISTRADO', 'EN PROCESO'];
-        $tip = ['', 'AFECTACION EN USO', 'TITULARIDAD Y APORTE REGLAMENTARIO', 'OTROS'];
-
-        $query = SFL::distinct()->select('ie.codLocal as local')
-            ->join('edu_institucioneducativa as ie', 'ie.id', '=', 'edu_sfl.institucioneducativa_id')
-            ->join('edu_centropoblado as cp', 'cp.id', '=', 'ie.CentroPoblado_id')
-            ->join('edu_ugel as uu', 'uu.id', '=', 'ie.Ugel_id')
-            ->join('par_ubigeo as dt', 'dt.id', '=', 'cp.Ubigeo_id');
-        if ($rq->ugel > 0) $query = $query->where('uu.id', $rq->ugel);
-        if ($rq->provincia > 0) $query = $query->where('dt.dependencia', $rq->provincia);
-        if ($rq->distrito > 0) $query = $query->where('dt.id', $rq->distrito);
-        if ($rq->estado > 0) $query = $query->where('edu_sfl.estado', $rq->estado);
-        $query = $query->get();
-
-        $data = [];
-        foreach ($query as $key => $value) {
-            $sfl = SFL::select(
-                'edu_sfl.id',
-                'edu_sfl.estado',
-                'edu_sfl.tipo',
-                'edu_sfl.partida_electronica',
-                'edu_sfl.zona_registral',
-                'edu_sfl.fecha_registro',
-                'uu.nombre as ugel',
-                'pv.nombre as provincia',
-                'dt.nombre as distrito',
-                'aa.nombre as area',
-                'ie.codLocal as local',
-            )
-                ->join('edu_institucioneducativa as ie', 'ie.id', '=', 'edu_sfl.institucioneducativa_id')
-                ->join('edu_area as aa', 'aa.id', '=', 'ie.Area_id')
-                ->join('edu_ugel as uu', 'uu.id', '=', 'ie.Ugel_id')
-                ->join('edu_centropoblado as cp', 'cp.id', '=', 'ie.CentroPoblado_id')
-                ->join('par_ubigeo as dt', 'dt.id', '=', 'cp.Ubigeo_id')
-                ->join('par_ubigeo as pv', 'pv.id', '=', 'dt.dependencia')
-                ->where('ie.codLocal', $value->local)
-                ->first();
-
-            $estados_sfl = SFL::select('edu_sfl.estado')->where('ie.codLocal', $value->local)
-                ->join('edu_institucioneducativa as ie', 'ie.id', '=', 'edu_sfl.institucioneducativa_id')
-                ->get();
-
-            $saneado = 0;
-            foreach ($estados_sfl as $item) {
-                if ($item->estado == 1) {
-                    $saneado++;
-                }
-            }
-
-            $estado = '';
-            if ($estados_sfl->count() == $saneado) {
-                $estado = 'SANEADO';
-            } else if ($saneado == 0) {
-                $noregistrado = 0;
-                foreach ($estados_sfl as $item) {
-                    if ($item->estado == 3) {
-                        $noregistrado++;
-                    }
-                }
-                // if ($estados_sfl->count() == $noregistrado) {
-                //     $estado = 'NO SANEADO';
-                // } else {
-                $estado = 'NO SANEADO';
-                // }
-            } else if ($estados_sfl->count() != $saneado) {
-                // $estado = 'EN PROCESO';
-                $estado = 'NO SANEADO';
-            }
-            $btn = '';
-            $btn .= '&nbsp;<a href="#" class="btn btn-info btn-xs" onclick="open_modular(`' . $value->local . '`)"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
-            $btn .= '&nbsp;<a href="#" class="btn btn-orange-0 btn-xs" onclick="open_ver(' . $value->local . ')"  title="VER"> <i class="fas fa-eye"></i> </a>';
-
-            $data[] = array(
-                '<div style="text-align:center">' . ($key + 1) . '</div>',
-                '<div style="text-align:center">' . $value->local . '</div>',
-                '<div style="text-align:center">' . $estados_sfl->count() . '</div>',
-                $sfl->ugel,
-                $sfl->provincia,
-                $sfl->distrito,
-                '<div style="text-align:center">' . $sfl->area . '</div>',
-                '<div style="text-align:center">' . $estado . '</div>',
-                '<div style="text-align:center">' . $tip[$sfl->tipo == NULL ? 0 : $sfl->tipo] . '</div>',
-                '<div style="text-align:center">' . date('d/m/Y', strtotime($sfl->fecha_registro)) . '</div>',
-                "<center><div class='btn-group'>" . $btn . "</div></center>",
-            );
-        }
-        $result = array(
-            "draw" => $draw,
-            "recordsTotal" => $start,
-            "recordsFiltered" => $length,
-            "data" => $data,
-        );
         return response()->json($result);
     }
 
@@ -924,7 +162,11 @@ class SFLController extends Controller
         $data = [];
         foreach ($query as $key => $value) {
             $btn = '';
-            $btn .= '<a href="#" class="btn btn-purple btn-xs" onclick="verpdf(' . $value->id . ')"  title="VER DOCUMENTO"> <i class="far fa-file-pdf"></i> </a>';
+            if ($value->documento != '') {
+                $btn .= '<a href="#" class="btn btn-purple btn-xs" onclick="verpdf(' . $value->id . ')"  title="VER DOCUMENTO"> <i class="far fa-file-pdf"></i> </a>';
+            } else {
+                $btn .= '<a href="#" class="btn btn-danger btn-xs"  title="SIN DOCUMENTO"> <i class="far fa-file-pdf"></i> </a>';
+            }
 
             $data[] = array(
                 '<div style="text-align:center">' . ($key + 1) . '</div>',
@@ -1293,13 +535,16 @@ class SFLController extends Controller
 
     public function Download(Request $rq)
     {
-
         $tipo = $rq->get('tipo', 'servicios');
         $ugel = $rq->get('ugel', 0);
         $provincia = $rq->get('provincia', 0);
         $distrito = $rq->get('distrito', 0);
         $estado = $rq->get('estado', 0);
-        $name = 'SANEAMIENTO FÍSICO LEGAL ' . date('Y-m-d') . '.xlsx';
+        if($tipo == 'locales'){
+            $name = 'SANEAMIENTO FÍSICO LEGAL LOCALES ' . date('Y-m-d') . '.xlsx';
+        }else{
+            $name = 'SANEAMIENTO FÍSICO LEGAL SERVICIOS ' . date('Y-m-d') . '.xlsx';
+        }
         return Excel::download(new SFLExport($tipo, $ugel, $provincia, $distrito, $estado), $name);
     }
 
@@ -1661,38 +906,65 @@ class SFLController extends Controller
         $tipos = ['AFECTACION EN USO' => 1, 'TITULARIDAD' => 2, 'APORTE REGLAMENTARIO' => 3, 'OTROS' => 4];
         $anotacion = ['PREVENTIVA' => 1, 'DEFINITIVA' => 2];
 
-        $query = Excel::toArray(new tablaXImport, $rq->file('archivo'));
-        $notmodular = [];
-        foreach ($query[0] as $key => $value) {
-            $modular = str_pad($value['codigo_modular'], 7, '0', STR_PAD_LEFT);
-            $iiee = InstitucionEducativa::where('codModular', $modular)->first();
-            if ($iiee) {
-                $sfl = SFL::where('institucioneducativa_id', $iiee->id)->first();
-                if ($sfl) {
-                    $sfl->estado = $estados[$value['estado_sfl']] ?? 0;
-                    $sfl->tipo = $tipos[$value['tipo_sfl']] ?? 0;
-                    $sfl->partida_electronica = $value['partida_electronica'];
-                    $sfl->anotacion = $anotacion[$value['anotacion']] ?? 0;
-                    $sfl->fecha_registro = $this->fechaExcel($value['fecha_registro']);
-                    $sfl->fecha_inscripcion = $this->fechaExcel($value['fecha_inscripcion']);
-                    $sfl->save();
-                } else {
-                    SFL::create([
-                        'institucioneducativa_id' => $iiee->id,
-                        'estado' => $estados[$value['estado_sfl']] ?? 0,
-                        'tipo' => $tipos[$value['tipo_sfl']] ?? 0,
-                        'partida_electronica' => $value['partida_electronica'],
-                        'zona_registral' => 'ZONA N° VI - OFICINA REGISTRAL DE PUCALLPA',
-                        'anotacion' => $anotacion[$value['anotacion']] ?? 0,
-                        'fecha_registro' => $this->fechaExcel($value['fecha_registro']),
-                        'fecha_inscripcion' => $this->fechaExcel($value['fecha_inscripcion']),
-                    ]);
+        try {
+            $query = Excel::toArray(new tablaXImport, $rq->file('archivo'));
+            $data = $query[0];
+            $notmodular = [];
+
+            // 1. Obtener todos los códigos modulares del Excel
+            $codigosModulares = collect($data)->pluck('codigo_modular')->map(function ($codigo) {
+                return str_pad($codigo, 7, '0', STR_PAD_LEFT);
+            })->unique()->values();
+
+            // 2. Cargar Instituciones Educativas en memoria
+            $iieeMap = InstitucionEducativa::whereIn('codModular', $codigosModulares)
+                ->pluck('id', 'codModular');
+
+            // 3. Cargar SFL existentes en memoria
+            $sflMap = SFL::whereIn('institucioneducativa_id', $iieeMap->values())
+                ->get()
+                ->keyBy('institucioneducativa_id');
+
+            DB::transaction(function () use ($data, $iieeMap, $sflMap, $estados, $tipos, $anotacion, &$notmodular) {
+                foreach ($data as $value) {
+                    $modular = str_pad($value['codigo_modular'], 7, '0', STR_PAD_LEFT);
+                    $iieeId = $iieeMap->get($modular);
+
+                    if ($iieeId) {
+                        $sfl = $sflMap->get($iieeId);
+
+                        if ($sfl) {
+                            // Actualizar existente
+                            $sfl->estado = $estados[$value['estado_sfl']] ?? 0;
+                            $sfl->tipo = $tipos[$value['tipo_sfl']] ?? 0;
+                            $sfl->partida_electronica = $value['partida_electronica'];
+                            $sfl->anotacion = $anotacion[$value['anotacion']] ?? 0;
+                            $sfl->fecha_registro = $this->fechaExcel($value['fecha_registro']);
+                            $sfl->fecha_inscripcion = $this->fechaExcel($value['fecha_inscripcion']);
+                            $sfl->save();
+                        } else {
+                            // Crear nuevo
+                            SFL::create([
+                                'institucioneducativa_id' => $iieeId,
+                                'estado' => $estados[$value['estado_sfl']] ?? 0,
+                                'tipo' => $tipos[$value['tipo_sfl']] ?? 0,
+                                'partida_electronica' => $value['partida_electronica'],
+                                'zona_registral' => 'ZONA N° VI - OFICINA REGISTRAL DE PUCALLPA',
+                                'anotacion' => $anotacion[$value['anotacion']] ?? 0,
+                                'fecha_registro' => $this->fechaExcel($value['fecha_registro']),
+                                'fecha_inscripcion' => $this->fechaExcel($value['fecha_inscripcion']),
+                            ]);
+                        }
+                    } else {
+                        $notmodular[] = $modular;
+                    }
                 }
-            } else {
-                $notmodular[] = $modular;
-            }
+            });
+
+            return response()->json(['status' => true, 'modular' => $notmodular]);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => 'Error al procesar el archivo: ' . $e->getMessage()]);
         }
-        return response()->json(['status' => TRUE, 'modular' => $notmodular]);
     }
 
     // public function fechaExcel($ff)
@@ -2103,16 +1375,16 @@ class SFLController extends Controller
     {
         switch ($div) {
             case 'tabla1':
-                $name='LOCALES_ESCOLARES_PÚBLICOS_POR_UGEL_SEGÚN_ESTADOS_DEL_SFL.xlsx';
+                $name = 'LOCALES_ESCOLARES_PÚBLICOS_POR_UGEL_SEGÚN_ESTADOS_DEL_SFL.xlsx';
                 break;
             case 'tabla2':
-                $name='INSTITUCIONES_EDUCATIVAS_Y_LOCALES_EDUCATIVOS_PÚBLICOS_POR_DISTRITOS_SEGÚN_ESTADOS_DEL_SFL.xlsx';
+                $name = 'INSTITUCIONES_EDUCATIVAS_Y_LOCALES_EDUCATIVOS_PÚBLICOS_POR_DISTRITOS_SEGÚN_ESTADOS_DEL_SFL.xlsx';
                 break;
             case 'tabla3':
-                $name='INSTITUCIONES_EDUCATIVAS_PÚBLICAS_SEGÚN_ESTADOS_DEL_SFL.xlsx';
+                $name = 'INSTITUCIONES_EDUCATIVAS_PÚBLICAS_SEGÚN_ESTADOS_DEL_SFL.xlsx';
                 break;
             default:
-                $name='REPORTE_SFL.xlsx';
+                $name = 'REPORTE_SFL.xlsx';
                 break;
         }
         return Excel::download(new SFLReportesExport($div, $ugel, $modalidad, $nivel), $name);

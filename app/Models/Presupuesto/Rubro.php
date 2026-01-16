@@ -5,20 +5,26 @@ namespace App\Models\Presupuesto;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class GenericaGasto extends Model
+class Rubro extends Model
 {
     use HasFactory;
-    protected $table = 'pres_generica_gastos';
+
+    protected $table = 'pres_rubro';
     public $timestamps = false;
 
     protected $fillable = [
         'codigo',
-        'tipotransaccion_id',
+        'fuentefinanciamiento_id',
         'nombre',
     ];
 
+    public function fuenteFinanciamiento()
+    {
+        return $this->belongsTo(FuenteFinanciamiento::class, 'fuentefinanciamiento_id');
+    }
+
     public function getNombreAttribute($value)
     {
-        return '2.'.$this->codigo . ' ' . $value;
+        return $this->codigo . ' ' . $value;
     }
 }

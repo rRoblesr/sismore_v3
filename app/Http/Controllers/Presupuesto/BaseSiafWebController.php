@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Presupuesto;
 
-use App\Exports\BaseGastosExport;
+use App\Exports\Presupuesto\CatPresReportesExport;
+use App\Exports\Presupuesto\FuenFinReportesExport;
+use App\Exports\Presupuesto\GenericaReportesExport;
 use App\Exports\SiafWebRPT1Export;
 use App\Exports\SiafWebRPT2Export;
 use App\Exports\SiafWebRPT3Export;
@@ -15,16 +17,13 @@ use App\Models\Educacion\Importacion;
 use App\Models\Presupuesto\BaseSiafWeb;
 use App\Models\Presupuesto\BaseSiafWebDetalle;
 use App\Models\Presupuesto\CategoriaGasto;
+use App\Models\Presupuesto\CategoriaPresupuestal;
 use App\Models\Presupuesto\FuenteFinanciamiento;
-use App\Models\Presupuesto\Funcion;
 use App\Models\Presupuesto\GenericaGasto;
 use App\Models\Presupuesto\ProductoProyecto;
-use App\Models\Presupuesto\TipoGobierno;
-use App\Models\Presupuesto\UnidadEjecutora;
-use App\Repositories\Educacion\CuboPadronEIBRepositorio;
+use App\Models\Presupuesto\Rubro;
+use App\Models\Presupuesto\SubGenericaGasto;
 use App\Repositories\Educacion\ImportacionRepositorio;
-use App\Repositories\Educacion\PadronEIBRepositorio;
-use App\Repositories\Presupuesto\BaseGastosRepositorio;
 use App\Repositories\Presupuesto\BaseSiafWebDetalleRepositorio;
 use App\Repositories\Presupuesto\BaseSiafWebRepositorio;
 use Illuminate\Http\Request;
@@ -640,15 +639,16 @@ class BaseSiafWebController extends Controller
         return response()->json(compact('ue'));
     }
 
-    public function reportes()
+    public function gaspresreportes()
     {
-        //  return BaseSiafWebDetalleRepositorio::obtenerUnidadesEjecutorasParaSelect(2025);
         $anios = BaseSiafWebRepositorio::anios();
         $aniomax = $anios->max('anio');
-        return view('presupuesto.BaseSiafWeb.EduReportes', compact('anios', 'aniomax'));
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporSiafWebController::$FUENTE);
+        $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesc[$imp->mes - 1] . ' del ' . $imp->anio;
+        return view('presupuesto.BaseSiafWeb.GasPresReportes', compact('anios', 'aniomax', 'actualizado'));
     }
 
-    public function reportesreporte(Request $rq)
+    public function gaspresreportesreporte(Request $rq)
     {
         $div = $rq->div;
         switch ($rq->div) {
@@ -683,15 +683,15 @@ class BaseSiafWebController extends Controller
                     'categorias' => [],
                     'series' => [
                         ['data' => [], 'name' => 'PIM'],
-                        ['data' => [], 'name' => 'CERTIFICADO'],
+                        // ['data' => [], 'name' => 'CERTIFICADO'],
                         ['data' => [], 'name' => 'DEVENGADO'],
                     ],
                 ];
                 foreach ($data as $key => $value) {
                     $info['categorias'][] = $value->ue;
                     $info['series'][0]['data'][] = (int)$value->pim;
-                    $info['series'][1]['data'][] = (int)$value->certificado;
-                    $info['series'][2]['data'][] = (int)$value->devengado;
+                    // $info['series'][1]['data'][] = (int)$value->certificado;
+                    $info['series'][1]['data'][] = (int)$value->devengado;
                 }
                 return response()->json(compact('info', 'data'));
 
@@ -751,7 +751,7 @@ class BaseSiafWebController extends Controller
                         continue;
                     }
                 }
-                return response()->json(compact('info', 'data'));   
+                return response()->json(compact('info', 'data'));
             case 'anal5':
                 $data = BaseSiafWebDetalleRepositorio::obtenerCertificadoMensual($rq->anio, $rq->ue, $rq->cg, $rq->cp);
                 $info = [
@@ -781,12 +781,392 @@ class BaseSiafWebController extends Controller
                     $foot->saldocert = $foot->pim - $foot->certificado;
                     $foot->saldodev = $foot->pim - $foot->devengado;
                 }
-                $excel = view('presupuesto.BaseSiafWeb.EduReportesTablas', compact('div', 'base', 'foot'))->render();
+                $excel = view('presupuesto.BaseSiafWeb.GasPresReportesTablas', compact('div', 'base', 'foot'))->render();
                 return response()->json(compact('excel'));
                 // return response()->json(compact('div', 'base', 'foot'));
             default:
                 # code...
                 return [];
         }
+    }
+
+    public function catpresreportes()
+    {
+        $anios = BaseSiafWebRepositorio::anios();
+        $aniomax = $anios->max('anio');
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporSiafWebController::$FUENTE);
+        $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesc[$imp->mes - 1] . ' del ' . $imp->anio;
+        return view('presupuesto.BaseSiafWeb.CatPresReportes', compact('anios', 'aniomax', 'actualizado'));
+    }
+
+    public function catpresreportesreporte(Request $rq)
+    {
+        $div = $rq->div;
+        switch ($rq->div) {
+            case 'anal1':
+                $color = ['#43beac', '#ffc107', '#ef5350'];
+                $data = BaseSiafWebDetalleRepositorio::catpresreportesreporte_anal1($rq->anio, $rq->ue, $rq->cg, $rq->ff);
+                $data->devengado = round($data->devengado, 0);
+                $data->avance = $data->pim > 0 ? round(100 * $data->devengado / $data->pim, 1) : 0;
+                return response()->json($data);
+
+            case 'anal2':
+                $data = BaseSiafWebDetalleRepositorio::catpresreportesreporte_anal2($rq->anio, $rq->ue, $rq->cg, $rq->ff);
+                $info = [
+                    'categorias' => [],
+                    'series' => [
+                        ['data' => [], 'type' => 'column', 'yAxis' => 0, 'name' => 'PIM'],
+                        ['data' => [], 'type' => 'column', 'yAxis' => 0, 'name' => 'DEVENGADO'],
+                        ['data' => [], 'type' => 'line', 'yAxis' => 1, 'name' => '% Ejecución'],
+                    ],
+                ];
+                foreach ($data as $key => $value) {
+                    $info['categorias'][] = $value->nombre;
+                    $info['series'][0]['data'][] = (int)$value->pim;
+                    $info['series'][1]['data'][] = (int)$value->devengado;
+                    $info['series'][2]['data'][] = $value->pim > 0 ? round(100 * $value->devengado / $value->pim, 1) : 0;
+                }
+                return response()->json(compact('info', 'data'));
+
+            case 'tabla1':
+                $base = BaseSiafWebDetalleRepositorio::catpresreportesreporte_tabla1($rq->anio, $rq->ue, $rq->cg, $rq->ff);
+                $foot = [];
+                if ($base->isNotEmpty()) {
+                    $foot = clone $base->first();
+                    $foot->nombre = 'TOTAL';
+                    $foot->pia = $base->sum('pia');
+                    $foot->pim = $base->sum('pim');
+                    $foot->certificado = $base->sum('certificado');
+                    $foot->compromiso = $base->sum('compromiso');
+                    $foot->devengado = $base->sum('devengado');
+                    $foot->avance = $foot->pim > 0 ? round(100 * $foot->devengado / $foot->pim, 1) : 0;
+                    $foot->saldocert = $foot->pim - $foot->certificado;
+                    $foot->saldodev = $foot->pim - $foot->devengado;
+                }
+                $excel = view('presupuesto.BaseSiafWeb.CatPresReportesTablas', compact('div', 'base', 'foot'))->render();
+                return response()->json(compact('excel'));
+
+            case 'tabla0101':
+                $base = BaseSiafWebDetalleRepositorio::catpresreportesreporte_tabla0101($rq->anio, $rq->ue, $rq->cg, $rq->ff, $rq->cp);
+                foreach ($base as $key => $value) {
+                    $value->dic = $value->dic - $value->nov;
+                    $value->nov = $value->nov - $value->oct;
+                    $value->oct = $value->oct - $value->sep;
+                    $value->sep = $value->sep - $value->ago;
+                    $value->ago = $value->ago - $value->jul;
+                    $value->jul = $value->jul - $value->jun;
+                    $value->jun = $value->jun - $value->may;
+                    $value->may = $value->may - $value->abr;
+                    $value->abr = $value->abr - $value->mar;
+                    $value->mar = $value->mar - $value->feb;
+                    $value->feb = $value->feb - $value->ene;
+                }
+                $nombre = CategoriaPresupuestal::find($rq->cp)->nombre;
+                $excel = view('presupuesto.BaseSiafWeb.CatPresReportesTablas', compact('div', 'base'))->render();
+                return response()->json(compact('excel', 'nombre'));
+
+            default:
+                # code...
+                return [];
+        }
+    }
+
+    public function catpresreportesdownloadexcel($div, $anio, $ue, $cg, $ff, $cp)
+    {
+        switch ($div) {
+            case 'tabla1':
+                $name = 'Ejecución del Gasto Presupuestal por Categoría Presupuestal.xlsx';
+                break;
+            case 'tabla0101':
+                $name = 'Devengado Mensualizado.xlsx';
+                break;
+            default:
+                $name = 'EXCEL_VACIO.xlsx';
+                break;
+        }
+        return Excel::download(new CatPresReportesExport($div, $anio, $ue, $cg, $ff, $cp), $name);
+    }
+
+    public function fuenfinreportes()
+    {
+        $anios = BaseSiafWebRepositorio::anios();
+        $aniomax = $anios->max('anio');
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporSiafWebController::$FUENTE);
+        $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesc[$imp->mes - 1] . ' del ' . $imp->anio;
+        return view('presupuesto.BaseSiafWeb.FuenFinReportes', compact('anios', 'aniomax', 'actualizado'));
+    }
+
+    public function fuenfinreportesreporte(Request $rq)
+    {
+        $div = $rq->div;
+        switch ($rq->div) {
+            case 'anal1':
+                $color = ['#43beac', '#ffc107', '#ef5350'];
+                $data = BaseSiafWebDetalleRepositorio::fuenfinreportesreporte_anal1($rq->anio, $rq->ue, $rq->cg, $rq->g);
+                $data->devengado = round($data->devengado, 0);
+                $data->avance = $data->pim > 0 ? round(100 * $data->devengado / $data->pim, 1) : 0;
+                return response()->json($data);
+
+            case 'anal2':
+                $data = BaseSiafWebDetalleRepositorio::fuenfinreportesreporte_anal2($rq->anio, $rq->ue, $rq->cg, $rq->g);
+                $info = [
+                    'categorias' => [],
+                    'series' => [
+                        ['data' => [], 'type' => 'column', 'yAxis' => 0, 'name' => 'PIM'],
+                        ['data' => [], 'type' => 'column', 'yAxis' => 0, 'name' => 'DEVENGADO'],
+                        ['data' => [], 'type' => 'line', 'yAxis' => 1, 'name' => '% Ejecución'],
+                    ],
+                ];
+                foreach ($data as $key => $value) {
+                    $info['categorias'][] = $value->nombre;
+                    $info['series'][0]['data'][] = (int)$value->pim;
+                    $info['series'][1]['data'][] = (int)$value->devengado;
+                    $info['series'][2]['data'][] = $value->pim > 0 ? round(100 * $value->devengado / $value->pim, 1) : 0;
+                }
+                return response()->json(compact('info', 'data'));
+
+            case 'tabla1':
+                $base = BaseSiafWebDetalleRepositorio::fuenfinreportesreporte_tabla1($rq->anio, $rq->ue, $rq->cg, $rq->g);
+                // $basex = BaseSiafWebDetalleRepositorio::fuenfinreportesreporte_xtabla1($rq->anio, $rq->ue, $rq->cg, $rq->g);
+                $foot = [];
+                if ($base->isNotEmpty()) {
+                    $foot = clone $base->first();
+                    $foot->nombre = 'TOTAL';
+                    $foot->pia = $base->sum('pia');
+                    $foot->pim = $base->sum('pim');
+                    $foot->certificado = $base->sum('certificado');
+                    $foot->compromiso = $base->sum('compromiso');
+                    $foot->devengado = $base->sum('devengado');
+                    $foot->avance = $foot->pim > 0 ? round(100 * $foot->devengado / $foot->pim, 1) : 0;
+                    $foot->saldocert = $foot->pim - $foot->certificado;
+                    $foot->saldodev = $foot->pim - $foot->devengado;
+                }
+                $excel = view('presupuesto.BaseSiafWeb.FuenFinReportesTablas', compact('div', 'base', 'foot'))->render();
+                return response()->json(compact('excel'));
+                // return response()->json(compact('div', 'base', 'foot'));
+            case 'tabla0101':
+                $base = BaseSiafWebDetalleRepositorio::fuenfinreportesreporte_tabla0101($rq->anio, $rq->ue, $rq->cg, $rq->g, $rq->ff);
+                foreach ($base as $key => $value) {
+                    $value->dic = $value->dic - $value->nov;
+                    $value->nov = $value->nov - $value->oct;
+                    $value->oct = $value->oct - $value->sep;
+                    $value->sep = $value->sep - $value->ago;
+                    $value->ago = $value->ago - $value->jul;
+                    $value->jul = $value->jul - $value->jun;
+                    $value->jun = $value->jun - $value->may;
+                    $value->may = $value->may - $value->abr;
+                    $value->abr = $value->abr - $value->mar;
+                    $value->mar = $value->mar - $value->feb;
+                    $value->feb = $value->feb - $value->ene;
+                }
+                $nombre = FuenteFinanciamiento::find($rq->ff)->nombre;
+                $excel = view('presupuesto.BaseSiafWeb.FuenFinReportesTablas', compact('div', 'base'))->render();
+                return response()->json(compact('excel', 'nombre'));
+
+            case 'tabla2':
+                $base = BaseSiafWebDetalleRepositorio::fuenfinreportesreporte_tabla2($rq->anio, $rq->ue, $rq->cg, $rq->g);
+                $foot = [];
+                if ($base->isNotEmpty()) {
+                    $foot = clone $base->first();
+                    $foot->nombre = 'TOTAL';
+                    $foot->pia = $base->sum('pia');
+                    $foot->pim = $base->sum('pim');
+                    $foot->certificado = $base->sum('certificado');
+                    $foot->compromiso = $base->sum('compromiso');
+                    $foot->devengado = $base->sum('devengado');
+                    $foot->avance = $foot->pim > 0 ? round(100 * $foot->devengado / $foot->pim, 1) : 0;
+                    $foot->saldocert = $foot->pim - $foot->certificado;
+                    $foot->saldodev = $foot->pim - $foot->devengado;
+                }
+                $excel = view('presupuesto.BaseSiafWeb.FuenFinReportesTablas', compact('div', 'base', 'foot'))->render();
+                return response()->json(compact('excel'));
+                // return response()->json(compact('div', 'base', 'foot'));
+            case 'tabla0201':
+                $base = BaseSiafWebDetalleRepositorio::fuenfinreportesreporte_tabla0201($rq->anio, $rq->ue, $rq->cg, $rq->g, $rq->rb);
+                foreach ($base as $key => $value) {
+                    $value->dic = $value->dic - $value->nov;
+                    $value->nov = $value->nov - $value->oct;
+                    $value->oct = $value->oct - $value->sep;
+                    $value->sep = $value->sep - $value->ago;
+                    $value->ago = $value->ago - $value->jul;
+                    $value->jul = $value->jul - $value->jun;
+                    $value->jun = $value->jun - $value->may;
+                    $value->may = $value->may - $value->abr;
+                    $value->abr = $value->abr - $value->mar;
+                    $value->mar = $value->mar - $value->feb;
+                    $value->feb = $value->feb - $value->ene;
+                }
+                $nombre = Rubro::find($rq->rb)->nombre;
+                $excel = view('presupuesto.BaseSiafWeb.FuenFinReportesTablas', compact('div', 'base'))->render();
+                return response()->json(compact('excel', 'nombre'));
+
+
+          
+            default:
+                # code...
+                return [];
+        }
+    }
+
+    public function fuenfinreportesdownloadexcel($div, $anio, $ue, $cg, $g, $ff, $rb)
+    {
+        switch ($div) {
+            case 'tabla1':
+                $name = 'Ejecución del Gasto Presupuestal por Fuente de Financiamiento.xlsx';
+                break;
+            case 'tabla0101':
+                $name = 'Devengado Mensualizado.xlsx';
+                break;
+            case 'tabla2':
+                $name = 'Ejecución del Gasto Presupuestal por Rubro de Financiamiento.xlsx';
+                break;
+            case 'tabla0201':
+                $name = 'Devengado Mensualizado.xlsx';
+                break;
+            default:
+                $name = 'EXCEL_VACIO.xlsx';
+                break;
+        }
+        return Excel::download(new FuenFinReportesExport($div, $anio, $ue, $cg, $g, $ff, $rb), $name);
+    }
+
+    public function genericareportes()
+    {
+        $anios = BaseSiafWebRepositorio::anios();
+        $aniomax = $anios->max('anio');
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporSiafWebController::$FUENTE);
+        $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesc[$imp->mes - 1] . ' del ' . $imp->anio;
+        return view('presupuesto.BaseSiafWeb.GenericaReportes', compact('anios', 'aniomax', 'actualizado'));
+    }
+
+    public function genericareportesreporte(Request $rq)
+    {
+        $div = $rq->div;
+        switch ($rq->div) {
+            case 'anal1':
+                $color = ['#43beac', '#ffc107', '#ef5350'];
+                $data = BaseSiafWebDetalleRepositorio::genericareportesreporte_anal1($rq->anio, $rq->ue, $rq->cp, $rq->ff);
+                $data->devengado = round($data->devengado, 0);
+                $data->avance = $data->pim > 0 ? round(100 * $data->devengado / $data->pim, 1) : 0;
+                return response()->json($data);
+
+            case 'anal2':
+                $data = BaseSiafWebDetalleRepositorio::genericareportesreporte_anal2($rq->anio, $rq->ue, $rq->cp, $rq->ff);
+                $info = [
+                    'categorias' => [],
+                    'series' => [
+                        ['data' => [], 'type' => 'column', 'yAxis' => 0, 'name' => 'PIM'],
+                        ['data' => [], 'type' => 'column', 'yAxis' => 0, 'name' => 'DEVENGADO'],
+                        ['data' => [], 'type' => 'line', 'yAxis' => 1, 'name' => '% Ejecución'],
+                    ],
+                ];
+                foreach ($data as $key => $value) {
+                    $info['categorias'][] = $value->nombre;
+                    $info['series'][0]['data'][] = (int)$value->pim;
+                    $info['series'][1]['data'][] = (int)$value->devengado;
+                    $info['series'][2]['data'][] = $value->pim > 0 ? round(100 * $value->devengado / $value->pim, 1) : 0;
+                }
+                return response()->json(compact('info', 'data'));
+
+            case 'tabla1':
+                $base = BaseSiafWebDetalleRepositorio::genericareportesreporte_tabla1($rq->anio, $rq->ue, $rq->cp, $rq->ff);
+                $foot = [];
+                if ($base->isNotEmpty()) {
+                    $foot = clone $base->first();
+                    $foot->nombre = 'TOTAL';
+                    $foot->pia = $base->sum('pia');
+                    $foot->pim = $base->sum('pim');
+                    $foot->certificado = $base->sum('certificado');
+                    $foot->compromiso = $base->sum('compromiso');
+                    $foot->devengado = $base->sum('devengado');
+                    $foot->avance = $foot->pim > 0 ? round(100 * $foot->devengado / $foot->pim, 1) : 0;
+                    $foot->saldocert = $foot->pim - $foot->certificado;
+                    $foot->saldodev = $foot->pim - $foot->devengado;
+                }
+                $excel = view('presupuesto.BaseSiafWeb.GenericaReportesTablas', compact('div', 'base', 'foot'))->render();
+                return response()->json(compact('excel'));
+                // return response()->json(compact('div', 'base', 'foot'));
+            case 'tabla0101':
+                $base = BaseSiafWebDetalleRepositorio::genericareportesreporte_tabla0101($rq->anio, $rq->ue, $rq->cp, $rq->ff, $rq->g);
+                foreach ($base as $key => $value) {
+                    $value->dic = $value->dic - $value->nov;
+                    $value->nov = $value->nov - $value->oct;
+                    $value->oct = $value->oct - $value->sep;
+                    $value->sep = $value->sep - $value->ago;
+                    $value->ago = $value->ago - $value->jul;
+                    $value->jul = $value->jul - $value->jun;
+                    $value->jun = $value->jun - $value->may;
+                    $value->may = $value->may - $value->abr;
+                    $value->abr = $value->abr - $value->mar;
+                    $value->mar = $value->mar - $value->feb;
+                    $value->feb = $value->feb - $value->ene;
+                }
+                $nombre = GenericaGasto::find($rq->g)->nombre;
+                $excel = view('presupuesto.BaseSiafWeb.GenericaReportesTablas', compact('div', 'base'))->render();
+                return response()->json(compact('excel', 'nombre'));
+
+            case 'tabla2':
+                $base = BaseSiafWebDetalleRepositorio::genericareportesreporte_tabla2($rq->anio, $rq->ue, $rq->cp, $rq->ff);
+                $foot = [];
+                if ($base->isNotEmpty()) {
+                    $foot = clone $base->first();
+                    $foot->nombre = 'TOTAL';
+                    $foot->pia = $base->sum('pia');
+                    $foot->pim = $base->sum('pim');
+                    $foot->certificado = $base->sum('certificado');
+                    $foot->compromiso = $base->sum('compromiso');
+                    $foot->devengado = $base->sum('devengado');
+                    $foot->avance = $foot->pim > 0 ? round(100 * $foot->devengado / $foot->pim, 1) : 0;
+                    $foot->saldocert = $foot->pim - $foot->certificado;
+                    $foot->saldodev = $foot->pim - $foot->devengado;
+                }
+                $excel = view('presupuesto.BaseSiafWeb.GenericaReportesTablas', compact('div', 'base', 'foot'))->render();
+                return response()->json(compact('excel'));
+                // return response()->json(compact('div', 'base', 'foot'));
+            case 'tabla0201':
+                $base = BaseSiafWebDetalleRepositorio::genericareportesreporte_tabla0201($rq->anio, $rq->ue, $rq->cp, $rq->ff, $rq->sg);
+                foreach ($base as $key => $value) {
+                    $value->dic = $value->dic - $value->nov;
+                    $value->nov = $value->nov - $value->oct;
+                    $value->oct = $value->oct - $value->sep;
+                    $value->sep = $value->sep - $value->ago;
+                    $value->ago = $value->ago - $value->jul;
+                    $value->jul = $value->jul - $value->jun;
+                    $value->jun = $value->jun - $value->may;
+                    $value->may = $value->may - $value->abr;
+                    $value->abr = $value->abr - $value->mar;
+                    $value->mar = $value->mar - $value->feb;
+                    $value->feb = $value->feb - $value->ene;
+                }
+                $nombre = SubGenericaGasto::find($rq->sg)->nombre;
+                $excel = view('presupuesto.BaseSiafWeb.GenericaReportesTablas', compact('div', 'base'))->render();
+                return response()->json(compact('excel', 'nombre'));
+
+            default:
+                # code...
+                return [];
+        }
+    }
+
+    public function genericareportesdownloadexcel($div, $anio, $ue, $cp, $ff, $g, $sg)
+    {
+        switch ($div) {
+            case 'tabla1':
+                $name = 'Ejecución del Gasto Presupuestal por Generica.xlsx';
+                break;
+            case 'tabla0101':
+                $name = 'Devengado Mensualizado.xlsx';
+                break;
+            case 'tabla2':
+                $name = 'Ejecución del Gasto Presupuestal por Sub Genérica.xlsx';
+                break;
+            case 'tabla0201':
+                $name = 'Devengado Mensualizado.xlsx';
+                break;
+            default:
+                $name = 'EXCEL_VACIO.xlsx';
+                break;
+        }
+        return Excel::download(new GenericaReportesExport($div, $anio, $ue, $cp, $ff, $g, $sg), $name);
     }
 }

@@ -60,7 +60,21 @@
                             </div>
 
                             <div class="card-body p-4 mt-0">
-                                {{-- <form action="#" class="p-3"> --}}
+                                @if(session('error'))
+                                    <div class="alert alert-danger">{{ session('error') }}</div>
+                                @endif
+                                @if($errors->has('usuario'))
+                                    <div class="alert alert-danger">{{ $errors->first('usuario') }}</div>
+                                @endif
+                                @if($errors->has('password'))
+                                    <div class="alert alert-danger">{{ $errors->first('password') }}</div>
+                                @endif
+                                @if(session('warning'))
+                                    <div class="alert alert-warning">{{ session('warning') }}</div>
+                                @endif
+                                @if(session('params_missing'))
+                                    <div class="alert alert-warning">{{ session('params_missing') }}</div>
+                                @endif
                                 <form class="form p-0" method="POST" action="{{ route('login') }}">
                                     @csrf
                                     <div class="form-group mb-3">
@@ -96,7 +110,7 @@
                                     </div> --}}
                                     <div class="form-group row mb-0">
                                         <div class="col-sm-12">
-                                            <a href="pages-recoverpw.html"><i class="fa fa-lock mr-1"></i> ¿Olvidaste tu
+                                            <a href="{{ route('password.request') }}"><i class="fa fa-lock mr-1"></i> ¿Olvidaste tu
                                                 contraseña?</a>
                                         </div>
                                         {{-- <div class="col-sm-5 text-right">

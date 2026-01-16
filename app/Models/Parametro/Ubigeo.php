@@ -29,4 +29,9 @@ class Ubigeo extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function padre()
+    {
+        return $this->belongsTo(Ubigeo::class, 'dependencia', 'id');
+    }
 }

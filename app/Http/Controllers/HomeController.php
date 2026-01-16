@@ -147,7 +147,12 @@ class HomeController extends Controller
         // session()->forget('menuNivel01');
         // session()->forget('menuNivel02');
 
-        $perfil = Perfil::find(session('perfils')->where('sistema_id', $sistema_id)->first()->perfil_id);
+        $perfilRow = session('perfils')->where('sistema_id', $sistema_id)->first();
+        if (!$perfilRow) {
+            return redirect()->route('home')
+                ->with('warning', 'No tienes acceso al módulo seleccionado.');
+        }
+        $perfil = Perfil::find($perfilRow->perfil_id);
         session(['perfil_sistema_id' => $perfil->id]);
         session(['perfil_sistema_nombre' => $perfil->nombre]);
 

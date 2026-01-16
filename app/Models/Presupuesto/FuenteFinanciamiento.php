@@ -15,4 +15,9 @@ class FuenteFinanciamiento extends Model
         'codigo',
         'nombre',
     ];
+
+    public function getNombreAttribute($value)
+    {
+        return $this->codigo . ' ' . $value;
+    }
 }

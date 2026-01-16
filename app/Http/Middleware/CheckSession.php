@@ -17,36 +17,35 @@ class CheckSession
      */
     public function handle(Request $request, Closure $next)
     {
-        // Verificar si el usuario está autenticado
-        if (!Auth::check()) {
-            // Guardar la URL actual para redirigir después del login
-            if ($request->isMethod('get')) {
-                $request->session()->put('url.intended', $request->url());
-            }
+        $route = $request->route();
+        $middlewares = $route && method_exists($route, 'middleware') ? $route->middleware() : [];
+        $requiresAuth = in_array('auth', $middlewares, true);
 
-            // Redirigir al login con mensaje
-            return redirect()->route('login')
-                ->with('error', 'Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
-        }
-
-        // Verificar si la sesión está activa
-        if ($request->session()->has('last_activity')) {
-            $last_activity = $request->session()->get('last_activity');
-            $session_lifetime = config('session.lifetime') * 60; // en segundos
-
-            if (time() - $last_activity > $session_lifetime) {
-                // Cerrar sesión y redirigir
-                Auth::logout();
-                $request->session()->invalidate();
-                $request->session()->regenerateToken();
-
+        if ($requiresAuth) {
+            if (!Auth::check()) {
+                if ($request->isMethod('get')) {
+                    $request->session()->put('url.intended', $request->url());
+                }
                 return redirect()->route('login')
-                    ->with('error', 'Tu sesión ha caducado por inactividad.');
+                    ->with('error', 'Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
             }
+
+            if ($request->session()->has('last_activity')) {
+                $last_activity = $request->session()->get('last_activity');
+                $session_lifetime = config('session.lifetime') * 60;
+
+                if (time() - $last_activity > $session_lifetime) {
+                    Auth::logout();
+                    $request->session()->invalidate();
+                    $request->session()->regenerateToken();
+
+                    return redirect()->route('login')
+                        ->with('error', 'Tu sesión ha caducado por inactividad.');
+                }
+            }
+            $request->session()->put('last_activity', time());
         }
 
-        // Actualizar el timestamp de última actividad
-        $request->session()->put('last_activity', time());
         return $next($request);
     }
 }

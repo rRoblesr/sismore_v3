@@ -153,6 +153,11 @@ use Maatwebsite\Excel\Facades\Excel;
 
 Auth::routes();
 
+Route::get('reload-captcha', function () {
+    return response()->json(['captcha' => captcha_img('login')]);
+})->name('reload-captcha');
+
+
 Route::get('/', function () {
     //return view('welcome');
     return redirect('/publico');
@@ -829,21 +834,21 @@ Route::get('/educación/PadronRER/Avance', [PadronRERController::class, 'avance'
 Route::get('/PadronRER/Grafica1', [PadronRERController::class, 'grafica1'])->name('padronrer.avance.graficas1');
 Route::get('/PadronRER/Grafica2', [PadronRERController::class, 'grafica2'])->name('padronrer.avance.graficas2');
 
-Route::get('/educación/Mantenimiento/SFL', [SFLController::class, 'principal'])->middleware('auth')->name('mantenimiento.sfl.principal');
-Route::get('/Man/SFL/Listar/', [SFLController::class, 'ListarDT'])->name('mantenimiento.sfl.listar');
-Route::post('/Man/SFL/AjaxAdd', [SFLController::class, 'ajax_add'])->middleware('auth')->name('mantenimiento.sfl.guardar');
-Route::get('/Man/SFL/AjaxEdit/{id}', [SFLController::class, 'ajax_edit'])->middleware('auth')->name('mantenimiento.sfl.editar');
-Route::post('/Man/SFL/AjaxUpdate', [SFLController::class, 'ajax_update'])->middleware('auth')->name('mantenimiento.sfl.modificar');
-Route::get('/Man/SFL/AjaxDelete/{id}', [SFLController::class, 'ajax_delete'])->middleware('auth')->name('mantenimiento.sfl.eliminar');
-Route::get('/Man/SFL/Buscar/Modular/{modular}', [SFLController::class, 'ajax_modular'])->middleware('auth')->name('mantenimiento.sfl.buscar.modular');
-Route::get('/Man/SFL/Listar/Modular', [SFLController::class, 'ListarDTModular'])->name('mantenimiento.sfl.modular.listar');
-Route::get('/Man/SFL/Listar/Modular2', [SFLController::class, 'ListarDTModular2'])->name('mantenimiento.sfl.modular.listar.2');
-Route::post('/Man/SFL/AjaxUpdate/Modular', [SFLController::class, 'ajax_update_modulares'])->middleware('auth')->name('mantenimiento.sfl.modular.modificar');
-Route::get('/Man/SFL/Download/PDF/{id}', [SFLController::class, 'exportarPDF'])->name('mantenimiento.sfl.exportar.pdf');
-Route::get('/educación/SFL/Download/EXCEL', [SFLController::class, 'Download'])->name('mantenimiento.sfl.exportar.xxx');
-Route::get('/Man/SFL/Download/plantilla', [SFLController::class, 'download_plantilla'])->name('mantenimiento.sfl.exportar.plantilla');
-Route::post('/Man/SFL/Download/plantilla/visualizar', [SFLController::class, 'cargar_plantilla'])->name('mantenimiento.sfl.exportar.plantilla.cargar');
-Route::post('/Man/SFL/Download/plantilla/guardar', [SFLController::class, 'plantilla_guardar'])->name('mantenimiento.sfl.exportar.plantilla.guardar');
+Route::get('/educación/SFL/Mantenimiento', [SFLController::class, 'principal'])->name('mantenimiento.sfl.principal');
+Route::get('/educación/SFL/Mantenimiento/Listar', [SFLController::class, 'ListarDT'])->name('mantenimiento.sfl.listar');
+Route::post('/educación/SFL/Mantenimiento/AjaxAdd', [SFLController::class, 'ajax_add'])->name('mantenimiento.sfl.guardar');
+Route::get('/educación/SFL/Mantenimiento/AjaxEdit/{id}', [SFLController::class, 'ajax_edit'])->name('mantenimiento.sfl.editar');
+Route::post('/educación/SFL/Mantenimiento/AjaxUpdate', [SFLController::class, 'ajax_update'])->name('mantenimiento.sfl.modificar');
+Route::get('/educación/SFL/Mantenimiento/AjaxDelete/{id}', [SFLController::class, 'ajax_delete'])->name('mantenimiento.sfl.eliminar');
+Route::get('/educación/SFL/Mantenimiento/Buscar/Modular/{modular}', [SFLController::class, 'ajax_modular'])->name('mantenimiento.sfl.buscar.modular');
+Route::get('/educación/SFL/Mantenimiento/Listar/Modular', [SFLController::class, 'ListarDTModular'])->name('mantenimiento.sfl.modular.listar');
+Route::get('/educación/SFL/Mantenimiento/Listar/Modular2', [SFLController::class, 'ListarDTModular2'])->name('mantenimiento.sfl.modular.listar.2');
+Route::post('/educación/SFL/Mantenimiento/AjaxUpdate/Modular', [SFLController::class, 'ajax_update_modulares'])->name('mantenimiento.sfl.modular.modificar');
+Route::get('/educación/SFL/Mantenimiento/Download/PDF/{id}', [SFLController::class, 'exportarPDF'])->name('mantenimiento.sfl.exportar.pdf');
+Route::get('/educación/SFL/Mantenimiento/Download/EXCEL', [SFLController::class, 'Download'])->name('mantenimiento.sfl.exportar.excel');
+Route::get('/educación/SFL/Mantenimiento/Download/plantilla', [SFLController::class, 'download_plantilla'])->name('mantenimiento.sfl.exportar.plantilla');
+Route::post('/educación/SFL/Mantenimiento/Download/plantilla/visualizar', [SFLController::class, 'cargar_plantilla'])->name('mantenimiento.sfl.exportar.plantilla.cargar');
+Route::post('/educación/SFL/Mantenimiento/Download/plantilla/guardar', [SFLController::class, 'plantilla_guardar'])->name('mantenimiento.sfl.exportar.plantilla.guardar');
 
 Route::get('/educación/SFL/Reportes', [SFLController::class, 'reportes'])->name('educacion.sfl.reportes');
 Route::get('/educación/SFL/Reportes/Reporte', [SFLController::class, 'reportesreporte'])->name('educacion.sfl.reportes.reporte');
@@ -890,6 +895,10 @@ Route::get('/presupuesto/pres/vista5', [MatriculaDetalleController::class, 'carg
 
 
 //Route::get('/presupuesto/Principall', [MatriculaDetalleController::class, 'cargarpresupuestoxxx'])->name('educacionl.xxx');
+
+Route::get('reload-captcha', function () {
+    return response()->json(['captcha' => captcha_img('login')]);
+});
 
 Route::get('/INDICADOR/SINRUTA', function () {
     //return 'Ruta no definida';
@@ -1271,14 +1280,30 @@ Route::get('/SubGenerica/cargarsubgenerica', [SubGenericaController::class, 'car
 Route::get('/Especifica/cargarespecifica', [EspecificaController::class, 'cargar'])->name('especifica.cargar');
 Route::get('/SubGenericaDetalle/cargarsubgenericadetalle', [SubGenericaDetalleController::class, 'cargar'])->name('subgenericadetalle.cargar');
 
-Route::get('/Presupuesto/Edu/Reportes', [BaseSiafWebController::class, 'reportes'])->name('presupuesto.educacion.reportes');
-Route::get('/Presupuesto/Edu/Reportes/Reporte', [BaseSiafWebController::class, 'reportesreporte'])->name('presupuesto.educacion.reportes.reporte');
+Route::get('/Presupuesto/GasPres/Reportes', [BaseSiafWebController::class, 'gaspresreportes'])->name('presupuesto.educacion.reportes');
+Route::get('/Presupuesto/GasPres/Reportes/Reporte', [BaseSiafWebController::class, 'gaspresreportesreporte'])->name('presupuesto.educacion.reportes.reporte');
+
+Route::get('/Presupuesto/CatPres/Reportes', [BaseSiafWebController::class, 'catpresreportes'])->name('presupuesto.catpres.reportes');
+Route::get('/Presupuesto/CatPres/Reportes/Reporte', [BaseSiafWebController::class, 'catpresreportesreporte'])->name('presupuesto.catpres.reportes.reporte');
+Route::get('/Presupuesto/CatPres/Reportes/Download/{div}/{anio}/{ue}/{cg}/{ff}/{cp}', [BaseSiafWebController::class, 'catpresreportesdownloadexcel'])->name('presupuesto.catpres.reportes.download.excel');
+
+Route::get('/Presupuesto/FuenFin/Reportes', [BaseSiafWebController::class, 'fuenfinreportes'])->name('presupuesto.rubro.reportes');
+Route::get('/Presupuesto/FuenFin/Reportes/Reporte', [BaseSiafWebController::class, 'fuenfinreportesreporte'])->name('presupuesto.rubro.reportes.reporte');
+Route::get('/Presupuesto/FuenFin/Reportes/Download/{div}/{anio}/{ue}/{cg}/{g}/{ff}/{rb}', [BaseSiafWebController::class, 'fuenfinreportesdownloadexcel'])->name('presupuesto.FuenFin.reportes.download.excel');
+
+Route::get('/Presupuesto/Generica/Reportes', [BaseSiafWebController::class, 'genericareportes'])->name('presupuesto.rubro2.reportes');
+Route::get('/Presupuesto/Generica/Reportes/Reporte', [BaseSiafWebController::class, 'genericareportesreporte'])->name('presupuesto.rubro2.reportes.reporte');
+Route::get('/Presupuesto/Generica/Reportes/Download/{div}/{anio}/{ue}/{cp}/{ff}/{g}/{sg}', [BaseSiafWebController::class, 'genericareportesdownloadexcel'])->name('presupuesto.generica.reportes.download.excel');
 
 Route::get('/Presupuesto/siafweb/detalle/ue/{anio}', [BaseSiafWebDetalleController::class, 'obtenerUnidadesEjecutorasParaSelect'])->name('presupuesto.saifweb.detalle.select.ue');
 Route::get('/Presupuesto/siafweb/detalle/cg/{anio}/{ue}', [BaseSiafWebDetalleController::class, 'obtenerCategoriasGastoParaSelect'])->name('presupuesto.saifweb.detalle.select.cg');
 Route::get('/Presupuesto/siafweb/detalle/cp/{anio}/{ue}/{cg}', [BaseSiafWebDetalleController::class, 'obtenerCategoriasPresupuestalesParaSelect'])->name('presupuesto.saifweb.detalle.select.cp');
+Route::get('/Presupuesto/siafweb/detalle/ff/{anio}/{ue}/{cg}', [BaseSiafWebDetalleController::class, 'obtenerFuenteFinanciamientoParaSelect'])->name('presupuesto.saifweb.detalle.select.ff');
+Route::get('/Presupuesto/siafweb/detalle/g/{anio}/{ue}/{cg}', [BaseSiafWebDetalleController::class, 'obtenerGenericaParaSelect'])->name('presupuesto.saifweb.detalle.select.g');
+Route::get('/Presupuesto/siafweb/detalle/cp2/{anio}/{ue}', [BaseSiafWebDetalleController::class, 'obtenerCategoriasPresupuestalesParaSelect2'])->name('presupuesto.saifweb.detalle.select.cp.2');
+Route::get('/Presupuesto/siafweb/detalle/ff2/{anio}/{ue}/{cp}', [BaseSiafWebDetalleController::class, 'obtenerFuenteFinanciamientoParaSelect2'])->name('presupuesto.saifweb.detalle.select.ff.2');
 
-
+/*  */
 /**************************************** FIN PRESUPUESTO ***************************************************/
 
 
@@ -1345,6 +1370,9 @@ Route::get('/Trabajo/PowerBi/EmpleoInformal', [PowerBiController::class, 'trabaj
 
 Route::get('/salud/PowerBi/Covid19', [PowerBiController::class, 'saludCovid19'])->name('powerbi.salud.covid19');
 Route::get('/salud/PowerBi/{id}', [PowerBiController::class, 'saludMenu'])->name('powerbi.salud.menu');
+Route::get('/trabajo/AsesoriaLegal/{id}', [PowerBiController::class, 'saludMenu'])->name('powerbi.salud.menu');
+Route::get('/trabajo/OfertaTrabajo/{id}', [PowerBiController::class, 'saludMenu'])->name('powerbi.salud.menu');
+Route::get('/trabajo/certificadolaboral/{id}', [PowerBiController::class, 'saludMenu'])->name('powerbi.salud.menu');
 
 Route::get('/indicador/pactoregional/meta', [IndicadoresController::class, 'PactoRegionalMeta'])->name('indicador.pactoregional.meta');
 
@@ -1849,3 +1877,21 @@ Route::get('/ciencias/e1', function () {
 });
 
 /****************************************** FIN EJEMPLOS Y PRUEBAS ***************************************************/
+
+Route::get('/{sistema}/{nombre_menu}/{id}', [PowerBiController::class, 'verReporteAmigable'])
+    ->where('id', '[0-9]+') // IMPORTANTE: Solo entra aquí si el ID es un número
+    ->name('powerbi.amigable');
+
+// Ruta para limpiar caché en Hosting (Útil para mantenimiento)
+Route::get('/limpiar-cache', function() {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('cache:clear');
+        \Illuminate\Support\Facades\Artisan::call('config:clear');
+        \Illuminate\Support\Facades\Artisan::call('route:clear');
+        \Illuminate\Support\Facades\Artisan::call('view:clear');
+        \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+        return "<h1>¡Mantenimiento Completado!</h1><p>Se han ejecutado: cache:clear, config:clear, route:clear, view:clear, optimize:clear.</p>";
+    } catch (\Throwable $e) {
+        return "Error al limpiar: " . $e->getMessage();
+    }
+});
