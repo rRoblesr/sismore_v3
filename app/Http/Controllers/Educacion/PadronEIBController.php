@@ -191,7 +191,7 @@ class PadronEIBController extends Controller
         return PadronEIBRepositorio::distrito_select($anio, $anioeib, $provincia);
     }
 
-    public function reportes()
+    public function edubascuboeib()
     {
         $anios =  CuboPadronEIBRepositorio::select_anios();
         $aniomax = $anios->max();
@@ -199,7 +199,7 @@ class PadronEIBController extends Controller
         return view('educacion.EIB.Reportes', compact('anios', 'aniomax', 'anioeib'));
     }
 
-    public function reportesreporte(Request $rq)
+    public function edubascuboeibreporte(Request $rq)
     {
         $div = $rq->div;
         $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronWebController::$FUENTE);
@@ -212,28 +212,43 @@ class PadronEIBController extends Controller
                 $card4 = number_format($data->docentes, 0);
                 return response()->json(compact('card1', 'card2', 'card3', 'card4'));
             case 'anal1':
-                $pe_pv = [
-                    '2501' => 'pe-uc-cp',
-                    '2502' => 'pe-uc-at',
-                    '2503' => 'pe-uc-pa',
-                    '2504' => 'pe-uc-pr',
-                ];
-                $info = [];
-                $valores = [];
                 $data = CuboPadronEIBRepositorio::reportesreporte_anal1($rq->anio, 0, $rq->gestion, $rq->provincia, $rq->distrito);
                 $total = $data->sum('conteo');
-                foreach ($data as $key => $value) {
-                    $info[] = [$value->codigo, round($total > 0 ? 100 * $value->conteo / $total : 0, 1)];
-                    $valores[$value->codigo] = ['num' => (int)$value->conteo, 'dem' => $total, 'ind' => round($total > 0 ? 100 * $value->conteo / $total : 0, 1)];
+                $info = [];
+                $valores = [];
+                $infoDistritos = [];
+                $acumuladoPorProvincia = [];
+                foreach ($data as $value) {
+                    if (!isset($acumuladoPorProvincia[$value->codigo])) {
+                        $acumuladoPorProvincia[$value->codigo] = 0;
+                    }
+                    $acumuladoPorProvincia[$value->codigo] += (int) $value->conteo;
+
+                    if (!isset($infoDistritos[$value->codigo])) {
+                        $infoDistritos[$value->codigo] = [];
+                    }
+                    $infoDistritos[$value->codigo][] = [
+                        'distrito_codigo' => $value->distrito_codigo,
+                        'distrito' => $value->distrito,
+                        'conteo' => (int) $value->conteo,
+                        'matriculados' => (int) $value->matriculados,
+                    ];
                 }
-                return response()->json(compact('info', 'valores', 'data'));
+                foreach ($acumuladoPorProvincia as $codigo => $conteoProvincia) {
+                    $info[] = [$codigo, round($total > 0 ? 100 * $conteoProvincia / $total : 0, 1)];
+                    $valores[$codigo] = [
+                        'num' => $conteoProvincia,
+                        'dem' => $total,
+                        'ind' => round($total > 0 ? 100 * $conteoProvincia / $total : 0, 1),
+                    ];
+                }
+                return response()->json(compact('info', 'valores', 'data', 'infoDistritos'));
 
             case 'anal2':
                 $info = [
-                    'categoria' => ['programa presupuestal','acciones centrales','apnop'],
+                    'categoria' => [],
                     'series' => [
-                        ['type' => 'column', 'yAxis' => 0, 'data' => [], 'name' => 'Pim'],
-                        ['type' => 'column', 'yAxis' => 0, 'data' => [], 'name' => 'Devengado'],
+                        ['type' => 'column', 'yAxis' => 0, 'data' => [], 'name' => 'Matriculados'],
                         ['type' => 'spline', 'yAxis' => 1, 'data' => [], 'name' => '%Avance'],
                     ],
                     'maxbar' => 0,
@@ -423,7 +438,7 @@ class PadronEIBController extends Controller
         }
     }
 
-    public function reportesrdownloadexcel($div, $anio, $ugel, $provincia, $distrito)
+    public function edubascuboeibreportedownloadexcel($div, $anio, $ugel, $provincia, $distrito)
     {
         switch ($div) {
             case 'tabla1':

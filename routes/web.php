@@ -518,9 +518,9 @@ Route::post('/MatriculaDetalle/EIB/grafica4', [MatriculaDetalleController::class
 Route::post('/MatriculaDetalle/EIB/tabla1', [MatriculaDetalleController::class, 'cargarEIBtabla1'])->name('matriculadetalle.eib.tabla1');
 Route::post('/MatriculaDetalle/EIB/tabla2', [MatriculaDetalleController::class, 'cargarEIBtabla2'])->name('matriculadetalle.eib.tabla2');
 
-Route::get('/educación/EIB/Reportes', [PadronEIBController::class, 'reportes'])->name('educacion.padron.eib.reportes');
-Route::get('/educación/EIB/Reportes/Reporte', [PadronEIBController::class, 'reportesreporte'])->name('educacion.padron.eib.reportes.reporte');
-Route::get('/educación/EIB/Reportes/Download/{div}/{anio}/{ugel}/{provincia}/{distrito}', [PadronEIBController::class, 'reportesrdownloadexcel'])->name('educacion.padron.eib.reportes.download.excel');
+Route::get('/educación/EIB/Reportes', [PadronEIBController::class, 'edubascuboeib'])->name('educacion.padron.eib.reportes');
+Route::get('/educación/EIB/Reportes/Reporte', [PadronEIBController::class, 'edubascuboeibreporte'])->name('educacion.padron.eib.reportes.reporte');
+Route::get('/educación/EIB/Reportes/Download/{div}/{anio}/{ugel}/{provincia}/{distrito}', [PadronEIBController::class, 'edubascuboeibreportedownloadexcel'])->name('educacion.padron.eib.reportes.download.excel');
 
 Route::get('/educación/CuboEIB/Select/CargarGestion/{anio}', [CuboPadronEIBController::class, 'cargargestion'])->name('educacion.cubo.padron.eib.select.gestion');
 Route::get('/educación/CuboEIB/Select/CargarProvincia/{anio}/{ugel}', [CuboPadronEIBController::class, 'cargarprovincia'])->name('educacion.cubo.padron.eib.select.provincia');
@@ -1402,12 +1402,12 @@ Route::get('/salud/pactoregional/Sal/Reports4/find/mes/{anio}', [IndicadoresCont
 Route::get('/salud/pactoregional/Sal/Reports4/Exportar/{div}/{indicador}/{anio}/{mes}/{provincia}/{distrito}', [IndicadoresController::class, 'PactoRegionalSalPacto4download'])->name('salud.indicador.pactoregional.sal.pacto4.excel');
 Route::get('/salud/pactoregional/Sal/Reports4/mes/{anio}', [IndicadoresController::class, 'cargarMesPvica'])->name('salud.indicador.pactoregional.sal.pacto4.cargarmes');
 
-Route::get('/educacion/pactoregional', [IndicadoresController::class, 'PactoRegionalEdu'])->name('salud.indicador.pactoregional.edu');
-Route::get('/educacion/pactoregional/Reports1', [IndicadoresController::class, 'PactoRegionalEduPacto1Reports'])->name('salud.indicador.pactoregional.edu.pacto1.reports');
-Route::get('/educacion/pactoregional/Edu/Reports1/find/mes/{anio}', [IndicadoresController::class, 'PactoRegionalEduPacto1FindMes'])->name('salud.indicador.pactoregional.edu.pacto1.find.mes');
+Route::get('/educacion/pactoregional', [IndicadoresController::class, 'PactoRegionalEdu'])->name('educacion.indicador.pactoregional.edu');
+Route::get('/educacion/pactoregional/Reports1', [IndicadoresController::class, 'PactoRegionalEduPacto1Reports'])->name('educacion.indicador.pactoregional.edu.pacto1.reports');
+Route::get('/educacion/pactoregional/Edu/Reports1/find/mes/{anio}', [IndicadoresController::class, 'PactoRegionalEduPacto1FindMes'])->name('educacion.indicador.pactoregional.edu.pacto1.find.mes');
 
-Route::get('/educacion/pactoregional/Reports2', [IndicadoresController::class, 'PactoRegionalEduPacto2Reports'])->name('salud.indicador.pactoregional.edu.pacto2.reports');
-Route::get('/educacion/pactoregional/Edu/Reports2/find/mes/{anio}', [IndicadoresController::class, 'PactoRegionalEduPacto2FindMes'])->name('salud.indicador.pactoregional.edu.pacto2.find.mes');
+Route::get('/educacion/pactoregional/Reports2', [IndicadoresController::class, 'PactoRegionalEduPacto2Reports'])->name('educacion.indicador.pactoregional.edu.pacto2.reports');
+Route::get('/educacion/pactoregional/Edu/Reports2/find/mes/{anio}', [IndicadoresController::class, 'PactoRegionalEduPacto2FindMes'])->name('educacion.indicador.pactoregional.edu.pacto2.find.mes');
 
 Route::get('/cubo/pacto2/local/mes/{anio}', [CuboPacto2Controller::class, 'mes'])->name('educacion.pactoregional.pacto2.mes');
 Route::get('/cubo/pacto2/local/provincia/{anio}/{mes}', [CuboPacto2Controller::class, 'provincia'])->name('educacion.pactoregional.pacto2.provincia');

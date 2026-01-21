@@ -157,23 +157,12 @@
                             <table id="siagie-matricula" class="table table-striped table-bordered" style="font-size:12px">
                                 {{-- width:7200px; --}}
                                 <thead class="text-primary">
-                                    {{-- <th>dre</th> --}}
-                                    <th>ugel</th>
-                                    {{-- <th>departamento</th> --}}
-                                    <th>provincia</th>
-                                    <th>distrito</th>
-                                    <th>centro_poblado</th>
-                                    <th>cod_mod</th>
-                                    <th>cod_local</th>
-                                    <th>institucion_educativa</th>
-                                    <th>cod_nivelmod</th>
-                                    <th>nivel_modalidad</th>
-                                    <th>forma_atencion</th>
-                                    {{-- <th>cod_lengua</th> --}}
-                                    <th>lengua_uno</th>
-                                    <th>lengua_dos</th>
-                                    <th>lengua_3</th>
-                                    {{-- <th>Accion</th> --}}
+                                    <th>PERIODO</th>
+                                    <th>COD_MOD</th>
+                                    <th>FORMA ATENCIÓN</th>
+                                    <th>LENGUA 1</th>
+                                    <th>LENGUA 2</th>
+                                    <th>LENGUA 3</th>
                                 </thead>
                                 <tbody>
 
@@ -512,50 +501,13 @@
                         "type": "POST",
                         "dataType": 'JSON',
                     },
-                    "columns": [{
-                            data: 'ugel',
-                            name: 'ugel'
-                        }, {
-                            data: 'provincia',
-                            name: 'provincia'
-                        }, {
-                            data: 'distrito',
-                            name: 'distrito'
-                        }, {
-                            data: 'centro_poblado',
-                            name: 'centro_poblado'
-                        }, {
-                            data: 'cod_mod',
-                            name: 'cod_mod' /*  */
-                        }, {
-                            data: 'cod_local',
-                            name: 'cod_local'
-                        }, {
-                            data: 'institucion_educativa',
-                            name: 'institucion_educativa'
-                        }, {
-                            data: 'cod_nivelmod',
-                            name: 'cod_nivelmod'
-                        }, {
-                            data: 'nivel_modalidad',
-                            name: 'nivel_modalidad'
-                        }, {
-                            data: 'forma_atencion',
-                            name: 'forma_atencion' /*  */
-                        }, {
-                            data: 'lengua1',
-                            name: 'lengua1'
-                        }, {
-                            data: 'lengua2',
-                            name: 'lengua2' /*  */
-                        }, {
-                            data: 'lengua3',
-                            name: 'lengua3'
-                        },
-                        /*  {
-                                                data: 'accion',
-                                                name: 'accion'
-                                            }, */
+                    "columns": [
+                        { data: 'periodo', name: 'periodo' },
+                        { data: 'cod_mod', name: 'cod_mod' },
+                        { data: 'forma_atencion', name: 'forma_atencion' },
+                        { data: 'lengua_1', name: 'lengua_1' },
+                        { data: 'lengua_2', name: 'lengua_2' },
+                        { data: 'lengua_3', name: 'lengua_3' }
                     ],
                 }
 

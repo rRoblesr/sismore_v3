@@ -63,12 +63,16 @@ class CuboPadronEIBRepositorio
 
     public static function reportesreporte_anal1($anio, $periodo, $gestion, $provincia, $distrito)
     {
-        return DB::table('edu_cubo_padron_eib as ceib')
-            ->join('par_ubigeo as p', 'p.id', '=', 'ceib.provincia_id')
-            ->where('ceib.anio_pw', $anio)
-            ->when($gestion > 0, fn($query) => $query->where('ceib.tipogestion_id', $gestion))
-            ->when($provincia > 0, fn($query) => $query->where('ceib.provincia_id', $provincia))
-            ->when($distrito > 0, fn($query) => $query->where('ceib.distrito_id', $distrito))
+        return DB::table('par_ubigeo as d')
+            ->join('par_ubigeo as p', 'p.id', '=', 'd.dependencia')
+            ->leftJoin('edu_cubo_padron_eib as ceib', function($join) use ($anio, $gestion) {
+                $join->on('d.id', '=', 'ceib.distrito_id')
+                     ->where('ceib.anio_pw', '=', $anio);
+                if ($gestion > 0) {
+                     $join->where('ceib.tipogestion_id', '=', $gestion);
+                }
+            })
+            ->whereIn('p.codigo', ['2501', '2502', '2503', '2504'])
             ->select(
                 DB::raw("
                     CASE 
@@ -79,9 +83,12 @@ class CuboPadronEIBRepositorio
                     END AS codigo
                 "),
                 'p.nombre as provincia',
-                DB::raw('COUNT(*) as conteo')
+                'd.codigo as distrito_codigo',
+                'd.nombre as distrito',
+                DB::raw('COUNT(ceib.id) as conteo'),
+                DB::raw('COALESCE(SUM(ceib.matriculados), 0) as matriculados')
             )
-            ->groupBy('p.codigo', 'p.nombre')
+            ->groupBy('p.codigo', 'p.nombre', 'd.codigo', 'd.nombre')
             ->get();
     }
 

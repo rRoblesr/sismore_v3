@@ -79,7 +79,7 @@ class MenuAccess
 
             if ($esRutaProtegida) {
                 // Lista blanca de acciones internas permitidas sin menú explícito
-                $internalAllowed = ['reporte', 'reportes', 'listar', 'listarDT', 'download', 'ajax', 'cargar', 'tabla', 'grafico', 'grafica', 'exportar', 'detalle', 'contenido', 'select', 'buscar', 'guardar', 'editar', 'eliminar', 'update', 'store', 'create'];
+                $internalAllowed = ['reporte', 'reportes', 'listar', 'listarDT', 'download', 'ajax', 'cargar', 'tabla', 'grafico', 'grafica', 'exportar', 'detalle', 'contenido', 'select', 'buscar', 'guardar', 'editar', 'eliminar', 'update', 'store', 'create', 'indicador'];
                 
                 if (!Str::contains($routeName, $internalAllowed)) {
                     // Opcional: Podríamos ser estrictos aquí, pero por ahora logueamos y dejamos pasar si es ambiguo, 

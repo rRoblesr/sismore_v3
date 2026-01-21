@@ -3,7 +3,28 @@
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
     <style>
+        #btn-mapa-eib-reset {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            z-index: 10;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
 
+        .highcharts-tooltip {
+            z-index: 9999 !important;
+        }
+
+        .highcharts-tooltip span {
+            background: #ffffff !important;
+            opacity: 1 !important;
+        }
     </style>
 @endsection
 
@@ -170,10 +191,15 @@
     <div class="row">
         <div class="col-lg-6 col-md-6">
             <div class="card card-border border border-plomo-0">
-                <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
+                <div
+                    class="card-header border-success-0 bg-transparent pb-0 pt-0 d-flex justify-content-between align-items-center">
                     <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
                 </div>
-                <div class="card-body p-0">
+                <div class="card-body p-0 position-relative">
+                    <button type="button" id="btn-mapa-eib-reset" class="btn btn-xs btn-outline-secondary d-none"
+                        title="Ver mapa completo" data-toggle="tooltip">
+                        <i class="fa fa-expand"></i>
+                    </button>
                     <div id="anal1" style="height: 25rem"></div>
                 </div>
             </div>
@@ -239,7 +265,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="row">
         <div class="col-lg-12">
             {{-- <div class="card">
@@ -363,14 +389,57 @@
         var ubigeo_select = '';
         var anal3;
         var anal3valores = [];
+        var anal1Chart;
+        var selectedProvinciaCodigo = null;
+        var anal1Distritos = {};
+        var anal1DistritosValores = {};
+        var provinciaNombreToCodigo = {};
+        var ubigeoToDistritoHcKey = {};
+        var mapLevel = 'provincia';
         const spinners = {
             head: ['#card1', '#card2', '#card3', '#card4', '#card1i', '#card2i', '#card3i', '#card4i', '#card1b',
                 '#card2b', '#card3b', '#card4b'
             ],
-            anal: ['#anal1', '#anal2', '#anal3', '#anal4'],
-            tabla: ['#ctabla1', '#ctabla2', '#ctabla3', '#ctabla4']
+            anal1: ['#anal1'],
+            anal2: ['#anal2'],
+            anal3: ['#anal3'],
+            anal4: ['#anal4'],
+            anal5: ['#anal5'],
+            anal6: ['#anal6'],
+            tabla1: ['#ctabla1'],
+            tabla2: ['#ctabla2'],
+            tabla3: ['#ctabla3'],
+            tabla4: ['#ctabla4']
         };
         $(document).ready(function() {
+            if (window.Highcharts && Highcharts.setOptions) {
+                Highcharts.setOptions({
+                    lang: {
+                        contextButtonTitle: 'Menú de exportación',
+                        viewFullscreen: 'Ver en pantalla completa',
+                        printChart: 'Imprimir gráfico',
+                        downloadPNG: 'Descargar imagen PNG',
+                        downloadJPEG: 'Descargar imagen JPEG',
+                        downloadSVG: 'Descargar imagen SVG vectorial',
+                        downloadPDF: 'Descargar documento PDF',
+                        downloadCSV: 'Descargar CSV',
+                        downloadXLS: 'Descargar XLS',
+                        viewData: 'Ver tabla de datos'
+                    },
+                    exporting: {
+                        buttons: {
+                            contextButton: {
+                                menuItems: [
+                                    'viewFullscreen',
+                                    'printChart',
+                                    'downloadPNG',
+                                    'downloadPDF'
+                                ]
+                            }
+                        }
+                    }
+                });
+            }
             Object.keys(spinners).forEach(key => {
                 SpinnerManager.show(key);
             });
@@ -381,6 +450,14 @@
                 cargarProvincia();
             });
             $('#provincia').on('change', function() {
+                var valor = $(this).val();
+                if (valor === '0') {
+                    $('#btn-mapa-eib-reset').addClass('d-none');
+                    selectedProvinciaCodigo = null;
+                    mapLevel = 'provincia';
+                } else {
+                    $('#btn-mapa-eib-reset').removeClass('d-none');
+                }
                 cargarDistrito();
             });
             $('#distrito').on('change', function() {
@@ -388,10 +465,34 @@
             });
 
             mapData = otros;
-            mapData.features.forEach((element, key) => {
-                console.log('["' + element.properties['hc-key'] + '", ' + (key + 1) + '],');
-            });
+            provinciaNombreToCodigo = {};
+            if (otros && otros.features) {
+                otros.features.forEach(function(element) {
+                    if (element.properties && element.properties.name && element.properties['hc-key']) {
+                        var nombre = String(element.properties.name).toUpperCase().trim();
+                        provinciaNombreToCodigo[nombre] = element.properties['hc-key'];
+                    }
+                });
+            }
+            ubigeoToDistritoHcKey = {};
+            if (otros2 && otros2.features) {
+                otros2.features.forEach(function(element) {
+                    if (element.ubigeo && element.properties && element.properties['hc-key']) {
+                        ubigeoToDistritoHcKey[element.ubigeo] = element.properties['hc-key'];
+                    }
+                });
+            }
             cargarGestion();
+
+            $('#btn-mapa-eib-reset').on('click', function() {
+                selectedProvinciaCodigo = null;
+                $('#provincia').val('0');
+                $('#distrito').empty().append('<option value="0">TODOS</option>');
+                $('#btn-mapa-eib-reset').addClass('d-none');
+                mapLevel = 'provincia';
+                mapData = otros;
+                cargarCards();
+            });
 
         });
 
@@ -446,9 +547,70 @@
                             break;
                         case 'anal1':
                             anal3valores = data.valores;
-                            anal3 = maps01(div, data.info, '',
-                                'Distribución de los Servicios Educativos del Modelo de Servicio de EIB por Provincia'
-                            );
+                            anal1Distritos = data.infoDistritos || {};
+
+                            // Ensure mappings are populated (lazy init)
+                            if (typeof otros !== 'undefined' && Object.keys(provinciaNombreToCodigo).length ===
+                                0) {
+                                otros.features.forEach(function(element) {
+                                    if (element.properties && element.properties.name && element
+                                        .properties['hc-key']) {
+                                        var nombre = String(element.properties.name).toUpperCase()
+                                        .trim();
+                                        provinciaNombreToCodigo[nombre] = element.properties['hc-key'];
+                                    }
+                                });
+                            }
+                            if (typeof otros2 !== 'undefined' && Object.keys(ubigeoToDistritoHcKey).length ===
+                                0) {
+                                otros2.features.forEach(function(element) {
+                                    if (element.ubigeo && element.properties && element.properties[
+                                            'hc-key']) {
+                                        ubigeoToDistritoHcKey[element.ubigeo] = element.properties[
+                                            'hc-key'];
+                                    }
+                                });
+                            }
+
+                            var provinciaValor = $('#provincia').val();
+                            var usarDistritos = false;
+                            var codigoProvincia = null;
+                            if (provinciaValor && provinciaValor !== '0') {
+                                var nombreSel = $('#provincia option:selected').text().toUpperCase().trim();
+                                codigoProvincia = provinciaNombreToCodigo[nombreSel] || null;
+
+                                // FIX: Hardcode explícito para Padre Abad
+                                if (nombreSel === 'PADRE ABAD') {
+                                    codigoProvincia = 'pe-uc-pa';
+                                }
+
+                                if (codigoProvincia && anal1Distritos[codigoProvincia]) {
+                                    usarDistritos = true;
+                                }
+                            }
+                            if (usarDistritos) {
+                                selectedProvinciaCodigo = codigoProvincia;
+                                mapLevel = 'distrito';
+                                var nombreProvinciaSel = $('#provincia option:selected').text();
+                                mapData = construirMapaDistritosProvincia(nombreProvinciaSel);
+                                $('#btn-mapa-eib-reset').removeClass('d-none');
+                                var datosDistritos = construirDatosDistritos(codigoProvincia);
+                                anal1Chart = maps01(div, datosDistritos, '',
+                                    'Distribución de los Servicios Educativos del Modelo de Servicio de EIB por Distrito'
+                                    );
+                            } else {
+                                selectedProvinciaCodigo = null;
+                                mapLevel = 'provincia';
+                                mapData = otros;
+                                if (provinciaValor && provinciaValor !== '0') {
+                                    $('#btn-mapa-eib-reset').removeClass('d-none');
+                                } else {
+                                    $('#btn-mapa-eib-reset').addClass('d-none');
+                                }
+                                anal1Chart = maps01(div, data.info, '',
+                                    'Distribución de los Servicios Educativos del Modelo de Servicio de EIB por Provincia'
+                                    );
+                            }
                             break;
                         case 'anal2':
                             gAnidadaColumn(div,
@@ -594,62 +756,6 @@
             });
         }
 
-        function cargarModalidad() {
-            $.ajax({
-                url: "{{ route('educacion.nexus.filtro.modalidad', ['anio' => ':anio', 'ugel' => ':ugel']) }}"
-                    .replace(':anio', $('#anio').val())
-                    .replace(':ugel', $('#ugel').val()),
-                type: 'GET',
-                success: function(data) {
-                    $('#modalidad').empty();
-                    if (Object.keys(data).length > 1)
-                        $('#modalidad').append('<option value="0">TODOS</option>');
-                    $.each(data, function(index, value) {
-                        $('#modalidad').append(`<option value='${index}'>${value}</option>`);
-                    });
-                    cargarNivel();
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
-        }
-
-        function cargarNivel() {
-            $.ajax({
-                url: "{{ route('educacion.nexus.filtro.nivel', ['anio' => ':anio', 'ugel' => ':ugel', 'modalidad' => ':modalidad']) }}"
-                    .replace(':anio', $('#anio').val())
-                    .replace(':ugel', $('#ugel').val())
-                    .replace(':modalidad', $('#modalidad').val()),
-                type: 'GET',
-                success: function(data) {
-                    $("#nivel").empty();
-                    if (Object.keys(data).length > 1)
-                        $('#nivel').append('<option value="0">TODOS</option>');
-                    $.each(data, function(index, value) {
-                        $('#nivel').append(`<option value='${index}'>${value}</option>`);
-                    });
-                    cargarCards();
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
-        }
-
-        function abrirmodalcentropoblado(ubigeo) {
-            ubigeo_select = ubigeo;
-            // console.log(ubigeo_select)]
-            panelGraficas('tabla3_1');
-
-            $('#modal-centropoblado').modal('show');
-
-        }
-
-        function abrirmodalconsultas() {
-            $('#modal-consulta').modal('show');
-        }
-
         function descargarExcel(div) {
             window.open(
                 "{{ route('educacion.padron.eib.reportes.download.excel', ['div' => ':div', 'anio' => ':anio', 'ugel' => ':ugel', 'provincia' => ':provincia', 'distrito' => ':distrito']) }}"
@@ -790,71 +896,98 @@
             });
         }
 
-        function gPie(div, datos, titulo, subtitulo, tituloserie) {
-            const colors = ["#5eb9aa", "#e65310", "#f5bd22"];
-            Highcharts.chart(div, {
-                chart: {
-                    plotBackgroundColor: null,
-                    plotBorderWidth: null,
-                    plotShadow: false,
-                    type: 'pie'
-                },
-                title: {
-                    enabled: false,
-                    text: titulo, //'Browser market shares in January, 2018'
-                },
-                subtitle: {
-                    enabled: true,
-                    text: subtitulo,
-                    style: {
-                        fontSize: '11px',
-                    }
-                },
-                tooltip: {
-                    //pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
-                    pointFormat: '<b>{point.percentage:.1f}% ({point.y:,0f})</b>',
-                },
-                accessibility: {
-                    point: {
-                        valueSuffix: '%'
-                    }
-                },
-                plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        colors,
-                        dataLabels: {
-                            enabled: true,
-                            // distance: -20,
-                            //format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                            //format: '{point.percentage:.1f}% ({point.y})',
-                            format: '{point.y:,0f} ( {point.percentage:.1f}% )',
-                            // format: '{point.percentage:.1f}%',
-                            connectorColor: 'silver'
-                        }
-                    }
-                },
-                series: [{
-                    innerSize: '50%',
-                    showInLegend: true,
-                    // name: 'Share',
-                    data: datos,
-                }],
-                legend: {
-                    itemStyle: {
-                        //color: "#333333",
-                        cursor: "pointer",
-                        fontSize: "10px",
-                        fontWeight: "normal",
-                        textOverflow: "ellipsis"
-                    },
-                },
-                exporting: {
-                    enabled: true
-                },
-                credits: false,
+        function construirDatosDistritos(codigoProvincia) {
+            anal1DistritosValores = {};
+            var lista = anal1Distritos[codigoProvincia] || [];
+            var totalProvincia = 0;
+            lista.forEach(function(item) {
+                totalProvincia += item.conteo;
             });
+            if (totalProvincia === 0) {
+                totalProvincia = 1;
+            }
+            var datos = [];
+            lista.forEach(function(item) {
+                var hcKey = ubigeoToDistritoHcKey[item.distrito_codigo] || null;
+                if (!hcKey) {
+                    return;
+                }
+                var porcentaje = (100 * item.conteo) / totalProvincia;
+                var valorRedondeado = Math.round(porcentaje * 10) / 10;
+                datos.push([hcKey, valorRedondeado]);
+                anal1DistritosValores[hcKey] = {
+                    num: item.conteo,
+                    dem: totalProvincia,
+                    ind: valorRedondeado,
+                    name: item.distrito
+                };
+            });
+            return datos;
+        }
+
+        function construirMapaDistritosProvincia(nombreProvincia) {
+            if (!otros2 || !otros2.features) {
+                return otros2;
+            }
+            var nombre = (nombreProvincia || '').toUpperCase().trim();
+
+            var provinceUbigeo = null;
+            var provinceHcKey = null;
+
+            if (otros && otros.features) {
+                var provFeature = otros.features.find(function(element) {
+                    var pName = '';
+                    if (element.properties && element.properties.name) {
+                        pName = String(element.properties.name).toUpperCase().trim();
+                    }
+                    return pName === nombre;
+                });
+                if (provFeature) {
+                    if (provFeature.ubigeo) {
+                        provinceUbigeo = String(provFeature.ubigeo);
+                    }
+                    if (provFeature.properties && provFeature.properties['hc-key']) {
+                        provinceHcKey = String(provFeature.properties['hc-key']);
+                    }
+                }
+            }
+
+            // FIX: Hardcode explícito para Padre Abad para asegurar visualización (sobreescribe cualquier valor anterior)
+            if (nombre === 'PADRE ABAD') {
+                provinceUbigeo = '2503';
+                provinceHcKey = 'pe-uc-pa';
+            }
+
+            var featuresFiltradas = otros2.features.filter(function(element) {
+                var padre = '';
+                if (element.padre) {
+                    padre = String(element.padre).toUpperCase().trim();
+                }
+
+                var matchName = (padre === nombre);
+                var matchUbigeo = false;
+                if (provinceUbigeo && element.ubigeo) {
+                    matchUbigeo = String(element.ubigeo).startsWith(provinceUbigeo);
+                }
+
+                var matchHcKey = false;
+                if (provinceHcKey && element.properties && element.properties['hc-key']) {
+                    matchHcKey = String(element.properties['hc-key']).startsWith(provinceHcKey + '-');
+                }
+
+                return matchName || matchUbigeo || matchHcKey;
+            });
+            return {
+                title: otros2.title,
+                version: otros2.version,
+                type: otros2.type,
+                copyright: otros2.copyright,
+                copyrightShort: otros2.copyrightShort,
+                copyrightUrl: otros2.copyrightUrl,
+                crs: otros2.crs,
+                "hc-transform": otros2["hc-transform"],
+                features: featuresFiltradas
+            };
         }
 
         function maps01(div, data, titulo, subtitulo) {
@@ -886,10 +1019,22 @@
                 },
 
                 colorAxis: {
-                    // mixColor: "#e6ebf5",
-                    // manColor: "#003399",
                     minColor: '#e0f6f3',
                     maxColor: '#2a7f72',
+                    // dataClasses: [{
+                    //     to: 50,
+                    //     color: '#ef5350', // Rojo
+                    //     name: '< 50%'
+                    // }, {
+                    //     from: 50,
+                    //     to: 95,
+                    //     color: '#f5bd22', // Amarillo
+                    //     name: '50% - 95%'
+                    // }, {
+                    //     from: 95,
+                    //     color: '#66bb6a', // Verde
+                    //     name: '> 95%'
+                    // }],
                     showInLegend: false
                 },
 
@@ -898,6 +1043,7 @@
                     name: 'NEXUS',
                     states: {
                         hover: {
+                            // color: '#87CEEB' // SkyBlue
                             color: '#ef5350' // '#BADA55'
                         }
                     },
@@ -937,22 +1083,71 @@
                             textShadow: '0px 0px 3px #000000'
                         }
                     },
-
+                    point: {
+                        events: {
+                            click: function() {
+                                if (mapLevel === 'provincia') {
+                                    var nombre = this.name ? this.name.toUpperCase().trim() : '';
+                                    var encontrado = false;
+                                    $('#provincia option').each(function() {
+                                        if ($(this).text().toUpperCase().trim() === nombre) {
+                                            var valor = $(this).val();
+                                            $('#provincia').val(valor);
+                                            encontrado = true;
+                                            return false;
+                                        }
+                                    });
+                                    if (encontrado) {
+                                        $('#btn-mapa-eib-reset').removeClass('d-none');
+                                        cargarDistrito();
+                                    }
+                                } else if (mapLevel === 'distrito') {
+                                    var nombreDistrito = this.name ? this.name.toUpperCase().trim() :
+                                    '';
+                                    var encontradoDistrito = false;
+                                    $('#distrito option').each(function() {
+                                        if ($(this).text().toUpperCase().trim() ===
+                                            nombreDistrito) {
+                                            var valorDistrito = $(this).val();
+                                            $('#distrito').val(valorDistrito);
+                                            encontradoDistrito = true;
+                                            return false;
+                                        }
+                                    });
+                                    if (encontradoDistrito) {
+                                        cargarCards();
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }],
                 tooltip: {
                     useHTML: true,
                     formatter: function() {
-                        // Obtener los datos desde anal3valores
-                        const provinciaData = anal3valores[this.point.properties['hc-key']];
-                        if (!provinciaData) {
-                            return `<strong>${this.point.name}</strong><br>Datos no disponibles`;
+                        var codigo = this.point.properties && this.point.properties['hc-key'] ? this.point
+                            .properties['hc-key'] : null;
+                        if (mapLevel === 'distrito') {
+                            var distritoData = codigo ? anal1DistritosValores[codigo] : null;
+                            if (!distritoData) {
+                                return `<strong>${this.point.name}</strong><br>Datos no disponibles`;
+                            }
+                            return `<div style="text-align:left;">
+                                        <strong>${this.point.name}</strong><br>
+                                        Servicios Educativos: ${Highcharts.numberFormat(distritoData.num,0)}<br>
+                                        Participación: ${Highcharts.numberFormat(distritoData.ind, 1)}%
+                                    </div>`;
+                        } else {
+                            var provinciaData = codigo ? anal3valores[codigo] : null;
+                            if (!provinciaData) {
+                                return `<strong>${this.point.name}</strong><br>Datos no disponibles`;
+                            }
+                            return `<div style="text-align:left;">
+                                        <strong>${this.point.name}</strong><br>
+                                        Servicios Educativos: ${Highcharts.numberFormat(provinciaData.num,0)}<br>
+                                        Participación: ${Highcharts.numberFormat(provinciaData.ind, 1)}%
+                                    </div>`;
                         }
-
-                        return `<div style="text-align:left;">
-                                    <strong>${this.point.name}</strong><br>
-                                    Servicios Educativos: ${Highcharts.numberFormat(provinciaData.num,0)}<br>
-                                    Participación: ${Highcharts.numberFormat(provinciaData.ind, 1)}%
-                                </div>`;
                     },
                     backgroundColor: '#fff', // Fondo blanco translúcido
                     borderColor: '#cccccc', // Borde suave
@@ -971,312 +1166,6 @@
                 credits: {
                     enabled: false
                 },
-            });
-        }
-
-        function crearGraficoMatricula(div, config) {
-            const defaultOpciones = {
-                altura: 500,
-                colorBarras: '#00BCD4',
-                colorLinea: '#E91E63',
-                exportar: true,
-                mostrarEtiquetas: true,
-                tipoGrafico: 'column', // 'column', 'bar', 'line'
-                etiquetaEjeY1: 'Matriculados',
-                etiquetaEjeY2: '% Avance',
-                nombreSerie1: 'MATRICULADOS',
-                nombreSerie2: '% AVANCE'
-            };
-
-            // Combinar opciones
-            const opciones = {
-                ...defaultOpciones,
-                ...config.opciones
-            };
-
-            // Crear el gráfico
-            Highcharts.chart(div, {
-                chart: {
-                    type: opciones.tipoGrafico,
-                    // height: opciones.altura
-                },
-                title: {
-                    text: config.titulo,
-                    style: {
-                        fontSize: '14px',
-                        color: '#666'
-                    }
-                },
-                xAxis: {
-                    categories: config.years,
-                    crosshair: true,
-                },
-                yAxis: [{
-                    title: {
-                        text: opciones.etiquetaEjeY1,
-                        style: {
-                            color: opciones.colorBarras
-                        },
-                        enabled: false,
-                    },
-                    labels: {
-                        format: '{value}'
-                    }
-                }, {
-                    title: {
-                        text: opciones.etiquetaEjeY2,
-                        style: {
-                            color: opciones.colorLinea
-                        },
-                        enabled: false,
-                    },
-                    labels: {
-                        format: '{value}%'
-                    },
-                    opposite: true,
-                    min: 0,
-                    max: 100
-                }],
-                tooltip: {
-                    shared: true,
-                    formatter: function() {
-                        let tooltip = '<b>' + this.x + '</b><br/>';
-                        this.points.forEach(function(point) {
-                            tooltip += '<span style="color:' + point.color + '">\u25CF</span> ' +
-                                point.series.name + ': <b>' +
-                                (point.series.name.includes('%') ?
-                                    (point.y ? point.y + '%' : 'N/A') :
-                                    point.y.toLocaleString()) +
-                                '</b><br/>';
-                        });
-                        return tooltip;
-                    }
-                },
-                legend: {
-                    align: 'center',
-                    verticalAlign: 'bottom',
-                    layout: 'horizontal'
-                },
-                plotOptions: {
-                    column: {
-                        dataLabels: {
-                            enabled: opciones.mostrarEtiquetas,
-                            format: '{point.y:,.0f}',
-                            style: {
-                                fontSize: '11px'
-                            }
-                        }
-                    },
-                    bar: {
-                        dataLabels: {
-                            enabled: opciones.mostrarEtiquetas,
-                            format: '{point.y:,.0f}',
-                            style: {
-                                fontSize: '11px'
-                            }
-                        }
-                    },
-                    line: {
-                        dataLabels: {
-                            enabled: opciones.mostrarEtiquetas,
-                            formatter: function() {
-                                return this.y ? this.y + '%' : '';
-                            },
-                            style: {
-                                fontSize: '11px',
-                                fontWeight: 'bold'
-                            }
-                        },
-                        marker: {
-                            enabled: true,
-                            radius: 5
-                        }
-                    }
-                },
-                series: [{
-                    name: opciones.nombreSerie1,
-                    type: opciones.tipoGrafico,
-                    data: config.matriculados,
-                    color: opciones.colorBarras,
-                    yAxis: 0
-                }, {
-                    name: opciones.nombreSerie2,
-                    type: 'line',
-                    data: config.porcentajes,
-                    color: opciones.colorLinea,
-                    yAxis: 1,
-                    lineWidth: 2
-                }],
-                credits: {
-                    enabled: false
-                },
-                exporting: {
-                    enabled: opciones.exportar,
-                    buttons: {
-                        contextButton: {
-                            menuItems: ['downloadPNG', 'downloadJPEG', 'downloadPDF', 'downloadSVG']
-                        }
-                    }
-                }
-            });
-        }
-
-        function anal3valores(provincia) {
-            return anal3valores[provincia] || null;
-        }
-
-        function crearGraficoLineasAcumuladas(div, data, titulo = 'Gráfico', subtitulo = '', colorLinea = '#cc0000') {
-            Highcharts.chart(div, {
-                chart: {
-                    type: 'line',
-                    // backgroundColor: '#f9f9f9',
-                    borderRadius: 10,
-                    spacingTop: 20,
-                    spacingBottom: 20,
-                    spacingLeft: 20,
-                    spacingRight: 20
-                },
-                title: {
-                    text: titulo,
-                    style: {
-                        fontSize: '16px',
-                        fontWeight: 'bold',
-                        color: '#333'
-                    }
-                },
-                subtitle: {
-                    text: subtitulo,
-                    style: {
-                        // fontSize: '12px',
-                        // color: '#666'
-                    }
-                },
-                xAxis: {
-                    categories: data
-                        .categoria, // ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Set', 'Oct', 'Nov', 'Dic'],
-                    tickmarkPlacement: 'on',
-                    lineWidth: 0,
-                    gridLineWidth: 1,
-                    gridLineColor: '#ddd',
-                    labels: {
-                        style: {
-                            fontSize: '12px',
-                            color: '#555'
-                        }
-                    }
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: ''
-                    },
-                    gridLineColor: '#ddd',
-                    labels: {
-                        style: {
-                            fontSize: '12px',
-                            color: '#555'
-                        }
-                    }
-                },
-                plotOptions: {
-                    line: {
-                        lineWidth: 2,
-                        marker: {
-                            enabled: true,
-                            radius: 4,
-                            fillColor: '#fff',
-                            lineColor: colorLinea,
-                            lineWidth: 2
-                        },
-                        states: {
-                            hover: {
-                                lineWidth: 3
-                            }
-                        }
-                    }
-                },
-                series: [{
-                    name: 'Plazas Docentes',
-                    data: data.data,
-                    color: colorLinea,
-                    dataLabels: {
-                        enabled: true,
-                        format: '{y}',
-                        style: {
-                            fontSize: '12px',
-                            fontWeight: 'bold',
-                            color: '#333',
-                            textOutline: '2px contrast'
-                        },
-                        verticalAlign: 'bottom',
-                        y: -10
-                    }
-                }],
-                tooltip: {
-                    shared: true,
-                    useHTML: true,
-                    formatter: function() {
-                        return `<b>${this.points[0].series.name}</b><br/>${this.x}: <b>${this.y} plazas</b>`;
-                    },
-                    backgroundColor: '#fff',
-                    borderColor: '#ccc',
-                    borderRadius: 8,
-                    shadow: true,
-                    style: {
-                        fontSize: '12px',
-                        padding: '8px'
-                    }
-                },
-                legend: {
-                    enabled: false
-                },
-                credits: {
-                    enabled: false
-                },
-                responsive: {
-                    rules: [{
-                        condition: {
-                            maxWidth: 500
-                        },
-                        chartOptions: {
-                            chart: {
-                                spacingTop: 10,
-                                spacingBottom: 10,
-                                spacingLeft: 10,
-                                spacingRight: 10
-                            },
-                            xAxis: {
-                                labels: {
-                                    style: {
-                                        fontSize: '10px'
-                                    }
-                                }
-                            },
-                            yAxis: {
-                                labels: {
-                                    style: {
-                                        fontSize: '10px'
-                                    }
-                                }
-                            },
-                            plotOptions: {
-                                line: {
-                                    marker: {
-                                        radius: 3
-                                    }
-                                }
-                            },
-                            series: [{
-                                dataLabels: {
-                                    style: {
-                                        fontSize: '10px'
-                                    },
-                                    y: -8
-                                }
-                            }]
-                        }
-                    }]
-                }
             });
         }
 
@@ -1596,6 +1485,8 @@
     <script src="https://code.highcharts.com/highcharts-more.js"></script>
     <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
     <!-- optional -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/svg2pdf.js/2.2.0/svg2pdf.min.js"></script>
     <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
 

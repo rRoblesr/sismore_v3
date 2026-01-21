@@ -323,7 +323,7 @@
 
         function panelGraficas(div) {
             $.ajax({
-                url: "{{ route('salud.indicador.pactoregional.edu.pacto1.reports') }}",
+                url: "{{ route('educacion.indicador.pactoregional.edu.pacto1.reports') }}",
                 data: {
                     'div': div,
                     "anio": $('#anio').val(),
@@ -477,7 +477,7 @@
 
         function cargarMes() {
             $.ajax({
-                url: "{{ route('salud.indicador.pactoregional.edu.pacto1.find.mes', ['anio' => 'anio']) }}"
+                url: "{{ route('educacion.indicador.pactoregional.edu.pacto1.find.mes', ['anio' => 'anio']) }}"
                     .replace('anio', $('#anio').val()),
                 type: 'GET',
                 success: function(data) {

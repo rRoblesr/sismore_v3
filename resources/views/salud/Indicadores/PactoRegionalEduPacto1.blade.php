@@ -327,7 +327,7 @@
 
         function panelGraficas(div) {
             $.ajax({
-                url: "{{ route('salud.indicador.pactoregional.edu.pacto1.reports') }}",
+                url: "{{ route('educacion.indicador.pactoregional.edu.pacto1.reports') }}",
                 data: {
                     'div': div,
                     "anio": $('#anio').val(),
