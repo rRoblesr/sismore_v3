@@ -80,6 +80,16 @@ class HomeController extends Controller
         } */
     }
 
+    public function rootRedirect()
+    {
+        return redirect('/publico');
+    }
+
+    public function reloadCaptcha()
+    {
+        return response()->json(['captcha' => captcha_img('login')]);
+    }
+
     /**
      * Show the application dashboard.
      *

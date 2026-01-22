@@ -153,15 +153,10 @@ use Maatwebsite\Excel\Facades\Excel;
 
 Auth::routes();
 
-Route::get('reload-captcha', function () {
-    return response()->json(['captcha' => captcha_img('login')]);
-})->name('reload-captcha');
+Route::get('reload-captcha', [HomeController::class, 'reloadCaptcha'])->name('reload-captcha');
 
 
-Route::get('/', function () {
-    //return view('welcome');
-    return redirect('/publico');
-});
+Route::get('/', [HomeController::class, 'rootRedirect']);
 
 // Rutas para gestión de logs
 Route::group(['prefix' => 'logs', 'as' => 'logs.'], function () {
@@ -809,7 +804,7 @@ Route::get('/Mantenimiento/Indicador/Meta/FED/Listar', [IndicadorGeneralControll
 Route::post('/Mantenimiento/Indicador/Meta/FED/Add', [IndicadorGeneralController::class, 'ajax_add_meta_fed'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.guardar.fed');
 Route::post('/Mantenimiento/Indicador/Meta/FED/Update', [IndicadorGeneralController::class, 'ajax_update_meta_fed'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.editar.fed');
 Route::get('/Mantenimiento/Indicador/Meta/FED/Find/{id}', [IndicadorGeneralController::class, 'ajax_find_meta_fed'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.find.fed');
-Route::get('/Mantenimiento/Indicador/Meta/FED/Delete/{id}', [IndicadorGeneralController::class, 'ajax_delete_meta'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.eliminar');
+Route::get('/Mantenimiento/Indicador/Meta/FED/Delete/{id}', [IndicadorGeneralController::class, 'ajax_delete_meta'])->middleware('auth')->name('mantenimiento.indicadorgeneralmeta.eliminar.fed');
 
 
 Route::get('/Mantenimiento/Indicador/Meta/exportar/{indicador}',  [IndicadorGeneralController::class, 'descargarExcel'])->name('mantenimiento.indicadorgeneralmeta.exportar');
@@ -1370,9 +1365,9 @@ Route::get('/Trabajo/PowerBi/EmpleoInformal', [PowerBiController::class, 'trabaj
 
 Route::get('/salud/PowerBi/Covid19', [PowerBiController::class, 'saludCovid19'])->name('powerbi.salud.covid19');
 Route::get('/salud/PowerBi/{id}', [PowerBiController::class, 'saludMenu'])->name('powerbi.salud.menu');
-Route::get('/trabajo/AsesoriaLegal/{id}', [PowerBiController::class, 'saludMenu'])->name('powerbi.salud.menu');
-Route::get('/trabajo/OfertaTrabajo/{id}', [PowerBiController::class, 'saludMenu'])->name('powerbi.salud.menu');
-Route::get('/trabajo/certificadolaboral/{id}', [PowerBiController::class, 'saludMenu'])->name('powerbi.salud.menu');
+Route::get('/trabajo/AsesoriaLegal/{id}', [PowerBiController::class, 'saludMenu'])->name('powerbi.trabajo.asesorialegal');
+Route::get('/trabajo/OfertaTrabajo/{id}', [PowerBiController::class, 'saludMenu'])->name('powerbi.trabajo.ofertatrabajo');
+Route::get('/trabajo/certificadolaboral/{id}', [PowerBiController::class, 'saludMenu'])->name('powerbi.trabajo.certificadolaboral');
 
 Route::get('/indicador/pactoregional/meta', [IndicadoresController::class, 'PactoRegionalMeta'])->name('indicador.pactoregional.meta');
 
@@ -1448,7 +1443,7 @@ Route::get('/educacion/conveniofed/{indicador_id}', [IndicadoresController::clas
 Route::get('/educacion/conveniofed/edu/buscarninio/{dni}', [IndicadoresController::class, 'ConvenioFEDbuscarninio'])->name('educacion.indicador.conveniofed.buscarninio');
 
 Route::get('/educacion/conveniofed/edu/Reports1', [IndicadoresController::class, 'ConvenioFEDEduMC0501Reports'])->name('educacion.indicador.conveniofed.detalle.reports');
-Route::post('/educacion/conveniofed/edu/Reports1/2', [IndicadoresController::class, 'PactoRegionalSalPacto1Reports2'])->name('educacion.indicador.conveniofed.detalle.reports.2');
+Route::post('/educacion/conveniofed/edu/Reports1/2', [IndicadoresController::class, 'PactoRegionalSalPacto1Reports2'])->name('educacion.indicador.conveniofed.detalle.reports.1.2');
 Route::post('/educacion/conveniofed/edu/Reports1/3', [IndicadoresController::class, 'PactoRegionalSalPacto1Reports3'])->name('educacion.indicador.conveniofed.detalle.reports.3');
 // Route::get('/educacion/conveniofed/edu/Reports1/Exportar/{div}/{indicador}/{anio}/{mes}/{provincia}/{distrito}', [IndicadoresController::class, 'PactoRegionalSalPacto1download'])->name('salud.indicador.pactoregional.sal.pacto1.excel');
 Route::get('/educacion/conveniofed/edu/Reports1/Exportar/{div}/{indicador}/{anio}/{mes}/{provincia}/{distrito}', [IndicadoresController::class, 'ConvenioFEDEduMC0501Reports1download'])->name('educacion.indicador.conveniofed.fed.excel');

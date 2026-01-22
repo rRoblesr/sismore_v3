@@ -33,7 +33,7 @@
                     <td>{{ $key + 1 }}</td>
                     <td class="text-left">{{ $item->dis }}</td>
                     <td>{{ $item->anio_base }}</td>
-                    <td>{{ $item->valor_base . '%' }}</td>
+                    <td>{{ $item->valor_base }}{{ $unidad == 1 ? '%' : '' }}</td>
                     <td><x-formatted-value :anio="2023" :value="$item->le2023" :unidad="$unidad" /></td>
                     <td><x-formatted-value :anio="2024" :value="$item->le2024" :unidad="$unidad" /></td>
                     <td><x-formatted-value :anio="2025" :value="$item->le2025" :unidad="$unidad" /></td>

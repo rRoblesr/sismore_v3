@@ -14,6 +14,7 @@ use App\Models\Educacion\CuboFEDPN;
 use App\Models\Educacion\CuboPacto1;
 use App\Models\Educacion\CuboPacto2;
 use App\Models\Educacion\Importacion;
+use App\Models\Educacion\Indicador;
 use App\Models\Educacion\SFL;
 use App\Models\Parametro\IndicadorGeneral;
 use App\Models\Parametro\IndicadorGeneralMeta;
@@ -438,9 +439,7 @@ class IndicadoresController extends Controller
                 $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesname[$imp->mes - 1] . ' del ' . $imp->anio;
                 $anio = EduCuboPacto1Repositorio::anios();
                 $aniomax = $anio->max('anio');
-                // $am = DB::table('edu_cubo_pacto01_matriculados')->whereIn('nivelmodalidad_codigo', ['A2', 'A3', 'A5'])->where('anio', $anio->where('anio', '<=', date('Y'))->max('anio'))->max('mes_id');
                 $am = EduCuboPacto1Repositorio::ultimoaniodisponible($anio, date('Y'));
-                // $ap = PoblacionPN::where('anio', $anio->where('anio', '<=', date('Y'))->max('anio'))->max('mes_id');
                 $ap = PoblacionPNRepositorio::ultimoaniodisponible($anio, date('Y'));
                 $mesmax = 0;
                 if ($mesmax < $am) $mesmax = $am;
@@ -1616,6 +1615,7 @@ class IndicadoresController extends Controller
             case 'tabla1':
                 // $base = IndicadorGeneralMetaRepositorio::getEduPacto2tabla1_opt01($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito, $rq->estado);
                 // $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla1', compact('base', 'ndis'))->render();
+                $indicador = IndicadorGeneral::find($rq->indicador);
                 $base = IndicadorGeneralMetaRepositorio::PactoRegionalEduPacto2Reports_tabla1($rq->indicador, $rq->anio, $rq->mes, $rq->provincia, $rq->distrito, $rq->estado);
                 $foot = null;
                 if ($base->count() > 0) {
@@ -1625,7 +1625,7 @@ class IndicadoresController extends Controller
                     $foot->numerador = $base->sum('numerador');
                     $foot->indicador = round(100 * ($foot->denominador > 0 ? $foot->numerador / $foot->denominador : 0), 1);
                 }
-                $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla1_opt02', compact('base', 'foot', 'ndis', 'distritos'))->render();
+                $excel = view('salud.Indicadores.PactoRegionalEduPacto2tabla1_opt02', compact('base', 'foot', 'ndis', 'distritos', 'indicador'))->render();
                 return response()->json(compact('excel'));
 
             case 'tabla2':

@@ -1392,6 +1392,63 @@ class IndicadorGeneralMetaRepositorio
                 DB::raw('MAX(CASE WHEN m.anio = 2026 THEN m.valor END) as le2026'),
 
                 // Avances por año
+                DB::raw('MAX(CASE WHEN c.anio = 2023 THEN c.numerador END) as vo2023'),
+                DB::raw('MAX(CASE WHEN c.anio = 2024 THEN c.numerador END) as vo2024'),
+                DB::raw('MAX(CASE WHEN c.anio = 2025 THEN c.numerador END) as vo2025'),
+                DB::raw('MAX(CASE WHEN c.anio = 2026 THEN c.numerador END) as vo2026'),
+
+                // Lógica de CUMPLE para el año actual
+                DB::raw("
+                    CASE 
+                        WHEN {$anioActual} = 2023 AND MAX(CASE WHEN m.anio = 2023 THEN m.valor END) < MAX(CASE WHEN c.anio = 2023 THEN c.numerador END) THEN 1
+                        WHEN {$anioActual} = 2024 AND MAX(CASE WHEN m.anio = 2024 THEN m.valor END) < MAX(CASE WHEN c.anio = 2024 THEN c.numerador END) THEN 1
+                        WHEN {$anioActual} = 2025 AND MAX(CASE WHEN m.anio = 2025 THEN m.valor END) < MAX(CASE WHEN c.anio = 2025 THEN c.numerador END) THEN 1
+                        WHEN {$anioActual} = 2026 AND MAX(CASE WHEN m.anio = 2026 THEN m.valor END) < MAX(CASE WHEN c.anio = 2026 THEN c.numerador END) THEN 1
+                        ELSE 0
+                    END as cumple
+                ")
+            )
+            ->join('par_indicador_general_meta as m', function ($join) use ($indicador) {
+                $join->on('m.distrito', '=', 'd.id')
+                    ->where('m.indicadorgeneral', '=', $indicador);
+            })
+            ->leftJoinSub($avances, 'c', function ($join) {
+                $join->on('c.distrito_id', '=', 'd.id')
+                    ->on('c.anio', '=', 'm.anio');
+            })
+            ->whereRaw("d.codigo LIKE '25____'")
+            ->groupBy('d.id', 'd.codigo', 'd.nombre', 'm.valor_base')
+            ->orderBy('d.codigo')
+            ->get();
+    }
+
+    public static function PactoRegionalEduPacto2Reports_tabla3_enPorcentaje($indicador, $anioActual, $mes, $provincia, $distrito, $estado)
+    {
+        $avances = DB::table('edu_cubo_pacto02_local')
+            ->select(
+                'distrito_id',
+                DB::raw('YEAR(fecha_inscripcion) as anio'),
+                DB::raw('COUNT(`local`) as denominador'),
+                DB::raw('SUM(CASE WHEN estado = 1 THEN 1 ELSE 0 END) as numerador'),
+                DB::raw('ROUND(100 * SUM(CASE WHEN estado = 1 THEN 1 ELSE 0 END) / NULLIF(COUNT(`local`), 0), 1) as avance')
+            )
+            ->groupBy('distrito_id', DB::raw('YEAR(fecha_inscripcion)'));
+
+        return DB::table('par_ubigeo as d')
+            ->select(
+                'd.id',
+                'd.codigo',
+                'd.nombre as dis',
+                'm.valor_base',
+                DB::raw('MAX(m.anio_base) as anio_base'),
+
+                // Metas por año
+                DB::raw('MAX(CASE WHEN m.anio = 2023 THEN m.valor END) as le2023'),
+                DB::raw('MAX(CASE WHEN m.anio = 2024 THEN m.valor END) as le2024'),
+                DB::raw('MAX(CASE WHEN m.anio = 2025 THEN m.valor END) as le2025'),
+                DB::raw('MAX(CASE WHEN m.anio = 2026 THEN m.valor END) as le2026'),
+
+                // Avances por año
                 DB::raw('MAX(CASE WHEN c.anio = 2023 THEN c.avance END) as vo2023'),
                 DB::raw('MAX(CASE WHEN c.anio = 2024 THEN c.avance END) as vo2024'),
                 DB::raw('MAX(CASE WHEN c.anio = 2025 THEN c.avance END) as vo2025'),

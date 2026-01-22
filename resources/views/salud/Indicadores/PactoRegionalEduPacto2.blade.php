@@ -468,14 +468,7 @@
                 success: function(data) {
                     $("#mes option").remove();
                     var options = '<option value="0">TODOS</option>';
-                    // var mesmax = 0;
-                    // $.each(data, function(index, value) {
-                    //     if (value.id > mesmax) {
-                    //         mesmax = value.id;
-                    //     }
-                    // });
                     $.each(data, function(index, value) {
-                        // var isSelected = (value.id == mesmax) ? "selected" : "";
                         options += `<option value='${value.id}'>${value.nombre}</option>`;
                     });
                     $("#mes").append(options);
