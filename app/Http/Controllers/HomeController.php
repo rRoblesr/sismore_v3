@@ -214,7 +214,7 @@ class HomeController extends Controller
         session()->put(['sistema_publico_nombre' => $sistema_nombre]);
         session()->put(['sistema_id' => $sistema_id]);
 
-        $perfilPublico = Perfil::where('nombre', 'PUBLICO')->where('sistema_id', $sistema_id)->first();
+        $perfilPublico = Perfil::whereIn('id', Perfil::PERFIL_PUBLICOS)->where('sistema_id', $sistema_id)->first();
         if ($perfilPublico) {
             $menuNivel01 = MenuRepositorio::Listar_Nivel01_porPerfil_Sistema($perfilPublico->id, $sistema_id);
             foreach ($menuNivel01 as $key => $menu) {

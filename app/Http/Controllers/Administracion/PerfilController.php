@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Hash;
 
 class PerfilController extends Controller
 {
-    public $perfil_publicos = [46, 47, 48, 49, 50];
+    // public $perfil_publicos = Perfil::PERFIL_PUBLICOS;
     public function __construct()
     {
         $this->middleware('auth');
@@ -32,7 +32,7 @@ class PerfilController extends Controller
     public function listarDT($sistema_id)
     {
         $data = Perfil::where('sistema_id', $sistema_id)->get();
-        $perfil_publicos = $this->perfil_publicos;
+        $perfil_publicos = Perfil::PERFIL_PUBLICOS; //$this->perfil_publicos;
 
         return  datatables()::of($data)
             ->editColumn('estado', function ($data) {

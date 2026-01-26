@@ -14,4 +14,6 @@ class Perfil extends Model
         'nombre',
         'estado',
     ];
+
+    public const PERFIL_PUBLICOS = [46, 47, 48, 49, 50];
 }
