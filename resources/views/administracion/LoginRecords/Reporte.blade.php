@@ -130,6 +130,8 @@
                 ordered: false,
                 destroy: true,
                 language: table_language,
+                processing: true,
+                serverSide: true,
                 ajax: "{{ route('loginrecords.reporte.listar') }}",
                 columnDefs: [{
                         targets: 0,

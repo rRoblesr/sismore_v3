@@ -20,4 +20,9 @@ class LoginRecords extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function usuarioRel()
+    {
+        return $this->belongsTo(Usuario::class, 'usuario');
+    }
 }

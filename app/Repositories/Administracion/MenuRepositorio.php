@@ -29,6 +29,7 @@ class MenuRepositorio
       ->where("adm_menu.dependencia", "=", null)
       ->orderBy('adm_menu.dependencia', 'asc')
       ->orderBy('adm_menu.posicion', 'asc')
+      ->distinct()
       ->get();
 
     return $data;
@@ -64,6 +65,7 @@ class MenuRepositorio
       ->where("m.dependencia", "=", null)
       ->orderBy('m.posicion', 'asc')
       ->orderBy('sm.posicion', 'asc')
+      ->distinct()
       ->get();
 
     return $data;
@@ -96,6 +98,7 @@ class MenuRepositorio
       ->where("adm_menu.dependencia", "!=", null)
       ->orderBy('adm_menu.dependencia', 'asc')
       ->orderBy('adm_menu.posicion', 'asc')
+      ->distinct()
       ->get();
 
     return $data;
@@ -132,6 +135,7 @@ class MenuRepositorio
       ->orderBy('m.posicion', 'asc')
       ->orderBy('sm.posicion', 'asc')
       ->orderBy('ssm.posicion', 'asc')
+      ->distinct()
       ->get();
 
     return $data;

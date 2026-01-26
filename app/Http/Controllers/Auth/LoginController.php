@@ -52,4 +52,40 @@ class LoginController extends Controller
             'captcha' => 'required|captcha',
         ]);
     }
+
+    protected function authenticated(Request $request, $user)
+    {
+        \App\Models\Administracion\LoginRecords::create([
+            'usuario' => $user->id,
+            'login' => now(),
+        ]);
+    }
+
+    public function logout(Request $request)
+    {
+        $user = auth()->user();
+        if ($user) {
+            $lastLogin = \App\Models\Administracion\LoginRecords::where('usuario', $user->id)
+                ->whereNull('logout')
+                ->latest('login')
+                ->first();
+            if ($lastLogin) {
+                $lastLogin->update(['logout' => now()]);
+            }
+        }
+
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        if ($response = $this->loggedOut($request)) {
+            return $response;
+        }
+
+        return $request->wantsJson()
+            ? new \Illuminate\Http\JsonResponse([], 204)
+            : redirect('/');
+    }
 }

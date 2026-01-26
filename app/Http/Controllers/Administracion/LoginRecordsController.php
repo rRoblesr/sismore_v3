@@ -20,8 +20,7 @@ class LoginRecordsController extends Controller
     }
     public function reporte()
     {
-        $data = LoginRecords::all();
-        return view('administracion.LoginRecords.Reporte', compact('data'));
+        return view('administracion.LoginRecords.Reporte');
     }
 
     public function ListarDT(Request $rq)
@@ -30,14 +29,21 @@ class LoginRecordsController extends Controller
         $start = intval($rq->start);
         $length = intval($rq->length);
 
-        $query = LoginRecords::orderBy('id', 'desc')->get();
-        $data = [];
-        foreach ($query as $key => $value) {
-            $usu = Usuario::find($value->usuario);
-            $ofi = EntidadRepositorio::migas($usu->entidad);
-            $data[] = array(
-                $key + 1,
-                $usu->nombre . ', ' . $usu->apellido1 . ' ' . $usu->apellido2,
+        $query = LoginRecords::with('usuarioRel');
+        $totalRecords = $query->count();
+
+        $data = $query->orderBy('id', 'desc')
+            ->skip($start)
+            ->take($length)
+            ->get();
+
+        $resultData = [];
+        foreach ($data as $key => $value) {
+            $usu = $value->usuarioRel;
+            $ofi = $usu ? EntidadRepositorio::migas($usu->entidad) : null;
+            $resultData[] = array(
+                $start + $key + 1,
+                $usu ? ($usu->nombre . ', ' . $usu->apellido1 . ' ' . $usu->apellido2) : 'Usuario Desconocido',
                 $ofi ? $ofi->entidadn : '',
                 $ofi ? $ofi->oficinan : '',
                 $value->login,
@@ -46,11 +52,9 @@ class LoginRecordsController extends Controller
         }
         $result = array(
             "draw" => $draw,
-            "recordsTotal" => $start,
-            "recordsFiltered" => $length,
-            "data" => $data,
-            // "ofi" => $ofi,
-            // "usu" => $usu,
+            "recordsTotal" => $totalRecords,
+            "recordsFiltered" => $totalRecords,
+            "data" => $resultData,
         );
         return response()->json($result);
     }

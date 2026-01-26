@@ -39,6 +39,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\MenuAccess::class,
             \App\Http\Middleware\CheckSession::class,
+            \App\Http\Middleware\RegistrarVisita::class,
         ],
 
         'api' => [
