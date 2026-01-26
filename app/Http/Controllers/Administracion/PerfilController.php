@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Hash;
 
 class PerfilController extends Controller
 {
+    public $perfil_publicos = [46, 47, 48, 49, 50];
     public function __construct()
     {
         $this->middleware('auth');
@@ -31,6 +32,7 @@ class PerfilController extends Controller
     public function listarDT($sistema_id)
     {
         $data = Perfil::where('sistema_id', $sistema_id)->get();
+        $perfil_publicos = $this->perfil_publicos;
 
         return  datatables()::of($data)
             ->editColumn('estado', function ($data) {
@@ -45,19 +47,25 @@ class PerfilController extends Controller
                 }
                 return $html;
             })
-            ->addColumn('action', function ($data) {
+            ->addColumn('action', function ($data) use ($perfil_publicos) {
                 $acciones = '';
-                $acciones .= '<a href="#" class="btn btn-info btn-sm" onclick="edit(' . $data->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a>';
-                if ($data->sistema_id == 4)
-                    $acciones .= '&nbsp;<a href="#" class="btn btn-purple btn-sm" onclick="sistema(' . $data->id . ')" title="AGREGAR SISTEMAS"> <i class="ion ion-md-cube"></i> </a>';
-                $acciones .= '&nbsp;<a href="#" class="btn btn-warning btn-sm" onclick="menu(' . $data->id . ')" title="AGREGAR MENU"> <i class="fa fa-list-ul"></i> </a>';
 
-                if ($data->estado == '1') {
-                    $acciones .= '&nbsp;<a class="btn btn-sm btn-dark" href="javascript:void(0)" title="Desactivar" onclick="estado(' . $data->id . ',' . $data->estado . ')"><i class="fa fa-power-off"></i></a> ';
-                } else {
-                    $acciones .= '&nbsp;<a class="btn btn-sm btn-default"  title="Activar" onclick="estado(' . $data->id . ',' . $data->estado . ')"><i class="fa fa-check"></i></a> ';
+                if (!in_array($data->id, $perfil_publicos)) {
+                    $acciones .= '<a href="#" class="btn btn-info btn-sm" onclick="edit(' . $data->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i> </a> ';
+                    if ($data->sistema_id == 4)
+                        $acciones .= '<a href="#" class="btn btn-purple btn-sm" onclick="sistema(' . $data->id . ')" title="AGREGAR SISTEMAS"> <i class="ion ion-md-cube"></i> </a> ';
                 }
-                $acciones .= '&nbsp;<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')" title="ELIMINAR"> <i class="fa fa-trash"></i> </a>';
+
+                $acciones .= '<a href="#" class="btn btn-warning btn-sm" onclick="menu(' . $data->id . ')" title="AGREGAR MENU"> <i class="fa fa-list-ul"></i> </a> ';
+                if ($data->estado == '1') {
+                    $acciones .= '<a class="btn btn-sm btn-dark" href="javascript:void(0)" title="Desactivar" onclick="estado(' . $data->id . ',' . $data->estado . ')"><i class="fa fa-power-off"></i></a> ';
+                } else {
+                    $acciones .= '<a class="btn btn-sm btn-default"  title="Activar" onclick="estado(' . $data->id . ',' . $data->estado . ')"><i class="fa fa-check"></i></a> ';
+                }
+
+                if (!in_array($data->id, $perfil_publicos)) {
+                    $acciones .= '<a href="#" class="btn btn-danger btn-sm" onclick="borrar(' . $data->id . ')" title="ELIMINAR"> <i class="fa fa-trash"></i> </a> ';
+                }
                 return $acciones;
             })
 

@@ -12,7 +12,7 @@ class CuboPacto2Controller extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        // $this->middleware('auth');
     }
 
     public function mes($anio)

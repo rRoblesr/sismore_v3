@@ -1302,12 +1302,18 @@ class PlazaRepositorio
             ->select(DB::raw('distinct edu_plaza.importacion_id'))
             ->orderBy('v2.id', 'desc')
             ->limit(1)
-            ->first()->importacion_id;
+            ->first();
+
+        if (!$imp) {
+            return 0;
+        }
+        $imp = $imp->importacion_id;
+
         $query = PadronRER::where('v2.importacion_id', $imp)->where('v3.id', '!=', '16')->where('v3.dependencia', 1)
             ->join('edu_plaza as v2', 'v2.institucioneducativa_id', '=', 'edu_padron_rer.institucioneducativa_id')
             ->join('edu_tipotrabajador as v3', 'v3.id', '=', 'v2.tipoTrabajador_id')
             ->select(DB::raw('count(distinct(v2.documento_identidad)) as conteo'))
-            ->first()->conteo;
-        return $query;
+            ->first();
+        return $query ? $query->conteo : 0;
     }
 }

@@ -2,26 +2,14 @@
 
 namespace App\Http\Controllers\Educacion;
 
-use App\Exports\AvanceMatricula1Export;
-use App\Exports\BasicaAlternativaExport;
-use App\Exports\BasicaEspecialExport;
-use App\Exports\BasicaRegularExport;
-use App\Exports\NivelEducativoEBAExport;
-use App\Exports\NivelEducativoEBEExport;
-use App\Exports\NivelEducativoEBRExport;
-use App\Exports\NivelEducativoExport;
 use App\Exports\ServiciosBasicosExport;
 use App\Http\Controllers\Controller;
 use App\Models\Educacion\Area;
-use App\Models\Educacion\ImporServiciosBasicos;
-use App\Models\Educacion\Importacion;
-use App\Models\Educacion\NivelModalidad;
 use App\Models\Educacion\Ugel;
 use App\Models\Parametro\Anio;
 use App\Models\Parametro\Ubigeo;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\MatriculaGeneralRepositorio;
-use App\Repositories\Educacion\MatriculaRepositorio;
 use App\Repositories\Educacion\ServiciosBasicosRepositorio;
 use App\Repositories\Parametro\UbigeoRepositorio;
 use Illuminate\Http\Request;
@@ -36,7 +24,7 @@ class ServiciosBasicosController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        // $this->middleware('auth');
     }
 
     public function principal__()

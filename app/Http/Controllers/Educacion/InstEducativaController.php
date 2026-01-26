@@ -15,6 +15,7 @@ use App\Models\Educacion\Turno;
 use App\Models\Educacion\Ugel;
 use App\Repositories\Educacion\InstEducativaRepositorio;
 use App\Repositories\Educacion\InstitucionEducativaRepositorio;
+use App\Repositories\Parametro\UbigeoRepositorio;
 use App\Utilities\Utilitario;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -165,15 +166,76 @@ class InstEducativaController extends Controller
     /* Mantenimiento */
     public function mantenimiento()
     {
-        $nivel = NivelModalidad::select('id', 'codigo', 'nombre')->where('estado', 'AC')->orderBy('codigo')->get();
+        $nivel = NivelModalidad::whereIn('id', function($q){
+            $q->select('NivelModalidad_id')->from('edu_institucionEducativa')->where('estado', 'AC');
+        })->select('id', 'codigo', 'nombre')->where('estado', 'AC')->orderBy('codigo')->get();
+
+        $ugels = Ugel::whereIn('id', function($q){
+            $q->select('Ugel_id')->from('edu_institucionEducativa')->where('estado', 'AC');
+        })->select('id', 'codigo', 'nombre')->where('estado', 'AC')->orderBy('codigo')->get();
+
+        $provincias = DB::table('par_ubigeo as p')
+            ->join('par_ubigeo as d', 'd.dependencia', '=', 'p.id')
+            ->join('edu_centropoblado as cp', 'cp.Ubigeo_id', '=', 'd.id')
+            ->join('edu_institucionEducativa as ie', 'ie.CentroPoblado_id', '=', 'cp.id')
+            ->where('ie.estado', 'AC')
+            ->select('p.id', 'p.nombre')
+            ->distinct()
+            ->orderBy('p.nombre')
+            ->get();
+
+        $distritos = DB::table('par_ubigeo as d')
+            ->join('edu_centropoblado as cp', 'cp.Ubigeo_id', '=', 'd.id')
+            ->join('edu_institucionEducativa as ie', 'ie.CentroPoblado_id', '=', 'cp.id')
+            ->where('ie.estado', 'AC')
+            ->select('d.id', 'd.nombre')
+            ->distinct()
+            ->orderBy('d.nombre')
+            ->get();
+
         $forma = Forma::select('id',  'nombre')->where('estado', 'AC')->get();
         $carac = Caracteristica::select('id', 'codigo', 'nombre')->where('estado', 'AC')->get();
         $gener = Genero::select('id', 'codigo', 'nombre')->where('estado', 'AC')->orderBy('codigo')->get();
         $tipog = TipoGestion::select('id', 'codigo', 'nombre')->where('dependencia', '>', '0')->where('estado', 'AC')->orderBy('dependencia')->orderBy('codigo')->get();
-        $ugels = Ugel::select('id', 'codigo', 'nombre')->where('estado', 'AC')->orderBy('codigo')->get();
         $areas = Area::select('id', 'codigo', 'nombre')->where('estado', 'AC')->orderBy('codigo')->get();
         $turno = Turno::select('id', 'codigo', 'nombre')->where('estado', 'AC')->orderBy('codigo')->get();
-        return view('educacion.InstEducativa.Mantenimiento', compact('nivel', 'forma', 'carac', 'gener', 'tipog', 'ugels', 'areas', 'turno'));
+        
+        return view('educacion.InstEducativa.Mantenimiento', compact('nivel', 'forma', 'carac', 'gener', 'tipog', 'ugels', 'areas', 'turno', 'provincias', 'distritos'));
+    }
+
+    public function cargarFiltros(Request $rq)
+    {
+        $queryBase = InstitucionEducativa::from('edu_institucioneducativa as ie')
+            ->join('edu_centropoblado as cp', 'cp.id', '=', 'ie.CentroPoblado_id')
+            ->join('par_ubigeo as d', 'd.id', '=', 'cp.Ubigeo_id')
+            ->join('par_ubigeo as p', 'p.id', '=', 'd.dependencia')
+            ->join('edu_ugel as u', 'u.id', '=', 'ie.Ugel_id')
+            ->join('edu_nivelmodalidad as n', 'n.id', '=', 'ie.NivelModalidad_id')
+            ->where('ie.estado', 'AC');
+
+        // Provincias
+        $qProv = clone $queryBase;
+        if ($rq->ugel > 0) $qProv->where('u.id', $rq->ugel);
+        $provincias = $qProv->select('p.id', 'p.nombre')->distinct()->orderBy('p.nombre')->get();
+
+        // Distritos
+        $qDist = clone $queryBase;
+        if ($rq->ugel > 0) $qDist->where('u.id', $rq->ugel);
+        if ($rq->provincia > 0) $qDist->where('p.id', $rq->provincia);
+        $distritos = $qDist->select('d.id', 'd.nombre')->distinct()->orderBy('d.nombre')->get();
+
+        // Niveles
+        $qNivel = clone $queryBase;
+        if ($rq->ugel > 0) $qNivel->where('u.id', $rq->ugel);
+        if ($rq->provincia > 0) $qNivel->where('p.id', $rq->provincia);
+        if ($rq->distrito > 0) $qNivel->where('d.id', $rq->distrito);
+        $niveles = $qNivel->select('n.id', 'n.nombre', 'n.codigo')->distinct()->orderBy('n.codigo')->get();
+
+        return response()->json([
+            'provincias' => $provincias,
+            'distritos' => $distritos,
+            'niveles' => $niveles
+        ]);
     }
 
     public function ListarDT(Request $rq)
@@ -182,7 +244,7 @@ class InstEducativaController extends Controller
         $start  = intval($rq->start);
         $length = intval($rq->length);
 
-        $estado = ['AC' => '<span class="badge badge-success">Activo</span>', 'EL' => '<span class="badge badge-danger">Inactivo</span>'];
+        $estado = ['AC' => '<span class="badge badge-success" style="font-size: 12px">Activo</span>', 'EL' => '<span class="badge badge-danger" style="font-size: 12px">Inactivo</span>'];
 
         $query = InstitucionEducativa::from('edu_institucioneducativa as ie')
             ->join('edu_centropoblado as cp', 'cp.id', '=', 'ie.CentroPoblado_id')
@@ -207,20 +269,23 @@ class InstEducativaController extends Controller
                 'ie.estado',
                 'ie.modo_registro'
             )
-            // ->tap(function ($query) use ($rq) {
-            //     if ($rq->ugel > 0) {
-            //         $query->where('u.id', $rq->ugel);
-            //     }
-            //     if ($rq->provincia > 0) {
-            //         $query->where('p.id', $rq->provincia);
-            //     }
-            //     if ($rq->distrito > 0) {
-            //         $query->where('d.id', $rq->distrito);
-            //     }
-            //     if ($rq->estado > 0) {
-            //         $query->where('s.estado', $rq->estado);
-            //     }
-            // })
+            ->tap(function ($query) use ($rq) {
+                if ($rq->ugel > 0) {
+                    $query->where('u.id', $rq->ugel);
+                }
+                if ($rq->provincia > 0) {
+                    $query->where('p.id', $rq->provincia);
+                }
+                if ($rq->distrito > 0) {
+                    $query->where('d.id', $rq->distrito);
+                }
+                if ($rq->nivel > 0) {
+                    $query->where('n.id', $rq->nivel);
+                }
+                // if ($rq->estado > 0) {
+                //     $query->where('s.estado', $rq->estado);
+                // }
+            })
             ->orderBy('id', 'desc')->get();
 
 

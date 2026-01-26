@@ -25,7 +25,7 @@ class PadronEIBController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        // $this->middleware('auth')->except(['edubascuboeib', 'edubascuboeibreporte', 'edubascuboeibreportedownloadexcel', 'ListarDTImportFuenteTodos', 'ajax_edit']);
     }
 
     public function principal()

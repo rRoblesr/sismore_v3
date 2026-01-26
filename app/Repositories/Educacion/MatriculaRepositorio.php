@@ -1634,11 +1634,17 @@ class MatriculaRepositorio
 
     public static function conteo_alumnos_rer()
     {
-        $matricula_id = MatriculaRepositorio::matricula_mas_actual()->first()->id;
+        $matricula = MatriculaRepositorio::matricula_mas_actual()->first();
+
+        if (!$matricula) {
+            return 0;
+        }
+        $matricula_id = $matricula->id;
+
         $query = PadronRER::where('v2.matricula_id', $matricula_id)
             ->join('edu_matricula_detalle as v2', 'v2.institucioneducativa_id', '=', 'edu_padron_rer.institucioneducativa_id')
             ->select(DB::raw('sum(v2.total_hombres+v2.total_mujeres) as conteo'))
             ->first();
-        return $query->conteo;
+        return $query ? $query->conteo : 0;
     }
 }

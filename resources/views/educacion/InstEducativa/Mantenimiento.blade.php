@@ -49,30 +49,109 @@
             min-height: 200px;
             height: auto;
         }
-    </style>
 
+        .custom-select-container {
+            position: relative;
+            margin-bottom: 15px;
+            margin-top: 5px;
+        }
+
+        .custom-select-container label {
+            position: absolute;
+            top: -9px;
+            left: 12px;
+            background: #fff;
+            padding: 0 5px;
+            font-size: 11px;
+            color: #495057;
+            z-index: 10;
+        }
+
+        .custom-select-container .form-control {
+            height: 40px;
+        }
+    </style>
 @endsection
 @section('content')
-    <div class="card card-border border border-plomo-0">
+    <div class="card">
         <div
-            class="card-header border-success-0 bg-transparent text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center px-2 py-2">
-            <h6 class="card-title mb-2 mb-md-0 text-center text-md-left text-wrap">Lista de Instituciones Educativas</h6>
+            class="card-header bg-success-0 text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center p-2">
+            <!--h3 class="card-title"></h3-->
+            <h6 class="card-title mb-2 mb-md-0 text-center text-white text-md-left text-wrap">
+                Instituciones Educativas
+            </h6>
             <div class="text-center text-md-right">
-                {{-- <button type="button" class="btn btn-success-0 btn-xs" onclick="abrirvistaprevia()"><i
-                        class="fa fa-file-excel"></i> Plantilla</button> --}}
-                {{-- <button type="button" class="btn btn-success-0 btn-xs" onclick="descargar1()"><i
-                        class="fa fa-file-excel"></i> Descargar</button> --}}
-                <button type="button" class="btn btn-primary btn-xs" onclick="add()">
-                    <i class="fa fa-plus"></i> Nuevo</button>
                 <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i class="fa fa-redo"></i>
                     Actualizar</button>
             </div>
         </div>
         <div class="card-body p-2">
+            <div class="row mb-0">
+                <div class="col-md-3">
+                    <div class="custom-select-container">
+                        <label for="ugel">UGEL</label>
+                        <select id="ugel" name="ugel" class="form-control" onchange="cargarFiltros('ugel')">
+                            <option value="0">TODOS</option>
+                            @foreach ($ugels as $item)
+                                <option value="{{ $item->id }}">{{ $item->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="custom-select-container">
+                        <label for="provincia">Provincia</label>
+                        <select id="provincia" name="provincia" class="form-control"
+                            onchange="cargarFiltros('provincia')">
+                            <option value="0">TODOS</option>
+                            @foreach ($provincias as $item)
+                                <option value="{{ $item->id }}">{{ $item->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="custom-select-container">
+                        <label for="distrito">Distrito</label>
+                        <select id="distrito" name="distrito" class="form-control" onchange="cargarFiltros('distrito')">
+                            <option value="0">TODOS</option>
+                            @foreach ($distritos as $item)
+                                <option value="{{ $item->id }}">{{ $item->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="custom-select-container">
+                        <label for="nivel">Nivel</label>
+                        <select id="nivel" name="nivel" class="form-control" onchange="reload_table_principal()">
+                            <option value="0">TODOS</option>
+                            @foreach ($nivel as $item)
+                                <option value="{{ $item->id }}">{{ $item->codigo }} | {{ $item->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card card-border border border-plomo-0">
+        <div
+            class="card-header border-success-0 bg-transparent text-white d-flex flex-column flex-md-row justify-content-between align-items-md-center px-2 py-2">
+            <h6 class="card-title mb-2 mb-md-0 text-center text-md-left text-wrap">Lista</h6>
+            <div class="text-center text-md-right">
+                <button type="button" class="btn btn-primary btn-xs" onclick="add()">
+                    <i class="fa fa-plus"></i> Nuevo</button>
+                {{-- <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()"><i class="fa fa-redo"></i> Actualizar</button> --}}
+            </div>
+        </div>
+        <div class="card-body p-2">
+
             <div class="row">
                 <div class="col-12">
                     <div class="table-responsive">
-                        <table id="tbprincipal" class="table font-11 table-striped table-bordered">
+                        <table id="tbprincipal" class="table table-striped table-bordered" style="font-size: 14px">
                             <thead class="cabecera-dataTable">
                                 <tr class="text-white bg-success-0">
                                     <th>Nº</th>
@@ -132,8 +211,8 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <label>Nombre<span class="required">*</span></label>
-                                        <input id="nombreInstEduc" name="nombreInstEduc" class="form-control" type="text"
-                                            onkeyup="this.value=this.value.toUpperCase()" maxlength="150">
+                                        <input id="nombreInstEduc" name="nombreInstEduc" class="form-control"
+                                            type="text" onkeyup="this.value=this.value.toUpperCase()" maxlength="150">
                                         <span class="help-block"></span>
                                     </div>
                                 </div>
@@ -196,7 +275,8 @@
                                         <select id="TipoGestion_id" name="TipoGestion_id" class="form-control">
                                             <option value="">SELECCIONAR</option>
                                             @foreach ($tipog as $item)
-                                                <option value="{{ $item->id }}">{{ $item->codigo }} | {{ $item->nombre }}</option>
+                                                <option value="{{ $item->id }}">{{ $item->codigo }} |
+                                                    {{ $item->nombre }}</option>
                                             @endforeach
                                         </select>
                                         <span class="help-block"></span>
@@ -351,7 +431,7 @@
                 <div class="modal-body">
                     <div class="table-responsive">
                         <table id="tbmodulares" class="table table-striped table-bordered tablex"
-                            style="font-size: 12px">
+                            style="font-size: 14px">
                             <thead class="cabecera-dataTable">
                                 <tr class="text-white bg-success-0">
                                     <th>Nº</th>
@@ -385,7 +465,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="table-responsive">
-                        <table id="tbver" class="table table-striped table-bordered tablex" style="font-size: 12px">
+                        <table id="tbver" class="table table-striped table-bordered tablex" style="font-size: 14px">
                             <thead class="cabecera-dataTable">
                                 <tr class="text-white bg-success-0">
                                     <th>Nº</th>
@@ -500,7 +580,7 @@
                         <div class="col-lg-12">
                             <div class="table-responsive">
                                 <table id="tbvistaprevia" class="table table-sm table-striped table-bordered"
-                                    style="font-size: 11px">
+                                    style="font-size: 14px">
                                     <thead class="cabecera-dataTable">
                                         <tr class="text-white bg-success-0">
                                             {{-- <th>Nº</th> --}}
@@ -573,11 +653,11 @@
                 ajax: {
                     "url": "{{ route('mantenimiento.iiee.listar') }}",
                     "type": "GET",
-                    data: {
-                        // ugel: $('#ugel').val(),
-                        // provincia: $('#provincia').val(),
-                        // distrito: $('#distrito').val(),
-                        // estado: $('#estado').val(),
+                    data: function(d) {
+                        d.ugel = $('#ugel').val();
+                        d.provincia = $('#provincia').val();
+                        d.distrito = $('#distrito').val();
+                        d.nivel = $('#nivel').val();
                     }
                     //"dataType": 'JSON',
                 },
@@ -585,6 +665,51 @@
                     className: 'text-center',
                     targets: [0, 1, 2, 6, 7, 8, 9, 10]
                 }],
+            });
+        }
+
+        function cargarFiltros(source) {
+            $.ajax({
+                url: "{{ route('mantenimiento.iiee.cargarfiltros') }}",
+                type: 'GET',
+                data: {
+                    ugel: $('#ugel').val(),
+                    provincia: $('#provincia').val(),
+                    distrito: $('#distrito').val(),
+                    nivel: $('#nivel').val()
+                },
+                success: function(data) {
+                    if (source == 'ugel') {
+                        var selectProv = $('#provincia');
+                        selectProv.empty();
+                        selectProv.append('<option value="0">TODOS</option>');
+                        $.each(data.provincias, function(index, value) {
+                            selectProv.append('<option value="' + value.id + '">' + value.nombre + '</option>');
+                        });
+                        selectProv.val(0);
+                    }
+
+                    if (source == 'ugel' || source == 'provincia') {
+                        var selectDist = $('#distrito');
+                        selectDist.empty();
+                        selectDist.append('<option value="0">TODOS</option>');
+                        $.each(data.distritos, function(index, value) {
+                            selectDist.append('<option value="' + value.id + '">' + value.nombre + '</option>');
+                        });
+                        selectDist.val(0);
+                    }
+
+                    if (source == 'ugel' || source == 'provincia' || source == 'distrito') {
+                        var selectNivel = $('#nivel');
+                        selectNivel.empty();
+                        selectNivel.append('<option value="0">TODOS</option>');
+                        $.each(data.niveles, function(index, value) {
+                            selectNivel.append('<option value="' + value.id + '">' + value.codigo + ' | ' + value.nombre + '</option>');
+                        });
+                        selectNivel.val(0);
+                    }
+                    reload_table_principal();
+                }
             });
         }
 

@@ -149,7 +149,7 @@ class BaseSiafWebDetalleRepositorio
     /*  */
     public static function ue_segun_sistema(int $sistema)
     {
-        // $route = Request::route();
+        $route = Request::route();
         // $routeName = $route && method_exists($route, 'getName') ? $route->getName() : '';
         // if ($routeName && Str::startsWith($routeName, 'presupuesto.')) {
         //     return DB::table('pres_base_siafweb_detalle')

@@ -5,24 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Educacion\ImporCensoDocenteController;
 use App\Http\Controllers\Educacion\ImporCensoMatriculaController;
 use App\Http\Controllers\Educacion\ImporMatriculaGeneralController;
-use App\Http\Controllers\Educacion\ImporPadronWebController;
 use App\Http\Controllers\Educacion\ImporServiciosBasicosController;
-use App\Http\Controllers\Parametro\UbigeoController;
 use App\Http\Controllers\Presupuesto\ImporActividadesProyectosController;
 use App\Http\Controllers\Presupuesto\ImporProyectosController;
 use App\Http\Controllers\Presupuesto\ImporSiafWebController;
-use App\Models\Administracion\Entidad;
 use App\Models\Administracion\Perfil;
 use App\Models\Administracion\Sistema;
-use App\Models\Administracion\TipoEntidad;
 use App\Models\Educacion\Area;
-use App\Models\Educacion\EduCuboMatricula;
-use App\Models\Educacion\ImporMatriculaGeneral;
-use App\Models\Educacion\ImporPadronWeb;
 use App\Models\Educacion\Importacion;
-use App\Models\Educacion\MatriculaGeneral;
-use App\Models\Educacion\MatriculaGeneralDetalle;
-use App\Models\Educacion\PadronWeb;
 use App\Models\Parametro\Anio;
 use App\Models\Presupuesto\BaseActividadesProyectos;
 use App\Models\Presupuesto\BaseProyectos;
@@ -32,20 +22,16 @@ use App\Repositories\Administracion\EntidadRepositorio;
 use App\Repositories\Administracion\MenuRepositorio;
 use App\Repositories\Administracion\SistemaRepositorio;
 use App\Repositories\Administracion\UsuarioPerfilRepositorio;
-use App\Repositories\Administracion\UsuarioRepositorio;
 use App\Repositories\Educacion\EduCuboMatriculaRepositorio;
 use App\Repositories\Educacion\ImporCensoDocenteRepositorio;
 use App\Repositories\Educacion\ImporCensoMatriculaRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\MatriculaDetalleRepositorio;
 use App\Repositories\Educacion\MatriculaGeneralRepositorio;
-use App\Repositories\Educacion\PadronWebRepositorio;
 use App\Repositories\Educacion\PlazaRepositorio;
 use App\Repositories\Educacion\ServiciosBasicosRepositorio;
-use App\Repositories\Educacion\TabletaRepositorio;
 use App\Repositories\Parametro\UbigeoRepositorio;
 use App\Repositories\Presupuesto\BaseActividadesProyectosRepositorio;
-use App\Repositories\Presupuesto\BaseGastosRepositorio;
 use App\Repositories\Presupuesto\BaseIngresosRepositorio;
 use App\Repositories\Presupuesto\BaseProyectosRepositorio;
 use App\Repositories\Presupuesto\BaseSiafWebRepositorio;
@@ -218,6 +204,7 @@ class HomeController extends Controller
 
     public function accesopublicomodulo($sistema_nombre)
     {
+        // return session()->all();
         if (!session()->has('sistemas_publico')) {
             session()->put(['sistemas_publico' => SistemaRepositorio::accesopublico()]);
         }
@@ -225,6 +212,25 @@ class HomeController extends Controller
         $sistema_id = Sistema::where('nombre', $sistema_nombre)->first()->id;
         session()->put(['sistema_publico_id' => $sistema_id]);
         session()->put(['sistema_publico_nombre' => $sistema_nombre]);
+        session()->put(['sistema_id' => $sistema_id]);
+
+        $perfilPublico = Perfil::where('nombre', 'PUBLICO')->where('sistema_id', $sistema_id)->first();
+        if ($perfilPublico) {
+            $menuNivel01 = MenuRepositorio::Listar_Nivel01_porPerfil_Sistema($perfilPublico->id, $sistema_id);
+            foreach ($menuNivel01 as $key => $menu) {
+                if ($menu->url == 'sistema_acceder') {
+                    $menu->url = 'acceso.publico.modulo';
+                }
+            }
+            session(['menuPublico01' => $menuNivel01]);
+
+            $menuNivel02 = MenuRepositorio::Listar_Nivel02_porPerfil_Sistema($perfilPublico->id, $sistema_id);
+            session(['menuPublico02' => $menuNivel02]);
+
+            $menuNivel03 = MenuRepositorio::Listar_Nivel03_porPerfil_Sistema($perfilPublico->id, $sistema_id);
+            session(['menuPublico03' => $menuNivel03]);
+        }
+
         // return session()->all();
         switch ($sistema_id) {
             case (1):

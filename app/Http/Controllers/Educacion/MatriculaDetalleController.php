@@ -6,14 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Educacion\Area;
 use App\Models\Educacion\Importacion;
 use App\Models\Educacion\NivelModalidad;
-use App\Models\Educacion\TipoGestion;
 use App\Models\Educacion\Ugel;
 use App\Models\Parametro\Anio;
 use App\Models\Parametro\Ubigeo;
-use App\Repositories\Educacion\ImportacionRepositorio;
-use App\Repositories\Educacion\MatriculaDetalleRepositorio;
 use App\Repositories\Educacion\MatriculaRepositorio;
-//use App\Repositories\Educacion\MatriculaDetalleRepositorio;
 use Illuminate\Http\Request;
 
 use Exception;
@@ -24,7 +20,7 @@ class MatriculaDetalleController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        // $this->middleware('auth');
     }
 
     public function rojos($mes, $nivel, $ano)

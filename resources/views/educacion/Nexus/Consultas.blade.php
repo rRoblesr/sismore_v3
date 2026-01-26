@@ -37,7 +37,7 @@
                             <div class="custom-select-container">
                                 <label for="documento">Documento</label>
                                 <input type="text" id="documento" name="documento" class="form-control font-12"
-                                    placeholder="Número de Documento" value="02424849">
+                                    placeholder="Número de Documento" value="">
                             </div>
                         </div>
 

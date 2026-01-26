@@ -1,6 +1,5 @@
 <?php
 
-use App\Exports\Salud\AgregarMetasExport;
 use App\Http\Controllers\Administracion\DirectoriosAuditoriaController;
 use App\Http\Controllers\Administracion\EntidadController;
 use App\Http\Controllers\Administracion\LogController;
@@ -56,7 +55,6 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Parametro\ClasificadorController;
 use App\Http\Controllers\Parametro\FuenteImportacionController;
 use App\Http\Controllers\Parametro\IconoController;
-use App\Http\Controllers\Parametro\ImporPoblacionController;
 use App\Http\Controllers\Parametro\ImporPoblacionDiresaController;
 use App\Http\Controllers\Parametro\ImporPoblacionPNController;
 use App\Http\Controllers\Parametro\IndicadorGeneralController;
@@ -96,13 +94,11 @@ use App\Http\Controllers\Salud\ImporPadronProgramaController;
 use App\Http\Controllers\Salud\ImporPadronPvicaController;
 use App\Http\Controllers\Salud\ImporReportePN05Controller;
 use App\Http\Controllers\Salud\IndicadoresController;
-use App\Http\Controllers\Salud\PadronNominal;
 use App\Http\Controllers\Salud\PadronNominalController;
 use App\Http\Controllers\Salud\SaludNino;
 use App\Http\Controllers\Salud\SaludPadronExportar;
 use App\Http\Controllers\Salud\SaludPadronNominal;
 use App\Http\Controllers\Salud\SaludPadronNominalCalidad;
-use App\Http\Controllers\Salud\SaludPadronNominalImportar;
 use App\Http\Controllers\Salud\SaludPadronNominalSeguimiento;
 use App\Http\Controllers\Trabajo\ActividadController;
 use App\Http\Controllers\Trabajo\AnuarioEstadisticoController;
@@ -113,32 +109,20 @@ use App\Http\Controllers\Vivienda\DatassController;
 use App\Http\Controllers\Vivienda\EmapacopsaController;
 use App\Http\Controllers\Vivienda\PadronEmapacopsaController;
 use App\Mail\MsnCorreo;
-use App\Models\Administracion\DirectoriosAuditoria;
-use App\Models\Administracion\UsuarioAuditoria;
 use App\Models\Educacion\Area;
-use App\Models\Educacion\EduCuboMatricula;
 use App\Models\Educacion\ImporDocentesBilingues;
 use App\Models\Educacion\ImporServiciosBasicos;
-use App\Models\Educacion\InstitucionEducativa;
 use App\Models\Educacion\NivelModalidad;
-use App\Models\Educacion\TipoGestion;
 use App\Models\Parametro\Icono;
-use App\Models\Parametro\PoblacionPN;
 use App\Models\Parametro\Ubigeo;
 use App\Repositories\Educacion\CuboPacto1Repositorio;
-use App\Repositories\Educacion\EduCuboMatriculaRepositorio;
-use App\Repositories\Educacion\ImporCensoDocenteRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Educacion\PadronEIBRepositorio;
 use App\Repositories\Parametro\PoblacionPNRepositorio;
-use App\Repositories\Parametro\UbigeoRepositorio;
-use App\Repositories\Salud\CalidadCriterioRepositorio;
-use App\Services\educacion\ProcesamientoService;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
-use Maatwebsite\Excel\Facades\Excel;
 
 /*
 |--------------------------------------------------------------------------
@@ -675,7 +659,7 @@ Route::get('/INDICADOR/Principal', [IndicadorController::class, 'principal'])->m
 Route::get('/INDICADOR/AJAX/LISTAR', [IndicadorController::class, 'ListarDT'])->name('indicador.ajax.listar');
 
 Route::get('/educación/PersonalDocente', [CensoDocenteController::class, 'PersonalDocente'])->name('Docentes.principal');
-Route::get('/Plaza/Docentes/Principal222', [CensoDocenteController::class, 'PersonalDocenteTabla'])->middleware('auth')->name('censodocente.personaldocente');
+Route::get('/Plaza/Docentes/Principal222', [CensoDocenteController::class, 'PersonalDocenteTabla'])->name('censodocente.personaldocente');
 
 //Route::get('/Plaza/Docentes/Principal', [PLazaController::class, 'DocentesPrincipal'])->middleware('auth')->name('Docentes.principal');
 Route::get('/Plaza/Distritos/{provincia}', [PLazaController::class, 'cargardistritos'])->name('plaza.cargardistritos');
@@ -865,6 +849,7 @@ Route::get('/educación/SFL/TableroControl2/reprote', [SFLController::class, 'ta
 
 Route::get('/educación/Mantenimiento/IIEE', [InstEducativaController::class, 'mantenimiento'])->middleware('auth')->name('mantenimiento.iiee.principal');
 Route::get('/Man/IIEE/Listar/', [InstEducativaController::class, 'ListarDT'])->name('mantenimiento.iiee.listar');
+Route::get('/Man/IIEE/CargarFiltros', [InstEducativaController::class, 'cargarFiltros'])->name('mantenimiento.iiee.cargarfiltros');
 Route::post('/Man/IIEE/AjaxAdd', [InstEducativaController::class, 'ajax_add'])->name('mantenimiento.iiee.guardar');
 Route::post('/Man/IIEE/AjaxUpdate', [InstEducativaController::class, 'ajax_update'])->name('mantenimiento.iiee.modificar');
 Route::get('/Man/IIEE/AjaxEdit/{id}', [InstEducativaController::class, 'ajax_edit'])->name('mantenimiento.iiee.editar');

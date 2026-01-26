@@ -64,6 +64,9 @@ class UsuarioController extends Controller
                 return '<div style="text-align:center">' . $perfiles->count() . '</div>';
             })
             ->addColumn('action', function ($data) { // '.auth()->user()->usuario.'
+                if ($data->id == 49 && auth()->user()->id != 49) {
+                    return '<div style="text-align:center"><i class="fa fa-lock text-secondary" title="Acciones restringidas"></i></div>';
+                }
                 $acciones = '';
                 if ($data->estado == '1') {
                     $acciones = '<a href="#" class="btn btn-info btn-sm" onclick="edit(' . $data->id . ')"  title="MODIFICAR"> <i class="fa fa-pen"></i></a>';
