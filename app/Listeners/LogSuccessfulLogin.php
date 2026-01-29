@@ -31,6 +31,8 @@ class LogSuccessfulLogin
         LoginRecords::create([
             'usuario' => $user->id,
             'login' => now(),
+            'ip' => request()->ip(),
+            'user_agent' => substr(request()->userAgent(), 0, 255),
         ]);
     }
 }

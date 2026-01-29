@@ -27,7 +27,7 @@ class RegistrarVisita
                     'ip' => $request->ip(),
                     'url' => $request->fullUrl(),
                     'user_agent' => $request->userAgent(),
-                    'sistema_id' => session('sistema_id'),
+                    'sistema_id' => session('sistema_id') ?? 3, // Default to SALUD (ID 3) if not set
                 ]);
             } catch (\Exception $e) {
                 // Silent fail to avoid disrupting the user experience

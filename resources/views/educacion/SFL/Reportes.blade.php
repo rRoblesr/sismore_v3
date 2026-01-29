@@ -729,74 +729,58 @@
                 chart: {
                     map: mapData
                 },
-                // states: {
-                //     hover: {
-                //         color: '#ff5733' // Cambia este color al que desees
-                //     }
-                // },
                 title: {
-                    text: titulo, //'Reportes de Mapa'
+                    text: titulo,
                 },
-
                 subtitle: {
-                    text: subtitulo, //'Un descripción de reportes'
-                    style: {
-                        // fontSize: '11px'
-                    }
+                    text: subtitulo,
+                    style: {}
                 },
-
                 mapNavigation: {
                     enabled: true,
                     buttonOptions: {
                         verticalAlign: 'top'
                     }
                 },
-
                 colorAxis: {
-                    // mixColor: "#e6ebf5",
-                    // manColor: "#003399",
                     minColor: '#e0f6f3',
                     maxColor: '#2a7f72',
                     showInLegend: false
                 },
-
                 series: [{
                     data: data,
                     name: 'SFL',
                     states: {
                         hover: {
-                            color: '#ef5350' // '#BADA55'
+                            color: '#ef5350'
                         }
                     },
                     borderColor: '#cac9c9',
-
                     dataLabels: {
                         enabled: true,
-                        useHTML: true, // Permite el uso de etiquetas HTML
-                        format: '<div style="text-align:center;">{point.name}<br><span style="font-size:12px;">{point.value:,2f}%</span></div>',
-                        // nullFormatter: '0%',
-                        // formatter: function() {
-                        //     const value = this.point.value || 0;
-                        //     return `<div style="text-align:center;">${this.point.name}<br><span style="font-size:12px;">${Highcharts.numberFormat(value, 2)}%</span></div>`;
-                        // },
+                        useHTML: true,
+                        formatter: function() {
+                            const value = this.point.value !== undefined ? this.point.value : 0;
+                            return `<div style="text-align:center;">
+                                        ${this.point.name}<br>
+                                        <span style="font-size:12px;">${Highcharts.numberFormat(value, 1)}%</span>
+                                    </div>`;
+                        },
                         style: {
                             fontSize: '10px',
                             fontWeight: 'bold',
                             color: '#FFFFFF',
-                            textShadow: '0px 0px 3px #000000' // Aplica sombra negra para simular el borde
+                            textShadow: '0px 0px 3px #000000'
                         }
-                    },
-
+                    }
                 }],
                 tooltip: {
                     useHTML: true,
                     formatter: function() {
-                        // Obtener los datos desde anal3valores
                         const provinciaData = anal3valores[this.point.properties['hc-key']];
                         if (!provinciaData) {
                             return `<strong>${this.point.name}</strong><br>Datos no disponibles`;
                         }
-
                         return `<div style="text-align:left;">
                                     <strong>${this.point.name}</strong><br>
                                     Numerador: ${provinciaData.num} Locales<br>
@@ -804,10 +788,10 @@
                                     Avance: ${Highcharts.numberFormat(provinciaData.ind, 2)}%
                                 </div>`;
                     },
-                    backgroundColor: '#fff', // Fondo blanco translúcido
-                    borderColor: '#cccccc', // Borde suave
-                    borderRadius: 10, // Bordes redondeados
-                    shadow: true, // Sombra para darle un efecto "suave"
+                    backgroundColor: '#fff',
+                    borderColor: '#cccccc',
+                    borderRadius: 10,
+                    shadow: true,
                     style: {
                         fontSize: '12px',
                         fontWeight: 'normal',

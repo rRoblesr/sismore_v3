@@ -57,6 +57,8 @@ class LoginController extends Controller
     {
         \App\Models\Administracion\LoginRecords::create([
             'usuario' => $user->id,
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
             'login' => now(),
         ]);
     }

@@ -12,6 +12,8 @@ class LoginRecords extends Model
 
     protected $fillable = [
         'usuario',
+        'ip',
+        'user_agent',
         'login',
         'logout'
     ];

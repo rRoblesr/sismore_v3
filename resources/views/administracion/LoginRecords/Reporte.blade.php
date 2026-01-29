@@ -1,4 +1,4 @@
-@extends('layouts.main', ['activePage' => 'usuarios', 'titlePage' => 'GESTION DE SISTEMAS'])
+@extends('layouts.main', ['activePage' => 'usuarios', 'titlePage' => 'REPORTE DE ACCESOS'])
 
 @section('css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
@@ -11,13 +11,126 @@
     <div class="content">
 
         <div class="row">
+            <div class="col-md-4 mb-2">
+                <label for="fecha_inicio">Fecha Inicio</label>
+                <input type="date" id="fecha_inicio" class="form-control" value="{{ date('Y-m-d', strtotime('-30 days')) }}">
+            </div>
+            <div class="col-md-4 mb-2">
+                <label for="fecha_fin">Fecha Fin</label>
+                <input type="date" id="fecha_fin" class="form-control" value="{{ date('Y-m-d') }}">
+            </div>
+            <div class="col-md-4 mb-2">
+                <label for="sistema">Sistema</label>
+                <select id="sistema" class="form-control">
+                    <option value="">Todos los sistemas</option>
+                    @foreach ($sistemas as $sistema)
+                        <option value="{{ $sistema->id }}">{{ $sistema->nombre }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-xl-3">
+                <div class="card-box border border-plomo-0">
+                    <div class="media">
+                        <div class="avatar-md mr-2">
+                            <i class="mdi mdi-login avatar-title font-30 text-success"></i>
+                        </div>
+                        <div class="media-body align-self-center">
+                            <div class="text-right">
+                                <h4 class="font-20 my-0 font-weight-bold" id="card1">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                </h4>
+                                <p class="mb-0 mt-1 text-truncate">Total Accesos</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <div class="card-box border border-plomo-0">
+                    <div class="media">
+                        <div class="avatar-md mr-2">
+                            <i class="mdi mdi-account-multiple avatar-title font-30 text-primary"></i>
+                        </div>
+                        <div class="media-body align-self-center">
+                            <div class="text-right">
+                                <h4 class="font-20 my-0 font-weight-bold" id="card2">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                </h4>
+                                <p class="mb-0 mt-1 text-truncate">Usuarios Únicos</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <div class="card-box border border-plomo-0">
+                    <div class="media">
+                        <div class="avatar-md mr-2">
+                            <i class="mdi mdi-calendar-today avatar-title font-30 text-warning"></i>
+                        </div>
+                        <div class="media-body align-self-center">
+                            <div class="text-right">
+                                <h4 class="font-20 my-0 font-weight-bold" id="card3">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                </h4>
+                                <p class="mb-0 mt-1 text-truncate">Accesos Hoy</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <div class="card-box border border-plomo-0">
+                    <div class="media">
+                        <div class="avatar-md mr-2">
+                            <i class="mdi mdi-domain avatar-title font-30 text-info"></i>
+                        </div>
+                        <div class="media-body align-self-center">
+                            <div class="text-right">
+                                <h4 class="font-20 my-0 font-weight-bold" id="card4">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                </h4>
+                                <p class="mb-0 mt-1 text-truncate">Top Entidad</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xl-8">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent pb-0">
+                        <h3 class="card-title text-primary">Tendencia de Accesos</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="grafico1" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4">
+                <div class="card card-border">
+                    <div class="card-header border-success-0 bg-transparent pb-0">
+                        <h3 class="card-title text-primary">Accesos por Sistema (Top 10)</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="grafico2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card card-border">
                             <div class="card-header border-success-0 bg-transparent pb-2 pl-0">
-                                {{-- <div class="card-widgets"><button type="button" class="btn btn-primary btn-xs" onclick="add()"><i class="fa fa-plus"></i> Nuevo</button></div> --}}
-                                <h4 class="card-title">lista de Ingresos </h4>
+                                <h4 class="card-title">Historial de Accesos</h4>
                             </div>
                             <div class="card-body p-0">
                                 <div class="table-responsive">
@@ -28,311 +141,136 @@
                                                 <th class="text-center">Usuario</th>
                                                 <th class="text-center">Entidad</th>
                                                 <th class="text-center">Oficina</th>
+                                                <th class="text-center">IP</th>
                                                 <th class="text-center">Login</th>
                                                 <th class="text-center">Logout</th>
-                                                {{-- <th>Aciones</th> --}}
+                                                <th class="text-center">Navegador</th>
                                             </tr>
                                         </thead>
-
+                                        <tbody></tbody>
                                     </table>
                                 </div>
-
                             </div>
                         </div>
                     </div>
-                </div> <!-- End row -->
+                </div>
             </div>
-        </div> <!-- End row -->
+        </div>
 
     </div>
-
-    <!-- Bootstrap modal -->
-    <div id="modal_form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
-        style="display: none;">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title"></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="" id="form" class="form-horizontal" autocomplete="off">
-                        @csrf
-                        <input type="hidden" class="form-control" id="id" name="id">
-                        <div class="form-body">
-                            <div class="form-group">
-                                <label>Nombre<span class="required">*</span></label>
-                                <input id="nombre" name="nombre" class="form-control" type="text"
-                                    onkeyup="this.value=this.value.toUpperCase()">
-                                <span class="help-block"></span>
-                            </div>
-                            <div class="form-group">
-                                <label>Icono
-                                    <!--span class="required">*</span-->
-                                </label>
-                                <input id="icono" name="icono" class="form-control" type="text">
-                                <span class="help-block"></span>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Posicion
-                                    <!--span class="required">*</span-->
-                                </label>
-                                <input id="pos" name="pos" class="form-control" type="number" value=" ">
-                                <span class="help-block"></span>
-                            </div>
-
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                    <button type="button" id="btnSave" onclick="save()" class="btn btn-primary">Guardar</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-    <!-- End Bootstrap modal -->
 @endsection
 
 @section('js')
-    {{-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> --}}
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap4.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
-
-    {{-- DATA TABLE --}}
     <script>
         $(document).ready(function() {
-            var save_method = '';
-            var table_principal;
+            function cargarResumen() {
+                $.ajax({
+                    url: "{{ route('loginrecords.reporte.resumen') }}",
+                    type: "GET",
+                    dataType: "json",
+                    data: {
+                        fecha_inicio: $('#fecha_inicio').val(),
+                        fecha_fin: $('#fecha_fin').val(),
+                        sistema: $('#sistema').val()
+                    },
+                    success: function(data) {
+                        $('#card1').text(data.card1);
+                        $('#card2').text(data.card2);
+                        $('#card3').text(data.card3);
+                        $('#card4').text(data.card4);
 
-            // $("input").change(function() {
-            //     $(this).parent().parent().removeClass('has-error');
-            //     $(this).next().empty();
-            // });
-            // $("textarea").change(function() {
-            //     $(this).parent().parent().removeClass('has-error');
-            //     $(this).next().empty();
-            // });
-            // $("select").change(function() {
-            //     $(this).parent().parent().removeClass('has-error');
-            //     $(this).next().empty();
-            // });
+                        Highcharts.chart('grafico1', {
+                            chart: { type: 'line' },
+                            title: { text: '' },
+                            xAxis: { 
+                                categories: data.grafico1.map(item => item.fecha),
+                                crosshair: true
+                            },
+                            yAxis: { min: 0, title: { text: 'Accesos' } },
+                            tooltip: {
+                                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                                    '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                                footerFormat: '</table>',
+                                shared: true,
+                                useHTML: true
+                            },
+                            plotOptions: {
+                                column: {
+                                    pointPadding: 0.2,
+                                    borderWidth: 0
+                                }
+                            },
+                            series: [{
+                                name: 'Accesos',
+                                data: data.grafico1.map(item => parseInt(item.total)),
+                                color: '#5eb9aa'
+                            }],
+                            credits: { enabled: false }
+                        });
 
-            table_principal = $('#tabla').DataTable({
+                        Highcharts.chart('grafico2', {
+                            chart: { type: 'pie' },
+                            title: { text: '' },
+                            tooltip: { pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>' },
+                            plotOptions: {
+                                pie: {
+                                    allowPointSelect: true,
+                                    cursor: 'pointer',
+                                    dataLabels: { enabled: true, format: '<b>{point.name}</b>: {point.y}' }
+                                }
+                            },
+                            series: [{
+                                name: 'Accesos',
+                                colorByPoint: true,
+                                data: data.grafico2
+                            }],
+                            credits: { enabled: false }
+                        });
+                    }
+                });
+            }
+
+            cargarResumen();
+
+            var tabla = $('#tabla').DataTable({
                 responsive: true,
                 autoWidth: false,
                 ordered: false,
                 destroy: true,
                 language: table_language,
-                processing: true,
                 serverSide: true,
-                ajax: "{{ route('loginrecords.reporte.listar') }}",
-                columnDefs: [{
-                        targets: 0,
-                        className: 'text-center'
-                    },
-                    // {
-                    //     targets: 3,
-                    //     className: 'text-center'
-                    // },
-                    {
-                        targets: 4,
-                        className: 'text-center'
-                    },
-                    {
-                        targets: 5,
-                        className: 'text-center'
+                processing: true,
+                ajax: {
+                    url: "{{ route('loginrecords.reporte.listar') }}",
+                    type: "GET",
+                    data: function(d) {
+                        d.fecha_inicio = $('#fecha_inicio').val();
+                        d.fecha_fin = $('#fecha_fin').val();
+                        d.sistema = $('#sistema').val();
                     }
-
-
+                },
+                columnDefs: [
+                    { targets: 0, className: 'text-center' },
+                    { targets: 4, className: 'text-center' },
+                    { targets: 5, className: 'text-center' },
+                    { targets: 6, className: 'text-center' }
                 ]
             });
+
+            $('#fecha_inicio, #fecha_fin, #sistema').change(function() {
+                cargarResumen();
+                tabla.ajax.reload();
+            });
         });
-
-        function add() {
-            save_method = 'add';
-            $('#form')[0].reset();
-            $('.form-group').removeClass('has-error');
-            $('.help-block').empty();
-            $('#modal_form').modal('show');
-            $('.modal-title').text('Crear Nuevo Sistema');
-        };
-
-        function save() {
-            $('#btnSave').text('guardando...');
-            $('#btnSave').attr('disabled', true);
-            var url;
-            if (save_method == 'add') {
-                url = "{{ url('/') }}/Sistema/ajax_add";
-                msgsuccess = "El registro fue creado exitosamente.";
-                msgerror = "El registro no se pudo crear verifique las validaciones.";
-            } else {
-                url = "{{ url('/') }}/Sistema/ajax_update";
-                msgsuccess = "El registro fue actualizado exitosamente.";
-                msgerror = "El registro no se pudo actualizar. Verifique la operación";
-            }
-            $.ajax({
-                url: url,
-                type: "POST",
-                data: $('#form').serialize(),
-                dataType: "JSON",
-                success: function(data) {
-                    console.log(data)
-                    if (data.status) {
-                        $('#modal_form').modal('hide');
-                        reload_table_principal(); //listarDT();
-                        toastr.success(msgsuccess, 'Mensaje');
-                    } else {
-                        for (var i = 0; i < data.inputerror.length; i++) {
-                            /* $('[name="' + data.inputerror[i] + '"]').parent().parent().addClass('has-error'); */
-                            $('[name="' + data.inputerror[i] + '"]').parent().addClass('has-error');
-                            $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]);
-                        }
-                    }
-                    $('#btnSave').text('Guardar');
-                    $('#btnSave').attr('disabled', false);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    toastr.error(msgerror, 'Mensaje');
-                    $('#btnSave').text('Guardar');
-                    $('#btnSave').attr('disabled', false);
-                }
-            });
-        };
-
-        function edit(id) {
-            save_method = 'update';
-            $('#form')[0].reset();
-            $('.form-group').removeClass('has-error');
-            $('.help-block').empty();
-            $.ajax({
-                url: "{{ url('/') }}/Sistema/ajax_edit/" + id,
-                type: "GET",
-                dataType: "JSON",
-                success: function(data) {
-                    $('[name="id"]').val(data.sistema.id);
-                    $('[name="nombre"]').val(data.sistema.nombre);
-                    $('[name="icono"]').val(data.sistema.icono);
-                    $('[name="pos"]').val(data.sistema.pos);
-                    $('#modal_form').modal('show');
-                    $('.modal-title').text('Modificar Sistema');
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    alert('Error get data from ajax');
-                }
-            });
-        };
-
-        function borrar(id) {
-            bootbox.confirm("Seguro desea Eliminar este registro?", function(result) {
-                if (result === true) {
-                    $.ajax({
-                        url: "{{ url('/') }}/Sistema/ajax_delete/" + id,
-                        type: "GET",
-                        dataType: "JSON",
-                        success: function(data) {
-                            $('#modal_form').modal('hide');
-                            reload_table_principal(); //listarDT();
-                            toastr.success('El registro fue eliminado exitosamente.', 'Mensaje');
-                        },
-                        error: function(jqXHR, textStatus, errorThrown) {
-                            toastr.error(
-                                'No se puede eliminar este registro por seguridad de su base de datos, Contacte al Administrador del Sistema',
-                                'Mensaje');
-                        }
-                    });
-                }
-            });
-        };
-
-        function listarDT() {
-            table_principal = $('#dtPrincipal').DataTable({
-                "ajax": "{{ url('/') }}/Sistema/listarDT/",
-                "columns": [{
-                        data: 'nombre',
-                        className: 'text-center'
-                    },
-                    {
-                        data: 'icono'
-                    },
-                    {
-                        data: 'pos'
-                    },
-                    {
-                        data: 'estado'
-                    },
-                    {
-                        data: 'action',
-                        orderable: false
-                    }
-                ],
-                responsive: true,
-                autoWidth: false,
-                orderable: false,
-                destroy: true,
-                language: {
-                    "lengthMenu": "Mostrar " +
-                        `<select class="custom-select custom-select-sm form-control form-control-sm">
-                        <option value = '10'> 10</option>
-                        <option value = '25'> 25</option>
-                        <option value = '50'> 50</option>
-                        <option value = '100'>100</option>
-                        <option value = '-1'>Todos</option>
-                        </select>` + " registros por página",
-                    "info": "Mostrando la página _PAGE_ de _PAGES_",
-                    "infoEmpty": "No records available",
-                    "infoFiltered": "(Filtrado de _MAX_ registros totales)",
-                    "emptyTable": "No hay datos disponibles en la tabla.",
-                    "info": "Del _START_ al _END_ de _TOTAL_ registros ",
-                    "infoEmpty": "Mostrando 0 registros de un total de 0. registros",
-                    "infoFiltered": "(filtrados de un total de _MAX_ )",
-                    "infoPostFix": "",
-                    "loadingRecords": "Cargando...",
-                    "processing": "Procesando...",
-                    "search": "Buscar:",
-                    "searchPlaceholder": "Dato para buscar",
-                    "zeroRecords": "No se han encontrado coincidencias.",
-                    "paginate": {
-                        "next": "siguiente",
-                        "previous": "anterior"
-                    }
-                }
-            });
-        }
-
-        function reload_table_principal() {
-            table_principal.ajax.reload(null, false);
-        }
-
-        function estado(id, x) {
-            bootbox.confirm("Seguro desea " + (x == 1 ? "desactivar" : "activar") + " este registro?", function(result) {
-                if (result === true) {
-                    $.ajax({
-                        url: "{{ url('/') }}/Sistema/ajax_estado/" + id,
-                        /* type: "POST", */
-                        dataType: "JSON",
-                        success: function(data) {
-                            console.log(data);
-                            reload_table_principal(); //listarDT();
-                            if (data.estado)
-                                toastr.success('El registro fue Activo exitosamente.', 'Mensaje');
-                            else
-                                toastr.success('El registro fue Desactivado exitosamente.', 'Mensaje');
-                        },
-                        error: function(jqXHR, textStatus, errorThrown) {
-                            toastr.error(
-                                'No se puede cambiar estado por seguridad de su base de datos, Contacte al Administrador del Sistema.',
-                                'Mensaje');
-                        }
-                    });
-                }
-            });
-        };
     </script>
 @endsection

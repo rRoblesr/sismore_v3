@@ -1046,9 +1046,11 @@ Route::get('/Entidad/ajax_edit_gerencia/{gerencia_id}', [EntidadController::clas
 Route::get('/Importado/resumen', [ImportacionController::class, 'resumenimportados'])->name('importar.importados');
 
 Route::get('/administrador/LoginRecords/Reporte', [LoginRecordsController::class, 'reporte'])->name('loginrecords.reporte');
+Route::get('/administrador/LoginRecords/Reporte/Resumen', [LoginRecordsController::class, 'resumen'])->name('loginrecords.reporte.resumen');
 Route::get('/administrador/LoginRecords/Reporte/listar', [LoginRecordsController::class, 'listarDT'])->name('loginrecords.reporte.listar');
 
 Route::get('/administrador/Visitas/Reporte', [VisitaController::class, 'reporte'])->name('visitas.reporte');
+Route::get('/administrador/Visitas/Reporte/Resumen', [VisitaController::class, 'resumen'])->name('visitas.reporte.resumen');
 Route::get('/administrador/Visitas/Reporte/listar', [VisitaController::class, 'listarDT'])->name('visitas.reporte.listar');
 
 Route::get('/administrador/Auditoria/Reporte', [UsuarioAuditoriaController::class, 'reporte'])->name('usuarioauditoria.reporte');
