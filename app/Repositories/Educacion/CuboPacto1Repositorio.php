@@ -24,6 +24,11 @@ class CuboPacto1Repositorio
         return $query;
     }
 
+    public static function max_mes_id($anio)
+    {
+        return CuboPacto1::where('anio', $anio)->max('mes_id');
+    }
+
     public static function anios()
     {
         return CuboPacto1::select('anio')->distinct()->orderBy('anio', 'asc')->get();

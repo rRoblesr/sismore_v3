@@ -2,6 +2,7 @@
 @section('css')
     <link href="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.css"
         rel="stylesheet"type="text/css" />
+    <link rel="stylesheet" href="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.css" />
     <style>
         .tablex thead th {
             padding: 6px;
@@ -24,6 +25,18 @@
 
         .fuentex {
             font-size: 10px;
+            font-weight: bold;
+        }
+
+        .custom-select-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .custom-select-container label {
+            align-self: flex-start;
+            margin-bottom: 0.25rem;
+            font-size: 11px;
             font-weight: bold;
         }
     </style>
@@ -50,45 +63,49 @@
                     </div>
                     <div class="card-body pb-0">
                         <div class="form-group row align-items-center vh-5">
-                            <div class="col-lg-5 col-md-5 col-sm-5">
-                                <h5 class="page-title font-12">SIAGIE - MINEDU, {{ $actualizado }}</h5>
-                            </div>
-                            <div class="col-lg-1 col-md-1 col-sm-1  ">
-                                <select id="anio" name="anio" class="form-control font-11"
-                                    onchange="cargarCards();">
-                                    <option value="0">AÑO</option>
-                                    @foreach ($anios as $item)
-                                        <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
-                                            {{ $item->anio }}</option>
-                                    @endforeach
-                                </select>
+                            <div class="col-lg-4 col-md-4 col-sm-4">
+                                <h4 class="page-title font-12">Fuente: SIAGIE - MINEDU, <span
+                                        id="fechaActualizacion">{{ $actualizado }}</span></h4>
                             </div>
                             <div class="col-lg-2 col-md-2 col-sm-2">
-                                <select id="ugel" name="ugel" class="form-control font-11"
-                                    onchange="cargarCards();">
-                                    <option value="0">UGEL</option>
-                                    @foreach ($ugel as $item)
-                                        <option value="{{ $item->id }}">{{ $item->nombre }}</option>
-                                    @endforeach
-                                </select>
+                                <div class="custom-select-container">
+                                    <label for="anio">Año</label>
+                                    <select id="anio" name="anio" class="form-control font-11">
+                                        <option value="0">TODOS</option>
+                                        @foreach ($anios as $item)
+                                            <option value="{{ $item->anio }}"
+                                                {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                                {{ $item->anio }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                             <div class="col-lg-2 col-md-2 col-sm-2">
-                                <select id="distrito" name="distrito" class="form-control font-11"
-                                    onchange="cargarCards();">
-                                    <option value="0">DISTRITO</option>
-                                    @foreach ($distrito as $item)
-                                        <option value="{{ $item->id }}">{{ $item->nombre }}</option>
-                                    @endforeach
-                                </select>
+                                <div class="custom-select-container">
+                                    <label for="ugel">UGEL</label>
+                                    <select id="ugel" name="ugel" class="form-control font-11">
+                                        <option value="0">TODOS</option>
+
+                                    </select>
+                                </div>
                             </div>
                             <div class="col-lg-2 col-md-2 col-sm-2">
-                                <select id="dependencia" name="dependencia" class="form-control font-11"
-                                    onchange="cargarCards();">
-                                    <option value="0">DEPENDENCIA</option>
-                                    @foreach ($dependencia as $item)
-                                        <option value="{{ $item->id }}">{{ $item->nombre }}</option>
-                                    @endforeach
-                                </select>
+                                <div class="custom-select-container">
+                                    <label for="distrito">Distrito</label>
+                                    <select id="distrito" name="distrito" class="form-control font-11">
+                                        <option value="0">TODOS</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                <div class="custom-select-container">
+                                    <label for="dependencia">Dependencia</label>
+                                    <select id="dependencia" name="dependencia" class="form-control font-11">
+                                        <option value="0">TODOS</option>
+
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -395,7 +412,30 @@
                     thousandsSep: ","
                 }
             });
-            cargarCards();
+
+            $('#anio').change(function() {
+                $('#ugel').val(0);
+                $('#distrito').val(0);
+                $('#dependencia').val(0);
+                cargarUgel();
+                // cargarCards();
+            });
+            $('#ugel').change(function() {
+                $('#distrito').val(0);
+                $('#dependencia').val(0);
+                cargarDistrito();
+                // cargarCards();
+            });
+            $('#distrito').change(function() {
+                $('#dependencia').val(0);
+                cargarDependencia();
+                // cargarCards();
+            });
+            $('#dependencia').change(function() {
+                cargarCards();
+            });
+            cargarUgel();
+            // cargarCards();
         });
 
         function cargarCards() {
@@ -404,10 +444,6 @@
             panelGraficas('anal2');
             panelGraficas('anal3');
             panelGraficas('anal4');
-            // panelGraficas('anal5');
-            // panelGraficas('anal6');
-            //panelGraficas('anal7');
-            // panelGraficas('anal8');
             panelGraficas('tabla1');
             panelGraficas('tabla2');
         }
@@ -473,9 +509,11 @@
                         );
                         $('.anal1-fuente').html('Fuente: ' + data.reg.fuente);
                         $('.anal1-fecha').html('Actualizado: ' + data.reg.fecha);
+                        $('#fechaActualizacion').html(data.reg.fecha);
                     } else if (div == "anal2") {
                         gLineaBasica(div, data.info, '',
-                            'Evolución mensual de la matricula educativa en educación básica especial período '+$('#anio option:selected').text(),
+                            'Evolución mensual de la matricula educativa en educación básica especial período ' +
+                            $('#anio option:selected').text(),
                             '');
                         $('.anal2-fuente').html('Fuente: ' + data.reg.fuente);
                         $('.anal2-fecha').html('Actualizado: ' + data.reg.fecha);
@@ -598,19 +636,62 @@
             });
         }
 
-        function cargarDistritos() {
+        function cargarUgel() {
             $.ajax({
-                url: "{{ route('ubigeo.distrito.25', '') }}/" + $('#provincia').val(),
+                url: "{{ route('matriculageneral.ebe.ugel', '') }}/" + $('#anio').val(),
+                type: 'GET',
+                success: function(data) {
+                    $("#ugel option").remove();
+                    var options = '<option value="0">TODOS</option>';
+                    $.each(data, function(index, value) {
+                        options += "<option value='" + value.id + "'>" + value.nombre + "</option>"
+                    });
+                    $("#ugel").append(options);
+                    cargarDistrito();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cargarDistrito() {
+            $.ajax({
+                url: "{{ route('matriculageneral.ebe.distrito', ['anio' => 'anio_id', 'ugel' => 'ugel_id']) }}"
+                    .replace('anio_id', $('#anio').val())
+                    .replace('ugel_id', $('#ugel').val()),
                 type: 'GET',
                 success: function(data) {
                     $("#distrito option").remove();
-                    var options = '<option value="0">DISTRITO</option>';
+                    var options = '<option value="0">TODOS</option>';
                     $.each(data, function(index, value) {
-                        //ss = (id == value.id ? "selected" : "");
-                        options += "<option value='" + value.id + "'>" + value.nombre +
-                            "</option>"
+                        options += "<option value='" + value.id + "'>" + value.nombre + "</option>"
                     });
                     $("#distrito").append(options);
+                    cargarDependencia();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cargarDependencia() {
+            $.ajax({
+                url: "{{ route('matriculageneral.ebe.dependencia', ['anio' => 'anio_id', 'ugel' => 'ugel_id', 'distrito' => 'distrito_id']) }}"
+                    .replace('anio_id', $('#anio').val())
+                    .replace('ugel_id', $('#ugel').val())
+                    .replace('distrito_id', $('#distrito').val()),
+                type: 'GET',
+                success: function(data) {
+                    $("#dependencia option").remove();
+                    var options = '';
+                    options = data.length == 1 ? '' : '<option value="0">TODOS</option>';
+                    $.each(data, function(index, value) {
+                        options += "<option value='" + value.id + "'>" + value.nombre + "</option>"
+                    });
+                    $("#dependencia").append(options);
+                    cargarCards();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -619,14 +700,23 @@
         }
 
         function descargar1() {
-            window.open("{{ url('/') }}/MatriculaGeneral/EBE/Excel/tabla1/" + $('#anio').val() + "/" +
-                $('#ugel').val() + "/" + $('#distrito').val() + "/" + $('#dependencia').val() + "/0");
+            window.open(
+                "{{ route('matriculageneral.ebe.download', ['div' => 'tabla1', 'anio' => ':anio', 'ugel' => ':ugel', 'gestion' => ':gestion', 'area' => ':area', 'provincia' => '0']) }}"
+                .replace(':anio', $('#anio').val())
+                .replace(':ugel', $('#ugel').val())
+                .replace(':gestion', $('#distrito').val())
+                .replace(':area', $('#dependencia').val()));
         }
 
         function descargar2() {
             console.log("provincia_select:" + provincia_select);
-            window.open("{{ url('/') }}/MatriculaGeneral/EBE/Excel/tabla2/" + $('#anio').val() + "/" +
-                $('#ugel').val() + "/" + $('#distrito').val() + "/" + $('#dependencia').val() + "/" + provincia_select);
+            window.open(
+                "{{ route('matriculageneral.ebe.download', ['div' => 'tabla2', 'anio' => ':anio', 'ugel' => ':ugel', 'gestion' => ':gestion', 'area' => ':area', 'provincia' => ':provincia']) }}"
+                .replace(':anio', $('#anio').val())
+                .replace(':ugel', $('#ugel').val())
+                .replace(':gestion', $('#distrito').val())
+                .replace(':area', $('#dependencia').val())
+                .replace(':provincia', provincia_select));
         }
 
         function verpdf(id) {
@@ -1597,20 +1687,20 @@
         }
     </script>
 
-    <script src="https://code.highcharts.com/highcharts.js"></script>
+    {{-- <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <!-- optional -->
     <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script> --}}
 
     <script src="{{ asset('/') }}public/assets/libs/datatables/jquery.dataTables.min.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.responsive.min.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.js"></script>
 
-    {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts-more.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script> --}}
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script>
 @endsection

@@ -1,6 +1,7 @@
 @extends('layouts.main', ['titlePage' => 'INDICADOR'])
 @section('css')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
+    <link href="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
     <style>
         .tablex thead th {
             padding: 6px;
@@ -52,37 +53,37 @@
                                 <h5 class="page-title font-12">SIAGIE - MINEDU, {{ $actualizado }}</h5>
                             </div>
                             <div class="col-lg-1 col-md-1 col-sm-1  ">
-                                <select id="anio" name="anio" class="form-control font-11"
-                                    onchange="cargarCards();">
+                                <select id="anio" name="anio" class="form-control font-11"{{-- 
+                                    onchange="cargarCards();" --}}>
                                     <option value="0">AÑO</option>
                                     @foreach ($anios as $item)
-                                        <option value="{{ $item->id }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                        <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
                                             {{ $item->anio }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col-lg-2 col-md-2 col-sm-2">
-                                <select id="provincia" name="provincia" class="form-control font-11"
-                                    onchange="cargarDistritos();cargarCards();">
+                                <select id="provincia" name="provincia" class="form-control font-11"{{-- 
+                                    onchange="cargarDistritos();cargarCards();" --}}>
                                     <option value="0">PROVINCIA</option>
-                                    @foreach ($provincia as $item)
+                                    {{-- @foreach ($provincia as $item)
                                         <option value="{{ $item->id }}">{{ $item->nombre }}</option>
-                                    @endforeach
+                                    @endforeach --}}
                                 </select>
                             </div>
                             <div class="col-lg-2 col-md-2 col-sm-2">
-                                <select id="distrito" name="distrito" class="form-control font-11"
-                                    onchange="cargarCards();">
+                                <select id="distrito" name="distrito" class="form-control font-11"{{-- 
+                                    onchange="cargarCards();" --}}>
                                     <option value="0">DISTRITO</option>
                                 </select>
                             </div>
                             <div class="col-lg-2 col-md-2 col-sm-2">
-                                <select id="nivel" name="nivel" class="form-control font-11"
-                                    onchange="cargarCards();">
+                                <select id="nivel" name="nivel" class="form-control font-11"{{-- 
+                                    onchange="cargarCards();" --}}>
                                     <option value="0">NIVELES</option>
-                                    @foreach ($nivel as $item)
+                                    {{-- @foreach ($nivel as $item)
                                         <option value="{{ $item->id }}">{{ $item->nombre }}</option>
-                                    @endforeach
+                                    @endforeach --}}
                                 </select>
                             </div>
 
@@ -387,15 +388,38 @@
 
 @section('js')
     <script type="text/javascript">
-        var provincia_select = 0;
         $(document).ready(function() {
             Highcharts.setOptions({
                 lang: {
                     thousandsSep: ","
                 }
             });
-            cargarDistritos();
-            cargarCards();
+
+            // Eventos
+            $('#anio').change(function() {
+                cargarProvincias();
+            });
+            $('#provincia').change(function() {
+                cargarDistritos();
+            });
+            $('#distrito').change(function() {
+                cargarNivel();
+            });
+            $('#nivel').change(function() {
+                cargarCards();
+            });
+            cargarProvincias();
+            // Carga inicial secuencial (si es necesario)
+            // Normalmente Blade ya trae seleccionado el anio max y provincias cargadas.
+            // Si el anio cambia, se gatilla cargarProvincias.
+            // Si provincia cambia, se gatilla cargarDistritos.
+
+            // Cargar distritos para la provincia por defecto (si hay alguna seleccionada)
+            // if($('#provincia').val() != 0){
+            //     cargarDistritos();
+            // } else {
+            //     cargarCards(); // Si no, carga cards directamente con filtros vacios
+            // }
         });
 
         function cargarCards() {
@@ -557,19 +581,65 @@
         }
 
 
+        function cargarProvincias() {
+            $.ajax({
+                url: "{{ route('matriculageneral.niveleducativo.ebe.provincias', '') }}/" + $('#anio').val(),
+                type: 'GET',
+                success: function(data) {
+                    $("#provincia option").remove();
+                    var options = '<option value="0">PROVINCIA</option>';
+                    $.each(data, function(index, value) {
+                        options += "<option value='" + value.id + "'>" + value.nombre + "</option>"
+                    });
+                    $("#provincia").append(options);
+
+                    // Resetear dependientes
+                    $("#distrito option").remove();
+                    $("#distrito").append('<option value="0">DISTRITO</option>');
+
+                    // Cargar cards con nuevo filtro (anio cambiado, provincia reset a 0)
+                    cargarDistritos();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
         function cargarDistritos() {
             $.ajax({
-                url: "{{ route('ubigeo.distrito.25', '') }}/" + $('#provincia').val(),
+                url: "{{ route('matriculageneral.niveleducativo.ebe.distritos', ['', '']) }}/" + $('#anio').val() +
+                    "/" + $('#provincia').val(),
                 type: 'GET',
                 success: function(data) {
                     $("#distrito option").remove();
                     var options = '<option value="0">DISTRITO</option>';
                     $.each(data, function(index, value) {
-                        //ss = (id == value.id ? "selected" : "");
-                        options += "<option value='" + value.id + "'>" + value.nombre +
-                            "</option>"
+                        options += "<option value='" + value.id + "'>" + value.nombre + "</option>"
                     });
                     $("#distrito").append(options);
+
+                    cargarNivel();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cargarNivel() {
+            $.ajax({
+                url: "{{ route('matriculageneral.niveleducativo.ebe.niveles', ['', '', '']) }}/" + $('#anio').val() + "/" +
+                    $('#provincia').val() + "/" + $('#distrito').val(),
+                type: 'GET',
+                success: function(data) {
+                    $("#nivel option").remove();
+                    var options = '<option value="0">NIVELES</option>';
+                    $.each(data, function(index, value) {
+                        options += "<option value='" + value.id + "'>" + value.nombre + "</option>"
+                    });
+                    $("#nivel").append(options);
+                    cargarCards();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -1651,17 +1721,13 @@
         }
     </script>
 
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <!-- optional -->
-    <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-
-    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
-
-    {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts-more.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script> --}}
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.responsive.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.js"></script>
 @endsection

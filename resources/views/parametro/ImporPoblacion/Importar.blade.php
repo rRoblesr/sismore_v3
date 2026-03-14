@@ -219,6 +219,7 @@
                         progress_bar.removeClass('bg-success bg-danger').addClass('bg-info');
                         progress_bar.css('width', '0%');
                         table_principal.ajax.reload();
+                        $('.bs-example-modal-lg').modal('hide');
                     }, 1500);
                 } else {
                     progress_bar.css('width', '100%');

@@ -1,6 +1,7 @@
 @extends('layouts.main', ['titlePage' => 'INDICADOR'])
 @section('css')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
+    <link href="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
     <style>
         .tablex thead th {
             padding: 6px;
@@ -44,44 +45,57 @@
                         {{-- <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
                                     title='IMPRIMIR'><i class="fa fa-print"></i></button> --}}
                     </div>
-                    <h3 class="card-title text-white">Educación Básica Regular</h3>
+                    <h3 class="card-title text-white font-14">Educación Básica Regular</h3>
                 </div>
                 <div class="card-body pb-0">
                     <div class="form-group row align-items-center vh-5">
-                        <div class="col-lg-5 col-md-5 col-sm-5">
-                            <h5 class="page-title font-12">SIAGIE - MINEDU, {{ $actualizado }}</h5>
-                        </div>
-                        <div class="col-lg-1 col-md-1 col-sm-1  ">
-                            <select id="anio" name="anio" class="form-control font-11" onchange="cargarCards();">
-                                <option value="0">AÑO</option>
-                                @foreach ($anios as $item)
-                                    <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
-                                        {{ $item->anio }}</option>
-                                @endforeach
-                            </select>
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <h4 class="page-title font-12">Fuente: SIAGIE - MINEDU, <span
+                                    id="fechaActualizacion">{{ $actualizado }}</span></h4>
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-2">
-                            <select id="ugel" name="ugel" class="form-control font-11" onchange="cargarCards();">
-                                <option value="0">UGEL</option>
-                                @foreach ($ugel as $item)
-                                    <option value="{{ $item->id }}">{{ $item->nombre }}</option>
-                                @endforeach
-                            </select>
+                            <div class="custom-select-container">
+                                <label for="anio">Año</label>
+                                <select id="anio" name="anio" class="form-control font-11">
+                                    <option value="0">TODOS</option>
+                                    @foreach ($anios as $item)
+                                        <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                            {{ $item->anio }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-2">
-                            <select id="gestion" name="gestion" class="form-control font-11" onchange="cargarCards();">
-                                <option value="0">TIPO DE GESTIÓN</option>
-                                <option value="12">PUBLICA</option>
-                                <option value="3">PRIVADA</option>
-                            </select>
+                            <div class="custom-select-container">
+                                <label for="ugel">UGEL</label>
+                                <select id="ugel" name="ugel" class="form-control font-11">
+                                    <option value="0">TODOS</option>
+                                    @foreach ($ugel as $item)
+                                        <option value="{{ $item->id }}">{{ $item->nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-2">
-                            <select id="area" name="area" class="form-control font-11" onchange="cargarCards();">
-                                <option value="0">ÁMBITO GEOGRÁFICO</option>
-                                @foreach ($area as $item)
-                                    <option value="{{ $item->id }}">{{ $item->nombre }}</option>
-                                @endforeach
-                            </select>
+                            <div class="custom-select-container">
+                                <label for="gestion">Tipo de Gestión</label>
+                                <select id="gestion" name="gestion" class="form-control font-11">
+                                    <option value="0">TODOS</option>
+                                    <option value="12">PUBLICA</option>
+                                    <option value="3">PRIVADA</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="custom-select-container">
+                                <label for="area">Área Geográfica</label>
+                                <select id="area" name="area" class="form-control font-11">
+                                    <option value="0">TODOS</option>
+                                    @foreach ($area as $item)
+                                        <option value="{{ $item->id }}">{{ $item->nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
 
                     </div>
@@ -461,7 +475,7 @@
 
 @section('js')
     <script type="text/javascript">
-        var distrito_select = 0;
+        var provincia_select = 0;
         var distrito_select = 0;
         $(document).ready(function() {
             Highcharts.setOptions({
@@ -469,8 +483,138 @@
                     thousandsSep: ","
                 }
             });
+
+            $('#anio').change(function() {
+                cargarugels();
+            });
+            $('#ugel').change(function() {
+                cargargestion();
+            });
+            $('#gestion').change(function() {
+                cargarAreas();
+            });
+            $('#area').change(function() {
+                cargarCards();
+            });
             cargarCards();
         });
+
+        function cargarugels() {
+            $.ajax({
+                url: "{{ route('matriculageneral.ebr.tablas') }}",
+                data: {
+                    'div': 'ugels',
+                    "anio": $('#anio').val()
+                },
+                type: "GET",
+                dataType: "JSON",
+                success: function(data) {
+                    var ugelSelect = $('#ugel');
+                    var selectedUgel = ugelSelect.val();
+                    ugelSelect.empty();
+                    if (data.ugels.length > 1) {
+                        ugelSelect.append('<option value="0">TODOS</option>');
+                    }
+                    $.each(data.ugels, function(key, value) {
+                        ugelSelect.append('<option value="' + value.id + '">' + value.nombre +
+                            '</option>');
+                    });
+
+                    if (data.ugels.length == 1) {
+                        ugelSelect.val(data.ugels[0].id);
+                    } else {
+                        if (ugelSelect.find('option[value="' + selectedUgel + '"]').length > 0) {
+                            ugelSelect.val(selectedUgel);
+                        } else {
+                            ugelSelect.val(0);
+                        }
+                    }
+                    cargargestion();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                }
+            });
+        }
+
+        function cargargestion() {
+            $.ajax({
+                url: "{{ route('matriculageneral.ebr.tablas') }}",
+                data: {
+                    'div': 'gestion',
+                    "anio": $('#anio').val(),
+                    "ugel": $('#ugel').val()
+                },
+                type: "GET",
+                dataType: "JSON",
+                success: function(data) {
+                    var gestionSelect = $('#gestion');
+                    var selectedGestion = gestionSelect.val();
+                    gestionSelect.empty();
+                    if (data.gestiones.length > 1) {
+                        gestionSelect.append('<option value="0">TODOS</option>');
+                    }
+                    $.each(data.gestiones, function(key, value) {
+                        gestionSelect.append('<option value="' + value.id + '">' + value.nombre +
+                            '</option>');
+                    });
+
+                    if (data.gestiones.length == 1) {
+                        gestionSelect.val(data.gestiones[0].id);
+                    } else {
+                        if (gestionSelect.find('option[value="' + selectedGestion + '"]').length > 0) {
+                            gestionSelect.val(selectedGestion);
+                        } else {
+                            gestionSelect.val(0);
+                        }
+                    }
+                    cargarAreas();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                }
+            });
+        }
+
+        function cargarAreas() {
+            $.ajax({
+                url: "{{ route('matriculageneral.ebr.tablas') }}",
+                data: {
+                    'div': 'areas',
+                    "anio": $('#anio').val(),
+                    "gestion": $('#gestion').val(),
+                    "ugel": $('#ugel').val()
+                },
+                type: "GET",
+                dataType: "JSON",
+                success: function(data) {
+                    var areaSelect = $('#area');
+                    var selectedArea = areaSelect.val();
+                    areaSelect.empty();
+                    if (data.areas.length > 1) {
+                        areaSelect.append('<option value="0">TODOS</option>');
+                    }
+                    $.each(data.areas, function(key, value) {
+                        areaSelect.append('<option value="' + value.id + '">' + value.nombre +
+                            '</option>');
+                    });
+
+                    if (data.areas.length == 1) {
+                        areaSelect.val(data.areas[0].id);
+                    } else {
+                        if (areaSelect.find('option[value="' + selectedArea + '"]').length > 0) {
+                            areaSelect.val(selectedArea);
+                        } else {
+                            areaSelect.val(0);
+                        }
+                    }
+                    cargarCards();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                }
+            });
+        }
 
         function cargarCards() {
             panelGraficas('head');
@@ -495,7 +639,7 @@
                     "ugel": $('#ugel').val(),
                     "gestion": $('#gestion').val(),
                     "area": $('#area').val(),
-                    "provincia": 0
+                    "provincia": provincia_select
                 },
                 type: "GET",
                 dataType: "JSON",
@@ -519,6 +663,7 @@
                 },
                 success: function(data) {
                     if (div == 'head') {
+                        $('#fechaActualizacion').html(data.actualizado);
                         $('#normal').text(data.valor1);
                         $('#eib').text(data.valor2);
                         $('#foraneo').text(data.valor3);
@@ -553,6 +698,7 @@
                         );
                         $('.anal1-fuente').html('Fuente: ' + data.reg.fuente);
                         $('.anal1-fecha').html('Actualizado: ' + data.reg.fecha);
+                        $('#fechaActualizacion').html(data.reg.fecha);
                     } else if (div == "anal2") {
                         gLineaBasica(div, data.info, '',
                             'Evolución mensual de la matricula educativa en educación básica regular período ' +
@@ -1640,17 +1786,14 @@
         }
     </script>
 
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <!-- optional -->
-    <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-
-    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
-
-    {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts-more.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script> --}}
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script>
+
+    <script src="{{ asset('/') }}public/assets/libs/datatables/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.responsive.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.js"></script>
 @endsection

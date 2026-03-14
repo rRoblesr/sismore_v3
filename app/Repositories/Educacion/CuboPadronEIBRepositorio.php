@@ -92,9 +92,10 @@ class CuboPadronEIBRepositorio
             ->get();
     }
 
-    public static function reportesreporte_anal2($gestion, $provincia, $distrito)
+    public static function reportesreporte_anal2($anio, $gestion, $provincia, $distrito)
     {
         return DB::table('edu_cubo_padron_eib as ceib')
+            ->where('ceib.anio_pw', '<=', $anio)
             ->when($gestion > 0, fn($query) => $query->where('ceib.tipogestion_id', $gestion))
             ->when($provincia > 0, fn($query) => $query->where('ceib.provincia_id', $provincia))
             ->when($distrito > 0, fn($query) => $query->where('ceib.distrito_id', $distrito))
@@ -120,10 +121,11 @@ class CuboPadronEIBRepositorio
             ->get();
     }
 
-    public static function reportesreporte_anal4($gestion, $provincia, $distrito)
+    public static function reportesreporte_anal4($anio, $gestion, $provincia, $distrito)
     {
         return DB::table('edu_cubo_padron_eib as ceib')
             ->join('edu_nivelmodalidad as nm', 'nm.id', '=', 'ceib.nivelmodalidad_id')
+            ->where('ceib.anio_pw', '<=', $anio)
             ->when($gestion > 0, fn($query) => $query->where('ceib.tipogestion_id', $gestion))
             ->when($provincia > 0, fn($query) => $query->where('ceib.provincia_id', $provincia))
             ->when($distrito > 0, fn($query) => $query->where('ceib.distrito_id', $distrito))

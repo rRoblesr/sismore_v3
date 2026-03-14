@@ -69,6 +69,11 @@
                             <h3 class="card-title">HISTORIAL DE IMPORTACIÓN DE EVALUACIÓN MUESTRAL</h3>
                         @break
 
+                        @case(51)
+                            {{-- censo educativo - matricula --}}
+                            <h3 class="card-title">HISTORIAL DE IMPORTACIÓN DE LOCALES BENEFICIADOS</h3>
+                        @break
+
                         @default
                     @endswitch
 
@@ -108,7 +113,22 @@
                                             </thead>
                                         @break
 
-                                        @default
+                                        @case(51)
+                                    <thead class="text-white bg-success-0">
+                                        <tr>
+                                            <th>N°</th>
+                                            <th>Fecha Versión</th>
+                                            <th>Fuente</th>
+                                            <th>Usuario</th>
+                                            <th>Área</th>
+                                            <th>Registro</th>
+                                            <th>Estado</th>
+                                            <th>Acción</th>
+                                        </tr>
+                                    </thead>
+                                @break
+
+                                @default
                                             <thead class="text-white bg-success-0">
                                                 <tr>
                                                     <th>N°</th>
@@ -448,56 +468,30 @@
 
                                 @case(34)
                                     <thead class="text-primary">
-                                        <th>CODOOII</th>
-                                        <th>CODGEO</th>
-                                        <th>CODLOCAL</th>
+                                        <th>ANIO</th>
                                         <th>COD_MOD</th>
-                                        <th>NROCED</th>
-                                        <th>CUADRO</th>
-                                        <th>TIPDATO</th>
-                                        <th>NIV_MOD</th>
-                                        <th>GES_DEP</th>
-                                        <th>AREA_CENSO</th>
-                                        <th>D01</th>
-                                        <th>D02</th>
-                                        <th>D03</th>
-                                        <th>D04</th>
-                                        <th>D05</th>
-                                        <th>D06</th>
-                                        <th>D07</th>
-                                        <th>D08</th>
-                                        <th>D09</th>
-                                        <th>D10</th>
-                                        <th>D11</th>
-                                        <th>D12</th>
-                                        <th>D13</th>
-                                        <th>D14</th>
-                                        <th>D15</th>
-                                        <th>D16</th>
-                                        <th>D17</th>
-                                        <th>D18</th>
-                                        <th>D19</th>
-                                        <th>D20</th>
-                                        <th>D21</th>
-                                        <th>D22</th>
-                                        <th>D23</th>
-                                        <th>D24</th>
-                                        <th>D25</th>
-                                        <th>D26</th>
-                                        <th>D27</th>
-                                        <th>D28</th>
-                                        <th>D29</th>
-                                        <th>D30</th>
-                                        <th>D31</th>
-                                        <th>D32</th>
-                                        <th>D33</th>
-                                        <th>D34</th>
-                                        <th>D35</th>
-                                        <th>D36</th>
-                                        <th>D37</th>
-                                        <th>D38</th>
-                                        <th>D39</th>
-                                        <th>D40</th>
+                                        <th>MODALIDAD</th>
+                                        <th>NIVEL</th>
+                                        <th>GESTION</th>
+                                        <th>PAIS</th>
+                                        <th>FECHA_NAC</th>
+                                        <th>SEXO</th>
+                                        <th>LENGUA_MAT</th>
+                                        <th>SEG_LENGUA</th>
+                                        <th>DISCAPACIDAD</th>
+                                        <th>SIT_MATRICULA</th>
+                                        {{-- <th>EST_MATRICULA</th> --}}
+                                        <th>FECHA_MAT</th>
+                                        {{-- <th>CONDICION</th> --}}
+                                        <th>GRADO</th>
+                                        <th>DSC_GRADO</th>
+                                        <th>SECCION</th>
+                                        <th>DSC_SECCION</th>
+                                        <th>FECHA_REG</th>
+                                        <th>FECHA_RET</th>
+                                        <th>MOTIVO_RET</th>
+                                        <th>SF_REGULAR</th>
+                                        <th>SF_RECUP</th>
                                     </thead>
                                 @break
 
@@ -582,6 +576,22 @@
                                         <th>medida_cs</th>
                                         <th>grupo_cs</th>
                                         <th>peso_cs</th>
+                                    </thead>
+                                @break
+
+                                @case(51)
+                                    <thead class="text-primary">
+                                        <th>COD_LOCAL</th>
+                                        <th>REGION</th>
+                                        <th>DEPARTAMENTO</th>
+                                        <th>PROVINCIA</th>
+                                        <th>DISTRITO</th>
+                                        <th>DRE_UGEL</th>
+                                        <th>NOMBRE_SERVICIOS</th>
+                                        <th>MONTO_ASIGNADO_MANTENIMIENTO_REGULAR</th>
+                                        <th>MONTO_ASIGNADO_RUTAS</th>
+                                        <th>MONTO_ASIGNADO_TOTAL</th>
+                                        <th>NUMERO_SERVICIOS</th>
                                     </thead>
                                 @break
 
@@ -777,6 +787,49 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal para procesar matricula (Fuente 34) -->
+    @if(isset($fuente) && $fuente == 34)
+    <div id="modal-procesar-matricula" class="modal fade centrarmodal" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Procesar Importación de SIAGIE Matricula</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="proc_importacion_id" value="">
+                    <p class="mb-3">
+                        Seleccione el proceso que desea ejecutar para la importación seleccionada.
+                    </p>
+                    <div class="text-center">
+                        <div class="d-inline-block mr-2">
+                            <button type="button" id="btn-proc-base-mat" class="btn btn-primary btn-sm">
+                                <i class="fa fa-database"></i> Procesar Base
+                            </button>
+                            <button type="button" id="btn-proc-base-ojito-mat" class="btn btn-outline-primary btn-sm ml-1" title="Ver estado">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="d-inline-block">
+                            <button type="button" id="btn-proc-cubo-mat" class="btn btn-success btn-sm">
+                                <i class="fa fa-cube"></i> Procesar Cubo
+                            </button>
+                            <button type="button" id="btn-proc-cubo-ojito-mat" class="btn btn-outline-success btn-sm ml-1" title="Ver estado">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
 @endsection
 
 @section('js')
@@ -793,6 +846,14 @@
                 ajax: url_tabla_principal({{ $fuente }}),
                 type: "POST",
             });
+            
+            @if(isset($fuente) && $fuente == 34)
+            $('#btn-proc-base-mat').on('click', function() { ejecutarProcesoMat('base'); });
+            $('#btn-proc-cubo-mat').on('click', function() { ejecutarProcesoMat('cubo'); });
+            $('#btn-proc-base-ojito-mat').on('click', function() { verificarEstadoMat('base'); });
+            $('#btn-proc-cubo-ojito-mat').on('click', function() { verificarEstadoMat('cubo'); });
+            @endif
+
             ///////////////////////////////
 
             // ✅ Sonido de éxito (sintético, sin archivos)
@@ -923,11 +984,11 @@
             }, 100); // Actualiza cada 100ms
 
             $.ajax({
-                url: "{{ route('impormatriculageneral.procesar.cubo') }}",
+                url: "{{ route('impormatriculageneral.procesar.cubo', 'id_placeholder') }}".replace('id_placeholder', importacion_id),
                 method: "POST",
                 data: {
                     _token: $('input[name=_token]').val(),
-                    importacion_id: importacion_id
+                    // importacion_id: importacion_id
                 },
                 success: function(response) {
                     clearInterval(intervalId);
@@ -962,11 +1023,10 @@
             $('#progress-bar-cubo').css('width', '0%').text('0%');
             $('#modal-procesar-cubo').modal('show');
             $.ajax({
-                url: "{{ route('impormatriculageneral.procesar.cubo') }}",
+                url: "{{ route('impormatriculageneral.procesar.cubo', 'id_placeholder') }}".replace('id_placeholder', importacion_id),
                 method: "POST",
                 data: {
                     _token: $('input[name=_token]').val(),
-                    importacion_id: importacion_id
                 },
                 xhrFields: {
                     onprogress: function(e) {
@@ -1019,6 +1079,8 @@
                     return "{{ route('imporserviciosbasicos.listar.importados') }}";
                 case 46:
                     return "{{ route('imporevaluacionmuestral.listar.importados') }}";
+                case 51:
+                    return "{{ route('imporlocalesbeneficiados.listar.importados') }}";
                 default:
                     return '';
             }
@@ -1136,6 +1198,8 @@
                     return "{{ route('imporserviciosbasicos.guardar') }}";
                 case 46:
                     return "{{ route('imporevaluacionmuestral.guardar') }}";
+                case 51:
+                    return "{{ route('imporlocalesbeneficiados.guardar') }}";
                 default:
                     return '';
             }
@@ -1192,6 +1256,8 @@
                     return "{{ route('imporserviciosbasicos.eliminar', '') }}/" + id;
                 case 46:
                     return "{{ route('imporevaluacionmuestral.eliminar', '') }}/" + id;
+                case 51:
+                    return "{{ route('imporlocalesbeneficiados.eliminar', '') }}/" + id;
                 default:
                     return '';
             }
@@ -2403,24 +2469,24 @@
                             "dataType": 'JSON',
                         },
                         "columns": [{
-                                data: 'id_anio',
-                                name: 'id_anio'
+                                data: 'anio',
+                                name: 'anio'
                             },
                             {
                                 data: 'cod_mod',
                                 name: 'cod_mod'
                             },
                             {
-                                data: 'id_modalidad',
-                                name: 'id_modalidad'
+                                data: 'id_mod',
+                                name: 'id_mod'
                             },
                             {
                                 data: 'id_nivel',
                                 name: 'id_nivel'
                             },
                             {
-                                data: 'gestion',
-                                name: 'gestion'
+                                data: 'id_gestion',
+                                name: 'id_gestion'
                             },
                             {
                                 data: 'pais_nacimiento',
@@ -2431,8 +2497,8 @@
                                 name: 'fecha_nacimiento'
                             },
                             {
-                                data: 'sexo',
-                                name: 'sexo'
+                                data: 'id_sexo',
+                                name: 'id_sexo'
                             },
                             {
                                 data: 'lengua_materna',
@@ -2443,40 +2509,40 @@
                                 name: 'segunda_lengua'
                             },
                             {
-                                data: 'id_discapacidad',
-                                name: 'id_discapacidad'
+                                data: 'discapacidad',
+                                name: 'discapacidad'
                             },
                             {
                                 data: 'situacion_matricula',
                                 name: 'situacion_matricula'
                             },
-                            {
+                            /* {
                                 data: 'estado_matricula',
                                 name: 'estado_matricula'
-                            },
+                            }, */
                             {
                                 data: 'fecha_matricula',
                                 name: 'fecha_matricula'
                             },
-                            {
+                            /* {
                                 data: 'condicion_matricula',
                                 name: 'condicion_matricula'
-                            },
+                            }, */
                             {
                                 data: 'id_grado',
                                 name: 'id_grado'
                             },
                             {
-                                data: 'dsc_grado',
-                                name: 'dsc_grado'
+                                data: 'grado',
+                                name: 'grado'
                             },
                             {
                                 data: 'id_seccion',
                                 name: 'id_seccion'
                             },
                             {
-                                data: 'dsc_seccion',
-                                name: 'dsc_seccion'
+                                data: 'seccion',
+                                name: 'seccion'
                             },
                             {
                                 data: 'fecha_registro',
@@ -2617,6 +2683,76 @@
                         ],
                     });
                     break;
+                case 51:
+                    $('#siagie-matricula').DataTable({
+                        "processing": true,
+                        "serverSide": true,
+                        "responsive": false,
+                        "autoWidth": false,
+                        "ordered": true,
+                        "destroy": true,
+                        "language": table_language,
+                        "ajax": {
+                            "headers": {
+                                'X-CSRF-TOKEN': $('input[name=_token]').val()
+                            },
+                            "url": "{{ route('imporlocalesbeneficiados.listarimportados', '') }}/" + importacion,
+                            "type": "POST",
+                            "dataType": 'JSON',
+                        },
+                        "columns": [{
+                                data: 'cod_local',
+                                name: 'cod_local'
+                            },
+                            {
+                                data: 'region',
+                                name: 'region'
+                            },
+                            {
+                                data: 'departamento',
+                                name: 'departamento'
+                            },
+                            {
+                                data: 'provincia',
+                                name: 'provincia'
+                            },
+                            {
+                                data: 'distrito',
+                                name: 'distrito'
+                            },
+                            {
+                                data: 'dre_ugel',
+                                name: 'dre_ugel'
+                            },
+                            {
+                                data: 'nombre_servicios',
+                                name: 'nombre_servicios'
+                            },
+                            {
+                                data: 'monto_asignado_mantenimiento_regular',
+                                name: 'monto_asignado_mantenimiento_regular'
+                            },
+                            {
+                                data: 'monto_asignado_rutas',
+                                name: 'monto_asignado_rutas'
+                            },
+                            {
+                                data: 'monto_asignado_total',
+                                name: 'monto_asignado_total'
+                            },
+                            {
+                                data: 'numero_servicios',
+                                name: 'numero_servicios'
+                            },
+                        ],
+                        "createdRow": function(row, data, dataIndex) {
+                            if (data.ubigeo_id === null || data.ubigeo_id === '' || data.ugel_id === null || data.ugel_id === '') {
+                                $(row).addClass('table-danger');
+                                $(row).attr('title', 'Falta Ubigeo ID o UGEL ID');
+                            }
+                        }
+                    });
+                    break;
                 default:
                     break;
             }
@@ -2625,6 +2761,118 @@
             $('#modal-siagie-matricula').modal('show');
             $('#modal-siagie-matricula .modal-title').text('Importado');
         }
+
+        @if(isset($fuente) && $fuente == 34)
+        function abrirProcesos(id) {
+            $('#proc_importacion_id').val(id);
+            $('#modal-procesar-matricula').modal('show');
+        }
+
+        function ejecutarProcesoMat(tipo) {
+            var importacion_id = $('#proc_importacion_id').val();
+            if (!importacion_id) return;
+
+            var url = tipo === 'base'
+                ? "{{ route('impormatriculageneral.procesar.base', 'id_placeholder') }}"
+                : "{{ route('impormatriculageneral.procesar.cubo', 'id_placeholder') }}";
+            url = url.replace('id_placeholder', importacion_id);
+
+            Swal.fire({
+                title: '¿Está seguro?',
+                text: tipo === 'base'
+                    ? 'Se procesará la base de matrícula (normalización).'
+                    : 'Se procesará el cubo de matrícula.',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, procesar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (!result.value) return;
+
+                Swal.fire({
+                    title: 'Procesando...',
+                    text: 'Por favor espere.',
+                    allowOutsideClick: false,
+                    onBeforeOpen: () => {
+                        Swal.showLoading()
+                    }
+                });
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    dataType: 'JSON',
+                    headers: {
+                        'X-CSRF-TOKEN': $('input[name=_token]').val()
+                    },
+                    success: function(res) {
+                        if (res.status) {
+                            Swal.fire('¡Éxito!', res.msg, 'success');
+                        } else {
+                            Swal.fire('Error', res.msg, 'error');
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        var msg = 'Ocurrió un error al procesar la importación.';
+                        if(jqXHR.responseJSON && jqXHR.responseJSON.msg) {
+                            msg = jqXHR.responseJSON.msg;
+                        }
+                        Swal.fire('Error', msg, 'error');
+                    }
+                });
+            });
+        }
+
+        function verificarEstadoMat(tipo) {
+            var importacion_id = $('#proc_importacion_id').val();
+            if (!importacion_id) return;
+
+            var url = tipo === 'base'
+                ? "{{ route('impormatriculageneral.verificar.base', 'id_placeholder') }}"
+                : "{{ route('impormatriculageneral.verificar.cubo', 'id_placeholder') }}";
+            url = url.replace('id_placeholder', importacion_id);
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'JSON',
+                success: function(res) {
+                    if (tipo === 'base') {
+                        var html = `
+                            <div class="text-left">
+                                <p class="mb-1"><strong>Resumen del proceso:</strong></p>
+                                <p class="mb-1">Base generada: ${res.base ? 'Sí' : 'No'}</p>
+                                <p class="mb-1">Registros de detalle: ${res.detalle}</p>
+                            </div>`;
+                        Swal.fire({
+                            title: 'Estado del proceso de Base de Matrícula',
+                            html: html,
+                            type: 'info',
+                            confirmButtonText: 'Cerrar',
+                            confirmButtonColor: '#3085d6'
+                        });
+                    } else {
+                        var html = `
+                            <div class="text-left">
+                                <p class="mb-2"><strong>Total de registros en Cubo:</strong> ${res.total}</p>
+                            </div>`;
+                        Swal.fire({
+                            title: 'Estado del proceso de Cubo de Matrícula',
+                            html: html,
+                            type: 'info',
+                            confirmButtonText: 'Cerrar',
+                            confirmButtonColor: '#28a745'
+                        });
+                    }
+                },
+                error: function() {
+                    Swal.fire('Error', 'No se pudo obtener el estado.', 'error');
+                }
+            });
+        }
+        @endif
     </script>
     <script src="{{ asset('/') }}public/assets/libs/jquery-validation/jquery.validate.min.js"></script>
     <!-- Validation init js-->

@@ -24,22 +24,39 @@ class BaseIngresosController extends Controller
     /* IngresoPresupuestal */
     public function ingresopresupuestal()
     {
-        $impG = Importacion::where('fuenteimportacion_id', '13')->where('estado', 'PR')->orderBy('fechaActualizacion', 'desc')->first();
-        $bg_id = BaseGastos::where('importacion_id', $impG->id)->first();
-        $impI = Importacion::where('fuenteimportacion_id', '15')->where('estado', 'PR')->orderBy('fechaActualizacion', 'desc')->first();
-        $bi_id = BaseIngresos::where('importacion_id', $impI->id)->first();
+        $impG_list = Importacion::where('fuenteimportacion_id', 13)->where('estado', 'PR')->orderBy('fechaActualizacion', 'desc')->get();
+        $impG = null;
+        foreach ($impG_list as $imp) {
+            if (BaseGastos::where('importacion_id', $imp->id)->exists()) {
+                $impG = $imp;
+                break;
+            }
+        }
+        if (!$impG && $impG_list->isNotEmpty()) $impG = $impG_list->first();
 
-        $opt1 = BaseIngresosRepositorio::total_pim($bi_id->id);
-        $card1['pim'] = $opt1->pim;
-        $card1['eje'] = $opt1->eje;
+        $impI_list = Importacion::where('fuenteimportacion_id', 15)->where('estado', 'PR')->orderBy('fechaActualizacion', 'desc')->get();
+        $impI = null;
+        $bi = null;
+        foreach ($impI_list as $imp) {
+            $bi = BaseIngresos::where('importacion_id', $imp->id)->first();
+            if ($bi) {
+                $impI = $imp;
+                break;
+            }
+        }
+        if (!$impI && $impI_list->isNotEmpty()) $impI = $impI_list->first();
 
-        $opt1 = BaseIngresosRepositorio::pim_tipogobierno($bi_id->id);
-        $card2['pim'] = $opt1[0]->y;
-        $card2['eje'] = $opt1[0]->eje;
-        $card3['pim'] = $opt1[1]->y;
-        $card3['eje'] = $opt1[1]->eje;
-        $card4['pim'] = $opt1[2]->y;
-        $card4['eje'] = $opt1[2]->eje;
+        if (!$bi) {
+            return "No se encontró información base procesada para mostrar. Por favor verifique que la importación de ingresos se haya procesado correctamente (pres_base_ingresos).";
+        }
+
+        $opt1 = BaseIngresosRepositorio::total_pim($bi->id);
+        $card1 = ['pim' => $opt1->pim ?? 0, 'eje' => $opt1->eje ?? 0];
+
+        $opt1 = BaseIngresosRepositorio::pim_tipogobierno($bi->id);
+        $card2 = ['pim' => $opt1[0]->y ?? 0, 'eje' => $opt1[0]->eje ?? 0];
+        $card3 = ['pim' => $opt1[1]->y ?? 0, 'eje' => $opt1[1]->eje ?? 0];
+        $card4 = ['pim' => $opt1[2]->y ?? 0, 'eje' => $opt1[2]->eje ?? 0];
 
         return view('Presupuesto.BaseIngresos.IngresoPresupuesto', compact('card1', 'card2', 'card3', 'card4', 'impG', 'impI'));
     }
@@ -47,6 +64,7 @@ class BaseIngresosController extends Controller
     public function ingresopresupuestalgrafica1(Request $rq)
     {
         $bi = BaseIngresos::where('importacion_id', $rq->get('importacion_id'))->first();
+        if (!$bi) return response()->json(['info' => []]);
         $info = BaseIngresosRepositorio::pim_tipogobierno($bi->id);
         return response()->json(compact('info'));
     }
@@ -54,6 +72,14 @@ class BaseIngresosController extends Controller
     public function ingresopresupuestalgrafica2(Request $rq)
     {
         $bi = BaseIngresos::where('importacion_id', $rq->get('importacion_id'))->first();
+        if (!$bi) {
+            $data['categoria'] = ['GOBIERNO NACIONAL', 'GOBIERNOS REGIONALES', 'GOBIERNOS LOCALES'];
+            $data['series'] = [
+                ['name' => 'PIM', 'color' => '#317eeb', 'data' => []],
+                ['name' => 'RECAUDADO', 'color' => '#ef5350', 'data' => []],
+            ];
+            return response()->json(compact('data'));
+        }
         $info = BaseIngresosRepositorio::pim_pia_devengado_tipogobierno($bi->id);
         $data['categoria'] = ['GOBIERNO NACIONAL', 'GOBIERNOS REGIONALES', 'GOBIERNOS LOCALES'];
         $data['series'] = [];

@@ -356,24 +356,17 @@
 
 
 @section('js')
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts-more.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script>
+
     <script type="text/javascript">
         //var paleta_colores = ['#058DC7', '#50B432', '#9D561B', '#DDDF00', '#24CBE5', '#64E572', '#9F9655', '#FFF263', '#6AF9C4'];
         $(document).ready(function() {
             //console.log(Highcharts.getOptions().colors)
             Highcharts.setOptions({
-                colors: Highcharts.map(Highcharts.getOptions().colors, function(color) { //paleta_colores
-                    return {
-                        radialGradient: {
-                            cx: 0.5,
-                            cy: 0.3,
-                            r: 0.7
-                        },
-                        stops: [
-                            [0, color],
-                            [1, Highcharts.color(color).brighten(-0.3).get('rgb')] // darken
-                        ],
-                    };
-                }),
                 lang: {
                     thousandsSep: ","
                 }
@@ -388,7 +381,7 @@
                     gSimpleColumn('anal1', data.info, '',
                         'Numero De Redes Educativas Según UGEL', '');
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");
                     console.log(jqXHR);
                 },
@@ -404,77 +397,8 @@
                         '', 'Total De Servicios Por NIVEL_CICLO' +
                         '</span>', '');
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 2");
-                    console.log(jqXHR);
-                },
-            });
-
-            $.ajax({
-                url: "{{ url('/') }}/Home/gra3",
-                type: "GET",
-                dataType: "JSON",
-                success: function(data) {
-                    gPie('anal3', data.info['puntos'],
-                        '',
-                        'Estudiantes Matriculados según Genero<br><span class="fuentex">Fuente:SIAGIE AL ' +
-                        data.info[
-                            'fecha'] + '</span>', '');
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 1");
-                    console.log(jqXHR);
-                },
-            });
-
-            $.ajax({
-                url: "{{ url('/') }}/Home/gra4",
-                type: "GET",
-                dataType: "JSON",
-                success: function(data) {
-                    gPie('anal4', data.info['puntos'],
-                        '',
-                        'Personal Docente según Genero<br><span class="fuentex">Fuente:NEXUS AL ' +
-                        data.info[
-                            'fecha'] + '</span>',
-                        '');
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 4");
-                    console.log(jqXHR);
-                },
-            });
-
-            $.ajax({
-                url: "{{ url('/') }}/Home/gra5",
-                type: "GET",
-                dataType: "JSON",
-                success: function(data) {
-                    gPie('anal5', data.info['puntos'],
-                        '',
-                        'Estudiantes Matriculados según Area Geografica<br><span class="fuentex">Fuente:SIAGIE AL ' +
-                        data
-                        .info['fecha'] + '</span>', '');
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 5");
-                    console.log(jqXHR);
-                },
-            });
-
-            $.ajax({
-                url: "{{ url('/') }}/Home/gra6",
-                type: "GET",
-                dataType: "JSON",
-                success: function(data) {
-                    gPie('anal6', data.info['puntos'],
-                        '',
-                        'Personal Docente según Area Geografica<br><span class="fuentex">Fuente:NEXUS AL ' +
-                        data.info['fecha'] + '</span>',
-                        '');
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 6");
                     console.log(jqXHR);
                 },
             });
@@ -629,9 +553,4 @@
             });
         }
     </script>
-    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts-more.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script>
 @endsection

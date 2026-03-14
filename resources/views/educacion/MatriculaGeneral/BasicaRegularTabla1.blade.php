@@ -13,12 +13,32 @@
             <th class="text-center">HOMBRES</th>
             <th class="text-center">MUJERES</th>
             <th class="text-center">TOTAL</th>
+
+            <!-- Inicial -->
+            {{-- <th class="text-center">CICLO I H</th>
+            <th class="text-center">CICLO I M</th> --}}
             <th class="text-center">CICLO I</th>
+            {{-- <th class="text-center">CICLO II H</th>
+            <th class="text-center">CICLO II M</th> --}}
             <th class="text-center">CICLO II</th>
+
+            <!-- Primaria -->
+            {{-- <th class="text-center">CICLO III H</th>
+            <th class="text-center">CICLO III M</th> --}}
             <th class="text-center">CICLO III</th>
+            {{-- <th class="text-center">CICLO IV H</th>
+            <th class="text-center">CICLO IV M</th> --}}
             <th class="text-center">CICLO IV</th>
+            {{-- <th class="text-center">CICLO V H</th>
+            <th class="text-center">CICLO V M</th> --}}
             <th class="text-center">CICLO V</th>
+
+            <!-- Secundaria -->
+            {{-- <th class="text-center">CICLO VI H</th>
+            <th class="text-center">CICLO VI M</th> --}}
             <th class="text-center">CICLO VI</th>
+            {{-- <th class="text-center">CICLO VII H</th>
+            <th class="text-center">CICLO VII M</th> --}}
             <th class="text-center">CICLO VII</th>
         </tr>
     </thead>
@@ -34,12 +54,32 @@
                     <td>{{ number_format($item->tm, 0) }}</td>
                     <th class="table-warning">{{ number_format($item->tt, 0) }}</th>
                     <td>{!! avance($item->avance, 1) !!}</td>
+
+                    <!-- Inicial -->
+                    {{-- <td>{{ number_format($item->cih, 0) }}</td>
+                    <td>{{ number_format($item->cim, 0) }}</td> --}}
                     <td>{{ number_format($item->ci, 0) }}</td>
+                    {{-- <td>{{ number_format($item->ciih, 0) }}</td>
+                    <td>{{ number_format($item->ciim, 0) }}</td> --}}
                     <td>{{ number_format($item->cii, 0) }}</td>
+
+                    <!-- Primaria -->
+                    {{-- <td>{{ number_format($item->ciiih, 0) }}</td>
+                    <td>{{ number_format($item->ciiim, 0) }}</td> --}}
                     <td>{{ number_format($item->ciii, 0) }}</td>
+                    {{-- <td>{{ number_format($item->civh, 0) }}</td>
+                    <td>{{ number_format($item->civm, 0) }}</td> --}}
                     <td>{{ number_format($item->civ, 0) }}</td>
+                    {{-- <td>{{ number_format($item->cvh, 0) }}</td>
+                    <td>{{ number_format($item->cvm, 0) }}</td> --}}
                     <td>{{ number_format($item->cv, 0) }}</td>
+
+                    <!-- Secundaria -->
+                    {{-- <td>{{ number_format($item->cvih, 0) }}</td>
+                    <td>{{ number_format($item->cvim, 0) }}</td> --}}
                     <td>{{ number_format($item->cvi, 0) }}</td>
+                    {{-- <td>{{ number_format($item->cviih, 0) }}</td>
+                    <td>{{ number_format($item->cviim, 0) }}</td> --}}
                     <td>{{ number_format($item->cvii, 0) }}</td>
                 </tr>
             @endforeach
@@ -52,12 +92,32 @@
                 <th class="text-center">{{ number_format($foot->tm, 0) }}</th>
                 <th class="text-center">{{ number_format($foot->tt, 0) }}</th>
                 <th class="text-center">{!! avance($foot->avance, 1) !!}</th>
+                
+                <!-- Inicial -->
+                {{-- <th class="text-center">{{ number_format($foot->cih, 0) }}</th>
+                <th class="text-center">{{ number_format($foot->cim, 0) }}</th> --}}
                 <th class="text-center">{{ number_format($foot->ci, 0) }}</th>
+                {{-- <th class="text-center">{{ number_format($foot->ciih, 0) }}</th>
+                <th class="text-center">{{ number_format($foot->ciim, 0) }}</th> --}}
                 <th class="text-center">{{ number_format($foot->cii, 0) }}</th>
+
+                <!-- Primaria -->
+                {{-- <th class="text-center">{{ number_format($foot->ciiih, 0) }}</th>
+                <th class="text-center">{{ number_format($foot->ciiim, 0) }}</th> --}}
                 <th class="text-center">{{ number_format($foot->ciii, 0) }}</th>
+                {{-- <th class="text-center">{{ number_format($foot->civh, 0) }}</th>
+                <th class="text-center">{{ number_format($foot->civm, 0) }}</th> --}}
                 <th class="text-center">{{ number_format($foot->civ, 0) }}</th>
+                {{-- <th class="text-center">{{ number_format($foot->cvh, 0) }}</th>
+                <th class="text-center">{{ number_format($foot->cvm, 0) }}</th> --}}
                 <th class="text-center">{{ number_format($foot->cv, 0) }}</th>
+
+                <!-- Secundaria -->
+                {{-- <th class="text-center">{{ number_format($foot->cvih, 0) }}</th>
+                <th class="text-center">{{ number_format($foot->cvim, 0) }}</th> --}}
                 <th class="text-center">{{ number_format($foot->cvi, 0) }}</th>
+                {{-- <th class="text-center">{{ number_format($foot->cviih, 0) }}</th>
+                <th class="text-center">{{ number_format($foot->cviim, 0) }}</th> --}}
                 <th class="text-center">{{ number_format($foot->cvii, 0) }}</th>
             </tr>
         </tfoot>

@@ -295,12 +295,11 @@
 
 @section('js')
     {{-- highcharts --}}
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/data.js"></script>
-    <script src="https://code.highcharts.com/modules/drilldown.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/data.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/drilldown.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
 
     <!-- third party js -->
     <script src="{{ asset('/') }}public/assets/libs/datatables/jquery.dataTables.min.js"></script>
@@ -366,7 +365,7 @@
                         'Distribución del Presupuesto  de la Región Ucayali', /* <br><b class="fuentex">Fuente: SIAF-MEF</b> */
                         '');
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");
                     console.log(jqXHR);
                 },
@@ -392,7 +391,7 @@
                         'Distribución del Presupuesto en Inversiones.',
                         '');
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 2");
                     console.log(jqXHR);
                 },
@@ -440,7 +439,7 @@
                         'Evolución del PIM del Sector Público de la región de Ucayali',
                         'Año');
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 7");
                     console.log(jqXHR);
                 },
@@ -466,7 +465,7 @@
                         'Evolución del PIM en Inversión Pública de la región de Ucayali',
                         'Año');
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 8");
                     console.log(jqXHR);
                 },
@@ -491,7 +490,7 @@
                         'Evolución del PIM en Actividades Pública de la región de Ucayali',
                         'Año');
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 9");
                     console.log(jqXHR);
                 },
@@ -520,7 +519,7 @@
                         'Ejecución Presupuestal Según Tipo De Gobierno'
                     );
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 4");
                     console.log(jqXHR);
                 },
@@ -550,7 +549,7 @@
                         'Ejecución Presupuestal en Inversiones Según Tipo De Gobierno'
                     );
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 5");
                     console.log(jqXHR);
                 },

@@ -1,6 +1,7 @@
 @extends('layouts.main', ['titlePage' => ''])
 @section('css')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
+    <link href="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
     <style>
         /* Cambia el tamaño de fuente del campo de búsqueda */
         .dataTables_wrapper .dataTables_filter {
@@ -61,7 +62,7 @@
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
-                                <label for="provincia">PROVINCIAxxxx</label>
+                                <label for="provincia">PROVINCIA</label>
                                 <select id="provincia" name="provincia" class="form-control font-11">
                                     <option value="0">TODOS</option>
                                 </select>
@@ -757,11 +758,15 @@
         }
     </script>
 
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <!-- optional -->
-    <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts-more.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/solid-gauge.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script>
 
-    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.responsive.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.js"></script>
 @endsection

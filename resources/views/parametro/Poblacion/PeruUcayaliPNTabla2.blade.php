@@ -12,7 +12,7 @@
             <th class="text-center">Hombres</th>
             <th class="text-center">Mujeres</th>
             <th class="text-center">
-                < 1A</th>
+                &lt; 1A</th>
             <th class="text-center">1A</th>
             <th class="text-center">2A</th>
             <th class="text-center">3A</th>
@@ -69,32 +69,3 @@
         </tbody>
     @endif
 </table>
-
-
-
-@php
-    function avance($monto)
-    {
-        if ($monto < 51) {
-            return '<span class="badge badge-pill badge-danger" style="font-size:90%;">' .
-                round($monto, 1) .
-                '%</span>';
-        } elseif ($monto < 100) {
-            return '<span class="badge badge-pill badge-warning" style="font-size:90%;">' .
-                round($monto, 1) .
-                '%</span>';
-        } else {
-            return '<span class="badge badge-pill badge-success" style="font-size:90%;">' .
-                round($monto, 1) .
-                '%</span>';
-        }
-    }
-    function bajas($monto)
-    {
-        if ($monto < 0) {
-            return '<span class="badge badge-pill badge-danger" style="font-size:85%;">' . round($monto, 0) . '</span>';
-        } else {
-            return number_format($monto);
-        }
-    }
-@endphp

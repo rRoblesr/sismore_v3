@@ -5289,6 +5289,7 @@
                     series: {
                         // className: 'highcharts-live-kpi',
                         dataLabels: {
+                            enabled: true,
                             format: '<div style="text-align:center; margin-top: -20px">' +
                                 '<div style="font-size:1.2em;">{y}%</div>' +
                                 '<div style="font-size:14px; opacity:0.4; text-align: center;">CPU</div>' +
@@ -5302,8 +5303,7 @@
                     // data:[80],
                     innerRadius: '80%',
                     data: [{
-                        y: 50,
-                        colorIndex: '50'
+                        y: 50
                     }],
                     radius: '100%',
                 }],

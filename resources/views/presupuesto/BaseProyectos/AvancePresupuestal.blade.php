@@ -312,16 +312,12 @@
 
 
 @section('js')
-    <script src="https://code.highcharts.com/maps/highmaps.js"></script>
-    <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/mapdata/countries/pe/pe-all.js"></script>
-    {{-- highcharts --}}
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/data.js"></script>
-    {{-- <script src="https://code.highcharts.com/modules/drilldown.js"></script> --}}
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highmaps.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/pe-all.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/data.js"></script>
+    {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/drilldown.js"></script> --}}
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
 
 
 
@@ -356,6 +352,9 @@
                 colors: paleta_colores,
                 lang: {
                     thousandsSep: ","
+                },
+                accessibility: {
+                    enabled: false
                 }
             });
             /* Highcharts.setOptions({
@@ -399,7 +398,7 @@
                         'Porcentaje de ejecución de gastos en inversiones por gobierno regionales',
                     );
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");
                     console.log(jqXHR);
                 },
@@ -433,7 +432,7 @@
                         'RANKIN(PUESTOS) MENSUAL DE LA EJECUCIÓN DE GASTOS',
                         ''); */
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 3");
                     console.log(jqXHR);
                 },
@@ -466,7 +465,7 @@
                         'ACUMULADO MENSUAL DEL PIM A TODA FUENTE DE FINANCIAMIENTO',
                         ''); */
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 3");
                     console.log(jqXHR);
                 },
@@ -497,7 +496,7 @@
                         '',
                         'CERTIFICACIÓN mensual en Inversiones del Gobierno Regional de Ucayali');
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 5");
                     console.log(jqXHR);
                 },
@@ -527,7 +526,7 @@
                         '',
                         'DEVENGADO mensual en Inversiones del Gobierno Regional de Ucayali');
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 6");
                     console.log(jqXHR);
                 },
@@ -553,7 +552,7 @@
                         'CERTIFICADO y DEVENGADO acumulado mensual del pliego del Gobierno Regional de Ucayali'
                     );
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 7");
                     console.log(jqXHR);
                 },

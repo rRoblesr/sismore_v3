@@ -304,12 +304,12 @@
 
 @section('js')
     {{-- highcharts --}}
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/data.js"></script>
-    <script src="https://code.highcharts.com/modules/drilldown.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/data.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/drilldown.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script>
 
     <!-- third party js -->
     <script src="{{ asset('/') }}public/assets/libs/datatables/jquery.dataTables.min.js"></script>
@@ -645,9 +645,13 @@
                 },
             });
         }
-    </script>
 
-    <script type="text/javascript">
-        Vacio
+        function cargaruo() {
+            var firstValue = $('#fue option:first').val();
+            if (firstValue !== undefined && firstValue !== null && firstValue !== '') {
+                $('#fue').val(firstValue);
+            }
+            listarDT();
+        }
     </script>
 @endsection

@@ -170,23 +170,27 @@ class ImporProyectosController extends Controller
                 $xx = explode(' ', $value->capellido1 . ' ' . $value->capellido2);
                 $ape = $xx[0];
             }
-
-            if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11)
-                $boton = '<button type="button" onclick="geteliminar(' . $value->id . ')" id="eliminar' . $value->id . '" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> </button>';
-            else
-                $boton = '';
-            $boton2 = '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> </button>';
+            $boton = '';
+            $boton .= '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-primary btn-xs mr-1" title="Ver detalle"><i class="fa fa-eye"></i> </button>';
+            $boton .= '<a href="' . route('imporproyectos.exportar', $value->id) . '" class="btn btn-success btn-xs mr-1" title="Descargar CSV"><i class="fa fa-file-csv"></i></a>';
+            
+            if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11) {
+                $boton .= '<button type="button" onclick="abrirModalActualizar(' . $value->id . ', \'' . (date('Y-m-d', strtotime($value->fechaActualizacion))) . '\')" class="btn btn-warning btn-xs mr-1" title="Actualizar Archivo"><i class="fa fa-upload"></i></button>';
+                $boton .= '<button type="button" onclick="geteliminar(' . $value->id . ')" id="eliminar' . $value->id . '" class="btn btn-danger btn-xs mr-1" title="Eliminar"><i class="fa fa-trash"></i> </button>';
+                $boton .= '<button type="button" onclick="abrirProcesos(' . $value->id . ')" class="btn btn-info btn-xs mr-1" title="Procesar"><i class="fa fa-cogs"></i></button>';
+            }
+            $usuario = trim($nom . ' ' . $ape);
             $data[] = array(
                 $key + 1,
                 'PROYECTO',
                 date("d/m/Y", strtotime($value->fechaActualizacion)),
                 //$value->fuente . $value->id,
-                $nom . ' ' . $ape,
-                ($ent ? $ent->abreviado : ''),
+                $usuario == '' ? 'SERVIDOR' : $usuario,
+                ($ent ? $ent->abreviado : 'OTI'),
                 date("d/m/Y", strtotime($value->created_at)),
                 //$value->comentario,
                 $value->estado == "PR" ? "PROCESADO" : ($value->estado == "PE" ? "PENDIENTE" : "ELIMINADO"),
-                $boton /* . '&nbsp;' . $boton2, */
+                $boton
             );
         }
         $result = array(
@@ -200,7 +204,7 @@ class ImporProyectosController extends Controller
 
     public function ListaImportada(Request $request, $importacion_id)
     {
-        $data = ImporGastosRepositorio::listaImportada($importacion_id);
+        $data = ImporProyectos::where('importacion_id', $importacion_id);
         return DataTables::of($data)->make(true);
     }
 
@@ -219,5 +223,226 @@ class ImporProyectosController extends Controller
         Importacion::find($id)->delete();
 
         return response()->json(array('status' => true));
+    }
+
+    public function exportarExcel($id)
+    {
+        ini_set('memory_limit', '-1');
+        set_time_limit(0);
+
+        $headers = array(
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=Proyectos_" . $id . ".csv",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        );
+
+        $columns = [
+            'cod_gob_reg',
+            'gobiernos_regionales',
+            'pia',
+            'pim',
+            'certificacion',
+            'compromiso_anual',
+            'compromiso_mensual',
+            'devengado',
+            'girado',
+            'avance'
+        ];
+
+        $headings = [
+            'COD_GOB_REG',
+            'GOBIERNOS_REGIONALES',
+            'PIA',
+            'PIM',
+            'CERTIFICACION',
+            'COMPROMISO_ANUAL',
+            'COMPROMISO_MENSUAL',
+            'DEVENGADO',
+            'GIRADO',
+            'AVANCE'
+        ];
+
+        $callback = function () use ($id, $columns, $headings) {
+            $file = fopen('php://output', 'w');
+            fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF)); // BOM
+            fputcsv($file, $headings);
+
+            ImporProyectos::where('importacion_id', $id)
+                ->select($columns)
+                ->chunk(2000, function ($proyectos) use ($file) {
+                    foreach ($proyectos as $proyecto) {
+                        fputcsv($file, $proyecto->toArray());
+                    }
+                });
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
+    public function importarActualizar(Request $request)
+    {
+        ini_set('memory_limit', '-1');
+        set_time_limit(0);
+
+        $importacion_id = $request->importacion_id;
+        $fechaActualizacion = $request->fechaActualizacion;
+        $importacion = Importacion::find($importacion_id);
+
+        if (!$importacion) {
+            return $this->json_output(400, 'Importación no encontrada.');
+        }
+
+        $this->validate($request, ['file' => 'required|mimes:xls,xlsx']);
+        $archivo = $request->file('file');
+        $array = (new tablaXImport)->toArray($archivo);
+
+        if (count($array) != 1) {
+            return $this->json_output(400, 'Error de Hojas, Solo debe tener una HOJA, el LIBRO EXCEL');
+        }
+
+        try {
+            // 1. Eliminar datos anteriores
+            $bp = BaseProyectos::where('importacion_id', $importacion_id)->first();
+            if ($bp) {
+                BaseProyectosDetalle::where('baseproyectos_id', $bp->id)->delete();
+                BaseProyectos::find($bp->id)->delete();
+            }
+            ImporProyectos::where('importacion_id', $importacion_id)->delete();
+
+            // 2. Actualizar fecha de importación
+            $importacion->fechaActualizacion = $fechaActualizacion;
+            $importacion->usuarioId_Crea = auth()->user()->id;
+            $importacion->estado = 'PE';
+            $importacion->save();
+
+            // 3. Procesar nuevos datos
+            foreach ($array as $key => $value) {
+                foreach ($value as $row) {
+                    ImporProyectos::Create([
+                        'importacion_id' => $importacion->id,
+                        'cod_gob_reg' => $row['cod_gob_reg'],
+                        'gobiernos_regionales' => $row['gobiernos_regionales'],
+                        'pia' => $row['pia'],
+                        'pim' => $row['pim'],
+                        'certificacion' => $row['certificacion'],
+                        'compromiso_anual' => $row['compromiso_anual'],
+                        'compromiso_mensual' => $row['compromiso_mensual'],
+                        'devengado' => $row['devengado'],
+                        'girado' => $row['girado'],
+                        'avance' => (float)$row['avance'],
+                    ]);
+                }
+            }
+
+            // 4. Procesar normalización (ETL)
+            try {
+                DB::select('call pres_pa_procesarProyectos(?,?)', [$importacion->id, $importacion->usuarioId_Crea]);
+            } catch (Exception $e) {
+                $importacion->estado = 'EL';
+                $importacion->save();
+                return $this->json_output(400, "Error al procesar la normalizacion de datos: " . $e->getMessage());
+            }
+
+            return $this->json_output(200, 'Importación actualizada y procesada correctamente.');
+
+        } catch (Exception $e) {
+            return $this->json_output(500, 'Error al actualizar Excel: ' . $e->getMessage());
+        }
+    }
+
+    public function procesarBase($importacion_id)
+    {
+        try {
+            // Asumimos que el usuario que crea es el actual, o podríamos buscarlo de la importación
+            $importacion = Importacion::find($importacion_id);
+            if (!$importacion) return response()->json(['status' => false, 'msg' => 'Importación no encontrada'], 404);
+
+            DB::select('call pres_pa_procesarProyectos(?,?)', [$importacion_id, $importacion->usuarioId_Crea]);
+            return response()->json(['status' => true, 'msg' => 'Base de proyectos procesada correctamente.']);
+        } catch (Exception $e) {
+            return response()->json(['status' => false, 'msg' => 'Error al procesar base de proyectos: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function verificarBase($importacion_id)
+    {
+        $base = BaseProyectos::where('importacion_id', $importacion_id)->first();
+        if (!$base) {
+            return response()->json([
+                'status' => true,
+                'msg' => 'Sin base generada aún.',
+                'base' => 0,
+                'detalle' => 0,
+            ]);
+        }
+        $detalle = BaseProyectosDetalle::where('baseproyectos_id', $base->id)->count();
+        return response()->json([
+            'status' => true,
+            'msg' => 'Conteo obtenido.',
+            'base' => 1,
+            'detalle' => $detalle,
+        ]);
+    }
+
+    public function descargarBaseProcesada($importacion_id)
+    {
+        $bp = BaseProyectos::where('importacion_id', $importacion_id)->first();
+        if (!$bp) {
+            abort(404, 'No existe base procesada para esta importación.');
+        }
+
+        $headers = [
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=Base_Proyectos_Procesada_" . $importacion_id . ".csv",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        ];
+
+        $columns = [
+            'gobiernosregionales_id',
+            'pia',
+            'pim',
+            'certificacion',
+            'compromiso_anual',
+            'compromiso_mensual',
+            'devengado',
+            'girado',
+            'avance',
+        ];
+
+        $headings = [
+            'GOBIERNOS_REGIONALES_ID',
+            'PIA',
+            'PIM',
+            'CERTIFICACION',
+            'COMPROMISO_ANUAL',
+            'COMPROMISO_MENSUAL',
+            'DEVENGADO',
+            'GIRADO',
+            'AVANCE',
+        ];
+
+        $callback = function () use ($bp, $columns, $headings) {
+            $file = fopen('php://output', 'w');
+            fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+            fputcsv($file, $headings);
+
+            BaseProyectosDetalle::where('baseproyectos_id', $bp->id)
+                ->select($columns)
+                ->chunk(2000, function ($detalles) use ($file) {
+                    foreach ($detalles as $detalle) {
+                        fputcsv($file, $detalle->toArray());
+                    }
+                });
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 }

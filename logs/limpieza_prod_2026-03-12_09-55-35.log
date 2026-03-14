@@ -1,0 +1,10 @@
+--- INICIO jue 12/03/2026  9:55:35.95 --- 
+Directorio: C:\xampp\htdocs\aaapanel007\sismore_v5
+C:\xampp\php\php.exe
+PHP 7.4.29 (cli) (built: Apr 12 2022 20:21:18) ( ZTS Visual C++ 2017 x64 )
+Copyright (c) The PHP Group
+Zend Engine v3.4.0, Copyright (c) Zend Technologies
+0. Asegurando variables de entorno para produccion (.env)...
+  Valores actuales en .env:
+APP_ENV=production
+APP_DEBUG=false

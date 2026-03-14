@@ -644,7 +644,11 @@ class BaseSiafWebController extends Controller
         $anios = BaseSiafWebRepositorio::anios();
         $aniomax = $anios->max('anio');
         $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporSiafWebController::$FUENTE);
-        $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesc[$imp->mes - 1] . ' del ' . $imp->anio;
+        if ($imp) {
+            $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesc[$imp->mes - 1] . ' del ' . $imp->anio;
+        } else {
+            $actualizado = 'Sin datos registrados';
+        }
         return view('presupuesto.BaseSiafWeb.GasPresReportes', compact('anios', 'aniomax', 'actualizado'));
     }
 
@@ -795,7 +799,11 @@ class BaseSiafWebController extends Controller
         $anios = BaseSiafWebRepositorio::anios();
         $aniomax = $anios->max('anio');
         $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporSiafWebController::$FUENTE);
-        $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesc[$imp->mes - 1] . ' del ' . $imp->anio;
+        if ($imp) {
+            $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesc[$imp->mes - 1] . ' del ' . $imp->anio;
+        } else {
+            $actualizado = 'Sin datos registrados';
+        }
         return view('presupuesto.BaseSiafWeb.CatPresReportes', compact('anios', 'aniomax', 'actualizado'));
     }
 
@@ -892,7 +900,11 @@ class BaseSiafWebController extends Controller
         $anios = BaseSiafWebRepositorio::anios();
         $aniomax = $anios->max('anio');
         $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporSiafWebController::$FUENTE);
-        $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesc[$imp->mes - 1] . ' del ' . $imp->anio;
+        if ($imp) {
+            $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesc[$imp->mes - 1] . ' del ' . $imp->anio;
+        } else {
+            $actualizado = 'Sin datos registrados';
+        }
         return view('presupuesto.BaseSiafWeb.FuenFinReportes', compact('anios', 'aniomax', 'actualizado'));
     }
 
@@ -1035,7 +1047,11 @@ class BaseSiafWebController extends Controller
         $anios = BaseSiafWebRepositorio::anios();
         $aniomax = $anios->max('anio');
         $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporSiafWebController::$FUENTE);
-        $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesc[$imp->mes - 1] . ' del ' . $imp->anio;
+        if ($imp) {
+            $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesc[$imp->mes - 1] . ' del ' . $imp->anio;
+        } else {
+            $actualizado = 'Sin datos registrados';
+        }
         return view('presupuesto.BaseSiafWeb.GenericaReportes', compact('anios', 'aniomax', 'actualizado'));
     }
 

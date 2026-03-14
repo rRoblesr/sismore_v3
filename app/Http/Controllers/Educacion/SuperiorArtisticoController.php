@@ -39,15 +39,15 @@ class SuperiorArtisticoController extends Controller
         return response()->json(compact('ugel'));
     }
 
-    public function area()
+    public function area(Request $rq)
     {
-        $area = ImporCensoMatriculaRepositorio::area($this->cedula);
+        $area = ImporCensoMatriculaRepositorio::area($this->cedula, $rq->gestion);
         return response()->json(compact('area'));
     }
 
     public function iiee(Request $rq)
     {
-        $ie = ImporCensoMatriculaRepositorio::iiee($rq->anio, $this->cedula);
+        $ie = ImporCensoMatriculaRepositorio::iiee($rq->anio, $this->cedula, $rq->gestion, $rq->area);
         return response()->json(compact('ie'));
     }
 

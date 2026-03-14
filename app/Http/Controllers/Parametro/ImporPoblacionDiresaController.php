@@ -11,12 +11,9 @@ use App\Models\Parametro\PoblacionDiresa;
 use App\Models\Parametro\Sexo;
 use App\Models\Parametro\Ubigeo;
 use App\Repositories\Educacion\ImportacionRepositorio;
-use App\Utilities\Utilitario;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
 
 use function PHPUnit\Framework\isNull;
@@ -114,21 +111,39 @@ class ImporPoblacionDiresaController extends Controller
             // $ubigeo=Ubigeo::where('codigo', 'like', '25%')->where(DB::raw('length(codigo)'), 6)->get();
             // $buscar=$ubigeo->where('codigo','250201')->id;
 
+            $ubigeos = Ubigeo::where(DB::raw('length(codigo)'), 6)->where('codigo', 'like', '25%')->pluck('id', 'codigo');
+            $sexos = Sexo::pluck('id', 'nombre'); // Keys are "HOMBRE", "MUJER"
+
+            $dataInsert = [];
             foreach ($array as $key => $value) {
                 foreach ($value as $row) {
-                    $ubigeo = Ubigeo::where('codigo', $row['ubigeo'])->where(DB::raw('length(codigo)'), 6)->first();
-                    $sexo = Sexo::where('nombre', $row['sexo'])->first();
-                    $padronPoblacion = PoblacionDiresa::Create([
+                    $ubigeoId = isset($ubigeos[$row['ubigeo']]) ? $ubigeos[$row['ubigeo']] : null;
+                    
+                    // Normalizar texto de sexo (mayúsculas y sin espacios)
+                    $sexoKey = strtoupper(trim($row['sexo']));
+                    $sexoId = isset($sexos[$sexoKey]) ? $sexos[$sexoKey] : null;
+
+                    $dataInsert[] = [
                         'importacion_id' => $importacion->id,
-                        'ubigeo_id' => $ubigeo ? $ubigeo->id : null,
-                        'sexo_id' => $sexo ? $sexo->id : null,
+                        'ubigeo_id' => $ubigeoId,
+                        'sexo_id' => $sexoId,
                         'edad' => $row['edad'],
                         'grupo_etareo' => $row['grupo_etareo'],
                         'etapa_vida' => $row['etapa_vida'],
                         'total' => $row['total'],
-                    ]);
+                    ];
+
+                    if (count($dataInsert) >= 1000) {
+                        PoblacionDiresa::insert($dataInsert);
+                        $dataInsert = [];
+                    }
                 }
             }
+
+            if (count($dataInsert) > 0) {
+                PoblacionDiresa::insert($dataInsert);
+            }
+
         } catch (Exception $e) {
             $importacion->estado = 'PE';
             $importacion->save();
@@ -148,7 +163,7 @@ class ImporPoblacionDiresaController extends Controller
         //     $this->json_output(400, $mensaje);
         // }
         $mensaje = "Archivo excel subido y Procesado correctamente .";
-        $this->json_output(200, $mensaje, '');
+        return response()->json(['status' => 200, 'msg' => $mensaje, 'data' => '']);
     }
 
     /* metodo para listar las importaciones */
@@ -161,11 +176,11 @@ class ImporPoblacionDiresaController extends Controller
         $data = [];
         foreach ($query as $key => $value) {
             $ent = Entidad::find($value->entidad);
-            $nom = '';
-            if (strlen($value->cnombre) > 0) {
-                $xx = explode(' ', $value->cnombre);
-                $nom = $xx[0];
-            }
+            $xx = explode(' ', $value->cnombre);
+            $nom = $xx[0];
+            $usuario = $nom . ' ' . $value->capellido1;
+            $area = $ent ? $ent->abreviado : '';
+
             if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11)
                 $boton = '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> </button>';
             else
@@ -175,8 +190,8 @@ class ImporPoblacionDiresaController extends Controller
                 $key + 1,
                 date("d/m/Y", strtotime($value->fechaActualizacion)),
                 $value->fuente,
-                $nom . ' ' . $value->capellido1,
-                $ent ? $ent->abreviado : '',
+                $usuario,
+                $area,
                 date("d/m/Y", strtotime($value->created_at)),
                 $value->estado == "PR" ? "PROCESADO" : "PENDIENTE",
                 $boton . '&nbsp;' . $boton2,
@@ -205,8 +220,18 @@ class ImporPoblacionDiresaController extends Controller
     /* metodo para eliminar una importacion */
     public function eliminar($id)
     {
-        PoblacionDiresa::where('importacion_id', $id)->delete();
-        Importacion::find($id)->delete();
-        return response()->json(array('status' => true));
+        try {
+            ini_set('memory_limit', '-1');
+            set_time_limit(0);
+
+            DB::beginTransaction();
+            DB::table('par_poblacion_diresa')->where('importacion_id', $id)->delete();
+            DB::table('par_importacion')->where('id', $id)->delete();
+            DB::commit();
+            return response()->json(array('status' => true));
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json(array('status' => false, 'message' => $e->getMessage()), 500);
+        }
     }
 }

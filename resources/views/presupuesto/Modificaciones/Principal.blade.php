@@ -248,18 +248,25 @@
     <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.scroller.min.js"></script>
 
     {{-- highcharts --}}
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/data.js"></script>
-    <script src="https://code.highcharts.com/modules/drilldown.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/data.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/drilldown.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
 
     <script>
         var save_method = '';
         var table_principal;
 
         $(document).ready(function() {
+            Highcharts.setOptions({
+                lang: {
+                    thousandsSep: ","
+                },
+                accessibility: {
+                    enabled: false
+                }
+            });
             $("input").change(function() {
                 $(this).parent().removeClass('has-error');
                 $(this).next().empty();

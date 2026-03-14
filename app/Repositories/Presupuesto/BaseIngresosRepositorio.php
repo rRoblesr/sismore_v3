@@ -81,11 +81,31 @@ class BaseIngresosRepositorio
             ->groupBy('id', 'name')
             ->orderBy('v5.pos', 'asc')
             ->get();
-        $color = ['#7e57c2', '#317eeb', '#ef5350'];
-        foreach ($query as $key => $value) {
-            $value->color = $color[$key];
+
+        $pad = [
+            (object)['id' => null, 'name' => 'GOBIERNO NACIONAL', 'y' => 0, 'eje' => 0, 'color' => '#7e57c2'],
+            (object)['id' => null, 'name' => 'GOBIERNOS REGIONALES', 'y' => 0, 'eje' => 0, 'color' => '#317eeb'],
+            (object)['id' => null, 'name' => 'GOBIERNOS LOCALES', 'y' => 0, 'eje' => 0, 'color' => '#ef5350'],
+        ];
+
+        foreach ($query as $row) {
+            $nombre = strtoupper(trim((string)($row->name ?? '')));
+            if ($nombre === '') continue;
+            if (strpos($nombre, 'NACIONAL') !== false) {
+                $pad[0] = (object)['id' => $row->id ?? null, 'name' => $row->name ?? 'GOBIERNO NACIONAL', 'y' => $row->y ?? 0, 'eje' => $row->eje ?? 0, 'color' => '#7e57c2'];
+                continue;
+            }
+            if (strpos($nombre, 'REGIONAL') !== false) {
+                $pad[1] = (object)['id' => $row->id ?? null, 'name' => $row->name ?? 'GOBIERNOS REGIONALES', 'y' => $row->y ?? 0, 'eje' => $row->eje ?? 0, 'color' => '#317eeb'];
+                continue;
+            }
+            if (strpos($nombre, 'LOCAL') !== false) {
+                $pad[2] = (object)['id' => $row->id ?? null, 'name' => $row->name ?? 'GOBIERNOS LOCALES', 'y' => $row->y ?? 0, 'eje' => $row->eje ?? 0, 'color' => '#ef5350'];
+                continue;
+            }
         }
-        return $query;
+
+        return collect($pad);
     }
 
     public static function pim_anios_tipogobierno()

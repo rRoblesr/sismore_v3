@@ -26,7 +26,7 @@
             @foreach ($base as $item)
                 <tr class="text-center">
                     <td class="text-left"><a href="javascript:void(0)"
-                            onclick="cargarTablaDistritos('tabla2',{{ $item->idprovincia }})">{{ $item->provincia }}</a>
+                            onclick="cargarTablaDistritos('tabla2',{{ $item->id_provincia }})">{{ $item->provincia }}</a>
                     </td>
                     <th class="table-warning">{{ number_format($item->meta, 0) }}</th>
                     <td>{{ number_format($item->th, 0) }}</td>

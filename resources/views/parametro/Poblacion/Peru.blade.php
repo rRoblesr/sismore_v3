@@ -1,6 +1,6 @@
 @extends('layouts.main', ['titlePage' => 'INDICADOR'])
 @section('css')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.css" />
     <style>
         .chart-container {
             position: relative;
@@ -96,7 +96,7 @@
                 <div class="card-body pb-0">
                     <div class="row">
                         <div class="col-lg-7 col-md-4 col-sm-4">
-                            <h4 class="page-title font-12">Fuente: INEI</h4>
+                            <h4 class="page-title font-12" id="header-fuente">Fuente: INEI</h4>
                         </div>
                         <div class="col-lg-1 col-md-1 col-sm-1  ">
                             <div class="custom-select-container">
@@ -266,10 +266,10 @@
                     <figure class="highcharts-figure p-0 m-0">
                         <div id="anal1" style="height: 35rem"></div>
                     </figure>
-                    {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                            <span class="anal1-fuente">Fuente:</span>
-                            <span class="float-right anal1-fecha">Actualizado:</span>
-                        </div> --}}
+                    <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                        <span class="anal1-fuente">Fuente: INEI - Estimaciones y Proyecciones de Población</span>
+                        {{-- <span class="float-right anal1-fecha">Actualizado:</span> --}}
+                    </div>
                 </div>
             </div>
         </div>
@@ -283,10 +283,10 @@
                     <figure class="highcharts-figure p-0 m-0">
                         <div id="anal2" style="height: 35rem"></div>
                     </figure>
-                    {{-- <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
-                            <span class="anal2-fuente">Fuente:</span>
-                            <span class="float-right anal2-fecha">Actualizado:</span>
-                        </div> --}}
+                    <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                        <span class="anal2-fuente">Fuente: INEI - Estimaciones y Proyecciones de Población</span>
+                        {{-- <span class="float-right anal2-fecha">Actualizado:</span> --}}
+                    </div>
                 </div>
             </div>
         </div>
@@ -303,8 +303,9 @@
                     <figure class="highcharts-figure p-0 m-0">
                         <div id="anal3" style="height: 20rem"></div>
                     </figure>
-                    {{-- <div class="credits-left">Fuente: RENIEC - PADRÓN NOMINAL</div>
-                    <div class="credits-right">Actualizado: JULIO 2024</div> --}}
+                    <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                        <span class="anal3-fuente">Fuente: INEI - Estimaciones y Proyecciones de Población</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -317,8 +318,9 @@
                     <figure class="highcharts-figure p-0 m-0">
                         <div id="anal4" style="height: 20rem"></div>
                     </figure>
-                    {{-- <div class="credits-left">Fuente: RENIEC - PADRÓN NOMINAL</div>
-                    <div class="credits-right">Actualizado: JULIO 2024</div> --}}
+                    <div class="font-weight-bold text-muted ml-2 mr-2 font-9">
+                        <span class="anal4-fuente">Fuente: INEI - Estimaciones y Proyecciones de Población</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -362,6 +364,34 @@
         var anal6;
         let selectedCode = null;
         let originalColors = {};
+
+        const ubigeoToHcKey = {
+            '01': 'pe-am',
+            '02': 'pe-an',
+            '03': 'pe-ap',
+            '04': 'pe-ar',
+            '05': 'pe-ay',
+            '06': 'pe-cj',
+            '07': 'pe-cl',
+            '08': 'pe-cs',
+            '09': 'pe-hv',
+            '10': 'pe-hc',
+            '11': 'pe-ic',
+            '12': 'pe-ju',
+            '13': 'pe-ll',
+            '14': 'pe-lb',
+            '15': 'pe-lr',
+            '16': 'pe-lo',
+            '17': 'pe-md',
+            '18': 'pe-mq',
+            '19': 'pe-pa',
+            '20': 'pe-pi',
+            '21': 'pe-pr',
+            '22': 'pe-sm',
+            '23': 'pe-ta',
+            '24': 'pe-tu',
+            '25': 'pe-uc'
+        };
 
         $(document).ready(function() {
             Highcharts.setOptions({
@@ -463,31 +493,52 @@
                         $('#card2').text(data.card2);
                         $('#card3').text(data.card3);
                         $('#card4').text(data.card4);
+                        $('#header-fuente').html('Fuente: INEI ' + $('#vanio').val());
 
                     } else if (div == "anal1") {
                         anal1 = maps01(div, data.info, '',
                             'Población estimada y proyectada, según departamento');
 
+                        $('.anal1-fuente').html('Fuente: INEI - Estimaciones y Proyecciones de Población ' + $(
+                                '#vanio')
+                            .val());
+
                         if ($('#vdepartamento').val() > '00') {
                             var serie = anal1.series[0];
                             var depa = $('#vdepartamento').val();
-                            var point = serie.points.find(
-                                p => p.properties['fips'] && p.properties['fips'].substring(2) === depa
-                            );
 
+                            // Intentar encontrar por mapeo directo (más seguro)
+                            var point = serie.points.find(p => p.properties['hc-key'] === ubigeoToHcKey[depa]);
+
+                            // Fallback para Callao si no se encuentra (puede ser pe-3341)
+                            if (!point && depa === '07') {
+                                point = serie.points.find(p => p.properties['hc-key'] === 'pe-3341');
+                            }
+
+                            // Fallback original por fips
+                            if (!point) {
+                                point = serie.points.find(
+                                    p => p.properties && p.properties['fips'] && p.properties['fips']
+                                    .substring(2) === depa
+                                );
+                            }
+
+                            /*
                             console.log("************************************************");
                             console.log("selectedCode2:" + selectedCode);
                             console.log('fips:' + point.properties['fips'].substring(2));
                             console.log('vdepartamento2:' + $('#vdepartamento').val());
                             console.log('hc-key:' + point.properties['hc-key']);
                             console.log("************************************************");
+                            */
 
-                            if (point) {
+                            if (point && point.properties) {
                                 if (!originalColors[point.properties['hc-key']]) {
                                     originalColors[point.properties['hc-key']] = point
                                         .color; // Almacena el color original
                                 }
                                 // Remover selección previa si existe
+                                /*
                                 if (selectedCode) {
                                     let prevPoint = serie.points.find(
                                         p => p.properties['hc-key'] === selectedCode
@@ -499,11 +550,13 @@
                                         });
                                     }
                                 }
+                                */
 
                                 // Resaltar el nuevo departamento
                                 point.update({
                                     color: '#bada55'
                                 });
+                                // point.zoomTo();
 
                                 // Actualizar el código seleccionado
                                 selectedCode = point.properties['hc-key'];
@@ -514,19 +567,10 @@
                     } else if (div == "anal2") {
                         anal2 = gbar2(div, data.info, '',
                             mapa_selected + 'Pirámide poblacional, según sexo  y grupo etario', '');
+                        $('.anal2-fuente').html('Fuente: INEI - Estimaciones y Proyecciones de Población ' + $(
+                                '#vanio')
+                            .val());
                     } else if (div == "anal3") {
-                        // anal3 = gLineaPuntos(div, data.info.punto);
-                        // anal3.setTitle({
-                        //     text: ''
-                        // }, {
-                        //     text: mapa_selected + 'Población estimada y proyectada, periodo 1995-2030'
-                        // });
-                        // anal3.update({
-                        //     legend: {
-                        //         enabled: false
-                        //     }
-                        // });
-
                         anal3 = gAreaspline(div);
                         anal3.setTitle({
                             text: ''
@@ -537,6 +581,9 @@
                         anal3.xAxis[0].setCategories(data.info.categoria);
                         // anal3.series[0].setData([]);
                         anal3.series[0].setData(data.info.serie);
+                        $('.anal3-fuente').html('Fuente: INEI - Estimaciones y Proyecciones de Población ' + $(
+                                '#vanio')
+                            .val());
 
                     } else if (div == "anal4") {
                         // anal4 = gLinea(div, data.info, '', mapa_selected + 'Población estimada de 0 a 5 años, periodo 2021-2030');
@@ -560,6 +607,9 @@
                         });
                         anal4.xAxis[0].setCategories(data.info.categoria);
                         anal4.series[0].setData(data.info.serie);
+                        $('.anal4-fuente').html('Fuente: INEI - Estimaciones y Proyecciones de Población ' + $(
+                                '#vanio')
+                            .val());
                     } else if (div == "tabla1") {
                         $('#vtabla1').html(data.excel);
                         $('#tabla1').DataTable({
@@ -580,119 +630,13 @@
             });
         }
 
-        function cargarTablaDistritos(div, provincia) {
-            provincia_select = provincia;
-            $.ajax({
-                url: "{{ route('matriculageneral.ebr.tablas') }}",
-                data: {
-                    'div': div,
-                    "anio": $('#anio').val(),
-                    "ugel": $('#ugel').val(),
-                    "gestion": $('#gestion').val(),
-                    "area": $('#area').val(),
-                    "provincia": provincia
-                },
-                type: "GET",
-                dataType: "JSON",
-                beforeSend: function() {
-                    $('#vtabla2').html(
-                        '<span><i class="fa fa-spinner fa-spin"></i></span>');
-                },
-                success: function(data) {
-                    if (div == "tabla2") {
-                        $('#vtabla2').html(data.excel);
-                        $('#tabla2').DataTable({
-                            responsive: true,
-                            autoWidth: false,
-                            ordered: true,
-                            searching: false,
-                            bPaginate: false,
-                            info: false,
-                            language: table_language,
-                        });
-                    }
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 1");
-                    console.log(jqXHR);
-                },
-            });
-        }
 
-        function cargarTablaCentroPoblado(div, distrito) {
-            distrito_select = distrito;
-            $('#modal_centropoblado').modal('show');
-            $.ajax({
-                url: "{{ route('matriculageneral.ebr.tablas') }}",
-                data: {
-                    'div': div,
-                    "anio": $('#anio').val(),
-                    "ugel": $('#ugel').val(),
-                    "gestion": $('#gestion').val(),
-                    "area": $('#area').val(),
-                    "provincia": distrito
-                },
-                type: "GET",
-                dataType: "JSON",
-                beforeSend: function() {
-                    $('#vtabla3').html(
-                        '<span><i class="fa fa-spinner fa-spin"></i></span>');
-                },
-                success: function(data) {
-                    if (div == "tabla3") {
-                        $('#vtabla3').html(data.excel);
-                        $('#tabla3').DataTable({
-                            "language": table_language,
-                        });
-                    }
-                },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 1");
-                    console.log(jqXHR);
-                },
-            });
-        }
-
-        function cargarDistritos() {
-            $.ajax({
-                url: "{{ route('ubigeo.distrito.25', '') }}/" + $('#vprovincia').val(),
-                type: 'GET',
-                success: function(data) {
-                    $("#vdistrito option").remove();
-                    var options = '<option value="0">DISTRITO</option>';
-                    $.each(data, function(index, value) {
-                        //ss = (id == value.id ? "selected" : "");
-                        options += "<option value='" + value.id + "'>" + value.nombre +
-                            "</option>"
-                    });
-                    $("#vdistrito").append(options);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
-        }
 
         function descargar1() {
             window.open(
                 "{{ route('poblacionprincipal.peru.descargar', ['', '', '', '']) }}/tabla1/" +
-                $('#vanio').val() + "/" + $('#vdepartamento').val() + "/" + $('#vetapavida').val() );
+                $('#vanio').val() + "/" + $('#vdepartamento').val() + "/" + $('#vetapavida').val());
         }
-
-        // function descargar1() {
-        //     window.open("{{ url('/') }}/MatriculaGeneral/EBR/Excel/tabla1/" + $('#anio').val() + "/" + $('#ugel')
-        //         .val() + "/" + $('#gestion').val() + "/" + $('#area').val() + "/0");
-        // }
-
-        // function descargar2() {
-        //     window.open("{{ url('/') }}/MatriculaGeneral/EBR/Excel/tabla2/" + $('#anio').val() + "/" + $('#ugel')
-        //         .val() + "/" + $('#gestion').val() + "/" + $('#area').val() + "/" + provincia_select);
-        // }
-
-        // function descargar3() {
-        //     window.open("{{ url('/') }}/MatriculaGeneral/EBR/Excel/tabla3/" + $('#anio').val() + "/" + $('#ugel')
-        //         .val() + "/" + $('#gestion').val() + "/" + $('#area').val() + "/" + distrito_select);
-        // }
 
         function verpdf(id) {
             window.open("{{ route('mantenimiento.indicadorgeneral.exportar.pdf', '') }}/" + id);
@@ -766,54 +710,7 @@
             });
         }
 
-        function gLineaPuntos(div, data) {
-            return Highcharts.chart(div, {
-                chart: {
-                    zooming: {
-                        type: 'x'
-                    }
-                },
-                title: {
-                    // text: 'Población desde 1995 hasta 2030',
-                    // align: 'left'
-                },
-                subtitle: {
-                    // text: 'Using the Boost module',
-                    // align: 'left'
-                },
-                accessibility: {
-                    screenReaderSection: {
-                        beforeChartFormat: '<{headingTagName}>' +
-                            '{chartTitle}</{headingTagName}><div>{chartSubtitle}</div>' +
-                            '<div>{chartLongdesc}</div><div>{xAxisDescription}</div><div>' +
-                            '{yAxisDescription}</div>'
-                    }
-                },
-                tooltip: {
-                    valueDecimals: 0 // Mostrará sin decimales
-                },
-                xAxis: {
-                    type: 'datetime',
-                    title: {
-                        text: ''
-                    }
-                },
-                yAxis: {
-                    title: {
-                        text: ''
-                    }
-                },
-                // legend: {
-                //     enabled: series.data.length == 1 ? false : true
-                // },
-                series: [{
-                    data: data,
-                    lineWidth: 0.5,
-                    name: 'Datos de población',
-                    boostThreshold: 1 // El boost module activado siempre que haya 1 o más puntos
-                }]
-            });
-        }
+
 
         function gLinea(div, data, titulo, subtitulo) {
             return Highcharts.chart(div, {
@@ -1063,7 +960,7 @@
                     //         'Población: ' + Highcharts.numberFormat(Math.abs(this.point.y), 0);
                     // },
                     formatter: function() {
-                        let tooltipText = '<b>Grupo Etéreo:' + this.x +
+                        let tooltipText = '<b>Grupo Etario: ' + this.points[0].key +
                             '</b><br/>'; // Muestra la categoría (edad)
                         this.points.forEach(function(point) {
                             tooltipText += point.series.name + ': ' + Highcharts.numberFormat(Math.abs(
@@ -1235,7 +1132,8 @@
                 tooltip: {
                     shared: true, // Muestra los valores de todas las series en el mismo tooltip
                     formatter: function() {
-                        let tooltipText = '<b>Año: ' + this.x + '</b><br/>'; // Muestra la categoría (año)
+                        let tooltipText = '<b>Etapa de Vida: ' + this.x +
+                            '</b><br/>'; // Muestra la categoría (año)
                         this.points.forEach(function(point) {
                             tooltipText += point.series.name + ': ' + Highcharts.numberFormat(Math.abs(
                                 point.y), 0) + '<br/>';
@@ -1556,6 +1454,14 @@
                 },
                 tooltip: {
                     shared: true,
+                    formatter: function() {
+                        let tooltipText = '<b>Año: ' + this.x + '</b><br/>'; // Muestra la categoría (año)
+                        this.points.forEach(function(point) {
+                            tooltipText += point.series.name + ': ' + Highcharts.numberFormat(Math.abs(
+                                point.y), 0) + '<br/>';
+                        });
+                        return tooltipText;
+                    }
                 },
                 legend: {
                     itemStyle: {
@@ -1697,6 +1603,15 @@
                 },
                 tooltip: {
                     shared: true,
+                    formatter: function() {
+                        let tooltipText = '<b>Etapa de Vida: ' + this.x +
+                            '</b><br/>'; // Muestra la categoría (año)
+                        this.points.forEach(function(point) {
+                            tooltipText += point.series.name + ': ' + Highcharts.numberFormat(Math.abs(
+                                point.y), 0) + '<br/>';
+                        });
+                        return tooltipText;
+                    }
                 },
                 legend: {
                     itemStyle: {
@@ -2171,37 +2086,23 @@
                                 }
                             },
                             click: function() {
-                                let point = this;
-                                let code = point.properties['hc-key'];
+                                var point = this;
+                                var hcKey = point.properties['hc-key'];
+                                var hcKeyToUbigeo = {
+                                    'pe-am': '01', 'pe-an': '02', 'pe-ap': '03', 'pe-ar': '04', 'pe-ay': '05',
+                                    'pe-cj': '06', 'pe-cl': '07', 'pe-cs': '08', 'pe-hv': '09', 'pe-hc': '10',
+                                    'pe-ic': '11', 'pe-ju': '12', 'pe-ll': '13', 'pe-lb': '14', 'pe-lr': '15',
+                                    'pe-lo': '16', 'pe-md': '17', 'pe-mq': '18', 'pe-pa': '19', 'pe-pi': '20',
+                                    'pe-pr': '21', 'pe-sm': '22', 'pe-ta': '23', 'pe-tu': '24', 'pe-uc': '25',
+                                    'pe-3341': '07', // Callao (alternativo)
+                                    'pe-145': '15'   // Lima Provincia
+                                };
 
-                                // Remover selección previa
-                                console.log('selectedCode e:' + code);
-                                if (selectedCode) {
-                                    this.series.chart.series[0].points.forEach(function(p) {
-                                        if (p.properties['hc-key'] === selectedCode) {
-                                            p.update({
-                                                color: originalColors[selectedCode] ||
-                                                    Highcharts.getOptions().colors[
-                                                        0] // Color original
-                                            });
-                                        }
-                                    });
+                                var codigo = hcKeyToUbigeo[hcKey];
+
+                                if (codigo) {
+                                    $('#vdepartamento').val(codigo).trigger('change');
                                 }
-
-                                // Marcar el punto seleccionado
-                                point.update({
-                                    color: '#bada55' // Color de selección
-                                });
-
-                                // Almacenar el código del departamento seleccionado
-                                selectedCode = code;
-
-                                // alert('Código: ' + code + '\nDepartamento: ' + point.name +
-                                //     '\nPoblación: ' + point.value);
-
-                                var codigo = this.properties['fips'].substring(2);
-                                $('#vdepartamento').val(codigo);
-                                cargarCards();
                             }
                         }
                     }
@@ -2238,20 +2139,21 @@
     </script>
 
     {{-- jrmt-mapero --}}
-    <script src="https://code.highcharts.com/maps/highmaps.js"></script>
-    <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/mapdata/countries/pe/pe-all.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highmaps.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/pe-all.js"></script>
 
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/boost.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script> --}}
+    {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/boost.js"></script> --}}
+    {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script> --}}
 
     <!-- optional -->
-    <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/offline-exporting.js"></script> --}}
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script>
 
-    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.js"></script>
 
     {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts-more.js"></script>

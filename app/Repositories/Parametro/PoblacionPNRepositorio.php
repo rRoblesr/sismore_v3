@@ -67,6 +67,11 @@ class PoblacionPNRepositorio
             ->get();
     }
 
+    public static function max_mes_id($anio)
+    {
+        return PoblacionPN::where('anio', $anio)->max('mes_id');
+    }
+
     public static function conteo($anio, $mes, $departamento, $provincia, $distrito, $sexo)
     {
         $query = PoblacionPN::from('par_poblacion_padron_nominal as pn')

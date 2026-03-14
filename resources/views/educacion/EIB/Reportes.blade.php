@@ -1,7 +1,9 @@
 @extends('layouts.main', ['activePage' => 'importacion', 'titlePage' => ''])
 
 @section('css')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
+    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" /> --}}
+    <link rel="stylesheet" href="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" href="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.css" />
     <style>
         #btn-mapa-eib-reset {
             position: absolute;
@@ -1474,21 +1476,36 @@
     </script>
 
     {{-- jrmt-mapero --}}
-    <script src="https://code.highcharts.com/maps/highmaps.js"></script>
-    <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+    {{-- <script src="https://code.highcharts.com/maps/highmaps.js"></script>
+    <script src="https://code.highcharts.com/maps/modules/exporting.js"></script> --}}
+
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highmaps.js"></script>
+    {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script> --}}
 
     <script src="{{ asset('/') }}public/us-ct-ally.js"></script>
     <script src="{{ asset('/') }}public/us-ct-allz.js"></script>
 
-    <script src="https://code.highcharts.com/highcharts.js"></script>
+    {{-- <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/highcharts-more.js"></script>
-    <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
+    <script src="https://code.highcharts.com/modules/solid-gauge.js"></script> --}}
     <!-- optional -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/svg2pdf.js/2.2.0/svg2pdf.min.js"></script>
-    <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
+    {{-- <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
 
-    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script> --}}
+
+    <script src="{{ asset('/') }}public/assets/libs/datatables/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.responsive.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.js"></script>
+
+    {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script> --}}
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts-more.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/solid-gauge.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script>
 @endsection

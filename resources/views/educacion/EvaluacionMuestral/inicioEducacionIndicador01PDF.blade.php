@@ -1774,7 +1774,7 @@
                         .addClass(data.ind4 > 84 ? 'bg-success-0' : (data.ind4 > 49 ? 'bg-orange-0' :
                             'bg-warning-0'));
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");
                     console.log(jqXHR);
                 },
@@ -1835,7 +1835,7 @@
                     }
 
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");
                     console.log(jqXHR);
                 },
@@ -1870,7 +1870,7 @@
                         $('#vtabla2').html(data.excel);
                     }
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");
                     console.log(jqXHR);
                 },

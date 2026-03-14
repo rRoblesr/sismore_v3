@@ -219,6 +219,9 @@
                 data: $('#form_opciones').serialize(),
                 success: function(data) {
                     $('#vista0').html(data);
+                    if ($('#fechaActualizacion').val()) {
+                        $('#fecha_actual').text($('#fechaActualizacion').val());
+                    }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);

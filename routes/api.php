@@ -19,5 +19,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// Ejemplo de uso: http://localhost/aaapanel007/sismore_v5/api/ubigeo/descargar/completo
+Route::get('/ubigeo/descargar/completo', [UbigeoApiController::class, 'descargarCompleto']);
+
+// Ejemplo de uso: http://localhost/aaapanel007/sismore_v5/api/ubigeo/listar/25
 Route::get('/ubigeo/listar/{codigo?}', [UbigeoApiController::class, 'listarHijos']);
+
+// Ejemplo de uso: http://localhost/aaapanel007/sismore_v5/api/ubigeo/250101
 Route::get('/ubigeo/{codigo}', [UbigeoApiController::class, 'buscarPorCodigo']);

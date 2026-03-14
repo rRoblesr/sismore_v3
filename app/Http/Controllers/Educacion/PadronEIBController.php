@@ -253,7 +253,7 @@ class PadronEIBController extends Controller
                     ],
                     'maxbar' => 0,
                 ];
-                $data = CuboPadronEIBRepositorio::reportesreporte_anal2($rq->gestion, $rq->provincia, $rq->distrito);
+                $data = CuboPadronEIBRepositorio::reportesreporte_anal2($rq->anio, $rq->gestion, $rq->provincia, $rq->distrito);
                 foreach ($data as $key => $value) {
                     $info['categoria'][] = $value->anio;
                     $info['series'][0]['data'][] = (int)$value->matriculados;
@@ -281,7 +281,7 @@ class PadronEIBController extends Controller
                         ['name' => 'secundaria', 'data' => [], 'color' => $color[2]],
                     ]
                 ];
-                $data = CuboPadronEIBRepositorio::reportesreporte_anal4($rq->gestion, $rq->provincia, $rq->distrito);
+                $data = CuboPadronEIBRepositorio::reportesreporte_anal4($rq->anio, $rq->gestion, $rq->provincia, $rq->distrito);
                 foreach ($data->unique('anio') as $value) {
                     $info['cat'][] = $value->anio;
                 }

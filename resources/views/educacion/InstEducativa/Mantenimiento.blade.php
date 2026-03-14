@@ -5,7 +5,6 @@
     <link href="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.css" rel="stylesheet"
         type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-    <link href="assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
 
     <style>
         .centrarmodal {
@@ -618,9 +617,9 @@
     <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.responsive.min.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.js"></script>
 
-    <script src="assets/libs/sweetalert2/sweetalert2.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/sweetalert2/sweetalert2.min.js"></script>
     <!-- Sweet alert init js-->
-    <script src="assets/js/pages/sweet-alerts.init.js"></script>
+    <script src="{{ asset('/') }}public/assets/js/pages/sweet-alerts.init.js"></script>
 
     <script>
         var save_method = '';

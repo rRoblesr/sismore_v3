@@ -104,7 +104,7 @@ class IndicadoresController extends Controller
 
         $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronActasController::$FUENTE['pacto_1']);
         // // return response()->json(compact('imp'));
-        $aniomax = $imp->anio;
+        $aniomax = optional($imp)->anio ?? date('Y');
 
         return view('salud.Indicadores.PactoRegional', compact('indsal', 'indedu', 'indviv', 'anio', 'provincia', 'aniomax'));
     }
@@ -118,7 +118,17 @@ class IndicadoresController extends Controller
         $updateMin1 = PoblacionPNRepositorio::actualizado();
         $updateMin2 = EduCuboPacto1Repositorio::actualizado();
         $updateMin3 = EduCuboPacto2Repositorio::actualizado();
-        $anios = [$updateMin1->anio, $updateMin2->anio, $updateMin3->anio];
+        
+        $anios = array_filter([
+            optional($updateMin1)->anio,
+            optional($updateMin2)->anio,
+            optional($updateMin3)->anio
+        ]);
+
+        if (empty($anios)) {
+            $anios = [date('Y')];
+        }
+
         $anio = array_unique($anios);
         $provincia = UbigeoRepositorio::provincia('25');
         $aniomax = date('Y');
@@ -145,7 +155,7 @@ class IndicadoresController extends Controller
 
         $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronNominalController::$FUENTE);
         // // return response()->json(compact('imp'));
-        $aniomax = $imp->anio;
+        $aniomax = optional($imp)->anio ?? date('Y');
 
         return view('salud.Indicadores.PactoRegionalSal', compact('indsal', 'anio', 'provincia', 'aniomax'));
     }
@@ -228,13 +238,19 @@ class IndicadoresController extends Controller
 
             case 'DIT-EDU-01':
                 $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporMatriculaGeneralController::$FUENTE);
-                $actualizado =  'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion));
-                $updateMin1 = PoblacionPNRepositorio::actualizado();
-                $updateMin2 = EduCuboPacto1Repositorio::actualizado();
-                $mes = min($updateMin1->mes, $updateMin2->mes);
+                $actualizado = ($imp) ? 'Actualizado: ' . date('d/m/Y', strtotime($imp->fechaActualizacion)) : 'Actualizado: Sin datos';
+                
+                $mes_poblacion = PoblacionPNRepositorio::max_mes_id($rq->anio);
+                $mes_matricula = EduCuboPacto1Repositorio::max_mes_id($rq->anio);
 
-                $gl = (int)PoblacionPNRepositorio::conteo3a5_acumulado($rq->anio, $mes, $rq->provincia, $rq->distrito, 0);
-                $gls = EduCuboPacto1Repositorio::pacto1_matriculados($rq->anio, $mes, $rq->provincia, $rq->distrito);
+                if ($mes_poblacion && $mes_matricula) {
+                    $gl = (int)PoblacionPNRepositorio::conteo3a5_acumulado($rq->anio, $mes_poblacion, $rq->provincia, $rq->distrito, 0);
+                    $gls = EduCuboPacto1Repositorio::pacto1_matriculados($rq->anio, $mes_matricula, $rq->provincia, $rq->distrito);
+                } else {
+                    $gl = 0;
+                    $gls = 0;
+                }
+                
                 $num = number_format($gls, 0);
                 $den = number_format($gl, 0);
 
@@ -369,7 +385,16 @@ class IndicadoresController extends Controller
 
     public function PactoRegionalDetalle($indicador_id)
     {
-        $ind = IndicadorGeneralRepositorio::findNoFichatecnica($indicador_id);
+        if (!ctype_digit((string)$indicador_id)) {
+            if (request()->ajax() || request()->wantsJson()) return response('', 204);
+            abort(404);
+        }
+
+        $ind = IndicadorGeneralRepositorio::findNoFichatecnica((int)$indicador_id);
+        if (!$ind) {
+            if (request()->ajax() || request()->wantsJson()) return response('', 204);
+            abort(404);
+        }
         switch ($ind->codigo) {
             case 'DIT-SAL-01':
                 $fuente = ImporPadronNominalController::$FUENTE;

@@ -6,8 +6,46 @@ use App\Http\Controllers\Controller;
 use App\Models\Parametro\Ubigeo;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\DB;
+
 class UbigeoApiController extends Controller
 {
+    public function descargarCompleto()
+    {
+        // Query traducida de SQL nativo a Query Builder para mayor seguridad y consistencia
+        /*
+         * SELECT 
+         *  de.codigo as cod_departamento, 
+         *  de.nombre as departamento, 
+         *  RIGHT(pr.codigo, 2) as cod_provincia, 
+         *  pr.nombre as provincia, 
+         *  RIGHT(di.codigo, 2) as cod_distrito, 
+         *  di.nombre as distrito
+         * FROM par_ubigeo di
+         * JOIN par_ubigeo pr ON pr.id = di.dependencia
+         * JOIN par_ubigeo de ON de.id = pr.dependencia
+         * ORDER BY de.codigo, pr.codigo, di.codigo
+         */
+
+        $resultados = DB::table('par_ubigeo as di')
+            ->join('par_ubigeo as pr', 'pr.id', '=', 'di.dependencia')
+            ->join('par_ubigeo as de', 'de.id', '=', 'pr.dependencia')
+            ->select(
+                'de.codigo as cod_departamento',
+                'de.nombre as departamento',
+                DB::raw('RIGHT(pr.codigo, 2) as cod_provincia'),
+                'pr.nombre as provincia',
+                DB::raw('RIGHT(di.codigo, 2) as cod_distrito'),
+                'di.nombre as distrito'
+            )
+            ->orderBy('de.codigo')
+            ->orderBy('pr.codigo')
+            ->orderBy('di.codigo')
+            ->get();
+
+        return response()->json($resultados, 200);
+    }
+
     public function buscarPorCodigo($codigo)
     {
         // Buscamos el ubigeo cargando sus padres (Provincia -> Departamento)

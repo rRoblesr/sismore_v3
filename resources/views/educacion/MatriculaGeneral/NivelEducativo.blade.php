@@ -1,6 +1,8 @@
 @extends('layouts.main', ['titlePage' => 'INDICADOR'])
 @section('css')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
+    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" /> --}}
+    <link rel="stylesheet" href="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" href="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.css" />
     <style>
         .tablex thead th {
             padding: 6px;
@@ -56,7 +58,7 @@
                                     onchange="cargarCards();">
                                     <option value="0">AÑO</option>
                                     @foreach ($anios as $item)
-                                        <option value="{{ $item->id }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
+                                        <option value="{{ $item->anio }}" {{ $item->anio == $aniomax ? 'selected' : '' }}>
                                             {{ $item->anio }}</option>
                                     @endforeach
                                 </select>
@@ -466,6 +468,18 @@
                     thousandsSep: ","
                 }
             });
+            // $('#anio').change(function() {
+            //     cargarugels();
+            // });
+            // $('#provincia').change(function() {
+            //     cargargestion();
+            // });
+            // $('#distrito').change(function() {
+            //     cargarAreas();
+            // });
+            // $('#nivel').change(function() {
+            //     cargarCards();
+            // });
             cargarDistritos();
             cargarCards();
         });
@@ -633,7 +647,7 @@
 
         function cargarDistritos() {
             $.ajax({
-                url: "{{ route('ubigeo.distrito.25', '') }}/" + $('#provincia').val(),
+                url: "{{ route('matriculageneral.niveleducativo.distritos', '') }}/" + $('#provincia').val(),
                 type: 'GET',
                 success: function(data) {
                     $("#distrito option").remove();
@@ -1805,17 +1819,21 @@
         }
     </script>
 
-    <script src="https://code.highcharts.com/highcharts.js"></script>
+    {{-- <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <!-- optional -->
     <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script> --}}
 
-    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    {{-- <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script> --}}
+    <script src="{{ asset('/') }}public/assets/libs/datatables/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.responsive.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.js"></script>
 
-    {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts-more.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script> --}}
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script>
 @endsection

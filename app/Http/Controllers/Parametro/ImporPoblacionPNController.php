@@ -2,25 +2,17 @@
 
 namespace App\Http\Controllers\Parametro;
 
-use App\Exports\ImporPadronSiagieExport;
 use App\Http\Controllers\Controller;
+use App\Imports\Parametro\ImporPoblacionPNImport;
 use App\Imports\tablaXImport;
 use App\Models\Administracion\Entidad;
-use App\Models\Educacion\ImporMatricula;
 use App\Models\Educacion\Importacion;
-use App\Models\Educacion\Matricula;
 use App\Models\Parametro\Anio;
-use App\Models\Parametro\ImporPoblacion;
 use App\Models\Parametro\Mes;
-use App\Models\Parametro\Poblacion;
-use App\Models\Parametro\PoblacionDetalle;
 use App\Models\Parametro\PoblacionPN;
 use App\Models\Parametro\Sexo;
 use App\Models\Parametro\Ubigeo;
-use App\Repositories\Educacion\ImporMatriculaRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
-use App\Repositories\Educacion\MatriculaDetalleRepositorio;
-use App\Utilities\Utilitario;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -44,7 +36,7 @@ class ImporPoblacionPNController extends Controller
     public function importar()
     {
         $mensaje = "";
-        return view('parametro.ImporPoblacion.Importar', compact('mensaje'));
+        return view('parametro.ImporPoblacionPN.Importar', compact('mensaje'));
     }
 
     /* metodo para tener una salida de respuesta de la carga del excel */
@@ -59,119 +51,56 @@ class ImporPoblacionPNController extends Controller
         die;
     }
 
-    /*  metodo que carga el excel y ejecuta un procedimiento almacenado*/
-    public function guardar(Request $request)
+    public function guardar(Request $rq)
     {
-        ini_set('memory_limit', '-1');
-        set_time_limit(0);
+        $rq->validate([
+            'file' => 'required|file|mimes:xlsx,xls,csv|max:10240',
+            'fechaActualizacion' => 'required|date_format:Y-m-d',
+        ]);
 
-        /* se esta  */
-        $existeMismaFecha = ImportacionRepositorio::Importacion_PE($request->fechaActualizacion, $this->fuente);
-        if ($existeMismaFecha != null) {
-            $mensaje = "Error, Ya existe archivos prendientes de aprobar para la fecha de versión ingresada";
-            $this->json_output(400, $mensaje);
+        $fechaActualizacion = Carbon::createFromFormat('Y-m-d', $rq->fechaActualizacion)->startOfDay();
+        $usuarioId = auth()->user()->id;
+
+        $importacionExistente = Importacion::where('fuenteImportacion_id', $this->fuente)
+            ->whereDate('fechaActualizacion', $fechaActualizacion)
+            ->whereIn('estado', ['PE', 'PR'])
+            ->first();
+
+        if ($importacionExistente) {
+            return $this->json_output(
+                400,
+                'Ya existe una importación pendiente o procesada para esta fuente y fecha.'
+            );
         }
 
-        $existeMismaFecha = ImportacionRepositorio::Importacion_PR($request->fechaActualizacion, $this->fuente);
-        if ($existeMismaFecha != null) {
-            $mensaje = "Error, Ya existe archivos procesados para la fecha de versión ingresada";
-            $this->json_output(400, $mensaje);
-        }
-
-        $this->validate($request, ['file' => 'required|mimes:xls,xlsx']);
-        $archivo = $request->file('file');
-        $array = (new tablaXImport)->toArray($archivo);
-
-        if (count($array) != 1) {
-            $this->json_output(400, 'Error de Hojas, Solo debe tener una HOJA, el LIBRO EXCEL');
-        }
+        $importacion = Importacion::create([
+            'fuenteImportacion_id' => $this->fuente,
+            'usuarioId_Crea' => $usuarioId,
+            'fechaActualizacion' => $fechaActualizacion,
+            'estado' => 'PE',
+        ]);
 
         try {
-            foreach ($array as $value) {
-                foreach ($value as $celda => $row) {
-                    if ($celda > 0) break;
-                    $cadena =
-                        $row['anio'] .
-                        $row['mes'] .
-                        $row['ubigeo'] .
-                        $row['cnv'] .
-                        $row['seguro'] .
-                        $row['sexo'] .
-                        $row['28dias'] .
-                        $row['0_5meses'] .
-                        $row['6_11meses'] .
-                        $row['0a'] .
-                        $row['1a'] .
-                        $row['2a'] .
-                        $row['3a'] .
-                        $row['4a'] .
-                        $row['5a'];
-                }
-            }
-        } catch (Exception $e) {
-            $mensaje = "Formato de archivo no reconocido, porfavor verifique si el formato es el correcto";
-            $this->json_output(403, $mensaje);
+            PoblacionPN::truncate();
+            Excel::import(new ImporPoblacionPNImport($importacion->id), $rq->file('file'), null, \Maatwebsite\Excel\Excel::XLSX, 0);
+            $importacion->update(['estado' => 'PR']);
+        } catch (\InvalidArgumentException $e) {
+            return $this->json_output(
+                400,
+                'Archivo inválido: ' . $e->getMessage()
+            );
+        } catch (\Exception $e) {
+            $importacion->update(['estado' => 'EL']);
+            return $this->json_output(
+                400,
+                'Error al importar el archivo: ' . $e->getMessage()
+            );
         }
-
-        /* ajustar fecha */
-        $anio = Anio::where('anio', date('Y'))->first();
-        if (!$anio) {
-            Anio::Create(['anio' => date('Y')]);
-        }
-        /* fin ajuste */
-
-        try {
-            $importacion = Importacion::Create([
-                'fuenteImportacion_id' => $this->fuente, // valor predeterminado
-                'usuarioId_Crea' => auth()->user()->id,
-                'fechaActualizacion' => $request['fechaActualizacion'],
-                'comentario' => $request['comentario'],
-                'estado' => 'PE'
-            ]);
-
-            foreach ($array as $key => $value) {
-                foreach ($value as $row) {
-                    $padronPoblacion = PoblacionPN::Create([
-                        'importacion_id' => $importacion->id,
-                        'anio' => $row['anio'],
-                        'mes_id ' =>  Mes::where('nombre', $row['mes'])->first()->id,
-                        'ubigeo_id ' =>  Ubigeo::where('codigo', $row['ubigeo'])->first()->id,
-                        'cnv' => $row['cnv'],
-                        'seguro' => $row['seguro'],
-                        'sexo_id ' => Sexo::where('nombre', $row['sexo'])->first()->id,
-                        '28dias' => $row['28dias'],
-                        '0_5meses' => $row['0_5meses'],
-                        '6_11meses' => $row['6_11meses'],
-                        '0_12meses' => $row['0_12meses'],
-                        '0a' => $row['0a'],
-                        '1a' => $row['1a'],
-                        '2a' => $row['2a'],
-                        '3a' => $row['3a'],
-                        '4a' => $row['4a'],
-                        '5a' => $row['5a'],
-                    ]);
-                }
-            }
-        } catch (Exception $e) {
-            $importacion->estado = 'EL';
-            $importacion->save();
-
-            $mensaje = "Error en la carga de datos, verifique los datos de su archivo y/o comuniquese con el administrador del sistema - " . $e->getMessage();
-            $this->json_output(400, $mensaje);
-        }
-
-        // try {
-        //     DB::select('call par_pa_procesarImporPoblacion(?,?)', [$importacion->id, $poblacion->id]);
-        // } catch (Exception $e) {
-        //     $importacion->estado = 'EL';
-        //     $importacion->save();
-
-        //     $mensaje = "Error al procesar la normalizacion de datos." . $e;
-        //     $tipo = 'danger';
-        //     $this->json_output(400, $mensaje);
-        // }
-        $mensaje = "Archivo excel subido y Procesado correctamente .";
-        $this->json_output(200, $mensaje, '');
+ 
+        return $this->json_output(
+            200,
+            'Archivo importado exitosamente.'
+        );
     }
 
     /* metodo para listar las importaciones */
@@ -217,11 +146,27 @@ class ImporPoblacionPNController extends Controller
     /* metodo para cargar una importacion especifica */
     public function ListaImportada(Request $rq)
     {
-        $data = [];
-        //  PoblacionDetalle::where('pp.importacion_id', $rq->importacion_id)
-        //     ->join('par_poblacion as pp', 'pp.id', '=', 'par_poblacion_detalle.poblacion_id')
-        //     ->join('par_ubigeo as uu', 'uu.id', '=', 'par_poblacion_detalle.ubigeo_id')
-        //     ->select('uu.codigo', 'par_poblacion_detalle.sexo', 'par_poblacion_detalle.edad', 'par_poblacion_detalle.total')->get();
+        $data = PoblacionPN::where('importacion_id', $rq->importacion_id)
+            ->join('par_ubigeo as uu', 'uu.id', '=', 'par_poblacion_padron_nominal.ubigeo_id')
+            ->join('par_sexo as ss', 'ss.id', '=', 'par_poblacion_padron_nominal.sexo_id')
+            ->join('par_mes as mm', 'mm.id', '=', 'par_poblacion_padron_nominal.mes_id')
+            ->select(
+                'par_poblacion_padron_nominal.anio',
+                'mm.codigo as mes_codigo',
+                'uu.codigo as ubigeo_codigo',
+                'ss.nombre as sexo_nombre',
+                'par_poblacion_padron_nominal.seguro',
+                'par_poblacion_padron_nominal.cnv',
+                'par_poblacion_padron_nominal.0a',
+                'par_poblacion_padron_nominal.1a',
+                'par_poblacion_padron_nominal.2a',
+                'par_poblacion_padron_nominal.3a',
+                'par_poblacion_padron_nominal.4a',
+                'par_poblacion_padron_nominal.5a',
+                'par_poblacion_padron_nominal.28dias',
+                'par_poblacion_padron_nominal.0_5meses',
+                'par_poblacion_padron_nominal.6_11meses'
+            );
         return DataTables::of($data)->make(true);
     }
 

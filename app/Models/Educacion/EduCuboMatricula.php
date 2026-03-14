@@ -48,6 +48,8 @@ class EduCuboMatricula extends Model
         'discapacidad',
         'fecha_matricula',
         'id_grado',
-        'grado'
+        'grado',
+        'eib',
+        'pais',
     ];
 }

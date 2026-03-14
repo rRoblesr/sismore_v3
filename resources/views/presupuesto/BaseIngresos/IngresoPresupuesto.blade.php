@@ -227,12 +227,11 @@
 
 @section('js')
     {{-- highcharts --}}
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/data.js"></script>
-    <script src="https://code.highcharts.com/modules/drilldown.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/data.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/drilldown.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
 
 
 
@@ -254,6 +253,9 @@
                 // }),
                 lang: {
                     thousandsSep: ","
+                },
+                accessibility: {
+                    enabled: false
                 }
             });
 
@@ -276,7 +278,7 @@
                         'Ingreso Presupuestal de la Region Ucayali',
                         '');
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");
                     console.log(jqXHR);
                 },
@@ -304,7 +306,7 @@
                         'Recaudación De Ingresos Según Tipo De Gobierno'
                     );
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 2");
                     console.log(jqXHR);
                 },
@@ -329,7 +331,7 @@
                         'Pim De Ingresos Según Tipo De Gobierno'
                     );
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 2");
                     console.log(jqXHR);
                 },
@@ -355,7 +357,7 @@
                         'Recaudación De Ingresos Según Tipo De Gobierno'
                     );
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 2");
                     console.log(jqXHR);
                 },

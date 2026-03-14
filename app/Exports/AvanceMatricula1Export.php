@@ -31,10 +31,10 @@ class AvanceMatricula1Export implements FromView, ShouldAutoSize
     public function view(): View
     {
         if ($this->div == 'tabla1') {
-            $mgs = (new IndicadorController())->panelControlEduacionNuevoindicador01Export($this->div, $this->anio, $this->provincia, $this->distrito, $this->gestion, $this->ugel);
+            $mgs = (new MatriculaGeneralController())->vista0001Export($this->div, $this->anio, $this->provincia, $this->distrito, $this->gestion, $this->ugel);
             return view('parametro.indicador.educacion.inicioEducacionIndicador01Table1Export', $mgs);
         } else {
-            $mgs = (new IndicadorController())->panelControlEduacionNuevoindicador01Export($this->div, $this->anio, $this->provincia, $this->distrito, $this->gestion, $this->ugel);
+            $mgs = (new MatriculaGeneralController())->vista0001Export($this->div, $this->anio, $this->provincia, $this->distrito, $this->gestion, $this->ugel);
             return view('parametro.indicador.educacion.inicioEducacionIndicador01Table2Export', $mgs);
         }
     }

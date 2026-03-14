@@ -1,0 +1,37 @@
+﻿Total paragraphs: 55
+[0] TEXT: INFORME N┬║ 002-2026-RARR
+[2] TEXT: SE├æOR	  :          Mg. V├¡ctor George Garc├¡a L├│pez.
+[3] TEXT: Director de la Oficina de Planeamiento y Presupuesto de la DREU
+[5] TEXT: DE                    :	         RONALD AMERICO ROBLES RIMAC
+[7] TEXT: ASUNTO          :           INFORME CORRESPONDIENTE A LA ACTIVIDAD N┬░1.
+[9] TEXT: REFERENCIA  :	       ORDEN SE SERVICIO N┬║ 0000056
+[11] TEXT: FECHA           :          Pucallpa, 10 de marzo del 2026.
+[14] TEXT: Por el presente me dirijo a usted para saludarlo y al mismo tiempo hacerle llegar el informe de serv
+[15] TEXT: Realizar la actualizaci├│n del PADRON WEB en la plataforma inform├ítica del SISMORE educaci├│n, MOSEVA 
+[17] TEXT: Realizar la actualizaci├│n del tablero de control y reportes del sistema de control y seguimiento de 
+[19] TEXT: Realizar la actualizaci├│n de la matricula educativa del SIAGIE en la plataforma inform├ítica del SISM
+[21] TEXT: Realizar la actualizaci├│n del registro de la informaci├│n del Saneamiento F├¡sico Legal de los locales
+[23] TEXT: Realizar la actualizaci├│n del padr├│n de Instituciones Educativas Intercultural Biling├╝e (EIB) en la 
+[25] TEXT: Al presente informe se adjunta las capturas de la actualizaci├│n del SISMORE, Es todo cuanto informo 
+[27] TEXT: Atentamente,
+[32] TEXT: ÔÇªÔÇªÔÇªÔÇª..........................................................
+[33] TEXT: RONALD AMERICO ROBLES RIMAC
+[34] TEXT: DNI:45026462
+[37] TEXT: REALIZAR LA ACTUALIZACI├ôN DEL PADRON WEB EN LA PLATAFORMA INFORM├üTICA DEL SISMORE EDUCACI├ôN, MOSEVA 
+[39] TEXT: 
+    --> HAS IMAGE
+[41] TEXT: 
+    --> HAS IMAGE
+[44] TEXT: REALIZAR LA ACTUALIZACI├ôN DEL TABLERO DE CONTROL Y REPORTES DEL SISTEMA DE CONTROL Y SEGUIMIENTO DE 
+    --> HAS IMAGE
+[48] TEXT: REALIZAR LA ACTUALIZACI├ôN DE LA MATRICULA EDUCATIVA DEL SIAGIE EN LA PLATAFORMA INFORM├üTICA DEL SISM
+[49] TEXT: 
+    --> HAS IMAGE
+[50] TEXT: 
+    --> HAS IMAGE
+[51] TEXT: REALIZAR LA ACTUALIZACI├ôN DEL REGISTRO DE LA INFORMACI├ôN DEL SANEAMIENTO F├ìSICO LEGAL DE LOS LOCALES
+[52] TEXT: 
+    --> HAS IMAGE
+[53] TEXT: REALIZAR LA ACTUALIZACI├ôN DEL PADR├ôN DE INSTITUCIONES EDUCATIVAS INTERCULTURAL BILING├£E (EIB) EN LA 
+[54] TEXT: 
+    --> HAS IMAGE

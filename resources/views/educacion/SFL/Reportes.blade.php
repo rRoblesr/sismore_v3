@@ -1,7 +1,8 @@
 @extends('layouts.main', ['activePage' => 'importacion', 'titlePage' => ''])
 
 @section('css')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" href="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.css" />
     <style>
 
     </style>
@@ -297,6 +298,22 @@
 @endsection
 
 @section('js')
+    {{-- jrmt-mapero --}}
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highmaps.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts-more.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/solid-gauge.js"></script>
+
+    <script src="{{ asset('/') }}public/us-ct-ally.js"></script>
+    <script src="{{ asset('/') }}public/us-ct-allz.js"></script>
+
+    <script src="{{ asset('/') }}public/assets/libs/datatables/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.responsive.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.js"></script>
+
     <script type="text/javascript">
         var paleta_colores = ['#5eb9aa', '#F9FFFE', '#f5bd22', '#058DC7', '#50B432', '#9D561B', '#DDDF00', '#24CBE5',
             '#64E572', '#9F9655', '#FFF263', '#6AF9C4'
@@ -307,8 +324,16 @@
         const spinners = {
             head: ['#card1', '#card2', '#card3', '#card4'],
             anal: ['#anal1', '#anal2', '#anal3', '#anal4'],
-            tabla: ['#ctabla1', '#ctabla2', '#ctabla3']
+            tabla: ['#ctabla1', '#ctabla2', '#ctabla3'],
+            anal1: ['#anal1'],
+            anal2: ['#anal2'],
+            anal3: ['#anal3'],
+            anal4: ['#anal4'],
+            tabla1: ['#ctabla1'],
+            tabla2: ['#ctabla2'],
+            tabla3: ['#ctabla3']
         };
+        var mapData;
         $(document).ready(function() {
             Object.keys(spinners).forEach(key => {
                 SpinnerManager.show(key);
@@ -323,11 +348,7 @@
                 cargarCards();
             });
             mapData = otros;
-            mapData.features.forEach((element, key) => {
-                console.log('["' + element.properties['hc-key'] + '", ' + (key + 1) + '],');
-            });
             cargarUgel();
-
         });
 
         function cargarCards() {
@@ -439,7 +460,7 @@
                     }
 
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");
                     console.log(jqXHR);
                 },
@@ -812,21 +833,4 @@
             return anal3valores[provincia] || null;
         }
     </script>
-
-    {{-- jrmt-mapero --}}
-    <script src="https://code.highcharts.com/maps/highmaps.js"></script>
-    <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
-
-    <script src="{{ asset('/') }}public/us-ct-ally.js"></script>
-    <script src="{{ asset('/') }}public/us-ct-allz.js"></script>
-
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/highcharts-more.js"></script>
-    <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
-    <!-- optional -->
-    <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-
-    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 @endsection

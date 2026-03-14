@@ -7,9 +7,6 @@
 @endsection
 @section('content')
     <div class="content">
-
-
-
         <div class="row">
             <div class="col-md-12">
                 <div class="card card-border">
@@ -25,9 +22,9 @@
                                 onclick="javascript:window.open('https://1drv.ms/x/s!AgffhPHh-Qgo0AEnoULq3wbXGnu-?e=d81hlQ','_blank');"><i
                                     class="mdi mdi-file-pdf-outline"></i>
                                 Manual</button>
-                            <button type="button" class="btn btn-primary btn-xs waves-effect waves-light"
+                            {{-- <button type="button" class="btn btn-primary btn-xs waves-effect waves-light"
                                 data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static"
-                                data-keyboard="false"><i class="ion ion-md-cloud-upload"></i> Importar</button>
+                                data-keyboard="false"><i class="ion ion-md-cloud-upload"></i> Importar</button> --}}
                         </div>
                         <h3 class="card-title">HISTORIAL DE IMPORTACION GASTO PRESUPUESTAL</h3>
                     </div>
@@ -94,7 +91,7 @@
                                         <div class="">
                                             <label class="col-form-label">Fecha Versión</label>
                                             <div class="">
-                                                <input type="date" class="form-control" name="fechaActualizacion"
+                                                <input type="datetime-local" class="form-control" name="fechaActualizacion"
                                                     placeholder="Ingrese fecha actualizacion" autofocus required>
                                             </div>
                                         </div>
@@ -222,7 +219,6 @@
                                     <th>COMPROMISO_MENSUAL</th>
                                     <th>DEVENGADO</th>
                                     <th>GIRADO</th>
-                                    <th>ACCION</th>
                                 </thead>
                                 <tbody>
 
@@ -239,6 +235,144 @@
         </div><!-- /.modal -->
         <!-- End Bootstrap modal -->
 
+        <div id="modal-procesar-gastos" class="modal fade centrarmodal" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Procesar Importación de Gastos</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="procg_importacion_id" value="">
+                        <p class="mb-3">
+                            Seleccione el proceso que desea ejecutar para la importación seleccionada.
+                        </p>
+                        <div class="text-center">
+                            <div class="d-inline-block mr-2">
+                                <button type="button" id="btn-procg-base" class="btn btn-primary btn-sm">
+                                    <i class="fa fa-database"></i> Procesar Base de Gastos
+                                </button>
+                                <button type="button" id="btn-procg-base-ojito"
+                                    class="btn btn-outline-primary btn-sm ml-1" title="Ver estado">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="d-inline-block">
+                                <button type="button" id="btn-procg-cubo" class="btn btn-success btn-sm">
+                                    <i class="fa fa-cube"></i> Procesar Cubo de Gastos
+                                </button>
+                                <button type="button" id="btn-procg-cubo-ojito"
+                                    class="btn btn-outline-success btn-sm ml-1" title="Ver estado">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Modal para actualizar importación -->
+        <div id="modal-actualizar" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Actualizar Archivo de Gastos</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="cmxform form-horizontal tasi-form update_file">
+                            @csrf
+                            <input type="hidden" id="upd_importacion_id" name="importacion_id" value="">
+
+                            <div class="alert alert-warning">
+                                <i class="fa fa-exclamation-triangle"></i>
+                                <strong>Advertencia:</strong> Esta acción eliminará los registros de gastos asociados a esta
+                                importación y cargará los nuevos datos del archivo Excel seleccionado.
+                            </div>
+
+                            <div class="form-group">
+                            <label class="col-form-label">Tipo de Archivo</label>
+                            <div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="tipo_archivo" id="type_csv" value="csv" checked onchange="toggleSeparador(true)">
+                                    <label class="form-check-label" for="type_csv">CSV (Texto)</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="tipo_archivo" id="type_xlsx" value="xlsx" onchange="toggleSeparador(false)">
+                                    <label class="form-check-label" for="type_xlsx">Excel (XLSX)</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-form-label">Fecha Versión</label>
+                            <div class="">{{-- datetime-local --}}
+                                <input type="date" class="form-control" name="fechaActualizacion"
+                                    id="fechaActualizacion_upd" placeholder="Ingrese fecha actualizacion" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="div_separador_csv">
+                            <label class="col-form-label">Separador CSV</label>
+                            <div class="">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="csv_separator" id="sep_comma" value="," checked>
+                                    <label class="form-check-label" for="sep_comma">Coma (,)</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="csv_separator" id="sep_semicolon" value=";">
+                                    <label class="form-check-label" for="sep_semicolon">Punto y coma (;)</label>
+                                </div>
+                            </div>
+                        </div>
+
+                            <div class="form-group">
+                                <label class="col-form-label">Archivo (Excel o CSV)</label>
+                                <div class="input-group">
+                                    <input id="file_upd" name="file" class="form-control d-none" type="file"
+                                        accept=".csv,.txt" required>
+                                    <input id="nfile_upd" name="nfile" class="form-control" type="text"
+                                        placeholder="Seleccione Archivo" readonly>
+                                    <span class="input-group-append">
+                                        <label for="file_upd" class="btn btn-primary btn-file-documento">
+                                            <i class="fas fa-cloud-upload-alt"></i>
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row mt-0 mb-0">
+                                <div class="col-md-12">
+                                    <div class="pwrapper_upd m-0" style="display:none;">
+                                        <div class="progress progress_wrapper">
+                                            <div class="progress-bar progress-bar-striped bg-info progress-bar-animated progress_bar_upd"
+                                                role="progressbar" style="width:0%">0%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-lg-12 text-center">
+                                    <button class="btn btn-warning waves-effect waves-light" type="submit">
+                                        <i class="fa fa-sync"></i> Actualizar
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 @endsection
@@ -248,6 +382,7 @@
         var table_principal = '';
         $(document).ready(function() {
             $('.upload_file').on('submit', upload);
+            $('.update_file').on('submit', uploadUpdate);
 
             table_principal = $('#datatable').DataTable({
                 responsive: true,
@@ -262,6 +397,25 @@
                 var fileName = $(this).val().split("\\").pop();
                 $('#nfile').val(fileName);
 
+            });
+
+            $('#btn-procg-base').on('click', function() {
+                ejecutarProcesoG('base');
+            });
+
+            $('#btn-procg-cubo').on('click', function() {
+                ejecutarProcesoG('cubo');
+            });
+            $('#btn-procg-base-ojito').on('click', function() {
+                verificarEstadoG('base');
+            });
+            $('#btn-procg-cubo-ojito').on('click', function() {
+                verificarEstadoG('cubo');
+            });
+
+            $("#file_upd").on("change", function() {
+                var fileName = $(this).val().split("\\").pop();
+                $('#nfile_upd').val(fileName);
             });
         });
 
@@ -335,13 +489,162 @@
             });
         }
 
+        function verificarEstadoG(tipo) {
+            var importacion_id = $('#procg_importacion_id').val();
+            if (!importacion_id) return;
+
+            var url = tipo === 'base' ?
+                "{{ route('imporgastos.verificar.base', 'id_placeholder') }}" :
+                "{{ route('imporgastos.verificar.cubo', 'id_placeholder') }}";
+            url = url.replace('id_placeholder', importacion_id);
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'JSON',
+                success: function(res) {
+                    if (tipo === 'base') {
+                        var html = `
+                            <div class="text-left">
+                                <p class="mb-1"><strong>Resumen del proceso:</strong></p>
+                                <p class="mb-1">Base generada: ${res.base ? 'Sí' : 'No'}</p>
+                                <p class="mb-1">Registros de detalle: ${res.detalle}</p>
+                                <p class="mb-1">Año de referencia: ${res.anio ?? '-'}</p>
+                            </div>`;
+                        Swal.fire({
+                            title: 'Estado del proceso de Base de Gastos',
+                            html: html,
+                            type: 'info',
+                            showCancelButton: true,
+                            confirmButtonText: 'Descargar registros',
+                            cancelButtonText: 'Cerrar',
+                            confirmButtonColor: '#3085d6'
+                        }).then((result) => {
+                            if (result.value && res.detalle > 0) {
+                                var urlDesc =
+                                    "{{ route('imporgastos.descargar.base', 'id_placeholder') }}";
+                                urlDesc = urlDesc.replace('id_placeholder', importacion_id);
+                                window.open(urlDesc, '_blank');
+                            }
+                        });
+                    } else {
+                        var filas = '';
+                        if (res.anios && res.anios.length) {
+                            res.anios.forEach(function(x) {
+                                filas +=
+                                    `<tr><td>${x.anio}</td><td class="text-right">${x.registros}</td></tr>`;
+                            });
+                        }
+                        var html = `
+                            <div class="text-left">
+                                <p class="mb-2"><strong>Total de registros consolidados:</strong> ${res.total}</p>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-bordered">
+                                        <thead><tr><th>Año</th><th class="text-right">Registros</th></tr></thead>
+                                        <tbody>${filas}</tbody>
+                                    </table>
+                                </div>
+                            </div>`;
+                        Swal.fire({
+                            title: 'Estado del proceso de Cubo de Gastos',
+                            html: html,
+                            type: 'info',
+                            showCancelButton: true,
+                            confirmButtonText: 'Descargar registros',
+                            cancelButtonText: 'Cerrar',
+                            confirmButtonColor: '#28a745'
+                        }).then((result) => {
+                            if (result.value && res.total > 0) {
+                                var urlDesc =
+                                    "{{ route('imporgastos.descargar.cubo', 'id_placeholder') }}";
+                                urlDesc = urlDesc.replace('id_placeholder', importacion_id);
+                                window.open(urlDesc, '_blank');
+                            }
+                        });
+                    }
+                },
+                error: function() {
+                    Swal.fire('Error', 'No se pudo obtener el estado.', 'error');
+                }
+            });
+        }
+
+        function abrirProcesosG(id) {
+            $('#procg_importacion_id').val(id);
+            $('#modal-procesar-gastos').modal('show');
+        }
+
+        function ejecutarProcesoG(tipo) {
+            var importacion_id = $('#procg_importacion_id').val();
+            if (!importacion_id) return;
+
+            var url = tipo === 'base' ?
+                "{{ route('imporgastos.procesar.base', 'id_placeholder') }}" :
+                "{{ route('imporgastos.procesar.cubo', 'id_placeholder') }}";
+            url = url.replace('id_placeholder', importacion_id);
+
+            Swal.fire({
+                title: '¿Está seguro?',
+                text: tipo === 'base' ?
+                    'Se procesará la base de gastos (normalización).' : 'Se procesará el cubo de gastos.',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, procesar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (!result.value) return;
+
+                Swal.fire({
+                    title: 'Procesando...',
+                    text: 'Por favor espere.',
+                    allowOutsideClick: false,
+                    onBeforeOpen: () => {
+                        Swal.showLoading()
+                    }
+                });
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    dataType: 'JSON',
+                    headers: {
+                        'X-CSRF-TOKEN': $('input[name=_token]').val()
+                    },
+                    success: function(res) {
+                        Swal.fire(
+                            res.status ? '¡Éxito!' : 'Error',
+                            res.msg,
+                            res.status ? 'success' : 'error'
+                        );
+                        if (res.status) {
+                            table_principal.ajax.reload();
+                        }
+                    },
+                    error: function() {
+                        Swal.fire(
+                            'Error',
+                            'Ocurrió un error al procesar la importación.',
+                            'error'
+                        );
+                    }
+                });
+            });
+        }
+
         function geteliminar(id) {
             bootbox.confirm("Seguro desea Eliminar este IMPORTACION?", function(result) {
                 if (result === true) {
+                    var url = "{{ route('imporgastos.eliminar', ':id') }}";
+                    url = url.replace(':id', id);
                     $.ajax({
-                        url: "{{ url('/') }}/IMPORGASTOS/eliminar/" + id,
-                        type: "GET",
+                        url: url,
+                        type: "DELETE",
                         dataType: "JSON",
+                        data: {
+                            _token: "{{ csrf_token() }}"
+                        },
                         beforeSend: function() {
                             $('#eliminar' + id).html(
                                 '<span><i class="fa fa-spinner fa-spin"></i></span>');
@@ -352,9 +655,10 @@
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
                             $('#eliminar' + id).html('<span><i class="fa fa-trash"></i></span>');
-                            toastr.error(
-                                'No se puede eliminar este registro por seguridad de su base de datos, Contacte al Administrador del Sistema',
-                                'Mensaje');
+                            var msg = jqXHR.responseJSON && jqXHR.responseJSON.message ? jqXHR
+                                .responseJSON.message :
+                                'No se puede eliminar este registro por seguridad de su base de datos, Contacte al Administrador del Sistema';
+                            toastr.error(msg, 'Mensaje');
                         }
                     });
                 }
@@ -389,12 +693,12 @@
                             name: 'mes'
                         },
                         {
-                            data: 'cod_tipo_gob',
-                            name: 'cod_tipo_gob'
+                            data: 'cod_niv_gob',
+                            name: 'cod_niv_gob'
                         },
                         {
-                            data: 'tipo_gobierno',
-                            name: 'tipo_gobierno'
+                            data: 'nivel_gobierno',
+                            name: 'nivel_gobierno'
                         },
                         {
                             data: 'cod_sector',
@@ -612,6 +916,94 @@
 
             $('#modal-siagie-matricula').modal('show');
             $('#modal-siagie-matricula .modal-title').text('Importado');
+        }
+
+        function toggleSeparador(isCsv) {
+            if (isCsv) {
+                $('#div_separador_csv').show();
+                $('#file_upd').attr('accept', '.csv,.txt');
+                // Select default comma
+                $('#sep_comma').prop('checked', true);
+            } else {
+                $('#div_separador_csv').hide();
+                $('#file_upd').attr('accept', '.xls,.xlsx');
+            }
+        }
+
+        $(document).ready(function() {
+            toggleSeparador(true); // Default to CSV
+        });
+
+        function abrirModalActualizar(id, fecha) {
+            $('#upd_importacion_id').val(id);
+            if (fecha) {
+                $('#fechaActualizacion_upd').val(fecha);
+            }
+            $('#modal-actualizar').modal('show');
+        }
+
+        function uploadUpdate(e) {
+            e.preventDefault();
+            let form = $(this),
+                wrapper = $('.pwrapper_upd'),
+                progress_bar = $('.progress_bar_upd'),
+                data = new FormData(form.get(0));
+
+            progress_bar.removeClass('bg-success bg-danger').addClass('bg-info');
+            progress_bar.css('width', '0%');
+            progress_bar.html('Preparando...');
+            wrapper.fadeIn();
+
+            $.ajax({
+                xhr: function() {
+                    let xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener("progress", function(e) {
+                        if (e.lengthComputable) {
+                            let percentComplete = Math.floor((e.loaded / e.total) * 100);
+                            progress_bar.css('width', percentComplete + '%');
+                            progress_bar.html(percentComplete + '%');
+                        }
+                    }, false);
+                    return xhr;
+                },
+                type: "POST",
+                url: "{{ route('imporgastos.gastos.actualizar') }}",
+                dataType: "json",
+                contentType: false,
+                processData: false,
+                cache: false,
+                data: data,
+                beforeSend: () => {
+                    $('button', form).attr('disabled', true);
+                }
+            }).done(res => {
+                if (res.status === 200) {
+                    progress_bar.removeClass('bg-info').addClass('bg-success');
+                    progress_bar.html('¡Actualizado!');
+                    $('#modal-actualizar').modal('hide');
+                    Swal.fire({
+                        title: "¡Actualización Exitosa!",
+                        type: "success",
+                        confirmButtonColor: "#348cd4"
+                    });
+                    form.trigger('reset');
+                    setTimeout(() => {
+                        wrapper.fadeOut();
+                        progress_bar.removeClass('bg-success bg-danger').addClass('bg-info');
+                        progress_bar.css('width', '0%');
+                        table_principal.ajax.reload();
+                    }, 1500);
+                } else {
+                    progress_bar.css('width', '100%');
+                    progress_bar.html(res.msg);
+                    alert(res.msg);
+                }
+            }).fail(err => {
+                progress_bar.removeClass('bg-success bg-info').addClass('bg-danger');
+                progress_bar.html('Error en la actualización');
+            }).always(() => {
+                $('button', form).attr('disabled', false);
+            });
         }
     </script>
     <script src="{{ asset('/') }}public/assets/libs/jquery-validation/jquery.validate.min.js"></script>

@@ -476,7 +476,7 @@ class IndicadorGeneralController extends Controller
     public function exportarPDF($id)
     {
         $ind = IndicadorGeneral::select('codigo', 'ficha_tecnica')->where('id', $id)->first();
-        if ($ind->ficha_tecnica) {
+        if ($ind && $ind->ficha_tecnica) {
             header('Content-Type: application/pdf');
             echo base64_decode($ind->ficha_tecnica);
 
@@ -487,7 +487,15 @@ class IndicadorGeneralController extends Controller
             // echo $b64d;
             //echo file_put_contents("aaaa.pdf", base64_decode($ind->ficha_tecnica));
         } else {
-            echo 'archivo PDF no encontrado';
+            echo '<script>
+                alert("El indicador seleccionado no cuenta con una Ficha Técnica cargada.");
+                window.close();
+            </script>';
+            echo '<div style="display:flex; justify-content:center; align-items:center; height:100vh; flex-direction:column; font-family:sans-serif;">
+                <h3 style="color:#dc3545;">Advertencia</h3>
+                <p>El indicador seleccionado no cuenta con una Ficha Técnica cargada.</p>
+                <button onclick="window.close()" style="padding:10px 20px; cursor:pointer;">Cerrar Pestaña</button>
+            </div>';
         }
     }
 

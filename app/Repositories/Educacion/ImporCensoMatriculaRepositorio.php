@@ -64,9 +64,13 @@ class ImporCensoMatriculaRepositorio
         return $ugel;
     }
 
-    public static function area($cedula)
+    public static function area($cedula, $gestion = 0)
     {
-        $ugel = ImporCensoMatricula::distinct()->select('area_censo as codigo')->where('nroced', $cedula)->get();
+        $query = ImporCensoMatricula::distinct()->select('area_censo as codigo')->where('nroced', $cedula);
+        if ($gestion > 0) {
+            $query = $gestion == 3 ? $query->whereIn('ges_dep', ['B3', 'B4']) : $query->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+        }
+        $ugel = $query->get();
         $ugel2 = Area::all();
         foreach ($ugel as $value) {
             foreach ($ugel2 as $value2) {
@@ -79,11 +83,19 @@ class ImporCensoMatriculaRepositorio
         return $ugel;
     }
 
-    public static function iiee($anio, $cedula)
+    public static function iiee($anio, $cedula, $area = 0, $gestion = 0)
     {
         $query = ImporCensoMatricula::distinct()->select('cod_mod')
             ->join('par_importacion as imp', 'imp.id', '=', 'edu_impor_censomatricula.importacion_id')
-            ->where(DB::raw('year(imp.fechaActualizacion)'), $anio)->where('nroced', $cedula)->get();
+            ->where(DB::raw('year(imp.fechaActualizacion)'), $anio)->where('nroced', $cedula);
+
+        if ($area > 0) {
+            $query->where('area_censo', $area);
+        }
+        if ($gestion > 0) {
+            $query = $gestion == 3 ? $query->whereIn('ges_dep', ['B3', 'B4']) : $query->whereIn('ges_dep', ['A1', 'A2', 'A3', 'A4']);
+        }
+        $query = $query->get();
         foreach ($query as $key => $value) {
             $value->nombre = InstitucionEducativa::where('codModular', $value->cod_mod)->first()->nombreInstEduc;
         }

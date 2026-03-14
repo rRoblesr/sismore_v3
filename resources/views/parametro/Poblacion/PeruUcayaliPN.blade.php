@@ -1,6 +1,6 @@
 @extends('layouts.main', ['titlePage' => 'INDICADOR'])
 @section('css')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.css" />
     <style>
         .chart-container {
             position: relative;
@@ -74,6 +74,10 @@
 @endsection
 
 @section('content')
+    @php
+        $aniomax = $anios->max('anio');
+        $aniomin = $anios->min('anio');
+    @endphp
     <div class="row">
         <div class="col-lg-12 col-md-12">
             <div class="card ">
@@ -97,7 +101,8 @@
                 <div class="card-body pb-0">
                     <div class="row">
                         <div class="col-lg-4 col-md-4 col-sm-4">
-                            <h4 class="page-title font-12">Fuente: Reniec - Padrón Nominal</h4>
+                            <h4 class="page-title font-12">Fuente: Reniec - Padrón Nominal 
+                                <span id="anio_seleccionado">{{ $aniomax }}</span></h4>
                         </div>
                         <div class="col-lg-2 col-md-1 col-sm-1  ">
                             <div class="custom-select-container">
@@ -106,7 +111,7 @@
                                     onchange="cargar_mes();">
                                     @foreach ($anios as $item)
                                         <option value="{{ $item->anio }}"
-                                            {{ $item->anio == date('Y') ? 'selected' : '' }}>
+                                            {{ $item->anio == $aniomax ? 'selected' : '' }}>
                                             {{ $item->anio }}</option>
                                     @endforeach
                                 </select>
@@ -319,7 +324,7 @@
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
                     <div class="card-widgets">
-                        <button type="button" class="btn btn-success btn-xs" onclick="descargar1()"><i
+                        <button type="button" class="btn btn-success btn-xs" onclick="descargar2()"><i
                                 class="fa fa-file-excel"></i> Descargar</button>
                     </div>
                     <h3 class="text-black font-14">
@@ -409,13 +414,13 @@
                         $('#card4').text(data.card4);
                     } else if (div == "anal1") {
                         anal1 = gColumnx(div, data.info, '',
-                            'Población de niños y niñas menores de 6 años, según sexo, periodo 2019- 2024',
+                            'Población de niños y niñas menores de 6 años, según sexo, periodo {{ $aniomin }} - {{ $aniomax }}',
                             'Año')
                     } else if (div == "anal2") {
                         anal2 = gColumnx(div, data.info, '',
                             'Población de niños y niñas menores de 6 años, según sexo', 'Etapa Vida')
                     } else if (div == "anal3") {
-                        anal3 = gColumnx(div, data.info, '', 'Población de niños y niñas menores de 6 años, periodo 2019- 2024', 'Año')
+                        anal3 = gColumnx(div, data.info, '', 'Población de niños y niñas menores de 6 años, periodo {{ $aniomin }} - {{ $aniomax }}', 'Año')
                         // anal3 = gLinea(div, data.info, '',
                         //     'Población de niños y niñas menores de 6 años, periodo 2019- 2024');
                     } else if (div == "anal4") {
@@ -424,8 +429,6 @@
                             'Población de niños y niñas menores de 6 años, según Mes');
                     } else if (div == "tabla1") {
                         $('#vtabla1').html(data.excel);
-                        // $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
-                        // $('.vtabla1-fecha').html('Actualizado: ' + data.reg.fecha);
                         $('#tabla1').DataTable({
                             responsive: true,
                             autoWidth: false,
@@ -437,8 +440,6 @@
                         });
                     } else if (div == "tabla2") {
                         $('#vtabla2').html(data.excel);
-                        // $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
-                        // $('.vtabla1-fecha').html('Actualizado: ' + data.reg.fecha);
                         $('#tabla2').DataTable({
                             responsive: true,
                             autoWidth: false,
@@ -458,6 +459,7 @@
         }
 
         function cargar_mes() {
+            $('#anio_seleccionado').html($('#vanio').val());
             $.ajax({
                 url: "{{ route('poblacionprincipal.peru.ucayali.pn.mes') }}",
                 data: {
@@ -466,9 +468,16 @@
                 type: 'GET',
                 success: function(data) {
                     $("#vmes option").remove();
-                    var options = '<option value="0">TODOS</option>';
+                    var options ='';// '<option value="0">TODOS</option>';
+                    var max_id = 0;
                     $.each(data.mes, function(index, value) {
-                        ss = (value.id == data.selected ? "selected" : "");
+                        if (parseInt(value.id) > max_id) {
+                            max_id = parseInt(value.id);
+                        }
+                    });
+
+                    $.each(data.mes, function(index, value) {
+                        var ss = (value.id == max_id ? "selected" : "");
                         options += `<option value='${value.id}' ${ss}>${value.mes}</option>`;
                     });
                     $("#vmes").append(options);
@@ -530,18 +539,19 @@
         }
 
         function descargar1() {
-            window.open("{{ url('/') }}/MatriculaGeneral/EBR/Excel/tabla1/" + $('#anio').val() + "/" + $('#ugel')
-                .val() + "/" + $('#gestion').val() + "/" + $('#area').val() + "/0");
+            window.location.href = "{{ route('poblacionprincipal.peru.ucayali.pn.descargar', ['div' => 'tabla1', 'anio' => ':anio', 'mes' => ':mes', 'provincia' => ':provincia', 'distrito' => ':distrito']) }}"
+                .replace(':anio', $('#vanio').val())
+                .replace(':mes', $('#vmes').val())
+                .replace(':provincia', $('#vprovincia').val())
+                .replace(':distrito', $('#vdistrito').val());
         }
 
         function descargar2() {
-            window.open("{{ url('/') }}/MatriculaGeneral/EBR/Excel/tabla2/" + $('#anio').val() + "/" + $('#ugel')
-                .val() + "/" + $('#gestion').val() + "/" + $('#area').val() + "/" + provincia_select);
-        }
-
-        function descargar3() {
-            window.open("{{ url('/') }}/MatriculaGeneral/EBR/Excel/tabla3/" + $('#anio').val() + "/" + $('#ugel')
-                .val() + "/" + $('#gestion').val() + "/" + $('#area').val() + "/" + distrito_select);
+            window.location.href = "{{ route('poblacionprincipal.peru.ucayali.pn.descargar', ['div' => 'tabla2', 'anio' => ':anio', 'mes' => ':mes', 'provincia' => ':provincia', 'distrito' => ':distrito']) }}"
+                .replace(':anio', $('#vanio').val())
+                .replace(':mes', $('#vmes').val())
+                .replace(':provincia', $('#vprovincia').val())
+                .replace(':distrito', $('#vdistrito').val());
         }
 
         function verpdf(id) {
@@ -796,7 +806,7 @@
                     //         'Población: ' + Highcharts.numberFormat(Math.abs(this.point.y), 0);
                     // },
                     formatter: function() {
-                        let tooltipText = '<b>Grupo Etéreo:' + this.x +
+                        let tooltipText = '<b>Grupo Etario: ' + this.points[0].key +
                             '</b><br/>'; // Muestra la categoría (edad)
                         this.points.forEach(function(point) {
                             tooltipText += point.series.name + ': ' + Highcharts.numberFormat(Math.abs(
@@ -1141,7 +1151,7 @@
                 tooltip: {
                     shared: true, // Muestra los valores de todas las series en el mismo tooltip
                     formatter: function() {
-                        let tooltipText = '<b>' + tooltip + ': ' + this.x +
+                        let tooltipText = '<b>' + tooltip + ': ' + this.points[0].key +
                             '</b><br/>'; // Muestra la categoría (año)
                         this.points.forEach(function(point) {
                             tooltipText += point.series.name + ': ' + Highcharts.numberFormat(Math.abs(
@@ -1971,22 +1981,23 @@
     </script>
 
     {{-- jrmt-mapero --}}
-    <script src="https://code.highcharts.com/maps/highmaps.js"></script>
-    <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/mapdata/countries/pe/pe-all.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highmaps.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/pe-all.js"></script>
 
     <script src="{{ asset('/') }}public/pe-pv-states.js"></script>
     <script src="{{ asset('/') }}public/us-ct-all.js"></script>
 
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script> --}}
+    {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script> --}}
 
     <!-- optional -->
-    <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/offline-exporting.js"></script> --}}
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script>
 
-    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.js"></script>
 
     {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts-more.js"></script>

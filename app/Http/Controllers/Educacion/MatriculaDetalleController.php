@@ -167,9 +167,29 @@ class MatriculaDetalleController extends Controller
         $gestion = $rq->gestion;
         $area = $rq->area;
 
-        $optugel = ($ugel == 0 ? "" : " and v6.id=$ugel ");
-        $optgestion = ($gestion == 0 ? "" : ($gestion == 3 ? " and v8.id=$gestion " : " and v8.id!=3 "));
-        $optarea = $area == 0 ? "" : " and v9.id=$area ";
+        $bindings = [];
+        $optugel = "";
+        $optgestion = "";
+        $optarea = "";
+
+        if ($ugel != 0) {
+            $optugel = " and v6.id = :ugel ";
+            $bindings['ugel'] = $ugel;
+        }
+
+        if ($gestion != 0) {
+            if ($gestion == 3) {
+                $optgestion = " and v8.id = :gestion ";
+                $bindings['gestion'] = $gestion;
+            } else {
+                $optgestion = " and v8.id != 3 ";
+            }
+        }
+
+        if ($area != 0) {
+            $optarea = " and v9.id = :area ";
+            $bindings['area'] = $area;
+        }
 
         $error['ano'] = $ano;
         $error['gestion'] = $gestion;
@@ -209,6 +229,10 @@ class MatriculaDetalleController extends Controller
 
         $error['fechas'] = $fechas;
 
+        $fechaActualizacion = "";
+        if (count($fechas) > 0) {
+            $fechaActualizacion = date('d/m/Y', strtotime($fechas[count($fechas) - 1]->fecha));
+        }
 
         $fx = '';
         $anoI = 0;
@@ -242,7 +266,9 @@ class MatriculaDetalleController extends Controller
         where v3.estado='PR' and v5.tipo in ('EBR','EBE') and v2.anio_id=$anoA and month(v3.fechaActualizacion)=12 $optgestion $optarea $optugel
         group by ugel
         order by ugel asc
-            ) as xx"))->get();
+            ) as xx"))
+            ->setBindings($bindings)
+            ->get();
         if (count($baseA) == 0) {
             $baseA = Ugel::where('dependencia', '2')->select('nombre as ugel', DB::raw('0 as dic'))->get();
         }
@@ -289,7 +315,9 @@ class MatriculaDetalleController extends Controller
             where v3.estado='PR' and v5.tipo in ('EBR','EBE') and v2.anio_id=$ano and v3.fechaActualizacion in ($fx) $optgestion $optarea $optugel
             group by id,ugel
             order by ugel asc
-            ) as xx"))->get();
+            ) as xx"))
+            ->setBindings($bindings)
+            ->get();
 
         $foot = ['meta' => 0, 'ene' => 0, 'feb' => 0, 'mar' => 0, 'abr' => 0, 'may' => 0, 'jun' => 0, 'jul' => 0, 'ago' => 0, 'set' => 0, 'oct' => 0, 'nov' => 0, 'dic' => 0, 'total' => 0, 'avance' => 0,];
 
@@ -323,7 +351,7 @@ class MatriculaDetalleController extends Controller
 
 
         //return $error;/
-        return view("educacion.MatriculaDetalle.MatriculaAvancetabla0", compact('rq', 'base', 'anoI', 'anoF', 'foot'));
+        return view("educacion.MatriculaDetalle.MatriculaAvancetabla0", compact('rq', 'base', 'anoI', 'anoF', 'foot', 'fechaActualizacion'));
     }
 
     public function cargartabla1(Request $rq)
@@ -333,9 +361,29 @@ class MatriculaDetalleController extends Controller
         $area = $rq->area;
         $ugel = $rq->ugel;
 
-        $optugel = ($ugel == 0 ? "" : " and v6.id=$ugel ");
-        $optgestion = ($gestion == 0 ? "" : ($gestion == 3 ? " and v8.id=$gestion " : " and v8.id!=3 "));
-        $optarea = $area == 0 ? "" : " and v9.id=$area ";
+        $bindings = [];
+        $optugel = "";
+        $optgestion = "";
+        $optarea = "";
+
+        if ($ugel != 0) {
+            $optugel = " and v6.id = :ugel ";
+            $bindings['ugel'] = $ugel;
+        }
+
+        if ($gestion != 0) {
+            if ($gestion == 3) {
+                $optgestion = " and v8.id = :gestion ";
+                $bindings['gestion'] = $gestion;
+            } else {
+                $optgestion = " and v8.id != 3 ";
+            }
+        }
+
+        if ($area != 0) {
+            $optarea = " and v9.id = :area ";
+            $bindings['area'] = $area;
+        }
 
         /* $error['ano'] = $ano;
         $error['gestion'] = $gestion;
@@ -414,7 +462,9 @@ class MatriculaDetalleController extends Controller
         inner join edu_area as v9 on v9.id=v4.Area_id
         where v3.estado='PR' and v5.tipo in ('EBR','EBE') and v2.anio_id=$anoA and month(v3.fechaActualizacion)=12 $optgestion $optarea $optugel
         group by id,tipo,nivel
-            ) as xx"))->get();
+            ) as xx"))
+            ->setBindings($bindings)
+            ->get();
         if (count($baseA) == 0) {
             $baseA = NivelModalidad::whereIn('tipo', ['EBR', 'EBE'])->select('id', 'tipo', DB::raw('0 as dic'))->get();
         }
@@ -579,9 +629,29 @@ class MatriculaDetalleController extends Controller
         $area = $rq->area;
         $ugel = $rq->ugel;
 
-        $optugel = ($ugel == 0 ? "" : " and v6.id=$ugel ");
-        $optgestion = ($gestion == 0 ? "" : ($gestion == 3 ? " and v8.id=$gestion " : " and v8.id!=3 "));
-        $optarea = $area == 0 ? "" : " and v9.id=$area ";
+        $bindings = [];
+        $optugel = "";
+        $optgestion = "";
+        $optarea = "";
+
+        if ($ugel != 0) {
+            $optugel = " and v6.id = :ugel ";
+            $bindings['ugel'] = $ugel;
+        }
+
+        if ($gestion != 0) {
+            if ($gestion == 3) {
+                $optgestion = " and v8.id = :gestion ";
+                $bindings['gestion'] = $gestion;
+            } else {
+                $optgestion = " and v8.id != 3 ";
+            }
+        }
+
+        if ($area != 0) {
+            $optarea = " and v9.id = :area ";
+            $bindings['area'] = $area;
+        }
 
         $error['ano'] = $ano;
         $error['gestion'] = $gestion;
@@ -665,7 +735,9 @@ class MatriculaDetalleController extends Controller
             where v3.estado='PR' and v5.tipo in ('EBR','EBE') and v2.anio_id=$ano and v3.fechaActualizacion in ($fx) $optgestion $optarea $optugel
             group by mes,name
             order by mes asc
-            ) as xx"))->get();
+            ) as xx"))
+            ->setBindings($bindings)
+            ->get();
         $error['base'] = $base;
         /* foreach ($base as $key => $value) {
             $value->y = (int)$value->y;

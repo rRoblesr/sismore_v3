@@ -256,7 +256,7 @@ class BaseSiafWebDetalleRepositorio
                 DB::raw("sum(sw.pim)-sum(sw.certificado) as saldocer"),
                 DB::raw("sum(sw.pim)-sum(sw.devengado) as saldodev"),
             ])
-            ->orderBy('avance', 'desc')
+            ->orderBy('ue.codigo_ue', 'asc')
             ->get();
     }
 

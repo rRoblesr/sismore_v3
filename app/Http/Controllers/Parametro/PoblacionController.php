@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Parametro;
 
 use App\Exports\parPoblacionPeruExport;
 use App\Exports\parPoblacionPeruUcayaliExport;
+use App\Exports\parPoblacionPeruUcayaliPNExport;
 use App\Http\Controllers\Controller;
 use App\Models\Educacion\Importacion;
 use App\Models\Parametro\CentroPoblado;
@@ -579,6 +580,101 @@ class PoblacionController extends Controller
             }
 
             return Excel::download(new parPoblacionPeruUcayaliExport($div,$anio, $provincia, $distrito, $sexo), $name);
+        }
+    }
+
+    public function poblacionprincipalucayaliPNDownload($div, $anio, $mes, $provincia, $distrito)
+    {
+        if ($anio > 0) {
+            switch ($div) {
+                case 'tabla1':
+                    $name = 'Población de niños y niñas menores de 6 años por tipo de seguro salud ' . date('Y-m-d') . '.xlsx';
+                    break;
+                case 'tabla2':
+                    $name = 'Población de niños y niñas menores de 6 años por distrito ' . date('Y-m-d') . '.xlsx';
+                    break;
+                default:
+                    $name = 'sin nombre.xlsx';
+                    break;
+            }
+
+            return Excel::download(new parPoblacionPeruUcayaliPNExport($div, $anio, $mes, $provincia, $distrito), $name);
+        }
+    }
+
+    public function poblacionprincipalucayaliPNExport($div, $anio, $mes, $provincia, $distrito)
+    {
+        switch ($div) {
+            case 'tabla1':
+                $base = PoblacionPNRepositorio::conteo_seguro_edades($anio, $mes, $provincia, $distrito);
+                $foot = [];
+                if ($base->count() > 0) {
+                    $foot = clone $base[0];
+                    $foot->conteo = 0;
+                    $foot->hconteo = 0;
+                    $foot->mconteo = 0;
+                    $foot->edad0 = 0;
+                    $foot->edad1 = 0;
+                    $foot->edad2 = 0;
+                    $foot->edad3 = 0;
+                    $foot->edad4 = 0;
+                    $foot->edad5 = 0;
+                    $foot->edad28 = 0;
+                    $foot->edad05 = 0;
+                    $foot->edad611 = 0;
+                    foreach ($base as $key => $value) {
+                        $foot->conteo += $value->conteo;
+                        $foot->hconteo += $value->hconteo;
+                        $foot->mconteo += $value->mconteo;
+                        $foot->edad0 += $value->edad0;
+                        $foot->edad1 += $value->edad1;
+                        $foot->edad2 += $value->edad2;
+                        $foot->edad3 += $value->edad3;
+                        $foot->edad4 += $value->edad4;
+                        $foot->edad5 += $value->edad5;
+                        $foot->edad28 += $value->edad28;
+                        $foot->edad05 += $value->edad05;
+                        $foot->edad611 += $value->edad611;
+                    }
+                }
+                return compact('base', 'foot', 'anio');
+
+            case 'tabla2':
+                $base = PoblacionPNRepositorio::conteo_distrito_edades($anio, $mes, $provincia, $distrito);
+                $foot = [];
+                if ($base->count() > 0) {
+                    $foot = clone $base[0];
+                    $foot->conteo = 0;
+                    $foot->hconteo = 0;
+                    $foot->mconteo = 0;
+                    $foot->edad0 = 0;
+                    $foot->edad1 = 0;
+                    $foot->edad2 = 0;
+                    $foot->edad3 = 0;
+                    $foot->edad4 = 0;
+                    $foot->edad5 = 0;
+                    $foot->edad28 = 0;
+                    $foot->edad05 = 0;
+                    $foot->edad611 = 0;
+                    foreach ($base as $key => $value) {
+                        $foot->conteo += $value->conteo;
+                        $foot->hconteo += $value->hconteo;
+                        $foot->mconteo += $value->mconteo;
+                        $foot->edad0 += $value->edad0;
+                        $foot->edad1 += $value->edad1;
+                        $foot->edad2 += $value->edad2;
+                        $foot->edad3 += $value->edad3;
+                        $foot->edad4 += $value->edad4;
+                        $foot->edad5 += $value->edad5;
+                        $foot->edad28 += $value->edad28;
+                        $foot->edad05 += $value->edad05;
+                        $foot->edad611 += $value->edad611;
+                    }
+                }
+                return compact('base', 'foot', 'anio');
+
+            default:
+                return [];
         }
     }
 

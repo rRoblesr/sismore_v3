@@ -494,6 +494,10 @@
                         // gPie(div, data.info, '',
                         //     'Número de estudiantes matriculados, según sexo',
                         //     '');
+                        if (!data.info || !data.info.categoria || data.info.categoria.length === 0) {
+                            $('#' + div).html('<div class="text-muted text-center">Sin datos</div>');
+                            return;
+                        }
                         gbar(div, data.info.categoria, data.info.series, '',
                             'Número de estudiantes con discapacidad matriculados, por sexo, según tipo de discapacidad',
                             '');
@@ -558,9 +562,13 @@
                         }
                     }
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 1");
-                    console.log(jqXHR);
+                error: function(jqXHR, textStatus, errorThrown) {
+                    if (div == "tabla1" || div == "tabla2") {
+                        $('#v' + div).html('<div class="text-muted text-center">Error</div>');
+                    } else {
+                        $('#' + div).html('<div class="text-muted text-center">Error</div>');
+                    }
+                    console.log('ERROR ' + div, textStatus, errorThrown, jqXHR);
                 },
             });
         }
@@ -1665,11 +1673,9 @@
         }
     </script>
 
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <!-- optional -->
-    <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
 
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 

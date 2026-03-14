@@ -40,67 +40,72 @@
     <div class="content">
 
         <div class="row">
-            <div class="col-lg-12">
-                <div class="card card-fill bg-success-0  mb-0">
-                    <div class="card-header bg-transparent">
-                        <div class="card-widgets">
-                            <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"><i
-                                    class="fa fa-history"></i></button>
-                        </div>
-                        <h3 class="card-title text-white text-center">EDUCACION BÁSICA REGULAR (EBR) SEGÚN SIAGIE- MINEDU
-                            ACTUALIZADO AL {{ $fecha }} {{-- <a href="javascript:location.reload()" class="btn btn-warning" title="ACTUALIZAR PAGINA"><i
-                                class="fa fa-redo"></i></a></h3> --}}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12">
+            <div class="col-lg-12 col-md-12">
                 <div class="card">
-                    <div class="card-body p-2">
-                        <form id="form_opciones" name="form_opciones" action="POST">
+                    <div class="card-header bg-success-0">
+                        <div class="card-widgets">
+                            <button type="button" class="btn btn-orange-0 btn-xs" onclick="location.reload()"
+                                title="ACTUALIZAR"><i class="fas fa-history"></i> Actualizar</button>
+                        </div>
+                        <h3 class="card-title text-white font-14">EDUCACION BÁSICA REGULAR (EBR) SEGÚN SIAGIE- MINEDU</h3>
+                    </div>
+                    <div class="card-body pb-0">
+                        <form id="form_opciones" name="form_opciones" action="POST" onsubmit="return false;">
                             @csrf
                             <input type="hidden" id="distrito" name="distrito" value="0">
                             <input type="hidden" id="provincia" name="provincia" value="0">
-                            <div class="form-group row mb-0">
-                                <div class="col-md-4"></div>
-                                <div class="col-md-2">
-                                    <select id="ano" name="ano" class="form-control" onchange="cargartabla0()">
-                                        @foreach ($anios as $item)
-                                            <option value="{{ $item->id }}">{{ $item->anio }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <select id="ugel" name="ugel" class="form-control" onchange="cargartabla0()">
-                                        <option value="0">Ugel</option>
-                                        @foreach ($ugels as $ugel)
-                                            <option value="{{ $ugel['id'] }}">{{ $ugel['nombre'] }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <select id="gestion" name="gestion" class="form-control" onchange="cargartabla0()">
-                                        <option value="0">Gestión</option>
-                                        @foreach ($gestions as $prov)
-                                            <option value="{{ $prov['id'] }}">{{ $prov['nombre'] }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <select id="area" name="area" class="form-control" onchange="cargartabla0()">
-                                        <option value="0">Área</option>
-                                        @foreach ($areas as $prov)
-                                            <option value="{{ $prov->id }}">{{ $prov->nombre }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                {{-- <div class="col-md-1">
-                                    <a href="javascript:location.reload()" class="btn btn-primary"><i
-                                            class="fa fa-redo"></i></a>
-                                </div> --}}
 
+                            <div class="form-group row align-items-center vh-5">
+                                <div class="col-lg-4 col-md-4 col-sm-4">
+                                    <h4 class="page-title font-12">Fuente: SIAGIE - MINEDU, ACTUALIZADO AL {{ $fecha }}</h4>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-2">
+                                    <div class="custom-select-container">
+                                        <label for="ano">Año</label>
+                                        <select id="ano" name="ano" class="form-control font-11"
+                                            onchange="cargartabla0()">
+                                            @foreach ($anios as $item)
+                                                <option value="{{ $item->id }}">{{ $item->anio }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-2">
+                                    <div class="custom-select-container">
+                                        <label for="ugel">UGEL</label>
+                                        <select id="ugel" name="ugel" class="form-control font-11"
+                                            onchange="cargartabla0()">
+                                            <option value="0">TODOS</option>
+                                            @foreach ($ugels as $ugel)
+                                                <option value="{{ $ugel['id'] }}">{{ $ugel['nombre'] }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-2">
+                                    <div class="custom-select-container">
+                                        <label for="gestion">Tipo de Gestión</label>
+                                        <select id="gestion" name="gestion" class="form-control font-11"
+                                            onchange="cargartabla0()">
+                                            <option value="0">TODOS</option>
+                                            @foreach ($gestions as $prov)
+                                                <option value="{{ $prov['id'] }}">{{ $prov['nombre'] }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-2">
+                                    <div class="custom-select-container">
+                                        <label for="area">Área Geográfica</label>
+                                        <select id="area" name="area" class="form-control font-11"
+                                            onchange="cargartabla0()">
+                                            <option value="0">TODOS</option>
+                                            @foreach ($areas as $prov)
+                                                <option value="{{ $prov->id }}">{{ $prov->nombre }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </form>
                     </div>

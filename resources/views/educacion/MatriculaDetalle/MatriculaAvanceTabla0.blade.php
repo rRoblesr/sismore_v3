@@ -1,3 +1,4 @@
+<input type="hidden" id="fechaActualizacion" value="{{ $fechaActualizacion }}">
 <table id="tabla0" class="table table-striped table-bordered tablex" style="font-size:11px;">
     <thead>
         <tr class="bg-primary text-white text-center">

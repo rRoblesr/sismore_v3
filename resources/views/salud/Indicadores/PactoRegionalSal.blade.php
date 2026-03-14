@@ -1012,9 +1012,11 @@
                     series: {
                         // className: 'highcharts-live-kpi',
                         dataLabels: {
+                            enabled: true,
+                            allowOverlap: true,
                             format: '<div style="text-align:center; margin-top: -20px">' +
-                                '<div style="font-size:2.5em;">{y}%</div>' +
-                                '<div style="font-size:12px; opacity:0.4; text-align: center;">Avance</div>' +
+                                '<div style="font-size:2em; color: black;">{y}%</div>' +
+                                '<div style="font-size:12px; opacity:0.4; text-align: center; color: black;">Avance</div>' +
                                 '</div>',
                             useHTML: true,
                             borderWidth: 0,
@@ -1027,8 +1029,7 @@
                     // data:[80],
                     innerRadius: '80%',
                     data: [{
-                        y: data,
-                        colorIndex: '50'
+                        y: data
                     }],
                     radius: '100%',
                 }],
@@ -1051,17 +1052,13 @@
         }
     </script>
 
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/highcharts-more.js"></script>
-    <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <!-- optional -->
-    <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-
-    {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts-more.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/solid-gauge.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script> --}}
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script>
+
+    <script src="{{ asset('/') }}public/assets/libs/datatables/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.js"></script>
 @endsection

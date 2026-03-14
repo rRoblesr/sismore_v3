@@ -1,4 +1,6 @@
 @section('css')
+    <link rel="stylesheet" href="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" href="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.css" />
     <style>
         .link {
             color: #000000;
@@ -1185,6 +1187,17 @@
 </div>
 
 @section('js')
+    <script src="{{ asset('/') }}public/assets/libs/datatables/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.responsive.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.js"></script>
+
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts-more.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script>
+
     <script type="text/javascript">
         var paleta_colores = ['#5eb9aa', '#F9FFFE', '#f5bd22', '#058DC7', '#50B432', '#9D561B', '#DDDF00', '#24CBE5',
             '#64E572', '#9F9655', '#FFF263', '#6AF9C4'
@@ -1288,10 +1301,10 @@
                     // $('#alumno').text(data.alumno);
                     // $('#docente').text(data.docente);
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 1");
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log("ERROR cargarCards", textStatus);
                     console.log(jqXHR);
-                },
+                }
             });
 
             //panelGraficas('container1');
@@ -1369,29 +1382,31 @@
                     }
                 },
                 success: function(data) {
+                    const info = data && data.info ? data.info : {};
+                    const reg = data && data.reg ? data.reg : {};
                     switch (div) {
                         case "siagie001":
                             gAnidadaColumn(div,
-                                data.info.cat,
-                                data.info.dat,
+                                info.cat || [],
+                                info.dat || [],
                                 '',
                                 'Numero de estudiantes matriculados en educacion basica regular, periodo ' +
-                                data.reg.rango,
-                                data.info.maxbar
+                                (reg.rango || ''),
+                                (info.maxbar || 0)
                             );
-                            $('#span-siagie001-fuente').html("Fuente: " + data.reg.fuente);
-                            $('#span-siagie001-fecha').html("Actualizado: " + data.reg.fecha);
+                            $('#span-siagie001-fuente').html("Fuente: " + (reg.fuente || ''));
+                            $('#span-siagie001-fecha').html("Actualizado: " + (reg.fecha || ''));
                             break;
                         case "censodocente001":
                             gAnidadaColumn(div,
-                                data.info.cat,
-                                data.info.dat,
+                                info.cat || [],
+                                info.dat || [],
                                 '',
-                                data.info.title,
-                                data.info.maxbar
+                                (info.title || ''),
+                                (info.maxbar || 0)
                             );
-                            $('#span-censodocente001-fuente').html("Fuente: " + data.reg.fuente);
-                            $('#span-censodocente001-fecha').html("Actualizado: " + data.reg.fecha);
+                            $('#span-censodocente001-fuente').html("Fuente: " + (reg.fuente || ''));
+                            $('#span-censodocente001-fecha').html("Actualizado: " + (reg.fecha || ''));
                             break;
                         case "container1":
                             gsemidona(div, 0, ['#5eb9aa', '#F9FFFE']);
@@ -1409,20 +1424,20 @@
                             $('#span-container3-fecha').html("Actualizado: " + '31/12/2022');
                             break;
                         case "dtanal1":
-                            console.log(data.info);
-                            gsemidona(div, data.info.indicador, ['#5eb9aa', '#F9FFFE']);
-                            $('#span-dtanal1-fuente').html("Fuente: " + data.info.fuente);
-                            $('#span-dtanal1-fecha').html("Actualizado: " + data.info.fecha);
+                            console.log(info);
+                            gsemidona(div, Number(info.indicador || 0), ['#5eb9aa', '#F9FFFE']);
+                            $('#span-dtanal1-fuente').html("Fuente: " + (info.fuente || ''));
+                            $('#span-dtanal1-fecha').html("Actualizado: " + (info.fecha || ''));
                             break;
                         case "dtanal2":
-                            gsemidona(div, data.info.indicador, ['#5eb9aa', '#F9FFFE']);
-                            $('#span-dtanal2-fuente').html("Fuente: " + data.info.fuente);
-                            $('#span-dtanal2-fecha').html("Actualizado: " + data.info.fecha);
+                            gsemidona(div, Number(info.indicador || 0), ['#5eb9aa', '#F9FFFE']);
+                            $('#span-dtanal2-fuente').html("Fuente: " + (info.fuente || ''));
+                            $('#span-dtanal2-fecha').html("Actualizado: " + (info.fecha || ''));
                             break;
                         case "dtanal3":
-                            gsemidona(div, data.info.indicador, ['#5eb9aa', '#F9FFFE']);
-                            $('#span-dtanal3-fuente').html("Fuente: " + data.info.fuente);
-                            $('#span-dtanal3-fecha').html("Actualizado: " + data.info.fecha);
+                            gsemidona(div, Number(info.indicador || 0), ['#5eb9aa', '#F9FFFE']);
+                            $('#span-dtanal3-fuente').html("Fuente: " + (info.fuente || ''));
+                            $('#span-dtanal3-fecha').html("Actualizado: " + (info.fecha || ''));
                             break;
                         case "iiee1":
                             gsemidona(div, 99.1, ['#5eb9aa', '#F9FFFE']);
@@ -1456,83 +1471,84 @@
                             break;
 
                         case "skills001":
-                            $('.skills001 h6 span').html(data.info.indicador + "%");
-                            $('.skills001 .progress-bar').css('width', data.info.indicador + '%')
+                            $('.skills001 h6 span').html((info.indicador || 0) + "%");
+                            $('.skills001 .progress-bar').css('width', (info.indicador || 0) + '%')
                                 .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 95 ? 'bg-success-0' :
-                                    (data.info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
+                                .addClass(info.indicador > 95 ? 'bg-success-0' :
+                                    (info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
                             break;
                         case "skills002":
-                            $('.skills002 h6 span').html(data.info.indicador + "%");
-                            $('.skills002 .progress-bar').css('width', data.info.indicador + '%')
+                            $('.skills002 h6 span').html((info.indicador || 0) + "%");
+                            $('.skills002 .progress-bar').css('width', (info.indicador || 0) + '%')
                                 .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 95 ? 'bg-success-0' :
-                                    (data.info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
+                                .addClass(info.indicador > 95 ? 'bg-success-0' :
+                                    (info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
+                            break;
                         case "skills003":
-                            $('.skills003 h6 span').html(data.info.indicador + "%");
-                            $('.skills003 .progress-bar').css('width', data.info.indicador + '%')
+                            $('.skills003 h6 span').html((info.indicador || 0) + "%");
+                            $('.skills003 .progress-bar').css('width', (info.indicador || 0) + '%')
                                 .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 95 ? 'bg-success-0' :
-                                    (data.info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
+                                .addClass(info.indicador > 95 ? 'bg-success-0' :
+                                    (info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
                             break;
                         case "skills004":
-                            $('.skills004 h6 span').html(data.info.indicador + "%");
-                            $('.skills004 .progress-bar').css('width', data.info.indicador + '%')
+                            $('.skills004 h6 span').html((info.indicador || 0) + "%");
+                            $('.skills004 .progress-bar').css('width', (info.indicador || 0) + '%')
                                 .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 95 ? 'bg-success-0' :
-                                    (data.info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
+                                .addClass(info.indicador > 95 ? 'bg-success-0' :
+                                    (info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
                             break;
                         case "skills005":
-                            $('.skills005 h6 span').html(data.info.indicador + "%");
-                            $('.skills005 .progress-bar').css('width', data.info.indicador + '%')
+                            $('.skills005 h6 span').html((info.indicador || 0) + "%");
+                            $('.skills005 .progress-bar').css('width', (info.indicador || 0) + '%')
                                 .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 95 ? 'bg-success-0' :
-                                    (data.info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
-                            $('#span-skills005-fuente').html("Fuente: " + data.reg.fuente);
-                            $('#span-skills005-fecha').html("Actualizado: " + data.reg.fecha);
+                                .addClass(info.indicador > 95 ? 'bg-success-0' :
+                                    (info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
+                            $('#span-skills005-fuente').html("Fuente: " + (reg.fuente || ''));
+                            $('#span-skills005-fecha').html("Actualizado: " + (reg.fecha || ''));
                             break;
                         case "skills006":
-                            $('.skills006 h6 span').html(data.info.indicador + "%");
-                            $('.skills006 .progress-bar').css('width', data.info.indicador + '%')
+                            $('.skills006 h6 span').html((info.indicador || 0) + "%");
+                            $('.skills006 .progress-bar').css('width', (info.indicador || 0) + '%')
                                 .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 95 ? 'bg-success-0' :
-                                    (data.info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
+                                .addClass(info.indicador > 95 ? 'bg-success-0' :
+                                    (info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
 
                             break;
                         case "skills007":
-                            $('.skills007 h6 span').html(data.info.indicador + "%");
-                            $('.skills007 .progress-bar').css('width', data.info.indicador + '%')
+                            $('.skills007 h6 span').html((info.indicador || 0) + "%");
+                            $('.skills007 .progress-bar').css('width', (info.indicador || 0) + '%')
                                 .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 95 ? 'bg-success-0' :
-                                    (data.info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
+                                .addClass(info.indicador > 95 ? 'bg-success-0' :
+                                    (info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
                             break;
                         case "skills008":
-                            $('.skills008 h6 span').html(data.info.indicador + "%");
-                            $('.skills008 .progress-bar').css('width', data.info.indicador + '%')
+                            $('.skills008 h6 span').html((info.indicador || 0) + "%");
+                            $('.skills008 .progress-bar').css('width', (info.indicador || 0) + '%')
                                 .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 95 ? 'bg-success-0' :
-                                    (data.info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
+                                .addClass(info.indicador > 95 ? 'bg-success-0' :
+                                    (info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
                             break;
                         case "skills009":
-                            $('.skills009 h6 span').html(data.info.indicador + "%");
-                            $('.skills009 .progress-bar').css('width', data.info.indicador + '%')
+                            $('.skills009 h6 span').html((info.indicador || 0) + "%");
+                            $('.skills009 .progress-bar').css('width', (info.indicador || 0) + '%')
                                 .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 95 ? 'bg-success-0' :
-                                    (data.info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
+                                .addClass(info.indicador > 95 ? 'bg-success-0' :
+                                    (info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
                             break;
                         case "skills010":
-                            $('.skills010 h6 span').html(data.info.indicador + "%");
-                            $('.skills010 .progress-bar').css('width', data.info.indicador + '%')
+                            $('.skills010 h6 span').html((info.indicador || 0) + "%");
+                            $('.skills010 .progress-bar').css('width', (info.indicador || 0) + '%')
                                 .removeClass('bg-success-0 bg-orange-0 bg-warning-0') //
-                                .addClass(data.info.indicador > 95 ? 'bg-success-0' :
-                                    (data.info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
-                            $('#span-skills010-fuente').html("Fuente: " + data.reg.fuente);
-                            $('#span-skills010-fecha').html("Actualizado: " + data.reg.fecha);
+                                .addClass(info.indicador > 95 ? 'bg-success-0' :
+                                    (info.indicador > 75 ? 'bg-warning-0' : 'bg-orange-0'));
+                            $('#span-skills010-fuente').html("Fuente: " + (reg.fuente || ''));
+                            $('#span-skills010-fecha').html("Actualizado: " + (reg.fecha || ''));
                             break;
                         case "tabla1":
                             $('#vtabla1').html(data.excel);
-                            $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
-                            $('.vtabla1-fecha').html('Actualizado: ' + data.reg.fecha);
+                            $('.vtabla1-fuente').html('Fuente: ' + (reg.fuente || ''));
+                            $('.vtabla1-fecha').html('Actualizado: ' + (reg.fecha || ''));
                             $('#tabla1').DataTable({
                                 responsive: true,
                                 autoWidth: false,
@@ -1548,10 +1564,10 @@
                     }
 
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR GRAFICA 1");
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log("ERROR panelGraficas", div, textStatus);
                     console.log(jqXHR);
-                },
+                }
             });
         }
 
@@ -1597,10 +1613,10 @@
                         toastr.error('ERROR, Indicador no encontrado, consulte al administrador', 'Mensaje');
                     }
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
-                    console.log("ERROR DE INDICADOR");
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log("ERROR datosIndicador", textStatus);
                     console.log(jqXHR);
-                },
+                }
             });
         };
 
@@ -2075,15 +2091,4 @@
         }
     </script>
 
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <!-- optional -->
-    <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-
-    {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts-more.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script> --}}
 @endsection

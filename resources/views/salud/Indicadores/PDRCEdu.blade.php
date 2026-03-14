@@ -307,20 +307,30 @@
                 type: "GET",
                 dataType: "JSON",
                 beforeSend: function() {
-                    GaugeSeries('gra' + codigo, 0);
+                    if ($('#gra' + codigo).length > 0) {
+                        GaugeSeries('gra' + codigo, 0);
+                    }
                     $('#actualizado' + codigo).text('');
                 },
                 success: function(data) {
                     console.log(data);
-                    GaugeSeries('gra' + codigo, data.avance);
+                    if ($('#gra' + codigo).length > 0) {
+                        GaugeSeries('gra' + codigo, data.avance);
+                    }
                     $('#actualizado' + codigo).text(data.actualizado);
                     $('#meta' + codigo).text('Meta: ' + data.meta);
                     $('#cumple' + codigo).html(data.cumple ?
                         '<span class="badge badge-success m-2" style="font-size: 90%; width:100px"> <i class="mdi mdi-thumb-up"></i> CUMPLE</span>' :
                         '<span class="badge badge-danger m-2" style="font-size: 90%; width:100px"> <i class="mdi mdi-thumb-down"></i> NO CUMPLE</span>'
                     );
-                    $('#num' + codigo).text(data.num.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }));
-                    $('#den' + codigo).text(data.den.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }));
+                    $('#num' + codigo).text(data.num.toLocaleString('en-US', {
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0
+                    }));
+                    $('#den' + codigo).text(data.den.toLocaleString('en-US', {
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0
+                    }));
 
                 },
                 erro: function(jqXHR, textStatus, errorThrown) {
@@ -846,9 +856,11 @@
                     series: {
                         // className: 'highcharts-live-kpi',
                         dataLabels: {
+                            enabled: true,
+                            allowOverlap: true,
                             format: '<div style="text-align:center; margin-top: -20px">' +
-                                '<div style="font-size:2.5em;">{y}%</div>' +
-                                '<div style="font-size:12px; opacity:0.4; text-align: center;">Avance</div>' +
+                                '<div style="font-size:2em; color: black;">{y}%</div>' +
+                                '<div style="font-size:12px; opacity:0.4; text-align: center; color: black;">Avance</div>' +
                                 '</div>',
                             useHTML: true,
                             borderWidth: 0,
@@ -861,8 +873,7 @@
                     // data:[80],
                     innerRadius: '80%',
                     data: [{
-                        y: data,
-                        colorIndex: '50'
+                        y: data
                     }],
                     radius: '100%',
                 }],
@@ -885,17 +896,10 @@
         }
     </script>
 
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/highcharts-more.js"></script>
-    <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <!-- optional -->
-    <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-
-    {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts-more.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/solid-gauge.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script> --}}
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script>
 @endsection

@@ -228,7 +228,7 @@ class ImportacionRepositorio
     {
         $query = DB::table('par_importacion as v1')
             ->join('par_fuenteimportacion as v2', 'v2.id', '=', 'v1.fuenteImportacion_id')
-            ->join('adm_usuario as v3', 'v3.id', '=', 'v1.usuarioId_Crea')
+            ->leftJoin('adm_usuario as v3', 'v3.id', '=', 'v1.usuarioId_Crea')
             // ->join('adm_usuario as v4', 'v4.id', '=', 'v1.usuarioId_Aprueba', 'left')
             ->where('v1.fuenteImportacion_id', $fuenteImportacion_id)
             ->where('v1.estado', '!=', 'EL')

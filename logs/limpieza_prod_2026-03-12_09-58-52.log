@@ -1,0 +1,35 @@
+--- INICIO jue 12/03/2026  9:58:53.10 --- 
+Directorio: C:\xampp\htdocs\aaapanel007\sismore_v5
+C:\xampp\php\php.exe
+PHP 7.4.29 (cli) (built: Apr 12 2022 20:21:18) ( ZTS Visual C++ 2017 x64 )
+Copyright (c) The PHP Group
+Zend Engine v3.4.0, Copyright (c) Zend Technologies
+0. Asegurando variables de entorno para produccion (.env)...
+  Valores actuales en .env:
+APP_ENV=production
+APP_DEBUG=false
+1. Limpiando caches...
+Application cache cleared!
+Route cache cleared!
+Configuration cache cleared!
+Compiled views cleared!
+Compiled views cleared!
+Application cache cleared!
+Route cache cleared!
+Configuration cache cleared!
+Compiled services and packages files removed!
+Caches cleared successfully!
+2. Regenerando caches para produccion (si aplica)...
+Configuration cache cleared!
+Configuration cached successfully!
+  - config:cache OK
+Route cache cleared!
+Routes cached successfully!
+  - route:cache OK
+Compiled views cleared!
+Blade templates cached successfully!
+  - view:cache OK
+Cached events cleared!
+Events cached successfully!
+  - event:cache OK
+--- FIN jue 12/03/2026  9:59:30.69 --- 

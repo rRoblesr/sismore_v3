@@ -87,7 +87,7 @@ class ImporMatriculaGeneralController extends Controller
             'pais_nacimiento',
             'lengua_materna',
             'segunda_lengua',
-            'id_discapacidad',
+            // 'id_discapacidad',
             'discapacidad',
             'situacion_matricula',
             'fecha_matricula',
@@ -147,7 +147,7 @@ class ImporMatriculaGeneralController extends Controller
                     'pais_nacimiento' => $row['pais_nacimiento'],
                     'lengua_materna' => $row['lengua_materna'],
                     'segunda_lengua' => $row['segunda_lengua'],
-                    'id_discapacidad' => $row['id_discapacidad'],
+                    'id_discapacidad' => null,//$row['id_discapacidad'],// no se usa
                     'discapacidad' => $row['discapacidad'],
                     'situacion_matricula' => $row['situacion_matricula'],
                     'fecha_matricula' => $row['fecha_matricula'],
@@ -356,15 +356,13 @@ class ImporMatriculaGeneralController extends Controller
             $ent = Entidad::find($value->entidad);
 
             $btn = '';
-            // if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11)
-            //     $btn .= '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" id="eliminar' . $value->id . '"><i class="fa fa-trash"></i> </button>&nbsp;';
-            // else $btn = '';
+            $btn .= '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-primary btn-xs mr-1" title="Ver detalle"><i class="fa fa-eye"></i></button>';
+            
+            if (auth()->user()->id == 49) {
+                $btn .= '<button type="button" onclick="abrirProcesos(' . $value->id . ')" class="btn btn-info btn-xs mr-1" title="Procesar"><i class="fa fa-cogs"></i></button>';
+            }
             if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') ||  in_array(session('perfil_administrador_id'), [3, 8, 9, 10, 11])) {
                 $btn .= '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" id="eliminar' . $value->id . '"><i class="fa fa-trash"></i> </button>&nbsp;';
-            }
-            $btn .= '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> </button>&nbsp;';
-            if (auth()->user()->id == 49) {
-                $btn .= '<button type="button" onclick="procesarCubo(' . $value->id . ')" class="btn btn-info btn-xs"> <i class="fa fa-cube"></i> </button>&nbsp;';
             }
 
             $data[] = array(
@@ -389,7 +387,7 @@ class ImporMatriculaGeneralController extends Controller
 
     public function ListaImportada($importacion_id)
     {
-        $data = ImporMatriculaGeneral::where('importacion_id', $importacion_id)->get();
+        $data = ImporMatriculaRepositorio::Listar_Por_Importacion_id($importacion_id);
         return DataTables::of($data)->make(true);
     }
 
@@ -423,14 +421,64 @@ class ImporMatriculaGeneralController extends Controller
         //return Excel::download(new ImporPadronSiagieExport, $name);
     }
 
-    public function procesarCubo(Request $request)
+    public function procesarBase($importacion_id)
     {
-        $importacion_id = $request->input('importacion_id');
         try {
-            DB::statement('CALL edu_pa_procesar_cubo_matricula(?)', [$importacion_id]);
-            return response()->json(['status' => 200, 'message' => 'Cubo procesado exitosamente.']);
-        } catch (\Exception $e) {
-            return response()->json(['status' => 400, 'message' => 'Error al procesar el cubo: ' . $e->getMessage()], 400);
+            $importacion = Importacion::find($importacion_id);
+            if (!$importacion) {
+                return response()->json(['status' => false, 'msg' => 'Importación no encontrada'], 404);
+            }
+
+            $matricula = MatriculaGeneral::where('importacion_id', $importacion_id)->first();
+            if (!$matricula) {
+                return response()->json(['status' => false, 'msg' => 'Matrícula no encontrada'], 404);
+            }
+
+            DB::select('call edu_pa_procesarImporMatriculaGeneral(?,?,?)', [$importacion->id, $matricula->id, date('Y-m-d', strtotime($importacion->fechaActualizacion))]);
+            return response()->json(['status' => true, 'msg' => 'Base de matrícula procesada correctamente.']);
+        } catch (Exception $e) {
+            return response()->json(['status' => false, 'msg' => 'Error al procesar base de matrícula: ' . $e->getMessage()], 500);
         }
+    }
+
+    public function procesarCubo($importacion_id)
+    {
+        try {
+            DB::select('call edu_pa_procesar_cubo_matricula(?)', [$importacion_id]);
+            return response()->json(['status' => true, 'msg' => 'Cubo de matrícula procesado correctamente.']);
+        } catch (Exception $e) {
+            return response()->json(['status' => false, 'msg' => 'Error al procesar cubo de matrícula: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function verificarBase($importacion_id)
+    {
+        $matricula = MatriculaGeneral::where('importacion_id', $importacion_id)->first();
+        if (!$matricula) {
+            return response()->json([
+                'status' => true,
+                'msg' => 'Sin base generada aún.',
+                'base' => 0,
+                'detalle' => 0,
+            ]);
+        }
+        $detalle = MatriculaGeneralDetalle::where('matriculageneral_id', $matricula->id)->count();
+        return response()->json([
+            'status' => true,
+            'msg' => 'Conteo obtenido.',
+            'base' => 1,
+            'detalle' => $detalle,
+        ]);
+    }
+
+    public function verificarCubo($importacion_id)
+    {
+        $count = DB::table('edu_cubo_matricula')->where('importacion_id', $importacion_id)->count();
+        
+        return response()->json([
+            'status' => true,
+            'msg' => 'Conteo obtenido.',
+            'total' => $count,
+        ]);
     }
 }

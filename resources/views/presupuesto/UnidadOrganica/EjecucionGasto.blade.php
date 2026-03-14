@@ -238,12 +238,11 @@
     <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.scroller.min.js"></script>
 
     {{-- highcharts --}}
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/data.js"></script>
-    <script src="https://code.highcharts.com/modules/drilldown.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/data.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/drilldown.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
 
     {{-- <!-- MDB -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.js"></script> --}}
@@ -253,6 +252,14 @@
         var table_principal;
 
         $(document).ready(function() {
+            Highcharts.setOptions({
+                lang: {
+                    thousandsSep: ","
+                },
+                accessibility: {
+                    enabled: false
+                }
+            });
             $("input").change(function() {
                 $(this).parent().removeClass('has-error');
                 $(this).next().empty();
@@ -330,7 +337,7 @@
                         '',
                         'PIM Y DEVENGADO ACUMULADO Y EJECUCIÓN MENSUAL');
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");
                     console.log(jqXHR);
                 },

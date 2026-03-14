@@ -23,9 +23,11 @@
                                 onclick="javascript:window.open('https://1drv.ms/x/s!AgffhPHh-Qgo0AEnoULq3wbXGnu-?e=d81hlQ','_blank');"><i
                                     class="mdi mdi-file-pdf-outline"></i>
                                 Manual</button>
-                            <button type="button" class="btn btn-primary btn-xs waves-effect waves-light"
+                            {{-- <button type="button" class="btn btn-info btn-xs" onclick="ejecutarETL()"><i
+                                    class="fa fa-download"></i> Descargar MEF</button> --}}
+                            {{-- <button type="button" class="btn btn-primary btn-xs waves-effect waves-light"
                                 data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static"
-                                data-keyboard="false"><i class="ion ion-md-cloud-upload"></i> Importar</button>
+                                data-keyboard="false"><i class="ion ion-md-cloud-upload"></i> Importar</button> --}}
                         </div>
                         <h3 class="card-title">HISTORIAL DE IMPORTACION </h3>
                     </div>
@@ -147,7 +149,7 @@
             </div>
         </div><!-- /.modal -->
 
-        <!-- Bootstrap modal -->
+        <!-- Modal para ver detalle importado -->
         <div id="modal-siagie-matricula" class="modal fade centrarmodal" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
@@ -211,6 +213,117 @@
         </div><!-- /.modal -->
         <!-- End Bootstrap modal -->
 
+        <!-- Modal para procesar importación -->
+        <div id="modal-procesar-ingresos" class="modal fade centrarmodal" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Procesar Importación de Ingresos</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="proc_importacion_id" value="">
+                        <p class="mb-3">
+                            Seleccione el proceso que desea ejecutar para la importación seleccionada.
+                        </p>
+                        <div class="text-center">
+                            <div class="d-inline-block mr-2">
+                                <button type="button" id="btn-proc-base" class="btn btn-primary btn-sm">
+                                    <i class="fa fa-database"></i> Procesar Base de Ingresos
+                                </button>
+                                <button type="button" id="btn-proc-base-ojito"
+                                    class="btn btn-outline-primary btn-sm ml-1" title="Ver estado">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="d-inline-block">
+                                <button type="button" id="btn-proc-cubo" class="btn btn-success btn-sm">
+                                    <i class="fa fa-cube"></i> Procesar Cubo de Ingresos
+                                </button>
+                                <button type="button" id="btn-proc-cubo-ojito"
+                                    class="btn btn-outline-success btn-sm ml-1" title="Ver estado">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal para actualizar importación -->
+        <div id="modal-actualizar" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Actualizar Archivo de Ingresos</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="cmxform form-horizontal tasi-form update_file">
+                            @csrf
+                            <input type="hidden" id="upd_importacion_id" name="importacion_id" value="">
+
+                            <div class="alert alert-warning">
+                                <i class="fa fa-exclamation-triangle"></i>
+                                <strong>Advertencia:</strong> Esta acción eliminará los registros de ingresos asociados a
+                                esta importación y cargará los nuevos datos del archivo Excel seleccionado.
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-form-label">Fecha Versión</label>
+                                <div class="">
+                                    <input type="date" class="form-control" name="fechaActualizacion"
+                                        id="fechaActualizacion_upd" placeholder="Ingrese fecha actualizacion" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-form-label">Archivo (Excel)</label>
+                                <div class="input-group">
+                                    <input id="file_upd" name="file" class="form-control d-none" type="file"
+                                        accept=".xls,.xlsx" required>
+                                    <input id="nfile_upd" name="nfile" class="form-control" type="text"
+                                        placeholder="Seleccione Archivo" readonly>
+                                    <span class="input-group-append">
+                                        <label for="file_upd" class="btn btn-primary btn-file-documento">
+                                            <i class="fas fa-cloud-upload-alt"></i>
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row mt-0 mb-0">
+                                <div class="col-md-12">
+                                    <div class="pwrapper_upd m-0" style="display:none;">
+                                        <div class="progress progress_wrapper">
+                                            <div class="progress-bar progress-bar-striped bg-info progress-bar-animated progress_bar_upd"
+                                                role="progressbar" style="width:0%">0%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-lg-12 text-center">
+                                    <button class="btn btn-warning waves-effect waves-light" type="submit">
+                                        <i class="fa fa-sync"></i> Actualizar
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
     </div>
 @endsection
@@ -234,6 +347,29 @@
                 var fileName = $(this).val().split("\\").pop();
                 $('#nfile').val(fileName);
 
+            });
+
+            $('#btn-proc-base').on('click', function() {
+                ejecutarProceso('base');
+            });
+
+            $('#btn-proc-cubo').on('click', function() {
+                ejecutarProceso('cubo');
+            });
+
+            $('#btn-proc-base-ojito').on('click', function() {
+                verificarEstado('base');
+            });
+
+            $('#btn-proc-cubo-ojito').on('click', function() {
+                verificarEstado('cubo');
+            });
+
+            $('.update_file').on('submit', uploadUpdate);
+
+            $("#file_upd").on("change", function() {
+                var fileName = $(this).val().split("\\").pop();
+                $('#nfile_upd').val(fileName);
             });
 
         });
@@ -308,11 +444,244 @@
             });
         }
 
+        function abrirProcesos(id) {
+            $('#proc_importacion_id').val(id);
+            $('#modal-procesar-ingresos').modal('show');
+        }
+
+        function ejecutarProceso(tipo) {
+            var importacion_id = $('#proc_importacion_id').val();
+            if (!importacion_id) return;
+
+            var url = tipo === 'base' ?
+                "{{ route('imporingresos.procesar.base', 'id_placeholder') }}" :
+                "{{ route('imporingresos.procesar.cubo', 'id_placeholder') }}";
+            url = url.replace('id_placeholder', importacion_id);
+
+            Swal.fire({
+                title: '¿Está seguro?',
+                text: tipo === 'base' ?
+                    'Se procesará la base de ingresos (normalización).' :
+                    'Se procesará el cubo de ingresos.',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, procesar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (!result.value) return;
+
+                Swal.fire({
+                    title: 'Procesando...',
+                    text: 'Por favor espere.',
+                    allowOutsideClick: false,
+                    onBeforeOpen: () => {
+                        Swal.showLoading()
+                    }
+                });
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    dataType: 'JSON',
+                    headers: {
+                        'X-CSRF-TOKEN': $('input[name=_token]').val()
+                    },
+                    success: function(res) {
+                        Swal.fire(
+                            res.status ? '¡Éxito!' : 'Error',
+                            res.msg,
+                            res.status ? 'success' : 'error'
+                        );
+                        if (res.status) {
+                            table_principal.ajax.reload();
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        Swal.fire(
+                            'Error',
+                            'Ocurrió un error al procesar la importación.',
+                            'error'
+                        );
+                    }
+                });
+            });
+        }
+
+        function verificarEstado(tipo) {
+            var importacion_id = $('#proc_importacion_id').val();
+            if (!importacion_id) return;
+
+            var url = tipo === 'base' ?
+                "{{ route('imporingresos.verificar.base', 'id_placeholder') }}" :
+                "{{ route('imporingresos.verificar.cubo', 'id_placeholder') }}";
+            url = url.replace('id_placeholder', importacion_id);
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'JSON',
+                success: function(res) {
+                    if (tipo === 'base') {
+                        var html = `
+                            <div class="text-left">
+                                <p class="mb-1"><strong>Resumen del proceso:</strong></p>
+                                <p class="mb-1">Base generada: ${res.base ? 'Sí' : 'No'}</p>
+                                <p class="mb-1">Registros de detalle: ${res.detalle}</p>
+                                <p class="mb-1">Año de referencia: ${res.anio ?? '-'}</p>
+                            </div>`;
+                        Swal.fire({
+                            title: 'Estado del proceso de Base de Ingresos',
+                            html: html,
+                            type: 'info',
+                            showCancelButton: true,
+                            confirmButtonText: 'Descargar registros',
+                            cancelButtonText: 'Cerrar',
+                            confirmButtonColor: '#3085d6'
+                        }).then((result) => {
+                            if (result.value && res.detalle > 0) {
+                                var urlDesc =
+                                    "{{ route('imporingresos.descargar.base', 'id_placeholder') }}";
+                                urlDesc = urlDesc.replace('id_placeholder', importacion_id);
+                                window.open(urlDesc, '_blank');
+                            }
+                        });
+                    } else {
+                        var filas = '';
+                        if (res.anios && res.anios.length) {
+                            res.anios.forEach(function(x) {
+                                filas +=
+                                    `<tr><td>${x.anio}</td><td class="text-right">${x.registros}</td></tr>`;
+                            });
+                        }
+                        var html = `
+                            <div class="text-left">
+                                <p class="mb-2"><strong>Total de registros consolidados:</strong> ${res.total}</p>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-bordered">
+                                        <thead><tr><th>Año</th><th class="text-right">Registros</th></tr></thead>
+                                        <tbody>${filas}</tbody>
+                                    </table>
+                                </div>
+                            </div>`;
+                        Swal.fire({
+                            title: 'Estado del proceso de Cubo de Ingresos',
+                            html: html,
+                            type: 'info',
+                            showCancelButton: true,
+                            confirmButtonText: 'Descargar registros',
+                            cancelButtonText: 'Cerrar',
+                            confirmButtonColor: '#28a745'
+                        }).then((result) => {
+                            if (result.value && res.total > 0) {
+                                var urlDesc =
+                                    "{{ route('imporingresos.descargar.cubo', 'id_placeholder') }}";
+                                urlDesc = urlDesc.replace('id_placeholder', importacion_id);
+                                window.open(urlDesc, '_blank');
+                            }
+                        });
+                    }
+                },
+                error: function() {
+                    Swal.fire('Error', 'No se pudo obtener el estado.', 'error');
+                }
+            });
+        }
+
+        function abrirModalActualizar(id, fecha) {
+            $('#upd_importacion_id').val(id);
+            if (fecha) {
+                $('#fechaActualizacion_upd').val(fecha);
+            }
+            $('#modal-actualizar').modal('show');
+        }
+
+        function uploadUpdate(e) {
+            e.preventDefault();
+            let form = $(this),
+                wrapper = $('.pwrapper_upd'),
+                progress_bar = $('.progress_bar_upd'),
+                data = new FormData(form.get(0));
+
+            let id = $('#upd_importacion_id').val();
+            let url = "{{ route('imporingresos.actualizar', 'id_placeholder') }}".replace('id_placeholder', id);
+
+            progress_bar.removeClass('bg-success bg-danger').addClass('bg-info');
+            progress_bar.css('width', '0%');
+            progress_bar.html('Preparando...');
+
+            wrapper.fadeIn();
+
+            $.ajax({
+                xhr: function() {
+                    let xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener("progress", function(e) {
+                        if (e.lengthComputable) {
+                            let percentComplete = Math.floor((e.loaded / e.total) * 100);
+                            progress_bar.css('width', percentComplete + '%');
+                            progress_bar.html(percentComplete + '%');
+                        }
+                    }, false);
+                    return xhr;
+                },
+                type: "POST",
+                url: url,
+                dataType: "json",
+                contentType: false,
+                processData: false,
+                cache: false,
+                data: data,
+                beforeSend: () => {
+                    $('button', form).attr('disabled', true);
+                }
+            }).done(res => {
+                if (res.status === 200) {
+                    progress_bar.removeClass('bg-info').addClass('bg-success');
+                    progress_bar.html('Listo!');
+                    $('#modal-actualizar').modal('hide');
+                    Swal.fire({
+                        title: "¡Actualización Exitosa!",
+                        type: "success",
+                        confirmButtonColor: "#348cd4"
+                    });
+                    form.trigger('reset');
+                    setTimeout(() => {
+                        wrapper.fadeOut();
+                        progress_bar.removeClass('bg-success bg-danger').addClass('bg-info');
+                        progress_bar.css('width', '0%');
+                        table_principal.ajax.reload();
+                    }, 1500);
+                } else {
+                    progress_bar.css('width', '100%');
+                    progress_bar.html(res.msg);
+                    Swal.fire({
+                        title: "Error",
+                        text: res.msg,
+                        type: "error"
+                    });
+                }
+            }).fail(err => {
+                progress_bar.removeClass('bg-success bg-info').addClass('bg-danger');
+                progress_bar.html('Error en la carga');
+                let msg = (err.responseJSON && err.responseJSON.msg) ? err.responseJSON.msg :
+                    "Hubo un error al procesar la solicitud";
+                Swal.fire({
+                    title: "Error",
+                    text: msg,
+                    type: "error"
+                });
+            }).always(() => {
+                $('button', form).attr('disabled', false);
+            });
+        }
+
         function geteliminar(id) {
             bootbox.confirm("Seguro desea Eliminar este IMPORTACION?", function(result) {
                 if (result === true) {
                     $.ajax({
-                        url: "{{ url('/') }}/IMPORINGRESO/eliminar/" + id,
+                        url: "{{ route('imporingresos.eliminar', 'id_placeholder') }}".replace(
+                            'id_placeholder', id),
                         type: "GET",
                         dataType: "JSON",
                         beforeSend: function() {
@@ -335,7 +704,7 @@
         };
 
         function monitor(id) {
-            var url = "{{ route('imporgastos.listarimportados', 55555) }}";
+            var url = "{{ route('imporingresos.listarimportados', 55555) }}";
             url = url.replace('55555', id);
             $('#siagie-matricula').DataTable({
                     "processing": true,
@@ -402,78 +771,6 @@
                             name: 'unidad_ejecutora'
                         },
                         {
-                            data: 'sec_func',
-                            name: 'sec_func'
-                        },
-                        {
-                            data: 'cod_cat_pres',
-                            name: 'cod_cat_pres'
-                        },
-                        {
-                            data: 'categoria_presupuestal',
-                            name: 'categoria_presupuestal'
-                        },
-                        {
-                            data: 'tipo_prod_proy',
-                            name: 'tipo_prod_proy'
-                        },
-                        {
-                            data: 'cod_prod_proy',
-                            name: 'cod_prod_proy'
-                        },
-                        {
-                            data: 'producto_proyecto',
-                            name: 'producto_proyecto'
-                        },
-                        {
-                            data: 'tipo_act_acc_obra',
-                            name: 'tipo_act_acc_obra'
-                        },
-                        {
-                            data: 'cod_act_acc_obra',
-                            name: 'cod_act_acc_obra'
-                        },
-                        {
-                            data: 'actividad_accion_obra',
-                            name: 'actividad_accion_obra'
-                        },
-                        {
-                            data: 'cod_fun',
-                            name: 'cod_fun'
-                        },
-                        {
-                            data: 'funcion',
-                            name: 'funcion'
-                        },
-                        {
-                            data: 'cod_div_fun',
-                            name: 'cod_div_fun'
-                        },
-                        {
-                            data: 'division_funcional',
-                            name: 'division_funcional'
-                        },
-                        {
-                            data: 'cod_gru_fun',
-                            name: 'cod_gru_fun'
-                        },
-                        {
-                            data: 'grupo_funcional',
-                            name: 'grupo_funcional'
-                        },
-                        {
-                            data: 'meta',
-                            name: 'meta'
-                        },
-                        {
-                            data: 'cod_fina',
-                            name: 'cod_fina'
-                        },
-                        {
-                            data: 'finalidad',
-                            name: 'finalidad'
-                        },
-                        {
                             data: 'cod_fue_fin',
                             name: 'cod_fue_fin'
                         },
@@ -496,14 +793,6 @@
                         {
                             data: 'tipo_recurso',
                             name: 'tipo_recurso'
-                        },
-                        {
-                            data: 'cod_cat_gas',
-                            name: 'cod_cat_gas'
-                        },
-                        {
-                            data: 'categoria_gasto',
-                            name: 'categoria_gasto'
                         },
                         {
                             data: 'cod_tipo_trans',
@@ -558,24 +847,8 @@
                             name: 'pim'
                         },
                         {
-                            data: 'certificado',
-                            name: 'certificado'
-                        },
-                        {
-                            data: 'compromiso_anual',
-                            name: 'compromiso_anual'
-                        },
-                        {
-                            data: 'compromiso_mensual',
-                            name: 'compromiso_mensual'
-                        },
-                        {
-                            data: 'devengado',
-                            name: 'devengado'
-                        },
-                        {
-                            data: 'girado',
-                            name: 'girado'
+                            data: 'recaudado',
+                            name: 'recaudado'
                         },
 
                     ],
@@ -585,6 +858,59 @@
 
             $('#modal-siagie-matricula').modal('show');
             $('#modal-siagie-matricula .modal-title').text('Importado');
+        }
+
+        function ejecutarETL() {
+            Swal.fire({
+                title: '¿Está seguro?',
+                text: "Se iniciará la descarga de datos desde el MEF. Esto puede tomar unos minutos.",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, ejecutar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.value) {
+                    Swal.fire({
+                        title: 'Ejecutando...',
+                        text: 'Por favor espere.',
+                        allowOutsideClick: false,
+                        onBeforeOpen: () => {
+                            Swal.showLoading()
+                        }
+                    });
+
+                    $.ajax({
+                        url: "{{ route('imporingresos.ejecutar.etl') }}",
+                        type: "GET",
+                        dataType: "JSON",
+                        success: function(res) {
+                            if (res.status) {
+                                Swal.fire(
+                                    '¡Éxito!',
+                                    res.msg,
+                                    'success'
+                                );
+                                table_principal.ajax.reload();
+                            } else {
+                                Swal.fire(
+                                    'Error',
+                                    res.msg,
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            Swal.fire(
+                                'Error',
+                                'Ocurrió un error al intentar conectar con el servidor.',
+                                'error'
+                            );
+                        }
+                    });
+                }
+            })
         }
     </script>
     <script src="{{ asset('/') }}public/assets/libs/jquery-validation/jquery.validate.min.js"></script>

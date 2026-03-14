@@ -1,6 +1,6 @@
 @extends('layouts.main', ['titlePage' => 'INDICADOR'])
 @section('css')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.css" />
     <style>
         .chart-container {
             position: relative;
@@ -74,6 +74,10 @@
 @endsection
 
 @section('content')
+    @php
+        $aniomax = $anios->max('anio');
+        $aniomin = $anios->min('anio');
+    @endphp
     <div class="row">
         <div class="col-lg-12 col-md-12">
             <div class="card ">
@@ -96,13 +100,15 @@
                 <div class="card-body pb-0">
                     <div class="row">
                         <div class="col-lg-6 col-md-4 col-sm-4">
-                            <h4 class="page-title font-12">Fuente: INEI - MINSA</h4>
+                            <h4 class="page-title font-12">Fuente: INEI - MINSA 
+                                <span id="anio_seleccionado">{{ $aniomax }}</span></h4>
+                            </h4>
                         </div>
                         <div class="col-lg-2 col-md-1 col-sm-1  ">
                             <div class="custom-select-container">
                                 <label for="vanio">AÑO</label>
                                 <select id="vanio" name="vanio" class="form-control form-control-sm"
-                                    onchange="panelGraficas('anal1');cargarCards();">
+                                    onchange="panelGraficas('anal1');cargarCards();$('#anio_seleccionado').html(this.value);">
                                     @foreach ($anios as $item)
                                         <option value="{{ $item->anio }}"
                                             {{ $item->anio == date('Y') ? 'selected' : '' }}>
@@ -367,7 +373,6 @@
 @section('js')
     <script type="text/javascript">
         var distrito_select = 0;
-        // var distrito_select = 0;
         var anal1;
         var anal2;
         var anal3;
@@ -387,31 +392,9 @@
             cargar_distritos();
             mapData = otros;
 
-            // mapData = Highcharts.maps["countries/pe/pe-all"];
-            // console.log(mapData.features.length);
             mapData.features.forEach((element, key) => {
                 console.log('["' + element.properties['hc-key'] + '", ' + (key + 1) + '],');
-                // console.log(element.properties['hc-key'] +' - '+element.properties['name']+ ': ' + element.properties['fips']);
-            });
-
-            ///Highcharts.maps['countries/pe/pe-all'];
-            // console.log(otros);
-            // console.log(provincia);
-            // mapData.features.forEach(function(feature) {
-            //     if (feature.properties['fips'] === "PE21") { // Condición para Puno
-            //         feature.properties['woe-name'] = "Puno";
-            //         feature.properties['name'] = "Puno";
-            //         feature.properties['alt-name'] = null;
-            //     }
-
-            //     if (feature.properties['hc-key'] === "pe-3341") { // Condición para Callao
-            //         feature.properties['fips'] = "PE07";
-            //     }
-
-            //     if (feature.properties['hc-key'] === "pe-145") { // Condición para Lima Provincia
-            //     }
-            //     // Puedes agregar más condiciones para otras ciudades si es necesario
-            // });
+            }); 
             panelGraficas('anal1');
             cargarCards();
         });
@@ -445,7 +428,9 @@
                         $('#card3').html('<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
                         $('#card4').html('<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
                     } else if (div == "anal1") {
-                        $('#' + div).html('<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                        if ($('#vprovincia').val() == 0) {
+                            $('#' + div).html('<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
+                        }
                     } else if (div == "anal2") {
                         $('#' + div).html('<span class="spinner"><i class="fa fa-spinner fa-spin"></i></span>');
                     } else if (div == "anal3") {
@@ -522,16 +507,16 @@
                             mapa_selected + 'Pirámide poblacional, según sexo  y grupo etario', '');
                     } else if (div == "anal3") {
                         anal3 = gColumnx(div, data.info, '',
-                            'Población estimada y proyectada, periodo 2019-2024', 'Año')
+                            'Población estimada y proyectada, periodo {{ $aniomin }}-{{ $aniomax }}', 'Año')
                     } else if (div == "anal4") {
                         anal4 = gPie2(div, data.info, '',
                             'Porcentaje de la Población Estimada, según etapa de vida');
                     } else if (div == "anal5") {
                         anal5 = gColumnx(div, data.info, '',
-                            'Población estimada y proyectada, periodo 2019-2024', 'Año')
+                            'Población estimada y proyectada, periodo {{ $aniomin }}-{{ $aniomax }}', 'Año')
                     } else if (div == "anal6") {
                         anal6 = gColumnx(div, data.info, '',
-                            'Población estimada y proyectada, periodo 2019-2024', 'Etapa Vida')
+                            'Población estimada y proyectada, periodo {{ $aniomin }}-{{ $aniomax }}', 'Etapa Vida')
                     } else if (div == "tabla1") {
                         $('#vtabla1').html(data.excel);
                         // $('.vtabla1-fuente').html('Fuente: ' + data.reg.fuente);
@@ -651,93 +636,9 @@
                 $('#vanio').val() + "/" + $('#vprovincia').val() + "/" + $('#vdistrito').val() + "/0");
         }
 
-        // function descargar1() {
-        //     window.open("{{ url('/') }}/MatriculaGeneral/EBR/Excel/tabla1/" + $('#anio').val() + "/" + $('#ugel')
-        //         .val() + "/" + $('#gestion').val() + "/" + $('#area').val() + "/0");
-        // }
-
-        // function descargar2() {
-        //     window.open("{{ url('/') }}/MatriculaGeneral/EBR/Excel/tabla2/" + $('#anio').val() + "/" + $('#ugel')
-        //         .val() + "/" + $('#gestion').val() + "/" + $('#area').val() + "/" + provincia_select);
-        // }
-
-        // function descargar3() {
-        //     window.open("{{ url('/') }}/MatriculaGeneral/EBR/Excel/tabla3/" + $('#anio').val() + "/" + $('#ugel')
-        //         .val() + "/" + $('#gestion').val() + "/" + $('#area').val() + "/" + distrito_select);
-        // }
-
         function verpdf(id) {
             window.open("{{ route('mantenimiento.indicadorgeneral.exportar.pdf', '') }}/" + id);
         };
-
-        function gLinea(div, data, titulo, subtitulo) {
-            return Highcharts.chart(div, {
-                chart: {
-                    type: 'line',
-                    // borderRadius: 10,
-                    // borderWidth: 1,
-                    // borderColor: '#000'
-                },
-                title: {
-                    text: titulo
-                },
-                subtitle: {
-                    text: subtitulo
-                },
-                xAxis: {
-                    categories: data.categoria,
-                    labels: {
-                        style: {
-                            fontSize: '10px' // Ajusta el tamaño de la fuente
-                        }
-                    }
-                },
-                yAxis: {
-                    title: {
-                        text: ''
-                    },
-                    // max: 8,
-                    // tickInterval: 1,
-                    labels: {
-                        style: {
-                            fontSize: '10px' // Ajusta el tamaño de la fuente
-                        }
-                    }
-                },
-                series: [{
-                    name: 'Población',
-                    data: data.serie,
-                    marker: {
-                        symbol: 'circle',
-                        radius: 4
-                    },
-                    color: '#d2232a'
-                }],
-                plotOptions: {
-                    series: {
-                        dataLabels: {
-                            enabled: true,
-                            // format: '{point.y:.1f} mil',
-                            style: {
-                                color: '#000'
-                            },
-                            align: 'right',
-                            crop: false,
-                            overflow: 'none'
-                        }
-                    }
-                },
-                tooltip: {
-                    // pointFormat: '{series.name}: <b>{point.y:.1f} mil</b>'
-                },
-                legend: {
-                    enabled: false // Ocultar la leyenda
-                },
-                credits: {
-                    enabled: false
-                }
-            });
-        }
 
         function gbar2(div, data, titulo, subtitulo, tituloserie) {
             return Highcharts.chart(div, {
@@ -807,118 +708,13 @@
                                 textOutline: 'none' // Elimina el contorno del texto
                             }
                         }
-
-                        // dataLabels: {
-                        //     enabled: true,
-                        //     formatter: function() {
-                        //         let point = this.point;
-                        //         let value = Math.abs(this.y);
-                        //         let shapeArgs = point.shapeArgs;
-                        //         let barWidth = shapeArgs.width; // Ancho de la barra
-                        //         let dataLabelWidth = this.series.chart.renderer.fontMetrics().h * (value
-                        //             .toString().length * 0.6); // Ancho estimado del texto de la etiqueta
-
-                        //         // Si el ancho del texto es mayor al ancho de la barra, lo posicionamos afuera
-                        //         if (dataLabelWidth > barWidth) {
-                        //             this.align = 'right';
-                        //             this.x = this.series.options.stacking === 'normal' ? 5 : 10;
-                        //         } else {
-                        //             this.align = 'center';
-                        //             this.x = 0;
-                        //         }
-
-                        //         return Highcharts.numberFormat(value, 0);
-                        //     },
-                        //     inside: true, // Se coloca dentro por defecto
-                        //     overflow: 'none', // No permitir que sobresalga fuera del gráfico
-                        //     crop: false, // Evita que las etiquetas se recorten
-                        //     style: {
-                        //         color: 'black',
-                        //         textOutline: 'none'
-                        //     }
-                        // }
-
-                        // dataLabels: {
-                        //     enabled: true,
-                        //     formatter: function() {
-                        //         let point = this.point;
-                        //         let value = Math.abs(this.y);
-                        //         let barWidth = point.shapeArgs.width; // Ancho de la barra
-
-                        //         // Crear un SVG temporary para calcular el ancho del texto
-                        //         let svgText = this.series.chart.renderer.text(
-                        //             Highcharts.numberFormat(value, 0),
-                        //             0,
-                        //             0
-                        //         ).add(this.series.group);
-
-                        //         let textWidth = svgText.getBBox().width; // Obtener el ancho del texto
-                        //         svgText.destroy(); // Eliminar el texto temporal
-
-                        //         // Verificar si el ancho del texto es mayor al ancho de la barra
-                        //         if (textWidth > barWidth) {
-                        //             this.align = 'right';
-                        //             this.x = this.series.options.stacking === 'normal' ? 5 : 10;
-                        //         } else {
-                        //             this.align = 'center';
-                        //             this.x = 0;
-                        //         }
-
-                        //         return Highcharts.numberFormat(value, 0);
-                        //     },
-                        //     inside: true, // Se coloca dentro por defecto
-                        //     overflow: 'none', // No permitir que sobresalga fuera del gráfico
-                        //     crop: false, // Evita que las etiquetas se recorten
-                        //     style: {
-                        //         color: 'black',
-                        //         textOutline: 'none'
-                        //     }
-                        // }
-
-                        // dataLabels: {
-                        //     enabled: true,
-                        //     formatter: function() {
-                        //         let point = this.point;
-                        //         let value = Math.abs(this.y);
-                        //         let barWidth = point.shapeArgs.width;
-
-                        //         let svgText = this.series.chart.renderer.text(
-                        //             Highcharts.numberFormat(value, 0),
-                        //             0,
-                        //             0
-                        //         ).add(this.series.group);
-
-                        //         let textWidth = svgText.getBBox().width;
-                        //         svgText.destroy();
-
-                        //         if (textWidth > barWidth) {
-                        //             this.align = 'right';
-                        //             this.x = this.series.options.stacking === 'normal' ? 5 : 10;
-                        //         } else {
-                        //             this.align = 'center';
-                        //             this.x = 0;
-                        //         }
-
-                        //         return Highcharts.numberFormat(value, 0);
-                        //     },
-                        //     inside: true,
-                        //     overflow: 'none',
-                        //     crop: false,
-                        //     style: {
-                        //         color: 'black',
-                        //         textOutline: 'none'
-                        //     }
-                        // }
+ 
                     }
                 },
                 tooltip: {
-                    shared: true, // Muestra los valores de todas las series en el mismo tooltip
-                    // formatter: function() {
-                    //     return '<b>' + this.series.name + ', edad ' + this.point.category + '</b><br/>' +
-                    //         'Población: ' + Highcharts.numberFormat(Math.abs(this.point.y), 0);
-                    // },
+                    shared: true, 
                     formatter: function() {
-                        let tooltipText = '<b>Grupo Etéreo:' + this.x +
+                        let tooltipText = '<b>Grupo Etario: ' + this.points[0].key +
                             '</b><br/>'; // Muestra la categoría (edad)
                         this.points.forEach(function(point) {
                             tooltipText += point.series.name + ': ' + Highcharts.numberFormat(Math.abs(
@@ -941,293 +737,8 @@
                     enabled: false
                 }
             });
-        }
-
-        function gSimpleColumn(div, datax, titulo, subtitulo, tituloserie) {
-
-            Highcharts.chart(div, {
-                chart: {
-                    type: 'column',
-                },
-                title: {
-                    enabled: false,
-                    text: titulo,
-                },
-                subtitle: {
-                    enabled: false,
-                    //text: subtitulo,
-                },
-                xAxis: {
-                    type: 'category',
-                },
-                yAxis: {
-                    /* max: 100, */
-                    title: {
-                        enabled: false,
-                        text: 'Porcentaje',
-                    }
-                },
-                /* colors: [
-                    '#8085e9',
-                    '#2b908f',
-                ], */
-                series: [{
-                    showInLegend: tituloserie != '',
-                    name: tituloserie,
-                    label: {
-                        enabled: false
-                    },
-                    colorByPoint: false,
-                    data: datax,
-                }],
-                tooltip: {
-                    pointFormat: '<span style="color:{point.color}">\u25CF</span> Hay: <b>{point.y}</b><br/>',
-                    shared: true
-                },
-                plotOptions: {
-                    series: {
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                        },
-                    }
-                },
-                exporting: {
-                    enabled: false
-                },
-                credits: false,
-            });
-        }
-
-        function gPie(div, datos, titulo, subtitulo, tituloserie) {
-            const colors = ["#5eb9aa", "#f5bd22", "#e65310"];
-            Highcharts.chart(div, {
-                chart: {
-                    plotBackgroundColor: null,
-                    plotBorderWidth: null,
-                    plotShadow: false,
-                    type: 'pie'
-                },
-                title: {
-                    enabled: false,
-                    text: titulo, //'Browser market shares in January, 2018'
-                },
-                subtitle: {
-                    enabled: true,
-                    text: subtitulo,
-                    style: {
-                        fontSize: '11px',
-                    }
-                },
-                tooltip: {
-                    //pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
-                    pointFormat: '<b>{point.percentage:.1f}% ({point.y:,0f})</b>',
-                },
-                accessibility: {
-                    point: {
-                        valueSuffix: '%'
-                    }
-                },
-                plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        colors,
-                        dataLabels: {
-                            enabled: true,
-                            // distance: -20,
-                            //format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                            //format: '{point.percentage:.1f}% ({point.y})',
-                            format: '{point.y:,0f} ( {point.percentage:.1f}% )',
-                            // format: '{point.percentage:.1f}%',
-                            connectorColor: 'silver'
-                        }
-                    }
-                },
-                series: [{
-                    innerSize: '50%',
-                    showInLegend: true,
-                    //name: 'Share',
-                    data: datos,
-                }],
-                legend: {
-                    itemStyle: {
-                        //color: "#333333",
-                        cursor: "pointer",
-                        fontSize: "10px",
-                        fontWeight: "normal",
-                        textOverflow: "ellipsis"
-                    },
-                },
-                exporting: {
-                    enabled: true
-                },
-                credits: false,
-            });
-        }
-
-        function gPie2(div, serie, titulo, subtitulo) {
-            return Highcharts.chart(div, {
-                chart: {
-                    type: 'pie',
-                    // borderColor: '#CCC', // Borde gris claro
-                    // borderWidth: 2, // Ancho del borde
-                    // plotShadow: true // Sombra alrededor del gráfico
-                },
-                title: {
-                    text: titulo
-                },
-                subtitle: {
-                    text: subtitulo
-                },
-                tooltip: {
-                    // pointFormat: '{series.name}: <b>{point.y:.0f}</b><br>Porcentaje: <b>{point.percentage:.1f}%</b>'
-                    // pointFormatter: function() {return this.series.name + ': <b>' +Highcharts.numberFormat(this.y, 0, ',', '.') +'</b><br>Porcentaje: <b>' +Highcharts.numberFormat(this.percentage, 1, ',', '.') +'%</b>';},
-                    pointFormatter: function() {
-                        return this.series.name + ': <b>' +
-                            Highcharts.numberFormat(this.y, 0) +
-                            '</b><br>Porcentaje: <b>' +
-                            Highcharts.numberFormat(this.percentage, 1) +
-                            '%</b>';
-                    }
-                },
-                plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: true,
-                            format: '{point.name} <br><b>{point.percentage:.1f} %</b>',
-                            style: {
-                                fontWeight: 'bold'
-                            }
-                        },
-                        showInLegend: false
-                    }
-                },
-                series: serie,
-                credits: {
-                    enabled: false,
-                }
-            });
-        }
-
-        function gPie2x(div, serie, titulo, subtitulo) {
-            // const colors = ["#5eb9aa", "#f5bd22", "#e65310"];
-            return Highcharts.chart(div, {
-                chart: {
-                    type: 'pie',
-                    borderColor: '#CCC', // Borde gris claro
-                    borderWidth: 2, // Ancho del borde
-                    plotShadow: true // Sombra alrededor del gráfico
-                },
-                title: {
-                    text: titulo
-                },
-                subtitle: {
-                    text: subtitulo
-                },
-                tooltip: {
-                    pointFormat: '{series.name}: <b>{point.y:.0f}</b><br>Porcentaje: <b>{point.percentage:.1f}%</b>'
-                },
-                plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: true,
-                            format: '{point.name} <br><b>{point.percentage:.1f} %</b>',
-                            style: {
-                                fontWeight: 'bold'
-                            }
-                        },
-                        showInLegend: false
-                    }
-                },
-                series: serie,
-                // [{
-                //     name: 'Porcentaje',
-                //     colorByPoint: true,
-                //     data: [{
-                //         name: 'Adulto',
-                //         y: 20.3,
-                //         color: '#00CED1' // Color del sector (Turquesa)
-                //     }, {
-                //         name: 'Adulto Mayor',
-                //         y: 20.3,
-                //         color: '#FFA500' // Color del sector (Naranja)
-                //     }, {
-                //         name: 'Joven',
-                //         y: 20.3,
-                //         color: '#8A2BE2' // Color del sector (Violeta)
-                //     }, {
-                //         name: 'Adolescente',
-                //         y: 20.3,
-                //         color: '#FF0000' // Color del sector (Rojo)
-                //     }, {
-                //         name: 'Niño',
-                //         y: 15.8,
-                //         color: '#1E90FF' // Color del sector (Azul)
-                //     }]
-                // }]
-                credits: {
-                    enabled: false,
-                }
-            });
-            // Highcharts.chart('anal4', {
-            //     chart: {
-            //         type: 'pie'
-            //     },
-            //     title: {
-            //         text: 'Porcentaje de la Población Estimada, según etapa de vida'
-            //     },
-            //     tooltip: {
-            //         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-            //     },
-            //     plotOptions: {
-            //         pie: {
-            //             allowPointSelect: true,
-            //             cursor: 'pointer',
-            //             dataLabels: {
-            //                 enabled: true,
-            //                 format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-            //                 distance: -50, // Para que los labels estén dentro de la porción del gráfico
-            //                 style: {
-            //                     color: 'white',
-            //                     textOutline: '0px contrast'
-            //                 }
-            //             },
-            //             showInLegend: true
-            //         }
-            //     },
-            //     series: [{
-            //         name: 'Población',
-            //         colorByPoint: true,
-            //         data: [{
-            //             name: 'Niño',
-            //             y: 10,
-            //             color: '#1E90FF' // Azul
-            //         }, {
-            //             name: 'Adolescente',
-            //             y: 13,
-            //             color: '#FF4500' // Rojo
-            //         }, {
-            //             name: 'Joven',
-            //             y: 20,
-            //             color: '#800080' // Morado
-            //         }, {
-            //             name: 'Adulto',
-            //             y: 27,
-            //             color: '#FFD700' // Amarillo
-            //         }, {
-            //             name: 'Adulto Mayor',
-            //             y: 30,
-            //             color: '#40E0D0' // Turquesa
-            //         }]
-            //     }]
-            // });
-        }
-
+        }        
+        
         function gColumnx(div, data, titulo, subtitulo, tooltip) {
             return Highcharts.chart(div, {
                 chart: {
@@ -1263,7 +774,7 @@
                 tooltip: {
                     shared: true, // Muestra los valores de todas las series en el mismo tooltip
                     formatter: function() {
-                        let tooltipText = '<b>' + tooltip + ': ' + this.x +
+                        let tooltipText = '<b>' + tooltip + ': ' + this.points[0].key +
                             '</b><br/>'; // Muestra la categoría (año)
                         this.points.forEach(function(point) {
                             tooltipText += point.series.name + ': ' + Highcharts.numberFormat(Math.abs(
@@ -1318,11 +829,14 @@
                 }
             });
         }
-
-        function gBasicColumn(div, categorias, datos, titulo, subtitulo) {
-            Highcharts.chart(div, {
+        
+        function gPie2(div, serie, titulo, subtitulo) {
+            return Highcharts.chart(div, {
                 chart: {
-                    type: 'column'
+                    type: 'pie',
+                    // borderColor: '#CCC', // Borde gris claro
+                    // borderWidth: 2, // Ancho del borde
+                    // plotShadow: true // Sombra alrededor del gráfico
                 },
                 title: {
                     text: titulo
@@ -1330,764 +844,34 @@
                 subtitle: {
                     text: subtitulo
                 },
-                xAxis: {
-                    categories: categorias,
-                },
-                yAxis: {
-
-                    min: 0,
-                    title: {
-                        text: 'Rainfall (mm)',
-                        enabled: false
-                    }
-                },
-
                 tooltip: {
-                    pointFormat: '<span style="color:{point.color}">\u25CF</span> Hay: <b>{point.y}</b><br/>',
-                    shared: true
-                },
-                plotOptions: {
-                    series: {
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                        },
-                    }
-                },
-                series: datos,
-                credits: false,
-            });
-        }
-
-        function gsemidona(div, valor) {
-            Highcharts.chart(div, {
-                chart: {
-                    plotBackgroundColor: null,
-                    plotBorderWidth: 0,
-                    plotShadow: false,
-                    height: 200,
-                },
-                title: {
-                    text: valor + '%', // 'Browser<br>shares<br>January<br>2022',
-                    align: 'center',
-                    verticalAlign: 'middle',
-                    y: 15, //60,
-                    style: {
-                        //fontWeight: 'bold',
-                        //color: 'orange',
-                        fontSize: '30'
-                    }
-                },
-                tooltip: {
-                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                },
-                accessibility: {
-                    point: {
-                        valueSuffix: '%'
+                    headerFormat: '<span style="font-size: 11px">{point.key}</span><br/>',
+                    pointFormatter: function() {
+                        return this.series.name + ': <b>' +
+                            Highcharts.numberFormat(this.y, 0) +
+                            '</b><br>Porcentaje: <b>' +
+                            Highcharts.numberFormat(this.percentage, 1) +
+                            '%</b>';
                     }
                 },
                 plotOptions: {
                     pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
                         dataLabels: {
                             enabled: true,
-                            distance: -50,
+                            format: '{point.name} <br><b>{point.percentage:.1f} %</b>',
                             style: {
-                                fontWeight: 'bold',
-                                color: 'white'
-                            },
-
-                        },
-                        startAngle: -90,
-                        endAngle: 90,
-                        center: ['50%', '50%'], //['50%', '75%'],
-                        size: '120%',
-                        borderColor: '#98a6ad',
-                        color: '#fff'
-                    }
-                },
-                series: [{
-                    type: 'pie',
-                    name: 'Avance',
-                    innerSize: '65%',
-                    data: [
-                        ['', valor],
-                        //['Edge', 11.97],
-                        //['Firefox', 5.52],
-                        //['Safari', 2.98],
-                        //['Internet Explorer', 1.90],
-                        {
-                            name: '',
-                            y: 100 - valor,
-                            dataLabels: {
-                                enabled: false
-                            }
-                        }
-                    ]
-                }],
-                exporting: {
-                    enabled: false
-                },
-                credits: false
-            });
-        }
-
-        function gLineaBasica(div, data, titulo, subtitulo, titulovetical) {
-            const colors = ["#5eb9aa", "#f5bd22", "#e65310"];
-            Highcharts.chart(div, {
-                title: {
-                    text: titulo
-                },
-                subtitle: {
-                    text: subtitulo,
-                    style: {
-                        fontSize: '11px',
-                    }
-                },
-                yAxis: {
-                    title: {
-                        text: titulovetical
-                    },
-                    min: 0,
-                    labels: {
-                        style: {
-                            fontSize: '10px'
-                        }
-                    }
-                },
-                xAxis: {
-                    categories: data.cat,
-                    /* accessibility: {
-                        rangeDescription: 'Range: 2010 to 2017'
-                    } */
-                    labels: {
-                        style: {
-                            fontSize: '10px'
-                        }
-                    }
-                },
-                /* legend: {
-                    layout: 'vertical',
-                    align: 'right',
-                    verticalAlign: 'middle'
-                }, */
-                plotOptions: {
-                    series: {
-                        dataLabels: {
-                            enabled: true,
-                            style: {
-                                fontSize: '10px',
-                                fontWeight: 'normal',
+                                fontWeight: 'bold'
                             }
                         },
-                        /* label: {
-                            connectorAllowed: false
-                        },
-                        pointStart: 2010 */
+                        showInLegend: false
                     }
                 },
-                series: [{
-                    name: 'Matriculados',
-                    showInLegend: false,
-                    data: data.dat
-                }],
-                responsive: {
-                    rules: [{
-                        condition: {
-                            maxWidth: 500
-                        },
-                        chartOptions: {
-                            legend: {
-                                layout: 'horizontal',
-                                align: 'center',
-                                verticalAlign: 'bottom'
-                            }
-                        }
-                    }]
-                },
-                legend: {
-                    itemStyle: {
-                        //"color": "#333333",
-                        "cursor": "pointer",
-                        "fontSize": "10px",
-                        "fontWeight": "normal",
-                        "textOverflow": "ellipsis"
-                    },
-                },
-                exporting: {
-                    enabled: true,
-                },
-                credits: false,
-
-            });
-        }
-
-        function gLineaMultiple(div, data, titulo, subtitulo, titulovetical) {
-            Highcharts.chart(div, {
-                title: {
-                    text: titulo
-                },
-                subtitle: {
-                    text: subtitulo,
-                    style: {
-                        fontSize: '11px',
-                    }
-                },
-                colors: ["#5eb9aa", "#f5bd22", "#e65310"],
-                yAxis: {
-                    title: {
-                        text: titulovetical
-                    },
-                    min: 0,
-                    labels: {
-                        style: {
-                            fontSize: '10px'
-                        }
-                    }
-                },
-                xAxis: {
-                    categories: data.cat,
-                    accessibility: {
-                        rangeDescription: 'Range: 2010 to 2017'
-                    },
-                    labels: {
-                        style: {
-                            fontSize: '10px'
-                        }
-                    }
-                },
-                /* legend: {
-                    layout: 'vertical',
-                    align: 'right',
-                    verticalAlign: 'middle'
-                }, */
-                plotOptions: {
-                    series: {
-                        dataLabels: {
-                            enabled: true,
-                        },
-                        /* label: {
-                            connectorAllowed: false
-                        },
-                        pointStart: 2010 */
-                    }
-                },
-                series: data.dat,
-                responsive: {
-                    rules: [{
-                        condition: {
-                            maxWidth: 500
-                        },
-                        chartOptions: {
-                            legend: {
-                                layout: 'horizontal',
-                                align: 'center',
-                                verticalAlign: 'bottom'
-                            }
-                        }
-                    }]
-                },
-                tooltip: {
-                    shared: true,
-                },
-                legend: {
-                    itemStyle: {
-                        //"color": "#333333",
-                        "cursor": "pointer",
-                        "fontSize": "10px",
-                        "fontWeight": "normal",
-                        "textOverflow": "ellipsis"
-                    },
-                },
-                credits: false,
-
-            });
-        }
-
-        function gAnidadaColumn(div, categoria, series, titulo, subtitulo, maxBar) {
-            var rango = categoria.length;
-            var posPorcentaje = rango * 2 + 1;
-            var cont = 0;
-            var porMaxBar = maxBar * 0.5;
-            Highcharts.chart(div, {
-                chart: {
-                    zoomType: 'xy',
-                },
-                colors: ['#5eb9aa', '#ef5350', '#f5bd22', '#ef5350'],
-                title: {
-                    text: titulo, //'Browser market shares in January, 2018'
-                },
-                subtitle: {
-                    text: subtitulo,
-                    style: {
-                        fontSize: '11px',
-                    }
-                },
-                xAxis: [{
-                    categories: categoria,
-                    crosshair: true,
-                    labels: {
-                        style: {
-                            fontSize: '10px',
-                        }
-                    }
-                }],
-                yAxis: [{ // Primary yAxis
-                        max: maxBar > 0 ? maxBar + porMaxBar : null,
-                        labels: {
-                            enabled: true,
-                            style: {
-                                //color: Highcharts.getOptions().colors[2],
-                                fontSize: '10px',
-                            }
-                        },
-                        title: {
-                            enabled: false,
-                        },
-                        /* labels: {
-                            //format: '{value}°C',
-                            //style: {
-                            //    color: Highcharts.getOptions().colors[2]
-                            //}
-                        }, */
-                        title: {
-                            text: 'Matriculados',
-                            style: {
-                                //color: Highcharts.getOptions().colors[2],
-                                fontSize: '11px',
-                            },
-                            enabled: false
-                        },
-                        //opposite: true,
-                    }, { // Secondary yAxis
-                        gridLineWidth: 0, //solo indica el tamaño de la linea
-                        labels: {
-                            enabled: false,
-                        },
-                        title: {
-                            enabled: false,
-                        },
-                        /* title: {
-                            //text: 'Rainfall',
-                            text: '%Indicador',
-                            //style: {
-                            //    color: Highcharts.getOptions().colors[0]
-                            //}
-                        }, */
-                        /* labels: {
-                            //format: '{value} mm',
-                            format: '{value} %',
-                            //style: {
-                            //   color: Highcharts.getOptions().colors[0]
-                            //}
-                        }, */
-                        //min: -200,
-                        min: 0,
-                        max: 120,
-                        opposite: true,
-                    },
-                    /* { // Tertiary yAxis
-                        gridLineWidth: 0,
-                        title: {
-                            text: 'Sea-Level Pressure',
-                            style: {
-                                color: Highcharts.getOptions().colors[1]
-                            }
-                        },
-                        labels: {
-                            format: '{value} mb',
-                            style: {
-                                color: Highcharts.getOptions().colors[1]
-                            }
-                        },
-                        opposite: true
-                    } */
-                ],
-                series: series,
-                plotOptions: {
-                    /* columns: {
-                        stacking: 'normal'
-                    }, */
-                    series: {
-                        showInLegend: true,
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                            //format: '{point.y:,.0f}',
-                            //format: '{point.y:.1f}%',
-                            formatter: function() {
-                                if (this.colorIndex == 1)
-                                    return this.y + " %";
-                                else
-                                    return Highcharts.numberFormat(this.y, 0);
-                            },
-                            style: {
-                                fontWeight: 'normal',
-                                fontSize: '10px',
-                            }
-                        },
-                    },
-                },
-                tooltip: {
-                    shared: true,
-                },
-                legend: {
-                    itemStyle: {
-                        //"color": "#333333",
-                        "cursor": "pointer",
-                        "fontSize": "10px",
-                        "fontWeight": "normal",
-                        "textOverflow": "ellipsis"
-                    },
-                },
-                exporting: {
-                    enabled: true
-                },
-                credits: false,
-            });
-        }
-
-        function gAnidadaColumn2(div, categoria, series, titulo, subtitulo, maxBar) {
-            var rango = categoria.length;
-            var posPorcentaje = rango * 2 + 1;
-            var cont = 0;
-            var porMaxBar = maxBar * 0.5;
-            Highcharts.chart(div, {
-                chart: {
-                    zoomType: 'xy',
-                },
-                colors: ['#5eb9aa', '#ef5350', '#f5bd22', '#ef5350'],
-                title: {
-                    text: titulo, //'Browser market shares in January, 2018'
-                },
-                subtitle: {
-                    text: subtitulo,
-                    style: {
-                        fontSize: '11px',
-                    }
-                },
-                xAxis: [{
-                    categories: categoria,
-                    crosshair: true,
-                    labels: {
-                        style: {
-                            fontSize: '10px',
-                        }
-                    }
-                }],
-                yAxis: [{ // Primary yAxis
-                        max: maxBar > 0 ? maxBar + porMaxBar : null,
-                        labels: {
-                            enabled: true,
-                            style: {
-                                //color: Highcharts.getOptions().colors[2],
-                                fontSize: '10px',
-                            }
-                        },
-                        title: {
-                            enabled: false,
-                        },
-                        /* labels: {
-                            //format: '{value}°C',
-                            //style: {
-                            //    color: Highcharts.getOptions().colors[2]
-                            //}
-                        }, */
-                        title: {
-                            text: 'Matriculados',
-                            style: {
-                                //color: Highcharts.getOptions().colors[2],
-                                fontSize: '11px',
-                            },
-                            enabled: false
-                        },
-                        //opposite: true,
-                    }, { // Secondary yAxis
-                        gridLineWidth: 0, //solo indica el tamaño de la linea
-                        labels: {
-                            enabled: false,
-                        },
-                        title: {
-                            enabled: false,
-                        },
-                        /* title: {
-                            //text: 'Rainfall',
-                            text: '%Indicador',
-                            //style: {
-                            //    color: Highcharts.getOptions().colors[0]
-                            //}
-                        }, */
-                        /* labels: {
-                            //format: '{value} mm',
-                            format: '{value} %',
-                            //style: {
-                            //   color: Highcharts.getOptions().colors[0]
-                            //}
-                        }, */
-                        //min: -200,
-                        min: 0,
-                        max: 120,
-                        opposite: true,
-                    },
-                    /* { // Tertiary yAxis
-                        gridLineWidth: 0,
-                        title: {
-                            text: 'Sea-Level Pressure',
-                            style: {
-                                color: Highcharts.getOptions().colors[1]
-                            }
-                        },
-                        labels: {
-                            format: '{value} mb',
-                            style: {
-                                color: Highcharts.getOptions().colors[1]
-                            }
-                        },
-                        opposite: true
-                    } */
-                ],
-                series: series,
-                plotOptions: {
-                    /* columns: {
-                        stacking: 'normal'
-                    }, */
-                    series: {
-                        showInLegend: true,
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                            //format: '{point.y:,.0f}',
-                            //format: '{point.y:.1f}%',
-                            formatter: function() {
-                                // if (this.colorIndex == 1)
-                                return this.y + " %";
-                                // else
-                                //     return Highcharts.numberFormat(this.y, 0);
-                            },
-                            style: {
-                                fontWeight: 'normal',
-                                fontSize: '10px',
-                            }
-                        },
-                    },
-                },
-                tooltip: {
-                    shared: true,
-                },
-                legend: {
-                    itemStyle: {
-                        //"color": "#333333",
-                        "cursor": "pointer",
-                        "fontSize": "10px",
-                        "fontWeight": "normal",
-                        "textOverflow": "ellipsis"
-                    },
-                },
-                exporting: {
-                    enabled: false
-                },
-                credits: false,
-            });
-        }
-
-        function gbar(div, categoria, series, titulo, subtitulo) {
-            Highcharts.chart(div, {
-                chart: {
-                    type: 'bar',
-                    //marginLeft: 50,
-                    //marginBottom: 90
-                },
-                colors: ['#5eb9aa', '#ef5350'],
-                title: {
-                    text: titulo,
-                },
-                subtitle: {
-                    text: subtitulo,
-                    style: {
-                        fontSize: '11px',
-                    }
-                },
-                xAxis: {
-                    categories: categoria,
-                    labels: {
-                        style: {
-                            fontSize: '10px',
-                        }
-                    }
-                },
-                yAxis: {
-                    labels: {
-                        enabled: true,
-                        style: {
-                            //color: Highcharts.getOptions().colors[2],
-                            fontSize: '10px',
-                        }
-                    },
-                    title: {
-                        text: '',
-                        enabled: false,
-                    },
-                },
-                plotOptions: {
-                    series: {
-                        stacking: 'normal', //normal, overlap, percent,stream
-                        pointPadding: 0, //size de colunma
-                        borderWidth: 0 //borde de columna
-                    },
-                    bar: {
-                        dataLabels: {
-                            enabled: true,
-                            inside: true,
-                            style: {
-                                fontWeight: 'normal',
-                                fontSize: '10px',
-                                color: 'white',
-                                //textShadow:false,//quita sombra//para versiones antiguas
-                                textOutline: false, //quita sombra
-                            }
-                        }
-                    },
-                },
-                legend: {
-                    itemStyle: {
-                        //color: "#333333",
-                        //cursor: "pointer",
-                        fontSize: "10px",
-                        //fontWeight: "normal",
-                        //textOverflow: "ellipsis"
-                    },
-                },
-                series: series,
-                tooltip: {
-                    shared: true,
-                },
+                series: serie,
                 credits: {
-                    enabled: false
-                },
-            });
-        }
-
-        function gAnidadaColumnx(div, categoria, series, titulo, subtitulo) {
-            Highcharts.chart(div, {
-                chart: {
-                    zoomType: 'xy',
-                },
-                title: {
-                    text: titulo, //'Browser market shares in January, 2018'
-                },
-                subtitle: {
-                    text: subtitulo,
-                },
-                xAxis: [{
-                    categories: categoria,
-                    crosshair: true
-                }],
-                yAxis: [{ // Primary yAxis
-                        //max: 2000000000,
-                        labels: {
-                            enabled: false,
-                        },
-                        title: {
-                            enabled: false,
-                        },
-                        /* labels: {
-                            format: '{value}°C',
-                            style: {
-                                color: Highcharts.getOptions().colors[2]
-                            }
-                        },
-                        title: {
-                            text: 'Temperature',
-                            style: {
-                                color: Highcharts.getOptions().colors[2]
-                            }
-                        }, */
-                        //opposite: true,
-                    }, { // Secondary yAxis
-                        gridLineWidth: 0,
-                        labels: {
-                            enabled: false,
-                        },
-                        title: {
-                            enabled: false,
-                        },
-                        /* title: {
-                            text: 'Rainfall',
-                            style: {
-                                color: Highcharts.getOptions().colors[0]
-                            }
-                        },
-                        labels: {
-                            format: '{value} mm',
-                            style: {
-                                color: Highcharts.getOptions().colors[0]
-                            }
-                        }, */
-                        min: -200,
-                        max: 150,
-                        opposite: true,
-                    },
-                    /* { // Tertiary yAxis
-                                       gridLineWidth: 0,
-                                       title: {
-                                           text: 'Sea-Level Pressure',
-                                           style: {
-                                               color: Highcharts.getOptions().colors[1]
-                                           }
-                                       },
-                                       labels: {
-                                           format: '{value} mb',
-                                           style: {
-                                               color: Highcharts.getOptions().colors[1]
-                                           }
-                                       },
-                                       opposite: true
-                                   } */
-                ],
-                series: series,
-                plotOptions: {
-                    /* columns: {
-                        stacking: 'normal'
-                    }, */
-                    series: {
-                        showInLegend: false,
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                            //format: '{point.y:,.0f}',
-                            //format: '{point.y:.1f}%',
-                            formatter: function() {
-                                if (this.y > 1000000) {
-                                    return Highcharts.numberFormat(this.y / 1000000, 0) + "M";
-                                } else if (this.y > 1000) {
-                                    return Highcharts.numberFormat(this.y / 1000, 0) + "K";
-                                } else if (this.y < 101) {
-                                    return this.y + "%";
-                                } else {
-                                    return this.y;
-                                }
-                            },
-                            style: {
-                                fontWeight: 'normal',
-                            }
-                        },
-                    },
-                },
-                tooltip: {
-                    shared: true,
-                },
-                legend: {
-                    itemStyle: {
-                        //"color": "#333333",
-                        "cursor": "pointer",
-                        "fontSize": "10px",
-                        "fontWeight": "normal",
-                        "textOverflow": "ellipsis"
-                    },
-                },
-                exporting: {
-                    enabled: false
-                },
-                credits: false,
+                    enabled: false,
+                }
             });
         }
 
@@ -2294,8 +1078,8 @@
     </script>
 
     {{-- jrmt-mapero --}}
-    <script src="https://code.highcharts.com/maps/highmaps.js"></script>
-    <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highmaps.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
     {{-- <script src="https://code.highcharts.com/mapdata/countries/pe/pe-all.js"></script> --}}
 
     {{-- <script src="{{ asset('/') }}public/pe-pv-states.js"></script> --}}
@@ -2304,15 +1088,16 @@
     <script src="{{ asset('/') }}public/us-ct-allz.js"></script>
     {{-- <script src="{{ asset('/') }}public/pe-allx.js"></script> --}}
 
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script> --}}
+    {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script> --}}
 
     <!-- optional -->
-    <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/offline-exporting.js"></script> --}}
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script>
 
-    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.js"></script>
 
     {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts-more.js"></script>

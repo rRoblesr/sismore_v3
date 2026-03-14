@@ -330,8 +330,30 @@ class BaseGastosRepositorio
             ->join('pres_sector as sec', 'sec.id', '=', 'plie.sector_id', 'left')
             ->join('pres_tipo_gobierno as tgob', 'tgob.id', '=', 'sec.tipogobierno_id', 'left');
         $query = $query->groupBy('id', 'gobiernos')->get();
+        $pad = [
+            (object)['id' => null, 'gobiernos' => 'GOBIERNOS LOCALES', 'pim' => 0, 'eje' => 0],
+            (object)['id' => null, 'gobiernos' => 'GOBIERNO NACIONAL', 'pim' => 0, 'eje' => 0],
+            (object)['id' => null, 'gobiernos' => 'GOBIERNOS REGIONALES', 'pim' => 0, 'eje' => 0],
+        ];
 
-        return $query;
+        foreach ($query as $row) {
+            $nombre = strtoupper(trim((string)($row->gobiernos ?? '')));
+            if ($nombre === '') continue;
+            if (strpos($nombre, 'NACIONAL') !== false) {
+                $pad[1] = (object)['id' => $row->id ?? null, 'gobiernos' => $row->gobiernos ?? 'GOBIERNO NACIONAL', 'pim' => $row->pim ?? 0, 'eje' => $row->eje ?? 0];
+                continue;
+            }
+            if (strpos($nombre, 'REGIONAL') !== false) {
+                $pad[2] = (object)['id' => $row->id ?? null, 'gobiernos' => $row->gobiernos ?? 'GOBIERNOS REGIONALES', 'pim' => $row->pim ?? 0, 'eje' => $row->eje ?? 0];
+                continue;
+            }
+            if (strpos($nombre, 'LOCAL') !== false) {
+                $pad[0] = (object)['id' => $row->id ?? null, 'gobiernos' => $row->gobiernos ?? 'GOBIERNOS LOCALES', 'pim' => $row->pim ?? 0, 'eje' => $row->eje ?? 0];
+                continue;
+            }
+        }
+
+        return collect($pad);
     }
 
 

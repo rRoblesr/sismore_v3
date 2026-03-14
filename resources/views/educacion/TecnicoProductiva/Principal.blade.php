@@ -1,72 +1,70 @@
 @extends('layouts.main', ['activePage' => 'importacion', 'titlePage' => ''])
 
 @section('css')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
-    <style>
-        .tablex thead th {
-            padding: 6px;
-            text-align: center;
-        }
-
-        .tablex thead td {
-            padding: 6px;
-            text-align: center;
-            vertical-align: middle;
-            font-weight: bold;
-        }
-
-        .tablex tbody td,
-        .tablex tbody th,
-        .tablex tfoot td,
-        .tablex tfoot th {
-            padding: 6px;
-        }
-
-        .fuentex {
-            font-size: 10px;
-            font-weight: bold;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.css" />
 @endsection
 
 @section('content')
     <div class="content">
         <div class="container-fluid">
-            <div class="form-group row align-items-center vh-5">
-                <div class="col-lg-5 col-md-4 col-sm-4">
-                    <h4 class="page-title font-16">EDUCACIÓN TÉCNICO PRODUCTIVA</h4>
-                </div>
-                <div class="col-lg-1 col-md-2 col-sm-2">
-                    <select id="anio" name="anio" class="form-control font-11" onchange="cargarCards();">
-                        <option value="0">AÑO</option>
-                        @foreach ($anios as $item)
-                            <option value="{{ $item->anio }}" {{ $item->anio == $maxAnio ? 'selected' : '' }}>
-                                {{ $item->anio }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                {{-- <div class="col-lg-2 col-md-2 col-sm-2">
-                    <select id="ugel" name=
-                     class="form-control font-11" onchange="cargarCards();">
-                        <option value="0">UGEL</option>
-                    </select>
-                </div> --}}
-                <div class="col-lg-2 col-md-2 col-sm-2">
-                    <select id="gestion" name="gestion" class="form-control font-11" onchange="cargarCards();">
-                        <option value="0">TIPO DE GESTIÓN</option>
-                        <option value="12">PUBLICO</option>
-                        <option value="3">PRIVADO</option>
-                    </select>
-                </div>
-                <div class="col-lg-2 col-md-2 col-sm-2">
-                    <select id="area" name="area" class="form-control font-11" onchange="cargarCards();">
-                        <option value="0">ÁREA GEOGRÁFICA</option>
-                    </select>
-                </div>
-                <div class="col-lg-2 col-md-2 col-sm-2">
-                    <select id="iiee" name="iiee" class="form-control font-11" onchange="cargarCards();">
-                        <option value="0">INSTITUCIÓN EDUCATIVA</option>
-                    </select>
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-success-0">
+                            <div class="card-widgets">
+                                <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
+                                    <i class="fa fa-redo"></i> Actualizar</button>
+                            </div>
+                            <h3 class="card-title text-white font-14">EDUCACIÓN TÉCNICO PRODUCTIVA</h3>
+                        </div>
+                        <div class="card-body pb-0">
+                            <div class="form-group row align-items-center vh-5">
+                                <div class="col-lg-4 col-md-4 col-sm-4">
+                                    <h4 class="page-title font-12" id="head-fuente">Fuente: Censo Educativo {{ $maxAnio }}</h4>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-2">
+                                    <div class="custom-select-container">
+                                        <label for="anio">Año</label>
+                                        <select id="anio" name="anio" class="form-control font-11" onchange="cargarCards();">
+                                            <option value="0">TODOS</option>
+                                            @foreach ($anios as $item)
+                                                <option value="{{ $item->anio }}" {{ $item->anio == $maxAnio ? 'selected' : '' }}>
+                                                    {{ $item->anio }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-2">
+                                    <div class="custom-select-container">
+                                        <label for="gestion">Tipo de Gestión</label>
+                                        <select id="gestion" name="gestion" class="form-control font-11"
+                                            onchange="$('#area').val(0);$('#iiee').val(0);cargarCards();cargarAreas();cargarIIEE();">
+                                            <option value="0">TODOS</option>
+                                            <option value="12">PUBLICO</option>
+                                            <option value="3">PRIVADO</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-2" id="div-area">
+                                    <div class="custom-select-container">
+                                        <label for="area">Área Geográfica</label>
+                                        <select id="area" name="area" class="form-control font-11"
+                                            onchange="$('#iiee').val(0);cargarCards();cargarIIEE();">
+                                            <option value="0">TODOS</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-2">
+                                    <div class="custom-select-container">
+                                        <label for="iiee">Institución Educativa</label>
+                                        <select id="iiee" name="iiee" class="form-control font-11" onchange="cargarCards();">
+                                            <option value="0">TODOS</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -266,6 +264,14 @@
 
 
 @section('js')
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts-more.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.js"></script>
+
     <script type="text/javascript">
         var paleta_colores = ['#5eb9aa', '#F9FFFE', '#f5bd22', '#058DC7', '#50B432', '#9D561B', '#DDDF00', '#24CBE5',
             '#64E572', '#9F9655', '#FFF263', '#6AF9C4'
@@ -285,6 +291,7 @@
         });
 
         function cargarCards() {
+            $('#head-fuente').html('Fuente: Censo Educativo ' + $('#anio').val());
             $.ajax({
                 url: "{{ route('tecnicoproductiva.principal.head') }}",
                 data: {
@@ -310,7 +317,7 @@
                     panelGraficas('anal4');
                     panelGraficas('tabla1');
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");
                     console.log(jqXHR);
                 },
@@ -387,7 +394,7 @@
                     }
 
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");
                     console.log(jqXHR);
                 },
@@ -435,15 +442,23 @@
         function cargarAreas() {
             $.ajax({
                 url: "{{ route('tecnicoproductiva.area') }}",
+                data: {
+                    gestion: $('#gestion').val(),
+                },
                 type: 'GET',
                 success: function(data) {
                     $("#area option").remove();
-                    var options = '<option value="0">ÁREA GEOGRÁFICA</option>';
+                    var options = '<option value="0">TODOS</option>';
                     $.each(data.area, function(index, value) {
                         options += "<option value='" + value.codigo + "'>" + value.nombre +
                             "</option>"
                     });
                     $("#area").append(options);
+                    if (data.area.length == 1) {
+                        $('#area').val(data.area[0].codigo);
+                        cargarIIEE();
+                        cargarCards();
+                    }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -456,11 +471,13 @@
                 url: "{{ route('tecnicoproductiva.iiee') }}",
                 data: {
                     anio: $('#anio').val(),
+                    area: $('#area').val(),
+                    gestion: $('#gestion').val(),
                 },
                 type: 'GET',
                 success: function(data) {
                     $("#iiee option").remove();
-                    var options = '<option value="0">INSTITUCIÓN EDUCATIVA</option>';
+                    var options = '<option value="0">TODOS</option>';
                     $.each(data.ie, function(index, value) {
                         options += "<option value='" + value.cod_mod + "'>" + value.nombre +
                             "</option>"
@@ -869,18 +886,4 @@
             });
         }
     </script>
-
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <!-- optional -->
-    <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-
-    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
-
-    {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts-more.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script> --}}
 @endsection

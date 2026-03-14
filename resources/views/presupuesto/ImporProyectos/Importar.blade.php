@@ -163,63 +163,16 @@
                                 style="font-size:12px">
                                 {{-- width:7200px; --}}
                                 <thead class="text-primary">
-                                    <td>ANIO</td>
-                                    <td>MES</td>
-                                    <td>COD_TIPO_GOB</td>
-                                    <td>TIPO_GOBIERNO</td>
-                                    <td>COD_SECTOR</td>
-                                    <td>SECTOR</td>
-                                    <td>COD_PLIEGO</td>
-                                    <td>PLIEGO</td>
-                                    <td>COD_UBIGEO</td>
-                                    <td>SEC_EJEC</td>
-                                    <td>COD_UE</td>
-                                    <td>UNIDAD_EJECUTORA</td>
-                                    <td>SEC_FUNC</td>
-                                    <td>COD_CAT_PRES</td>
-                                    <td>CATEGORIA_PRESUPUESTAL</td>
-                                    <td>TIPO_PROD_PROY</td>
-                                    <td>COD_PROD_PROY</td>
-                                    <td>PRODUCTO_PROYECTO</td>
-                                    <td>TIPO_ACT_ACC_OBRA</td>
-                                    <td>COD_ACT_ACC_OBRA</td>
-                                    <td>ACTIVIDAD_ACCION_OBRA</td>
-                                    <td>COD_FUN</td>
-                                    <td>FUNCION</td>
-                                    <td>COD_DIV_FUN</td>
-                                    <td>DIVISION_FUNCIONAL</td>
-                                    <td>COD_GRU_FUN</td>
-                                    <td>GRUPO_FUNCIONAL</td>
-                                    <td>META</td>
-                                    <td>COD_FINA</td>
-                                    <td>FINALIDAD</td>
-                                    <td>COD_FUE_FIN</td>
-                                    <td>FUENTE_FINANCIAMIENTO</td>
-                                    <td>COD_RUB</td>
-                                    <td>RUBRO</td>
-                                    <td>COD_TIPO_REC</td>
-                                    <th>TIPO_RECURSO</th>
-                                    <th>COD_CAT_GAS</th>
-                                    <th>CATEGORIA_GASTO</th>
-                                    <th>COD_TIPO_TRANS</th>
-                                    <th>COD_GEN</th>
-                                    <th>GENERICA</th>
-                                    <th>COD_SUBGEN</th>
-                                    <th>SUBGENERICA</th>
-                                    <th>COD_SUBGEN_DET</th>
-                                    <th>SUBGENERICA_DETALLE</th>
-                                    <th>COD_ESP</th>
-                                    <th>ESPECIFICA</th>
-                                    <th>COD_ESP_DET</th>
-                                    <th>ESPECIFICA_DETALLE</th>
+                                    <th>COD_GOB_REG</th>
+                                    <th>GOBIERNOS_REGIONALES</th>
                                     <th>PIA</th>
                                     <th>PIM</th>
-                                    <th>CERTIFICADO</th>
+                                    <th>CERTIFICACION</th>
                                     <th>COMPROMISO_ANUAL</th>
                                     <th>COMPROMISO_MENSUAL</th>
                                     <th>DEVENGADO</th>
                                     <th>GIRADO</th>
-                                    <th>ACCION</th>
+                                    <th>AVANCE</th>
                                 </thead>
                                 <tbody>
 
@@ -235,6 +188,111 @@
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
         <!-- End Bootstrap modal -->
+
+        <!-- Modal para procesar proyectos -->
+        <div id="modal-procesar-proyectos" class="modal fade centrarmodal" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Procesar Importación de Proyectos</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="procp_importacion_id" value="">
+                        <p class="mb-3">
+                            Seleccione el proceso que desea ejecutar para la importación seleccionada.
+                        </p>
+                        <div class="text-center">
+                            <div class="d-inline-block mr-2">
+                                <button type="button" id="btn-procp-base" class="btn btn-primary btn-sm">
+                                    <i class="fa fa-database"></i> Procesar Base de Proyectos
+                                </button>
+                                <button type="button" id="btn-procp-base-ojito"
+                                    class="btn btn-outline-primary btn-sm ml-1" title="Ver estado">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="d-inline-block">
+                                <a href="#" id="btn-descargar-base" class="btn btn-success btn-sm" target="_blank">
+                                    <i class="fa fa-download"></i> Descargar Base Procesada
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal para actualizar importación -->
+        <div id="modal-actualizar" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Actualizar Archivo de Proyectos</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="cmxform form-horizontal tasi-form update_file">
+                            @csrf
+                            <input type="hidden" id="upd_importacion_id" name="importacion_id" value="">
+
+                            <div class="alert alert-warning">
+                                <i class="fa fa-exclamation-triangle"></i>
+                                <strong>Advertencia:</strong> Esta acción eliminará los registros de proyectos asociados a esta
+                                importación y cargará los nuevos datos del archivo Excel seleccionado.
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-form-label">Fecha Versión</label>
+                                <div class="">
+                                    <input type="date" class="form-control" name="fechaActualizacion"
+                                        id="fechaActualizacion_upd" placeholder="Ingrese fecha actualizacion" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-form-label">Archivo (Excel)</label>
+                                <div class="input-group">
+                                    <input id="file_upd" name="file" class="form-control d-none" type="file"
+                                        accept=".xls,.xlsx" required>
+                                    <input id="nfile_upd" name="nfile" class="form-control" type="text"
+                                        placeholder="Seleccione Archivo" readonly>
+                                    <span class="input-group-append">
+                                        <label for="file_upd" class="btn btn-primary btn-file-documento">
+                                            <i class="fas fa-cloud-upload-alt"></i> </label>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row  mt-0 mb-0">
+                                <div class="col-md-12">
+                                    <div class="pwrapper_upd m-0" style="display:none;">
+                                        <div class="progress progress_wrapper_upd">
+                                            <div class="progress-bar progress-bar-striped bg-info progress-bar-animated progress_bar_upd"
+                                                role="progressbar" style="width:0%">0%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row ">
+                                <div class="col-lg-12 text-center">
+                                    <button class="btn btn-primary waves-effect waves-light" type="submit"><i
+                                            class="ion ion-md-cloud-upload"></i> Actualizar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
     </div>
@@ -259,6 +317,21 @@
                 var fileName = $(this).val().split("\\").pop();
                 $('#nfile').val(fileName);
 
+            });
+
+            $('.update_file').on('submit', uploadUpdate);
+
+            $("#file_upd").on("change", function() {
+                var fileName = $(this).val().split("\\").pop();
+                $('#nfile_upd').val(fileName);
+            });
+
+            $('#btn-procp-base').click(function() {
+                procesarBase();
+            });
+
+            $('#btn-procp-base-ojito').click(function() {
+                verificarBase();
             });
 
         });
@@ -337,7 +410,7 @@
             bootbox.confirm("Seguro desea Eliminar este IMPORTACION?", function(result) {
                 if (result === true) {
                     $.ajax({
-                        url: "{{ url('/') }}/IMPORPROYECTOS/eliminar/" + id,
+                        url: "{{ url('/') }}/Presupuesto/eliminar/" + id,
                         type: "GET",
                         dataType: "JSON",
                         beforeSend: function() {
@@ -360,7 +433,7 @@
         };
 
         function monitor(id) {
-            var url = "{{ route('imporgastos.listarimportados', 55555) }}";
+            var url = "{{ route('imporproyectos.listarimportados', 55555) }}";
             url = url.replace('55555', id);
             $('#siagie-matricula').DataTable({
                     "processing": true,
@@ -378,231 +451,17 @@
                         "type": "POST",
                         "dataType": 'JSON',
                     },
-                    "columns": [{
-                            data: 'anio',
-                            name: 'anio'
-                        },
-                        {
-                            data: 'mes',
-                            name: 'mes'
-                        },
-                        {
-                            data: 'cod_tipo_gob',
-                            name: 'cod_tipo_gob'
-                        },
-                        {
-                            data: 'tipo_gobierno',
-                            name: 'tipo_gobierno'
-                        },
-                        {
-                            data: 'cod_sector',
-                            name: 'cod_sector'
-                        },
-                        {
-                            data: 'sector',
-                            name: 'sector'
-                        },
-                        {
-                            data: 'cod_pliego',
-                            name: 'cod_pliego'
-                        },
-                        {
-                            data: 'pliego',
-                            name: 'pliego'
-                        },
-                        {
-                            data: 'cod_ubigeo',
-                            name: 'cod_ubigeo'
-                        },
-                        {
-                            data: 'sec_ejec',
-                            name: 'sec_ejec'
-                        },
-                        {
-                            data: 'cod_ue',
-                            name: 'cod_ue'
-                        },
-                        {
-                            data: 'unidad_ejecutora',
-                            name: 'unidad_ejecutora'
-                        },
-                        {
-                            data: 'sec_func',
-                            name: 'sec_func'
-                        },
-                        {
-                            data: 'cod_cat_pres',
-                            name: 'cod_cat_pres'
-                        },
-                        {
-                            data: 'categoria_presupuestal',
-                            name: 'categoria_presupuestal'
-                        },
-                        {
-                            data: 'tipo_prod_proy',
-                            name: 'tipo_prod_proy'
-                        },
-                        {
-                            data: 'cod_prod_proy',
-                            name: 'cod_prod_proy'
-                        },
-                        {
-                            data: 'producto_proyecto',
-                            name: 'producto_proyecto'
-                        },
-                        {
-                            data: 'tipo_act_acc_obra',
-                            name: 'tipo_act_acc_obra'
-                        },
-                        {
-                            data: 'cod_act_acc_obra',
-                            name: 'cod_act_acc_obra'
-                        },
-                        {
-                            data: 'actividad_accion_obra',
-                            name: 'actividad_accion_obra'
-                        },
-                        {
-                            data: 'cod_fun',
-                            name: 'cod_fun'
-                        },
-                        {
-                            data: 'funcion',
-                            name: 'funcion'
-                        },
-                        {
-                            data: 'cod_div_fun',
-                            name: 'cod_div_fun'
-                        },
-                        {
-                            data: 'division_funcional',
-                            name: 'division_funcional'
-                        },
-                        {
-                            data: 'cod_gru_fun',
-                            name: 'cod_gru_fun'
-                        },
-                        {
-                            data: 'grupo_funcional',
-                            name: 'grupo_funcional'
-                        },
-                        {
-                            data: 'meta',
-                            name: 'meta'
-                        },
-                        {
-                            data: 'cod_fina',
-                            name: 'cod_fina'
-                        },
-                        {
-                            data: 'finalidad',
-                            name: 'finalidad'
-                        },
-                        {
-                            data: 'cod_fue_fin',
-                            name: 'cod_fue_fin'
-                        },
-                        {
-                            data: 'fuente_financiamiento',
-                            name: 'fuente_financiamiento'
-                        },
-                        {
-                            data: 'cod_rub',
-                            name: 'cod_rub'
-                        },
-                        {
-                            data: 'rubro',
-                            name: 'rubro'
-                        },
-                        {
-                            data: 'cod_tipo_rec',
-                            name: 'cod_tipo_rec'
-                        },
-                        {
-                            data: 'tipo_recurso',
-                            name: 'tipo_recurso'
-                        },
-                        {
-                            data: 'cod_cat_gas',
-                            name: 'cod_cat_gas'
-                        },
-                        {
-                            data: 'categoria_gasto',
-                            name: 'categoria_gasto'
-                        },
-                        {
-                            data: 'cod_tipo_trans',
-                            name: 'cod_tipo_trans'
-                        },
-                        {
-                            data: 'cod_gen',
-                            name: 'cod_gen'
-                        },
-                        {
-                            data: 'generica',
-                            name: 'generica'
-                        },
-                        {
-                            data: 'cod_subgen',
-                            name: 'cod_subgen'
-                        },
-                        {
-                            data: 'subgenerica',
-                            name: 'subgenerica'
-                        },
-                        {
-                            data: 'cod_subgen_det',
-                            name: 'cod_subgen_det'
-                        },
-                        {
-                            data: 'subgenerica_detalle',
-                            name: 'subgenerica_detalle'
-                        },
-                        {
-                            data: 'cod_esp',
-                            name: 'cod_esp'
-                        },
-                        {
-                            data: 'especifica',
-                            name: 'especifica'
-                        },
-                        {
-                            data: 'cod_esp_det',
-                            name: 'cod_esp_det'
-                        },
-                        {
-                            data: 'especifica_detalle',
-                            name: 'especifica_detalle'
-                        },
-                        {
-                            data: 'pia',
-                            name: 'pia'
-                        },
-                        {
-                            data: 'pim',
-                            name: 'pim'
-                        },
-                        {
-                            data: 'certificado',
-                            name: 'certificado'
-                        },
-                        {
-                            data: 'compromiso_anual',
-                            name: 'compromiso_anual'
-                        },
-                        {
-                            data: 'compromiso_mensual',
-                            name: 'compromiso_mensual'
-                        },
-                        {
-                            data: 'devengado',
-                            name: 'devengado'
-                        },
-                        {
-                            data: 'girado',
-                            name: 'girado'
-                        },
-
+                    "columns": [
+                        { data: 'cod_gob_reg', name: 'cod_gob_reg' },
+                        { data: 'gobiernos_regionales', name: 'gobiernos_regionales' },
+                        { data: 'pia', name: 'pia' },
+                        { data: 'pim', name: 'pim' },
+                        { data: 'certificacion', name: 'certificacion' },
+                        { data: 'compromiso_anual', name: 'compromiso_anual' },
+                        { data: 'compromiso_mensual', name: 'compromiso_mensual' },
+                        { data: 'devengado', name: 'devengado' },
+                        { data: 'girado', name: 'girado' },
+                        { data: 'avance', name: 'avance' },
                     ],
                 }
 
@@ -610,6 +469,140 @@
 
             $('#modal-siagie-matricula').modal('show');
             $('#modal-siagie-matricula .modal-title').text('Importado');
+        }
+
+        function abrirModalActualizar(id, fecha) {
+            $('#upd_importacion_id').val(id);
+            $('#fechaActualizacion_upd').val(fecha);
+            $('#modal-actualizar').modal('show');
+        }
+
+        function abrirProcesos(id) {
+            $('#procp_importacion_id').val(id);
+            // Actualizar enlace de descarga
+            let urlDescarga = "{{ route('imporproyectos.descargar.base', 'PLACEHOLDER') }}";
+            urlDescarga = urlDescarga.replace('PLACEHOLDER', id);
+            $('#btn-descargar-base').attr('href', urlDescarga);
+            
+            $('#modal-procesar-proyectos').modal('show');
+        }
+
+        function uploadUpdate(e) {
+            e.preventDefault();
+            let form = $(this),
+                wrapper = $('.pwrapper_upd'),
+                progress_bar = $('.progress_bar_upd'),
+                data = new FormData(form.get(0));
+
+            progress_bar.removeClass('bg-success bg-danger').addClass('bg-info');
+            progress_bar.css('width', '0%');
+            progress_bar.html('Preparando...');
+            wrapper.fadeIn();
+
+            $.ajax({
+                xhr: function() {
+                    let xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener("progress", function(e) {
+                        if (e.lengthComputable) {
+                            let percentComplete = Math.floor((e.loaded / e.total) * 100);
+                            progress_bar.css('width', percentComplete + '%');
+                            progress_bar.html(percentComplete + '%');
+                        }
+                    }, false);
+                    return xhr;
+                },
+                type: "POST",
+                url: "{{ route('imporproyectos.actualizar') }}",
+                dataType: "json",
+                contentType: false,
+                processData: false,
+                cache: false,
+                data: data,
+                beforeSend: () => {
+                    $('button', form).attr('disabled', true);
+                }
+            }).done(res => {
+                if (res.status === 200) {
+                    progress_bar.removeClass('bg-info').addClass('bg-success');
+                    progress_bar.html('Listo!');
+                    $('#modal-actualizar').modal('hide');
+                    Swal.fire({
+                        title: "¡Actualización Exitosa!",
+                        type: "success",
+                        confirmButtonColor: "#348cd4"
+                    })
+                    form.trigger('reset');
+
+                    setTimeout(() => {
+                        wrapper.fadeOut();
+                        progress_bar.removeClass('bg-success bg-danger').addClass('bg-info');
+                        progress_bar.css('width', '0%');
+                        table_principal.ajax.reload();
+                    }, 1500);
+                } else {
+                    progress_bar.css('width', '100%');
+                    progress_bar.html(res.msg);
+                }
+            }).fail(err => {
+                progress_bar.removeClass('bg-success bg-info').addClass('bg-danger');
+                let msg = 'Error desconocido';
+                if(err.responseJSON && err.responseJSON.msg) msg = err.responseJSON.msg;
+                else if(err.responseText) msg = err.responseText;
+                progress_bar.html('Error: ' + msg);
+            }).always(() => {
+                $('button', form).attr('disabled', false);
+            });
+        }
+
+        function procesarBase() {
+            let id = $('#procp_importacion_id').val();
+            let btn = $('#btn-procp-base');
+            let originalText = btn.html();
+
+            btn.html('<i class="fa fa-spinner fa-spin"></i> Procesando...').prop('disabled', true);
+
+            $.ajax({
+                url: "{{ route('imporproyectos.procesar.base', 'PLACEHOLDER') }}".replace('PLACEHOLDER', id),
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}"
+                },
+                dataType: "JSON",
+                success: function(data) {
+                    if (data.status) {
+                        toastr.success(data.msg, 'Mensaje');
+                    } else {
+                        toastr.error(data.msg, 'Mensaje');
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    let msg = 'Error al procesar base.';
+                    if(jqXHR.responseJSON && jqXHR.responseJSON.msg) msg = jqXHR.responseJSON.msg;
+                    toastr.error(msg, 'Mensaje');
+                },
+                complete: function() {
+                    btn.html(originalText).prop('disabled', false);
+                }
+            });
+        }
+
+        function verificarBase() {
+            let id = $('#procp_importacion_id').val();
+            $.ajax({
+                url: "{{ route('imporproyectos.verificar.base', 'PLACEHOLDER') }}".replace('PLACEHOLDER', id),
+                type: "GET",
+                dataType: "JSON",
+                success: function(data) {
+                    if (data.status) {
+                        alert("Estado Base: " + (data.base ? 'Generada' : 'No generada') + "\nRegistros Detalle: " + data.detalle);
+                    } else {
+                        toastr.error(data.msg, 'Mensaje');
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    toastr.error('Error al verificar base.', 'Mensaje');
+                }
+            });
         }
     </script>
     <script src="{{ asset('/') }}public/assets/libs/jquery-validation/jquery.validate.min.js"></script>

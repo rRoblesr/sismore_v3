@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        Commands\ImportMefData::class,
     ];
 
     /**
@@ -25,6 +25,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+
+        // Ejecutar la importación del MEF todos los días a las 02:00 AM
+        $schedule->command('import:mef-data')->dailyAt('02:00')->withoutOverlapping();
     }
 
     /**

@@ -1,7 +1,8 @@
 @extends('layouts.main', ['activePage' => 'importacion', 'titlePage' => ''])
 
 @section('css')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" href="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.css" />
     <style>
         .tablex thead th {
             padding: 6px;
@@ -32,41 +33,61 @@
 @section('content')
     <div class="content">
         <div class="container-fluid">
-            <div class="form-group row align-items-center vh-5">
-                <div class="col-lg-5 col-md-4 col-sm-4">
-                    <h4 class="page-title font-16">EDUCACIÓN SUPERIOR DE FORMACIÓN ARTÍSTICO</h4>
+            <div class="card">
+                <div class="card-header bg-success-0">
+                    <div class="card-widgets">
+                        <button type="button" class="btn btn-danger btn-xs" onclick="location.reload()">
+                            <i class="fa fa-redo"></i> Actualizar</button>
+                    </div>
+                    <h3 class="card-title text-white font-14">EDUCACIÓN SUPERIOR DE FORMACIÓN ARTÍSTICO</h3>
                 </div>
-                <div class="col-lg-1 col-md-2 col-sm-2">
-                    <select id="anio" name="anio" class="form-control font-11"
-                        onchange="cargarUgels();cargarAreas();cargarCards();">
-                        <option value="0">AÑO</option>
-                        @foreach ($anios as $item)
-                            <option value="{{ $item->anio }}" {{ $item->anio == $maxAnio ? 'selected' : '' }}>
-                                {{ $item->anio }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                {{-- <div class="col-lg-2 col-md-2 col-sm-2">
-                    <select id="ugel" name="ugel" class="form-control font-11" onchange="cargarCards();">
-                        <option value="0">UGEL</option>
-                    </select>
-                </div> --}}
-                <div class="col-lg-2 col-md-2 col-sm-2">
-                    <select id="gestion" name="gestion" class="form-control font-11" onchange="cargarCards();">
-                        <option value="0">TIPO DE GESTIÓN</option>
-                        <option value="12">PUBLICO</option>
-                        <option value="3">PRIVADO</option>
-                    </select>
-                </div>
-                <div class="col-lg-2 col-md-2 col-sm-2">
-                    <select id="area" name="area" class="form-control font-11" onchange="cargarCards();">
-                        <option value="0">ÁREA GEOGRÁFICA</option>
-                    </select>
-                </div>
-                <div class="col-lg-2 col-md-2 col-sm-2">
-                    <select id="iiee" name="iiee" class="form-control font-11" onchange="cargarCards();">
-                        <option value="0">INSTITUCIÓN EDUCATIVA</option>
-                    </select>
+                <div class="card-body pb-0">
+                    <div class="form-group row align-items-center vh-5">
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <h4 class="page-title font-12" id="head-fuente">Fuente: Censo Educativo {{ $maxAnio }}</h4>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="custom-select-container">
+                                <label for="anio">Año</label>
+                                <select id="anio" name="anio" class="form-control font-11"
+                                    onchange="cargarAreas();cargarCards();">
+                                    <option value="0">TODOS</option>
+                                    @foreach ($anios as $item)
+                                        <option value="{{ $item->anio }}" {{ $item->anio == $maxAnio ? 'selected' : '' }}>
+                                            {{ $item->anio }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="custom-select-container">
+                                <label for="gestion">Tipo de Gestión</label>
+                                <select id="gestion" name="gestion" class="form-control font-11"
+                                    onchange="cargarAreas();cargarCards();">
+                                    <option value="0">TODOS</option>
+                                    <option value="12">PUBLICO</option>
+                                    <option value="3">PRIVADO</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="custom-select-container">
+                                <label for="area">Área Geográfica</label>
+                                <select id="area" name="area" class="form-control font-11"
+                                    onchange="cargarIIEE();cargarCards();">
+                                    <option value="0">TODOS</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="custom-select-container">
+                                <label for="iiee">Institución Educativa</label>
+                                <select id="iiee" name="iiee" class="form-control font-11" onchange="cargarCards();">
+                                    <option value="0">TODOS</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -267,6 +288,16 @@
 
 
 @section('js')
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts-more.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.responsive.min.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.js"></script>
+
     <script type="text/javascript">
         var paleta_colores = ['#5eb9aa', '#F9FFFE', '#f5bd22', '#058DC7', '#50B432', '#9D561B', '#DDDF00', '#24CBE5',
             '#64E572', '#9F9655', '#FFF263', '#6AF9C4'
@@ -280,6 +311,7 @@
         });
 
         function cargarCards() {
+            $('#head-fuente').html('Fuente: Censo Educativo ' + $('#anio').val());
             $.ajax({
                 url: "{{ route('superiorartistico.principal.head') }}",
                 data: {
@@ -305,7 +337,7 @@
                     panelGraficas('anal4');
                     panelGraficas('tabla1');
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");
                     console.log(jqXHR);
                 },
@@ -354,19 +386,22 @@
         function cargarAreas() {
             $.ajax({
                 url: "{{ route('superiorartistico.area') }}",
+                data: {
+                    gestion: $('#gestion').val()
+                },
                 type: 'GET',
                 success: function(data) {
                     $("#area option").remove();
-                    if (data.area.length == 1) {
-                        var options = '';
-                    } else {
-                        var options = '<option value="0">ÁREA GEOGRÁFICA</option>';
-                    }
+                    var options = '<option value="0">TODOS</option>';
                     $.each(data.area, function(index, value) {
                         options += "<option value='" + value.codigo + "'>" + value.nombre +
                             "</option>"
                     });
                     $("#area").append(options);
+                    if (data.area.length == 1) {
+                        $("#area").val(data.area[0].codigo);
+                    }
+                    cargarIIEE();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -379,21 +414,21 @@
                 url: "{{ route('superiorartistico.iiee') }}",
                 data: {
                     anio: $('#anio').val(),
+                    gestion: $('#gestion').val(),
+                    area: $('#area').val(),
                 },
                 type: 'GET',
                 success: function(data) {
                     $("#iiee option").remove();
-                    // console.log(data.ie.length);
-                    if (data.ie.length == 1) {
-                        var options = '';
-                    } else {
-                        var options = '<option value="0">INSTITUCIÓN EDUCATIVA</option>';
-                    }
+                    var options = '<option value="0">TODOS</option>';
                     $.each(data.ie, function(index, value) {
                         options += "<option value='" + value.cod_mod + "'>" + value.nombre +
                             "</option>"
                     });
                     $("#iiee").append(options);
+                    if (data.ie.length == 1) {
+                        $("#iiee").val(data.ie[0].cod_mod);
+                    }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -469,7 +504,7 @@
                     }
 
                 },
-                erro: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.log("ERROR GRAFICA 1");
                     console.log(jqXHR);
                 },
@@ -871,18 +906,4 @@
             });
         }
     </script>
-
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <!-- optional -->
-    <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-
-    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
-
-    {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts-more.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script> --}}
 @endsection

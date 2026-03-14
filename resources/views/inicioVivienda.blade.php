@@ -123,20 +123,22 @@
 </div>
 
 @section('js')
-    {{-- este script tiene modificaciones para la paleta de colores --}}
-    <script src="{{ asset('/') }}public/assets/libs/highchartsV2/highcharts.js"></script>
-
-    {{-- <script src="https://code.highcharts.com/highcharts.js"></script> --}}
-    <script src="https://code.highcharts.com/modules/data.js"></script>
-    <script src="https://code.highcharts.com/modules/drilldown.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/data.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/drilldown.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
+    <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
 
 
 
     <script type="text/javascript">
         $(document).ready(function() {
+            Highcharts.setOptions({
+                colors: ['#43beac', '#f5bd22', '#058DC7', '#50B432', '#9D561B', '#DDDF00', '#24CBE5', '#64E572'],
+                accessibility: {
+                    enabled: false
+                }
+            });
             cargar_datos();
         });
 

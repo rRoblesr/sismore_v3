@@ -32,11 +32,11 @@
                 <tr class="text-center">
                     <td class="text-left">{{ $key + 1 }}</td>
                     <td class="text-left">{{ $item->codmod }}</td>
-                    <td class="text-left">{{ $item->iiee }}</td>
+                    <td class="text-left">{{ $item->nombre_ie }}</td>
                     <td class="text-left">{{ $item->nivel }}</td>
                     <td class="text-left">{{ $item->gestion }}</td>
                     <td class="text-left">{{ $item->area }}</td>
-                    <th class="text-center table-warning">{{ $item->meta }}</th>
+                    <th class="text-center table-warning">{{ number_format($item->meta, 0) }}</th>
                     <td>{{ number_format($item->th, 0) }}</td>
                     <td>{{ number_format($item->tm, 0) }}</td>
                     <th class="table-warning">{{ number_format($item->tt, 0) }}</th>
