@@ -111,6 +111,7 @@ use App\Http\Controllers\Vivienda\EmapacopsaController;
 use App\Http\Controllers\Vivienda\PadronEmapacopsaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PowerBiController;
+use App\Http\Controllers\Presupuesto\ImporConsultaAmigableController;
 use App\Mail\MsnCorreo;
 use App\Models\Educacion\Area;
 use App\Models\Educacion\ImporDocentesBilingues;
@@ -1132,6 +1133,17 @@ Route::post('/Presupuesto/SiafWeb/Importar', [ImporSiafWebController::class, 'im
 Route::get('/Presupuesto/SiafWeb/Listar/ImportarDT', [ImporSiafWebController::class, 'ListarDTImportFuenteTodos'])->name('imporsiafweb.listar.importados');
 Route::get('/Presupuesto/SiafWeb/eliminar/{id}', [ImporSiafWebController::class, 'eliminar']);
 Route::post('/Presupuesto/SiafWeb/ListaImportada/{importacion_id}', [ImporSiafWebController::class, 'ListaImportada'])->name('imporsiafweb.listarimportados');
+
+Route::get('/Presupuesto/ConsultaAmigable/Importar', [ImporConsultaAmigableController::class, 'importar'])->name('imporconsultaamigable.importar');
+Route::post('/Presupuesto/ConsultaAmigable/Importar', [ImporConsultaAmigableController::class, 'importarGuardar'])->name('imporconsultaamigable.guardar');
+Route::post('/Presupuesto/ConsultaAmigable/Importar/Actualizar', [ImporConsultaAmigableController::class, 'importarActualizar'])->name('imporconsultaamigable.actualizar');
+Route::get('/Presupuesto/ConsultaAmigable/Listar/ImportarDT', [ImporConsultaAmigableController::class, 'ListarDTImportFuenteTodos'])->name('imporconsultaamigable.listar.importados');
+Route::get('/Presupuesto/ConsultaAmigable/eliminar/{id}', [ImporConsultaAmigableController::class, 'eliminar'])->name('imporconsultaamigable.eliminar');
+Route::get('/Presupuesto/ConsultaAmigable/Importar/Exportar/{id}', [ImporConsultaAmigableController::class, 'exportarExcel'])->name('imporconsultaamigable.exportar');
+Route::post('/Presupuesto/ConsultaAmigable/Importar/ProcesarBase/{importacion_id}', [ImporConsultaAmigableController::class, 'procesarBase'])->name('imporconsultaamigable.procesar.base');
+Route::get('/Presupuesto/ConsultaAmigable/Importar/VerificarBase/{importacion_id}', [ImporConsultaAmigableController::class, 'verificarBase'])->name('imporconsultaamigable.verificar.base');
+Route::get('/Presupuesto/ConsultaAmigable/Importar/DescargarBaseProcesada/{importacion_id}', [ImporConsultaAmigableController::class, 'descargarBaseProcesada'])->name('imporconsultaamigable.descargar.base');
+Route::post('/Presupuesto/ConsultaAmigable/ListaImportada/{importacion_id}', [ImporConsultaAmigableController::class, 'ListaImportada'])->name('imporconsultaamigable.listarimportados');
 
 Route::get('/Presupuesto/Proyectos/Importar', [ImporProyectosController::class, 'importar'])->name('imporproyectos.importar');
 Route::post('/Presupuesto/Proyectos/Importar', [ImporProyectosController::class, 'importarGuardar'])->name('imporproyectos.guardar');

@@ -1350,41 +1350,83 @@ class HomeController extends Controller
 
     public function educaciongrafica1()
     {
-        $siagie[] = ['name' => 2018, 'y' => 189154];
-        $siagie[] = ['name' => 2019, 'y' => 197907];
-        $siagie[] = ['name' => 2020, 'y' => 203980];
-        $siagie[] = ['name' => 2021, 'y' => 15450];
-        $siagie[] = ['name' => 2022, 'y' => 18066];
-        $siagie[] = ['name' => 2023, 'y' => 0];
         $info1 = MatriculaDetalleRepositorio::estudiantes_matriculadosEBR_EBE_anual();
-        foreach ($info1 as $value) {
-            foreach ($siagie as $pos => $value1) {
-                if ($value1['name'] == $value->name) {
-                    $siagie[$pos]['y'] += $value->y;
-                }
+
+        $base = [
+            2018 => 189154,
+            2019 => 197907,
+            2020 => 203980,
+            2021 => 15450,
+            2022 => 18066,
+            2023 => 0,
+        ];
+
+        $sumPorAnio = [];
+        foreach ($info1 as $row) {
+            $anio = (int)$row->name;
+            $sumPorAnio[$anio] = ($sumPorAnio[$anio] ?? 0) + (int)$row->y;
+        }
+
+        $allYears = array_unique(array_merge(array_keys($base), array_keys($sumPorAnio)));
+        sort($allYears);
+
+        $years = [];
+        if (count($allYears) > 0) {
+            $min = (int)$allYears[0];
+            $max = (int)$allYears[count($allYears) - 1];
+            for ($y = $min; $y <= $max; $y++) {
+                $years[] = $y;
             }
         }
-        $info = $siagie;
+
+        $info = [];
+        foreach ($years as $anio) {
+            $info[] = [
+                'name' => $anio,
+                'y' => (int)($base[$anio] ?? 0) + (int)($sumPorAnio[$anio] ?? 0),
+            ];
+        }
         return response()->json(compact('info', 'info1'));
     }
 
     public function educaciongrafica2()
     {
-        $nexus[] = ['name' => 2018, 'y' => 9780];
-        $nexus[] = ['name' => 2019, 'y' => 10161];
-        $nexus[] = ['name' => 2020, 'y' => 10433];
-        $nexus[] = ['name' => 2021, 'y' => 826];
-        $nexus[] = ['name' => 2022, 'y' => 920];
-        $nexus[] = ['name' => 2023, 'y' => 0];
         $info1 = PlazaRepositorio::docentes_conteo_anual();
-        foreach ($info1 as $value) {
-            foreach ($nexus as $pos => $value1) {
-                if ($value1['name'] == $value->name) {
-                    $nexus[$pos]['y'] += $value->y;
-                }
+
+        $base = [
+            2018 => 9780,
+            2019 => 10161,
+            2020 => 10433,
+            2021 => 826,
+            2022 => 920,
+            2023 => 0,
+        ];
+
+        $sumPorAnio = [];
+        foreach ($info1 as $row) {
+            $anio = (int)$row->name;
+            $sumPorAnio[$anio] = ($sumPorAnio[$anio] ?? 0) + (int)$row->y;
+        }
+
+        $allYears = array_unique(array_merge(array_keys($base), array_keys($sumPorAnio)));
+        sort($allYears);
+
+        $years = [];
+        if (count($allYears) > 0) {
+            $min = (int)$allYears[0];
+            $max = (int)$allYears[count($allYears) - 1];
+            for ($y = $min; $y <= $max; $y++) {
+                $years[] = $y;
             }
         }
-        $info = $nexus;
+
+        $info = [];
+        foreach ($years as $anio) {
+            $info[] = [
+                'name' => $anio,
+                'y' => (int)($base[$anio] ?? 0) + (int)($sumPorAnio[$anio] ?? 0),
+            ];
+        }
         return response()->json(compact('info'));
     }
 

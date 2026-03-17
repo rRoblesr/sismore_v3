@@ -1,0 +1,209 @@
+GENERADO: 2026-03-15
+SISTEMA: Presupuesto (Sismore V5)
+
+OBJETIVO
+Ubicaciones en el código donde se usa o aparece cada tabla:
+- pres_impor_actividadesproyectos
+- pres_impor_proyectos
+- pres_base_actividadesproyectos
+- pres_base_actividadesproyectos_detalle
+- pres_base_proyectos
+- pres_base_proyectos_detalle
+
+FORMATO
+Tabla
+  - Modelo (Eloquent)
+  - Rutas (URL -> Controller@method -> route name)
+  - Controlador (métodos principales)
+  - Vistas (Blade)
+  - Repositorios/Consultas (si aplica)
+  - ETL / Stored Procedure (si aplica)
+
+================================================================================
+TABLA: pres_impor_actividadesproyectos
+  - Modelo:
+    - app/Models/Presupuesto/ImporActividadesProyectos.php (protected $table = 'pres_impor_actividadesproyectos')
+  - Rutas (routes/web.php):
+    - /Presupuesto/ActividadesProyectos/Importar -> ImporActividadesProyectosController@importar -> imporactividadesproyectos.importar
+    - /Presupuesto/ActividadesProyectos/Importar (POST) -> ImporActividadesProyectosController@importarGuardar -> imporactividadesproyectos.guardar
+    - /Presupuesto/ActividadesProyectos/Listar/ImportarDT -> ImporActividadesProyectosController@ListarDTImportFuenteTodos -> imporactividadesproyectos.listar.importados
+    - /Presupuesto/ActividadesProyectos/ListaImportada/{importacion_id} (POST) -> ImporActividadesProyectosController@ListaImportada -> imporactividadesproyectos.listarimportados
+    - /Presupuesto/ActividadesProyectos/Importar/Exportar/{id} -> ImporActividadesProyectosController@exportarExcel -> imporactividadesproyectos.exportar
+    - /Presupuesto/ActividadesProyectos/Importar/Actualizar (POST) -> ImporActividadesProyectosController@importarActualizar -> imporactividadesproyectos.actualizar
+    - /Presupuesto/ActividadesProyectos/Importar/ProcesarBase/{importacion_id} (POST) -> ImporActividadesProyectosController@procesarBase -> imporactividadesproyectos.procesar.base
+    - /Presupuesto/ActividadesProyectos/Importar/VerificarBase/{importacion_id} (GET) -> ImporActividadesProyectosController@verificarBase -> imporactividadesproyectos.verificar.base
+    - /Presupuesto/ActividadesProyectos/Importar/DescargarBaseProcesada/{importacion_id} (GET) -> ImporActividadesProyectosController@descargarBaseProcesada -> imporactividadesproyectos.descargar.base
+  - Controlador:
+    - app/Http/Controllers/Presupuesto/ImporActividadesProyectosController.php
+      - importarGuardar(): crea registros en pres_impor_actividadesproyectos
+      - importarActualizar(): borra y vuelve a insertar en pres_impor_actividadesproyectos
+      - ListaImportada(): DataTables desde pres_impor_actividadesproyectos
+      - eliminar(): borra registros de pres_impor_actividadesproyectos por importacion_id
+  - Vista:
+    - resources/views/presupuesto/ImporActividadesProyectos/Importar.blade.php
+  - ETL / Stored Procedure:
+    - call pres_pa_procesarActividadesProyectos(?,?) (desde ImporActividadesProyectosController)
+
+================================================================================
+TABLA: pres_impor_proyectos
+  - Modelo:
+    - app/Models/Presupuesto/ImporProyectos.php (protected $table = 'pres_impor_proyectos')
+  - Rutas (routes/web.php):
+    - /Presupuesto/Proyectos/Importar -> ImporProyectosController@importar -> imporproyectos.importar
+    - /Presupuesto/Proyectos/Importar (POST) -> ImporProyectosController@importarGuardar -> imporproyectos.guardar
+    - /Presupuesto/Proyectos/Importar/Actualizar (POST) -> ImporProyectosController@importarActualizar -> imporproyectos.actualizar
+    - /Presupuesto/Listar/ImportarDT -> ImporProyectosController@ListarDTImportFuenteTodos -> imporproyectos.listar.importados
+    - /Presupuesto/ListaImportada/{importacion_id} (POST) -> ImporProyectosController@ListaImportada -> imporproyectos.listarimportados
+    - /Presupuesto/Proyectos/Importar/Exportar/{id} -> ImporProyectosController@exportarExcel -> imporproyectos.exportar
+    - /Presupuesto/Proyectos/Importar/ProcesarBase/{importacion_id} (POST) -> ImporProyectosController@procesarBase -> imporproyectos.procesar.base
+    - /Presupuesto/Proyectos/Importar/VerificarBase/{importacion_id} (GET) -> ImporProyectosController@verificarBase -> imporproyectos.verificar.base
+    - /Presupuesto/Proyectos/Importar/DescargarBaseProcesada/{importacion_id} (GET) -> ImporProyectosController@descargarBaseProcesada -> imporproyectos.descargar.base
+  - Controlador:
+    - app/Http/Controllers/Presupuesto/ImporProyectosController.php
+      - importarGuardar(): crea registros en pres_impor_proyectos
+      - importarActualizar(): borra y vuelve a insertar en pres_impor_proyectos
+      - ListaImportada(): DataTables desde pres_impor_proyectos
+      - eliminar(): borra pres_impor_proyectos por importacion_id y además limpia pres_base_proyectos/pres_base_proyectos_detalle
+  - Vista:
+    - resources/views/presupuesto/ImporProyectos/Importar.blade.php
+  - ETL / Stored Procedure:
+    - call pres_pa_procesarProyectos(?,?) (desde ImporProyectosController)
+
+================================================================================
+TABLA: pres_base_actividadesproyectos
+  - Modelo:
+    - app/Models/Presupuesto/BaseActividadesProyectos.php (protected $table = 'pres_base_actividadesproyectos')
+  - Controlador (principalmente como “base generada” por el ETL de actividades/proyectos):
+    - app/Http/Controllers/Presupuesto/ImporActividadesProyectosController.php
+      - importarActualizar(): borra BaseActividadesProyectos (y detalle) si existe para esa importación
+      - verificarBase(): busca BaseActividadesProyectos por importacion_id
+      - descargarBaseProcesada(): busca BaseActividadesProyectos por importacion_id
+      - eliminar(): borra BaseActividadesProyectos (y detalle) si existe para esa importación
+  - Repositorios/Consultas:
+    - app/Repositories/Presupuesto/BaseActividadesProyectosRepositorio.php
+      - baseids_fecha_max(): query directo a pres_base_actividadesproyectos para obtener ids “última fecha”
+      - listado_ejecucion(): join pres_base_actividadesproyectos con pres_base_actividadesproyectos_detalle
+    - app/Repositories/Presupuesto/GobiernosRegionalesRepositorio.php
+      - anios(), meses(): union con pres_base_proyectos para poblar filtros
+      - tipos_gobiernosregionales(tipo=1): usa pres_base_actividadesproyectos + detalle
+      - tipos_gobiernosregionales(else): usa union/diferencia contra pres_base_proyectos
+    - app/Repositories/Presupuesto/ModificacionesRepositorio.php
+      - usa pres_base_actividadesproyectos + detalle como fuente para comparativos (tipo=1 y tipo=3)
+
+================================================================================
+TABLA: pres_base_actividadesproyectos_detalle
+  - Modelo:
+    - app/Models/Presupuesto/BaseActividadesProyectosDetalle.php (protected $table = 'pres_base_actividadesproyectos_detalle')
+  - Controlador:
+    - app/Http/Controllers/Presupuesto/ImporActividadesProyectosController.php
+      - importarActualizar()/eliminar(): borra detalle por baseactividadesproyectos_id
+      - verificarBase(): cuenta registros detalle por baseactividadesproyectos_id
+      - descargarBaseProcesada(): exporta filas desde BaseActividadesProyectosDetalle
+  - Repositorios/Consultas:
+    - app/Repositories/Presupuesto/BaseActividadesProyectosRepositorio.php (usa tabla de detalle en casi todos los métodos)
+    - app/Repositories/Presupuesto/GobiernosRegionalesRepositorio.php (tipos_gobiernosregionales tipo=1 y tipo=3)
+    - app/Repositories/Presupuesto/ModificacionesRepositorio.php (comparativos)
+
+================================================================================
+TABLA: pres_base_proyectos
+  - Modelo:
+    - app/Models/Presupuesto/BaseProyectos.php (protected $table = 'pres_base_proyectos')
+  - Rutas (reportes base proyectos) (routes/web.php):
+    - /BaseProyectos/AvancePresupuestal -> BaseProyectosController@avancepresupuestal -> baseproyectos.avancepresupuestal
+    - /BaseProyectos/mapa1/{importacion_id} -> BaseProyectosController@avancepresupuestalmapa1 -> baseproyectos.mapa.1
+    - /BaseProyectos/gra3 -> BaseProyectosController@avancepresupuestalgrafica3 -> baseproyectos.grafica.1
+    - /BaseProyectos/gra4 -> BaseProyectosController@avancepresupuestalgrafica4 -> baseproyectos.grafica.2
+    - /BaseProyectos/gra5 -> BaseProyectosController@avancepresupuestalgrafica5 -> baseproyectos.grafica.3
+    - /BaseProyectos/gra6 -> BaseProyectosController@avancepresupuestalgrafica6 -> baseproyectos.grafica.4
+    - /BaseProyectos/gra7 -> BaseProyectosController@avancepresupuestalgrafica7 -> baseproyectos.grafica.5
+  - Controlador:
+    - app/Http/Controllers/Presupuesto/BaseProyectosController.php
+      - avancepresupuestal(): obtiene BaseProyectos por importacion_id (fuente 25)
+  - Vista:
+    - resources/views/presupuesto/BaseProyectos/AvancePresupuestal.blade.php
+  - Repositorios/Consultas:
+    - app/Repositories/Presupuesto/BaseProyectosRepositorio.php
+      - baseids_fecha_max(): query directo a pres_base_proyectos
+      - listado_ejecucion()/suma_ejecucion(): join con pres_base_proyectos_detalle
+    - app/Repositories/Presupuesto/BaseActividadesProyectosRepositorio.php
+      - listar_regiones_actividad()/listado_ejecucion_actividad(): usa pres_base_proyectos y detalle para cálculos “diferencia”
+    - app/Repositories/Presupuesto/GobiernosRegionalesRepositorio.php
+      - anios(), meses(): union con pres_base_actividadesproyectos
+      - tipos_gobiernosregionales(tipo=2): usa pres_base_proyectos + detalle
+      - tipos_gobiernosregionales(else): usa union/diferencia con pres_base_actividadesproyectos
+    - app/Repositories/Presupuesto/ModificacionesRepositorio.php
+      - comparativos para tipos (usa pres_base_proyectos + detalle)
+
+================================================================================
+TABLA: pres_base_proyectos_detalle
+  - Modelo:
+    - app/Models/Presupuesto/BaseProyectosDetalle.php (protected $table = 'pres_base_proyectos_detalle')
+  - Controlador:
+    - app/Http/Controllers/Presupuesto/ImporProyectosController.php
+      - eliminar()/importarActualizar(): borra detalle por baseproyectos_id
+      - verificarBase(): cuenta registros detalle por baseproyectos_id
+      - descargarBaseProcesada(): exporta filas desde BaseProyectosDetalle
+  - Repositorios/Consultas:
+    - app/Repositories/Presupuesto/BaseProyectosRepositorio.php (usa tabla de detalle en casi todos los métodos)
+    - app/Repositories/Presupuesto/BaseActividadesProyectosRepositorio.php (comparativos)
+    - app/Repositories/Presupuesto/GobiernosRegionalesRepositorio.php (tipos_gobiernosregionales tipo=2 y tipo=3)
+    - app/Repositories/Presupuesto/ModificacionesRepositorio.php (comparativos)
+
+================================================================================
+NOTAS RAPIDAS
+  - Las tablas pres_base_* suelen ser resultado de procesos ETL (stored procedures) disparados desde los controladores de importación:
+    - pres_pa_procesarProyectos(?,?) -> genera pres_base_proyectos + pres_base_proyectos_detalle
+    - pres_pa_procesarActividadesProyectos(?,?) -> genera pres_base_actividadesproyectos + pres_base_actividadesproyectos_detalle
+
+================================================================================
+PANTALLAS (URL/CONTROLADOR/VISTA) QUE CONSUMEN pres_base_* (directo o vía repositorios)
+  - Gobiernos Regionales (usa pres_base_actividadesproyectos* y pres_base_proyectos* vía GobiernosRegionalesRepositorio):
+    - /GobsRegs/Principal -> GobiernosRegionalesController@principal -> gobsregs.principal
+      - Vista: resources/views/Presupuesto/GobiernosRegionales/Principal.blade.php
+    - /GobsRegs/cargarmes -> GobiernosRegionalesController@cargarmes -> gobsregs.cargarmes
+    - /GobsRegs/tabla01 -> GobiernosRegionalesController@principaltabla01 -> gobsregs.tabla01
+      - Vista: resources/views/Presupuesto/GobiernosRegionales/PrincipalTabla1.blade.php
+    - /GobsRegs/Exportar/excel/principal01/{ano}/{mes}/{tipo} -> GobiernosRegionalesController@download
+
+  - Ejecución de inversiones (usa pres_base_proyectos vía BaseProyectosRepositorio):
+    - /BaseProyectos/AvancePresupuestal -> BaseProyectosController@avancepresupuestal -> baseproyectos.avancepresupuestal
+      - Vista: resources/views/presupuesto/BaseProyectos/AvancePresupuestal.blade.php
+
+  - Modificaciones (usa pres_base_actividadesproyectos* y pres_base_proyectos* para filtros/comparativos dentro de ModificacionesRepositorio):
+    - /Modificaciones/Principal -> ModificacionesController@principal_gasto -> modificaciones.principal.gastos
+      - Vista: resources/views/Presupuesto/Modificaciones/Principal.blade.php
+    - /Modificaciones/cargarmes -> ModificacionesController@cargarmes -> modificaciones.cargarmes
+    - /Modificaciones/tabla01 -> ModificacionesController@principalgastotabla01 -> modificaciones.tabla01
+      - Vista: resources/views/Presupuesto/Modificaciones/PrincipalTabla1.blade.php
+
+================================================================================
+SOLO VISTAS (RESUMEN)
+  - pres_impor_actividadesproyectos:
+    - resources/views/presupuesto/ImporActividadesProyectos/Importar.blade.php
+    - resources/views/presupuesto/ImporActividadesProyectos/ListaImportada.blade.php
+    - resources/views/presupuesto/ImporActividadesProyectos/Aprobar.blade.php
+
+  - pres_impor_proyectos:
+    - resources/views/presupuesto/ImporProyectos/Importar.blade.php
+    - resources/views/presupuesto/ImporProyectos/ListaImportada.blade.php
+    - resources/views/presupuesto/ImporProyectos/Aprobar.blade.php
+
+  - pres_base_actividadesproyectos / pres_base_actividadesproyectos_detalle (consumo indirecto):
+    - resources/views/presupuesto/GobiernosRegionales/Principal.blade.php
+    - resources/views/presupuesto/GobiernosRegionales/PrincipalTabla1.blade.php
+    - resources/views/presupuesto/GobiernosRegionales/PrincipalTabla1Export.blade.php
+    - resources/views/presupuesto/Modificaciones/Principal.blade.php
+    - resources/views/presupuesto/Modificaciones/PrincipalTabla1.blade.php
+    - resources/views/presupuesto/Modificaciones/PrincipalTabla1Export.blade.php
+
+  - pres_base_proyectos / pres_base_proyectos_detalle:
+    - resources/views/presupuesto/BaseProyectos/AvancePresupuestal.blade.php
+    - resources/views/presupuesto/BaseProyectos/NivelGobiernos.blade.php
+    - resources/views/presupuesto/BaseProyectos/NivelGobiernosTabla1.blade.php
+    - resources/views/presupuesto/BaseProyectos/NivelGobiernosTabla2.blade.php
+    - resources/views/presupuesto/GobiernosRegionales/Principal.blade.php
+    - resources/views/presupuesto/GobiernosRegionales/PrincipalTabla1.blade.php
+    - resources/views/presupuesto/GobiernosRegionales/PrincipalTabla1Export.blade.php
+    - resources/views/presupuesto/Modificaciones/Principal.blade.php
+    - resources/views/presupuesto/Modificaciones/PrincipalTabla1.blade.php
+    - resources/views/presupuesto/Modificaciones/PrincipalTabla1Export.blade.php
