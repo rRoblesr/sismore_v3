@@ -40,6 +40,23 @@
         .ui-autocomplete {
             z-index: 215000000 !important;
         }
+
+        .custom-select-container {
+            position: relative;
+            margin-top: 5px;
+        }
+
+        .custom-select-container label {
+            position: absolute;
+            top: -9px;
+            left: 12px;
+            background: transparent;
+            padding: 0 5px;
+            font-size: 10px;
+            color: #495057;
+            z-index: 10;
+        }
+
     </style>
 @endsection
 
@@ -68,10 +85,12 @@
                             @csrf
                             <div class="form">
                                 <div class="form-group row">
-                                    <div class="col-md-7"><span class="font-11">{{$actualizado}}</span></div>
-                                    <div class="col-md-1">
-                                        {{-- <label class=" col-form-label">Año</label> --}}
-                                        <div class="">
+                                    <div class="col-lg-4 col-md-12 col-sm-12">
+                                        <span class="font-11">{{ $actualizado }}</span>
+                                    </div>
+                                    <div class="col-lg-2 col-md-2 col-sm-12">
+                                        <div class="custom-select-container">
+                                            <label for="fanio">AÑO</label>
                                             <select class="form-control font-11" name="fanio" id="fanio"
                                                 onchange="cargarcuadros();">
                                                 @foreach ($ano as $item)
@@ -80,24 +99,24 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
-                                        {{-- <label class="col-form-label">Producto/Proyecto</label> --}}
-                                        <div class="">
+                                    <div class="col-lg-3 col-md-5 col-sm-12">
+                                        <div class="custom-select-container">
+                                            <label for="farticulo">PRODUCTO/PROYECTO</label>
                                             <select class="form-control font-11" name="farticulo" id="farticulo"
                                                 onchange="cargarcuadros();">
-                                                <option value="0">PRODUCTO/PROYECTO</option>
+                                                <option value="0">TODOS</option>
                                                 @foreach ($articulo as $item)
                                                     <option value="{{ $item->id }}">{{ $item->nombre }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
-                                        {{-- <label class="col-form-label">Categoría de Gasto</label> --}}
-                                        <div class="">
+                                    <div class="col-lg-3 col-md-5 col-sm-12">
+                                        <div class="custom-select-container">
+                                            <label for="fcategoria">CATEGORÍA DE GASTO</label>
                                             <select class="form-control font-11" name="fcategoria" id="fcategoria"
                                                 onchange="cargarcuadros();">
-                                                <option value="0">CATEGORÍA DE GASTO</option>
+                                                <option value="0">TODOS</option>
                                                 @foreach ($categoria as $item)
                                                     <option value="{{ $item->id }}">{{ $item->nombre }}</option>
                                                 @endforeach

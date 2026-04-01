@@ -224,31 +224,6 @@ Route::get('/NivelModalidad/Buscar/{tipo}', [NivelModalidadController::class, 'b
 Route::get('/InstitucionEducativa/Buscar/{local}', [InstEducativaController::class, 'buscar_codmodular'])->name('iiee.codmodular.buscar');
 Route::get('/InstitucionEducativa/Distrito/{provincia}', [InstEducativaController::class, 'cargar_distrito'])->name('iiee.cargar.distrito');
 
-// Route::get('/educación/Importar/PadronWeb', [ImporPadronWebController::class, 'importar'])->name('ImporPadronWeb.importar');
-// Route::post('/ImporPadronWeb/Importar', [ImporPadronWebController::class, 'guardar'])->name('ImporPadronWeb.guardar');
-// Route::post('/ImporPadronWeb/LI/{importacion_id}', [ImporPadronWebController::class, 'ListaImportada'])->name('ImporPadronWeb.listarimportados');
-// Route::get('/ImporPadronWeb/Listar/ImportarDT', [ImporPadronWebController::class, 'ListarDTImportFuenteTodos'])->name('ImporPadronWeb.listar.importados');
-// Route::get('/ImporPadronWeb/Eliminar/{id}', [ImporPadronWebController::class, 'eliminar'])->name('ImporPadronWeb.eliminar');
-// Route::get('/ImporPadronWeb/Exportar', [ImporPadronWebController::class, 'exportar'])->name('imporpadronweb.exportar');
-// Route::get('/ImporPadronWeb/Exportar/PadronWEB', [ImporPadronWebController::class, 'download'])->name('imporpadronweb.download');
-// Route::post('/ImporPadronWeb/PA/{proceso}/{importacion}', [ImporPadronWebController::class, 'ejecutarProcesos'])->name('imporpadronnominal.procedures');
-
-// Route::prefix('educación/Importar/PadronWeb')
-//     ->name('ImporPadronWeb.')
-//     // ->middleware(['auth', 'can:importar-padron-web'])
-//     ->group(function () {
-//         Route::get('/', [ImporPadronWebController::class, 'importar'])->name('importar');
-//         Route::post('/Importar', [ImporPadronWebController::class, 'guardar'])->name('guardar');
-//         Route::post('/LI/{importacion_id}', [ImporPadronWebController::class, 'ListaImportada'])->name('listarimportados');
-//         Route::get('/Listar/ImportarDT', [ImporPadronWebController::class, 'ListarDTImportFuenteTodos'])->name('listar.importados');
-//         Route::get('/Eliminar/{id}', [ImporPadronWebController::class, 'eliminar'])->name('eliminar');
-//         Route::get('/Exportar', [ImporPadronWebController::class, 'exportar'])->name('exportar');
-//         Route::get('/Exportar/PadronWEB', [ImporPadronWebController::class, 'download'])->name('download');
-//         Route::post('/PA/{proceso}/{importacion}', [ImporPadronWebController::class, 'ejecutarProcesos'])->name('procedures');
-//     });
-
-// Rutas desagrupadas para 'educación/Importar/PadronWeb'
-
 Route::get('educación/Importar/PadronWeb/', [ImporPadronWebController::class, 'importar'])->name('ImporPadronWeb.importar');
 Route::post('educación/Importar/PadronWeb/Importar', [ImporPadronWebController::class, 'guardar'])->name('ImporPadronWeb.guardar');
 Route::post('educación/Importar/PadronWeb/LI/{importacion_id}', [ImporPadronWebController::class, 'ListaImportada'])->name('ImporPadronWeb.listarimportados');
@@ -258,17 +233,10 @@ Route::get('educación/Importar/PadronWeb/Exportar', [ImporPadronWebController::
 Route::get('educación/Importar/PadronWeb/Exportar/PadronWEB', [ImporPadronWebController::class, 'download'])->name('ImporPadronWeb.download');
 Route::post('educación/Importar/PadronWeb/PA/{proceso}/{importacion}', [ImporPadronWebController::class, 'ejecutarProcesos'])->name('ImporPadronWeb.procedures');
 
-// Route::prefix('educación/Importar')->name('impornexus.')
-//     ->group(function () {
-//         Route::get('/Nexus', [ImporNexusController::class, 'importar'])->name('importar'); //impornexus.importar
-//         Route::post('/Guardar', [ImporNexusController::class, 'guardar'])->name('guardar'); //impornexus.guardar
-//         Route::get('/ListaImportada/{importacion}', [ImporNexusController::class, 'listar_importados'])->name('listar.importados'); //impornexus.listar.importados
-//         Route::delete('/eliminar/{id}', [ImporNexusController::class, 'eliminar'])->name('eliminar'); //impornexus.eliminar
-//     });
-
 Route::get('educación/Importar/PadronNexus', [ImporNexusController::class, 'importar'])->name('impornexus.importar');
 Route::post('educación/Importar/PadronNexus/Guardar', [ImporNexusController::class, 'guardar'])->name('impornexus.guardar');
 Route::get('educación/Importar/PadronNexus/ListaImportada/{importacion}', [ImporNexusController::class, 'listar_importados'])->name('impornexus.listar.importados');
+Route::post('educación/Importar/PadronNexus/ListaImportada/{importacion}', [ImporNexusController::class, 'listar_importados'])->name('impornexus.listarimportados');
 Route::delete('educación/Importar/PadronNexus/eliminar/{id}', [ImporNexusController::class, 'eliminar'])->name('impornexus.eliminar');
 
 Route::get('educación/PadronLocalesBeneficiados/Importar', [ImporLocalesBeneficiadosController::class, 'importar'])->name('imporlocalesbeneficiados.importar');
@@ -1220,11 +1188,11 @@ Route::get('/IMPORMODS/Listar/ImportarDT', [ImporModificacionesController::class
 Route::get('/IMPORMODS/eliminar/{id}', [ImporModificacionesController::class, 'eliminar']);
 Route::post('/IMPORMODS/ListaImportada/{importacion_id}', [ImporModificacionesController::class, 'ListaImportada'])->name('impormodificaciones.listarimportados');
 
-Route::get('/GobsRegs/Principal', [GobiernosRegionalesController::class, 'principal'])->middleware('auth')->name('gobsregs.principal');
-Route::get('/GobsRegs/cargarmes', [GobiernosRegionalesController::class, 'cargarmes'])->name('gobsregs.cargarmes');
-Route::get('/GobsRegs/tabla01', [GobiernosRegionalesController::class, 'principaltabla01'])->name('gobsregs.tabla01');
-Route::get('/GobsRegs/Exportar/excel/principal01', [GobiernosRegionalesController::class, 'download'])->name('gobsregs.download.excel.principal01');
-Route::get('/GobsRegs/Exportar/excel/principal01/{ano}/{mes}/{tipo}', [GobiernosRegionalesController::class, 'download']);
+Route::get('/Presupuesto/GobsRegs/Principal', [GobiernosRegionalesController::class, 'principal'])->middleware('auth')->name('gobsregs.principal');
+Route::get('/Presupuesto/GobsRegs/cargarmes', [GobiernosRegionalesController::class, 'cargarmes'])->name('gobsregs.cargarmes');
+Route::get('/Presupuesto/GobsRegs/tabla01', [GobiernosRegionalesController::class, 'principaltabla01'])->name('gobsregs.tabla01');
+Route::get('/Presupuesto/GobsRegs/Exportar/excel/principal01', [GobiernosRegionalesController::class, 'download'])->name('gobsregs.download.excel.principal01');
+Route::get('/Presupuesto/GobsRegs/Exportar/excel/principal01/{ano}/{mes}/{tipo}', [GobiernosRegionalesController::class, 'download']);
 
 Route::get('/Modificaciones/Principal', [ModificacionesController::class, 'principal_gasto'])->middleware('auth')->name('modificaciones.principal.gastos');
 Route::get('/Modificaciones/cargarmes', [ModificacionesController::class, 'cargarmes'])->name('modificaciones.cargarmes');

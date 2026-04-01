@@ -40,6 +40,20 @@
         .ui-autocomplete {
             z-index: 215000000 !important;
         }
+        .custom-select-container {
+            position: relative;
+            margin-top: 5px;
+        }
+        .custom-select-container label {
+            position: absolute;
+            top: -9px;
+            left: 12px;
+            background: transparent;
+            padding: 0 5px;
+            font-size: 10px;
+            color: #495057;
+            z-index: 10;
+        }
     </style>
 @endsection
 
@@ -67,14 +81,15 @@
                         <form class="form-horizontal" id="form-filtro">
                             @csrf
                             <div class="form">
-                                <div class="form-group row">
-                                    <div class="col-md-8"><span class="font-11">{{$actualizado}}</span></div>
-                                    <div class="col-md-1">
-                                        {{-- <label class=" col-form-label">Año</label> --}}
-                                        <div class="">
+                                <div class="form-group row align-items-end">
+                                    <div class="col-lg-4 col-md-12 col-sm-12">
+                                        <span class="font-11">{{ $actualizado }}</span>
+                                    </div>
+                                    <div class="col-lg-2 col-md-3 col-sm-12">
+                                        <div class="custom-select-container">
+                                            <label for="fano">AÑO</label>
                                             <select class="form-control font-11" name="fano" id="fano"
                                                 onchange="cargarmes();cargarcuadros();">
-                                                {{-- <option value="0">TODOS</option> --}}
                                                 @foreach ($anos as $item)
                                                     <option value="{{ $item->anio }}"
                                                         {{ $item->anio == $anio ? 'selected' : '' }}>{{ $item->anio }}
@@ -83,23 +98,22 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-1">
-                                        {{-- <label class="col-form-label">Mes</label> --}}
-                                        <div class="">
+                                    <div class="col-lg-2 col-md-3 col-sm-12">
+                                        <div class="custom-select-container">
+                                            <label for="fmes">MES</label>
                                             <select class="form-control font-11" name="fmes" id="fmes"
                                                 onchange="cargarcuadros();">
-                                                {{-- <option value="0">TODOS</option> --}}
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
-                                        {{-- <label class="col-form-label">Tipo </label> --}}
-                                        <div class="">
+                                    <div class="col-lg-4 col-md-6 col-sm-12">
+                                        <div class="custom-select-container">
+                                            <label for="ftipo">CLASIFICACIÓN</label>
                                             <select class="form-control font-11" name="ftipo" id="ftipo"
                                                 onchange="cargarcuadros();">
                                                 <option value="1">Actividades/Proyectos</option>
-                                                <option value="2">Proyectos</option>
-                                                <option value="3">Actividades</option>
+                                                <option value="2">Actividades</option>
+                                                <option value="3">Proyectos</option>
                                             </select>
                                         </div>
                                     </div>
@@ -248,15 +262,10 @@
         }
 
         function descargar() {
-            $.ajax({
-                url: "{{ url('/') }}/GobsRegs/Exportar/excel/principal01/null/null/null",
-                type: "GET",
-                success: function(data) {
-                    window.open("{{ url('/') }}/GobsRegs/Exportar/excel/principal01/" + $('#fano').val() +
-                        "/" + $('#fmes').val() + "/" + $('#ftipo').val());
-
-                },
-            });
+            window.open(
+                "{{ url('/') }}/Presupuesto/GobsRegs/Exportar/excel/principal01/" +
+                $('#fano').val() + "/" + $('#fmes').val() + "/" + $('#ftipo').val()
+            );
         }
     </script>
     <script>

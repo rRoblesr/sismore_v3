@@ -40,6 +40,20 @@
         .ui-autocomplete {
             z-index: 215000000 !important;
         }
+        .custom-select-container {
+            position: relative;
+            margin-top: 5px;
+        }
+        .custom-select-container label {
+            position: absolute;
+            top: -9px;
+            left: 12px;
+            background: transparent;
+            padding: 0 5px;
+            font-size: 10px;
+            color: #495057;
+            z-index: 10;
+        }
     </style>
 @endsection
 
@@ -70,11 +84,10 @@
                                 <div class="form-group row">
                                     <div class="col-md-4"></div>
                                     <div class="col-md-1">
-                                        {{-- <label class=" col-form-label">Año</label> --}}
-                                        <div class="">
+                                        <div class="custom-select-container">
+                                            <label for="fano">AÑO</label>
                                             <select class="form-control font-11" name="fano" id="fano"
                                                 onchange="cargarmes();cargarcuadros();">
-                                                {{-- <option value="0">TODOS</option> --}}
                                                 @foreach ($anio as $item)
                                                     <option value="{{ $item->anio }}"
                                                         {{ $item->anio == $actual ? 'selected' : '' }}>{{ $item->anio }}
@@ -84,20 +97,19 @@
                                         </div>
                                     </div>
                                     <div class="col-md-1">
-                                        {{-- <label class="col-form-label">Mes</label> --}}
-                                        <div class="">
+                                        <div class="custom-select-container">
+                                            <label for="fmes">MES</label>
                                             <select class="form-control font-11 pl-0" name="fmes" id="fmes"
                                                 onchange="cargarcuadros();">
-                                                {{-- <option value="0">TODOS</option> --}}
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        {{-- <label class="col-form-label">Tipos de Modificaciones </label> --}}
-                                        <div class="">
+                                        <div class="custom-select-container">
+                                            <label for="ftipomodificacion">TIPOS DE MODIFICACIONES</label>
                                             <select class="form-control font-11" name="ftipomodificacion"
                                                 id="ftipomodificacion" onchange="cargarcuadros();">
-                                                <option value="0">TIPOS DE MODIFICACIONES</option>
+                                                <option value="0">TODOS</option>
                                                 {{-- @foreach ($opt4 as $item)
                                                     <option value="{{ $item->id }}">
                                                         {{ $item->codigo . ' ' . $item->nombre }}</option>
@@ -106,11 +118,11 @@
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        {{-- <label class="col-form-label">Unidad Ejecutora </label> --}}
-                                        <div class="">
+                                        <div class="custom-select-container">
+                                            <label for="fue">UNIDAD EJECUTORA</label>
                                             <select class="form-control font-11" name="fue" id="fue"
                                                 onchange="cargarcuadros();">
-                                                <option value="0">UNIDAD EJECUTORA</option>
+                                                <option value="0">TODOS</option>
                                                 {{-- @foreach ($opt6 as $item)
                                                     <option value="{{ $item->id }}">
                                                         {{ $item->nombre_ejecutora }}</option>

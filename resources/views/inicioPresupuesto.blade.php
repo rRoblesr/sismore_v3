@@ -38,7 +38,7 @@
         .centrador {
             position: relative;
             /* width: 400px;
-                                                /* background-color: red; */
+                                                        /* background-color: red; */
         }
 
         .imagen {
@@ -49,6 +49,26 @@
             right: 0;
             bottom: 0;
             margin: auto;
+        }
+
+        .custom-select-container {
+            position: relative;
+            margin-top: 5px;
+        }
+
+        .custom-select-container label {
+            position: absolute;
+            top: -9px;
+            left: 12px;
+            background: transparent;
+            padding: 0 5px;
+            font-size: 10px;
+            color: #495057;
+            z-index: 10;
+        }
+
+        .custom-select-container .form-control {
+            /* height: 40px; */
         }
     </style>
 @endsection
@@ -68,26 +88,31 @@
             </div>
         </div> --}}
         <!-- end row -->
-        <div class="form-group row align-items-center vh-5">
-            <div class="col-lg-8">
+        <div class="form-group row mb-2">
+            <div class="col-lg-6 col-md-12 col-sm-12">
                 <h4 class="page-title font-16">{{ $titulo }}</h4>
             </div>
-            <label class="col-lg-1 control-label text-right align-self-end">Año</label>
-            <div class="col-lg-1">
-                <select id="anio" name="anio" class="form-control font-10" onchange="cargartarjetas();">
-                    @foreach ($anios as $item)
-                        <option value="{{ $item->anio }}" {{ $item->anio == $anio ? 'selected' : '' }}>
-                            {{ $item->anio }}
-                        </option>
-                    @endforeach
-                </select>
+            <div class="col-lg-2 col-md-6 col-sm-12">
+                <div class="custom-select-container">
+                    <label for="anio">AÑO</label>
+                    <select id="anio" name="anio" class="form-control font-11" onchange="cargartarjetas();">
+                        @foreach ($anios as $item)
+                            <option value="{{ $item->anio }}" {{ $item->anio == $anio ? 'selected' : '' }}>
+                                {{ $item->anio }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
-            <div class="col-lg-2">
-                <select id="articulo" name="articulo" class="form-control font-10" onchange="cargartarjetas();">
-                    <option value="0">ACTIVIDADES Y PROYECTOS</option>
-                    <option value="1">PROYECTOS</option>
-                    <option value="2">ACTIVIDADES</option>
-                </select>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="custom-select-container">
+                    <label for="articulo">CLASIFICACIÓN</label>
+                    <select id="articulo" name="articulo" class="form-control font-11" onchange="cargartarjetas();">
+                        <option value="0">ACTIVIDADES/PROYECTOS</option>
+                        <option value="2">ACTIVIDADES</option>
+                        <option value="1">PROYECTOS</option>
+                    </select>
+                </div>
             </div>
         </div>
 
@@ -340,53 +365,15 @@
 
 
 @section('js')
-    {{-- <script src="https://code.highcharts.com/maps/highmaps.js"></script>
-    <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/mapdata/countries/pe/pe-all.js"></script> --}}
-    
     <script src="{{ asset('/') }}public/assets/libs/highcharts/highmaps.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/exporting.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts/pe-all.js"></script>
-
-    {{-- highcharts --}}
-    {{-- <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/data.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script> --}}
 
     {{-- <script src="{{ asset('/') }}public/assets/libs/highcharts/highcharts.js"></script> --}}
     <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/data.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/export-data.js"></script>
     <script src="{{ asset('/') }}public/assets/libs/highcharts-modules/accessibility.js"></script>
-
-
-
-    <!-- third party js -->
-    {{-- <script src="{{ asset('/') }}public/assets/libs/datatables/jquery.dataTables.min.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.bootstrap4.min.js"></script>
-
-    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.responsive.min.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/datatables/responsive.bootstrap4.min.js"></script>
-
-    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.buttons.min.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/datatables/buttons.bootstrap4.min.js"></script>
-
-    <script src="{{ asset('/') }}public/assets/libs/jszip/jszip.min.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/pdfmake/pdfmake.min.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/pdfmake/vfs_fonts.js"></script>
-
-    <script src="{{ asset('/') }}public/assets/libs/datatables/buttons.html5.min.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/datatables/buttons.print.min.js"></script>
-
-    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.fixedHeader.min.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.keyTable.min.js"></script>
-    <script src="{{ asset('/') }}public/assets/libs/datatables/dataTables.scroller.min.js"></script>
- --}}
-
-
-
-
+ 
     <script type="text/javascript">
         $(document).ready(function() {
             Highcharts.setOptions({

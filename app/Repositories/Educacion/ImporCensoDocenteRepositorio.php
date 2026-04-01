@@ -95,7 +95,19 @@ class ImporCensoDocenteRepositorio
 
                 return compact('docentes', 'titulados');
             case 'dianal0':
-                $anios = Importacion::select('id', DB::raw('year(fechaActualizacion) as anio'))->where('fuenteImportacion_id', 32)->where('estado', 'PR')->orderBy('anio')->get();
+                $anioRef = null;
+                $impRef = Importacion::find($anio);
+                if ($impRef) {
+                    $anioRef = (int)($impRef->anio ?? date('Y', strtotime($impRef->fechaActualizacion)));
+                }
+
+                $aniosQuery = Importacion::select('id', DB::raw('year(fechaActualizacion) as anio'))
+                    ->where('fuenteImportacion_id', 32)
+                    ->where('estado', 'PR');
+                if ($anioRef) {
+                    $aniosQuery->where(DB::raw('year(fechaActualizacion)'), '<=', $anioRef);
+                }
+                $anios = $aniosQuery->orderBy('anio')->get();
 
                 $docentes = Importacion::select(
                     DB::raw('year(par_importacion.fechaActualizacion) as anio'),
@@ -108,6 +120,9 @@ class ImporCensoDocenteRepositorio
                 )
                     ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
                     ->whereIn('v1.nroced', ['1A'])->whereIn('v1.cuadro', ['C305'])->whereIn('v1.tipdato', ['01', '05']);
+                if ($anioRef) {
+                    $docentes = $docentes->where(DB::raw('year(par_importacion.fechaActualizacion)'), '<=', $anioRef);
+                }
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
                     $docentes = $docentes->where('v1.codgeo', 'like', $prov->codigo . '%');
@@ -137,6 +152,9 @@ class ImporCensoDocenteRepositorio
                 )
                     ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
                     ->whereIn('v1.nroced', ['1A'])->whereIn('v1.cuadro', ['C309', 'C310'])->whereIn('v1.tipdato', ['01', '03', '07', '08']);
+                if ($anioRef) {
+                    $titulados = $titulados->where(DB::raw('year(fechaActualizacion)'), '<=', $anioRef);
+                }
                 if ($provincia > 0) {
                     $prov = Ubigeo::find($provincia);
                     $titulados = $titulados->where('v1.codgeo', 'like', $prov->codigo . '%');
@@ -1196,6 +1214,12 @@ class ImporCensoDocenteRepositorio
                                                     when "3AP" then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15
                                                     when "3AS" then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26
                                                 end                                                
+                                    when 2025 then
+                                                case nroced
+                                                    when  "1A" then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11
+                                                    when "3AP" then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15
+                                                    when "3AS" then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26
+                                                end         
                                 end) as conteo')
                 )
                     ->join('edu_impor_censodocente as v1', 'v1.importacion_id', '=', 'par_importacion.id')
@@ -4631,7 +4655,7 @@ class ImporCensoDocenteRepositorio
                 'sum(
                         case 
                             when year(par_importacion.fechaActualizacion) in(2018, 2019)                   then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25
-                            when year(par_importacion.fechaActualizacion) in(2020, 2021, 2022, 2023, 2024) then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26
+                            when year(par_importacion.fechaActualizacion) in(2020, 2021, 2022, 2023, 2024, 2025) then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15+d16+d17+d18+d19+d20+d21+d22+d23+d24+d25+d26
                             else 0
                         end
                                 ) as v'
@@ -4711,7 +4735,7 @@ class ImporCensoDocenteRepositorio
                 'sum(
                         case 
                             when year(par_importacion.fechaActualizacion) in(2018, 2019)                   then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13
-                            when year(par_importacion.fechaActualizacion) in(2020, 2021, 2022, 2023, 2024) then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15
+                            when year(par_importacion.fechaActualizacion) in(2020, 2021, 2022, 2023, 2024, 2025) then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13+d14+d15
                             else 0
                         end
                                 ) as v'
@@ -4791,7 +4815,7 @@ class ImporCensoDocenteRepositorio
                 'sum(
                         case 
                             when year(par_importacion.fechaActualizacion) in(2018, 2019)                   then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11+d12+d13
-                            when year(par_importacion.fechaActualizacion) in(2020, 2021, 2022, 2023, 2024) then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11
+                            when year(par_importacion.fechaActualizacion) in(2020, 2021, 2022, 2023, 2024, 2025) then d01+d02+d03+d04+d05+d06+d07+d08+d09+d10+d11
                             else 0
                         end
                                 ) as v'

@@ -7,6 +7,7 @@ use App\Http\Controllers\Educacion\ImporCensoMatriculaController;
 use App\Http\Controllers\Educacion\ImporMatriculaGeneralController;
 use App\Http\Controllers\Educacion\ImporServiciosBasicosController;
 use App\Http\Controllers\Presupuesto\ImporActividadesProyectosController;
+use App\Http\Controllers\Presupuesto\ImporConsultaAmigableController;
 use App\Http\Controllers\Presupuesto\ImporProyectosController;
 use App\Http\Controllers\Presupuesto\ImporSiafWebController;
 use App\Models\Administracion\Perfil;
@@ -35,6 +36,7 @@ use App\Repositories\Presupuesto\BaseActividadesProyectosRepositorio;
 use App\Repositories\Presupuesto\BaseIngresosRepositorio;
 use App\Repositories\Presupuesto\BaseProyectosRepositorio;
 use App\Repositories\Presupuesto\BaseSiafWebRepositorio;
+use App\Repositories\Presupuesto\ImporConsultaAmigableRepositorio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Repositories\Vivienda\DatassRepositorio;
@@ -290,18 +292,19 @@ class HomeController extends Controller
         $card4['pim'] = $opt1->dev;
         $card4['eje'] = $opt1->eje_dev;
 
-        $impAP = Importacion::where('fuenteimportacion_id', ImporActividadesProyectosController::$FUENTE)->where('estado', 'PR')->orderBy('fechaActualizacion', 'desc')->first();
-        $baseAP = BaseActividadesProyectos::where('importacion_id', $impAP->id)->first();
-        $opt2 = BaseActividadesProyectosRepositorio::listar_regiones($baseAP->id);
+        // $impAP = Importacion::where('fuenteimportacion_id', ImporActividadesProyectosController::$FUENTE)->where('estado', 'PR')->orderBy('fechaActualizacion', 'desc')->first();
+        // $baseAP = BaseActividadesProyectos::where('importacion_id', $impAP->id)->first();
+        // $opt2 = BaseActividadesProyectosRepositorio::listar_regiones($baseAP->id);
 
-        $anios = BaseSiafWebRepositorio::anios();
+        // return $impCA=ImportacionRepositorio::aniosMax_porfuente(ImporConsultaAmigableController::$FUENTE);
+
+        $anios = ImporConsultaAmigableRepositorio::anios();
 
         $strSiafWeb = strtotime($impSW->fechaActualizacion);
         $actualizado = 'Actualizado al ' . date('d', $strSiafWeb) . ' de ' . $this->mes[date('m', $strSiafWeb) - 1] . ' del ' . date('Y', $strSiafWeb);
 
         $titulo = 'Modulo Presupuesto'; // 'Ejecución Presupuestal del Gobierno Regional de Ucayali';
-
-        return view('home', compact('sistema_id', 'card1', 'card2', 'card3', 'card4',  'anio', 'baseAP',  'anios', 'actualizado', 'titulo'));
+        return view('home', compact('sistema_id', 'card1', 'card2', 'card3', 'card4',  'anio',  'anios', 'actualizado', 'titulo'));
     }
 
     public function presupuestocuadros(Request $rq)
@@ -309,17 +312,18 @@ class HomeController extends Controller
         $anio = $rq->get('anio');
         $articulo = $rq->get('articulo');
 
-        $impSW = Importacion::where('fuenteimportacion_id', '24')->where('estado', 'PR')->where(DB::raw('year(fechaActualizacion)'), $anio)->orderBy('fechaActualizacion', 'desc')->first();
-        $baseSW = BaseSiafWeb::where('importacion_id', $impSW->id)->first();
-        $opt1 = BaseSiafWebRepositorio::pia_pim_certificado_devengado($baseSW->id, $articulo);
+        // $impSW = Importacion::where('fuenteimportacion_id', '24')->where('estado', 'PR')->where(DB::raw('year(fechaActualizacion)'), $anio)->orderBy('fechaActualizacion', 'desc')->first();
+        // $baseSW = BaseSiafWeb::where('importacion_id', $impSW->id)->first();
+        $opt1 = ImporConsultaAmigableRepositorio::resumen_ultimo_registro($anio, $articulo);
+
 
         $card1['pim'] = number_format($opt1->pia, 0);
         $card1['eje'] = $opt1->eje_pia;
         $card2['pim'] = number_format($opt1->pim, 0);
         $card2['eje'] = $opt1->eje_pim;
-        $card3['pim'] = number_format($opt1->cer, 0);
+        $card3['pim'] = number_format($opt1->certificacion, 0);
         $card3['eje'] = $opt1->eje_cer;
-        $card4['pim'] = number_format($opt1->dev, 0);
+        $card4['pim'] = number_format($opt1->devengado, 0);
         $card4['eje'] = $opt1->eje_dev;
 
         return response()->json(compact('card1', 'card2', 'card3', 'card4'));
@@ -392,30 +396,9 @@ class HomeController extends Controller
         ];
         $data = [];
         $reg = ['fue' => '', 'fec' => ''];
-        if ($articulo == 0) {
-            // $impAP = Importacion::where('fuenteimportacion_id', '16')->where('estado', 'PR')->where(DB::raw('year(fechaActualizacion)'), $anio)->orderBy('fechaActualizacion', 'desc')->first();
-            $impAP = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio(ImporActividadesProyectosController::$FUENTE, $anio);
-            $baseAP = BaseActividadesProyectos::where('importacion_id', $impAP->id)->first();
-            $info = BaseActividadesProyectosRepositorio::listar_regiones($baseAP->id);
-            $reg = ['fue' => $impAP->fuente, 'fec' => date('d/m/Y', strtotime($impAP->fecha))];
-        } else if ($articulo == 1) {
-            // $impP = Importacion::where('fuenteimportacion_id', '25')->where('estado', 'PR')->where(DB::raw('year(fechaActualizacion)'), $anio)->orderBy('fechaActualizacion', 'desc')->first();
-            $impP = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio(ImporProyectosController::$FUENTE, $anio);
-            $baseP = BaseProyectos::where('importacion_id', $impP->id)->first();
-            $info = BaseProyectosRepositorio::listar_regiones($baseP->id);
-            $reg = ['fue' => $impP->fuente, 'fec' => date('d/m/Y', strtotime($impP->fecha))];
-        } else { //2
-            // $impAP = Importacion::where('fuenteimportacion_id', '16')->where('estado', 'PR')->where(DB::raw('year(fechaActualizacion)'), $anio)->orderBy('fechaActualizacion', 'desc')->first();
-            $impAP = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio(ImporActividadesProyectosController::$FUENTE, $anio);
-            $baseAP = BaseActividadesProyectos::where('importacion_id', $impAP->id)->first();
-
-            // $impP = Importacion::where('fuenteimportacion_id', '25')->where('estado', 'PR')->where(DB::raw('year(fechaActualizacion)'), $anio)->orderBy('fechaActualizacion', 'desc')->first();
-            $impP = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio(ImporProyectosController::$FUENTE, $anio);
-            $baseP = BaseProyectos::where('importacion_id', $impP->id)->first();
-
-            $info = BaseActividadesProyectosRepositorio::listar_regiones_actividad($baseAP->id, $baseP->id);
-            $reg = ['fue' => $impAP->fuente, 'fec' => date('d/m/Y', strtotime($impAP->fecha))];
-        }
+        $imp = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio(ImporConsultaAmigableController::$FUENTE, $anio);
+        $info = ImporConsultaAmigableRepositorio::listar_regiones($imp->id, $articulo);
+        $reg = ['fue' => $imp->fuente, 'fec' => date('d/m/Y', strtotime($imp->fecha))];
 
         foreach ($info as $key => $value1) {
             $hc_key = $datax[$value1->codigo];
@@ -432,26 +415,10 @@ class HomeController extends Controller
         $articulo = $rq->get('articulo');
 
         $mes = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Set', 'Oct', 'Nov', 'Dic'];
-        if ($articulo == 0) {
-            $array = BaseActividadesProyectosRepositorio::baseids_fecha_max($anio);
-            $base = BaseActividadesProyectosRepositorio::listado_ejecucion($array);
-
-            $impAP = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio(ImporActividadesProyectosController::$FUENTE, $anio);
-            $reg = ['fue' => $impAP->fuente, 'fec' => date('d/m/Y', strtotime($impAP->fecha))];
-        } else if ($articulo == 1) {
-            $array = BaseProyectosRepositorio::baseids_fecha_max($anio);
-            $base = BaseProyectosRepositorio::listado_ejecucion($array);
-
-            $impP = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio(ImporProyectosController::$FUENTE, $anio);
-            $reg = ['fue' => $impP->fuente, 'fec' => date('d/m/Y', strtotime($impP->fecha))];
-        } else { //2
-            $array1 = BaseActividadesProyectosRepositorio::baseids_fecha_max($anio);
-            $array2 = BaseProyectosRepositorio::baseids_fecha_max($anio);
-            $base = BaseActividadesProyectosRepositorio::listado_ejecucion_actividad($array1, $array2);
-
-            $impAP = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio(ImporActividadesProyectosController::$FUENTE, $anio);
-            $reg = ['fue' => $impAP->fuente, 'fec' => date('d/m/Y', strtotime($impAP->fecha))];
-        }
+        $array = ImporConsultaAmigableRepositorio::baseids_fecha_max($anio, $articulo);
+        $base = ImporConsultaAmigableRepositorio::listado_ejecucion($array, $anio, $articulo);
+        $imp = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio(ImporConsultaAmigableController::$FUENTE, $anio);
+        $reg = ['fue' => $imp->fuente, 'fec' => date('d/m/Y', strtotime($imp->fecha))];
 
         $info['categoria'] = $mes;
         $info['series'] = [null, null, null, null, null, null, null, null, null, null, null, null];
@@ -476,22 +443,17 @@ class HomeController extends Controller
         $articulo = $rq->get('articulo');
 
         $mes = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Set', 'Oct', 'Nov', 'Dic'];
-        $array = BaseSiafWebRepositorio::baseids_fecha_max($anio);
-        if ($articulo == 0) {
-            $base = BaseSiafWebRepositorio::suma_pim($array, 0);
-        } else if ($articulo == 1) {
-            $base = BaseSiafWebRepositorio::suma_pim($array, 1);
-        } else { //2
-            $base = BaseSiafWebRepositorio::suma_pim($array, 2);
-        }
-
-        $imp = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio(ImporSiafWebController::$FUENTE, $anio);
+        $base = ImporConsultaAmigableRepositorio::pim_ucayali_ultimo_registro_mes($anio, $articulo);
+        $imp = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio(ImporConsultaAmigableController::$FUENTE, $anio);
         $reg = ['fue' => $imp->fuente, 'fec' => date('d/m/Y', strtotime($imp->fecha))];
 
         $info['categoria'] = $mes;
         $info['series'] = [null, null, null, null, null, null, null, null, null, null, null, null];
+        $monto = 0.0;
         foreach ($base as $key => $value) {
-            $info['series'][$value->name - 1] = $value->y;
+            $val = (float)$value->y - $monto;
+            $info['series'][$value->name - 1] = $val;
+            $monto = (float)$value->y;
         }
         return response()->json(compact('info', 'reg'));
     }
@@ -502,25 +464,17 @@ class HomeController extends Controller
         $articulo = $rq->get('articulo');
 
         $mes = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Set', 'Oct', 'Nov', 'Dic'];
-        $array = BaseSiafWebRepositorio::baseids_fecha_max($anio);
-        if ($articulo == 0) {
-            $base = BaseSiafWebRepositorio::suma_certificado($array, 0);
-        } else if ($articulo == 1) {
-            $base = BaseSiafWebRepositorio::suma_certificado($array, 1);
-        } else { //2
-            $base = BaseSiafWebRepositorio::suma_certificado($array, 2);
-        }
-        $imp = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio(ImporSiafWebController::$FUENTE, $anio);
+        $base = ImporConsultaAmigableRepositorio::cert_ucayali_ultimo_registro_mes($anio, $articulo);
+        $imp = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio(ImporConsultaAmigableController::$FUENTE, $anio);
         $reg = ['fue' => $imp->fuente, 'fec' => date('d/m/Y', strtotime($imp->fecha))];
 
         $info['categoria'] = $mes;
         $info['series'] = [null, null, null, null, null, null, null, null, null, null, null, null];
-        $monto = 0;
+        $monto = 0.0;
         foreach ($base as $key => $value) {
-            $value->y -= $monto;
-            $info['series'][$value->name - 1] = $value->y;
-            $monto = $value->y + $monto;
-            $value->color = ($value->y < 0 ? '#ef5350' : '#317eeb');
+            $val = (float)$value->y - $monto;
+            $info['series'][$value->name - 1] = $val;
+            $monto = (float)$value->y;
         }
         return response()->json(compact('info', 'reg'));
     }
@@ -531,26 +485,18 @@ class HomeController extends Controller
         $articulo = $rq->get('articulo');
 
         $mes = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Set', 'Oct', 'Nov', 'Dic'];
-        $array = BaseSiafWebRepositorio::baseids_fecha_max($rq->get('anio'));
-        if ($articulo == 0) {
-            $base = BaseSiafWebRepositorio::suma_devengado($array, 0);
-        } else if ($articulo == 1) {
-            $base = BaseSiafWebRepositorio::suma_devengado($array, 1);
-        } else { //2
-            $base = BaseSiafWebRepositorio::suma_devengado($array, 2);
-        }
+        $base = ImporConsultaAmigableRepositorio::dev_ucayali_ultimo_registro_mes($anio, $articulo);
 
-        $imp = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio(ImporSiafWebController::$FUENTE, $anio);
+        $imp = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio(ImporConsultaAmigableController::$FUENTE, $anio);
         $reg = ['fue' => $imp->fuente, 'fec' => date('d/m/Y', strtotime($imp->fecha))];
 
         $info['categoria'] = $mes;
         $info['series'] = [null, null, null, null, null, null, null, null, null, null, null, null];
-        $monto = 0;
+        $monto = 0.0;
         foreach ($base as $key => $value) {
-            $value->y -= $monto;
-            $info['series'][$value->name - 1] = $value->y;
-            $monto = $value->y + $monto;
-            $value->color = ($value->y < 0 ? '#ef5350' : '#317eeb');
+            $val = (float)$value->y - $monto;
+            $info['series'][$value->name - 1] = $val;
+            $monto = (float)$value->y;
         }
         return response()->json(compact('info', 'reg'));
     }
@@ -561,16 +507,10 @@ class HomeController extends Controller
         $articulo = $rq->get('articulo');
 
         $info['categoria'] = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Setiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-        $array = BaseSiafWebRepositorio::baseids_fecha_max($rq->get('anio'));
-        if ($articulo == 0) {
-            $query = BaseSiafWebRepositorio::suma_xxxx($array, 0);
-        } else if ($articulo == 1) {
-            $query = BaseSiafWebRepositorio::suma_xxxx($array, 1);
-        } else { //2
-            $query = BaseSiafWebRepositorio::suma_xxxx($array, 2);
-        }
+        
+        $query = ImporConsultaAmigableRepositorio::suma_xxxx($anio, $articulo);
 
-        $imp = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio(ImporSiafWebController::$FUENTE, $anio);
+        $imp = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio(ImporConsultaAmigableController::$FUENTE, $anio);
         $reg = ['fue' => $imp->fuente, 'fec' => date('d/m/Y', strtotime($imp->fecha))];
 
         $info['series'] = [];
@@ -580,11 +520,11 @@ class HomeController extends Controller
         $dx4 = [null, null, null, null, null, null, null, null, null, null, null, null];
         $dx5 = [null, null, null, null, null, null, null, null, null, null, null, null];
         foreach ($query as $key => $value) {
-            //$dx1[$key] = $value->y1; //pia
-            $dx2[$key] = $value->y2; //pim
-            $dx3[$key] = $value->y3; //devengado
-            $dx4[$key] = $value->y4; //devengado
-            $dx5[$key] = $value->y5; //devengado
+            //$dx1[$value->name - 1] = (float)$value->y1; //pia
+            $dx2[$value->name - 1] = (float)$value->y2; //pim
+            $dx3[$value->name - 1] = (float)$value->y3; //devengado
+            $dx4[$value->name - 1] = (float)$value->y4; //avance cert
+            $dx5[$value->name - 1] = (float)$value->y5; //ejecucion
         }
         //$info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'PIM', 'color' => '#7C7D7D', 'data' => $dx1];
         $info['series'][] = ['type' => 'column', 'yAxis' => 0, 'name' => 'CERTIFICADO', 'color' => '#317eeb', 'data' => $dx2];

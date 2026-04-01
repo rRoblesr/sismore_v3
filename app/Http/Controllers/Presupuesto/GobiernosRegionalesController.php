@@ -2,17 +2,10 @@
 
 namespace App\Http\Controllers\Presupuesto;
 
-use App\Exports\BaseGastosExport;
 use App\Exports\GobiernosRegionalesExport;
 use App\Http\Controllers\Controller;
 use App\Models\Educacion\Importacion;
-use App\Models\Presupuesto\BaseProyectos;
-use App\Models\Presupuesto\BaseSiafWeb;
-use App\Models\Presupuesto\TipoGobierno;
 use App\Repositories\Educacion\ImportacionRepositorio;
-use App\Repositories\Presupuesto\BaseGastosRepositorio;
-use App\Repositories\Presupuesto\BaseProyectosRepositorio;
-use App\Repositories\Presupuesto\BaseSiafWebRepositorio;
 use App\Repositories\Presupuesto\GobiernosRegionalesRepositorio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -34,7 +27,7 @@ class GobiernosRegionalesController extends Controller
         $anio = $anos->max('anio');
         $impG = Importacion::where('fuenteimportacion_id', '25')->where('estado', 'PR')->orderBy('fechaActualizacion', 'desc')->first();
 
-        $imp = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio('25', $anio);
+        $imp = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio(ImporConsultaAmigableController::$FUENTE, $anio);
         $actualizado = $imp->fuente . ', Actualizado al ' . date('d', strtotime($imp->fecha)) . ' de ' . $this->mesc[date('m', strtotime($imp->fecha)) - 1] . ' del ' . date('Y', strtotime($imp->fecha));
         $mensaje = "";
         return view('Presupuesto.GobiernosRegionales.Principal', compact('mensaje', 'anos', 'anio', 'impG', 'actualizado'));

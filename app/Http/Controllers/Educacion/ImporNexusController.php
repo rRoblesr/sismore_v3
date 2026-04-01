@@ -413,9 +413,21 @@ class ImporNexusController extends Controller
 
     public function ListaImportada_DataTable($importacion_id)
     {
-        $Lista = ImporNexusRepositorio::Listar_Por_Importacion_id($importacion_id);
+        try {
+            $Lista = ImporNexusRepositorio::Listar_Por_Importacion_id($importacion_id);
+            return datatables()->of($Lista)->toJson();
+        } catch (\Throwable $e) {
+            \Log::error('ImporNexus ListaImportada_DataTable error', [
+                'importacion_id' => $importacion_id,
+                'message' => $e->getMessage(),
+            ]);
+            return response()->json(['message' => 'Server Error'], 500);
+        }
+    }
 
-        return  datatables()->of($Lista)->toJson();;
+    public function listar_importados($importacion_id)
+    {
+        return $this->ListaImportada_DataTable($importacion_id);
     }
 
     public function procesar($importacion_id)

@@ -8,9 +8,11 @@ use App\Models\Educacion\Importacion;
 use App\Models\Presupuesto\BaseProyectos;
 use App\Models\Presupuesto\BaseSiafWeb;
 use App\Models\Presupuesto\TipoGobierno;
+use App\Repositories\Educacion\ImportacionRepositorio;
 use App\Repositories\Presupuesto\BaseGastosRepositorio;
 use App\Repositories\Presupuesto\BaseProyectosRepositorio;
 use App\Repositories\Presupuesto\BaseSiafWebRepositorio;
+use App\Repositories\Presupuesto\ImporConsultaAmigableRepositorio;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -41,7 +43,7 @@ class BaseProyectosController extends Controller
         $impP = Importacion::where('fuenteimportacion_id', '25')->where('estado', 'PR')->orderBy('fechaActualizacion', 'desc')->first();
         $baseP = BaseProyectos::where('importacion_id', $impP->id)->first();
 
-        $impG=$impSW;
+        $impG = $impSW;
         return view('presupuesto.BaseProyectos.AvancePresupuestal', compact('card1', 'card2', 'card3', 'card4', 'impG', 'anio', 'baseP'));
     }
     public function avancepresupuestalmapa1($importacion_id)
@@ -76,7 +78,9 @@ class BaseProyectosController extends Controller
         ];
 
         $data = [];
-        $info = BaseProyectosRepositorio::listar_regiones($importacion_id);
+        // $info = BaseProyectosRepositorio::listar_regiones($importacion_id);
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporConsultaAmigableController::$FUENTE);
+        $info = ImporConsultaAmigableRepositorio::listar_regiones($imp->id, 1);
         foreach ($info as $key => $value1) {
             $hc_key = $datax[$value1->codigo];
             $data[] = [$hc_key, $key + 1];
@@ -90,8 +94,10 @@ class BaseProyectosController extends Controller
     public function avancepresupuestalgrafica3(Request $rq)
     {
         $mes = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Set', 'Oct', 'Nov', 'Dic'];
-        $array = BaseProyectosRepositorio::baseids_fecha_max($rq->get('anio'));
-        $base = BaseProyectosRepositorio::listado_ejecucion($array);
+        // $array = BaseProyectosRepositorio::baseids_fecha_max($rq->get('anio'));
+        // $base = BaseProyectosRepositorio::listado_ejecucion($array);
+        $array = ImporConsultaAmigableRepositorio::baseids_fecha_max($rq->get('anio'), $rq->get('articulo'));
+        $base = ImporConsultaAmigableRepositorio::listado_ejecucion($array, $rq->get('anio'), $rq->get('articulo'));
         $info['categoria'] = $mes;
         $info['series'] = [null, null, null, null, null, null, null, null, null, null, null, null];
         for ($i = 1; $i < 13; $i++) {

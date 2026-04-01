@@ -1796,25 +1796,25 @@ class IndicadorController extends Controller
 
     public function panelControlEduacionNuevoindicador06Head(Request $rq)
     {
-        // $base = ImporCensoDocenteRepositorio::_1AReportes('head', $rq->anio, $rq->provincia, $rq->distrito, $rq->tipogestion, 0);
-        // $denonimador = $base['docentes'];
-        // $numerador = $base['titulados'];
-
-        // $v1 = isset($numerador->d) ? $numerador->d : 0;
-        // $v2 = isset($denonimador->d) ? $denonimador->d : 0;
-
-        // $valor1 = $v2 > 0 ? 100 * $v1 / $v2 : 0;
-        // $valor2 = $v2;
-        // $valor3 = $v1;
-        // $valor4 = $v2 - $v1;}
-
         $base = ImporCensoDocenteRepositorio::PersonaDocenteTitulado1A($rq->anio, $rq->provincia, $rq->distrito, $rq->tipogestion, 0);
 
         $valor1 = number_format($base['avance'], 1);
         $valor2 = number_format($base['den'], 0);
         $valor3 = number_format($base['num'], 0);
         $valor4 = number_format($base['brecha'], 0);
-        return response()->json(compact('valor1', 'valor2', 'valor3', 'valor4'));
+
+        $imp = Importacion::find($rq->anio);
+        $actualizado = '';
+        if ($imp) {
+            if (isset($imp->dia, $imp->mes, $imp->anio) && $imp->dia && $imp->mes && $imp->anio) {
+                $actualizado = 'Fuente: Censo Educativo, Actualizado al ' . $imp->dia . ' de ' . $this->mes[$imp->mes - 1] . ' del ' . $imp->anio;
+            } else if ($imp->fechaActualizacion) {
+                $str = strtotime($imp->fechaActualizacion);
+                $actualizado = 'Fuente: Censo Educativo, Actualizado al ' . date('d', $str) . ' de ' . $this->mes[date('m', $str) - 1] . ' del ' . date('Y', $str);
+            }
+        }
+
+        return response()->json(compact('valor1', 'valor2', 'valor3', 'valor4', 'actualizado'));
     }
 
     public function panelControlEduacionNuevoindicador06Tabla(Request $rq)

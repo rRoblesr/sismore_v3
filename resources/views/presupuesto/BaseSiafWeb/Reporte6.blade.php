@@ -40,6 +40,23 @@
         .ui-autocomplete {
             z-index: 215000000 !important;
         }
+
+        .custom-select-container {
+            position: relative;
+            margin-top: 5px;
+        }
+
+        .custom-select-container label {
+            position: absolute;
+            top: -9px;
+            left: 12px;
+            background: transparent;
+            padding: 0 5px;
+            font-size: 10px;
+            color: #495057;
+            z-index: 10;
+        }
+ 
     </style>
 @endsection
 
@@ -66,11 +83,10 @@
                             @csrf
                             <div class="form">
                                 <div class="form-group row">
-                                    <div class="col-md-6"><span class="font-11">{{ $actualizado }}</span>
-                                    </div>
-                                    <div class="col-md-1">
-                                        {{-- <label class=" col-form-label">Año</label> --}}
-                                        <div class="">
+                                    <div class="col-lg-4 col-md-12 col-sm-12"><span class="font-11">{{ $actualizado }}</span></div>
+                                    <div class="col-lg-2 col-md-2 col-sm-12">
+                                        <div class="custom-select-container">
+                                            <label for="ganio">AÑO</label>
                                             <select class="form-control font-11" name="ganio" id="ganio"
                                                 onchange="cargar_productoproyecto();cargar_unidadejecutora();cargarcuadros2();">
                                                 @foreach ($ano as $item)
@@ -81,24 +97,24 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
-                                        {{-- <label class="col-form-label">Producto/Proyecto</label> --}}
-                                        <div class="">
+                                    <div class="col-lg-2 col-md-4 col-sm-12">
+                                        <div class="custom-select-container">
+                                            <label for="garticulo">PRODUCTO/PROYECTO</label>
                                             <select class="form-control font-11" name="garticulo" id="garticulo"
                                                 onchange="cargar_unidadejecutora();cargarcuadros2();">
-                                                <option value="0">PRODUCTO/PROYECTO</option>
+                                                <option value="0">TODOS</option>
                                                 @foreach ($articulo as $item)
                                                     <option value="{{ $item->id }}">{{ $item->nombre }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        {{-- <label class="col-form-label">Unidad Ejecutora</label> --}}
-                                        <div class="">
+                                    <div class="col-lg-4 col-md-6 col-sm-12">
+                                        <div class="custom-select-container">
+                                            <label for="gue">UNIDAD EJECUTORA</label>
                                             <select class="form-control font-11" name="gue" id="gue"
                                                 onchange="cargarcuadros2();">
-                                                <option value="0">UNIDAD EJECUTORA</option>
+                                                <option value="0">TODOS</option>
                                                 @foreach ($ue as $item)
                                                     <option value="{{ $item->id }}">
                                                         {{ $item->codigo . ' ' . $item->nombre }}

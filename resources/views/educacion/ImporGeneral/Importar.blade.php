@@ -5,6 +5,43 @@
         type="text/css" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"> --}}
+    <style>
+        #modal-siagie-matricula .modal-dialog {
+            max-width: 95vw;
+        }
+
+        #modal-siagie-matricula .modal-body {
+            padding: .75rem 1rem;
+        }
+
+        #modal-siagie-matricula table.dataTable thead th,
+        #modal-siagie-matricula table.dataTable tbody td {
+            vertical-align: middle;
+        }
+
+        #modal-siagie-matricula .dataTables_wrapper .row {
+            width: 100%;
+        }
+
+        #modal-siagie-matricula .dataTables_wrapper .dataTables_length,
+        #modal-siagie-matricula .dataTables_wrapper .dataTables_filter {
+            margin-bottom: .5rem;
+        }
+
+        #modal-siagie-matricula .dataTables_wrapper .dataTables_filter {
+            text-align: right;
+        }
+
+        #modal-siagie-matricula .dataTables_wrapper .dataTables_info {
+            padding-top: .5rem;
+        }
+
+        #modal-siagie-matricula .dataTables_wrapper .dataTables_paginate {
+            float: none;
+            text-align: center;
+            padding-top: .5rem;
+        }
+    </style>
 @endsection
 @section('content')
     <div class="row">
@@ -165,7 +202,7 @@
                 <div class="modal-body">
                     <div class="table-responsive">
                         <table id="siagie-matricula" class="table table-striped table-bordered"
-                            style="font-size:10px;width:5000px;">
+                            style="font-size:10px;width:100%;">
                             @switch($fuente)
                                 @case(1)
                                     <thead class="text-primary">
@@ -497,56 +534,21 @@
 
                                 @case(35)
                                     <thead class="text-primary">
-                                        <th>CODOOII</th>
-                                        <th>CODGEO</th>
                                         <th>CODLOCAL</th>
-                                        <th>COD_MOD</th>
-                                        <th>NROCED</th>
-                                        <th>CUADRO</th>
-                                        <th>TIPDATO</th>
-                                        <th>NIV_MOD</th>
-                                        <th>GES_DEP</th>
+                                        <th>CODGEO</th>
+                                        <th>PROVINCIA</th>
+                                        <th>DISTRITO</th>
+                                        <th>UGEL</th>
+                                        <th>COD_AREA</th>
                                         <th>AREA_CENSO</th>
-                                        <th>D01</th>
-                                        <th>D02</th>
-                                        <th>D03</th>
-                                        <th>D04</th>
-                                        <th>D05</th>
-                                        <th>D06</th>
-                                        <th>D07</th>
-                                        <th>D08</th>
-                                        <th>D09</th>
-                                        <th>D10</th>
-                                        <th>D11</th>
-                                        <th>D12</th>
-                                        <th>D13</th>
-                                        <th>D14</th>
-                                        <th>D15</th>
-                                        <th>D16</th>
-                                        <th>D17</th>
-                                        <th>D18</th>
-                                        <th>D19</th>
-                                        <th>D20</th>
-                                        <th>D21</th>
-                                        <th>D22</th>
-                                        <th>D23</th>
-                                        <th>D24</th>
-                                        <th>D25</th>
-                                        <th>D26</th>
-                                        <th>D27</th>
-                                        <th>D28</th>
-                                        <th>D29</th>
-                                        <th>D30</th>
-                                        <th>D31</th>
-                                        <th>D32</th>
-                                        <th>D33</th>
-                                        <th>D34</th>
-                                        <th>D35</th>
-                                        <th>D36</th>
-                                        <th>D37</th>
-                                        <th>D38</th>
-                                        <th>D39</th>
-                                        <th>D40</th>
+                                        <th>COD_GEST</th>
+                                        <th>GESTION</th>
+                                        <th>MODALIDAD</th>
+                                        <th>AGUA</th>
+                                        <th>DESAGUE</th>
+                                        <th>LUZ</th>
+                                        <th>INTERNET</th>
+                                        <th>TRES SERVICIOS</th>
                                     </thead>
                                 @break
 
@@ -1449,14 +1451,14 @@
                             "serverSide": true,
                             "responsive": false,
                             "autoWidth": false,
-                            "order": true,
+                        "ordering": false,
                             "destroy": true,
                             "language": table_language,
                             "ajax": {
                                 "headers": {
                                     'X-CSRF-TOKEN': $('input[name=_token]').val()
                                 },
-                                "url": "{{ route('CuadroAsigPersonal.listarimportados', '') }}/" + importacion,
+                                "url": "{{ route('impornexus.listarimportados', '') }}/" + importacion,
                                 "type": "POST",
                                 "dataType": 'JSON',
                             },
@@ -2052,7 +2054,8 @@
                         "serverSide": true,
                         "responsive": false,
                         "autoWidth": false,
-                        "order": true,
+                        "ordering": true,
+                        "order": [[1, "asc"]],
                         "destroy": true,
                         "language": table_language,
                         "ajax": {
@@ -2576,6 +2579,10 @@
                         "ordered": true,
                         "destroy": true,
                         "language": table_language,
+                        "scrollX": true,
+                        "dom": "<'row align-items-center'<'col-md-6 col-12'l><'col-md-6 col-12'f>>" +
+                            "<'row'<'col-12'tr>>" +
+                            "<'row align-items-center'<'col-md-5 col-12'i><'col-md-7 col-12'p>>",
                         "ajax": {
                             "headers": {
                                 'X-CSRF-TOKEN': $('input[name=_token]').val()
@@ -2584,101 +2591,69 @@
                             "type": "POST",
                             "dataType": 'JSON',
                         },
+                        "columnDefs": [{
+                            "targets": "_all",
+                            "className": "text-center"
+                        }],
                         "columns": [{
-                                data: 'id_anio',
-                                name: 'id_anio'
+                                data: 'codlocal',
+                                name: 'codlocal'
                             },
                             {
-                                data: 'cod_mod',
-                                name: 'cod_mod'
+                                data: 'codgeo',
+                                name: 'codgeo'
                             },
                             {
-                                data: 'id_modalidad',
-                                name: 'id_modalidad'
+                                data: 'provincia',
+                                name: 'provincia'
                             },
                             {
-                                data: 'id_nivel',
-                                name: 'id_nivel'
+                                data: 'distrito',
+                                name: 'distrito'
+                            },
+                            {
+                                data: 'ugel',
+                                name: 'ugel'
+                            },
+                            {
+                                data: 'cod_area',
+                                name: 'cod_area'
+                            },
+                            {
+                                data: 'area_censo',
+                                name: 'area_censo'
+                            },
+                            {
+                                data: 'cod_gest',
+                                name: 'cod_gest'
                             },
                             {
                                 data: 'gestion',
                                 name: 'gestion'
                             },
                             {
-                                data: 'pais_nacimiento',
-                                name: 'pais_nacimiento'
+                                data: 'modalidad',
+                                name: 'modalidad'
                             },
                             {
-                                data: 'fecha_nacimiento',
-                                name: 'fecha_nacimiento'
+                                data: 'agua_final',
+                                name: 'agua_final'
                             },
                             {
-                                data: 'sexo',
-                                name: 'sexo'
+                                data: 'desague_final',
+                                name: 'desague_final'
                             },
                             {
-                                data: 'lengua_materna',
-                                name: 'lengua_materna'
+                                data: 'luz_final',
+                                name: 'luz_final'
                             },
                             {
-                                data: 'segunda_lengua',
-                                name: 'segunda_lengua'
+                                data: 'internet_final',
+                                name: 'internet_final'
                             },
                             {
-                                data: 'id_discapacidad',
-                                name: 'id_discapacidad'
-                            },
-                            {
-                                data: 'situacion_matricula',
-                                name: 'situacion_matricula'
-                            },
-                            {
-                                data: 'estado_matricula',
-                                name: 'estado_matricula'
-                            },
-                            {
-                                data: 'fecha_matricula',
-                                name: 'fecha_matricula'
-                            },
-                            {
-                                data: 'condicion_matricula',
-                                name: 'condicion_matricula'
-                            },
-                            {
-                                data: 'id_grado',
-                                name: 'id_grado'
-                            },
-                            {
-                                data: 'dsc_grado',
-                                name: 'dsc_grado'
-                            },
-                            {
-                                data: 'id_seccion',
-                                name: 'id_seccion'
-                            },
-                            {
-                                data: 'dsc_seccion',
-                                name: 'dsc_seccion'
-                            },
-                            {
-                                data: 'fecha_registro',
-                                name: 'fecha_registro'
-                            },
-                            {
-                                data: 'fecha_retiro',
-                                name: 'fecha_retiro'
-                            },
-                            {
-                                data: 'motivo_retiro',
-                                name: 'motivo_retiro'
-                            },
-                            {
-                                data: 'sf_regular',
-                                name: 'sf_regular'
-                            },
-                            {
-                                data: 'sf_recuperacion',
-                                name: 'sf_recuperacion'
+                                data: 'tres_servicios_final',
+                                name: 'tres_servicios_final'
                             },
                         ],
                     });

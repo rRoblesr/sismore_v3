@@ -1425,17 +1425,17 @@
                             break;
                         case "dtanal1":
                             console.log(info);
-                            gsemidona(div, Number(info.indicador || 0), ['#5eb9aa', '#F9FFFE']);
+                            gsemidona(div, Number(info.indicador || 0), ['#5eb9aa', '#F9FFFE'], 20);
                             $('#span-dtanal1-fuente').html("Fuente: " + (info.fuente || ''));
                             $('#span-dtanal1-fecha').html("Actualizado: " + (info.fecha || ''));
                             break;
                         case "dtanal2":
-                            gsemidona(div, Number(info.indicador || 0), ['#5eb9aa', '#F9FFFE']);
+                            gsemidona(div, Number(info.indicador || 0), ['#5eb9aa', '#F9FFFE'], 20);
                             $('#span-dtanal2-fuente').html("Fuente: " + (info.fuente || ''));
                             $('#span-dtanal2-fecha').html("Actualizado: " + (info.fecha || ''));
                             break;
                         case "dtanal3":
-                            gsemidona(div, Number(info.indicador || 0), ['#5eb9aa', '#F9FFFE']);
+                            gsemidona(div, Number(info.indicador || 0), ['#5eb9aa', '#F9FFFE'], 20);
                             $('#span-dtanal3-fuente').html("Fuente: " + (info.fuente || ''));
                             $('#span-dtanal3-fecha').html("Actualizado: " + (info.fecha || ''));
                             break;
@@ -1781,7 +1781,7 @@
             });
         }
 
-        function gsemidona(div, valor, colors) {
+        function gsemidona(div, valor, colors, fontSizePx) {
             Highcharts.chart(div, {
                 chart: {
                     plotBackgroundColor: null,
@@ -1797,7 +1797,7 @@
                     style: {
                         //fontWeight: 'bold',
                         //color: 'orange',
-                        fontSize: '30px'
+                        fontSize: (Number(fontSizePx || 30)) + 'px'
                     }
                 },
                 tooltip: {
