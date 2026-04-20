@@ -3,13 +3,15 @@
         @php
             $grouped = $base->groupBy('unidadejecutora')->sortKeys();
         @endphp
-        <table id="tabla1" class="table table-striped table-bordered font-11">
+        <table id="tabla1">
             <thead>
                 <tr>
                     <th style="background-color:#43beac;color:#ffffff;text-align:center;">UNIDAD EJECUTORA</th>
+                    <th style="background-color:#43beac;color:#ffffff;text-align:center;">GENÉRICA</th>
                     <th style="background-color:#43beac;color:#ffffff;text-align:center;">PIA</th>
                     <th style="background-color:#43beac;color:#ffffff;text-align:center;">PIM</th>
                     <th style="background-color:#43beac;color:#ffffff;text-align:center;">CERTIFICADO</th>
+                    <th style="background-color:#43beac;color:#ffffff;text-align:center;">COMPROMISO</th>
                     <th style="background-color:#43beac;color:#ffffff;text-align:center;">DEVENGADO</th>
                     <th style="background-color:#43beac;color:#ffffff;text-align:center;">% Ejecución</th>
                     <th style="background-color:#43beac;color:#ffffff;text-align:center;">Saldo PIM-CERT</th>
@@ -22,27 +24,32 @@
                         $ue_pia = $items->sum('pia');
                         $ue_pim = $items->sum('pim');
                         $ue_cert = $items->sum('certificado');
+                        $ue_comp = $items->sum('compromiso');
                         $ue_dev = $items->sum('devengado');
                         $ue_avance = $ue_pim > 0 ? round(($ue_dev / $ue_pim) * 100, 1) : 0;
                         $ue_saldo_cert = $ue_pim - $ue_cert;
                         $ue_saldo_dev = $ue_pim - $ue_dev;
                     @endphp
                     <tr style="font-weight: bold;">
-                        <td>{{ $ue }}</td>
-                        <td style="text-align:right">{{ $ue_pia }}</td>
-                        <td style="text-align:right">{{ $ue_pim }}</td>
-                        <td style="text-align:right">{{ $ue_cert }}</td>
-                        <td style="text-align:right">{{ $ue_dev }}</td>
-                        <td style="text-align:center">{{ $ue_avance }}%</td>
-                        <td style="text-align:right">{{ $ue_saldo_cert }}</td>
-                        <td style="text-align:right">{{ $ue_saldo_dev }}</td>
+                        <td style="font-weight: bold;">{{ $ue }}</td>
+                        <td style="font-weight: bold;">TOTAL</td>
+                        <td style="text-align:right;font-weight: bold;">{{ $ue_pia }}</td>
+                        <td style="text-align:right;font-weight: bold;">{{ $ue_pim }}</td>
+                        <td style="text-align:right;font-weight: bold;">{{ $ue_cert }}</td>
+                        <td style="text-align:right;font-weight: bold;">{{ $ue_comp }}</td>
+                        <td style="text-align:right;font-weight: bold;">{{ $ue_dev }}</td>
+                        <td style="text-align:center;font-weight: bold;">{{ $ue_avance }}%</td>
+                        <td style="text-align:right;font-weight: bold;">{{ $ue_saldo_cert }}</td>
+                        <td style="text-align:right;font-weight: bold;">{{ $ue_saldo_dev }}</td>
                     </tr>
                     @foreach ($items as $item)
                         <tr>
-                            <td style="padding-left: 20px;">{{ $item->nombre }}</td>
+                            <td></td>
+                            <td>{{ $item->nombre }}</td>
                             <td style="text-align:right">{{ $item->pia }}</td>
                             <td style="text-align:right">{{ $item->pim }}</td>
                             <td style="text-align:right">{{ $item->certificado }}</td>
+                            <td style="text-align:right">{{ $item->compromiso }}</td>
                             <td style="text-align:right">{{ $item->devengado }}</td>
                             <td style="text-align:center">{{ $item->avance }}%</td>
                             <td style="text-align:right">{{ $item->saldocert }}</td>
@@ -53,14 +60,15 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <th style="background-color:#43beac;color:#ffffff;text-align:center;">TOTAL</th>
-                    <th style="background-color:#43beac;color:#ffffff;text-align:right;">{{ $foot->pia }}</th>
-                    <th style="background-color:#43beac;color:#ffffff;text-align:right;">{{ $foot->pim }}</th>
-                    <th style="background-color:#43beac;color:#ffffff;text-align:right;">{{ $foot->certificado }}</th>
-                    <th style="background-color:#43beac;color:#ffffff;text-align:right;">{{ $foot->devengado }}</th>
+                    <th style="background-color:#43beac;color:#ffffff;text-align:center;" colspan="2">TOTAL</th>
+                    <th style="background-color:#43beac;color:#ffffff;text-align:right;">{{ number_format($foot->pia, 0) }}</th>
+                    <th style="background-color:#43beac;color:#ffffff;text-align:right;">{{ number_format($foot->pim, 0) }}</th>
+                    <th style="background-color:#43beac;color:#ffffff;text-align:right;">{{ number_format($foot->certificado, 0) }}</th>
+                    <th style="background-color:#43beac;color:#ffffff;text-align:right;">{{ number_format($foot->compromiso, 0) }}</th>
+                    <th style="background-color:#43beac;color:#ffffff;text-align:right;">{{ number_format($foot->devengado, 0) }}</th>
                     <th style="background-color:#43beac;color:#ffffff;text-align:center;">{{ $foot->avance }}%</th>
-                    <th style="background-color:#43beac;color:#ffffff;text-align:right;">{{ $foot->saldocert }}</th>
-                    <th style="background-color:#43beac;color:#ffffff;text-align:right;">{{ $foot->saldodev }}</th>
+                    <th style="background-color:#43beac;color:#ffffff;text-align:right;">{{ number_format($foot->saldocert, 2) }}</th>
+                    <th style="background-color:#43beac;color:#ffffff;text-align:right;">{{ number_format($foot->saldodev, 2) }}</th>
                 </tr>
             </tfoot>
         </table>
@@ -70,8 +78,9 @@
         <table id="tabla0101">
             <thead>
                 <tr>
-                    <th style="background-color:#43beac;color:#ffffff;text-align:center;" colspan="14">DEVENGADO
-                        MENSUALIZADO(S/.)</th>
+                    <th colspan="14" style="background-color:#43beac;color:#ffffff;text-align:center;">
+                        DEVENGADO MENSUALIZADO(S/.)
+                    </th>
                 </tr>
                 <tr>
                     <th style="background-color:#43beac;color:#ffffff;text-align:center;">Año</th>
@@ -117,13 +126,15 @@
         @php
             $grouped = $base->groupBy('unidadejecutora')->sortKeys();
         @endphp
-        <table id="tabla2" class="table table-striped table-bordered font-11">
+        <table id="tabla2">
             <thead>
                 <tr>
                     <th style="background-color:#43beac;color:#ffffff;text-align:center;">UNIDAD EJECUTORA</th>
+                    <th style="background-color:#43beac;color:#ffffff;text-align:center;">SUB GENÉRICA</th>
                     <th style="background-color:#43beac;color:#ffffff;text-align:center;">PIA</th>
                     <th style="background-color:#43beac;color:#ffffff;text-align:center;">PIM</th>
                     <th style="background-color:#43beac;color:#ffffff;text-align:center;">CERTIFICADO</th>
+                    <th style="background-color:#43beac;color:#ffffff;text-align:center;">COMPROMISO</th>
                     <th style="background-color:#43beac;color:#ffffff;text-align:center;">DEVENGADO</th>
                     <th style="background-color:#43beac;color:#ffffff;text-align:center;">% Ejecución</th>
                     <th style="background-color:#43beac;color:#ffffff;text-align:center;">Saldo PIM-CERT</th>
@@ -136,27 +147,32 @@
                         $ue_pia = $items->sum('pia');
                         $ue_pim = $items->sum('pim');
                         $ue_cert = $items->sum('certificado');
+                        $ue_comp = $items->sum('compromiso');
                         $ue_dev = $items->sum('devengado');
                         $ue_avance = $ue_pim > 0 ? round(($ue_dev / $ue_pim) * 100, 1) : 0;
                         $ue_saldo_cert = $ue_pim - $ue_cert;
                         $ue_saldo_dev = $ue_pim - $ue_dev;
                     @endphp
                     <tr style="font-weight: bold;">
-                        <td>{{ $ue }}</td>
-                        <td style="text-align:right">{{ $ue_pia }}</td>
-                        <td style="text-align:right">{{ $ue_pim }}</td>
-                        <td style="text-align:right">{{ $ue_cert }}</td>
-                        <td style="text-align:right">{{ $ue_dev }}</td>
-                        <td style="text-align:center">{{ $ue_avance }}%</td>
-                        <td style="text-align:right">{{ $ue_saldo_cert }}</td>
-                        <td style="text-align:right">{{ $ue_saldo_dev }}</td>
+                        <td style="font-weight: bold;">{{ $ue }}</td>
+                        <td style="font-weight: bold;">TOTAL</td>
+                        <td style="text-align:right;font-weight: bold;">{{ $ue_pia }}</td>
+                        <td style="text-align:right;font-weight: bold;">{{ $ue_pim }}</td>
+                        <td style="text-align:right;font-weight: bold;">{{ $ue_cert }}</td>
+                        <td style="text-align:right;font-weight: bold;">{{ $ue_comp }}</td>
+                        <td style="text-align:right;font-weight: bold;">{{ $ue_dev }}</td>
+                        <td style="text-align:center;font-weight: bold;">{{ $ue_avance }}%</td>
+                        <td style="text-align:right;font-weight: bold;">{{ $ue_saldo_cert }}</td>
+                        <td style="text-align:right;font-weight: bold;">{{ $ue_saldo_dev }}</td>
                     </tr>
                     @foreach ($items as $item)
                         <tr>
-                            <td style="padding-left: 20px;">{{ $item->nombre }}</td>
+                            <td></td>
+                            <td>{{ $item->nombre }}</td>
                             <td style="text-align:right">{{ $item->pia }}</td>
                             <td style="text-align:right">{{ $item->pim }}</td>
                             <td style="text-align:right">{{ $item->certificado }}</td>
+                            <td style="text-align:right">{{ $item->compromiso }}</td>
                             <td style="text-align:right">{{ $item->devengado }}</td>
                             <td style="text-align:center">{{ $item->avance }}%</td>
                             <td style="text-align:right">{{ $item->saldocert }}</td>
@@ -167,10 +183,11 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <th style="background-color:#43beac;color:#ffffff;text-align:center;">TOTAL</th>
+                    <th style="background-color:#43beac;color:#ffffff;text-align:center;" colspan="2">TOTAL</th>
                     <th style="background-color:#43beac;color:#ffffff;text-align:right;">{{ $foot->pia }}</th>
                     <th style="background-color:#43beac;color:#ffffff;text-align:right;">{{ $foot->pim }}</th>
                     <th style="background-color:#43beac;color:#ffffff;text-align:right;">{{ $foot->certificado }}</th>
+                    <th style="background-color:#43beac;color:#ffffff;text-align:right;">{{ $foot->compromiso }}</th>
                     <th style="background-color:#43beac;color:#ffffff;text-align:right;">{{ $foot->devengado }}</th>
                     <th style="background-color:#43beac;color:#ffffff;text-align:center;">{{ $foot->avance }}%</th>
                     <th style="background-color:#43beac;color:#ffffff;text-align:right;">{{ $foot->saldocert }}</th>
@@ -184,7 +201,9 @@
         <table id="tabla0201">
             <thead>
                 <tr>
-                    <th style="background-color:#43beac;color:#ffffff;text-align:center;" colspan="14">DEVENGADO MENSUALIZADO(S/.)</th>
+                    <th colspan="14" style="background-color:#43beac;color:#ffffff;text-align:center;">
+                        DEVENGADO MENSUALIZADO(S/.)
+                    </th>
                 </tr>
                 <tr>
                     <th style="background-color:#43beac;color:#ffffff;text-align:center;">Año</th>
@@ -228,3 +247,4 @@
 
     @default
 @endswitch
+

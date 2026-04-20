@@ -14,6 +14,10 @@
                         <div class="card-widgets">
                             <button type="button" class="btn btn-warning btn-xs" onclick="location.reload()"><i
                                     class="fa fa-redo"></i> Actualizar</button>
+                            @if (auth()->user()->id == 49)
+                                <button type="button" class="btn btn-secondary btn-xs" onclick="abrirModalEditarImportacionMeta()">
+                                    <i class="fa fa-edit"></i> Editar Registro</button>
+                            @endif
                             <button type="button" class="btn btn-success btn-xs"
                                 onclick="javascript:window.open('https://docs.google.com/spreadsheets/d/1-eFsw4nbmA9xHf9g7MdF4lZavOmOKTl5/edit#gid=1842841396','_blank');"><i
                                     class="fa fa-file-excel"></i>
@@ -145,6 +149,52 @@
                 </div>
             </div>
         </div><!-- /.modal -->
+
+        @if (auth()->user()->id == 49)
+            <div id="modal-editar-importacion-meta" class="modal fade centrarmodal" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Editar Registro de Importación</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form class="cmxform form-horizontal tasi-form edit_importacion_meta">
+                            @csrf
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label class="col-form-label">Importación</label>
+                                    <select id="importacion_id_meta" name="importacion_id" class="form-control" required></select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label">Fecha Versión</label>
+                                    <input type="datetime-local" id="fechaActualizacion_meta" name="fechaActualizacion"
+                                        class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label">Fecha Registro</label>
+                                    <input type="datetime-local" id="fechaRegistro_meta" name="fechaRegistro"
+                                        class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label">Estado</label>
+                                    <select id="estado_meta" name="estado" class="form-control" required>
+                                        <option value="PR">PROCESADO</option>
+                                        <option value="PE">PENDIENTE</option>
+                                        <option value="EL">ELIMINADO</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        @endif
 
 
         <!-- Bootstrap modal -->
@@ -380,9 +430,11 @@
 @section('js')
     <script>
         var table_principal = '';
+        var importacionesMetaCache = [];
         $(document).ready(function() {
             $('.upload_file').on('submit', upload);
             $('.update_file').on('submit', uploadUpdate);
+            $('.edit_importacion_meta').on('submit', guardarImportacionMeta);
 
             table_principal = $('#datatable').DataTable({
                 responsive: true,
@@ -418,6 +470,106 @@
                 $('#nfile_upd').val(fileName);
             });
         });
+
+        function abrirModalEditarImportacionMeta() {
+            $('#modal-editar-importacion-meta').modal('show');
+            cargarImportacionesMeta();
+        }
+
+        // Abrir modal para un registro específico desde la fila de la tabla
+        function abrirModalEditarImportacion(id, fechaIso, estado, registroIso) {
+            @if (auth()->user()->id == 49)
+                var $sel = $('#importacion_id_meta');
+                if (!$sel.find('option[value="' + id + '"]').length) {
+                    var label = id + ' - ' + (fechaIso ? fechaIso.replace('T', ' ') : '');
+                    $sel.append(new Option(label, id));
+                }
+                $sel.val(id);
+                if (fechaIso) {
+                    $('#fechaActualizacion_meta').val(fechaIso.substring(0, 16));
+                }
+                if (estado) {
+                    $('#estado_meta').val(estado);
+                }
+                if (registroIso) {
+                    $('#fechaRegistro_meta').val(registroIso.substring(0, 16));
+                }
+                $('#modal-editar-importacion-meta').modal('show');
+            @endif
+        }
+
+        function cargarImportacionesMeta() {
+            $.ajax({
+                url: "{{ route('imporgastos.importacion.meta.list') }}",
+                type: 'GET',
+                dataType: 'json',
+                success: function(rows) {
+                    importacionesMetaCache = Array.isArray(rows) ? rows : [];
+                    var $sel = $('#importacion_id_meta');
+                    $sel.empty();
+                    importacionesMetaCache.forEach(function(r) {
+                        var label = r.id + ' - ' + (r.fechaActualizacion || '');
+                        $sel.append(new Option(label, r.id));
+                    });
+                    if (importacionesMetaCache.length) {
+                        $sel.val(importacionesMetaCache[0].id).trigger('change');
+                    }
+                }
+            });
+        }
+
+        $(document).on('change', '#importacion_id_meta', function() {
+            var id = parseInt($(this).val() || '0', 10);
+            var row = importacionesMetaCache.find(function(r) {
+                return parseInt(r.id, 10) === id;
+            });
+            if (!row) return;
+            if (row.fechaActualizacion) {
+                var dt = row.fechaActualizacion.replace(' ', 'T').substring(0, 16);
+                $('#fechaActualizacion_meta').val(dt);
+            }
+            if (row.updated_at) {
+                var dr = row.updated_at.replace(' ', 'T').substring(0, 16);
+                $('#fechaRegistro_meta').val(dr);
+            }
+            if (row.estado) {
+                $('#estado_meta').val(row.estado);
+            }
+        });
+
+        function guardarImportacionMeta(e) {
+            e.preventDefault();
+            var form = $(this);
+            var data = new FormData(form.get(0));
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('imporgastos.importacion.meta.update') }}",
+                data: data,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                cache: false,
+                beforeSend: function() {
+                    $('button', form).attr('disabled', true);
+                },
+                success: function(resp) {
+                    if (resp && resp.status === 200) {
+                        $('#modal-editar-importacion-meta').modal('hide');
+                        table_principal.ajax.reload();
+                    } else {
+                        alert(resp && resp.msg ? resp.msg : 'No se pudo actualizar.');
+                    }
+                },
+                error: function(xhr) {
+                    var msg = 'No se pudo actualizar.';
+                    if (xhr.responseJSON && xhr.responseJSON.msg) msg = xhr.responseJSON.msg;
+                    alert(msg);
+                },
+                complete: function() {
+                    $('button', form).attr('disabled', false);
+                }
+            });
+        }
 
         function upload(e) {
             e.preventDefault();

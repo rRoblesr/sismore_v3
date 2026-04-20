@@ -3,7 +3,7 @@
 namespace App\Exports\Presupuesto;
 
 use App\Models\Presupuesto\CategoriaPresupuestal;
-use App\Repositories\Presupuesto\BaseSiafWebDetalleRepositorio;
+use App\Repositories\Presupuesto\BaseGastosDetalleRepositorio;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -33,7 +33,7 @@ class CatPresReportesExport implements FromView, ShouldAutoSize
         $div = $this->div;
         switch ($this->div) {
             case 'tabla1':
-                $base = BaseSiafWebDetalleRepositorio::catpresreportesreporte_tabla1_export($this->anio, $this->ue, $this->cg, $this->ff);
+                $base = BaseGastosDetalleRepositorio::catpresreportesreporte_tabla1_export($this->anio, $this->ue, $this->cg, $this->ff);
                 $foot = [];
                 if ($base->isNotEmpty()) {
                     $foot = clone $base->first();
@@ -49,7 +49,10 @@ class CatPresReportesExport implements FromView, ShouldAutoSize
                 }
                 return view('presupuesto.BaseSiafWeb.CatPresReportesTablasExport', compact('div', 'base', 'foot'));
             case 'tabla0101':
-                $base = BaseSiafWebDetalleRepositorio::catpresreportesreporte_tabla0101($this->anio, $this->ue, $this->cg, $this->ff, $this->cp);
+                $base = BaseGastosDetalleRepositorio::catpresreportesreporte_tabla0101($this->anio, $this->ue, $this->cg, $this->ff, $this->cp);
+                foreach ($base as $item) {
+                    $item->total = max([$item->ene, $item->feb, $item->mar, $item->abr, $item->may, $item->jun, $item->jul, $item->ago, $item->sep, $item->oct, $item->nov, $item->dic]);
+                }
                 foreach ($base as $key => $value) {
                     $value->dic = $value->dic - $value->nov;
                     $value->nov = $value->nov - $value->oct;

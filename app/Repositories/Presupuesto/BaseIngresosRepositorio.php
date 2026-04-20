@@ -13,6 +13,7 @@ class BaseIngresosRepositorio
         $anios = BaseIngresos::distinct()
             ->select('anio')
             ->join('par_importacion as v2', 'v2.id', '=', 'pres_base_ingresos.importacion_id')
+            ->where('v2.estado', 'PR')
             ->orderBy('anio', 'desc')->get();
         return $anios;
     }
@@ -37,6 +38,172 @@ class BaseIngresosRepositorio
             $fechas[] = $value->id;
         }
         return $fechas;
+    }
+
+    public static function obtenerUltimoIdPorAnio(int $anio): int
+    {
+        $row = DB::table('pres_base_ingresos as bi')
+            ->join('par_importacion as i', function ($join) {
+                $join->on('i.id', '=', 'bi.importacion_id')
+                    ->where('i.estado', '=', 'PR');
+            })
+            ->where('bi.anio', $anio)
+            ->orderBy('i.fechaActualizacion', 'desc')
+            ->select('bi.id')
+            ->first();
+
+        return $row ? (int) $row->id : 0;
+    }
+
+    public static function catpresreportesreporte_anal1(int $anio, int $ue, $cg, $ff)
+    {
+        $baseingresosId = self::obtenerUltimoIdPorAnio($anio);
+        if ($baseingresosId <= 0) {
+            return (object) ['pim' => 0, 'devengado' => 0];
+        }
+        return DB::table('pres_base_ingresos_detalle as bid')
+            ->join('pres_rubro as r', 'r.id', '=', 'bid.rubro_id')
+            ->join('pres_fuentefinanciamiento as ff_table', 'ff_table.id', '=', 'r.fuentefinanciamiento_id')
+            ->where('bid.baseingresos_id', $baseingresosId)
+            ->when($ue > 0, fn($q) => $q->where('bid.unidadejecutora_id', $ue))
+            ->when($ff > 0, fn($q) => $q->where('ff_table.id', $ff))
+            ->select([
+                DB::raw('SUM(bid.pim) as pim'),
+                DB::raw('ROUND(SUM(bid.recaudado), 1) as devengado')
+            ])
+            ->first();
+    }
+
+    public static function catpresreportesreporte_anal2(int $anio, int $ue, $cg, $ff)
+    {
+        $baseingresosId = self::obtenerUltimoIdPorAnio($anio);
+        if ($baseingresosId <= 0) {
+            return collect();
+        }
+        return DB::table('pres_base_ingresos_detalle as bid')
+            ->join('pres_rubro as r', 'r.id', '=', 'bid.rubro_id')
+            ->join('pres_fuentefinanciamiento as ff_table', 'ff_table.id', '=', 'r.fuentefinanciamiento_id')
+            ->where('bid.baseingresos_id', $baseingresosId)
+            ->when($ue > 0, fn($q) => $q->where('bid.unidadejecutora_id', $ue))
+            ->when($ff > 0, fn($q) => $q->where('ff_table.id', $ff))
+            ->groupBy('r.rubro')
+            ->select([
+                'r.rubro as nombre',
+                DB::raw('SUM(bid.pim) as pim'),
+                DB::raw('ROUND(SUM(bid.recaudado), 1) as devengado')
+            ])
+            ->get();
+    }
+
+    public static function catpresreportesreporte_tabla1(int $anio, int $ue, $cg, $ff)
+    {
+        $baseingresosId = self::obtenerUltimoIdPorAnio($anio);
+        if ($baseingresosId <= 0) {
+            return collect();
+        }
+        return DB::table('pres_base_ingresos_detalle as bid')
+            ->join('pres_rubro as r', 'r.id', '=', 'bid.rubro_id')
+            ->join('pres_fuentefinanciamiento as ff_table', 'ff_table.id', '=', 'r.fuentefinanciamiento_id')
+            ->where('bid.baseingresos_id', $baseingresosId)
+            ->when($ue > 0, fn($q) => $q->where('bid.unidadejecutora_id', $ue))
+            ->when($ff > 0, fn($q) => $q->where('ff_table.id', $ff))
+            ->groupBy('r.rubro', 'r.codigo', 'r.id')
+            ->select([
+                'r.id as id',
+                DB::raw("CONCAT(r.codigo, ' ', r.rubro) as nombre"),
+                DB::raw('0 as pia'),
+                DB::raw('SUM(bid.pim) as pim'),
+                DB::raw('0 as certificado'),
+                DB::raw('0 as compromiso'),
+                DB::raw('ROUND(SUM(bid.recaudado), 1) as devengado'),
+                DB::raw('CASE WHEN SUM(bid.pim) > 0 THEN ROUND(100 * SUM(bid.recaudado) / SUM(bid.pim), 1) ELSE 0 END as avance'),
+                DB::raw('0 as saldocert'),
+                DB::raw('ROUND(SUM(bid.pim) - SUM(bid.recaudado), 1) as saldodev')
+            ])
+            ->orderBy('nombre', 'asc')
+            ->get();
+    }
+
+    public static function catpresreportesreporte_tabla0101(int $anio, int $ue, $cg, $ff, $cp)
+    {
+        $baseingresosId = self::obtenerUltimoIdPorAnio($anio);
+        if ($baseingresosId <= 0) {
+            return collect();
+        }
+        return DB::table('pres_base_ingresos_detalle as bid')
+            ->join('pres_rubro as r', 'r.id', '=', 'bid.rubro_id')
+            ->join('pres_fuentefinanciamiento as ff_table', 'ff_table.id', '=', 'r.fuentefinanciamiento_id')
+            ->where('bid.baseingresos_id', $baseingresosId)
+            ->when($ue > 0, fn($q) => $q->where('bid.unidadejecutora_id', $ue))
+            ->when($ff > 0, fn($q) => $q->where('ff_table.id', $ff))
+            ->when($cp > 0, fn($q) => $q->where('bid.rubro_id', $cp))
+            ->select([
+                DB::raw('SUM(bid.recaudado_ene) as ene'),
+                DB::raw('SUM(bid.recaudado_feb) as feb'),
+                DB::raw('SUM(bid.recaudado_mar) as mar'),
+                DB::raw('SUM(bid.recaudado_abr) as abr'),
+                DB::raw('SUM(bid.recaudado_may) as may'),
+                DB::raw('SUM(bid.recaudado_jun) as jun'),
+                DB::raw('SUM(bid.recaudado_jul) as jul'),
+                DB::raw('SUM(bid.recaudado_ago) as ago'),
+                DB::raw('SUM(bid.recaudado_sep) as sep'),
+                DB::raw('SUM(bid.recaudado_oct) as oct'),
+                DB::raw('SUM(bid.recaudado_nov) as nov'),
+                DB::raw('SUM(bid.recaudado_dic) as dic')
+            ])
+            ->get();
+    }
+
+    public static function obtenerUnidadesEjecutorasParaSelect(int $anio)
+    {
+        $baseingresosId = self::obtenerUltimoIdPorAnio($anio);
+        if ($baseingresosId <= 0) {
+            return collect();
+        }
+        return DB::table('pres_base_ingresos_detalle as bid')
+            ->join('pres_unidadejecutora as ue', 'ue.id', '=', 'bid.unidadejecutora_id')
+            ->where('bid.baseingresos_id', $baseingresosId)
+            ->select([
+                'ue.id',
+                DB::raw("CONCAT(ue.codigo_ue, ' ', ue.abreviatura) as nombre")
+            ])
+            ->distinct()
+            ->orderBy('ue.codigo_ue', 'asc')
+            ->pluck('nombre', 'id');
+    }
+
+    public static function obtenerRubrosParaSelect(int $anio, int $ue)
+    {
+        $baseingresosId = self::obtenerUltimoIdPorAnio($anio);
+        if ($baseingresosId <= 0) {
+            return collect();
+        }
+        return DB::table('pres_base_ingresos_detalle as bid')
+            ->join('pres_rubro as r', 'r.id', '=', 'bid.rubro_id')
+            ->where('bid.baseingresos_id', $baseingresosId)
+            ->when($ue > 0, fn($q) => $q->where('bid.unidadejecutora_id', $ue))
+            ->select('r.id', 'r.rubro as nombre')
+            ->distinct()
+            ->orderBy('r.rubro', 'asc')
+            ->pluck('nombre', 'id');
+    }
+
+    public static function obtenerFuenteFinanciamientoParaSelect(int $anio, int $ue, int $cg)
+    {
+        $baseingresosId = self::obtenerUltimoIdPorAnio($anio);
+        if ($baseingresosId <= 0) {
+            return collect();
+        }
+        return DB::table('pres_base_ingresos_detalle as bid')
+            ->join('pres_rubro as r', 'r.id', '=', 'bid.rubro_id')
+            ->join('pres_fuentefinanciamiento as ff', 'ff.id', '=', 'r.fuentefinanciamiento_id')
+            ->where('bid.baseingresos_id', $baseingresosId)
+            ->when($ue > 0, fn($q) => $q->where('bid.unidadejecutora_id', $ue))
+            ->when($cg > 0, fn($q) => $q->where('bid.rubro_id', $cg))
+            ->select('ff.id', 'ff.nombre')
+            ->distinct()
+            ->orderBy('ff.nombre', 'asc')
+            ->pluck('nombre', 'id');
     }
 
     public static function total_pim($imp)

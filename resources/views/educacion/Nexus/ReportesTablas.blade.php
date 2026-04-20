@@ -6,7 +6,7 @@
                     <th class="text-center" rowspan="2">UGEL</th>
                     <th class="text-center" colspan="4">PLAZAS DOCENTE</th>
                     <th class="text-center" colspan="4">PLAZAS AUXILIARES DE EDUCACIÓN</th>
-                    <th class="text-center" colspan="5">PLAZAS ADMINISTRATIVAS/th>
+                    <th class="text-center" colspan="5">PLAZAS ADMINISTRATIVAS</th>
                     <th class="text-center" colspan="1">PEC</th>
                 </tr>
                 <tr class="table-success-0 text-white">
@@ -76,7 +76,7 @@
                     <th class="text-center" rowspan="2">LEY</th>
                     <th class="text-center" colspan="4">PLAZAS DOCENTE</th>
                     <th class="text-center" colspan="4">PLAZAS AUXILIARES DE EDUCACIÓN</th>
-                    <th class="text-center" colspan="5">PLAZAS ADMINISTRATIVAS/th>
+                    <th class="text-center" colspan="5">PLAZAS ADMINISTRATIVAS</th>
                     <th class="text-center" colspan="1">PEC</th>
                 </tr>
                 <tr class="table-success-0 text-white">
@@ -146,7 +146,7 @@
                     <th class="text-center" rowspan="2">DISTRITO</th>
                     <th class="text-center" colspan="4">PLAZAS DOCENTE</th>
                     <th class="text-center" colspan="4">PLAZAS AUXILIARES DE EDUCACIÓN</th>
-                    <th class="text-center" colspan="5">PLAZAS ADMINISTRATIVAS/th>
+                    <th class="text-center" colspan="5">PLAZAS ADMINISTRATIVAS</th>
                     <th class="text-center" colspan="1">PEC</th>
                 </tr>
                 <tr class="table-success-0 text-white">

@@ -4,7 +4,7 @@ namespace App\Exports\Presupuesto;
 
 use App\Models\Presupuesto\GenericaGasto;
 use App\Models\Presupuesto\SubGenericaGasto;
-use App\Repositories\Presupuesto\BaseSiafWebDetalleRepositorio;
+use App\Repositories\Presupuesto\BaseGastosDetalleRepositorio;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -36,7 +36,7 @@ class GenericaReportesExport implements FromView, ShouldAutoSize
         $div = $this->div;
         switch ($this->div) {
             case 'tabla1':
-                $base = BaseSiafWebDetalleRepositorio::genericareportesreporte_tabla1_export($this->anio, $this->ue, $this->cp, $this->ff);
+                $base = BaseGastosDetalleRepositorio::genericareportesreporte_tabla1_export($this->anio, $this->ue, $this->cp, $this->ff);
                 $foot = [];
                 if ($base->isNotEmpty()) {
                     $foot = clone $base->first();
@@ -53,7 +53,7 @@ class GenericaReportesExport implements FromView, ShouldAutoSize
                 return view('presupuesto.BaseSiafWeb.GenericaReportesTablasExport', compact('div', 'base', 'foot'));
 
             case 'tabla0101':
-                $base = BaseSiafWebDetalleRepositorio::genericareportesreporte_tabla0101($this->anio, $this->ue, $this->cp, $this->ff, $this->g);
+                $base = BaseGastosDetalleRepositorio::genericareportesreporte_tabla0101($this->anio, $this->ue, $this->cp, $this->ff, $this->g);
                 foreach ($base as $key => $value) {
                     $value->dic = $value->dic - $value->nov;
                     $value->nov = $value->nov - $value->oct;
@@ -71,7 +71,7 @@ class GenericaReportesExport implements FromView, ShouldAutoSize
                 return view('presupuesto.BaseSiafWeb.GenericaReportesTablasExport', compact('div', 'base'));
 
             case 'tabla2':
-                $base = BaseSiafWebDetalleRepositorio::genericareportesreporte_tabla2_export($this->anio, $this->ue, $this->cp, $this->ff);
+                $base = BaseGastosDetalleRepositorio::genericareportesreporte_tabla2_export($this->anio, $this->ue, $this->cp, $this->ff);
                 $foot = [];
                 if ($base->isNotEmpty()) {
                     $foot = clone $base->first();
@@ -88,7 +88,7 @@ class GenericaReportesExport implements FromView, ShouldAutoSize
                 return view('presupuesto.BaseSiafWeb.GenericaReportesTablasExport', compact('div', 'base', 'foot'));
 
             case 'tabla0201':
-                 $base = BaseSiafWebDetalleRepositorio::genericareportesreporte_tabla0201($this->anio, $this->ue, $this->cp, $this->ff, $this->sg);
+                 $base = BaseGastosDetalleRepositorio::genericareportesreporte_tabla0201($this->anio, $this->ue, $this->cp, $this->ff, $this->sg);
                 foreach ($base as $key => $value) {
                     $value->dic = $value->dic - $value->nov;
                     $value->nov = $value->nov - $value->oct;

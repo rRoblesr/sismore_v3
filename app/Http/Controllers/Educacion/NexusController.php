@@ -45,27 +45,45 @@ class NexusController extends Controller
         $anios = ImportacionRepositorio::anios_porfuente_select(ImporNexusController::$FUENTE);
         $aniomax = $anios->max('anio');
         $mensaje = "";
-        // return json_encode(compact('anios', 'aniomax', 'mensaje'));
-        return view('educacion.Nexus.Reportes', compact('anios', 'aniomax', 'mensaje'));
+        $actualizado = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio(ImporNexusController::$FUENTE, (int) $aniomax);
+        return view('educacion.Nexus.Reportes', compact('anios', 'aniomax', 'mensaje', 'actualizado'));
     }
 
     public function reportesreporte(Request $rq)
     {
         $div = $rq->div;
-        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporPadronWebController::$FUENTE);
         switch ($rq->div) {
             case 'head':
-                $data2025 = NexusRepositorio::reportesreporte_head($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
-                $data2024 = NexusRepositorio::reportesreporte_head($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
-                $card1 = number_format($data2025->docentes, 0);
-                $card2 = number_format($data2025->auxiliar, 0);
-                $card3 = number_format($data2025->promotor, 0);
-                $card4 = number_format($data2025->administrativo, 0);
-                $pcard1 = round($data2024->docentes > 0 ? (100 * $data2025->docentes / $data2024->docentes) : 0, 1);
-                $pcard2 = round($data2024->auxiliar > 0 ? (100 * $data2025->auxiliar / $data2024->auxiliar) : 0, 1);
-                $pcard3 = round($data2024->promotor > 0 ? (100 * $data2025->promotor / $data2024->promotor) : 0, 1);
-                $pcard4 = round($data2024->administrativo > 0 ? (100 * $data2025->administrativo / $data2024->administrativo) : 0, 1);
-                return response()->json(compact('card1', 'card2', 'card3', 'card4', 'pcard1', 'pcard2', 'pcard3', 'pcard4'));
+                $anio = (int) $rq->anio;
+                $anioPrev = $anio - 1;
+                $dataActual = NexusRepositorio::reportesreporte_head($anio, $rq->ugel, $rq->modalidad, $rq->nivel);
+                $dataPrev = $anioPrev > 0
+                    ? NexusRepositorio::reportesreporte_head($anioPrev, $rq->ugel, $rq->modalidad, $rq->nivel)
+                    : null;
+
+                $doc = (float) ($dataActual->docentes ?? 0);
+                $aux = (float) ($dataActual->auxiliar ?? 0);
+                $pro = (float) ($dataActual->promotor ?? 0);
+                $adm = (float) ($dataActual->administrativo ?? 0);
+
+                $docPrev = (float) ($dataPrev->docentes ?? 0);
+                $auxPrev = (float) ($dataPrev->auxiliar ?? 0);
+                $proPrev = (float) ($dataPrev->promotor ?? 0);
+                $admPrev = (float) ($dataPrev->administrativo ?? 0);
+
+                $card1 = number_format($doc, 0);
+                $card2 = number_format($aux, 0);
+                $card3 = number_format($pro, 0);
+                $card4 = number_format($adm, 0);
+                $pcard1 = round($docPrev > 0 ? (100 * $doc / $docPrev) : 0, 1);
+                $pcard2 = round($auxPrev > 0 ? (100 * $aux / $auxPrev) : 0, 1);
+                $pcard3 = round($proPrev > 0 ? (100 * $pro / $proPrev) : 0, 1);
+                $pcard4 = round($admPrev > 0 ? (100 * $adm / $admPrev) : 0, 1);
+
+                $imp = ImportacionRepositorio::ImportacionMaxFuente_porFuenteAnio(ImporNexusController::$FUENTE, $anio);
+                $actualizado = $imp && $imp->fecha ? date('d/m/Y', strtotime($imp->fecha)) : '';
+
+                return response()->json(compact('card1', 'card2', 'card3', 'card4', 'pcard1', 'pcard2', 'pcard3', 'pcard4', 'actualizado'));
             case 'anal1':
                 $pe_pv = [
                     '2501' => 'pe-uc-cp',
@@ -83,22 +101,55 @@ class NexusController extends Controller
                 }
                 return response()->json(compact('info', 'valores', 'data'));
 
+            case 'anal5':
+                $dataProvincias = NexusRepositorio::reportesreporte_anal1($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
+                $totalProvincias = $dataProvincias->sum('conteo');
+                
+                $provinciasInfo = [];
+                foreach ($dataProvincias as $value) {
+                     $provinciasInfo[] = [
+                         'codigo' => $value->codigo,
+                         'nombre' => $value->provincia,
+                         'cantidad' => (int) $value->conteo,
+                         'porcentaje' => round($totalProvincias > 0 ? 100 * $value->conteo / $totalProvincias : 0, 1)
+                     ];
+                }
 
+                $dataDistritos = NexusRepositorio::reportesreporte_anal5_distritos($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
+                $totalDistritos = $dataDistritos->sum('conteo'); 
+                
+                $distritosInfo = [];
+                foreach ($dataDistritos as $value) {
+                     $distritosInfo[] = [
+                         'codigo' => trim($value->codigo),
+                         'nombre' => $value->distrito,
+                         'cantidad' => (int) $value->conteo,
+                         'porcentaje' => round($totalDistritos > 0 ? 100 * $value->conteo / $totalDistritos : 0, 1)
+                     ];
+                }
+
+                return response()->json(compact('provinciasInfo', 'distritosInfo'));
+                
             case 'anal2':
-                $data = NexusRepositorio::reportesreporte_anal2($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
+                $anioSel = (int) $rq->anio;
+                $anioActual = (int) date('Y');
+                $esAnioActual = $anioSel === $anioActual;
+
+                $data = NexusRepositorio::reportesreporte_anal2($anioSel, $rq->ugel, $rq->modalidad, $rq->nivel);
                 $info = [];
                 foreach ($data as $key => $value) {
                     $info['categoria'][] = $value->mes;
-                    $info['data'][] = $value->conteo;
+                    $conteo = $value->conteo;
+                    if (!$esAnioActual && $conteo === null) {
+                        $conteo = 0;
+                    }
+                    $info['data'][] = $conteo === null ? null : (int) $conteo;
                 }
-                // $data = CuboPacto2Repositorio::reportesreporte_anal2($rq->ugel, $rq->modalidad, $rq->nivel);
-                // $info = $data->map(function ($y, $name) {
-                //     return ['name' => $name, 'y' => (int)$y];
-                // })->values();
+                
                 return response()->json(compact('info', 'data'));
                 break;
             case 'anal3':
-                $color = ['#43beac', '#ffc107', '#ef5350'];
+                $color = ['#ef5350', '#43beac', '#ffc107'];
                 $data = NexusRepositorio::reportesreporte_anal3($rq->anio, $rq->ugel, $rq->modalidad, $rq->nivel);
                 foreach ($data as $key => $value) {
                     $value->color = $color[$key % count($color)];

@@ -517,6 +517,10 @@ class ImporGastosController extends Controller
             $boton .= '<button type="button" onclick="abrirModalActualizar(' . $value->id . ', \'' . (date('Y-m-d', strtotime($value->fechaActualizacion))) . '\')" class="btn btn-warning btn-xs mr-1" title="Actualizar Archivo"><i class="fa fa-upload"></i></button>';
 
             if (auth()->user()->id == 49) {
+                $fechaIso = date('Y-m-d\TH:i', strtotime($value->fechaActualizacion));
+                $registroIso = $value->updated_at ? date('Y-m-d\TH:i', strtotime($value->updated_at)) : '';
+                $estado = $value->estado;
+                $boton .= '<button type="button" onclick="abrirModalEditarImportacion(' . $value->id . ', \'' . $fechaIso . '\', \'' . $estado . '\', \'' . $registroIso . '\')" class="btn btn-secondary btn-xs mr-1" title="Editar Registro"><i class="fa fa-edit"></i></button>';
                 $boton .= '<button type="button" onclick="geteliminar(' . $value->id . ')" id="eliminar' . $value->id . '" class="btn btn-danger btn-xs mr-1" title="Eliminar"><i class="fa fa-trash"></i></button>';
                 $boton .= '<button type="button" onclick="abrirProcesosG(' . $value->id . ')" class="btn btn-info btn-xs mr-1" title="Procesar"><i class="fa fa-cogs"></i></button>';
             }
@@ -539,6 +543,70 @@ class ImporGastosController extends Controller
             "data" => $data
         );
         return response()->json($result);
+    }
+
+    public function importacionMetaList()
+    {
+        if ((int) auth()->user()->id !== 49) {
+            abort(403);
+        }
+
+        $rows = Importacion::query()
+            ->where('fuenteImportacion_id', $this->fuente)
+            ->where('estado', '!=', 'EL')
+            ->orderBy('fechaActualizacion', 'desc')
+            ->limit(50)
+            ->get(['id', 'fechaActualizacion', 'estado', 'updated_at']);
+
+        return response()->json($rows);
+    }
+
+    public function importacionMetaUpdate(Request $request)
+    {
+        if ((int) auth()->user()->id !== 49) {
+            abort(403);
+        }
+
+        $this->validate($request, [
+            'importacion_id' => 'required|exists:par_importacion,id',
+            'fechaActualizacion' => 'required|date',
+            'fechaRegistro' => 'nullable|date',
+            'estado' => 'required|in:PR,PE,EL',
+        ]);
+
+        $importacionId = (int) $request->input('importacion_id');
+        $fechaActualizacion = $request->input('fechaActualizacion');
+        $fechaRegistro = $request->input('fechaRegistro');
+        $estado = $request->input('estado');
+
+        $importacion = Importacion::where('id', $importacionId)
+            ->where('fuenteImportacion_id', $this->fuente)
+            ->first();
+
+        if (!$importacion) {
+            return response()->json(['status' => 404, 'msg' => 'Importación no encontrada o no válida.'], 404);
+        }
+
+        $existeMismaFecha = Importacion::where('fechaActualizacion', $fechaActualizacion)
+            ->where('fuenteImportacion_id', $this->fuente)
+            ->where('id', '!=', $importacionId)
+            ->where('estado', '!=', 'EL')
+            ->exists();
+
+        if ($existeMismaFecha) {
+            return response()->json(['status' => 400, 'msg' => 'Ya existe otra importación con la misma fecha de versión.'], 400);
+        }
+
+        $importacion->fechaActualizacion = $fechaActualizacion;
+        $importacion->estado = $estado;
+        $importacion->usuarioId_Crea = auth()->user()->id;
+        if (!empty($fechaRegistro)) {
+            $importacion->updated_at = $fechaRegistro;
+        }
+        $importacion->timestamps = false;
+        $importacion->save();
+
+        return response()->json(['status' => 200, 'msg' => 'Importación actualizada.']);
     }
 
     public function ListaImportada(Request $request, $importacion_id)

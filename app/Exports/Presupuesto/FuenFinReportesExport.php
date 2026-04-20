@@ -4,7 +4,7 @@ namespace App\Exports\Presupuesto;
 
 use App\Models\Presupuesto\FuenteFinanciamiento;
 use App\Models\Presupuesto\Rubro;
-use App\Repositories\Presupuesto\BaseSiafWebDetalleRepositorio;
+use App\Repositories\Presupuesto\BaseGastosDetalleRepositorio;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -36,7 +36,7 @@ class FuenFinReportesExport implements FromView, ShouldAutoSize
         $div = $this->div;
         switch ($this->div) {
             case 'tabla1':
-                $base = BaseSiafWebDetalleRepositorio::fuenfinreportesreporte_tabla1_export($this->anio, $this->ue, $this->cg, $this->g);
+                $base = BaseGastosDetalleRepositorio::fuenfinreportesreporte_tabla1_export($this->anio, $this->ue, $this->cg, $this->g);
                 $foot = [];
                 if ($base->isNotEmpty()) {
                     $foot = clone $base->first();
@@ -53,7 +53,7 @@ class FuenFinReportesExport implements FromView, ShouldAutoSize
                 return view('presupuesto.BaseSiafWeb.FuenFinReportesTablasExport', compact('div', 'base', 'foot'));
 
             case 'tabla0101':
-                $base = BaseSiafWebDetalleRepositorio::fuenfinreportesreporte_tabla0101($this->anio, $this->ue, $this->cg, $this->g, $this->ff);
+                $base = BaseGastosDetalleRepositorio::fuenfinreportesreporte_tabla0101($this->anio, $this->ue, $this->cg, $this->g, $this->ff);
                 foreach ($base as $key => $value) {
                     $value->dic = $value->dic - $value->nov;
                     $value->nov = $value->nov - $value->oct;
@@ -71,7 +71,7 @@ class FuenFinReportesExport implements FromView, ShouldAutoSize
                 return view('presupuesto.BaseSiafWeb.FuenFinReportesTablasExport', compact('div', 'base'));
 
             case 'tabla2':
-                $base = BaseSiafWebDetalleRepositorio::fuenfinreportesreporte_tabla2_export($this->anio, $this->ue, $this->cg, $this->g);
+                $base = BaseGastosDetalleRepositorio::fuenfinreportesreporte_tabla2_export($this->anio, $this->ue, $this->cg, $this->g);
                 $foot = [];
                 if ($base->isNotEmpty()) {
                     $foot = clone $base->first();
@@ -88,7 +88,7 @@ class FuenFinReportesExport implements FromView, ShouldAutoSize
                 return view('presupuesto.BaseSiafWeb.FuenFinReportesTablasExport', compact('div', 'base', 'foot'));
 
             case 'tabla0201':
-                $base = BaseSiafWebDetalleRepositorio::fuenfinreportesreporte_tabla0201($this->anio, $this->ue, $this->cg, $this->g, $this->rb);
+                $base = BaseGastosDetalleRepositorio::fuenfinreportesreporte_tabla0201($this->anio, $this->ue, $this->cg, $this->g, $this->rb);
                 foreach ($base as $key => $value) {
                     $value->dic = $value->dic - $value->nov;
                     $value->nov = $value->nov - $value->oct;

@@ -37,14 +37,14 @@
             <tfoot>
                 <tr class="text-center table-success-0 text-white">
                     <th class="text-left">TOTAL</th>
-                    <th class="text-right">{{ $foot->pia }}</th>
-                    <th class="text-right">{{ $foot->pim }}</th>
-                    <th class="text-right">{{ $foot->certificado }}</th>
-                    <th class="text-right">{{ $foot->compromiso }}</th>
-                    <th class="text-right">{{ $foot->devengado }}</th>
+                    <th class="text-right">{{ number_format($foot->pia, 0) }}</th>
+                    <th class="text-right">{{ number_format($foot->pim, 0) }}</th>
+                    <th class="text-right">{{ number_format($foot->certificado, 0) }}</th>
+                    <th class="text-right">{{ number_format($foot->compromiso, 0) }}</th>
+                    <th class="text-right">{{ number_format($foot->devengado, 0) }}</th>
                     <th class="text-center"><x-avance-badge :avance="$foot->avance" fontSize="11px" /></th>
-                    <th class="text-right">{{ $foot->saldocert }}</th>
-                    <th class="text-right">{{ $foot->saldodev }}</th>
+                    <th class="text-right">{{ number_format($foot->saldocert, 0) }}</th>
+                    <th class="text-right">{{ number_format($foot->saldodev, 0) }}</th>
                 </tr>
             </tfoot>
         </table>

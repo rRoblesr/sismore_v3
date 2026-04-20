@@ -7,14 +7,17 @@ use App\Repositories\Educacion\NexusRepositorio;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Events\AfterSheet;
 
-class NexusReportesExport implements FromView, ShouldAutoSize
+class NexusReportesExport implements FromView, ShouldAutoSize, WithEvents
 {
     public $div;
     public $anio;
     public $ugel;
     public $modalidad;
     public $nivel;
+    public $rows = 0;
 
 
     public function __construct($div, $anio, $ugel, $modalidad, $nivel)
@@ -32,6 +35,7 @@ class NexusReportesExport implements FromView, ShouldAutoSize
         switch ($this->div) {
             case 'tabla1':
                 $base = NexusRepositorio::reportesreporte_tabla01($this->anio, $this->ugel, $this->modalidad, $this->nivel);
+                $this->rows = $base->count();
                 $foot = [];
                 if ($base->count() > 0) {
                     $foot = clone $base[0];
@@ -47,9 +51,10 @@ class NexusReportesExport implements FromView, ShouldAutoSize
                     $foot->tac = $base->sum('tac');
                     $foot->tav = $base->sum('tav');
                 }
-                return view('educacion.Nexus.ReportesTablas', compact('div', 'base', 'foot'));
+                return view('educacion.Nexus.ReportesTablasExcel', compact('div', 'base', 'foot'));
             case 'tabla2':
                 $base = NexusRepositorio::reportesreporte_tabla02($this->anio, $this->ugel, $this->modalidad, $this->nivel);
+                $this->rows = $base->count();
                 $foot = [];
                 if ($base->count() > 0) {
                     $foot = clone $base[0];
@@ -65,9 +70,10 @@ class NexusReportesExport implements FromView, ShouldAutoSize
                     $foot->tac = $base->sum('tac');
                     $foot->tav = $base->sum('tav');
                 }
-                return view('educacion.Nexus.ReportesTablas', compact('div', 'base', 'foot'));
+                return view('educacion.Nexus.ReportesTablasExcel', compact('div', 'base', 'foot'));
             case 'tabla3':
                 $base = NexusRepositorio::reportesreporte_tabla03($this->anio, $this->ugel, $this->modalidad, $this->nivel);
+                $this->rows = $base->count();
                 $foot = [];
                 if ($base->count() > 0) {
                     $foot = clone $base[0];
@@ -83,13 +89,37 @@ class NexusReportesExport implements FromView, ShouldAutoSize
                     $foot->tac = $base->sum('tac');
                     $foot->tav = $base->sum('tav');
                 }
-                return view('educacion.Nexus.ReportesTablas', compact('div', 'base', 'foot'));
+                return view('educacion.Nexus.ReportesTablasExcel', compact('div', 'base', 'foot'));
 
             case 'tabla4':
                 $base = NexusRepositorio::reportesreporte_tabla04($this->anio, $this->ugel, $this->modalidad, $this->nivel);
-                return view('educacion.Nexus.ReportesTablas', compact('div', 'base'));
+                $this->rows = $base->count();
+                return view('educacion.Nexus.ReportesTablasExcel', compact('div', 'base'));
             default:
                 return view('exports.vacio', ['mensaje' => 'Tipo de reporte no válido']);
         }
+    }
+
+    public function registerEvents(): array
+    {
+        return [
+            AfterSheet::class => function (AfterSheet $event) {
+                if (in_array($this->div, ['tabla1', 'tabla2', 'tabla3'])) {
+                    $firstDataRow = 3; // 2 filas de cabecera
+                    $lastRow = max($firstDataRow, $firstDataRow + $this->rows); // incluye fila TOTAL
+                    $event->sheet->getDelegate()->getStyle("B{$firstDataRow}:O{$lastRow}")
+                        ->getNumberFormat()
+                        ->setFormatCode('#,##0');
+                }
+
+                if ($this->div === 'tabla4') {
+                    $firstDataRow = 2; // 1 fila de cabecera
+                    $lastRow = max($firstDataRow, $firstDataRow + $this->rows); // incluye fila TOTAL
+                    $event->sheet->getDelegate()->getStyle("G{$firstDataRow}:K{$lastRow}")
+                        ->getNumberFormat()
+                        ->setFormatCode('#,##0');
+                }
+            },
+        ];
     }
 }

@@ -8,6 +8,16 @@ use Illuminate\Support\Facades\DB;
 
 class BaseGastosRepositorio
 {
+    public static function anios()
+    {
+        $anios = BaseGastos::distinct()
+            ->select('anio')
+            ->join('par_importacion as v2', 'v2.id', '=', 'pres_base_gastos.importacion_id')
+            ->where('v2.estado', 'PR')
+            ->orderBy('anio', 'desc')->get();
+        return $anios;
+    }
+
     public static function fechasActualicacion_anos_max()
     {
         $fechasb = DB::table(DB::raw("(

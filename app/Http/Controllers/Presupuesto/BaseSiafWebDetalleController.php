@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Presupuesto;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\Presupuesto\BaseGastosDetalleRepositorio;
+use App\Repositories\Presupuesto\BaseIngresosRepositorio;
 use App\Repositories\Presupuesto\BaseSiafWebDetalleRepositorio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

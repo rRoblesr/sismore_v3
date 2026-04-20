@@ -17,12 +17,15 @@ class CuboIngreso extends Model
         'unidadejecutora_id',
         'fuentefinanciamiento_id',
         'rubro_id',
+        'clasificador',
+        'tipotransaccion_id',
+        'generica_id',
+        'subgenerica_id',
+        'subgenericadetalle_id',
+        'especifica_id',
+        'especificadetalle_id',
         'pia',
         'pim',
-        'certificado',
-        'compromiso_anual',
-        'devengado',
-        'girado',
+        'recaudado',
     ];
 }
-

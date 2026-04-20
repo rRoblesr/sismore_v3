@@ -68,6 +68,7 @@ use App\Http\Controllers\Presupuesto\BaseIngresosController;
 use App\Http\Controllers\Presupuesto\BaseProyectosController;
 use App\Http\Controllers\Presupuesto\BaseSiafWebController;
 use App\Http\Controllers\Presupuesto\BaseSiafWebDetalleController;
+use App\Http\Controllers\Presupuesto\BaseGastosDetalleController;
 use App\Http\Controllers\Presupuesto\EspecificaController;
 use App\Http\Controllers\Presupuesto\EspecificaDetalleController;
 use App\Http\Controllers\Presupuesto\GobiernosRegionalesController;
@@ -235,6 +236,8 @@ Route::post('educación/Importar/PadronWeb/PA/{proceso}/{importacion}', [ImporPa
 
 Route::get('educación/Importar/PadronNexus', [ImporNexusController::class, 'importar'])->name('impornexus.importar');
 Route::post('educación/Importar/PadronNexus/Guardar', [ImporNexusController::class, 'guardar'])->name('impornexus.guardar');
+Route::post('educación/Importar/PadronNexus/PA/Procesar/{importacion_id}', [ImporNexusController::class, 'procesarPA'])->name('impornexus.procesar.pa');
+Route::get('educación/Importar/PadronNexus/Listar/ImportarDT', [ImporNexusController::class, 'ListarDTImportFuenteTodos'])->name('impornexus.listar.importados.dt');
 Route::get('educación/Importar/PadronNexus/ListaImportada/{importacion}', [ImporNexusController::class, 'listar_importados'])->name('impornexus.listar.importados');
 Route::post('educación/Importar/PadronNexus/ListaImportada/{importacion}', [ImporNexusController::class, 'listar_importados'])->name('impornexus.listarimportados');
 Route::delete('educación/Importar/PadronNexus/eliminar/{id}', [ImporNexusController::class, 'eliminar'])->name('impornexus.eliminar');
@@ -1075,6 +1078,8 @@ Route::get('/Presupuesto/Gastos/Importar/VerificarCubo/{importacion_id}', [Impor
 Route::get('/Presupuesto/Gastos/Importar/DescargarBaseProcesada/{importacion_id}', [ImporGastosController::class, 'descargarBaseProcesada'])->name('imporgastos.descargar.base');
 Route::get('/Presupuesto/Gastos/Importar/DescargarCuboProcesado/{importacion_id}', [ImporGastosController::class, 'descargarCuboProcesado'])->name('imporgastos.descargar.cubo');
 Route::post('/Presupuesto/Gastos/Importar/ListaImportada/{importacion_id}', [ImporGastosController::class, 'ListaImportada'])->name('imporgastos.listarimportados');
+Route::get('/Presupuesto/Gastos/Importar/ImportacionMeta/List', [ImporGastosController::class, 'importacionMetaList'])->name('imporgastos.importacion.meta.list');
+Route::post('/Presupuesto/Gastos/Importar/ImportacionMeta/Update', [ImporGastosController::class, 'importacionMetaUpdate'])->name('imporgastos.importacion.meta.update');
 
 Route::get('/IMPORGASTOS/Gastos/Importar2', [ImporGastosController::class, 'importar2'])->name('pres.gastos.importar2');
 Route::post('/IMPORGASTOS/Gastos/Importar2', [ImporGastosController::class, 'importarGuardar2'])->name('imporgastos.gastos.guardar2');
@@ -1319,6 +1324,15 @@ Route::get('/Presupuesto/siafweb/detalle/ff/{anio}/{ue}/{cg}', [BaseSiafWebDetal
 Route::get('/Presupuesto/siafweb/detalle/g/{anio}/{ue}/{cg}', [BaseSiafWebDetalleController::class, 'obtenerGenericaParaSelect'])->name('presupuesto.saifweb.detalle.select.g');
 Route::get('/Presupuesto/siafweb/detalle/cp2/{anio}/{ue}', [BaseSiafWebDetalleController::class, 'obtenerCategoriasPresupuestalesParaSelect2'])->name('presupuesto.saifweb.detalle.select.cp.2');
 Route::get('/Presupuesto/siafweb/detalle/ff2/{anio}/{ue}/{cp}', [BaseSiafWebDetalleController::class, 'obtenerFuenteFinanciamientoParaSelect2'])->name('presupuesto.saifweb.detalle.select.ff.2');
+
+Route::get('/Presupuesto/gastos/detalle/ue/{anio}', [BaseGastosDetalleController::class, 'obtenerUnidadesEjecutorasParaSelect'])->name('presupuesto.gastos.detalle.select.ue');
+Route::get('/Presupuesto/gastos/detalle/cg/{anio}/{ue}', [BaseGastosDetalleController::class, 'obtenerCategoriasGastoParaSelect'])->name('presupuesto.gastos.detalle.select.cg');
+Route::get('/Presupuesto/gastos/detalle/cp/{anio}/{ue}/{cg}', [BaseGastosDetalleController::class, 'obtenerCategoriasPresupuestalesParaSelect'])->name('presupuesto.gastos.detalle.select.cp');
+Route::get('/Presupuesto/gastos/detalle/rb/{anio}/{ue}/{ff}', [BaseGastosDetalleController::class, 'obtenerRubrosParaSelect'])->name('presupuesto.gastos.detalle.select.rb');
+Route::get('/Presupuesto/gastos/detalle/ff/{anio}/{ue}/{cg}', [BaseGastosDetalleController::class, 'obtenerFuenteFinanciamientoParaSelect'])->name('presupuesto.gastos.detalle.select.ff');
+Route::get('/Presupuesto/gastos/detalle/g/{anio}/{ue}/{cg}', [BaseGastosDetalleController::class, 'obtenerGenericaParaSelect'])->name('presupuesto.gastos.detalle.select.g');
+Route::get('/Presupuesto/gastos/detalle/cp2/{anio}/{ue}', [BaseGastosDetalleController::class, 'obtenerCategoriasPresupuestalesParaSelect2'])->name('presupuesto.gastos.detalle.select.cp.2');
+Route::get('/Presupuesto/gastos/detalle/ff2/{anio}/{ue}/{cp}', [BaseGastosDetalleController::class, 'obtenerFuenteFinanciamientoParaSelect2'])->name('presupuesto.gastos.detalle.select.ff.2');
 
 /* */
 /* FIN PRESUPUESTO */

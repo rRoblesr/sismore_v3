@@ -25,7 +25,7 @@
                 <div class="card-body pb-0">
                     <div class="form-group row align-items-center vh-5">
                         <div class="col-lg-3 col-md-3 col-sm-4">
-                            <h4 class="page-title font-12 m-0">Fuente: SIAF-WEB <br>{{ $actualizado }}</h4>
+                            <h4 class="page-title font-12 m-0">Fuente: SIAF - GASTOS <br>{{ $actualizado }}</h4>
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
@@ -51,8 +51,8 @@
 
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
-                                <label for="cg">Categoria de Gasto</label>
-                                <select id="cg" name="cg" class="form-control font-11">
+                                <label for="ff">Fuente de Financiamiento</label>
+                                <select id="ff" name="ff" class="form-control font-11">
                                     <option value="0">TODOS</option>
                                 </select>
                             </div>
@@ -61,8 +61,8 @@
 
                         <div class="col-lg-3 col-md-32 col-sm-2">
                             <div class="custom-select-container">
-                                <label for="cp">Categoria Presupuestal</label>
-                                <select id="cp" name="cp" class="form-control font-11">
+                                <label for="rb">Rubro</label>
+                                <select id="rb" name="rb" class="form-control font-11">
                                     <option value="0">TODOS</option>
                                 </select>
                             </div>
@@ -78,14 +78,13 @@
         <div class="col-lg-3 col-md-6 col-sm-6">
             <div class="card-box border border-plomo-0">
                 <div class="media">
-                    {{-- <div class="text-center">
-                        <img src="{{ asset('/') }}public/img/icon/tableta32px.png" alt="" class=""
+                    <div class="text-center">
+                        <img src="{{ asset('/') }}public/img/icon/dinero32.png" alt="" class=""
                             width="100%" height="100%">
-                    </div> --}}
-                    <div class="avatar-md mr-2">
-                        <i class="fa fa-users avatar-title font-30 text-dark"></i>
-
                     </div>
+                    {{-- <div class="avatar-md mr-2">
+                        <i class="fa fa-users avatar-title font-30 text-dark"></i>
+                    </div> --}}
                     <div class="media-body align-self-center">
                         <div class="text-right">
                             <h4 class="font-20 my-0 font-weight-bold">
@@ -110,14 +109,13 @@
         <div class="col-lg-3 col-md-6 col-sm-6">
             <div class="card-box border border-plomo-0">
                 <div class="media">
-                    {{-- <div class="text-center">
-                        <img src="{{ asset('/') }}public/img/icon/tableta32px.png" alt="" class=""
+                    <div class="text-center">
+                        <img src="{{ asset('/') }}public/img/icon/dinero32.png" alt="" class=""
                             width="100%" height="100%">
-                    </div> --}}
-                    <div class="avatar-md mr-2">
-                        <i class="fa fa-users avatar-title font-30 text-dark"></i>
-
                     </div>
+                    {{-- <div class="avatar-md mr-2">
+                        <i class="fa fa-users avatar-title font-30 text-dark"></i>
+                    </div> --}}
                     <div class="media-body align-self-center">
                         <div class="text-right">
                             <h4 class="font-20 my-0 font-weight-bold">
@@ -142,14 +140,13 @@
         <div class="col-lg-3 col-md-6 col-sm-6">
             <div class="card-box border border-plomo-0">
                 <div class="media">
-                    {{-- <div class="text-center">
-                        <img src="{{ asset('/') }}public/img/icon/cargador32px.png" alt="" class=""
+                    <div class="text-center">
+                        <img src="{{ asset('/') }}public/img/icon/dinero32.png" alt="" class=""
                             width="100%" height="100%">
-                    </div> --}}
-                    <div class="avatar-md mr-2">
-                        <i class="fa fa-users avatar-title font-30 text-dark"></i>
-
                     </div>
+                    {{-- <div class="avatar-md mr-2">
+                        <i class="fa fa-users avatar-title font-30 text-dark"></i>
+                    </div> --}}
                     <div class="media-body align-self-center">
                         <div class="text-right">
                             <h4 class="font-20 my-0 font-weight-bold">
@@ -174,14 +171,13 @@
         <div class="col-lg-3 col-md-6 col-sm-6">
             <div class="card-box border border-plomo-0">
                 <div class="media">
-                    {{-- <div class="text-center">
-                        <img src="{{ asset('/') }}public/img/icon/cargador32px.png" alt="" class=""
+                    <div class="text-center">
+                        <img src="{{ asset('/') }}public/img/icon/dinero32.png" alt="" class=""
                             width="100%" height="100%">
-                    </div> --}}
-                    <div class="avatar-md mr-2">
-                        <i class="fa fa-users avatar-title font-30 text-dark"></i>
-
                     </div>
+                    {{-- <div class="avatar-md mr-2">
+                        <i class="fa fa-users avatar-title font-30 text-dark"></i>
+                    </div> --}}
                     <div class="media-body align-self-center">
                         <div class="text-right">
                             <h4 class="font-20 my-0 font-weight-bold">
@@ -404,12 +400,12 @@
                 cargarEjecutora();
             });
             $('#ue').on('change', function() {
-                cargarGasto();
+                cargarFuente();
             });
-            $('#cg').on('change', function() {
-                cargarPresupuesto();
+            $('#ff').on('change', function() {
+                cargarRubro();
             });
-            $('#cp').on('change', function() {
+            $('#rb').on('change', function() {
                 cargarCards();
             });
 
@@ -434,8 +430,8 @@
                     'div': div,
                     "anio": $('#anio').val(),
                     "ue": $('#ue').val(),
-                    "cg": $('#cg').val(),
-                    "cp": $('#cp').val(),
+                    "ff": $('#ff').val(),
+                    "rb": $('#rb').val(),
                 },
                 type: "GET",
                 dataType: "JSON",
@@ -577,7 +573,7 @@
                                 div,
                                 data.info.categorias,
                                 data.info.series,
-                                'Certificado presupuestal mensual - año 2025',
+                                'Certificado presupuestal mensual - año ' + $('#anio').val(),
                                 opciones2
                             );
                             break;
@@ -587,8 +583,12 @@
                                 dat: data.info.series
                             }, {
                                 title: '',
-                                subtitle: 'Certificado presupuestal mensual( % ) - año 2025',
+                                subtitle: 'Certificado presupuestal acumulado( % ) - año ' + $('#anio')
+                                    .val(),
                                 yAxisTitle: '',
+                                acumuladoMontos: (data.data || []).map(r => r && r.certificado !==
+                                    null ? parseFloat(r.certificado) : 0),
+                                acumuladoNombre: 'Acumulado (S/.)',
                                 // legend: false, // opcional: si quieres forzar ocultar
                                 dataLabels: true // por defecto true
                             });
@@ -598,7 +598,7 @@
                                 div,
                                 data.info.categorias,
                                 data.info.series,
-                                'Devengado presupuestal mensual - año 2025',
+                                'Devengado presupuestal mensual - año ' + $('#anio').val(),
                                 opciones2
                             );
                             break;
@@ -608,8 +608,12 @@
                                 dat: data.info.series
                             }, {
                                 title: '',
-                                subtitle: 'Devengado presupuestal mensual( % ) - año 2025',
+                                subtitle: 'Devengado presupuestal acumulado( % ) - año ' + $('#anio')
+                                    .val(),
                                 yAxisTitle: '',
+                                acumuladoMontos: (data.data || []).map(r => r && r.devengado !== null ?
+                                    parseFloat(r.devengado) : 0),
+                                acumuladoNombre: 'Acumulado (S/.)',
                                 // legend: false, // opcional: si quieres forzar ocultar
                                 dataLabels: true // por defecto true
                             });
@@ -682,7 +686,7 @@
 
         function cargarEjecutora() {
             $.ajax({
-                url: "{{ route('presupuesto.saifweb.detalle.select.ue', ['anio' => ':anio']) }}"
+                url: "{{ route('presupuesto.gastos.detalle.select.ue', ['anio' => ':anio']) }}"
                     .replace(':anio', $('#anio').val()),
                 type: 'GET',
                 success: function(data) {
@@ -692,7 +696,7 @@
                     $.each(data, function(index, value) {
                         $('#ue').append(`<option value='${index}'>${value}</option>`);
                     });
-                    cargarGasto();
+                    cargarFuente();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -700,40 +704,41 @@
             });
         }
 
-        function cargarGasto() {
+        function cargarFuente() {
             $.ajax({
-                url: "{{ route('presupuesto.saifweb.detalle.select.cg', ['anio' => ':anio', 'ue' => ':ue']) }}"
-                    .replace(':anio', $('#anio').val())
-                    .replace(':ue', $('#ue').val()),
-                type: 'GET',
-                success: function(data) {
-                    $('#cg').empty();
-                    if (Object.keys(data).length > 1)
-                        $('#cg').append('<option value="0">TODOS</option>');
-                    $.each(data, function(index, value) {
-                        $('#cg').append(`<option value='${index}'>${value}</option>`);
-                    });
-                    cargarPresupuesto();
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                },
-            });
-        }
-
-        function cargarPresupuesto() {
-            $.ajax({
-                url: "{{ route('presupuesto.saifweb.detalle.select.cp', ['anio' => ':anio', 'ue' => ':ue', 'cg' => ':cg']) }}"
+                url: "{{ route('presupuesto.gastos.detalle.select.ff', ['anio' => ':anio', 'ue' => ':ue', 'cg' => ':cg']) }}"
                     .replace(':anio', $('#anio').val())
                     .replace(':ue', $('#ue').val())
-                    .replace(':cg', $('#cg').val()),
+                    .replace(':cg', 0),
                 type: 'GET',
                 success: function(data) {
-                    $('#cp').empty();
+                    $('#ff').empty();
                     if (Object.keys(data).length > 1)
-                        $('#cp').append('<option value="">TODOS</option>');
+                        $('#ff').append('<option value="0">TODOS</option>');
                     $.each(data, function(index, value) {
-                        $('#cp').append(`<option value='${index}'>${value}</option>`);
+                        $('#ff').append(`<option value='${index}'>${value}</option>`);
+                    });
+                    cargarRubro();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                },
+            });
+        }
+
+        function cargarRubro() {
+            $.ajax({
+                url: "{{ route('presupuesto.gastos.detalle.select.rb', ['anio' => ':anio', 'ue' => ':ue', 'ff' => ':ff']) }}"
+                    .replace(':anio', $('#anio').val())
+                    .replace(':ue', $('#ue').val())
+                    .replace(':ff', $('#ff').val()),
+                type: 'GET',
+                success: function(data) {
+                    $('#rb').empty();
+                    if (Object.keys(data).length > 1)
+                        $('#rb').append('<option value="0">TODOS</option>');
+                    $.each(data, function(index, value) {
+                        $('#rb').append(`<option value='${index}'>${value}</option>`);
                     });
                     cargarCards();
                 },
@@ -1899,7 +1904,21 @@
                 shared: true,
                 useHTML: true,
                 formatter: function() {
-                    let s = `<span style="font-size:11px">${this.key}</span><br/>`;
+                    const firstPoint = Array.isArray(this.points) && this.points.length ? this.points[0] :
+                        null;
+                    let label = firstPoint && firstPoint.key !== undefined && firstPoint.key !== null ?
+                        firstPoint.key : this.x;
+
+                    if ((label === undefined || label === null || label === '') && typeof this.x ===
+                        'number' && Array.isArray(categories)) {
+                        label = categories[this.x] ?? '';
+                    }
+
+                    if (label === undefined || label === null) {
+                        label = '';
+                    }
+
+                    let s = `<span style="font-size:11px">${label}</span><br/>`;
                     this.points.forEach(point => {
                         const full = formatFull(point.y);
                         const short = formatShort(point.y);
@@ -2050,7 +2069,22 @@
                 shared: true,
                 useHTML: true,
                 formatter: function() {
-                    let s = `<span style="font-size:11px">${this.key}</span><br/>`;
+                    const firstPoint = Array.isArray(this.points) && this.points.length ? this.points[0] :
+                        null;
+                    let label = this.key;
+                    if (label === undefined || label === null || label === '') {
+                        label = firstPoint && firstPoint.key !== undefined && firstPoint.key !== null ?
+                            firstPoint.key : '';
+                    }
+                    if ((label === undefined || label === null || label === '') && typeof this.x ===
+                        'number' && Array.isArray(categories)) {
+                        label = categories[this.x] ?? '';
+                    }
+                    if (label === undefined || label === null) {
+                        label = '';
+                    }
+
+                    let s = `<span style="font-size:11px">${label}</span><br/>`;
                     this.points.forEach(point => {
                         const full = formatFull(point.y);
                         const short = formatShort(point.y);
@@ -2288,6 +2322,10 @@
             return Number(value).toFixed(decimals).replace(/\.0+$/, '') + '%';
         }
 
+        function formatMoney(value) {
+            return Highcharts.numberFormat(value, 0, '.', ',');
+        }
+
         // 🎯 Detectar si es una sola serie
         const isSingleSeries = data.dat.length === 1;
 
@@ -2358,12 +2396,46 @@
                 shared: true,
                 useHTML: true,
                 formatter: function() {
-                    let s = `<span style="font-size:12px">${this.key}</span><br/>`;
+                    const firstPoint = Array.isArray(this.points) && this.points.length ? this.points[0] :
+                        null;
+                    let label = this.key;
+                    if (label === undefined || label === null || label === '') {
+                        label = firstPoint && firstPoint.key !== undefined && firstPoint.key !== null ?
+                            firstPoint.key : '';
+                    }
+                    if ((label === undefined || label === null || label === '') && typeof this.x ===
+                        'number' && Array.isArray(data.cat)) {
+                        label = data.cat[this.x] ?? '';
+                    }
+                    if (label === undefined || label === null) {
+                        label = '';
+                    }
+
+                    let s = `<span style="font-size:12px">${label}</span><br/>`;
                     this.points.forEach(point => {
                         // ✅ SIEMPRE mostrar el nombre, incluso con 1 serie (tu requerimiento)
                         const pct = formatPercent(point.y, 1); // 1 decimal, pero sin .0 innecesario
+                        let acumuladoStr = '';
+                        if (point.point && point.point.monto !== undefined && point.point.monto !==
+                            null) {
+                            acumuladoStr =
+                                `<br/><span style="color:#666">${options.acumuladoNombre || 'Acumulado'}:</span> <b>${formatMoney(point.point.monto)}</b>`;
+                        } else {
+                            const idx = typeof point.x === 'number' ? point.x : (typeof this.x ===
+                                'number' ? this.x : null);
+                            if (idx !== null && Array.isArray(options.acumuladoMontos)) {
+                                let acum = 0;
+                                for (let i = 0; i <= idx && i < options.acumuladoMontos
+                                    .length; i++) {
+                                    const v = options.acumuladoMontos[i];
+                                    acum += v ? Number(v) : 0;
+                                }
+                                acumuladoStr =
+                                    `<br/><span style="color:#666">${options.acumuladoNombre || 'Acumulado'}:</span> <b>${formatMoney(acum)}</b>`;
+                            }
+                        }
                         s += `<span style="color:${point.series.color}">\u25CF</span> ` +
-                            `<b>${point.series.name}</b>: ${pct}<br/>`;
+                            `<b>${point.series.name}</b>: ${pct}${acumuladoStr}<br/>`;
                         });
                         return s;
                     }

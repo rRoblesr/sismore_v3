@@ -25,7 +25,14 @@
                 <div class="card-body pb-0">
                     <div class="form-group row align-items-center vh-5">
                         <div class="col-lg-4 col-md-4 col-sm-4">
-                            <h4 class="page-title font-12">Fuente: DREU - NEXUS {{ date('Y') }}</h4>
+                            <h4 class="page-title font-12">
+                                Fuente: DREU - NEXUS <span id="anio_fuente">{{ $aniomax }}</span>
+                                {{-- @if (isset($actualizado) && $actualizado && isset($actualizado->fecha))
+                                    <span class="ml-2">Actualizado al <span id="actualizado_fuente">{{ date('d/m/Y', strtotime($actualizado->fecha)) }}</span></span>
+                                @else
+                                    <span class="ml-2">Actualizado al <span id="actualizado_fuente">-</span></span>
+                                @endif --}}
+                            </h4>
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
@@ -210,7 +217,7 @@
     </div>
 
     <div class="row">
-        <div class="col-lg-6 col-md-6">
+        <!-- <div class="col-lg-6 col-md-6">
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
                     <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
@@ -219,7 +226,20 @@
                     <div id="anal1" style="height: 25rem"></div>
                 </div>
             </div>
+        </div> -->
+
+            <!-- <div class="row"> -->
+        <div class="col-lg-6 ml-auto">
+            <div class="card card-border border border-plomo-0">
+                <div class="card-header border-success-0 bg-transparent pb-0 pt-0">
+                    <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
+                </div>
+                <div class="card-body p-0">
+                    <div id="anal5" style="height: 380px; width:100%;"></div>
+                </div>
+            </div>
         </div>
+    <!-- </div> -->
 
         <div class="col-lg-6 col-md-6">
             <div class="card card-border border border-plomo-0">
@@ -227,7 +247,8 @@
                     <h3 class="text-black text-center font-weight-normal font-11 m-0"></h3>
                 </div>
                 <div class="card-body p-0">
-                    <div id="anal2" style="height: 25rem"></div>
+                    <div id="anal2" style="height: 380px; width:100%;"></div>
+                    <!-- <div id="anal2" style="height: 25rem"></div> -->
                 </div>
             </div>
         </div>
@@ -257,6 +278,8 @@
             </div>
         </div>
     </div>
+
+
 
     <div class="row">
         <div class="col-lg-12">
@@ -341,8 +364,6 @@
 
     <div class="row">
         <div class="col-lg-12">
-            {{-- <div class="card">
-                <div class="card-header"> --}}
             <div class="card card-border border border-plomo-0">
                 <div class="card-header border-success-0 bg-transparent pb-0 pt-2">
                     <div class="card-widgets">
@@ -362,6 +383,8 @@
             </div>
         </div>
     </div>
+
+
 @endsection
 
 @section('js')
@@ -388,7 +411,8 @@
             head: ['#card1', '#card2', '#card3', '#card4', '#card1i', '#card2i', '#card3i', '#card4i', '#card1b',
                 '#card2b', '#card3b', '#card4b'
             ],
-            anal1: ['#anal1'],
+            // anal1: ['#anal1'],
+            anal5: ['#anal5'],
             anal2: ['#anal2'],
             anal3: ['#anal3'],
             anal4: ['#anal4'],
@@ -402,6 +426,7 @@
                 SpinnerManager.show(key);
             });
             $('#anio').on('change', function() {
+                $('#anio_fuente').text($('#anio').val());
                 cargarUgel();
             });
             $('#ugel').on('change', function() {
@@ -413,17 +438,20 @@
             $('#nivel').on('change', function() {
                 cargarCards();
             });
-            mapData = otros;
-            mapData.features.forEach((element, key) => {
-                console.log('["' + element.properties['hc-key'] + '", ' + (key + 1) + '],');
-            });
+            mapData = typeof p_ucayali !== 'undefined' ? p_ucayali : otros;
+            if (mapData && mapData.features) {
+                mapData.features.forEach((element, key) => {
+                    // console.log('["' + element.properties['hc-key'] + '", ' + (key + 1) + '],');
+                });
+            }
             cargarUgel();
 
         });
 
         function cargarCards() {
             panelGraficas('head');
-            panelGraficas('anal1');
+            // panelGraficas('anal1');
+            panelGraficas('anal5');
             panelGraficas('anal2');
             panelGraficas('anal3');
             panelGraficas('anal4');
@@ -492,15 +520,51 @@
                                 .addClass(data.pcard4 > 96 ? 'bg-success-0' : (data.pcard4 > 76 ?
                                     'bg-warning-0' :
                                     'bg-orange-0'));
+                            if (data.actualizado !== undefined && data.actualizado !== null && data.actualizado !== '') {
+                                $('#actualizado_fuente').text(data.actualizado);
+                            }
                             break;
                         case 'anal1':
                             anal3valores = data.valores;
                             anal3 = maps01(div, data.info, '',
                                 'Porcentaje de Plazas Docentes por Provincia');
                             break;
+                            
+                        case 'anal5':
+                            let provinciasDict = {};
+                            if (data.provinciasInfo && Array.isArray(data.provinciasInfo)) {
+                                data.provinciasInfo.forEach(item => {
+                                    if(item.codigo) provinciasDict[item.codigo] = { cantidad: item.cantidad, porcentaje: item.porcentaje };
+                                    if(item.nombre) provinciasDict[item.nombre.toUpperCase().trim()] = { cantidad: item.cantidad, porcentaje: item.porcentaje };
+                                });
+                            }
+                            
+                            let distritosDict = {};
+                            if (data.distritosInfo && Array.isArray(data.distritosInfo)) {
+                                data.distritosInfo.forEach(item => {
+                                    if(item.codigo) distritosDict[item.codigo] = { cantidad: item.cantidad, porcentaje: item.porcentaje };
+                                    if(item.nombre) distritosDict[item.nombre.toUpperCase().trim()] = { cantidad: item.cantidad, porcentaje: item.porcentaje };
+                                });
+                            }
+                            
+                            let demografiaRobot = {
+                                departamentos: { "UCAYALI": { porcentaje: 100 }, "pe-uc": { porcentaje: 100 } }, 
+                                provincias_ucayali: provinciasDict,
+                                distritos_ucayali: distritosDict
+                            };
+                            
+                            if (typeof SismoreMapAgent !== 'undefined') {
+                                SismoreMapAgent.renderizarMapa('anal5', demografiaRobot, { 
+                                    unit: '%', 
+                                    initialLevel: 'provincias', 
+                                    title: null, 
+                                    subtitle: 'Porcentaje de Plazas Docentes por Provincia'
+                                });
+                            }
+                            break;
                         case 'anal2':
                             crearGraficoLineasAcumuladas(div, data.info, '',
-                                'Acumulado Mensual de Plazas Docentes, periodo 2025', '#cc0000');
+                                'Acumulado Mensual de Plazas Docentes, periodo ' + $('#anio').val(), '#cc0000');
                             break;
                         case 'anal3':
                             crearGraficoDistribucionPlazas(div, data,
@@ -966,7 +1030,7 @@
 
                         return `<div style="text-align:left;">
                                     <strong>${this.point.name}</strong><br>
-                                    Docentes: ${Highcharts.numberFormat(provinciaData.num,0)}<br>
+                                    Docentes: ${Highcharts.numberFormat(provinciaData.num, 0, '.', ',')}<br>
                                     Participación: ${Highcharts.numberFormat(provinciaData.ind, 1)}%
                                 </div>`;
                     },
@@ -995,10 +1059,34 @@
         }
 
         function crearGraficoLineasAcumuladas(div, data, titulo = 'Gráfico', subtitulo = '', colorLinea = '#cc0000') {
+            function formatAbbrev(value) {
+                const n = Number(value);
+                const abs = Math.abs(n);
+                if (!isFinite(n)) return '';
+                if (abs >= 1000000000) {
+                    let s = (n / 1000000000).toFixed(1);
+                    if (s.endsWith('.0')) s = s.slice(0, -2);
+                    return s + 'B';
+                }
+                if (abs >= 1000000) {
+                    let s = (n / 1000000).toFixed(1);
+                    if (s.endsWith('.0')) s = s.slice(0, -2);
+                    return s + 'M';
+                }
+                if (abs >= 1000) {
+                    let s = (n / 1000).toFixed(1);
+                    if (s.endsWith('.0')) s = s.slice(0, -2);
+                    return s + 'K';
+                }
+                return Highcharts.numberFormat(n, 0, '.', ',');
+            }
             Highcharts.chart(div, {
                 chart: {
                     type: 'line',
                     // backgroundColor: '#f9f9f9',
+                    style: {
+                        fontFamily: 'Segoe UI, Roboto, Arial, sans-serif'
+                    },
                     borderRadius: 10,
                     spacingTop: 20,
                     spacingBottom: 20,
@@ -1008,16 +1096,17 @@
                 title: {
                     text: titulo,
                     style: {
-                        fontSize: '16px',
-                        fontWeight: 'bold',
+                        fontSize: '13px',
+                        fontWeight: 'normal',
                         color: '#333'
                     }
                 },
                 subtitle: {
                     text: subtitulo,
                     style: {
-                        // fontSize: '12px',
-                        // color: '#666'
+                        fontSize: '12px',
+                        fontWeight: 'normal',
+                        color: '#666'
                     }
                 },
                 xAxis: {
@@ -1025,11 +1114,11 @@
                         .categoria, // ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Set', 'Oct', 'Nov', 'Dic'],
                     tickmarkPlacement: 'on',
                     lineWidth: 0,
-                    gridLineWidth: 1,
-                    gridLineColor: '#ddd',
+                    gridLineWidth: 0,
+                    minorGridLineWidth: 0,
                     labels: {
                         style: {
-                            fontSize: '12px',
+                            fontSize: '11px',
                             color: '#555'
                         }
                     }
@@ -1041,8 +1130,11 @@
                     },
                     gridLineColor: '#ddd',
                     labels: {
+                        formatter: function() {
+                            return formatAbbrev(this.value);
+                        },
                         style: {
-                            fontSize: '12px',
+                            fontSize: '11px',
                             color: '#555'
                         }
                     }
@@ -1066,14 +1158,17 @@
                 },
                 series: [{
                     name: 'Plazas Docentes',
+                    showInLegend: false,
                     data: data.data,
                     color: colorLinea,
                     dataLabels: {
                         enabled: true,
-                        format: '{y}',
+                        formatter: function() {
+                            return formatAbbrev(this.y);
+                        },
                         style: {
-                            fontSize: '12px',
-                            fontWeight: 'bold',
+                            fontSize: '11px',
+                            fontWeight: 'normal',
                             color: '#333',
                             textOutline: '2px contrast'
                         },
@@ -1085,7 +1180,9 @@
                     shared: true,
                     useHTML: true,
                     formatter: function() {
-                        return `<b>${this.points[0].series.name}</b><br/>${this.x}: <b>${this.y} plazas</b>`;
+                        const y = (this.y === null || this.y === undefined) ? null : this.y;
+                        const yFmt = y === null ? '-' : Highcharts.numberFormat(y, 0, '.', ',');
+                        return `<b>${this.points[0].series.name}</b><br/>${this.x}: <b>${yFmt} plazas</b>`;
                     },
                     backgroundColor: '#fff',
                     borderColor: '#ccc',
@@ -1097,7 +1194,9 @@
                     }
                 },
                 legend: {
-                    enabled: false
+                    enabled: true,
+                    align: 'center',
+                    verticalAlign: 'bottom'
                 },
                 credits: {
                     enabled: false
@@ -1223,6 +1322,8 @@
         }
     </script>
 
+    <script src="{{ asset('/') }}public/pe-states.js"></script>
     <script src="{{ asset('/') }}public/us-ct-ally.js"></script>
     <script src="{{ asset('/') }}public/us-ct-allz.js"></script>
+    <script src="{{ asset('/') }}public/js/sismore-mapas.js?v={{ time() }}"></script>
 @endsection

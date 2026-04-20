@@ -251,64 +251,41 @@
 
                                 @case(2)
                                     <thead class="text-primary">
-                                        <th>UNIDAD_EJECUTORA</th>
                                         <th>UGEL</th>
                                         <th>PROVINCIA</th>
                                         <th>DISTRITO</th>
                                         <th>TIPO_IE</th>
                                         <th>GESTION</th>
                                         <th>ZONA</th>
-                                        <th>CODMOD_IE</th>
-                                        <th>CODIGO_LOCAL</th>
-                                        <th>CLAVE8</th>
+                                        <th>MODALIDAD</th>
                                         <th>NIVEL_EDUCATIVO</th>
+                                        <th>COD_MOD</th>
+                                        <th>COD_LOCAL</th>
                                         <th>INSTITUCION_EDUCATIVA</th>
-                                        <th>JEC</th>
-                                        <th>CODIGO_PLAZA</th>
+                                        <th>COD_PLAZA</th>
                                         <th>TIPO_TRABAJADOR</th>
-                                        <th>SUB_TIPO_TRABAJADOR</th>
+                                        <th>SUBTIPO_TRABAJADOR</th>
                                         <th>CARGO</th>
                                         <th>SITUACION_LABORAL</th>
-                                        <th>MOTIVO_VACANTE</th>
                                         <th>CATEGORIA_REMUNERATIVA</th>
-                                        <th>DESCRIPCION_ESCALA</th>
+                                        <th>ESCALA_REMUNERATIVA</th>
+                                        <th>JEC</th>
                                         <th>JORNADA_LABORAL</th>
                                         <th>ESTADO</th>
-                                        <th>FECHA_INICIO</th>
-                                        <th>FECHA_TERMINO</th>
                                         <th>TIPO_REGISTRO</th>
-                                        <th>LEY</th>
-                                        <th>FECHA_INGRESO_NOMB</th>
-                                        <th>DOCUMENTO</th>
-                                        <th>CODMOD_DOCENTE</th>
+                                        <th>NUM_DOCUMENTO</th>
                                         <th>APELLIDO_PATERNO</th>
                                         <th>APELLIDO_MATERNO</th>
                                         <th>NOMBRES</th>
-                                        <th>FECHA_NACIMIENTO</th>
                                         <th>SEXO</th>
-                                        <th>REGIMEN_PENSIONARIO</th>
-                                        <th>FECHA_AFILIACION_RP</th>
-                                        <th>CODIGO_ESSALUD</th>
-                                        <th>AFP</th>
-                                        <th>CODIGO_AFP</th>
-                                        <th>FECHA_AFILIACION_AFP</th>
-                                        <th>FECHA_DEVENGUE_AFP</th>
-                                        <th>MENCION</th>
-                                        <th>CENTRO_ESTUDIOS</th>
+                                        <th>FECHA_NACIMIENTO</th>
                                         <th>TIPO_ESTUDIOS</th>
-                                        <th>ESTADO_ESTUDIOS</th>
-                                        <th>ESPECIALIDAD_PROFESIONAL</th>
-                                        <th>GRADO</th>
-                                        <th>CELULAR</th>
-                                        <th>EMAIL</th>
-                                        <th>ESPECIALIDAD</th>
-                                        <th>FECHA_RESOLUCION</th>
-                                        <th>NUMERO_RESOLUCION</th>
-                                        <th>DESC_SUPERIOR</th>
-                                        <th>NUMERO_CONTRATO_CAS</th>
-                                        <th>NUMERO_ADENDA_CAS</th>
-                                        <th>PREVENTIVA</th>
-                                        <th>REFERENCIA_PREVENTIVA</th>
+                                        <th>PROFESION</th>
+                                        <th>GRADO_OBTENIDO</th>
+                                        <th>REGIMEN_PENSIONARIO</th>
+                                        <th>AFP</th>
+                                        <th>LEY</th>
+                                        <th>FECHA_NOMBRAMIENTO</th>
                                     </thead>
                                 @break
 
@@ -837,16 +814,65 @@
 @section('js')
     <script>
         var table_principal = '';
+        var importPollTimer = null;
+        var importHeaderBtnHtml = null;
+        function setImportHeaderButtonLoading(isLoading) {
+            var btn = $('button[data-target=".bs-example-modal-lg"]');
+            if (!btn.length) return;
+            if (importHeaderBtnHtml === null) {
+                importHeaderBtnHtml = btn.html();
+            }
+            if (isLoading) {
+                btn.prop('disabled', true);
+                btn.html('<i class="fa fa-spinner fa-spin"></i> Importando...');
+            } else {
+                btn.prop('disabled', false);
+                btn.html(importHeaderBtnHtml);
+            }
+        }
+
+        function hasImportPending() {
+            return $('#datatable [data-estado="PE"]').length > 0;
+        }
+
+        function startImportPolling() {
+            if (importPollTimer) return;
+            importPollTimer = setInterval(function() {
+                if (table_principal) {
+                    table_principal.ajax.reload(null, false);
+                }
+            }, 5000);
+        }
+
+        function stopImportPolling() {
+            if (!importPollTimer) return;
+            clearInterval(importPollTimer);
+            importPollTimer = null;
+        }
+
         $(document).ready(function() {
             $('.upload_file').on('submit', upload);
 
             table_principal = $('#datatable').DataTable({
                 responsive: true,
                 autoWidth: false,
-                order: true,
+                ordering: true,
+                order: [[5, 'desc']],
                 language: table_language,
-                ajax: url_tabla_principal({{ $fuente }}),
-                type: "POST",
+                ajax: {
+                    url: url_tabla_principal({{ $fuente }}),
+                    type: 'GET',
+                },
+            });
+
+            table_principal.on('draw', function() {
+                if (hasImportPending()) {
+                    startImportPolling();
+                    setImportHeaderButtonLoading(true);
+                } else {
+                    stopImportPolling();
+                    setImportHeaderButtonLoading(false);
+                }
             });
             
             @if(isset($fuente) && $fuente == 34)
@@ -1064,7 +1090,7 @@
                 case 1:
                     return "{{ route('ImporPadronWeb.listar.importados') }}";
                 case 2:
-                    return "{{ route('cuadroasigpersonal.listar.importados') }}";
+                    return "{{ route('impornexus.listar.importados.dt') }}";
                 case 8:
                     return "{{ route('ImporMatricula.listar.importados') }}";
                 case 9:
@@ -1094,6 +1120,7 @@
                 wrapper = $('.pwrapper'),
                 /* wrapper_f = $('.wrapper_files'), */
                 progress_bar = $('.progress_bar'),
+                submitBtn = $('button[type="submit"]', form),
                 data = new FormData(form.get(0));
 
             progress_bar.removeClass('bg-success bg-danger').addClass('bg-info');
@@ -1123,19 +1150,19 @@
                 data: data,
                 beforeSend: () => {
                     $('button', form).attr('disabled', true);
+                    submitBtn.html('<i class="fa fa-spinner fa-spin"></i> Subiendo...');
                 }
             }).done(res => {
                 if (res.status === 200) {
                     progress_bar.removeClass('bg-info').addClass('bg-success');
-                    progress_bar.html('Listo!');
+                    progress_bar.html(res.msg ?? 'Listo!');
                     form.trigger('reset');
-
-                    setTimeout(() => {
-                        wrapper.fadeOut();
-                        progress_bar.removeClass('bg-success bg-danger').addClass('bg-info');
-                        progress_bar.css('width', '0%');
-                        table_principal.ajax.reload();
-                    }, 1500);
+                    $('.bs-example-modal-lg').modal('hide');
+                    wrapper.fadeOut();
+                    progress_bar.removeClass('bg-success bg-danger').addClass('bg-info');
+                    progress_bar.css('width', '0%');
+                    table_principal.ajax.reload(null, true);
+                    startImportPolling();
                 } else {
                     progress_bar.css('width', '100%');
                     progress_bar.html(res.msg);
@@ -1175,6 +1202,7 @@
                 //     progress_bar.html('Archivo desconocido');
             }).always(() => {
                 $('button', form).attr('disabled', false);
+                submitBtn.html('<i class="ion ion-md-cloud-upload"></i> Guardar');
             });
         }
 
@@ -1206,6 +1234,52 @@
                     return '';
             }
         }
+
+        @if ((int) $fuente === 2)
+            function procesar_pa_nexus(importacionId) {
+                bootbox.confirm("Seguro desea ejecutar el PA de esta importación?", function(result) {
+                    if (result !== true) return;
+                    var $btn = $('#pa' + importacionId);
+                    var oldHtml = $btn.length ? $btn.html() : null;
+                    if ($btn.length) {
+                        $btn.prop('disabled', true);
+                        $btn.html('<i class="fa fa-spinner fa-spin"></i>');
+                    }
+
+                    var dlg = bootbox.dialog({
+                        message: '<div class="text-center"><i class="fa fa-spinner fa-spin"></i> Ejecutando PA, espere...</div>',
+                        closeButton: false
+                    });
+
+                    axios.post("{{ route('impornexus.procesar.pa', ['importacion_id' => ':id']) }}".replace(':id', importacionId), {
+                            _token: $('meta[name="csrf-token"]').attr('content')
+                        })
+                        .then(function(response) {
+                            var data = response.data || {};
+                            if (data.status === 200) {
+                                toastr.success(data.msg || 'Proceso ejecutado.', 'Mensaje');
+                                table_principal.ajax.reload(null, false);
+                            } else {
+                                toastr.error(data.msg || 'No se pudo ejecutar el proceso.', 'Mensaje');
+                            }
+                        })
+                        .catch(function(error) {
+                            var msg = 'Error al ejecutar el proceso.';
+                            if (error.response && error.response.data && error.response.data.msg) {
+                                msg = error.response.data.msg;
+                            }
+                            toastr.error(msg, 'Mensaje');
+                        })
+                        .finally(function() {
+                            if (dlg) dlg.modal('hide');
+                            if ($btn.length) {
+                                $btn.prop('disabled', false);
+                                if (oldHtml !== null) $btn.html(oldHtml);
+                            }
+                        });
+                });
+            }
+        @endif
 
         function geteliminar(id) {
             bootbox.confirm("Seguro desea Eliminar este IMPORTACION?", function(result) {
@@ -1451,7 +1525,8 @@
                             "serverSide": true,
                             "responsive": false,
                             "autoWidth": false,
-                        "ordering": false,
+                        "ordering": true,
+                        "order": [[0, "asc"]],
                             "destroy": true,
                             "language": table_language,
                             "ajax": {
@@ -1462,238 +1537,42 @@
                                 "type": "POST",
                                 "dataType": 'JSON',
                             },
-                            "columns": [{
-                                    data: 'unidad_ejecutora',
-                                    name: 'unidad_ejecutora'
-                                },
-                                {
-                                    data: 'organo_intermedio',
-                                    name: 'organo_intermedio'
-                                },
-                                {
-                                    data: 'provincia',
-                                    name: 'provincia'
-                                },
-                                {
-                                    data: 'distrito',
-                                    name: 'distrito'
-                                },
-                                {
-                                    data: 'tipo_ie',
-                                    name: 'tipo_ie'
-                                },
-                                {
-                                    data: 'gestion',
-                                    name: 'gestion'
-                                },
-                                {
-                                    data: 'zona',
-                                    name: 'zona'
-                                },
-                                {
-                                    data: 'codmod_ie',
-                                    name: 'codmod_ie'
-                                },
-                                {
-                                    data: 'codigo_local',
-                                    name: 'codigo_local'
-                                },
-                                {
-                                    data: 'clave8',
-                                    name: 'clave8'
-                                },
-                                {
-                                    data: 'nivel_educativo',
-                                    name: 'nivel_educativo'
-                                },
-                                {
-                                    data: 'institucion_educativa',
-                                    name: 'institucion_educativa'
-                                },
-                                {
-                                    data: 'jec',
-                                    name: 'jec'
-                                },
-                                {
-                                    data: 'codigo_plaza',
-                                    name: 'codigo_plaza'
-                                },
-                                {
-                                    data: 'tipo_trabajador',
-                                    name: 'tipo_trabajador'
-                                },
-                                {
-                                    data: 'sub_tipo_trabajador',
-                                    name: 'sub_tipo_trabajador'
-                                },
-                                {
-                                    data: 'cargo',
-                                    name: 'cargo'
-                                },
-                                {
-                                    data: 'situacion_laboral',
-                                    name: 'situacion_laboral'
-                                },
-                                {
-                                    data: 'motivo_vacante',
-                                    name: 'motivo_vacante'
-                                },
-                                {
-                                    data: 'categoria_remunerativa',
-                                    name: 'categoria_remunerativa'
-                                },
-                                {
-                                    data: 'descripcion_escala',
-                                    name: 'descripcion_escala'
-                                },
-                                {
-                                    data: 'jornada_laboral',
-                                    name: 'jornada_laboral'
-                                },
-                                {
-                                    data: 'estado',
-                                    name: 'estado'
-                                },
-                                {
-                                    data: 'fecha_inicio',
-                                    name: 'fecha_inicio'
-                                },
-                                {
-                                    data: 'fecha_termino',
-                                    name: 'fecha_termino'
-                                },
-                                {
-                                    data: 'tipo_registro',
-                                    name: 'tipo_registro'
-                                },
-                                {
-                                    data: 'ley',
-                                    name: 'ley'
-                                },
-                                {
-                                    data: 'fecha_ingreso',
-                                    name: 'fecha_ingreso'
-                                },
-                                {
-                                    data: 'documento_identidad',
-                                    name: 'documento_identidad'
-                                },
-                                {
-                                    data: 'codigo_modular',
-                                    name: 'codigo_modular'
-                                },
-                                {
-                                    data: 'apellido_paterno',
-                                    name: 'apellido_paterno'
-                                },
-                                {
-                                    data: 'apellido_materno',
-                                    name: 'apellido_materno'
-                                },
-                                {
-                                    data: 'nombres',
-                                    name: 'nombres'
-                                },
-                                {
-                                    data: 'fecha_nacimiento',
-                                    name: 'fecha_nacimiento'
-                                },
-                                {
-                                    data: 'sexo',
-                                    name: 'sexo'
-                                },
-                                {
-                                    data: 'regimen_pensionario',
-                                    name: 'regimen_pensionario'
-                                },
-                                {
-                                    data: 'fecha_afiliacion_rp',
-                                    name: 'fecha_afiliacion_rp'
-                                },
-                                {
-                                    data: 'codigo_essalud',
-                                    name: 'codigo_essalud'
-                                },
-                                {
-                                    data: 'afp',
-                                    name: 'afp'
-                                },
-                                {
-                                    data: 'codigo_afp',
-                                    name: 'codigo_afp'
-                                },
-                                {
-                                    data: 'fecha_afiliacion_afp',
-                                    name: 'fecha_afiliacion_afp'
-                                },
-                                {
-                                    data: 'fecha_devengue_afp',
-                                    name: 'fecha_devengue_afp'
-                                },
-                                {
-                                    data: 'mencion',
-                                    name: 'mencion'
-                                },
-                                {
-                                    data: 'centro_estudios',
-                                    name: 'centro_estudios'
-                                },
-                                {
-                                    data: 'tipo_estudios',
-                                    name: 'tipo_estudios'
-                                },
-                                {
-                                    data: 'estado_estudios',
-                                    name: 'estado_estudios'
-                                },
-                                {
-                                    data: 'especialidad_profesional',
-                                    name: 'especialidad_profesional'
-                                },
-                                {
-                                    data: 'grado',
-                                    name: 'grado'
-                                },
-                                {
-                                    data: 'celular',
-                                    name: 'celular'
-                                },
-                                {
-                                    data: 'email',
-                                    name: 'email'
-                                },
-                                {
-                                    data: 'especialidad',
-                                    name: 'especialidad'
-                                },
-                                {
-                                    data: 'fecha_resolucion',
-                                    name: 'fecha_resolucion'
-                                },
-                                {
-                                    data: 'numero_resolucion',
-                                    name: 'numero_resolucion'
-                                },
-                                {
-                                    data: 'desc_superior',
-                                    name: 'desc_superior'
-                                },
-                                {
-                                    data: 'numero_contrato_cas',
-                                    name: 'numero_contrato_cas'
-                                },
-                                {
-                                    data: 'numero_adenda_cas',
-                                    name: 'numero_adenda_cas'
-                                },
-                                {
-                                    data: 'preventiva',
-                                    name: 'preventiva'
-                                },
-                                {
-                                    data: 'referencia_preventiva',
-                                    name: 'referencia_preventiva'
-                                }
+                            "columns": [
+                                { data: 'ugel', name: 'ugel' },
+                                { data: 'provincia', name: 'provincia' },
+                                { data: 'distrito', name: 'distrito' },
+                                { data: 'tipo_ie', name: 'tipo_ie' },
+                                { data: 'gestion', name: 'gestion' },
+                                { data: 'zona', name: 'zona' },
+                                { data: 'modalidad', name: 'modalidad' },
+                                { data: 'nivel_educativo', name: 'nivel_educativo' },
+                                { data: 'cod_mod', name: 'cod_mod' },
+                                { data: 'cod_local', name: 'cod_local' },
+                                { data: 'institucion_educativa', name: 'institucion_educativa' },
+                                { data: 'cod_plaza', name: 'cod_plaza' },
+                                { data: 'tipo_trabajador', name: 'tipo_trabajador' },
+                                { data: 'subtipo_trabajador', name: 'subtipo_trabajador' },
+                                { data: 'cargo', name: 'cargo' },
+                                { data: 'situacion_laboral', name: 'situacion_laboral' },
+                                { data: 'categoria_remunerativa', name: 'categoria_remunerativa' },
+                                { data: 'escala_remunerativa', name: 'escala_remunerativa' },
+                                { data: 'jec', name: 'jec' },
+                                { data: 'jornada_laboral', name: 'jornada_laboral' },
+                                { data: 'estado', name: 'estado' },
+                                { data: 'tipo_registro', name: 'tipo_registro' },
+                                { data: 'num_documento', name: 'num_documento' },
+                                { data: 'apellido_paterno', name: 'apellido_paterno' },
+                                { data: 'apellido_materno', name: 'apellido_materno' },
+                                { data: 'nombres', name: 'nombres' },
+                                { data: 'sexo', name: 'sexo' },
+                                { data: 'fecha_nacimiento', name: 'fecha_nacimiento' },
+                                { data: 'tipo_estudios', name: 'tipo_estudios' },
+                                { data: 'profesion', name: 'profesion' },
+                                { data: 'grado_obtenido', name: 'grado_obtenido' },
+                                { data: 'regimen_pensionario', name: 'regimen_pensionario' },
+                                { data: 'afp', name: 'afp' },
+                                { data: 'ley', name: 'ley' },
+                                { data: 'fecha_nombramiento', name: 'fecha_nombramiento' }
                             ],
                         }
 

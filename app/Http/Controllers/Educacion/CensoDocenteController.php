@@ -35,17 +35,7 @@ class CensoDocenteController extends Controller
         $provincias = Ubigeo::select('v2.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();
         $distritos = Ubigeo::select('v3.*')->join('par_ubigeo as v2', 'v2.dependencia', '=', 'par_ubigeo.id')->join('par_ubigeo as v3', 'v3.dependencia', '=', 'v2.id')->whereNull('par_ubigeo.dependencia')->where('par_ubigeo.codigo', '25')->get();
 
-        return  view(
-            'educacion.CensoDocente.PersonalDocente',
-            compact(
-                'importacion_id',
-                'anioMax',
-                'anios',
-                'provincias',
-                'distritos',
-                'actualizado',
-            )
-        );
+        return  view('educacion.CensoDocente.PersonalDocente', compact( 'importacion_id', 'anioMax', 'anios', 'provincias', 'distritos', 'actualizado', ) );
     }
 
     public function PersonalDocenteTabla(Request $rq)

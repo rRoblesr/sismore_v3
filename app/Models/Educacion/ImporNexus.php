@@ -34,6 +34,7 @@ class ImporNexus extends Model
         'cod_local',
         'institucion_educativa',
         'cod_plaza',
+        'cod_airhsp',
         'tipo_trabajador',
         'subtipo_trabajador',
         'cargo',

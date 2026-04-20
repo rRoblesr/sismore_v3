@@ -129,16 +129,46 @@ class NexusRepositorio
                     )', [$anio]);
             })
             ->when($ugel > 0, fn($q) => $q->where('ie.ugel_id', $ugel))
-            ->when($modalidad > 0, fn($q) => $q->where('nm.modalidad', $modalidad))
+            ->when($modalidad > 0, fn($q) => $q->where('nm.modalidad_id', $modalidad))
             ->when($nivel > 0, fn($q) => $q->where('nm.id', $nivel))
             ->groupBy('p.codigo', 'p.nombre')
+            ->get();
+    }
+
+    public static function reportesreporte_anal5_distritos($anio, $ugel, $modalidad, $nivel)
+    {
+        return Nexus::from('edu_nexus as nx')
+            ->leftJoin('edu_nexus_regimen_laboral as stt', 'stt.id', '=', 'nx.regimenlaboral_id')
+            ->leftJoin('edu_nexus_institucion_educativa as ie', 'ie.id', '=', 'nx.institucioneducativa_id')
+            ->leftJoin('edu_nexus_nivel_educativo as nm', 'nm.id', '=', 'ie.niveleducativo_id')
+            ->leftJoin('edu_nexus_modalidad as m', 'm.id', '=', 'nm.modalidad_id')
+            ->leftJoin('par_ubigeo as d', 'd.id', '=', 'ie.ubigeo_id')
+            ->select(
+                'd.codigo',
+                'd.nombre as distrito',
+                DB::raw('COUNT(DISTINCT nx.cod_plaza) AS conteo')
+            )
+            ->whereIn('stt.id', [8, 9, 15, 17])
+            ->where('nx.importacion_id', function ($query) use ($anio) {
+                $query->select('id')
+                    ->from('par_importacion')
+                    ->where('fuenteImportacion_id', 2)
+                    ->where('estado', 'PR')
+                    ->whereRaw('fechaActualizacion = (
+                        SELECT MAX(fechaActualizacion) FROM par_importacion WHERE fuenteImportacion_id = 2 AND YEAR(fechaActualizacion) = ? AND estado = "PR"
+                    )', [$anio]);
+            })
+            ->when($ugel > 0, fn($q) => $q->where('ie.ugel_id', $ugel))
+            ->when($modalidad > 0, fn($q) => $q->where('nm.modalidad_id', $modalidad))
+            ->when($nivel > 0, fn($q) => $q->where('nm.id', $nivel))
+            ->groupBy('d.codigo', 'd.nombre')
             ->get();
     }
 
     public static function reportesreporte_anal2($anio, $ugel, $modalidad, $nivel)
     {
         return DB::table('par_mes as m')
-            ->selectRaw('m.codigo, m.abreviado as mes, COALESCE(dt.conteo, 0) AS conteo')
+            ->selectRaw('m.codigo, m.abreviado as mes, dt.conteo AS conteo')
             ->leftJoinSub(
                 function ($query) use ($anio, $ugel, $modalidad, $nivel) {
                     $query->from('edu_nexus as nx')
@@ -200,7 +230,7 @@ class NexusRepositorio
             ->leftJoin('par_ubigeo as d', 'd.id', '=', 'ie.ubigeo_id')
             ->leftJoin('par_ubigeo as p', 'p.id', '=', 'd.dependencia')
             ->select(
-                DB::raw('case when s.nombre2 is null then "NO DEFINIDO" else s.nombre2 end AS name'),
+                DB::raw('case when s.nombre is null then "NO DEFINIDO" else s.nombre end AS name'),
                 DB::raw('COUNT(DISTINCT nx.cod_plaza) AS y')
             )
             // ->where('stt.dependencia', 1)
@@ -217,7 +247,7 @@ class NexusRepositorio
             ->when($ugel > 0, fn($q) => $q->where('ie.ugel_id', $ugel))
             ->when($modalidad > 0, fn($q) => $q->where('nm.modalidad_id', $modalidad))
             ->when($nivel > 0, fn($q) => $q->where('nm.id', $nivel))
-            ->groupBy('s.nombre2')
+            ->groupBy('s.nombre')
             ->orderBy('y', 'desc')
             ->get();
     }
@@ -687,7 +717,7 @@ class NexusRepositorio
                 'ie.institucion_educativa',
                 'ie.id as ie_id'
             )
-            ->leftJoin(DB::raw(
+            ->join(DB::raw(
                 "(
                     SELECT id, fechaActualizacion, ROW_NUMBER() OVER ( PARTITION BY YEAR(fechaActualizacion) ORDER BY fechaActualizacion DESC ) AS rn
                     FROM par_importacion WHERE fuenteImportacion_id = 2 AND estado = 'PR'

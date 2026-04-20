@@ -24,6 +24,9 @@ use App\Models\Presupuesto\ProductoProyecto;
 use App\Models\Presupuesto\Rubro;
 use App\Models\Presupuesto\SubGenericaGasto;
 use App\Repositories\Educacion\ImportacionRepositorio;
+use App\Repositories\Presupuesto\BaseGastosDetalleRepositorio;
+use App\Repositories\Presupuesto\BaseGastosRepositorio;
+use App\Repositories\Presupuesto\BaseIngresosRepositorio;
 use App\Repositories\Presupuesto\BaseSiafWebDetalleRepositorio;
 use App\Repositories\Presupuesto\BaseSiafWebRepositorio;
 use Illuminate\Http\Request;
@@ -641,9 +644,18 @@ class BaseSiafWebController extends Controller
 
     public function gaspresreportes()
     {
-        $anios = BaseSiafWebRepositorio::anios();
+        $anios = DB::table('pres_base_gastos as bg')
+            ->join('par_importacion as i', function ($join) {
+                $join->on('i.id', '=', 'bg.importacion_id')
+                    ->where('i.estado', '=', 'PR');
+            })
+            ->select('bg.anio')
+            ->distinct()
+            ->orderBy('bg.anio', 'desc')
+            ->get();
+
         $aniomax = $anios->max('anio');
-        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporSiafWebController::$FUENTE);
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente(13);
         if ($imp) {
             $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesc[$imp->mes - 1] . ' del ' . $imp->anio;
         } else {
@@ -657,7 +669,7 @@ class BaseSiafWebController extends Controller
         $div = $rq->div;
         switch ($rq->div) {
             case 'head':
-                $data = BaseSiafWebDetalleRepositorio::obtenerResumenEjecucion($rq->anio, $rq->ue, $rq->cg, $rq->cp);
+                $data = BaseGastosDetalleRepositorio::obtenerResumenEjecucionPorFuenteRubro((int) $rq->anio, (int) $rq->ue, (int) $rq->ff, (int) $rq->rb);
                 $card1 = number_format($data['pim'], 0);
                 $card2 = number_format($data['certificado'], 0);
                 $card3 = number_format($data['compromiso'], 0);
@@ -669,7 +681,7 @@ class BaseSiafWebController extends Controller
                 return response()->json(compact('card1', 'card2', 'card3', 'card4', 'pcard1', 'pcard2', 'pcard3', 'pcard4'));
 
             case 'progress1':
-                $data = BaseSiafWebDetalleRepositorio::obtenerResumenPorUnidadEjecutora($rq->anio, 0, $rq->cg, $rq->cp);
+                $data = BaseGastosDetalleRepositorio::obtenerResumenPorUnidadEjecutoraPorFuenteRubro((int) $rq->anio, 0, (int) $rq->ff, (int) $rq->rb);
                 $info = [];
                 foreach ($data as $key => $value) {
                     $info[] = [
@@ -682,7 +694,7 @@ class BaseSiafWebController extends Controller
                 return response()->json($info);
 
             case 'anal1':
-                $data = BaseSiafWebDetalleRepositorio::obtenerResumenPorUnidadEjecutora($rq->anio, $rq->ue, $rq->cg, $rq->cp);
+                $data = BaseGastosDetalleRepositorio::obtenerResumenPorUnidadEjecutoraPorFuenteRubro((int) $rq->anio, (int) $rq->ue, (int) $rq->ff, (int) $rq->rb);
                 $info = [
                     'categorias' => [],
                     'series' => [
@@ -700,78 +712,90 @@ class BaseSiafWebController extends Controller
                 return response()->json(compact('info', 'data'));
 
             case 'anal2':
-                $data = BaseSiafWebDetalleRepositorio::obtenerCertificadoMensual($rq->anio, $rq->ue, $rq->cg, $rq->cp);
+                $data = BaseGastosDetalleRepositorio::obtenerCertificadoMensualPorFuenteRubro((int) $rq->anio, (int) $rq->ue, (int) $rq->ff, (int) $rq->rb);
                 $info = [
                     'categorias' => [],
                     'series' => [
                         ['data' => [], 'name' => 'CERTIFICADO'],
                     ],
                 ];
-                $valor_anterior = 0;
                 foreach ($data as $key => $value) {
                     $info['categorias'][] = ucfirst(strtolower($value->mes));
-                    if ($key == 0) {
-                        $info['series'][0]['data'][] = (int)$value->certificado;
-                        $valor_anterior = (int)$value->certificado;
-                    } else {
-                        $info['series'][0]['data'][] = (int)$value->certificado - $valor_anterior;
-                        $valor_anterior = (int)$value->certificado;
+                    if ($value->certificado === null) {
+                        $info['series'][0]['data'][] = null;
                         continue;
                     }
+                    $info['series'][0]['data'][] = round((float) $value->certificado, 1);
                 }
                 return response()->json(compact('info', 'data'));
 
             case 'anal3':
-                $data = BaseSiafWebDetalleRepositorio::obtenerCertificadoMensual($rq->anio, $rq->ue, $rq->cg, $rq->cp);
+                $data = BaseGastosDetalleRepositorio::obtenerCertificadoMensualPorFuenteRubro((int) $rq->anio, (int) $rq->ue, (int) $rq->ff, (int) $rq->rb);
                 $info = [
                     'categorias' => [],
                     'series' => [
                         ['data' => [], 'name' => 'CERTIFICADO'],
                     ],
                 ];
+                $pimDen = (float) ($data->max('pim') ?? 0);
+                $acum = 0.0;
                 foreach ($data as $key => $value) {
                     $info['categorias'][] = ucfirst(strtolower($value->mes));
-                    $info['series'][0]['data'][] = round($value->pim > 0 ? 100 * (int)$value->certificado / (int)$value->pim : 0, 1);
+                    if ($value->certificado === null || $pimDen <= 0) {
+                        $info['series'][0]['data'][] = null;
+                        continue;
+                    }
+                    $acum += (float) $value->certificado;
+                    $info['series'][0]['data'][] = [
+                        'y' => round(100 * $acum / $pimDen, 1),
+                        'monto' => round($acum, 1),
+                    ];
                 }
                 return response()->json(compact('info', 'data'));
 
             case 'anal4':
-                $data = BaseSiafWebDetalleRepositorio::obtenerCertificadoMensual($rq->anio, $rq->ue, $rq->cg, $rq->cp);
+                $data = BaseGastosDetalleRepositorio::obtenerCertificadoMensualPorFuenteRubro((int) $rq->anio, (int) $rq->ue, (int) $rq->ff, (int) $rq->rb);
                 $info = [
                     'categorias' => [],
                     'series' => [
                         ['data' => [], 'name' => 'DEVENGADO'],
                     ],
                 ];
-                $valor_anterior = 0;
                 foreach ($data as $key => $value) {
                     $info['categorias'][] = ucfirst(strtolower($value->mes));
-                    if ($key == 0) {
-                        $info['series'][0]['data'][] = (int)$value->devengado;
-                        $valor_anterior = (int)$value->devengado;
-                    } else {
-                        $info['series'][0]['data'][] = (int)$value->devengado - $valor_anterior;
-                        $valor_anterior = (int)$value->devengado;
+                    if ($value->devengado === null) {
+                        $info['series'][0]['data'][] = null;
                         continue;
                     }
+                    $info['series'][0]['data'][] = round((float) $value->devengado, 1);
                 }
                 return response()->json(compact('info', 'data'));
             case 'anal5':
-                $data = BaseSiafWebDetalleRepositorio::obtenerCertificadoMensual($rq->anio, $rq->ue, $rq->cg, $rq->cp);
+                $data = BaseGastosDetalleRepositorio::obtenerCertificadoMensualPorFuenteRubro((int) $rq->anio, (int) $rq->ue, (int) $rq->ff, (int) $rq->rb);
                 $info = [
                     'categorias' => [],
                     'series' => [
                         ['data' => [], 'name' => 'DEVENGADO'],
                     ],
                 ];
+                $pimDen = (float) ($data->max('pim') ?? 0);
+                $acum = 0.0;
                 foreach ($data as $key => $value) {
                     $info['categorias'][] = ucfirst(strtolower($value->mes));
-                    $info['series'][0]['data'][] = round($value->pim > 0 ? 100 * (int)$value->devengado / (int)$value->pim : 0, 1);
+                    if ($value->devengado === null || $pimDen <= 0) {
+                        $info['series'][0]['data'][] = null;
+                        continue;
+                    }
+                    $acum += (float) $value->devengado;
+                    $info['series'][0]['data'][] = [
+                        'y' => round(100 * $acum / $pimDen, 1),
+                        'monto' => round($acum, 1),
+                    ];
                 }
                 return response()->json(compact('info', 'data'));
 
             case 'tabla1':
-                $base = BaseSiafWebDetalleRepositorio::obtenerResumenPorUnidadEjecutora($rq->anio, $rq->ue, $rq->cg, $rq->cp);
+                $base = BaseGastosDetalleRepositorio::obtenerResumenPorUnidadEjecutoraPorFuenteRubro((int) $rq->anio, (int) $rq->ue, (int) $rq->ff, (int) $rq->rb);
                 $foot = [];
                 if ($base->isNotEmpty()) {
                     $foot = clone $base->first();
@@ -796,9 +820,18 @@ class BaseSiafWebController extends Controller
 
     public function catpresreportes()
     {
-        $anios = BaseSiafWebRepositorio::anios();
+        $anios = DB::table('pres_base_gastos as bg')
+            ->join('par_importacion as i', function ($join) {
+                $join->on('i.id', '=', 'bg.importacion_id')
+                    ->where('i.estado', '=', 'PR');
+            })
+            ->select('bg.anio')
+            ->distinct()
+            ->orderBy('bg.anio', 'desc')
+            ->get();
+
         $aniomax = $anios->max('anio');
-        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporSiafWebController::$FUENTE);
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporGastosController::$FUENTE);
         if ($imp) {
             $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesc[$imp->mes - 1] . ' del ' . $imp->anio;
         } else {
@@ -813,13 +846,13 @@ class BaseSiafWebController extends Controller
         switch ($rq->div) {
             case 'anal1':
                 $color = ['#43beac', '#ffc107', '#ef5350'];
-                $data = BaseSiafWebDetalleRepositorio::catpresreportesreporte_anal1($rq->anio, $rq->ue, $rq->cg, $rq->ff);
+                $data = BaseGastosDetalleRepositorio::catpresreportesreporte_anal1($rq->anio, $rq->ue, $rq->cg, $rq->ff);
                 $data->devengado = round($data->devengado, 0);
                 $data->avance = $data->pim > 0 ? round(100 * $data->devengado / $data->pim, 1) : 0;
                 return response()->json($data);
 
             case 'anal2':
-                $data = BaseSiafWebDetalleRepositorio::catpresreportesreporte_anal2($rq->anio, $rq->ue, $rq->cg, $rq->ff);
+                $data = BaseGastosDetalleRepositorio::catpresreportesreporte_anal2($rq->anio, $rq->ue, $rq->cg, $rq->ff);
                 $info = [
                     'categorias' => [],
                     'series' => [
@@ -837,7 +870,7 @@ class BaseSiafWebController extends Controller
                 return response()->json(compact('info', 'data'));
 
             case 'tabla1':
-                $base = BaseSiafWebDetalleRepositorio::catpresreportesreporte_tabla1($rq->anio, $rq->ue, $rq->cg, $rq->ff);
+                $base = BaseGastosDetalleRepositorio::catpresreportesreporte_tabla1($rq->anio, $rq->ue, $rq->cg, $rq->ff);
                 $foot = [];
                 if ($base->isNotEmpty()) {
                     $foot = clone $base->first();
@@ -855,19 +888,31 @@ class BaseSiafWebController extends Controller
                 return response()->json(compact('excel'));
 
             case 'tabla0101':
-                $base = BaseSiafWebDetalleRepositorio::catpresreportesreporte_tabla0101($rq->anio, $rq->ue, $rq->cg, $rq->ff, $rq->cp);
-                foreach ($base as $key => $value) {
-                    $value->dic = $value->dic - $value->nov;
-                    $value->nov = $value->nov - $value->oct;
-                    $value->oct = $value->oct - $value->sep;
-                    $value->sep = $value->sep - $value->ago;
-                    $value->ago = $value->ago - $value->jul;
-                    $value->jul = $value->jul - $value->jun;
-                    $value->jun = $value->jun - $value->may;
-                    $value->may = $value->may - $value->abr;
-                    $value->abr = $value->abr - $value->mar;
-                    $value->mar = $value->mar - $value->feb;
-                    $value->feb = $value->feb - $value->ene;
+                $base = BaseGastosDetalleRepositorio::catpresreportesreporte_tabla0101($rq->anio, $rq->ue, $rq->cg, $rq->ff, $rq->cp);
+                $mesCols = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+                foreach ($base as $item) {
+                    $ultimoIdxConData = -1;
+                    $total = 0.0;
+                    foreach ($mesCols as $idx => $col) {
+                        $valor = (float) $item->$col;
+                        $total += $valor;
+                        if ($valor > 0) {
+                            $ultimoIdxConData = $idx;
+                        }
+                    }
+
+                    if ($ultimoIdxConData < 0) {
+                        $item->total = 0.0;
+                        foreach ($mesCols as $col) {
+                            $item->$col = null;
+                        }
+                        continue;
+                    }
+
+                    $item->total = round($total, 1);
+                    for ($i = $ultimoIdxConData + 1; $i < count($mesCols); $i++) {
+                        $item->{$mesCols[$i]} = null;
+                    }
                 }
                 $nombre = CategoriaPresupuestal::find($rq->cp)->nombre;
                 $excel = view('presupuesto.BaseSiafWeb.CatPresReportesTablas', compact('div', 'base'))->render();
@@ -897,14 +942,24 @@ class BaseSiafWebController extends Controller
 
     public function fuenfinreportes()
     {
-        $anios = BaseSiafWebRepositorio::anios();
+        $anios = DB::table('pres_base_gastos as bg')
+            ->join('par_importacion as i', function ($join) {
+                $join->on('i.id', '=', 'bg.importacion_id')
+                    ->where('i.estado', '=', 'PR');
+            })
+            ->select('bg.anio')
+            ->distinct()
+            ->orderBy('bg.anio', 'desc')
+            ->get();
+
         $aniomax = $anios->max('anio');
-        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporSiafWebController::$FUENTE);
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporGastosController::$FUENTE);
         if ($imp) {
             $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesc[$imp->mes - 1] . ' del ' . $imp->anio;
         } else {
             $actualizado = 'Sin datos registrados';
         }
+
         return view('presupuesto.BaseSiafWeb.FuenFinReportes', compact('anios', 'aniomax', 'actualizado'));
     }
 
@@ -914,13 +969,13 @@ class BaseSiafWebController extends Controller
         switch ($rq->div) {
             case 'anal1':
                 $color = ['#43beac', '#ffc107', '#ef5350'];
-                $data = BaseSiafWebDetalleRepositorio::fuenfinreportesreporte_anal1($rq->anio, $rq->ue, $rq->cg, $rq->g);
+                $data = BaseGastosDetalleRepositorio::fuenfinreportesreporte_anal1($rq->anio, $rq->ue, $rq->cg, $rq->g);
                 $data->devengado = round($data->devengado, 0);
                 $data->avance = $data->pim > 0 ? round(100 * $data->devengado / $data->pim, 1) : 0;
                 return response()->json($data);
 
             case 'anal2':
-                $data = BaseSiafWebDetalleRepositorio::fuenfinreportesreporte_anal2($rq->anio, $rq->ue, $rq->cg, $rq->g);
+                $data = BaseGastosDetalleRepositorio::fuenfinreportesreporte_anal2($rq->anio, $rq->ue, $rq->cg, $rq->g);
                 $info = [
                     'categorias' => [],
                     'series' => [
@@ -938,7 +993,7 @@ class BaseSiafWebController extends Controller
                 return response()->json(compact('info', 'data'));
 
             case 'tabla1':
-                $base = BaseSiafWebDetalleRepositorio::fuenfinreportesreporte_tabla1($rq->anio, $rq->ue, $rq->cg, $rq->g);
+                $base = BaseGastosDetalleRepositorio::fuenfinreportesreporte_tabla1($rq->anio, $rq->ue, $rq->cg, $rq->g);
                 // $basex = BaseSiafWebDetalleRepositorio::fuenfinreportesreporte_xtabla1($rq->anio, $rq->ue, $rq->cg, $rq->g);
                 $foot = [];
                 if ($base->isNotEmpty()) {
@@ -957,26 +1012,38 @@ class BaseSiafWebController extends Controller
                 return response()->json(compact('excel'));
                 // return response()->json(compact('div', 'base', 'foot'));
             case 'tabla0101':
-                $base = BaseSiafWebDetalleRepositorio::fuenfinreportesreporte_tabla0101($rq->anio, $rq->ue, $rq->cg, $rq->g, $rq->ff);
-                foreach ($base as $key => $value) {
-                    $value->dic = $value->dic - $value->nov;
-                    $value->nov = $value->nov - $value->oct;
-                    $value->oct = $value->oct - $value->sep;
-                    $value->sep = $value->sep - $value->ago;
-                    $value->ago = $value->ago - $value->jul;
-                    $value->jul = $value->jul - $value->jun;
-                    $value->jun = $value->jun - $value->may;
-                    $value->may = $value->may - $value->abr;
-                    $value->abr = $value->abr - $value->mar;
-                    $value->mar = $value->mar - $value->feb;
-                    $value->feb = $value->feb - $value->ene;
+                $base = BaseGastosDetalleRepositorio::fuenfinreportesreporte_tabla0101($rq->anio, $rq->ue, $rq->cg, $rq->g, $rq->ff);
+                $mesCols = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+                foreach ($base as $item) {
+                    $ultimoIdxConData = -1;
+                    $total = 0.0;
+                    foreach ($mesCols as $idx => $col) {
+                        $valor = (float) $item->$col;
+                        $total += $valor;
+                        if ($valor > 0) {
+                            $ultimoIdxConData = $idx;
+                        }
+                    }
+
+                    if ($ultimoIdxConData < 0) {
+                        $item->total = 0.0;
+                        foreach ($mesCols as $col) {
+                            $item->$col = null;
+                        }
+                        continue;
+                    }
+
+                    $item->total = round($total, 1);
+                    for ($i = $ultimoIdxConData + 1; $i < count($mesCols); $i++) {
+                        $item->{$mesCols[$i]} = null;
+                    }
                 }
                 $nombre = FuenteFinanciamiento::find($rq->ff)->nombre;
                 $excel = view('presupuesto.BaseSiafWeb.FuenFinReportesTablas', compact('div', 'base'))->render();
                 return response()->json(compact('excel', 'nombre'));
 
             case 'tabla2':
-                $base = BaseSiafWebDetalleRepositorio::fuenfinreportesreporte_tabla2($rq->anio, $rq->ue, $rq->cg, $rq->g);
+                $base = BaseGastosDetalleRepositorio::fuenfinreportesreporte_tabla2($rq->anio, $rq->ue, $rq->cg, $rq->g);
                 $foot = [];
                 if ($base->isNotEmpty()) {
                     $foot = clone $base->first();
@@ -994,19 +1061,31 @@ class BaseSiafWebController extends Controller
                 return response()->json(compact('excel'));
                 // return response()->json(compact('div', 'base', 'foot'));
             case 'tabla0201':
-                $base = BaseSiafWebDetalleRepositorio::fuenfinreportesreporte_tabla0201($rq->anio, $rq->ue, $rq->cg, $rq->g, $rq->rb);
-                foreach ($base as $key => $value) {
-                    $value->dic = $value->dic - $value->nov;
-                    $value->nov = $value->nov - $value->oct;
-                    $value->oct = $value->oct - $value->sep;
-                    $value->sep = $value->sep - $value->ago;
-                    $value->ago = $value->ago - $value->jul;
-                    $value->jul = $value->jul - $value->jun;
-                    $value->jun = $value->jun - $value->may;
-                    $value->may = $value->may - $value->abr;
-                    $value->abr = $value->abr - $value->mar;
-                    $value->mar = $value->mar - $value->feb;
-                    $value->feb = $value->feb - $value->ene;
+                $base = BaseGastosDetalleRepositorio::fuenfinreportesreporte_tabla0201($rq->anio, $rq->ue, $rq->cg, $rq->g, $rq->rb);
+                $mesCols = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+                foreach ($base as $item) {
+                    $ultimoIdxConData = -1;
+                    $total = 0.0;
+                    foreach ($mesCols as $idx => $col) {
+                        $valor = (float) $item->$col;
+                        $total += $valor;
+                        if ($valor > 0) {
+                            $ultimoIdxConData = $idx;
+                        }
+                    }
+
+                    if ($ultimoIdxConData < 0) {
+                        $item->total = 0.0;
+                        foreach ($mesCols as $col) {
+                            $item->$col = null;
+                        }
+                        continue;
+                    }
+
+                    $item->total = round($total, 1);
+                    for ($i = $ultimoIdxConData + 1; $i < count($mesCols); $i++) {
+                        $item->{$mesCols[$i]} = null;
+                    }
                 }
                 $nombre = Rubro::find($rq->rb)->nombre;
                 $excel = view('presupuesto.BaseSiafWeb.FuenFinReportesTablas', compact('div', 'base'))->render();
@@ -1044,9 +1123,18 @@ class BaseSiafWebController extends Controller
 
     public function genericareportes()
     {
-        $anios = BaseSiafWebRepositorio::anios();
+        $anios = DB::table('pres_base_gastos as bg')
+            ->join('par_importacion as i', function ($join) {
+                $join->on('i.id', '=', 'bg.importacion_id')
+                    ->where('i.estado', '=', 'PR');
+            })
+            ->select('bg.anio')
+            ->distinct()
+            ->orderBy('bg.anio', 'desc')
+            ->get();
+
         $aniomax = $anios->max('anio');
-        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporSiafWebController::$FUENTE);
+        $imp = ImportacionRepositorio::ImportacionMax_porfuente(ImporGastosController::$FUENTE);
         if ($imp) {
             $actualizado = 'Actualizado al ' . $imp->dia . ' de ' . $this->mesc[$imp->mes - 1] . ' del ' . $imp->anio;
         } else {
@@ -1061,13 +1149,13 @@ class BaseSiafWebController extends Controller
         switch ($rq->div) {
             case 'anal1':
                 $color = ['#43beac', '#ffc107', '#ef5350'];
-                $data = BaseSiafWebDetalleRepositorio::genericareportesreporte_anal1($rq->anio, $rq->ue, $rq->cp, $rq->ff);
+                $data = BaseGastosDetalleRepositorio::genericareportesreporte_anal1($rq->anio, $rq->ue, $rq->cp, $rq->ff);
                 $data->devengado = round($data->devengado, 0);
                 $data->avance = $data->pim > 0 ? round(100 * $data->devengado / $data->pim, 1) : 0;
                 return response()->json($data);
 
             case 'anal2':
-                $data = BaseSiafWebDetalleRepositorio::genericareportesreporte_anal2($rq->anio, $rq->ue, $rq->cp, $rq->ff);
+                $data = BaseGastosDetalleRepositorio::genericareportesreporte_anal2($rq->anio, $rq->ue, $rq->cp, $rq->ff);
                 $info = [
                     'categorias' => [],
                     'series' => [
@@ -1085,7 +1173,7 @@ class BaseSiafWebController extends Controller
                 return response()->json(compact('info', 'data'));
 
             case 'tabla1':
-                $base = BaseSiafWebDetalleRepositorio::genericareportesreporte_tabla1($rq->anio, $rq->ue, $rq->cp, $rq->ff);
+                $base = BaseGastosDetalleRepositorio::genericareportesreporte_tabla1($rq->anio, $rq->ue, $rq->cp, $rq->ff);
                 $foot = [];
                 if ($base->isNotEmpty()) {
                     $foot = clone $base->first();
@@ -1103,26 +1191,38 @@ class BaseSiafWebController extends Controller
                 return response()->json(compact('excel'));
                 // return response()->json(compact('div', 'base', 'foot'));
             case 'tabla0101':
-                $base = BaseSiafWebDetalleRepositorio::genericareportesreporte_tabla0101($rq->anio, $rq->ue, $rq->cp, $rq->ff, $rq->g);
-                foreach ($base as $key => $value) {
-                    $value->dic = $value->dic - $value->nov;
-                    $value->nov = $value->nov - $value->oct;
-                    $value->oct = $value->oct - $value->sep;
-                    $value->sep = $value->sep - $value->ago;
-                    $value->ago = $value->ago - $value->jul;
-                    $value->jul = $value->jul - $value->jun;
-                    $value->jun = $value->jun - $value->may;
-                    $value->may = $value->may - $value->abr;
-                    $value->abr = $value->abr - $value->mar;
-                    $value->mar = $value->mar - $value->feb;
-                    $value->feb = $value->feb - $value->ene;
+                $base = BaseGastosDetalleRepositorio::genericareportesreporte_tabla0101($rq->anio, $rq->ue, $rq->cp, $rq->ff, $rq->g);
+                $mesCols = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+                foreach ($base as $item) {
+                    $ultimoIdxConData = -1;
+                    $total = 0.0;
+                    foreach ($mesCols as $idx => $col) {
+                        $valor = (float) $item->$col;
+                        $total += $valor;
+                        if ($valor > 0) {
+                            $ultimoIdxConData = $idx;
+                        }
+                    }
+
+                    if ($ultimoIdxConData < 0) {
+                        $item->total = 0.0;
+                        foreach ($mesCols as $col) {
+                            $item->$col = null;
+                        }
+                        continue;
+                    }
+
+                    $item->total = round($total, 1);
+                    for ($i = $ultimoIdxConData + 1; $i < count($mesCols); $i++) {
+                        $item->{$mesCols[$i]} = null;
+                    }
                 }
                 $nombre = GenericaGasto::find($rq->g)->nombre;
                 $excel = view('presupuesto.BaseSiafWeb.GenericaReportesTablas', compact('div', 'base'))->render();
                 return response()->json(compact('excel', 'nombre'));
 
             case 'tabla2':
-                $base = BaseSiafWebDetalleRepositorio::genericareportesreporte_tabla2($rq->anio, $rq->ue, $rq->cp, $rq->ff);
+                $base = BaseGastosDetalleRepositorio::genericareportesreporte_tabla2($rq->anio, $rq->ue, $rq->cp, $rq->ff);
                 $foot = [];
                 if ($base->isNotEmpty()) {
                     $foot = clone $base->first();
@@ -1140,19 +1240,31 @@ class BaseSiafWebController extends Controller
                 return response()->json(compact('excel'));
                 // return response()->json(compact('div', 'base', 'foot'));
             case 'tabla0201':
-                $base = BaseSiafWebDetalleRepositorio::genericareportesreporte_tabla0201($rq->anio, $rq->ue, $rq->cp, $rq->ff, $rq->sg);
-                foreach ($base as $key => $value) {
-                    $value->dic = $value->dic - $value->nov;
-                    $value->nov = $value->nov - $value->oct;
-                    $value->oct = $value->oct - $value->sep;
-                    $value->sep = $value->sep - $value->ago;
-                    $value->ago = $value->ago - $value->jul;
-                    $value->jul = $value->jul - $value->jun;
-                    $value->jun = $value->jun - $value->may;
-                    $value->may = $value->may - $value->abr;
-                    $value->abr = $value->abr - $value->mar;
-                    $value->mar = $value->mar - $value->feb;
-                    $value->feb = $value->feb - $value->ene;
+                $base = BaseGastosDetalleRepositorio::genericareportesreporte_tabla0201($rq->anio, $rq->ue, $rq->cp, $rq->ff, $rq->sg);
+                $mesCols = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+                foreach ($base as $item) {
+                    $ultimoIdxConData = -1;
+                    $total = 0.0;
+                    foreach ($mesCols as $idx => $col) {
+                        $valor = (float) $item->$col;
+                        $total += $valor;
+                        if ($valor > 0) {
+                            $ultimoIdxConData = $idx;
+                        }
+                    }
+
+                    if ($ultimoIdxConData < 0) {
+                        $item->total = 0.0;
+                        foreach ($mesCols as $col) {
+                            $item->$col = null;
+                        }
+                        continue;
+                    }
+
+                    $item->total = round($total, 1);
+                    for ($i = $ultimoIdxConData + 1; $i < count($mesCols); $i++) {
+                        $item->{$mesCols[$i]} = null;
+                    }
                 }
                 $nombre = SubGenericaGasto::find($rq->sg)->nombre;
                 $excel = view('presupuesto.BaseSiafWeb.GenericaReportesTablas', compact('div', 'base'))->render();

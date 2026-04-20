@@ -234,7 +234,7 @@
 
         function panelGraficas(div) {
             $.ajax({
-                url: "{{ route('presupuesto.gastos.seguimiento.reporte') }}",
+                url: "{{ url('/Presupuesto/Gastos/Seguimiento/Reporte') }}",
                 data: {
                     'div': div,
                     "anio": $('#anio').val(),
@@ -332,7 +332,7 @@
 
         function cargarModalDetalle2(codes, nombre) {
             $.ajax({
-                url: "{{ route('presupuesto.gastos.seguimiento.tabla0201', ['anio' => ':anio', 'codes' => ':codes', 'ue' => ':ue', 'ff' => ':ff', 'rubro' => ':rubro']) }}"
+                url: "{{ url('/Presupuesto/Gastos/Seguimiento/Tabla/0201/:anio/:codes/:ue/:ff/:rubro') }}"
                     .replace(':anio', $('#anio').val())
                     .replace(':codes', codes)
                     .replace(':ue', $('#ue').val())
@@ -352,7 +352,7 @@
 
         function cargarModalDetalle(id, nombre) {
             $.ajax({
-                url: "{{ route('presupuesto.gastos.seguimiento.tabla0101', ['anio' => ':anio', 'ue' => ':ue', 'ff' => ':ff', 'rubro' => ':rubro']) }}"
+                url: "{{ url('/Presupuesto/Gastos/Seguimiento/Tabla/0101/:anio/:ue/:ff/:rubro') }}"
                     .replace(':anio', $('#anio').val())
                     .replace(':ue', id)
                     .replace(':ff', $('#ff').val())
@@ -371,7 +371,7 @@
 
         function cargarEjecutora() {
             $.ajax({
-                url: "{{ route('presupuesto.gastos.seguimiento.select.ue', ['anio' => ':anio']) }}"
+                url: "{{ url('/Presupuesto/Gastos/Seguimiento/Select/UE/:anio') }}"
                     .replace(':anio', $('#anio').val()),
                 type: 'GET',
                 success: function(data) {
@@ -391,7 +391,7 @@
 
         function cargarFuente() {
             $.ajax({
-                url: "{{ route('presupuesto.gastos.seguimiento.select.ff', ['anio' => ':anio', 'ue' => ':ue']) }}"
+                url: "{{ url('/Presupuesto/Gastos/Seguimiento/Select/FF/:anio/:ue') }}"
                     .replace(':anio', $('#anio').val())
                     .replace(':ue', $('#ue').val()),
                 type: 'GET',
@@ -412,7 +412,7 @@
 
         function cargarRubro() {
             $.ajax({
-                url: "{{ route('presupuesto.gastos.seguimiento.select.rubro', ['anio' => ':anio', 'ue' => ':ue', 'ff' => ':ff']) }}"
+                url: "{{ url('/Presupuesto/Gastos/Seguimiento/Select/Rubro/:anio/:ue/:ff') }}"
                     .replace(':anio', $('#anio').val())
                     .replace(':ue', $('#ue').val())
                     .replace(':ff', $('#ff').val()),
@@ -434,7 +434,7 @@
 
         function actualizarActualizado() {
             $.ajax({
-                url: "{{ route('presupuesto.gastos.seguimiento.actualizado', ['anio' => ':anio']) }}"
+                url: "{{ url('/Presupuesto/Gastos/Seguimiento/Actualizado/:anio') }}"
                     .replace(':anio', $('#anio').val()),
                 type: 'GET',
                 dataType: 'json',
@@ -451,7 +451,7 @@
 
         function descargarExcel(div) {
             window.open(
-                "{{ route('presupuesto.gastos.seguimiento.reporte.download.excel', ['div' => ':div', 'anio' => ':anio', 'ue' => ':ue', 'cg' => 0, 'ff' => ':ff', 'cp' => ':cp']) }}"
+                "{{ url('/Presupuesto/Gastos/Seguimiento/Download/:div/:anio/:ue/0/:ff/:cp') }}"
                 .replace(':div', div)
                 .replace(':anio', $('#anio').val())
                 .replace(':ue', $('#ue').val())
@@ -462,7 +462,7 @@
 
         function descargarExcelDetalle0101(ue) {
             window.open(
-                "{{ route('presupuesto.gastos.seguimiento.reporte.download.excel', ['div' => 'tabla0101', 'anio' => ':anio', 'ue' => ':ue', 'cg' => 0, 'ff' => ':ff', 'cp' => ':cp']) }}"
+                "{{ url('/Presupuesto/Gastos/Seguimiento/Download/tabla0101/:anio/:ue/0/:ff/:cp') }}"
                 .replace(':anio', $('#anio').val())
                 .replace(':ue', ue)
                 .replace(':ff', $('#ff').val())
@@ -472,7 +472,7 @@
 
         function descargarExcelDetalle0201(codes) {
             window.open(
-                "{{ route('presupuesto.gastos.seguimiento.reporte.download.excel', ['div' => 'tabla0201', 'anio' => ':anio', 'ue' => ':ue', 'cg' => ':codes', 'ff' => ':ff', 'cp' => ':cp']) }}"
+                "{{ url('/Presupuesto/Gastos/Seguimiento/Download/tabla0201/:anio/:ue/:codes/:ff/:cp') }}"
                 .replace(':anio', $('#anio').val())
                 .replace(':ue', $('#ue').val())
                 .replace(':codes', codes)
@@ -574,7 +574,7 @@
             }
             let str = scaled.toFixed(decimals);
             if (str.endsWith('.0')) str = str.slice(0, -2);
-            return str + units[unitIndex];
+            return str +' '+ units[unitIndex];
         }
 
         function gAnidadaColumn2(div, categories, series, options = {}) {
@@ -714,7 +714,9 @@
                 plotOptions: {
                     series: {
                         showInLegend: true,
-                        borderWidth: 0,
+                        borderWidth: 0
+                    },
+                    column: {
                         dataLabels: {
                             enabled: opts.dataLabels.enabled,
                             style: {
@@ -723,15 +725,25 @@
                                 textOutline: 'none'
                             },
                             formatter: function() {
-                                const axisIndex = this.series.yAxis.index;
-                                if (axisIndex === 0) {
-                                    const formatted = formatNumberAbbr(this.y, opts.primaryAxis.decimals);
-                                    return opts.primaryAxis.unit ? `${formatted} ${opts.primaryAxis.unit}` :
-                                        formatted;
-                                } else {
-                                    const val = Highcharts.numberFormat(this.y, opts.secondaryAxis.decimals);
-                                    return opts.secondaryAxis.unit ? `${val} ${opts.secondaryAxis.unit}` : val;
+                                const formatted = formatNumberAbbr(this.y, opts.primaryAxis.decimals);
+                                return opts.primaryAxis.unit ? `${formatted} ${opts.primaryAxis.unit}` : formatted;
+                            }
+                        }
+                    },
+                    line: {
+                        dataLabels: {
+                            enabled: opts.dataLabels.enabled,
+                            style: {
+                                fontSize: opts.dataLabels.fontSize,
+                                fontWeight: opts.dataLabels.fontWeight,
+                                textOutline: 'none'
+                            },
+                            formatter: function() {
+                                const val = Highcharts.numberFormat(this.y, opts.secondaryAxis.decimals);
+                                if (opts.secondaryAxis.unit === '%') {
+                                    return `${val}%`;
                                 }
+                                return opts.secondaryAxis.unit ? `${val} ${opts.secondaryAxis.unit}` : val;
                             }
                         }
                     }
@@ -746,26 +758,25 @@
                     style: {
                         fontSize: '11px'
                     },
-                    headerFormat: '<b>{point.key}</b><br/>',
-                    pointFormatter: function() {
-                        const axisIndex = this.series.yAxis.index;
-                        let valueStr;
-                        let suffix = '';
-
-                        if (axisIndex === 0) {
-                            // Primary Axis: Full number
-                            valueStr = Highcharts.numberFormat(this.y, opts.primaryAxis.decimals, '.', ',');
-                            suffix = opts.primaryAxis.unit ? ` ${opts.primaryAxis.unit}` : '';
-                        } else {
-                            // Secondary Axis: Percentage
-                            valueStr = Highcharts.numberFormat(this.y, opts.tooltip.valueDecimalsSecondary, '.',
-                                ',');
-                            // Percentage without space
-                            suffix = opts.secondaryAxis.unit === '%' ? '%' : (opts.secondaryAxis.unit ?
-                                ` ${opts.secondaryAxis.unit}` : '');
-                        }
-
-                        return `<span style="color:${this.color}">\u25CF</span> ${this.series.name}: <b>${valueStr}${suffix}</b><br/>`;
+                    formatter: function() {
+                        let s = `<b>${this.x}</b><br/>`;
+                        (this.points || []).forEach(p => {
+                            const isLine = p.series && p.series.type === 'line';
+                            let valueStr = '';
+                            if (isLine) {
+                                const val = Highcharts.numberFormat(p.y, opts.tooltip.valueDecimalsSecondary, '.', ',');
+                                if (opts.secondaryAxis.unit === '%') {
+                                    valueStr = `${val}%`;
+                                } else {
+                                    valueStr = opts.secondaryAxis.unit ? `${val} ${opts.secondaryAxis.unit}` : val;
+                                }
+                            } else {
+                                const val = Highcharts.numberFormat(p.y, opts.primaryAxis.decimals, '.', ',');
+                                valueStr = opts.primaryAxis.unit ? `${val} ${opts.primaryAxis.unit}` : val;
+                            }
+                            s += `<span style="color:${p.color}">\u25CF</span> ${p.series.name}: <b>${valueStr}</b><br/>`;
+                        });
+                        return s;
                     }
                 },
                 legend: {

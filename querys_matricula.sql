@@ -242,6 +242,179 @@ CREATE TABLE `pres_impor_consulta_amigable` (
     FOREIGN KEY (`importacion_id`) REFERENCES `par_importacion` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+####################################################################################
+###################################################################################
+SELECT 
+		257 as basegastos,		
+        XD.anio,
+        XD.mes,
+        (	select v1.id from pres_unidadejecutora v1  
+			join pres_pliego v2 on v2.id=v1.pliego_id
+            join pres_sector v3 on v3.id=v2.sector_id
+            join pres_tipo_gobierno v4 on v4.id=v3.tipogobierno_id
+            where v1.secuencia_ejecutora=XD.sec_ejec and v1.codigo_ue=XD.cod_ue and v2.codigo=XD.cod_pliego and v3.codigo=XD.cod_sector and v4.codigo=XD.cod_niv_gob ) as unidadejecutora,		
+        (select id from par_ubigeo where codigo=XD.cod_ubigeo) as ubigeo,		
+        (select id from pres_meta where anio=XD.anio and sec_fun=XD.sec_func) as meta,
+        (select id from pres_categoriapresupuestal where codigo=XD.cod_cat_pres) as catpres,
+        (select id from pres_producto_proyecto where codigo=XD.tipo_prod_proy) as tipopp,
+        (select id from pres_productos where codigo=XD.cod_prod_proy) as productos,        
+        (select id from pres_proyectos where codigo=XD.cod_prod_proy) as proyectos,
+        (SELECT id FROM pres_act_acc_obr where codigo=XD.tipo_act_acc_obra) as tipoaao,
+        (select id from pres_obra where codigo=XD.cod_act_acc_obra) as obra,
+		(select id from pres_actividades where codigo=XD.cod_act_acc_obra) as actividad,
+		(select id from pres_accion where codigo=XD.cod_act_acc_obra) as accion,
+        (	select v1.id from pres_grupofuncional v1 
+			join pres_divisionfuncional v2 on v2.id=v1.divisionfuncional_id  
+            join pres_funcion v3 on v3.id=v2.funcion_id 
+            where v1.codigo=XD.cod_gru_fun and v2.codigo=XD.cod_div_fun and v3.codigo=XD.cod_fun) as grufun,
+		XD.meta,
+        (select id from pres_finalidad where codigo=XD.cod_fina) as finalidad,
+        (	select v1.id from pres_recursos_gastos v1
+			join pres_rubro v2 on v2.id=v1.rubro_id
+            join pres_fuentefinanciamiento v3 on v3.id=v2.fuentefinanciamiento_id
+            where v1.codigo=XD.cod_tipo_rec and v2.codigo=XD.cod_rub and v3.codigo=XD.cod_fue_fin) as recurso,
+        (select id from pres_categoriagasto where codigo=XD.cod_cat_gas) as catgas,
+        (	select v1.id from pres_especificadetalle_gastos v1
+			join pres_especifica_gastos v2 on v2.id=v1.especifica_id
+            join pres_subgenericadetalle_gastos v3 on v3.id=v2.subgenericadetalle_id 
+            join pres_subgenerica_gastos v4 on v4.id=v3.subgenerica_id
+            join pres_generica_gastos v5 on v5.id=v4.generica_id 
+            where v1.codigo=XD.cod_esp_det and v2.codigo=XD.cod_esp and v3.codigo=XD.cod_subgen_det and v4.codigo=XD.cod_subgen and v5.codigo=XD.cod_gen ) as especifica,
+		XD.pia,
+		XD.pim,
+		XD.certificado,
+		XD.compromiso_anual,
+		XD.compromiso_mensual,
+		XD.devengado,
+		XD.girado
+	FROM pres_impor_gastos as XD
+    WHERE XD.importacion_id=3232;
+end;
+
+
+SELECT
+  bg.id                                        AS basegastos,
+  XD.anio,
+  XD.mes,
+
+  ue.id                                        AS unidadejecutora,
+  ub.id                                        AS ubigeo,
+  mt.id                                        AS meta,
+  cp.id                                        AS catpres,
+  tpp.id                                       AS tipopp,
+  prd.id                                       AS productos,
+  pry.id                                       AS proyectos,
+  taa.id                                       AS tipoaao,
+  obr.id                                       AS obra,
+  act.id                                       AS actividad,
+  acc.id                                       AS accion,
+  gf.id                                        AS grufun,
+  XD.meta,
+  fin.id                                       AS finalidad,
+  rg.id                                        AS recurso,
+  cg.id                                        AS catgas,
+  ed.id                                        AS especifica,
+
+  XD.pia,
+  XD.pim,
+  XD.certificado,
+  XD.compromiso_anual,
+  XD.compromiso_mensual,
+  XD.devengado,
+  XD.girado
+FROM pres_impor_gastos XD
+JOIN pres_base_gastos bg
+  ON bg.importacion_id = XD.importacion_id
+ AND bg.anio = XD.anio
+ AND bg.mes = XD.mes
+
+/* Unidad ejecutora por cadena niv_gob/sector/pliego + sec_ejec/cod_ue */
+JOIN pres_unidadejecutora ue
+  ON ue.secuencia_ejecutora = XD.sec_ejec
+ AND ue.codigo_ue          = XD.cod_ue
+JOIN pres_pliego pl
+  ON pl.id = ue.pliego_id
+ AND pl.codigo             = XD.cod_pliego
+JOIN pres_sector se
+  ON se.id = pl.sector_id
+ AND se.codigo             = XD.cod_sector
+JOIN pres_tipo_gobierno tg
+  ON tg.id = se.tipogobierno_id
+ AND tg.codigo             = XD.cod_niv_gob
+
+/* Ubigeo y demás dimensiones (LEFT JOIN si pueden faltar) */
+LEFT JOIN par_ubigeo ub
+  ON ub.codigo             = XD.cod_ubigeo
+
+LEFT JOIN pres_meta mt
+  ON mt.anio               = XD.anio
+ AND mt.sec_fun            = XD.sec_func
+
+LEFT JOIN pres_finalidad fin
+  ON fin.codigo            = XD.cod_fina
+
+LEFT JOIN pres_categoriapresupuestal cp
+  ON cp.codigo             = XD.cod_cat_pres
+
+LEFT JOIN pres_producto_proyecto tpp
+  ON tpp.codigo            = XD.tipo_prod_proy
+
+LEFT JOIN pres_productos prd
+  ON prd.codigo            = XD.cod_prod_proy
+
+LEFT JOIN pres_proyectos pry
+  ON pry.codigo            = XD.cod_prod_proy
+
+LEFT JOIN pres_act_acc_obr taa
+  ON taa.codigo            = XD.tipo_act_acc_obra
+
+LEFT JOIN pres_obra obr
+  ON obr.codigo            = XD.cod_act_acc_obra
+LEFT JOIN pres_actividades act
+  ON act.codigo            = XD.cod_act_acc_obra
+LEFT JOIN pres_accion acc
+  ON acc.codigo            = XD.cod_act_acc_obra
+
+/* función/división/grupo funcional */
+LEFT JOIN pres_grupofuncional gf
+  ON gf.codigo             = XD.cod_gru_fun
+LEFT JOIN pres_divisionfuncional df
+  ON df.id                 = gf.divisionfuncional_id
+ AND df.codigo             = XD.cod_div_fun
+LEFT JOIN pres_funcion fu
+  ON fu.id                 = df.funcion_id
+ AND fu.codigo             = XD.cod_fun
+
+/* recurso: tipo recurso + rubro + fuente */
+LEFT JOIN pres_recursos_gastos rg
+  ON rg.codigo             = XD.cod_tipo_rec
+LEFT JOIN pres_rubro ru
+  ON ru.id                 = rg.rubro_id
+ AND ru.codigo             = XD.cod_rub
+LEFT JOIN pres_fuentefinanciamiento ff
+  ON ff.id                 = ru.fuentefinanciamiento_id
+ AND ff.codigo             = XD.cod_fue_fin
+
+LEFT JOIN pres_categoriagasto cg
+  ON cg.codigo             = XD.cod_cat_gas
+
+/* clasificadores de gasto (árbol) */
+LEFT JOIN pres_especificadetalle_gastos ed
+  ON ed.codigo             = XD.cod_esp_det
+LEFT JOIN pres_especifica_gastos eg
+  ON eg.id                 = ed.especifica_id
+ AND eg.codigo             = XD.cod_esp
+LEFT JOIN pres_subgenericadetalle_gastos sgd
+  ON sgd.id                = eg.subgenericadetalle_id
+ AND sgd.codigo            = XD.cod_subgen_det
+LEFT JOIN pres_subgenerica_gastos sg
+  ON sg.id                 = sgd.subgenerica_id
+ AND sg.codigo             = XD.cod_subgen
+LEFT JOIN pres_generica_gastos ge
+  ON ge.id                 = sg.generica_id
+ AND ge.codigo             = XD.cod_gen
+
+WHERE XD.importacion_id = 3232;
 
 
 

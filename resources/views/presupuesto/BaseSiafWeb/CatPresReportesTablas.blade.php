@@ -74,18 +74,18 @@
                 @foreach ($base as $item)
                     <tr class="text-center">
                         <td class="text-primary">{{ $item->anio }}</td>
-                        <td>{{ $item->ene > 0 ? number_format($item->ene, 0) : '' }}</td>
-                        <td>{{ $item->feb > 0 ? number_format($item->feb, 0) : '' }}</td>
-                        <td>{{ $item->mar > 0 ? number_format($item->mar, 0) : '' }}</td>
-                        <td>{{ $item->abr > 0 ? number_format($item->abr, 0) : '' }}</td>
-                        <td>{{ $item->may > 0 ? number_format($item->may, 0) : '' }}</td>
-                        <td>{{ $item->jun > 0 ? number_format($item->jun, 0) : '' }}</td>
-                        <td>{{ $item->jul > 0 ? number_format($item->jul, 0) : '' }}</td>
-                        <td>{{ $item->ago > 0 ? number_format($item->ago, 0) : '' }}</td>
-                        <td>{{ $item->sep > 0 ? number_format($item->sep, 0) : '' }}</td>
-                        <td>{{ $item->oct > 0 ? number_format($item->oct, 0) : '' }}</td>
-                        <td>{{ $item->nov > 0 ? number_format($item->nov, 0) : '' }}</td>
-                        <td>{{ $item->dic > 0 ? number_format($item->dic, 0) : '' }}</td>
+                        <td>{{ is_null($item->ene) ? '' : number_format($item->ene, 0) }}</td>
+                        <td>{{ is_null($item->feb) ? '' : number_format($item->feb, 0) }}</td>
+                        <td>{{ is_null($item->mar) ? '' : number_format($item->mar, 0) }}</td>
+                        <td>{{ is_null($item->abr) ? '' : number_format($item->abr, 0) }}</td>
+                        <td>{{ is_null($item->may) ? '' : number_format($item->may, 0) }}</td>
+                        <td>{{ is_null($item->jun) ? '' : number_format($item->jun, 0) }}</td>
+                        <td>{{ is_null($item->jul) ? '' : number_format($item->jul, 0) }}</td>
+                        <td>{{ is_null($item->ago) ? '' : number_format($item->ago, 0) }}</td>
+                        <td>{{ is_null($item->sep) ? '' : number_format($item->sep, 0) }}</td>
+                        <td>{{ is_null($item->oct) ? '' : number_format($item->oct, 0) }}</td>
+                        <td>{{ is_null($item->nov) ? '' : number_format($item->nov, 0) }}</td>
+                        <td>{{ is_null($item->dic) ? '' : number_format($item->dic, 0) }}</td>
                         <td>{{ number_format($item->total, 0) }}</td>
                     </tr>
                 @endforeach
@@ -127,18 +127,18 @@
                             @foreach ($base as $item)
                                 <tr class="text-center">
                                     <td class="text-primary">{{ $item->anio }}</td>
-                                    <td>{{ $item->ene > 0 ? number_format($item->ene, 0) : '' }}</td>
-                                    <td>{{ $item->feb > 0 ? number_format($item->feb, 0) : '' }}</td>
-                                    <td>{{ $item->mar > 0 ? number_format($item->mar, 0) : '' }}</td>
-                                    <td>{{ $item->abr > 0 ? number_format($item->abr, 0) : '' }}</td>
-                                    <td>{{ $item->may > 0 ? number_format($item->may, 0) : '' }}</td>
-                                    <td>{{ $item->jun > 0 ? number_format($item->jun, 0) : '' }}</td>
-                                    <td>{{ $item->jul > 0 ? number_format($item->jul, 0) : '' }}</td>
-                                    <td>{{ $item->ago > 0 ? number_format($item->ago, 0) : '' }}</td>
-                                    <td>{{ $item->sep > 0 ? number_format($item->sep, 0) : '' }}</td>
-                                    <td>{{ $item->oct > 0 ? number_format($item->oct, 0) : '' }}</td>
-                                    <td>{{ $item->nov > 0 ? number_format($item->nov, 0) : '' }}</td>
-                                    <td>{{ $item->dic > 0 ? number_format($item->dic, 0) : '' }}</td>
+                                    <td>{{ is_null($item->ene) ? '' : number_format($item->ene, 0) }}</td>
+                                    <td>{{ is_null($item->feb) ? '' : number_format($item->feb, 0) }}</td>
+                                    <td>{{ is_null($item->mar) ? '' : number_format($item->mar, 0) }}</td>
+                                    <td>{{ is_null($item->abr) ? '' : number_format($item->abr, 0) }}</td>
+                                    <td>{{ is_null($item->may) ? '' : number_format($item->may, 0) }}</td>
+                                    <td>{{ is_null($item->jun) ? '' : number_format($item->jun, 0) }}</td>
+                                    <td>{{ is_null($item->jul) ? '' : number_format($item->jul, 0) }}</td>
+                                    <td>{{ is_null($item->ago) ? '' : number_format($item->ago, 0) }}</td>
+                                    <td>{{ is_null($item->sep) ? '' : number_format($item->sep, 0) }}</td>
+                                    <td>{{ is_null($item->oct) ? '' : number_format($item->oct, 0) }}</td>
+                                    <td>{{ is_null($item->nov) ? '' : number_format($item->nov, 0) }}</td>
+                                    <td>{{ is_null($item->dic) ? '' : number_format($item->dic, 0) }}</td>
                                     <td>{{ number_format($item->total, 0) }}</td>
                                 </tr>
                             @endforeach

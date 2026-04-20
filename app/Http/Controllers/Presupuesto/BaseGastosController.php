@@ -504,7 +504,8 @@ class BaseGastosController extends Controller
         switch ($rq->div) {
             case 'anal1':
                 $query = DB::table('pres_cubo_gasto as ci')
-                    ->where('ci.anio', $anio);
+                    ->where('ci.anio', $anio)
+                    ->where('ci.mes', 0);
                 if ($ue > 0) {
                     $query = $query->where('ci.unidadejecutora_id', $ue);
                 }
@@ -519,7 +520,8 @@ class BaseGastosController extends Controller
                     ->first();
 
                 $query = DB::table('pres_cubo_ingreso as ci')
-                    ->where('ci.anio', $anio);
+                    ->where('ci.anio', $anio)
+                    ->whereBetween('ci.mes', [1, 12]);
                 if ($ue > 0) {
                     $query = $query->where('ci.unidadejecutora_id', $ue);
                 }
@@ -593,7 +595,6 @@ class BaseGastosController extends Controller
                     $info['series'][1]['data'][] = (int)round($item->devengado);
                     $info['series'][2]['data'][] = $item->pim > 0 ? round(100 * $item->devengado / $item->pim, 1) : 0;
                 }
-
                 return response()->json(compact('info', 'data'));
 
             case 'tabla1':

@@ -22,7 +22,7 @@
                 <div class="card-body pb-0">
                     <div class="form-group row align-items-center vh-5">
                         <div class="col-lg-3 col-md-3 col-sm-4">
-                            <h4 class="page-title font-12 m-0">Fuente: SIAF-WEB <br>{{ $actualizado }}</h4>
+                            <h4 class="page-title font-12 m-0">Fuente: SIAF - GASTOS <br>{{ $actualizado }}</h4>
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-2">
                             <div class="custom-select-container">
@@ -218,7 +218,7 @@
                     "anio": $('#anio').val(),
                     "ue": $('#ue').val(),
                     "cg": $('#cg').val(),
-                    "ff": $('#ff').val(),
+                    "ff": (div === 'tabla0101' ? 0 : $('#ff').val()),
                     "cp": select_cp,
                 },
                 type: "GET",
@@ -235,10 +235,11 @@
                                 delay: 10,
                                 time: 1000
                             });
-                            $('#anal1_devengado').text(new Intl.NumberFormat('en-US').format(data.devengado)).counterUp({
-                                delay: 10,
-                                time: 1000
-                            });
+                            $('#anal1_devengado').text(new Intl.NumberFormat('en-US').format(data.devengado))
+                                .counterUp({
+                                    delay: 10,
+                                    time: 1000
+                                });
                             $('#anal1_anio_pim').text($('#anio').val());
                             $('#anal1_anio_dev').text($('#anio').val());
                             break;
@@ -298,7 +299,7 @@
 
         function cargarEjecutora() {
             $.ajax({
-                url: "{{ route('presupuesto.saifweb.detalle.select.ue', ['anio' => ':anio']) }}"
+                url: "{{ route('presupuesto.gastos.detalle.select.ue', ['anio' => ':anio']) }}"
                     .replace(':anio', $('#anio').val()),
                 type: 'GET',
                 success: function(data) {
@@ -318,7 +319,7 @@
 
         function cargarGasto() {
             $.ajax({
-                url: "{{ route('presupuesto.saifweb.detalle.select.cg', ['anio' => ':anio', 'ue' => ':ue']) }}"
+                url: "{{ route('presupuesto.gastos.detalle.select.cg', ['anio' => ':anio', 'ue' => ':ue']) }}"
                     .replace(':anio', $('#anio').val())
                     .replace(':ue', $('#ue').val()),
                 type: 'GET',
@@ -339,7 +340,7 @@
 
         function cargarPresupuesto() {
             $.ajax({
-                url: "{{ route('presupuesto.saifweb.detalle.select.ff', ['anio' => ':anio', 'ue' => ':ue', 'cg' => ':cg']) }}"
+                url: "{{ route('presupuesto.gastos.detalle.select.ff', ['anio' => ':anio', 'ue' => ':ue', 'cg' => ':cg']) }}"
                     .replace(':anio', $('#anio').val())
                     .replace(':ue', $('#ue').val())
                     .replace(':cg', $('#cg').val()),
@@ -464,7 +465,7 @@
             }
             let str = scaled.toFixed(decimals);
             if (str.endsWith('.0')) str = str.slice(0, -2);
-            return str + units[unitIndex];
+            return str + ' ' + units[unitIndex];
         }
 
         function gAnidadaColumn2(div, categories, series, options = {}) {
@@ -613,15 +614,18 @@
                                 textOutline: 'none'
                             },
                             formatter: function() {
-                                const axisIndex = this.series.yAxis.index;
-                                if (axisIndex === 0) {
-                                    const formatted = formatNumberAbbr(this.y, opts.primaryAxis.decimals);
-                                    return opts.primaryAxis.unit ? `${formatted} ${opts.primaryAxis.unit}` :
-                                        formatted;
-                                } else {
+                                const isPercent = this.series.type === 'line';
+
+                                if (isPercent) {
                                     const val = Highcharts.numberFormat(this.y, opts.secondaryAxis.decimals);
-                                    return opts.secondaryAxis.unit ? `${val} ${opts.secondaryAxis.unit}` : val;
+                                    if (!opts.secondaryAxis.unit) return val;
+                                    return opts.secondaryAxis.unit === '%' ? `${val}%` :
+                                        `${val} ${opts.secondaryAxis.unit}`;
                                 }
+
+                                const formatted = formatNumberAbbr(this.y, opts.primaryAxis.decimals);
+                                return opts.primaryAxis.unit ? `${formatted} ${opts.primaryAxis.unit}` :
+                                    formatted;
                             }
                         }
                     }
@@ -638,23 +642,17 @@
                     },
                     headerFormat: '<b>{point.key}</b><br/>',
                     pointFormatter: function() {
-                        const axisIndex = this.series.yAxis.index;
-                        let valueStr;
-                        let suffix = '';
-
-                        if (axisIndex === 0) {
-                            // Primary Axis: Full number
-                            valueStr = Highcharts.numberFormat(this.y, opts.primaryAxis.decimals, '.', ',');
-                            suffix = opts.primaryAxis.unit ? ` ${opts.primaryAxis.unit}` : '';
-                        } else {
-                            // Secondary Axis: Percentage
-                            valueStr = Highcharts.numberFormat(this.y, opts.tooltip.valueDecimalsSecondary, '.',
-                                ',');
-                            // Percentage without space
-                            suffix = opts.secondaryAxis.unit === '%' ? '%' : (opts.secondaryAxis.unit ?
+                        const isPercent = this.series.type === 'line';
+                        if (isPercent) {
+                            const valueStr = Highcharts.numberFormat(this.y, opts.tooltip
+                                .valueDecimalsSecondary, '.', ',');
+                            const suffix = opts.secondaryAxis.unit === '%' ? '%' : (opts.secondaryAxis.unit ?
                                 ` ${opts.secondaryAxis.unit}` : '');
+                            return `<span style="color:${this.color}">\u25CF</span> ${this.series.name}: <b>${valueStr}${suffix}</b><br/>`;
                         }
 
+                        const valueStr = Highcharts.numberFormat(this.y, opts.primaryAxis.decimals, '.', ',');
+                        const suffix = opts.primaryAxis.unit ? ` ${opts.primaryAxis.unit}` : '';
                         return `<span style="color:${this.color}">\u25CF</span> ${this.series.name}: <b>${valueStr}${suffix}</b><br/>`;
                     }
                 },

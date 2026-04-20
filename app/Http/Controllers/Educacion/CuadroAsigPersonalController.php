@@ -272,11 +272,31 @@ class CuadroAsigPersonalController extends Controller
 
             $ent = Entidad::find($value->entidad);
 
-            if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11)
-                $boton = '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" id="eliminar' . $value->id . '"><i class="fa fa-trash"></i> </button>';
-            else
-                $boton = '';
-            $boton2 = '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> </button>';
+            $puedeEliminar = date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d')
+                || session('perfil_administrador_id') == 3
+                || session('perfil_administrador_id') == 8
+                || session('perfil_administrador_id') == 9
+                || session('perfil_administrador_id') == 10
+                || session('perfil_administrador_id') == 11;
+
+            if ($value->estado === 'PE') {
+                $estadoHtml = '<span class="badge badge-warning" data-estado="PE"><i class="fa fa-spinner fa-spin"></i> IMPORTANDO</span>';
+                $accionHtml = '<button type="button" class="btn btn-success btn-xs" disabled title="Importando..."><i class="fa fa-spinner fa-spin"></i></button>';
+            } elseif ($value->estado === 'PR') {
+                $estadoHtml = '<span class="badge badge-success" data-estado="PR">PROCESADO</span>';
+                $boton = $puedeEliminar
+                    ? '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" id="eliminar' . $value->id . '"><i class="fa fa-trash"></i></button>'
+                    : '';
+                $boton2 = '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i></button>';
+                $accionHtml = $boton . '&nbsp;' . $boton2;
+            } else {
+                $estadoHtml = '<span class="badge badge-danger" data-estado="EL">ERROR</span>';
+                $boton = $puedeEliminar
+                    ? '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" id="eliminar' . $value->id . '"><i class="fa fa-trash"></i></button>'
+                    : '';
+                $accionHtml = $boton;
+            }
+
             $data[] = array(
                 $key + 1,
                 date("d/m/Y", strtotime($value->fechaActualizacion)),
@@ -285,8 +305,8 @@ class CuadroAsigPersonalController extends Controller
                 $ent ? $ent->abreviado : '',
                 date("d/m/Y", strtotime($value->created_at)),
 
-                $value->estado == "PR" ? "PROCESADO" : ($value->estado == "PE" ? "PENDIENTE" : "ELIMINADO"),
-                $boton . '&nbsp;' . $boton2,
+                $estadoHtml,
+                $accionHtml,
             );
         }
         $result = array(

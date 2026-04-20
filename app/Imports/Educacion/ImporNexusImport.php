@@ -3,6 +3,7 @@
 namespace App\Imports\Educacion;
 
 use App\Models\educacion\ImporNexus;
+use Illuminate\Support\Facades\Schema;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
@@ -23,6 +24,7 @@ class ImporNexusImport implements ToModel, WithHeadingRow, WithBatchInserts, Wit
         'cod_local',
         'institucion_educativa',
         'cod_plaza',
+        'cod_airhsp',
         'tipo_trabajador',
         'subtipo_trabajador',
         'cargo',
@@ -49,6 +51,7 @@ class ImporNexusImport implements ToModel, WithHeadingRow, WithBatchInserts, Wit
     ];
     protected $importacionId;
     protected $encabezadosValidados = false;
+    protected $columnasTabla = null;
 
     public function __construct($importacionId)
     {
@@ -61,7 +64,7 @@ class ImporNexusImport implements ToModel, WithHeadingRow, WithBatchInserts, Wit
             $this->validarEncabezados($row);
             $this->encabezadosValidados = true;
         }
-        return new ImporNexus([
+        $data = [
             'importacion_id' => $this->importacionId,
             'ugel' => $row['ugel'] ?? null,
             'provincia' => $row['provincia'] ?? null,
@@ -75,6 +78,7 @@ class ImporNexusImport implements ToModel, WithHeadingRow, WithBatchInserts, Wit
             'cod_local' => $row['cod_local'] ?? null,
             'institucion_educativa' => $row['institucion_educativa'] ?? null,
             'cod_plaza' => $row['cod_plaza'] ?? null,
+            'cod_airhsp' => $row['cod_airhsp'] ?? null,
             'tipo_trabajador' => $row['tipo_trabajador'] ?? null,
             'subtipo_trabajador' => $row['subtipo_trabajador'] ?? null,
             'cargo' => $row['cargo'] ?? null,
@@ -98,7 +102,31 @@ class ImporNexusImport implements ToModel, WithHeadingRow, WithBatchInserts, Wit
             'afp' => $row['afp'] ?? null,
             'ley' => $row['ley'] ?? null,
             'fecha_nombramiento' => $this->parseFecha($row['fecha_nombramiento'] ?? null),
-        ]);
+        ];
+
+        $columnasTabla = $this->obtenerColumnasTabla();
+        if (!empty($columnasTabla)) {
+            $data = array_intersect_key($data, array_flip($columnasTabla));
+        }
+
+        return new ImporNexus($data);
+    }
+
+    protected function obtenerColumnasTabla(): array
+    {
+        if (is_array($this->columnasTabla)) {
+            return $this->columnasTabla;
+        }
+
+        $model = new ImporNexus();
+        $tabla = $model->getTable();
+        if (!Schema::hasTable($tabla)) {
+            $this->columnasTabla = [];
+            return $this->columnasTabla;
+        }
+
+        $this->columnasTabla = Schema::getColumnListing($tabla);
+        return $this->columnasTabla;
     }
 
     protected function parseFecha($valor)

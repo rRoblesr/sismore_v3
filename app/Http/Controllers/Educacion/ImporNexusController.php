@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Administracion\Entidad;
 use App\Models\educacion\ImporNexus;
 use App\Models\Educacion\Importacion;
+use App\Jobs\ProcesarImportacionNexus;
 use App\Repositories\Educacion\ImporNexusRepositorio;
 use App\Repositories\Educacion\ImportacionRepositorio;
 use Carbon\Carbon;
@@ -63,16 +64,39 @@ class ImporNexusController extends Controller
         $fechaActualizacion = Carbon::createFromFormat('Y-m-d', $rq->fechaActualizacion)->startOfDay();
         $usuarioId = auth()->user()->id;
 
+        $file = $rq->file('file');
+        $extension = strtolower($file->getClientOriginalExtension());
+        if ($extension === 'xlsx' && !class_exists(\ZipArchive::class)) {
+            return response()->json([
+                'status' => 500,
+                'msg' => 'El servidor no tiene habilitada la extensión ZIP (ZipArchive). No puede procesar archivos XLSX.',
+            ], 500);
+        }
+
+        try {
+            \Illuminate\Support\Facades\Storage::disk('local')->put('imports/nexus/.probe', 'ok');
+            \Illuminate\Support\Facades\Storage::disk('local')->delete('imports/nexus/.probe');
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status' => 500,
+                'msg' => 'El servidor no puede escribir en storage (disk local). Verificar permisos de storage/app.',
+            ], 500);
+        }
+
         $importacionExistente = Importacion::where('fuenteImportacion_id', $this->fuente)
             ->whereDate('fechaActualizacion', $fechaActualizacion)
             ->whereIn('estado', ['PE', 'PR'])
             ->first();
 
         if ($importacionExistente) {
-            return $this->json_output(
-                400,
-                'Ya existe una importación pendiente o procesada para esta fuente y fecha.'
-            );
+            return response()->json([
+                'status' => 400,
+                'msg' => 'Ya existe una importación pendiente o procesada para esta fuente y fecha.',
+                'data' => [
+                    'importacion_id' => $importacionExistente->id,
+                    'estado' => $importacionExistente->estado,
+                ],
+            ], 400);
             // return response()->json([
             //     'error' => 'Ya existe una importación pendiente o procesada para esta fuente y fecha.',
             //     'importacion_id' => $importacionExistente->id,
@@ -87,45 +111,89 @@ class ImporNexusController extends Controller
             'estado' => 'PE',
         ]);
 
-        try {
-            Excel::import(new ImporNexusImport($importacion->id), $rq->file('file'), null, \Maatwebsite\Excel\Excel::XLSX, 0);
-            $importacion->update(['estado' => 'PR']);
-
-            // return response()->json([
-            //     'message' => 'Archivo importado exitosamente.',
-            //     'importacion_id' => $importacion->id,
-            //     'total_registros' => DB::table('edu_impor_nexus')->where('importacion_id', $importacion->id)->count(),
-            // ], 200);
-        } catch (\InvalidArgumentException $e) {
-            return $this->json_output(
-                400,
-                'Archivo inválido: ' . $e->getMessage()
-            );
-            // return response()->json(['error' => 'Archivo inválido: ' . $e->getMessage()], 422);            
-        } catch (\Exception $e) {
-            $importacion->update(['estado' => 'EL']);
-            return $this->json_output(
-                400,
-                'Error al importar el archivo: ' . $e->getMessage()
-            );
-            // return response()->json([
-            //     'error' => 'Error al importar el archivo: ' . $e->getMessage(),
-            // ], 500);
-        }
-
-        try {
-            DB::select('call edu_pa_procesarImporNexus(?)', [$importacion->id]);
-        } catch (Exception $e) {
-            $importacion->update(['estado' => 'EL']);
-
-            $mensaje = "Error al procesar la normalizacion de datos.<br>" . $e;
-            $this->json_output(400, $mensaje);
-        }
-
-        return $this->json_output(
-            200,
-            'Archivo importado exitosamente.'
+        $relativePath = $file->storeAs(
+            'imports/nexus',
+            'impor_nexus_' . $importacion->id . '.' . $extension,
+            'local'
         );
+
+        try {
+            ini_set('memory_limit', '-1');
+            set_time_limit(0);
+            ignore_user_abort(true);
+
+            $job = new ProcesarImportacionNexus($importacion->id, $relativePath);
+            $job->handle();
+
+            return response()->json([
+                'status' => 200,
+                'msg' => 'Importación procesada.',
+                'data' => [
+                    'importacion_id' => $importacion->id,
+                    'estado' => 'PR',
+                ],
+            ], 200);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Importación Nexus falló', [
+                'importacion_id' => $importacion->id,
+                'file' => $relativePath,
+                'message' => $e->getMessage(),
+            ]);
+
+            $importacion->update(['estado' => 'EL']);
+
+            return response()->json([
+                'status' => 500,
+                'msg' => 'Error al procesar la importación: ' . $e->getMessage(),
+                'data' => [
+                    'importacion_id' => $importacion->id,
+                    'estado' => 'EL',
+                ],
+            ], 500);
+        }
+    }
+
+    public function procesarPA($importacion_id)
+    {
+        ini_set('memory_limit', '-1');
+        set_time_limit(0);
+
+        $importacion = Importacion::where('id', $importacion_id)
+            ->where('fuenteImportacion_id', $this->fuente)
+            ->first();
+
+        if (!$importacion) {
+            return response()->json(['status' => 404, 'msg' => 'Importación no encontrada.'], 404);
+        }
+
+        try {
+            $routine = DB::selectOne("
+                SELECT ROUTINE_NAME
+                FROM information_schema.ROUTINES
+                WHERE ROUTINE_SCHEMA = DATABASE()
+                  AND ROUTINE_NAME = 'edu_pa_procesarImporNexus'
+                  AND ROUTINE_TYPE = 'PROCEDURE'
+                LIMIT 1
+            ");
+            if (!$routine) {
+                return response()->json([
+                    'status' => 500,
+                    'msg' => 'No existe el procedimiento edu_pa_procesarImporNexus() en la base de datos.',
+                ], 500);
+            }
+
+            $importacion->estado = 'PE';
+            $importacion->save();
+
+            DB::select('call edu_pa_procesarImporNexus(?)', [(int) $importacion_id]);
+            $importacion->estado = 'PR';
+            $importacion->save();
+            return response()->json(['status' => 200, 'msg' => 'PA ejecutado correctamente.']);
+        } catch (\Throwable $e) {
+            $importacion->estado = 'EL';
+            $importacion->save();
+            return response()->json(['status' => 500, 'msg' => 'Error al ejecutar PA: ' . $e->getMessage()], 500);
+        }
     }
 
     public function guardar_x(Request $request)
@@ -345,11 +413,33 @@ class ImporNexusController extends Controller
 
             $ent = Entidad::find($value->entidad);
 
-            if (date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d') || session('perfil_administrador_id') == 3 || session('perfil_administrador_id') == 8 || session('perfil_administrador_id') == 9 || session('perfil_administrador_id') == 10 || session('perfil_administrador_id') == 11)
-                $boton = '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" id="eliminar' . $value->id . '"><i class="fa fa-trash"></i> </button>';
-            else
-                $boton = '';
-            $boton2 = '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> </button>';
+            $puedeEliminar = date('Y-m-d', strtotime($value->created_at)) == date('Y-m-d')
+                || session('perfil_administrador_id') == 3
+                || session('perfil_administrador_id') == 8
+                || session('perfil_administrador_id') == 9
+                || session('perfil_administrador_id') == 10
+                || session('perfil_administrador_id') == 11;
+
+            if ($value->estado === 'PE') {
+                $estadoHtml = '<span class="badge badge-warning" data-estado="PE"><i class="fa fa-spinner fa-spin"></i> IMPORTANDO</span>';
+                $accionHtml = '<button type="button" class="btn btn-success btn-xs" disabled title="Importando..."><i class="fa fa-spinner fa-spin"></i></button>';
+            } elseif ($value->estado === 'PR') {
+                $estadoHtml = '<span class="badge badge-success" data-estado="PR">PROCESADO</span>';
+                $boton = $puedeEliminar
+                    ? '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" id="eliminar' . $value->id . '"><i class="fa fa-trash"></i></button>'
+                    : '';
+                $botonPa = '<button type="button" id="pa' . $value->id . '" onclick="procesar_pa_nexus(' . $value->id . ')" class="btn btn-info btn-xs" title="Ejecutar PA"><i class="fa fa-cogs"></i></button>';
+                $boton2 = '<button type="button" onclick="monitor(' . $value->id . ')" class="btn btn-primary btn-xs" title="Ver"><i class="fa fa-eye"></i></button>';
+                $accionHtml = $boton . '&nbsp;' . $botonPa . '&nbsp;' . $boton2;
+            } else {
+                $estadoHtml = '<span class="badge badge-danger" data-estado="EL">ERROR</span>';
+                $boton = $puedeEliminar
+                    ? '<button type="button" onclick="geteliminar(' . $value->id . ')" class="btn btn-danger btn-xs" id="eliminar' . $value->id . '"><i class="fa fa-trash"></i></button>'
+                    : '';
+                $botonPa = '<button type="button" id="pa' . $value->id . '" onclick="procesar_pa_nexus(' . $value->id . ')" class="btn btn-info btn-xs" title="Ejecutar PA"><i class="fa fa-cogs"></i></button>';
+                $accionHtml = $boton . '&nbsp;' . $botonPa;
+            }
+
             $data[] = array(
                 $key + 1,
                 date("d/m/Y", strtotime($value->fechaActualizacion)),
@@ -358,8 +448,8 @@ class ImporNexusController extends Controller
                 $ent ? $ent->abreviado : '',
                 date("d/m/Y", strtotime($value->created_at)),
 
-                $value->estado == "PR" ? "PROCESADO" : ($value->estado == "PE" ? "PENDIENTE" : "ELIMINADO"),
-                $boton . '&nbsp;' . $boton2,
+                $estadoHtml,
+                $accionHtml,
             );
         }
         $result = array(

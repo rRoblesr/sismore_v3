@@ -1,4 +1,4 @@
-var otros2 = {
+var p_distrito = {
     title: "Peru",
     version: "2.3.0",
     type: "FeatureCollection",
